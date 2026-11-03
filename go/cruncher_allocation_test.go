@@ -395,8 +395,9 @@ func TestAllocateCriticalWoundsWithTheirOwnSaveAndDamage(t *testing.T) {
 	}
 }
 
-// A single re-rolled die and ability mortal wounds change the expected stages;
-// exact allocation refuses them rather than returning the result without them.
+// A single re-rolled die changes the expected stages; exact allocation refuses
+// it rather than returning the result without it. Ability mortal wounds it
+// allocates.
 func TestAllocateRefusesWhatItDoesNotModel(t *testing.T) {
 	ds := EmbeddedDataset()
 	weapon, _ := ds.Weapons.GetAny("bolt-rifle")
@@ -430,7 +431,42 @@ func TestAllocateRefusesWhatItDoesNotModel(t *testing.T) {
 		t.Errorf("re-roll one Damage roll on a fixed Damage: got %v, %v", fixed, err)
 	}
 	mortal := map[string]any{"source": manual, "contribution": map[string]any{"type": "mortal-wounds-on-roll", "roll": "wound", "outcome": "success", "count": 1.0}}
-	if _, err := Allocate(input(mortal), ds); err == nil || err.Error() != "allocate: mortal wounds inflicted on a roll not modelled by exact allocation" {
-		t.Errorf("mortal wounds on a roll: got %v", err)
+	out, err := Allocate(input(mortal), ds)
+	if err != nil {
+		t.Fatalf("mortal wounds on a roll: %v", err)
+	}
+	// Every wound deals 1 damage and the squad cannot run out, so no damage is ever lost.
+	stages, _, err := crunch(input(mortal), ds)
+	if err != nil {
+		t.Fatal(err)
+	}
+	near(t, "damage dealt", out.DamageDealt, stages[len(stages)-2]["expected"].(float64), 1e-12)
+	if out.DamageDealt <= plain.DamageDealt {
+		t.Errorf("mortal wounds on a roll dealt %v, no more than %v without them", out.DamageDealt, plain.DamageDealt)
+	}
+}
+
+func TestAllocateCarriesAbilityMortalWoundsOver(t *testing.T) {
+	// A D1 wound kills the first 1-wound model; its mortal wound kills the second.
+	out := mustAllocate(t, allocModel(func(m *AttackModel) { m.RollMortals.Wound = 1; m.ModelCount = 2 }))
+	near(t, "P(2 destroyed)", out.ModelsDestroyedDistribution[2], 1, 1e-12)
+	// Two mortal wounds per hit finish a 3-wound model a D1 wound started.
+	hit := mustAllocate(t, allocModel(func(m *AttackModel) { m.RollMortals.Hit = 2; m.Wounds = 3 }))
+	near(t, "models destroyed", hit.ModelsDestroyed, 1, 1e-12)
+}
+
+func TestAllocateInflictsAbilityMortalWoundsAfterDevastatingWounds(t *testing.T) {
+	// The D2 Devastating Wounds event kills the first 2-wound model, then the
+	// ability's mortal wound damages the second: 3 wounds removed (2 if it came first).
+	ordered := mustAllocate(t, allocModel(func(m *AttackModel) {
+		m.WoundCrit, m.Devastating, m.Damage = 1, true, []DamageOutcome{{2, 1}}
+		m.RollMortals.CriticalWound, m.Wounds, m.ModelCount = 1, 2, 2
+	}))
+	near(t, "damage dealt", ordered.DamageDealt, 3, 1e-12)
+	// Mortal-only Feel No Pain removes each with probability 1/2.
+	shielded := mustAllocate(t, allocModel(func(m *AttackModel) { m.RollMortals.Wound, m.MortalWoundLost, m.Wounds = 2, 0.5, 5 }))
+	near(t, "damage dealt", shielded.DamageDealt, 2, 1e-12)
+	if _, err := AllocateModel(allocModel(func(m *AttackModel) { m.RollMortals.Wound = 0.5 })); err == nil {
+		t.Error("a fractional mortal-wound count allocated")
 	}
 }

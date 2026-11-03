@@ -6,12 +6,15 @@ Each attack that gets through deals its Damage to one model; damage beyond
 that model's remaining wounds is lost, and an already damaged model takes the
 next attack. Feel No Pain rolls once for each wound that would be lost.
 Devastating Wounds mortal wounds are inflicted after all normal damage and
-also damage at most one model each, the rest being lost.
+also damage at most one model each, the rest being lost. Mortal wounds an
+ability inflicts on the attack's rolls come last, one wound at a time, each
+carrying over to the next model.
 
 The state is (models alive, wounds left on the damaged model, zeroing uses
-left). Event counts come from the exact joint distribution of normal and
-mortal damage events per attack, so Sustained Hits, Lethal Hits and
-Devastating Wounds keep their correlation within an attack.
+left). Event counts come from the exact joint distribution of normal damage
+events, mortal-wound events and ability mortal wounds per attack, so Sustained
+Hits, Lethal Hits, Devastating Wounds and mortal wounds on a roll keep their
+correlation within an attack.
 
 A damage-zeroing defence changes an unsaved attack's Damage to 0 before it is
 rolled. Every normal damage event has the same Damage distribution, so the
@@ -33,12 +36,15 @@ from wh40kdc.cruncher.engine import AttackModel, EngineInput, crunch_model
 from wh40kdc.data.dataset import Dataset
 
 #: The largest event table the exact computation builds, measured as attacks x
-#: table rows x table columns. Past it the allocation is refused rather than
+#: table rows x table columns x table depth. Past it the allocation is refused rather than
 #: approximated.
 MAX_EVENT_WORK = 1_000_000
 
-#: Probabilities indexed [normal events][mortal events].
-Joint = list[list[float]]
+#: Probabilities indexed [normal events][mortal events][ability mortal wounds].
+Joint = list[list[list[float]]]
+
+#: States by the ability mortal wounds still to inflict: layer k waits on k of them.
+Layers = list[list[float]]
 
 
 class AllocationOutput(TypedDict):
@@ -65,37 +71,46 @@ class AllocationDefences(TypedDict):
     zeroing: NotRequired[DamageZeroing]
 
 
-def _joint(rows: int, columns: int) -> Joint:
-    return [[0.0] * columns for _ in range(rows)]
+def _joint(rows: int, columns: int, depth: int = 1) -> Joint:
+    return [[[0.0] * depth for _ in range(columns)] for _ in range(rows)]
 
 
 def _convolve(left: Joint, right: Joint) -> Joint:
-    out = _joint(len(left) + len(right) - 1, len(left[0]) + len(right[0]) - 1)
+    out = _joint(
+        len(left) + len(right) - 1,
+        len(left[0]) + len(right[0]) - 1,
+        len(left[0][0]) + len(right[0][0]) - 1,
+    )
     for k, row in enumerate(left):
-        for j, p in enumerate(row):
-            if p == 0:
-                continue
-            for k2, other in enumerate(right):
-                for j2, q in enumerate(other):
-                    if q != 0:
-                        out[k + k2][j + j2] += p * q
+        for j, cell in enumerate(row):
+            for a, p in enumerate(cell):
+                if p == 0:
+                    continue
+                for k2, other in enumerate(right):
+                    for j2, cell2 in enumerate(other):
+                        for a2, q in enumerate(cell2):
+                            if q != 0:
+                                out[k + k2][j + j2][a + a2] += p * q
     return out
 
 
 def _trim(table: Joint) -> Joint:
-    """``table`` without trailing all-zero rows and columns; convolution skips
-    zeros, so the nonzero values are unchanged."""
+    """``table`` without trailing all-zero rows, columns and depth; convolution
+    skips zeros, so the nonzero values are unchanged."""
     rows = len(table)
-    while rows > 1 and all(p == 0 for p in table[rows - 1]):
+    while rows > 1 and all(p == 0 for cell in table[rows - 1] for p in cell):
         rows -= 1
     columns = len(table[0])
-    while columns > 1 and all(row[columns - 1] == 0 for row in table[:rows]):
+    while columns > 1 and all(p == 0 for row in table[:rows] for p in row[columns - 1]):
         columns -= 1
-    return [row[:columns] for row in table[:rows]]
+    depth = len(table[0][0])
+    while depth > 1 and all(cell[depth - 1] == 0 for row in table[:rows] for cell in row[:columns]):
+        depth -= 1
+    return [[cell[:depth] for cell in row[:columns]] for row in table[:rows]]
 
 
 def _power(base: Joint, times: int) -> Joint:
-    out: Joint = [[1.0]]
+    out: Joint = [[[1.0]]]
     for _ in range(times):
         out = _convolve(out, base)
     return out
@@ -103,14 +118,27 @@ def _power(base: Joint, times: int) -> Joint:
 
 def _add(into: Joint, source: Joint, weight: float) -> Joint:
     """``into + weight * source``, grown to the larger shape."""
-    grown = _joint(max(len(into), len(source)), max(len(into[0]), len(source[0])))
+    grown = _joint(
+        max(len(into), len(source)),
+        max(len(into[0]), len(source[0])),
+        max(len(into[0][0]), len(source[0][0])),
+    )
     for k, row in enumerate(into):
-        for j, p in enumerate(row):
-            grown[k][j] += p
+        for j, cell in enumerate(row):
+            for a, p in enumerate(cell):
+                grown[k][j][a] += p
     for k, row in enumerate(source):
-        for j, p in enumerate(row):
-            grown[k][j] += weight * p
+        for j, cell in enumerate(row):
+            for a, p in enumerate(cell):
+                grown[k][j][a] += weight * p
     return grown
+
+
+def _shift(table: Joint, by: int) -> Joint:
+    """``table`` with every ability mortal-wound count raised by ``by``."""
+    if by == 0:
+        return table
+    return [[[0.0] * by + cell for cell in row] for row in table]
 
 
 def _integral(value: Any, what: str) -> int:
@@ -125,11 +153,25 @@ def _optional_distribution(stat: Any) -> list[tuple[float, float]]:
     return [(0, 1.0)] if stat is None else quantity_distribution(stat)
 
 
+def _roll_mortals_of(model: AttackModel) -> dict[str, int]:
+    """The mortal wounds an attack's rolls inflict, each count whole and not negative."""
+    out: dict[str, int] = {}
+    for key, count in model["rollMortals"].items():
+        whole = _integral(count, f"mortal wounds on a roll ({key})")
+        if whole < 0:
+            raise ValueError(
+                f"allocate: mortal wounds on a roll ({key}) must not be negative, got {count}"
+            )
+        out[key] = whole
+    return out
+
+
 def _per_attack(model: AttackModel) -> Joint:
-    """Distribution of one attack's normal damage events and its second kind of
-    event: mortal wounds with Devastating Wounds, otherwise unsaved critical
+    """Distribution of one attack's normal damage events, its second kind of
+    event (mortal wounds with Devastating Wounds, otherwise unsaved critical
     wounds when they have their own save and Damage (``criticalWound``), else
-    none."""
+    none) and the mortal wounds its rolls inflict."""
+    mortals = _roll_mortals_of(model)
     wound = model["wound"]
     hit = model["hit"]
     devastating = model["devastating"]
@@ -143,18 +185,42 @@ def _per_attack(model: AttackModel) -> Joint:
         to_second = wound["crit"] * critical["unsaved"]  # type: ignore[index]
     else:
         to_second = 0
-    wound_roll: Joint = [[1 - to_main - to_second, to_second], [to_main, 0.0]]
-    auto_wound: Joint = [[1 - model["unsaved"]], [model["unsaved"]]]
+    unsaved = model["unsaved"]
+
+    def wound_roll(extra: int) -> Joint:
+        # `extra`: the mortal wounds a critical wound inflicts beyond every critical wound's.
+        on_wound = mortals["wound"]
+        on_critical = on_wound + mortals["criticalWound"] + extra
+        if on_wound == 0 and on_critical == 0:
+            return [[[1 - to_main - to_second], [to_second]], [[to_main], [0.0]]]
+        out = _joint(2, 2, max(on_wound, on_critical) + 1)
+        crit_unsaved: float
+        if devastating:
+            crit_unsaved, crit_event = 1.0, out[0][1]
+        elif split:
+            crit_unsaved, crit_event = critical["unsaved"], out[0][1]  # type: ignore[index]
+        else:
+            crit_unsaved, crit_event = unsaved, out[1][0]
+        out[0][0][0] += 1 - wound["pass"]
+        out[1][0][on_wound] += normal_wound * unsaved
+        out[0][0][on_wound] += normal_wound * (1 - unsaved)
+        crit_event[on_critical] += wound["crit"] * crit_unsaved
+        out[0][0][on_critical] += wound["crit"] * (1 - crit_unsaved)
+        return out
+
+    auto_wound = _shift([[[1 - unsaved]], [[unsaved]]], mortals["wound"])
     normal_hit = 1 if model["torrent"] else hit["pass"] - hit["crit"]
     crit_hit = 0 if model["torrent"] else hit["crit"]
     out = _joint(1, 1)
-    out[0][0] = 1 - normal_hit - crit_hit
-    result = _add(out, wound_roll, normal_hit)
+    out[0][0][0] = 1 - normal_hit - crit_hit
+    result = _add(out, _shift(wound_roll(0), mortals["hit"]), normal_hit)
     if crit_hit > 0:
-        first = auto_wound if model["lethal"] else wound_roll
+        first = auto_wound if model["lethal"] else wound_roll(mortals["criticalWoundOfCriticalHit"])
+        plain = wound_roll(0)
         for count, probability in _optional_distribution(model["sustainedStat"]):
-            sustained = _power(wound_roll, _integral(count, "Sustained Hits"))
-            result = _add(result, _convolve(first, sustained), crit_hit * probability)
+            sustained = _power(plain, _integral(count, "Sustained Hits"))
+            hits = _shift(_convolve(first, sustained), mortals["hit"] + mortals["criticalHit"])
+            result = _add(result, hits, crit_hit * probability)
     return result
 
 
@@ -247,7 +313,11 @@ def _bounded_per_attack(model: AttackModel) -> tuple[Joint, dict[int, float], in
     per = _trim(_per_attack(model))
     counts = _attack_counts(model)
     most = max(counts.keys())
-    work = most * (most * (len(per) - 1) + 1) * (most * (len(per[0]) - 1) + 1)
+
+    def span(size: int) -> int:
+        return most * (size - 1) + 1
+
+    work = most * span(len(per)) * span(len(per[0])) * span(len(per[0][0]))
     if work > MAX_EVENT_WORK:
         raise ValueError(
             f"allocate: {most} attacks exceed the exact allocation bound "
@@ -257,9 +327,10 @@ def _bounded_per_attack(model: AttackModel) -> tuple[Joint, dict[int, float], in
 
 
 def _events(per: Joint, counts: dict[int, float], most: int) -> Joint:
-    """Joint distribution of the unit's total normal and mortal damage events."""
-    total: Joint = [[0.0]]
-    acc: Joint = [[1.0]]
+    """Joint distribution of the unit's total normal damage events, mortal-wound
+    events and ability mortal wounds."""
+    total: Joint = [[[0.0]]]
+    acc: Joint = [[[1.0]]]
     for attacks in range(most + 1):
         weight = counts.get(attacks, 0.0)
         if weight > 0:
@@ -318,10 +389,32 @@ def allocate_model(
         return out
 
     per, counts, most = _bounded_per_attack(model)
+    mortals = _roll_mortals_of(model)
     normal = _wounds_lost(model["damage"], model["woundLost"])
-    state = [0.0] * (dead + 1)
-    state[dead - 1] = 1.0
-    final = [0.0] * (dead + 1)
+
+    def zeros() -> list[float]:
+        return [0.0] * (dead + 1)
+
+    state: Layers = [zeros()]
+    state[0][dead - 1] = 1.0
+    pending: Layers = []
+
+    def gather(into: Layers, layers: Layers, weight: float) -> None:
+        for k, layer in enumerate(layers):
+            while len(into) <= k:
+                into.append([])
+            if not into[k]:
+                into[k] = zeros()
+            target = into[k]
+            for id_, q in enumerate(layer):
+                target[id_] += weight * q
+
+    def step_all(from_: Layers, removed: list[float]) -> Layers:
+        return [step(layer, removed, True) for layer in from_]
+
+    def shift_all(from_: Layers, by: int) -> Layers:
+        return from_ if by == 0 else [zeros() for _ in range(by)] + from_
+
     critical = model.get("criticalWound")
     if critical is not None and not model["devastating"]:
         # Critical wounds with their own save and Damage land in the order their hits wound, and
@@ -337,39 +430,56 @@ def allocate_model(
         )
         extra_counts = [(_integral(count, "Sustained Hits"), p) for count, p in extras]
 
-        def blend(parts: list[tuple[float, list[float]]]) -> list[float]:
-            out = [0.0] * (dead + 1)
+        def blend(parts: list[tuple[float, Layers]]) -> Layers:
+            out: Layers = [zeros()]
             for weight, from_ in parts:
                 if weight > 0:
-                    for id_, q in enumerate(from_):
-                        out[id_] += weight * q
+                    gather(out, from_, weight)
             return out
 
-        def wound_roll(from_: list[float]) -> list[float]:
+        def wound_roll(from_: Layers, extra: int) -> Layers:
+            # `extra`: the mortal wounds a critical wound inflicts beyond every critical wound's.
+            on_wound = mortals["wound"]
+            on_critical = on_wound + mortals["criticalWound"] + extra
+            if on_wound == 0 and on_critical == 0:
+                return blend(
+                    [
+                        (1 - to_normal - to_critical, from_),
+                        (to_normal, step_all(from_, normal)),
+                        (to_critical, step_all(from_, critical_lost)),
+                    ]
+                )
+            normal_wound = model["wound"]["pass"] - model["wound"]["crit"]
             return blend(
                 [
-                    (1 - to_normal - to_critical, from_),
-                    (to_normal, step(from_, normal, True)),
-                    (to_critical, step(from_, critical_lost, True)),
+                    (1 - model["wound"]["pass"], from_),
+                    (normal_wound * (1 - model["unsaved"]), shift_all(from_, on_wound)),
+                    (to_normal, shift_all(step_all(from_, normal), on_wound)),
+                    (model["wound"]["crit"] - to_critical, shift_all(from_, on_critical)),
+                    (to_critical, shift_all(step_all(from_, critical_lost), on_critical)),
                 ]
             )
 
-        def first_wound(from_: list[float]) -> list[float]:
+        def first_wound(from_: Layers) -> Layers:
             # Lethal Hits: the critical hit wounds automatically, a normal wound taking the save.
             if model["lethal"]:
-                return blend(
-                    [(1 - model["unsaved"], from_), (model["unsaved"], step(from_, normal, True))]
+                landed = blend(
+                    [(1 - model["unsaved"], from_), (model["unsaved"], step_all(from_, normal))]
                 )
-            return wound_roll(from_)
+                return shift_all(landed, mortals["wound"])
+            return wound_roll(from_, mortals["criticalWoundOfCriticalHit"])
 
-        def attack(from_: list[float]) -> list[float]:
-            parts = [(1 - normal_hit - crit_hit, from_), (normal_hit, wound_roll(from_))]
+        def attack(from_: Layers) -> Layers:
+            parts = [
+                (1 - normal_hit - crit_hit, from_),
+                (normal_hit, shift_all(wound_roll(from_, 0), mortals["hit"])),
+            ]
             if crit_hit > 0:
-                after = first_wound(from_)
+                after = first_wound(shift_all(from_, mortals["hit"] + mortals["criticalHit"]))
                 done = 0
                 for count, probability in extra_counts:
                     while done < count:
-                        after = wound_roll(after)
+                        after = wound_roll(after, 0)
                         done += 1
                     parts.append((crit_hit * probability, after))
             return blend(parts)
@@ -377,29 +487,36 @@ def allocate_model(
         for attacks in range(most + 1):
             weight = counts.get(attacks, 0.0)
             if weight > 0:
-                for id_, q in enumerate(state):
-                    final[id_] += weight * q
+                gather(pending, state, weight)
             if attacks == most:
                 break
             state = attack(state)
-        return _summarise(final, models, wounds, uses, cells, dead)
-    events = _events(per, counts, most)
-    # Devastating Wounds' mortal wounds deal a critical wound's own Damage when it has one.
-    mortal_roll = critical["damage"] if critical is not None else model["damage"]
-    mortal = _wounds_lost(mortal_roll, model["mortalWoundLost"])
-    for normal_events, row in enumerate(events):
-        if normal_events > 0:
-            state = step(state, normal, True)
-        if not any(p > 0 for p in row):
-            continue
-        after = state
-        for mortal_events, p in enumerate(row):
-            if mortal_events > 0:
-                after = step(after, mortal, False)
-            if p > 0:
-                for id_, q in enumerate(after):
-                    final[id_] += p * q
+    else:
+        events = _events(per, counts, most)
+        # Devastating Wounds' mortal wounds deal a critical wound's own Damage when it has one.
+        mortal_roll = critical["damage"] if critical is not None else model["damage"]
+        mortal = _wounds_lost(mortal_roll, model["mortalWoundLost"])
+        current = state[0]
+        for normal_events, row in enumerate(events):
+            if normal_events > 0:
+                current = step(current, normal, True)
+            if not any(p > 0 for cell in row for p in cell):
+                continue
+            after = current
+            for mortal_events, cell in enumerate(row):
+                if mortal_events > 0:
+                    after = step(after, mortal, False)
+                for count, p in enumerate(cell):
+                    if p > 0:
+                        gather(pending, [[] for _ in range(count)] + [after], p)
 
+    # The ability's mortal wounds, one wound each after everything else: layer k takes k of them.
+    one = _wounds_lost([{"value": 1, "probability": 1.0}], model["mortalWoundLost"])
+    final = pending[-1] if pending and pending[-1] else zeros()
+    for layer in reversed(pending[:-1]):
+        final = step(final, one, False)
+        for id_, q in enumerate(layer):
+            final[id_] += q
     return _summarise(final, models, wounds, uses, cells, dead)
 
 

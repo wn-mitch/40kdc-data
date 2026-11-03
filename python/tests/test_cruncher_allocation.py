@@ -10,6 +10,14 @@ import pytest
 from wh40kdc.cruncher import AttackModel, allocate_model
 from wh40kdc.cruncher.damage_roll import quantity_distribution
 
+_NO_MORTALS = {
+    "hit": 0,
+    "criticalHit": 0,
+    "wound": 0,
+    "criticalWound": 0,
+    "criticalWoundOfCriticalHit": 0,
+}
+
 
 def _model(**overrides: Any) -> AttackModel:
     """An attack model that always hits, wounds and goes unsaved unless overridden."""
@@ -30,6 +38,7 @@ def _model(**overrides: Any) -> AttackModel:
         "mortalWoundLost": 1,
         "wounds": 1,
         "modelCount": 1,
+        "rollMortals": dict(_NO_MORTALS),
     }
     base.update(overrides)
     return base  # type: ignore[return-value]
@@ -202,8 +211,8 @@ def test_critical_wounds_allocate_with_their_own_save_and_damage() -> None:
 
 
 def test_allocate_refuses_what_it_does_not_model(dataset: Any) -> None:
-    """A single re-rolled die and ability mortal wounds change the expected stages; exact
-    allocation refuses them rather than returning the result without them."""
+    """A single re-rolled die changes the expected stages; exact allocation refuses it rather
+    than returning the result without it. Ability mortal wounds it allocates."""
     from wh40kdc.cruncher import allocate
 
     def engine_input(buffs: list[dict[str, Any]]) -> Any:
@@ -235,5 +244,38 @@ def test_allocate_refuses_what_it_does_not_model(dataset: Any) -> None:
             "count": 1,
         },
     }
-    with pytest.raises(ValueError, match="mortal wounds inflicted on a roll not modelled"):
-        allocate(engine_input([mortal]), dataset)
+    # Every wound deals 1 damage and the squad cannot run out, so no damage is ever lost.
+    from wh40kdc.cruncher import crunch
+
+    out = allocate(engine_input([mortal]), dataset)
+    expected = crunch(engine_input([mortal]), dataset)["stages"][-2]["expected"]
+    assert out["damageDealt"] == pytest.approx(expected, abs=1e-12)
+    assert out["damageDealt"] > allocate(engine_input([]), dataset)["damageDealt"]
+
+
+def test_carries_each_ability_mortal_wound_over_to_the_next_model() -> None:
+    # A D1 wound kills the first 1-wound model; its mortal wound kills the second.
+    out = allocate_model(_model(rollMortals={**_NO_MORTALS, "wound": 1}, modelCount=2))
+    assert out["modelsDestroyedDistribution"] == [0, 0, 1]
+    # Two mortal wounds per hit finish a 3-wound model a D1 wound started.
+    hit = allocate_model(_model(rollMortals={**_NO_MORTALS, "hit": 2}, wounds=3))
+    assert hit["modelsDestroyed"] == pytest.approx(1, abs=1e-12)
+
+
+def test_inflicts_ability_mortal_wounds_after_devastating_wounds() -> None:
+    # The D2 Devastating Wounds event kills the first 2-wound model, then the ability's mortal
+    # wound damages the second: 3 wounds removed (2 if it came first).
+    ordered = _model(
+        wound={"pass": 1, "crit": 1},
+        devastating=True,
+        damage=[{"value": 2, "probability": 1}],
+        rollMortals={**_NO_MORTALS, "criticalWound": 1},
+        wounds=2,
+        modelCount=2,
+    )
+    assert allocate_model(ordered)["damageDealt"] == pytest.approx(3, abs=1e-12)
+    # Mortal-only Feel No Pain removes each with probability 1/2.
+    shielded = _model(rollMortals={**_NO_MORTALS, "wound": 2}, mortalWoundLost=0.5, wounds=5)
+    assert allocate_model(shielded)["damageDealt"] == pytest.approx(2, abs=1e-12)
+    with pytest.raises(ValueError, match="mortal wounds"):
+        allocate_model(_model(rollMortals={**_NO_MORTALS, "wound": 0.5}))

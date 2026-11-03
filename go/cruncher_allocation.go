@@ -16,12 +16,15 @@ import (
 // that model's remaining wounds is lost, and an already damaged model takes the
 // next attack. Feel No Pain rolls once for each wound that would be lost.
 // Devastating Wounds mortal wounds are inflicted after all normal damage and
-// also damage at most one model each, the rest being lost.
+// also damage at most one model each, the rest being lost. Mortal wounds an
+// ability inflicts on the attack's rolls come last, one wound at a time, each
+// carrying over to the next model.
 //
 // The state is (models alive, wounds left on the damaged model, zeroing uses
-// left). Event counts come from the exact joint distribution of normal and
-// mortal damage events per attack, so Sustained Hits, Lethal Hits and
-// Devastating Wounds keep their correlation within an attack.
+// left). Event counts come from the exact joint distribution of normal damage
+// events, mortal-wound events and ability mortal wounds per attack, so
+// Sustained Hits, Lethal Hits, Devastating Wounds and mortal wounds on a roll
+// keep their correlation within an attack.
 //
 // A damage-zeroing defence changes an unsaved attack's Damage to 0 before it is
 // rolled. Every normal damage event has the same Damage distribution, so the
@@ -63,12 +66,23 @@ type AttackModel struct {
 	// when a buff applies only on a critical wound. With Devastating Wounds it
 	// skips the save and its mortal wounds deal this Damage.
 	CriticalWound *CriticalWound
+	// RollMortals is the mortal wounds an ability inflicts on the attack's own
+	// rolls, one Damage each.
+	RollMortals RollMortalCounts
 	// Unmodelled lists what the expected stages price that exact allocation does
 	// not model: a single re-rolled die over the whole unit (its attacks are no
-	// longer independent) and mortal wounds an ability inflicts on a roll.
-	// Allocation refuses a model listing any rather than return a result
-	// without them.
+	// longer independent). Allocation refuses a model listing any rather than
+	// return a result without them.
 	Unmodelled []string
+}
+
+// RollMortalCounts is the mortal wounds an ability inflicts per roll outcome
+// of one attack: on each Hit roll that scores (every Torrent attack), more on
+// a critical hit, on each wound (a Lethal Hits wound included), more on each
+// critical wound the Wound roll scores, and more again when that Wound roll is
+// the critical hit's own.
+type RollMortalCounts struct {
+	Hit, CriticalHit, Wound, CriticalWound, CriticalWoundOfCriticalHit float64
 }
 
 // AllocationOutput is the allocation of one crunch's attacks into the target.
@@ -96,7 +110,7 @@ type AllocationDefences struct {
 }
 
 // MaxEventWork is the largest event table the exact computation builds,
-// measured as attacks x table rows x table columns. Past it the allocation is
+// measured as attacks x table rows x table columns x table depth. Past it the allocation is
 // refused rather than approximated.
 const MaxEventWork = 1_000_000
 
@@ -120,97 +134,6 @@ func ParseDamageZeroing(value map[string]any) (*DamageZeroing, error) {
 	return &DamageZeroing{Uses: uses, Per: per}, nil
 }
 
-// trimJoint drops trailing all-zero rows and columns; convolution skips zeros,
-// so the nonzero values are unchanged.
-func trimJoint(table joint) joint {
-	rows := len(table)
-	for rows > 1 && allZero(table[rows-1]) {
-		rows--
-	}
-	columns := len(table[0])
-	for columns > 1 {
-		empty := true
-		for _, row := range table[:rows] {
-			if row[columns-1] != 0 {
-				empty = false
-				break
-			}
-		}
-		if !empty {
-			break
-		}
-		columns--
-	}
-	out := make(joint, rows)
-	for k := range out {
-		out[k] = append([]float64(nil), table[k][:columns]...)
-	}
-	return out
-}
-
-func allZero(row []float64) bool {
-	for _, p := range row {
-		if p != 0 {
-			return false
-		}
-	}
-	return true
-}
-
-// joint holds probabilities indexed [normal events][mortal events].
-type joint [][]float64
-
-func newJoint(rows, columns int) joint {
-	out := make(joint, rows)
-	for k := range out {
-		out[k] = make([]float64, columns)
-	}
-	return out
-}
-
-func convolveJoint(left, right joint) joint {
-	out := newJoint(len(left)+len(right)-1, len(left[0])+len(right[0])-1)
-	for k, row := range left {
-		for j, p := range row {
-			if p == 0 {
-				continue
-			}
-			for k2, other := range right {
-				for j2, q := range other {
-					if q != 0 {
-						out[k+k2][j+j2] += p * q
-					}
-				}
-			}
-		}
-	}
-	return out
-}
-
-func powerJoint(base joint, times int) joint {
-	out := joint{{1}}
-	for i := 0; i < times; i++ {
-		out = convolveJoint(out, base)
-	}
-	return out
-}
-
-// addJoint returns into + weight * from, grown to fit both.
-func addJoint(into, from joint, weight float64) joint {
-	grown := newJoint(max(len(into), len(from)), max(len(into[0]), len(from[0])))
-	for k, row := range into {
-		for j, p := range row {
-			grown[k][j] += p
-		}
-	}
-	for k, row := range from {
-		for j, p := range row {
-			grown[k][j] += weight * p
-		}
-	}
-	return grown
-}
-
 // integral returns value as an int, or an error when it is not a whole number.
 func integral(value float64, what string) (int, error) {
 	if math.IsNaN(value) || math.IsInf(value, 0) || value != math.Trunc(value) {
@@ -225,49 +148,6 @@ func optionalQuantity(stat any) ([]DamageOutcome, error) {
 		return []DamageOutcome{{0, 1}}, nil
 	}
 	return quantityDistribution(stat)
-}
-
-// perAttackEvents is the distribution of one attack's normal and mortal damage events.
-func perAttackEvents(model *AttackModel) (joint, error) {
-	// The second axis counts mortal wounds with Devastating Wounds, otherwise unsaved
-	// critical wounds when they have their own save and Damage (CriticalWound), else none.
-	normalWound := model.WoundPass - model.WoundCrit
-	critToMain := model.WoundCrit
-	toSecond := 0.0
-	switch {
-	case model.Devastating:
-		critToMain = 0
-		toSecond = model.WoundCrit
-	case model.CriticalWound != nil:
-		critToMain = 0
-		toSecond = model.WoundCrit * model.CriticalWound.Unsaved
-	}
-	toMain := (normalWound + critToMain) * model.Unsaved
-	woundRoll := joint{{1 - toMain - toSecond, toSecond}, {toMain, 0}}
-	autoWound := joint{{1 - model.Unsaved}, {model.Unsaved}}
-	normalHit, critHit := model.HitPass-model.HitCrit, model.HitCrit
-	if model.Torrent {
-		normalHit, critHit = 1, 0
-	}
-	result := addJoint(joint{{1 - normalHit - critHit}}, woundRoll, normalHit)
-	if critHit > 0 {
-		first := woundRoll
-		if model.Lethal {
-			first = autoWound
-		}
-		extras, err := optionalQuantity(model.SustainedStat)
-		if err != nil {
-			return nil, err
-		}
-		for _, extra := range extras {
-			count, err := integral(extra.Value, "Sustained Hits")
-			if err != nil {
-				return nil, err
-			}
-			result = addJoint(result, convolveJoint(first, powerJoint(woundRoll, count)), critHit*extra.Probability)
-		}
-	}
-	return result, nil
 }
 
 // attackCounts is the distribution of the unit's total attacks, indexed by
@@ -455,12 +335,17 @@ func AllocateModelWith(model *AttackModel, defences AllocationDefences) (Allocat
 		return AllocationOutput{}, err
 	}
 	per = trimJoint(per)
+	mortals, err := rollMortalsOf(model)
+	if err != nil {
+		return AllocationOutput{}, err
+	}
 	counts, err := attackCounts(model)
 	if err != nil {
 		return AllocationOutput{}, err
 	}
 	most := len(counts) - 1
-	work := most * (most*(len(per)-1) + 1) * (most*(len(per[0])-1) + 1)
+	span := func(size int) int { return most*(size-1) + 1 }
+	work := most * span(len(per)) * span(len(per[0])) * span(len(per[0][0]))
 	if work > MaxEventWork {
 		return AllocationOutput{}, &crunchError{"allocate: " + strconv.Itoa(most) + " attacks exceed the exact allocation bound (work " + strconv.Itoa(work) + " > " + strconv.Itoa(MaxEventWork) + ")"}
 	}
@@ -468,9 +353,11 @@ func AllocateModelWith(model *AttackModel, defences AllocationDefences) (Allocat
 	if err != nil {
 		return AllocationOutput{}, err
 	}
-	state := make([]float64, dead+1)
-	state[dead-1] = 1
-	final := make([]float64, dead+1)
+	zeros := func() []float64 { return make([]float64, dead+1) }
+	// States by the ability mortal wounds still to inflict: layer k waits on k of them.
+	state := layers{zeros()}
+	state[0][dead-1] = 1
+	var pending layers
 	if model.CriticalWound != nil && !model.Devastating {
 		// Critical wounds with their own save and Damage land in the order their hits
 		// wound, and a normal and a critical wound of different Damage do not commute:
@@ -506,41 +393,70 @@ func AllocateModelWith(model *AttackModel, defences AllocationDefences) (Allocat
 		}
 		type part struct {
 			weight float64
-			state  []float64
+			state  layers
 		}
-		blend := func(parts []part) []float64 {
-			out := make([]float64, dead+1)
+		blend := func(parts []part) layers {
+			out := layers{zeros()}
 			for _, p := range parts {
 				if p.weight > 0 {
-					for id, q := range p.state {
-						out[id] += p.weight * q
-					}
+					out = gatherLayers(out, p.state, p.weight, dead)
 				}
 			}
 			return out
 		}
-		woundRoll := func(from []float64) []float64 {
+		stepAll := func(from layers, removed []float64) layers {
+			out := make(layers, len(from))
+			for k, layer := range from {
+				out[k] = step(layer, removed, true)
+			}
+			return out
+		}
+		shiftAll := func(from layers, by int) layers {
+			if by == 0 {
+				return from
+			}
+			out := make(layers, 0, by+len(from))
+			for i := 0; i < by; i++ {
+				out = append(out, zeros())
+			}
+			return append(out, from...)
+		}
+		// extra: the mortal wounds a critical wound inflicts beyond every critical wound's.
+		woundRoll := func(from layers, extra int) layers {
+			onWound := mortals.wound
+			onCritical := onWound + mortals.criticalWound + extra
+			if onWound == 0 && onCritical == 0 {
+				return blend([]part{
+					{1 - toNormal - toCritical, from},
+					{toNormal, stepAll(from, normal)},
+					{toCritical, stepAll(from, criticalLost)},
+				})
+			}
+			normalWound := model.WoundPass - model.WoundCrit
 			return blend([]part{
-				{1 - toNormal - toCritical, from},
-				{toNormal, step(from, normal, true)},
-				{toCritical, step(from, criticalLost, true)},
+				{1 - model.WoundPass, from},
+				{normalWound * (1 - model.Unsaved), shiftAll(from, onWound)},
+				{toNormal, shiftAll(stepAll(from, normal), onWound)},
+				{model.WoundCrit - toCritical, shiftAll(from, onCritical)},
+				{toCritical, shiftAll(stepAll(from, criticalLost), onCritical)},
 			})
 		}
 		// Lethal Hits: the critical hit wounds automatically, a normal wound that takes the save.
-		firstWound := func(from []float64) []float64 {
+		firstWound := func(from layers) layers {
 			if model.Lethal {
-				return blend([]part{{1 - model.Unsaved, from}, {model.Unsaved, step(from, normal, true)}})
+				landed := blend([]part{{1 - model.Unsaved, from}, {model.Unsaved, stepAll(from, normal)}})
+				return shiftAll(landed, mortals.wound)
 			}
-			return woundRoll(from)
+			return woundRoll(from, mortals.criticalWoundOfCriticalHit)
 		}
-		attack := func(from []float64) []float64 {
-			parts := []part{{1 - normalHit - critHit, from}, {normalHit, woundRoll(from)}}
+		attack := func(from layers) layers {
+			parts := []part{{1 - normalHit - critHit, from}, {normalHit, shiftAll(woundRoll(from, 0), mortals.hit)}}
 			if critHit > 0 {
-				after := firstWound(from)
+				after := firstWound(shiftAll(from, mortals.hit+mortals.criticalHit))
 				done := 0
 				for _, extra := range extraCounts {
 					for ; done < extra.count; done++ {
-						after = woundRoll(after)
+						after = woundRoll(after, 0)
 					}
 					parts = append(parts, part{critHit * extra.probability, after})
 				}
@@ -549,64 +465,106 @@ func AllocateModelWith(model *AttackModel, defences AllocationDefences) (Allocat
 		}
 		for attacks := 0; attacks <= most; attacks++ {
 			if weight := counts[attacks]; weight > 0 {
-				for id, q := range state {
-					final[id] += weight * q
-				}
+				pending = gatherLayers(pending, state, weight, dead)
 			}
 			if attacks == most {
 				break
 			}
 			state = attack(state)
 		}
-		return summariseAllocation(final, models, wounds, uses, cells, dead), nil
-	}
-	events := joint{{0}}
-	acc := joint{{1}}
-	for attacks := 0; attacks <= most; attacks++ {
-		if weight := counts[attacks]; weight > 0 {
-			events = addJoint(events, acc, weight)
-		}
-		if attacks < most {
-			acc = convolveJoint(acc, per)
-		}
-	}
-	// Devastating Wounds' mortal wounds deal a critical wound's own Damage when it has one.
-	mortalRoll := model.Damage
-	if model.CriticalWound != nil {
-		mortalRoll = model.CriticalWound.Damage
-	}
-	mortal, err := woundsLost(mortalRoll, model.MortalWoundLost)
-	if err != nil {
-		return AllocationOutput{}, err
-	}
-	for normalEvents, row := range events {
-		if normalEvents > 0 {
-			state = step(state, normal, true)
-		}
-		anyPositive := false
-		for _, p := range row {
-			if p > 0 {
-				anyPositive = true
-				break
+	} else {
+		events := joint{{{0}}}
+		acc := joint{{{1}}}
+		for attacks := 0; attacks <= most; attacks++ {
+			if weight := counts[attacks]; weight > 0 {
+				events = addJoint(events, acc, weight)
+			}
+			if attacks < most {
+				acc = convolveJoint(acc, per)
 			}
 		}
-		if !anyPositive {
-			continue
+		// Devastating Wounds' mortal wounds deal a critical wound's own Damage when it has one.
+		mortalRoll := model.Damage
+		if model.CriticalWound != nil {
+			mortalRoll = model.CriticalWound.Damage
 		}
-		after := state
-		for mortalEvents, p := range row {
-			if mortalEvents > 0 {
-				after = step(after, mortal, false)
+		mortal, err := woundsLost(mortalRoll, model.MortalWoundLost)
+		if err != nil {
+			return AllocationOutput{}, err
+		}
+		current := state[0]
+		for normalEvents, row := range events {
+			if normalEvents > 0 {
+				current = step(current, normal, true)
 			}
-			if p > 0 {
-				for id, q := range after {
-					final[id] += p * q
+			anyPositive := false
+			for _, cell := range row {
+				for _, p := range cell {
+					anyPositive = anyPositive || p > 0
+				}
+			}
+			if !anyPositive {
+				continue
+			}
+			after := current
+			for mortalEvents, cell := range row {
+				if mortalEvents > 0 {
+					after = step(after, mortal, false)
+				}
+				for count, p := range cell {
+					if p <= 0 {
+						continue
+					}
+					for len(pending) <= count {
+						pending = append(pending, nil)
+					}
+					if pending[count] == nil {
+						pending[count] = zeros()
+					}
+					for id, q := range after {
+						pending[count][id] += p * q
+					}
 				}
 			}
 		}
 	}
 
+	// The ability's mortal wounds, one wound each after everything else: layer k takes k of them.
+	one, err := woundsLost([]DamageOutcome{{1, 1}}, model.MortalWoundLost)
+	if err != nil {
+		return AllocationOutput{}, err
+	}
+	final := zeros()
+	if len(pending) > 0 && pending[len(pending)-1] != nil {
+		final = pending[len(pending)-1]
+	}
+	for k := len(pending) - 2; k >= 0; k-- {
+		final = step(final, one, false)
+		for id, q := range pending[k] {
+			final[id] += q
+		}
+	}
 	return summariseAllocation(final, models, wounds, uses, cells, dead), nil
+}
+
+// layers holds allocation states by how many ability mortal wounds they still
+// wait on; a nil layer holds none.
+type layers [][]float64
+
+// gatherLayers adds weight times each layer of from into into, layer by layer.
+func gatherLayers(into, from layers, weight float64, dead int) layers {
+	for len(into) < len(from) {
+		into = append(into, nil)
+	}
+	for k, layer := range from {
+		if into[k] == nil {
+			into[k] = make([]float64, dead+1)
+		}
+		for id, q := range layer {
+			into[k][id] += weight * q
+		}
+	}
+	return into
 }
 
 // summariseAllocation is the expected wounds removed, the expected models

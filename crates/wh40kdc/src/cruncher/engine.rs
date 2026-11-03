@@ -172,11 +172,25 @@ pub struct AttackModel {
     /// a critical wound. A critical wound is one the wound roll scores, not a Lethal Hits wound;
     /// with Devastating Wounds it skips the save and its mortal wounds deal this Damage.
     pub critical_wound: Option<CriticalWound>,
+    /// Mortal wounds an ability inflicts on the attack's own rolls, one Damage each.
+    pub roll_mortals: RollMortalCounts,
     /// What the expected stages price that the exact allocation does not model: a single
-    /// re-rolled die over the whole unit (its attacks are no longer independent) and mortal
-    /// wounds an ability inflicts on a roll. Allocation refuses a model listing any rather than
-    /// return a result without them.
+    /// re-rolled die over the whole unit (its attacks are no longer independent). Allocation
+    /// refuses a model listing any rather than return a result without them.
     pub unmodelled: Vec<String>,
+}
+
+/// Mortal wounds an ability inflicts per roll outcome of one attack: on each Hit roll that scores
+/// (every Torrent attack), more on a critical hit, on each wound (a Lethal Hits wound included),
+/// more on each critical wound the Wound roll scores, and more again when that Wound roll is the
+/// critical hit's own.
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
+pub struct RollMortalCounts {
+    pub hit: f64,
+    pub critical_hit: f64,
+    pub wound: f64,
+    pub critical_wound: f64,
+    pub critical_wound_of_critical_hit: f64,
 }
 
 /// A critical wound's chance to go unsaved and its per-attack Damage, ascending by value.
@@ -998,11 +1012,12 @@ pub fn crunch_model(
     } else {
         crit_hits / hits_for_wound_roll
     };
-    let critical_mortals: f64 = critical
+    let critical_entries: Vec<&super::resolved::RollMortals> = critical
         .as_ref()
         .map(|critical| critical_only_entries(&resolved.roll_mortals, &critical.roll_mortals))
-        .unwrap_or_default()
-        .into_iter()
+        .unwrap_or_default();
+    let critical_mortals: f64 = critical_entries
+        .iter()
         .map(|entry| {
             let triggers = match (entry.roll, entry.outcome) {
                 (super::buffs::AttackRoll::Hit, super::buffs::RollOutcome::Critical) => {
@@ -1013,6 +1028,27 @@ pub fn crunch_model(
             entry.count * triggers
         })
         .sum();
+    let roll_mortal_counts = {
+        use super::buffs::{AttackRoll, RollOutcome};
+        let ordinary: Vec<&super::resolved::RollMortals> = resolved.roll_mortals.iter().collect();
+        RollMortalCounts {
+            hit: roll_mortal_count(&ordinary, AttackRoll::Hit, RollOutcome::Success),
+            critical_hit: roll_mortal_count(&ordinary, AttackRoll::Hit, RollOutcome::Critical),
+            wound: roll_mortal_count(&ordinary, AttackRoll::Wound, RollOutcome::Success),
+            // A critical-wound-only entry fires on the attack scoring the critical wound: on
+            // its hit, its wound, and its critical hit only when the critical hit rolled that
+            // wound itself.
+            critical_wound: roll_mortal_count(&ordinary, AttackRoll::Wound, RollOutcome::Critical)
+                + roll_mortal_count(&critical_entries, AttackRoll::Hit, RollOutcome::Success)
+                + roll_mortal_count(&critical_entries, AttackRoll::Wound, RollOutcome::Success)
+                + roll_mortal_count(&critical_entries, AttackRoll::Wound, RollOutcome::Critical),
+            critical_wound_of_critical_hit: if has_lethal {
+                0.0
+            } else {
+                roll_mortal_count(&critical_entries, AttackRoll::Hit, RollOutcome::Critical)
+            },
+        }
+    };
     let roll_mortals = roll_mortals + critical_mortals;
     damage_mortal += roll_mortals;
     let damage = damage_main + damage_mortal;
@@ -1126,12 +1162,12 @@ pub fn crunch_model(
             unsaved: 1.0 - p_saved_critical,
             damage: per_critical.distribution,
         }),
+        roll_mortals: roll_mortal_counts,
         unmodelled: [
             (hit_reroll_one_dice > 0.0, "re-roll one Hit roll"),
             (wound_reroll_one_dice > 0.0, "re-roll one Wound roll"),
             (save_reroll_one_dice > 0.0, "re-roll one saving throw"),
             (damage_reroll_one > 0.0, "re-roll one Damage roll"),
-            (roll_mortals > 0.0, "mortal wounds inflicted on a roll"),
         ]
         .into_iter()
         .filter_map(|(priced, what)| priced.then(|| what.to_string()))
@@ -1570,6 +1606,19 @@ mod tests {
 /// The entries of the critical-wound resolution that the ordinary one lacks: those gated on a
 /// critical wound. Both resolve the same buffs, so an entry is matched by its source, roll,
 /// outcome and count, each match consuming one ordinary entry. Mirrors `criticalOnlyEntries`.
+/// Mortal wounds the entries on one roll outcome inflict together.
+fn roll_mortal_count(
+    entries: &[&super::resolved::RollMortals],
+    roll: super::buffs::AttackRoll,
+    outcome: super::buffs::RollOutcome,
+) -> f64 {
+    entries
+        .iter()
+        .filter(|entry| entry.roll == roll && entry.outcome == outcome)
+        .map(|entry| entry.count)
+        .sum()
+}
+
 fn critical_only_entries<'a>(
     ordinary: &[super::resolved::RollMortals],
     critical: &'a [super::resolved::RollMortals],

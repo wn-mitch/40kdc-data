@@ -86,9 +86,16 @@ export type AttackModel = {
   wounds: number;
   modelCount: number;
   /**
+   * Mortal wounds an ability inflicts on the attack's own rolls, one Damage each: on each Hit roll
+   * that scores (every Torrent attack), more on a critical hit, on each wound (a Lethal Hits wound
+   * included), more on each critical wound the Wound roll scores, and more again when that Wound
+   * roll is the critical hit's own.
+   */
+  rollMortals: { hit: number; criticalHit: number; wound: number; criticalWound: number; criticalWoundOfCriticalHit: number };
+  /**
    * What the expected stages price that the exact allocation does not model: a single re-rolled
-   * die over the whole unit (its attacks are no longer independent) and mortal wounds an ability
-   * inflicts on a roll. Allocation refuses a model listing any rather than return a result without them.
+   * die over the whole unit (its attacks are no longer independent). Allocation refuses a model
+   * listing any rather than return a result without them.
    */
   unmodelled: string[];
 };
@@ -483,12 +490,21 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     wounds: W,
     modelCount: targetModelCount,
     ...(critical ? { criticalWound: { unsaved: 1 - pSavedCritical, damage: perCritical.distribution } } : {}),
+    rollMortals: {
+      hit: rollMortalCount(resolved.rollMortals, "hit", "success"),
+      criticalHit: rollMortalCount(resolved.rollMortals, "hit", "critical"),
+      wound: rollMortalCount(resolved.rollMortals, "wound", "success"),
+      // A critical-wound-only entry fires on the attack scoring the critical wound: on its hit, its
+      // wound, and its critical hit only when the critical hit rolled that wound itself.
+      criticalWound: rollMortalCount(resolved.rollMortals, "wound", "critical") + rollMortalCount(criticalMortals, "hit", "success") +
+        rollMortalCount(criticalMortals, "wound", "success") + rollMortalCount(criticalMortals, "wound", "critical"),
+      criticalWoundOfCriticalHit: hasLethal ? 0 : rollMortalCount(criticalMortals, "hit", "critical"),
+    },
     unmodelled: [
       ...(hitRerollOneDice > 0 ? ["re-roll one Hit roll"] : []),
       ...(woundRerollOneDice > 0 ? ["re-roll one Wound roll"] : []),
       ...(saveRerollOneDice > 0 ? ["re-roll one saving throw"] : []),
       ...(damageRerollOne > 0 ? ["re-roll one Damage roll"] : []),
-      ...(rollMortals > 0 ? ["mortal wounds inflicted on a roll"] : []),
     ],
   };
   return { output: { stages, resolved }, model };
@@ -705,6 +721,11 @@ function hasAttackComparison(gate: BuffApplicability | undefined): boolean {
  * critical wound. Both resolve the same buffs, so an entry is matched by its source, roll, outcome
  * and count, each match consuming one ordinary entry.
  */
+/** Mortal wounds the entries on one roll outcome inflict together. */
+function rollMortalCount(entries: ReadonlyArray<{ roll: string; outcome: string; count: number }>, roll: string, outcome: string): number {
+  return entries.reduce((sum, entry) => sum + (entry.roll === roll && entry.outcome === outcome ? entry.count : 0), 0);
+}
+
 function criticalOnlyEntries<T extends { roll: string; outcome: string; count: number; source: unknown }>(ordinary: readonly T[], critical: readonly T[]): T[] {
   const unmatched = [...ordinary];
   return critical.filter((entry) => {

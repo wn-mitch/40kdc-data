@@ -2,7 +2,7 @@
 use serde_json::{json, Value};
 
 use super::*;
-use crate::cruncher::engine::RollProbabilities;
+use crate::cruncher::engine::{RollMortalCounts, RollProbabilities};
 
 /// An attack model that always hits, wounds and goes unsaved.
 fn model() -> AttackModel {
@@ -31,6 +31,7 @@ fn model() -> AttackModel {
         wounds: 1,
         model_count: 1,
         critical_wound: None,
+        roll_mortals: RollMortalCounts::default(),
         unmodelled: Vec::new(),
     }
 }
@@ -257,4 +258,73 @@ fn allocates_critical_wounds_with_their_own_save_and_damage() {
     })
     .unwrap();
     assert!(harder.damage_dealt > plain.damage_dealt + 0.05);
+}
+
+#[test]
+fn carries_each_ability_mortal_wound_over_to_the_next_model() {
+    // A D1 wound kills the first 1-wound model; its mortal wound kills the second.
+    let out = allocate_model(&AttackModel {
+        roll_mortals: RollMortalCounts {
+            wound: 1.0,
+            ..RollMortalCounts::default()
+        },
+        model_count: 2,
+        ..model()
+    })
+    .expect("whole quantities");
+    assert_eq!(out.models_destroyed_distribution, vec![0.0, 0.0, 1.0]);
+    // Two mortal wounds per hit finish a 3-wound model a D1 wound started.
+    let hit = allocate_model(&AttackModel {
+        roll_mortals: RollMortalCounts {
+            hit: 2.0,
+            ..RollMortalCounts::default()
+        },
+        wounds: 3,
+        ..model()
+    })
+    .expect("whole quantities");
+    assert_close(hit.models_destroyed, 1.0, 1e-12);
+}
+
+#[test]
+fn inflicts_ability_mortal_wounds_after_devastating_wounds() {
+    // The D2 Devastating Wounds event kills the first 2-wound model, then the ability's mortal
+    // wound damages the second: 3 wounds removed (2 if it came first).
+    let ordered = allocate_model(&AttackModel {
+        wound: RollProbabilities {
+            pass: 1.0,
+            crit: 1.0,
+        },
+        devastating: true,
+        damage: vec![(2.0, 1.0)],
+        roll_mortals: RollMortalCounts {
+            critical_wound: 1.0,
+            ..RollMortalCounts::default()
+        },
+        wounds: 2,
+        model_count: 2,
+        ..model()
+    })
+    .expect("whole quantities");
+    assert_close(ordered.damage_dealt, 3.0, 1e-12);
+    // Mortal-only Feel No Pain removes each with probability 1/2.
+    let shielded = allocate_model(&AttackModel {
+        roll_mortals: RollMortalCounts {
+            wound: 2.0,
+            ..RollMortalCounts::default()
+        },
+        mortal_wound_lost: 0.5,
+        wounds: 5,
+        ..model()
+    })
+    .expect("whole quantities");
+    assert_close(shielded.damage_dealt, 2.0, 1e-12);
+    let fractional = allocate_model(&AttackModel {
+        roll_mortals: RollMortalCounts {
+            wound: 0.5,
+            ..RollMortalCounts::default()
+        },
+        ..model()
+    });
+    assert!(fractional.is_err());
 }

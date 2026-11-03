@@ -217,6 +217,64 @@
     }
   },
   {
+    "name": "bolt rifle vs intercessors, 1 mortal wound each time a wound roll scores",
+    "cruncher_case": "48-mortal-wounds-per-wound-bolter-vs-intercessor.json",
+    "expected": {
+      "damageDealt": 5.000000000000003,
+      "modelsDestroyed": 2.254335382478959,
+      "modelsDestroyedDistribution": [
+        0.060695354705414206,
+        0.22218835204660553,
+        0.31926027536452795,
+        0.24513539602702852,
+        0.11302252684211422,
+        0.03285967678855696,
+        0.006087452925748107,
+        0.0007022438462124675,
+        0.00004713378931057257,
+        0.0000015711263103524187,
+        1.6538171687920194e-8
+      ]
+    }
+  },
+  {
+    "name": "lascannon vs cultists with Devastating Wounds, two sources of D3 mortal wounds per critical hit and a mortal-only FNP",
+    "cruncher_case": "49-mortal-wounds-per-critical-hit-stacked-mortal-fnp-lascannon-vs-cultists.json",
+    "expected": {
+      "damageDealt": 2.6641919152867652,
+      "modelsDestroyed": 2.6641919152867657,
+      "modelsDestroyedDistribution": [
+        0.07313791108750378,
+        0.224304578288912,
+        0.25199444907418944,
+        0.16122233951336232,
+        0.12264493975545135,
+        0.092426217028208,
+        0.040972764318254765,
+        0.018437561350381985,
+        0.010358278252886205,
+        0.003254778547252071,
+        0.001246182783598181
+      ]
+    }
+  },
+  {
+    "name": "Canonical critical wound: mortal-wounds",
+    "cruncher_case": "canonical-critical-wound-mortal-wounds.json",
+    "expected": {
+      "damageDealt": 8.60722548012239,
+      "modelsDestroyed": 4.19450496804606,
+      "modelsDestroyedDistribution": [
+        0.011203015589032988,
+        0.0316205115000456,
+        0.0758258185318755,
+        0.12254344102010062,
+        0.15043357037276717,
+        0.6083736429861787
+      ]
+    }
+  },
+  {
     "name": "multi-melta x1 vs questoris knight, stationary, within half range + damage zeroing (1 use per unit)",
     "cruncher_case": "04-multi-melta-half-range-stationary-vs-knight.json",
     "zeroing": {

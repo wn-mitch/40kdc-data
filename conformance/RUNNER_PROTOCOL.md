@@ -251,9 +251,9 @@ wounds removed, the expected models destroyed, and the probability of each
 number of models destroyed from `0` to the target's model count. A quantity
 the allocation needs as a whole number (Attacks, Damage, Wounds, model counts,
 zeroing uses) that resolves to a fraction, an unknown `per`, an event table
-past the exact bound, or a crunch that prices a single re-rolled die or mortal
-wounds inflicted on a roll answers `CRUNCH_ERROR`. Floats compare with
-`±5e-4` per value; the distribution's length is exact.
+past the exact bound, or a crunch that prices a single re-rolled die answers
+`CRUNCH_ERROR`. Floats compare with `±5e-4` per value; the distribution's
+length is exact.
 
 ### `translate_scoring`
 

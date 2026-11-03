@@ -58,6 +58,19 @@ class CriticalWound(TypedDict):
     damage: list[DamageOutcome]
 
 
+class RollMortalCounts(TypedDict):
+    """Mortal wounds an ability inflicts per roll outcome of one attack: on each Hit roll that
+    scores (every Torrent attack), more on a critical hit, on each wound (a Lethal Hits wound
+    included), more on each critical wound the Wound roll scores, and more again when that Wound
+    roll is the critical hit's own."""
+
+    hit: float
+    criticalHit: float
+    wound: float
+    criticalWound: float
+    criticalWoundOfCriticalHit: float
+
+
 class AttackModel(TypedDict):
     """The per-roll parameters behind one crunch, for the discrete allocation
     stage (``allocation.py``): every probability is the one the expected-value
@@ -93,10 +106,11 @@ class AttackModel(TypedDict):
     #: critical wound. With Devastating Wounds it skips the save and its mortal wounds deal this
     #: Damage.
     criticalWound: NotRequired[CriticalWound]
+    #: Mortal wounds an ability inflicts on the attack's own rolls, one Damage each.
+    rollMortals: RollMortalCounts
     #: What the expected stages price that the exact allocation does not model: a single
-    #: re-rolled die over the whole unit (its attacks are no longer independent) and mortal wounds
-    #: an ability inflicts on a roll. Allocation refuses a model listing any rather than return a
-    #: result without them.
+    #: re-rolled die over the whole unit (its attacks are no longer independent). Allocation
+    #: refuses a model listing any rather than return a result without them.
     unmodelled: list[str]
 
 
@@ -759,6 +773,20 @@ def crunch_model(
         "mortalWoundLost": p_survive_all * p_survive_mortal,
         "wounds": wounds_stat,
         "modelCount": target_model_count,
+        "rollMortals": {
+            "hit": _roll_mortal_count(resolved["rollMortals"], "hit", "success"),
+            "criticalHit": _roll_mortal_count(resolved["rollMortals"], "hit", "critical"),
+            "wound": _roll_mortal_count(resolved["rollMortals"], "wound", "success"),
+            # A critical-wound-only entry fires on the attack scoring the critical wound: on its
+            # hit, its wound, and its critical hit only when the critical hit rolled that wound.
+            "criticalWound": _roll_mortal_count(resolved["rollMortals"], "wound", "critical")
+            + _roll_mortal_count(critical_mortals, "hit", "success")
+            + _roll_mortal_count(critical_mortals, "wound", "success")
+            + _roll_mortal_count(critical_mortals, "wound", "critical"),
+            "criticalWoundOfCriticalHit": (
+                0 if has_lethal else _roll_mortal_count(critical_mortals, "hit", "critical")
+            ),
+        },
         "unmodelled": [
             what
             for priced, what in (
@@ -766,7 +794,6 @@ def crunch_model(
                 (wound_reroll_one_dice > 0, "re-roll one Wound roll"),
                 (save_reroll_one_dice > 0, "re-roll one saving throw"),
                 (damage_reroll_one > 0, "re-roll one Damage roll"),
-                (roll_mortals > 0, "mortal wounds inflicted on a roll"),
             )
             if priced
         ],
@@ -1006,6 +1033,15 @@ def _set_or_stat(resolved: dict[str, Any], stat: str, printed: Any) -> float:
     """A ``stat-set`` value when one applies, else the profile's characteristic."""
     set_stat = resolved["statSet"].get(stat)
     return set_stat["value"] if set_stat is not None else eval_stat_value(printed)
+
+
+def _roll_mortal_count(entries: list[dict[str, Any]], roll: str, outcome: str) -> float:
+    """Mortal wounds the entries on one roll outcome inflict together."""
+    total = 0
+    for entry in entries:
+        if entry["roll"] == roll and entry["outcome"] == outcome:
+            total += entry["count"]
+    return total
 
 
 def _critical_only_entries(

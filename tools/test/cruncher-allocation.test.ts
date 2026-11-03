@@ -12,7 +12,8 @@ function model(overrides: Partial<AttackModel>): AttackModel {
     modelsFiring: 1, attacksStat: 1, attacksBonus: 0, rapidFireStat: null, torrent: false,
     hit: { pass: 1, crit: 0 }, sustainedStat: null, lethal: false, wound: { pass: 1, crit: 0 },
     devastating: false, unsaved: 1, damage: [{ value: 1, probability: 1 }], woundLost: 1, mortalWoundLost: 1,
-    wounds: 1, modelCount: 1, unmodelled: [], ...overrides,
+    wounds: 1, modelCount: 1, rollMortals: { hit: 0, criticalHit: 0, wound: 0, criticalWound: 0, criticalWoundOfCriticalHit: 0 },
+    unmodelled: [], ...overrides,
   };
 }
 
@@ -38,7 +39,8 @@ function draw(random: () => number, distribution: Array<[number, number]>): numb
 
 /**
  * An independent simulation of the same attack sequence: every attack rolls in turn, normal damage
- * allocates as it lands, and Devastating Wounds mortal wounds wait until all normal damage is done.
+ * allocates as it lands, Devastating Wounds mortal wounds wait until all normal damage is done, and
+ * mortal wounds the attack's rolls inflict come last, one wound at a time.
  */
 function simulate(attack: AttackModel, trials: number, seed: number, zeroing?: DamageZeroing): { damageDealt: number; modelsDestroyed: number } {
   const random = rng(seed);
@@ -64,9 +66,13 @@ function simulate(attack: AttackModel, trials: number, seed: number, zeroing?: D
       if (left === 0) { alive -= 1; left = attack.wounds; if (zeroing?.per === "model") unused = zeroing.uses; }
     };
     let mortal = 0;
-    const woundRoll = () => {
+    let rolled = 0;
+    const mortals = attack.rollMortals;
+    const woundRoll = (ofCriticalHit = false) => {
       const roll = random();
       const normal = attack.wound.pass - attack.wound.crit;
+      if (roll < attack.wound.crit + normal) rolled += mortals.wound;
+      if (roll < attack.wound.crit) rolled += mortals.criticalWound + (ofCriticalHit ? mortals.criticalWoundOfCriticalHit : 0);
       if (roll < attack.wound.crit) {
         if (attack.devastating) mortal += 1;
         else if (random() < (attack.criticalWound?.unsaved ?? attack.unsaved)) land(attack.woundLost, true, criticalDamage);
@@ -80,14 +86,17 @@ function simulate(attack: AttackModel, trials: number, seed: number, zeroing?: D
         const roll = random();
         const critHit = !attack.torrent && roll < attack.hit.crit;
         const normalHit = attack.torrent || (!critHit && roll < attack.hit.pass);
+        if (normalHit || critHit) rolled += mortals.hit;
         if (normalHit) woundRoll();
         if (critHit) {
-          if (attack.lethal) { if (random() < attack.unsaved) land(attack.woundLost, true); } else woundRoll();
+          rolled += mortals.criticalHit;
+          if (attack.lethal) { rolled += mortals.wound; if (random() < attack.unsaved) land(attack.woundLost, true); } else woundRoll(true);
           for (let extra = draw(random, sustained); extra > 0; extra -= 1) woundRoll();
         }
       }
     }
     for (; mortal > 0; mortal -= 1) land(attack.mortalWoundLost, false, criticalDamage);
+    for (; rolled > 0; rolled -= 1) land(attack.mortalWoundLost, false, [[1, 1]]);
     dealt += removed;
     destroyed += attack.modelCount - alive;
   }
@@ -254,9 +263,12 @@ describe("exact allocation of what it does not model", () => {
     expect(allocate(input([one("damage")]), ds)).toEqual(allocate(input([]), ds));
   });
 
-  it("refuses mortal wounds an ability inflicts on a roll", () => {
+  it("allocates mortal wounds an ability inflicts on a roll at the expected stages' value", () => {
     const mortal: Buff = { source: manual, contribution: { type: "mortal-wounds-on-roll", roll: "wound", outcome: "success", count: 1 } };
-    expect(() => allocate(input([mortal]), ds)).toThrow(/mortal wounds inflicted on a roll not modelled/u);
+    // Every wound deals 1 damage and the squad cannot run out, so no damage is ever lost.
+    const out = allocate(input([mortal]), ds);
+    expect(out.damageDealt).toBeCloseTo(crunch(input([mortal]), ds).stages.at(-2)!.expected, 12);
+    expect(out.damageDealt).toBeGreaterThan(allocate(input([]), ds).damageDealt);
   });
 });
 
@@ -309,5 +321,51 @@ describe("allocation order of normal and critical wounds", () => {
     const out = allocateModel(attack);
     expect(out.damageDealt).toBeCloseTo(exact.damage, 12);
     expect(out.modelsDestroyed).toBeCloseTo(exact.kills, 12);
+  });
+});
+
+describe("mortal wounds an attack's rolls inflict", () => {
+  const none = { hit: 0, criticalHit: 0, wound: 0, criticalWound: 0, criticalWoundOfCriticalHit: 0 };
+
+  it("carries each mortal wound over to the next model", () => {
+    // A D1 wound kills the first 1-wound model; its mortal wound kills the second.
+    const out = allocateModel(model({ rollMortals: { ...none, wound: 1 }, wounds: 1, modelCount: 2 }));
+    expect(out.modelsDestroyedDistribution).toEqual([0, 0, 1]);
+    // Two mortal wounds per hit finish a 3-wound model a D1 wound started.
+    expect(allocateModel(model({ rollMortals: { ...none, hit: 2 }, wounds: 3, modelCount: 1 })).modelsDestroyed).toBe(1);
+  });
+
+  it("inflicts them after Devastating Wounds, with mortal-only Feel No Pain", () => {
+    // The D2 Devastating Wounds mortal wounds kill the first 2-wound model, then the ability's
+    // mortal wound damages the second: 3 wounds removed. Inflicted first, the ability's wound
+    // would leave the D2 event 1 wound to remove and 2 in all.
+    const ordered = model({ wound: { pass: 1, crit: 1 }, devastating: true, damage: [{ value: 2, probability: 1 }], rollMortals: { ...none, criticalWound: 1 }, wounds: 2, modelCount: 2 });
+    expect(allocateModel(ordered).damageDealt).toBe(3);
+    // Mortal-only Feel No Pain removes each with probability 1/2.
+    const shielded = allocateModel(model({ rollMortals: { ...none, wound: 2 }, mortalWoundLost: 0.5, wounds: 5, modelCount: 1 }));
+    expect(shielded.damageDealt).toBeCloseTo(1 + 2 * 0.5, 12);
+  });
+
+  const checks: Array<[string, Partial<AttackModel>]> = [
+    ["on each wound, sustained and lethal hits", { modelsFiring: 3, attacksStat: 2, hit: { pass: 1 / 2, crit: 1 / 6 }, sustainedStat: 1, lethal: true, wound: { pass: 1 / 2, crit: 1 / 6 }, unsaved: 1 / 2, rollMortals: { ...none, wound: 1, criticalHit: 1 }, mortalWoundLost: 2 / 3, wounds: 3, modelCount: 4 }],
+    ["on critical hits and wounds with Devastating Wounds", { modelsFiring: 2, attacksStat: 3, hit: { pass: 2 / 3, crit: 1 / 6 }, sustainedStat: 1, wound: { pass: 1 / 2, crit: 1 / 6 }, devastating: true, unsaved: 1 / 3, damage: [{ value: 2, probability: 1 }], rollMortals: { ...none, criticalHit: 2, criticalWound: 1 }, mortalWoundLost: 1 / 2, wounds: 2, modelCount: 5 }],
+    ["torrent hits", { modelsFiring: 2, attacksStat: "D3", torrent: true, wound: { pass: 1 / 3, crit: 1 / 6 }, unsaved: 1 / 2, damage: [{ value: 2, probability: 1 }], rollMortals: { ...none, hit: 1 }, wounds: 3, modelCount: 3 }],
+    ["critical wounds with their own Damage, hit by hit", { modelsFiring: 3, attacksStat: 2, hit: { pass: 2 / 3, crit: 1 / 6 }, sustainedStat: 1, wound: { pass: 1 / 2, crit: 1 / 6 }, unsaved: 1 / 2, criticalWound: { unsaved: 1 / 2, damage: [{ value: 3, probability: 1 }] }, rollMortals: { ...none, wound: 1, criticalWound: 1, criticalWoundOfCriticalHit: 2 }, wounds: 3, modelCount: 4 }],
+  ];
+  for (const [name, overrides] of checks) {
+    it(`agrees with a seeded simulation: ${name}`, () => {
+      const attack = model(overrides);
+      const exact = allocateModel(attack);
+      const trials = 40_000;
+      const simulated = simulate(attack, trials, 0x3a7e);
+      expect(Math.abs(simulated.damageDealt - exact.damageDealt)).toBeLessThan((attack.modelCount * attack.wounds) * 4 / Math.sqrt(trials));
+      expect(Math.abs(simulated.modelsDestroyed - exact.modelsDestroyed)).toBeLessThan(attack.modelCount * 4 / Math.sqrt(trials));
+      // The mortal wounds matter: without them fewer models die.
+      expect(allocateModel({ ...attack, rollMortals: none }).modelsDestroyed).toBeLessThan(exact.modelsDestroyed - 0.05);
+    });
+  }
+
+  it("rejects a fractional mortal-wound count", () => {
+    expect(() => allocateModel(model({ rollMortals: { ...none, wound: 0.5 } }))).toThrow(/mortal wounds/);
   });
 });

@@ -163,21 +163,15 @@ fn allocation_corpus_matches_reference() {
     }
 }
 
-/// The cruncher cases whose single re-rolled dice and ability mortal wounds the expected stages
-/// price: exact allocation refuses them rather than returning a result without them.
+/// The cruncher cases whose single re-rolled dice the expected stages price: exact allocation
+/// refuses them rather than returning a result without them.
 #[test]
 fn allocation_refuses_what_it_does_not_model() {
     let ds = Dataset::embedded();
-    for (file, what) in [
-        (
-            "36-reroll-one-hit-and-wound-bolter-vs-intercessor.json",
-            "re-roll one Hit roll, re-roll one Wound roll",
-        ),
-        (
-            "48-mortal-wounds-per-wound-bolter-vs-intercessor.json",
-            "mortal wounds inflicted on a roll",
-        ),
-    ] {
+    for (file, what) in [(
+        "36-reroll-one-hit-and-wound-bolter-vs-intercessor.json",
+        "re-roll one Hit roll, re-roll one Wound roll",
+    )] {
         let path = conformance_dir().join("cruncher").join(file);
         let case: CruncherCase =
             serde_json::from_str(&fs::read_to_string(&path).expect("cruncher case")).expect(file);

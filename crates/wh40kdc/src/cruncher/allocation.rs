@@ -7,12 +7,15 @@
 //! is lost, and an already damaged model takes the next attack. Feel No Pain
 //! rolls once for each wound that would be lost. Devastating Wounds mortal
 //! wounds are inflicted after all normal damage and also damage at most one
-//! model each, the rest being lost.
+//! model each, the rest being lost. Mortal wounds an ability inflicts on the
+//! attack's rolls come last, one wound at a time, each carrying over to the
+//! next model.
 //!
 //! The state is (models alive, wounds left on the damaged model, zeroing uses
-//! left). Event counts come from the exact joint distribution of normal and
-//! mortal damage events per attack, so Sustained Hits, Lethal Hits and
-//! Devastating Wounds keep their correlation within an attack. Arithmetic runs
+//! left). Event counts come from the exact joint distribution of normal damage
+//! events, mortal-wound events and ability mortal wounds per attack, so
+//! Sustained Hits, Lethal Hits, Devastating Wounds and mortal wounds on a roll
+//! keep their correlation within an attack. Arithmetic runs
 //! in the same order as the TS reference so the two agree to the last few
 //! ulps.
 //!
@@ -29,6 +32,10 @@ use serde::Serialize;
 use super::damage_roll::{quantity_distribution, quantity_roll};
 use super::engine::{crunch_model, AttackModel, CruncherError, EngineInput};
 use crate::data::Dataset;
+
+#[path = "allocation_joint.rs"]
+mod joint;
+use joint::{add, convolve, per_attack, roll_mortals_of, trim, Joint};
 
 /// The allocation result. Serializes with the runner's camelCase keys.
 #[derive(Clone, Debug, PartialEq, Serialize)]
@@ -98,7 +105,7 @@ pub struct AllocationDefences {
 }
 
 /// The largest event table the exact computation builds, measured as attacks
-/// × table rows × table columns. Past it the allocation is refused rather
+/// × table rows × table columns × table depth. Past it the allocation is refused rather
 /// than approximated.
 pub const MAX_EVENT_WORK: u64 = 1_000_000;
 
@@ -150,134 +157,12 @@ impl From<CruncherError> for AllocationError {
     }
 }
 
-/// Probabilities indexed `[normal events][mortal events]`.
-type Joint = Vec<Vec<f64>>;
-
-fn joint(rows: usize, columns: usize) -> Joint {
-    vec![vec![0.0; columns]; rows]
-}
-
-fn convolve(left: &Joint, right: &Joint) -> Joint {
-    let mut out = joint(
-        left.len() + right.len() - 1,
-        left[0].len() + right[0].len() - 1,
-    );
-    for (k, row) in left.iter().enumerate() {
-        for (j, &p) in row.iter().enumerate() {
-            if p == 0.0 {
-                continue;
-            }
-            for (k2, other) in right.iter().enumerate() {
-                for (j2, &q) in other.iter().enumerate() {
-                    if q != 0.0 {
-                        out[k + k2][j + j2] += p * q;
-                    }
-                }
-            }
-        }
-    }
-    out
-}
-
-/// `table` without trailing all-zero rows and columns; convolution skips
-/// zeros, so the nonzero values are unchanged.
-fn trim(table: Joint) -> Joint {
-    let mut rows = table.len();
-    while rows > 1 && table[rows - 1].iter().all(|&p| p == 0.0) {
-        rows -= 1;
-    }
-    let mut columns = table[0].len();
-    while columns > 1 && table[..rows].iter().all(|row| row[columns - 1] == 0.0) {
-        columns -= 1;
-    }
-    table[..rows]
-        .iter()
-        .map(|row| row[..columns].to_vec())
-        .collect()
-}
-
-fn power(base: &Joint, times: i64) -> Joint {
-    let mut out: Joint = vec![vec![1.0]];
-    for _ in 0..times.max(0) {
-        out = convolve(&out, base);
-    }
-    out
-}
-
-/// `into + weight * from`, grown to cover both.
-fn add(into: &Joint, from: &Joint, weight: f64) -> Joint {
-    let mut grown = joint(into.len().max(from.len()), into[0].len().max(from[0].len()));
-    for (k, row) in into.iter().enumerate() {
-        for (j, &p) in row.iter().enumerate() {
-            grown[k][j] += p;
-        }
-    }
-    for (k, row) in from.iter().enumerate() {
-        for (j, &p) in row.iter().enumerate() {
-            grown[k][j] += weight * p;
-        }
-    }
-    grown
-}
-
-fn integral(value: f64, what: &'static str) -> Result<i64, AllocationError> {
+pub(super) fn integral(value: f64, what: &'static str) -> Result<i64, AllocationError> {
     if value.is_finite() && value.fract() == 0.0 {
         Ok(value as i64)
     } else {
         Err(AllocationError::NotWhole { what, value })
     }
-}
-
-/// Distribution of one attack's normal and mortal damage events.
-fn per_attack(model: &AttackModel) -> Result<Joint, AllocationError> {
-    let normal_wound = model.wound.pass - model.wound.crit;
-    let split = model.critical_wound.as_ref().filter(|_| !model.devastating);
-    let to_main = (normal_wound
-        + if model.devastating || split.is_some() {
-            0.0
-        } else {
-            model.wound.crit
-        })
-        * model.unsaved;
-    let to_second = match split {
-        _ if model.devastating => model.wound.crit,
-        Some(critical) => model.wound.crit * critical.unsaved,
-        None => 0.0,
-    };
-    let wound_roll: Joint = vec![
-        vec![1.0 - to_main - to_second, to_second],
-        vec![to_main, 0.0],
-    ];
-    let auto_wound: Joint = vec![vec![1.0 - model.unsaved], vec![model.unsaved]];
-    let normal_hit = if model.torrent {
-        1.0
-    } else {
-        model.hit.pass - model.hit.crit
-    };
-    let crit_hit = if model.torrent { 0.0 } else { model.hit.crit };
-    let mut out = joint(1, 1);
-    out[0][0] = 1.0 - normal_hit - crit_hit;
-    let mut result = add(&out, &wound_roll, normal_hit);
-    if crit_hit > 0.0 {
-        let first = if model.lethal {
-            &auto_wound
-        } else {
-            &wound_roll
-        };
-        let extras = match &model.sustained_stat {
-            None => vec![(0.0, 1.0)],
-            Some(stat) => quantity_distribution(stat)?,
-        };
-        for (count, probability) in extras {
-            let extra_hits = power(&wound_roll, integral(count, "Sustained Hits")?);
-            result = add(
-                &result,
-                &convolve(first, &extra_hits),
-                crit_hit * probability,
-            );
-        }
-    }
-    Ok(result)
 }
 
 /// Insertion-ordered `count → probability` pairs: iteration order fixes the
@@ -468,10 +353,11 @@ pub fn allocate_model_with(
     };
 
     let per = trim(per_attack(model)?);
+    let mortals = roll_mortals_of(&model.roll_mortals)?;
     let counts = attack_counts(model)?;
     let most = counts.0.iter().map(|(count, _)| *count).max().unwrap_or(0);
     let span = |size: usize| most as u64 * (size as u64 - 1) + 1;
-    let work = most as u64 * span(per.len()) * span(per[0].len());
+    let work = most as u64 * span(per.len()) * span(per[0].len()) * span(per[0][0].len());
     if work > MAX_EVENT_WORK {
         return Err(AllocationError::TooManyAttacks {
             attacks: most,
@@ -479,9 +365,11 @@ pub fn allocate_model_with(
         });
     }
     let normal = wounds_lost(&model.damage, model.wound_lost)?;
-    let mut state = vec![0.0; dead + 1];
-    state[dead - 1] = 1.0;
-    let mut finals = vec![0.0; dead + 1];
+    let zeros = || vec![0.0; dead + 1];
+    // States by the ability mortal wounds still to inflict: layer k waits on k of them.
+    let mut state: Layers = vec![zeros()];
+    state[0][dead - 1] = 1.0;
+    let mut pending: Layers = Vec::new();
     if let Some(critical) = model.critical_wound.as_ref().filter(|_| !model.devastating) {
         // Critical wounds with their own save and Damage land in the order their hits wound, and
         // a normal and a critical wound of different Damage do not commute: the allocation steps
@@ -504,114 +392,182 @@ pub fn allocate_model_with(
         for &(count, probability) in &extras {
             extra_counts.push((integral(count, "Sustained Hits")?, probability));
         }
-        let blend = |parts: &[(f64, &[f64])]| -> Vec<f64> {
-            let mut out = vec![0.0; dead + 1];
+        let step_all = |from: &Layers, removed: &[f64]| -> Layers {
+            from.iter()
+                .map(|layer| step(layer, removed, true))
+                .collect()
+        };
+        let shift_all = |from: Layers, by: usize| -> Layers {
+            if by == 0 {
+                return from;
+            }
+            let mut out: Layers = (0..by).map(|_| zeros()).collect();
+            out.extend(from);
+            out
+        };
+        let blend = |parts: &[(f64, &Layers)]| -> Layers {
+            let mut out: Layers = vec![zeros()];
             for &(weight, from) in parts {
                 if weight > 0.0 {
-                    for (id, &q) in from.iter().enumerate() {
-                        out[id] += weight * q;
-                    }
+                    gather(&mut out, from, weight, dead);
                 }
             }
             out
         };
-        let wound_roll = |from: &[f64]| -> Vec<f64> {
-            let normal_after = step(from, &normal, true);
-            let critical_after = step(from, &critical_lost, true);
+        // `extra`: the mortal wounds a critical wound inflicts beyond every critical wound's.
+        let wound_roll = |from: &Layers, extra: usize| -> Layers {
+            let on_wound = mortals.wound;
+            let on_critical = on_wound + mortals.critical_wound + extra;
+            let normal_after = step_all(from, &normal);
+            let critical_after = step_all(from, &critical_lost);
+            if on_wound == 0 && on_critical == 0 {
+                return blend(&[
+                    (1.0 - to_normal - to_critical, from),
+                    (to_normal, &normal_after),
+                    (to_critical, &critical_after),
+                ]);
+            }
+            let normal_wound = model.wound.pass - model.wound.crit;
             blend(&[
-                (1.0 - to_normal - to_critical, from),
-                (to_normal, &normal_after),
-                (to_critical, &critical_after),
+                (1.0 - model.wound.pass, from),
+                (
+                    normal_wound * (1.0 - model.unsaved),
+                    &shift_all(from.clone(), on_wound),
+                ),
+                (to_normal, &shift_all(normal_after, on_wound)),
+                (
+                    model.wound.crit - to_critical,
+                    &shift_all(from.clone(), on_critical),
+                ),
+                (to_critical, &shift_all(critical_after, on_critical)),
             ])
         };
         // Lethal Hits: the critical hit wounds automatically, a normal wound that takes the save.
-        let first_wound = |from: &[f64]| -> Vec<f64> {
+        let first_wound = |from: &Layers| -> Layers {
             if model.lethal {
-                let normal_after = step(from, &normal, true);
-                blend(&[(1.0 - model.unsaved, from), (model.unsaved, &normal_after)])
+                let normal_after = step_all(from, &normal);
+                shift_all(
+                    blend(&[(1.0 - model.unsaved, from), (model.unsaved, &normal_after)]),
+                    mortals.wound,
+                )
             } else {
-                wound_roll(from)
+                wound_roll(from, mortals.critical_wound_of_critical_hit)
             }
         };
-        let attack = |from: &[f64]| -> Vec<f64> {
-            let hit = wound_roll(from);
-            let mut crits: Vec<(f64, Vec<f64>)> = Vec::new();
+        let attack = |from: &Layers| -> Layers {
+            let hit = shift_all(wound_roll(from, 0), mortals.hit);
+            let mut crits: Vec<(f64, Layers)> = Vec::new();
             if crit_hit > 0.0 {
-                let mut after = first_wound(from);
+                let mut after =
+                    first_wound(&shift_all(from.clone(), mortals.hit + mortals.critical_hit));
                 let mut done = 0;
                 for &(count, probability) in &extra_counts {
                     while done < count {
-                        after = wound_roll(&after);
+                        after = wound_roll(&after, 0);
                         done += 1;
                     }
                     crits.push((crit_hit * probability, after.clone()));
                 }
             }
-            let mut parts: Vec<(f64, &[f64])> =
+            let mut parts: Vec<(f64, &Layers)> =
                 vec![(1.0 - normal_hit - crit_hit, from), (normal_hit, &hit)];
-            parts.extend(
-                crits
-                    .iter()
-                    .map(|(weight, state)| (*weight, state.as_slice())),
-            );
+            parts.extend(crits.iter().map(|(weight, state)| (*weight, state)));
             blend(&parts)
         };
         for attacks in 0..=most {
             let weight = counts.get(attacks);
             if weight > 0.0 {
-                for (id, &q) in state.iter().enumerate() {
-                    finals[id] += weight * q;
-                }
+                gather(&mut pending, &state, weight, dead);
             }
             if attacks == most {
                 break;
             }
             state = attack(&state);
         }
-        return Ok(summarise(&finals, models, wounds, uses, cells, dead));
-    }
-    let events = {
-        let mut total: Joint = vec![vec![0.0]];
-        let mut acc: Joint = vec![vec![1.0]];
-        for attacks in 0..=most {
-            let weight = counts.get(attacks);
-            if weight > 0.0 {
-                total = add(&total, &acc, weight);
+    } else {
+        let events = {
+            let mut total: Joint = vec![vec![vec![0.0]]];
+            let mut acc: Joint = vec![vec![vec![1.0]]];
+            for attacks in 0..=most {
+                let weight = counts.get(attacks);
+                if weight > 0.0 {
+                    total = add(&total, &acc, weight);
+                }
+                if attacks < most {
+                    acc = convolve(&acc, &per);
+                }
             }
-            if attacks < most {
-                acc = convolve(&acc, &per);
-            }
-        }
-        total
-    };
+            total
+        };
 
-    // Devastating Wounds' mortal wounds deal a critical wound's own Damage when it has one.
-    let mortal_roll = model
-        .critical_wound
-        .as_ref()
-        .map_or(&model.damage, |critical| &critical.damage);
-    let mortal = wounds_lost(mortal_roll, model.mortal_wound_lost)?;
-    for (normal_events, row) in events.iter().enumerate() {
-        if normal_events > 0 {
-            state = step(&state, &normal, true);
-        }
-        if !row.iter().any(|&p| p > 0.0) {
-            continue;
-        }
-        let mut after = state.clone();
-        for (mortal_events, &p) in row.iter().enumerate() {
-            if mortal_events > 0 {
-                after = step(&after, &mortal, false);
+        // Devastating Wounds' mortal wounds deal a critical wound's own Damage when it has one.
+        let mortal_roll = model
+            .critical_wound
+            .as_ref()
+            .map_or(&model.damage, |critical| &critical.damage);
+        let mortal = wounds_lost(mortal_roll, model.mortal_wound_lost)?;
+        let mut current = state.swap_remove(0);
+        for (normal_events, row) in events.iter().enumerate() {
+            if normal_events > 0 {
+                current = step(&current, &normal, true);
             }
-            if p > 0.0 {
-                for (id, &q) in after.iter().enumerate() {
-                    finals[id] += p * q;
+            if !row.iter().any(|cell| cell.iter().any(|&p| p > 0.0)) {
+                continue;
+            }
+            let mut after = current.clone();
+            for (mortal_events, cell) in row.iter().enumerate() {
+                if mortal_events > 0 {
+                    after = step(&after, &mortal, false);
+                }
+                for (count, &p) in cell.iter().enumerate() {
+                    if p <= 0.0 {
+                        continue;
+                    }
+                    if pending.len() <= count {
+                        pending.resize_with(count + 1, Vec::new);
+                    }
+                    if pending[count].is_empty() {
+                        pending[count] = zeros();
+                    }
+                    for (id, &q) in after.iter().enumerate() {
+                        pending[count][id] += p * q;
+                    }
                 }
             }
         }
     }
 
+    // The ability's mortal wounds, one wound each after everything else: layer k takes k of them.
+    let one = wounds_lost(&[(1.0, 1.0)], model.mortal_wound_lost)?;
+    let mut finals = pending
+        .pop()
+        .filter(|layer| !layer.is_empty())
+        .unwrap_or_else(zeros);
+    while let Some(layer) = pending.pop() {
+        finals = step(&finals, &one, false);
+        for (id, &q) in layer.iter().enumerate() {
+            finals[id] += q;
+        }
+    }
     Ok(summarise(&finals, models, wounds, uses, cells, dead))
+}
+
+/// States by how many ability mortal wounds they still wait on; an empty layer holds none.
+type Layers = Vec<Vec<f64>>;
+
+/// `into` plus `weight` times each layer of `from`, layer by layer.
+fn gather(into: &mut Layers, from: &Layers, weight: f64, dead: usize) {
+    if into.len() < from.len() {
+        into.resize_with(from.len(), Vec::new);
+    }
+    for (k, layer) in from.iter().enumerate() {
+        if into[k].is_empty() {
+            into[k] = vec![0.0; dead + 1];
+        }
+        for (id, &q) in layer.iter().enumerate() {
+            into[k][id] += weight * q;
+        }
+    }
 }
 
 /// Expected wounds removed, expected models destroyed and their distribution.

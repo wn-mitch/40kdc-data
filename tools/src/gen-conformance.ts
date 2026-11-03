@@ -1175,7 +1175,7 @@ function genAttribution(): void {
  * models destroyed when one crunch's attacks are allocated into the target's
  * models. Cases reference cruncher inputs and are chosen to cover overkill,
  * partial kills on multi-wound models, Sustained/Lethal Hits, Devastating
- * Wounds with mortal-only Feel No Pain, and variable Damage.
+ * Wounds with mortal-only Feel No Pain, mortal wounds on a roll, and variable Damage.
  */
 const ALLOCATION_CASE_FILES = [
   "01-bolter-vs-intercessor.json",
@@ -1192,6 +1192,11 @@ const ALLOCATION_CASE_FILES = [
   "canonical-critical-wound-damage.json",
   "canonical-critical-wound-devastating-damage.json",
   "canonical-critical-wound-sustained-damage.json",
+  // Mortal wounds an ability inflicts on a roll: on each wound, on critical hits beside Devastating
+  // Wounds with mortal-only Feel No Pain, and on critical wounds allocated hit by hit.
+  "48-mortal-wounds-per-wound-bolter-vs-intercessor.json",
+  "49-mortal-wounds-per-critical-hit-stacked-mortal-fnp-lascannon-vs-cultists.json",
+  "canonical-critical-wound-mortal-wounds.json",
 ];
 
 /**

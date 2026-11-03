@@ -636,7 +636,6 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		{woundRerollOneDice > 0, "re-roll one Wound roll"},
 		{saveRerollOneDice > 0, "re-roll one saving throw"},
 		{damageRerollOne > 0, "re-roll one Damage roll"},
-		{rollMortals > 0, "mortal wounds inflicted on a roll"},
 	} {
 		if priced.on {
 			model.Unmodelled = append(model.Unmodelled, priced.what)
@@ -644,6 +643,22 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	}
 	if critical != nil {
 		model.CriticalWound = &CriticalWound{Unsaved: 1 - pSavedCritical, Damage: perCritical.distribution}
+	}
+	model.RollMortals = RollMortalCounts{
+		Hit:         rollMortalCount(res.rollMortals, "hit", "success"),
+		CriticalHit: rollMortalCount(res.rollMortals, "hit", "critical"),
+		Wound:       rollMortalCount(res.rollMortals, "wound", "success"),
+	}
+	model.RollMortals.CriticalWound = rollMortalCount(res.rollMortals, "wound", "critical")
+	if critical != nil {
+		// A critical-wound-only entry fires on the attack scoring the critical wound: on its hit,
+		// its wound, and its critical hit only when the critical hit rolled that wound itself.
+		criticalEntries := criticalOnlyEntries(res.rollMortals, critical.rollMortals)
+		model.RollMortals.CriticalWound += rollMortalCount(criticalEntries, "hit", "success") +
+			rollMortalCount(criticalEntries, "wound", "success") + rollMortalCount(criticalEntries, "wound", "critical")
+		if !hasLethal {
+			model.RollMortals.CriticalWoundOfCriticalHit = rollMortalCount(criticalEntries, "hit", "critical")
+		}
 	}
 	return stages, res, model, nil
 }
@@ -927,6 +942,17 @@ func rerollIfUnset(subset string, attacksSet bool) string {
 // criticalOnlyEntries is the entries of the critical-wound resolution that the ordinary one lacks:
 // those gated on a critical wound. Both resolve the same buffs, so an entry is matched by its
 // source, roll, outcome and count, each match consuming one ordinary entry.
+// rollMortalCount is the mortal wounds the entries on one roll outcome inflict together.
+func rollMortalCount(entries []rollMortal, roll, outcome string) float64 {
+	total := 0.0
+	for _, entry := range entries {
+		if entry.roll == roll && entry.outcome == outcome {
+			total += entry.count
+		}
+	}
+	return total
+}
+
 func criticalOnlyEntries(ordinary, critical []rollMortal) []rollMortal {
 	unmatched := append([]rollMortal{}, ordinary...)
 	var out []rollMortal
