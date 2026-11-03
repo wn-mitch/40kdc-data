@@ -8045,7 +8045,7 @@
             "parameters": {
               "subject": "event-subject",
               "filter": {
-                "any_of": [
+                "all_of": [
                   "KHORNE",
                   "LEGIONES DAEMONICA"
                 ]
