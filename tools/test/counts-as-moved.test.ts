@@ -10,14 +10,6 @@ type Item = [wording: string, family: string, parameters: Record<string, unknown
 
 /** Leaves placed on their wording in `text`, in order, with stored (normalized) parameters (fabricated wording). */
 function build(text: string, ...items: Item[]): CompileLeaf[] {
-  return unchecked(text, ...items).map((leaf) => ({ ...leaf, parameters: normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version) }));
-}
-
-/**
- * Leaves as `build` places them, without normalization: only for calling the fold directly on shapes no reviewer can
- * store (a carried-units permission whose subject is not this unit or model), which the fold still guards.
- */
-function unchecked(text: string, ...items: Item[]): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters, fragment]) => {
@@ -25,11 +17,15 @@ function unchecked(text: string, ...items: Item[]): CompileLeaf[] {
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: fragment ?? "RAW_TEXT" };
+    return {
+      role: familyRole(family, version), family_id: family, family_version: version,
+      parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: fragment ?? "RAW_TEXT",
+    };
   });
 }
 
-const DISEMBARK = { subject: "selected-unit", activity: "disembark", allow: true };
+/** A Transport's carried units, named by the permission's antecedent subject (the Transport an earlier leaf names). */
+const DISEMBARK = { subject: "antecedent", activity: "disembark", allow: true };
 const MOVE_ENDED = { kind: "move-ended" };
 const COUNTS = { move_type: "normal" };
 
@@ -61,23 +57,23 @@ describe("foldCountsAsMoved", () => {
   ];
 
   it("binds across a sentence boundary when one move-ended event lies between, and drops the counts-as leaf", () => {
-    const folded = foldCountsAsMoved(unchecked(text, ...sentenceSplit), text);
+    const folded = foldCountsAsMoved(build(text, ...sentenceSplit), text);
     expect(folded.map((leaf) => leaf.family_id)).toEqual(["eligibility-permission", "event"]);
     expect(folded[0]!.parameters.counts_as_move).toBe("normal");
   });
 
   it("folds a phase window as counts_as_until end-of-phase, and a turn window as none", () => {
     const phaseText = "Fabricated transport. It can disembark from it. After that, it has moved. Carried units that do so count as having made a Test move that phase.";
-    const folded = foldCountsAsMoved(unchecked(phaseText,
+    const folded = foldCountsAsMoved(build(phaseText,
       ["It can disembark from it.", "eligibility-permission", DISEMBARK],
       ["After that, it has moved.", "event", MOVE_ENDED],
       ["Carried units that do so count as having made a Test move that phase.", "counts-as-moved", { move_type: "normal", window: "phase" }]), phaseText);
     expect(folded[0]!.parameters).toMatchObject({ counts_as_move: "normal", counts_as_until: "end-of-phase" });
-    expect(foldCountsAsMoved(unchecked(text, ...sentenceSplit), text)[0]!.parameters.counts_as_until).toBeUndefined();
+    expect(foldCountsAsMoved(build(text, ...sentenceSplit), text)[0]!.parameters.counts_as_until).toBeUndefined();
   });
 
   it("refuses a permission for an activity other than disembark, as a DSL_GAP", () => {
-    const shoot = unchecked(text,
+    const shoot = build(text,
       ["It can disembark from it.", "eligibility-permission", { ...DISEMBARK, activity: "shoot" }],
       ["After that, it has moved.", "event", MOVE_ENDED],
       ["Carried units that do so count as having made a Test move.", "counts-as-moved", COUNTS]);
@@ -85,30 +81,33 @@ describe("foldCountsAsMoved", () => {
   });
 
   it("refuses with no permission before it, and does not reach into another fragment for one", () => {
-    const none = unchecked(text, ["Carried units that do so count as having made a Test move.", "counts-as-moved", COUNTS]);
+    const none = build(text, ["Carried units that do so count as having made a Test move.", "counts-as-moved", COUNTS]);
     expect(() => foldCountsAsMoved(none, text)).toThrow(/no permission before it in its fragment/);
-    const other = unchecked(text,
+    const other = build(text,
       ["It can disembark from it.", "eligibility-permission", DISEMBARK, "FRAGMENT_A"],
       ["Carried units that do so count as having made a Test move.", "counts-as-moved", COUNTS, "FRAGMENT_B"]);
     expect(() => foldCountsAsMoved(other, text)).toThrow(/no permission before it in its fragment/);
   });
 
   it("refuses a permission that forbids the activity", () => {
-    const forbid = unchecked(text,
+    const forbid = build(text,
       ["It can disembark from it.", "eligibility-permission", { ...DISEMBARK, allow: false }],
       ["Carried units that do so count as having made a Test move.", "counts-as-moved", COUNTS]);
     expect(() => foldCountsAsMoved(forbid, text)).toThrow(/forbids the activity/);
   });
 
   it("refuses a permission that already counts as a move", () => {
-    const again = unchecked(text,
-      ["It can disembark from it.", "eligibility-permission", { ...DISEMBARK, counts_as_move: "normal" }],
-      ["Carried units that do so count as having made a Test move.", "counts-as-moved", COUNTS]);
-    expect(() => foldCountsAsMoved(again, text)).toThrow(/Conflicting counts-as/);
+    // Only an earlier fold sets counts_as_move: a second counts-as leaf on the same permission conflicts with it.
+    const twice = "Fabricated transport. It can disembark from it. If it does, it counts as having made a Test move. It counts as having made a Test move.";
+    const again = build(twice,
+      ["It can disembark from it.", "eligibility-permission", { subject: "this-unit", activity: "disembark", allow: true }],
+      ["it counts as having made a Test move", "counts-as-moved", { move_type: "normal", units: "permission-subject" }],
+      ["It counts as having made a Test move", "counts-as-moved", { move_type: "normal", units: "permission-subject" }]);
+    expect(() => foldCountsAsMoved(again, twice)).toThrow(/Conflicting counts-as/);
   });
 
   it("refuses an intervening permission from another fragment, which the nearest-permission search skips", () => {
-    const between = unchecked(text,
+    const between = build(text,
       ["It can disembark from it.", "eligibility-permission", DISEMBARK, "FRAGMENT_A"],
       ["After that, it has moved.", "eligibility-permission", { subject: "this-model", activity: "shoot", allow: true }, "FRAGMENT_B"],
       ["Carried units that do so count as having made a Test move.", "counts-as-moved", COUNTS, "FRAGMENT_A"]);
@@ -116,7 +115,7 @@ describe("foldCountsAsMoved", () => {
   });
 
   it("refuses an intervening make-move, which is not a move-ended event", () => {
-    const moved = unchecked(text,
+    const moved = build(text,
       ["It can disembark from it.", "eligibility-permission", DISEMBARK],
       ["After that, it has moved.", "make-move", { subject: "this-unit", move_type: "normal" }],
       ["Carried units that do so count as having made a Test move.", "counts-as-moved", COUNTS]);
@@ -125,7 +124,7 @@ describe("foldCountsAsMoved", () => {
 
   it("refuses two move-ended events between the permission and the counts-as leaf", () => {
     const twice = "Fabricated transport. It can disembark from it. After that, it has moved. Then it has moved again. Carried units that do so count as having made a Test move.";
-    const leaves = unchecked(twice,
+    const leaves = build(twice,
       ["It can disembark from it.", "eligibility-permission", DISEMBARK],
       ["After that, it has moved.", "event", MOVE_ENDED],
       ["Then it has moved again.", "event", MOVE_ENDED],
@@ -147,21 +146,21 @@ describe("foldCountsAsMoved", () => {
 
   it("refuses a charge refusal in the same sentence as the counts-as leaf, as a DSL_GAP", () => {
     const same = "Fabricated transport. It can disembark from it. After that, it has moved. Carried units that do so count as having made a Test move, and cannot declare a Test charge.";
-    const leaves = unchecked(same,
+    const leaves = build(same,
       ["It can disembark from it.", "eligibility-permission", DISEMBARK],
       ["After that, it has moved.", "event", MOVE_ENDED],
       ["Carried units that do so count as having made a Test move", "counts-as-moved", COUNTS],
-      ["cannot declare a Test charge", "eligibility-permission", { subject: "selected-unit", activity: "declare-charge", allow: false }]);
+      ["cannot declare a Test charge", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: false }]);
     expect(() => foldCountsAsMoved(leaves, same)).toThrow(/DSL_GAP.*charge refusal/);
   });
 
   it("does not refuse a charge refusal that opens the next sentence", () => {
     const next = "Fabricated transport. It can disembark from it. After that, it has moved. Carried units that do so count as having made a Test move. They cannot declare a Test charge.";
-    const leaves = unchecked(next,
+    const leaves = build(next,
       ["It can disembark from it.", "eligibility-permission", DISEMBARK],
       ["After that, it has moved.", "event", MOVE_ENDED],
       ["Carried units that do so count as having made a Test move.", "counts-as-moved", COUNTS],
-      ["They cannot declare a Test charge.", "eligibility-permission", { subject: "selected-unit", activity: "declare-charge", allow: false }]);
+      ["They cannot declare a Test charge.", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: false }]);
     const folded = foldCountsAsMoved(leaves, next);
     expect(folded.map((leaf) => leaf.family_id)).toEqual(["eligibility-permission", "event", "eligibility-permission"]);
     expect(folded[0]!.parameters.counts_as_move).toBe("normal");
@@ -169,21 +168,45 @@ describe("foldCountsAsMoved", () => {
 
   it("ends the counts-as sentence at a semicolon, as every other pass does", () => {
     const next = "Fabricated transport. It can disembark from it. After that, it has moved. Carried units that do so count as having made a Test move; they cannot declare a Test charge.";
-    const leaves = unchecked(next,
+    const leaves = build(next,
       ["It can disembark from it.", "eligibility-permission", DISEMBARK],
       ["After that, it has moved.", "event", MOVE_ENDED],
       ["Carried units that do so count as having made a Test move", "counts-as-moved", COUNTS],
-      ["they cannot declare a Test charge.", "eligibility-permission", { subject: "selected-unit", activity: "declare-charge", allow: false }]);
+      ["they cannot declare a Test charge.", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: false }]);
     const folded = foldCountsAsMoved(leaves, next);
     expect(folded.map((leaf) => leaf.family_id)).toEqual(["eligibility-permission", "event", "eligibility-permission"]);
     expect(folded[0]!.parameters.counts_as_move).toBe("normal");
   });
 
   it("returns the leaves unchanged when none is a counts-as-moved leaf, and refuses without source text", () => {
-    const plain = unchecked(text, ["It can disembark from it.", "eligibility-permission", DISEMBARK]);
+    const plain = build(text, ["It can disembark from it.", "eligibility-permission", DISEMBARK]);
     expect(foldCountsAsMoved(plain, undefined)).toEqual(plain);
-    const leaves = unchecked(text, ["Carried units that do so count as having made a Test move.", "counts-as-moved", COUNTS]);
+    const leaves = build(text, ["Carried units that do so count as having made a Test move.", "counts-as-moved", COUNTS]);
     expect(() => foldCountsAsMoved(leaves, undefined)).toThrow(/needs the source text/);
+  });
+});
+
+describe("a charge refusal folded into its own permission", () => {
+  const own = "Fabricated transport. It can disembark from it. If it does, it counts as having made a Test move and cannot declare a Test charge.";
+  const leaves = (refusal: Record<string, unknown>) => build(own,
+    ["It can disembark from it.", "eligibility-permission", { subject: "this-unit", activity: "disembark", allow: true }],
+    ["it counts as having made a Test move", "counts-as-moved", { move_type: "normal", units: "permission-subject" }],
+    ["cannot declare a Test charge", "eligibility-permission", refusal]);
+
+  it("folds a plain refusal of the permission's own subject as then_cannot", () => {
+    const folded = foldCountsAsMoved(leaves({ subject: "this-unit", activity: "declare-charge", allow: false }), own);
+    expect(folded.map((leaf) => leaf.family_id)).toEqual(["eligibility-permission"]);
+    expect(folded[0]!.parameters).toMatchObject({ counts_as_move: "normal", then_cannot: expect.anything() });
+  });
+
+  it("refuses a refusal of another subject than the units that count as having moved", () => {
+    expect(() => foldCountsAsMoved(leaves({ subject: "this-model", activity: "declare-charge", allow: false }), own))
+      .toThrow(/refuses this-model, but the units that count as having moved are the permission's subject, this-unit/u);
+  });
+
+  it("refuses a refusal that carries more than the refusal itself", () => {
+    expect(() => foldCountsAsMoved(leaves({ subject: "this-unit", activity: "declare-charge", allow: false, despite: ["advanced"] }), own))
+      .toThrow(/carries more than a plain refusal/u);
   });
 });
 
