@@ -32,12 +32,12 @@ const datasheet = (id: string, name = id): AbilityOwner => ({ kind: "datasheet",
 const detachment = (id: string, slug: string): AbilityOwner => ({ kind: "detachment", id, name: slug, slug });
 
 let serial = 0;
-function row(faction: string, owner: AbilityOwner, name: string, fields: { kind?: AbilityRow["kind"]; text?: string; stratagem?: StratagemFields; combatPatrol?: boolean; datasheetIds?: string[] } = {}): AbilityRow {
+function row(faction: string, owner: AbilityOwner, name: string, fields: { kind?: AbilityRow["kind"]; text?: string; stratagem?: StratagemFields; combatPatrol?: boolean; datasheetIds?: string[]; publicationId?: string } = {}): AbilityRow {
   serial += 1;
   const rowId = `row-${serial}`;
   return {
     key: rowId, kind: fields.kind ?? "datasheet-ability", table: "datasheet_ability", rowId, ref: `dump.json#${rowId}`, faction,
-    publication: { id: "pub", name: fields.combatPatrol ? "Combat Patrol: Fixture" : "Codex: Fixture", combatPatrol: fields.combatPatrol ?? false, legends: false },
+    publication: { id: fields.publicationId ?? "pub", name: fields.combatPatrol ? "Combat Patrol: Fixture" : "Codex: Fixture", combatPatrol: fields.combatPatrol ?? false, legends: false },
     owner, name, slug: name.toLowerCase().replace(/[^a-z0-9]+/gu, "-"), ...(fields.text ? { text: fields.text } : {}),
     ...(fields.stratagem ? { stratagem: fields.stratagem } : {}), ...(fields.datasheetIds ? { datasheetIds: fields.datasheetIds } : {}), legends: false, sharedWith: [],
   };
@@ -168,5 +168,43 @@ describe("Semantic authoring army-rule prose for a unit that lists the rule", ()
     ], unowned: [] });
     const loaded = loadDumpSourceRecords({ dataRoot: root, prose, dumpPath: "fixture" });
     expect(loaded.records.find((record) => record.abilityId === "war-cry")?.text).toBe("Codex war cry.");
+  });
+});
+
+describe("Semantic authoring army-rule prose for a Combat Patrol's own copy", () => {
+  it("reads a patrol copy from the army rules its patrol box prints, never the codex text", () => {
+    const root = dataRoot({
+      "enrichment/alpha/abilities.json": [
+        { ability_id: "war-cry-alpha", name: "War Cry", ability_type: "faction" },
+        { ability_id: "war-cry-ash-patrol-alpha", name: "War Cry", ability_type: "faction", detachment_id: "ash-patrol" },
+        { ability_id: "war-cry-ember-patrol-alpha", name: "War Cry", ability_type: "faction", detachment_id: "ember-patrol" },
+        { ability_id: "war-cry-silent-patrol-alpha", name: "War Cry", ability_type: "faction", detachment_id: "silent-patrol" },
+      ],
+      "core/alpha/detachments.json": [
+        { id: "ash-patrol", external_refs: mfm("det-ash") },
+        { id: "ember-patrol", external_refs: mfm("det-ember") },
+        // A patrol detachment whose box prints no rule rows of its own.
+        { id: "silent-patrol", external_refs: mfm("det-silent") },
+      ],
+    });
+    const army = (text: string, publicationId: string, combatPatrol: boolean) =>
+      row("alpha", { kind: "army" }, "War Cry", { kind: "army-rule", text, combatPatrol, publicationId });
+    const prose = new DumpProse({ rows: [
+      army("Codex war cry.", "codex", false),
+      army("Ash patrol war cry.", "box-ash", true),
+      army("Ember patrol war cry.", "box-ember", true),
+      // Each box's detachment rule row places that detachment in its box.
+      row("alpha", detachment("det-ash", "ash-patrol"), "Ash Rule", { kind: "detachment-rule", text: "Ash rule.", combatPatrol: true, publicationId: "box-ash" }),
+      row("alpha", detachment("det-ember", "ember-patrol"), "Ember Rule", { kind: "detachment-rule", text: "Ember rule.", combatPatrol: true, publicationId: "box-ember" }),
+    ], unowned: [] });
+
+    const loaded = loadDumpSourceRecords({ dataRoot: root, prose, dumpPath: "fixture" });
+    const text = Object.fromEntries(loaded.records.map((record) => [record.abilityId, record.text]));
+    expect(text["war-cry-alpha"]).toBe("Codex war cry.");
+    expect(text["war-cry-ash-patrol-alpha"]).toBe("Ash patrol war cry.");
+    expect(text["war-cry-ember-patrol-alpha"]).toBe("Ember patrol war cry.");
+    expect(text["war-cry-silent-patrol-alpha"]).toBeUndefined();
+    expect(loaded.skipped).toEqual([expect.objectContaining({ abilityId: "war-cry-silent-patrol-alpha", reason: "missing-prose" })]);
+    expect(loaded.conflicts).toEqual([]);
   });
 });

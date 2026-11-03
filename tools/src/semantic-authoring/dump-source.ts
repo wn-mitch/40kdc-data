@@ -76,6 +76,17 @@ function coreIndex(dataRoot: string, file: string): Map<string, Array<{ faction:
  * under the supplement's faction (D7) even while the repo files the unit under its parent; a
  * unit pinned to its own datasheet ids is looked up wherever those datasheets print.
  */
+function detachmentPublications(prose: DumpProse): Map<string, Set<string>> {
+  const publications = new Map<string, Set<string>>();
+  for (const row of prose.rows) {
+    if (row.owner.kind !== "detachment" || !row.publication) continue;
+    const set = publications.get(row.owner.id) ?? new Set<string>();
+    set.add(row.publication.id);
+    publications.set(row.owner.id, set);
+  }
+  return publications;
+}
+
 function printingFactions(prose: DumpProse): Map<string, Set<string>> {
   const factions = new Map<string, Set<string>>();
   for (const row of prose.rows) {
@@ -109,6 +120,8 @@ type Indexes = {
   units: Map<string, Array<{ faction: string; mfm: string[] }>>;
   detachments: Map<string, Array<{ faction: string; mfm: string[] }>>;
   printing: Map<string, Set<string>>;
+  /** Dump detachment id → the publications that print its rule rows (a Combat Patrol box for a patrol detachment). */
+  publications: Map<string, Set<string>>;
 };
 
 /** The query's factions: its own, and every faction that prints one of the pinned dump ids. */
@@ -117,7 +130,7 @@ function withPrinting(factions: readonly string[], pinned: readonly string[], pr
 }
 
 /** The (faction, owner) queries an enrichment ability's prose is looked up under, most specific first. */
-function ownerQueries(faction: string, abilityId: string, ability: EnrichmentAbility, { listing, units, detachments, printing }: Indexes): Array<Omit<ProseQuery, "ability">> {
+function ownerQueries(faction: string, abilityId: string, ability: EnrichmentAbility, { listing, units, detachments, printing, publications }: Indexes): Array<Omit<ProseQuery, "ability">> {
   const type = text(ability.ability_type);
   if (faction === CORE_FACTION) return [{ faction: CORE_FACTION, owner: { kind: "core" } }];
   const detachment = text(ability.detachment_id);
@@ -144,7 +157,14 @@ function ownerQueries(faction: string, abilityId: string, ability: EnrichmentAbi
   // Faction rules, and the few records with no owner of their own: the army rules; a core
   // stratagem or core ability outside `_core` is still a core rule.
   // A Combat Patrol prints its own army rules, which are their own records (D10); the repo's
-  // faction rule is the codex one.
+  // faction rule is the codex one. A patrol's own copy names its patrol detachment and reads the
+  // army rules that patrol's box prints; a patrol the dump prints nothing for resolves to nothing,
+  // never to the codex text.
+  if (type === "faction" && detachment) {
+    const detachmentIds = (detachments.get(detachment) ?? []).filter((home) => home.faction === faction).flatMap((home) => home.mfm);
+    const publicationIds = [...new Set(detachmentIds.flatMap((id) => [...(publications.get(id) ?? [])]))].sort();
+    return [{ faction, owner: { kind: "army" }, publicationIds }];
+  }
   const army: Omit<ProseQuery, "ability"> = { faction, owner: { kind: "army" }, combatPatrol: false };
   return type === "stratagem" || type === "core" ? [{ faction: CORE_FACTION, owner: { kind: "core" } }, army] : [army];
 }
@@ -217,7 +237,7 @@ export function loadDumpSourceRecords(options: DumpSourceOptions = {}): SourceLo
   const dataRoot = resolve(options.dataRoot ?? semanticAuthoringDataRoot());
   const dumpPath = options.dumpPath ?? DEFAULT_DUMP_PATH;
   const prose = options.prose ?? loadDumpProse(dumpPath);
-  const indexes: Indexes = { listing: unitsListing(dataRoot), units: coreIndex(dataRoot, "units.json"), detachments: coreIndex(dataRoot, "detachments.json"), printing: printingFactions(prose) };
+  const indexes: Indexes = { listing: unitsListing(dataRoot), units: coreIndex(dataRoot, "units.json"), detachments: coreIndex(dataRoot, "detachments.json"), printing: printingFactions(prose), publications: detachmentPublications(prose) };
   const records: SourceRecord[] = [];
   const skipped: SkippedSourceRecord[] = [];
   const conflicts: SourceConflict[] = [];
