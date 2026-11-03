@@ -424,6 +424,7 @@ impl Dataset {
         let effect = raw.get("effect").cloned().unwrap_or(Value::Null);
         let mut seen = vec![ability.ability_id.to_string()];
         let resolved = with_rating(&self.resolve_rules_bundles(&effect, &mut seen), rating);
+        let mut scoped = Vec::new();
         let triggered = if crate::cruncher::from_dsl::recipient_snapshot_reason(
             raw.get("trigger"),
             &resolved,
@@ -443,7 +444,10 @@ impl Dataset {
                 )
             };
             match result {
-                Ok(effect) => effect,
+                Ok((effect, refused)) => {
+                    scoped = refused;
+                    effect
+                }
                 Err(reason) => {
                     return EffectTranslation {
                         unsupported: vec![crate::cruncher::from_dsl::UnsupportedFragment {
@@ -475,6 +479,18 @@ impl Dataset {
             raw.get("usage"),
             raw.get("trigger"),
         );
+        // A menu option whose pool the snapshots cannot resolve is refused alone, ahead of the rest.
+        if !scoped.is_empty() {
+            let refused = scoped.into_iter().map(|(reason, effect_fragment)| {
+                crate::cruncher::from_dsl::UnsupportedFragment {
+                    reason: reason.into(),
+                    effect_fragment,
+                    needs: None,
+                    scope: None,
+                }
+            });
+            translated.unsupported.splice(0..0, refused);
+        }
         if let Some(usage) = raw.get("usage") {
             crate::cruncher::from_dsl::apply_activation(
                 &mut translated,

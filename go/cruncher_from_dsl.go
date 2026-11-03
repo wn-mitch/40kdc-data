@@ -112,11 +112,12 @@ func scopeOf(fragment map[string]any, source map[string]any, context map[string]
 func translateEffect(effect any, source map[string]any, context map[string]any, perspective string, activation ...map[string]any) *effectTranslation {
 	out := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
 	if recipientSnapshotUnavailable(nil, effect) {
-		resolved, reason := resolveRecipientSnapshots(nil, effect, source, context, perspective)
+		resolved, reason, scoped := resolveRecipientSnapshots(nil, effect, source, context, perspective)
 		if reason != "" {
 			out.unsupported = append(out.unsupported, unsup(reason, effect))
 			return out
 		}
+		out.unsupported = append(out.unsupported, scoped...)
 		effect = resolved
 	}
 	effect = resolveNamedWeaponBindings(effect)
@@ -762,7 +763,9 @@ func bindSnapshotRecipient(node map[string]any) (any, bool) {
 	return effect, bound && !other
 }
 
-func resolveRecipientSnapshots(trigger, effect any, source map[string]any, context map[string]any, perspective string) (any, string) {
+// resolveRecipientSnapshots resolves event-scoped recipient pools. A non-empty reason refuses the
+// whole effect; scoped lists the named menu options refused alone (their effect is emptied).
+func resolveRecipientSnapshots(trigger, effect any, source map[string]any, context map[string]any, perspective string) (resolved any, reason string, scoped []any) {
 	sideID := getStr(context, map[string]string{"attacker": "attackerUnitId", "target": "targetUnitId"}[perspective])
 	sourceID := ""
 	if getStr(source, "kind") == "ability" {
@@ -771,7 +774,6 @@ func resolveRecipientSnapshots(trigger, effect any, source map[string]any, conte
 			sourceID = sideID
 		}
 	}
-	var reason string
 	var visit func(any, string, any) any
 	visit = func(node any, path string, event any) any {
 		m, ok := node.(map[string]any)
@@ -854,6 +856,36 @@ func resolveRecipientSnapshots(trigger, effect any, source map[string]any, conte
 			delete(out, "trigger")
 			out["effect"] = visit(m["effect"], path+"/effect", nextEvent)
 			return out
+		case "stance-select", "issue-orders":
+			// Each named option is its own lever: a pool one option cannot resolve refuses that option alone.
+			options, isList := m["options"].([]any)
+			if !isList {
+				break
+			}
+			out := cloneMap(m)
+			next := make([]any, len(options))
+			for i, raw := range options {
+				option, ok := raw.(map[string]any)
+				if !ok {
+					next[i] = raw
+					continue
+				}
+				outer := reason
+				reason = ""
+				effect := visit(option["effect"], path+"/options/"+strconv.Itoa(i)+"/effect", event)
+				refused := reason
+				reason = outer
+				copied := cloneMap(option)
+				if refused == "" {
+					copied["effect"] = effect
+				} else {
+					scoped = append(scoped, unsup(refused, option["effect"]))
+					copied["effect"] = map[string]any{"type": "sequence", "steps": []any{}}
+				}
+				next[i] = copied
+			}
+			out["options"] = next
+			return out
 		}
 		if containsForEachUnit(m) {
 			reason = "recipient snapshot is nested in an unsupported activation composition"
@@ -861,7 +893,8 @@ func resolveRecipientSnapshots(trigger, effect any, source map[string]any, conte
 		}
 		return momentGate(event, m)
 	}
-	return visit(effect, "", trigger), reason
+	resolved = visit(effect, "", trigger)
+	return resolved, reason, scoped
 }
 
 // momentKey is the lever key of a trigger: its event family and the filter

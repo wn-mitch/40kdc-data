@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Dataset, emptyRawData, type RecipientSnapshot } from "../src/data/index.js";
 import { resolveBuffs, type BuffSource, type EngineContext } from "../src/cruncher/index.js";
 import type { Trigger, UnitSelector } from "../src/generated.js";
+import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 
 const trigger: Trigger = { event: "battle-started", condition: { type: "attachment", parameters: { subject: "this-model", role: "leading" } } };
 const selector: UnitSelector = { filter: { level: "model", member_of: "this-unit", attachment_role: "bodyguard" } };
@@ -122,5 +123,45 @@ describe("caller-supplied source-bound recipient snapshots", () => {
     const outsider: BuffSource = { ...source, sourceUnitId: "outsider" };
     expect(ds.buffsFor(input, { ...context, recipientSnapshots: [{ ...snapshot, source: outsider as typeof source, sourceUnitId: "outsider" }] })).toEqual([]);
     expect(ds.buffsFor({ ...input, detachmentId: "other-detachment" }, context)).toEqual([]);
+  });
+});
+
+describe("a recipient pool inside a named menu option", () => {
+  const hit = { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } };
+  const pooled = { type: "ability-part", trigger, effect };
+  const menu = (type: "stance-select" | "issue-orders") => ({ type, mode: "consumable", options: [
+    { id: "keen", name: "Keen", effect: hit },
+    { id: "rally", name: "Rally", effect: pooled },
+  ] });
+  const local = { ...snapshot, selectionPath: "/options/1/effect/effect" };
+
+  for (const type of ["stance-select", "issue-orders"] as const) {
+    it(`refuses only the ${type} option whose recipients are unknown`, () => {
+      const result = effectToBuffs(menu(type), source, { ...context, recipientSnapshots: [] }, "attacker");
+      expect(result.unsupported.map(({ reason, effectFragment }) => ({ reason, effectFragment })))
+        .toEqual([{ reason: expect.stringContaining("snapshot is unavailable"), effectFragment: pooled }]);
+      expect(result.activatable.map((lever) => lever.label)).toEqual(["Keen"]);
+      expect(result.activatable[0]!.buffs.map((buff) => buff.contribution)).toEqual([{ type: "hit-mod", value: 1 }]);
+    });
+  }
+
+  it("resolves the option's pool from a snapshot at the option's own path", () => {
+    const ability = fixture(menu("stance-select"), null).abilities.get("snapshot-example")!;
+    const result = ability.describeBuffs(source, { ...context, recipientSnapshots: [local] });
+    expect(result.unsupported.map((item) => item.reason)).toEqual(["stat-modifier T: defender-side stat; applies when the buffed unit is the target"]);
+    expect(result.activatable.map((lever) => [lever.label, lever.buffs.map((buff) => buff.contribution)])).toEqual([
+      ["Keen", [{ type: "hit-mod", value: 1 }]],
+      ["Rally", [{ type: "strength-mod", value: 1 }]],
+    ]);
+    const elsewhere = ability.describeBuffs(source, { ...context, recipientSnapshots: [{ ...local, selectionPath: "/options/0/effect/effect" }] });
+    expect(elsewhere.unsupported.map((item) => [item.reason, item.effectFragment])).toEqual([[expect.stringContaining("snapshot is unavailable"), pooled]]);
+    expect(elsewhere.activatable.map((lever) => lever.label)).toEqual(["Keen"]);
+  });
+
+  it("still refuses the whole effect when the pool sits in another composition", () => {
+    const choice = { type: "choice", options: [hit, pooled] };
+    const result = effectToBuffs(choice, source, { ...context, recipientSnapshots: [] }, "attacker");
+    expect(result.activatable).toEqual([]);
+    expect(result.unsupported.map((item) => item.reason)).toEqual(["recipient snapshot is nested in an unsupported activation composition"]);
   });
 });

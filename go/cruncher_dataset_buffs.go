@@ -154,9 +154,10 @@ func (a *AbilityView) describeRatedBuffs(source map[string]any, ctx map[string]a
 		}
 	}
 	moment := resolvedEffect
+	var scoped []any
 	if needsSnapshot {
 		var reason string
-		moment, reason = resolveRecipientSnapshots(a.Raw["trigger"], resolvedEffect, source, ctx, perspective)
+		moment, reason, scoped = resolveRecipientSnapshots(a.Raw["trigger"], resolvedEffect, source, ctx, perspective)
 		if reason != "" {
 			return &effectTranslation{
 				applied: []any{}, activatable: []any{},
@@ -171,6 +172,10 @@ func (a *AbilityView) describeRatedBuffs(source map[string]any, ctx map[string]a
 		moment = triggerGated(a.Raw["behavior"], a.Raw["trigger"], bound)
 	}
 	translated := effectToBuffs(moment, source, ctx, perspective, map[string]any{"usage": a.Raw["usage"], "duration": mapOr(a.Raw["scope"])["duration"], "trigger": a.Raw["trigger"]})
+	// A menu option whose pool the snapshots cannot resolve is refused alone, ahead of the rest.
+	if len(scoped) > 0 {
+		translated.unsupported = append(append([]any{}, scoped...), translated.unsupported...)
+	}
 	rng, ok := auraInches(resolvedEffect)
 	if !ok {
 		return translated

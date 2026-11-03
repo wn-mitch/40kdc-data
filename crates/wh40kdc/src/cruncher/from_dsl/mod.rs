@@ -332,6 +332,7 @@ fn translate_effect(
     trigger: Option<&Value>,
 ) -> EffectTranslation {
     let effect = strip_nulls(effect);
+    let mut scoped = Vec::new();
     let effect = if recipient_snapshot_reason(None, &effect).is_some() {
         match super::recipient_snapshots::resolve_recipient_snapshots(
             None,
@@ -340,7 +341,10 @@ fn translate_effect(
             context,
             perspective,
         ) {
-            Ok(effect) => effect,
+            Ok((effect, refused)) => {
+                scoped = refused;
+                effect
+            }
             Err(reason) => {
                 return EffectTranslation {
                     unsupported: vec![UnsupportedFragment {
@@ -389,6 +393,11 @@ fn translate_effect(
         None => effect,
     };
     let mut out = Out::default();
+    out.unsupported.extend(
+        scoped
+            .into_iter()
+            .map(|(reason, fragment)| (reason.to_string(), fragment, None)),
+    );
     walk(&effect, &opts, &mut out);
     finish(out)
 }

@@ -77,7 +77,7 @@ pub(crate) fn resolve_recipient_snapshots(
     source: &BuffSource,
     context: &EngineContext,
     perspective: TranslationPerspective,
-) -> Result<Value, &'static str> {
+) -> Result<(Value, Vec<(&'static str, Value)>), &'static str> {
     let side_id = match perspective {
         TranslationPerspective::Attacker => context.attacker_unit_id.as_deref(),
         TranslationPerspective::Target => context.target_unit_id.as_deref(),
@@ -100,8 +100,10 @@ pub(crate) fn resolve_recipient_snapshots(
         side_id,
         context,
         perspective,
+        scoped: std::cell::RefCell::new(Vec::new()),
     };
-    resolver.visit(effect, "", trigger)
+    let effect = resolver.visit(effect, "", trigger)?;
+    Ok((effect, resolver.scoped.into_inner()))
 }
 
 struct Resolver<'a> {
@@ -110,6 +112,8 @@ struct Resolver<'a> {
     side_id: Option<&'a str>,
     context: &'a EngineContext,
     perspective: TranslationPerspective,
+    /// Named menu options refused alone: the reason and the option's own effect.
+    scoped: std::cell::RefCell<Vec<(&'static str, Value)>>,
 }
 
 impl Resolver<'_> {
@@ -196,6 +200,33 @@ impl Resolver<'_> {
                     active,
                 )?;
                 transformed.insert("effect".into(), effect);
+            }
+            // Each named option is its own lever: a pool one option cannot resolve refuses that option alone.
+            Some("stance-select" | "issue-orders")
+                if node.get("options").is_some_and(Value::is_array) =>
+            {
+                let options = node["options"].as_array().into_iter().flatten().enumerate();
+                let options = options
+                    .map(|(i, option)| {
+                        let Some(object) = option.as_object() else {
+                            return option.clone();
+                        };
+                        let inner = object.get("effect").unwrap_or(&Value::Null);
+                        let mut option = object.clone();
+                        match self.visit(inner, &format!("{path}/options/{i}/effect"), trigger) {
+                            Ok(effect) => {
+                                option.insert("effect".into(), effect);
+                            }
+                            Err(reason) => {
+                                self.scoped.borrow_mut().push((reason, inner.clone()));
+                                option
+                                    .insert("effect".into(), json!({"type":"sequence","steps":[]}));
+                            }
+                        }
+                        Value::Object(option)
+                    })
+                    .collect();
+                transformed.insert("options".into(), Value::Array(options));
             }
             _ => {
                 fn contains_pool(value: &Value) -> bool {

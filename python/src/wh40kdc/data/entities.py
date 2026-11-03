@@ -399,6 +399,12 @@ class AbilityView:
                 "trigger": trigger,
             },
         )
+        # A menu option whose pool the snapshots cannot resolve is refused alone, ahead of the rest.
+        if snapshot.get("scoped"):
+            translated = {
+                **translated,
+                "unsupported": [*snapshot["scoped"], *translated.get("unsupported", [])],
+            }
         # An aura (an effect whose target filter reaches units `within` N", e.g. a
         # "within 18\"" reroll) gates on distance to the target. Stamp it here, not
         # in the effect translator, so the effect-translation corpus (bare effects)

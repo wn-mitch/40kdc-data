@@ -276,6 +276,7 @@ function translateEffect(
       out.unsupported.push({ reason: snapshot.reason, effectFragment: effect });
       return out;
     }
+    out.unsupported.push(...snapshot.scoped);
     effect = snapshot.effect;
   }
   // A moment gate the data layer registered keeps its activation when the rewrite copies it.

@@ -244,7 +244,7 @@ func TestRecipientSnapshotsBindHistoricalForEachRecipients(t *testing.T) {
 			"selector": selector, "perspective": "attacker", "recipientUnitId": "attacker-1", "selected": true,
 		}},
 	}
-	resolved, reason := resolveRecipientSnapshots(trigger, effect, source, context, "attacker")
+	resolved, reason, _ := resolveRecipientSnapshots(trigger, effect, source, context, "attacker")
 	if reason != "" || getStr(mapOr(resolved), "type") != "stat-modifier" || mapOr(resolved)["target"] != "recipient" {
 		t.Fatalf("resolved = %#v, reason = %q", resolved, reason)
 	}
@@ -252,12 +252,12 @@ func TestRecipientSnapshotsBindHistoricalForEachRecipients(t *testing.T) {
 		"source": source, "sourceUnitId": "attacker-1", "trigger": trigger, "selectionPath": "",
 		"selector": selector, "perspective": "attacker", "recipientUnitId": "attacker-1", "selected": false,
 	}}
-	resolved, reason = resolveRecipientSnapshots(trigger, effect, source, context, "attacker")
+	resolved, reason, _ = resolveRecipientSnapshots(trigger, effect, source, context, "attacker")
 	if reason != "" || getStr(mapOr(resolved), "type") != "sequence" || len(getList(mapOr(resolved), "steps")) != 0 {
 		t.Fatalf("unselected = %#v, reason = %q", resolved, reason)
 	}
 	delete(context, "recipientSnapshots")
-	_, reason = resolveRecipientSnapshots(trigger, effect, source, context, "attacker")
+	_, reason, _ = resolveRecipientSnapshots(trigger, effect, source, context, "attacker")
 	if reason != recipientSnapshotReason {
 		t.Fatalf("missing snapshot reason = %q", reason)
 	}

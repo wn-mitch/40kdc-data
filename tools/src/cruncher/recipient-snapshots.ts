@@ -39,7 +39,10 @@ export function sameSnapshotValue(left: unknown, right: unknown): boolean {
   return keys.length === Object.keys(right).filter((key) => right[key] !== undefined).length && keys.every((key) => sameSnapshotValue(left[key], right[key]));
 }
 
-/** Resolve only event-scoped recipient pools; unrelated effect guards still run normally. */
+/**
+ * Resolve only event-scoped recipient pools; unrelated effect guards still run normally. A `reason`
+ * refuses the whole effect; `scoped` lists the named menu options refused alone (their effect is emptied).
+ */
 export function resolveRecipientSnapshots(
   trigger: unknown,
   effect: unknown,
@@ -49,8 +52,9 @@ export function resolveRecipientSnapshots(
   perspective: "attacker" | "target",
   gate: (trigger: unknown, effect: unknown) => unknown,
   basePath = "",
-): { effect: unknown; resolved: boolean; reason?: string } {
+): { effect: unknown; resolved: boolean; reason?: string; scoped: Array<{ reason: string; effectFragment: unknown }> } {
   let resolved = false;
+  const scoped: Array<{ reason: string; effectFragment: unknown }> = [];
   let reason: string | undefined;
   const sideId = perspective === "attacker" ? context.attackerUnitId : context.targetUnitId;
   const sourceId = source.kind === "ability" ? source.sourceUnitId ?? (source.abilityKind === "unit" ? sideId : undefined) : undefined;
@@ -87,6 +91,20 @@ export function resolveRecipientSnapshots(
       return { ...node, steps: Array.isArray(node.steps) ? node.steps.map((step, index) => visit(step, `${path}/steps/${index}`, event)) : node.steps };
     }
     if (node.type === "conditional") return { ...node, effect: visit(node.effect, `${path}/effect`, event) };
+    // Each named option is its own lever: a pool one option cannot resolve refuses that option alone.
+    if ((node.type === "stance-select" || node.type === "issue-orders") && Array.isArray(node.options)) {
+      return { ...node, options: node.options.map((option, index) => {
+        if (!record(option)) return option;
+        const outer = reason;
+        reason = undefined;
+        const effect = visit(option.effect, `${path}/options/${index}/effect`, event);
+        const refused = reason;
+        reason = outer;
+        if (refused === undefined) return { ...option, effect };
+        scoped.push({ reason: refused, effectFragment: option.effect });
+        return { ...option, effect: { type: "sequence", steps: [] } };
+      }) };
+    }
     if (node.type === "ability-part") {
       const { trigger: localTrigger, ...part } = node;
       return { ...part, effect: visit(node.effect, `${path}/effect`, localTrigger ?? event) };
@@ -102,7 +120,7 @@ export function resolveRecipientSnapshots(
     return gate(event, node);
   };
   const transformed = visit(effect, basePath, trigger);
-  return { effect: transformed, resolved, ...(reason ? { reason } : {}) };
+  return { effect: transformed, resolved, scoped, ...(reason ? { reason } : {}) };
 }
 
 function record(value: unknown): value is Record<string, unknown> {

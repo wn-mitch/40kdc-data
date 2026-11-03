@@ -162,6 +162,7 @@ def _translate_effect(
                 }
             )
             return out
+        out["unsupported"].extend(snapshot.get("scoped", []))
         effect = snapshot["effect"]
     effect = resolve_named_weapon_bindings(effect)
     ability_id = source.get("abilityId", "effect") if source.get("kind") == "ability" else "effect"
@@ -2486,7 +2487,11 @@ def resolve_recipient_snapshots(
     perspective: str,
     base_path: str = "",
 ) -> dict[str, Any]:
-    """Resolve caller-attested historical for-each recipients before trigger gating."""
+    """Resolve caller-attested historical for-each recipients before trigger gating.
+
+    A ``reason`` refuses the whole effect; ``scoped`` lists the named menu options
+    refused alone (their effect is emptied).
+    """
     side_id = context.get("attackerUnitId" if perspective == "attacker" else "targetUnitId")
     source_id = source.get("sourceUnitId")
     if source.get("abilityKind") == "unit" and source_id is None:
@@ -2494,6 +2499,7 @@ def resolve_recipient_snapshots(
     snapshots = context.get("recipientSnapshots") or []
     resolved = False
     reason: str | None = None
+    scoped: list[dict[str, Any]] = []
 
     def visit(node: Any, path: str, event: Any) -> Any:
         nonlocal resolved, reason
@@ -2556,10 +2562,46 @@ def resolve_recipient_snapshots(
                 **{key: value for key, value in node.items() if key != "trigger"},
                 "effect": visit(node.get("effect"), f"{path}/effect", local),
             }
+        if node_type in ("stance-select", "issue-orders") and isinstance(node.get("options"), list):
+            # Each named option is its own lever: a pool one option cannot resolve
+            # refuses that option alone.
+            options: list[Any] = []
+            for index, option in enumerate(node["options"]):
+                if not isinstance(option, dict):
+                    options.append(option)
+                    continue
+                outer, reason = reason, None
+                inner = visit(option.get("effect"), f"{path}/options/{index}/effect", event)
+                refused, reason = reason, outer
+                if refused is None:
+                    options.append({**option, "effect": inner})
+                else:
+                    scoped.append({"reason": refused, "effectFragment": option.get("effect")})
+                    options.append({**option, "effect": {"type": "sequence", "steps": []}})
+            return {**node, "options": options}
+        # A menu/choice establishes its own activation. Do not silently lower a
+        # historical recipient nested in an unhandled composition as a current filter.
+        if _contains_pool(node):
+            reason = "recipient snapshot is nested in an unsupported activation composition"
+            return {"type": "sequence", "steps": []}
         return node
 
     transformed = visit(effect, base_path, trigger)
-    return {"effect": transformed, "resolved": resolved, **({"reason": reason} if reason else {})}
+    return {
+        "effect": transformed,
+        "resolved": resolved,
+        "scoped": scoped,
+        **({"reason": reason} if reason else {}),
+    }
+
+
+def _contains_pool(value: Any) -> bool:
+    """Whether a recipient pool (``for-each-unit``) sits anywhere in ``value``."""
+    if isinstance(value, list):
+        return any(_contains_pool(item) for item in value)
+    return isinstance(value, dict) and (
+        value.get("type") == "for-each-unit" or any(_contains_pool(item) for item in value.values())
+    )
 
 
 def _enumerate_choice(

@@ -7732,6 +7732,503 @@
       }
     },
     {
+      "caseId": "canonical/recipient-snapshot/stance-option-missing",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "consumable",
+        "options": [
+          {
+            "id": "keen",
+            "name": "Keen",
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          },
+          {
+            "id": "rally",
+            "name": "Rally",
+            "effect": {
+              "type": "ability-part",
+              "trigger": {
+                "event": "battle-started",
+                "condition": {
+                  "type": "attachment",
+                  "parameters": {
+                    "subject": "this-model",
+                    "role": "leading"
+                  }
+                }
+              },
+              "duration": "battle",
+              "effect": {
+                "type": "for-each-unit",
+                "selector": {
+                  "filter": {
+                    "level": "model",
+                    "member_of": "this-unit",
+                    "attachment_role": "bodyguard"
+                  }
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "stat-modifier",
+                      "target": "recipient",
+                      "modifier": {
+                        "stat": "S",
+                        "operation": "add",
+                        "value": 1,
+                        "weapons": {
+                          "type": "melee"
+                        }
+                      }
+                    },
+                    {
+                      "type": "stat-modifier",
+                      "target": "recipient",
+                      "modifier": {
+                        "stat": "T",
+                        "operation": "add",
+                        "value": 1
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": []
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
+        ],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "snapshot-example#keen",
+            "label": "Keen",
+            "group": {
+              "id": "snapshot-example?stance",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/stance-option-attested",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "consumable",
+        "options": [
+          {
+            "id": "keen",
+            "name": "Keen",
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          },
+          {
+            "id": "rally",
+            "name": "Rally",
+            "effect": {
+              "type": "ability-part",
+              "trigger": {
+                "event": "battle-started",
+                "condition": {
+                  "type": "attachment",
+                  "parameters": {
+                    "subject": "this-model",
+                    "role": "leading"
+                  }
+                }
+              },
+              "duration": "battle",
+              "effect": {
+                "type": "for-each-unit",
+                "selector": {
+                  "filter": {
+                    "level": "model",
+                    "member_of": "this-unit",
+                    "attachment_role": "bodyguard"
+                  }
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "stat-modifier",
+                      "target": "recipient",
+                      "modifier": {
+                        "stat": "S",
+                        "operation": "add",
+                        "value": 1,
+                        "weapons": {
+                          "type": "melee"
+                        }
+                      }
+                    },
+                    {
+                      "type": "stat-modifier",
+                      "target": "recipient",
+                      "modifier": {
+                        "stat": "T",
+                        "operation": "add",
+                        "value": 1
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "/options/1/effect/effect",
+            "perspective": "attacker",
+            "recipientUnitId": "recipient",
+            "selected": true
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "stat-modifier T: defender-side stat; applies when the buffed unit is the target"
+        ],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "snapshot-example#keen",
+            "label": "Keen",
+            "group": {
+              "id": "snapshot-example?stance",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "id": "snapshot-example#rally",
+            "label": "Rally",
+            "group": {
+              "id": "snapshot-example?stance",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "strength-mod",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/orders-option-missing",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "issue-orders",
+        "mode": "consumable",
+        "options": [
+          {
+            "id": "keen",
+            "name": "Keen",
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          },
+          {
+            "id": "rally",
+            "name": "Rally",
+            "effect": {
+              "type": "ability-part",
+              "trigger": {
+                "event": "battle-started",
+                "condition": {
+                  "type": "attachment",
+                  "parameters": {
+                    "subject": "this-model",
+                    "role": "leading"
+                  }
+                }
+              },
+              "duration": "battle",
+              "effect": {
+                "type": "for-each-unit",
+                "selector": {
+                  "filter": {
+                    "level": "model",
+                    "member_of": "this-unit",
+                    "attachment_role": "bodyguard"
+                  }
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "stat-modifier",
+                      "target": "recipient",
+                      "modifier": {
+                        "stat": "S",
+                        "operation": "add",
+                        "value": 1,
+                        "weapons": {
+                          "type": "melee"
+                        }
+                      }
+                    },
+                    {
+                      "type": "stat-modifier",
+                      "target": "recipient",
+                      "modifier": {
+                        "stat": "T",
+                        "operation": "add",
+                        "value": 1
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": []
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
+        ],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "snapshot-example#Keen",
+            "label": "Keen",
+            "group": {
+              "id": "snapshot-example?order",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/choice-composition-refused",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "duration": "battle",
+            "effect": {
+              "type": "for-each-unit",
+              "selector": {
+                "filter": {
+                  "level": "model",
+                  "member_of": "this-unit",
+                  "attachment_role": "bodyguard"
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "stat-modifier",
+                    "target": "recipient",
+                    "modifier": {
+                      "stat": "S",
+                      "operation": "add",
+                      "value": 1,
+                      "weapons": {
+                        "type": "melee"
+                      }
+                    }
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": "recipient",
+                    "modifier": {
+                      "stat": "T",
+                      "operation": "add",
+                      "value": 1
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": []
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "recipient snapshot is nested in an unsupported activation composition"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/half-weapon-range/known-true",
       "abilityId": "fabricated-half-weapon-range",
       "source": {

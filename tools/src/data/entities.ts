@@ -307,13 +307,16 @@ export class AbilityView {
     };
     const bound = this.raw.trigger == null ? resolved : bindEventSubject(this.raw.trigger, resolved, ctx, perspective);
     const moment = snapshot ? snapshot.effect : triggerGated(this.raw.behavior, this.raw.trigger, bound);
-    const translated = effectToBuffs(
+    const translation = effectToBuffs(
       moment,
       source,
       ctx,
       perspective,
       { usage: this.raw.usage, duration: this.raw.scope?.duration, trigger: this.raw.trigger },
     );
+    // A menu option whose pool the snapshots cannot resolve is refused alone, ahead of the rest.
+    const translated = snapshot && snapshot.scoped.length > 0
+      ? { ...translation, unsupported: [...snapshot.scoped, ...translation.unsupported] } : translation;
     // An aura (an effect whose target filter reaches units `within` N", e.g. a "within 18\""
     // reroll) gates on distance to the target. Stamp it here rather than in the effect
     // translator so the `effect-translation` corpus (bare effects) is unaffected; the gate is

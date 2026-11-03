@@ -66,6 +66,13 @@ export function canonicalRecipientCases() {
   add("recipient-relative-ap-ws-bs", [snapshot], { effect: { ...effect, effect: { ...pool, effect: { type: "sequence", steps: ["AP", "WS", "BS"].map((stat) => ({
     type: "stat-modifier", target: "recipient", modifier: { stat, operation: "improve", value: 1 },
   })) } } } });
+  // A named menu option is its own lever: only the option whose pool is unresolved is refused.
+  const hit = { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } };
+  const menu = (type: string) => ({ type, mode: "consumable", options: [{ id: "keen", name: "Keen", effect: hit }, { id: "rally", name: "Rally", effect }] });
+  add("stance-option-missing", [], { effect: menu("stance-select") });
+  add("stance-option-attested", [{ ...snapshot, selectionPath: "/options/1/effect/effect" }], { effect: menu("stance-select") });
+  add("orders-option-missing", [], { effect: menu("issue-orders") });
+  add("choice-composition-refused", [], { effect: { type: "choice", options: [hit, effect] } });
   return cases.map((row) => {
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
     return { ...row, expected: {
