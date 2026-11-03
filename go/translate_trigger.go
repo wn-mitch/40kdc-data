@@ -379,7 +379,13 @@ func triggerEventPhrase(t map[string]any) string {
 			return "each time " + who + " is selected as an Observer unit"
 		}
 		if f["to"] == "move" && isList(f["move_types"]) {
-			return "when " + who + " is selected to " + moveKinds(f["move_types"]) + selectedMode(f)
+			// "selected to make a Normal move", "selected to make an Advance or Fall Back move".
+			kinds := moveKinds(f["move_types"])
+			move := "a move"
+			if kinds != "" {
+				move = article(kinds) + " " + kinds + " move"
+			}
+			return "when " + who + " is selected to make " + move + selectedMode(f)
 		}
 		to := dekebab(cstr(f["to"]))
 		if f["to"] == "attack" {

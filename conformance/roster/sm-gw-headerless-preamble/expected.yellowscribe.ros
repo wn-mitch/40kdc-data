@@ -46,9 +46,9 @@
               <characteristics>
                 <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
   -&gt; Select one (each may be chosen once per battle):
-    - Assault Doctrine: when the unit is selected to Advance: the unit is eligible to declare a charge even if it Advanced this turn.
+    - Assault Doctrine: when the unit is selected to make an Advance move: the unit is eligible to declare a charge even if it Advanced this turn.
     - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
-    - Tactical Doctrine: when the unit is selected to Fall Back: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
+    - Tactical Doctrine: when the unit is selected to make a Fall Back move: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
             <profile name="Transhuman Strategist" typeName="Abilities">
@@ -154,9 +154,9 @@
               <characteristics>
                 <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
   -&gt; Select one (each may be chosen once per battle):
-    - Assault Doctrine: when the unit is selected to Advance: the unit is eligible to declare a charge even if it Advanced this turn.
+    - Assault Doctrine: when the unit is selected to make an Advance move: the unit is eligible to declare a charge even if it Advanced this turn.
     - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
-    - Tactical Doctrine: when the unit is selected to Fall Back: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
+    - Tactical Doctrine: when the unit is selected to make a Fall Back move: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -258,9 +258,9 @@
               <characteristics>
                 <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
   -&gt; Select one (each may be chosen once per battle):
-    - Assault Doctrine: when the unit is selected to Advance: the unit is eligible to declare a charge even if it Advanced this turn.
+    - Assault Doctrine: when the unit is selected to make an Advance move: the unit is eligible to declare a charge even if it Advanced this turn.
     - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
-    - Tactical Doctrine: when the unit is selected to Fall Back: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
+    - Tactical Doctrine: when the unit is selected to make a Fall Back move: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
           </profiles>

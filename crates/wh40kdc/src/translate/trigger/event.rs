@@ -431,11 +431,14 @@ pub(crate) fn event_phrase(t: &P) -> String {
                 return format!("each time {who} is selected as an Observer unit");
             }
             if is(f, "to", "move") && f.get("move_types").is_some_and(Value::is_array) {
-                return format!(
-                    "when {who} is selected to {}{}",
-                    move_kinds(f.get("move_types")),
-                    selected_mode(f)
-                );
+                // "selected to make a Normal move", "selected to make an Advance or Fall Back move".
+                let kinds = move_kinds(f.get("move_types"));
+                let mv = if kinds.is_empty() {
+                    "a move".to_string()
+                } else {
+                    format!("{} {kinds} move", article(&kinds))
+                };
+                return format!("when {who} is selected to make {mv}{}", selected_mode(f));
             }
             let to = if is(f, "to", "attack") {
                 "shoot or fight".to_string()

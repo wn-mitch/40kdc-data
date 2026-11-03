@@ -2785,7 +2785,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "All friendly WARBIKERS units gain the BATTLELINE keyword.\n-> When a friendly unit is selected to Advance or Fall Back (the triggering unit must have SPEED FREEKS), until the end of the turn:\n  -> Ranged weapons equipped by the triggering unit gain [ASSAULT].\n  -> The triggering unit is eligible to declare a charge."
+      "text": "All friendly WARBIKERS units gain the BATTLELINE keyword.\n-> When a friendly unit is selected to make an Advance or Fall Back move (the triggering unit must have SPEED FREEKS), until the end of the turn:\n  -> Ranged weapons equipped by the triggering unit gain [ASSAULT].\n  -> The triggering unit is eligible to declare a charge."
     }
   },
   {
@@ -9260,7 +9260,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "-> At the start of the battle round: if your Army Faction is AELDARI, you gain 2/4/6 Battle Focus tokens (Incursion/Strike Force/Onslaught).\nIf your Army Faction is AELDARI:\n  -> Actions may be performed when their conditions are met. A unit may perform at most one action per phase; unless stated otherwise, a given action may be triggered once per phase:\n    - Swift as the Wind: when a friendly unit is selected to Normal, Advance or Fall Back, spend 1 Battle Focus token, add 2 to the unit's Move characteristic, until the end of the phase (may be triggered more than once per phase if a different unit performs it each time).\n    - Flitting Shadows: when a friendly unit is selected to Normal, Advance or Fall Back or when a friendly unit is set up or after a friendly unit selects targets for its charge but before it makes a Charge move, spend 1 Battle Focus token, your opponent cannot target the unit with Overwatch, until the end of the turn.\n    - Star Engines: when a friendly unit is selected to Advance (only usable by one VEHICLE unit), spend 1 Battle Focus token, ranged weapons equipped by models in this unit gain [ASSAULT], until the end of the turn.\n    - Sudden Strike: each time a friendly unit ends a Charge move, spend 1 Battle Focus token, add 3\" to the unit's Pile-in and Consolidation moves, until the end of the turn.\n    - Opportunity Seized: each time an enemy unit Falls Back (only usable by one unit (excluding TITANIC units), the selected unit was engaged with that unit at the start of the phase), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1\".\n    - Fade Back: after an enemy unit shoots (only usable by one unit (excluding TITANIC units), during the Shooting phase and in the opponent's turn and the selected unit was hit by an attack from the triggering unit during its just-finished shooting sequence), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1\".\n  -> At the end of the battle round: spend all your Battle Focus tokens."
+      "text": "-> At the start of the battle round: if your Army Faction is AELDARI, you gain 2/4/6 Battle Focus tokens (Incursion/Strike Force/Onslaught).\nIf your Army Faction is AELDARI:\n  -> Actions may be performed when their conditions are met. A unit may perform at most one action per phase; unless stated otherwise, a given action may be triggered once per phase:\n    - Swift as the Wind: when a friendly unit is selected to make a Normal, Advance or Fall Back move, spend 1 Battle Focus token, add 2 to the unit's Move characteristic, until the end of the phase (may be triggered more than once per phase if a different unit performs it each time).\n    - Flitting Shadows: when a friendly unit is selected to make a Normal, Advance or Fall Back move or when a friendly unit is set up or after a friendly unit selects targets for its charge but before it makes a Charge move, spend 1 Battle Focus token, your opponent cannot target the unit with Overwatch, until the end of the turn.\n    - Star Engines: when a friendly unit is selected to make an Advance move (only usable by one VEHICLE unit), spend 1 Battle Focus token, ranged weapons equipped by models in this unit gain [ASSAULT], until the end of the turn.\n    - Sudden Strike: each time a friendly unit ends a Charge move, spend 1 Battle Focus token, add 3\" to the unit's Pile-in and Consolidation moves, until the end of the turn.\n    - Opportunity Seized: each time an enemy unit Falls Back (only usable by one unit (excluding TITANIC units), the selected unit was engaged with that unit at the start of the phase), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1\".\n    - Fade Back: after an enemy unit shoots (only usable by one unit (excluding TITANIC units), during the Shooting phase and in the opponent's turn and the selected unit was hit by an attack from the triggering unit during its just-finished shooting sequence), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1\".\n  -> At the end of the battle round: spend all your Battle Focus tokens."
     }
   },
   {
@@ -9625,7 +9625,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "-> At the start of the battle round: if your Army Faction is AELDARI, you gain 2/4/6 Battle Focus tokens (Incursion/Strike Force/Onslaught).\nIf your Army Faction is AELDARI:\n  -> Actions may be performed when their conditions are met. A unit may perform at most one action per phase; unless stated otherwise, a given action may be triggered once per phase:\n    - Swift as the Wind: when a friendly unit is selected to Normal, Advance or Fall Back, spend 1 Battle Focus token, add 2 to the unit's Move characteristic, until the end of the phase (may be triggered more than once per phase if a different unit performs it each time).\n    - Flitting Shadows: when a friendly unit is selected to Normal, Advance or Fall Back or when a friendly unit is set up or after a friendly unit selects targets for its charge but before it makes a Charge move, spend 1 Battle Focus token, your opponent cannot target the unit with Overwatch, until the end of the turn.\n    - Star Engines: when a friendly unit is selected to Advance (only usable by one VEHICLE unit), spend 1 Battle Focus token, ranged weapons equipped by models in this unit gain [ASSAULT], until the end of the turn.\n    - Sudden Strike: each time a friendly unit ends a Charge move, spend 1 Battle Focus token, add 3\" to the unit's Pile-in and Consolidation moves, until the end of the turn.\n    - Opportunity Seized: each time an enemy unit Falls Back (only usable by one unit (excluding TITANIC units), the selected unit was engaged with that unit at the start of the phase), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1\".\n    - Fade Back: after an enemy unit shoots (only usable by one unit (excluding TITANIC units), during the Shooting phase and in the opponent's turn and the selected unit was hit by an attack from the triggering unit during its just-finished shooting sequence), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1\".\n  -> At the end of the battle round: spend all your Battle Focus tokens."
+      "text": "-> At the start of the battle round: if your Army Faction is AELDARI, you gain 2/4/6 Battle Focus tokens (Incursion/Strike Force/Onslaught).\nIf your Army Faction is AELDARI:\n  -> Actions may be performed when their conditions are met. A unit may perform at most one action per phase; unless stated otherwise, a given action may be triggered once per phase:\n    - Swift as the Wind: when a friendly unit is selected to make a Normal, Advance or Fall Back move, spend 1 Battle Focus token, add 2 to the unit's Move characteristic, until the end of the phase (may be triggered more than once per phase if a different unit performs it each time).\n    - Flitting Shadows: when a friendly unit is selected to make a Normal, Advance or Fall Back move or when a friendly unit is set up or after a friendly unit selects targets for its charge but before it makes a Charge move, spend 1 Battle Focus token, your opponent cannot target the unit with Overwatch, until the end of the turn.\n    - Star Engines: when a friendly unit is selected to make an Advance move (only usable by one VEHICLE unit), spend 1 Battle Focus token, ranged weapons equipped by models in this unit gain [ASSAULT], until the end of the turn.\n    - Sudden Strike: each time a friendly unit ends a Charge move, spend 1 Battle Focus token, add 3\" to the unit's Pile-in and Consolidation moves, until the end of the turn.\n    - Opportunity Seized: each time an enemy unit Falls Back (only usable by one unit (excluding TITANIC units), the selected unit was engaged with that unit at the start of the phase), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1\".\n    - Fade Back: after an enemy unit shoots (only usable by one unit (excluding TITANIC units), during the Shooting phase and in the opponent's turn and the selected unit was hit by an attack from the triggering unit during its just-finished shooting sequence), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1\".\n  -> At the end of the battle round: spend all your Battle Focus tokens."
     }
   },
   {
@@ -10083,7 +10083,7 @@
       "optional": true
     },
     "expected": {
-      "text": "When a friendly unit is selected to Disembark, you may use this ability, during the Movement phase, in your turn, while the unit is not Battle-shocked, until the end of the turn:\n  -> Roll D6, then:\n    -> Roll one D6:\n      - On 1: The unit is Battle-shocked.\n      - On 2-6: Nothing happens.\n  -> Against MONSTER or VEHICLE targets, the triggering unit gets +1 to Wound rolls."
+      "text": "When a friendly unit is selected to make a Disembark move, you may use this ability, during the Movement phase, in your turn, while the unit is not Battle-shocked, until the end of the turn:\n  -> Roll D6, then:\n    -> Roll one D6:\n      - On 1: The unit is Battle-shocked.\n      - On 2-6: Nothing happens.\n  -> Against MONSTER or VEHICLE targets, the triggering unit gets +1 to Wound rolls."
     }
   },
   {
@@ -15904,7 +15904,7 @@
       "optional": true
     },
     "expected": {
-      "text": "At the start of your Command phase, you may use this ability, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - Assault Doctrine: when the unit is selected to Advance: the unit is eligible to declare a charge even if it Advanced this turn.\n    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].\n    - Tactical Doctrine: when the unit is selected to Fall Back: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn."
+      "text": "At the start of your Command phase, you may use this ability, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - Assault Doctrine: when the unit is selected to make an Advance move: the unit is eligible to declare a charge even if it Advanced this turn.\n    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].\n    - Tactical Doctrine: when the unit is selected to make a Fall Back move: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn."
     }
   },
   {
@@ -16030,7 +16030,7 @@
       "optional": true
     },
     "expected": {
-      "text": "At the start of your Command phase, you may use this ability, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - Assault Doctrine: when the unit is selected to Advance: the unit is eligible to declare a charge even if it Advanced this turn.\n    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].\n    - Tactical Doctrine: when the unit is selected to Fall Back: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn."
+      "text": "At the start of your Command phase, you may use this ability, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - Assault Doctrine: when the unit is selected to make an Advance move: the unit is eligible to declare a charge even if it Advanced this turn.\n    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].\n    - Tactical Doctrine: when the unit is selected to make a Fall Back move: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn."
     }
   },
   {
@@ -34944,7 +34944,7 @@
       "optional": true
     },
     "expected": {
-      "text": "When the unit is selected to Advance, you may use this ability, during the Movement phase, in your turn, until the end of the phase:\n  -> The unit can move any distance, during its Advance moves.\n  -> The unit can move over models as though they were not there.\n  -> The triggering unit must end its move where the unit is not within 8\" of an enemy unit, during its Advance moves."
+      "text": "When the unit is selected to make an Advance move, you may use this ability, during the Movement phase, in your turn, until the end of the phase:\n  -> The unit can move any distance, during its Advance moves.\n  -> The unit can move over models as though they were not there.\n  -> The triggering unit must end its move where the unit is not within 8\" of an enemy unit, during its Advance moves."
     }
   },
   {
@@ -40803,7 +40803,7 @@
       "duration": "resolution"
     },
     "expected": {
-      "text": "When a friendly FABLED SPRITE unit embarked within the unit is selected to Disembark using the Tactical Disembarkation rules, when resolving this use, you gain 1CP."
+      "text": "When a friendly FABLED SPRITE unit embarked within the unit is selected to make a Disembark move using the Tactical Disembarkation rules, when resolving this use, you gain 1CP."
     }
   },
   {

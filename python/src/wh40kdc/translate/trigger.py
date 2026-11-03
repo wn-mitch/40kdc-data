@@ -335,7 +335,10 @@ def _event_phrase(t: AbilityTrigger) -> str:
         if to == "observe":
             return f"each time {who} is selected as an Observer unit"
         if to == "move" and isinstance(f.get("move_types"), list):
-            return f"when {who} is selected to {move_kinds(f['move_types'])}{_selected_mode(f)}"
+            # "selected to make a Normal move", "selected to make an Advance or Fall Back move".
+            kinds = move_kinds(f["move_types"])
+            move = f"{_article(kinds)} {kinds} move" if kinds else "a move"
+            return f"when {who} is selected to make {move}{_selected_mode(f)}"
         verb = "shoot or fight" if to == "attack" else dekebab(_str(to))
         return f"when {who} is selected to {verb}"
     if event == "targets-selected":

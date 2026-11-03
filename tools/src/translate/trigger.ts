@@ -209,7 +209,12 @@ function eventPhrase(t: AbilityTrigger): string {
     case "selected": {
       if (f.to == null) return `when ${who} is selected`;
       if (f.to === "observe") return `each time ${who} is selected as an Observer unit`;
-      if (f.to === "move" && Array.isArray(f.move_types)) return `when ${who} is selected to ${moveKinds(f.move_types)}${selectedMode(f)}`;
+      if (f.to === "move" && Array.isArray(f.move_types)) {
+        // "selected to make a Normal move", "selected to make an Advance or Fall Back move".
+        const kinds = moveKinds(f.move_types);
+        const move = `${kinds ? `${/^[aeiou]/i.test(kinds) ? "an" : "a"} ${kinds}` : "a"} move`;
+        return `when ${who} is selected to make ${move}${selectedMode(f)}`;
+      }
       return `when ${who} is selected to ${f.to === "attack" ? "shoot or fight" : dekebab(str(f.to))}`;
     }
     case "targets-selected": {

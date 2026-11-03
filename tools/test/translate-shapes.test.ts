@@ -189,3 +189,21 @@ describe("leaf English defects found by the corpus sweep", () => {
     expect(gain("blood-tithe-pool", 2)).toBe("You gain 2 Blood Tithe points.");
   });
 });
+
+describe("selected-to-move triggers", () => {
+  const selected = (move_types: string[], extra: Record<string, unknown> = {}) =>
+    describeTrigger({ event: "selected", filter: { to: "move", move_types, ...extra } } as Parameters<typeof describeTrigger>[0]);
+
+  it("names the move the unit is selected to make", () => {
+    expect(selected(["normal"])).toBe("when the unit is selected to make a Normal move");
+    expect(selected(["advance", "fall-back"])).toBe("when the unit is selected to make an Advance or Fall Back move");
+    expect(selected(["normal", "advance", "fall-back"])).toBe("when the unit is selected to make a Normal, Advance or Fall Back move");
+    expect(selected([])).toBe("when the unit is selected to make a move");
+  });
+
+  it("keeps the named mode after the move", () => {
+    expect(selected(["disembark"], { mode: "tactical" })).toBe(
+      "when the unit is selected to make a Disembark move using the Tactical Disembarkation rules",
+    );
+  });
+});
