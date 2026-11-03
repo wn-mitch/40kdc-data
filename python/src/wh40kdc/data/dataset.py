@@ -39,6 +39,37 @@ from wh40kdc.share import embedded_registry_aliases
 _MORTAL_PHASES = ("command", "movement", "shooting", "charge", "fight")
 
 
+def _push_levers(
+    levers: dict[str, Any],
+    activatable: list[dict[str, Any]],
+    ability: Any,
+    source: dict[str, Any],
+) -> None:
+    """Append each of an ability's activatables to ``levers`` as an opt-in lever (first id
+    wins) with the pools it names, leaving out cap raises and stance-gated ones. Mirrors the
+    ``levers`` sink of TS ``collectBuffs``."""
+    from wh40kdc.data.lever_providers import lever_from_activatable
+
+    for act in activatable:
+        if act.get("capRaise") or act.get("requiresOption") or act.get("excludesOption"):
+            continue
+        if any(lever["id"] == act["id"] for lever in levers["buffs"]):
+            continue
+        label = f"{ability.name} — {act['label']}"
+        levers["buffs"].append(lever_from_activatable(act, label, source))
+        pools = ([act["group"]] if act.get("group") else []) + list(act.get("groups") or [])
+        for group in pools:
+            if not any(existing["id"] == group["id"] for existing in levers["groups"]):
+                levers["groups"].append(
+                    {
+                        "id": group["id"],
+                        "abilityId": ability.id,
+                        "label": ability.name,
+                        "maxActivations": group["maxActivations"],
+                    }
+                )
+
+
 def _buff_source_from_eligible(entry: dict[str, Any]) -> dict[str, Any]:
     """Map an eligible-ability entry back to the BuffSource the translator
     expects."""
@@ -806,6 +837,22 @@ class Dataset:
         self._collect_buffs(input, context, "target", needs)
         return needs
 
+    def defensive_levers_for(
+        self, input: dict[str, Any], context: dict[str, Any]
+    ) -> dict[str, Any]:
+        """The defending unit's player decisions: the activatable levers of the abilities
+        :meth:`defensive_buffs_for` walks (an optional ability, a usage-limited activation, a
+        ``choice`` branch), each off by default, with the pools that cap them. Returns
+        ``{"buffs": [StackableBuff], "groups": [StackableBuffGroup]}`` in the lever shape of
+        :meth:`stackable_buffs_for`; :meth:`defensive_buffs_for` never applies these. A lever
+        behind an undecided condition appears once that condition is answered true in
+        ``context["conditionFacts"]``. Append each chosen lever's ``buffs`` to the defensive
+        stack to crunch it. A lever that raises another pool's cap or applies only under a
+        stance option is not listed."""
+        levers: dict[str, Any] = {"buffs": [], "groups": []}
+        self._collect_buffs(input, context, "target", None, levers)
+        return levers
+
     def stackable_buffs_for(self, input: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """Enumerate every attacker-side buff a unit could stack in
         ``context`` as toggleable levers plus their activation groups.
@@ -1146,9 +1193,13 @@ class Dataset:
         context: dict[str, Any],
         perspective: str,
         needs: list[dict[str, Any]] | None = None,
+        levers: dict[str, Any] | None = None,
     ) -> list[dict[str, Any]]:
         """Shared implementation for buffs_for / defensive_buffs_for. When ``needs`` is
-        given, every undecided leaf condition of the walked abilities is appended to it."""
+        given, every undecided leaf condition of the walked abilities is appended to it. When
+        ``levers`` is given, every activatable of the walked abilities is appended to it as an
+        opt-in lever (first id wins), with the pools it names; one that raises a pool's cap or
+        is gated on a stance option is left out. Mirrors TS ``collectBuffs``."""
         from wh40kdc.data.lever_providers import ability_needs
 
         out: list[dict[str, Any]] = []
@@ -1192,6 +1243,8 @@ class Dataset:
                         for n in needs
                     ):
                         needs.append(need)
+            if levers is not None:
+                _push_levers(levers, translation["activatable"], ability, source)
             out.extend(translation["applied"])
 
         return out

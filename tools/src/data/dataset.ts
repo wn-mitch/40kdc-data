@@ -68,11 +68,13 @@ import {
 
 export type {
   BuffInput,
+  DefensiveLevers,
   StackableBuff,
   StackableBuffGroup,
 } from "./dataset-buffs.js";
 import type {
   BuffInput,
+  DefensiveLevers,
   StackableBuff,
   StackableBuffGroup,
 } from "./dataset-buffs.js";
@@ -593,6 +595,32 @@ export class Dataset {
     const needs: AbilityNeed[] = [];
     collectBuffs(this, input, context, "target", needs);
     return needs;
+  }
+
+  /**
+   * The defending unit's player decisions: the activatable levers of the abilities
+   * {@link defensiveBuffsFor} walks (an optional ability, a usage-limited activation, a `choice`
+   * branch), each off by default, with the {@link StackableBuffGroup} pools that cap them. Same
+   * lever shape as {@link stackableBuffsFor}; {@link defensiveBuffsFor} never applies these. A
+   * lever behind an undecided condition appears once that condition is answered true in
+   * `context.conditionFacts` (see {@link defensiveNeedsFor}). To crunch a choice, append each
+   * enabled lever's `buffs` to the defensive stack:
+   *
+   * ```ts
+   * const { buffs } = ds.defensiveLeversFor(input, ctx);
+   * const chosen = buffs.filter((lever) => on.has(lever.id)).flatMap((lever) => lever.buffs);
+   * const defence = [...ds.defensiveBuffsFor(input, ctx), ...chosen];
+   * ```
+   *
+   * A lever that raises another pool's cap or applies only under a stance option is not listed.
+   */
+  defensiveLeversFor(
+    input: EligibilityInput & { optedInStratagemIds?: string[] },
+    context: EngineContext,
+  ): DefensiveLevers {
+    const levers: DefensiveLevers = { buffs: [], groups: [] };
+    collectBuffs(this, input, context, "target", undefined, levers);
+    return levers;
   }
 
   /**

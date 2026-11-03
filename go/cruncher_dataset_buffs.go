@@ -272,7 +272,12 @@ func (ds *Dataset) weaponFaction(input map[string]any) string {
 
 // buffContext is the engine context the buff collectors translate under: context with the input
 // unit's attachment, unit id and (attacker) Toughness filled in where context leaves them unset.
+// Under target perspective it mirrors TS buffContext: the defending unit's attachment, unit id,
+// army faction, attachment role, and combined/shared keywords.
 func (ds *Dataset) buffContext(input, context map[string]any, perspective string) map[string]any {
+	if perspective == "target" {
+		return ds.targetBuffContext(input, context)
+	}
 	ctx := ds.derivedContext(input, context)
 	if perspective == "attacker" && ctx["attackerUnitId"] == nil {
 		ctx["attackerUnitId"] = getStr(input, "unitId")
@@ -283,13 +288,90 @@ func (ds *Dataset) buffContext(input, context map[string]any, perspective string
 			ctx["attackerToughness"] = toughness
 		}
 	}
-	if perspective == "target" && ctx["targetUnitId"] == nil {
-		ctx["targetUnitId"] = getStr(input, "unitId")
+	return ctx
+}
+
+// targetBuffContext is buffContext under target perspective. Explicit context values win.
+func (ds *Dataset) targetBuffContext(input, context map[string]any) map[string]any {
+	ctx := cloneMap(context)
+	combined := ds.combinedUnit(input)
+	factionID := getStr(input, "factionId")
+	if factionID == "" && len(combined) > 0 && getStr(input, "unitId") != "" {
+		factionID = combined[0].FactionID()
+	}
+	roles, _ := getMap(input, "attachmentRoles")
+	setDefault := func(key string, value any) {
+		if ctx[key] == nil {
+			ctx[key] = value
+		}
+	}
+	setDefault("targetAttached", len(getList(input, "attachedUnitIds")) > 0)
+	setDefault("targetUnitId", getStr(input, "unitId"))
+	if factionID != "" {
+		setDefault("targetArmyFaction", factionID)
+	}
+	if role, ok := roles[getStr(input, "unitId")]; ok && role != nil {
+		setDefault("targetAttachmentRole", role)
+	}
+	if len(combined) > 0 {
+		setDefault("targetKeywords", stringsToAny(combinedUnitKeywordsLower(combined)))
+		setDefault("targetModelKeywords", stringsToAny(sharedUnitKeywordsLower(combined)))
+	}
+	if roles != nil {
+		setDefault("attachmentRoles", roles)
 	}
 	return ctx
 }
 
-func (ds *Dataset) collectBuffs(input, context map[string]any, perspective string) []any {
+// combinedUnitKeywordsLower is the lower-cased union of the units' keywords and faction keywords,
+// in first-seen order.
+func combinedUnitKeywordsLower(units []*UnitView) []string {
+	seen := map[string]bool{}
+	out := []string{}
+	for _, unit := range units {
+		for _, keyword := range unitKeywordsLower(unit.Raw) {
+			if !seen[keyword] {
+				seen[keyword] = true
+				out = append(out, keyword)
+			}
+		}
+	}
+	return out
+}
+
+// sharedUnitKeywordsLower is the lower-cased keywords and faction keywords every one of the units
+// carries, in the first unit's order.
+func sharedUnitKeywordsLower(units []*UnitView) []string {
+	if len(units) == 0 {
+		return []string{}
+	}
+	out := []string{}
+	for _, keyword := range combinedUnitKeywordsLower(units[:1]) {
+		everyone := true
+		for _, unit := range units[1:] {
+			if !containsString(combinedUnitKeywordsLower([]*UnitView{unit}), keyword) {
+				everyone = false
+				break
+			}
+		}
+		if everyone {
+			out = append(out, keyword)
+		}
+	}
+	return out
+}
+
+func stringsToAny(values []string) []any {
+	out := make([]any, len(values))
+	for i, value := range values {
+		out[i] = value
+	}
+	return out
+}
+
+// collectBuffs is the shared walk of buffsFor / defensiveBuffsFor. When levers is non-nil, every
+// activatable of the walked abilities is pushed onto it (see defensiveLevers.push).
+func (ds *Dataset) collectBuffs(input, context map[string]any, perspective string, levers *defensiveLevers) []any {
 	out := []any{}
 	ctx := ds.buffContext(input, context, perspective)
 	if perspective == "attacker" {
@@ -330,7 +412,9 @@ func (ds *Dataset) collectBuffs(input, context map[string]any, perspective strin
 		}
 		ability := entry["ability"].(*AbilityView)
 		rating, hasRating := entry["rating"]
-		out = append(out, ability.describeRatedBuffs(source, ctx, perspective, rating, hasRating).applied...)
+		translated := ability.describeRatedBuffs(source, ctx, perspective, rating, hasRating)
+		levers.push(ability, source, translated.activatable)
+		out = append(out, translated.applied...)
 	}
 	for _, entry := range eligible {
 		source := entry["source"].(map[string]any)
@@ -346,7 +430,9 @@ func (ds *Dataset) collectBuffs(input, context map[string]any, perspective strin
 		if getStr(source, "kind") == "detachment-stratagem" {
 			at = ds.stratagemContext(input, entry, ctx)
 		}
-		out = append(out, ability.describeRatedBuffs(bs, at, perspective, rating, hasRating).applied...)
+		translated := ability.describeRatedBuffs(bs, at, perspective, rating, hasRating)
+		levers.push(ability, bs, translated.activatable)
+		out = append(out, translated.applied...)
 	}
 	return out
 }
@@ -453,11 +539,11 @@ func combinedToughness(units []*UnitView, roles map[string]any) (float64, bool) 
 }
 
 func (ds *Dataset) buffsFor(input, context map[string]any) []any {
-	return ds.collectBuffs(input, context, "attacker")
+	return ds.collectBuffs(input, context, "attacker", nil)
 }
 
 func (ds *Dataset) defensiveBuffsFor(input, context map[string]any) []any {
-	return ds.collectBuffs(input, context, "target")
+	return ds.collectBuffs(input, context, "target", nil)
 }
 
 // auraInches is the one inch range every aura-filtered effect target in effect

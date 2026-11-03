@@ -29,7 +29,6 @@
     type WeaponLine,
   } from "./weapon-lines.js";
   import { buildDebugSnapshot } from "./debug-export.js";
-  import { scenarioContext } from "./scenario.js";
   import {
     memberLevers,
     memberMortalSources,
@@ -54,18 +53,7 @@
     stageOf,
   } from "./projection-model.js";
 
-  const context = $derived<EngineContext>({
-    phase: salvo.phase,
-    attackerStationary: salvo.contextFlags.attackerStationary,
-    withinHalfRange: salvo.contextFlags.withinHalfRange,
-    attackerCharged: salvo.contextFlags.attackerCharged,
-    targetInCover: salvo.manualBuffsActive.has("cover"),
-    attackerAttached: salvo.attachedUnitIds.length > 0,
-    // Drives range-gated abilities (e.g. Furious Onslaught's 18" reroll). Unset
-    // → range gates stay permissive.
-    ...(salvo.targetDistance !== null ? { distanceInches: salvo.targetDistance } : {}),
-    ...scenarioContext(salvo.scenario),
-  });
+  const context = $derived<EngineContext>(salvo.projectionContext);
 
   // Each member's levers, read as that member under its own context (as the damage matrix reads
   // them); the toggles and the selection check read their union.
@@ -97,6 +85,7 @@
     stratagemIds: salvo.defenderStratagemIds,
     enhancementId: salvo.defenderEnhancementId,
     wargear: salvo.targetWargear,
+    leverIds: salvo.targetLeverIds,
   }, context));
 
   // The ticked mortal-wound sources, after the target's Feel No Pain: a line of the combined total.

@@ -97,6 +97,7 @@ import {
   runGameModeQuery,
 } from "./gen-conformance-game-mode-cases.js";
 import { canonicalMortalSourceCases } from "./gen-conformance-mortal-cases.js";
+import { canonicalDefensiveLeverCases } from "./gen-conformance-defensive-levers.js";
 import { canonicalDamageZeroingCases, DAMAGE_ZEROING_CASE_PREFIX } from "./gen-conformance-zeroing-cases.js";
 import { canonicalIgnoreModifiersCases, IGNORE_MODIFIERS_CASE_PREFIX } from "./gen-conformance-ignore-cases.js";
 import { canonicalGrantedRecordCases, GRANTED_RECORD_CASE_PREFIX, withGrantedRecords } from "./gen-conformance-granted-cases.js";
@@ -4478,6 +4479,13 @@ function genMortalSourceCases(): void {
   console.log(`abilities-resolver/mortal-sources.json: ${cases.length} cases`);
 }
 
+/** The defensive-levers corpus: every row regenerated from the TS reference. */
+function genDefensiveLeverCases(): void {
+  const cases = canonicalDefensiveLeverCases(Dataset.embedded());
+  writeJson(join(CONFORMANCE, "abilities-resolver", "defensive-levers.json"), { cases });
+  console.log(`abilities-resolver/defensive-levers.json: ${cases.length} cases`);
+}
+
 /** Append fabricated direct-API cases without duplicating their stable identities on regen. */
 function genCanonicalCruncherCases(): void {
   const appended = [...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases(), ...canonicalScenarioCases(), ...canonicalGrantedRecordCases(), ...canonicalDamageZeroingCases(), ...canonicalIgnoreModifiersCases(), ...canonicalTriggerSubjectCases(), ...canonicalStratagemModelCases(), ...canonicalStratagemTargetCases(), ...canonicalNamedRegionBeneficiaryCases(), ...canonicalDesignationCases()];
@@ -4516,6 +4524,7 @@ genCanonicalCruncherCases();
 // After the canonical cruncher cases, some of which it allocates.
 genAllocation();
 genMortalSourceCases();
+genDefensiveLeverCases();
 genScoring();
 genTerrainResolver();
 genTerrainKeystones();

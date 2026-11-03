@@ -1,8 +1,9 @@
-import type { Scenario } from "./scenario.js";
+import { scenarioContext, type Scenario } from "./scenario.js";
 import {
   Dataset,
   tryImportRoster,
   type AdapterTrial,
+  type EngineContext,
   type Roster,
   type RosterFormat,
   type Buff,
@@ -204,6 +205,8 @@ class SalvoState {
   defenderEnhancementId = $state<string | null>(null);
   /** The target's wargear, with the unit it was chosen for. */
   defenderWargear = $state<{ unitId: string; wargear: Record<string, number> } | null>(null);
+  /** The target's optional abilities the defender turns on (lever ids), with the unit they were chosen for. */
+  defenderLevers = $state<{ unitId: string; ids: string[] } | null>(null);
 
   // Fleet comparison (the "Compare" view).
   compareFactionId = $state<string | null>("world-eaters");
@@ -226,6 +229,39 @@ class SalvoState {
   /** The wargear chosen for the current target; null (its out-of-the-box loadout) once the target changes. */
   get targetWargear(): Record<string, number> | null {
     return this.defenderWargear && this.defenderWargear.unitId === this.targetUnitId ? this.defenderWargear.wargear : null;
+  }
+
+  /** The optional abilities turned on for the current target; none once the target changes. */
+  get targetLeverIds(): string[] {
+    return this.defenderLevers && this.defenderLevers.unitId === this.targetUnitId ? this.defenderLevers.ids : [];
+  }
+
+  /** Turn one of the current target's optional abilities on or off. */
+  setTargetLever(id: string, on: boolean): void {
+    const unitId = this.targetUnitId;
+    if (!unitId) return;
+    const rest = this.targetLeverIds.filter((item) => item !== id);
+    this.defenderLevers = { unitId, ids: on ? [...rest, id] : rest };
+  }
+
+  /**
+   * The engine context the projection crunches under: the phase, the attacker's movement and
+   * range flags, cover, the distance and the declared scenario. The defender's levers are listed
+   * under it too, so a lever behind an answered condition is offered exactly when it can apply.
+   */
+  get projectionContext(): EngineContext {
+    return {
+      phase: this.phase,
+      attackerStationary: this.contextFlags.attackerStationary,
+      withinHalfRange: this.contextFlags.withinHalfRange,
+      attackerCharged: this.contextFlags.attackerCharged,
+      targetInCover: this.manualBuffsActive.has("cover"),
+      attackerAttached: this.attachedUnitIds.length > 0,
+      // Drives range-gated abilities (e.g. Furious Onslaught's 18" reroll). Unset
+      // → range gates stay permissive.
+      ...(this.targetDistance !== null ? { distanceInches: this.targetDistance } : {}),
+      ...scenarioContext(this.scenario),
+    };
   }
 
   /** Apply a target-profile preset: point the dataset target at its unit. */

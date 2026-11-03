@@ -188,3 +188,31 @@ def test_mortal_wound_sources(dataset: Any, case: dict[str, Any]) -> None:
     for found, expected in zip(result["sources"], want["sources"], strict=True):
         assert found["expected"] == pytest.approx(expected["expected"], abs=1e-9), found["id"]
     assert [u["reason"] for u in result["unsupported"]] == want["unsupportedReasons"]
+
+
+_DEFENSIVE_LEVER_CASES = (
+    json.loads((_DIR / "defensive-levers.json").read_text(encoding="utf-8"))["cases"]
+    if (_DIR / "defensive-levers.json").exists()
+    else []
+)
+
+
+@pytest.mark.skipif(not _DEFENSIVE_LEVER_CASES, reason="conformance corpus not available")
+@pytest.mark.parametrize("case", _DEFENSIVE_LEVER_CASES, ids=lambda case: case["caseId"])
+def test_defensive_levers(dataset: Any, case: dict[str, Any]) -> None:
+    """The defending unit's opt-in levers and their pools match exactly."""
+    result = dataset.defensive_levers_for(case["input"], case["context"])
+    levers = [
+        {
+            "id": lever["id"],
+            "label": lever["label"],
+            "enabled": lever["enabled"],
+            "source": lever["source"],
+            "group": lever.get("group"),
+            "groups": lever.get("groups"),
+            "requires": lever.get("requires"),
+            "buffs": [buff["contribution"] for buff in lever["buffs"]],
+        }
+        for lever in result["buffs"]
+    ]
+    assert {"levers": levers, "groups": result["groups"]} == case["expected"]

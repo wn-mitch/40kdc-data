@@ -22,6 +22,7 @@
 export { Dataset } from "./dataset.js";
 export type {
   BuffInput,
+  DefensiveLevers,
   StackableBuff,
   StackableBuffGroup,
   ReactiveTrigger,

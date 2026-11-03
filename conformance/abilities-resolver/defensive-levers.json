@@ -1,0 +1,515 @@
+{
+  "cases": [
+    {
+      "caseId": "optional-roll-undecided",
+      "input": {
+        "unitId": "primaris-psyker",
+        "factionId": "astra-militarum"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "levers": [
+          {
+            "id": "voice-of-command-astra-militarum#TAKE COVER",
+            "label": "Voice of Command — TAKE COVER",
+            "enabled": false,
+            "source": {
+              "kind": "ability",
+              "abilityId": "voice-of-command-astra-militarum",
+              "abilityKind": "army"
+            },
+            "group": "voice-of-command-astra-militarum?order",
+            "groups": null,
+            "requires": null,
+            "buffs": [
+              {
+                "type": "save-improve",
+                "value": 1,
+                "best": 3
+              }
+            ]
+          }
+        ],
+        "groups": [
+          {
+            "id": "voice-of-command-astra-militarum?order",
+            "abilityId": "voice-of-command-astra-militarum",
+            "label": "Voice of Command",
+            "maxActivations": 1
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "optional-roll-holds",
+      "input": {
+        "unitId": "primaris-psyker",
+        "factionId": "astra-militarum"
+      },
+      "context": {
+        "phase": "shooting",
+        "conditionFacts": {
+          "target:{\"parameters\":{\"ability\":\"psychic-barrier-astra-militarum\",\"dice\":\"D6\",\"results\":[2,3,4,5,6]},\"type\":\"dice-table-result\"}": true
+        }
+      },
+      "expected": {
+        "levers": [
+          {
+            "id": "voice-of-command-astra-militarum#TAKE COVER",
+            "label": "Voice of Command — TAKE COVER",
+            "enabled": false,
+            "source": {
+              "kind": "ability",
+              "abilityId": "voice-of-command-astra-militarum",
+              "abilityKind": "army"
+            },
+            "group": "voice-of-command-astra-militarum?order",
+            "groups": null,
+            "requires": null,
+            "buffs": [
+              {
+                "type": "save-improve",
+                "value": 1,
+                "best": 3
+              }
+            ]
+          },
+          {
+            "id": "psychic-barrier-astra-militarum@phase-started",
+            "label": "Psychic Barrier (Psychic) — 4+ invuln",
+            "enabled": false,
+            "source": {
+              "kind": "ability",
+              "abilityId": "psychic-barrier-astra-militarum",
+              "abilityKind": "unit"
+            },
+            "group": null,
+            "groups": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "phase-started",
+                  "condition": {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "shooting"
+                        }
+                      },
+                      {
+                        "type": "player-turn-is",
+                        "parameters": {
+                          "turn": "opponent-turn"
+                        }
+                      }
+                    ]
+                  },
+                  "optional": true
+                }
+              }
+            ],
+            "buffs": [
+              {
+                "type": "invulnerable-save",
+                "threshold": 4
+              }
+            ]
+          }
+        ],
+        "groups": [
+          {
+            "id": "voice-of-command-astra-militarum?order",
+            "abilityId": "voice-of-command-astra-militarum",
+            "label": "Voice of Command",
+            "maxActivations": 1
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "optional-roll-fails",
+      "input": {
+        "unitId": "primaris-psyker",
+        "factionId": "astra-militarum"
+      },
+      "context": {
+        "phase": "shooting",
+        "conditionFacts": {
+          "target:{\"parameters\":{\"ability\":\"psychic-barrier-astra-militarum\",\"dice\":\"D6\",\"results\":[2,3,4,5,6]},\"type\":\"dice-table-result\"}": false
+        }
+      },
+      "expected": {
+        "levers": [
+          {
+            "id": "voice-of-command-astra-militarum#TAKE COVER",
+            "label": "Voice of Command — TAKE COVER",
+            "enabled": false,
+            "source": {
+              "kind": "ability",
+              "abilityId": "voice-of-command-astra-militarum",
+              "abilityKind": "army"
+            },
+            "group": "voice-of-command-astra-militarum?order",
+            "groups": null,
+            "requires": null,
+            "buffs": [
+              {
+                "type": "save-improve",
+                "value": 1,
+                "best": 3
+              }
+            ]
+          }
+        ],
+        "groups": [
+          {
+            "id": "voice-of-command-astra-militarum?order",
+            "abilityId": "voice-of-command-astra-militarum",
+            "label": "Voice of Command",
+            "maxActivations": 1
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "usage-pool",
+      "input": {
+        "unitId": "canoness",
+        "factionId": "adepta-sororitas"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "levers": [
+          {
+            "id": "the-emperors-grace-adepta-sororitas@phase-started",
+            "label": "The Emperor’s Grace — 2+ invuln",
+            "enabled": false,
+            "source": {
+              "kind": "ability",
+              "abilityId": "the-emperors-grace-adepta-sororitas",
+              "abilityKind": "unit"
+            },
+            "group": "the-emperors-grace-adepta-sororitas?usage",
+            "groups": null,
+            "requires": [
+              {
+                "usage": {
+                  "frequency": "n-per-battle",
+                  "count": 1,
+                  "per": "unit"
+                }
+              },
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "phase-started",
+                  "optional": true
+                }
+              }
+            ],
+            "buffs": [
+              {
+                "type": "invulnerable-save",
+                "threshold": 2
+              }
+            ]
+          }
+        ],
+        "groups": [
+          {
+            "id": "the-emperors-grace-adepta-sororitas?usage",
+            "abilityId": "the-emperors-grace-adepta-sororitas",
+            "label": "The Emperor’s Grace",
+            "maxActivations": 1
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "choice-pool",
+      "input": {
+        "unitId": "trajann-valoris",
+        "factionId": "adeptus-custodes"
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "expected": {
+        "levers": [
+          {
+            "id": "martial-katah-adeptus-custodes#kaptaris",
+            "label": "Martial Ka’tah — Kaptaris",
+            "enabled": false,
+            "source": {
+              "kind": "ability",
+              "abilityId": "martial-katah-adeptus-custodes",
+              "abilityKind": "army"
+            },
+            "group": "martial-katah-adeptus-custodes?stance",
+            "groups": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "optional": true
+              },
+              {
+                "designated": "readied"
+              }
+            ],
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": -1
+              }
+            ]
+          },
+          {
+            "id": "martial-katah-tristraens-gilded-blades-adeptus-custodes#kaptaris",
+            "label": "Martial Ka’tah — Kaptaris",
+            "enabled": false,
+            "source": {
+              "kind": "ability",
+              "abilityId": "martial-katah-tristraens-gilded-blades-adeptus-custodes",
+              "abilityKind": "army"
+            },
+            "group": "martial-katah-tristraens-gilded-blades-adeptus-custodes?stance",
+            "groups": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "optional": true
+              },
+              {
+                "designated": "readied"
+              }
+            ],
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": -1
+              }
+            ]
+          },
+          {
+            "id": "moment-shackle-adeptus-custodes?1",
+            "label": "Moment Shackle — 3+ invuln",
+            "enabled": false,
+            "source": {
+              "kind": "ability",
+              "abilityId": "moment-shackle-adeptus-custodes",
+              "abilityKind": "unit"
+            },
+            "group": "moment-shackle-adeptus-custodes?choice",
+            "groups": [
+              "moment-shackle-adeptus-custodes?usage"
+            ],
+            "requires": [
+              {
+                "usage": {
+                  "frequency": "n-per-battle",
+                  "count": 1,
+                  "per": "army"
+                }
+              },
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "phase-started",
+                  "optional": true
+                }
+              }
+            ],
+            "buffs": [
+              {
+                "type": "invulnerable-save",
+                "threshold": 3
+              }
+            ]
+          }
+        ],
+        "groups": [
+          {
+            "id": "martial-katah-adeptus-custodes?stance",
+            "abilityId": "martial-katah-adeptus-custodes",
+            "label": "Martial Ka’tah",
+            "maxActivations": 1
+          },
+          {
+            "id": "martial-katah-tristraens-gilded-blades-adeptus-custodes?stance",
+            "abilityId": "martial-katah-tristraens-gilded-blades-adeptus-custodes",
+            "label": "Martial Ka’tah",
+            "maxActivations": 1
+          },
+          {
+            "id": "moment-shackle-adeptus-custodes?choice",
+            "abilityId": "moment-shackle-adeptus-custodes",
+            "label": "Moment Shackle",
+            "maxActivations": 1
+          },
+          {
+            "id": "moment-shackle-adeptus-custodes?usage",
+            "abilityId": "moment-shackle-adeptus-custodes",
+            "label": "Moment Shackle",
+            "maxActivations": 1
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "stance-pool",
+      "input": {
+        "unitId": "telemon-heavy-dreadnought",
+        "factionId": "adeptus-custodes"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "levers": [
+          {
+            "id": "martial-katah-adeptus-custodes#kaptaris",
+            "label": "Martial Ka’tah — Kaptaris",
+            "enabled": false,
+            "source": {
+              "kind": "ability",
+              "abilityId": "martial-katah-adeptus-custodes",
+              "abilityKind": "army"
+            },
+            "group": "martial-katah-adeptus-custodes?stance",
+            "groups": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "optional": true
+              },
+              {
+                "designated": "readied"
+              }
+            ],
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": -1
+              }
+            ]
+          },
+          {
+            "id": "martial-katah-tristraens-gilded-blades-adeptus-custodes#kaptaris",
+            "label": "Martial Ka’tah — Kaptaris",
+            "enabled": false,
+            "source": {
+              "kind": "ability",
+              "abilityId": "martial-katah-tristraens-gilded-blades-adeptus-custodes",
+              "abilityKind": "army"
+            },
+            "group": "martial-katah-tristraens-gilded-blades-adeptus-custodes?stance",
+            "groups": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "optional": true
+              },
+              {
+                "designated": "readied"
+              }
+            ],
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": -1
+              }
+            ]
+          }
+        ],
+        "groups": [
+          {
+            "id": "martial-katah-adeptus-custodes?stance",
+            "abilityId": "martial-katah-adeptus-custodes",
+            "label": "Martial Ka’tah",
+            "maxActivations": 1
+          },
+          {
+            "id": "martial-katah-tristraens-gilded-blades-adeptus-custodes?stance",
+            "abilityId": "martial-katah-tristraens-gilded-blades-adeptus-custodes",
+            "label": "Martial Ka’tah",
+            "maxActivations": 1
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "stratagem-not-opted-in",
+      "input": {
+        "unitId": "mortifiers",
+        "factionId": "adepta-sororitas",
+        "detachmentId": "penitent-host"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "levers": [],
+        "groups": []
+      }
+    },
+    {
+      "caseId": "stratagem-opted-in",
+      "input": {
+        "unitId": "mortifiers",
+        "factionId": "adepta-sororitas",
+        "detachmentId": "penitent-host",
+        "optedInStratagemIds": [
+          "purity-of-suffering-penitent-host-adepta-sororitas"
+        ]
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "levers": [
+          {
+            "id": "purity-of-suffering-penitent-host-adepta-sororitas@targets-selected:attack",
+            "label": "Purity of Suffering — feel no pain 4+",
+            "enabled": false,
+            "source": {
+              "kind": "ability",
+              "abilityId": "purity-of-suffering-penitent-host-adepta-sororitas",
+              "abilityKind": "detachment-stratagem"
+            },
+            "group": null,
+            "groups": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "targets-selected",
+                  "filter": {
+                    "kind": "attack"
+                  },
+                  "subject": {
+                    "owner": "enemy"
+                  },
+                  "object": "this-unit"
+                }
+              }
+            ],
+            "buffs": [
+              {
+                "type": "feel-no-pain",
+                "threshold": 4
+              }
+            ]
+          }
+        ],
+        "groups": []
+      }
+    }
+  ]
+}

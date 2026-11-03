@@ -1,11 +1,14 @@
 <script lang="ts">
   import { salvo, ds } from "./store.svelte.js";
+  import { isLegalLeverSelection, type StackableBuff } from "@alpaca-software/40kdc-data";
   import {
     defaultTargetWargear,
     defenderDetachments,
     defenderEnhancements,
+    defenderLevers,
     defenderStratagems,
     targetWargearChoices,
+    type DefenderLevers,
   } from "./defender.js";
 
   const unit = $derived(salvo.targetUnitId ? ds.units.getAny(salvo.targetUnitId) : undefined);
@@ -30,6 +33,31 @@
     salvo.defenderWargear = { unitId: unit.id, wargear: next };
   }
 
+  // The target's optional abilities, listed under the context the projection crunches with, so a
+  // lever behind an answered condition (a roll in Needs) appears exactly when it can apply.
+  const levers = $derived.by<DefenderLevers & { error?: string }>(() => {
+    if (!unit) return { buffs: [], groups: [] };
+    try {
+      return defenderLevers(ds, unit, {
+        detachmentId,
+        stratagemIds: salvo.defenderStratagemIds,
+        enhancementId: salvo.defenderEnhancementId,
+        wargear: salvo.targetWargear,
+      }, salvo.projectionContext);
+    } catch (err) {
+      return { buffs: [], groups: [], error: (err as Error).message };
+    }
+  });
+  const leverOn = (lever: StackableBuff) => salvo.targetLeverIds.includes(lever.id);
+  const poolLabel = (id: string) => levers.groups.find((group) => group.id === id);
+  // Turning a lever off is always allowed; turning one on must keep every pool within its allowance.
+  function canToggleLever(lever: StackableBuff): boolean {
+    if (leverOn(lever)) return true;
+    const selected = new Set(levers.buffs.filter(leverOn).map((item) => item.id));
+    selected.add(lever.id);
+    return isLegalLeverSelection(levers.buffs, levers.groups, selected);
+  }
+
   function toggleStratagem(id: string, on: boolean): void {
     const rest = salvo.defenderStratagemIds.filter((item) => item !== id);
     salvo.defenderStratagemIds = on ? [...rest, id] : rest;
@@ -49,6 +77,30 @@
         <span class="name">{item.name}{(wargear[item.id] ?? 0) > 1 ? ` ×${wargear[item.id]}` : ""}</span>
       </label>
     {/each}
+  </div>
+{/if}
+{#if unit}
+  <div class="section-label">Target's optional abilities</div>
+  {#if levers.error}
+    <p class="error" role="alert">Target abilities could not be read: {levers.error}</p>
+  {/if}
+  <div class="ability-list">
+    {#each levers.buffs as lever (lever.id)}
+      {@const pool = lever.group ? poolLabel(lever.group) : undefined}
+      <label class="ability-row" class:active={leverOn(lever)} class:dim={!canToggleLever(lever)}>
+        <input
+          type="checkbox"
+          checked={leverOn(lever)}
+          disabled={!canToggleLever(lever)}
+          onchange={(e) => salvo.setTargetLever(lever.id, (e.currentTarget as HTMLInputElement).checked)}
+        />
+        <span class="name">{lever.label}{#if pool}<small> · allowance {pool.maxActivations}</small>{/if}</span>
+        <span class="chip activation">optional</span>
+      </label>
+    {:else}
+      <p class="dim">No optional ability in the {salvo.phase} phase.</p>
+    {/each}
+    <p class="hint dim">An ability behind a roll is listed once that roll is answered under Needs.</p>
   </div>
 {/if}
 {#if unit}
@@ -100,3 +152,7 @@
     </div>
   {/if}
 {/if}
+
+<style>
+  .hint { margin: var(--space-1) 0 0; font-size: var(--text-xs); }
+</style>

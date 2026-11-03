@@ -48,7 +48,7 @@ pub struct MortalWoundSources {
 }
 
 /// Lower-cased union of the units' keywords and faction keywords.
-fn combined_keywords_lower(units: &[&Unit]) -> Vec<String> {
+pub(super) fn combined_keywords_lower(units: &[&Unit]) -> Vec<String> {
     let mut seen = HashSet::new();
     let mut out = Vec::new();
     for unit in units {
@@ -68,7 +68,7 @@ fn combined_keywords_lower(units: &[&Unit]) -> Vec<String> {
 }
 
 /// Lower-cased keywords and faction keywords every one of the units carries.
-fn shared_keywords_lower(units: &[&Unit]) -> Vec<String> {
+pub(super) fn shared_keywords_lower(units: &[&Unit]) -> Vec<String> {
     let sets: Vec<Vec<String>> = units
         .iter()
         .map(|unit| combined_keywords_lower(&[unit]))

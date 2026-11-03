@@ -26,6 +26,8 @@ mod abilities;
 mod ability_refs;
 mod collection;
 mod dataset;
+#[cfg(feature = "cruncher")]
+mod defensive;
 pub mod game_mode;
 mod loadout;
 #[cfg(feature = "cruncher")]
@@ -55,6 +57,8 @@ pub use ability_refs::{
 };
 pub use collection::Collection;
 pub use dataset::{Dataset, RawData, ReactiveTrigger};
+#[cfg(feature = "cruncher")]
+pub use defensive::{DefensiveLever, DefensiveLevers, LeverGroup};
 pub use game_mode::{GameModeView, UnknownGameMode};
 pub use loadout::{
     base_loadout, check_unit_legality, clamp_weapon_count, complete_loadout, group_loadout,

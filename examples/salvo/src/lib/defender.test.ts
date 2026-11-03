@@ -6,6 +6,8 @@ import {
   defenderBuffs,
   defenderDetachments,
   defenderEnhancements,
+  defenderLevers,
+  defenderNeeds,
   defenderStratagems,
   supportProviders,
   targetWargearChoices,
@@ -92,5 +94,48 @@ describe("the target's wargear", () => {
       expect(fromAbility(bare, "drones-tau-empire")).toEqual([]);
       expect(fromAbility(bare, "guardian-drone-tau-empire")).toEqual([]);
     }
+  });
+});
+
+describe("the target's optional abilities", () => {
+  // Psychic Barrier: an optional roll whose 2-6 result gives the Psyker a 4+ invulnerable save.
+  const psyker = ds.units.getInFaction("primaris-psyker", "astra-militarum")!;
+  const barrier = "psychic-barrier-astra-militarum@phase-started";
+  const rolled = (holds: boolean) => {
+    const need = defenderNeeds(ds, psyker, none, context).find((item) => item.abilityId === "psychic-barrier-astra-militarum")!;
+    return { ...context, conditionFacts: { [need.key]: holds } };
+  };
+  const invulns = (buffs: Buff[]) => buffs.filter((buff) => buff.contribution.type === "invulnerable-save").map((buff) => buff.contribution);
+
+  it("offers the ability once its roll is answered true", () => {
+    expect(defenderLevers(ds, psyker, none, context).buffs.map((lever) => lever.id)).not.toContain(barrier);
+    expect(defenderLevers(ds, psyker, none, rolled(false)).buffs.map((lever) => lever.id)).not.toContain(barrier);
+    expect(defenderLevers(ds, psyker, none, rolled(true)).buffs.map((lever) => lever.id)).toContain(barrier);
+  });
+
+  it("gives the target the invulnerable save only while toggled on", () => {
+    const off = defenderBuffs(ds, psyker, none, rolled(true));
+    const on = defenderBuffs(ds, psyker, { ...none, leverIds: [barrier] }, rolled(true));
+    expect(invulns(off)).toEqual([]);
+    expect(invulns(on)).toEqual([{ type: "invulnerable-save", threshold: 4 }]);
+  });
+
+  it("ignores a toggled ability no longer offered", () => {
+    // The roll answered false withdraws the lever, so its save does not apply.
+    expect(invulns(defenderBuffs(ds, psyker, { ...none, leverIds: [barrier] }, rolled(false)))).toEqual([]);
+  });
+
+  it("offers an opted-in Stratagem's optional buff only with the Stratagem", () => {
+    const mortifiers = ds.units.getInFaction("mortifiers", "adepta-sororitas")!;
+    const strat = "purity-of-suffering-penitent-host-adepta-sororitas";
+    const build = { ...none, detachmentId: "penitent-host" };
+    const ids = (stratagemIds: string[]) => defenderLevers(ds, mortifiers, { ...build, stratagemIds }, context).buffs.map((lever) => lever.id);
+    expect(ids([]).some((id) => id.startsWith(strat))).toBe(false);
+    const lever = ids([strat]).find((id) => id.startsWith(strat))!;
+    expect(lever).toBeDefined();
+    const fnp = (leverIds: string[]) => defenderBuffs(ds, mortifiers, { ...build, stratagemIds: [strat], leverIds }, context)
+      .filter((buff) => buff.source.kind === "ability" && buff.source.abilityId === strat);
+    expect(fnp([])).toEqual([]);
+    expect(fnp([lever]).map((buff) => buff.contribution)).toEqual([{ type: "feel-no-pain", threshold: 4 }]);
   });
 });

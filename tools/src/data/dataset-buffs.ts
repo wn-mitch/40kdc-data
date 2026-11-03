@@ -22,6 +22,7 @@ import {
   combinedToughness,
   sharedKeywordsLower,
   enhancementLevers,
+  leverFromActivatable,
   resolveCapRaises,
   resolveOptionRequirements,
   stanceOptionName,
@@ -209,9 +210,15 @@ export function inputEligibleAbilities(ds: Dataset, input: BuffInput, phase: Pha
   return input.unitId === undefined ? [] : ds.eligibleAbilities({ ...input, unitId: input.unitId }, phase);
 }
 
+/** The opt-in levers {@link Dataset.defensiveLeversFor} returns, with the pools that limit them. */
+export type DefensiveLevers = { buffs: StackableBuff[]; groups: StackableBuffGroup[] };
+
 /**
  * Shared implementation of {@link Dataset.buffsFor} / {@link Dataset.defensiveBuffsFor}. When
- * `needs` is given, every undecided leaf condition of the walked abilities is pushed onto it.
+ * `needs` is given, every undecided leaf condition of the walked abilities is pushed onto it. When
+ * `levers` is given, every activatable of the walked abilities is pushed onto it as an opt-in
+ * lever (first id wins), with the pools it names; an activatable that raises a pool's cap or is
+ * gated on a stance option is left out, since nothing here resolves those against another lever.
  */
 export function collectBuffs(
   ds: Dataset,
@@ -222,6 +229,7 @@ export function collectBuffs(
   context: EngineContext,
   perspective: "attacker" | "target",
   needs?: AbilityNeed[],
+  levers?: DefensiveLevers,
 ): Buff[] {
   const out: Buff[] = [];
   const translate = (ability: AbilityView, source: BuffSource, rating?: string | number, at: EngineContext = ctx) => {
@@ -229,6 +237,18 @@ export function collectBuffs(
     if (needs) {
       for (const need of abilityNeeds(translation.unsupported, ability.id, ability.name)) {
         if (!needs.some((n) => n.key === need.key && n.abilityId === need.abilityId)) needs.push(need);
+      }
+    }
+    if (levers) {
+      for (const act of translation.activatable) {
+        if (act.capRaise || act.requiresOption || act.excludesOption) continue;
+        if (levers.buffs.some((lever) => lever.id === act.id)) continue;
+        levers.buffs.push(leverFromActivatable(act, `${ability.name} — ${act.label}`, source));
+        for (const group of [...(act.group ? [act.group] : []), ...(act.groups ?? [])]) {
+          if (!levers.groups.some((existing) => existing.id === group.id)) {
+            levers.groups.push({ id: group.id, abilityId: ability.id, label: ability.name, maxActivations: group.maxActivations });
+          }
+        }
       }
     }
     return translation.applied;
