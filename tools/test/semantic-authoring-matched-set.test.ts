@@ -33,6 +33,31 @@ describe("Semantic authoring matched sets (those X units)", () => {
     expect(selector.count).toEqual({ min: 1, max: 1 });
   });
 
+  it("selects one of those units around the triggering unit (2131 shape), not the triggering unit itself", () => {
+    const result = compileLeaves([
+      leaf("unit-filter", { side: "enemy" }),
+      leaf("event", { kind: "move-ended", owner: "enemy" }),
+      leaf("unit-position", { kind: "within", inches: 8, subject: "antecedent", of: "matching-unit", of_side: "friendly", of_keywords: ["ALPHA", "BRAVO"], negated: false }),
+      leaf("select-unit", { distance: "any", visible: false }),
+      those(["ALPHA", "BRAVO"]),
+      leaf("make-move", { subject: "antecedent", move_type: "surge", distance: "D6" }),
+    ]);
+    expectCompiled(result);
+    const select = (result as unknown as { mechanics: { effect: { effect: { type: string; selector: Record<string, unknown>; effect: Record<string, unknown> } } } }).mechanics.effect.effect;
+    expect(select.type).toBe("select-units");
+    expect(select.selector.filter).toEqual({ owner: "friendly", all_of: ["ALPHA", "BRAVO"], within: { range: { inches: 8 }, of: "event-subject" } });
+    expect(select.selector.count).toEqual({ min: 1, max: 1 });
+    expect(select.effect.target).toBe("selected-unit");
+  });
+
+  it("measures a selection from this unit when the set is measured from this unit", () => {
+    const pool = leaf("unit-position", { kind: "within", inches: 6, subject: "this-unit", of: "matching-unit", of_side: "friendly", of_keywords: ["ALPHA"], negated: false });
+    const result = compileLeaves([pool, selectFriendly(), those(["ALPHA"]), mortal()]);
+    expectCompiled(result);
+    const selector = (result as unknown as { mechanics: { effect: { effect: { selector: Record<string, unknown> } } } }).mechanics.effect.effect.selector;
+    expect(selector.filter).toEqual({ owner: "friendly", all_of: ["ALPHA"], within: { range: { inches: 6 }, of: "this-unit" } });
+  });
+
   it("targets only those enemy units (9073 shape): the target is the pool, not every enemy unit", () => {
     const pool = leaf("unit-position", { kind: "within", inches: 6, subject: "this-unit", of: "matching-unit", of_side: "enemy", negated: false });
     const restriction = leaf("targeting-restriction", { may: "target", kind: "charge", weapon_type: "all", by: "this-unit", target: "matched-units" });

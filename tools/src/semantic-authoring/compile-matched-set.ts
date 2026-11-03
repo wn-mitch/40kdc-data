@@ -45,7 +45,11 @@ function poolOf(source: CompileLeaf): Node {
   if (p.of_alternatives !== undefined || p.of_designated !== undefined || p.of_not_designated !== undefined) {
     throw new CompileError("matched-units cannot take a unit-position with alternatives or a designation as its set.");
   }
-  if (p.subject !== "this-model" && p.subject !== "this-unit") throw new CompileError("matched-units needs an earlier unit-position measured from this model or this unit.");
+  // An event-subject set is the units in range of the unit that triggered the ability, once bindAntecedents has bound
+  // "an enemy unit ends a move within 8\" of one or more X units" to that unit.
+  if (p.subject !== "this-model" && p.subject !== "this-unit" && p.subject !== "event-subject") {
+    throw new CompileError("matched-units needs an earlier unit-position measured from this model, this unit or the triggering unit.");
+  }
   const subject = String(p.subject);
   const inches = closed(source, "inches");
   if (typeof inches !== "number") throw new CompileError("matched-units needs an earlier unit-position with a whole-number distance.");
@@ -73,9 +77,11 @@ function selectWith(select: CompileLeaf, pool: Node): CompileLeaf {
   if (select.parameters.scope !== undefined && select.parameters.scope !== pool.owner) throw new CompileError("matched-units selects from the side its unit-position names.");
   if (select.parameters.distance !== undefined && select.parameters.distance !== "any") throw new CompileError("A selection of matched units cannot already be measured by a distance.");
   if (pool.excluding !== undefined) throw new CompileError("A selection of units other than the subject, from a matched set, has no DSL shape yet.");
-  const within = pool.within as { range: { inches: number }; wholly?: boolean };
+  const within = pool.within as { range: { inches: number }; of: string; wholly?: boolean };
   if (within.wholly === true) throw new CompileError("A selection of units wholly within a range has no DSL shape yet.");
-  return { ...select, parameters: { ...select.parameters, distance: "within", inches: within.range.inches } };
+  // The selection measures from where the set does; selectionFilter reads within_origin, defaulting to this model.
+  const origin = within.of === "this-model" ? {} : { within_origin: within.of };
+  return { ...select, parameters: { ...select.parameters, distance: "within", inches: within.range.inches, ...origin } };
 }
 
 /**
