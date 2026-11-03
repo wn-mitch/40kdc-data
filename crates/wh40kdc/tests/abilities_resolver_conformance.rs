@@ -438,3 +438,68 @@ fn mortal_sources_match_the_goldens() {
         failures.join("\n")
     );
 }
+
+/// A unit's mortal-wound sources under the context the Dataset derives from the input unit,
+/// against `unit-mortal-sources.json`: ability ids, ids, moments, need keys and unsupported
+/// fragments exactly, `expected` within 1e-9.
+#[test]
+fn unit_mortal_sources_match_the_goldens() {
+    let ds = Dataset::embedded();
+    let corpus = read(&corpus_dir().join("unit-mortal-sources.json"));
+    let cases = corpus["cases"].as_array().expect("cases");
+    assert!(!cases.is_empty(), "the unit-mortal-sources corpus is empty");
+    let mut failures = Vec::new();
+    for case in cases {
+        let id = case["caseId"].as_str().expect("caseId");
+        let input: EligibilityInput = serde_json::from_value(case["input"].clone()).expect("input");
+        let context: EngineContext =
+            serde_json::from_value(case["context"].clone()).expect("context");
+        let got = ds.mortal_wound_sources_for(&input, &context);
+        let want = &case["expected"];
+        let got_unsupported: Vec<Value> = got
+            .unsupported
+            .iter()
+            .map(|u| json!([u.ability_id, u.fragment.reason]))
+            .collect();
+        let want_unsupported: Vec<Value> = want["unsupported"]
+            .as_array()
+            .expect("expected unsupported")
+            .iter()
+            .map(|u| json!([u["abilityId"], u["reason"]]))
+            .collect();
+        if got_unsupported != want_unsupported {
+            failures.push(format!(
+                "{id} unsupported\n  want: {want_unsupported:?}\n  got:  {got_unsupported:?}"
+            ));
+        }
+        let got_sources: Vec<Value> = got
+            .sources
+            .iter()
+            .map(|s| {
+                let keys: Vec<&str> = s.source.needs.iter().map(|n| n.key.as_str()).collect();
+                json!([s.ability_id, s.source.id, s.source.moment, keys])
+            })
+            .collect();
+        let want_sources = want["sources"].as_array().expect("expected sources");
+        let want_rows: Vec<Value> = want_sources
+            .iter()
+            .map(|s| json!([s["abilityId"], s["id"], s["moment"], s["needKeys"]]))
+            .collect();
+        if got_sources != want_rows {
+            failures.push(format!(
+                "{id} sources\n  want: {want_rows:?}\n  got:  {got_sources:?}"
+            ));
+            continue;
+        }
+        for (got, want) in got.sources.iter().zip(want_sources) {
+            let want_expected = want["expected"].as_f64().expect("expected number");
+            if (got.source.expected - want_expected).abs() > 1e-9 {
+                failures.push(format!(
+                    "{id} expected: want {want_expected}, got {}",
+                    got.source.expected
+                ));
+            }
+        }
+    }
+    assert!(failures.is_empty(), "{}", failures.join("\n"));
+}

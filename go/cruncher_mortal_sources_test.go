@@ -58,3 +58,42 @@ func TestWithinChoiceLimitsKeepsAChoiceToItsLimit(t *testing.T) {
 		t.Errorf("choose two = %v", got)
 	}
 }
+
+// The attacker-side buff context fills the combined unit's Army Faction and keywords where the
+// context leaves them unset, as TS buffContext does; values the context gives win. Expected values
+// are TS buffContext's for the same inputs.
+func TestAttackerBuffContextDerivesFactionAndKeywords(t *testing.T) {
+	ds := EmbeddedDataset()
+	ctx := ds.buffContext(
+		map[string]any{"unitId": "captain", "factionId": "adeptus-astartes", "attachedUnitIds": []any{"intercessor-squad"}},
+		map[string]any{"phase": "shooting"},
+		"attacker",
+	)
+	if ctx["armyFaction"] != "adeptus-astartes" {
+		t.Errorf("armyFaction = %v", ctx["armyFaction"])
+	}
+	wantKeywords := []string{"infantry", "character", "explosives", "imperium", "tacticus", "captain", "adeptus astartes", "battleline", "intercessor squad"}
+	if got := getStrList(ctx, "attackerKeywords"); !reflect.DeepEqual(got, wantKeywords) {
+		t.Errorf("attackerKeywords = %v, want %v", got, wantKeywords)
+	}
+	wantModel := []string{"infantry", "explosives", "imperium", "tacticus", "adeptus astartes"}
+	if got := getStrList(ctx, "attackerModelKeywords"); !reflect.DeepEqual(got, wantModel) {
+		t.Errorf("attackerModelKeywords = %v, want %v", got, wantModel)
+	}
+	// No factionId: the unit's own faction. Explicit context values win.
+	given := ds.buffContext(
+		map[string]any{"unitId": "beasts-of-nurgle"},
+		map[string]any{"phase": "shooting", "armyFaction": "x", "attackerKeywords": []any{"k"}},
+		"attacker",
+	)
+	if given["armyFaction"] != "x" || !reflect.DeepEqual(getStrList(given, "attackerKeywords"), []string{"k"}) {
+		t.Errorf("explicit context lost: %v %v", given["armyFaction"], given["attackerKeywords"])
+	}
+	if got := ds.buffContext(map[string]any{"unitId": "beasts-of-nurgle"}, map[string]any{}, "attacker")["armyFaction"]; got != "chaos-daemons" {
+		t.Errorf("armyFaction from the unit = %v", got)
+	}
+	// The defender side is not filled here.
+	if target := ds.buffContext(map[string]any{"unitId": "beasts-of-nurgle"}, map[string]any{}, "target"); target["armyFaction"] != nil || target["attackerKeywords"] != nil {
+		t.Errorf("target perspective filled attacker fields: %v", target)
+	}
+}

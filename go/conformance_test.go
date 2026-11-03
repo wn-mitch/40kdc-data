@@ -478,3 +478,68 @@ func TestMortalSourcesCorpus(t *testing.T) {
 		}
 	}
 }
+
+// TestUnitMortalSourcesCorpus pins Dataset.MortalWoundSourcesFor against conformance/
+// abilities-resolver/unit-mortal-sources.json: a real unit's sources under the context the Dataset
+// derives from the input unit (its Army Faction among them). Ability ids, ids, moments, need keys
+// and unsupported fragments exactly, expected within 1e-9.
+func TestUnitMortalSourcesCorpus(t *testing.T) {
+	var corpus map[string]any
+	if err := json.Unmarshal(loadCorpus(t, "abilities-resolver", "unit-mortal-sources.json"), &corpus); err != nil {
+		t.Fatal(err)
+	}
+	cases := getList(corpus, "cases")
+	if len(cases) == 0 {
+		t.Fatal("the unit-mortal-sources corpus is empty")
+	}
+	ds := EmbeddedDataset()
+	for _, item := range cases {
+		c, _ := asMap(item)
+		name := getStr(c, "caseId")
+		input, _ := getMap(c, "input")
+		ctx, _ := getMap(c, "context")
+		sources, unsupported := ds.MortalWoundSourcesFor(input, ctx)
+		expected, _ := getMap(c, "expected")
+		gotUnsupported := []any{}
+		for _, u := range unsupported {
+			gotUnsupported = append(gotUnsupported, []any{u["abilityId"], u["reason"]})
+		}
+		wantUnsupported := []any{}
+		for _, raw := range getList(expected, "unsupported") {
+			u, _ := asMap(raw)
+			wantUnsupported = append(wantUnsupported, []any{u["abilityId"], u["reason"]})
+		}
+		if got, want := canon(t, gotUnsupported), canon(t, wantUnsupported); got != want {
+			t.Errorf("%s unsupported = %s, want %s", name, got, want)
+		}
+		gotSources := []any{}
+		for _, s := range sources {
+			keys := []any{}
+			for _, need := range s.Needs {
+				keys = append(keys, need.(map[string]any)["key"])
+			}
+			var moment any
+			if s.Moment != nil {
+				moment = *s.Moment
+			}
+			gotSources = append(gotSources, []any{s.AbilityID, s.ID, moment, keys})
+		}
+		want := getList(expected, "sources")
+		wantSources := []any{}
+		for _, raw := range want {
+			s, _ := asMap(raw)
+			wantSources = append(wantSources, []any{s["abilityId"], s["id"], s["moment"], orEmpty(getList(s, "needKeys"))})
+		}
+		if got, wantRows := canon(t, gotSources), canon(t, wantSources); got != wantRows {
+			t.Errorf("%s sources = %s, want %s", name, got, wantRows)
+			continue
+		}
+		for i, raw := range want {
+			s, _ := asMap(raw)
+			wantExpected, _ := num(s["expected"])
+			if math.Abs(sources[i].Expected-wantExpected) > 1e-9 {
+				t.Errorf("%s[%d] expected = %v, want %v", name, i, sources[i].Expected, wantExpected)
+			}
+		}
+	}
+}

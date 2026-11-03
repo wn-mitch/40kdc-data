@@ -100,3 +100,27 @@ export function canonicalMortalSourceCases(ds: Dataset): (MortalSourceRow & { ex
     };
   });
 }
+
+/**
+ * Conformance rows for {@link Dataset.mortalWoundSourcesFor}: a real unit's mortal-wound sources,
+ * translated under the context the Dataset derives from the input unit. The Chaos Daemons army
+ * rule is gated on the Army Faction, which the input's faction (else the unit's own) supplies
+ * when the context leaves it unset; a context that names another army decides it false.
+ */
+export function canonicalUnitMortalSourceCases(ds: Dataset) {
+  const rows: Array<{ caseId: string; input: { unitId: string; factionId?: string; attachedUnitIds?: string[] }; context: Partial<EngineContext> }> = [
+    { caseId: "army-faction-from-input", input: { unitId: "beasts-of-nurgle", factionId: "chaos-daemons" }, context: { phase: "shooting" } },
+    { caseId: "army-faction-from-unit", input: { unitId: "beasts-of-nurgle" }, context: { phase: "shooting" } },
+    { caseId: "army-faction-context-wins", input: { unitId: "beasts-of-nurgle", factionId: "chaos-daemons" }, context: { phase: "shooting", armyFaction: "adeptus-astartes" } },
+  ];
+  return rows.map((row) => {
+    const result = ds.mortalWoundSourcesFor(row.input, row.context as EngineContext);
+    return {
+      ...row,
+      expected: {
+        sources: result.sources.map((source) => ({ abilityId: source.abilityId, id: source.id, moment: source.moment, expected: stable(source.expected), needKeys: source.needs.map((need) => need.key) })),
+        unsupported: result.unsupported.map((fragment) => ({ abilityId: fragment.abilityId, reason: fragment.reason })),
+      },
+    };
+  });
+}

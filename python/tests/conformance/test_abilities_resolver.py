@@ -216,3 +216,28 @@ def test_defensive_levers(dataset: Any, case: dict[str, Any]) -> None:
         for lever in result["buffs"]
     ]
     assert {"levers": levers, "groups": result["groups"]} == case["expected"]
+
+
+_UNIT_MORTAL_CASES = (
+    json.loads((_DIR / "unit-mortal-sources.json").read_text(encoding="utf-8"))["cases"]
+    if (_DIR / "unit-mortal-sources.json").exists()
+    else []
+)
+
+
+@pytest.mark.skipif(not _UNIT_MORTAL_CASES, reason="conformance corpus not available")
+@pytest.mark.parametrize("case", _UNIT_MORTAL_CASES, ids=lambda case: case["caseId"])
+def test_unit_mortal_wound_sources(dataset: Any, case: dict[str, Any]) -> None:
+    """A unit's mortal wounds under the context the Dataset derives from it: ability ids, ids,
+    moments, need keys and unsupported fragments match exactly, the expected counts to 1e-9."""
+    result = dataset.mortal_wound_sources_for(case["input"], case["context"])
+    want = case["expected"]
+    assert [[u["abilityId"], u["reason"]] for u in result["unsupported"]] == [
+        [u["abilityId"], u["reason"]] for u in want["unsupported"]
+    ]
+    assert [
+        [s["abilityId"], s["id"], s["moment"], [n["key"] for n in s["needs"]]]
+        for s in result["sources"]
+    ] == [[s["abilityId"], s["id"], s["moment"], s["needKeys"]] for s in want["sources"]]
+    for got, expected in zip(result["sources"], want["sources"], strict=True):
+        assert abs(got["expected"] - expected["expected"]) <= 1e-9

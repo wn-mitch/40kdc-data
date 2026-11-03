@@ -271,20 +271,32 @@ func (ds *Dataset) weaponFaction(input map[string]any) string {
 }
 
 // buffContext is the engine context the buff collectors translate under: context with the input
-// unit's attachment, unit id and (attacker) Toughness filled in where context leaves them unset.
-// Under target perspective it mirrors TS buffContext: the defending unit's attachment, unit id,
-// army faction, attachment role, and combined/shared keywords.
+// unit's attachment, unit id, army faction and combined/shared keywords filled in where context
+// leaves them unset, as TS buffContext does, plus its Toughness on the attacker side.
 func (ds *Dataset) buffContext(input, context map[string]any, perspective string) map[string]any {
 	if perspective == "target" {
 		return ds.targetBuffContext(input, context)
 	}
 	ctx := ds.derivedContext(input, context)
-	if perspective == "attacker" && ctx["attackerUnitId"] == nil {
+	if ctx["attackerUnitId"] == nil {
 		ctx["attackerUnitId"] = getStr(input, "unitId")
 	}
-	if perspective == "attacker" && ctx["attackerToughness"] == nil {
+	combined := ds.combinedUnit(input)
+	// The input's faction is the army whose rules the resolver walks, so it is the Army Faction.
+	if ctx["armyFaction"] == nil {
+		if faction := ds.weaponFaction(input); faction != "" {
+			ctx["armyFaction"] = faction
+		}
+	}
+	if len(combined) > 0 && ctx["attackerKeywords"] == nil {
+		ctx["attackerKeywords"] = stringsToAny(combinedUnitKeywordsLower(combined))
+	}
+	if len(combined) > 0 && ctx["attackerModelKeywords"] == nil {
+		ctx["attackerModelKeywords"] = stringsToAny(sharedUnitKeywordsLower(combined))
+	}
+	if ctx["attackerToughness"] == nil {
 		roles, _ := getMap(input, "attachmentRoles")
-		if toughness, ok := combinedToughness(ds.combinedUnit(input), roles); ok {
+		if toughness, ok := combinedToughness(combined, roles); ok {
 			ctx["attackerToughness"] = toughness
 		}
 	}

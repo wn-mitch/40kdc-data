@@ -568,6 +568,24 @@ describe("abilities-resolver conformance corpus", () => {
       result.sources.forEach((source, index) => expect(source.expected, c.caseId).toBeCloseTo(c.expected.sources[index]!.expected, 9));
     }
   });
+
+  it("unit-mortal-sources.json: a unit's mortal wounds under the derived context match", () => {
+    type Row = {
+      caseId: string; input: EligibilityInput; context: EngineContext;
+      expected: { sources: { abilityId: string; id: string; moment: string | null; expected: number; needKeys: string[] }[]; unsupported: { abilityId: string; reason: string }[] };
+    };
+    const { cases } = JSON.parse(readFileSync(join(CONFORMANCE, "abilities-resolver", "unit-mortal-sources.json"), "utf8")) as { cases: Row[] };
+    expect(cases.length).toBeGreaterThan(0);
+    const ds = Dataset.embedded();
+    for (const c of cases) {
+      const result = ds.mortalWoundSourcesFor(c.input, c.context);
+      expect(result.unsupported.map((entry) => [entry.abilityId, entry.reason]), c.caseId)
+        .toEqual(c.expected.unsupported.map((entry) => [entry.abilityId, entry.reason]));
+      expect(result.sources.map((source) => [source.abilityId, source.id, source.moment, source.needs.map((need) => need.key)]), c.caseId)
+        .toEqual(c.expected.sources.map((source) => [source.abilityId, source.id, source.moment, source.needKeys]));
+      result.sources.forEach((source, index) => expect(source.expected, c.caseId).toBeCloseTo(c.expected.sources[index]!.expected, 9));
+    }
+  });
 });
 
 // Linked-API conformance — pins the cross-implementation contract for

@@ -74,7 +74,7 @@ import {
   GAME_MODE_LINKED_QUERIES,
   runGameModeQuery,
 } from "./gen-conformance-game-mode-cases.js";
-import { canonicalMortalSourceCases } from "./gen-conformance-mortal-cases.js";
+import { canonicalMortalSourceCases, canonicalUnitMortalSourceCases } from "./gen-conformance-mortal-cases.js";
 import { canonicalDefensiveLeverCases } from "./gen-conformance-defensive-levers.js";
 import { canonicalDslCases, refreshResolverDslCases, withCanonicalDslCases, type ResolverDslCase } from "./gen-conformance-resolver-dsl.js";
 
@@ -4417,6 +4417,13 @@ function genDefensiveLeverCases(): void {
   console.log(`abilities-resolver/defensive-levers.json: ${cases.length} cases`);
 }
 
+/** The unit-mortal-sources corpus: a real unit's sources under the context the Dataset derives. */
+function genUnitMortalSourceCases(): void {
+  const cases = canonicalUnitMortalSourceCases(Dataset.embedded());
+  writeJson(join(CONFORMANCE, "abilities-resolver", "unit-mortal-sources.json"), { cases });
+  console.log(`abilities-resolver/unit-mortal-sources.json: ${cases.length} cases`);
+}
+
 /** Append fabricated direct-API cases without duplicating their stable identities on regen. */
 function genCanonicalCruncherCases(): void {
   const appended = canonicalDslCases();
@@ -4447,6 +4454,7 @@ genCanonicalCruncherCases();
 genAllocation();
 genMortalSourceCases();
 genDefensiveLeverCases();
+genUnitMortalSourceCases();
 genScoring();
 genTerrainResolver();
 genTerrainKeystones();
