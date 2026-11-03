@@ -220,14 +220,16 @@ describe("Semantic authoring leading-container compiler", () => {
     expect(JSON.stringify(result)).toMatch(/Option 2's named-option leaf needs a reviewed option_id/u);
   });
 
-  it("refuses a stance-select-open option with no leading named-option leaf", () => {
+  // Only the first option can lack a named-option leaf, and an unnamed first sentence is every option's step
+  // (semantic-authoring-option-menus.test.ts), so the menu's "leading named-option leaf" refusal is a guard.
+  it("reads an unnamed sentence before the first named option as every option's step, so one option is too few", () => {
     const result = compileLeaves([
       leaf("EFFECT", "stance-select-open", { scope: "unit", mode: "consumable" }, 1, "A"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
       leaf("EVENT", "named-option", { label: "Ballistic Doctrine", option_id: "ballistic-doctrine" }, 3, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]);
-    expect(result.ok).toBe(false);
+    expect(result.ok ? [] : result.errors).toEqual([expect.stringMatching(/stance-select-open needs at least two options/u)]);
   });
 
   it("compiles issue-orders-open into named Orders", () => {
