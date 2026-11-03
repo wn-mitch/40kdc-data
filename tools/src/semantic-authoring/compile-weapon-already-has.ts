@@ -12,7 +12,10 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 const CONDITION = "weapon-has-ability";
 const GRANT = "weapon-ability-grant";
 const HOST = "critical-hit-threshold";
-/** What narrows a grant to some weapons or to some moment; "such a weapon" would then be a subset the fold cannot name. */
+/**
+ * What narrows a grant to some weapons or to some moment; "such a weapon" would then be a subset the fold cannot name.
+ * A keyword choice narrows only when it is one ("…has [A] or [B]"): the keyword fold writes false for one keyword or an "and" run.
+ */
 const GRANT_NARROWING = ["weapon_var", "weapon_name", "weapon_names", "weapon_keyword", "weapon_ref", "incoming", "exclude_weapon_name", "exclude_weapon_names", "exclude_weapon_keyword", "gate", "keyword_choice"];
 /** A rating after the keyword: "Sustained Hits 1", "Anti-Infantry 5+", "Melta D6", "Rapid Fire 2". */
 const RATING = /\s+(?:\d*D\d+(?:\+\d+)?|\d+\+?)$/u;
@@ -41,7 +44,7 @@ export function foldWeaponAlreadyHas(list: readonly CompileLeaf[]): CompileLeaf[
     const grant = result[grantAt]!;
     if (grant.fragment !== condition.fragment) throw new CompileError("\"Such a weapon already has that ability\" reads a grant in its own part of the text.");
     for (const key of GRANT_NARROWING) {
-      if (grant.parameters[key] !== undefined) throw new CompileError(`"Such a weapon already has that ability" cannot read a grant narrowed by ${key}.`);
+      if (grant.parameters[key] !== undefined && !(key === "keyword_choice" && grant.parameters[key] === false)) throw new CompileError(`"Such a weapon already has that ability" cannot read a grant narrowed by ${key}.`);
     }
     const keyword = baseKeyword(grant);
     let hostAt = at + 1;

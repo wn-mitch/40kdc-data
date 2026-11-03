@@ -7,6 +7,7 @@ import { describeEffect, type Effect } from "../src/translate/index.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import type { BuffSource, EngineContext } from "../src/cruncher/buffs.js";
 import { createValidator } from "../src/schema-loader.js";
+import { outsideContract } from "./leaf-contract.js";
 
 /**
  * Weapon-ability removal ("Do not have [Heavy]") under a weapon-property scope, with the scope's
@@ -299,19 +300,6 @@ describe("the effect schema accepts a removal with or without keywords", () => {
 
 type Piece = [wording: string, family: string, parameters: Record<string, unknown>];
 
-/** Leaves on their wording in `text`, in order, with their parameters as written (not normalized). */
-function placedAsWritten(text: string, ...pieces: Piece[]): CompileLeaf[] {
-  const bytes = Buffer.from(text, "utf8");
-  let from = 0;
-  return pieces.map(([wording, family, parameters]) => {
-    const start = bytes.indexOf(Buffer.from(wording, "utf8"), from);
-    if (start < 0) throw new Error(`"${wording}" is not in the text`);
-    from = start + Buffer.byteLength(wording, "utf8");
-    const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
-  });
-}
-
 const TEXT = "Your unit's weapons have the [SUSTAINED HITS 1] ability. If such a weapon already has that ability, an unmodified Hit roll of 5+ scores a Critical Hit.";
 const GRANT = "Your unit's weapons have the [SUSTAINED HITS 1] ability";
 const CONDITION = "If such a weapon already has that ability";
@@ -321,7 +309,7 @@ const grant = (parameters: Record<string, unknown> = {}): Piece => [GRANT, "weap
 const threshold = (parameters: Record<string, unknown> = {}): Piece => [THRESHOLD, "critical-hit-threshold", { roll: "hit", value: 5, ...parameters }];
 
 function compiled(text: string, ...pieces: Piece[]) {
-  return compileLeaves(placedAsWritten(text, ...pieces), text);
+  return compileLeaves(placed(text, ...pieces), text);
 }
 function mechanicsOf(text: string, ...pieces: Piece[]): Record<string, any> {
   const result = compiled(text, ...pieces);
@@ -382,8 +370,9 @@ describe("weapon-has-ability: compilation", () => {
   });
 
   it("reads a keyword the grant frame folded in a one-element keywords list", () => {
-    const { keyword: _keyword, ...frame } = { subject: "this-unit", keyword: "x", weapon_type: "all" };
-    const steps = mechanicsOf(TEXT, grant({ ...frame, keywords: ["Lethal Hits"] }), condition(), threshold()).effect.steps as Array<Record<string, any>>;
+    const text = TEXT.replace("[SUSTAINED HITS 1]", "[LETHAL HITS]");
+    const frame: Piece = ["Your unit's weapons have the", "weapon-ability-grant", { subject: "this-unit", weapon_type: "all" }];
+    const steps = mechanicsOf(text, frame, ["[LETHAL HITS]", "weapon-ability-keyword", { keyword: "Lethal Hits" }], condition(), threshold()).effect.steps as Array<Record<string, any>>;
     expect(steps[1]!.modifier.weapons).toEqual({ keyword: { keyword_id: "lethal-hits" } });
   });
 
@@ -398,11 +387,21 @@ describe("weapon-has-ability: compilation", () => {
   });
 
   it("refuses a grant that gives two keywords", () => {
-    expect(refusalOf(TEXT, grant({ keyword: undefined, keywords: ["Lethal Hits", "Precision"] }), condition(), threshold())).toMatch(/exactly one keyword/u);
+    const text = TEXT.replace("the [SUSTAINED HITS 1] ability", "the [LETHAL HITS] and [PRECISION] abilities");
+    const frame: Piece = ["Your unit's weapons have the", "weapon-ability-grant", { subject: "this-unit", weapon_type: "all" }];
+    expect(refusalOf(text, frame, ["[LETHAL HITS]", "weapon-ability-keyword", { keyword: "Lethal Hits" }], ["[PRECISION]", "weapon-ability-keyword", { keyword: "Precision" }], condition(), threshold()))
+      .toMatch(/exactly one keyword/u);
+  });
+
+  it("refuses a grant that offers a choice of keywords: such a weapon is the chosen one's", () => {
+    const text = TEXT.replace("the [SUSTAINED HITS 1] ability", "the [LETHAL HITS] or [PRECISION] ability");
+    const frame: Piece = ["Your unit's weapons have the", "weapon-ability-grant", { subject: "this-unit", weapon_type: "all" }];
+    expect(refusalOf(text, frame, ["[LETHAL HITS]", "weapon-ability-keyword", { keyword: "Lethal Hits" }], ["[PRECISION]", "weapon-ability-keyword", { keyword: "Precision" }], condition(), threshold()))
+      .toMatch(/narrowed by keyword_choice/u);
   });
 
   it("refuses a grant that names a weapon, narrows by a weapon keyword or excludes weapons", () => {
-    for (const narrowing of [{ weapon_name: "Zap cannon" }, { weapon_keyword: "Torrent" }, { incoming: true }, { exclude_weapon_keyword: ["Blast"] }]) {
+    for (const narrowing of [{ weapon_name: "Zap cannon" }, { weapon_keyword: "Torrent" }, { incoming: true }, { exclude_weapon_keyword: "Blast" }]) {
       expect(refusalOf(TEXT, grant(narrowing), condition(), threshold())).toMatch(/cannot read a grant narrowed by/u);
     }
   });
@@ -420,7 +419,12 @@ describe("weapon-has-ability: compilation", () => {
   it("refuses two conditions for one sentence and a threshold that already selects weapons", () => {
     const twice = `${TEXT.replace("an unmodified", "if such a weapon already has that ability, an unmodified")}`;
     expect(refusalOf(twice, grant(), condition(), ["if such a weapon already has that ability", "weapon-has-ability", { weapon: "earlier-grant", ability: "earlier-grant", granted_rating: "keep" }], threshold())).toMatch(/cannot share one sentence/u);
-    expect(refusalOf(TEXT, grant(), condition(), threshold({ weapon_keyword: "Torrent" }))).toMatch(/already selects weapons/u);
+    // A stored threshold cannot select weapons; the fold still refuses one that does, so the leaf is built outside the contract.
+    expect(() => normalizeFingerprintParameters("critical-hit-threshold", { roll: "hit", value: 5, weapon_keyword: "Torrent" }, currentFamilyVersion("critical-hit-threshold"))).toThrow(/value and optional roll only/u);
+    const selecting = placed(TEXT, grant(), condition(), threshold());
+    selecting[2] = { ...selecting[2]!, parameters: { ...selecting[2]!.parameters, weapon_keyword: "Torrent" } };
+    const result = compileLeaves(outsideContract(selecting), TEXT);
+    expect(result.ok ? "" : result.errors.join("; ")).toMatch(/already selects weapons/u);
   });
 
   it("without the condition the threshold stays unscoped, so only the fold ever adds the selection", () => {

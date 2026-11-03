@@ -94,6 +94,13 @@ export const MARKER_COUNT_FAMILIES: readonly SemanticFamilyDefinition[] = [
   },
 ];
 
+/** engagement-exclusive parameters: none; the state it qualifies is the unit-state after it. */
+export function normalizeEngagementRelationParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
+  if (family !== "engagement-exclusive") return null;
+  if (Object.keys(input).length > 0) throw new TypeError("engagement-exclusive takes no parameters.");
+  return {};
+}
+
 /** count-by-markers parameters: exactly a kebab-case marker label. */
 export function normalizeMarkerCountParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
   if (family !== "count-by-markers") return null;

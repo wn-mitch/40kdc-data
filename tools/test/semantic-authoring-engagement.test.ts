@@ -17,7 +17,7 @@ function placed(text: string, ...items: Array<readonly [string, string, Record<s
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -127,6 +127,12 @@ describe("Semantic authoring engaged with a designated unit (SS5)", () => {
 });
 
 describe("Semantic authoring engaged with only the named units (SS1)", () => {
+  it("stores the qualifier with no parameters and refuses any", () => {
+    const version = currentFamilyVersion("engagement-exclusive");
+    expect(normalizeFingerprintParameters("engagement-exclusive", {}, version)).toEqual({});
+    expect(() => normalizeFingerprintParameters("engagement-exclusive", { only: true }, version)).toThrow(/takes no parameters/u);
+  });
+
   const text = "While an enemy unit is only within Engagement Range of one or more FORTIFICATIONS from your army, add 1 to the Hit roll for this unit.";
   const enemyWhile = ["While an enemy unit", "unit-filter", { side: "enemy" }] as const;
   const exclusive = ["only", "engagement-exclusive", {}] as const;
