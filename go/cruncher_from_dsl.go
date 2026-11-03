@@ -43,7 +43,11 @@ type dslOpts struct {
 	abilityID     string
 	defaultTarget string
 	grantedHolder bool
-	duration      any
+	// auraEmitter is set inside a printed grant's definition walked for a unit that is not one
+	// of its holders: the holders' filter. Only the definition's auras can reach the buffed
+	// unit, emitted by a holder.
+	auraEmitter map[string]any
+	duration    any
 	// usage is the usage limit inherited from the owning ability or nearest
 	// ability part.
 	usage any
@@ -300,6 +304,34 @@ func designateEntry(n, applies map[string]any, source map[string]any, opts dslOp
 	}
 }
 
+// auraEmitterReason reports an aura whose emitter's identity the context cannot establish.
+const auraEmitterReason = "aura emitter filter requires the source unit's keywords"
+
+// auraEmitterNodes carry a granted definition's aura to its recipients (see dslOpts.auraEmitter).
+var auraEmitterNodes = map[string]bool{"aura": true, "sequence": true, "rules-bundle": true, "ability-part": true}
+
+// containsAura reports whether node applies an aura anywhere beneath it.
+func containsAura(node any) bool {
+	switch v := node.(type) {
+	case []any:
+		for _, item := range v {
+			if containsAura(item) {
+				return true
+			}
+		}
+	case map[string]any:
+		if v["type"] == "aura" {
+			return true
+		}
+		for _, item := range v {
+			if containsAura(item) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslation) {
 	n, ok := asMap(node)
 	if !ok || n == nil {
@@ -347,6 +379,13 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		dslWalk(bindEachRecipient(n["effect"], filter), source, opts, out)
 		return
 	}
+	// Walking a granted definition for a non-holder: what is not an aura is the holder's own.
+	if opts.auraEmitter != nil && !auraEmitterNodes[getStr(n, "type")] {
+		if containsAura(n) {
+			out.unsupported = append(out.unsupported, unsup(auraEmitterReason, n))
+		}
+		return
+	}
 	// Unit-filter targets are board facts, not merely keyword hints.
 	if filter, ok := asMap(n["target"]); ok && filter != nil {
 		side := opts.perspective
@@ -359,7 +398,18 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		if filter["owner"] == "enemy" {
 			owner = "enemy"
 		}
-		switch verdict := matchesUnitFilter(withoutOwnHolding(filter, source), opts.context, side, owner); verdict {
+		verdict := matchesUnitFilter(withoutOwnHolding(filter, source), opts.context, side, owner)
+		// A printed grant's holders emit its auras: a unit that is not a holder can still be a
+		// recipient.
+		if grant, _ := getMap(n, "modifier"); verdict == false && n["type"] == "ability-grant" && grant != nil {
+			if definition, ok := asMap(grant["definition"]); ok && definition != nil && containsAura(definition) {
+				emitterOpts := opts
+				emitterOpts.auraEmitter = filter
+				dslWalk(definition, source, emitterOpts, out)
+				return
+			}
+		}
+		switch verdict {
 		case false:
 			return
 		case nil:
@@ -533,6 +583,29 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 			return
 		}
 		modifier, _ := getMap(n, "modifier")
+		// eligible names the units the aura reaches (its owner relative to the aura's holder); the
+		// buffed unit is the recipient, so it must match before the nested effect applies.
+		if rawEligible, present := modifier["eligible"]; present {
+			owner := "friendly"
+			if side == "defender" {
+				owner = "enemy"
+			}
+			filterSide := "target"
+			if opts.perspective == "attacker" {
+				filterSide = "attacker"
+			}
+			var verdict any
+			if eligible, ok := asMap(rawEligible); ok && eligible != nil {
+				verdict = matchesUnitFilter(eligible, opts.context, filterSide, owner)
+			}
+			if verdict == false {
+				return
+			}
+			if verdict != true {
+				out.unsupported = append(out.unsupported, unsup("aura recipient keywords are unavailable or its filter is malformed", n))
+				return
+			}
+		}
 		if recipientFilter, present := modifier["recipient_filter"]; present {
 			matches, reason := auraRecipientFilterMatches(recipientFilter, opts.context, opts.perspective)
 			if reason != "" {
@@ -546,13 +619,21 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		if emitterFilter, present := modifier["emitter_filter"]; present {
 			matches, _ := auraRecipientFilterMatches(emitterFilter, nil, opts.perspective)
 			if !matches {
-				out.unsupported = append(out.unsupported, unsup("aura emitter filter requires the source unit's keywords", n))
+				out.unsupported = append(out.unsupported, unsup(auraEmitterReason, n))
 				return
 			}
 		}
+		// A granted aura's emitter is one of the grant's holders; like an emitter filter, an
+		// unknown source identity does not establish it.
+		if opts.auraEmitter != nil && matchesUnitFilter(opts.auraEmitter, map[string]any{"phase": opts.context["phase"]}, "attacker", "friendly") != true {
+			out.unsupported = append(out.unsupported, unsup(auraEmitterReason, n))
+			return
+		}
 		effect, ok := getMap(modifier, "effect")
 		if ok && effect != nil {
-			dslWalk(effect, source, opts, out)
+			recipientOpts := opts
+			recipientOpts.auraEmitter = nil
+			dslWalk(effect, source, recipientOpts, out)
 		} else {
 			out.unsupported = append(out.unsupported, unsup("aura without nested effect: not a combat buff", n))
 		}

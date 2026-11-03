@@ -167,6 +167,19 @@ export type EffectTranslation = {
  */
 export type TranslationPerspective = "attacker" | "target";
 
+/** An aura whose emitter's identity the context cannot establish. */
+const AURA_EMITTER_REASON = "aura emitter filter requires the source unit's keywords";
+
+/** Nodes that only carry an aura of a granted definition to its recipients (see `auraEmitter`). */
+const AURA_EMITTER_CONTAINERS: ReadonlySet<string> = new Set(["sequence", "rules-bundle", "ability-part"]);
+
+/** Whether `node` applies an `aura` anywhere beneath it. */
+function containsAura(node: unknown): boolean {
+  if (Array.isArray(node)) return node.some(containsAura);
+  if (!isObject(node)) return false;
+  return node.type === "aura" || Object.values(node).some(containsAura);
+}
+
 /** Targets that resolve to the buffed unit itself. */
 const SELF_TARGETS = new Set(["this-unit", "ability-unit", "this-model", "selected-unit", "recipient"]);
 
@@ -314,6 +327,11 @@ type WalkOpts = {
   abilityId: string;
   /** Inside a granted definition, self refs name its holder rather than its external provider. */
   grantedHolder?: boolean;
+  /**
+   * Inside a printed grant's definition walked for a unit that is not one of its holders: the
+   * holders' filter. Only the definition's auras can reach the buffed unit, emitted by a holder.
+   */
+  auraEmitter?: Record<string, unknown>;
   /** Lifetime inherited from the owning ability or nearest ability part. */
   duration?: unknown;
   /** Usage limit inherited from the owning ability or nearest ability part. */
@@ -392,11 +410,22 @@ function walk(
   // An ability another unit provides reaches the crunched unit only through a friendly filter, an
   // aura's recipient or a selection; its own unit and model are the provider, not the crunched unit.
   if (!opts.grantedHolder && isProvidedByAnotherUnit(source) && typeof currentNode.target === "string" && PROVIDER_TARGETS.has(currentNode.target)) return;
+  // Walking a granted definition for a non-holder: what is not an aura is the holder's own.
+  if (opts.auraEmitter !== undefined && currentNode.type !== "aura" && !AURA_EMITTER_CONTAINERS.has(String(currentNode.type))) {
+    if (containsAura(currentNode)) out.unsupported.push({ reason: AURA_EMITTER_REASON, effectFragment: currentNode });
+    return;
+  }
   if (isObject(currentNode.target)) {
     const side = currentNode.target.member_of === "attacker" ? "attacker" :
       currentNode.target.member_of === "defender" || currentNode.target.owner === "enemy" ? "target" :
         opts.perspective === "attacker" ? "attacker" : "target";
     const verdict = matchesUnitFilter(withoutOwnHolding(currentNode.target, source), opts.context, side, currentNode.target.owner === "enemy" ? "enemy" : "friendly");
+    // A printed grant's holders emit its auras: a unit that is not a holder can still be a recipient.
+    if (verdict === false && currentNode.type === "ability-grant" && isObject(currentNode.modifier) &&
+      isObject(currentNode.modifier.definition) && containsAura(currentNode.modifier.definition)) {
+      walk(currentNode.modifier.definition, source, { ...opts, auraEmitter: currentNode.target }, out);
+      return;
+    }
     if (verdict === false) return;
     if (verdict === "unknown") {
       out.unsupported.push({ reason: "unit-filter target: identity, state or model membership is unresolved", effectFragment: currentNode });
@@ -528,6 +557,16 @@ function walk(
       // buffed side, enemy ones the other.
       const side = currentNode.target === "friendly-within-aura" ? "self" : currentNode.target === "enemy-within-aura" ? "defender" : "unknown";
       if (side === "unknown" || (side === "defender" && opts.perspective !== "target")) return;
+      // `eligible` names the units the aura reaches (its owner relative to the aura's holder); the
+      // buffed unit is the recipient, so it must match before the nested effect applies.
+      if (modifier?.eligible !== undefined) {
+        const eligible = matchesUnitFilter(modifier.eligible, opts.context, opts.perspective === "attacker" ? "attacker" : "target", side === "defender" ? "enemy" : "friendly");
+        if (eligible === false) return;
+        if (eligible === "unknown") {
+          out.unsupported.push({ reason: "aura recipient keywords are unavailable or its filter is malformed", effectFragment: currentNode });
+          return;
+        }
+      }
       if (modifier?.recipient_filter !== undefined) {
         const matches = matchesUnitFilter(modifier.recipient_filter, opts.context, opts.perspective === "attacker" ? "attacker" : "target");
         if (matches === false) return;
@@ -536,12 +575,17 @@ function walk(
           return;
         }
       }
-      if (modifier?.emitter_filter !== undefined && matchesUnitFilter(modifier.emitter_filter, { phase: opts.context.phase }, "attacker") !== true) {
-        out.unsupported.push({ reason: "aura emitter filter requires the source unit's keywords", effectFragment: currentNode });
-        return;
+      // A granted aura's emitter is one of the grant's holders; like an emitter filter, an
+      // unknown source identity does not establish it.
+      for (const emitter of [modifier?.emitter_filter, opts.auraEmitter]) {
+        if (emitter !== undefined && matchesUnitFilter(emitter, { phase: opts.context.phase }, "attacker") !== true) {
+          out.unsupported.push({ reason: AURA_EMITTER_REASON, effectFragment: currentNode });
+          return;
+        }
       }
       if (modifier && isObject(modifier.effect)) {
-        walk(modifier.effect, source, opts, out);
+        const { auraEmitter: _emitter, ...recipientOpts } = opts;
+        walk(modifier.effect, source, recipientOpts, out);
       } else {
         out.unsupported.push({
           reason: "aura without nested effect: not a combat buff",

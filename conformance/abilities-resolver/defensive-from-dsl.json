@@ -1000,6 +1000,269 @@
       }
     },
     {
+      "_comment": "Daemon Lord of Nurgle's Toughness aura reaches only PLAGUE LEGIONS recipients: an eligible defender gets +1 T.",
+      "abilityId": "daemon-lord-of-nurgle-death-guard",
+      "source": {
+        "kind": "ability",
+        "abilityId": "daemon-lord-of-nurgle-death-guard",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting",
+        "targetKeywords": [
+          "INFANTRY",
+          "DEATH GUARD",
+          "PLAGUE LEGIONS"
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "toughness-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "A DEATH GUARD defender without PLAGUE LEGIONS is not an eligible recipient of Daemon Lord of Nurgle's aura.",
+      "abilityId": "daemon-lord-of-nurgle-death-guard",
+      "source": {
+        "kind": "ability",
+        "abilityId": "daemon-lord-of-nurgle-death-guard",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting",
+        "targetKeywords": [
+          "INFANTRY",
+          "DEATH GUARD"
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "An enemy aura limited to units that are neither MONSTER nor VEHICLE (owner enemy, relative to the aura's holder) reaches an INFANTRY defender.",
+      "abilityId": "aura-eligible-enemy-example",
+      "effect": {
+        "type": "aura",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "range": {
+            "inches": 6
+          },
+          "eligible": {
+            "owner": "enemy",
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "recipient",
+            "modifier": {
+              "stat": "T",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "aura-eligible-enemy-example",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting",
+        "targetKeywords": [
+          "INFANTRY"
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "toughness-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "The same enemy aura does not reach a VEHICLE defender.",
+      "abilityId": "aura-eligible-enemy-example",
+      "effect": {
+        "type": "aura",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "range": {
+            "inches": 6
+          },
+          "eligible": {
+            "owner": "enemy",
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "recipient",
+            "modifier": {
+              "stat": "T",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "aura-eligible-enemy-example",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting",
+        "targetKeywords": [
+          "VEHICLE"
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Without the defender's keywords, the enemy aura's eligibility is undecided and reported, not applied.",
+      "abilityId": "aura-eligible-enemy-example",
+      "effect": {
+        "type": "aura",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "range": {
+            "inches": 6
+          },
+          "eligible": {
+            "owner": "enemy",
+            "none_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "recipient",
+            "modifier": {
+              "stat": "T",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "aura-eligible-enemy-example",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "aura recipient keywords are unavailable or its filter is malformed"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Psychic Null is granted to ANATHEMA PSYKANA units, which emit it to ADEPTUS CUSTODES units. This eligible defender is not a holder, so the aura reports its unresolved emitter.",
+      "abilityId": "daughters-of-the-abyss-adeptus-custodes",
+      "source": {
+        "kind": "ability",
+        "abilityId": "daughters-of-the-abyss-adeptus-custodes",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting",
+        "targetKeywords": [
+          "INFANTRY",
+          "ADEPTUS CUSTODES"
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "aura emitter filter requires the source unit's keywords",
+          "effect type \"army-rule\" is not modelled by the buff layer",
+          "effect type \"army-rule\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "unresolved",
+          "out-of-scope",
+          "out-of-scope"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Terrifying Presence is granted to ZARKAN'S DAEMONKIN units and reaches every enemy unit. The defender is not a holder, so the aura reports its unresolved emitter.",
+      "abilityId": "abject-fear-chaos-space-marines",
+      "source": {
+        "kind": "ability",
+        "abilityId": "abject-fear-chaos-space-marines",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "shooting",
+        "targetKeywords": [
+          "INFANTRY"
+        ]
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "aura emitter filter requires the source unit's keywords"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-toughness-after-detachment",
       "abilityId": "snapshot-example",
       "source": {

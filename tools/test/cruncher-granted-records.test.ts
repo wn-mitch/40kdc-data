@@ -6,7 +6,7 @@ import type { BuffSource, EngineContext } from "../src/cruncher/index.js";
 import { classifyUnsupported } from "../src/semantic-authoring/gates.js";
 
 const source: BuffSource = { kind: "ability", abilityId: "fabricated-banner", abilityKind: "unit" };
-const context: EngineContext = { phase: "shooting", attackerStationary: false };
+const context: EngineContext = { phase: "shooting", attackerStationary: false, attackerKeywords: ["EXAMPLE"] };
 const grant = (target: unknown, ability: string, extra: Record<string, unknown> = {}) => ({ type: "ability-grant", target, modifier: { ability, ...extra } });
 // An army rule that only holds in its own army, granted by an aura to the units around its bearer.
 const armyRule: GrantedRecord = {

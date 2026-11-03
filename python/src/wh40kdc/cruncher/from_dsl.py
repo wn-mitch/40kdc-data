@@ -306,6 +306,22 @@ def _aura_filter_keywords(
     return True
 
 
+#: An aura whose emitter's identity the context cannot establish.
+_AURA_EMITTER_REASON = "aura emitter filter requires the source unit's keywords"
+
+#: Nodes that only carry a granted definition's aura to its recipients (see ``auraEmitter``).
+_AURA_EMITTER_NODES = frozenset({"aura", "sequence", "rules-bundle", "ability-part"})
+
+
+def _contains_aura(node: Any) -> bool:
+    """Whether ``node`` applies an ``aura`` anywhere beneath it."""
+    if isinstance(node, list):
+        return any(_contains_aura(item) for item in node)
+    if not isinstance(node, dict):
+        return False
+    return node.get("type") == "aura" or any(_contains_aura(v) for v in node.values())
+
+
 #: Diagnostic emitted for a model-scoped effect of a Stratagem that targets one model.
 _STRATAGEM_MODEL_REASON = "model-only target"
 
@@ -484,6 +500,11 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         and node["target"] in _selection.PROVIDER_TARGETS
     ):
         return
+    # Walking a granted definition for a non-holder: what is not an aura is the holder's own.
+    if opts.get("auraEmitter") is not None and node.get("type") not in _AURA_EMITTER_NODES:
+        if _contains_aura(node):
+            out["unsupported"].append({"reason": _AURA_EMITTER_REASON, "effectFragment": node})
+        return
     target = node.get("target")
     if _is_object(target):
         if target.get("member_of") == "attacker":
@@ -498,6 +519,18 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
             side,
             "enemy" if target.get("owner") == "enemy" else "friendly",
         )
+        # A printed grant's holders emit its auras: a unit that is not a holder can still be a
+        # recipient.
+        grant_modifier = node.get("modifier")
+        definition = grant_modifier.get("definition") if _is_object(grant_modifier) else None
+        if (
+            verdict is False
+            and node.get("type") == "ability-grant"
+            and _is_object(definition)
+            and _contains_aura(definition)
+        ):
+            _walk(definition, source, {**opts, "auraEmitter": target}, out)
+            return
         if verdict is False:
             return
         if verdict == "unknown":
@@ -660,11 +693,42 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
                 }
             )
             return
+        # ``eligible`` names the units the aura reaches (its owner relative to the aura's
+        # holder); the buffed unit is the recipient, so it must match before the effect applies.
+        if "eligible" in modifier:
+            eligible = _matches_unit_filter(
+                modifier["eligible"],
+                opts["context"],
+                "attacker" if opts["perspective"] == "attacker" else "target",
+                "enemy" if side == "defender" else "friendly",
+            )
+            if eligible is False:
+                return
+            if eligible == "unknown":
+                out["unsupported"].append(
+                    {
+                        "reason": (
+                            "aura recipient keywords are unavailable or its filter is malformed"
+                        ),
+                        "effectFragment": node,
+                    }
+                )
+                return
         if not _aura_filter_keywords(node, modifier, opts, out):
+            return
+        # A granted aura's emitter is one of the grant's holders; like an emitter filter, an
+        # unknown source identity does not establish it.
+        emitter = opts.get("auraEmitter")
+        if emitter is not None and (
+            _matches_unit_filter(emitter, {"phase": opts["context"].get("phase")}, "attacker")
+            is not True
+        ):
+            out["unsupported"].append({"reason": _AURA_EMITTER_REASON, "effectFragment": node})
             return
         effect = modifier.get("effect")
         if isinstance(effect, dict):
-            _walk(effect, source, opts, out)
+            recipient_opts = {k: v for k, v in opts.items() if k != "auraEmitter"}
+            _walk(effect, source, recipient_opts, out)
         else:
             out["unsupported"].append(
                 {

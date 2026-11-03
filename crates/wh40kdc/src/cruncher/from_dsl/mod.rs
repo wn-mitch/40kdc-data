@@ -197,6 +197,9 @@ pub(crate) struct WalkOpts<'a> {
     /// Usage limit inherited from the owning ability or nearest ability part.
     usage: Option<Value>,
     granted_holder: bool,
+    /// Inside a printed grant's definition walked for a unit that is not one of its holders: the
+    /// holders' filter. Only the definition's auras can reach the buffed unit, emitted by a holder.
+    aura_emitter: Option<Value>,
     /// Tags the owning ability designates on the units holding it
     /// ([`gated::self_designations`]).
     self_designations: &'a std::collections::BTreeSet<String>,
@@ -211,6 +214,20 @@ const MODEL_SCOPED_REASON: &str =
 const STRATAGEM_MODEL_REASON: &str = "model-only target";
 const FIDELITY_BINDING_REASON: &str =
     "selection/history/model/attack predicates are not resolved by the buff engine";
+/// An aura whose emitter's identity the context cannot establish.
+const AURA_EMITTER_REASON: &str = "aura emitter filter requires the source unit's keywords";
+
+/// Whether `node` applies an `aura` anywhere beneath it.
+fn contains_aura(node: &Value) -> bool {
+    match node {
+        Value::Array(items) => items.iter().any(contains_aura),
+        Value::Object(o) => {
+            o.get("type").and_then(Value::as_str) == Some("aura") || o.values().any(contains_aura)
+        }
+        _ => false,
+    }
+}
+
 const ALTERNATIVES_REASON: &str =
     "unit-filter target: identity, state or model membership is unresolved";
 
@@ -417,6 +434,7 @@ fn translate_effect(
         duration: duration.cloned(),
         usage: usage.cloned(),
         granted_holder: false,
+        aura_emitter: None,
         self_designations: &self_designations,
         attack_roll: None,
     };
@@ -766,8 +784,37 @@ pub(crate) fn walk(node: &Value, opts: &WalkOpts, out: &mut Out) {
     if selection::targets_provider(current, opts) {
         return;
     }
+    // Walking a granted definition for a non-holder: what is not an aura is the holder's own.
+    if opts.aura_emitter.is_some()
+        && !matches!(
+            current.get("type").and_then(Value::as_str),
+            Some("aura" | "sequence" | "rules-bundle" | "ability-part")
+        )
+    {
+        if contains_aura(node) {
+            out.unsupported(AURA_EMITTER_REASON, current);
+        }
+        return;
+    }
     // Targets require positive evidence for every canonical filter predicate.
     match alternatives_match(current, opts) {
+        // A printed grant's holders emit its auras: a unit that is not a holder can still be a
+        // recipient.
+        Some(false)
+            if is_str(current, "type", "ability-grant")
+                && current.get("target").is_some_and(Value::is_object)
+                && object(current.get("modifier"))
+                    .and_then(|m| m.get("definition"))
+                    .is_some_and(|d| d.is_object() && contains_aura(d)) =>
+        {
+            let definition = &current["modifier"]["definition"];
+            let emitter_opts = WalkOpts {
+                aura_emitter: current.get("target").cloned(),
+                ..opts.clone()
+            };
+            walk(definition, &emitter_opts, out);
+            return;
+        }
         Some(false) => return,
         None => {
             out.unsupported(ALTERNATIVES_REASON, current);
@@ -1050,6 +1097,30 @@ fn aura(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     {
         return;
     }
+    // `eligible` names the units the aura reaches (its owner relative to the aura's holder); the
+    // buffed unit is the recipient, so it must match before the nested effect applies.
+    if let Some(filter) = modifier.and_then(|m| m.get("eligible")) {
+        match conditions::matches_unit_filter(
+            filter,
+            opts.context,
+            opts.perspective,
+            if side == Side::Defender {
+                "enemy"
+            } else {
+                "friendly"
+            },
+        ) {
+            Some(false) => return,
+            None => {
+                out.unsupported(
+                    "aura recipient keywords are unavailable or its filter is malformed",
+                    node,
+                );
+                return;
+            }
+            Some(true) => {}
+        }
+    }
     if let Some(filter) = modifier.and_then(|m| m.get("recipient_filter")) {
         match conditions::matches_unit_filter(
             filter,
@@ -1072,12 +1143,17 @@ fn aura(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             Some(true) => {}
         }
     }
-    if let Some(filter) = modifier.and_then(|m| m.get("emitter_filter")) {
-        if conditions::evaluate_keyword_filter(filter, None) != Some(true) {
-            out.unsupported(
-                "aura emitter filter requires the source unit's keywords",
-                node,
-            );
+    // A granted aura's emitter is one of the grant's holders; like an emitter filter, an unknown
+    // source identity does not establish it.
+    for emitter in [
+        modifier.and_then(|m| m.get("emitter_filter")),
+        opts.aura_emitter.as_ref(),
+    ]
+    .into_iter()
+    .flatten()
+    {
+        if conditions::evaluate_keyword_filter(emitter, None) != Some(true) {
+            out.unsupported(AURA_EMITTER_REASON, node);
             return;
         }
     }
@@ -1085,7 +1161,14 @@ fn aura(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         .and_then(|m| m.get("effect"))
         .filter(|e| e.is_object())
     {
-        Some(effect) => walk(effect, opts, out),
+        Some(effect) => walk(
+            effect,
+            &WalkOpts {
+                aura_emitter: None,
+                ..opts.clone()
+            },
+            out,
+        ),
         None => out.unsupported("aura without nested effect: not a combat buff", node),
     }
 }

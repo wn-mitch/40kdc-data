@@ -8,7 +8,7 @@ from typing import Any
 from wh40kdc.cruncher import effect_to_buffs, resolve_granted_records
 
 _SOURCE = {"kind": "ability", "abilityId": "fabricated-banner", "abilityKind": "unit"}
-_CONTEXT = {"phase": "shooting", "attackerStationary": False}
+_CONTEXT = {"phase": "shooting", "attackerStationary": False, "attackerKeywords": ["EXAMPLE"]}
 _ARMY_RULE: dict[str, Any] = {
     "effect": {
         "type": "conditional",

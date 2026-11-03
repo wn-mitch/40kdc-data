@@ -6293,6 +6293,262 @@
       }
     },
     {
+      "_comment": "Firebase Control is granted to LEAGUES OF VOTANN TRANSPORTs, which emit it to INFANTRY LEAGUES OF VOTANN units. This eligible recipient is not a holder, and nothing names the emitter, so the aura reports its unresolved emitter instead of applying [SUSTAINED HITS 1].",
+      "abilityId": "mobile-sensor-relays-leagues-of-votann",
+      "source": {
+        "kind": "ability",
+        "abilityId": "mobile-sensor-relays-leagues-of-votann",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "INFANTRY",
+          "LEAGUES OF VOTANN",
+          "HEARTHKYN SALVAGERS"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "aura emitter filter requires the source unit's keywords"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "A LEAGUES OF VOTANN unit that is neither a holder nor INFANTRY gets nothing from Firebase Control.",
+      "abilityId": "mobile-sensor-relays-leagues-of-votann",
+      "source": {
+        "kind": "ability",
+        "abilityId": "mobile-sensor-relays-leagues-of-votann",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "MOUNTED",
+          "LEAGUES OF VOTANN",
+          "HEARTHKYN SALVAGERS"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Firebase Control's holder (a TRANSPORT that is not INFANTRY) is not an eligible recipient, so its own aura does not buff it.",
+      "abilityId": "mobile-sensor-relays-leagues-of-votann",
+      "source": {
+        "kind": "ability",
+        "abilityId": "mobile-sensor-relays-leagues-of-votann",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "VEHICLE",
+          "TRANSPORT",
+          "LEAGUES OF VOTANN",
+          "SAGITAUR"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "A holder that is also an eligible recipient emits the aura itself, so its emitter is known and it gains [SUSTAINED HITS 1] on its ranged weapons.",
+      "abilityId": "mobile-sensor-relays-leagues-of-votann",
+      "source": {
+        "kind": "ability",
+        "abilityId": "mobile-sensor-relays-leagues-of-votann",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "INFANTRY",
+          "TRANSPORT",
+          "LEAGUES OF VOTANN"
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "extra-keyword",
+            "keywordRef": {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Without the crunched unit's keywords, whether it holds Firebase Control is undecided and reported, not applied.",
+      "abilityId": "mobile-sensor-relays-leagues-of-votann",
+      "source": {
+        "kind": "ability",
+        "abilityId": "mobile-sensor-relays-leagues-of-votann",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "unit-filter target: identity, state or model membership is unresolved"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Infusion is granted to THOUSAND SONS PSYKER units, which emit it to SEKHETAR ROBOTS. This eligible recipient keeps its own [PSYCHIC] grant, but the WS aura reports its unresolved emitter instead of applying.",
+      "abilityId": "ensorcelled-animus-thousand-sons",
+      "source": {
+        "kind": "ability",
+        "abilityId": "ensorcelled-animus-thousand-sons",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "fight",
+        "attackerKeywords": [
+          "VEHICLE",
+          "WALKER",
+          "THOUSAND SONS",
+          "SEKHETAR ROBOTS"
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "extra-keyword",
+            "keywordRef": {
+              "keyword_id": "psychic"
+            }
+          }
+        ],
+        "unsupportedReasons": [
+          "aura emitter filter requires the source unit's keywords"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "A THOUSAND SONS unit that is neither a PSYKER holder nor SEKHETAR ROBOTS gets nothing from Infusion.",
+      "abilityId": "ensorcelled-animus-thousand-sons",
+      "source": {
+        "kind": "ability",
+        "abilityId": "ensorcelled-animus-thousand-sons",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "fight",
+        "attackerKeywords": [
+          "INFANTRY",
+          "THOUSAND SONS",
+          "RUBRICAE"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Infusion's PSYKER holder is not a SEKHETAR ROBOTS unit, so its own aura does not improve its WS.",
+      "abilityId": "ensorcelled-animus-thousand-sons",
+      "source": {
+        "kind": "ability",
+        "abilityId": "ensorcelled-animus-thousand-sons",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "fight",
+        "attackerKeywords": [
+          "INFANTRY",
+          "PSYKER",
+          "THOUSAND SONS",
+          "CHARACTER"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "A SEKHETAR ROBOTS unit that is also a PSYKER holder emits Infusion itself, so it gets +1 WS on its melee weapons.",
+      "abilityId": "ensorcelled-animus-thousand-sons",
+      "source": {
+        "kind": "ability",
+        "abilityId": "ensorcelled-animus-thousand-sons",
+        "abilityKind": "detachment"
+      },
+      "context": {
+        "phase": "fight",
+        "attackerKeywords": [
+          "VEHICLE",
+          "PSYKER",
+          "THOUSAND SONS",
+          "SEKHETAR ROBOTS"
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "extra-keyword",
+            "keywordRef": {
+              "keyword_id": "psychic"
+            }
+          },
+          {
+            "type": "skill-mod",
+            "stat": "WS",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-strength-after-detachment",
       "abilityId": "snapshot-example",
       "source": {
