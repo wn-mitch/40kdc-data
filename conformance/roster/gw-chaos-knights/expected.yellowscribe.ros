@@ -46,7 +46,7 @@
     - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
     - Darkness: this model gains the Stealth ability.
     - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when recipient fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
+    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
     - Dominion: increase the range of each AURA ability of this model by 3".
   -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
@@ -171,7 +171,7 @@
     - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
     - Darkness: this model gains the Stealth ability.
     - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when recipient fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
+    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
     - Dominion: increase the range of each AURA ability of this model by 3".
   -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
@@ -297,7 +297,7 @@ If this model has destroyed 1+ enemy units with its just-resolved attacks, enemy
     - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
     - Darkness: this model gains the Stealth ability.
     - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when recipient fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
+    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
     - Dominion: increase the range of each AURA ability of this model by 3".
   -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
@@ -408,7 +408,7 @@ If this model has destroyed 1+ enemy units with its just-resolved attacks, enemy
     - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
     - Darkness: this model gains the Stealth ability.
     - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when recipient fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
+    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
     - Dominion: increase the range of each AURA ability of this model by 3".
   -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
@@ -519,7 +519,7 @@ You can re-roll the Advance roll.</characteristic>
     - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
     - Darkness: this model gains the Stealth ability.
     - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when recipient fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
+    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
     - Dominion: increase the range of each AURA ability of this model by 3".
   -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
@@ -630,7 +630,7 @@ You can re-roll the Advance roll.</characteristic>
     - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
     - Darkness: this model gains the Stealth ability.
     - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when recipient fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
+    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
     - Dominion: increase the range of each AURA ability of this model by 3".
   -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
@@ -741,7 +741,7 @@ You can re-roll the Advance roll.</characteristic>
     - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
     - Darkness: this model gains the Stealth ability.
     - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when recipient fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
+    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
     - Dominion: increase the range of each AURA ability of this model by 3".
   -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
@@ -852,7 +852,7 @@ You can re-roll the Advance roll.</characteristic>
     - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
     - Darkness: this model gains the Stealth ability.
     - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when recipient fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
+    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
     - Dominion: increase the range of each AURA ability of this model by 3".
   -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
@@ -967,7 +967,7 @@ You can re-roll the Advance roll.</characteristic>
     - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
     - Darkness: this model gains the Stealth ability.
     - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when recipient fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
+    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
     - Dominion: increase the range of each AURA ability of this model by 3".
   -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
@@ -1082,7 +1082,7 @@ You can re-roll the Advance roll.</characteristic>
     - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
     - Darkness: this model gains the Stealth ability.
     - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when recipient fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
+    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
     - Dominion: increase the range of each AURA ability of this model by 3".
   -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
@@ -1197,7 +1197,7 @@ You can re-roll the Advance roll.</characteristic>
     - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
     - Darkness: this model gains the Stealth ability.
     - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when recipient fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
+    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
     - Dominion: increase the range of each AURA ability of this model by 3".
   -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
@@ -1312,7 +1312,7 @@ You can re-roll the Advance roll.</characteristic>
     - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
     - Darkness: this model gains the Stealth ability.
     - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when recipient fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
+    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
     - Dominion: increase the range of each AURA ability of this model by 3".
   -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
@@ -1427,7 +1427,7 @@ You can re-roll the Advance roll.</characteristic>
     - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
     - Darkness: this model gains the Stealth ability.
     - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when recipient fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
+    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
     - Dominion: increase the range of each AURA ability of this model by 3".
   -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>

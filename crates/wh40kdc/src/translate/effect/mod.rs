@@ -49,7 +49,7 @@ pub(crate) use dice::dice_table_result_label;
 use dice::*;
 use leaf::{describe_leaf, LEAF_TYPES};
 pub(crate) use menu::usage_clause;
-use menu::{duration_clauses, menu_inline, scaling_clause, trigger_phrases};
+use menu::{duration_clauses, menu_inline, scaling_clause};
 use region::{describe_named_region_conditional, describe_named_region_state};
 use select::*;
 use words::*;
@@ -201,19 +201,8 @@ fn aura_role_filter(filter: &P, noun: &str, ctx: &Ctx) -> String {
     format!("{noun}{all}{any}{none}{not_all}{other}")
 }
 
-fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
-    if let Some(bonus) = nn(m, "range_bonus") {
-        let named = nn(m, "of")
-            .map(|of| format!("{} ", title_case(&jv(of))))
-            .unwrap_or_default();
-        return format!(
-            "the range of this model's {named}abilities is increased by {}{}",
-            range_phrase(Some(bonus)),
-            nn(m, "range_cap")
-                .map(|c| format!(" (to a maximum of {})", range_phrase(Some(c))))
-                .unwrap_or_default()
-        );
-    }
+/// Who an aura reaches and where: ("an enemy unit", "within 6\" of this unit").
+pub(super) fn aura_reach(e: &P, m: &P, ctx: &Ctx) -> (String, String) {
     let range_text = nn(m, "range")
         .map(|range| range_phrase(Some(range)))
         .unwrap_or_else(|| "range".to_string());
@@ -258,6 +247,35 @@ fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
     let emitter = nn(m, "emitter_filter")
         .map(|filter| aura_emitter(obj(Some(filter)), origin, ctx))
         .unwrap_or_else(|| origin.to_string());
+    let capped = nn(m, "range_cap")
+        .map(|c| {
+            format!(
+                " (to a maximum of {}, extensions included)",
+                range_phrase(Some(c))
+            )
+        })
+        .unwrap_or_default();
+    let wholly = if is_true(m, "wholly") { "wholly " } else { "" };
+    (
+        recipient,
+        format!("{wholly}within {range_text}{capped} of {emitter}"),
+    )
+}
+
+fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
+    if let Some(bonus) = nn(m, "range_bonus") {
+        let named = nn(m, "of")
+            .map(|of| format!("{} ", title_case(&jv(of))))
+            .unwrap_or_default();
+        return format!(
+            "the range of this model's {named}abilities is increased by {}{}",
+            range_phrase(Some(bonus)),
+            nn(m, "range_cap")
+                .map(|c| format!(" (to a maximum of {})", range_phrase(Some(c))))
+                .unwrap_or_default()
+        );
+    }
+    let (recipient, within) = aura_reach(e, m, ctx);
     let effect_text = match nn(m, "effect") {
         Some(effect) => inline(
             effect,
@@ -268,16 +286,7 @@ fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
         ),
         None => "that unit is affected".to_string(),
     };
-    let capped = nn(m, "range_cap")
-        .map(|c| {
-            format!(
-                " (to a maximum of {}, extensions included)",
-                range_phrase(Some(c))
-            )
-        })
-        .unwrap_or_default();
-    let wholly = if is_true(m, "wholly") { "wholly " } else { "" };
-    format!("while {recipient} is {wholly}within {range_text}{capped} of {emitter}, {effect_text}")
+    format!("while {recipient} is {within}, {effect_text}")
 }
 
 /// " (in addition to any already active)" when a stance pick joins the active options.
@@ -396,7 +405,7 @@ fn own_choice_prompt(e: &P) -> String {
 
 /// What leads a part: its moment, usage limit, name, the choice to use it and its cost.
 fn part_head(e: &P) -> String {
-    let moment = trigger_phrases(e.get("trigger"));
+    let moment = ability::part_trigger_phrases(e);
     let level = match nn(e, "level") {
         Some(l) if sv(e, "kind") == Some("psychic") => format!(" (Psychic level {})", jv(l)),
         _ => String::new(),

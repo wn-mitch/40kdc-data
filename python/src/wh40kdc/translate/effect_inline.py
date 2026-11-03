@@ -12,6 +12,7 @@ from typing import Any
 from wh40kdc.translate.condition import dekebab, describe_condition
 from wh40kdc.translate.condition_leadin import condition_lead_in, is_defensive_effect
 from wh40kdc.translate.condition_refs import _or_list, range_phrase, unit_ref_phrase
+from wh40kdc.translate.effect_aura import aura_reach, with_aura_recipient
 from wh40kdc.translate.effect_bind import roll_head, select_objective_inline
 from wh40kdc.translate.effect_leaf import LEAF_TYPES, describe_leaf
 from wh40kdc.translate.effect_quantity import (
@@ -51,7 +52,6 @@ from wh40kdc.translate.effect_words import (
     capitalize,
     dice_case,
     dice_table_result_label,
-    filter_subject,
     format_comparison,
     jstr,
     num,
@@ -169,53 +169,6 @@ def _aura_eligible_subject(who: str, eligible: Any) -> str:
     return f"{base}{exclusion}"
 
 
-def _aura_emitter(value: Any, origin: str) -> str:
-    """Who an aura is measured from.
-
-    A filter that names an owner is army-wide: any of that side's models with its keywords
-    ("one or more friendly DEATH GUARD models"; owner any names no side). Without one it
-    narrows the aura's own origin (this model, or this unit).
-    """
-    if not isinstance(value, dict) or not isinstance(value.get("owner"), str):
-        return _keyword_filter_clause(value, origin)
-    rest = dict(value)
-    owner = rest.pop("owner")
-    all_of = rest.pop("all_of", None)
-    side = "" if owner == "any" else f" {owner}"
-    keywords = (
-        "".join(f" {jstr(keyword)}" for keyword in all_of) if isinstance(all_of, list) else ""
-    )
-    return _keyword_filter_clause(rest, f"one or more{side}{keywords} models")
-
-
-def _keyword_filter_clause(value: Any, noun: str) -> str:
-    if not isinstance(value, dict):
-        return noun
-    relations = dict(value)
-    all_of = relations.pop("all_of", None)
-    any_of = relations.pop("any_of", None)
-    none_of = relations.pop("none_of", None)
-    not_all = relations.pop("not_all_of", None)
-    all_text = f" with {' and '.join(map(jstr, all_of))}" if isinstance(all_of, list) else ""
-    any_text = (
-        f" with at least one of {or_list(list(map(jstr, any_of)))}"
-        if isinstance(any_of, list)
-        else ""
-    )
-    none_text = (
-        f" without {or_list(list(map(jstr, none_of)))}"
-        if isinstance(none_of, list)
-        else ""
-    )
-    not_all_text = (
-        f" without all of {' and '.join(map(jstr, not_all))}"
-        if isinstance(not_all, list)
-        else ""
-    )
-    other = f" matching {filter_subject(relations)}" if relations else ""
-    return f"{noun}{all_text}{any_text}{none_text}{not_all_text}{other}"
-
-
 def _aura_clause(e: Effect, m: dict[str, Any], ctx: Ctx) -> str:
     if m.get("range_bonus") is not None:
         capped_bonus = (
@@ -226,41 +179,13 @@ def _aura_clause(e: Effect, m: dict[str, Any], ctx: Ctx) -> str:
         named = f"{title_case(jstr(m['of']))} " if m.get("of") is not None else ""
         bonus = range_phrase(m["range_bonus"])
         return f"the range of this model's {named}abilities is increased by {bonus}{capped_bonus}"
-    range_text = range_phrase(m["range"]) if m.get("range") is not None else "range"
-    capped = (
-        f" (to a maximum of {range_phrase(m['range_cap'])}, extensions included)"
-        if m.get("range_cap") is not None
-        else ""
-    )
-    owner = "friendly" if e.get("target") == "friendly-within-aura" else "enemy"
-    recipient_filter = m.get("eligible", m.get("recipient_filter", {}))
-    subject = filter_subject({"owner": owner, **_obj(recipient_filter)})
-    subject = (
-        subject.removeprefix("all ")
-        .replace(" units", " unit", 1)
-        .replace(" models", " model", 1)
-        .replace("that are", "that is", 1)
-    )
-    eligible_who = f"{'an' if re.match(r'^[aeiou]', subject, re.I) else 'a'} {subject}"
-    recipient = (
-        _keyword_filter_clause(m["recipient_filter"], eligible_who)
-        if m.get("eligible") is not None and m.get("recipient_filter") is not None
-        else eligible_who
-    )
-    # Without a range bonus, of names the unit the range is measured from; this model by default.
-    origin = "this unit" if m.get("of") == "this-unit" else "this model"
-    emitter = (
-        _aura_emitter(m["emitter_filter"], origin)
-        if m.get("emitter_filter") is not None
-        else origin
-    )
+    recipient, within = aura_reach(e, m)
     effect_text = (
         describe_effect_inline(_obj(m["effect"]), {**ctx, "aura_recipient": True})
         if m.get("effect") is not None
         else "that unit is affected"
     )
-    wholly = "wholly " if m.get("wholly") is True else ""
-    return f"while {recipient} is {wholly}within {range_text}{capped} of {emitter}, {effect_text}"
+    return f"while {recipient} is {within}, {effect_text}"
 
 
 def describe_effect_inline(e: Effect, ctx: Ctx | None = None) -> str:
@@ -595,8 +520,14 @@ def _own_choice_prompt(e: Effect) -> str:
 
 def part_head(e: Effect) -> str:
     """What leads a part: its moment, usage limit, name, the choice to use it and its cost."""
+    effect = e.get("effect") if isinstance(e.get("effect"), dict) else {}
     moment = " or ".join(
-        s for s in (describe_trigger(t) for t in normalize_triggers(e.get("trigger"))) if s
+        s
+        for s in (
+            describe_trigger(with_aura_recipient(t, effect))
+            for t in normalize_triggers(e.get("trigger"))
+        )
+        if s
     )
     level = (
         f" (Psychic level {jstr(e['level'])})"

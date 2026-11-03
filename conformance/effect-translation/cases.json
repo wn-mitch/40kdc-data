@@ -24029,7 +24029,7 @@
       "subject": "recipient"
     },
     "expected": {
-      "text": "When recipient fails a Battle-shock test, if the unit is the Neurothrope model, while an enemy unit is within 6\" of this unit, that unit suffers D3 mortal wounds; each model in the unit regains up to D3 lost wounds."
+      "text": "When an enemy unit within 6\" of this unit fails a Battle-shock test, if the unit is the Neurothrope model, while an enemy unit is within 6\" of this unit, that unit suffers D3 mortal wounds; each model in the unit regains up to D3 lost wounds."
     }
   },
   {
@@ -40951,6 +40951,99 @@
     },
     "expected": {
       "text": "After a Psychic test is taken, if that test is not for a Ritual the triggering unit is attempting, when resolving this use, you gain 1CP."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-subject-aura-recipient-in-sequence",
+    "trigger": {
+      "event": "selected",
+      "subject": "recipient",
+      "filter": {
+        "to": "shoot"
+      }
+    },
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "cp-gain",
+          "target": "this-model",
+          "modifier": {
+            "amount": 1
+          }
+        },
+        {
+          "type": "aura",
+          "target": "friendly-within-aura",
+          "modifier": {
+            "range": {
+              "inches": 6
+            },
+            "wholly": true,
+            "eligible": {
+              "owner": "friendly",
+              "all_of": [
+                "INFANTRY"
+              ]
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": "recipient",
+              "modifier": {
+                "stat": "OC",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When a friendly INFANTRY unit wholly within 6\" of this model is selected to shoot, when resolving this use:\n  -> You gain 1CP.\n  -> While a friendly INFANTRY unit is wholly within 6\" of this model, add 1 to that unit's Objective Control characteristic."
+    }
+  },
+  {
+    "caseId": "fidelity/part-trigger-subject-aura-recipient",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "after-roll",
+        "subject": "recipient",
+        "filter": {
+          "roll": "battle-shock",
+          "result": "failure"
+        }
+      },
+      "effect": {
+        "type": "aura",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "range": {
+            "inches": 9
+          },
+          "of": "this-unit",
+          "eligible": {
+            "owner": "enemy"
+          },
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "recipient",
+            "modifier": {
+              "count": 1
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> When an enemy unit within 9\" of this unit fails a Battle-shock test: while an enemy unit is within 9\" of this unit, that unit suffers 1 mortal wound."
     }
   },
   {

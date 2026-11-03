@@ -220,3 +220,25 @@ describe("Psychic tests made for a Ritual", () => {
     );
   });
 });
+
+describe("triggers on an aura's recipient", () => {
+  const aura = (extra: Record<string, unknown> = {}) => ({
+    type: "aura", target: "enemy-within-aura",
+    modifier: { range: { inches: 6 }, of: "this-unit", eligible: { owner: "enemy" }, effect: { type: "mortal-wounds", target: "recipient", modifier: { count: "D3" } }, ...extra },
+  });
+  const failsTest = { event: "after-roll", subject: "recipient", filter: { roll: "battle-shock", result: "failure" } };
+
+  it("names the unit the aura reaches instead of the bare word recipient", () => {
+    const text = describeAbility({ effect: aura() as Effect, scope: { duration: "permanent" }, trigger: failsTest } as Parameters<typeof describeAbility>[0]);
+    expect(text).toMatch(/^When an enemy unit within 6" of this unit fails a Battle-shock test, /);
+  });
+
+  it("finds the aura behind a condition and inside a part's own moment", () => {
+    const conditional = { type: "conditional", condition: { type: "phase-is", parameters: { phase: "fight" } }, effect: aura({ wholly: true }) };
+    expect(describeAbility({ effect: conditional as Effect, scope: { duration: "permanent" }, trigger: failsTest } as Parameters<typeof describeAbility>[0]))
+      .toMatch(/^When an enemy unit wholly within 6" of this unit fails a Battle-shock test/);
+    expect(render({ type: "ability-part", trigger: failsTest, effect: aura() } as Effect)).toContain(
+      "When an enemy unit within 6\" of this unit fails a Battle-shock test:",
+    );
+  });
+});

@@ -17,7 +17,7 @@
 import { dekebab, describeCondition, titleCase, type Condition } from "./condition.js";
 import { conditionLeadIn, describeSelectionEligibility, isDefensiveEffect } from "./condition-leadin.js";
 import { unitRefPhrase, usageClause } from "./condition-refs.js";
-import { describeTrigger, normalizeTriggers, type AbilityTriggerSpec } from "./trigger.js";
+import { describeTrigger, normalizeTriggers, type AbilityTrigger, type AbilityTriggerSpec } from "./trigger.js";
 import { definedGrantHead, definitionPart, describeLeaf, isDefinedGrant, LEAF_TYPES, type Leaf } from "./effect-leaf.js";
 import { expiryTrail } from "./expiry.js";
 import { ritualMenuBlock, ritualMenuInline } from "./effect-ritual.js";
@@ -507,12 +507,8 @@ function auraEmitter(filter: Record<string, unknown>, origin: string): string {
   return auraRoleFilter(rest, `one or more${owner === "any" ? "" : ` ${owner}`}${keywords} models`);
 }
 
-function auraClause(e: Effect, m: Record<string, unknown>, ctx: Ctx): string {
-  // Range-extension of a named aura (e.g. Gift of Poxes: contagion +3").
-  if (m.range_bonus != null) {
-    const named = m.of != null ? `${titleCase(jstr(m.of))} ` : "";
-    return `the range of this model's ${named}abilities is increased by ${rangePhrase(m.range_bonus)}${m.range_cap != null ? ` (to a maximum of ${rangePhrase(m.range_cap)})` : ""}`;
-  }
+/** Who an aura reaches and where: "an enemy unit" and "within 6\" of this unit". */
+function auraReach(e: Effect, m: Record<string, unknown>, ctx: Ctx): { recipient: string; within: string } {
   const rangeText = m.range != null ? rangePhrase(m.range) : "range";
   const capped = m.range_cap != null ? ` (to a maximum of ${rangePhrase(m.range_cap)}, extensions included)` : "";
   const owner = e.target === "friendly-within-aura" ? "friendly" : "enemy";
@@ -523,8 +519,41 @@ function auraClause(e: Effect, m: Record<string, unknown>, ctx: Ctx): string {
   // Without a range bonus, of names the unit the range is measured from; this model by default.
   const origin = m.of === "this-unit" ? "this unit" : "this model";
   const emitter = m.emitter_filter != null ? auraEmitter(m.emitter_filter as Record<string, unknown>, origin) : origin;
+  return { recipient, within: `${m.wholly === true ? "wholly " : ""}within ${rangeText}${capped} of ${emitter}` };
+}
+
+function auraClause(e: Effect, m: Record<string, unknown>, ctx: Ctx): string {
+  // Range-extension of a named aura (e.g. Gift of Poxes: contagion +3").
+  if (m.range_bonus != null) {
+    const named = m.of != null ? `${titleCase(jstr(m.of))} ` : "";
+    return `the range of this model's ${named}abilities is increased by ${rangePhrase(m.range_bonus)}${m.range_cap != null ? ` (to a maximum of ${rangePhrase(m.range_cap)})` : ""}`;
+  }
+  const { recipient, within } = auraReach(e, m, ctx);
   const effectText = m.effect != null ? describeEffectInline(m.effect as Effect, { ...ctx, auraRecipient: true }) : "that unit is affected";
-  return `while ${recipient} is ${m.wholly === true ? "wholly " : ""}within ${rangeText}${capped} of ${emitter}, ${effectText}`;
+  return `while ${recipient} is ${within}, ${effectText}`;
+}
+
+/** The first aura an effect applies through its conditions, sequences and parts, else undefined. */
+function firstAura(e: Effect | undefined): Effect | undefined {
+  if (e == null) return undefined;
+  if (e.type === "aura") return e.modifier?.range_bonus == null ? e : undefined;
+  for (const child of [e.effect, ...(Array.isArray(e.steps) ? e.steps : [])]) {
+    const aura = firstAura(child as Effect | undefined);
+    if (aura) return aura;
+  }
+  return undefined;
+}
+
+/**
+ * A trigger whose subject is the aura's recipient names the unit the aura reaches ("an enemy unit
+ * within 6\" of this unit"), carried to the trigger describer as `{aura_recipient}`.
+ */
+function withAuraRecipient(t: AbilityTrigger, effect: Effect | undefined, ctx: Ctx): AbilityTrigger {
+  if (t.subject !== "recipient") return t;
+  const aura = firstAura(effect);
+  if (aura == null) return t;
+  const { recipient, within } = auraReach(aura, (aura.modifier ?? {}) as Record<string, unknown>, ctx);
+  return { ...t, subject: { aura_recipient: `${recipient} ${within}` } };
 }
 
 /**
@@ -852,7 +881,7 @@ function describeNamedRegionConditional(m: Record<string, unknown>, condition: C
  * use it and its cost ("at the end of your Movement phase, once per battle, you can").
  */
 function partHead(e: Effect): string {
-  const moment = normalizeTriggers(e.trigger).map(describeTrigger).filter(Boolean).join(" or ");
+  const moment = normalizeTriggers(e.trigger).map((t) => describeTrigger(withAuraRecipient(t, e.effect, {}))).filter(Boolean).join(" or ");
   const level = e.kind === "psychic" && e.level != null ? ` (Psychic level ${jstr(e.level)})` : "";
   // A named part that always applies is a labelled rule ("Kine Shield: …"), not one to use.
   const label = e.name && !moment && !e.optional ? `${jstr(e.name)}${level}` : "";
@@ -1173,6 +1202,7 @@ function renderTopLevel(
   if (triggers.some((t) => t.event === "destroyed" || t.event === "model-destroyed")) ctx.destroyedTrigger = true;
   const condRange = conditionWithinRange(e.type === "conditional" ? e.condition : undefined);
   const trig = triggers
+    .map((t) => withAuraRecipient(t, e, ctx))
     .map((t) =>
       describeTrigger(condRange != null && (t.proximity?.range as { inches?: unknown } | undefined)?.inches === condRange ? { ...t, proximity: undefined } : t),
     )

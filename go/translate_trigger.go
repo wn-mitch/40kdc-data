@@ -68,6 +68,10 @@ func triggerActor(ref any) string {
 		}
 		return dekebab(r)
 	case map[string]any:
+		// The unit an aura reaches, as the effect's aura names it (withAuraRecipient).
+		if reach, ok := r["aura_recipient"].(string); ok {
+			return reach
+		}
 		if _, ok := r["event_var"].(string); ok {
 			return "that unit"
 		}

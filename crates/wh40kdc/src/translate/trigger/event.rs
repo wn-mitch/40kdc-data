@@ -100,6 +100,10 @@ pub(crate) fn actor(r: Option<&Value>) -> String {
             other => dekebab(other),
         },
         Some(Value::Object(f)) => {
+            // The unit an aura reaches, as the effect's aura names it (effect `with_aura_recipient`).
+            if let Some(reach) = f.get("aura_recipient").and_then(Value::as_str) {
+                return reach.to_string();
+            }
             if f.get("event_var").is_some_and(Value::is_string) {
                 return "that unit".to_string();
             }

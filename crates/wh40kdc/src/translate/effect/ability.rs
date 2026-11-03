@@ -7,7 +7,7 @@ use serde_json::Value;
 use super::block::block;
 use super::menu::{duration_clauses, normalize_triggers, usage_clause};
 use super::words::*;
-use super::{child, inline, is_container, join_nonempty, ty};
+use super::{child, inline, is_container, join_nonempty, ty, P};
 use crate::generated::{
     Ability, AbilityTrigger, AbilityUsage, EffectNode, KeywordPredicate, Scope,
 };
@@ -70,7 +70,11 @@ pub(super) fn render_top_level(
         ctx.destroyed_trigger = true;
     }
     let mut phrases: Vec<String> = Vec::new();
-    for phrase in triggers.into_iter().map(|t| {
+    let triggers: Vec<Value> = triggers
+        .into_iter()
+        .map(|t| with_aura_recipient(t, e_map, &ctx))
+        .collect();
+    for phrase in triggers.iter().map(|t| {
         let prox = t
             .get("proximity")
             .and_then(|p| p.get("range"))
@@ -272,4 +276,54 @@ pub fn describe_ability(a: &Ability) -> String {
         a.trigger.as_ref(),
         a.optional == Some(true),
     )
+}
+
+/// The first aura an effect applies through its conditions, sequences and parts.
+fn first_aura(e: &P) -> Option<&P> {
+    if ty(e) == "aura" {
+        return nn(obj(e.get("modifier")), "range_bonus")
+            .is_none()
+            .then_some(e);
+    }
+    let steps = e.get("steps").and_then(Value::as_array);
+    e.get("effect")
+        .into_iter()
+        .chain(steps.into_iter().flatten())
+        .filter_map(Value::as_object)
+        .find_map(first_aura)
+}
+
+/// A trigger whose subject is the aura's recipient names the unit the aura reaches ("an enemy
+/// unit within 6\" of this unit"), carried to the trigger describer as `{aura_recipient}`.
+pub(super) fn with_aura_recipient(t: &Value, effect: &P, ctx: &Ctx) -> Value {
+    if t.get("subject").and_then(Value::as_str) != Some("recipient") {
+        return t.clone();
+    }
+    let Some(aura) = first_aura(effect) else {
+        return t.clone();
+    };
+    let (recipient, within) = super::aura_reach(aura, obj(aura.get("modifier")), ctx);
+    let mut t2 = obj(Some(t)).clone();
+    t2.insert(
+        "subject".into(),
+        serde_json::json!({ "aura_recipient": format!("{recipient} {within}") }),
+    );
+    Value::Object(t2)
+}
+
+/// A part's moment phrases, naming the unit its aura reaches when the moment is the recipient's.
+pub(super) fn part_trigger_phrases(e: &P) -> String {
+    let effect = obj(e.get("effect"));
+    normalize_triggers(e.get("trigger"))
+        .into_iter()
+        .map(|t| {
+            crate::translate::trigger::describe_trigger_value(&with_aura_recipient(
+                t,
+                effect,
+                &Ctx::default(),
+            ))
+        })
+        .filter(|s| !s.is_empty())
+        .collect::<Vec<_>>()
+        .join(" or ")
 }

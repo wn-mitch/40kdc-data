@@ -70,6 +70,8 @@ function actor(ref: unknown): string {
   if (ref === "selected-unit") return "the selected unit";
   if (typeof ref === "object") {
     const f = ref as P;
+    // The unit an aura reaches, as the effect's aura names it (effect.ts withAuraRecipient).
+    if (typeof f.aura_recipient === "string") return f.aura_recipient;
     if (typeof f.event_var === "string") return "that unit";
     if (f.selection_var != null || f.stratagem_target != null) return unitRefPhrase(f);
     if (Object.keys(f).some((key) => !["owner", "level", "state", "not_states", "all_of", "any_of", "none_of", "not_all_of", "any_of_filters"].includes(key))) return unitFilterPhrase(f);

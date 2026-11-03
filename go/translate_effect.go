@@ -136,6 +136,18 @@ func auraClause(e, m map[string]any, ctx effCtx) string {
 		}
 		return "the range of this model's " + named + "abilities is increased by " + rangePhrase(m["range_bonus"]) + capped
 	}
+	recipient, within := auraReach(e, m)
+	effectText := "that unit is affected"
+	if m["effect"] != nil {
+		inner := ctx
+		inner.auraRecipient = true
+		effectText = describeEffectInline(mapOr(m["effect"]), inner)
+	}
+	return "while " + recipient + " is " + within + ", " + effectText
+}
+
+// auraReach: who an aura reaches and where ("an enemy unit", "within 6\" of this unit").
+func auraReach(e, m map[string]any) (string, string) {
 	rangeText := "range"
 	if m["range"] != nil {
 		rangeText = rangePhrase(m["range"])
@@ -167,12 +179,6 @@ func auraClause(e, m map[string]any, ctx effCtx) string {
 	if m["emitter_filter"] != nil {
 		emitter = auraEmitter(mapOr(m["emitter_filter"]), origin)
 	}
-	effectText := "that unit is affected"
-	if m["effect"] != nil {
-		inner := ctx
-		inner.auraRecipient = true
-		effectText = describeEffectInline(mapOr(m["effect"]), inner)
-	}
 	capped := ""
 	if m["range_cap"] != nil {
 		capped = " (to a maximum of " + rangePhrase(m["range_cap"]) + ", extensions included)"
@@ -181,7 +187,7 @@ func auraClause(e, m map[string]any, ctx effCtx) string {
 	if m["wholly"] == true {
 		wholly = "wholly "
 	}
-	return "while " + recipient + " is " + wholly + "within " + rangeText + capped + " of " + emitter + ", " + effectText
+	return recipient, wholly + "within " + rangeText + capped + " of " + emitter
 }
 
 // describeEffectInline renders a single-clause translation (lowercase-initial,

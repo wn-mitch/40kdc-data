@@ -185,7 +185,7 @@ func usageClause(usage any) string {
 func partHead(e map[string]any) string {
 	var moments []string
 	for _, t := range normalizeTriggers(e["trigger"]) {
-		if s := describeReactiveTrigger(t); s != "" {
+		if s := describeReactiveTrigger(withAuraRecipient(t, mapOr(e["effect"]))); s != "" {
 			moments = append(moments, s)
 		}
 	}
@@ -351,6 +351,7 @@ func renderTopLevel(e, scope map[string]any, usage, trigger any) string {
 		if t["event"] == nil {
 			continue
 		}
+		t = withAuraRecipient(t, e)
 		tt := t
 		if hasCondRange {
 			if in, ok := mapOr(mapOr(t["proximity"])["range"])["inches"].(float64); ok && in == condRange {
@@ -399,4 +400,49 @@ func containsStr(l []string, s string) bool {
 		}
 	}
 	return false
+}
+
+// firstAura: the first aura an effect applies through its conditions, sequences and parts, or nil.
+func firstAura(e map[string]any) map[string]any {
+	if e == nil {
+		return nil
+	}
+	if e["type"] == "aura" {
+		if mapOr(e["modifier"])["range_bonus"] == nil {
+			return e
+		}
+		return nil
+	}
+	children := []any{e["effect"]}
+	if steps, ok := e["steps"].([]any); ok {
+		children = append(children, steps...)
+	}
+	for _, child := range children {
+		if c, ok := child.(map[string]any); ok {
+			if aura := firstAura(c); aura != nil {
+				return aura
+			}
+		}
+	}
+	return nil
+}
+
+// withAuraRecipient: a trigger whose subject is the aura's recipient names the unit the aura
+// reaches ("an enemy unit within 6\" of this unit"), carried to the trigger describer as
+// {aura_recipient}.
+func withAuraRecipient(t, effect map[string]any) map[string]any {
+	if t["subject"] != "recipient" {
+		return t
+	}
+	aura := firstAura(effect)
+	if aura == nil {
+		return t
+	}
+	recipient, within := auraReach(aura, mapOr(aura["modifier"]))
+	out := make(map[string]any, len(t))
+	for k, v := range t {
+		out[k] = v
+	}
+	out["subject"] = map[string]any{"aura_recipient": recipient + " " + within}
+	return out
 }

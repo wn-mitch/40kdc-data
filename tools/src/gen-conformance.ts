@@ -4185,6 +4185,14 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/trigger-psychic-test-not-for-ritual", trigger: { event: "after-roll", filter: { roll: "psychic" }, binds_event_variable: "psychic-test",
       condition: { operator: "not", operands: [{ type: "happened", parameters: { event: "used", subject: "event-subject", filter: { kind: "ritual", same_rule_as: { event_var: "psychic-test" } }, window: "event" } }] } },
       effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
+    // A trigger whose subject is an aura's recipient names the unit the aura reaches, found through a sequence step or inside a part.
+    { caseId: "fidelity/trigger-subject-aura-recipient-in-sequence", trigger: { event: "selected", subject: "recipient", filter: { to: "shoot" } },
+      effect: { type: "sequence", steps: [{ type: "cp-gain", target: "this-model", modifier: { amount: 1 } },
+        { type: "aura", target: "friendly-within-aura", modifier: { range: { inches: 6 }, wholly: true, eligible: { owner: "friendly", all_of: ["INFANTRY"] },
+          effect: { type: "stat-modifier", target: "recipient", modifier: { stat: "OC", operation: "add", value: 1 } } } }] } },
+    { caseId: "fidelity/part-trigger-subject-aura-recipient", effect: { type: "ability-part", trigger: { event: "after-roll", subject: "recipient", filter: { roll: "battle-shock", result: "failure" } },
+      effect: { type: "aura", target: "enemy-within-aura", modifier: { range: { inches: 9 }, of: "this-unit", eligible: { owner: "enemy" },
+        effect: { type: "mortal-wounds", target: "recipient", modifier: { count: 1 } } } } } },
     { caseId: "fidelity/move-modifier-mode-choice-named-beside-clause", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], no_end_in_engagement: true, mode_choice: { modes: ["objective"], ignore_before_moving: true } } } },
   ];
   for (const example of fidelityBoundaryCases) {

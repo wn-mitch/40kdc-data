@@ -19,6 +19,7 @@ from typing import Any
 from wh40kdc.translate.condition import Condition, dekebab
 from wh40kdc.translate.condition_leadin import condition_lead_in, is_defensive_effect
 from wh40kdc.translate.condition_refs import range_phrase
+from wh40kdc.translate.effect_aura import with_aura_recipient
 from wh40kdc.translate.effect_bind import roll_head, select_objective_block
 from wh40kdc.translate.effect_inline import (
     choice_prompt,
@@ -460,6 +461,7 @@ def _render_top_level(e: Effect, scope: Any, usage: Any = None, trigger: Any = N
         e.get("condition") if e.get("type") == "conditional" else None
     )
     parts: list[str] = []
+    triggers = [with_aura_recipient(t, e) for t in triggers]
     for t in triggers:
         prox_inches = _obj(_obj(t.get("proximity")).get("range")).get("inches")
         restated = cond_range is not None and prox_inches == cond_range

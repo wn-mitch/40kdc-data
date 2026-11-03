@@ -105,6 +105,9 @@ def _actor(ref: Any) -> str:
         return "the selected unit"
     if isinstance(ref, (dict, list)):
         f = _obj(ref)
+        # The unit an aura reaches, as the effect's aura names it (effect_aura.with_aura_recipient).
+        if isinstance(f.get("aura_recipient"), str):
+            return str(f["aura_recipient"])
         if isinstance(f.get("event_var"), str):
             return "that unit"
         if f.get("selection_var") is not None or f.get("stratagem_target") is not None:
