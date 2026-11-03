@@ -4524,7 +4524,8 @@
             "trigger": {
               "event": "used",
               "filter": {
-                "kind": "ability"
+                "kind": "ability",
+                "id": "grenade-pack-flyover-aeldari"
               }
             },
             "effect": {
