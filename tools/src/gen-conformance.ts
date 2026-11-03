@@ -4178,6 +4178,13 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/dice-table-result-negated-list", effect: { type: "conditional",
       condition: { operator: "not", operands: [{ type: "dice-table-result", parameters: { ability: "fabricated-barrier", dice: "D6", results: [1, 3] } }] },
       effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } } },
+    // A Psychic test gated on the Ritual the testing unit attempts with it, and its negation.
+    { caseId: "fidelity/trigger-psychic-test-for-ritual", trigger: { event: "before-roll", filter: { roll: "psychic" }, binds_event_variable: "ritual-test",
+      condition: { type: "happened", parameters: { event: "used", subject: "event-subject", filter: { kind: "ritual", same_rule_as: { event_var: "ritual-test" } }, window: "event" } } },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
+    { caseId: "fidelity/trigger-psychic-test-not-for-ritual", trigger: { event: "after-roll", filter: { roll: "psychic" }, binds_event_variable: "psychic-test",
+      condition: { operator: "not", operands: [{ type: "happened", parameters: { event: "used", subject: "event-subject", filter: { kind: "ritual", same_rule_as: { event_var: "psychic-test" } }, window: "event" } }] } },
+      effect: { type: "cp-gain", target: "this-model", modifier: { amount: 1 } } },
     { caseId: "fidelity/move-modifier-mode-choice-named-beside-clause", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], no_end_in_engagement: true, mode_choice: { modes: ["objective"], ignore_before_moving: true } } } },
   ];
   for (const example of fidelityBoundaryCases) {

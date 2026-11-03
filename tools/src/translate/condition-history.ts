@@ -135,6 +135,8 @@ function happenedPhrase(p: P, negated: boolean): string {
       return `${neg}${withWindow(`${amount} ${objects}${tagged} destroyed`, p.window)}`;
     }
     case "used": {
+      // A Ritual is attempted with a Psychic test: the bound test is for the Ritual the unit attempts.
+      if (p.window === "event" && f.kind === "ritual" && f.same_rule_as != null) return `that test is ${negated ? "not " : ""}for a Ritual ${who} is attempting`;
       // The use being resolved now: "the unit is performing the Swift as the Wind Agile Manoeuvre".
       if (p.window === "event" && f.ability_keyword == null && f.same_rule_as == null) {
         const kind = str(f.kind ?? "ability");

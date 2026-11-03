@@ -476,6 +476,15 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             )
         }
         "used" => {
+            // A Ritual is attempted with a Psychic test: the bound test is for the Ritual the unit
+            // attempts.
+            if window.and_then(Value::as_str) == Some("event")
+                && is(f, "kind", "ritual")
+                && nn(f, "same_rule_as").is_some()
+            {
+                let not = if negated { "not " } else { "" };
+                return format!("that test is {not}for a Ritual {who} is attempting");
+            }
             // The use being resolved now: "the unit is performing the Swift as the Wind Agile Manoeuvre".
             if window.and_then(Value::as_str) == Some("event")
                 && nn(f, "ability_keyword").is_none()

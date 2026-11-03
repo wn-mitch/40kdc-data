@@ -40875,6 +40875,85 @@
     }
   },
   {
+    "caseId": "fidelity/trigger-psychic-test-for-ritual",
+    "trigger": {
+      "event": "before-roll",
+      "filter": {
+        "roll": "psychic"
+      },
+      "binds_event_variable": "ritual-test",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "subject": "event-subject",
+          "filter": {
+            "kind": "ritual",
+            "same_rule_as": {
+              "event_var": "ritual-test"
+            }
+          },
+          "window": "event"
+        }
+      }
+    },
+    "effect": {
+      "type": "cp-gain",
+      "target": "this-model",
+      "modifier": {
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Before a Psychic test is made, if that test is for a Ritual the triggering unit is attempting, when resolving this use, you gain 1CP."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-psychic-test-not-for-ritual",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "psychic"
+      },
+      "binds_event_variable": "psychic-test",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "used",
+              "subject": "event-subject",
+              "filter": {
+                "kind": "ritual",
+                "same_rule_as": {
+                  "event_var": "psychic-test"
+                }
+              },
+              "window": "event"
+            }
+          }
+        ]
+      }
+    },
+    "effect": {
+      "type": "cp-gain",
+      "target": "this-model",
+      "modifier": {
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "After a Psychic test is taken, if that test is not for a Ritual the triggering unit is attempting, when resolving this use, you gain 1CP."
+    }
+  },
+  {
     "caseId": "fidelity/move-modifier-mode-choice-named-beside-clause",
     "effect": {
       "type": "move-modifier",

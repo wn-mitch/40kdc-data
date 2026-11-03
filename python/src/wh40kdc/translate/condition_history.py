@@ -260,6 +260,10 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         )
         return f"{neg}{_with_window(f'{_str(n)}+ {objects}{tagged} destroyed', window)}"
     if event == "used":
+        # A Ritual is attempted with a Psychic test: the bound test is for the Ritual the unit
+        # attempts.
+        if window == "event" and f.get("kind") == "ritual" and f.get("same_rule_as") is not None:
+            return f"that test is {'not ' if negated else ''}for a Ritual {who} is attempting"
         # The use being resolved now: "the unit is performing the Swift as the Wind Agile
         # Manoeuvre".
         if window == "event" and f.get("ability_keyword") is None and f.get("same_rule_as") is None:

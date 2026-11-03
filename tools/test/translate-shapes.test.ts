@@ -207,3 +207,16 @@ describe("selected-to-move triggers", () => {
     );
   });
 });
+
+describe("Psychic tests made for a Ritual", () => {
+  const ritual = { type: "happened", parameters: { event: "used", subject: "event-subject", filter: { kind: "ritual", same_rule_as: { event_var: "ritual-test" } }, window: "event" } };
+  const test = (condition: unknown) =>
+    describeTrigger({ event: "before-roll", filter: { roll: "psychic" }, binds_event_variable: "ritual-test", condition } as Parameters<typeof describeTrigger>[0]);
+
+  it("says the bound test is for the Ritual the unit attempts, not that the unit used the same ability", () => {
+    expect(test(ritual)).toBe("before a Psychic test is made, if that test is for a Ritual the triggering unit is attempting");
+    expect(test({ operator: "not", operands: [ritual] })).toBe(
+      "before a Psychic test is made, if that test is not for a Ritual the triggering unit is attempting",
+    );
+  });
+});

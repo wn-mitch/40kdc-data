@@ -330,6 +330,14 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 		}
 		return neg + withWindow(amount+" "+objects+tagged+" destroyed", p["window"])
 	case "used":
+		// A Ritual is attempted with a Psychic test: the bound test is for the Ritual the unit attempts.
+		if p["window"] == "event" && f["kind"] == "ritual" && f["same_rule_as"] != nil {
+			not := ""
+			if negated {
+				not = "not "
+			}
+			return "that test is " + not + "for a Ritual " + who + " is attempting"
+		}
 		// The use being resolved now: "the unit is performing the Swift as the Wind Agile Manoeuvre".
 		if p["window"] == "event" && f["ability_keyword"] == nil && f["same_rule_as"] == nil {
 			kind := "ability"
