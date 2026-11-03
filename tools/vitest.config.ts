@@ -6,5 +6,6 @@ export default defineConfig({
     // run they exceed vitest's 5s/10s defaults, so give tests and hooks headroom.
     testTimeout: 30_000,
     hookTimeout: 60_000,
+    setupFiles: ["test/setup/leaf-contract-guard.ts"],
   },
 });

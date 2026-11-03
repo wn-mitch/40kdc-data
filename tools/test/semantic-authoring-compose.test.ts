@@ -25,7 +25,8 @@ function leavesIn(text: string, pieces: Piece[]): CompileLeaf[] {
     if (at < 0) throw new Error(`Missing ${phrase}`);
     cursor = at + phrase.length;
     const start_byte = Buffer.byteLength(text.slice(0, at));
-    return { role, family_id, family_version: currentFamilyVersion(family_id), parameters, start_byte, end_byte: start_byte + Buffer.byteLength(phrase), fragment: "RAW_TEXT" };
+    const version = currentFamilyVersion(family_id);
+    return { role, family_id, family_version: version, parameters: normalizeFingerprintParameters(family_id, parameters, version), start_byte, end_byte: start_byte + Buffer.byteLength(phrase), fragment: "RAW_TEXT" };
   });
 }
 
@@ -111,7 +112,7 @@ describe("Semantic authoring composition rules", () => {
     const shape = (unit: string, type: string) => shapeSignature(leavesIn("Whenever the attacker strikes a hero, re-roll the hit.", [
       ["Whenever the attacker strikes", "EVENT", "attack", attack("makes", unit, type)],
       ["a hero", "CONDITION", "unit-keyword", hero],
-      ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
+      ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }],
     ]), "Whenever the attacker strikes a hero, re-roll the hit.");
     expect(new Set([shape("this-model", "melee"), shape("this-model", "any"), shape("that-unit", "ranged")]).size).toBe(1);
   });
@@ -142,9 +143,9 @@ describe("Semantic authoring composition rules", () => {
     const text = "Whenever a model here swings, re-roll a one. If it charged this turn, re-roll the swing instead.";
     const result = compiled(text, [
       ["Whenever a model here swings", "EVENT", "attack", attack("makes", "this-unit", "melee")],
-      ["re-roll a one", "EFFECT", "reroll", { roll: "hit", subset: "ones" }],
+      ["re-roll a one", "EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }],
       ["If it charged this turn", "CONDITION", "unit-activity", { activities: ["charged-this-turn"], subject: "this-unit", negated: false }],
-      ["re-roll the swing", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
+      ["re-roll the swing", "EFFECT", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }],
       ["instead", "COMBINATOR", "instead", {}],
     ]);
     const charged = { type: "happened", parameters: { event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" } };
@@ -372,7 +373,7 @@ describe("Semantic authoring composition rules", () => {
       ["if that model has not fought this phase", "CONDITION", "unit-activity", { activities: ["fought-this-phase"], subject: "this-unit", negated: true }],
       ["roll one D6", "EVENT", "dice-roll", { dice: "D6" }],
       ["On a 2+", "CONDITION", "roll-result", { from: 2, to: 6 }],
-      ["leave it; it fights after the attackers finish", "EFFECT", "fight-on-death", { timing: "after-the-attacking-unit-finishes" }],
+      ["leave it; it fights after the attackers finish", "EFFECT", "fight-on-death", { act: "fight", timing: "after-the-attacking-unit-finishes" }],
     ]);
     expect(result.mechanics.effect).toEqual({ type: "act-on-death", target: "event-object", modifier: {
       act: "fight", resolution: "after-attacking-unit-finishes", removal: "after-destroyed-model-fights",
@@ -427,9 +428,9 @@ describe("Semantic authoring composition rules", () => {
 
   it("replaces an earlier effect with \"instead\", for re-rolls and for numbers", () => {
     const rerolls = compiled("Re-roll a hit of one. If the foe is thinned, re-roll the hit instead.", [
-      ["Re-roll a hit of one", "EFFECT", "reroll", { roll: "hit", subset: "ones" }],
+      ["Re-roll a hit of one", "EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }],
       ["If the foe is thinned", "CONDITION", "unit-state", state(["below-starting-strength"])],
-      ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
+      ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }],
       ["instead", "COMBINATOR", "instead", {}],
     ]);
     const weak = { type: "strength", parameters: { subject: "defender", below: "starting" } };
@@ -463,12 +464,12 @@ describe("Semantic authoring composition rules", () => {
   it("refuses an \"instead\" it cannot place", () => {
     expect(failures("If the foe is thinned, re-roll the hit instead.", [
       ["If the foe is thinned", "CONDITION", "unit-state", state(["below-starting-strength"])],
-      ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
+      ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }],
       ["instead", "COMBINATOR", "instead", {}],
     ])).toEqual(["\"Instead\" has no earlier reroll effect to replace."]);
     expect(failures("Re-roll a hit of one. Re-roll the hit instead.", [
-      ["Re-roll a hit of one", "EFFECT", "reroll", { roll: "hit", subset: "ones" }],
-      ["Re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
+      ["Re-roll a hit of one", "EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }],
+      ["Re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }],
       ["instead", "COMBINATOR", "instead", {}],
     ])[0]).toMatch(/needs a condition/u);
   });
@@ -479,7 +480,7 @@ describe("Semantic authoring composition rules", () => {
       ["Pick one enemy unit within 12\"", "EVENT", "select-unit", { scope: "enemy", distance: "within", inches: 12, visible: false }],
       ["Whenever a model in this unit attacks", "EVENT", "attack", attack("makes", "this-unit", "any")],
       ["that unit", "CONDITION", "target-is-selected", {}],
-      ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
+      ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }],
     ];
     const result = compiled(text, pieces, { name: "Fire Support" });
     // The designation is the record's own registered tag, by its name or "<name> target".
@@ -494,14 +495,14 @@ describe("Semantic authoring composition rules", () => {
     expect(failures("Whenever this model attacks that unit, re-roll the hit.", [
       ["Whenever this model attacks", "EVENT", "attack", attack("makes", "this-model", "any")],
       ["that unit", "CONDITION", "target-is-selected", {}],
-      ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
+      ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }],
     ])).toEqual(["An attack targets \"that unit\", but no select-unit leaf says which unit."]);
   });
 
   it("treats a sentence without an effect as leading into the next one", () => {
     const pieces = (text: string) => leavesIn(text, [
       ["While leading", "CONDITION", "leading-unit", { subject: "this-model", attachment: "leading" }],
-      ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
+      ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }],
     ]);
     const comma = "While leading, re-roll the hit.";
     const stop = "While leading. re-roll the hit.";
@@ -518,13 +519,13 @@ describe("Semantic authoring composition rules", () => {
       ["unit-state", { states: ["battle-shocked"], subject: "this-unit", negated: false }, { type: "matches", parameters: { filter: { state: "battle-shocked" } } }],
       ["unit-mark", { mark: "oath-of-moment", subject: "target", negated: false }, { type: "matches", parameters: { subject: "defender", filter: { designated: "OATH OF MOMENT TARGET" } } }],
       ["unit-position", { kind: "closest-eligible", subject: "target", negated: false }, { type: "closest", parameters: { subject: "defender", among: "eligible-targets" } }],
-      ["unit-position", { kind: "beyond", inches: 12, subject: "target", negated: false }, { operator: "not", operands: [{ type: "matches", parameters: { filter: { within: { of: "defender", range: { inches: 12 } } } } }] }],
+      ["unit-position", { kind: "beyond", inches: 12, of: "target", subject: "this-unit", negated: false }, { operator: "not", operands: [{ type: "matches", parameters: { filter: { within: { of: "defender", range: { inches: 12 } } } } }] }],
       ["unit-position", { kind: "objective-range", controlled_by: "you", subject: "target", negated: false }, { type: "matches", parameters: { subject: "defender", filter: { within: { of: { objective: { controlled_by: "friendly" } }, range: "objective-control" } } } }],
     ];
     for (const [family, parameters, node] of cases) {
       const result = compiled("If so, re-roll the hit.", [
         ["If so", "CONDITION", family, parameters],
-        ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
+        ["re-roll the hit", "EFFECT", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }],
       ]);
       expect((result.mechanics.effect as { condition: unknown }).condition).toEqual(node);
     }

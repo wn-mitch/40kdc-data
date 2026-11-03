@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { bindFrameAntecedents } from "../src/semantic-authoring/compile-weapon-antecedent.js";
+import { outsideContract } from "./leaf-contract.js";
 import { shapeSignature } from "../src/semantic-authoring/compile-placement.js";
 
 /**
@@ -21,7 +22,7 @@ function placed(text: string, ...items: Item[]): CompileLeaf[] {
     const end = zero ? start : start + Buffer.byteLength(wording, "utf8");
     if (!zero) from = end;
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: end, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: end, fragment: "RAW_TEXT" };
   });
 }
 
@@ -78,7 +79,7 @@ describe("Semantic authoring antecedent frames on an Or: branch", () => {
     const effect = compiled(text, placed(text,
       frame("Your unit's melee attacks", "melee"),
       keyword("LANCE", "Lance"),
-      ["Or:", "instead", { choice: false }],
+      ["Or:", "instead", {}],
       ["If the assault doctrine is active for your unit", "rule-active", { rule: "assault-doctrine" }],
       antecedentFrame("LANCE"),
       keyword("LANCE", "Lance"),
@@ -213,14 +214,14 @@ describe("Semantic authoring antecedent frames on an Or: branch", () => {
     it("refuses a container opener between the source and the antecedent", () => {
       const text = "Your unit's melee attacks have [LANCE]. Choose one: [LANCE].";
       refused(text, placed(text, frame("Your unit's melee attacks", "melee"), keyword("LANCE", "Lance"),
-        ["Choose one", "stance-select-open", { subject: "this-unit" }],
+        ["Choose one", "stance-select-open", { scope: "unit", mode: "re-selectable", min_choices: 1, max_choices: 1 }],
         antecedentFrame("LANCE"), keyword("LANCE", "Lance")), "container");
     });
 
     it("refuses a target condition between the source and the antecedent in the source's fragment", () => {
       const text = "Your unit's melee attacks have [LANCE]. That target is a marked unit, [LANCE].";
       const leaves = placed(text, frame("Your unit's melee attacks", "melee"), keyword("LANCE", "Lance"),
-        ["That target is a marked unit", "unit-mark", { subject: "defender", mark: "example" }],
+        ["That target is a marked unit", "unit-mark", { mark: "marked", subject: "target", negated: false }],
         antecedentFrame("LANCE"), keyword("LANCE", "Lance"));
       refused(text, leaves, "target condition or duration");
     });
@@ -228,17 +229,23 @@ describe("Semantic authoring antecedent frames on an Or: branch", () => {
     it("refuses a duration between the source and the antecedent in the source's fragment", () => {
       const text = "Your unit's melee attacks have [LANCE]. Until the end of the phase, [LANCE].";
       const leaves = placed(text, frame("Your unit's melee attacks", "melee"), keyword("LANCE", "Lance"),
-        ["Until the end of the phase", "duration", { until: "end-of-phase" }],
+        ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
         antecedentFrame("LANCE"), keyword("LANCE", "Lance"));
       refused(text, leaves, "target condition or duration");
     });
 
     it("refuses a source that names a weapon keyword, weapon name, incoming attacks or a bound weapon", () => {
-      for (const extra of [{ weapon_keyword: "Melee" }, { weapon_name: "lance" }, { incoming: true }, { weapon_var: "sword" }]) {
+      for (const extra of [{ weapon_keyword: "Melee" }, { weapon_name: "lance" }, { incoming: true }]) {
         const leaves = placed(branch, ["Your unit's melee attacks", "weapon-ability-grant", { subject: "this-unit", weapon_type: "melee", ...extra }],
           keyword("LANCE", "Lance"), antecedentFrame("LANCE"), keyword("LANCE", "Lance"));
         refused(branch, leaves, "would widen its weapons");
       }
+      // weapon_var is the compiler's own bound form of a "that weapon" grant (bindWeaponAntecedents); no stored leaf carries it.
+      const unbound = { subject: "this-unit", weapon_type: "melee" };
+      expect(() => normalizeFingerprintParameters("weapon-ability-grant", { ...unbound, weapon_var: "sword" }, currentFamilyVersion("weapon-ability-grant"))).toThrow(/optional weapon_name/u);
+      const [source, ...rest] = placed(branch, ["Your unit's melee attacks", "weapon-ability-grant", unbound], keyword("LANCE", "Lance"), antecedentFrame("LANCE"), keyword("LANCE", "Lance"));
+      const bound = outsideContract([{ ...source!, parameters: { ...unbound, weapon_var: "sword" } }, ...rest]);
+      refused(branch, bound, "would widen its weapons");
     });
 
     it("refuses an antecedent frame whose own fragment names a recipient", () => {

@@ -163,7 +163,7 @@ describe("bound durations on records with several", () => {
 
   it("window stratagem read as an Advance already made refuses: the no-roll cannot follow the Advance", () => {
     const leaves = recordLeaves("window stratagem").map((leaf) => (leaf.family_id === "event"
-      ? { ...leaf, role: "CONDITION", family_id: "unit-activity", family_version: currentFamilyVersion("unit-activity"), parameters: { activities: ["advanced-this-turn"], subject: "this-unit" } } : leaf));
+      ? { ...leaf, role: "CONDITION", family_id: "unit-activity", family_version: currentFamilyVersion("unit-activity"), parameters: { activities: ["advanced-this-turn"], subject: "this-unit", negated: false } } : leaf));
     const result = compileRecord("window stratagem", leaves);
     expect(result.ok).toBe(false);
     expect(result.ok ? [] : result.errors).toContain(NO_ROLL_AFTER_ADVANCE);

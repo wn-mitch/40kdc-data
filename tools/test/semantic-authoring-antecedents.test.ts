@@ -157,7 +157,7 @@ function placedIn(text: string, ...items: Array<[string, CompileLeaf["family_id"
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const family_version = currentFamilyVersion(family_id);
-    return { role: familyRole(family_id, family_version), family_id, family_version, parameters, start_byte: start, end_byte: from, fragment };
+    return { role: familyRole(family_id, family_version), family_id, family_version, parameters: normalizeFingerprintParameters(family_id, parameters, family_version), start_byte: start, end_byte: from, fragment };
   });
 }
 
@@ -190,7 +190,7 @@ describe("Semantic authoring a filter after a characteristic change, and a later
 
   it("keeps the filter with the linking verb's effect, so the Move change points back with no unit", () => {
     const haveText = "Gain Move 2 for friendly FOO units have bonus rolls.";
-    const list = placedIn(haveText, [...move], ["friendly FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }], ["bonus rolls", "roll-modifier", { subject: "antecedent", operation: "add", value: 1, rolls: ["advance"] }]);
+    const list = placedIn(haveText, [...move], ["friendly FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }], ["bonus rolls", "roll-modifier", { subject: "antecedent", operation: "add", value: 1, roll: "advance" }]);
     expect(postfixFilter(list, 0, haveText)).toBe(false);
     // The roll binds the filter through bareFilter (the Move change is not in its way).
     const bound = bindAntecedents(list.slice(1), undefined, haveText);
@@ -199,13 +199,13 @@ describe("Semantic authoring a filter after a characteristic change, and a later
 
   it("refuses the Move change when a linking verb gives the filter to the roll after it", () => {
     const haveText = "Gain Move 2 for friendly FOO units have bonus rolls.";
-    const list = placedIn(haveText, [...move], ["friendly FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }], ["bonus rolls", "roll-modifier", { subject: "antecedent", operation: "add", value: 1, rolls: ["advance"] }]);
+    const list = placedIn(haveText, [...move], ["friendly FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }], ["bonus rolls", "roll-modifier", { subject: "antecedent", operation: "add", value: 1, roll: "advance" }]);
     expect(() => bindAntecedents(list, undefined, haveText)).toThrow("belongs to a later effect and no earlier leaf names it");
   });
 
   it("keeps an aura's claim of a filter as it was (the change is not refused)", () => {
     const auraText = "Gain Move 2 for friendly FOO units within 6\" of this unit.";
-    const list = placedIn(auraText, [...move], ["friendly FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }], ["within 6\" of this unit", "aura-range", { side: "friendly", distance: "within", range: 6 }]);
+    const list = placedIn(auraText, [...move], ["friendly FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }], ["within 6\" of this unit", "aura-range", { side: "friendly", inches: 6 }]);
     expect(postfixFilter(list, 0, auraText)).toBe(false);
     expect(bindAntecedents(list, undefined, auraText)[0]!.parameters.subject).toBe("this-unit");
   });
@@ -215,7 +215,7 @@ describe("Semantic authoring act-after-move that points back to the units a filt
   // Fabricated wording of the 3711 and 6821 shapes.
   const filterText = "Friendly FOO BAR units from your army are eligible to shoot and declare a charge in a turn in which they Fell Back.";
   const filtered = (subject: string) => placedIn(filterText,
-    ["Friendly FOO BAR units", "unit-filter", { side: "friendly", keywords: ["FOO", "BAR"] }],
+    ["Friendly FOO BAR units", "unit-filter", { side: "friendly", keywords: ["BAR", "FOO"] }],
     ["from your army", "unit-owner", { owner: "friendly" }],
     ["are eligible to shoot and declare a charge in a turn in which they Fell Back", "act-after-move", { subject, moves: ["fall-back"], acts: ["shoot", "charge"] }]);
 
@@ -227,7 +227,7 @@ describe("Semantic authoring act-after-move that points back to the units a filt
       { activity: "shoot", allow: true, after: ["fall-back"] },
       { activity: "declare-charge", allow: true, after: ["fall-back"] },
     ]);
-    for (const step of steps) expect(step.target).toEqual({ owner: "friendly", all_of: ["FOO", "BAR"] });
+    for (const step of steps) expect(step.target).toEqual({ owner: "friendly", all_of: ["BAR", "FOO"] });
   });
 
   it("keeps a subject that is not an antecedent as the record's own unit, ignoring the filter", () => {

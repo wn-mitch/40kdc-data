@@ -8,8 +8,16 @@ import { describeCondition } from "../src/translate/index.js";
 
 type Item = [wording: string, family: string, parameters: Record<string, unknown>, fragment: string];
 
-/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
+/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text), with parameters as stored. */
 function placed(text: string, ...items: Item[]): CompileLeaf[] {
+  return unnormalized(text, ...items).map((leaf) => ({ ...leaf, parameters: normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version) }));
+}
+
+/**
+ * As placed, with parameters as given: for refuseDestinationMismatch, which reads leaves after the compiler has resolved
+ * their subjects (stratagem-target:first), a form no stored leaf has.
+ */
+function unnormalized(text: string, ...items: Item[]): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters, fragment]) => {
@@ -361,7 +369,7 @@ describe("Semantic authoring embark destination: the pairing of destination and 
     ["friendly TRANSPORT", "unit-filter", { side: "friendly", keywords: ["TRANSPORT"] }, "TARGET"],
   ];
   const permission = (subject: string, into: string): Item => ["can embark within that TRANSPORT", "eligibility-permission", { subject, activity: "embark", allow: true, into }, "EFFECT"];
-  const check = (...items: Item[]) => refuseDestinationMismatch(placed(text, ...items), text);
+  const check = (...items: Item[]) => refuseDestinationMismatch(unnormalized(text, ...items), text);
 
   it("accepts a destination in the group of the Transport the eligibility names", () => {
     expect(() => check(...targets, eligible, permission("stratagem-target:first", "stratagem-target:second"))).not.toThrow();
@@ -379,15 +387,15 @@ describe("Semantic authoring embark destination: the pairing of destination and 
     const ownText = "Fight phase. This unit is able to embark within this unit, and can embark within this unit.";
     const own: Item = ["is able to embark within this unit", "eligible", { subject: "selected-unit", to: "embark-within", transport: "ability-unit" }, "EFFECT"];
     const ownPermission: Item = ["can embark within this unit", "eligibility-permission", { subject: "selected-unit", activity: "embark", allow: true, into: "this-unit" }, "EFFECT"];
-    expect(() => refuseDestinationMismatch(placed(ownText, own, ownPermission), ownText)).not.toThrow();
+    expect(() => refuseDestinationMismatch(unnormalized(ownText, own, ownPermission), ownText)).not.toThrow();
     const wrong: Item = ["is able to embark within this unit", "eligible", { subject: "selected-unit", to: "embark-within", transport: "this-unit" }, "EFFECT"];
-    expect(() => refuseDestinationMismatch(placed(ownText, wrong, ownPermission), ownText)).toThrow(/names this unit as its Transport/u);
+    expect(() => refuseDestinationMismatch(unnormalized(ownText, wrong, ownPermission), ownText)).toThrow(/names this unit as its Transport/u);
   });
 
   it("leaves a permission with no embark-within eligibility to name its destination alone", () => {
     const soloText = "Fight phase. That unit can embark within this unit.";
     const solo: Item = ["can embark within this unit", "eligibility-permission", { subject: "selected-unit", activity: "embark", allow: true, into: "this-unit" }, "EFFECT"];
-    expect(() => refuseDestinationMismatch(placed(soloText, solo), soloText)).not.toThrow();
+    expect(() => refuseDestinationMismatch(unnormalized(soloText, solo), soloText)).not.toThrow();
   });
 });
 
@@ -460,7 +468,7 @@ describe("Semantic authoring embark destination: a permission whose destination 
       ["Select one friendly", "select-unit", { distance: "any", visible: false }, "EFFECT"],
       ["ADEPTUS ASTARTES unit", "unit-filter", { side: "friendly", keywords: ["ADEPTUS ASTARTES"] }, "EFFECT"],
       ["that is able to embark within this unit", "eligible", { subject: "selected-unit", to: "embark-within", transport: "ability-unit" }, "EFFECT"],
-      ["That unit can embark within this unit", "eligibility-permission", { subject: "selected-unit", activity: "embark", allow: true, into: "this-unit" }, "EFFECT"],
+      ["That unit can embark within this unit", "eligibility-permission", { subject: "antecedent", activity: "embark", allow: true, into: "this-unit" }, "EFFECT"],
     ];
     const [permissionNode] = permissions(compiled(text, ...items));
     expect(permissionNode!.modifier.into).toBe("this-unit");

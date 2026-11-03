@@ -4,10 +4,11 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { compileLeaves, shapeSignature, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { currentFamilyVersion, REVIEWED_FAMILY_REGISTRY } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { prefillFromSource, type PrefillFamily } from "../src/semantic-authoring/leaf-prefill.js";
 import { previewLeaf } from "../src/semantic-authoring/leaf-preview.js";
+import { outsideContract } from "./leaf-contract.js";
 
 const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment");
 
@@ -21,7 +22,7 @@ function authored(factionId: string, abilityId: string): Record<string, unknown>
 let offset = 0;
 function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion = 1): CompileLeaf {
   offset += 10;
-  return { role, family_id: familyId, family_version: familyVersion, parameters, start_byte: offset };
+  return { role, family_id: familyId, family_version: familyVersion, parameters: normalizeFingerprintParameters(familyId, parameters, familyVersion), start_byte: offset };
 }
 const lead = () => leaf("CONDITION", "leading-unit", { subject: "this-model", attachment: "leading" }, 2);
 const attack = () => leaf("EVENT", "event", { kind: "attack-made" }, 2);
@@ -157,7 +158,14 @@ describe("Semantic authoring leaf compiler", () => {
     // Without with, the DSL means engaged with any unit; "with this unit" must stay.
     expect(text({ with: "this-unit" })).toContain('"type":"matches","parameters":{"subject":"event-subject","filter":{"engaged_with":"this-unit"}}');
     expect(text({ with: "this-unit", at: "phase-start" })).toContain('"state":"engaged","with":"this-unit","at":"phase-start"');
-    expect(compileLeaves([leaf("CONDITION", "unit-state", { states: ["below-starting-strength"], subject: "this-unit", negated: false, at: "turn-start" }, currentFamilyVersion("unit-state")), leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 })]).ok).toBe(false);
+    // An earlier-point read of a state the contract does not read that way: the contract and the compiler both refuse it.
+    const earlier = { states: ["below-starting-strength"], subject: "this-unit", negated: false, at: "turn-start" };
+    expect(() => normalizeFingerprintParameters("unit-state", earlier, currentFamilyVersion("unit-state"))).toThrow(/unit-state\.at reads only/u);
+    const earlierLeaves = outsideContract([
+      { role: "CONDITION", family_id: "unit-state", family_version: currentFamilyVersion("unit-state"), parameters: earlier, start_byte: offset += 10 },
+      leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }),
+    ]);
+    expect(compileLeaves(earlierLeaves).ok).toBe(false);
   });
 
   it("measures a distance or engagement to the unit-filter right after it", () => {
@@ -294,7 +302,7 @@ describe("Semantic authoring leaf compiler", () => {
 
   it("gives each later moment its own part of one compound ability", () => {
     const result = compiled([
-      leaf("CONDITION", "leading-unit", { subject: "this-model", attachment: "leading" }),
+      leaf("CONDITION", "leading-unit", { subject: "this-model", attachment: "leading" }, 2),
       leaf("EVENT", "event", { kind: "phase-start", phase: "movement", turn: "your" }, 3),
       leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" }),
       leaf("EVENT", "event", { kind: "phase-end", phase: "movement", turn: "your" }, 3),
@@ -311,7 +319,7 @@ describe("Semantic authoring leaf compiler", () => {
   });
 
   it("fires on any of several leading moments", () => {
-    const either = compiled([leaf("EVENT", "event", { kind: "selected-to-shoot" }), leaf("EVENT", "event", { kind: "selected-to-fight" }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+    const either = compiled([leaf("EVENT", "event", { kind: "selected", to: "shoot" }, currentFamilyVersion("event")), leaf("EVENT", "event", { kind: "selected", to: "fight" }, currentFamilyVersion("event")), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
     expect(either.mechanics).toMatchObject({ behavior: "reactive", trigger: [{ event: "selected", filter: { to: "shoot" } }, { event: "selected", filter: { to: "fight" } }] });
   });
 
@@ -363,7 +371,7 @@ describe("Semantic authoring leaf compiler", () => {
     expect(fail([leaf("CONDITION", "army-faction", { faction: { source: "Fabricated" } }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })])[0]).toMatch(/quoted source text/u);
     expect(compiled([leaf("CONDITION", "army-faction", { faction: "ultramarines" }, 2), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]).mechanics.effect)
       .toEqual({ type: "conditional", condition: { type: "army-faction", parameters: { faction: "ultramarines" } }, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } } });
-    expect(fail([leaf("EVENT", "event", { kind: "selected-to-shoot" }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" }), leaf("EVENT", "event", { kind: "selected-to-fight" })]))
+    expect(fail([leaf("EVENT", "event", { kind: "selected", to: "shoot" }, currentFamilyVersion("event")), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" }), leaf("EVENT", "event", { kind: "selected", to: "fight" }, currentFamilyVersion("event"))]))
       .toContain("A moment ends the ability with no effect after it.");
   });
 

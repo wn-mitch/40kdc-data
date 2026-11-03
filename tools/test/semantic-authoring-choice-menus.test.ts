@@ -33,7 +33,8 @@ function leavesIn(text: string, pieces: Piece[]): CompileLeaf[] {
     const start_byte = Buffer.byteLength(text.slice(0, at));
     const roleOf = role ?? (family_id === "duration" ? "DURATION" : family_id === "additive-option" ? "CONDITION" : "EFFECT");
     return {
-      role: roleOf, family_id, family_version: currentFamilyVersion(family_id), parameters,
+      role: roleOf, family_id, family_version: currentFamilyVersion(family_id),
+      parameters: normalizeFingerprintParameters(family_id, parameters, currentFamilyVersion(family_id)),
       start_byte, end_byte: start_byte + Buffer.byteLength(phrase), fragment: "RAW_TEXT",
     };
   });
@@ -65,7 +66,7 @@ describe("additive option qualifier", () => {
   });
 
   it("refuses when the nearest effect is not an ability-activate", () => {
-    const errors = refused(TEXT, [["select one sample option to be active for this unit", "stance-select-open", { options: ["a", "b"] }], DURATION, QUALIFIER]);
+    const errors = refused(TEXT, [["select one sample option to be active for this unit", "stance-select-open", { scope: "unit", mode: "re-selectable", min_choices: 1, max_choices: 1 }], DURATION, QUALIFIER]);
     expect(errors.join(" ")).toMatch(/no additive form/);
   });
 
@@ -89,7 +90,7 @@ describe("additive option qualifier", () => {
 
   it("refuses a qualifier separated from its activation by an event", () => {
     const text = "Sample hero: select one sample option to be active for this unit at the start of your Command phase until the start of your next Command phase, in addition to any other sample option.";
-    const errors = refused(text, [ACTIVATE, ["at the start of your Command phase", "event", {}, "EVENT"], DURATION, QUALIFIER]);
+    const errors = refused(text, [ACTIVATE, ["at the start of your Command phase", "event", { kind: "phase-start", phase: "command", turn: "your" }, "EVENT"], DURATION, QUALIFIER]);
     expect(errors.join(" ")).toMatch(/separated from its activation by event/);
   });
 
@@ -137,7 +138,7 @@ describe("additive option with a unit-filter between activation and qualifier", 
   });
 
   it("refuses a select-unit between the activation and its qualifier", () => {
-    const errors = refused(FILTER_TEXT, [CHOSEN, ["friendly SAMPLE units", "select-unit", { scope: "friendly", distance: "any" }], DURATION, QUALIFIER]);
+    const errors = refused(FILTER_TEXT, [CHOSEN, ["friendly SAMPLE units", "select-unit", { scope: "friendly", distance: "any", visible: false }], DURATION, QUALIFIER]);
     expect(errors.join(" ")).toMatch(/no additive form|only a duration/);
   });
 });

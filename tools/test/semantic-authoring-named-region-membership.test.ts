@@ -21,7 +21,7 @@ const RULE_REGION = { region_kind: "rule-region", region_id: "flow-of-magic", ow
 const HALLOWED = { region_id: "hallowed-ground", owner_faction: "grey-knights" };
 
 function leaf(role: "CONDITION" | "EFFECT", familyId: string, parameters: Record<string, unknown>, version = currentFamilyVersion(familyId)): CompileLeaf {
-  return { role: familyRole(familyId, version), family_id: familyId, family_version: version, parameters, start_byte: 0 };
+  return { role: familyRole(familyId, version), family_id: familyId, family_version: version, parameters: normalizeFingerprintParameters(familyId, parameters, version), start_byte: 0 };
 }
 
 /** Leaves placed on their own wording in `text`, in order (fabricated wording). */
@@ -37,7 +37,7 @@ function placed(text: string, items: Array<[string, string, Record<string, unkno
 }
 
 function conditionCase(parameters: Record<string, unknown>, expected: Record<string, unknown>): void {
-  const result = compileLeaves([leaf("CONDITION", "in-region", parameters), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+  const result = compileLeaves([leaf("CONDITION", "in-region", parameters), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" })]);
   if (!result.ok) throw new Error(result.errors.join("; "));
   expect(result.mechanics.effect).toEqual({ type: "conditional", condition: expected, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } } });
 }
@@ -162,7 +162,7 @@ describe("Semantic authoring named army regions: named-region-state is the whole
     });
     const alone = compileLeaves([region]);
     expect(alone.ok).toBe(true);
-    const beside = compileLeaves([region, leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+    const beside = compileLeaves([region, leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" })]);
     expect(beside.ok).toBe(false);
     if (!beside.ok) expect(beside.errors).toEqual(["named-region-state must be the ability's only leaf."]);
   });

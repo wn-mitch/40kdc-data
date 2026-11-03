@@ -26,9 +26,10 @@ function authored(factionId: string, abilityId: string): Record<string, unknown>
 }
 
 let offset = 0;
+/** A leaf with its parameters as stored (normalized at its version). */
 function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion = 1): CompileLeaf {
   offset += 10;
-  return { role, family_id: familyId, family_version: familyVersion, parameters, start_byte: offset };
+  return { role, family_id: familyId, family_version: familyVersion, parameters: normalizeFingerprintParameters(familyId, parameters, familyVersion), start_byte: offset };
 }
 
 function compiled(leaves: CompileLeaf[]) {
@@ -371,7 +372,7 @@ describe("Semantic authoring economy-family compiler", () => {
       .toEqual({ type: "cp-gain", target: "this-model", modifier: { amount: 1 } });
     expect(compiled([leaf("EFFECT", "resource-gain", { pool: "pain-token-pool", amount: 1 })]).mechanics.effect)
       .toEqual({ type: "resource-gain", target: "this-model", modifier: { pool: "pain-token-pool", amount: 1 } });
-    expect(rendered(base(), [leaf("EFFECT", "resource-gain", { pool: "fate-dice-pool", amount: "D3" })]).length).toBeGreaterThan(0);
+    expect(rendered(base(), [leaf("EFFECT", "resource-gain", { pool: "fate-dice-pool", amount: 3 })]).length).toBeGreaterThan(0);
   });
 
   it("compiles resource-spend to the resource-spend fragment, amount all included", () => {
@@ -394,6 +395,7 @@ describe("Semantic authoring economy-family compiler", () => {
   });
 
   it("checks spend_gate for self-consistency but never compiles it", () => {
+    expect(normalizeFingerprintParameters("resource-spend", { pool: "blessings-of-khorne-pool", amount: 1, spend_gate: "none" })).toEqual({ pool: "blessings-of-khorne-pool", amount: 1 });
     expect(compiled([leaf("EFFECT", "resource-spend", { pool: "blessings-of-khorne-pool", amount: 1, spend_gate: "none" })]).mechanics.effect)
       .toEqual({ type: "resource-spend", target: "this-model", modifier: { pool: "blessings-of-khorne-pool", amount: 1 } });
     expect(compiled([leaf("EFFECT", "resource-spend", { pool: "blessings-of-khorne-pool", amount: 1, spend_gate: "face", face: 6 })]).mechanics.effect)
@@ -412,7 +414,7 @@ describe("Semantic authoring economy-family compiler", () => {
 
   it("lowers the leaf's normal-move roll to the DSL roll-kind normal", () => {
     expect(compiled([leaf("EFFECT", "resource-die", { pool: "miracle-dice-pool", operation: "substitute", rolls: ["normal-move", "advance"] })]).mechanics.effect)
-      .toEqual({ type: "resource-die", target: "this-model", modifier: { pool: "miracle-dice-pool", operation: "substitute", rolls: ["normal", "advance"] } });
+      .toEqual({ type: "resource-die", target: "this-model", modifier: { pool: "miracle-dice-pool", operation: "substitute", rolls: ["advance", "normal"] } });
   });
 
   it("extends sticky-objective to an optional subject, v1 leaves still meaning this-unit", () => {

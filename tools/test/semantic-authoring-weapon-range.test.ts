@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { mapToLatest } from "../src/semantic-authoring/family-versions.js";
+import { outsideContract } from "./leaf-contract.js";
 import { describeCondition, describeEffect, type Effect } from "../src/translate/index.js";
 
 /**
@@ -13,8 +14,13 @@ import { describeCondition, describeEffect, type Effect } from "../src/translate
 
 type Item = readonly [string, string, Record<string, unknown>];
 
-/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
+/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text), in stored (normalized) form. */
 function placed(text: string, ...items: Item[]): CompileLeaf[] {
+  return located(text, items).map((leaf) => ({ ...leaf, parameters: normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version) }));
+}
+
+/** placed() without normalization: for a leaf the contract rejects on purpose (outsideContract). */
+function located(text: string, items: readonly Item[]): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters]) => {
@@ -153,10 +159,14 @@ describe("Semantic authoring unit-position weapon_range: a distance equal to the
 
   it("refuses a weapon_range limit on a set-up's placement rather than folding it as a distance", () => {
     const text = "Your unit can be set up aimed at a unit within half range.";
-    const result = compileLeaves(placed(text,
-      ["Your unit can be set up", "set-up", { subject: "target", to: "battlefield", allow: true }],
-      ["aimed at a unit within half range", "unit-position", { kind: "within", subject: "target", of: "attacker", negated: false, weapon_range: "half" }],
-    ), text, {});
+    const limit = { kind: "within", subject: "this-unit", of: "attacker", negated: false, weapon_range: "half" };
+    expect(() => normalize("unit-position", limit)).toThrow(/weapon_range describes the attack's target/u);
+    // The compiler refuses the placement on its own, behind the contract check above.
+    const leaves = outsideContract(located(text, [
+      ["Your unit can be set up", "set-up", { subject: "this-unit", to: "battlefield" }],
+      ["aimed at a unit within half range", "unit-position", limit],
+    ]));
+    const result = compileLeaves(leaves, text, {});
     expect(result.ok).toBe(false);
     expect(result.ok ? "" : result.errors.join(" ")).toMatch(/half- or full-weapon distance has no placement form/u);
   });

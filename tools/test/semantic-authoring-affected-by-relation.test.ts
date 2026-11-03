@@ -14,7 +14,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeAt(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -37,7 +37,7 @@ const bondsman = (): CompileLeaf[] => placed(BONDSMAN_TEXT,
 const DUTY_TEXT = "While a model is affected by this ability, it is eligible to declare a charge in a turn in which it Advanced.";
 const duty = (filter: Record<string, unknown>): CompileLeaf[] => placed(DUTY_TEXT,
   ["While a model is affected by this ability", "unit-filter", filter],
-  ["it is eligible to declare a charge", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: true, despite: "advanced" }],
+  ["it is eligible to declare a charge", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: true, despite: ["advanced"] }],
   ["in a turn in which it Advanced", "unit-activity", { activities: ["advanced-this-turn"], subject: "antecedent", negated: false }],
 );
 
@@ -95,7 +95,7 @@ describe("unit-filter@8 designated and designated_by", () => {
   it("names the affected units of a Duty as the permission target, and tests each affected unit's Advance", () => {
     const permissionOnly = placed(DUTY_TEXT,
       ["While a model is affected by this ability", "unit-filter", AFFECTED],
-      ["it is eligible to declare a charge", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: true, despite: "advanced" }],
+      ["it is eligible to declare a charge", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: true, despite: ["advanced"] }],
     );
     expect(JSON.stringify(mechanicsOf(permissionOnly, DUTY_TEXT).effect)).toContain('"designated":"bondsman-affected","designated_by":"this-unit"');
     // The Advanced test binds to each affected unit (recipient), not to the group or to the bearer.
@@ -109,14 +109,14 @@ describe("unit-filter@8 designated and designated_by", () => {
     const text = "While a model is affected by this ability, it is eligible to declare a charge. In a turn in which it Advanced.";
     const leaves = placed(text,
       ["While a model is affected by this ability", "unit-filter", AFFECTED],
-      ["it is eligible to declare a charge", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: true, despite: "advanced" }],
+      ["it is eligible to declare a charge", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: true, despite: ["advanced"] }],
       ["In a turn in which it Advanced", "unit-activity", { activities: ["advanced-this-turn"], subject: "antecedent", negated: false }],
     );
     expect(() => mechanicsOf(leaves, text)).toThrow(/no leaf binds it to that/u);
   });
 
   it("keeps a plain unit-filter's permission target free of designation fields", () => {
-    expect(JSON.stringify(mechanicsOf(placed(DUTY_TEXT, ["While a model is affected by this ability", "unit-filter", { side: "friendly", level: "model" }], ["it is eligible to declare a charge", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: true, despite: "advanced" }]), DUTY_TEXT).effect)).not.toContain("designated");
+    expect(JSON.stringify(mechanicsOf(placed(DUTY_TEXT, ["While a model is affected by this ability", "unit-filter", { side: "friendly", level: "model" }], ["it is eligible to declare a charge", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: true, despite: ["advanced"] }]), DUTY_TEXT).effect)).not.toContain("designated");
   });
 
   it("refuses designated_by without designated, an unregistered designation, and a non-unit applier", () => {
@@ -130,7 +130,7 @@ describe("unit-filter@8 designated and designated_by", () => {
     const leaves = placed(text,
       ["Select one friendly", "select-unit", { scope: "friendly", distance: "any", visible: false }],
       ["unit affected by this ability", "unit-filter", { side: "friendly", designated: "bondsman-affected", designated_by: "this-unit" }],
-      ["That unit regains 1 lost wound", "regain-wounds", { subject: "selected-unit", amount: "1" }],
+      ["That unit regains 1 lost wound", "regain-wounds", { subject: "antecedent", amount: "1" }],
     );
     const mechanics = mechanicsOf(leaves, text);
     expect(mechanics.effect.selector.filter).toEqual({ owner: "friendly", designated: "bondsman-affected", designated_by: "this-unit" });

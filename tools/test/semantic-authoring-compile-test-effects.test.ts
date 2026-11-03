@@ -25,7 +25,8 @@ function authored(factionId: string, abilityId: string): Record<string, unknown>
 let offset = 0;
 function leaf(role: string, familyId: string, parameters: Record<string, unknown>): CompileLeaf {
   offset += 10;
-  return { role, family_id: familyId, family_version: 1, parameters, start_byte: offset };
+  const version = currentFamilyVersion(familyId);
+  return { role, family_id: familyId, family_version: version, parameters: normalizeFingerprintParameters(familyId, parameters, version), start_byte: offset };
 }
 
 function compiled(leaves: CompileLeaf[]) {
@@ -167,7 +168,7 @@ function placed(text: string, ...items: Item[]): CompileLeaf[] {
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -202,7 +203,7 @@ describe("Semantic authoring trailing condition on a change to the test just tak
   it("gates each enemy unit's test on Below Half-strength, the -1 on that side only (6119 shape, test on the recipient)", () => {
     const text = "At the start of the Fight phase, each enemy unit within Engagement Range of this model must take a Battle-shock test, subtracting 1 from that test if that enemy unit is Below Half-strength.";
     const result = compileLeaves(placed(text,
-      ["At the start of the Fight phase", "event", { kind: "phase-start", phase: "fight" }],
+      ["At the start of the Fight phase", "event", { kind: "phase-start", phase: "fight", turn: "either" }],
       ["each", "for-each-unit-select", {}],
       ["enemy unit", "unit-filter", { side: "enemy" }],
       ["within Engagement Range of this model", "unit-state", { states: ["engaged"], subject: "antecedent", negated: false, with: "this-model" }],
@@ -335,11 +336,11 @@ describe("Semantic authoring trailing condition on a change to the test just tak
   it("splits a negated pair of keywords as the neither reading: -1 when not IMPERIUM and not CHAOS (10356 shape)", () => {
     const text = "This unit must take a Battle-shock test, subtracting 1 from that test if it is a non-IMPERIUM/CHAOS unit.";
     const result = compileLeaves(placed(text, TEST_TAKEN, SUBTRACT_TEST,
-      ["if it is a non-IMPERIUM/CHAOS unit", "unit-keyword", { keywords: ["IMPERIUM", "CHAOS"], subject: "this-unit", negated: true }]), text);
+      ["if it is a non-IMPERIUM/CHAOS unit", "unit-keyword", { keywords: ["CHAOS", "IMPERIUM"], subject: "this-unit", negated: true }]), text);
     if (!result.ok) throw new Error(result.errors.join("; "));
     const neither = { operator: "and", operands: [
-      { operator: "not", operands: [{ type: "matches", parameters: { filter: { all_of: ["IMPERIUM"] } } }] },
       { operator: "not", operands: [{ type: "matches", parameters: { filter: { all_of: ["CHAOS"] } } }] },
+      { operator: "not", operands: [{ type: "matches", parameters: { filter: { all_of: ["IMPERIUM"] } } }] },
     ] };
     expect(result.mechanics.effect).toEqual({
       type: "sequence",

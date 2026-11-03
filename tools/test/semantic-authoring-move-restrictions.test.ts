@@ -9,7 +9,7 @@ import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entrie
 let offset = 0;
 function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion = currentFamilyVersion(familyId)): CompileLeaf {
   offset += 10;
-  return { role, family_id: familyId, family_version: familyVersion, parameters, start_byte: offset };
+  return { role, family_id: familyId, family_version: familyVersion, parameters: normalizeFingerprintParameters(familyId, parameters, familyVersion), start_byte: offset };
 }
 
 function refused(leaves: CompileLeaf[]): string {

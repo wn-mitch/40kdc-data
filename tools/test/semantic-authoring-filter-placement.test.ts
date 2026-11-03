@@ -27,7 +27,7 @@ function placed(text: string, items: Array<Item | [...Item, { until: string }]>)
     const end = span ? bytes.indexOf(Buffer.from(span.until, "utf8"), start) + Buffer.byteLength(span.until, "utf8") : start + Buffer.byteLength(wording, "utf8");
     from = start + Buffer.byteLength(wording, "utf8");
     const family_version = currentFamilyVersion(family);
-    return { role: familyRole(family, family_version), family_id: family, family_version, parameters, start_byte: start, end_byte: end, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, family_version), family_id: family, family_version, parameters: normalizeFingerprintParameters(family, parameters, family_version), start_byte: start, end_byte: end, fragment: "RAW_TEXT" };
   });
 }
 
@@ -64,18 +64,18 @@ describe("Semantic authoring unit-filter placement", () => {
   });
 
   it("narrows who attacks to the units a designation between the filter and the attack names", () => {
-    const text = "While a GLORB unit from your army is under an Edict, each time a model in that unit makes an attack, re-roll a Hit roll of 1.";
+    const text = "While a GLORB unit from your army is Blessed, each time a model in that unit makes an attack, re-roll a Hit roll of 1.";
     const { mechanics } = compiled(text, [
       ["GLORB unit", "unit-filter", { side: "friendly", keywords: ["GLORB"] }],
       ["from your army", "unit-owner", { owner: "friendly" }],
-      ["under an Edict", "designated-filter", { tag: "under-edict" }],
+      ["Blessed", "designated-filter", { tag: "blessed" }],
       ["each time a model in that unit makes an attack", "attack", { direction: "makes", unit: "that-unit", attack_type: "any" }],
       ["re-roll a Hit roll of 1", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }],
     ]);
     // The designation is the attackers' own, not a free-standing condition about no unit in particular.
     expect(mechanics.effect).toEqual({
       type: "re-roll",
-      target: { owner: "friendly", all_of: ["GLORB"], designated: "under-edict" },
+      target: { owner: "friendly", all_of: ["GLORB"], designated: "blessed" },
       modifier: { roll: "hit", subset: "ones" },
     });
   });

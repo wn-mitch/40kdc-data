@@ -27,7 +27,7 @@ function authored(factionId: string, abilityId: string): Record<string, unknown>
 let offset = 0;
 function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion = 1): CompileLeaf {
   offset += 10;
-  return { role, family_id: familyId, family_version: familyVersion, parameters, start_byte: offset };
+  return { role, family_id: familyId, family_version: familyVersion, parameters: normalizeFingerprintParameters(familyId, parameters, familyVersion), start_byte: offset };
 }
 
 function compiled(leaves: CompileLeaf[]) {
@@ -203,7 +203,7 @@ describe("Semantic authoring roll-outcome predicate (closes the roll-result cove
     expect((authoredCondition.condition as Record<string, unknown>)).toEqual({ type: "roll-result", parameters: { roll: "wound", result: "critical" } });
 
     const result = compiled([leaf("CONDITION", "roll-outcome", { roll: "wound", result: "critical" }),
-      leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["AP"], operation: "set", value: 3, weapon_type: "ranged" }, 3)]);
+      leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "ranged" }, 3)]);
     expect((result.mechanics.effect as Record<string, unknown>).condition).toEqual(authoredCondition.condition);
   });
 

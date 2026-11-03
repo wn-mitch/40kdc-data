@@ -13,7 +13,8 @@ import { currentFamilyVersion, normalizeFingerprintParameters, familyRole, norma
 let offset = 0;
 function leaf(role: string, familyId: string, parameters: Record<string, unknown>, fragment = "EFFECT"): CompileLeaf {
   offset += 10;
-  return { role, family_id: familyId, family_version: currentFamilyVersion(familyId), parameters, start_byte: offset, end_byte: offset + 5, fragment };
+  const version = currentFamilyVersion(familyId);
+  return { role, family_id: familyId, family_version: version, parameters: normalizeFingerprintParameters(familyId, parameters, version), start_byte: offset, end_byte: offset + 5, fragment };
 }
 
 const declare = (action = "charge") => leaf("EVENT", "event", { kind: "targets-selected", action_kind: action });
@@ -99,7 +100,7 @@ describe("positive must-end anchored to a declared charge", () => {
   });
 
   it("keeps the make-move path when the ability makes the move, with no charge move-modifier", () => {
-    const mechanics = json(compiled([declare(), reroll(), leaf("EFFECT", "make-move", { move: "normal" }), mustEnd(), engagedWith("this-unit", "antecedent")]));
+    const mechanics = json(compiled([declare(), reroll(), leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal" }), mustEnd(), engagedWith("this-unit", "antecedent")]));
     expect(mechanics).not.toContain('"applies_to_moves":["charge"]');
     expect(mechanics).toContain('"ends_when"');
   });
@@ -153,7 +154,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -235,7 +236,7 @@ describe("disembark moments by shape (fabricated wording)", () => {
       ORDER, PERMIT), text);
     expect(result.ok).toBe(true);
     expect(result.mechanics!.trigger).toEqual({ event: "disembarked", subject: { owner: "any" }, filter: { transport: "this-unit" } });
-    expect(result.checks).toContainEqual({ kind: "bearer-eligibility", parameters: { keywords: ["FOO", "BAR"], match: "all", excluded_keywords: [] } });
+    expect(result.checks).toContainEqual({ kind: "bearer-eligibility", parameters: { keywords: ["BAR", "FOO"], match: "all", excluded_keywords: [] } });
   });
 });
 

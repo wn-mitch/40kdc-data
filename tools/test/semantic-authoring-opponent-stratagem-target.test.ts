@@ -3,9 +3,16 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { describeAbility, describeCondition } from "../src/translate/index.js";
+import { outsideContract } from "./leaf-contract.js";
 
-/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
+/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text), with parameters as stored. */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
+  return unnormalized(text, ...items.map(([wording, family, parameters]): [string, string, Record<string, unknown>] =>
+    [wording, family, normalizeFingerprintParameters(family, parameters, currentFamilyVersion(family))]));
+}
+
+/** As placed, with parameters as given: only for leaves a test compiles outside the contract on purpose. */
+function unnormalized(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters]) => {
@@ -66,7 +73,7 @@ describe("Aura recipient targeted with a Stratagem (object antecedent)", () => {
   it("refuses a range that cannot be the target's: wholly within, which only the subject form already refuses", () => {
     const text = "While a friendly unit is within 6\" of this model wholly, each time that unit is chosen by a Gadget.";
     const message = refusalOf(placed(text,
-      ["friendly unit", "unit-filter", { side: "friendly", keywords: [] }],
+      ["friendly unit", "unit-filter", { side: "friendly" }],
       ["within 6\" of this model wholly", "aura-range", { inches: 6, of: "this-model", wholly: true }],
       ["each time that unit is chosen by a Gadget", "event", { kind: "targets-selected", action_kind: "stratagem", object: "antecedent" }]), text);
     expect(message).toMatch(/wholly/);
@@ -74,11 +81,14 @@ describe("Aura recipient targeted with a Stratagem (object antecedent)", () => {
 
   it("refuses an object antecedent on a used moment: the recipient is not who used the rule", () => {
     const text = "While a friendly unit is within 6\" of this model, each time that unit uses its Foo ability. You gain 1CP.";
-    const message = refusalOf(placed(text,
-      ["friendly unit", "unit-filter", { side: "friendly", keywords: [] }],
+    const used = { kind: "used", activity: "ability", object: "antecedent" };
+    expect(() => normalizeFingerprintParameters("event", used, currentFamilyVersion("event"))).toThrow(/event.object must be one of/u);
+    // The contract refuses an object antecedent on a used moment; the compiler refuses it too, behind that check.
+    const message = refusalOf(outsideContract(unnormalized(text,
+      ["friendly unit", "unit-filter", { side: "friendly" }],
       ["within 6\" of this model", "aura-range", { inches: 6, of: "this-model" }],
-      ["each time that unit uses", "event", { kind: "used", object: "antecedent" }],
-      ["You gain 1CP", "resource-action", { resource: "command-point", operation: "gain", amount: 1 }]), text);
+      ["each time that unit uses", "event", used],
+      ["You gain 1CP", "resource-action", { resource: "command-point", operation: "gain", amount: 1 }])), text);
     expect(message).toMatch(/not who used it/);
   });
 });
@@ -88,8 +98,8 @@ describe("Opponent targets a unit within range with a Stratagem", () => {
   const text = "A rival picks a squad from its force within 12\" of the carrier with a Gadget. You gain 1CP.";
   const leaves = () => placed(text,
     ["A rival picks", "event", { kind: "targets-selected", owner: "enemy" }],
-    ["a squad from its force", "unit-filter", { side: "enemy", keywords: [] }],
-    ["within 12\" of the carrier", "unit-position", { kind: "within", inches: 12, of: "this-model", subject: "antecedent" }],
+    ["a squad from its force", "unit-filter", { side: "enemy" }],
+    ["within 12\" of the carrier", "unit-position", { kind: "within", inches: 12, of: "this-model", subject: "antecedent", negated: false }],
     ["with a Gadget", "event", { kind: "targets-selected", action_kind: "stratagem" }],
     ["You gain 1CP", "resource-action", { resource: "command-point", operation: "gain", amount: 1 }]);
 
@@ -112,7 +122,7 @@ describe("Opponent targets a unit within range with a Stratagem", () => {
   it("refuses a range from the target that is negated", () => {
     const message = refusalOf(placed(text,
       ["A rival picks", "event", { kind: "targets-selected", owner: "enemy" }],
-      ["a squad from its force", "unit-filter", { side: "enemy", keywords: [] }],
+      ["a squad from its force", "unit-filter", { side: "enemy" }],
       ["within 12\" of the carrier", "unit-position", { kind: "within", inches: 12, of: "this-model", subject: "antecedent", negated: true }],
       ["with a Gadget", "event", { kind: "targets-selected", action_kind: "stratagem" }],
       ["You gain 1CP", "resource-action", { resource: "command-point", operation: "gain", amount: 1 }]), text);
@@ -122,8 +132,8 @@ describe("Opponent targets a unit within range with a Stratagem", () => {
   it("refuses a range measured from a unit other than this unit or model", () => {
     const message = refusalOf(placed(text,
       ["A rival picks", "event", { kind: "targets-selected", owner: "enemy" }],
-      ["a squad from its force", "unit-filter", { side: "enemy", keywords: [] }],
-      ["within 12\" of the carrier", "unit-position", { kind: "within", inches: 12, of: "event-subject", subject: "antecedent" }],
+      ["a squad from its force", "unit-filter", { side: "enemy" }],
+      ["within 12\" of the carrier", "unit-position", { kind: "within", inches: 12, of: "event-subject", subject: "antecedent", negated: false }],
       ["with a Gadget", "event", { kind: "targets-selected", action_kind: "stratagem" }],
       ["You gain 1CP", "resource-action", { resource: "command-point", operation: "gain", amount: 1 }]), text);
     expect(message).toMatch(/measured from this unit or this model/);
@@ -166,20 +176,26 @@ describe("Unit not targeted with named Stratagems this phase (unit-activity v15)
   });
 
   it("refuses a leaf that names the activity without its Stratagems", () => {
-    const message = refusalOf(placed(text,
-      ["not been chosen", "unit-activity", { activities: ["targeted-with-stratagem-this-phase"], subject: "this-unit", negated: true }]), text);
+    const leaf = { activities: ["targeted-with-stratagem-this-phase"], subject: "this-unit", negated: true };
+    expect(() => normalizeFingerprintParameters("unit-activity", leaf, currentFamilyVersion("unit-activity"))).toThrow(/names its Stratagems in stratagem_ids/u);
+    // The contract refuses the activity without its ids; the compiler refuses it too, behind that check.
+    const message = refusalOf(outsideContract(unnormalized(text, ["not been chosen", "unit-activity", leaf])), text);
     expect(message).toMatch(/stratagem_ids/);
   });
 
   it("refuses stratagem_ids on a leaf whose activity is not the targeting activity", () => {
-    const message = refusalOf(placed(text,
-      ["not been chosen", "unit-activity", { activities: ["fought-this-phase"], stratagem_ids: ids, subject: "this-unit", negated: true }]), text);
+    const leaf = { activities: ["fought-this-phase"], stratagem_ids: ids, subject: "this-unit", negated: true };
+    expect(() => normalizeFingerprintParameters("unit-activity", leaf, currentFamilyVersion("unit-activity"))).toThrow(/applies only to targeted-with-stratagem-this-phase/u);
+    // The contract refuses ids on another activity; the compiler refuses it too, behind that check.
+    const message = refusalOf(outsideContract(unnormalized(text, ["not been chosen", "unit-activity", leaf])), text);
     expect(message).toMatch(/applies only to the Stratagem-targeting activity/);
   });
 
   it("refuses the targeting activity mixed with another activity in one leaf", () => {
-    const message = refusalOf(placed(text,
-      ["not been chosen", "unit-activity", { activities: ["targeted-with-stratagem-this-phase", "fought-this-phase"], stratagem_ids: ids, subject: "this-unit", negated: true }]), text);
+    const leaf = { activities: ["targeted-with-stratagem-this-phase", "fought-this-phase"], stratagem_ids: ids, subject: "this-unit", negated: true };
+    expect(() => normalizeFingerprintParameters("unit-activity", leaf, currentFamilyVersion("unit-activity"))).toThrow(/is not mixed with another activity/u);
+    // The contract refuses the mix; the compiler refuses it too, behind that check.
+    const message = refusalOf(outsideContract(unnormalized(text, ["not been chosen", "unit-activity", leaf])), text);
     expect(message).toMatch(/not mixed/);
   });
 
@@ -224,7 +240,7 @@ describe("Record shapes from the wave-10 design compile whole", () => {
       ["GIZMO model only", "bearer-eligibility", { keywords: ["GIZMO", "CARRIER"], match: "all", excluded_keywords: [] }],
       ["Once per round", "usage-limit", { frequency: "once-per-turn", per: "model" }],
       ["when a rival picks", "event", { kind: "targets-selected", owner: "enemy" }],
-      ["a squad from its force", "unit-filter", { side: "enemy", keywords: [] }],
+      ["a squad from its force", "unit-filter", { side: "enemy" }],
       ["within 12\" of the carrier", "unit-position", { kind: "within", inches: 12, of: "this-model", subject: "antecedent", negated: false }],
       ["with a Gadget", "event", { kind: "targets-selected", action_kind: "stratagem" }],
       ["the carrier can use this Relic", "optional-use", { who: "this-model" }],
@@ -278,8 +294,8 @@ describe("Describer for Stratagem targeting", () => {
 describe("Opponent Stratagem targeting: refusals of unfolded shapes", () => {
   const text = "A rival picks a squad from its force within 12\" of the carrier with a Gadget. You gain 1CP.";
   const moment = ["A rival picks", "event", { kind: "targets-selected", owner: "enemy" }] as const;
-  const filter = ["a squad from its force", "unit-filter", { side: "enemy", keywords: [] }] as const;
-  const range = ["within 12\" of the carrier", "unit-position", { kind: "within", inches: 12, of: "this-model", subject: "antecedent" }] as const;
+  const filter = ["a squad from its force", "unit-filter", { side: "enemy" }] as const;
+  const range = ["within 12\" of the carrier", "unit-position", { kind: "within", inches: 12, of: "this-model", subject: "antecedent", negated: false }] as const;
   const tail = ["with a Gadget", "event", { kind: "targets-selected", action_kind: "stratagem" }] as const;
   const gain = ["You gain 1CP", "resource-action", { resource: "command-point", operation: "gain", amount: 1 }] as const;
 

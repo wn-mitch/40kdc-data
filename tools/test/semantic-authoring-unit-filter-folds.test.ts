@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 
 /** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
 const FIXTURE_RULE_NAME = "A Trap Well Laid";
@@ -15,7 +15,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -319,9 +319,9 @@ describe("Semantic authoring persistent designation with a filtered selection", 
       ["At the start of the first battle round", "turn-start", { turn: "battle-round" }],
       ["select one", "select-unit", { distance: "any", visible: false }],
       ["enemy Alpha or Beta unit", "unit-filter", { side: "enemy", any_keywords: ["ALPHA", "BETA"] }],
-      ["to be this unit's mark", "persistent-designation-open", { designation: "fabricated-mark", scope: "enemy-unit", timing: "start-of-first-battle-round", beneficiary: "this-unit" }],
+      ["to be this unit's mark", "persistent-designation-open", { designation: "mark", scope: "enemy-unit", timing: "start-of-first-battle-round", beneficiary: "this-unit" }],
       ["This unit's attacks", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
-      ["against that mark", "designated-filter", { subject: "defender", tag: "fabricated-mark" }],
+      ["against that mark", "designated-filter", { subject: "defender", tag: "mark" }],
       ["ignore the Hit roll modifiers", "ignore-modifiers", { subject: "this-unit", what: ["rolls"], rolls: ["hit"] }],
     );
     const result = compileLeaves(list, text, { name: FIXTURE_RULE_NAME });

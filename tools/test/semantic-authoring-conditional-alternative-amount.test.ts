@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { placements } from "../src/semantic-authoring/compile-placement.js";
 import { OTHERWISE_REFUSAL } from "../src/semantic-authoring/compile-otherwise.js";
-import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 
 // Fabricated wording only. The compiler reads the punctuation and joining words between leaves,
 // so each shape keeps the structure of a real record with invented words.
@@ -19,7 +19,7 @@ function placed(text: string, ...pieces: Piece[]): CompileLeaf[] {
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment };
   });
 }
 
@@ -81,9 +81,9 @@ describe("an instead written as \"or\" opens its own clause (compile-placement.t
   it("keeps a choice \"or\" as a clause opener", () => {
     const choice = "Re-roll a hit of one or re-roll a wound of one.";
     const list = placed(choice,
-      ["Re-roll a hit of one", "reroll", { roll: "hit", subset: "ones" }, "EFFECT"],
+      ["Re-roll a hit of one", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }, "EFFECT"],
       ["or", "instead", { choice: true }, "EFFECT"],
-      ["re-roll a wound of one", "reroll", { roll: "wound", subset: "ones" }, "EFFECT"]);
+      ["re-roll a wound of one", "reroll", { roll: "wound", subset: "ones", weapon_type: "all" }, "EFFECT"]);
     expect(placements(list, choice).map((place) => place.clause)).toEqual([0, 1, 1]);
   });
 });
@@ -191,8 +191,8 @@ describe("authored shapes for the design's sub-shapes compile to their mechanics
       ["Heal D3 wounds", "regain-wounds", { subject: "this-unit", amount: "D3", per: "unit" }, "EFFECT"],
       ["or", "instead", {}, "EFFECT"],
       ["D3+1 wounds", "regain-wounds", { subject: "this-unit", amount: "D3+1", per: "unit" }, "EFFECT"],
-      ["a ZARKS HERO is leading the unit", "leading-unit", { subject: "this-unit", attachment: "led", leader_keywords: ["ZARKS", "HERO"] }, "EFFECT"]);
-    const led = { type: "attachment", parameters: { role: "led", with: { all_of: ["ZARKS", "HERO"] } } };
+      ["a ZARKS HERO is leading the unit", "leading-unit", { subject: "this-unit", attachment: "led", leader_keywords: ["HERO", "ZARKS"] }, "EFFECT"]);
+    const led = { type: "attachment", parameters: { role: "led", with: { all_of: ["HERO", "ZARKS"] } } };
     expect(mechanics.effect).toMatchObject({ type: "sequence", steps: [
       { condition: { operator: "not", operands: [led] }, effect: { modifier: { amount: "D3" } } },
       { condition: led, effect: { modifier: { amount: "D3+1" } } },

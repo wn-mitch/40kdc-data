@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 
 // Fabricated wording only. The compiler reads the punctuation and joining words between leaves,
 // so each shape keeps the structure of a record with invented words.
@@ -17,7 +17,7 @@ function placed(text: string, pieces: Piece[]): CompileLeaf[] {
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: fragment ?? "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: fragment ?? "RAW_TEXT" };
   });
 }
 
@@ -72,7 +72,7 @@ describe("an If-led sentence gates its own sentence only (compile-instead-scope.
   it("stops an If-led condition at its sentence when a later sentence opens a moment", () => {
     const text = "At the start of the phase. If it is a KEYA unit, it has +1 OC. When this unit is set up, if it is a KEYB unit it has +2 OC.";
     const mechanics = mechanicsOf(text, [
-      ["At the start of the phase", "event", { kind: "phase-start", phase: "any" }],
+      ["At the start of the phase", "event", { kind: "phase-start", phase: "any", turn: "either" }],
       ["If it is a KEYA unit", "unit-keyword", keyword("KEYA", "antecedent")],
       ["it has +1 OC", "characteristic-modifier", stat("OC", 1)],
       ["When this unit is set up", "event", { kind: "set-up" }],
@@ -87,7 +87,7 @@ describe("an If-led sentence gates its own sentence only (compile-instead-scope.
   it("stops the condition at its sentence when the leaf names only the unit after \"If it is a\"", () => {
     const text = "At the start of the phase. If it is a **KEYA** unit, it has +1 OC. When this unit is set up, it has +2 OC.";
     const mechanics = mechanicsOf(text, [
-      ["At the start of the phase", "event", { kind: "phase-start", phase: "any" }],
+      ["At the start of the phase", "event", { kind: "phase-start", phase: "any", turn: "either" }],
       ["KEYA** unit", "unit-keyword", keyword("KEYA")],
       ["it has +1 OC", "characteristic-modifier", stat("OC", 1)],
       ["When this unit is set up", "event", { kind: "set-up" }],
@@ -378,7 +378,7 @@ describe("a window beside a later moment, and a parenthetical's duration (compil
     ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
     ["each time your unit makes a Normal move", "event", { kind: "move-ended", move_types: ["normal"] }],
     ["you can", "optional-use", { who: "you" }],
-    ["ignore modifiers to its Move", "ignore-modifiers", { subject: "this-unit", what: "characteristics", stats: ["M"] }],
+    ["ignore modifiers to its Move", "ignore-modifiers", { subject: "this-unit", what: ["characteristics"], stats: ["M"] }],
     ["until the end of the turn", "duration", { endpoint: "end-of-turn" }],
     ["each time a model in your unit makes such a move", "event", { kind: "move-ended", move_types: ["normal"] }],
     ["it can move through models", "move-through", { subject: "antecedent", passthrough: "models" }],
@@ -411,7 +411,7 @@ describe("a window beside a later moment, and a parenthetical's duration (compil
 describe("a Stratagem's RESTRICTIONS belong to its first part (compile.ts partOf)", () => {
   const text = "At the start of the phase.\nIf it is a KEYA unit, it has +1 OC. When this unit is set up, it has +2 OC.\nIf a KEYB unit is targeted with this Stratagem, it has -1 M.";
   const pieces: Piece[] = [
-    ["At the start of the phase", "event", { kind: "phase-start", phase: "any" }, "WHEN"],
+    ["At the start of the phase", "event", { kind: "phase-start", phase: "any", turn: "either" }, "WHEN"],
     ["If it is a KEYA unit", "unit-keyword", keyword("KEYA"), "EFFECT"],
     ["it has +1 OC", "characteristic-modifier", stat("OC", 1), "EFFECT"],
     ["When this unit is set up", "event", { kind: "set-up" }, "EFFECT"],

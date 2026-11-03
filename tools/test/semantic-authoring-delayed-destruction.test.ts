@@ -4,7 +4,7 @@ import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compi
 import { describeAbility } from "../src/translate/index.js";
 import { describeHappened } from "../src/translate/condition-history.js";
 import { FIRST_TIME_ERROR, NAMED_MODEL_ERROR, NESTED_MOMENT_ERROR } from "../src/semantic-authoring/compile-delayed-destruction.js";
-import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
@@ -15,7 +15,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -84,7 +84,7 @@ describe("Delayed destruction: a leading pair lowers to the phase that holds it"
     const text = "At the end of a phase in which this model is destroyed, roll one D6: On a 2+, set this model back up.";
     const mechanics = mechanicsOf(placed(text,
       ["At the end of a phase", "event", PHASE_END],
-      ["in which this model is destroyed", "destroy-models", { target: "this-model" }],
+      ["in which this model is destroyed", "destroy-models", { recipient: "this-model", count: "1" }],
       ["roll one D6", "dice-roll", { dice: "D6" }],
       ["On a 2+", "roll-result", { from: 2, to: 6 }],
       ["set this model back up", "set-up", { subject: "this-model", to: "battlefield", min_enemy_distance: 1 }],
@@ -128,7 +128,7 @@ describe("Delayed destruction: refusals", () => {
     const text = "The first time this model is destroyed, remove it from play, then, at the end of the phase, roll one D6: On a 2+, set this model back up.";
     const result = compileLeaves(placed(text,
       ["this model is destroyed", "event", { kind: "this-model-destroyed" }],
-      ["remove it from play", "destroy-models", { target: "this-model" }],
+      ["remove it from play", "destroy-models", { recipient: "this-model", count: "1", remove_from_play: true }],
       ["at the end of the phase", "event", PHASE_END],
       ["roll one D6", "dice-roll", { dice: "D6" }],
       ["On a 2+", "roll-result", { from: 2, to: 6 }],
@@ -226,7 +226,7 @@ describe("Delayed destruction: a phase end after \"then\" nests under the destru
     const text = "When this model is destroyed, remove it from play, then, at the end of the phase, roll one D6: On a 2+, set this model back up.";
     const mechanics = mechanicsOf(placed(text,
       ["this model is destroyed", "event", { kind: "this-model-destroyed" }],
-      ["remove it from play", "destroy-models", { target: "this-model" }],
+      ["remove it from play", "destroy-models", { recipient: "this-model", count: "1", remove_from_play: true }],
       ["at the end of the phase", "event", PHASE_END],
       ["roll one D6", "dice-roll", { dice: "D6" }],
       ["On a 2+", "roll-result", { from: 2, to: 6 }],
@@ -244,7 +244,7 @@ describe("Delayed destruction: a phase end after \"then\" nests under the destru
     const mechanics = mechanicsOf(placed(text,
       [...FIRST_TIME],
       ["this model is destroyed", "event", { kind: "this-model-destroyed" }],
-      ["remove it from play", "destroy-models", { target: "this-model" }],
+      ["remove it from play", "destroy-models", { recipient: "this-model", count: "1", remove_from_play: true }],
       ["at the end of the phase", "event", PHASE_END],
       ["roll one D6", "dice-roll", { dice: "D6" }],
       ["On a 2+", "roll-result", { from: 2, to: 6 }],
@@ -270,7 +270,7 @@ describe("Reserves arrival binds to the set-up it follows in its own sentence (1
     const text = "Remove this unit from the battlefield. In the Reinforcements step of your next Movement phase, set this unit up anywhere on the battlefield.";
     const mechanics = mechanicsOf(placed(text,
       ["Remove this unit from the battlefield", "set-up", { subject: "this-unit", to: "strategic-reserves", from: "battlefield" }],
-      ["In the Reinforcements step of your next Movement phase", "reserves-arrival", {}],
+      ["In the Reinforcements step of your next Movement phase", "reserves-arrival", { allow_first_round: false }],
       ["set this unit up anywhere on the battlefield", "set-up", { subject: "this-unit", to: "battlefield" }],
     ), text);
     const setUps = setUpsOf(mechanics.effect);
@@ -287,7 +287,7 @@ describe("Reserves arrival binds to the set-up it follows in its own sentence (1
     return setUpsOf(mechanics.effect).filter((item) => item.arrives !== undefined).map((item) => item.min_enemy_distance);
   };
   const setUp = (wording: string, distance: number): [string, string, Record<string, unknown>] => [wording, "set-up", { subject: "this-unit", to: "battlefield", min_enemy_distance: distance }];
-  const arrival: [string, string, Record<string, unknown>] = ["Reinforcements step", "reserves-arrival", {}];
+  const arrival: [string, string, Record<string, unknown>] = ["Reinforcements step", "reserves-arrival", { allow_first_round: false }];
 
   it("T4b: an earlier set-up in the arrival's sentence wins over a following one", () => {
     const text = "Set this unit up here, then Reinforcements step arrives, and set this unit up again.";
@@ -458,7 +458,7 @@ describe("Delayed destruction follow-up: the 753 part path and the 1643 / 3644 /
     const mechanics = mechanicsOf(placed(text,
       [...FIRST_TIME],
       ["this model is destroyed", "event", { kind: "this-model-destroyed" }],
-      ["remove it from play", "destroy-models", { target: "this-model" }],
+      ["remove it from play", "destroy-models", { recipient: "this-model", count: "1", remove_from_play: true }],
       ["at the end of the phase", "event", PHASE_END],
       ["roll one D6", "dice-roll", { dice: "D6" }],
       ["On a 2+", "roll-result", { from: 2, to: 6 }],

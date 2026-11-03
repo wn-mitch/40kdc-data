@@ -1,6 +1,7 @@
 import { afterAll, describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
+import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { createValidator } from "../src/schema-loader.js";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -20,7 +21,7 @@ const ajv = createValidator();
 const effectOk = ajv.getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json")!;
 
 function leaf(role: string, familyId: string, parameters: Record<string, unknown>, fragment: string, version = 1): CompileLeaf {
-  return { role, family_id: familyId, family_version: version, parameters, start_byte: 0, fragment };
+  return { role, family_id: familyId, family_version: version, parameters: normalizeFingerprintParameters(familyId, parameters, version), start_byte: 0, fragment };
 }
 
 const select = (fragment: string, extra: Record<string, unknown> = {}) =>
@@ -131,7 +132,8 @@ describe("Semantic authoring re-designation: replacement tail", () => {
   });
 
   it("refuses a replacement trigger that carries a parameter besides its kind", () => {
-    const errors = errorsOf(redesignate([{ ...destroyed("C"), parameters: { kind: "unit-destroyed", subject: "this-unit" } }, select("C"), open("C", "on-unit-destroyed")]));
+    const destroyedBy = leaf("EVENT", "event", { kind: "unit-destroyed", by: "this-unit" }, "C", currentFamilyVersion("event"));
+    const errors = errorsOf(redesignate([destroyedBy, select("C"), open("C", "on-unit-destroyed")]));
     expect(errors.join(" ")).toMatch(/one trigger/u);
   });
 
@@ -157,7 +159,8 @@ describe("Semantic authoring re-designation: replacement tail", () => {
   });
 
   it("refuses a replacement selection that filters beyond the enemy side", () => {
-    expect(errorsOf(redesignate([destroyed("C"), select("C", { filter: { keywords: ["Monster"] } }), open("C", "on-unit-destroyed")])).join(" ")).toMatch(/only filter by the enemy side/u);
+    const shocked = leaf("CONDITION", "unit-filter", { side: "enemy", states: ["battle-shocked"] }, "C");
+    expect(errorsOf(redesignate([destroyed("C"), select("C"), shocked, open("C", "on-unit-destroyed")])).join(" ")).toMatch(/only filter by the enemy side/u);
   });
 
   it("refuses a replacement selection with a visibility requirement", () => {
@@ -170,7 +173,7 @@ describe("Semantic authoring re-designation: replacement tail", () => {
   });
 
   it("refuses a replacement selection with a distance other than any", () => {
-    expect(errorsOf(redesignate([destroyed("C"), select("C", { distance: "within-range" }), open("C", "on-unit-destroyed")])).join(" ")).toMatch(/distance/u);
+    expect(errorsOf(redesignate([destroyed("C"), select("C", { distance: "within", inches: 6 }), open("C", "on-unit-destroyed")])).join(" ")).toMatch(/distance/u);
   });
 
   it("refuses an establishment that selects more than one unit", () => {
@@ -296,7 +299,7 @@ describe("Semantic authoring re-designation: beneficiary this-unit (2146 shape)"
 describe("Semantic authoring re-designation: names and registry", () => {
   it("spells a registered designation in its registry id on the opener and on the consumer's condition", () => {
     const effect = effectOf([
-      select("A"), open("A", "start-of-first-battle-round", "hated foe"), attack("B"), designatedFilter("B", "hated foe"), reroll("B", "wound"),
+      select("A"), open("A", "start-of-first-battle-round", "hated foe"), attack("B"), designatedFilter("B", "hated-foe"), reroll("B", "wound"),
     ]);
     const persistent = persistentEffect(effect);
     expect(persistent.designation).toBe("hated-foe");
@@ -321,8 +324,10 @@ describe("Semantic authoring re-designation: registry integrity", () => {
   mkdirSync(join(root, "enrichment/probe"), { recursive: true });
   /** Runs checkDslShapes over one ability whose effect and trigger come from a compiled record. */
   const integrityErrors = async (designation: string): Promise<string[]> => {
+    // A designated-filter's tag must be a registered id (its contract), so an unregistered designation's attacks carry none.
+    const tagged = DESIGNATION_IDS.has(designation) ? [designatedFilter("B", designation)] : [];
     const result = compileLeaves([
-      select("A"), open("A", "start-of-first-battle-round", designation), attack("B"), designatedFilter("B", designation), reroll("B", "wound"),
+      select("A"), open("A", "start-of-first-battle-round", designation), attack("B"), ...tagged, reroll("B", "wound"),
       destroyed("C"), select("C"), open("C", "on-unit-destroyed", designation),
     ]);
     if (!result.ok) throw new Error(result.errors.join("; "));
@@ -338,8 +343,8 @@ describe("Semantic authoring re-designation: registry integrity", () => {
   });
 
   it("rejects the same re-designation under an unregistered designation id", async () => {
+    // The designation itself; its attacks carry no designated condition (integrityErrors).
     expect(await integrityErrors("made-up-mark")).toEqual([
-      'designation "made-up-mark" is not in the registry (tools/src/translate/designations.ts)',
       'designation "made-up-mark" is not in the registry (tools/src/translate/designations.ts)',
     ]);
   });

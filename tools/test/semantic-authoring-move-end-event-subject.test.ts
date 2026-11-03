@@ -15,7 +15,7 @@ import { describeAbility, type Effect } from "../src/translate/index.js";
 
 /** A leaf of the family at the given version; its bytes are set by inSentences. */
 function leaf(familyId: string, parameters: Record<string, unknown>, familyVersion = currentFamilyVersion(familyId)): CompileLeaf {
-  return { role: familyRole(familyId, familyVersion), family_id: familyId, family_version: familyVersion, parameters, start_byte: 0 };
+  return { role: familyRole(familyId, familyVersion), family_id: familyId, family_version: familyVersion, parameters: normalizeFingerprintParameters(familyId, parameters, familyVersion), start_byte: 0 };
 }
 
 /**
@@ -231,7 +231,7 @@ describe("the start-of-phase engaged condition on the mortal-wound roll (4339 sh
   const startedEngaged = () => leaf("unit-state", { states: ["engaged"], subject: "antecedent", with: "event-subject", negated: false, at: "phase-start" });
   const roll = () => leaf("dice-roll", { dice: "D6" });
   const band = (from: number, to: number) => leaf("roll-result", { from, to });
-  const wounds = (count: number | string) => leaf("mortal-wounds", { recipient: "event-subject", count });
+  const wounds = (count: string) => leaf("mortal-wounds", { recipient: "event-subject", count });
   const move = () => leaf("make-move", { subject: "this-unit", move_type: "normal" });
   const endAtEnemy = () => leaf("move-end-nearest", { to: "event-subject" }, 3);
 
@@ -246,7 +246,7 @@ describe("the start-of-phase engaged condition on the mortal-wound roll (4339 sh
         [startedEngaged(), "that started the phase within Engagement Range of that enemy unit"],
       ],
       [[roll(), "roll one D6"], [band(2, 5), "on a 2-5"], [wounds("D3"), "that enemy unit suffers D3 mortal wounds"]],
-      [[band(6, 6), "on a 6"], [wounds(3), "that enemy unit suffers 3 mortal wounds"]],
+      [[band(6, 6), "on a 6"], [wounds("3"), "that enemy unit suffers 3 mortal wounds"]],
       [[move(), "this unit can make a Normal move"], [endAtEnemy(), "it must end that move as close as possible to that enemy unit"]],
     ]);
     expect(text).toContain('"at":"phase-start"');

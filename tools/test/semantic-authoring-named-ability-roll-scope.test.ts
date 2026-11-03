@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { markCountedSubjects } from "../src/semantic-authoring/compile-count-scale.js";
+import { outsideContract } from "./leaf-contract.js";
 import { coreCheckErrors } from "../src/semantic-authoring/core-checks.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 
@@ -19,7 +20,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -123,7 +124,7 @@ describe("Named ability's own dice (reroll v6, roll-modifier v7)", () => {
   it("refuses an ability's dice when the ability is only activated, not used", () => {
     const text = "Activate the Sample Aura ability. You can re-roll the dice to see how many marks are added.";
     expect(refusal(placed(text,
-      ["Activate the Sample Aura ability", "ability-activate", { subject: "this-unit" }],
+      ["Activate the Sample Aura ability", "ability-activate", { subject: "this-unit", ability: "reanimation-protocols-necrons" }],
       ["re-roll the dice", "reroll", { roll: { ability: "reanimation-protocols-necrons" }, subset: "all", weapon_type: "all" }]), text))
       .toMatch(/has no use of reanimation-protocols-necrons/);
   });
@@ -142,8 +143,12 @@ describe("Named ability's own dice (reroll v6, roll-modifier v7)", () => {
   it("keeps a quoted-source roll refused at compile time", () => {
     const text = "Add 1 to the result of the roll.";
     expect(refusal(placed(text, ["Add 1 to the result of the roll", "roll-modifier", { roll: { source: "the roll" }, operation: "add", value: 1 }]), text)).toMatch(/quoted source text/);
+    // reroll's contract already refuses a quoted-source roll; the compiler refuses one that reaches it too.
     const reroll = "Re-roll the roll.";
-    expect(refusal(placed(reroll, ["Re-roll the roll", "reroll", { roll: { source: "the roll" }, subset: "all", weapon_type: "all" }]), reroll)).toMatch(/quoted source text/);
+    const quoted = { roll: { source: "the roll" }, subset: "all", weapon_type: "all" };
+    expect(() => normalizeFingerprintParameters("reroll", quoted, currentFamilyVersion("reroll"))).toThrow(/reroll\.roll must be one of/u);
+    const [valid] = placed(reroll, ["Re-roll the roll", "reroll", { ...quoted, roll: "any" }]);
+    expect(refusal(outsideContract([{ ...valid!, parameters: quoted }]), reroll)).toMatch(/quoted source text/);
   });
 
   it("refuses a bare reanimation-protocols id, which names no ability record", () => { // mfm:mirror keep — the bare id under test

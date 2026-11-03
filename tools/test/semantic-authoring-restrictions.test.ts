@@ -18,7 +18,8 @@ afterEach(() => {
 let offset = 0;
 function leaf(role: string, family_id: string, parameters: Record<string, unknown>): CompileLeaf {
   offset += 10;
-  return { role, family_id, family_version: currentFamilyVersion(family_id), parameters, start_byte: offset };
+  const family_version = currentFamilyVersion(family_id);
+  return { role, family_id, family_version, parameters: normalizeFingerprintParameters(family_id, parameters, family_version), start_byte: offset };
 }
 const grant = () => leaf("EFFECT", "fights-first", { subject: "this-unit" });
 
@@ -119,7 +120,7 @@ describe("Semantic authoring restrictions", () => {
   });
 
   it("checks an enhancement's bearers against core, allowing the faction keyword core adds", () => {
-    const bearers = (keywords: string[], match: string) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match }), grant()]).checks;
+    const bearers = (keywords: string[], match: string) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match, excluded_keywords: [] }), grant()]).checks;
     const root = dataRoot([], [
       { id: "relic", ability_id: "relic", keyword_restrictions: ["Hive Faction", "Hierophant"] },
       { id: "choice", ability_id: "choice", keyword_restriction_groups: [["Hive Faction", "Warden"], ["Hive Faction", "Oracle"]] },
@@ -156,7 +157,7 @@ describe("Semantic authoring restrictions", () => {
   });
 
   it("accepts a bearer spelled differently from core when both admit the same units, and only then", () => {
-    const bearers = (keywords: string[], match: string) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match }), grant()]).checks;
+    const bearers = (keywords: string[], match: string) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match, excluded_keywords: [] }), grant()]).checks;
     const root = dataRoot([], [
       { id: "node", ability_id: "node", keyword_restriction_groups: [["Clan Forge"], ["Loremaster"]] },
       { id: "blade", ability_id: "blade", keyword_restrictions: ["Hive Faction", "Gilded Warden"] },
@@ -176,7 +177,7 @@ describe("Semantic authoring restrictions", () => {
   });
 
   it("admits a datasheet group's own unit, not another that carries its name as a keyword", () => {
-    const bearers = (keywords: string[], anyOf: string[]) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match: "all", any_keywords: anyOf }), grant()]).checks;
+    const bearers = (keywords: string[], anyOf: string[]) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match: "all", excluded_keywords: [], any_keywords: anyOf }), grant()]).checks;
     const root = dataRoot([], [
       { id: "hat", ability_id: "hat", keyword_restriction_groups: [["Infantry", "Boss"], ["Infantry", "Tinkerer"]], datasheet_restriction_groups: [{ unit_id: "tinkerer" }] },
       // The former reading: the datasheet's name as a keyword group, which also admits the walker.
@@ -192,9 +193,9 @@ describe("Semantic authoring restrictions", () => {
     expect(coreCheckErrors(root, "hat", bearers(["INFANTRY"], ["TINKERER", "BOSS"]))).toEqual([]);
     expect(coreCheckErrors(root, "old-hat", bearers(["INFANTRY"], ["TINKERER", "BOSS"]))[0]).toMatch(/core/u);
     // "Tinkerer model only" names the datasheet; the walker's TINKERER keyword does not make it one.
-    const tinkerer = compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords: ["TINKERER", "INFANTRY"], match: "all" }), grant()]).checks;
+    const tinkerer = compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords: ["TINKERER", "INFANTRY"], match: "all", excluded_keywords: [] }), grant()]).checks;
     expect(coreCheckErrors(root, "solo", tinkerer)).toEqual([]);
-    const anyTinkerer = compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords: ["TINKERER"], match: "all" }), grant()]).checks;
+    const anyTinkerer = compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords: ["TINKERER"], match: "all", excluded_keywords: [] }), grant()]).checks;
     expect(coreCheckErrors(root, "solo", anyTinkerer)[0]).toMatch(/core allows .*the tinkerer datasheet/u);
     // Naming the datasheet admits it alone, whatever else carries its keyword.
     const named = (datasheets: string[]) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords: ["TINKERER"], match: "all", excluded_keywords: [], datasheets }), grant()]).checks;
@@ -206,7 +207,7 @@ describe("Semantic authoring restrictions", () => {
   });
 
   it("compares a chapter enhancement's bearers over its parent's shared roster", () => {
-    const bearers = (keywords: string[]) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match: "all" }), grant()]).checks;
+    const bearers = (keywords: string[]) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match: "all", excluded_keywords: [] }), grant()]).checks;
     const root = dataRoot([], []);
     for (const [dir, files] of Object.entries({
       parent: { "factions.json": [{ id: "parent", parent_faction_id: null }], "units.json": [
@@ -289,11 +290,11 @@ describe("Semantic authoring restrictions", () => {
     // The moment's unit is this unit, so "that WARDENS unit" is a keyword condition on it, not any WARDENS unit.
     expect(result.mechanics.trigger).toEqual({ event: "selected", filter: { to: "shoot" }, condition: { type: "matches", parameters: { filter: { all_of: ["WARDENS"] } } } });
     const attacked = compiled([
-      { ...leaf("RESTRICTION", "stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: ["WARDENS", "ORACLES"], match: "any", excluded_keywords: [] }), fragment: "TARGET" },
+      { ...leaf("RESTRICTION", "stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: ["ORACLES", "WARDENS"], match: "any", excluded_keywords: [] }), fragment: "TARGET" },
       { ...leaf("RESTRICTION", "target-binding", { bound_to: "attacked-unit" }), fragment: "TARGET" },
       grant(),
     ]);
-    expect(attacked.core?.target_restrictions).toEqual({ count: "one", side: "your-army", selects: "unit", required_keywords_any: ["WARDENS", "ORACLES"], bound_to: "attacked-unit" });
+    expect(attacked.core?.target_restrictions).toEqual({ count: "one", side: "your-army", selects: "unit", required_keywords_any: ["ORACLES", "WARDENS"], bound_to: "attacked-unit" });
   });
 
   it("reads a TARGET, a trigger's subject and an attack's target from one unit-filter leaf", () => {

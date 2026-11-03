@@ -12,7 +12,7 @@ const FIXTURE_RULE_NAME = "A Trap Well Laid";
 function leaves(...items: Array<[string, Record<string, unknown>, string?]>): CompileLeaf[] {
   return items.map(([family, parameters, fragment], index) => {
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: index * 10, end_byte: index * 10 + 5, ...(fragment ? { fragment } : {}) };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: index * 10, end_byte: index * 10 + 5, ...(fragment ? { fragment } : {}) };
   });
 }
 
@@ -31,7 +31,7 @@ function placed(text: string, fragment: string, ...items: Array<[string, string,
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment };
   });
 }
 
@@ -508,7 +508,7 @@ describe("more of a unit's history", () => {
 describe("an instead of another rule's default", () => {
   const consolidate = (text: string) => compileLeaves(placed(text, "RAW_TEXT",
     ["Each time this unit Consolidates", "event", { kind: "move-ended", move_types: ["consolidation"] }],
-    ["it can move up to 6\"", "make-move", { subject: "this-unit", move: "consolidation", distance: 6 }],
+    ["it can move up to 6\"", "make-move", { subject: "this-unit", move_type: "consolidation", distance: 6 }],
     ["instead", "instead", {}]), text, { name: FIXTURE_RULE_NAME });
 
   it("stands alone when the replaced value is printed after \"instead of\"", () => {

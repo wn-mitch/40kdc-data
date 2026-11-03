@@ -31,7 +31,7 @@ describe("event object on a used rule (the unit an Order is issued to)", () => {
     const text = "Each time this squad is given an Order, it can move 1\".";
     const result = compileLeaves([
       leaf(text, "Each time this squad is given an Order", "event", 35, normalize({ ...order, object: "this-unit" }, 35)),
-      leaf(text, "it can move 1\"", "make-move", 6, { subject: "this-unit", move_type: "normal", inches: 1 }),
+      leaf(text, "it can move 1\"", "make-move", currentFamilyVersion("make-move"), normalizeFingerprintParameters("make-move", { subject: "this-unit", move_type: "normal", distance: 1 }, currentFamilyVersion("make-move"))),
     ], text);
     if (!result.ok) throw new Error(result.errors.join("; "));
     const mechanics = result.mechanics as Record<string, any>;
@@ -148,7 +148,7 @@ function placed(text: string, ...items: Item[]): CompileLeaf[] {
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -223,7 +223,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -329,10 +329,10 @@ describe("Optional spend before a designated selection (compile.ts designatedSpe
     ["spend 3YP", "resource-spend", { pool: "yp-pool", amount: 3 }],
     ["Select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
     ["Ranged attacks made by your unit that target that unit", "attack", { direction: "makes", unit: "this-unit", attack_type: "ranged", target: "that-unit" }],
-    ["improve the Armour Penetration characteristic by 1", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "ranged" }],
+    ["improve the Armour Penetration characteristic by 1", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "all" }],
     ["If you spent YP during this use of this Stratagem", "optional-cost-paid", { pool: "yp-pool", window: "use", subject: "attacker", tag: "yp-spent-this-use" }],
     ["ranged attacks made by your unit that target that unit", "attack", { direction: "makes", unit: "this-unit", attack_type: "ranged", target: "that-unit" }],
-    ["improve the Armour Penetration characteristic by 2", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "improve", value: 2, weapon_type: "ranged" }],
+    ["improve the Armour Penetration characteristic by 2", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "improve", value: 2, weapon_type: "all" }],
     ["instead", "instead", {}],
   );
 
@@ -390,7 +390,7 @@ describe("Optional spend before a designated selection (compile.ts designatedSpe
       ["spend 3YP", "resource-spend", { pool: "yp-pool", amount: 3 }],
       ["If you spent YP during this use of this Stratagem", "optional-cost-paid", { pool: "yp-pool", window: "use", subject: "attacker", tag: "yp-spent-this-use" }],
       ["ranged attacks made by your unit that target that unit", "attack", { direction: "makes", unit: "this-unit", attack_type: "ranged", target: "that-unit" }],
-      ["improve the Armour Penetration characteristic by 2", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "improve", value: 2, weapon_type: "ranged" }],
+      ["improve the Armour Penetration characteristic by 2", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "improve", value: 2, weapon_type: "all" }],
     );
     const result = compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
     expectRefused(result);
@@ -405,12 +405,12 @@ describe("Instead over a same-sentence group of re-rolls (8903 shape)", () => {
     ["you can", "optional-use", { who: "you" }],
     ["spend 3YP", "resource-spend", { pool: "yp-pool", amount: 3 }],
     ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
-    ["each time a model in your unit makes an attack", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "any", target: "any" }],
-    ["re-roll a Hit roll of 1", "reroll", { roll: "hit", subset: "ones" }],
-    ["re-roll a Wound roll of 1", "reroll", { roll: "wound", subset: "ones" }],
+    ["each time a model in your unit makes an attack", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "any" }],
+    ["re-roll a Hit roll of 1", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }],
+    ["re-roll a Wound roll of 1", "reroll", { roll: "wound", subset: "ones", weapon_type: "all" }],
     ["If you spent YP during this use of this Stratagem", "optional-cost-paid", { pool: "yp-pool", window: "use", subject: "attacker", tag: "privateer-arsenal-yp-spent" }],
-    ["you can re-roll the Hit roll", "reroll", { roll: "hit", subset: "all" }],
-    ["re-roll a Wound roll of 1", "reroll", { roll: "wound", subset: "ones" }],
+    ["you can re-roll the Hit roll", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }],
+    ["re-roll a Wound roll of 1", "reroll", { roll: "wound", subset: "ones", weapon_type: "all" }],
     ["instead", "instead", {}],
   );
 
@@ -488,7 +488,7 @@ describe("'Neither X nor Y' as one negated keyword condition on the attack targe
   it("requires the target to carry neither keyword", () => {
     const text = "Your unit makes an attack against an enemy unit. If that enemy unit is neither a MONSTER nor a VEHICLE, add 1 to the Wound roll.";
     const mechanics = mechanicsOf(placed(text,
-      ["Your unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any", target: "any" }],
+      ["Your unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
       ["an enemy unit", "unit-filter", { side: "enemy", keywords: ["INFANTRY"] }],
       ["If that enemy unit is neither a MONSTER nor a VEHICLE", "unit-keyword", { keywords: ["MONSTER", "VEHICLE"], subject: "target", negated: true }],
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }]), text);

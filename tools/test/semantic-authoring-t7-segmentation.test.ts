@@ -6,9 +6,15 @@ import { sentenceSegments } from "../src/semantic-authoring/compile-segments.js"
 import { dslUnitFilter } from "../src/semantic-authoring/compile-unit-filter-dsl.js";
 import { resolveNames, type WeaponNameContext } from "../src/semantic-authoring/compile-weapon-names.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
+import { outsideContract } from "./leaf-contract.js";
 
-/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
+/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text), in stored (normalized) form. */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
+  return located(text, items).map((leaf) => ({ ...leaf, parameters: normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version) }));
+}
+
+/** placed() without normalization: for a leaf the contract rejects on purpose (outsideContract). */
+function located(text: string, items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters]) => {
@@ -29,7 +35,7 @@ function spanOf(text: string, wording: string): [number, number] {
 /** One leaf of a family at its current version, on its wording. */
 function leaf(family: string, parameters: Record<string, unknown>, start: number, end: number, fragment = "RAW_TEXT", role?: CompileLeaf["role"]): CompileLeaf {
   const version = currentFamilyVersion(family);
-  return { role: role ?? familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: end, fragment };
+  return { role: role ?? familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: end, fragment };
 }
 
 function mechanicsOf(list: CompileLeaf[], text: string): Record<string, any> {
@@ -145,7 +151,7 @@ describe("T7 destroyed model's unit keywords (SS-D)", () => {
     const at = (wording: string) => spanOf(text, wording);
     const list = [
       leaf("event", { kind: "attacks-resolved", action_kind: "attack" }, ...at("If those attacks")),
-      leaf("unit-activity", { activities: ["destroyed-units-by-triggering-attacks", "destroyed-models-by-triggering-attacks"], named: "after", container: "none", destroyer: "this-unit", keywords: ["CHARACTER"] }, ...at("destroyed an enemy unit or an enemy Character model")),
+      leaf("unit-activity", { activities: ["destroyed-units-by-triggering-attacks", "destroyed-models-by-triggering-attacks"], named: "after", container: "none", destroyer: "this-unit", keywords: ["CHARACTER"], negated: false }, ...at("destroyed an enemy unit or an enemy Character model")),
       leaf("unit-filter", { side: "enemy" }, ...at("an enemy unit"), "RAW_TEXT", "CONDITION"),
       leaf("resource-action", { resource: "command-point", operation: "gain", amount: 1 }, ...at("you gain 1CP")),
     ];
@@ -220,10 +226,11 @@ describe("T7 membership in a reference's model (SS-M)", () => {
   });
 
   it("keeps refusing a membership that is not being a model of its unit (regression pin)", () => {
-    const list = placed(text,
+    // groupMembership is called directly (no compileLeaves), on a relation the membership contract does not list.
+    const list = located(text, [
       ["within 12\" of", "unit-position", { kind: "within", inches: 12, of: "following-filter", subject: "selected-unit", negated: false }],
       ["a CRYPTEK model", "unit-filter", { side: "friendly", keywords: ["CRYPTEK"], level: "model" }],
-      ["in your unit", "membership", { relation: "within", of: "this-unit" }]);
+      ["in your unit", "membership", { relation: "within", of: "this-unit" }]]);
     expect(() => groupMembership(list)).toThrow(/membership/);
   });
 });
@@ -256,7 +263,7 @@ describe("T7 comma-listed menus and bearer-filtered grants (SS-J)", () => {
     const list = placed(text,
       ["Ranged weapons equipped by", "weapon-property-scope", { subject: "antecedent", weapon_type: "ranged" }],
       ["CRYPTEK models from your army", "unit-filter", { side: "friendly", keywords: ["CRYPTEK"], level: "model" }],
-      ["ASSAULT", "weapon-ability-keyword", { keyword: "ASSAULT" }]);
+      ["ASSAULT", "weapon-ability-keyword", { keyword: "Assault" }]);
     const mechanics = mechanicsOf(list, text);
     expect(mechanics.effect.type).toBe("weapon-ability-grant");
     expect(mechanics.effect.target).toEqual({ owner: "friendly", all_of: ["CRYPTEK"], level: "model" });
@@ -269,7 +276,7 @@ describe("T7 bearer-named grants with no bearer filter (SS-J)", () => {
     const text = "Ranged weapons equipped by CRYPTEK models from your army have the ASSAULT ability.";
     const result = compileLeaves(placed(text,
       ["Ranged weapons equipped by", "weapon-property-scope", { subject: "this-unit", weapon_type: "ranged" }],
-      ["ASSAULT", "weapon-ability-keyword", { keyword: "ASSAULT" }]), text);
+      ["ASSAULT", "weapon-ability-keyword", { keyword: "Assault" }]), text);
     expect(result.ok).toBe(false);
     expect(result.ok ? "" : result.errors.join(" ")).toMatch(/names its bearers/);
   });
@@ -279,15 +286,17 @@ describe("T7 bearer-named grants with no bearer filter (SS-J)", () => {
     const mechanics = mechanicsOf(placed(text,
       ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
       ["ranged weapons equipped by your models", "weapon-property-scope", { subject: "this-unit", weapon_type: "ranged" }],
-      ["ASSAULT", "weapon-ability-keyword", { keyword: "ASSAULT" }]), text);
+      ["ASSAULT", "weapon-ability-keyword", { keyword: "Assault" }]), text);
     expect(mechanics.effect.target).toBe("this-unit");
   });
 
   it("refuses a grant with no subject and no filter (regression pin)", () => {
     const text = "Ranged weapons equipped by models in this unit have the ASSAULT ability.";
-    const result = compileLeaves(placed(text,
-      ["Ranged weapons", "weapon-ability-grant", { weapon_type: "ranged" }],
-      ["ASSAULT", "weapon-ability-keyword", { keyword: "ASSAULT" }]), text);
+    const grant: [string, string, Record<string, unknown>] = ["Ranged weapons", "weapon-ability-grant", { weapon_type: "ranged" }];
+    expect(() => normalizeFingerprintParameters("weapon-ability-grant", grant[2], currentFamilyVersion("weapon-ability-grant"))).toThrow(/must contain subject/u);
+    // The compiler refuses the subject-less grant on its own, behind the contract check above.
+    const leaves = outsideContract(located(text, [grant, ["ASSAULT", "weapon-ability-keyword", { keyword: "Assault" }]]));
+    const result = compileLeaves(leaves, text);
     expect(result.ok).toBe(false);
   });
 
@@ -296,11 +305,11 @@ describe("T7 bearer-named grants with no bearer filter (SS-J)", () => {
     const list = placed(text,
       ["In your Shooting phase, each time a CRYPTEK unit from your army is selected to shoot", "event", { kind: "selected", to: "shoot" }],
       ["select one of the following abilities", "choice-open", { min_choices: 1, max_choices: 1 }],
-      ["ANTI-INFANTRY 3+", "weapon-ability-keyword", { keyword: "ANTI-INFANTRY 3+" }],
-      ["ANTI-MOUNTED 4+", "weapon-ability-keyword", { keyword: "ANTI-MOUNTED 4+" }],
-      ["ASSAULT", "weapon-ability-keyword", { keyword: "ASSAULT" }],
-      ["HEAVY", "weapon-ability-keyword", { keyword: "HEAVY" }],
-      ["IGNORES COVER", "weapon-ability-keyword", { keyword: "IGNORES COVER" }],
+      ["ANTI-INFANTRY 3+", "weapon-ability-keyword", { keyword: "Anti-Infantry 3+" }],
+      ["ANTI-MOUNTED 4+", "weapon-ability-keyword", { keyword: "Anti-Mounted 4+" }],
+      ["ASSAULT", "weapon-ability-keyword", { keyword: "Assault" }],
+      ["HEAVY", "weapon-ability-keyword", { keyword: "Heavy" }],
+      ["IGNORES COVER", "weapon-ability-keyword", { keyword: "Ignores Cover" }],
       ["ranged weapons equipped by models in that unit have that ability", "weapon-ability-grant", { subject: "this-unit", weapon_type: "ranged" }]);
     const mechanics = mechanicsOf(list, text);
     expect(mechanics.effect.type).toBe("choice");
@@ -315,8 +324,8 @@ describe("T7 option boundaries in a weapon scope (SS-G)", () => {
       ["Select one of the following", "choice-open", { min_choices: 1, max_choices: 1 }],
       ["This unit's melee attacks", "weapon-property-scope", { subject: "this-unit", weapon_type: "melee" }],
       ["+1 to hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
-      ["Attacks that target this unit", "attack", { direction: "targeted", unit: "this-unit" }],
-      ["-1 to hit rolls", "roll-modifier", { roll: "hit", operation: "subtract", value: 1, incoming: true }]);
+      ["Attacks that target this unit", "attack", { direction: "targeted", unit: "this-unit", attack_type: "any" }],
+      ["-1 to hit rolls", "roll-modifier", { roll: "hit", operation: "subtract", value: 1 }]);
     const mechanics = mechanicsOf(list, text);
     expect(mechanics.effect.options[0].modifier).toMatchObject({ roll: "hit", weapons: { type: "melee" } });
     expect(mechanics.effect.options[1].target).toBe("attacker");

@@ -27,7 +27,7 @@ function compileItems(text: string, items: Item[]) {
     if (inner) innerFrom = end;
     else { from = end; innerFrom = start; }
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: end, fragment: fragment ?? "RAW_TEXT", ...(inner ? { allow_overlap: true } : {}) } as CompileLeaf;
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: end, fragment: fragment ?? "RAW_TEXT", ...(inner ? { allow_overlap: true } : {}) } as CompileLeaf;
   });
   return compileLeaves(leaves, text);
 }
@@ -157,7 +157,7 @@ describe("S2 compile lines", () => {
     const mechanics = mechanicsOf("This unit's Zorb Launcher weapons have D3+3 A.", [
       ["This unit's Zorb Launcher weapons have D3+3 A", "characteristic-set", { subject: "this-unit", characteristic: "A", value: "D3+3", weapon_type: "ranged", weapon_name: "Zorb Launcher" }],
     ]);
-    expect(mechanics.effect.modifier).toMatchObject({ stat: "A", operation: "set", value: "D3+3", weapons: { type: "ranged", name: "Zorb Launcher" } });
+    expect(mechanics.effect.modifier).toMatchObject({ stat: "A", operation: "set", value: "D3+3", weapons: { type: "ranged", name: "zorb launcher" } });
     validates(mechanics.effect);
   });
 
@@ -187,7 +187,7 @@ describe("S2 compile lines", () => {
 });
 
 const POOL_SELECT: Item = ["Select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }];
-const POOL_ENGAGED: Item = ["within Engagement Range of your unit", "unit-state", { states: ["engaged"], subject: "selected-unit", with: "this-unit" }];
+const POOL_ENGAGED: Item = ["within Engagement Range of your unit", "unit-state", { states: ["engaged"], subject: "selected-unit", negated: false, with: "this-unit" }];
 const HAS = (keyword: string): Record<string, unknown> => ({ keywords: [keyword], subject: "this-unit", negated: false });
 const POOL_TEXT = "Select one enemy unit within Engagement Range of your unit. Roll one D6 for each Zorb model in your unit, or roll four D6 if your unit has the Alpha keyword, or roll six D6 if your unit has the Omega keyword: for each 3+, that enemy unit suffers 1 mortal wound.";
 const POOL_ITEMS: Item[] = [
@@ -314,7 +314,7 @@ describe("S5 conditional bonus on a roll of several dice", () => {
       ["Roll one D6", "dice-roll", { dice: "D6" }],
       ["for each", "for-each-unit-select", {}],
       ["enemy unit", "unit-filter", { side: "enemy" }],
-      ["within 6\" of this unit", "unit-state", { states: ["engaged"], subject: "antecedent", with: "this-unit" }],
+      ["within 6\" of this unit", "unit-state", { states: ["engaged"], subject: "antecedent", negated: false, with: "this-unit" }],
       [", adding 2 to the result", "roll-modifier", { roll: "preceding", operation: "add", value: 2 }],
       ["if that unit has the Glide keyword", "unit-keyword", { keywords: ["GLIDE"], subject: "antecedent", negated: false }],
       ["on a 2-3", "roll-result", { from: 2, to: 3 }],
@@ -336,7 +336,7 @@ describe("S6 loop scope", () => {
     ["Roll one D6", "dice-roll", { dice: "D6" }],
     ["for each", "for-each-unit-select", {}],
     ["enemy unit", "unit-filter", { side: "enemy" }],
-    ["within 6\" of this unit", "unit-state", { states: ["engaged"], subject: "antecedent", with: "this-unit" }],
+    ["within 6\" of this unit", "unit-state", { states: ["engaged"], subject: "antecedent", negated: false, with: "this-unit" }],
     ["on a 4+", "roll-result", { from: 4 }],
     ["that enemy unit suffers D3 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "D3" }],
   ];
@@ -357,13 +357,14 @@ describe("S6 loop scope", () => {
     expect(result.ok).toBe(false);
   });
 
-  it("a bearer roll-modifier in a later sentence stays in the loop's own sequence (pinned; not hoisted after it)", () => {
+  it("a bearer roll-modifier in a later sentence runs once, after the loop, like any other effect on the bearer's unit", () => {
     const text = `${head} Then, add 1 to hit rolls made by this unit.`;
-    const result = compileItems(text, [...loop, ["add 1 to hit rolls made by this unit", "roll-modifier", { operation: "add", value: 1, rolls: ["hit"], recipient: "this-unit" }]]);
+    const result = compileItems(text, [...loop, ["add 1 to hit rolls made by this unit", "roll-modifier", { operation: "add", value: 1, roll: "hit", subject: "this-unit" }]]);
     if (!result.ok) throw new Error(result.errors.join("; "));
     const effect = (result.mechanics as unknown as Record<string, any>).effect;
-    expect(effect.type).toBe("for-each-unit");
-    expect(effect.effect.steps.map((step: any) => step.type)).toEqual(["dice-gated", "roll-modifier"]);
+    expect(effect.type).toBe("sequence");
+    expect(effect.steps.map((step: any) => step.type)).toEqual(["for-each-unit", "roll-modifier"]);
+    expect(effect.steps[1]).toEqual({ type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } });
   });
 
   it("a later sentence's effect on the iterated unit stays inside the loop", () => {
@@ -447,7 +448,7 @@ describe("Semantic authoring selection inside one result band", () => {
     ["At the start of your Shooting phase", "event", { kind: "phase-start", phase: "shooting", turn: "your" }],
     ["roll one D6", "dice-roll", { dice: "D6" }],
     ["1", "roll-result", { from: 1, to: 1 }],
-    ["this unit suffers 1 mortal wound", "mortal-wounds", { recipient: "this-unit", count: 1 }],
+    ["this unit suffers 1 mortal wound", "mortal-wounds", { recipient: "this-unit", count: "1" }],
     ["2-6", "roll-result", { from: 2, to: 6 }],
     ["select one", "select-unit", { distance: "any", visible: false }],
     ["enemy unit", "unit-filter", { side: "enemy" }],
@@ -466,7 +467,7 @@ describe("Semantic authoring selection inside one result band", () => {
   it("refuses an effect on the selected unit in another band", () => {
     const later = text.replace("D3 mortal wounds.", "D3 mortal wounds. On a 6, that unit suffers 1 mortal wound.");
     const errors = errorsOf(later, [...head, ["That unit suffers D3 mortal wounds", "mortal-wounds", { recipient: "antecedent", count: "D3" }],
-      ["6", "roll-result", { from: 6, to: 6 }], ["that unit suffers 1 mortal wound", "mortal-wounds", { recipient: "antecedent", count: 1 }]]);
+      ["6", "roll-result", { from: 6, to: 6 }], ["that unit suffers 1 mortal wound", "mortal-wounds", { recipient: "antecedent", count: "1" }]]);
     expect(errors.join("; ")).toMatch(/selection inside one result band/u);
   });
 });

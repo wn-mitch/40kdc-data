@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
+import { outsideContract } from "./leaf-contract.js";
 
 /**
  * Menu-action eligibility from ordinary leaves in source order (compile-containers.ts,
@@ -8,7 +9,13 @@ import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/sem
  */
 
 let offset = 0;
+/** A leaf with its parameters as stored (normalized at its version). */
 function leaf(role: string, familyId: string, parameters: Record<string, unknown>, fragment: string, version = 1): CompileLeaf {
+  return rawLeaf(role, familyId, normalizeFingerprintParameters(familyId, parameters, version), fragment, version);
+}
+
+/** As leaf, with parameters as given: only for leaves a test compiles outside the contract on purpose. */
+function rawLeaf(role: string, familyId: string, parameters: Record<string, unknown>, fragment: string, version = 1): CompileLeaf {
   offset += 10;
   return { role, family_id: familyId, family_version: version, parameters, start_byte: offset, end_byte: offset + 5, fragment };
 }
@@ -22,7 +29,7 @@ describe("menu-action eligibility in source order", () => {
       opener(),
       leaf("EVENT", "menu-action", { action_id: "tactical-dash", label: "Tactical Dash", cost_amount: 1, binds_event_variable: "triggering-enemy", duration: "immediate" }, "B", 2),
       leaf("EVENT", "event", { kind: "move-ended", owner: "enemy", move_types: ["fall-back"] }, "B", 9),
-      leaf("EVENT", "select-unit", { distance: "any", visible: true }, "B"),
+      leaf("EVENT", "select-unit", { scope: "friendly", distance: "any", visible: true }, "B"),
       leaf("CONDITION", "unit-filter", { side: "friendly", excluded_keywords: ["TITANIC"] }, "B"),
       leaf("CONDITION", "unit-state", bound, "B", 14),
       leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "B"),
@@ -47,7 +54,7 @@ describe("menu-action eligibility in source order", () => {
       opener(),
       leaf("EVENT", "menu-action", { action_id: "sharp-shot", label: "Sharp Shot", cost_amount: 1, binds_event_variable: "triggering-shooter", duration: "immediate" }, "C", 2),
       leaf("EVENT", "event", { kind: "attacks-resolved", owner: "enemy", action_kind: "shoot" }, "C", 9),
-      leaf("EVENT", "select-unit", { distance: "any", visible: true }, "C"),
+      leaf("EVENT", "select-unit", { scope: "friendly", distance: "any", visible: true }, "C"),
       leaf("CONDITION", "unit-filter", { side: "friendly" }, "C"),
       leaf("CONDITION", "hit-by-attacks", { subject: "selected-unit" }, "C"),
       leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "C"),
@@ -70,14 +77,19 @@ describe("menu-action eligibility in source order", () => {
     const trigger = () => leaf("EVENT", "event", { kind: "move-ended", owner: "enemy", move_types: ["fall-back"] }, "D", 9);
     const effect = () => leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "D");
     const select = (parameters: Record<string, unknown> = {}) => leaf("EVENT", "select-unit", { scope: "friendly", distance: "any", visible: false, ...parameters }, "D");
+    const rawSelect = (parameters: Record<string, unknown>) => rawLeaf("EVENT", "select-unit", { scope: "friendly", distance: "any", visible: false, ...parameters }, "D");
     const errorsOf = (leaves: CompileLeaf[]) => {
       const result = compileLeaves(leaves);
       return result.ok ? [] : result.errors;
     };
     expect(errorsOf([opener(), menu(), trigger(), select({ scope: "enemy" }), effect()])).toEqual([expect.stringContaining("selects a friendly unit")]);
     expect(errorsOf([opener(), menu(), trigger(), select(), select(), effect()])).toEqual([expect.stringContaining("selects one unit: give it one select-unit.")]);
-    expect(errorsOf([opener(), menu(), trigger(), select({ count: 2 }), effect()])).toEqual([expect.stringContaining("selects one unit.")]);
-    expect(errorsOf([opener(), menu(), trigger(), select({ filter: { battle_shocked: true } }), effect()])).toEqual([expect.stringContaining("the DSL holds no battle_shocked for it")]);
+    // A count and a filter are not select-unit parameters; the compiler refuses them too, behind that check.
+    for (const extra of [{ count: 2 }, { filter: { battle_shocked: true } }]) {
+      expect(() => normalizeFingerprintParameters("select-unit", { scope: "friendly", distance: "any", visible: false, ...extra }, 1)).toThrow(/parameters must be exactly/u);
+    }
+    expect(errorsOf(outsideContract([opener(), menu(), trigger(), rawSelect({ count: 2 }), effect()]))).toEqual([expect.stringContaining("selects one unit.")]);
+    expect(errorsOf(outsideContract([opener(), menu(), trigger(), rawSelect({ filter: { battle_shocked: true } }), effect()]))).toEqual([expect.stringContaining("the DSL holds no battle_shocked for it")]);
     expect(errorsOf([opener(), menu({ eligibility_engaged_with_bound_at_phase_start: true }), trigger(), select(), leaf("CONDITION", "unit-state", bound, "D", 14), effect()]))
       .toEqual([expect.stringContaining("states a bound requirement both as a leaf and as a flag")]);
   });
@@ -87,7 +99,7 @@ describe("menu-action eligibility in source order", () => {
       opener(),
       leaf("EVENT", "menu-action", { action_id: "fade-back", label: "Fade Back", cost_amount: 1, binds_event_variable: "triggering-shooter", duration: "immediate" }, "C", 2),
       leaf("EVENT", "event", { kind: "attacks-resolved", owner: "enemy", action_kind: "shoot", phase: "shooting", turn: "opponent" }, "C", currentFamilyVersion("event")),
-      leaf("EVENT", "select-unit", { distance: "any", visible: true }, "C"),
+      leaf("EVENT", "select-unit", { scope: "friendly", distance: "any", visible: true }, "C"),
       leaf("CONDITION", "unit-filter", { side: "friendly", excluded_keywords: ["TITANIC"] }, "C"),
       leaf("CONDITION", "hit-by-attacks", { subject: "selected-unit" }, "C"),
       leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "C"),
@@ -113,12 +125,15 @@ describe("menu-action eligibility in source order", () => {
   });
 
   it("refuses a phase or turn on an owned moment other than attacks-resolved", () => {
-    const result = compileLeaves([
+    const moment = { kind: "move-ended", owner: "enemy", move_types: ["fall-back"], phase: "movement" };
+    expect(() => normalizeFingerprintParameters("event", moment, currentFamilyVersion("event"))).toThrow(/event parameters must be exactly/u);
+    // The contract refuses a phase on move-ended; the compiler refuses it too, behind that check.
+    const result = compileLeaves(outsideContract([
       opener(),
       leaf("EVENT", "menu-action", { action_id: "c", label: "C", cost_amount: 1, binds_event_variable: "triggering-enemy", duration: "immediate" }, "C", 2),
-      leaf("EVENT", "event", { kind: "move-ended", owner: "enemy", move_types: ["fall-back"], phase: "movement" }, "C", currentFamilyVersion("event")),
+      rawLeaf("EVENT", "event", moment, "C", currentFamilyVersion("event")),
       leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "C"),
-    ]);
+    ]));
     expect(result.ok).toBe(false);
     if (result.ok) return;
     expect(result.errors).toEqual([expect.stringContaining("Only an attacks-resolved moment names its phase and turn")]);
@@ -129,7 +144,7 @@ describe("menu-action eligibility in source order", () => {
       opener(),
       leaf("EVENT", "menu-action", { action_id: "b", label: "B", cost_amount: 1, binds_event_variable: "triggering-enemy", duration: "immediate" }, "E", 2),
       leaf("EVENT", "event", { kind: "move-ended", owner: "enemy", move_types: ["fall-back"] }, "E", 9),
-      leaf("CONDITION", "unit-state", { ...bound, states: ["battle-shocked"] }, "E", 14),
+      leaf("CONDITION", "unit-state", { states: ["battle-shocked"], subject: "selected-unit", at: "phase-start", negated: false }, "E", 14),
       leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "E"),
     ]);
     expect(result.ok).toBe(false);

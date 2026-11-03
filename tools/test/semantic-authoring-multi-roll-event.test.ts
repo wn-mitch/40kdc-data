@@ -11,6 +11,7 @@ import { trigger, triggerLeaves } from "../src/semantic-authoring/compile-trigge
 import { TRIGGER_ROLL_KINDS } from "../src/semantic-authoring/dice-families.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
+import { outsideContract } from "./leaf-contract.js";
 
 // Fabricated wording only; no GW rule prose.
 
@@ -295,7 +296,8 @@ describe("a menu action whose trigger is a list moment (compile-containers path)
     const list = menu({ kind: "after-roll", rolls: ["hit", "wound"] });
     const event = list.find((leaf) => leaf.family_id === "event")!;
     event.parameters = { kind: "after-roll", rolls: ["hit", "any"] };
-    const result = compileLeaves(list, MENU_TEXT);
+    expect(() => NORMALIZE_EVENT(event.parameters)).toThrow(/must be one of/u);
+    const result = compileLeaves(outsideContract(list), MENU_TEXT);
     expect(result.ok).toBe(false);
     expect(result.ok ? "" : result.errors.join("; ")).toMatch(/cannot name/u);
   });

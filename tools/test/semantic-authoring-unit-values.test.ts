@@ -14,7 +14,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -447,7 +447,7 @@ describe("an area held in a rule region reaches units of either side", () => {
   });
 
   it("still refuses an aura over either side whose body is not a region grant", () => {
-    const body: [string, string, Record<string, unknown>] = ["is held in the Zed zone", "characteristic-modifier", { subject: "antecedent", characteristic: "move", operation: "add", value: 1 }];
+    const body: [string, string, Record<string, unknown>] = ["is held in the Zed zone", "characteristic-modifier", { subject: "antecedent", characteristics: ["M"], operation: "add", value: 1 }];
     expect(errorsOf(leaves("any", body), TEXT)).toMatch(/must say friendly or enemy/u);
   });
 

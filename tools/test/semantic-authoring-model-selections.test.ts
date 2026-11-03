@@ -3,11 +3,17 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { familyExtension } from "../src/semantic-authoring/families/index.js";
+import { outsideContract } from "./leaf-contract.js";
 
 type Item = [string, string, Record<string, unknown>];
 
-/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
+/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text), in stored (normalized) form. */
 function placed(text: string, ...items: Item[]): CompileLeaf[] {
+  return located(text, items).map((leaf) => ({ ...leaf, parameters: normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version) }));
+}
+
+/** placed() without normalization: for a leaf the contract rejects on purpose (outsideContract). */
+function located(text: string, items: Item[]): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters]) => {
@@ -264,7 +270,7 @@ describe("Semantic authoring per-model cap in a compound ability", () => {
       ["select one", "select-unit", { distance: "any", visible: false }],
       ["friendly ALPHA model", "unit-filter", { side: "friendly", keywords: ["ALPHA"], level: "model" }],
       ["Each model can only be selected once per Command phase", "usage-limit", { frequency: "once-per-command-phase", per: "model" }],
-      ["The selected model regains D3 wounds", "regain-wounds", { subject: "selected-unit", amount: "D3" }],
+      ["The selected model regains D3 wounds", "regain-wounds", { subject: "this-model", amount: "D3" }],
       ["When it attacks", "event", { kind: "attacks-resolved", action_kind: "attack", subject: "antecedent" }],
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
     ], text);
@@ -442,7 +448,10 @@ describe("Semantic authoring per-model cap in a compound ability", () => {
 
     it("refuses within_of together with a transport origin", () => {
       const origin: Item = ["Select one friendly", "select-unit", { distance: "any", visible: false, within_of: "outer", bind_as: "inner", within_origin: "bearer-transport" }];
-      expect(() => resultOf([head[0]!, head[1]!, origin, head[3]!, ...candidates, permission], text)).toThrow(/needs a within distance/u);
+      expect(() => normalizeFingerprintParameters("select-unit", origin[2], currentFamilyVersion("select-unit"))).toThrow(/needs distance within/u);
+      // The compiler refuses the same leaf on its own, behind the contract check above.
+      const leaves = outsideContract(located(text, [head[0]!, head[1]!, origin, head[3]!, ...candidates, permission]));
+      expect(() => compileLeaves(leaves, text, {})).toThrow(/needs a within distance/u);
     });
   });
 }

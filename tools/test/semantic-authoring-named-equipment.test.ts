@@ -7,8 +7,13 @@ import { compileLeaves } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { describePredicate } from "../src/translate/condition.js";
 
-/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
+/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text), with parameters as stored. */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
+  return unnormalized(text, ...items).map((leaf) => ({ ...leaf, parameters: normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version) }));
+}
+
+/** As placed, with parameters as given: for the compiler's own refusals of leaves the contract already rejects. */
+function unnormalized(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters]) => {
@@ -43,17 +48,23 @@ describe("named-weapon: compile", () => {
   });
 
   it("refuses a this-unit named-weapon with no models quantifier", () => {
-    const leaf = placed("If this unit carries one fizz blade", ["carries one fizz blade", "named-weapon", { subject: "this-unit", name: "Fizz blade", count: 1 }])[0]!;
+    expect(() => normalizeFingerprintParameters("named-weapon", { subject: "this-unit", name: "Fizz blade", count: 1 }, currentFamilyVersion("named-weapon"))).toThrow(/needs a models quantifier/u);
+    // The contract refuses this leaf; the compiler's predicate refuses it too, behind that check.
+    const leaf = unnormalized("If this unit carries one fizz blade", ["carries one fizz blade", "named-weapon", { subject: "this-unit", name: "Fizz blade", count: 1 }])[0]!;
     expect(() => namedEquipmentPredicate(leaf)).toThrow(CompileError);
   });
 
   it("refuses a this-model named-weapon that carries a models quantifier", () => {
-    const leaf = placed("If this model carries one fizz blade", ["carries one fizz blade", "named-weapon", { subject: "this-model", name: "Fizz blade", count: 1, models: carry(1) }])[0]!;
+    expect(() => normalizeFingerprintParameters("named-weapon", { subject: "this-model", name: "Fizz blade", count: 1, models: carry(1) }, currentFamilyVersion("named-weapon"))).toThrow(/takes no models quantifier/u);
+    // The contract refuses this leaf; the compiler's predicate refuses it too, behind that check.
+    const leaf = unnormalized("If this model carries one fizz blade", ["carries one fizz blade", "named-weapon", { subject: "this-model", name: "Fizz blade", count: 1, models: carry(1) }])[0]!;
     expect(() => namedEquipmentPredicate(leaf)).toThrow(CompileError);
   });
 
   it("refuses an empty printed name", () => {
-    const leaf = placed("If this model carries one fizz blade", ["carries one fizz blade", "named-weapon", { subject: "this-model", name: "", count: 1 }])[0]!;
+    expect(() => normalizeFingerprintParameters("named-weapon", { subject: "this-model", name: "", count: 1 }, currentFamilyVersion("named-weapon"))).toThrow(/1 to 80 characters/u);
+    // The contract refuses this leaf; the compiler's predicate refuses it too, behind that check.
+    const leaf = unnormalized("If this model carries one fizz blade", ["carries one fizz blade", "named-weapon", { subject: "this-model", name: "", count: 1 }])[0]!;
     expect(() => namedEquipmentPredicate(leaf)).toThrow(CompileError);
   });
 });
@@ -65,7 +76,7 @@ describe("named-weapon and unit-wargear: family parameters", () => {
   });
 
   it("refuses an unknown key in named-weapon parameters", () => {
-    expect(() => normalizeFingerprintParameters("named-weapon", { subject: "this-model", name: "Fizz blade", count: 1, extra: true }, 1)).toThrow();
+    expect(() => normalizeFingerprintParameters("named-weapon", { subject: "this-model", name: "Fizz blade", count: 1, extra: true }, currentFamilyVersion("named-weapon"))).toThrow();
   });
 
   it("refuses unit-wargear for any subject but this unit", () => {
@@ -142,7 +153,7 @@ describe("named equipment: record shapes", () => {
       mechanics: { effect: { type: "conditional", condition: { operator: "and", operands: [
         { type: "named-weapon", parameters: { subject: "this-model", name: "Fizz caestus", count: 2 } },
         { type: "named-weapon", parameters: { subject: "this-model", name: "Armoured feet", count: 1 } },
-      ] }, effect: { type: "stat-modifier", modifier: { value: 2, weapons: { type: "melee", name: "Fizz caestus" } } } } },
+      ] }, effect: { type: "stat-modifier", modifier: { value: 2, weapons: { type: "melee", name: "fizz caestus" } } } } },
     });
   });
 

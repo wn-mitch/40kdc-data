@@ -29,7 +29,7 @@ function placed(text: string, ...items: Item[]): CompileLeaf[] {
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -163,7 +163,7 @@ describe("Wave 10 placement after a set-up (SS1, SS2)", () => {
     const text = "When a unit is destroyed, that unit can be set up anywhere on the battlefield.";
     const mechanics = mechanicsOf(text,
       ["When a unit is destroyed", "event", { kind: "unit-destroyed" }],
-      ["that unit can be set up", "set-up", { subject: "event-subject", to: "battlefield" }]);
+      ["that unit can be set up", "set-up", { subject: "antecedent", to: "battlefield" }]);
     expect(mechanics.trigger).toEqual({ event: "destroyed" });
   });
 
@@ -203,7 +203,7 @@ describe("Wave 10 placement after a set-up (SS1, SS2)", () => {
 });
 
 describe("Wave 10 objective and designation limits (SS3)", () => {
-  const select = (wording = "one objective marker you control"): Item => [wording, "select-objective-open", { bind_as: "warded_marker", controlled_by: "you" }];
+  const select = (wording = "one objective marker you control"): Item => [wording, "select-objective-open", { bind_as: "warded_marker", controlled_by: "your-army" }];
 
   it("tags the selected objective marker, lasting as long as the printed duration (SS3)", () => {
     const text = "Select one objective marker you control. That objective marker is said to be Warded and remains under your control until your opponent controls it.";
@@ -260,12 +260,15 @@ describe("Wave 10 designated-unit distances and deployment-zone distances (SS4, 
     expect(mechanics.effect.modifier.away_from[1]).toEqual({ of: { owner: "enemy", not_designated: "afflicted" }, range: { inches: 9 } });
   });
 
-  it("keeps a designated exclusion on the selection's canonical filter", () => {
+  it("keeps a designated exclusion on the selection", () => {
     const mechanics = mechanicsOf("Select one enemy unit that is not AFFLICTED. That unit is pinned.",
-      ["Select one enemy unit", "select-unit", { distance: "any", visible: false }],
-      ["that is not AFFLICTED", "unit-filter", { side: "enemy", not_designated: "afflicted" }],
+      ["Select one", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["enemy unit", "unit-filter", { side: "enemy" }],
+      ["that is not AFFLICTED", "designated-filter", { subject: "antecedent", tag: "afflicted", negated: true }],
       ["That unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }]);
-    expect(mechanics.effect.selector.filter).toEqual({ owner: "enemy", not_designated: "afflicted" });
+    // unit-filter has no not_designated in the contract: the exclusion is a negated designated-filter, read as eligibility.
+    expect(mechanics.effect.selector.filter).toEqual({ owner: "enemy" });
+    expect(mechanics.effect.selector.eligibility).toEqual({ operator: "not", operands: [{ type: "matches", parameters: { subject: "selected-unit", filter: { designated: "afflicted" } } }] });
   });
 
   it("sets up a unit more than 8\" from the enemy deployment zone and from all enemy units, in deployment (SS5)", () => {

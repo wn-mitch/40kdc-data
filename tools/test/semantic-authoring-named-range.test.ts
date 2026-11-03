@@ -12,6 +12,7 @@ import { checkAuraRangeRefs } from "../src/integrity-aura-ranges.js";
 import { createValidator } from "../src/schema-loader.js";
 import { describeAbility, describeEffect, type Effect } from "../src/translate/index.js";
 import type { ValidationResult } from "../src/validate.js";
+import { outsideContract } from "./leaf-contract.js";
 
 /**
  * Named ranges a record defines per battle round (named-ranges.ts, compile-named-range.ts) and
@@ -22,8 +23,13 @@ import type { ValidationResult } from "../src/validate.js";
 
 type Item = [string, string, Record<string, unknown>, number?];
 
-/** Leaves on their own wording in `text`, in order; a fourth item pins the family version. */
+/** Leaves on their own wording in `text`, in order, with parameters as stored; a fourth item pins the family version. */
 function placed(text: string, ...items: Item[]): CompileLeaf[] {
+  return unnormalized(text, ...items).map((leaf) => ({ ...leaf, parameters: normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version) }));
+}
+
+/** As placed, with parameters as given: only for leaves a test compiles outside the contract on purpose. */
+function unnormalized(text: string, ...items: Item[]): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters, pinned]) => {
@@ -300,7 +306,7 @@ describe("Semantic authoring named-range reference: unit-position range_ref", ()
     const text = "While this unit is inside Synapse Range of your host and retreated sideways this phase, it can benefit.";
     const mechanics = compiledRef(text,
       ["this unit is inside Synapse Range of your host", "unit-position", { kind: "within", range_ref: "synapse", of: "matching-unit", of_side: "friendly", subject: "this-unit", negated: false }],
-      ["retreated sideways this phase", "unit-activity", { activities: ["fell-back-this-phase"], subject: "this-unit" }],
+      ["retreated sideways this phase", "unit-activity", { activities: ["fell-back-this-phase"], subject: "this-unit", negated: false }],
       ["it can benefit", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
     expect(mechanics.effect.condition.operands[0]).toEqual({ type: "matches", parameters: { filter: { within: { of: { owner: "friendly" }, range: { aura_of: "synapse-tyranids" } } } } });
   });
@@ -374,17 +380,19 @@ describe("Semantic authoring named-range reference: unit-position range_ref", ()
   it("refuses a named-range distance to another unit (near other, of target)", () => {
     const text = "For each other foe unit inside Synapse Range of the target, it can benefit.";
     expect(normalizeRefuses("unit-position", { kind: "within", range_ref: "synapse", of: "target", subject: "recipient", negated: false })).toBe(true);
-    expect(refused(text,
+    // The contract refuses range_ref of target; the compiler refuses it too, behind that check.
+    const result = compileLeaves(outsideContract(unnormalized(text,
       ["For each", "for-each-unit-select", {}],
       ["foe unit", "unit-filter", { side: "enemy", other: true }],
       ["inside Synapse Range of the target", "unit-position", { kind: "within", range_ref: "synapse", of: "target", subject: "recipient", negated: false }],
-      ["it can benefit", "roll-modifier", { roll: "hit", operation: "add", value: 1 }])).toEqual(["A distance to another unit by a named range has no quantifier shape yet."]);
+      ["it can benefit", "roll-modifier", { roll: "hit", operation: "add", value: 1 }])), text, { abilityId: "fabricated-named-range" });
+    expect(result.ok ? [] : result.errors).toEqual(["A distance to another unit by a named range has no quantifier shape yet."]);
   });
 
   it("refuses a named-range minimum distance from enemy units on a set-up", () => {
     const text = "Set it up anywhere on the battlefield more than Synapse Range away from every foe unit.";
     const errors = refused(text,
-      ["Set it up", "set-up", { subject: "antecedent", to: "battlefield", allow: true }],
+      ["Set it up", "set-up", { subject: "antecedent", to: "battlefield" }],
       ["more than Synapse Range away from every foe unit", "unit-position", { kind: "within", range_ref: "synapse", of: "matching-unit", of_side: "enemy", subject: "antecedent", negated: true }]);
     expect(errors.join(" ")).toMatch(/fixed inch count|placement/u);
   });

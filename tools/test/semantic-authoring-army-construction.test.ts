@@ -17,7 +17,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -269,7 +269,7 @@ describe("army-construction datasheet lists (sub-shape B)", () => {
   it("refuses a datasheet list outside a list-building group, and as a Warlord subject", () => {
     const select = "Select one Alpha Squad unit. That unit can make a Normal move.";
     expect(errorsOf(placed(select,
-      ["Select one", "select-unit", { count: 1 }],
+      ["Select one", "select-unit", { scope: "friendly", distance: "any", visible: false }],
       filter("Alpha Squad unit", { side: "friendly", datasheets: ["alpha-squad"] }),
       ["That unit can make a Normal move", "make-move", { subject: "antecedent", move_type: "normal" }]), select)).toMatch(/outside army construction/);
     const warlord = "You cannot select an Alpha Squad model to be your Warlord.";
@@ -299,7 +299,7 @@ describe("army-construction core checks", () => {
     const sheets = "Your army cannot include the following datasheets: Intercessor Squad, Alpha Squad.";
     expect(compiled(sheets,
       ["cannot include the following datasheets", army, { rule: "composition", max: 0, with: "following-filter" }],
-      filter("Intercessor Squad, Alpha Squad", { side: "friendly", datasheets: ["intercessor-squad", "alpha-squad"] })).join()).toMatch(/no core unit: alpha-squad\.$/);
+      filter("Intercessor Squad, Alpha Squad", { side: "friendly", datasheets: ["alpha-squad", "intercessor-squad"] })).join()).toMatch(/no core unit: alpha-squad\.$/);
   });
 });
 

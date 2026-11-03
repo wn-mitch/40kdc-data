@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { bindBareFilterHits } from "../src/semantic-authoring/compile-weapon-qualified.js";
 import { expectCompiled, expectRefused } from "./semantic-authoring-connective-fixture.js";
 
@@ -10,6 +10,11 @@ const FIXTURE_RULE_NAME = "A Trap Well Laid";
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<readonly [string, string, Record<string, unknown>]>): CompileLeaf[] {
+  return unnormalized(text, ...items).map((leaf) => ({ ...leaf, parameters: normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version) }));
+}
+
+/** As placed, with parameters as given: for the compiler's own refusal of a leaf the contract already rejects. */
+function unnormalized(text: string, ...items: Array<readonly [string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters]) => {
@@ -285,7 +290,7 @@ describe("Semantic authoring attack-filter frame over subjectless rolls", () => 
       const text = "Attacks aimed at friendly Omega/Sigma units where the attacker's power is above the bearer's resilience have -1 to wound rolls.";
       const result = compile(placed(text,
         ["friendly Omega/Sigma units", "unit-filter", { side: "friendly", any_keywords: ["OMEGA", "SIGMA"] }],
-        ["where the attacker's power is above the bearer's resilience", "attack-compare", { ...COMPARE, right_of: "this-unit" }],
+        ["where the attacker's power is above the bearer's resilience", "attack-compare", { ...COMPARE, right_of: "attacker" }],
         ["have -1 to wound rolls.", "roll-modifier", WOUND_MINUS_ONE]), text);
       expect(result.ok).toBe(false);
       expect(errorsOf(result)).toMatch(/needs a select-unit or attack right before it/);
@@ -388,7 +393,7 @@ describe("Semantic authoring attack-filter frame over subjectless rolls", () => 
 
     it("refuses a moment that is not this unit's own after-shooting event", () => {
       const text = "After enemy units have shot, each enemy INFANTRY unit was hit by one or more of those attacks made with a zap cannon. Until the end of the turn, that enemy unit is pinned.";
-      const list = placed(text, ["After enemy units have shot", "event", { kind: "attacks-resolved", subject: "enemy" }], INFANTRY, HIT_BY, ZAP, PINNED);
+      const list = placed(text, ["After enemy units have shot", "event", { kind: "attacks-resolved", owner: "enemy", action_kind: "shoot" }], INFANTRY, HIT_BY, ZAP, PINNED);
       expect(() => bindBareFilterHits(list, text)).toThrow("needs the attacks of this unit's own moment");
     });
 
@@ -406,7 +411,9 @@ describe("Semantic authoring attack-filter frame over subjectless rolls", () => 
 
     it("refuses an attack-filter field the hit filter does not have", () => {
       const text = "In your Shooting phase, after this model has shot, each enemy INFANTRY unit was hit by one or more of those attacks made with a zap cannon. Until the end of the turn, that enemy unit is pinned.";
-      const list = placed(text, SHOOTING, AFTER_SHOT, INFANTRY, HIT_BY, ["made with a zap cannon", "attack-filter", { side: "enemy" }], PINNED);
+      expect(() => normalizeFingerprintParameters("attack-filter", { side: "enemy" }, currentFamilyVersion("attack-filter"))).toThrow(/parameters must be exactly/u);
+      // The contract has no side on attack-filter; the binding pass refuses it too, behind that check.
+      const list = unnormalized(text, SHOOTING, AFTER_SHOT, INFANTRY, HIT_BY, ["made with a zap cannon", "attack-filter", { side: "enemy" }], PINNED);
       expect(() => bindBareFilterHits(list, text)).toThrow("names side");
     });
 

@@ -19,7 +19,7 @@ function compileItems(text: string, items: Array<[string, string, Record<string,
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: fragment ?? "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: fragment ?? "RAW_TEXT" };
   });
   return compileLeaves(leaves, text, { name: FIXTURE_RULE_NAME });
 }
@@ -281,7 +281,7 @@ describe("destroyed Warlord: the destruction object takes the Warlord designatio
     ["After your unit has fought", "event", { kind: "attacks-resolved" }],
     ["the enemy", "unit-filter", filter],
     ["WARLORD", "designated-filter", { subject: "antecedent", tag: "warlord" }],
-    ["was destroyed as a result of those attacks", "unit-activity", { activities: [activity], named: "before", container: "none", destroyer: "this-unit" }],
+    ["was destroyed as a result of those attacks", "unit-activity", { activities: [activity], negated: false, named: "before", container: "none", destroyer: "this-unit" }],
     ["each enemy unit", "unit-filter", { side: "enemy" }],
     ["within 6 of your unit", "unit-position", { kind: "within", inches: 6, of: "this-unit", subject: "antecedent", negated: false }],
     ["must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }],

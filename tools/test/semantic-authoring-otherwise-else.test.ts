@@ -24,7 +24,7 @@ function placed(text: string, ...pieces: Piece[]): CompileLeaf[] {
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment };
   });
 }
 
@@ -169,7 +169,7 @@ describe("an Otherwise sentence takes the negation of the leading condition befo
 describe("an Otherwise sentence whose restated condition repeats the eligibility (1118 shape)", () => {
   it("is true only where the restated eligibility holds and the earlier pair does not hold together", () => {
     const text = "If this unit was eligible to fight this phase, and this unit is not engaged, it can move six inches. Otherwise, if this unit was eligible to fight this phase, it can fall back.";
-    const eligible = { subject: "this-unit", activity: "fight", negated: false };
+    const eligible = { subject: "this-unit", to: "fight", negated: false };
     const steps = effectOf(text,
       ["this unit was eligible to fight this phase", "eligible", eligible],
       ["this unit is not engaged", "unit-state", engaged],
@@ -225,12 +225,12 @@ describe("bullets and colons split the sentences of a list before its Otherwise 
 describe("an Otherwise after a phase-and-selection head (7005 shape, with a bearer-level condition)", () => {
   const text = "In your Command phase, select one friendly SPIRIT unit within 6\" of this model. If this model is below Starting Strength, you can return one destroyed model to that unit. Otherwise, one model in that unit regains up to D3 lost wounds.";
   const pieces: Piece[] = [
-    ["In your Command phase", "phase-window", { phase: "command", turn: "own" }],
+    ["In your Command phase", "phase-window", { phase: "command", turn: "your" }],
     ["select one", "select-unit", { distance: "any", visible: false }],
     ["friendly SPIRIT unit", "unit-filter", { side: "friendly", keywords: ["SPIRIT"] }],
     ["within 6\" of this model", "aura-range", { inches: 6 }],
     ["this model is below Starting Strength", "unit-state", { states: ["below-starting-strength"], subject: "this-unit", negated: false }],
-    ["you can return one destroyed model", "return-models", { subject: "antecedent", count: 1 }],
+    ["you can return one destroyed model", "return-models", { subject: "antecedent", count: "1" }],
     ["Otherwise", "otherwise", {}],
     ["one model in that unit regains up to D3 lost wounds", "regain-wounds", { subject: "antecedent", amount: "D3" }],
   ];
@@ -251,12 +251,12 @@ describe("an Otherwise after a phase-and-selection head (7005 shape, with a bear
       "Otherwise, one model in that unit regains up to D3 lost wounds.",
     ].join(" ");
     const result = compile(antecedentText,
-      ["In your Command phase", "phase-window", { phase: "command", turn: "own" }],
+      ["In your Command phase", "phase-window", { phase: "command", turn: "your" }],
       ["select one", "select-unit", { distance: "any", visible: false }],
       ["friendly SPIRIT unit", "unit-filter", { side: "friendly", keywords: ["SPIRIT"] }],
       ["within 6\" of this model", "aura-range", { inches: 6 }],
       ["that unit is below Starting Strength", "unit-state", { states: ["below-starting-strength"], subject: "antecedent", negated: false }],
-      ["you can return one destroyed model", "return-models", { subject: "antecedent", count: 1 }],
+      ["you can return one destroyed model", "return-models", { subject: "antecedent", count: "1" }],
       ["Otherwise", "otherwise", {}],
       ["one model in that unit regains up to D3 lost wounds", "regain-wounds", { subject: "antecedent", amount: "D3" }]);
     expectCompiled(result);

@@ -10,6 +10,7 @@ import { placements } from "../src/semantic-authoring/compile-placement.js";
 import { isSameAttackResolved } from "../src/semantic-authoring/compile-weapon-qualified.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
+import { outsideContract } from "./leaf-contract.js";
 import { describeTrigger } from "../src/translate/trigger.js";
 
 // Fabricated wording only: the keywords (ALPHA, BETA, GAMMA) and the sentences are invented; only the sentence shape is kept.
@@ -21,7 +22,7 @@ const base = (JSON.parse(readFileSync(join(dataRoot, "adeptus-mechanicus", "abil
 
 type Item = [wording: string, family: string, parameters: Record<string, unknown>];
 
-/** Leaves placed on their own wording in `text`, in order (a family version the current one by default). */
+/** Leaves placed on their own wording in `text`, in order, at the current family version with parameters as stored. */
 function placed(text: string, items: Item[]): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
@@ -30,7 +31,8 @@ function placed(text: string, items: Item[]): CompileLeaf[] {
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     const end = start + Buffer.byteLength(wording, "utf8");
     from = end;
-    return { role: familyRole(family, currentFamilyVersion(family)), family_id: family, family_version: currentFamilyVersion(family), parameters, start_byte: start, end_byte: end, fragment: "RAW_TEXT" };
+    const version = currentFamilyVersion(family);
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: end, fragment: "RAW_TEXT" };
   });
 }
 
@@ -155,7 +157,9 @@ describe("Semantic authoring destroyer filter after a unit-destroyed moment", ()
     const text = "When a friendly ALPHA unit is destroyed by an enemy unit. That enemy unit is marked.";
     const leaves = placed(text, [ALPHA, destroyedUnit(), ENEMY, marked()]);
     leaves[1]!.parameters = { kind: "unit-destroyed", destroy_filter: { weapon: "any" } };
-    const result = compileLeaves(leaves, text);
+    expect(() => normalizeFingerprintParameters("event", leaves[1]!.parameters, currentFamilyVersion("event"))).toThrow(/event parameters must be exactly/u);
+    // The contract has no destroy_filter on event; the compiler still must not fold the filter, behind that check.
+    const result = compileLeaves(outsideContract(leaves), text);
     expect(JSON.stringify(result.ok ? result.mechanics.trigger : null)).not.toContain('"subject"');
   });
 
@@ -168,7 +172,9 @@ describe("Semantic authoring destroyer filter after a unit-destroyed moment", ()
   });
 
   it("refuses a destruction whose subject is already set when the fold runs", () => {
-    const out = placed("is destroyed", [["is destroyed", "event", { kind: "unit-destroyed", subject_filter: { owner: "enemy" } }]]);
+    const out = placed("is destroyed", [["is destroyed", "event", { kind: "unit-destroyed" }]]);
+    // subject_filter is the compiler's own intermediate form, set by an earlier fold; no stored leaf carries it.
+    out[0]!.parameters = { kind: "unit-destroyed", subject_filter: { owner: "enemy" } };
     expect(() => foldDestroyedByFilter(out, { owner: "enemy" })).toThrow("already has a subject");
   });
 

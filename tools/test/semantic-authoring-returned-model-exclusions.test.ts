@@ -19,7 +19,8 @@ function leavesIn(text: string, pieces: Piece[]): CompileLeaf[] {
     const start_byte = Buffer.byteLength(text.slice(0, at));
     return {
       role: family_id === "returned-model-exclusion" ? "CONDITION" : "EFFECT",
-      family_id, family_version: currentFamilyVersion(family_id), parameters,
+      family_id, family_version: currentFamilyVersion(family_id),
+      parameters: normalizeFingerprintParameters(family_id, parameters, currentFamilyVersion(family_id)),
       start_byte, end_byte: start_byte + Buffer.byteLength(phrase), fragment: "RAW_TEXT",
     };
   });
@@ -120,8 +121,8 @@ describe("returned-model exclusions", () => {
   it("preserves Bodyguard membership on an explicitly selected unit without keyword surrogates", () => {
     const text = "Select a friendly unit. Recover a Bodyguard model.";
     const leaves = leavesIn(text, [
-      ["Select a friendly unit", "select-unit", { scope: "friendly", distance: "any" }],
-      ["Recover a Bodyguard model", "return-models", { subject: "selected-unit", count: "1", bodyguard_only: true }],
+      ["Select a friendly unit", "select-unit", { scope: "friendly", distance: "any", visible: false }],
+      ["Recover a Bodyguard model", "return-models", { subject: "antecedent", count: "1", bodyguard_only: true }],
     ]);
     leaves[0]!.role = "EVENT";
     const result = compileLeaves(leaves, text);

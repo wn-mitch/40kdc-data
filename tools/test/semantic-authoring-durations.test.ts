@@ -14,7 +14,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeAt(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -396,12 +396,13 @@ describe("Semantic authoring window period as the default duration", () => {
   });
 
   it("leaves an any-of that holds a non-window alternative without a window period", () => {
-    const text = "In your Shooting phase or while this unit is within 6\" of an enemy unit, you can add 1 to the Hit roll for this unit.";
+    const text = "In your Shooting phase or while this unit is Battle-shocked, you can add 1 to the Hit roll for this unit.";
     const mechanics = mechanicsOf(placed(text,
       ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
-      ["while this unit is within 6\" of an enemy unit", "unit-position", { subject: "this-unit", relation: "within", distance: 6, of: "enemy-unit" }],
+      ["while this unit is Battle-shocked", "unit-state", { states: ["battle-shocked"], subject: "this-unit", negated: false }],
       ["you can", "optional-use", { who: "you" }],
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), text);
+    expect(mechanics.effect.condition.operator).toBe("or");
     expect(mechanics.scope).toEqual({ duration: "permanent" });
   });
 

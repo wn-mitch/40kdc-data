@@ -5,6 +5,7 @@ import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from
 import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { describeCondition } from "../src/translate/condition.js";
 import { expectRefused } from "./semantic-authoring-connective-fixture.js";
+import { outsideContract } from "./leaf-contract.js";
 
 /** The family versions the extensions under test create. */
 const EVERY_MODEL_POSITION_VERSIONS: ReadonlySet<string> = new Set(["unit-position@23"]);
@@ -25,7 +26,7 @@ function placed(text: string, ...items: Item[]): CompileLeaf[] {
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -143,22 +144,25 @@ describe("unit-position models every: compiled shapes", () => {
       ["from your army", "unit-owner", { owner: "friendly" }],
       ["not within Engagement Range of one or more enemy units", "unit-state", { states: ["engaged"], subject: "this-unit", negated: true }],
       ["each model in your unit is within 3\" of a", "unit-position", { kind: "within", inches: 3, of: "following-filter", subject: "antecedent", negated: false, models: "every" }],
-      ["ZETA TRANSPORT", "unit-filter", { side: "friendly", keywords: ["ZETA", "TRANSPORT"] }],
+      ["ZETA TRANSPORT", "unit-filter", { side: "friendly", keywords: ["TRANSPORT", "ZETA"] }],
       ["from your army", "unit-owner", { owner: "friendly" }],
       ["it can embark within that TRANSPORT", "eligibility-permission", { subject: "this-unit", activity: "embark", allow: true }],
     ), text);
     const within = mechanics.effect.condition.operands[2];
     expect(within).toEqual({
       type: "within",
-      parameters: { of: { owner: "friendly", all_of: ["ZETA", "TRANSPORT"] }, range: { inches: 3 }, models: "every" },
+      parameters: { of: { owner: "friendly", all_of: ["TRANSPORT", "ZETA"] }, range: { inches: 3 }, models: "every" },
     });
   });
 
   it("refuses an every-model flag the compiler cannot place, even when the family check is bypassed", () => {
     const text = "Each model in this unit is within 3\" of this unit, wholly.";
-    const result = compileLeaves(placed(text,
-      ["Each model in this unit is within 3\" of this unit, wholly.", "unit-position", { kind: "within", inches: 3, of: "this-unit", subject: "this-unit", negated: false, models: "every", wholly: true }],
-    ), text);
+    const wholly = { kind: "within", inches: 3, of: "this-unit", subject: "this-unit", negated: false, models: "every", wholly: true };
+    // The family check refuses this leaf; the compiler must refuse it too when it reaches compile anyway.
+    expect(() => normalizeFingerprintParameters(POSITION, wholly, VERSION)).toThrow(/cannot combine with wholly/u);
+    const { wholly: _wholly, ...placeable } = wholly;
+    const [position] = placed(text, ["Each model in this unit is within 3\" of this unit, wholly.", POSITION, placeable]);
+    const result = compileLeaves(outsideContract([{ ...position!, parameters: wholly }]), text);
     expectRefused(result);
     expect(result.errors.join(" ")).toContain("cannot combine with wholly");
   });

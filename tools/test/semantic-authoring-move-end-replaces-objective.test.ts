@@ -27,7 +27,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -126,7 +126,7 @@ describe("move-end nearest to an objective (make-move, must)", () => {
       ["Your unit can make a Normal move", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }],
       ["must end that move as close as possible to that objective", "move-end-nearest", { to: "selected-objective" }],
       ["Choose one objective marker", "select-objective-open", { bind_as: "marker" }],
-      ["Your unit gains fights first", "feel-no-pain", { subject: "this-model", threshold: 5 }],
+      ["Your unit gains fights first", "feel-no-pain", { subject: "this-model", threshold: 5, against: "all" }],
     ), text)).toMatch(/comes before the select-objective that binds it/u);
   });
 
@@ -136,9 +136,9 @@ describe("move-end nearest to an objective (make-move, must)", () => {
       ["Your unit can make a Normal move", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }],
       ["must end that move as close as possible to that objective", "move-end-nearest", { to: "selected-objective" }],
       ["Choose one objective marker", "select-objective-open", { bind_as: "marker" }],
-      ["Your unit gains fights first", "feel-no-pain", { subject: "this-model", threshold: 5 }],
+      ["Your unit gains fights first", "feel-no-pain", { subject: "this-model", threshold: 5, against: "all" }],
       ["Choose another objective marker", "select-objective-open", { bind_as: "other" }],
-      ["Your unit gains stealth", "feel-no-pain", { subject: "this-model", threshold: 4 }],
+      ["Your unit gains stealth", "feel-no-pain", { subject: "this-model", threshold: 4, against: "all" }],
     ), text)).toMatch(/selected objective needs exactly one select-objective in its ability/u);
   });
 
@@ -374,7 +374,7 @@ describe("ability-scoped charge ban on the ability's move (9046 sentence 2, not 
     ["more than 6\" from", "unit-position", { kind: "within", inches: 6, subject: "this-unit", negated: false, of: "following-filter" }],
     ["enemy units", "unit-filter", { side: "enemy" }],
     ["ends that move within 8\"", "event", { kind: "move-ended", move_types: ["normal", "advance"] }],
-    ["not eligible to declare a charge", "eligibility-permission", { subject: "this-unit", activity: "charge", allow: false }],
+    ["not eligible to declare a charge", "eligibility-permission", { subject: "this-unit", activity: "declare-charge", allow: false }],
   );
 
   // The record compiles today; only the ability scope is missing. The expected-failure test asserts
@@ -401,7 +401,7 @@ describe("a bold paragraph opens a clause of its own (the Restrictions paragraph
   const items = (source: string): Array<[string, string, Record<string, unknown>]> => [
     ["makes a Normal move", "event", { kind: "move-ended", move_types: ["normal"] }],
     ["instead of its usual move", "instead", {}],
-    ["Your army can include one unit of this kind", "army-includes", {}],
+    ["Your army can include one unit of this kind", "army-includes", { quantifier: "some", with: "following-filter" }],
   ];
   it("starts a new clause at a line that opens with bold text", () => {
     const places = placements(placed(heading, ...items(heading)), heading);

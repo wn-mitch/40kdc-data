@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { bindAntecedents } from "../src/semantic-authoring/compile-antecedent.js";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { refuseSelectionAcrossMoment } from "../src/semantic-authoring/compile-selection-moment.js";
 import { trailingTestCondition } from "../src/semantic-authoring/compile-preceding-roll.js";
 
@@ -17,7 +17,7 @@ function placed(text: string, ...items: Item[]): CompileLeaf[] {
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -151,12 +151,12 @@ describe("Semantic authoring selection shapes of the model-selection rows", () =
     const result = compileLeaves(placed(text,
       ["Each time that unit is selected", "event", { kind: "selected", to: "shoot", subject: "this-unit" }],
       ["select one", "select-unit", { distance: "any", visible: false, bind_as: "bodyguard" }],
-      ["Bodyguard model", "unit-filter", { side: "friendly", any_keywords: ["BODYGUARD"], level: "model" }],
+      ["Bodyguard model", "unit-filter", { side: "friendly", keywords: ["BODYGUARD"], level: "model" }],
       ["in that unit", "membership", { relation: "in", of: "this-unit" }],
-      ["that model is destroyed", "destroy-models", { recipient: "selected-unit" }]), text);
+      ["that model is destroyed", "destroy-models", { recipient: "selected-unit", count: "1" }]), text);
     expect(result.ok).toBe(true);
     const selector = nodesOf(result.ok ? result.mechanics : {}, "select-units")[0]!.selector;
-    expect(selector.filter).toEqual({ owner: "friendly", any_of: ["BODYGUARD"], level: "model", member_of: "this-unit" });
+    expect(selector.filter).toEqual({ owner: "friendly", all_of: ["BODYGUARD"], level: "model", member_of: "this-unit" });
   });
 
   it("binds an enemy selection within range of and visible to the first selection's model", () => {
@@ -164,10 +164,10 @@ describe("Semantic authoring selection shapes of the model-selection rows", () =
     const result = compileLeaves(placed(text,
       ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
       ["select one friendly", "select-unit", { distance: "any", visible: false, bind_as: "shooter" }],
-      ["EXPLOSIVES model", "unit-filter", { side: "friendly", any_keywords: ["EXPLOSIVES"], level: "model" }],
+      ["EXPLOSIVES model", "unit-filter", { side: "friendly", keywords: ["EXPLOSIVES"], level: "model" }],
       ["Select one unengaged", "select-unit", { distance: "within", inches: 8, visible: true, within_of: "shooter", visible_to: "shooter" }],
       ["enemy unit", "unit-filter", { side: "enemy", states: ["unengaged"] }],
-      ["suffers 1 mortal wound", "mortal-wounds", { amount: 1, recipient: "selected-unit" }]), text);
+      ["suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]), text);
     expect(result.ok).toBe(true);
     const enemy = nodesOf(result.ok ? result.mechanics : {}, "select-units").find((node) => node.selector.filter.owner === "enemy")!.selector;
     expect(enemy).toMatchObject({
@@ -181,10 +181,10 @@ describe("Semantic authoring selection shapes of the model-selection rows", () =
     const result = compileLeaves(placed(text,
       ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
       ["select one friendly", "select-unit", { distance: "any", visible: false }],
-      ["EXPLOSIVES model", "unit-filter", { side: "friendly", any_keywords: ["EXPLOSIVES"], level: "model" }],
+      ["EXPLOSIVES model", "unit-filter", { side: "friendly", keywords: ["EXPLOSIVES"], level: "model" }],
       ["Select one unengaged", "select-unit", { distance: "within", inches: 8, visible: true, within_of: "shooter", visible_to: "shooter" }],
       ["enemy unit", "unit-filter", { side: "enemy", states: ["unengaged"] }],
-      ["suffers 1 mortal wound", "mortal-wounds", { amount: 1, recipient: "selected-unit" }]), text);
+      ["suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]), text);
     expect(result.ok).toBe(false);
     expect(result.ok ? "" : result.errors.join("\n")).toContain("bound by a name (bind_as)");
   });
@@ -274,7 +274,7 @@ describe("Semantic authoring antecedent binding bookkeeping", () => {
 const run = (text: string, ...items: Item[]) => compileLeaves(placed(text, ...items), text, { abilityId: "fabricated-objective-body" });
 
 const OPEN: Item = ["Select one objective marker", "select-objective-open", { bind_as: "marker" }];
-const IN_RANGE: Item = ["While this model is within range of that objective", "unit-position", { kind: "objective-range", objective: "selected", subject: "this-model", negated: false }];
+const IN_RANGE: Item = ["While this model is within range of that objective", "unit-position", { kind: "objective-range", controlled_by: "any", objective: "selected", subject: "this-model", negated: false }];
 const FIRST: Item = ["this model has Fights First", "fights-first", { subject: "this-model" }];
 const PAIN: Item = ["It also has Feel No Pain 5+", "feel-no-pain", { subject: "this-model", threshold: 5, against: "all" }];
 const TEXT = "Select one objective marker. While this model is within range of that objective, this model has Fights First. It also has Feel No Pain 5+.";

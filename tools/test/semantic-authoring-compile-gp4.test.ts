@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 
 // Fabricated wording only. The compiler reads the punctuation and joining words between leaves,
 // so each shape keeps the structure of a record with invented words.
@@ -17,7 +17,7 @@ function placed(text: string, pieces: Piece[]): CompileLeaf[] {
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: fragment ?? "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: fragment ?? "RAW_TEXT" };
   });
 }
 
@@ -120,7 +120,7 @@ describe("a Stratagem's effect moment is a part under its WHEN moment (compile.t
       ["when a unit is selected to fall back", "event", { kind: "selected", move_types: ["fall-back"], to: "move", ...whenOwner }, "WHEN"],
       ...pieces.slice(3, 6),
       ...again,
-      ["it suffers 1 mortal wound", "mortal-wounds", { amount: 1, recipient: "event-subject" }, "EFFECT"],
+      ["it suffers 1 mortal wound", "mortal-wounds", { count: "1", recipient: "event-subject" }, "EFFECT"],
     ],
   ];
 
@@ -325,7 +325,7 @@ describe("a While-led leading frame gates a later sentence that says that unit (
     ["While this model is leading a unit", "leading-unit", { subject: "this-model", attachment: "leading" }],
     ["models in that unit have the KEYA ability", "core-ability-grant", { subject: "this-unit", ability: "deep-strike" }],
     ["When making a Normal move", "event", { kind: "move-ended", move_types: ["normal"], subject: "antecedent" }],
-    ["models in that unit can move through models", "move-through", { subject: "antecedent", passthrough: ["models"], applies_to_moves: ["normal"] }],
+    ["models in that unit can move through models", "move-through", { subject: "antecedent", passthrough: "models", applies_to_moves: ["normal"] }],
   ];
   const leading = { type: "attachment", parameters: { subject: "this-model", role: "leading" } };
 
@@ -337,7 +337,7 @@ describe("a While-led leading frame gates a later sentence that says that unit (
 
   it("leaves a later sentence that never says that unit ungated", () => {
     const other = text.replace("models in that unit can move through models", "this model can move through models");
-    const steps = mechanicsOf(other, [...pieces.slice(0, 3), ["this model can move through models", "move-through", { subject: "this-model", passthrough: ["models"], applies_to_moves: ["normal"] }]]).effect.steps as Array<Record<string, any>>;
+    const steps = mechanicsOf(other, [...pieces.slice(0, 3), ["this model can move through models", "move-through", { subject: "this-model", passthrough: "models", applies_to_moves: ["normal"] }]]).effect.steps as Array<Record<string, any>>;
     expect(JSON.stringify(steps[1])).not.toContain("attachment");
   });
 });

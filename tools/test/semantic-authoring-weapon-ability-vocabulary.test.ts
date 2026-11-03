@@ -12,7 +12,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -79,14 +79,15 @@ describe("weapon-property-scope with a target qualifier", () => {
   });
 
   it("refuses a qualifier after a run of two keywords, rather than gating both on it", () => {
-    const two = "Friendly ALPHA units' attacks have [LETHAL HITS] and [SUSTAINED HITS 1: CHARACTER].";
+    const two = "Friendly ALPHA units' attacks have [LETHAL HITS] and [SUSTAINED HITS 1: CHARACTER/MONSTER].";
     const result = compileLeaves(placed(two,
       ["Friendly ALPHA units'", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
       ["attacks", "weapon-property-scope", { subject: "antecedent", weapon_type: "all" }],
       ["LETHAL HITS", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
       ["SUSTAINED HITS 1", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }],
-      ["CHARACTER", "unit-filter", { side: "any", any_keywords: ["CHARACTER"] }]), two);
+      ["CHARACTER/MONSTER", "unit-filter", { side: "any", any_keywords: ["CHARACTER", "MONSTER"] }]), two);
     expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join(" ")).toContain("keyword run of more than one keyword");
   });
 
   it("does not fold a qualifier whose separator is not a colon", () => {
@@ -197,7 +198,7 @@ describe("wave-9 Cleave records with a named weapon or a stat beside the keyword
   it("compiles a Cleave N grant on one named weapon (the bold weapon name is its weapon_name)", () => {
     const text = "This unit's Maulerfiend Fists have [Cleave 2].";
     const result = compileLeaves(placed(text,
-      ["This unit's Maulerfiend Fists have [Cleave 2]", "weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 2", weapon_name: "Maulerfiend Fists" }]), text);
+      ["This unit's Maulerfiend Fists have [Cleave 2]", "weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 2", weapon_type: "melee", weapon_name: "Maulerfiend Fists" }]), text);
     expect(result.ok ? [] : result.errors).toEqual([]);
     expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"keyword_id":"cleave","parameters":{"value":2}');
   });

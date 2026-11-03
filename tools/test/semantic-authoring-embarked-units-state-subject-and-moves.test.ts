@@ -4,6 +4,7 @@ import { compileLeaves, type CompileLeaf, type CorePatch } from "../src/semantic
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { claimedByEmbarkedState } from "../src/semantic-authoring/compile-embarked-exclusion.js";
+import { outsideContract } from "./leaf-contract.js";
 import { mergeStackedFilters } from "../src/semantic-authoring/compile-unit-filter-merge.js";
 
 /** The one target restriction a compiled core patch carries (a list is a test failure). */
@@ -28,7 +29,7 @@ function placed(text: string, ...items: Item[]): CompileLeaf[] {
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, ...(fragment ? { fragment } : {}) };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, ...(fragment ? { fragment } : {}) };
   });
 }
 
@@ -228,10 +229,16 @@ describe("unit-state embarked within a named Transport", () => {
 
   it("refuses a named Transport for a unit that is not a filter's (a selected unit)", () => {
     const text = "Select one friendly unit. If that unit is stowed within this Hauler, add 1 to the Hit roll for that unit.";
-    expect(refusal(text,
+    // The family refuses embarked with a with; the compiler names the DSL gap for a leaf that reaches it anyway.
+    const stowed = { states: ["embarked"], subject: "selected-unit", negated: false, with: "this-unit" };
+    expect(() => normalizeFingerprintParameters("unit-state", stowed, currentFamilyVersion("unit-state"))).toThrow(/embarked takes no with/u);
+    const placeable = { states: ["embarked"], subject: "this-unit", negated: false };
+    const leaves = placed(text,
       ["Select one friendly unit", "select-unit", { scope: "friendly", distance: "any", visible: false }],
-      ["that unit is stowed within this Hauler", "unit-state", { states: ["embarked"], subject: "selected-unit", negated: false, with: "this-unit" }] as Item,
-      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }])).toMatch(/DSL_GAP: a named unit embarked within a named Transport/);
+      ["that unit is stowed within this Hauler", "unit-state", placeable],
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
+    const result = compileLeaves(outsideContract(leaves.map((leaf) => leaf.family_id === "unit-state" ? { ...leaf, parameters: stowed } : leaf)), text);
+    expect(result.ok ? "" : result.errors.join("; ")).toMatch(/DSL_GAP: a named unit embarked within a named Transport/);
   });
 });
 
@@ -275,7 +282,10 @@ describe("a Transport target and the unit embarked within it", () => {
 
   it("keeps the filters apart under both spellings of the state's subject (before and after antecedent binding)", () => {
     const filter = (keywords: string[]) => placed("x", ["x", "unit-filter", { side: "friendly", keywords }, "TARGET"])[0]!;
-    const state = (subject: string) => placed("x", ["x", "unit-state", { states: ["embarked"], subject, negated: false, with: "this-unit" }, "TARGET"])[0]!;
+    // These leaves go to the merge and claim helpers, not to compileLeaves: filtered-units is the bound spelling
+    // (after antecedent binding) and some of the non-claiming states are ones no stored leaf carries.
+    const raw = (parameters: Record<string, unknown>) => ({ ...placed("x", ["x", "unit-state", { states: ["engaged"], subject: "this-unit", negated: false }, "TARGET"])[0]!, parameters });
+    const state = (subject: string) => raw({ states: ["embarked"], subject, negated: false, with: "this-unit" });
     for (const subject of ["antecedent", "filtered-units"]) {
       const list = [filter(["ALPHA", "TRANSPORT"]), filter(["ALPHA", "BATTLELINE"]), state(subject)];
       expect(mergeStackedFilters(list)).toHaveLength(3);
@@ -284,8 +294,8 @@ describe("a Transport target and the unit embarked within it", () => {
     expect(mergeStackedFilters([filter(["ALPHA", "TRANSPORT"]), filter(["ALPHA", "BATTLELINE"])])).toHaveLength(1);
     // A different state, a state with no Transport and a state about another subject do not claim the filter.
     for (const parameters of [{ states: ["engaged"], subject: "antecedent", negated: false }, { states: ["embarked"], subject: "antecedent", negated: false }, { states: ["embarked"], subject: "this-unit", negated: false, with: "this-unit" }]) {
-      const other = placed("x", ["x", "unit-state", parameters, "TARGET"])[0]!;
-      expect(claimedByEmbarkedState([filter(["A"]), filter(["B"]), other], 1, "TARGET")).toBe(false);
+      const other = raw(parameters);
+      expect(claimedByEmbarkedState([filter(["ALPHA"]), filter(["BRAVO"]), other], 1, "TARGET")).toBe(false);
     }
   });
 

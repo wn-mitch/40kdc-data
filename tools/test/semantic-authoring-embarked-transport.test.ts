@@ -3,14 +3,20 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { designation } from "../src/semantic-authoring/compile-wrappers.js";
+import { outsideContract } from "./leaf-contract.js";
 
 /** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
 const FIXTURE_RULE_NAME = "A Trap Well Laid";
 
 // Fabricated wording throughout: "stowed within a Hauler" stands for a unit embarked within a Transport.
 
-/** Leaves on their own wording in `text`, in order, all in one fragment (or none). */
+/** Leaves on their own wording in `text`, in order, all in one fragment (or none), in stored (normalized) form. */
 function placed(text: string, fragment: string | undefined, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
+  return located(text, fragment, items).map((leaf) => ({ ...leaf, parameters: normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version) }));
+}
+
+/** placed() without normalization: for a leaf the contract rejects on purpose (outsideContract). */
+function located(text: string, fragment: string | undefined, items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters]) => {
@@ -82,12 +88,12 @@ describe("bearer-transport as a subject (wave 10)", () => {
   it("keeps the Transport as the target when a leader is attached (the unit-widening must not reach it)", () => {
     const text = "Attached Leader. Your Hauler has the Pathfinder 9 ability.";
     const mech = mechanicsOf(text, undefined,
-      ["Attached Leader", "leading-unit", { attachment: "leading" }],
+      ["Attached Leader", "leading-unit", { subject: "this-model", attachment: "leading" }],
       ["Your Hauler has the Pathfinder 9 ability", "core-ability-grant", { subject: "bearer-transport", ability: "scouts", value: 9 }]);
     expect(mech.effect.effect).toMatchObject({ type: "ability-grant", target: "bearer-transport" });
     const unitText = "Attached Leader. This unit has the Pathfinder 9 ability.";
     const unit = mechanicsOf(unitText, undefined,
-      ["Attached Leader", "leading-unit", { attachment: "leading" }],
+      ["Attached Leader", "leading-unit", { subject: "this-model", attachment: "leading" }],
       ["This unit has the Pathfinder 9 ability", "core-ability-grant", { subject: "this-unit", ability: "scouts", value: 9 }]);
     expect(unit.effect.effect).toMatchObject({ target: "this-unit" });
   });
@@ -112,7 +118,7 @@ describe("bearer-transport as a subject (wave 10)", () => {
   it("refuses a Stratagem that names the bearer's Transport: a Stratagem has no bearer", () => {
     const text = "Fight phase. Its Hauler has M increased by 2.";
     const result = compiled(text, "stratagem-fragment",
-      ["Fight phase", "use-window", { phases: [], your_phases: [], opponent_phases: [], either_phases: ["fight"] }],
+      ["Fight phase", "use-window", { your_phases: [], opponent_phases: [], either_phases: ["fight"] }],
       ["Its Hauler has M increased by 2", "characteristic-modifier", { subject: "bearer-transport", characteristics: ["M"], operation: "add", value: 2 }]);
     expect(result.ok).toBe(false);
     expect(result.ok ? "" : result.errors.join(" ")).toMatch(/no bearer/);
@@ -126,10 +132,11 @@ describe("bearer-transport as a subject (wave 10)", () => {
 
 describe("select-unit within_origin (wave 10)", () => {
   const SELECT = "Movement phase. Select one friendly unit within 6\" of its Hauler. That unit has a 5+ invulnerable save.";
-  const selectWith = (parameters: Record<string, unknown>) => compiled(SELECT, undefined,
+  const selectItems = (parameters: Record<string, unknown>): Array<[string, string, Record<string, unknown>]> => [
     ["Movement phase", "phase-window", { phase: "movement", turn: "your" }],
     ["Select one friendly unit within 6\" of its Hauler", "select-unit", parameters],
-    ["That unit has a 5+ invulnerable save", "invulnerable-save", { subject: "antecedent", threshold: 5 }]);
+    ["That unit has a 5+ invulnerable save", "invulnerable-save", { subject: "antecedent", threshold: 5 }]];
+  const selectWith = (parameters: Record<string, unknown>) => compiled(SELECT, undefined, ...selectItems(parameters));
 
   it("measures the distance from the bearer's Transport: reference beside within_inches", () => {
     const result = selectWith({ scope: "friendly", distance: "within", inches: 6, visible: false, within_origin: "bearer-transport" });
@@ -146,7 +153,9 @@ describe("select-unit within_origin (wave 10)", () => {
     expect(() => normalize("select-unit", { scope: "friendly", distance: "any", visible: false, within_origin: "bearer-transport" })).toThrow(/needs distance within/);
     expect(() => normalize("select-unit", { scope: "friendly", distance: "within", inches: 6, visible: false, within_origin: "bearer-transport", within_of: "anchor" })).toThrow(/name two origins/);
     expect(() => normalize("select-unit", { scope: "friendly", distance: "within", visible: false, within_origin: "bearer-transport" })).toThrow(/needs inches/);
-    expect(() => selectWith({ scope: "friendly", distance: "any", visible: false, within_origin: "bearer-transport" })).toThrow(/needs a within distance/);
+    // The compiler refuses the same leaf on its own, behind the contract check above.
+    const anyDistance = outsideContract(located(SELECT, undefined, selectItems({ scope: "friendly", distance: "any", visible: false, within_origin: "bearer-transport" })));
+    expect(() => compileLeaves(anyDistance, SELECT, { name: FIXTURE_RULE_NAME })).toThrow(/needs a within distance/);
   });
 
   it("preserves the Transport as a designated selection's range origin", () => {

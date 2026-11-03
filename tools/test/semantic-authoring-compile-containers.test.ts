@@ -28,7 +28,7 @@ function authored(factionId: string, abilityId: string): Record<string, unknown>
 let offset = 0;
 function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion = 1, fragment?: string): CompileLeaf {
   offset += 10;
-  return { role, family_id: familyId, family_version: familyVersion, parameters, start_byte: offset, ...(fragment !== undefined ? { fragment } : {}) };
+  return { role, family_id: familyId, family_version: familyVersion, parameters: normalizeFingerprintParameters(familyId, parameters, familyVersion), start_byte: offset, ...(fragment !== undefined ? { fragment } : {}) };
 }
 
 function compiled(leaves: CompileLeaf[]) {
@@ -224,7 +224,7 @@ describe("Semantic authoring leading-container compiler", () => {
     const result = compileLeaves([
       leaf("EFFECT", "stance-select-open", { scope: "unit", mode: "consumable" }, 1, "A"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-      leaf("EVENT", "named-option", { label: "Ballistic Doctrine", option_id: "ballistic-doctrine" }, 1, "C"),
+      leaf("EVENT", "named-option", { label: "Ballistic Doctrine", option_id: "ballistic-doctrine" }, 3, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]);
     expect(result.ok).toBe(false);
@@ -233,9 +233,9 @@ describe("Semantic authoring leading-container compiler", () => {
   it("compiles issue-orders-open into named Orders", () => {
     expect(compiled([
       leaf("EFFECT", "issue-orders-open", { count: 1, range: 6, eligible_keyword: "INFANTRY" }, 1, "A"),
-      leaf("EVENT", "named-option", { label: "First Rank, Fire!", option_id: "first-rank-fire" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "First Rank, Fire!", option_id: "first-rank-fire" }, 3, "B"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-      leaf("EVENT", "named-option", { label: "Take Aim!", option_id: "take-aim" }, 1, "C"),
+      leaf("EVENT", "named-option", { label: "Take Aim!", option_id: "take-aim" }, 3, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]).mechanics.effect).toEqual({
       type: "issue-orders", count: 1, range: { inches: 6 }, eligible: { all_of: ["INFANTRY"] },
@@ -246,9 +246,9 @@ describe("Semantic authoring leading-container compiler", () => {
     });
     expect(rendered(base(), [
       leaf("EFFECT", "issue-orders-open", {}, 1, "A"),
-      leaf("EVENT", "named-option", { label: "First Rank, Fire!", option_id: "first-rank-fire" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "First Rank, Fire!", option_id: "first-rank-fire" }, 3, "B"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-      leaf("EVENT", "named-option", { label: "Take Aim!", option_id: "take-aim" }, 1, "C"),
+      leaf("EVENT", "named-option", { label: "Take Aim!", option_id: "take-aim" }, 3, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]).length).toBeGreaterThan(0);
   });
@@ -327,9 +327,9 @@ describe("Semantic authoring leading-container compiler", () => {
   it("compiles dice-pool-allocation-open into options gated by a dice requirement", () => {
     expect(compiled([
       leaf("EFFECT", "dice-pool-allocation-open", { pool_count: 6, pool_die: "D6", max_activations: 1 }, 1, "A"),
-      leaf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter", requirement_type: "pair", requirement_min_value: 3 }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter", requirement_type: "pair", requirement_min_value: 3 }, 3, "B"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-      leaf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
+      leaf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, 3, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]).mechanics.effect).toEqual({
       type: "dice-pool-allocation", pool: { count: 6, die: "D6" }, max_activations: 1,
@@ -340,9 +340,9 @@ describe("Semantic authoring leading-container compiler", () => {
     });
     expect(rendered(base(), [
       leaf("EFFECT", "dice-pool-allocation-open", { pool_count: 6, pool_die: "D6", max_activations: 1 }, 1, "A"),
-      leaf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter", requirement_type: "pair", requirement_min_value: 3 }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter", requirement_type: "pair", requirement_min_value: 3 }, 3, "B"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-      leaf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
+      leaf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, 3, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]).length).toBeGreaterThan(0);
   });
@@ -350,9 +350,9 @@ describe("Semantic authoring leading-container compiler", () => {
   it("refuses a dice-pool-allocation option whose named-option leaf carries no requirement", () => {
     const result = compileLeaves([
       leaf("EFFECT", "dice-pool-allocation-open", { pool_count: 6, pool_die: "D6", max_activations: 1 }, 1, "A"),
-      leaf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter" }, 3, "B"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-      leaf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
+      leaf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, 3, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]);
     expect(result.ok).toBe(false);

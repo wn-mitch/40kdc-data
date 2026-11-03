@@ -297,9 +297,12 @@ describe("such a weapon after a scope-printed grant", () => {
   });
 
   it("refuses an attack that already names its attacker with attacker_filter", () => {
-    // attacker_filter is folded in by foldUnitFilters, not authored, so the test adds it as the fold would.
-    const list = placed(SUCH_TEXT, ...sustained()).map((leaf) => leaf.family_id === "attack" ? { ...leaf, parameters: { ...leaf.parameters, attacker_filter: { owner: "friendly" } } } : leaf);
-    const result = resultOf(list, SUCH_TEXT);
+    // attacker_filter is folded in by foldUnitFilters, not authored: "made by a" + a unit-filter names who attacks.
+    const text = SUCH_TEXT.replace("each time an attack made", "each time an attack made by a LAMBDA model");
+    const items = sustained();
+    items.splice(5, 0, ["LAMBDA model", "unit-filter", { side: "friendly", keywords: ["LAMBDA"], level: "model" }]);
+    items[4] = ["each time an attack made by a", items[4]![1], items[4]![2]];
+    const result = resultOf(placed(text, ...items), text);
     expect(result.ok ? "" : result.errors.join(" ")).toContain("attacker_filter");
   });
 

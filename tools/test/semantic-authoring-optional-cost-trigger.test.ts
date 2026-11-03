@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
+import { outsideContract } from "./leaf-contract.js";
 import { DESIGNATION_IDS } from "../src/translate/designations.js";
 import { createValidator } from "../src/schema-loader.js";
 import { describeAbility } from "../src/translate/effect.js";
@@ -15,7 +16,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -100,12 +101,12 @@ function bastionLeaves(text = BASTION_TEXT, tag = "bastion-shield-yp-spent", wit
   const leaves = placed(text,
     ["Each time a ranged attack targets the bearer's unit", "attack", { direction: "targeted", unit: "this-unit", attack_type: "ranged" }],
     ["if the attacking model is within 12\"", "unit-position", { kind: "within", inches: 12, of: "this-model", subject: "attacker", negated: false }],
-    ["worsen the Armour Penetration characteristic by 1", "characteristic-modifier", { characteristics: ["AP"], operation: "worsen", value: 1, subject: "attack", weapon_type: "ranged" }],
+    ["worsen the Armour Penetration characteristic by 1", "characteristic-modifier", { characteristics: ["AP"], operation: "worsen", value: 1, subject: "attack", weapon_type: "all" }],
     ["If you", "optional-cost-paid", { pool: "yp-pool", window: "trigger", subject: "this-unit", tag }],
     ["spend 1YP", "resource-spend", { pool: "yp-pool", amount: 1 }],
     ["until the end of the phase", "duration", { endpoint: "end-of-phase" }],
     ["if the attacking model is within 18\"", "unit-position", { kind: "within", inches: 18, of: "this-model", subject: "attacker", negated: false }],
-    ["worsen the Armour Penetration characteristic by 1", "characteristic-modifier", { characteristics: ["AP"], operation: "worsen", value: 1, subject: "attack", weapon_type: "ranged" }],
+    ["worsen the Armour Penetration characteristic by 1", "characteristic-modifier", { characteristics: ["AP"], operation: "worsen", value: 1, subject: "attack", weapon_type: "all" }],
     ["instead", "instead", {}],
   );
   // "you can spend" shares the read's words: an optional-use over the same span, not a placed leaf after it.
@@ -256,7 +257,10 @@ describe("attacker-subject use read in the attack moment (SS-A, 4213 shape)", ()
   });
 
   it("refuses a use read with no tag: version 2 leaves name their designation", () => {
-    const leaves = attackUseLeaves({ pool: "yp-pool", window: "use", subject: "attacker" }).map((leaf) => leaf.family_id === "optional-cost-paid" ? { ...leaf, family_version: 2 } : leaf);
+    const untagged = { pool: "yp-pool", window: "use", subject: "attacker" };
+    // No stored version 2 leaf lacks a tag (normalization gives the legacy one); the compiler refuses one regardless.
+    expect(v2(untagged)).toEqual({ ...untagged, tag: "yp-spent-this-use" });
+    const leaves = outsideContract(attackUseLeaves({ ...untagged, tag: "x-spent" }).map((leaf) => leaf.family_id === "optional-cost-paid" ? { ...leaf, parameters: untagged } : leaf));
     expect(errorsOf(leaves, ATTACK_USE_TEXT).join(" ")).toMatch(/names no designation tag/);
   });
 });

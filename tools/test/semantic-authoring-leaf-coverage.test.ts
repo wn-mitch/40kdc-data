@@ -3,6 +3,11 @@ import { describe, expect, it } from "vitest";
 import { catalogInventory, COMPOSED, leafCoverage, RETIRED } from "../src/semantic-authoring/leaf-coverage.js";
 import { boundedCombinations } from "../src/semantic-authoring/leaf-coverage-samples.js";
 import { currentFamilyVersion, reviewedFamily } from "../src/semantic-authoring/contracts.js";
+import { allowSyntheticLeaves } from "./leaf-contract.js";
+
+// The coverage sweep compiles each family's sampled parameters, including values its contract rejects, to prove what
+// the compile arm produces; those leaves are synthetic by design.
+allowSyntheticLeaves();
 
 /**
  * Step-8 leaf coverage gate: every DSL type the schema catalog defines must be either produced by

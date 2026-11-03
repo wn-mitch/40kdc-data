@@ -26,7 +26,7 @@ function placedIn(text: string, ...items: Array<[string, string, Record<string, 
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const family_version = currentFamilyVersion(family_id);
-    return { role: familyRole(family_id, family_version), family_id, family_version, parameters, start_byte: start, end_byte: from, fragment };
+    return { role: familyRole(family_id, family_version), family_id, family_version, parameters: normalizeFingerprintParameters(family_id, parameters, family_version), start_byte: start, end_byte: from, fragment };
   });
 }
 
@@ -60,7 +60,7 @@ describe("Semantic authoring characteristic amounts after a recipient filter", (
     expectCompiled(result);
     expect(result.mechanics.effect).toEqual({
       type: "stat-modifier",
-      target: { owner: "friendly", all_of: ["FOO BAR", "BAZ QUX"], level: "model" },
+      target: { owner: "friendly", all_of: ["BAZ QUX", "FOO BAR"], level: "model" },
       modifier: { stat: "OC", operation: "improve", value: 2 },
     });
   });

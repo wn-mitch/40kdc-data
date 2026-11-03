@@ -4,9 +4,10 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { attackOwner, effect } from "../src/semantic-authoring/compile-fragments.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
+import { outsideContract } from "./leaf-contract.js";
 
 // Fabricated wording only: the names, keywords and numbers are invented, and the sentence
 // structure is what the compiler reads (the punctuation and joining words between leaves).
@@ -18,8 +19,13 @@ const base = (JSON.parse(readFileSync(join(dataRoot, "adeptus-mechanicus", "abil
 /** "zero": a zero-width leaf at the first byte of its wording (a frame that precedes the leaf it grants). */
 type Item = [wording: string, family: string, parameters: Record<string, unknown>, ("zero" | undefined)?];
 
-/** Leaves on their own wording in `text`, in order. `version` pins a family version other than the current one. */
+/** Leaves on their own wording in `text`, in order, with parameters as stored. `version` pins a family version other than the current one. */
 function placed(text: string, items: Item[], version?: { family: string; version: number }): CompileLeaf[] {
+  return unnormalized(text, items, version).map((leaf) => ({ ...leaf, parameters: normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version) }));
+}
+
+/** As placed, with parameters as given: only for leaves a test compiles outside the contract on purpose. */
+function unnormalized(text: string, items: Item[], version?: { family: string; version: number }): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters, zero]) => {
@@ -72,7 +78,9 @@ describe("Semantic authoring attacker-side filter on a destruction by an attack"
     const text = SHOT_TEXT;
     const leaves = placed(text, [ASTRA, destroyed(), makesByEnemy(), FLY, hitRoll()]);
     leaves[1]!.parameters = { kind: "unit-destroyed", destroy_filter: { weapon: "any" } };
-    const result = compileLeaves(leaves, text);
+    expect(() => normalizeFingerprintParameters("event", leaves[1]!.parameters, currentFamilyVersion("event"))).toThrow(/event parameters must be exactly/u);
+    // The contract has no destroy_filter on event; the compiler refuses the fold too, behind that check.
+    const result = compileLeaves(outsideContract(leaves), text);
     expect(result.ok).toBe(false);
     expect(result.ok ? "" : result.errors.join(" ")).toContain("cannot also take its destroyer");
   });
@@ -81,7 +89,9 @@ describe("Semantic authoring attacker-side filter on a destruction by an attack"
     const text = SHOT_TEXT;
     const leaves = placed(text, [ASTRA, destroyed(), makesByEnemy(), FLY, hitRoll()]);
     leaves[1]!.parameters = { kind: "unit-destroyed", subject_filter: { owner: "enemy" } };
-    const result = compileLeaves(leaves, text);
+    expect(() => normalizeFingerprintParameters("event", leaves[1]!.parameters, currentFamilyVersion("event"))).toThrow(/event parameters must be exactly/u);
+    // The contract has no subject_filter on event; the compiler refuses the fold too, behind that check.
+    const result = compileLeaves(outsideContract(leaves), text);
     expect(result.ok).toBe(false);
     expect(result.ok ? "" : result.errors.join(" ")).toContain("already has a subject");
   });
@@ -90,7 +100,9 @@ describe("Semantic authoring attacker-side filter on a destruction by an attack"
     const text = SHOT_TEXT;
     const leaves = placed(text, [ASTRA, destroyed(), makesByEnemy(), FLY, hitRoll()]);
     leaves[2]!.parameters = { ...leaves[2]!.parameters, weapon: "any" };
-    const result = compileLeaves(leaves, text);
+    expect(() => normalizeFingerprintParameters("attack", leaves[2]!.parameters, currentFamilyVersion("attack"))).toThrow(/attack parameters must be exactly/u);
+    // The contract has no weapon on attack; the compiler refuses the fold too, behind that check.
+    const result = compileLeaves(outsideContract(leaves), text);
     expect(result.ok).toBe(false);
     expect(result.ok ? "" : result.errors.join(" ")).toContain("cannot fold its maker");
   });
@@ -112,7 +124,7 @@ describe("Semantic authoring attacker filter on an incoming attack's damage", ()
       ["is allocated to a model in that unit", "event", { kind: "damage-allocated" }],
       ["add 1 to the Damage characteristic of that attack", "characteristic-modifier", { subject: "attack", characteristics: ["D"], operation: "add", value: 1, weapon_type: "all" }],
     ]);
-    expect(mechanics.trigger).toMatchObject({ event: "damage-allocated", subject: { owner: "friendly", all_of: ["NURGLE", "LEGIONES DAEMONICA"], level: "model" } });
+    expect(mechanics.trigger).toMatchObject({ event: "damage-allocated", subject: { owner: "friendly", all_of: ["LEGIONES DAEMONICA", "NURGLE"], level: "model" } });
   });
 
   it("changes the Damage of the allocated attack on the bearer's unit, not on every friendly unit", () => {
@@ -261,7 +273,9 @@ describe("Semantic authoring characteristic setter on the attack (characteristic
   });
 
   it("refuses subject attack on version 6, which predates the attack subject", () => {
-    const result = compileLeaves(placed(TEXT, ITEMS, { family: "characteristic-set", version: 6 }), TEXT);
+    expect(() => normalizeFingerprintParameters("characteristic-set", ITEMS[1]![2], 6)).toThrow(/characteristic-set.subject must be one of/u);
+    // Version 6's contract refuses subject attack; the compiler has no DSL target for it either, behind that check.
+    const result = compileLeaves(outsideContract(unnormalized(TEXT, ITEMS, { family: "characteristic-set", version: 6 })), TEXT);
     expect(result.ok).toBe(false);
     expect(result.ok ? "" : result.errors.join(" ")).toContain("has no DSL target");
   });

@@ -1,13 +1,19 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { createValidator } from "../src/schema-loader.js";
+import { outsideContract } from "./leaf-contract.js";
 
 type Item = [string, string, Record<string, unknown>];
 
-/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
+/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text), with parameters as stored. */
 function placed(text: string, ...items: Item[]): CompileLeaf[] {
+  return unnormalized(text, ...items).map((leaf) => ({ ...leaf, parameters: normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version) }));
+}
+
+/** As placed, with parameters as given: only for leaves a test compiles outside the contract on purpose. */
+function unnormalized(text: string, ...items: Item[]): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters]) => {
@@ -112,7 +118,12 @@ describe("Semantic authoring independent selection pair: a friendly recipient an
 
   it("refuses a selection that counts its own units, or names a quantity", () => {
     expect(refusal(...swap(FRIENDLY, ["Select one", "select-unit", { distance: "any", visible: false, bind_as: "alpha-unit", count: 2 }]))).toContain("takes one unit each");
-    expect(refusal(...swap(FRIENDLY, ["Select one", "select-unit", { distance: "any", visible: false, bind_as: "alpha-unit", quantity: "any-number" }]))).toContain("takes one unit each");
+    const quantity: Item = ["Select one", "select-unit", { distance: "any", visible: false, bind_as: "alpha-unit", quantity: "any-number" }];
+    expect(() => normalizeFingerprintParameters("select-unit", quantity[2], currentFamilyVersion("select-unit"))).toThrow(/parameters must be exactly/u);
+    // The contract has no quantity on select-unit; the compiler refuses it too, behind that check.
+    const leaves = outsideContract(unnormalized(TEXT, ...swap(FRIENDLY, quantity)));
+    const result = compileLeaves(leaves, TEXT, { abilityId: "fabricated-independent-pair", name: "Bounty Hunters" });
+    expect(result.ok ? "" : result.errors.join(" ")).toContain("takes one unit each");
   });
 
   it("refuses the pair when no leaf says the attacks target the enemy unit", () => {
@@ -120,8 +131,11 @@ describe("Semantic authoring independent selection pair: a friendly recipient an
   });
 
   it("refuses a target-is-selected leaf that carries its own parameters", () => {
-    expect(refusal(...swap(TARGETING, ["while targeting that enemy unit", "target-is-selected", { by: "friendly-unit" }]))).toContain("with no parameters");
-    expect(refusal(...swap(TARGETING, ["while targeting that enemy unit", "target-is-selected", { target: "that-unit" }]))).toContain("with no parameters");
+    expect(refusal(...swap(TARGETING, ["while targeting that enemy unit", "target-is-selected", { by: "antecedent", target: "selected-unit" }]))).toContain("with no parameters");
+    // The contract names by and target together or neither, so a leaf with one of them never reaches the compiler.
+    for (const half of [{ by: "antecedent" }, { target: "selected-unit" }]) {
+      expect(() => normalizeFingerprintParameters("target-is-selected", half, currentFamilyVersion("target-is-selected"))).toThrow(/by and target together/u);
+    }
   });
 
   it("refuses an effect on the units that is not a grant or an attack scope", () => {

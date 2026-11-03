@@ -7,11 +7,17 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
+import { outsideContract } from "./leaf-contract.js";
 
 type Item = [string, string, Record<string, unknown>, string?];
 
-/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
+/** Leaves on their own wording in `text`, in order (fabricated wording, not rules text), with parameters as stored. */
 function placed(text: string, ...items: Item[]): CompileLeaf[] {
+  return unnormalized(text, ...items).map((leaf) => ({ ...leaf, parameters: normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version) }));
+}
+
+/** As placed, with parameters as given: only for leaves a test compiles outside the contract on purpose. */
+function unnormalized(text: string, ...items: Item[]): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters, fragment = "RAW_TEXT"]) => {
@@ -155,11 +161,14 @@ describe("Semantic authoring hidden retention refusals", () => {
 
   it("refuses bound attacks narrowed by another attack field", () => {
     const text = "When this unit is selected to shoot, those melee attacks do not prevent this unit from being hidden.";
-    expect(errorsOf(text,
+    const version = currentFamilyVersion("attack-filter");
+    expect(() => normalizeFingerprintParameters("attack-filter", { attack_type: "melee", of: "antecedent" }, version)).toThrow(/ranged, not melee/u);
+    // The contract refuses melee bound attacks; the compiler refuses them too (boundAttacksProblem), behind that check.
+    const melee = compileLeaves(outsideContract(unnormalized(text,
       ["When this unit is selected to shoot", "event", { kind: "selected-to-shoot" }],
       ["those melee attacks", "attack-filter", { attack_type: "melee", of: "antecedent" }],
-      hidden("do not prevent this unit from being hidden", "this-unit"))).toMatch(/ranged, not melee/u);
-    const version = currentFamilyVersion("attack-filter");
+      hidden("do not prevent this unit from being hidden", "this-unit"))), text);
+    expect(melee.ok ? "" : melee.errors.join("; ")).toMatch(/ranged, not melee/u);
     for (const extra of [{ fight_type: "normal" }, { weapon_name: "Blade" }, { negated: true }, { all_target_same_unit: true }, { shooting_type: "snap" }]) {
       expect(() => normalizeFingerprintParameters("attack-filter", { of: "antecedent", ...extra }, version)).toThrow(/cannot narrow/u);
     }

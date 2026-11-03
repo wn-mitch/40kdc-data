@@ -20,7 +20,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -348,9 +348,11 @@ describe("Semantic authoring named weapons: family versions refuse what they can
 
 describe("Semantic authoring named weapons: a choice of keywords over named weapons", () => {
   it("makes each keyword option a sequence over the named weapons", () => {
-    const text = "Your unit's Zap cannons and Zap missiles weapons have Lethal Hits or Sustained Hits.";
+    const text = "Your unit's Zap cannons and Zap missiles weapons have Lethal Hits or Sustained Hits 1.";
     const mechanics = mechanicsOf(placed(text,
-      ["Your unit's Zap cannons and Zap missiles weapons have Lethal Hits or Sustained Hits", "weapon-ability-grant", { subject: "this-unit", weapon_type: "ranged", weapon_names: ["Zap cannon", "Zap missile"], keywords: ["Lethal Hits", "Sustained Hits"], keyword_choice: true }]), text, UNIT);
+      ["Your unit's Zap cannons and Zap missiles weapons", "weapon-property-scope", { subject: "this-unit", weapon_type: "ranged", weapon_names: ["Zap cannon", "Zap missile"] }],
+      ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
+      ["Sustained Hits 1", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }]), text, UNIT);
     expect(mechanics.effect.type).toBe("choice");
     for (const option of mechanics.effect.options as Array<{ type: string; steps: Array<{ modifier: { weapons?: { name?: string } } }> }>) {
       expect(option.type).toBe("sequence");

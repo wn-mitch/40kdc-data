@@ -26,7 +26,7 @@ function placed(text: string, ...pieces: Piece[]): CompileLeaf[] {
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment };
   });
 }
 
@@ -193,8 +193,8 @@ describe("a scope that names one weapon: compilation", () => {
 
   it("carries the name onto a set and both keywords of its own weapon, with the leaf's own name refused as a conflict", () => {
     const text = "Its Twin lash weapon has a Damage characteristic of 3 and the [LETHAL HITS] and [PRECISION] abilities.";
-    const pieces = (setParameters: Record<string, unknown>): Piece[] => [
-      ["Its Twin lash weapon has", "weapon-property-scope", { subject: "this-model", weapon_type: "all", weapon_name: "Twin lash" }],
+    const pieces = (setParameters: Record<string, unknown>, scopeType = "all"): Piece[] => [
+      ["Its Twin lash weapon has", "weapon-property-scope", { subject: "this-model", weapon_type: scopeType, weapon_name: "Twin lash" }],
       ["a Damage characteristic of 3", "characteristic-set", { subject: "this-model", characteristic: "D", value: 3, weapon_type: "all", ...setParameters }],
       ["[LETHAL HITS]", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
       ["[PRECISION]", "weapon-ability-keyword", { keyword: "Precision" }],
@@ -203,7 +203,7 @@ describe("a scope that names one weapon: compilation", () => {
     const json = JSON.stringify(mechanics);
     expect(json.match(/"weapons":\{"name":"Twin lash"/gu)).toHaveLength(2);
     expect(json).toMatch(/"stat":"D"/u);
-    expect(refusalOf(placed(text, ...pieces({ weapon_name: "Twin lash" })), text, UNIT)).toMatch(/weapon selection conflicts/u);
+    expect(refusalOf(placed(text, ...pieces({ weapon_name: "Twin lash", weapon_type: "melee" }, "melee")), text, UNIT)).toMatch(/weapon selection conflicts/u);
   });
 
   it("refuses a keyword-selected roll or a removal under a scope that names a weapon, and a roll with a name of its own", () => {

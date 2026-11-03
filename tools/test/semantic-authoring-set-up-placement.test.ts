@@ -18,7 +18,7 @@ function placed(text: string, ...items: Item[]): CompileLeaf[] {
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: fragment ?? "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: fragment ?? "RAW_TEXT" };
   });
 }
 
@@ -306,7 +306,7 @@ describe("Semantic authoring set-up relative placement: the add-unit permission 
 
   it("refuses a permission set-up that carries its own placement", () => {
     expect(errorsOf(bare, TRIGGER, ADD, PERMISSION_UNIT,
-      ["can be set up", "set-up", { subject: "antecedent", to: "battlefield", placement: "unengaged" }], PERMITTED_LIMIT())).toMatch(/own placement/u);
+      ["can be set up", "set-up", { subject: "antecedent", to: "battlefield", placement: "deployment-zone" }], PERMITTED_LIMIT())).toMatch(/own placement/u);
   });
 
   it("refuses a permission whose sentence has no add-unit before it", () => {

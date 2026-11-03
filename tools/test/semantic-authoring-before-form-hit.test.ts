@@ -4,7 +4,7 @@ import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compi
 import { bindBeforeFormHits } from "../src/semantic-authoring/compile-weapon-qualified.js";
 import { foldUnitFilters } from "../src/semantic-authoring/compile-unit-filters.js";
 import { wrapForEachUnit } from "../src/semantic-authoring/compile-wrappers.js";
-import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { createValidator } from "../src/schema-loader.js";
 import { describeAbility } from "../src/translate/index.js";
 import { expectRefused } from "./semantic-authoring-connective-fixture.js";
@@ -21,7 +21,7 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
@@ -79,7 +79,7 @@ describe("a selection's hit eligibility (S1, S2)", () => {
       ["made with its Doomweaver", "attack-filter", { weapon_name: "Doomweaver" }],
       ["Whenever a model in this unit attacks", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
       ["that unit", "target-is-selected", {}],
-      ["re-roll the hit", "reroll", { roll: "hit", subset: "all" }]), text);
+      ["re-roll the hit", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }]), text);
     expect(mechanics.effect.type).toBe("designate-target");
     expect(mechanics.effect.select.selector.eligibility).toEqual({ type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "this-unit", filter: { roll: "hit", result: "success", weapons: { name: "Doomweaver" } }, window: "event" } });
   });
@@ -87,8 +87,8 @@ describe("a selection's hit eligibility (S1, S2)", () => {
   it("refuses a pair of selections whose eligibility no single select owns", () => {
     const text = "Select one friendly model, then select one enemy unit within 6\" of it hit by one or more of those attacks made with its Doomweaver. Until the end of the phase, that enemy unit is pinned.";
     const result = compileLeaves(placed(text,
-      ["Select one friendly model", "select-unit", { scope: "friendly", distance: "any", visible: false, target_kind: "model", bind_as: "bearer" }],
-      ["select one enemy unit within 6\" of it", "select-unit", { scope: "enemy", distance: "within", within_of: "bearer", visible: false }],
+      ["Select one friendly model", "select-unit", { scope: "friendly", distance: "any", visible: false, bind_as: "bearer" }],
+      ["select one enemy unit within 6\" of it", "select-unit", { scope: "enemy", distance: "within", inches: 6, within_of: "bearer", visible: false }],
       ["hit by one or more of those attacks", "hit-by-attacks", { subject: "selected-unit" }],
       ["made with its Doomweaver", "attack-filter", { weapon_name: "Doomweaver" }],
       ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }]), text, { name: FIXTURE_RULE_NAME });
@@ -100,7 +100,7 @@ describe("a selection's hit eligibility (S1, S2)", () => {
   it("carries a before-form hit eligibility onto a persistent designation's selector", () => {
     const text = "At the start of the battle, select one enemy unit hit by one or more of those attacks made with its Doomweaver to be this model's quarry. Each time this model makes an attack that targets its quarry, you can re-roll the Hit roll.";
     const result = compileLeaves(placed(text,
-      ["At the start of the battle", "phase-window", { phase: "start-of-battle", turn: "none" }],
+      ["At the start of the battle", "event", { kind: "battle-started" }],
       ["select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
       ["hit by one or more of those attacks", "hit-by-attacks", { subject: "selected-unit" }],
       ["made with its Doomweaver", "attack-filter", { weapon_name: "Doomweaver" }],

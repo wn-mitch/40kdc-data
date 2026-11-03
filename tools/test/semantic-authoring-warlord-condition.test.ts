@@ -232,15 +232,12 @@ describe("Warlord test refused on an aura, a for-each and a unit-filter target (
 
   it("compiles a Warlord unit-filter as an attack's target: the defender is the Warlord's unit (T7 SS-L)", () => {
     const text = "Each time a model in this unit makes an attack that targets the enemy WARLORD, add 1 to the Hit roll.";
-    const [attack, roll] = placed(text,
-      ["Each time a model in this unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
-      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
-    // unit-filter-target is derived by the folds, not a reviewed family, so the leaf is built directly.
-    const wording = "that targets the enemy WARLORD";
-    const start = text.indexOf(wording);
-    const target: CompileLeaf = { role: "CONDITION", family_id: "unit-filter-target", family_version: 1, parameters: { side: "enemy", designated: "warlord" }, start_byte: start, end_byte: start + wording.length, fragment: "RAW_TEXT" };
-    const effect = compiledEffect([attack!, target, roll!], text).effect;
-    expect(JSON.stringify(effect)).toContain('{"type":"matches","parameters":{"subject":"defender","filter":{"designated":"warlord"}}}');
+    // The attack's target is the unit-filter right after it (attack target following-filter).
+    const effect = compiledEffect(placed(text,
+      ["Each time a model in this unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any", target: "following-filter" }],
+      ["the enemy WARLORD", "unit-filter", { side: "enemy", designated: "warlord" }],
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), text).effect;
+    expect(JSON.stringify(effect)).toContain('{"type":"matches","parameters":{"subject":"defender","filter":{"owner":"enemy","designated":"warlord"}}}');
   });
 });
 
