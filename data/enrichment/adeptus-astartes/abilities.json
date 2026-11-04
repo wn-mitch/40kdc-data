@@ -374,6 +374,7 @@
             "parameters": {
               "subject": "defender",
               "filter": {
+                "owner": "enemy",
                 "none_of": [
                   "MONSTER",
                   "VEHICLE"
@@ -587,8 +588,8 @@
         }
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
+        "type": "choice",
+        "options": [
           {
             "type": "re-roll",
             "target": "this-unit",
@@ -686,27 +687,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "move-ended",
-              "filter": {
-                "move_types": [
-                  "ingress"
-                ]
-              },
-              "window": "turn"
-            }
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "ingress"
+            ]
           },
-          {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "ranged"
-            }
-          }
-        ]
+          "window": "turn"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -714,7 +704,10 @@
         "modifier": {
           "roll": "hit",
           "operation": "add",
-          "value": 1
+          "value": 1,
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -1396,12 +1389,6 @@
         "selector": {
           "filter": {
             "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 18
-              },
-              "of": "this-unit"
-            },
             "visible": {
               "to": "this-model"
             }
@@ -1409,6 +1396,20 @@
           "count": {
             "min": 1,
             "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 18
+                  }
+                }
+              }
+            }
           }
         },
         "effect": {
@@ -1450,6 +1451,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
+            "owner": "enemy",
             "any_of": [
               "FORTIFICATION",
               "MONSTER",
@@ -2382,11 +2384,11 @@
     "faction_id": "adeptus-astartes",
     "trigger": [
       {
-        "event": "move-started",
+        "event": "move-ended",
         "optional": true
       },
       {
-        "event": "move-ended",
+        "event": "move-started",
         "optional": true
       }
     ]
@@ -2761,19 +2763,28 @@
     "source_digest": "71adeee5b1a5174c0de1f1e79a8cfad3a424531d68f78a28e66b2da4eeae451f",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "conditional",
-            "condition": {
+      "type": "act-on-death",
+      "target": "event-object",
+      "modifier": {
+        "act": "fight",
+        "resolution": "when-unit-fights",
+        "removal": "after-unit-fights-or-phase-end",
+        "gate": {
+          "dice": "D6",
+          "threshold": 2,
+          "comparison": "gte",
+          "modifiers": []
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
+              }
+            },
+            {
               "operator": "not",
               "operands": [
                 {
@@ -2787,42 +2798,27 @@
                   }
                 }
               ]
-            },
-            "effect": {
-              "type": "destroy-models",
-              "target": "this-model",
-              "modifier": {
-                "count": 1
-              }
             }
-          },
-          {
-            "type": "act-on-death",
-            "target": "event-object",
-            "modifier": {
-              "act": "fight",
-              "resolution": "when-unit-fights",
-              "removal": "after-unit-fights-or-phase-end",
-              "gate": {
-                "dice": "D6",
-                "threshold": 2,
-                "comparison": "gte",
-                "modifiers": []
-              }
-            }
-          }
-        ]
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "captain-titus"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-astartes"
+    "behavior": "reactive",
+    "faction_id": "adeptus-astartes",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
+    }
   },
   {
     "ability_id": "targeter-optics-adeptus-astartes",
@@ -2927,18 +2923,20 @@
             }
           },
           {
-            "type": "move",
+            "type": "move-modifier",
             "target": "this-unit",
             "modifier": {
-              "move_type": "normal",
-              "distance": 6
+              "applies_to_moves": [
+                "normal"
+              ],
+              "maximum": 6
             }
           }
         ]
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "cato-sicarius"
@@ -4421,17 +4419,25 @@
           "all_of": [
             "ADEPTUS ASTARTES"
           ],
-          "state": "battle-shocked",
-          "within": {
-            "range": {
-              "inches": 6
-            },
-            "of": "this-model"
-          }
+          "state": "battle-shocked"
         },
         "count": {
           "min": 1,
           "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-model",
+                "range": {
+                  "inches": 6
+                }
+              }
+            }
+          }
         }
       },
       "effect": {
@@ -6623,7 +6629,7 @@
       },
       "modifier": {
         "stat": "OC",
-        "operation": "improve",
+        "operation": "add",
         "value": 1
       }
     },
@@ -7122,7 +7128,7 @@
           "parameters": {
             "subject": "selected-unit",
             "filter": {
-              "engaged_with": "this-unit"
+              "engaged_with": "event-subject"
             }
           }
         }
@@ -7460,6 +7466,15 @@
             "type": "attack-is",
             "parameters": {
               "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "owner": "enemy"
+              }
             }
           },
           {
@@ -8827,7 +8842,7 @@
               "type": "designate",
               "target": "selected-unit",
               "modifier": {
-                "tag": "scanned"
+                "tag": "auspex-scanned"
               }
             },
             {
@@ -8840,7 +8855,7 @@
                     "parameters": {
                       "subject": "defender",
                       "filter": {
-                        "designated": "scanned"
+                        "designated": "auspex-scanned"
                       }
                     }
                   },
@@ -8945,6 +8960,7 @@
             "condition": {
               "type": "matches",
               "parameters": {
+                "subject": "selected-unit",
                 "filter": {
                   "designated": "suppressed"
                 }
@@ -8952,7 +8968,7 @@
             },
             "effect": {
               "type": "roll-modifier",
-              "target": "this-unit",
+              "target": "selected-unit",
               "modifier": {
                 "roll": "hit",
                 "operation": "subtract",
@@ -10362,7 +10378,7 @@
                   "target": "this-unit",
                   "modifier": {
                     "stat": "S",
-                    "operation": "improve",
+                    "operation": "add",
                     "value": 2,
                     "weapons": {
                       "type": "melee"
@@ -10587,12 +10603,6 @@
             "all_of": [
               "ADEPTUS ASTARTES"
             ],
-            "within": {
-              "range": {
-                "inches": 9
-              },
-              "of": "this-model"
-            },
             "visible": {
               "to": "this-model"
             }
@@ -10600,6 +10610,20 @@
           "count": {
             "min": 1,
             "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-model",
+                  "range": {
+                    "inches": 9
+                  }
+                }
+              }
+            }
           }
         },
         "effect": {
@@ -11750,7 +11774,12 @@
       },
       "effect": {
         "type": "objective-sticky",
-        "target": "this-unit"
+        "target": "this-unit",
+        "modifier": {
+          "objective": {
+            "selection_var": "objective"
+          }
+        }
       }
     },
     "scope": {
@@ -13132,12 +13161,10 @@
     "detachment_id": "ironclad-champions",
     "ability_type": "enhancement",
     "effect": {
-      "type": "stat-modifier",
+      "type": "damage-reduction",
       "target": "this-unit",
       "modifier": {
-        "stat": "D",
-        "operation": "subtract",
-        "value": 1
+        "reduction": 1
       }
     },
     "scope": {
@@ -13722,8 +13749,8 @@
     "detachment_id": "gladius-task-force",
     "ability_type": "enhancement",
     "effect": {
-      "type": "sequence",
-      "steps": [
+      "type": "choice",
+      "options": [
         {
           "type": "sequence",
           "steps": [
@@ -14371,6 +14398,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
+            "owner": "enemy",
             "all_of": [
               "CHARACTER"
             ]
@@ -14495,7 +14523,10 @@
       "type": "ability-part",
       "trigger": {
         "event": "model-destroyed",
-        "object": "model-in-this-unit"
+        "object": {
+          "owner": "friendly",
+          "level": "model"
+        }
       },
       "effect": {
         "type": "act-on-death",
@@ -14564,28 +14595,48 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
-        "parameters": {
-          "subject": "defender",
-          "filter": {
-            "any_of": [
-              "MONSTER",
-              "VEHICLE"
-            ]
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
           }
-        }
+        ]
       },
       "effect": {
-        "type": "weapon-ability-grant",
-        "target": "this-unit",
-        "modifier": {
-          "keywords": [
-            {
-              "keyword_id": "lethal-hits"
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "defender",
+            "filter": {
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ]
             }
-          ],
-          "weapons": {
-            "type": "ranged"
+          }
+        },
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
       }
@@ -14682,11 +14733,49 @@
     "detachment_id": "ironstorm-spearhead",
     "ability_type": "stratagem",
     "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5,
-        "against": "mortal"
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5,
+          "against": "mortal"
+        }
       }
     },
     "scope": {
@@ -14695,6 +14784,9 @@
     "behavior": "reactive",
     "trigger": {
       "event": "damage-allocated",
+      "filter": {
+        "attack_type": "mortal"
+      },
       "object": {
         "owner": "friendly",
         "all_of": [

@@ -594,7 +594,10 @@
       "type": "ability-part",
       "trigger": {
         "event": "model-destroyed",
-        "object": "model-in-this-unit"
+        "object": {
+          "owner": "friendly",
+          "level": "model"
+        }
       },
       "effect": {
         "type": "act-on-death",
@@ -646,7 +649,7 @@
       }
     },
     "expected": {
-      "text": "When an enemy unit targets a friendly ADEPTUS ASTARTES unit, until the end of the phase:\n  -> When a model in the unit is destroyed: each time a model in this unit is destroyed, unless the unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; when its unit is selected to fight, it can fight. Remove it after this unit has fought or at the end of the phase, whichever comes first."
+      "text": "When an enemy unit targets a friendly ADEPTUS ASTARTES unit, until the end of the phase:\n  -> When a friendly model is destroyed: each time a model in this unit is destroyed, unless the unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; when its unit is selected to fight, it can fight. Remove it after this unit has fought or at the end of the phase, whichever comes first."
     }
   },
   {
@@ -2775,7 +2778,11 @@
                 "target": "event-subject",
                 "modifier": {
                   "activity": "declare-charge",
-                  "allow": true
+                  "allow": true,
+                  "despite": [
+                    "advanced",
+                    "fell-back"
+                  ]
                 }
               }
             ]
@@ -2787,7 +2794,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "All friendly WARBIKERS units gain the BATTLELINE keyword.\n-> When a friendly unit is selected to make an Advance or Fall Back move (the triggering unit must have SPEED FREEKS), until the end of the turn:\n  -> Ranged weapons equipped by the triggering unit gain [ASSAULT].\n  -> The triggering unit is eligible to declare a charge."
+      "text": "All friendly WARBIKERS units gain the BATTLELINE keyword.\n-> When a friendly unit is selected to make an Advance or Fall Back move (the triggering unit must have SPEED FREEKS), until the end of the turn:\n  -> Ranged weapons equipped by the triggering unit gain [ASSAULT].\n  -> The triggering unit is eligible to declare a charge even if it Advanced this turn or it Fell Back this turn."
     }
   },
   {
@@ -12413,12 +12420,6 @@
         "selector": {
           "filter": {
             "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 12
-              },
-              "of": "this-unit"
-            },
             "visible": {
               "to": "this-model"
             }
@@ -12426,6 +12427,20 @@
           "count": {
             "min": 1,
             "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 12
+                  }
+                }
+              }
+            }
           }
         },
         "effect": {
@@ -12462,7 +12477,7 @@
       "optional": true
     },
     "expected": {
-      "text": "When the unit ends a Normal move, you may use this ability, once per battle per unit, during the Movement phase, in your turn:\n  -> Select one enemy unit within 12\" of the unit visible to this model:\n    -> Roll one D6: on a 3+, that unit suffers D3 mortal wounds."
+      "text": "When the unit ends a Normal move, you may use this ability, once per battle per unit, during the Movement phase, in your turn:\n  -> Select one enemy unit visible to this model if the selected unit is within 12\" of the unit:\n    -> Roll one D6: on a 3+, that unit suffers D3 mortal wounds."
     }
   },
   {
@@ -17640,7 +17655,7 @@
               "type": "designate",
               "target": "selected-unit",
               "modifier": {
-                "tag": "scanned"
+                "tag": "auspex-scanned"
               }
             },
             {
@@ -17653,7 +17668,7 @@
                     "parameters": {
                       "subject": "defender",
                       "filter": {
-                        "designated": "scanned"
+                        "designated": "auspex-scanned"
                       }
                     }
                   },
@@ -17705,7 +17720,7 @@
       "optional": true
     },
     "expected": {
-      "text": "When a friendly unit is selected to shoot (the triggering unit must have ADEPTUS ASTARTES), you may use this ability, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit within 18\" of the unit visible to this model:\n    -> That unit is scanned.\n    -> While the target is scanned, while making ranged attacks, if the target unit is the same unit as the selected unit, you can re-roll a Hit roll of 1."
+      "text": "When a friendly unit is selected to shoot (the triggering unit must have ADEPTUS ASTARTES), you may use this ability, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit within 18\" of the unit visible to this model:\n    -> That unit is marked as auspex scanned.\n    -> While the target is tagged auspex scanned, while making ranged attacks, if the target unit is the same unit as the selected unit, you can re-roll a Hit roll of 1."
     }
   },
   {
@@ -32778,7 +32793,7 @@
     "caseId": "adeptus-custodes-fidelity/gilded-champion-auric-champions-adeptus-custodes",
     "effect": {
       "type": "ability-modifier",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "ability": {
           "event": "used",

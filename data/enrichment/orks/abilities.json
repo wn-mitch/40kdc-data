@@ -418,12 +418,6 @@
         "selector": {
           "filter": {
             "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 12
-              },
-              "of": "this-unit"
-            },
             "visible": {
               "to": "this-model"
             }
@@ -431,6 +425,20 @@
           "count": {
             "min": 1,
             "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 12
+                  }
+                }
+              }
+            }
           }
         },
         "effect": {
@@ -884,12 +892,6 @@
         "selector": {
           "filter": {
             "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 12
-              },
-              "of": "this-unit"
-            },
             "visible": {
               "to": "this-model"
             }
@@ -897,6 +899,20 @@
           "count": {
             "min": 1,
             "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 12
+                  }
+                }
+              }
+            }
           }
         },
         "effect": {
@@ -1009,17 +1025,25 @@
               "any_of": [
                 "MONSTER",
                 "VEHICLE"
-              ],
-              "within": {
-                "range": {
-                  "inches": 24
-                },
-                "of": "this-unit"
-              }
+              ]
             },
             "count": {
               "min": 1,
               "max": 1
+            },
+            "eligibility": {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-unit",
+                    "range": {
+                      "inches": 24
+                    }
+                  }
+                }
+              }
             }
           }
         },
@@ -1405,19 +1429,28 @@
     "source_digest": "e18d77b6050d6ffcd491d6033a3af6d79b5496ff783f1bc23d9db75133b72129",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "conditional",
-            "condition": {
+      "type": "act-on-death",
+      "target": "event-object",
+      "modifier": {
+        "act": "fight",
+        "resolution": "when-unit-fights",
+        "removal": "after-unit-fights-or-phase-end",
+        "gate": {
+          "dice": "D6",
+          "threshold": 2,
+          "comparison": "gte",
+          "modifiers": []
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "fight"
+              }
+            },
+            {
               "operator": "not",
               "operands": [
                 {
@@ -1431,43 +1464,28 @@
                   }
                 }
               ]
-            },
-            "effect": {
-              "type": "destroy-models",
-              "target": "this-model",
-              "modifier": {
-                "count": 1
-              }
             }
-          },
-          {
-            "type": "act-on-death",
-            "target": "event-object",
-            "modifier": {
-              "act": "fight",
-              "resolution": "when-unit-fights",
-              "removal": "after-unit-fights-or-phase-end",
-              "gate": {
-                "dice": "D6",
-                "threshold": 2,
-                "comparison": "gte",
-                "modifiers": []
-              }
-            }
-          }
-        ]
+          ]
+        }
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "mozrog-skragbad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "this-model",
+      "filter": {
+        "timing": "before-removal"
+      }
+    }
   },
   {
     "ability_id": "da-bigger-dey-iz-orks",
@@ -1495,6 +1513,7 @@
             "parameters": {
               "subject": "defender",
               "filter": {
+                "owner": "enemy",
                 "any_of": [
                   "MONSTER",
                   "VEHICLE"
@@ -2626,9 +2645,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "9505f77890a320546443de269c675a682eadc1fd17e53cf04186b389edfed427",
+    "source_digest": "d4b3d78415888c163d222ca825b1d04d429b14779e390408927d1839fd3d8015",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2688,6 +2707,7 @@
               "condition": {
                 "type": "matches",
                 "parameters": {
+                  "subject": "selected-unit",
                   "filter": {
                     "designated": "suppressed"
                   }
@@ -2695,7 +2715,7 @@
               },
               "effect": {
                 "type": "roll-modifier",
-                "target": "this-unit",
+                "target": "selected-unit",
                 "modifier": {
                   "roll": "hit",
                   "operation": "subtract",
@@ -3671,21 +3691,165 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "0520096de4863c6800eee054e03f9c674512d46b4e91b2ac63aec1a3f79c7ee7",
+    "source_digest": "40a377ad3f1d07e7189d52b2fda5e0eabebac2491ebb0cdc7620565972ac51fd",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "advance",
-        "operation": "add",
-        "value": 1
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "ability-part",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": true,
+                "despite": [
+                  "advanced",
+                  "fell-back"
+                ]
+              }
+            },
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "move_types": [
+                  "advance",
+                  "fall-back"
+                ],
+                "to": "move"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "phase-is",
+                      "parameters": {
+                        "phase": "command"
+                      }
+                    },
+                    {
+                      "type": "player-turn-is",
+                      "parameters": {
+                        "turn": "your-turn"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "state": "engaged"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "effect": {
+              "type": "set-up",
+              "target": "this-unit",
+              "modifier": {
+                "to": "strategic-reserves"
+              }
+            }
+          },
+          {
+            "type": "ability-part",
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "movement"
+                        }
+                      },
+                      {
+                        "type": "player-turn-is",
+                        "parameters": {
+                          "turn": "your-turn"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "filter": {
+                            "state": "engaged"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "effect": {
+                "type": "move",
+                "target": "this-unit",
+                "modifier": {
+                  "move_type": "pulse-jet"
+                }
+              }
+            },
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "to": "move"
+              },
+              "optional": true
+            }
+          }
+        ],
+        "choice_label": "Throttlerokkit Shokka Engine ability",
+        "min_choices": 1,
+        "max_choices": 1
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "until-next-command-phase"
     },
     "unit_ids": [
       "wazdakka-gutsmek"
@@ -5218,17 +5382,25 @@
             "owner": "friendly",
             "all_of": [
               "BEAST SNAGGA"
-            ],
-            "within": {
-              "range": {
-                "inches": 6
-              },
-              "of": "this-unit"
-            }
+            ]
           },
           "count": {
             "min": 1,
             "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
           }
         },
         "effect": {
@@ -5774,6 +5946,7 @@
               "condition": {
                 "type": "matches",
                 "parameters": {
+                  "subject": "selected-unit",
                   "filter": {
                     "designated": "covered-in-squigs"
                   }
@@ -5781,7 +5954,7 @@
               },
               "effect": {
                 "type": "roll-modifier",
-                "target": "this-unit",
+                "target": "selected-unit",
                 "modifier": {
                   "roll": "hit",
                   "operation": "subtract",
@@ -6057,7 +6230,11 @@
       "target": "this-unit",
       "modifier": {
         "activity": "declare-charge",
-        "allow": true
+        "allow": true,
+        "despite": [
+          "advanced",
+          "fell-back"
+        ]
       }
     },
     "scope": {
@@ -6407,7 +6584,11 @@
                 "target": "event-subject",
                 "modifier": {
                   "activity": "declare-charge",
-                  "allow": true
+                  "allow": true,
+                  "despite": [
+                    "advanced",
+                    "fell-back"
+                  ]
                 }
               }
             ]
@@ -6592,36 +6773,67 @@
     "source_digest": "8af731766e52f8400a072c583d8f8f2cc7834e3b2fcf31917fb549ba7bdd969d",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "subset": "ones"
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "designated": "riled-up"
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
               }
-            }
+            ]
           },
-          "effect": {
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
             "type": "re-roll",
             "target": "this-unit",
             "modifier": {
               "roll": "hit",
-              "result_scope": "any-result"
+              "subset": "ones"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "designated": "riled-up"
+                }
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "result_scope": "any-result"
+              }
             }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "phase"
@@ -7048,6 +7260,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
+            "owner": "enemy",
             "any_of": [
               "MONSTER",
               "VEHICLE"
@@ -7465,7 +7678,12 @@
       },
       "effect": {
         "type": "objective-sticky",
-        "target": "this-unit"
+        "target": "this-unit",
+        "modifier": {
+          "objective": {
+            "selection_var": "objective"
+          }
+        }
       }
     },
     "scope": {
@@ -8445,8 +8663,8 @@
         ]
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
+        "type": "choice",
+        "options": [
           {
             "type": "roll-modifier",
             "target": "attacker",
@@ -8868,6 +9086,23 @@
         "operator": "and",
         "operands": [
           {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
             "type": "attack-is",
             "parameters": {
               "attack_type": "ranged"
@@ -8963,7 +9198,11 @@
       "target": "this-unit",
       "modifier": {
         "activity": "start-action",
-        "allow": true
+        "allow": true,
+        "despite": [
+          "advanced",
+          "fell-back"
+        ]
       }
     },
     "scope": {
@@ -9206,7 +9445,7 @@
       },
       "effect": {
         "type": "roll-result",
-        "target": "this-unit",
+        "target": "selected-unit",
         "modifier": {
           "roll": "battle-shock",
           "result": "pass"
@@ -9484,7 +9723,10 @@
       "type": "ability-part",
       "trigger": {
         "event": "model-destroyed",
-        "object": "model-in-this-unit"
+        "object": {
+          "owner": "friendly",
+          "level": "model"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -9505,6 +9747,12 @@
               "eligibility": {
                 "operator": "and",
                 "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "fight"
+                    }
+                  },
                   {
                     "operator": "not",
                     "operands": [
@@ -9548,6 +9796,12 @@
               "eligibility": {
                 "operator": "and",
                 "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "fight"
+                    }
+                  },
                   {
                     "operator": "not",
                     "operands": [
@@ -9908,26 +10162,48 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
-        "parameters": {
-          "subject": "event-subject",
-          "filter": {
-            "within": {
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "GRETCHIN"
-                ],
-                "not_states": [
-                  "engaged"
-                ]
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
               },
-              "range": {
-                "inches": 8
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "GRETCHIN"
+                    ],
+                    "not_states": [
+                      "engaged"
+                    ]
+                  },
+                  "range": {
+                    "inches": 8
+                  }
+                }
               }
             }
           }
-        }
+        ]
       },
       "effect": {
         "type": "sequence",
@@ -10222,6 +10498,23 @@
       "condition": {
         "operator": "and",
         "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
           {
             "type": "attack-is",
             "parameters": {
@@ -10887,7 +11180,10 @@
       "type": "ability-part",
       "trigger": {
         "event": "model-destroyed",
-        "object": "model-in-this-unit"
+        "object": {
+          "owner": "friendly",
+          "level": "model"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -10908,6 +11204,12 @@
               "eligibility": {
                 "operator": "and",
                 "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "fight"
+                    }
+                  },
                   {
                     "operator": "not",
                     "operands": [
@@ -10951,6 +11253,12 @@
               "eligibility": {
                 "operator": "and",
                 "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "fight"
+                    }
+                  },
                   {
                     "operator": "not",
                     "operands": [
@@ -12011,17 +12319,25 @@
                   "all_of": [
                     "ORKS",
                     "WALKER"
-                  ],
-                  "within": {
-                    "range": {
-                      "inches": 3
-                    },
-                    "of": "this-model"
-                  }
+                  ]
                 },
                 "count": {
                   "min": 1,
                   "max": 1
+                },
+                "eligibility": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "within": {
+                        "of": "this-model",
+                        "range": {
+                          "inches": 3
+                        }
+                      }
+                    }
+                  }
                 }
               },
               "effect": {
@@ -12163,6 +12479,14 @@
               "modifier": {
                 "label": "Makari token",
                 "operation": "place"
+              }
+            },
+            {
+              "type": "marker",
+              "target": "this-unit",
+              "modifier": {
+                "label": "Makari token",
+                "operation": "remove"
               }
             }
           ]
@@ -12521,8 +12845,8 @@
         ]
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
+        "type": "choice",
+        "options": [
           {
             "type": "move",
             "target": "this-unit",
@@ -13085,6 +13409,7 @@
             "parameters": {
               "subject": "defender",
               "filter": {
+                "owner": "enemy",
                 "any_of": [
                   "MONSTER",
                   "VEHICLE"
@@ -13600,7 +13925,10 @@
       "type": "ability-part",
       "trigger": {
         "event": "model-destroyed",
-        "object": "model-in-this-unit"
+        "object": {
+          "owner": "friendly",
+          "level": "model"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -14008,6 +14336,23 @@
       "condition": {
         "operator": "and",
         "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
           {
             "type": "attack-is",
             "parameters": {
@@ -14497,14 +14842,23 @@
     "detachment_id": "ardmob",
     "ability_type": "stratagem",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "S",
-        "operation": "improve",
-        "value": 1,
-        "weapons": {
-          "type": "melee"
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "S",
+          "operation": "improve",
+          "value": 1,
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -14539,10 +14893,30 @@
     "detachment_id": "ardmob",
     "ability_type": "stratagem",
     "effect": {
-      "type": "invulnerable-save",
-      "target": "this-unit",
-      "modifier": {
-        "invuln_sv": 5
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "invulnerable-save",
+        "target": "this-unit",
+        "modifier": {
+          "invuln_sv": 5
+        }
       }
     },
     "scope": {

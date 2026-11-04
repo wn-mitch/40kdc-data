@@ -256,7 +256,7 @@ All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
             </profile>
             <profile name="Aegis of the Emperor" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">All friendly ADEPTUS CUSTODES units have the Feel No Pain 5+ ability against mortal wounds.</characteristic>
+                <characteristic name="Description">All friendly ADEPTUS CUSTODES units with the Aegis of the Emperor ability have the Feel No Pain 5+ ability against mortal wounds.</characteristic>
               </characteristics>
             </profile>
             <profile name="Martial Ka’tah" typeName="Abilities">

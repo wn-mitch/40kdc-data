@@ -35,7 +35,7 @@ The unit gains Tactical Doctrine (Combat Doctrines).</characteristic>
             <profile name="Master Tactician" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">You can: During the Movement phase, in your turn, until the start of your next Command phase:
-  -&gt; Select one friendly ADEPTUS ASTARTES unit within 9" of this model visible to this model: select one option of Combat Doctrines for that unit, in place of any already active.</characteristic>
+  -&gt; Select one friendly ADEPTUS ASTARTES unit visible to this model if the selected unit is within 9" of this model: select one option of Combat Doctrines for that unit, in place of any already active.</characteristic>
               </characteristics>
             </profile>
             <profile name="Thunderhawk Insertion" typeName="Abilities">

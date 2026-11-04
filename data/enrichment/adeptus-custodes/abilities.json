@@ -152,6 +152,7 @@
             "parameters": {
               "subject": "defender",
               "filter": {
+                "owner": "enemy",
                 "any_of": [
                   "MONSTER",
                   "VEHICLE"
@@ -1457,7 +1458,10 @@
         "target": "this-unit",
         "modifier": {
           "roll": "hit",
-          "result_scope": "any-result"
+          "result_scope": "any-result",
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -2535,7 +2539,7 @@
     },
     "effect": {
       "type": "ability-modifier",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "ability": {
           "event": "used",
@@ -2597,31 +2601,51 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "permission",
-          "target": "this-unit",
-          "modifier": {
-            "activity": "shoot",
-            "allow": true,
-            "after": [
-              "fall-back"
-            ]
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
           }
-        },
-        {
-          "type": "permission",
-          "target": "this-unit",
-          "modifier": {
-            "activity": "declare-charge",
-            "allow": true,
-            "after": [
-              "fall-back"
-            ]
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "shoot",
+              "allow": true,
+              "after": [
+                "fall-back"
+              ]
+            }
+          },
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": true,
+              "after": [
+                "fall-back"
+              ]
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "phase"
@@ -2763,12 +2787,43 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "stat-modifier",
-      "target": "attacker",
-      "modifier": {
-        "stat": "D",
-        "operation": "subtract",
-        "value": 1
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "attacker",
+        "modifier": {
+          "stat": "D",
+          "operation": "subtract",
+          "value": 1
+        }
       }
     },
     "scope": {
@@ -3346,11 +3401,22 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "strength",
-        "parameters": {
-          "subject": "event-subject",
-          "below": "starting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "strength",
+            "parameters": {
+              "subject": "event-subject",
+              "below": "starting"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "stat-modifier",
@@ -3660,12 +3726,6 @@
         "selector": {
           "filter": {
             "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 12
-              },
-              "of": "this-unit"
-            },
             "visible": {
               "to": "this-model"
             }
@@ -3673,6 +3733,20 @@
           "count": {
             "min": 1,
             "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 12
+                  }
+                }
+              }
+            }
           }
         },
         "effect": {
@@ -4177,6 +4251,9 @@
         "owner": "friendly",
         "all_of": [
           "ADEPTUS CUSTODES"
+        ],
+        "has_ability": [
+          "aegis-of-the-emperor-adeptus-custodes"
         ]
       },
       "modifier": {
@@ -6279,10 +6356,14 @@
             ]
           },
           {
-            "type": "wounds",
+            "type": "happened",
             "parameters": {
-              "subject": "this-unit",
-              "lost": true
+              "event": "damage-allocated",
+              "object": "this-unit",
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event"
             }
           },
           {
@@ -7441,6 +7522,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
+            "owner": "enemy",
             "any_of": [
               "CHARACTER",
               "MONSTER",
@@ -8379,7 +8461,12 @@
       },
       "effect": {
         "type": "objective-sticky",
-        "target": "this-unit"
+        "target": "this-unit",
+        "modifier": {
+          "objective": {
+            "selection_var": "objective"
+          }
+        }
       }
     },
     "scope": {
@@ -9912,12 +9999,54 @@
     "detachment_id": "might-of-the-moritoi",
     "ability_type": "stratagem",
     "effect": {
-      "type": "keyword-grant",
-      "target": "this-unit",
-      "modifier": {
-        "keywords": [
-          "MOBILE"
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "charge"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          }
         ]
+      },
+      "effect": {
+        "type": "keyword-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [
+            "MOBILE"
+          ]
+        }
       }
     },
     "scope": {

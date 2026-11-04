@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1237 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 1 | 181 | 275 |
-| stratagems | 1 | 0 | 1057 | 255 |
-| abilities | 0 | 1 | 3741 | 794 |
-| phase-mappings | 0 | 1 | 1205 | 375 |
+| detachments | 0 | 0 | 181 | 276 |
+| stratagems | 0 | 0 | 1058 | 255 |
+| abilities | 0 | 0 | 3743 | 793 |
+| phase-mappings | 0 | 0 | 1205 | 376 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -50,7 +50,7 @@ dump confirmation.
 | iron-hands | 0 | 0 | 9 | 2 |
 | leagues-of-votann | 0 | 0 | 129 | 26 |
 | necrons | 0 | 0 | 193 | 37 |
-| orks | 0 | 0 | 179 | 30 |
+| orks | 0 | 0 | 181 | 28 |
 | raven-guard | 0 | 0 | 10 | 1 |
 | salamanders | 0 | 0 | 6 | 5 |
 | space-wolves | 0 | 0 | 74 | 13 |
@@ -59,7 +59,7 @@ dump confirmation.
 | tyranids | 0 | 0 | 159 | 27 |
 | ultramarines | 0 | 0 | 10 | 1 |
 | white-scars | 0 | 0 | 11 | 0 |
-| world-eaters | 0 | 1 | 118 | 28 |
+| world-eaters | 0 | 0 | 118 | 29 |
 
 ## Ability verification outcomes
 
@@ -165,10 +165,10 @@ dump confirmation.
 | necrons | unpublished | 15 |
 | necrons | verified | 193 |
 | orks | ambiguous-source | 1 |
-| orks | digest-differs | 16 |
+| orks | digest-differs | 14 |
 | orks | stub | 7 |
 | orks | unpublished | 6 |
-| orks | verified | 179 |
+| orks | verified | 181 |
 | raven-guard | stub | 1 |
 | raven-guard | verified | 10 |
 | salamanders | digest-differs | 2 |
