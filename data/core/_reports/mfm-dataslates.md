@@ -16,9 +16,9 @@ dump confirmation.
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 181 | 276 |
-| stratagems | 0 | 0 | 1058 | 255 |
-| abilities | 0 | 0 | 3743 | 793 |
-| phase-mappings | 0 | 0 | 1205 | 376 |
+| stratagems | 2 | 0 | 1058 | 253 |
+| abilities | 0 | 0 | 3747 | 789 |
+| phase-mappings | 1 | 0 | 1205 | 375 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -27,8 +27,8 @@ dump confirmation.
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 11 | 15 |
 | adepta-sororitas | 0 | 0 | 121 | 27 |
-| adeptus-astartes | 0 | 0 | 211 | 39 |
-| adeptus-custodes | 0 | 0 | 144 | 14 |
+| adeptus-astartes | 0 | 0 | 213 | 37 |
+| adeptus-custodes | 0 | 0 | 145 | 13 |
 | adeptus-mechanicus | 0 | 0 | 141 | 26 |
 | aeldari | 0 | 0 | 247 | 53 |
 | agents-of-the-imperium | 0 | 0 | 98 | 40 |
@@ -50,7 +50,7 @@ dump confirmation.
 | iron-hands | 0 | 0 | 9 | 2 |
 | leagues-of-votann | 0 | 0 | 129 | 26 |
 | necrons | 0 | 0 | 193 | 37 |
-| orks | 0 | 0 | 181 | 28 |
+| orks | 0 | 0 | 182 | 27 |
 | raven-guard | 0 | 0 | 10 | 1 |
 | salamanders | 0 | 0 | 6 | 5 |
 | space-wolves | 0 | 0 | 74 | 13 |
@@ -77,14 +77,14 @@ dump confirmation.
 | adeptus-astartes | ambiguous-source | 1 |
 | adeptus-astartes | digest-differs | 13 |
 | adeptus-astartes | no-source | 5 |
-| adeptus-astartes | stub | 19 |
+| adeptus-astartes | stub | 17 |
 | adeptus-astartes | unpublished | 1 |
-| adeptus-astartes | verified | 211 |
+| adeptus-astartes | verified | 213 |
 | adeptus-custodes | ambiguous-source | 1 |
 | adeptus-custodes | digest-differs | 2 |
 | adeptus-custodes | stub | 9 |
-| adeptus-custodes | unpublished | 2 |
-| adeptus-custodes | verified | 144 |
+| adeptus-custodes | unpublished | 1 |
+| adeptus-custodes | verified | 145 |
 | adeptus-mechanicus | digest-differs | 8 |
 | adeptus-mechanicus | stub | 16 |
 | adeptus-mechanicus | unpublished | 2 |
@@ -165,10 +165,10 @@ dump confirmation.
 | necrons | unpublished | 15 |
 | necrons | verified | 193 |
 | orks | ambiguous-source | 1 |
-| orks | digest-differs | 14 |
+| orks | digest-differs | 13 |
 | orks | stub | 7 |
 | orks | unpublished | 6 |
-| orks | verified | 181 |
+| orks | verified | 182 |
 | raven-guard | stub | 1 |
 | raven-guard | verified | 10 |
 | salamanders | digest-differs | 2 |

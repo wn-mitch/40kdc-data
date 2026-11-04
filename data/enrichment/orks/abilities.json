@@ -7392,126 +7392,53 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "a02c4197f53d521edb4db68191a42fbf4693bb1cbb9f2ce029fa021763a7fb2e",
+    "source_digest": "2a990b76f7a5916b848f85998c5d50b44186ef7f6bf2fa145a0fd81173c7ed6e",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "RUKKATRUKK SQUIGBUGGIES"
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "conditional",
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "owner": "friendly"
-                }
-              }
-            },
-            {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "within": {
-                    "range": {
-                      "inches": 3
-                    },
-                    "of": "stratagem-target"
-                  }
-                },
-                "subject": "selected-unit"
-              }
-            },
-            {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "all_of": [
-                    "ORKS"
-                  ]
-                },
-                "subject": "defender"
-              }
-            },
-            {
-              "type": "matches",
-              "parameters": {
-                "filter": {
-                  "all_of": [
-                    "INFANTRY"
-                  ]
-                },
-                "subject": "defender"
-              }
-            }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "INFANTRY",
+            "ORKS"
           ]
         },
-        "effect": {
-          "type": "heal",
-          "target": {
-            "owner": "friendly",
-            "all_of": [
-              "ORKS",
-              "INFANTRY"
-            ],
-            "within": {
-              "range": {
-                "inches": 3
-              },
-              "of": "stratagem-target"
+        "count": {
+          "min": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 3
+                }
+              }
             }
-          },
-          "modifier": {
-            "amount": 3,
-            "per": "unit"
           }
+        }
+      },
+      "effect": {
+        "type": "heal",
+        "target": "selected-unit",
+        "modifier": {
+          "amount": 3,
+          "per": "unit"
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [],
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "activated",
     "detachment_id": "kult-of-speed",
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks"

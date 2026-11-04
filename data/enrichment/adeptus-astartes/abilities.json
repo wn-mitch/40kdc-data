@@ -9663,9 +9663,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "reiver-squad"
     ],
@@ -9673,11 +9672,51 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "passthrough": [
+              "models"
+            ]
+          }
+        },
+        {
+          "type": "move-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "passthrough": [
+              "models"
+            ],
+            "ignore_vertical": true
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back",
+          "charge",
+          "pile-in",
+          "consolidation",
+          "surge",
+          "scout"
+        ],
+        "to": "move"
+      },
+      "optional": true
+    },
+    "source_digest": "990e85dc07894fd86babcd45b35b9afa3905ea1458123b23f875fd5d5f3989c1"
   },
   {
     "ability_id": "grav-chutes-adeptus-astartes",
@@ -14491,9 +14530,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "kaius-konorius"
     ],
@@ -14501,11 +14539,35 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "attached"
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "CHARACTER"
+          ],
+          "excluding": "this-model",
+          "level": "model",
+          "member_of": "this-unit"
+        },
+        "modifier": {
+          "threshold": 4
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "0875c087de833b96b5927a642e9ef29299b5dfc057994d306c1180c7c6715ff8"
   },
   {
     "ability_id": "a-worthy-death-gladius-task-force-adeptus-astartes",

@@ -85,6 +85,19 @@ describe("Semantic authoring weapon-scoped change on an attached leader's own mo
   });
 });
 
+describe("Semantic authoring other models of the bearer's own unit", () => {
+  it("excludes only this model, not the unit the models belong to", () => {
+    const text = "While this model is attached to a unit, other Character models in this unit have Feel No Pain 4+.";
+    const result = compileLeaves(placed(text,
+      ["While this model is attached to a unit", "leading-unit", { subject: "this-model", attachment: "any" }],
+      ["other Character models in this unit", "unit-filter", { side: "friendly", keywords: ["CHARACTER"], other: true, level: "model", member_of: "this-unit" }],
+      ["have Feel No Pain 4+", "feel-no-pain", { subject: "antecedent", threshold: 4, against: "all" }]), text);
+    expect(result.ok).toBe(true);
+    const [fnp] = nodesOf(result.ok ? result.mechanics : {}, "feel-no-pain");
+    expect(fnp!.target).toMatchObject({ level: "model", member_of: "this-unit", excluding: "this-model" });
+  });
+});
+
 describe("Semantic authoring selection whose effect sits on a later moment", () => {
   const TEXT = "Each time a friendly Psyker model is destroyed, select one of those models with this ability. When that selected model attempts a Ritual, it has +1 to the test.";
   const SELECTION: Item[] = [
