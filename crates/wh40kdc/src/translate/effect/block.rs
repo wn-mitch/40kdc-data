@@ -31,6 +31,13 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             if is_container(obj(Some(inner))) {
                 return format!("{indent}{lead}:\n{}", block(inner, depth + 1, ctx));
             }
+            if let Some(g) = super::recipient_gate::recipient_gate(e, ctx) {
+                return format!(
+                    "{indent}{arrow}{}, {}.",
+                    capitalize(&g.lead),
+                    inline(&g.inner, &g.ctx)
+                );
+            }
             format!("{indent}{arrow}{lead}, {}.", inline(inner, ctx))
         }
         "rules-bundle" | "sequence" => {

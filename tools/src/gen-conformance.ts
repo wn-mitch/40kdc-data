@@ -2150,6 +2150,27 @@ function genEffectTranslation(): void {
       cases.push({ caseId: `move-type#${cases.length}`, effect: effect as unknown as Effect, scope, expected: { text: describeAbility({ effect: effect as unknown as Effect, scope }) } });
     }
   }
+  // Pin a condition on each unit an effect reaches (subject `recipient`): the condition names the unit
+  // with the effect's filter ("an enemy unit", "an enemy model", "an enemy VEHICLE unit") and the effect
+  // says "that unit"/"that model", top level, in a sequence and inline in a part; a condition on the ability's own unit
+  // keeps its old reading.
+  {
+    const within = (of: string) => ({ type: "matches", parameters: { subject: "recipient", filter: { within: { of, range: { inches: 3 } } } } });
+    const oc = (target: Record<string, unknown>) => ({ type: "stat-modifier", target, modifier: { stat: "OC", operation: "worsen", value: 1 } });
+    const shocked = { type: "matches", parameters: { subject: "recipient", filter: { state: "battle-shocked" } } };
+    const own = { type: "matches", parameters: { subject: "this-unit", filter: { within: { of: "this-model", range: { inches: 3 } } } } };
+    const improve = { type: "stat-modifier", target: "this-unit", modifier: { stat: "OC", operation: "improve", value: 1 } };
+    for (const effect of [
+      { type: "conditional", condition: within("this-unit"), effect: oc({ owner: "enemy" }) },
+      { type: "conditional", condition: { operator: "and", operands: [within("this-unit"), shocked] }, effect: oc({ owner: "enemy", level: "model" }) },
+      { type: "sequence", steps: [{ type: "conditional", condition: within("this-unit"), effect: oc({ owner: "enemy", all_of: ["VEHICLE"] }) }, improve] },
+      { type: "conditional", condition: own, effect: oc({ owner: "enemy" }) },
+      { type: "ability-part", name: "Example Part", effect: { type: "conditional", condition: within("this-unit"), effect: oc({ owner: "enemy" }) } },
+    ]) {
+      const scope = { duration: "permanent" };
+      cases.push({ caseId: `recipient-gate#${cases.length}`, effect: effect as unknown as Effect, scope, expected: { text: describeAbility({ effect: effect as unknown as Effect, scope }) } });
+    }
+  }
   // Pin the charge permission's `after` clause for the sibling moves — they
   // rarely surface in the capped sample above (permission caps out on the
   // common charge-after-Advance). Shapes mirror real enrichment data; expected

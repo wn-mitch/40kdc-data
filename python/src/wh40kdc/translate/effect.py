@@ -47,6 +47,7 @@ from wh40kdc.translate.effect_inline import (
 )
 from wh40kdc.translate.effect_leaf import defined_grant_head, definition_part, is_defined_grant
 from wh40kdc.translate.effect_move_type import move_type_block
+from wh40kdc.translate.effect_recipient_gate import recipient_gate
 from wh40kdc.translate.effect_region import (
     capacity_clause,
     describe_menu_action,
@@ -167,6 +168,10 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         lead = capitalize(condition_lead_in(_obj(e.get("condition")), is_defensive_effect(inner)))
         if _is_container(inner):
             return f"{indent}{lead}:\n" + describe_effect(inner, depth + 1, ctx)
+        gate = recipient_gate(e, ctx)
+        if gate:
+            body = describe_effect_inline(gate[1], gate[2])
+            return f"{indent}{arrow}{capitalize(gate[0])}, {body}."
         return f"{indent}{arrow}{lead}, {describe_effect_inline(inner, ctx)}."
     if t in ("rules-bundle", "sequence"):
         steps = e.get("steps") or []
@@ -482,6 +487,11 @@ def _render_top_level(e: Effect, scope: Any, usage: Any = None, trigger: Any = N
         if _is_container(inner):
             header = ", ".join(p for p in (trig, lead, lead_in, trail) if p)
             return capitalize(header) + ":\n" + describe_effect(inner, 1, ctx)
+        gate = recipient_gate(e, ctx)
+        if gate:
+            return _assemble_sentence(
+                [trig, lead, gate[0], trail, describe_effect_inline(gate[1], gate[2])]
+            )
         return _assemble_sentence([trig, lead, lead_in, trail, describe_effect_inline(inner, ctx)])
     if _is_container(e) or is_defined_grant(e):
         # A designation carrying its own duration renders it itself; don't repeat it in the head.

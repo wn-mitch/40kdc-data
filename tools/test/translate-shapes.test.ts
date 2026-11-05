@@ -285,3 +285,33 @@ describe("Unless over a compound condition", () => {
     expect(gate(notAll)).toMatch(/^If the unit has the CHAOS keyword or if the unit has the IMPERIUM keyword, /);
   });
 });
+
+describe("a condition on each unit an effect reaches", () => {
+  // Hunts: a recipient condition read as "the unit" (this unit) and its effect as "all enemy units", so
+  // "while an enemy unit is X, that unit is Y" rendered as a condition on the ability's own unit.
+  const within = (of: string) => ({ type: "matches", parameters: { subject: "recipient", filter: { within: { of, range: { inches: 3 } } } } });
+  const oc = (target: Record<string, unknown>) => ({ type: "stat-modifier", target, modifier: { stat: "OC", operation: "worsen", value: 1 } });
+
+  it("names the unit with the effect's filter and refers back to it as that unit", () => {
+    expect(render({ type: "conditional", condition: within("this-unit"), effect: oc({ owner: "enemy" }) } as Effect))
+      .toBe("While an enemy unit is within 3\" of the unit, worsen that unit's Objective Control characteristic by 1.");
+  });
+
+  it("says model for a model-level filter, and keeps later mentions as that model", () => {
+    const both = { operator: "and", operands: [within("this-unit"), { type: "matches", parameters: { subject: "recipient", filter: { state: "battle-shocked" } } }] };
+    expect(render({ type: "conditional", condition: both, effect: oc({ owner: "enemy", level: "model" }) } as Effect))
+      .toBe("While an enemy model is within 3\" of the unit, while that model is Battle-shocked, worsen that model's Objective Control characteristic by 1.");
+  });
+
+  it("reads the same inside a sequence", () => {
+    const gated = { type: "conditional", condition: within("this-unit"), effect: oc({ owner: "enemy", all_of: ["VEHICLE"] }) };
+    expect(render({ type: "sequence", steps: [gated, { type: "stat-modifier", target: "this-unit", modifier: { stat: "OC", operation: "improve", value: 1 } }] } as Effect))
+      .toContain("While an enemy VEHICLE unit is within 3\" of the unit, worsen that unit's Objective Control characteristic by 1.");
+  });
+
+  it("leaves a condition on the ability's own unit as it was", () => {
+    const own = { type: "matches", parameters: { subject: "this-unit", filter: { within: { of: "this-model", range: { inches: 3 } } } } };
+    expect(render({ type: "conditional", condition: own, effect: oc({ owner: "enemy" }) } as Effect))
+      .toBe("While the unit is within 3\" of this model, worsen all enemy units' Objective Control characteristic by 1.");
+  });
+});

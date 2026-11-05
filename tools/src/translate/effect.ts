@@ -21,6 +21,7 @@ import { describeTrigger, normalizeTriggers, type AbilityTrigger, type AbilityTr
 import { definedGrantHead, definitionPart, describeLeaf, isDefinedGrant, LEAF_TYPES, type Leaf } from "./effect-leaf.js";
 import { expiryTrail } from "./expiry.js";
 import { moveTypeBlock, moveTypeInline } from "./effect-move-type.js";
+import { recipientGate } from "./effect-recipient-gate.js";
 import { ritualMenuBlock, ritualMenuInline } from "./effect-ritual.js";
 import { objectiveSelectorPhrase, rollHead, selectObjectiveBlock, selectObjectiveInline, selectionBinding, selectionLimit, selectorCount, selectorNoun, selectorSubject, selectUnitsSubject } from "./effect-bind.js";
 import {
@@ -625,6 +626,10 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
     case "conditional":
       if (e.effect?.type === "named-region-state" && e.effect.modifier?.consumer != null)
         return describeNamedRegionConditional(e.effect.modifier ?? {}, e.condition ?? {}, ctx);
+      {
+        const gate = recipientGate(e, ctx);
+        if (gate) return `${gate.lead}, ${describeEffectInline(gate.inner, gate.ctx)}`;
+      }
       return `${conditionLeadIn(e.condition ?? {}, isDefensiveEffect(e.effect))}, ${describeEffectInline(e.effect ?? {}, ctx)}`;
     case "rules-bundle":
     case "sequence": {
@@ -919,6 +924,8 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       if (CONTAINER_TYPES.has(inner.type ?? "")) {
         return `${indent}${capitalize(conditionLeadIn(e.condition ?? {}))}:\n` + describeEffect(inner, depth + 1, ctx);
       }
+      const gate = recipientGate(e, ctx);
+      if (gate) return `${indent}${arrow}${capitalize(gate.lead)}, ${describeEffectInline(gate.inner, gate.ctx)}.`;
       return `${indent}${arrow}${capitalize(conditionLeadIn(e.condition ?? {}, isDefensiveEffect(inner)))}, ${describeEffectInline(inner, ctx)}.`;
     }
     case "rules-bundle":
@@ -1224,6 +1231,8 @@ function renderTopLevel(
       const header = [trig, lead, leadIn, trail].filter((p) => p.length > 0).join(", ");
       return capitalize(header) + ":\n" + describeEffect(inner, 1, ctx);
     }
+    const gate = recipientGate(e, ctx);
+    if (gate) return assembleSentence([trig, lead, gate.lead, trail, describeEffectInline(gate.inner, gate.ctx)]);
     return assembleSentence([trig, lead, leadIn, trail, describeEffectInline(inner, ctx)]);
   }
 

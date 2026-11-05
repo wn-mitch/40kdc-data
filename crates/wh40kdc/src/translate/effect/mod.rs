@@ -26,6 +26,7 @@ mod menu;
 mod move_type;
 mod placement;
 mod quantity;
+mod recipient_gate;
 mod region;
 mod ritual;
 mod select;
@@ -476,6 +477,9 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
                     child(e, "condition"),
                     ctx,
                 );
+            }
+            if let Some(g) = recipient_gate::recipient_gate(e, ctx) {
+                return format!("{}, {}", g.lead, inline(&g.inner, &g.ctx));
             }
             format!(
                 "{}, {}",

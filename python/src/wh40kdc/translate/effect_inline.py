@@ -22,6 +22,7 @@ from wh40kdc.translate.effect_quantity import (
     roll_kind_noun,
     scale_source,
 )
+from wh40kdc.translate.effect_recipient_gate import recipient_gate
 from wh40kdc.translate.effect_region import (
     describe_menu_action,
     describe_named_region_conditional,
@@ -308,6 +309,9 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
             return describe_named_region_conditional(
                 _obj(inner.get("modifier")), _obj(e.get("condition")), ctx, inline
             )
+        gate = recipient_gate(e, ctx)
+        if gate:
+            return f"{gate[0]}, {describe_effect_inline(gate[1], gate[2])}"
         lead = condition_lead_in(_obj(e.get("condition")), is_defensive_effect(inner))
         return f"{lead}, {describe_effect_inline(inner, ctx)}"
     if t in ("rules-bundle", "sequence"):

@@ -376,6 +376,9 @@ func renderTopLevel(e, scope map[string]any, usage, trigger any) string {
 			header := joinNonEmpty([]string{trig, lead, leadIn, trail}, ", ")
 			return capitalize(header) + ":\n" + describeEffect(inner, 1, ctx)
 		}
+		if gate, ok := recipientGate(e, ctx); ok {
+			return assembleSentence([]string{trig, lead, gate.lead, trail, describeEffectInline(gate.inner, gate.ctx)})
+		}
 		return assembleSentence([]string{trig, lead, leadIn, trail, describeEffectInline(inner, ctx)})
 	}
 	if containerTypes[ejstrType(e)] || isDefinedGrant(e) {

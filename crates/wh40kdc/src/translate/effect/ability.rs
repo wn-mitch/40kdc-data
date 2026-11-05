@@ -102,6 +102,9 @@ pub(super) fn render_top_level(
             let header = join_nonempty(&[&trig, &lead, &lead_in, trail], ", ");
             return format!("{}:\n{}", capitalize(&header), block(inner, 1, &ctx));
         }
+        if let Some(g) = super::recipient_gate::recipient_gate(e_map, &ctx) {
+            return assemble_sentence(&[&trig, &lead, &g.lead, trail, &inline(&g.inner, &g.ctx)]);
+        }
         return assemble_sentence(&[&trig, &lead, &lead_in, trail, &inline(inner, &ctx)]);
     }
 

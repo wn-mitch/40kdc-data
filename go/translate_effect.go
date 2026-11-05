@@ -336,6 +336,9 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		if inner["type"] == "named-region-state" && mod(inner)["consumer"] != nil {
 			return describeNamedRegionConditional(mod(inner), mapOr(e["condition"]), ctx)
 		}
+		if gate, ok := recipientGate(e, ctx); ok {
+			return gate.lead + ", " + describeEffectInline(gate.inner, gate.ctx)
+		}
 		return conditionLeadInFor(mapOr(e["condition"]), isDefensiveEffect(inner)) + ", " + describeEffectInline(inner, ctx)
 	case "rules-bundle", "sequence":
 		steps := getList(e, "steps")
@@ -632,6 +635,9 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		lead := capitalize(conditionLeadInFor(mapOr(e["condition"]), isDefensiveEffect(inner)))
 		if containerTypes[ejstrType(inner)] {
 			return indent + lead + ":\n" + describeEffect(inner, depth+1, ctx)
+		}
+		if gate, ok := recipientGate(e, ctx); ok {
+			return indent + arrow + capitalize(gate.lead) + ", " + describeEffectInline(gate.inner, gate.ctx) + "."
 		}
 		return indent + arrow + lead + ", " + describeEffectInline(inner, ctx) + "."
 	case "rules-bundle", "sequence":
