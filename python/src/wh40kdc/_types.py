@@ -2934,14 +2934,14 @@ class SingleEffect6(TypedDict):
 
 class Modifier9(TypedDict):
     ability: EntityId | NamedAbilityRef
-    value: NotRequired[float | UnitRating]
+    value: NotRequired[float | UnitRating | DiceExpression]
     rules_bundle: NotRequired[Literal[True]]
     definition: NotRequired[AbilityPart]
 
 
 class Modifier10(TypedDict):
     ability: NotRequired[EntityId | NamedAbilityRef]
-    value: NotRequired[float | UnitRating]
+    value: NotRequired[float | UnitRating | DiceExpression]
     rules_bundle: NotRequired[Literal[True]]
     definition: AbilityPart
 

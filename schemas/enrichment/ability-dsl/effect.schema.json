@@ -1017,6 +1017,10 @@
                     },
                     {
                       "$ref": "../../defs/common.schema.json#/$defs/unit-rating"
+                    },
+                    {
+                      "$ref": "../../defs/common.schema.json#/$defs/dice-expression",
+                      "description": "A rolled rating, such as Deadly Demise D6."
                     }
                   ]
                 },

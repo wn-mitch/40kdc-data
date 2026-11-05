@@ -483,4 +483,20 @@ export const CHARACTERISTIC_EXTENSIONS: readonly FamilyExtension[] = [
       return normalized;
     },
   },
+  {
+    // "this model has the Deadly Demise D6 ability": a rating rolled when the model is destroyed.
+    family: "core-ability-grant",
+    version: 7,
+    description: "As the previous version, and Deadly Demise can carry a dice rating (\"D6\", \"D3+1\", \"2D6\") as value.",
+    schema: (previous) => {
+      const value = properties(previous).value as Schema;
+      return withProperties(previous, { value: { ...value, anyOf: [...(value.anyOf as Schema[]), { type: "string", pattern: DICE.source }] } });
+    },
+    normalize: (input, previous) => {
+      // Every other ability keeps the previous version's own value checks.
+      if (typeof input.value !== "string" || input.ability !== "deadly-demise") return previous(input);
+      if (!DICE.test(input.value)) throw new TypeError("core-ability-grant.value for Deadly Demise is a whole number, {rating}, or a dice rating such as D6 or D3+1.");
+      return standIn(input, "value", 1, previous);
+    },
+  },
 ];

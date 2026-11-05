@@ -92,6 +92,17 @@ const SUBJECT_TARGETS: Record<string, string> = {
 /** Recipients that stay themselves when a leader is attached; only the ability's own unit widens to the attached unit. */
 const OTHER_UNITS = new Set(["selected-unit", "event-subject", "event-object", "defender", "recipient", "bearer-transport"]);
 
+/** Families whose subject is a property of one model: its keywords, its rules, its characteristics. */
+const MODEL_PROPERTY_FAMILIES = new Set(["keyword-grant", "rule-state", "characteristic-modifier", "characteristic-set"]);
+
+/**
+ * A model property the source writes of "this model" (not a "that unit" compile-antecedent.ts bound
+ * to the bearer): an attached leader's own keywords and characteristics, not the led unit's.
+ */
+function ownModelProperty(leaf: CompileLeaf): boolean {
+  return MODEL_PROPERTY_FAMILIES.has(leaf.family_id) && leaf.parameters.subject === "this-model" && !(leaf.antecedent_keys ?? []).includes("subject");
+}
+
 const MORTAL_TARGETS: Record<string, string> = { target: "defender", "that-unit": "selected-unit", "this-unit": "this-unit", "this-model": "this-model", recipient: "recipient", "event-subject": "event-subject", "event-object": "event-object" };
 
 const isSource = (value: unknown): boolean => value !== null && typeof value === "object" && "source" in value;
@@ -189,7 +200,9 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
     if (isSelectionRef(subject)) return subject as unknown as Node;
     const found = SUBJECT_TARGETS[String(subject)];
     if (!found) throw new CompileError(`${leaf.family_id}@${leaf.family_version} subject ${JSON.stringify(subject)} has no DSL target; move the leaf to its current version.`);
-    // An attached leader's own subject is the whole unit; a selected unit stays the selected unit.
+    // An attached leader's own subject is the whole unit; a selected unit stays the selected unit,
+    // and a keyword or characteristic written of "this model" stays the leader's own model.
+    if (found === "this-model" && ownModelProperty(leaf)) return found;
     return context.attached && !OTHER_UNITS.has(found) ? "this-unit" : found;
   };
   const delegated = rollEffect(leaf, context, target) ?? weaponAbilityEffect(leaf, context, target) ?? characteristicEffect(leaf, context, target);

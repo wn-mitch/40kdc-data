@@ -77,6 +77,16 @@ describe("Semantic authoring family extensions", () => {
     }
   });
 
+  it("grants Deadly Demise with a dice rating and refuses dice on other abilities", () => {
+    expect(normalize("core-ability-grant", { subject: "this-model", ability: "deadly-demise", value: "D3+1" })).toEqual({ subject: "this-model", ability: "deadly-demise", value: "D3+1" });
+    expect(() => normalizeFingerprintParameters("core-ability-grant", { subject: "this-model", ability: "deadly-demise", value: "D6" }, 6)).toThrow();
+    expect(() => normalize("core-ability-grant", { subject: "this-unit", ability: "scouts", value: "D6" })).toThrow();
+    expect(() => normalize("core-ability-grant", { subject: "this-model", ability: "deadly-demise", value: "D4" })).toThrow(/dice rating/u);
+    const text = "This model has the Deadly Demise D6 ability.";
+    const result = compileLeaves([leaf("core-ability-grant", { subject: "this-model", ability: "deadly-demise", value: "D6" })], text);
+    expect(result.ok && result.mechanics.effect).toEqual({ type: "ability-grant", target: "this-model", modifier: { ability: "deadly-demise", value: "D6" } });
+  });
+
   it("reads 'every keyword plus one of these' bearers and checks them against core groups", () => {
     const eligible = normalize("bearer-eligibility", { keywords: ["Adeptus Astartes"], any_keywords: ["MOUNTED", "INFANTRY"], match: "all", excluded_keywords: [] });
     expect(eligible).toEqual({ keywords: ["ADEPTUS ASTARTES"], any_keywords: ["INFANTRY", "MOUNTED"], match: "all", excluded_keywords: [] });

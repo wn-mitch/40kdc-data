@@ -9080,6 +9080,10 @@
                     },
                     {
                       "$ref": "#/$defs/unit-rating"
+                    },
+                    {
+                      "$ref": "#/$defs/dice-expression",
+                      "description": "A rolled rating, such as Deadly Demise D6."
                     }
                   ]
                 },

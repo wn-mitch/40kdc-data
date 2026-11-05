@@ -75,13 +75,24 @@ describe("Semantic authoring weapon-scoped change on an attached leader's own mo
     expect(steps.every((step) => step.modifier.weapons?.keyword?.keyword_id === "psychic")).toBe(true);
   });
 
-  it("still widens a non-weapon change on the attached leader to its unit", () => {
+  it("keeps a non-weapon characteristic of this model on the attached leader", () => {
     const text = "While this model is leading a unit, add 1 to the Wounds characteristic of this model.";
     const result = compileLeaves(placed(text,
       ["While this model is leading a unit", "leading-unit", { attachment: "led", subject: "this-model" }],
       ["add 1 to the Wounds characteristic of this model", "characteristic-modifier", { subject: "this-model", characteristics: ["W"], operation: "add", value: 1 }]), text);
     expect(result.ok).toBe(true);
-    expect(nodesOf(result.ok ? result.mechanics : {}, "stat-modifier").map((step) => step.target)).toEqual(["this-unit"]);
+    expect(nodesOf(result.ok ? result.mechanics : {}, "stat-modifier").map((step) => step.target)).toEqual(["this-model"]);
+  });
+
+  it("keeps keywords gained and lost by this model on the attached leader", () => {
+    const text = "While this model is leading a unit, this model gains the MOUNTED keyword and loses the INFANTRY keyword.";
+    const result = compileLeaves(placed(text,
+      ["While this model is leading a unit", "leading-unit", { attachment: "led", subject: "this-model" }],
+      ["this model gains the MOUNTED keyword", "keyword-grant", { subject: "this-model", keywords: ["MOUNTED"] }],
+      ["loses the INFANTRY keyword", "rule-state", { subject: "this-model", direction: "suppressed", rule_kind: "keyword", rule: "INFANTRY" }]), text);
+    expect(result.ok).toBe(true);
+    const mechanics = result.ok ? result.mechanics : {};
+    expect([...nodesOf(mechanics, "keyword-grant"), ...nodesOf(mechanics, "rule-state")].map((step) => step.target)).toEqual(["this-model", "this-model"]);
   });
 });
 

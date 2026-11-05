@@ -5671,59 +5671,45 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "1d6d3e9834d739001aeb8c87cba9598653eba973a806a72b71fdb2c520c3e992",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "MOUNTED"
-                ]
-              }
-            }
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "attached",
+          "with": {
+            "all_of": [
+              "MOUNTED"
+            ]
           }
-        ]
+        }
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "keyword-grant",
-                "target": "this-model",
-                "modifier": {
-                  "keywords": [
-                    "MOBILE"
-                  ]
-                }
-              },
-              {
-                "type": "keyword-grant",
-                "target": "this-model",
-                "modifier": {
-                  "keywords": [
-                    "MOUNTED"
-                  ]
-                }
-              }
-            ]
+            "type": "rule-state",
+            "target": "this-model",
+            "modifier": {
+              "direction": "suppressed",
+              "rule_kind": "keyword",
+              "rule": "INFANTRY"
+            }
+          },
+          {
+            "type": "keyword-grant",
+            "target": "this-model",
+            "modifier": {
+              "keywords": [
+                "MOBILE",
+                "MOUNTED"
+              ]
+            }
           },
           {
             "type": "stat-modifier",
@@ -5732,15 +5718,6 @@
               "stat": "M",
               "operation": "add",
               "value": 4
-            }
-          },
-          {
-            "type": "rule-state",
-            "target": "this-model",
-            "modifier": {
-              "direction": "suppressed",
-              "rule_kind": "keyword",
-              "rule": "INFANTRY"
             }
           }
         ]
@@ -11611,66 +11588,39 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "c8fe10526adaf2f6e32b7dbd8afd83c4b7d5fb7400c9d7f9118a4256ac2d9ac8",
+    "source_digest": "32757e41e7c9050f5318c559ce49a35b3eef23f9bfbf17776057a15f1cf09d11",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "ORKS"
-                ]
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "PSYKER"
-                ]
-              }
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "psyker-level",
+            "operation": "set",
+            "value": 2
           }
-        ]
-      },
-      "effect": {
-        "type": "rules-bundle",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "psyker-level",
-              "operation": "set",
-              "value": 2
-            }
-          },
-          {
-            "type": "ability-grant",
-            "target": "this-model",
-            "modifier": {
-              "ability": "deadly-demise"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "this-model",
-            "modifier": {
-              "roll": "psychic",
-              "result_scope": "any-result"
-            }
+        },
+        {
+          "type": "ability-grant",
+          "target": "this-model",
+          "modifier": {
+            "ability": "deadly-demise",
+            "value": "D6"
           }
-        ]
-      }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "psychic",
+            "result_scope": "any-result"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"

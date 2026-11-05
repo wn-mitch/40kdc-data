@@ -19,6 +19,15 @@ const source: BuffSource = { kind: "ability", abilityId: "fixture", abilityKind:
 const ctx: EngineContext = { phase: "shooting", attackerStationary: false, attackerKeywords: ["example"] };
 
 describe("pipeline-8b cruncher unsupported classification", () => {
+  it("counts an aura limited to eligible recipients as a runtime unknown, but not a malformed one", () => {
+    const aura = (eligible: unknown) => ({ type: "aura", target: "friendly-within-aura", modifier: { range: { inches: 6 }, of: "this-unit", eligible, effect: { type: "ability-grant", target: "recipient", modifier: { ability: "stealth" } } } });
+    const unknown = effectToBuffs(aura({ owner: "friendly", all_of: ["EXAMPLE"] }), source, { phase: "shooting", attackerStationary: false }, "target").unsupported;
+    expect(unknown.map((item) => item.reason)).toEqual(["aura recipient keywords are unavailable or its filter is malformed"]);
+    expect(classifyUnsupported(unknown)).toEqual({ honestUnknown: 1, outsideDamagePath: 0, unrecognizedShape: 0 });
+    const malformed = [{ reason: unknown[0]!.reason, effectFragment: aura({ owner: "friendly", all_of: "EXAMPLE" }) }];
+    expect(classifyUnsupported(malformed)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
+  });
+
   it("counts a heal effect as outside the damage path, not an unrecognized shape", () => {
     const { unsupported } = effectToBuffs({ type: "heal", target: "this-unit", modifier: { value: 3 } }, source, ctx);
     expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });

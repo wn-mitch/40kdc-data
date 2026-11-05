@@ -2096,6 +2096,25 @@ function genEffectTranslation(): void {
       },
     });
   }
+  // Pin a dice-rated grant ("Deadly Demise D3+1"): the rating is a dice string, not a number.
+  {
+    const fc = {
+      effect: {
+        type: "ability-grant",
+        target: "this-model",
+        modifier: { ability: "deadly-demise", value: "D3+1" },
+      },
+      scope: { duration: "permanent" },
+    };
+    cases.push({
+      caseId: `ability-grant-deadly-demise-dice#${cases.length}`,
+      effect: fc.effect,
+      scope: fc.scope,
+      expected: {
+        text: describeAbility({ effect: fc.effect as Effect, scope: fc.scope }),
+      },
+    });
+  }
   // Pin the charge permission's `after` clause for the sibling moves — they
   // rarely surface in the capped sample above (permission caps out on the
   // common charge-after-Advance). Shapes mirror real enrichment data; expected

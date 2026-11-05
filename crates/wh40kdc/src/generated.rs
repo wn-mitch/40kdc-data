@@ -1054,6 +1054,10 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityBehavior {
 ///        },
 ///        {
 ///          "$ref": "#/$defs/unit-rating"
+///        },
+///        {
+///          "description": "A rolled rating, such as Deadly Demise D6.",
+///          "$ref": "#/$defs/dice-expression"
 ///        }
 ///      ]
 ///    }
@@ -1130,6 +1134,10 @@ impl ::std::convert::From<NamedAbilityRef> for AbilityGrantEffectModifierAbility
 ///    },
 ///    {
 ///      "$ref": "#/$defs/unit-rating"
+///    },
+///    {
+///      "description": "A rolled rating, such as Deadly Demise D6.",
+///      "$ref": "#/$defs/dice-expression"
 ///    }
 ///  ]
 ///}
@@ -1140,6 +1148,7 @@ impl ::std::convert::From<NamedAbilityRef> for AbilityGrantEffectModifierAbility
 pub enum AbilityGrantEffectModifierValue {
     Number(f64),
     UnitRating(UnitRating),
+    DiceExpression(DiceExpression),
 }
 impl ::std::convert::From<f64> for AbilityGrantEffectModifierValue {
     fn from(value: f64) -> Self {
@@ -1149,6 +1158,11 @@ impl ::std::convert::From<f64> for AbilityGrantEffectModifierValue {
 impl ::std::convert::From<UnitRating> for AbilityGrantEffectModifierValue {
     fn from(value: UnitRating) -> Self {
         Self::UnitRating(value)
+    }
+}
+impl ::std::convert::From<DiceExpression> for AbilityGrantEffectModifierValue {
+    fn from(value: DiceExpression) -> Self {
+        Self::DiceExpression(value)
     }
 }
 ///`AbilityInteractionsItem`
