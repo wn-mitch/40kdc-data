@@ -10,6 +10,7 @@ import { NAME_FRAGMENT } from "./compile-name.js";
 import { approveShape, carryApprovals, compiledRecordsOf, rejectShapeMembers } from "./shapes.js";
 import { exactSpan } from "./contracts.js";
 import { withTransactionAsync } from "./db.js";
+import { staleGaps } from "./gap-sweep.js";
 
 /**
  * Will's decisions, made in conversation, applied as his own. Each decision names a proposal
@@ -24,7 +25,8 @@ import { withTransactionAsync } from "./db.js";
  * `ability_version_ids`) for publication, refusing any member publication would reject;
  * `reject-shape` refuses them until their leaves change. `carry-approvals` (optionally one
  * `faction_id`) keeps each approval a family-version migration staled when the recompiled entry is
- * byte-identical. `resolve-gap` closes the open gap `gap_id` names once the record no longer needs it.
+ * byte-identical. `resolve-gap` closes the open gap `gap_id` names once the record no longer needs it;
+ * `close-covered-gaps` (optionally one `faction_id`) closes every gap `staleGaps` finds.
  */
 
 export type ChatDecision = {
@@ -49,12 +51,12 @@ export type ChatDecision = {
   allow_overlap?: boolean;
   /** For `correct` of an annotation: same-role leaves inside the new wording that it absorbs (one list, one leaf). */
   merges_annotation_ids?: number[];
-  action: "confirm" | "correct" | "retire" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "add-connective" | "operator" | "move-surface" | "approve-shape" | "reject-shape" | "carry-approvals" | "connective-relation" | "resolve-gap";
+  action: "confirm" | "correct" | "retire" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "add-connective" | "operator" | "move-surface" | "approve-shape" | "reject-shape" | "carry-approvals" | "connective-relation" | "resolve-gap" | "close-covered-gaps";
   /** For `approve-shape` / `reject-shape`: the shape signature the members compile to. */
   signature?: string;
   /** For `approve-shape` / `reject-shape`: the source versions decided. */
   ability_version_ids?: number[];
-  /** For `carry-approvals`: only this faction's members. */
+  /** For `carry-approvals` / `close-covered-gaps`: only this faction's members. */
   faction_id?: string;
   /** For `add` with an explicit occurrence, the UTF-8 byte end (paired with `start_byte`). */
   end_byte?: number;
@@ -374,6 +376,15 @@ export async function applyChatReview(db: DatabaseSync, review: ChatReview): Pro
       }
       if (item.action === "resolve-gap") {
         applied.push(resolveGap(db, item, actor.reviewer));
+        continue;
+      }
+      if (item.action === "close-covered-gaps") {
+        const stale = staleGaps(db, item.faction_id);
+        for (const proposal_id of stale.reject_proposal_ids) {
+          applyAnnotationBatch(db, { reviewer: actor.reviewer, decisions: [decision(db, { action: "reject", proposal_id })] }, actor);
+        }
+        for (const gap of stale.resolve) resolveGap(db, { action: "resolve-gap", gap_id: gap.gap_id, description: gap.reason }, actor.reviewer);
+        applied.push({ batch_id: "", closed: { rejected_proposals: stale.reject_proposal_ids.length, resolved_gaps: stale.resolve.length } } as never);
         continue;
       }
       const full = decision(db, item);

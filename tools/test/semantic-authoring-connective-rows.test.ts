@@ -428,3 +428,33 @@ describe("chat review closing a gap", () => {
     }
   });
 });
+
+describe("chat review closing the gaps coverage has made stale", () => {
+  it("closes a leaf gap whose span a later leaf covers and gaps on superseded versions, and keeps uncovered ones", async () => {
+    const { db, twin } = fixture(undefined);
+    try {
+      const novel = (text: string) => ({ action: "novel", ability_version_id: twin, source_hash: hashJson({ text: SOURCE }), fragment: "RAW_TEXT", ...bytes(text), role: "EFFECT" });
+      applyAnnotationBatch(db, { reviewer: REVIEWER, decisions: [novel("it can relocate 5 inches"), novel("the squad is barred from charging")] });
+      const gapFor = (text: string) => (db.prepare(`SELECT gaps.id, gaps.proposal_id FROM gaps JOIN proposals ON proposals.id = gaps.proposal_id
+        JOIN source_spans ON source_spans.id = proposals.span_id WHERE source_spans.ability_version_id = ? AND source_spans.exact_text = ?`).get(twin, text)) as { id: number; proposal_id: number };
+      const covered = gapFor("it can relocate 5 inches");
+      const uncovered = gapFor("the squad is barred from charging");
+      // The reviewer later leafs the first span directly, which leaves its placeholder proposal pending.
+      applyAnnotationBatch(db, { reviewer: REVIEWER, decisions: [{ action: "confirm", ability_version_id: twin, source_hash: hashJson({ text: SOURCE }), fragment: "RAW_TEXT", ...bytes("it can relocate 5 inches"), role: "EFFECT", family_id: "make-move", parameters: { subject: "this-unit", move_type: "normal", distance: 5 } }] });
+      db.prepare("UPDATE abilities SET current = 0 WHERE ability_id = 'fade-step'").run();
+      const source = (db.prepare("SELECT id FROM abilities WHERE ability_id = 'fade-step'").get() as { id: number }).id;
+      const superseded = Number(db.prepare("INSERT INTO gaps (ability_version_id, type, status, description, batch_id) VALUES (?, 'DSL_GAP', 'open', 'fixture gap', NULL)").run(source).lastInsertRowid);
+      expect(db.prepare("SELECT count(*) AS n FROM gaps WHERE status = 'open'").get()).toEqual({ n: 3 });
+
+      const result = await applyChatReview(db, { reviewer: REVIEWER, decisions: [{ action: "close-covered-gaps" }] });
+      expect(result.failed).toEqual([]);
+      expect(result.applied).toEqual([{ batch_id: "", closed: { rejected_proposals: 1, resolved_gaps: 1 } }]);
+      const status = (id: number) => (db.prepare("SELECT status FROM gaps WHERE id = ?").get(id) as { status: string }).status;
+      expect([status(covered.id), status(superseded), status(uncovered.id)]).toEqual(["resolved", "resolved", "open"]);
+      expect(db.prepare("SELECT status FROM proposals WHERE id = ?").get(covered.proposal_id)).toEqual({ status: "rejected" });
+      expect(db.prepare("SELECT status FROM proposals WHERE id = ?").get(uncovered.proposal_id)).toEqual({ status: "unresolved" });
+    } finally {
+      db.close();
+    }
+  });
+});
