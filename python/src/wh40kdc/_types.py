@@ -2130,6 +2130,7 @@ EventFilter = TypedDict(
                     "surge",
                     "scout",
                     "disembark",
+                    "embark",
                 ]
             ]
         ],
@@ -2862,6 +2863,7 @@ EffectNode: TypeAlias = Union[
     "SelectObjectiveEffect",
     "OathModifierEffect",
     "RitualMenuEffect",
+    "MoveTypeEffect",
 ]
 
 
@@ -4231,6 +4233,23 @@ class DesignationApplies(TypedDict):
     attacker_unit_filter: NotRequired[UnitFilter]
     beneficiary: NotRequired[EventOrSelectionReference]
     reference: NotRequired[SelectionReference]
+
+
+MoveTypeEffect = TypedDict(
+    "MoveTypeEffect",
+    {
+        "type": Literal["move-type"],
+        "name": str,
+        "move_type": MovementKind,
+        "mode": NotRequired[MoveMode],
+        "setup_distance": NotRequired[RangeRef],
+        "distance": NotRequired[Quantity],
+        "eligible_if": NotRequired[Condition],
+        "before": NotRequired[EffectNode],
+        "while": NotRequired[EffectNode],
+        "after": NotRequired[EffectNode],
+    },
+)
 
 
 Effect: TypeAlias = EffectNode

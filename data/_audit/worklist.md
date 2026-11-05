@@ -5,7 +5,7 @@ structural stub — an effect carrying an empty-modifier placeholder node that s
 DSL authored. This is the actionable counterpart to the per-faction `stub*` counts in
 [`CONTRIBUTING.md`](../../CONTRIBUTING.md) and [`summary.md`](summary.md).
 
-Total: 303 stub abilities.
+Total: 300 stub abilities.
 
 | faction | ability | shape | needs |
 |---|---|---|---|
@@ -27,7 +27,6 @@ Total: 303 stub abilities.
 | adeptus-astartes | righteous-fury-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-astartes | rites-of-thermal-appeasement-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-astartes | special-issue-optics-and-ammunition-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | special-move-types-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-astartes | venator-omni-auspex-phobos-shadow-force-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-astartes | venator-omni-auspex-phobos-shock-force-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-custodes | fearless-and-unrelenting-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -36,7 +35,6 @@ Total: 303 stub abilities.
 | adeptus-custodes | praesidium-shield-wargear-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-custodes | selfless-service-emissaries-imperatus-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-custodes | silent-sisterhood-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-custodes | special-move-types-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-custodes | swift-ruin-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-custodes | vexilla-wargear-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-mechanicus | aggressive-impulse-haloscreed-battle-clade-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -277,7 +275,6 @@ Total: 303 stub abilities.
 | orks | boss-boomer-upgrade-blitz-brigade-orks | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | orks | get-stuck-in-ardmob-orks | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | orks | keep-it-runnin-blitz-brigade-orks | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| orks | special-move-types-orks | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | orks | unstable-energies-orks | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | raven-guard | raptorial-vigilance-shadowmark-talon-raven-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | salamanders | blazing-earth-forgefathers-seekers-salamanders | no-effect | effect type "no-effect" is not modelled by the buff layer |

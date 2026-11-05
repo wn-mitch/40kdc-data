@@ -299,6 +299,7 @@ export const withWindow = (s: string, w: unknown): string => (windowPhrase(w) ? 
 const PAST: Record<string, string> = {
   charge: "charged", advance: "advanced", "fall back": "fell back", "remain stationary": "remained stationary",
   "make an ingress move": "made an ingress move", move: "moved", disembark: "disembarked",
+  embark: "embarked",
 };
 export const pastOf = (verb: string): string => PAST[verb] ?? (verb.startsWith("make ") ? `made ${verb.slice(5)}` : verb);
 

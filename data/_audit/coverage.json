@@ -29,7 +29,7 @@
       "defensive": 25,
       "inert": 176,
       "stub": 1,
-      "stubStructural": 16,
+      "stubStructural": 15,
       "gwTextLeak": 0,
       "defensiveSkipped": 3
     },
@@ -40,7 +40,7 @@
       "defensive": 17,
       "inert": 118,
       "stub": 1,
-      "stubStructural": 9,
+      "stubStructural": 8,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
@@ -279,10 +279,10 @@
       "faction": "orks",
       "total": 209,
       "offensive": 32,
-      "defensive": 10,
-      "inert": 167,
+      "defensive": 11,
+      "inert": 166,
       "stub": 0,
-      "stubStructural": 5,
+      "stubStructural": 4,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
@@ -389,21 +389,21 @@
   "totals": {
     "total": 4536,
     "offensive": 716,
-    "defensive": 366,
-    "inert": 3472,
+    "defensive": 367,
+    "inert": 3471,
     "stub": 65,
-    "stubStructural": 303,
+    "stubStructural": 300,
     "gwTextLeak": 0,
     "defensiveSkipped": 44
   },
   "unsupportedReasons": [
     {
       "reason": "effect type \"no-effect\" is not modelled by the buff layer",
-      "count": 308
+      "count": 305
     },
     {
       "reason": "effect type \"permission\" is not modelled by the buff layer",
-      "count": 246
+      "count": 249
     },
     {
       "reason": "conditional: cannot evaluate condition \"matches\" against current context",
@@ -4591,11 +4591,11 @@
       "faction": "adeptus-astartes",
       "ability_id": "special-move-types-adeptus-astartes",
       "name": "Special Move Types",
-      "shape": "no-effect",
-      "stub": true,
+      "shape": "rules-bundle",
+      "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "gap": "effect type \"permission\" is not modelled by the buff layer"
     },
     {
       "faction": "adeptus-astartes",
@@ -6121,11 +6121,11 @@
       "faction": "adeptus-custodes",
       "ability_id": "special-move-types-adeptus-custodes",
       "name": "Special Move Types",
-      "shape": "no-effect",
-      "stub": true,
+      "shape": "rules-bundle",
+      "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "gap": "effect type \"permission\" is not modelled by the buff layer"
     },
     {
       "faction": "adeptus-custodes",
@@ -38221,11 +38221,11 @@
       "faction": "orks",
       "ability_id": "special-move-types-orks",
       "name": "Special Move Types",
-      "shape": "no-effect",
-      "stub": true,
+      "shape": "rules-bundle",
+      "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": "effect type \"permission\" is not modelled by the buff layer"
     },
     {
       "faction": "orks",

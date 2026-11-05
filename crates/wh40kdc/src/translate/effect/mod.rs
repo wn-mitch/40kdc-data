@@ -23,6 +23,7 @@ mod leaf_move;
 mod leaf_rules;
 mod leaf_shapes;
 mod menu;
+mod move_type;
 mod placement;
 mod quantity;
 mod region;
@@ -59,6 +60,7 @@ const CONTAINER_TYPES: &[&str] = &[
     "roll",
     "select-objective",
     "ritual-menu",
+    "move-type",
     "sequence",
     "rules-bundle",
     "ability-part",
@@ -517,6 +519,7 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
         ),
         "select-objective" => bind::select_objective_inline(e, ctx),
         "ritual-menu" => ritual::ritual_menu_inline(e, ctx),
+        "move-type" => move_type::move_type_inline(e, ctx),
         "dice-table" => dice_table_inline(e, ctx),
         "dice-pool-allocation" => {
             let opts = items(e, "options")

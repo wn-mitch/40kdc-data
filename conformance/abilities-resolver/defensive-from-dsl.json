@@ -2404,6 +2404,184 @@
         "needKeys": [],
         "activatable": []
       }
+    },
+    {
+      "caseId": "canonical/move-type/after-lever-defending",
+      "abilityId": "move-type-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "move-type-example",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "move-type",
+        "name": "Example Jet Move",
+        "move_type": "pulse-jet",
+        "distance": "D6+18",
+        "after": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "ability-part",
+              "duration": "turn",
+              "effect": {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "declare-charge",
+                  "allow": false
+                }
+              }
+            },
+            {
+              "type": "ability-part",
+              "duration": "until-start-next-turn",
+              "effect": {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1,
+                  "incoming": true
+                }
+              }
+            }
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"permission\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
+        ],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "move-type-example#move:pulse-jet",
+            "label": "After Example Jet Move: -1 to hit",
+            "group": null,
+            "requires": [
+              {
+                "type": "move",
+                "target": "this-unit",
+                "modifier": {
+                  "move_type": "pulse-jet"
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": -1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/move-type/after-lever-mode",
+      "abilityId": "move-type-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "move-type-example",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "move-type",
+        "name": "Example Drop Move",
+        "move_type": "disembark",
+        "mode": "assault",
+        "setup_distance": {
+          "inches": 3
+        },
+        "after": {
+          "type": "ability-part",
+          "duration": "until-start-next-turn",
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1,
+              "incoming": true
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "move-type-example#move:disembark-assault",
+            "label": "After Example Drop Move: -1 to hit",
+            "group": null,
+            "requires": [
+              {
+                "type": "move",
+                "target": "this-unit",
+                "modifier": {
+                  "move_type": "disembark",
+                  "mode": "assault"
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": -1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/move-type/nothing-after",
+      "abilityId": "move-type-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "move-type-example",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "move-type",
+        "name": "Example Bare Move",
+        "move_type": "disembark",
+        "mode": "shock",
+        "setup_distance": {
+          "inches": 3
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
     }
   ]
 }

@@ -991,6 +991,7 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             }
         }
         Some("risk-reward") => walk(node.get("reward").unwrap_or(&Value::Null), opts, out),
+        Some("move-type") => levers::move_type_lever(node, opts, out),
         Some("stance-select") => {
             let group = format!("{}?stance", opts.ability_id);
             levers::enumerate_named_options(node, opts, out, &group, node.get("max_choices").and_then(Value::as_i64).unwrap_or(1));

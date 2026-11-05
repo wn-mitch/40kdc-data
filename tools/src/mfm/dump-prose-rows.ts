@@ -16,7 +16,7 @@ import { readDamaged } from "./damaged.js";
 import { nameToId } from "../converters/id-generator.js";
 import { FACTION_ALIASES } from "./faction-map.js";
 import type { MfmDump, MfmRow, MfmTableName } from "./loader.js";
-import { assembleRuleText, type BulletLookup, menuSections, plainBlock, plainLine, ruleSections } from "./dump-text.js";
+import { assembleBehaviourText, assembleRuleText, type BulletLookup, menuSections, plainBlock, plainLine, ruleSections } from "./dump-text.js";
 import { wargearItemsForDatasheet } from "./wargear.js";
 
 /** The faction every Core Rules row belongs to. */
@@ -252,8 +252,17 @@ export function enumerateAbilityRows(dump: MfmDump): AbilityRowSet {
     const names = [...new Set((stubsByRule.get(ruleId) ?? []).map((s) => nameOf(s)).filter((n): n is string => !!n && n !== name))].sort(cmp);
     return names.length ? names : undefined;
   };
+  const behaviours = new Map(rowsOf(dump, "behaviour_type").map((b) => [b.id, b]));
+  const behavioursOf = groupRows(rowsOf(dump, "army_rule_behaviour_type"), (l) => l.armyRuleId);
+  // The move types an army rule lists (Special Move Types), after its own prose, in display order.
+  const behaviourText = (ruleId: string): string[] => [...(behavioursOf.get(ruleId) ?? [])]
+    .sort((a, b) => a.displayOrder - b.displayOrder || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+    .map((link) => behaviours.get(link.behaviourTypeId))
+    .flatMap((row) => (row ? [assembleBehaviourText(row)].filter((t): t is string => t !== undefined) : []));
   const emitRule = (table: "army_rule" | "detachment_rule", row: { id: string }, name: string, components: readonly MfmRow<"rule_container_component">[], placements: (Placement | string)[]): void => {
-    const text = assembleRuleText(components, bullets);
+    const own = assembleRuleText(components, bullets);
+    const moves = table === "army_rule" ? behaviourText(row.id) : [];
+    const text = moves.length ? [own, ...moves].filter((t): t is string => t !== undefined).join("\n") : own;
     ruleText.set(row.id, text);
     const aliases = aliasesOf(row.id, name);
     emit({ kind: table === "army_rule" ? "army-rule" : "detachment-rule", table, rowId: row.id, name, ...(text ? { text } : {}), ...(aliases ? { aliases } : {}) }, placements);

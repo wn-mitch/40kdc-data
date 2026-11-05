@@ -646,6 +646,16 @@ function walk(
     case "risk-reward":
       walk(currentNode.reward, source, opts, out);
       return;
+    case "move-type": {
+      // What follows a move type applies to a unit once it has made that move: the player's pick,
+      // vouched for by the move. Before and while it moves are movement rules, not buffs.
+      if (currentNode.after === undefined) return;
+      const move = { type: "move", target: "this-unit", modifier: { move_type: currentNode.move_type, ...(currentNode.mode !== undefined ? { mode: currentNode.mode } : {}) } };
+      const kind = `${String(currentNode.move_type)}${currentNode.mode !== undefined ? `-${String(currentNode.mode)}` : ""}`;
+      const name = typeof currentNode.name === "string" ? currentNode.name : kind;
+      offerLever(currentNode.after, source, opts, out, { id: `${opts.abilityId}#move:${kind}`, label: `After ${name}`, requires: [move] });
+      return;
+    }
     case "stance-select":
       enumerateNamedOptions(currentNode, source, opts, out, `${opts.abilityId}?stance`, typeof currentNode.max_choices === "number" ? currentNode.max_choices : 1);
       return;

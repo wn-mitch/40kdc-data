@@ -31,6 +31,13 @@ const ORDER_RULES = ["issuer", "one-at-a-time", "ineligible-state", "ends-on-sta
 const ORDER_RULES_V2 = [...ORDER_RULES, "only-orders"] as const;
 const ORDER_STATES = ["battle-shocked"] as const;
 
+/** The moves a move type can be or extend: every movement kind but remaining stationary. */
+const MOVE_TYPE_KINDS = ["normal", "advance", "fall-back", "charge", "pile-in", "consolidation", "ingress", "surge", "scout", "disembark", "embark", "pulse-jet"] as const;
+/** A move type's named mode of the move it extends (common.schema.json move-mode). */
+const MOVE_TYPE_MODES = ["ordered-retreat", "desperate-escape", "ongoing", "engaging", "objective", "rapid", "tactical", "combat", "emergency", "assault", "shock"] as const;
+/** The parts of a move type the app prints, each opened by a move-type-section marker. */
+const MOVE_TYPE_SECTIONS = ["eligible", "effect", "before", "while", "after"] as const;
+
 export const CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {
     id: "aura-range",
@@ -261,6 +268,41 @@ export const CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
       additionalProperties: false,
     },
   },
+  {
+    id: "move-type-open",
+    version: 1,
+    role: "EFFECT",
+    label: "Define a move type",
+    description: "Opens a move type an army rule defines (Special Move Types): its printed name, the move it is or extends (disembark for an Assault or Shock Disembark, with that mode; pulse-jet for a move of its own), and the set-up distance or maximum distance it prints. The sentences after it, up to the next move-type-open, fold into it under their move-type-section markers.",
+    starter: { name: "", move_type: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["name", "move_type"],
+      properties: {
+        name: { type: "string", minLength: 1 },
+        move_type: { enum: MOVE_TYPE_KINDS },
+        mode: { enum: MOVE_TYPE_MODES },
+        setup_inches: { type: "integer", minimum: 1, maximum: 24 },
+        distance_inches: { type: "integer", minimum: 1, maximum: 48 },
+        distance_dice: { type: "string", pattern: "^\\d*D\\d+(\\+\\d+)?$" },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "move-type-section",
+    version: 1,
+    role: "EVENT",
+    label: "Move type section",
+    description: "Marks which part of the enclosing move type the leaves after it state, up to the next marker: eligible (condition leaves on the moving unit and its Transport, beyond the rule allowing the move), effect (the core move it is made as; no leaves), before (what resolves before it moves), while (move-modifier leaves on how it moves) or after (what applies once it has moved, with each duration).",
+    starter: { section: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["section"],
+      properties: { section: { enum: MOVE_TYPE_SECTIONS } },
+      additionalProperties: false,
+    },
+  },
 ];
 
 export function normalizeContainerParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
@@ -299,6 +341,23 @@ export function normalizeContainerParameters(family: string, input: Record<strin
       if ("max_choices" in input) result.max_choices = boundedInteger(input.max_choices, 1, 99, "choice-open.max_choices");
       return result;
     }
+    case "move-type-open": {
+      const keys = ["name", "move_type", "mode", "setup_inches", "distance_inches", "distance_dice"].filter((key) => key in input);
+      exactKeys(input, keys, family);
+      if (typeof input.name !== "string" || !input.name.trim()) throw new RangeError("move-type-open.name must be the move type's printed name.");
+      const result: Record<string, unknown> = { name: input.name.trim(), move_type: enumValue(input.move_type, MOVE_TYPE_KINDS, "move-type-open.move_type") };
+      if ("mode" in input) result.mode = enumValue(input.mode, MOVE_TYPE_MODES, "move-type-open.mode");
+      if ("setup_inches" in input) result.setup_inches = boundedInteger(input.setup_inches, 1, 24, "move-type-open.setup_inches");
+      if ("distance_inches" in input) result.distance_inches = boundedInteger(input.distance_inches, 1, 48, "move-type-open.distance_inches");
+      if ("distance_dice" in input) {
+        if (typeof input.distance_dice !== "string" || !/^\d*D\d+(\+\d+)?$/u.test(input.distance_dice)) throw new RangeError("move-type-open.distance_dice must be a dice expression such as D6+18.");
+        result.distance_dice = input.distance_dice;
+      }
+      return result;
+    }
+    case "move-type-section":
+      exactKeys(input, ["section"], family);
+      return { section: enumValue(input.section, MOVE_TYPE_SECTIONS, "move-type-section.section") };
     case "stance-select-open": {
       const keys = ["scope", "mode", "min_choices", "max_choices"].filter((key) => key in input);
       exactKeys(input, keys, family);

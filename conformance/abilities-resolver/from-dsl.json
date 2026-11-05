@@ -17888,6 +17888,67 @@
           }
         ]
       }
+    },
+    {
+      "caseId": "canonical/move-type/after-lever-attacking",
+      "abilityId": "move-type-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "move-type-example",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "move-type",
+        "name": "Example Jet Move",
+        "move_type": "pulse-jet",
+        "distance": "D6+18",
+        "after": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "ability-part",
+              "duration": "turn",
+              "effect": {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "declare-charge",
+                  "allow": false
+                }
+              }
+            },
+            {
+              "type": "ability-part",
+              "duration": "until-start-next-turn",
+              "effect": {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1,
+                  "incoming": true
+                }
+              }
+            }
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"permission\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
     }
   ]
 }

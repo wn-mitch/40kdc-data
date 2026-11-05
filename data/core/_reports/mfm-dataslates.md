@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1237 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 0 | 183 | 274 |
+| detachments | 0 | 0 | 184 | 273 |
 | stratagems | 0 | 0 | 1063 | 250 |
-| abilities | 0 | 0 | 3762 | 774 |
-| phase-mappings | 0 | 0 | 1206 | 375 |
+| abilities | 0 | 0 | 3766 | 770 |
+| phase-mappings | 0 | 0 | 1207 | 374 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -27,8 +27,8 @@ dump confirmation.
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 11 | 15 |
 | adepta-sororitas | 0 | 0 | 121 | 27 |
-| adeptus-astartes | 0 | 0 | 214 | 36 |
-| adeptus-custodes | 0 | 0 | 145 | 13 |
+| adeptus-astartes | 0 | 0 | 215 | 35 |
+| adeptus-custodes | 0 | 0 | 146 | 12 |
 | adeptus-mechanicus | 0 | 0 | 141 | 26 |
 | aeldari | 0 | 0 | 247 | 53 |
 | agents-of-the-imperium | 0 | 0 | 98 | 40 |
@@ -50,7 +50,7 @@ dump confirmation.
 | iron-hands | 0 | 0 | 9 | 2 |
 | leagues-of-votann | 0 | 0 | 129 | 26 |
 | necrons | 0 | 0 | 194 | 36 |
-| orks | 0 | 0 | 186 | 23 |
+| orks | 0 | 0 | 187 | 22 |
 | raven-guard | 0 | 0 | 10 | 1 |
 | salamanders | 0 | 0 | 6 | 5 |
 | space-wolves | 0 | 0 | 74 | 13 |
@@ -59,7 +59,7 @@ dump confirmation.
 | tyranids | 0 | 0 | 159 | 27 |
 | ultramarines | 0 | 0 | 10 | 1 |
 | white-scars | 0 | 0 | 11 | 0 |
-| world-eaters | 0 | 0 | 119 | 28 |
+| world-eaters | 0 | 0 | 120 | 27 |
 
 ## Ability verification outcomes
 
@@ -77,14 +77,14 @@ dump confirmation.
 | adeptus-astartes | ambiguous-source | 1 |
 | adeptus-astartes | digest-differs | 13 |
 | adeptus-astartes | no-source | 5 |
-| adeptus-astartes | stub | 16 |
+| adeptus-astartes | stub | 15 |
 | adeptus-astartes | unpublished | 1 |
-| adeptus-astartes | verified | 214 |
+| adeptus-astartes | verified | 215 |
 | adeptus-custodes | ambiguous-source | 1 |
 | adeptus-custodes | digest-differs | 2 |
-| adeptus-custodes | stub | 9 |
+| adeptus-custodes | stub | 8 |
 | adeptus-custodes | unpublished | 1 |
-| adeptus-custodes | verified | 145 |
+| adeptus-custodes | verified | 146 |
 | adeptus-mechanicus | digest-differs | 8 |
 | adeptus-mechanicus | stub | 16 |
 | adeptus-mechanicus | unpublished | 2 |
@@ -165,9 +165,9 @@ dump confirmation.
 | necrons | verified | 194 |
 | orks | ambiguous-source | 1 |
 | orks | digest-differs | 12 |
-| orks | stub | 5 |
+| orks | stub | 4 |
 | orks | unpublished | 5 |
-| orks | verified | 186 |
+| orks | verified | 187 |
 | raven-guard | stub | 1 |
 | raven-guard | verified | 10 |
 | salamanders | digest-differs | 2 |
@@ -193,8 +193,8 @@ dump confirmation.
 | white-scars | verified | 11 |
 | world-eaters | digest-differs | 5 |
 | world-eaters | stub | 2 |
-| world-eaters | unpublished | 21 |
-| world-eaters | verified | 119 |
+| world-eaters | unpublished | 20 |
+| world-eaters | verified | 120 |
 
 ## Weapon verification outcomes
 

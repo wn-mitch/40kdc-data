@@ -18,11 +18,21 @@ pub(crate) fn past_of(verb: &str) -> String {
         "make an ingress move" => "made an ingress move".to_string(),
         "move" => "moved".to_string(),
         "disembark" => "disembarked".to_string(),
+        "embark" => "embarked".to_string(),
         other => match other.strip_prefix("make ") {
             Some(rest) => format!("made {rest}"),
             None => other.to_string(),
         },
     }
+}
+
+/// "an Advance", "a Normal": the indefinite article for a printed move name.
+fn articled(name: &str) -> String {
+    let vowel = name
+        .chars()
+        .next()
+        .is_some_and(|c| "AEIOUaeiou".contains(c));
+    format!("{} {name}", if vowel { "an" } else { "a" })
 }
 
 /// `/^[a-z0-9]+(-[a-z0-9]+)+$/.test(s)`: an id slug rather than a printed name.
@@ -119,14 +129,16 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                     "fall-back" => "fall back",
                     "remain-stationary" => "remain stationary",
                     "ingress" => "make an ingress move",
+                    "embark" => "embark",
                     _ => return None,
                 })
             };
             let done = match (types.len(), types.first().and_then(|t| verb(t))) {
                 (1, Some(v)) => did_not(v),
-                _ if !types.is_empty() => {
-                    did_not(&format!("make a {} move", move_kinds(f.get("move_types"))))
-                }
+                _ if !types.is_empty() => did_not(&format!(
+                    "make {} move",
+                    articled(&move_kinds(f.get("move_types")))
+                )),
                 _ => did_not("move"),
             };
             // A charge with an object: the unit the charge was made against ("was charged this turn").

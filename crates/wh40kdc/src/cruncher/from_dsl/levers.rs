@@ -20,7 +20,7 @@ mod options;
 
 pub(super) use options::{
     enumerate_choice, enumerate_dice_pool, enumerate_menu_actions, enumerate_named_options,
-    enumerate_roll_allocation,
+    enumerate_roll_allocation, move_type_lever,
 };
 
 /// Rolls inside every attack: a trigger on one applies to each attack it modifies.

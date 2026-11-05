@@ -93,4 +93,6 @@ export const REGISTRY_ORDER: readonly string[] = [
   "unit-filter@20",
   "core-ability-grant@7",
   "reroll@8",
+  "unit-activity@24",
+  "unit-activity@25",
 ];

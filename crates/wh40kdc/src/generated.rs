@@ -15495,6 +15495,9 @@ impl ::std::convert::From<EffectNode> for Effect {
 ///    },
 ///    {
 ///      "$ref": "#/$defs/ritual-menu-effect"
+///    },
+///    {
+///      "$ref": "#/$defs/move-type-effect"
 ///    }
 ///  ]
 ///}
@@ -15528,6 +15531,7 @@ pub enum EffectNode {
     SelectObjectiveEffect(::std::boxed::Box<SelectObjectiveEffect>),
     OathModifierEffect(::std::boxed::Box<OathModifierEffect>),
     RitualMenuEffect(::std::boxed::Box<RitualMenuEffect>),
+    MoveTypeEffect(::std::boxed::Box<MoveTypeEffect>),
 }
 impl ::std::convert::From<SingleEffect> for EffectNode {
     fn from(value: SingleEffect) -> Self {
@@ -15652,6 +15656,11 @@ impl ::std::convert::From<OathModifierEffect> for EffectNode {
 impl ::std::convert::From<RitualMenuEffect> for EffectNode {
     fn from(value: RitualMenuEffect) -> Self {
         Self::RitualMenuEffect(::std::boxed::Box::new(value))
+    }
+}
+impl ::std::convert::From<MoveTypeEffect> for EffectNode {
+    fn from(value: MoveTypeEffect) -> Self {
+        Self::MoveTypeEffect(::std::boxed::Box::new(value))
     }
 }
 ///`EligibleConditionParameters`
@@ -16757,7 +16766,8 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///          "ingress",
 ///          "surge",
 ///          "scout",
-///          "disembark"
+///          "disembark",
+///          "embark"
 ///        ]
 ///      },
 ///      "minItems": 1,
@@ -17476,7 +17486,8 @@ impl<'de> ::serde::Deserialize<'de> for EventFilterMarker {
 ///    "ingress",
 ///    "surge",
 ///    "scout",
-///    "disembark"
+///    "disembark",
+///    "embark"
 ///  ]
 ///}
 /// ```
@@ -17516,6 +17527,8 @@ pub enum EventFilterMoveTypesItem {
     Scout,
     #[serde(rename = "disembark")]
     Disembark,
+    #[serde(rename = "embark")]
+    Embark,
 }
 impl ::std::fmt::Display for EventFilterMoveTypesItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -17531,6 +17544,7 @@ impl ::std::fmt::Display for EventFilterMoveTypesItem {
             Self::Surge => f.write_str("surge"),
             Self::Scout => f.write_str("scout"),
             Self::Disembark => f.write_str("disembark"),
+            Self::Embark => f.write_str("embark"),
         }
     }
 }
@@ -17551,6 +17565,7 @@ impl ::std::str::FromStr for EventFilterMoveTypesItem {
             "surge" => Ok(Self::Surge),
             "scout" => Ok(Self::Scout),
             "disembark" => Ok(Self::Disembark),
+            "embark" => Ok(Self::Embark),
             _ => Err("invalid value".into()),
         }
     }
@@ -26522,6 +26537,381 @@ for MoveModifierEffectModifierPassthroughItemVariant1Kind {
 }
 impl ::std::convert::TryFrom<::std::string::String>
 for MoveModifierEffectModifierPassthroughItemVariant1Kind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Define a move type other rules let a unit make (Special Move Types): a named mode of a core move (an Assault or Shock Disembark of the core Disembark move) or a move of its own (Pulse Jet). It states what the core move leaves open: the set-up distance or maximum distance, what the moving unit must satisfy beyond the rule allowing the move (eligible_if), and what applies before, while and after it moves. Its effects name the moving unit as this-unit and the Transport it disembarks from as bearer-transport.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Define a move type other rules let a unit make (Special Move Types): a named mode of a core move (an Assault or Shock Disembark of the core Disembark move) or a move of its own (Pulse Jet). It states what the core move leaves open: the set-up distance or maximum distance, what the moving unit must satisfy beyond the rule allowing the move (eligible_if), and what applies before, while and after it moves. Its effects name the moving unit as this-unit and the Transport it disembarks from as bearer-transport.",
+///  "type": "object",
+///  "required": [
+///    "move_type",
+///    "name",
+///    "type"
+///  ],
+///  "properties": {
+///    "after": {
+///      "description": "What applies once the unit has moved; a part's duration says how long.",
+///      "$ref": "#/$defs/effect-node"
+///    },
+///    "before": {
+///      "description": "What resolves before the unit moves.",
+///      "$ref": "#/$defs/effect-node"
+///    },
+///    "distance": {
+///      "description": "The move's maximum distance.",
+///      "$ref": "#/$defs/quantity"
+///    },
+///    "eligible_if": {
+///      "description": "What the moving unit must satisfy, beyond the rule that allows the move.",
+///      "$ref": "#/$defs/condition"
+///    },
+///    "mode": {
+///      "description": "The named mode of move_type this type defines (assault, shock).",
+///      "$ref": "#/$defs/move-mode"
+///    },
+///    "move_type": {
+///      "description": "The move this type is, or extends: disembark for a disembark mode.",
+///      "not": {
+///        "const": "remain-stationary"
+///      },
+///      "$ref": "#/$defs/movement-kind"
+///    },
+///    "name": {
+///      "description": "The move type's printed name.",
+///      "type": "string",
+///      "minLength": 1
+///    },
+///    "setup_distance": {
+///      "description": "How far from the Transport each model is set up.",
+///      "$ref": "#/$defs/range-ref"
+///    },
+///    "type": {
+///      "type": "string",
+///      "enum": [
+///        "move-type"
+///      ]
+///    },
+///    "while": {
+///      "description": "How the unit moves: move-modifier effects on this-unit.",
+///      "$ref": "#/$defs/effect-node"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct MoveTypeEffect {
+    ///What applies once the unit has moved; a part's duration says how long.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub after: ::std::option::Option<EffectNode>,
+    ///What resolves before the unit moves.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub before: ::std::option::Option<EffectNode>,
+    ///The move's maximum distance.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub distance: ::std::option::Option<Quantity>,
+    ///What the moving unit must satisfy, beyond the rule that allows the move.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub eligible_if: ::std::option::Option<Condition>,
+    ///The named mode of move_type this type defines (assault, shock).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mode: ::std::option::Option<MoveMode>,
+    ///The move this type is, or extends: disembark for a disembark mode.
+    pub move_type: MoveTypeEffectMoveType,
+    ///The move type's printed name.
+    pub name: MoveTypeEffectName,
+    ///How far from the Transport each model is set up.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub setup_distance: ::std::option::Option<RangeRef>,
+    #[serde(rename = "type")]
+    pub type_: MoveTypeEffectType,
+    ///How the unit moves: move-modifier effects on this-unit.
+    #[serde(
+        rename = "while",
+        default,
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub while_: ::std::option::Option<EffectNode>,
+}
+///`MoveTypeEffectMoveType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "normal",
+///    "advance",
+///    "remain-stationary",
+///    "fall-back",
+///    "charge",
+///    "pile-in",
+///    "consolidation",
+///    "ingress",
+///    "surge",
+///    "scout",
+///    "disembark",
+///    "embark",
+///    "pulse-jet"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum MoveTypeEffectMoveType {
+    #[serde(rename = "normal")]
+    Normal,
+    #[serde(rename = "advance")]
+    Advance,
+    #[serde(rename = "remain-stationary")]
+    RemainStationary,
+    #[serde(rename = "fall-back")]
+    FallBack,
+    #[serde(rename = "charge")]
+    Charge,
+    #[serde(rename = "pile-in")]
+    PileIn,
+    #[serde(rename = "consolidation")]
+    Consolidation,
+    #[serde(rename = "ingress")]
+    Ingress,
+    #[serde(rename = "surge")]
+    Surge,
+    #[serde(rename = "scout")]
+    Scout,
+    #[serde(rename = "disembark")]
+    Disembark,
+    #[serde(rename = "embark")]
+    Embark,
+    #[serde(rename = "pulse-jet")]
+    PulseJet,
+}
+impl ::std::fmt::Display for MoveTypeEffectMoveType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Normal => f.write_str("normal"),
+            Self::Advance => f.write_str("advance"),
+            Self::RemainStationary => f.write_str("remain-stationary"),
+            Self::FallBack => f.write_str("fall-back"),
+            Self::Charge => f.write_str("charge"),
+            Self::PileIn => f.write_str("pile-in"),
+            Self::Consolidation => f.write_str("consolidation"),
+            Self::Ingress => f.write_str("ingress"),
+            Self::Surge => f.write_str("surge"),
+            Self::Scout => f.write_str("scout"),
+            Self::Disembark => f.write_str("disembark"),
+            Self::Embark => f.write_str("embark"),
+            Self::PulseJet => f.write_str("pulse-jet"),
+        }
+    }
+}
+impl ::std::str::FromStr for MoveTypeEffectMoveType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "normal" => Ok(Self::Normal),
+            "advance" => Ok(Self::Advance),
+            "remain-stationary" => Ok(Self::RemainStationary),
+            "fall-back" => Ok(Self::FallBack),
+            "charge" => Ok(Self::Charge),
+            "pile-in" => Ok(Self::PileIn),
+            "consolidation" => Ok(Self::Consolidation),
+            "ingress" => Ok(Self::Ingress),
+            "surge" => Ok(Self::Surge),
+            "scout" => Ok(Self::Scout),
+            "disembark" => Ok(Self::Disembark),
+            "embark" => Ok(Self::Embark),
+            "pulse-jet" => Ok(Self::PulseJet),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for MoveTypeEffectMoveType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for MoveTypeEffectMoveType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for MoveTypeEffectMoveType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///The move type's printed name.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The move type's printed name.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MoveTypeEffectName(::std::string::String);
+impl ::std::ops::Deref for MoveTypeEffectName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MoveTypeEffectName> for ::std::string::String {
+    fn from(value: MoveTypeEffectName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for MoveTypeEffectName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for MoveTypeEffectName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for MoveTypeEffectName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for MoveTypeEffectName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for MoveTypeEffectName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`MoveTypeEffectType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "move-type"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum MoveTypeEffectType {
+    #[serde(rename = "move-type")]
+    MoveType,
+}
+impl ::std::fmt::Display for MoveTypeEffectType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::MoveType => f.write_str("move-type"),
+        }
+    }
+}
+impl ::std::str::FromStr for MoveTypeEffectType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "move-type" => Ok(Self::MoveType),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for MoveTypeEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for MoveTypeEffectType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for MoveTypeEffectType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -62371,6 +62761,9 @@ fn effect_node_from_value(
         }
         Some("ritual-menu") => {
             |v| ::serde_json::from_value(v).map(EffectNode::RitualMenuEffect)
+        }
+        Some("move-type") => {
+            |v| ::serde_json::from_value(v).map(EffectNode::MoveTypeEffect)
         }
         Some(other) => {
             return Err(

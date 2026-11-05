@@ -2122,6 +2122,33 @@ function genEffectTranslation(): void {
     const scope = { duration: "permanent" };
     cases.push({ caseId: `reroll-ones-and-twos#${cases.length}`, effect, scope, expected: { text: describeAbility({ effect, scope }) } });
   }
+  // Pin a history move phrase's verb and article: "did not embark", "did not make an Advance or Fall Back move".
+  for (const move_types of [["embark"], ["advance", "fall-back"], ["normal", "advance"]]) {
+    const effect = { type: "conditional", condition: { operator: "not", operands: [{ type: "happened", parameters: { subject: "bearer-transport", event: "move-ended", filter: { move_types }, window: "phase" } }] }, effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "fights-first" } } } as unknown as Effect;
+    const scope = { duration: "permanent" };
+    cases.push({ caseId: `history-move-verb#${cases.length}`, effect, scope, expected: { text: describeAbility({ effect, scope }) } });
+  }
+  // Pin the move-type container: a disembark mode with its set-up distance and eligibility, and a move
+  // of its own with a distance, how it moves and what follows, inline (in a sequence) and as a block.
+  {
+    const noCharge = { type: "ability-part", duration: "turn", effect: { type: "permission", target: "this-unit", modifier: { activity: "declare-charge", allow: false } } };
+    const penalty = { type: "ability-part", duration: "until-start-next-turn", effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "subtract", value: 1, incoming: true } } };
+    const drop = {
+      type: "move-type", name: "Example Drop Move", move_type: "disembark", mode: "shock", setup_distance: { inches: 3 },
+      eligible_if: { operator: "not", operands: [{ type: "happened", parameters: { event: "move-ended", subject: "bearer-transport", filter: { move_types: ["advance", "fall-back"] }, window: "phase" } }] },
+      after: noCharge,
+    };
+    const jet = {
+      type: "move-type", name: "Example Jet Move", move_type: "pulse-jet", distance: "D6+18",
+      while: { type: "move-modifier", target: "this-unit", modifier: { ignore_vertical: true, passthrough: [{ kind: "models" }, { kind: "terrain" }], no_end_in_engagement: true } },
+      after: { type: "sequence", steps: [noCharge, penalty] },
+    };
+    const bare = { type: "move-type", name: "Example Bare Move", move_type: "disembark", mode: "assault" };
+    for (const effect of [drop, jet, bare, { type: "sequence", steps: [drop, jet] }, { type: "conditional", condition: { type: "phase-is", parameters: { phase: "movement" } }, effect: jet }]) {
+      const scope = { duration: "permanent" };
+      cases.push({ caseId: `move-type#${cases.length}`, effect: effect as unknown as Effect, scope, expected: { text: describeAbility({ effect: effect as unknown as Effect, scope }) } });
+    }
+  }
   // Pin the charge permission's `after` clause for the sibling moves — they
   // rarely surface in the capped sample above (permission caps out on the
   // common charge-after-Advance). Shapes mirror real enrichment data; expected

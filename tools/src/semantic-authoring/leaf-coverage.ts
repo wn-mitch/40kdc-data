@@ -111,6 +111,10 @@ const CONTAINER_OPENER_FOLLOWUPS: Partial<Record<string, () => CompileLeaf[]>> =
     leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
     leafOf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
   ],
+  "move-type-open": () => [
+    leafOf("EVENT", "move-type-section", { section: "after" }, 1, "B"),
+    leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+  ],
   "stance-select-open": () => [
     leafOf("EVENT", "named-option", { label: "Conqueror Doctrine", option_id: "conqueror-doctrine" }, 1, "B"),
     leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
@@ -156,6 +160,11 @@ const CONTAINER_OPENER_FOLLOWUPS: Partial<Record<string, () => CompileLeaf[]>> =
  * everything else goes through `boundedCombinations` below.
  */
 const FIXED_PARAMETERS: Partial<Record<string, Array<Record<string, unknown>>>> = {
+  // A move type's printed name is free text: one disembark mode and one move of its own.
+  "move-type-open@1": [
+    { name: "Example Drop Move", move_type: "disembark", mode: "shock", setup_inches: 3 },
+    { name: "Example Jet Move", move_type: "pulse-jet", distance_dice: "D6+18" },
+  ],
   // Printed weapon names and wargear ids are free text, so the sampler cannot draw them; one of each
   // quantifier state is listed so every named-equipment predicate form appears in the catalog.
   "named-weapon@1": [

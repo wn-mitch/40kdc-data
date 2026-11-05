@@ -80,6 +80,9 @@ const ACTIVITIES: Record<string, [string, Node, string]> = {
   "disembarked-this-phase": ["disembarked", {}, "phase"],
   "set-up-this-phase": ["set-up", {}, "phase"],
   "made-dark-pact-this-phase": ["used", { kind: "dark-pact" }, "phase"],
+  // Version 24: a move type's eligibility (Special Move Types).
+  "embarked-this-phase": ["move-ended", { move_types: ["embark"] }, "phase"],
+  "advanced-this-phase": ["move-ended", { move_types: ["advance"] }, "phase"],
 };
 
 /**

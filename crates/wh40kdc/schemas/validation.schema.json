@@ -1369,7 +1369,8 @@
               "ingress",
               "surge",
               "scout",
-              "disembark"
+              "disembark",
+              "embark"
             ]
           }
         },
@@ -8142,6 +8143,9 @@
         },
         {
           "$ref": "#/$defs/ritual-menu-effect"
+        },
+        {
+          "$ref": "#/$defs/move-type-effect"
         }
       ]
     },
@@ -16193,6 +16197,77 @@
                 ]
               }
             }
+          }
+        }
+      ]
+    },
+    "move-type-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Define a move type other rules let a unit make (Special Move Types): a named mode of a core move (an Assault or Shock Disembark of the core Disembark move) or a move of its own (Pulse Jet). It states what the core move leaves open: the set-up distance or maximum distance, what the moving unit must satisfy beyond the rule allowing the move (eligible_if), and what applies before, while and after it moves. Its effects name the moving unit as this-unit and the Transport it disembarks from as bearer-transport.",
+      "required": [
+        "type",
+        "name",
+        "move_type"
+      ],
+      "properties": {
+        "type": {
+          "const": "move-type"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The move type's printed name."
+        },
+        "move_type": {
+          "$ref": "#/$defs/movement-kind",
+          "not": {
+            "const": "remain-stationary"
+          },
+          "description": "The move this type is, or extends: disembark for a disembark mode."
+        },
+        "mode": {
+          "$ref": "#/$defs/move-mode",
+          "description": "The named mode of move_type this type defines (assault, shock)."
+        },
+        "setup_distance": {
+          "$ref": "#/$defs/range-ref",
+          "description": "How far from the Transport each model is set up."
+        },
+        "distance": {
+          "$ref": "#/$defs/quantity",
+          "description": "The move's maximum distance."
+        },
+        "eligible_if": {
+          "$ref": "#/$defs/condition",
+          "description": "What the moving unit must satisfy, beyond the rule that allows the move."
+        },
+        "before": {
+          "$ref": "#/$defs/effect-node",
+          "description": "What resolves before the unit moves."
+        },
+        "while": {
+          "$ref": "#/$defs/effect-node",
+          "description": "How the unit moves: move-modifier effects on this-unit."
+        },
+        "after": {
+          "$ref": "#/$defs/effect-node",
+          "description": "What applies once the unit has moved; a part's duration says how long."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "move_type": {
+                "const": "disembark"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "mode"
+            ]
           }
         }
       ]

@@ -4,7 +4,7 @@
  * components assembled in display order (including the `altText` of image components, which is
  * where the dump states table-shaped rules such as per-round ranges and battle-size counts).
  */
-import type { RuleContainerComponentRow } from "./loader.js";
+import type { BehaviourTypeRow, RuleContainerComponentRow } from "./loader.js";
 
 const NAMED_ENTITIES: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", rsquo: "’", lsquo: "‘", rdquo: "”", ldquo: "“", ndash: "–", mdash: "—", hellip: "…" };
 
@@ -165,4 +165,40 @@ export function menuSections(text: string): MenuSection[] {
     out.push({ name, ...(m[2] ? { cost: m[2] } : {}), text: body });
   }
   return out;
+}
+
+/** The structured fields of a move type the dump defines (`behaviour_type`), in the order the app prints them. */
+const BEHAVIOUR_FIELDS: ReadonlyArray<readonly [string, string]> = [
+  ["maximumDistance", "Maximum distance"],
+  ["setupDistance", "Set-up distance"],
+  ["eligibleIf", "Eligible if"],
+  ["effect", "Effect"],
+  ["beforeMoving", "Before moving"],
+  ["whileMoving", "While moving"],
+  ["afterMoving", "After moving"],
+  ["beforeShooting", "Before shooting"],
+  ["whileShooting", "While shooting"],
+  ["afterShooting", "After shooting"],
+  ["beforeFighting", "Before fighting"],
+  ["whileFighting", "While fighting"],
+  ["afterFighting", "After fighting"],
+];
+
+/**
+ * A move type's definition as prose: its name in bold, then one labelled block per field it fills,
+ * list items as `■` lines. An army rule that lists special move types (Special Move Types) prints
+ * only an introduction; its move types are these rows, linked by `army_rule_behaviour_type`.
+ */
+export function assembleBehaviourText(row: BehaviourTypeRow): string | undefined {
+  const en = row.localisations?.en as unknown as Record<string, unknown> | undefined;
+  const name = typeof en?.name === "string" ? plainLine(en.name)?.replace(/\*\*/g, "") : undefined;
+  if (!name) return undefined;
+  const blocks = [bold(name)];
+  for (const [key, label] of BEHAVIOUR_FIELDS) {
+    const value = en?.[key];
+    if (typeof value !== "string") continue;
+    const text = plainBlock(value.replace(/\r\n?/gu, "\n").replace(/<li>/giu, "\n■ ").replace(/<\/li>|<\/?ul>/giu, "\n"));
+    if (text) blocks.push(`${label}: ${text}`);
+  }
+  return blocks.join("\n");
 }

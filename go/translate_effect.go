@@ -14,7 +14,7 @@ import (
 // tools/src/translate/effect.ts.
 
 var containerTypes = map[string]bool{
-	"roll": true, "select-objective": true, "ritual-menu": true, "sequence": true, "rules-bundle": true, "ability-part": true, "choice": true, "dice-gated": true, "dice-table": true,
+	"roll": true, "select-objective": true, "ritual-menu": true, "move-type": true, "sequence": true, "rules-bundle": true, "ability-part": true, "choice": true, "dice-gated": true, "dice-table": true,
 	"dice-pool-allocation": true, "select-units": true, "for-each-unit": true, "designate-target": true,
 	"persistent-designation": true, "stance-select": true, "risk-reward": true, "issue-orders": true, "resource-action-menu": true,
 }
@@ -364,6 +364,8 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		return rollHead(e) + "; then " + describeEffectInline(mapOr(e["effect"]), ctx)
 	case "ritual-menu":
 		return ritualMenuInline(e, func(x any) string { return describeEffectInline(mapOr(x), ctx) })
+	case "move-type":
+		return moveTypeInline(e, func(x any) string { return describeEffectInline(mapOr(x), ctx) })
 	case "select-objective":
 		return selectObjectiveInline(e, func(x any) string { return describeEffectInline(mapOr(x), ctx) })
 	case "dice-table":
@@ -679,6 +681,8 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		return head + "; then " + describeEffectInline(inner, ctx) + "."
 	case "ritual-menu":
 		return ritualMenuBlock(e, indent, arrow, func(x any) string { return describeEffectInline(mapOr(x), ctx) })
+	case "move-type":
+		return moveTypeBlock(e, indent, arrow, func(x any) string { return describeEffectInline(mapOr(x), ctx) })
 	case "select-objective":
 		inner := mapOr(e["effect"])
 		nested := ""

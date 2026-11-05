@@ -13520,19 +13520,177 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "orks",
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "move-type",
+          "name": "Pulse Jet move",
+          "move_type": "pulse-jet",
+          "distance": "D6+18",
+          "while": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "move-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "passthrough": [
+                    "all-terrain",
+                    "models"
+                  ],
+                  "ignore_vertical": true
+                }
+              },
+              {
+                "type": "move-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "no_end_in_engagement": true
+                }
+              }
+            ]
+          },
+          "after": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "ability-part",
+                "duration": "turn",
+                "effect": {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": false
+                  }
+                }
+              },
+              {
+                "type": "ability-part",
+                "duration": "turn",
+                "effect": {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "start-action",
+                    "allow": false
+                  }
+                }
+              },
+              {
+                "type": "ability-part",
+                "duration": "until-start-next-turn",
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "attacker",
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "subtract",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "move-type",
+          "name": "Assault Disembark move",
+          "move_type": "disembark",
+          "mode": "assault",
+          "setup_distance": {
+            "inches": 3
+          },
+          "eligible_if": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "embarked"
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "bearer-transport",
+                  "filter": {
+                    "state": "on-battlefield"
+                  }
+                }
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "move-ended",
+                      "filter": {
+                        "move_types": [
+                          "embark"
+                        ]
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "operator": "or",
+                    "operands": [
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "subject": "bearer-transport",
+                          "event": "move-ended",
+                          "filter": {
+                            "move_types": [
+                              "advance"
+                            ]
+                          },
+                          "window": "phase"
+                        }
+                      },
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "subject": "bearer-transport",
+                          "event": "move-ended",
+                          "filter": {
+                            "move_types": [
+                              "fall-back"
+                            ]
+                          },
+                          "window": "phase"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "472a4a7c5013af02414cffd0b8836fa9e439370e5d0b32596d1e5f1ddb9a07c0"
   },
   {
     "ability_id": "speednob-support-orks",

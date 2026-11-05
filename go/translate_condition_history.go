@@ -8,12 +8,22 @@ import "strings"
 var happenedMoveVerbs = map[string]string{
 	"charge": "charge", "advance": "advance", "fall-back": "fall back",
 	"remain-stationary": "remain stationary", "ingress": "make an ingress move",
+	"embark": "embark",
 }
 
 // pastVerbs is the past tense of the verbs history predicates use.
 var pastVerbs = map[string]string{
 	"charge": "charged", "advance": "advanced", "fall back": "fell back", "remain stationary": "remained stationary",
 	"make an ingress move": "made an ingress move", "move": "moved", "disembark": "disembarked",
+	"embark": "embarked",
+}
+
+// articledMove is "an Advance", "a Normal": the indefinite article for a printed move name.
+func articledMove(name string) string {
+	if name != "" && strings.ContainsRune("AEIOUaeiou", rune(name[0])) {
+		return "an " + name
+	}
+	return "a " + name
 }
 
 func pastOf(verb string) string {
@@ -69,7 +79,7 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 		if v, ok := happenedMoveVerbs[firstOr(types)]; len(types) == 1 && ok {
 			done = didNot(v)
 		} else if len(types) > 0 {
-			done = didNot("make a " + moveKinds(f["move_types"]) + " move")
+			done = didNot("make " + articledMove(moveKinds(f["move_types"])) + " move")
 		} else {
 			done = didNot("move")
 		}

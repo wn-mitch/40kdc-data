@@ -23735,7 +23735,405 @@
     }
   },
   {
-    "caseId": "speednob-support-orks#317",
+    "caseId": "special-move-types-adeptus-astartes#317",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "move-type",
+          "name": "Shock Disembark Move",
+          "move_type": "disembark",
+          "mode": "shock",
+          "eligible_if": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "embarked"
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "bearer-transport",
+                  "filter": {
+                    "state": "on-battlefield"
+                  }
+                }
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "move-ended",
+                      "filter": {
+                        "move_types": [
+                          "embark"
+                        ]
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "after": {
+            "type": "ability-part",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": false
+              }
+            },
+            "duration": "turn"
+          }
+        },
+        {
+          "type": "move-type",
+          "name": "Assault Disembark move",
+          "move_type": "disembark",
+          "mode": "assault",
+          "setup_distance": {
+            "inches": 3
+          },
+          "eligible_if": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "embarked"
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "bearer-transport",
+                  "filter": {
+                    "state": "on-battlefield"
+                  }
+                }
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "move-ended",
+                      "filter": {
+                        "move_types": [
+                          "embark"
+                        ]
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "operator": "or",
+                    "operands": [
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "subject": "bearer-transport",
+                          "event": "move-ended",
+                          "filter": {
+                            "move_types": [
+                              "advance"
+                            ]
+                          },
+                          "window": "phase"
+                        }
+                      },
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "subject": "bearer-transport",
+                          "event": "move-ended",
+                          "filter": {
+                            "move_types": [
+                              "fall-back"
+                            ]
+                          },
+                          "window": "phase"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Shock Disembark Move (the Shock mode of a Disembark move):\n  - A unit can make this move only if the unit is embarked and the Transport this unit is embarked within is on the battlefield and the unit did not embark this phase.\n  - After it moves, until the end of the turn: the unit cannot declare a charge.\nAssault Disembark move (the Assault mode of a Disembark move):\n  - Each model is set up wholly within 3\" of that Transport.\n  - A unit can make this move only if the unit is embarked and the Transport this unit is embarked within is on the battlefield and the unit did not embark this phase and not (the Transport this unit is embarked within advanced this phase or the Transport this unit is embarked within fell back this phase)."
+    }
+  },
+  {
+    "caseId": "special-move-types-adeptus-custodes#318",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "move-type",
+          "name": "Shock Disembark Move",
+          "move_type": "disembark",
+          "mode": "shock",
+          "setup_distance": {
+            "inches": 3
+          },
+          "eligible_if": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "embarked"
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "bearer-transport",
+                  "filter": {
+                    "state": "on-battlefield"
+                  }
+                }
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "move-ended",
+                      "filter": {
+                        "move_types": [
+                          "embark"
+                        ]
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "after": {
+            "type": "ability-part",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": false
+              }
+            },
+            "duration": "turn"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Shock Disembark Move (the Shock mode of a Disembark move):\n  - Each model is set up wholly within 3\" of that Transport.\n  - A unit can make this move only if the unit is embarked and the Transport this unit is embarked within is on the battlefield and the unit did not embark this phase.\n  - After it moves, until the end of the turn: the unit cannot declare a charge."
+    }
+  },
+  {
+    "caseId": "special-move-types-orks#319",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "move-type",
+          "name": "Pulse Jet move",
+          "move_type": "pulse-jet",
+          "distance": "D6+18",
+          "while": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "move-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "passthrough": [
+                    "all-terrain",
+                    "models"
+                  ],
+                  "ignore_vertical": true
+                }
+              },
+              {
+                "type": "move-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "no_end_in_engagement": true
+                }
+              }
+            ]
+          },
+          "after": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "ability-part",
+                "duration": "turn",
+                "effect": {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": false
+                  }
+                }
+              },
+              {
+                "type": "ability-part",
+                "duration": "turn",
+                "effect": {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "start-action",
+                    "allow": false
+                  }
+                }
+              },
+              {
+                "type": "ability-part",
+                "duration": "until-start-next-turn",
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "attacker",
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "subtract",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "move-type",
+          "name": "Assault Disembark move",
+          "move_type": "disembark",
+          "mode": "assault",
+          "setup_distance": {
+            "inches": 3
+          },
+          "eligible_if": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "embarked"
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "bearer-transport",
+                  "filter": {
+                    "state": "on-battlefield"
+                  }
+                }
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "move-ended",
+                      "filter": {
+                        "move_types": [
+                          "embark"
+                        ]
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "operator": "or",
+                    "operands": [
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "subject": "bearer-transport",
+                          "event": "move-ended",
+                          "filter": {
+                            "move_types": [
+                              "advance"
+                            ]
+                          },
+                          "window": "phase"
+                        }
+                      },
+                      {
+                        "type": "happened",
+                        "parameters": {
+                          "subject": "bearer-transport",
+                          "event": "move-ended",
+                          "filter": {
+                            "move_types": [
+                              "fall-back"
+                            ]
+                          },
+                          "window": "phase"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Pulse Jet move:\n  - The unit can move up to D6+18\".\n  - While it moves, the unit can move over terrain features and models as though they were not there; the unit ignores vertical distances when it moves; the unit cannot end a move within Engagement Range of any enemy unit.\n  - After it moves, until the end of the turn: the unit cannot declare a charge; until the end of the turn: the unit cannot start an Action; until the start of your next turn: the attacking unit gets -1 to Hit rolls.\nAssault Disembark move (the Assault mode of a Disembark move):\n  - Each model is set up wholly within 3\" of that Transport.\n  - A unit can make this move only if the unit is embarked and the Transport this unit is embarked within is on the battlefield and the unit did not embark this phase and not (the Transport this unit is embarked within advanced this phase or the Transport this unit is embarked within fell back this phase)."
+    }
+  },
+  {
+    "caseId": "speednob-support-orks#320",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23773,7 +24171,7 @@
     }
   },
   {
-    "caseId": "spirit-leech-tyranids#318",
+    "caseId": "spirit-leech-tyranids#321",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23833,7 +24231,7 @@
     }
   },
   {
-    "caseId": "stalwart-defenders-adeptus-astartes#319",
+    "caseId": "stalwart-defenders-adeptus-astartes#322",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23874,7 +24272,7 @@
     }
   },
   {
-    "caseId": "storm-swift-onslaught-white-scars#320",
+    "caseId": "storm-swift-onslaught-white-scars#323",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24038,7 +24436,7 @@
     }
   },
   {
-    "caseId": "supernova-launcher-experimental-prototype-cadre-tau-empire#321",
+    "caseId": "supernova-launcher-experimental-prototype-cadre-tau-empire#324",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24117,7 +24515,7 @@
     }
   },
   {
-    "caseId": "swift-demise-aeldari#322",
+    "caseId": "swift-demise-aeldari#325",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24183,7 +24581,7 @@
     }
   },
   {
-    "caseId": "taktikal-know-wotz-orks#323",
+    "caseId": "taktikal-know-wotz-orks#326",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24225,7 +24623,7 @@
     }
   },
   {
-    "caseId": "tempestor-prime-astra-militarum#324",
+    "caseId": "tempestor-prime-astra-militarum#327",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24261,7 +24659,7 @@
     }
   },
   {
-    "caseId": "terror-descends-chaos-space-marines#325",
+    "caseId": "terror-descends-chaos-space-marines#328",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24395,7 +24793,7 @@
     }
   },
   {
-    "caseId": "terror-made-manifest-chaos-space-marines#326",
+    "caseId": "terror-made-manifest-chaos-space-marines#329",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24584,7 +24982,7 @@
     }
   },
   {
-    "caseId": "the-shadow-of-chaos-chaos-daemons#327",
+    "caseId": "the-shadow-of-chaos-chaos-daemons#330",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24929,7 +25327,7 @@
     }
   },
   {
-    "caseId": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire#328",
+    "caseId": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire#331",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -25009,7 +25407,7 @@
     }
   },
   {
-    "caseId": "tidewall-defence-platform-tau-empire#329",
+    "caseId": "tidewall-defence-platform-tau-empire#332",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25037,7 +25435,7 @@
     }
   },
   {
-    "caseId": "unleash-the-lions-lions-of-the-emperor-adeptus-custodes#330",
+    "caseId": "unleash-the-lions-lions-of-the-emperor-adeptus-custodes#333",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -25059,7 +25457,7 @@
     }
   },
   {
-    "caseId": "using-sir-hekhtur-imperial-knights#331",
+    "caseId": "using-sir-hekhtur-imperial-knights#334",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -25117,7 +25515,7 @@
     }
   },
   {
-    "caseId": "violent-fury-space-wolves#332",
+    "caseId": "violent-fury-space-wolves#335",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25150,7 +25548,7 @@
     }
   },
   {
-    "caseId": "ability-grant-scouts#333",
+    "caseId": "ability-grant-scouts#336",
     "effect": {
       "type": "ability-grant",
       "target": "this-unit",
@@ -25167,7 +25565,7 @@
     }
   },
   {
-    "caseId": "ability-grant-deadly-demise-dice#334",
+    "caseId": "ability-grant-deadly-demise-dice#337",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -25184,7 +25582,7 @@
     }
   },
   {
-    "caseId": "reroll-ones-and-twos#335",
+    "caseId": "reroll-ones-and-twos#338",
     "effect": {
       "type": "re-roll",
       "target": "this-unit",
@@ -25201,7 +25599,7 @@
     }
   },
   {
-    "caseId": "reroll-ones-and-twos#336",
+    "caseId": "reroll-ones-and-twos#339",
     "effect": {
       "type": "re-roll",
       "target": "this-unit",
@@ -25219,7 +25617,424 @@
     }
   },
   {
-    "caseId": "permission-charge-after-disembark#337",
+    "caseId": "history-move-verb#340",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "subject": "bearer-transport",
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "embark"
+                ]
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "fights-first"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Unless the Transport this unit is embarked within embarked this phase, the unit gains the Fights First ability."
+    }
+  },
+  {
+    "caseId": "history-move-verb#341",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "subject": "bearer-transport",
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "advance",
+                  "fall-back"
+                ]
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "fights-first"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Unless the Transport this unit is embarked within made an Advance or Fall Back move this phase, the unit gains the Fights First ability."
+    }
+  },
+  {
+    "caseId": "history-move-verb#342",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "subject": "bearer-transport",
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "normal",
+                  "advance"
+                ]
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "fights-first"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Unless the Transport this unit is embarked within made a Normal or Advance move this phase, the unit gains the Fights First ability."
+    }
+  },
+  {
+    "caseId": "move-type#343",
+    "effect": {
+      "type": "move-type",
+      "name": "Example Drop Move",
+      "move_type": "disembark",
+      "mode": "shock",
+      "setup_distance": {
+        "inches": 3
+      },
+      "eligible_if": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "subject": "bearer-transport",
+              "filter": {
+                "move_types": [
+                  "advance",
+                  "fall-back"
+                ]
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      },
+      "after": {
+        "type": "ability-part",
+        "duration": "turn",
+        "effect": {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": false
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Example Drop Move (the Shock mode of a Disembark move):\n  - Each model is set up wholly within 3\" of that Transport.\n  - A unit can make this move only if the Transport this unit is embarked within did not make an Advance or Fall Back move this phase.\n  - After it moves, until the end of the turn: the unit cannot declare a charge."
+    }
+  },
+  {
+    "caseId": "move-type#344",
+    "effect": {
+      "type": "move-type",
+      "name": "Example Jet Move",
+      "move_type": "pulse-jet",
+      "distance": "D6+18",
+      "while": {
+        "type": "move-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "ignore_vertical": true,
+          "passthrough": [
+            {
+              "kind": "models"
+            },
+            {
+              "kind": "terrain"
+            }
+          ],
+          "no_end_in_engagement": true
+        }
+      },
+      "after": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-part",
+            "duration": "turn",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": false
+              }
+            }
+          },
+          {
+            "type": "ability-part",
+            "duration": "until-start-next-turn",
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "subtract",
+                "value": 1,
+                "incoming": true
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Example Jet Move:\n  - The unit can move up to D6+18\".\n  - While it moves, the unit can move over models and terrain features as though they were not there; the unit cannot end a move within Engagement Range of any enemy unit; the unit ignores vertical distances when it moves.\n  - After it moves, until the end of the turn: the unit cannot declare a charge; until the start of your next turn: each time an attack targets the unit, apply -1 to the Hit roll."
+    }
+  },
+  {
+    "caseId": "move-type#345",
+    "effect": {
+      "type": "move-type",
+      "name": "Example Bare Move",
+      "move_type": "disembark",
+      "mode": "assault"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Example Bare Move (the Assault mode of a Disembark move)."
+    }
+  },
+  {
+    "caseId": "move-type#346",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move-type",
+          "name": "Example Drop Move",
+          "move_type": "disembark",
+          "mode": "shock",
+          "setup_distance": {
+            "inches": 3
+          },
+          "eligible_if": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "move-ended",
+                  "subject": "bearer-transport",
+                  "filter": {
+                    "move_types": [
+                      "advance",
+                      "fall-back"
+                    ]
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          },
+          "after": {
+            "type": "ability-part",
+            "duration": "turn",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": false
+              }
+            }
+          }
+        },
+        {
+          "type": "move-type",
+          "name": "Example Jet Move",
+          "move_type": "pulse-jet",
+          "distance": "D6+18",
+          "while": {
+            "type": "move-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "ignore_vertical": true,
+              "passthrough": [
+                {
+                  "kind": "models"
+                },
+                {
+                  "kind": "terrain"
+                }
+              ],
+              "no_end_in_engagement": true
+            }
+          },
+          "after": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "ability-part",
+                "duration": "turn",
+                "effect": {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": false
+                  }
+                }
+              },
+              {
+                "type": "ability-part",
+                "duration": "until-start-next-turn",
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "subtract",
+                    "value": 1,
+                    "incoming": true
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Example Drop Move (the Shock mode of a Disembark move):\n  - Each model is set up wholly within 3\" of that Transport.\n  - A unit can make this move only if the Transport this unit is embarked within did not make an Advance or Fall Back move this phase.\n  - After it moves, until the end of the turn: the unit cannot declare a charge.\nExample Jet Move:\n  - The unit can move up to D6+18\".\n  - While it moves, the unit can move over models and terrain features as though they were not there; the unit cannot end a move within Engagement Range of any enemy unit; the unit ignores vertical distances when it moves.\n  - After it moves, until the end of the turn: the unit cannot declare a charge; until the start of your next turn: each time an attack targets the unit, apply -1 to the Hit roll."
+    }
+  },
+  {
+    "caseId": "move-type#347",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      },
+      "effect": {
+        "type": "move-type",
+        "name": "Example Jet Move",
+        "move_type": "pulse-jet",
+        "distance": "D6+18",
+        "while": {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "ignore_vertical": true,
+            "passthrough": [
+              {
+                "kind": "models"
+              },
+              {
+                "kind": "terrain"
+              }
+            ],
+            "no_end_in_engagement": true
+          }
+        },
+        "after": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "ability-part",
+              "duration": "turn",
+              "effect": {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "declare-charge",
+                  "allow": false
+                }
+              }
+            },
+            {
+              "type": "ability-part",
+              "duration": "until-start-next-turn",
+              "effect": {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1,
+                  "incoming": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "During the Movement phase:\n  -> Example Jet Move:\n    - The unit can move up to D6+18\".\n    - While it moves, the unit can move over models and terrain features as though they were not there; the unit cannot end a move within Engagement Range of any enemy unit; the unit ignores vertical distances when it moves.\n    - After it moves, until the end of the turn: the unit cannot declare a charge; until the start of your next turn: each time an attack targets the unit, apply -1 to the Hit roll."
+    }
+  },
+  {
+    "caseId": "permission-charge-after-disembark#348",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -25239,7 +26054,7 @@
     }
   },
   {
-    "caseId": "permission-charge-after-fall-back#338",
+    "caseId": "permission-charge-after-fall-back#349",
     "effect": {
       "type": "permission",
       "target": "this-model",
@@ -25259,7 +26074,7 @@
     }
   },
   {
-    "caseId": "unit-state-engaged#339",
+    "caseId": "unit-state-engaged#350",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25286,7 +26101,7 @@
     }
   },
   {
-    "caseId": "unit-state-on-battlefield#340",
+    "caseId": "unit-state-on-battlefield#351",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25313,7 +26128,7 @@
     }
   },
   {
-    "caseId": "unit-state-embarked#341",
+    "caseId": "unit-state-embarked#352",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25340,7 +26155,7 @@
     }
   },
   {
-    "caseId": "unit-state-unengaged#342",
+    "caseId": "unit-state-unengaged#353",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25372,7 +26187,7 @@
     }
   },
   {
-    "caseId": "unit-state-negated#343",
+    "caseId": "unit-state-negated#354",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25404,7 +26219,7 @@
     }
   },
   {
-    "caseId": "unit-state-in-strategic-reserves#344",
+    "caseId": "unit-state-in-strategic-reserves#355",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25431,7 +26246,7 @@
     }
   },
   {
-    "caseId": "owned-by-enemy#345",
+    "caseId": "owned-by-enemy#356",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25459,7 +26274,7 @@
     }
   },
   {
-    "caseId": "fights-first-cond#346",
+    "caseId": "fights-first-cond#357",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25488,7 +26303,7 @@
     }
   },
   {
-    "caseId": "scaling-attacks-per-models#347",
+    "caseId": "scaling-attacks-per-models#358",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
@@ -25513,7 +26328,7 @@
     }
   },
   {
-    "caseId": "scaling-strength-wounds-lost#348",
+    "caseId": "scaling-strength-wounds-lost#359",
     "effect": {
       "type": "stat-modifier",
       "target": "this-model",
@@ -25537,7 +26352,7 @@
     }
   },
   {
-    "caseId": "dice-pool-inline-label#349",
+    "caseId": "dice-pool-inline-label#360",
     "effect": {
       "type": "choice",
       "options": [
@@ -25585,7 +26400,7 @@
     }
   },
   {
-    "caseId": "closest-eligible-within-range#350",
+    "caseId": "closest-eligible-within-range#361",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25615,7 +26430,7 @@
     }
   },
   {
-    "caseId": "dice-pool-requirement-anyof#351",
+    "caseId": "dice-pool-requirement-anyof#362",
     "effect": {
       "type": "dice-pool-allocation",
       "pool": {
@@ -25669,7 +26484,7 @@
     }
   },
   {
-    "caseId": "rule-state-forgo-faction-rule#352",
+    "caseId": "rule-state-forgo-faction-rule#363",
     "effect": {
       "type": "ability-part",
       "cost": {
@@ -25699,7 +26514,7 @@
     }
   },
   {
-    "caseId": "rule-state-faction-rule-granted#353",
+    "caseId": "rule-state-faction-rule-granted#364",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -25717,7 +26532,7 @@
     }
   },
   {
-    "caseId": "rule-state-cover-granted#354",
+    "caseId": "rule-state-cover-granted#365",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -25735,7 +26550,7 @@
     }
   },
   {
-    "caseId": "permission-advance-forbidden#355",
+    "caseId": "permission-advance-forbidden#366",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -25752,7 +26567,7 @@
     }
   },
   {
-    "caseId": "rule-state-overwatch-against-bearer#356",
+    "caseId": "rule-state-overwatch-against-bearer#367",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -25770,7 +26585,7 @@
     }
   },
   {
-    "caseId": "rule-state-desperate-escape-granted#357",
+    "caseId": "rule-state-desperate-escape-granted#368",
     "effect": {
       "type": "rule-state",
       "target": {
@@ -25793,7 +26608,7 @@
     }
   },
   {
-    "caseId": "rule-state-desperate-escape-suppressed#358",
+    "caseId": "rule-state-desperate-escape-suppressed#369",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -25811,7 +26626,7 @@
     }
   },
   {
-    "caseId": "rule-state-ability-granted#359",
+    "caseId": "rule-state-ability-granted#370",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -25829,7 +26644,7 @@
     }
   },
   {
-    "caseId": "rule-state-keyword-suppressed#360",
+    "caseId": "rule-state-keyword-suppressed#371",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -25847,7 +26662,7 @@
     }
   },
   {
-    "caseId": "rule-state-ordered-retreat-suppressed#361",
+    "caseId": "rule-state-ordered-retreat-suppressed#372",
     "effect": {
       "type": "rule-state",
       "target": {
@@ -25872,7 +26687,7 @@
     }
   },
   {
-    "caseId": "rule-state-ordered-retreat-granted#362",
+    "caseId": "rule-state-ordered-retreat-granted#373",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -25890,7 +26705,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-anti-titanic#363",
+    "caseId": "weapon-ability-grant-anti-titanic#374",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -25914,7 +26729,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-anti-infantry#364",
+    "caseId": "weapon-ability-grant-anti-infantry#375",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -25938,7 +26753,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-rated-value#365",
+    "caseId": "weapon-ability-grant-rated-value#376",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -25961,7 +26776,7 @@
     }
   },
   {
-    "caseId": "roll-result-battle-shock-pass#366",
+    "caseId": "roll-result-battle-shock-pass#377",
     "effect": {
       "type": "roll-result",
       "target": "this-unit",
@@ -25978,7 +26793,7 @@
     }
   },
   {
-    "caseId": "roll-result-hit-six#367",
+    "caseId": "roll-result-hit-six#378",
     "effect": {
       "type": "roll-result",
       "target": "this-unit",
@@ -25995,7 +26810,7 @@
     }
   },
   {
-    "caseId": "ability-grant-firing-deck#368",
+    "caseId": "ability-grant-firing-deck#379",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -26012,7 +26827,7 @@
     }
   },
   {
-    "caseId": "permission-disembark-after-move#369",
+    "caseId": "permission-disembark-after-move#380",
     "effect": {
       "type": "permission",
       "target": "this-model",
@@ -26032,7 +26847,7 @@
     }
   },
   {
-    "caseId": "usage-once-per-turn#370",
+    "caseId": "usage-once-per-turn#381",
     "effect": {
       "type": "cp-gain",
       "target": "this-model",
@@ -26051,7 +26866,7 @@
     }
   },
   {
-    "caseId": "usage-n-per-battle-per-unit#371",
+    "caseId": "usage-n-per-battle-per-unit#382",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
@@ -26074,7 +26889,7 @@
     }
   },
   {
-    "caseId": "trigger-enemy-ended-move#372",
+    "caseId": "trigger-enemy-ended-move#383",
     "effect": {
       "type": "move",
       "target": "this-model",
@@ -26103,7 +26918,7 @@
     }
   },
   {
-    "caseId": "trigger-on-model-destroyed#373",
+    "caseId": "trigger-on-model-destroyed#384",
     "effect": {
       "type": "mortal-wounds",
       "target": {
@@ -26130,7 +26945,7 @@
     }
   },
   {
-    "caseId": "trigger-before-save-with-condition#374",
+    "caseId": "trigger-before-save-with-condition#385",
     "effect": {
       "type": "re-roll",
       "target": "this-unit",
@@ -26161,7 +26976,7 @@
     }
   },
   {
-    "caseId": "move-passthrough-models-terrain#375",
+    "caseId": "move-passthrough-models-terrain#386",
     "effect": {
       "type": "move-modifier",
       "target": "this-model",
@@ -26180,7 +26995,7 @@
     }
   },
   {
-    "caseId": "move-passthrough-applies#376",
+    "caseId": "move-passthrough-applies#387",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -26203,7 +27018,7 @@
     }
   },
   {
-    "caseId": "move-ignore-vertical#377",
+    "caseId": "move-ignore-vertical#388",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -26219,7 +27034,7 @@
     }
   },
   {
-    "caseId": "move-modifier-distance-bonus#378",
+    "caseId": "move-modifier-distance-bonus#389",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -26240,7 +27055,7 @@
     }
   },
   {
-    "caseId": "stat-modifier-move-negative#379",
+    "caseId": "stat-modifier-move-negative#390",
     "effect": {
       "type": "stat-modifier",
       "target": "defender",
@@ -26258,7 +27073,7 @@
     }
   },
   {
-    "caseId": "roll-modifier-advance-bonus#380",
+    "caseId": "roll-modifier-advance-bonus#391",
     "effect": {
       "type": "roll-modifier",
       "target": "this-unit",
@@ -26276,7 +27091,7 @@
     }
   },
   {
-    "caseId": "move-pile-in#381",
+    "caseId": "move-pile-in#392",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -26293,7 +27108,7 @@
     }
   },
   {
-    "caseId": "move-consolidation#382",
+    "caseId": "move-consolidation#393",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -26310,7 +27125,7 @@
     }
   },
   {
-    "caseId": "move-surge#383",
+    "caseId": "move-surge#394",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -26327,7 +27142,7 @@
     }
   },
   {
-    "caseId": "move-normal-after-shooting#384",
+    "caseId": "move-normal-after-shooting#395",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -26344,7 +27159,7 @@
     }
   },
   {
-    "caseId": "set-up-reserves-max-units#385",
+    "caseId": "set-up-reserves-max-units#396",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -26372,7 +27187,7 @@
     }
   },
   {
-    "caseId": "marker-relocate#386",
+    "caseId": "marker-relocate#397",
     "effect": {
       "type": "marker",
       "target": "this-unit",
@@ -26392,7 +27207,7 @@
     }
   },
   {
-    "caseId": "set-up-redeploy-filtered#387",
+    "caseId": "set-up-redeploy-filtered#398",
     "effect": {
       "type": "set-up",
       "target": {
@@ -26415,7 +27230,7 @@
     }
   },
   {
-    "caseId": "ability-grant-infiltrators#388",
+    "caseId": "ability-grant-infiltrators#399",
     "effect": {
       "type": "ability-grant",
       "target": "this-unit",
@@ -26431,7 +27246,7 @@
     }
   },
   {
-    "caseId": "aura-range-bonus#389",
+    "caseId": "aura-range-bonus#400",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -26450,7 +27265,7 @@
     }
   },
   {
-    "caseId": "issue-orders-eligible-keywords#390",
+    "caseId": "issue-orders-eligible-keywords#401",
     "effect": {
       "type": "issue-orders",
       "count": 1,
@@ -26482,7 +27297,7 @@
     }
   },
   {
-    "caseId": "issue-orders-menu-from#391",
+    "caseId": "issue-orders-menu-from#402",
     "effect": {
       "type": "issue-orders",
       "count": 1,
@@ -26506,7 +27321,7 @@
     }
   },
   {
-    "caseId": "aura-army-emitter-tiered-capped#392",
+    "caseId": "aura-army-emitter-tiered-capped#403",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -26553,7 +27368,7 @@
     }
   },
   {
-    "caseId": "aura-any-emitter-keyword-clauses#393",
+    "caseId": "aura-any-emitter-keyword-clauses#404",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -26594,7 +27409,7 @@
     }
   },
   {
-    "caseId": "aura-model-emitter-keywords#394",
+    "caseId": "aura-model-emitter-keywords#405",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -26626,7 +27441,7 @@
     }
   },
   {
-    "caseId": "aura-unit-origin#395",
+    "caseId": "aura-unit-origin#406",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -26657,7 +27472,7 @@
     }
   },
   {
-    "caseId": "aura-unit-origin-emitter-keywords#396",
+    "caseId": "aura-unit-origin-emitter-keywords#407",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -26690,7 +27505,7 @@
     }
   },
   {
-    "caseId": "aura-tiered-effect#397",
+    "caseId": "aura-tiered-effect#408",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -26727,7 +27542,7 @@
     }
   },
   {
-    "caseId": "set-up-deep-strike-min-distance#398",
+    "caseId": "set-up-deep-strike-min-distance#409",
     "effect": {
       "type": "set-up",
       "target": "this-unit",
@@ -26747,7 +27562,7 @@
     }
   },
   {
-    "caseId": "move-modifier-engagement-no-end#399",
+    "caseId": "move-modifier-engagement-no-end#410",
     "effect": {
       "type": "move-modifier",
       "target": "this-model",
@@ -26766,7 +27581,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-after-fall-back#400",
+    "caseId": "permission-shoot-after-fall-back#411",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -26786,7 +27601,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-and-charge-after-fall-back#401",
+    "caseId": "permission-shoot-and-charge-after-fall-back#412",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -26822,7 +27637,7 @@
     }
   },
   {
-    "caseId": "superlative-strategist-aeldari#402",
+    "caseId": "superlative-strategist-aeldari#413",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26875,7 +27690,7 @@
     }
   },
   {
-    "caseId": "deceptive-feint#403",
+    "caseId": "deceptive-feint#414",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26960,7 +27775,7 @@
     }
   },
   {
-    "caseId": "heal-selected-model#404",
+    "caseId": "heal-selected-model#415",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -27013,7 +27828,7 @@
     }
   },
   {
-    "caseId": "marker-next-to-target#405",
+    "caseId": "marker-next-to-target#416",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -27062,7 +27877,7 @@
     }
   },
   {
-    "caseId": "psychic-model-bundle#406",
+    "caseId": "psychic-model-bundle#417",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -27141,7 +27956,7 @@
     }
   },
   {
-    "caseId": "designate-bearer-target-with-eligibility#407",
+    "caseId": "designate-bearer-target-with-eligibility#418",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -27222,7 +28037,7 @@
     }
   },
   {
-    "caseId": "conditional-selected-to-shoot-this-phase#408",
+    "caseId": "conditional-selected-to-shoot-this-phase#419",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -27253,7 +28068,7 @@
     }
   },
   {
-    "caseId": "transport-capacity#409",
+    "caseId": "transport-capacity#420",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -27274,7 +28089,7 @@
     }
   },
   {
-    "caseId": "transport-grouped-single-keyword-model#410",
+    "caseId": "transport-grouped-single-keyword-model#421",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -27295,7 +28110,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#411",
+    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#422",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -27316,7 +28131,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-embark-as#412",
+    "caseId": "transport-fixed-model-spaces-with-embark-as#423",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -27337,7 +28152,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-keyword#413",
+    "caseId": "transport-equivalent-model-keyword#424",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -27356,7 +28171,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-count#414",
+    "caseId": "transport-equivalent-model-count#425",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -27374,7 +28189,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-inline#415",
+    "caseId": "moved-through-tall-terrain-inline#426",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -27403,7 +28218,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-condition#416",
+    "caseId": "moved-through-tall-terrain-trigger-condition#427",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -27435,7 +28250,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-inline#417",
+    "caseId": "moved-through-tall-terrain-negated-inline#428",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -27469,7 +28284,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-trigger-condition#418",
+    "caseId": "moved-through-tall-terrain-negated-trigger-condition#429",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -27506,7 +28321,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-event#419",
+    "caseId": "moved-through-tall-terrain-trigger-event#430",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -27528,7 +28343,7 @@
     }
   },
   {
-    "caseId": "moved-through-terrain-generic#420",
+    "caseId": "moved-through-terrain-generic#431",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -27557,7 +28372,7 @@
     }
   },
   {
-    "caseId": "aura-role-filtered-effect#421",
+    "caseId": "aura-role-filtered-effect#432",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",

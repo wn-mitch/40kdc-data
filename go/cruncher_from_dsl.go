@@ -654,6 +654,25 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	case "risk-reward":
 		// The reward is the buff; the risk (self-damage on a failed test) is not.
 		dslWalk(n["reward"], source, opts, out)
+	case "move-type":
+		// What follows a move type applies to a unit once it has made that move: the player's pick,
+		// vouched for by the move. Before and while it moves are movement rules, not buffs.
+		after, hasAfter := n["after"]
+		if !hasAfter {
+			return
+		}
+		modifier := map[string]any{"move_type": n["move_type"]}
+		kind := ejstr(n["move_type"])
+		if mode, hasMode := n["mode"]; hasMode {
+			modifier["mode"] = mode
+			kind += "-" + ejstr(mode)
+		}
+		name, isString := n["name"].(string)
+		if !isString {
+			name = kind
+		}
+		move := map[string]any{"type": "move", "target": "this-unit", "modifier": modifier}
+		offerLever(after, source, opts, out, leverSpec{id: opts.abilityID + "#move:" + kind, label: "After " + name, requires: []any{move}})
 	case "stance-select":
 		// Pick-one modal buff — each option is an opt-in lever.
 		maxActivations := float64(1)

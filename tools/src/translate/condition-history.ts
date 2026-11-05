@@ -25,6 +25,9 @@ export function describeHappened(p: P, negated: boolean): string {
   return phrase;
 }
 
+/** "an Advance", "a Normal": the indefinite article for a printed move name. */
+const articled = (name: string): string => `${/^[AEIOU]/iu.test(name) ? "an" : "a"} ${name}`;
+
 function happenedPhrase(p: P, negated: boolean): string {
   const neg = negated ? "not " : "";
   const didNot = (verb: string): string => (negated ? `did not ${verb}` : pastOf(verb));
@@ -40,8 +43,8 @@ function happenedPhrase(p: P, negated: boolean): string {
   switch (event) {
     case "move-ended": {
       const types = (f.move_types as string[] | undefined) ?? [];
-      const verb: Record<string, string> = { charge: "charge", advance: "advance", "fall-back": "fall back", "remain-stationary": "remain stationary", ingress: "make an ingress move" };
-      const done = types.length === 1 && verb[types[0]!] ? didNot(verb[types[0]!]!) : didNot(types.length ? `make a ${moveKinds(types)} move` : "move");
+      const verb: Record<string, string> = { charge: "charge", advance: "advance", "fall-back": "fall back", "remain-stationary": "remain stationary", ingress: "make an ingress move", embark: "embark" };
+      const done = types.length === 1 && verb[types[0]!] ? didNot(verb[types[0]!]!) : didNot(types.length ? `make ${articled(moveKinds(types))} move` : "move");
       // A charge with an object: the unit the charge was made against ("was charged this turn").
       if (p.object != null && types.length === 1 && types[0] === "charge") return withWindow(`${who} ${done} ${unitRefPhrase(p.object)}`, p.window);
       return withWindow(`${who} ${done}`, p.window);

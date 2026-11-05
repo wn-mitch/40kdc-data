@@ -17,6 +17,7 @@ export const STRATAGEM_MODEL_CASE_PREFIX = "canonical/stratagem-model/";
 export const STRATAGEM_TARGET_CASE_PREFIX = "canonical/stratagem-target/";
 export const NAMED_REGION_BENEFICIARY_CASE_PREFIX = "canonical/named-region-beneficiary/";
 export const DESIGNATION_CASE_PREFIX = "canonical/designation/";
+export const MOVE_TYPE_CASE_PREFIX = "canonical/move-type/";
 
 export interface DslInput {
   caseId: string;
@@ -196,6 +197,30 @@ export function canonicalDesignationCases() {
   return rows.map(({ id, ...row }) => {
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
     return { caseId: `${DESIGNATION_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: dslProjection(result) };
+  });
+}
+
+/**
+ * Fabricated move types: what follows a move is a lever vouched for by that move (a disembark mode's
+ * lever names its mode), a move type with nothing after it offers nothing, and a non-buff after
+ * (a charge ban) is reported unsupported rather than applied.
+ */
+export function canonicalMoveTypeCases() {
+  const source = { kind: "ability", abilityId: "move-type-example", abilityKind: "army" } as const;
+  const penalty = { type: "ability-part", duration: "until-start-next-turn", effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "subtract", value: 1, incoming: true } } };
+  const noCharge = { type: "ability-part", duration: "turn", effect: { type: "permission", target: "this-unit", modifier: { activity: "declare-charge", allow: false } } };
+  const jet = { type: "move-type", name: "Example Jet Move", move_type: "pulse-jet", distance: "D6+18", after: { type: "sequence", steps: [noCharge, penalty] } };
+  const drop = { type: "move-type", name: "Example Drop Move", move_type: "disembark", mode: "assault", setup_distance: { inches: 3 }, after: penalty };
+  const bare = { type: "move-type", name: "Example Bare Move", move_type: "disembark", mode: "shock", setup_distance: { inches: 3 } };
+  const rows: Array<Omit<DslInput, "abilityId" | "caseId"> & { id: string }> = [
+    { id: "after-lever-defending", source, effect: jet, context: { phase: "shooting" as const }, perspective: "target" },
+    { id: "after-lever-mode", source, effect: drop, context: { phase: "shooting" as const }, perspective: "target" },
+    { id: "nothing-after", source, effect: bare, context: { phase: "shooting" as const }, perspective: "target" },
+    { id: "after-lever-attacking", source, effect: jet, context: { phase: "shooting" as const }, perspective: "attacker" },
+  ];
+  return rows.map(({ id, ...row }) => {
+    const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
+    return { caseId: `${MOVE_TYPE_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: dslProjection(result) };
   });
 }
 

@@ -46,6 +46,7 @@ from wh40kdc.translate.effect_inline import (
     usage_clause,
 )
 from wh40kdc.translate.effect_leaf import defined_grant_head, definition_part, is_defined_grant
+from wh40kdc.translate.effect_move_type import move_type_block
 from wh40kdc.translate.effect_region import (
     capacity_clause,
     describe_menu_action,
@@ -104,6 +105,7 @@ _CONTAINER_TYPES = frozenset(
         "roll",
         "select-objective",
         "ritual-menu",
+        "move-type",
         "sequence",
         "rules-bundle",
         "ability-part",
@@ -202,6 +204,8 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         return f"{head}; then {describe_effect_inline(inner, ctx)}."
     if t == "ritual-menu":
         return ritual_menu_block(e, indent, arrow, lambda x: inline(x, ctx))
+    if t == "move-type":
+        return move_type_block(e, indent, arrow, lambda x: inline(x, ctx))
     if t == "select-objective":
         inner = _obj(e.get("effect"))
         nested = describe_effect(inner, depth + 1, ctx) if _is_container(inner) else None

@@ -183,6 +183,21 @@ const WINDOWED: FamilyExtension = {
   },
 };
 
+/**
+ * A unit's own moves this phase, as a move type's eligibility prints them: "did not embark within that
+ * TRANSPORT this phase", "that TRANSPORT has not made an advance/fall-back move this phase".
+ */
+const TRANSPORT_MOVES = activitiesExtension(24, ["embarked-this-phase", "advanced-this-phase"], "two activities: embarked within a Transport this phase, and made an Advance move this phase");
+
+/** Subject bearer-transport: the Transport the unit is embarked within ("that TRANSPORT has not made …"). */
+const BEARER_TRANSPORT: FamilyExtension = {
+  family: "unit-activity",
+  version: 25,
+  description: "As the previous version, plus subject bearer-transport: the Transport the unit is embarked within.",
+  schema: (previous) => withProperties(previous, { subject: widenedEnum(previous, "subject", ["bearer-transport"]) }),
+  normalize: (input, previous) => (input.subject === "bearer-transport" ? { ...previous({ ...input, subject: "this-unit" }), subject: "bearer-transport" } : previous(input)),
+};
+
 export const UNIT_ACTIVITY_EXTENSIONS: readonly FamilyExtension[] = [
   // "if that unit has declared a charge this phase", "if this unit Fell Back this turn".
   activitiesExtension(6, NEW_ACTIVITIES, "two activities: declared a charge this phase, and made a Fall Back move this turn"),
@@ -309,4 +324,10 @@ export const UNIT_ACTIVITY_EXTENSIONS: readonly FamilyExtension[] = [
   activitiesExtension(20, [DESTROYED_STRATAGEM_TARGET], `activity ${DESTROYED_STRATAGEM_TARGET}: the subject destroyed the unit the Stratagem targets ("targets the enemy unit that just destroyed your unit")`),
   VALUES,
  WINDOWED,
+  /**
+   * A Transport's own moves this phase, as a move type's eligibility prints them: "did not embark within
+   * that TRANSPORT this phase", "that TRANSPORT has not made an advance move this phase".
+   */
+  TRANSPORT_MOVES,
+  BEARER_TRANSPORT,
 ];

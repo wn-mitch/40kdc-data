@@ -12,6 +12,7 @@ import { duration } from "./compile-duration-scope.js";
 import { gatedMoment } from "./compile-usability-gate.js";
 import { buildRitualMenu, isRitualTestLeaf } from "./compile-ritual-menu.js";
 import { RITUAL_MENU_OPEN } from "./psychic-families.js";
+import { buildMoveType, MOVE_TYPE_OPEN } from "./compile-move-type.js";
 
 /**
  * Container fragments (batch 5). `compile.ts` delegates here in two ways:
@@ -33,7 +34,7 @@ type Node = Record<string, unknown>;
 
 const LEADING_CONTAINERS = new Set([
   "choice-open", "stance-select-open", "issue-orders-open", "dice-pool-allocation-open",
-  "risk-reward-open", "resource-action-menu-open", "persistent-designation-open", "select-objective-open", RITUAL_MENU_OPEN,
+  "risk-reward-open", "resource-action-menu-open", "persistent-designation-open", "select-objective-open", RITUAL_MENU_OPEN, MOVE_TYPE_OPEN,
 ]);
 /** Openers that wrap a single combined body instead of splitting into two or more options. */
 const SINGLE_BODY_CONTAINERS = new Set(["persistent-designation-open", "select-objective-open"]);
@@ -461,6 +462,16 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     if (consumed.has(index)) return;
     // A replacement opener is the last sentence of its origin's ability part (below), so it builds no container of its own.
     if (replacements.replacements.has(index)) return;
+    // A move type holds every leaf up to the next opener, split by its section markers (compile-move-type.ts).
+    if (leaf.family_id === MOVE_TYPE_OPEN) {
+      const body: CompileLeaf[] = [];
+      for (let cursor = index + 1; cursor < list.length && !LEADING_CONTAINERS.has(list[cursor]!.family_id); cursor += 1) {
+        body.push(list[cursor]!);
+        consumed.add(cursor);
+      }
+      nodes.set(index, buildMoveType(leaf, body, nestedCompiler));
+      return;
+    }
     // An origin with a replacement reads on through it: its trailing sentence is part of the origin.
     const replacement = replacements.origins.get(index);
     const groups: CompileLeaf[][] = [];

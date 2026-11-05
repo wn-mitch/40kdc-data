@@ -52,6 +52,11 @@ _IN_PROGRESS: dict[str, str] = {
 }
 
 
+
+def _articled(name: str) -> str:
+    """"an Advance", "a Normal": the indefinite article for a printed move name."""
+    return f"{'an' if name[:1].upper() in 'AEIOU' and name else 'a'} {name}"
+
 def _describe_happened_core(p: P, negated: bool) -> str:
     neg = "not " if negated else ""
     f = _obj(p.get("filter"))
@@ -78,7 +83,7 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         if len(types) == 1 and _MOVE_VERBS.get(types[0]):
             done = did_not(_MOVE_VERBS[types[0]])
         else:
-            done = did_not(f"make a {move_kinds(types)} move" if types else "move")
+            done = did_not(f"make {_articled(move_kinds(types))} move" if types else "move")
         # A charge with an object: the unit the charge was made against ("was charged this turn").
         if p.get("object") is not None and types == ["charge"]:
             return _with_window(f"{who} {done} {unit_ref_phrase(p['object'])}", window)

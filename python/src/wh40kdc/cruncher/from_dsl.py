@@ -762,6 +762,30 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
     elif node_type == "risk-reward":
         # The reward is the buff; the risk (self-damage on a failed test) is not.
         _walk(node.get("reward"), source, opts, out)
+    elif node_type == "move-type":
+        # What follows a move type applies to a unit once it has made that move: the player's
+        # pick, vouched for by the move. Before and while it moves are movement rules, not buffs.
+        if "after" not in node:
+            return
+        move_modifier: dict[str, Any] = {"move_type": node.get("move_type")}
+        if "mode" in node:
+            move_modifier["mode"] = node.get("mode")
+        move = {"type": "move", "target": "this-unit", "modifier": move_modifier}
+        kind = _js_str(node.get("move_type"))
+        if "mode" in node:
+            kind += f"-{_js_str(node.get('mode'))}"
+        name = node["name"] if isinstance(node.get("name"), str) else kind
+        _selection.offer_lever(
+            node["after"],
+            source,
+            opts,
+            out,
+            {
+                "id": f"{opts['abilityId']}#move:{kind}",
+                "label": f"After {name}",
+                "requires": [move],
+            },
+        )
     elif node_type == "stance-selection-capacity":
         _translate_stance_capacity(node, source, opts, out)
     elif node_type == "mortal-wounds":

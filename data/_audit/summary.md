@@ -8,8 +8,8 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 |---|--:|--:|--:|--:|--:|--:|--:|--:|
 | _core | 26 | 0 | 1 | 25 | 1 | 0 | 0 | 0 |
 | adepta-sororitas | 148 | 32 | 16 | 101 | 4 | 7 | 0 | 1 |
-| adeptus-astartes | 250 | 50 | 25 | 176 | 16 | 1 | 0 | 3 |
-| adeptus-custodes | 158 | 24 | 17 | 118 | 9 | 1 | 0 | 0 |
+| adeptus-astartes | 250 | 50 | 25 | 176 | 15 | 1 | 0 | 3 |
+| adeptus-custodes | 158 | 24 | 17 | 118 | 8 | 1 | 0 | 0 |
 | adeptus-mechanicus | 167 | 27 | 12 | 128 | 16 | 0 | 0 | 2 |
 | aeldari | 300 | 44 | 24 | 233 | 26 | 7 | 0 | 5 |
 | agents-of-the-imperium | 138 | 26 | 10 | 102 | 18 | 0 | 0 | 2 |
@@ -31,7 +31,7 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 | iron-hands | 11 | 4 | 3 | 5 | 1 | 0 | 0 | 0 |
 | leagues-of-votann | 155 | 25 | 11 | 119 | 16 | 0 | 0 | 0 |
 | necrons | 230 | 29 | 23 | 178 | 15 | 1 | 0 | 1 |
-| orks | 209 | 32 | 10 | 167 | 5 | 0 | 0 | 0 |
+| orks | 209 | 32 | 11 | 166 | 4 | 0 | 0 | 0 |
 | raven-guard | 11 | 1 | 0 | 10 | 1 | 0 | 0 | 0 |
 | salamanders | 11 | 5 | 1 | 5 | 3 | 0 | 0 | 0 |
 | space-wolves | 87 | 16 | 6 | 65 | 8 | 5 | 0 | 0 |
@@ -41,14 +41,14 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 | ultramarines | 11 | 4 | 3 | 4 | 1 | 0 | 0 | 0 |
 | white-scars | 11 | 5 | 2 | 5 | 0 | 0 | 0 | 0 |
 | world-eaters | 147 | 13 | 8 | 126 | 2 | 0 | 0 | 0 |
-| **TOTAL** | **4536** | **716** | **366** | **3472** | **303** | **65** | **0** | **44** |
+| **TOTAL** | **4536** | **716** | **367** | **3471** | **300** | **65** | **0** | **44** |
 
 `stub*` = structural (empty-modifier placeholder node) — the authoring worklist. `notes-stub` = flagged in community_notes.
 
 ## Unsupported-effect reasons (offensive walk)
 
-- `308` — effect type "no-effect" is not modelled by the buff layer
-- `246` — effect type "permission" is not modelled by the buff layer
+- `305` — effect type "no-effect" is not modelled by the buff layer
+- `249` — effect type "permission" is not modelled by the buff layer
 - `125` — conditional: cannot evaluate condition "matches" against current context
 - `121` — conditional: cannot evaluate condition "and" against current context
 - `88` — effect type "ability-grant" is not modelled by the buff layer

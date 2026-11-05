@@ -1368,7 +1368,8 @@
               "ingress",
               "surge",
               "scout",
-              "disembark"
+              "disembark",
+              "embark"
             ]
           }
         },

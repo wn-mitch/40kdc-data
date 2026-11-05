@@ -6537,19 +6537,82 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "move-type",
+          "name": "Shock Disembark Move",
+          "move_type": "disembark",
+          "mode": "shock",
+          "setup_distance": {
+            "inches": 3
+          },
+          "eligible_if": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "embarked"
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "bearer-transport",
+                  "filter": {
+                    "state": "on-battlefield"
+                  }
+                }
+              },
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "move-ended",
+                      "filter": {
+                        "move_types": [
+                          "embark"
+                        ]
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "after": {
+            "type": "ability-part",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": false
+              }
+            },
+            "duration": "turn"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "5de16c48d0df420b6008025994d84f4f607ed415f4ab1445a3868e5b23b14980"
   },
   {
     "ability_id": "swift-ruin-adeptus-custodes",

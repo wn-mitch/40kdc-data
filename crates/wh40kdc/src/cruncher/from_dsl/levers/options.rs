@@ -251,3 +251,43 @@ pub(in crate::cruncher::from_dsl) fn enumerate_menu_actions(
         });
     }
 }
+
+/// What follows a move type applies to a unit once it has made that move: the player's pick,
+/// vouched for by the move (`<abilityId>#move:<move_type>[-<mode>]`). Before and while it moves are
+/// movement rules, not buffs.
+pub(in crate::cruncher::from_dsl) fn move_type_lever(node: &Obj, opts: &WalkOpts, out: &mut Out) {
+    let Some(after) = node.get("after") else {
+        return;
+    };
+    let mode = present(node, "mode");
+    let mut modifier = serde_json::Map::new();
+    modifier.insert(
+        "move_type".to_string(),
+        node.get("move_type").cloned().unwrap_or(Value::Null),
+    );
+    if let Some(mode) = mode {
+        modifier.insert("mode".to_string(), mode.clone());
+    }
+    let mv = serde_json::json!({ "type": "move", "target": "this-unit", "modifier": modifier });
+    let kind = match mode {
+        Some(mode) => format!(
+            "{}-{}",
+            js_string(node.get("move_type")),
+            js_string(Some(mode))
+        ),
+        None => js_string(node.get("move_type")),
+    };
+    let name = match node.get("name") {
+        Some(Value::String(name)) => name.clone(),
+        _ => kind.clone(),
+    };
+    super::super::selection::offer_lever(
+        after,
+        opts,
+        out,
+        format!("{}#move:{kind}", opts.ability_id),
+        &format!("After {name}"),
+        vec![mv],
+        None,
+    );
+}

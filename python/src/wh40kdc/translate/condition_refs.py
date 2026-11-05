@@ -578,6 +578,7 @@ _MOVE_VERBS: dict[str, str] = {
     "fall-back": "fall back",
     "remain-stationary": "remain stationary",
     "ingress": "make an ingress move",
+    "embark": "embark",
 }
 
 # Past tense of the verbs history predicates use.
@@ -589,6 +590,7 @@ _PAST: dict[str, str] = {
     "make an ingress move": "made an ingress move",
     "move": "moved",
     "disembark": "disembarked",
+    "embark": "embarked",
 }
 
 

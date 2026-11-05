@@ -15,6 +15,7 @@ from wh40kdc.translate.condition_refs import _or_list, range_phrase, unit_ref_ph
 from wh40kdc.translate.effect_aura import aura_reach, with_aura_recipient
 from wh40kdc.translate.effect_bind import roll_head, select_objective_inline
 from wh40kdc.translate.effect_leaf import LEAF_TYPES, describe_leaf
+from wh40kdc.translate.effect_move_type import move_type_inline
 from wh40kdc.translate.effect_quantity import (
     quantity_phrase,
     requirement_phrase,
@@ -325,6 +326,8 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
         return f"{roll_head(e)}; then {inline(e.get('effect'), ctx)}"
     if t == "ritual-menu":
         return ritual_menu_inline(e, lambda x: inline(x, ctx))
+    if t == "move-type":
+        return move_type_inline(e, lambda x: inline(x, ctx))
     if t == "select-objective":
         return select_objective_inline(e, lambda x: inline(x, ctx))
     if t == "dice-table":
