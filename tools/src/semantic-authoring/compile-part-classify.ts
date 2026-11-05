@@ -257,7 +257,11 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
       // An "If …" sentence before an "Or:" player's pick ("If A, X. Or: If B, Y.") gates only its own option. A
       // condition inside a sentence ("…, if this unit is …"), a trigger, a scope heading ("This unit's melee attacks:"),
       // or an "If …" whose own sentence holds the pick ("If A, you can include X or Y") still gates the whole ability.
-      } else if (node !== "selected" && leading && sourceText !== undefined && opensIfSentence(sourceText, list[index]!)
+      // "Attacks that target your unit with a S greater than your unit's T have -1 to wound rolls. Or: …": a comparison
+      // that qualifies the attacks of one option's own sentence is that option's, as an "If …" sentence is.
+      } else if (node !== "selected" && leading && sourceText !== undefined
+        && (opensIfSentence(sourceText, list[index]!) || (leaf.family_id === "attack-compare"
+          && list.some((other, at) => at > index && other.role === "EFFECT" && places[at]!.clause === clause)))
         && list.some((other, at) => at > index && other.role === "COMBINATOR" && other.parameters.choice === true && places[at]!.clause !== clause && places[at]!.sentence !== sentence)) {
         clauseGates.set(clause, [...(clauseGates.get(clause) ?? []), node]);
       // "…: Each time this unit is selected to fight, if it charged this turn, it can use this ability. If it does, ■ A ■ B":

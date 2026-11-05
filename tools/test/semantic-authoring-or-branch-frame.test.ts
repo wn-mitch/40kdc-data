@@ -325,3 +325,25 @@ describe("Semantic authoring \"Or:\" options as whole groups", () => {
     for (const step of effect.options[2].steps) expect(step).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { filter: { designated: "entrenched" } } } });
   });
 });
+
+describe("Semantic authoring attack comparisons on an Or: option", () => {
+  // Hunts: the first option's "with a S greater than your unit's T" wrapped the whole choice, so the second option
+  // ("if your unit is entrenched, attacks … have -1") needed S > T as well.
+  const text = "Attacks that target your unit with a S greater than your unit's T have -1 to wound rolls. Or: If your unit is entrenched, attacks that target your unit have -1 to wound rolls.";
+  const leaves = () => placed(text,
+    ["Attacks that target your unit", "attack", { direction: "targeted", unit: "this-unit", attack_type: "any" }],
+    ["a S greater than your unit's T", "attack-compare", { left_of: "attacker", left_stat: "S", comparison: "greater-than", right_kind: "stat", right_of: "defender", right_stat: "T" }],
+    ["have -1 to wound rolls", "roll-modifier", { roll: "wound", operation: "subtract", value: 1 }],
+    ["Or:", "instead", { choice: true }],
+    ["your unit is entrenched", "designated-filter", { subject: "this-unit", tag: "entrenched", negated: false }],
+    ["attacks that target your unit have -1 to wound rolls", "roll-modifier", { roll: "wound", operation: "subtract", value: 1 }]);
+
+  it("gates only the option whose sentence prints it", () => {
+    const effect = compiled(text, leaves());
+    expect(effect.type).toBe("choice");
+    const [first, second] = effect.options;
+    expect(first).toMatchObject({ type: "conditional", condition: { type: "attack-compare" }, effect: { type: "roll-modifier" } });
+    expect(second).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { filter: { designated: "entrenched" } } } });
+    expect(JSON.stringify(second)).not.toContain("attack-compare");
+  });
+});
