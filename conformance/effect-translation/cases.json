@@ -5056,14 +5056,26 @@
         "ARMIGER"
       ]
     },
-    "trigger": {
-      "event": "used",
-      "filter": {
-        "kind": "stratagem"
+    "trigger": [
+      {
+        "event": "used",
+        "filter": {
+          "kind": "stratagem",
+          "id": "fire-overwatch"
+        },
+        "object": "this-unit"
+      },
+      {
+        "event": "used",
+        "filter": {
+          "kind": "stratagem",
+          "id": "heroic-intervention"
+        },
+        "object": "this-unit"
       }
-    },
+    ],
     "expected": {
-      "text": "Each time you use a Stratagem, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).\nApplies to: units with IMPERIAL KNIGHTS, ARMIGER."
+      "text": "When you target the unit with the Fire Overwatch Stratagem or when you target the unit with the Heroic Intervention Stratagem, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).\nApplies to: units with IMPERIAL KNIGHTS, ARMIGER."
     }
   },
   {

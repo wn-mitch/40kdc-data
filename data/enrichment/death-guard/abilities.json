@@ -4563,13 +4563,13 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "263fd37b9e458be7a3e2b872e1367904b4f26c551b9ce20832105afe7cfa5c58",
     "version": "2025-q3",
     "effect": {
       "type": "army-rule",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "rule": "faction-forbidden",
         "faction": "plague-legions"
@@ -8796,19 +8796,67 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "death-lords-chosen",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "within": {
+            "range": {
+              "inches": 30
+            },
+            "of": "this-model"
+          }
+        },
+        "bind_as": "objective-marker",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "ability-part",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "recipient",
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "selection_var": "objective-marker"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          },
+          "effect": {
+            "type": "designate",
+            "target": {
+              "owner": "enemy"
+            },
+            "modifier": {
+              "tag": "afflicted"
+            }
+          }
+        },
+        "duration": "until-start-next-turn"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "608792151ef74a201a0268c2226e6db948e36abf06ed56c717c4afc8352569cb"
   },
   {
     "ability_id": "smeared-with-filth-shamblerot-vectorium-death-guard",
@@ -9339,19 +9387,39 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "champions-of-contagion",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "recipient",
+          "filter": {
+            "designated": "enfeebled",
+            "designated_by": "this-model"
+          }
+        }
+      },
+      "effect": {
+        "type": "designate",
+        "target": {
+          "owner": "enemy"
+        },
+        "modifier": {
+          "tag": "afflicted"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "9bd04f65242fe774709ca05f7008516d23c6d6d63ad3c36b220690cbf9d74cd1"
   },
   {
     "ability_id": "vomitous-salvoes-maggot-lords-death-guard",

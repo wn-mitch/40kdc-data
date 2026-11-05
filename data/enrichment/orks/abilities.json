@@ -8582,40 +8582,38 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "ranged"
-            }
-          },
-          {
-            "type": "attack-compare",
-            "parameters": {
-              "left": {
-                "of": "attacker",
-                "stat": "S"
-              },
-              "comparison": "gt",
-              "right": {
-                "of": "defender",
-                "stat": "T"
-              }
-            }
-          }
-        ]
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
       },
       "effect": {
         "type": "choice",
         "options": [
           {
-            "type": "roll-modifier",
-            "target": "attacker",
-            "modifier": {
-              "roll": "wound",
-              "operation": "subtract",
-              "value": 1
+            "type": "conditional",
+            "condition": {
+              "type": "attack-compare",
+              "parameters": {
+                "left": {
+                  "of": "attacker",
+                  "stat": "S"
+                },
+                "comparison": "gt",
+                "right": {
+                  "of": "defender",
+                  "stat": "T"
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "attacker",
+              "modifier": {
+                "roll": "wound",
+                "operation": "subtract",
+                "value": 1
+              }
             }
           },
           {

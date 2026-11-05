@@ -5976,9 +5976,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "1c7f0659937bd27afa97f1fd09d1fe1c2c55e4f53a3caaebf12a9df6628a317c",
+    "source_digest": "d6679b5b93fd762c5ca71745dd26a8137c81ceaf0853dcfc4bf7e12961b92741",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -5987,37 +5987,27 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "battle-shock",
-              "operation": "subtract",
-              "value": 1
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "OC",
-              "operation": "add",
-              "value": 1
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "Ld",
+            "operation": "add",
+            "value": 1
           }
-        ]
-      }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "OC",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -10987,19 +10977,29 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "drukhari",
     "detachment_id": "coven-of-agonies",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "AP",
+        "operation": "improve",
+        "value": 1,
+        "weapons": {
+          "type": "melee"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "bb4462e105d959455c367fc5a3ffa46a01812a1a3f3b750525987e84187c4d74"
   },
   {
     "ability_id": "vicious-blades-skysplinter-assault-drukhari",

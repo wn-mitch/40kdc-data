@@ -3756,13 +3756,13 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "cc6e85d28cd55bcee6d7425aed4f5cf85bf346ab42f9b925019c9200ba6941c6",
     "version": "2025-q3",
     "effect": {
       "type": "army-rule",
-      "target": "this-model",
+      "target": "this-unit",
       "modifier": {
         "rule": "faction-forbidden",
         "faction": "scintillating-legions"

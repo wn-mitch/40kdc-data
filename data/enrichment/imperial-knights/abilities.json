@@ -2253,7 +2253,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "9450cc1a0890193053153fecb37d383bcf45c31cd25549f445860ba5dc1fc80e",
     "version": "2025-q3",
@@ -2262,15 +2262,43 @@
     "faction_id": "imperial-knights",
     "detachment_id": "dominus-foebreakers",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "stat-modifier",
-      "target": "this-unit",
-      "modifier": {
-        "stat": "A",
-        "operation": "add",
-        "value": 1
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "removes": [
+              {
+                "keyword_id": "blast"
+              }
+            ],
+            "weapons": {
+              "type": "ranged",
+              "keyword": {
+                "keyword_id": "blast"
+              }
+            }
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "A",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "type": "ranged",
+              "keyword": {
+                "keyword_id": "blast"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -2281,7 +2309,21 @@
         "DOMINUS"
       ]
     },
-    "community_notes": "BLAST removal from the unit's [BLAST] ranged attacks carried as prose; modeled buff is +1 A"
+    "community_notes": "BLAST removal from the unit's [BLAST] ranged attacks carried as prose; modeled buff is +1 A",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DOMINUS",
+          "IMPERIAL KNIGHTS"
+        ],
+        "state": "engaged"
+      }
+    }
   },
   {
     "ability_id": "fire-shocked-dominus-foebreakers-imperial-knights",
@@ -2431,7 +2473,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "5105e552c7fd34a10d80d9109d6bb785c124f19ff7267f90a95905552c0fcc89",
     "version": "2025-q3",
@@ -2461,12 +2503,24 @@
       ]
     },
     "community_notes": "-1 CP when targeting bearer with Fire Overwatch/Heroic Intervention stratagem",
-    "trigger": {
-      "event": "used",
-      "filter": {
-        "kind": "stratagem"
+    "trigger": [
+      {
+        "event": "used",
+        "filter": {
+          "kind": "stratagem",
+          "id": "fire-overwatch"
+        },
+        "object": "this-unit"
+      },
+      {
+        "event": "used",
+        "filter": {
+          "kind": "stratagem",
+          "id": "heroic-intervention"
+        },
+        "object": "this-unit"
       }
-    }
+    ]
   },
   {
     "ability_id": "neural-lash-throne-bonded-outriders-imperial-knights",

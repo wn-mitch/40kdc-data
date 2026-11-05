@@ -16,9 +16,9 @@ dump confirmation.
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 186 | 271 |
-| stratagems | 0 | 0 | 1067 | 246 |
-| abilities | 0 | 0 | 3780 | 756 |
-| phase-mappings | 0 | 0 | 1207 | 374 |
+| stratagems | 0 | 0 | 1071 | 242 |
+| abilities | 0 | 0 | 3791 | 745 |
+| phase-mappings | 0 | 0 | 1208 | 373 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -39,23 +39,23 @@ dump confirmation.
 | chaos-knights | 0 | 0 | 87 | 23 |
 | chaos-space-marines | 0 | 0 | 230 | 51 |
 | dark-angels | 0 | 0 | 66 | 11 |
-| death-guard | 0 | 0 | 131 | 29 |
+| death-guard | 0 | 0 | 134 | 26 |
 | deathwatch | 0 | 0 | 33 | 3 |
-| drukhari | 0 | 0 | 128 | 36 |
+| drukhari | 0 | 0 | 130 | 34 |
 | emperors-children | 0 | 0 | 126 | 22 |
-| genestealer-cults | 0 | 0 | 120 | 27 |
+| genestealer-cults | 0 | 0 | 121 | 26 |
 | grey-knights | 0 | 0 | 120 | 14 |
-| imperial-fists | 0 | 0 | 8 | 3 |
-| imperial-knights | 0 | 0 | 90 | 28 |
+| imperial-fists | 0 | 0 | 9 | 2 |
+| imperial-knights | 0 | 0 | 92 | 26 |
 | iron-hands | 0 | 0 | 9 | 2 |
-| leagues-of-votann | 0 | 0 | 129 | 26 |
+| leagues-of-votann | 0 | 0 | 130 | 25 |
 | necrons | 0 | 0 | 194 | 36 |
 | orks | 0 | 0 | 188 | 21 |
 | raven-guard | 0 | 0 | 11 | 0 |
 | salamanders | 0 | 0 | 8 | 3 |
 | space-wolves | 0 | 0 | 77 | 10 |
 | tau-empire | 0 | 0 | 137 | 29 |
-| thousand-sons | 0 | 0 | 127 | 31 |
+| thousand-sons | 0 | 0 | 128 | 30 |
 | tyranids | 0 | 0 | 159 | 27 |
 | ultramarines | 0 | 0 | 10 | 1 |
 | white-scars | 0 | 0 | 11 | 0 |
@@ -124,41 +124,41 @@ dump confirmation.
 | dark-angels | stub | 3 |
 | dark-angels | verified | 66 |
 | death-guard | digest-differs | 4 |
-| death-guard | stub | 16 |
-| death-guard | unpublished | 9 |
-| death-guard | verified | 131 |
+| death-guard | stub | 14 |
+| death-guard | unpublished | 8 |
+| death-guard | verified | 134 |
 | deathwatch | ambiguous-source | 1 |
 | deathwatch | digest-differs | 1 |
 | deathwatch | no-source | 1 |
 | deathwatch | verified | 33 |
-| drukhari | digest-differs | 8 |
-| drukhari | stub | 20 |
+| drukhari | digest-differs | 7 |
+| drukhari | stub | 19 |
 | drukhari | unpublished | 8 |
-| drukhari | verified | 128 |
+| drukhari | verified | 130 |
 | emperors-children | digest-differs | 5 |
 | emperors-children | unpublished | 17 |
 | emperors-children | verified | 126 |
 | genestealer-cults | digest-differs | 3 |
 | genestealer-cults | stub | 13 |
-| genestealer-cults | unpublished | 11 |
-| genestealer-cults | verified | 120 |
+| genestealer-cults | unpublished | 10 |
+| genestealer-cults | verified | 121 |
 | grey-knights | digest-differs | 1 |
 | grey-knights | stub | 11 |
 | grey-knights | unpublished | 2 |
 | grey-knights | verified | 120 |
-| imperial-fists | digest-differs | 3 |
-| imperial-fists | verified | 8 |
+| imperial-fists | digest-differs | 2 |
+| imperial-fists | verified | 9 |
 | imperial-knights | digest-differs | 6 |
 | imperial-knights | stub | 13 |
-| imperial-knights | unpublished | 9 |
-| imperial-knights | verified | 90 |
+| imperial-knights | unpublished | 7 |
+| imperial-knights | verified | 92 |
 | iron-hands | digest-differs | 1 |
 | iron-hands | stub | 1 |
 | iron-hands | verified | 9 |
 | leagues-of-votann | digest-differs | 3 |
-| leagues-of-votann | stub | 16 |
+| leagues-of-votann | stub | 15 |
 | leagues-of-votann | unpublished | 7 |
-| leagues-of-votann | verified | 129 |
+| leagues-of-votann | verified | 130 |
 | necrons | digest-differs | 7 |
 | necrons | stub | 15 |
 | necrons | unpublished | 14 |
@@ -181,8 +181,8 @@ dump confirmation.
 | tau-empire | verified | 137 |
 | thousand-sons | digest-differs | 7 |
 | thousand-sons | stub | 2 |
-| thousand-sons | unpublished | 22 |
-| thousand-sons | verified | 127 |
+| thousand-sons | unpublished | 21 |
+| thousand-sons | verified | 128 |
 | tyranids | digest-differs | 4 |
 | tyranids | stub | 13 |
 | tyranids | unpublished | 10 |

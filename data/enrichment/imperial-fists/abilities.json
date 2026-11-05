@@ -465,9 +465,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "ba042271ba452e74cd497a8f673c8144f8e9b9f349eae1b9861f6ae66470b52b",
+    "source_digest": "eafef9fb8c6aa080d98158bb77cba10ded25b8183c9cc27ccaf3557b87b0cb45",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -477,33 +477,74 @@
     "behavior": "reactive",
     "trigger": {
       "event": "targets-selected",
-      "subject": {
-        "owner": "enemy"
-      },
-      "object": "this-unit",
       "filter": {
         "kind": "attack"
       },
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ],
+        "none_of": [
+          "MONSTER",
+          "VEHICLE"
+        ]
       }
     },
     "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 4,
-      "comparison": "gte",
-      "on_success": {
-        "type": "act-on-death",
-        "target": "this-unit",
-        "modifier": {
-          "act": "fight"
+      "type": "choice",
+      "options": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-compare",
+            "parameters": {
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
+              "comparison": "gt",
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "wound",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "entrenched"
+              }
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "wound",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
         }
-      },
-      "on_fail": null
+      ]
     },
     "scope": {
       "duration": "phase"
