@@ -70,4 +70,17 @@ describe("Mission Tactics", () => {
     expect(legal(furor.id, malleus.id, furor.requiresOption!)).toBe(false);
     expect(legal(furor.id, malleus.id, furor.requiresOption!, malleus.requiresOption!)).toBe(false);
   });
+
+  it("follows a chapter army's own Combat Doctrines, declared or picked as a lever", () => {
+    // Blood Angels pick their own copy of Combat Doctrines; Mission Tactics names the Space Marine one.
+    const chapter = { ...input, factionId: "blood-angels" };
+    const own = (option: string) => [{ ability_id: "combat-doctrines-blood-angels", option_id: option }];
+    expect(tactics(ds.buffsFor(chapter, { phase: "shooting", activeRules: own("devastator-doctrine") }))).toEqual([sustained]);
+    expect(tactics(ds.buffsFor(chapter, { phase: "shooting", activeRules: own("assault-doctrine") }))).toEqual([]);
+    const { buffs, groups } = ds.stackableBuffsFor(chapter, { phase: "shooting" });
+    const furor = buffs.find((lever) => lever.buffs.some((buff) => JSON.stringify(buff.contribution) === JSON.stringify(sustained) && lever.source.kind === "ability" && lever.source.abilityId.startsWith("mission-tactics")))!;
+    expect(furor.requiresOption).toMatch(/combat-doctrines-blood-angels#devastator-doctrine$/u);
+    expect(groups.some((group) => group.id === buffs.find((lever) => lever.id === furor.requiresOption)?.group && group.abilityId === "combat-doctrines-blood-angels")).toBe(true);
+    expect(isLegalLeverSelection(buffs, groups, new Set([furor.id, furor.requiresOption!]))).toBe(true);
+  });
 });

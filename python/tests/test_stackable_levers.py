@@ -701,3 +701,42 @@ def test_choice_between_granted_records_keeps_each_behind_its_own_pick() -> None
     assert levers["fix-grant-choice?0"]["buffs"] == []
     pool = next(g for g in out["groups"] if g["id"] == "fix-grant-choice?choice")
     assert pool["maxActivations"] == 1
+
+
+def test_chapter_army_follows_its_own_combat_doctrines_declared_or_picked() -> None:
+    # Blood Angels pick their own copy of Combat Doctrines; Mission Tactics names the Space
+    # Marine one. Mirrors tools/test/cruncher-named-grants.test.ts.
+    ds = Dataset.embedded()
+    chapter = {
+        "unitId": "deathwatch-veterans",
+        "factionId": "blood-angels",
+        "detachmentId": "deathwatch-support",
+    }
+    tactic = "mission-tactics-deathwatch-support-deathwatch"
+    sustained = {
+        "type": "extra-keyword",
+        "keywordRef": {"keyword_id": "sustained-hits", "parameters": {"value": 1}},
+    }
+
+    def own(option: str) -> list[dict[str, str]]:
+        return [{"ability_id": "combat-doctrines-blood-angels", "option_id": option}]
+
+    def tactics(buffs: list[dict[str, Any]]) -> list[Any]:
+        return [
+            buff["contribution"]
+            for buff in buffs
+            if buff["source"].get("kind") == "ability" and buff["source"].get("abilityId") == tactic
+        ]
+
+    declared = {"phase": "shooting", "activeRules": own("devastator-doctrine")}
+    assert tactics(ds.buffs_for(chapter, declared)) == [sustained]
+    other = {"phase": "shooting", "activeRules": own("assault-doctrine")}
+    assert tactics(ds.buffs_for(chapter, other)) == []
+    levers = ds.stackable_buffs_for(chapter, {"phase": "shooting"})
+    furor = next(
+        lever
+        for lever in levers["buffs"]
+        if lever["source"].get("abilityId", "").startswith("mission-tactics")
+        and any(buff["contribution"] == sustained for buff in lever["buffs"])
+    )
+    assert furor["requiresOption"].endswith("combat-doctrines-blood-angels#devastator-doctrine")

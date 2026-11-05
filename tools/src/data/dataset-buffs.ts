@@ -91,6 +91,47 @@ export type StackableBuffGroup = {
   maxActivations: number;
 };
 
+/**
+ * A chapter army's own copies of its parent faction's rules, keyed by the parent rule's id. A
+ * chapter that prints a rule its parent prints (Blood Angels' Combat Doctrines) carries a record
+ * named alike and suffixed with its own faction; a rule naming the parent's copy (a Space Marine
+ * detachment's "while the Tactical Doctrine is active") means the copy the chapter army selects.
+ */
+export function parentRuleCopies(ds: Dataset, factionId: string | undefined): Map<string, string> {
+  const copies = new Map<string, string>();
+  const parent = factionId ? ds.factions.getAny(factionId)?.raw.parent_faction_id : undefined;
+  if (!factionId || !parent) return copies;
+  const suffix = `-${factionId}`;
+  for (const ability of ds.abilities.all) {
+    if (ability.raw.faction_id !== factionId || !ability.id.endsWith(suffix)) continue;
+    const parentId = `${ability.id.slice(0, -suffix.length)}-${parent}`;
+    const original = ds.abilities.getInFaction(parentId, parent);
+    if (original && original.raw.faction_id === parent && original.name === ability.name) copies.set(parentId, ability.id);
+  }
+  return copies;
+}
+
+/**
+ * `rules` with each parent rule and its chapter copy standing for the other, so a `rule-active`
+ * gate naming either holds when the army declares either.
+ */
+export function withRuleCopies(rules: EngineContext["activeRules"], copies: ReadonlyMap<string, string>): EngineContext["activeRules"] {
+  if (rules === undefined || copies.size === 0) return rules;
+  const counterpart = new Map<string, string>();
+  for (const [parentId, copyId] of copies) { counterpart.set(parentId, copyId); counterpart.set(copyId, parentId); }
+  const key = (rule: NonNullable<EngineContext["activeRules"]>[number]) => JSON.stringify(rule);
+  const out = [...rules];
+  const seen = new Set(out.map(key));
+  for (const rule of rules) {
+    const id = typeof rule === "string" ? rule : rule.ability_id;
+    const other = counterpart.get(id);
+    if (other === undefined) continue;
+    const mirrored = typeof rule === "string" ? other : { ...rule, ability_id: other };
+    if (!seen.has(key(mirrored))) { seen.add(key(mirrored)); out.push(mirrored); }
+  }
+  return out;
+}
+
 /** {@link Dataset.stackableBuffsFor} for `ds`. */
 export function stackableBuffsFor(
   ds: Dataset,
@@ -122,8 +163,10 @@ export function stackableBuffsFor(
   // Surface the attachment fact and the combined unit's keywords to the DSL translator so
   // attachment conditions and keyword filters evaluate against their actual subjects.
   // Clone — never mutate the caller's context. An explicitly-set value wins over the derivation.
+  const copies = parentRuleCopies(ds, factionId);
   const ctx: EngineContext = {
     ...context,
+    activeRules: withRuleCopies(context.activeRules, copies),
     attackerAttached:
       context.attackerAttached ?? (input.attachedUnitIds?.length ?? 0) > 0,
     attackerKeywords: context.attackerKeywords ?? (combined.length > 0 ? combinedKeywordsLower(combined) : undefined),
@@ -194,6 +237,22 @@ export function stackableBuffsFor(
   const optionName = (option: StanceOptionRef) =>
     stanceOptionName((ds.abilities.getInFaction(option.ability_id, factionId) ?? ds.abilities.getAny(option.ability_id))?.raw.effect, option.option_id)
       ?? option.option_id;
+  // A gate on a parent rule's option binds to the stance the chapter army picks: its own copy.
+  const onCopy = (option: StanceOptionRef): StanceOptionRef => ({ ...option, ability_id: copies.get(option.ability_id) ?? option.ability_id });
+  for (const [lever, gate] of optionRequirements) {
+    optionRequirements.set(lever, {
+      ...(gate.requiresOption ? { requiresOption: onCopy(gate.requiresOption) } : {}),
+      ...(gate.excludesOption ? { excludesOption: onCopy(gate.excludesOption) } : {}),
+    });
+  }
+  for (const [lever, raise] of capRaises) {
+    capRaises.set(lever, {
+      ...raise,
+      ability: copies.get(raise.ability) ?? raise.ability,
+      ...(raise.option ? { option: onCopy(raise.option) } : {}),
+      ...(raise.options ? { options: raise.options.map(onCopy) } : {}),
+    });
+  }
   const resolved = resolveOptionRequirements(resolveCapRaises(buffs, capRaises, groups, optionRequirements), optionRequirements, groups, optionName);
   return { buffs: resolved, groups, needs };
 }
@@ -326,8 +385,10 @@ export function buffContext(ds: Dataset, input: BuffInput, context: EngineContex
   const keywords = combined.length > 0 ? combinedKeywordsLower(combined) : undefined;
   const modelKeywords = combined.length > 0 ? sharedKeywordsLower(combined) : undefined;
   const attached = (input.attachedUnitIds?.length ?? 0) > 0;
+  const activeRules = withRuleCopies(context.activeRules, parentRuleCopies(ds, factionId));
   return perspective === "attacker" ? {
     ...context,
+    activeRules,
     attackerAttached: context.attackerAttached ?? attached,
     attackerUnitId: context.attackerUnitId ?? input.unitId,
     // The input's faction is the army whose rules the resolver walks, so it is the Army Faction.
@@ -339,6 +400,7 @@ export function buffContext(ds: Dataset, input: BuffInput, context: EngineContex
     attackerToughness: context.attackerToughness ?? combinedToughness(combined, input.attachmentRoles),
   } : {
     ...context,
+    activeRules,
     targetAttached: context.targetAttached ?? attached,
     targetUnitId: context.targetUnitId ?? input.unitId,
     // The input's faction is the defending army whose rules the resolver walks.

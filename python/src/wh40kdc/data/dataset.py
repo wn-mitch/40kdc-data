@@ -15,6 +15,7 @@ Python mirror of ``tools/src/data/dataset.ts``.
 
 from __future__ import annotations
 
+import json
 from typing import Any, TypedDict
 
 from wh40kdc.data.ability_refs import unit_ability_ids
@@ -911,7 +912,7 @@ class Dataset:
         # Surface actual attachment membership and the combined unit's keywords to the DSL
         # translator so attachment-role conditions and keyword filters evaluate.
         # Clone — never mutate the caller's context. An explicitly-set value wins.
-        ctx = self._derived_context(input, context)
+        ctx = self._with_rule_copies(self._derived_context(input, context), faction_id)
         if ctx.get("attackerKeywords") is None and combined:
             ctx["attackerKeywords"] = combined_keywords_lower(combined)
         if ctx.get("attackerModelKeywords") is None and combined:
@@ -999,6 +1000,36 @@ class Dataset:
             )
             return name if name else option["option_id"]
 
+        # A gate on a parent rule's option binds to the stance the chapter army picks: its copy.
+        copies = self._parent_rule_copies(faction_id)
+
+        def on_copy(option: dict[str, Any]) -> dict[str, Any]:
+            return {**option, "ability_id": copies.get(option["ability_id"], option["ability_id"])}
+
+        for key, (lever, gate) in list(option_requirements.items()):
+            option_requirements[key] = (
+                lever,
+                {
+                    **(
+                        {"requiresOption": on_copy(gate["requiresOption"])}
+                        if gate.get("requiresOption")
+                        else {}
+                    ),
+                    **(
+                        {"excludesOption": on_copy(gate["excludesOption"])}
+                        if gate.get("excludesOption")
+                        else {}
+                    ),
+                },
+            )
+        for key, (lever, raise_) in list(cap_raises.items()):
+            moved = {**raise_, "ability": copies.get(raise_["ability"], raise_["ability"])}
+            if raise_.get("option"):
+                moved["option"] = on_copy(raise_["option"])
+            if raise_.get("options"):
+                moved["options"] = [on_copy(option) for option in raise_["options"]]
+            cap_raises[key] = (lever, moved)
+
         resolved = resolve_option_requirements(
             resolve_cap_raises(buffs, cap_raises, groups, option_requirements),
             option_requirements,
@@ -1015,6 +1046,55 @@ class Dataset:
             return faction
         unit = self.units.get_any(input.get("unitId") or "")
         return unit.raw.get("faction_id") if unit is not None else None
+
+    def _parent_rule_copies(self, faction_id: str | None) -> dict[str, str]:
+        """A chapter army's own copies of its parent faction's rules, keyed by the parent rule's
+        id: a record of the chapter named like a parent record and suffixed with the chapter's
+        faction. Mirrors TS ``parentRuleCopies``."""
+        copies: dict[str, str] = {}
+        faction = self.factions.get_any(faction_id) if faction_id else None
+        parent = faction.raw.get("parent_faction_id") if faction is not None else None
+        if not faction_id or not parent:
+            return copies
+        suffix = f"-{faction_id}"
+        for ability in self.abilities.all:
+            if ability.raw.get("faction_id") != faction_id or not ability.id.endswith(suffix):
+                continue
+            parent_id = f"{ability.id[: -len(suffix)]}-{parent}"
+            original = self.abilities.get_in_faction(parent_id, parent)
+            if (
+                original is not None
+                and original.raw.get("faction_id") == parent
+                and original.name == ability.name
+            ):
+                copies[parent_id] = ability.id
+        return copies
+
+    def _with_rule_copies(
+        self, context: dict[str, Any], faction_id: str | None
+    ) -> dict[str, Any]:
+        """``context`` with each declared parent rule and its chapter copy standing for the
+        other in ``activeRules``. Mirrors TS ``withRuleCopies``."""
+        rules = context.get("activeRules")
+        if rules is None:
+            return context
+        copies = self._parent_rule_copies(faction_id)
+        if not copies:
+            return context
+        counterpart = {**copies, **{copy: parent for parent, copy in copies.items()}}
+        out = list(rules)
+        seen = [json.dumps(rule, sort_keys=True) for rule in out]
+        for rule in rules:
+            rule_id = rule if isinstance(rule, str) else rule.get("ability_id")
+            other = counterpart.get(rule_id) if isinstance(rule_id, str) else None
+            if other is None:
+                continue
+            mirrored = other if isinstance(rule, str) else {**rule, "ability_id": other}
+            key = json.dumps(mirrored, sort_keys=True)
+            if key not in seen:
+                seen.append(key)
+                out.append(mirrored)
+        return {**context, "activeRules": out}
 
     def _derived_context(self, input: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """Derive current attachment identity without inventing member roles."""
@@ -1102,6 +1182,7 @@ class Dataset:
         model_keywords = shared_keywords_lower(combined) if combined else None
         attached = bool(input.get("attachedUnitIds"))
         roles = input.get("attachmentRoles")
+        context = self._with_rule_copies(context, faction_id)
         if perspective == "attacker":
             ctx = {
                 **context,

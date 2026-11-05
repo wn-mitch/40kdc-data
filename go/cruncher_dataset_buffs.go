@@ -278,6 +278,7 @@ func (ds *Dataset) buffContext(input, context map[string]any, perspective string
 		return ds.targetBuffContext(input, context)
 	}
 	ctx := ds.derivedContext(input, context)
+	ds.withRuleCopies(ctx, ds.weaponFaction(input))
 	if ctx["attackerUnitId"] == nil {
 		ctx["attackerUnitId"] = getStr(input, "unitId")
 	}
@@ -311,6 +312,7 @@ func (ds *Dataset) targetBuffContext(input, context map[string]any) map[string]a
 	if factionID == "" && len(combined) > 0 && getStr(input, "unitId") != "" {
 		factionID = combined[0].FactionID()
 	}
+	ds.withRuleCopies(ctx, factionID)
 	roles, _ := getMap(input, "attachmentRoles")
 	setDefault := func(key string, value any) {
 		if ctx[key] == nil {
