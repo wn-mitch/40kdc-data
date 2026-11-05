@@ -2187,7 +2187,7 @@
           "type": "ability-activate",
           "target": "selected-unit",
           "modifier": {
-            "ability": "combat-doctrines-adeptus-astartes",
+            "ability": "combat-doctrines-dark-angels",
             "select": {
               "by": "player"
             },

@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import type { CompileLeaf } from "./compile-fragments.js";
 import type { UnitNameContext } from "./compile-unit-names.js";
 import { NAMED_RANGES } from "./named-ranges.js";
@@ -116,6 +116,42 @@ function definitionsOf(record: Record<string, unknown>): Array<[string, string |
   };
   visit(record.effect);
   return found;
+}
+
+let detachmentOwners: Map<string, Set<string>> | null = null;
+
+/** The factions whose detachments print each detachment-scoped record (rule, Stratagem, Enhancement). */
+function ownersOf(abilityId: string): Set<string> {
+  if (!detachmentOwners) {
+    detachmentOwners = new Map();
+    const core = new URL("core/", DATA);
+    for (const faction of existsSync(core) ? readdirSync(core) : []) {
+      for (const row of readJson(new URL(`core/${faction}/detachments.json`, DATA)) as Array<Record<string, unknown>>) {
+        if (typeof row.faction_id !== "string") continue;
+        for (const key of ["detachment_rule_ids", "stratagem_ids", "enhancement_ids"]) {
+          for (const id of Array.isArray(row[key]) ? row[key] as unknown[] : []) {
+            if (typeof id === "string") detachmentOwners.set(id, (detachmentOwners.get(id) ?? new Set()).add(row.faction_id));
+          }
+        }
+      }
+    }
+  }
+  return detachmentOwners.get(abilityId) ?? new Set();
+}
+
+/**
+ * The context a record's rule names resolve in. A detachment-scoped record filed under a faction
+ * whose own detachments never print it (Deathwatch Support's Mission Tactics, kept with Deathwatch
+ * but taken by Space Marine armies) resolves in the faction that does: the record's parent when
+ * that faction owns the detachment, else the single owning faction.
+ */
+export function ruleScopeContext(context: UnitNameContext | undefined, abilityId: string | undefined): UnitNameContext | undefined {
+  if (!context || !abilityId) return context;
+  const owners = ownersOf(abilityId);
+  if (owners.size === 0 || owners.has(context.faction_id)) return context;
+  const parent = parentFaction(context.faction_id);
+  const owner = parent && owners.has(parent) ? parent : owners.size === 1 ? [...owners][0]! : null;
+  return owner ? { ...context, faction_id: owner } : context;
 }
 
 /** Factions a reference resolves in, nearest first. */

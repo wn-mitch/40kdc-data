@@ -1517,7 +1517,7 @@
               "direction": "granted",
               "rule_kind": "faction-rule",
               "rule": {
-                "ability_id": "combat-doctrines-adeptus-astartes",
+                "ability_id": "combat-doctrines-deathwatch",
                 "option_id": "assault-doctrine"
               }
             }
@@ -1529,7 +1529,7 @@
               "direction": "granted",
               "rule_kind": "faction-rule",
               "rule": {
-                "ability_id": "combat-doctrines-adeptus-astartes",
+                "ability_id": "combat-doctrines-deathwatch",
                 "option_id": "devastator-doctrine"
               }
             }
@@ -1541,7 +1541,7 @@
               "direction": "granted",
               "rule_kind": "faction-rule",
               "rule": {
-                "ability_id": "combat-doctrines-adeptus-astartes",
+                "ability_id": "combat-doctrines-deathwatch",
                 "option_id": "tactical-doctrine"
               }
             }

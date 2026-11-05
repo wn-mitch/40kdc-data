@@ -1,7 +1,7 @@
 import { foldStepWindow } from "./compile-step-window.js";
 import { hasUnboundSelectedUnit, unscopedRecipientEffect } from "./compile-recipient-scope.js";
 import { resolveUnitNames, type UnitNameContext } from "./compile-unit-names.js";
-import { resolveRuleReferences } from "./compile-rule-refs.js";
+import { resolveRuleReferences, ruleScopeContext } from "./compile-rule-refs.js";
 import { foldAuraEmitter, lowerConditionalAuras } from "./compile-aura-emitter.js";
 import { foldNamedRanges, requireNamedRangeAuras } from "./compile-named-range.js";
 import { foldCostTables } from "./compile-cost-table.js";
@@ -268,7 +268,7 @@ function compileUnchecked(record: readonly CompileLeaf[], sourceText?: string, o
   let bound: CompileLeaf[];
   try {
     bound = foldCostTables(foldNamedRanges(foldAuraEmitter(bindIgnoreLists(
-      bindAdditiveOptions(bindCharacteristicFloors(bindCharacteristicAmounts(resolveRuleReferences(resolveUnitNames(leaves, options.units), options.units))), sourceText),
+      bindAdditiveOptions(bindCharacteristicFloors(bindCharacteristicAmounts(resolveRuleReferences(resolveUnitNames(leaves, options.units), ruleScopeContext(options.units, options.abilityId)))), sourceText),
       sourceText,
     )), options.abilityId));
   } catch (error) {

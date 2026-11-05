@@ -2528,7 +2528,7 @@
             "direction": "granted",
             "rule_kind": "faction-rule",
             "rule": {
-              "ability_id": "combat-doctrines-adeptus-astartes",
+              "ability_id": "combat-doctrines-blood-angels",
               "option_id": "assault-doctrine"
             }
           }
@@ -2540,7 +2540,7 @@
             "direction": "granted",
             "rule_kind": "faction-rule",
             "rule": {
-              "ability_id": "combat-doctrines-adeptus-astartes",
+              "ability_id": "combat-doctrines-blood-angels",
               "option_id": "tactical-doctrine"
             }
           }
@@ -2689,7 +2689,7 @@
         "type": "rule-active",
         "parameters": {
           "rule": {
-            "ability_id": "combat-doctrines-adeptus-astartes",
+            "ability_id": "combat-doctrines-blood-angels",
             "option_id": "tactical-doctrine"
           }
         }
@@ -2995,7 +2995,7 @@
                       "direction": "granted",
                       "rule_kind": "faction-rule",
                       "rule": {
-                        "ability_id": "combat-doctrines-adeptus-astartes",
+                        "ability_id": "combat-doctrines-blood-angels",
                         "option_id": "assault-doctrine"
                       }
                     }
@@ -3453,7 +3453,7 @@
                       "direction": "granted",
                       "rule_kind": "faction-rule",
                       "rule": {
-                        "ability_id": "combat-doctrines-adeptus-astartes",
+                        "ability_id": "combat-doctrines-blood-angels",
                         "option_id": "assault-doctrine"
                       }
                     }
@@ -3465,7 +3465,7 @@
                       "direction": "suppressed",
                       "rule_kind": "faction-rule",
                       "rule": {
-                        "ability_id": "combat-doctrines-adeptus-astartes",
+                        "ability_id": "combat-doctrines-blood-angels",
                         "option_id": "devastator-doctrine"
                       }
                     }
@@ -3477,7 +3477,7 @@
                       "direction": "suppressed",
                       "rule_kind": "faction-rule",
                       "rule": {
-                        "ability_id": "combat-doctrines-adeptus-astartes",
+                        "ability_id": "combat-doctrines-blood-angels",
                         "option_id": "tactical-doctrine"
                       }
                     }

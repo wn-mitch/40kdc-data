@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { parentFaction, resolveDefinitionName, resolveOptionName, resolveWeaponName, resolveRecordName, resolveRuleReferences } from "../src/semantic-authoring/compile-rule-refs.js";
+import { parentFaction, resolveDefinitionName, resolveOptionName, resolveWeaponName, resolveRecordName, resolveRuleReferences, ruleScopeContext } from "../src/semantic-authoring/compile-rule-refs.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 
 // Printed rule, ability, weapon and unit names resolve to stable ids.
@@ -43,11 +43,26 @@ describe("printed rule and ability names resolve to the records that print them"
     expect(resolveRecordName("chaos-daemons", "shadow-of-chaos")).toBe("the-shadow-of-chaos-chaos-daemons");
   });
 
-  it("resolves a doctrine in a chapter to its parent's stance option", () => {
+  it("resolves a doctrine to the chapter's own Combat Doctrines, else to its parent's", () => {
+    // Blood Angels print their own Combat Doctrines, the faction rule their army carries.
     expect(parentFaction("blood-angels")).toBe("adeptus-astartes");
-    expect(resolveOptionName("blood-angels", "tactical-doctrine")).toEqual({ ability_id: "combat-doctrines-adeptus-astartes", option_id: "tactical-doctrine" });
+    expect(resolveOptionName("blood-angels", "tactical-doctrine")).toEqual({ ability_id: "combat-doctrines-blood-angels", option_id: "tactical-doctrine" });
     const [active] = resolveRuleReferences([refLeaf("rule-active", { rule: "tactical-doctrine" }, "CONDITION")], { faction_id: "blood-angels" });
+    expect(active!.parameters.rule).toEqual({ ability_id: "combat-doctrines-blood-angels", option_id: "tactical-doctrine" });
+    // Ultramarines carry the parent's Combat Doctrines.
+    expect(parentFaction("ultramarines")).toBe("adeptus-astartes");
+    expect(resolveOptionName("ultramarines", "tactical-doctrine")).toEqual({ ability_id: "combat-doctrines-adeptus-astartes", option_id: "tactical-doctrine" });
+  });
+
+  it("resolves a detachment rule in the faction whose detachment prints it, not where it is filed", () => {
+    // Mission Tactics is filed with Deathwatch, but Deathwatch Support is a Space Marine detachment.
+    const filed = { faction_id: "deathwatch" };
+    expect(ruleScopeContext(filed, "mission-tactics-deathwatch-support-deathwatch")).toEqual({ faction_id: "adeptus-astartes" });
+    const [active] = resolveRuleReferences([refLeaf("rule-active", { rule: "tactical-doctrine" }, "CONDITION")], ruleScopeContext(filed, "mission-tactics-deathwatch-support-deathwatch"));
     expect(active!.parameters.rule).toEqual({ ability_id: "combat-doctrines-adeptus-astartes", option_id: "tactical-doctrine" });
+    // Black Spear Task Force is Deathwatch's own detachment, so its rules keep the Deathwatch copy.
+    expect(ruleScopeContext(filed, "adaptive-tactics-black-spear-task-force-deathwatch")).toBe(filed);
+    expect(ruleScopeContext(filed, "deep-strike")).toBe(filed);
   });
 
   it("leaves a name nothing prints, or one several records print, as written", () => {
@@ -64,12 +79,12 @@ describe("printed rule and ability names resolve to the records that print them"
       refLeaf("rule-active", { rule: "devastator-doctrine" }, "CONDITION"),
       { ...refLeaf("roll-modifier", { roll: "hit", operation: "add", value: 1 }), start_byte: 10 },
     ], undefined, { units: { faction_id: "dark-angels" } });
-    expect(JSON.stringify(compiled.ok ? compiled.mechanics : compiled.errors)).toContain('"rule":{"ability_id":"combat-doctrines-adeptus-astartes","option_id":"devastator-doctrine"}');
+    expect(JSON.stringify(compiled.ok ? compiled.mechanics : compiled.errors)).toContain('"rule":{"ability_id":"combat-doctrines-dark-angels","option_id":"devastator-doctrine"}');
   });
 
   it("resolves a doctrine a unit gains to the stance option, keeping its rule kind", () => {
     const [granted] = resolveRuleReferences([refLeaf("rule-state", { subject: "this-unit", direction: "granted", rule_kind: "faction-rule", rule: "assault-doctrine" })], { faction_id: "blood-angels" });
-    expect(granted!.parameters).toMatchObject({ rule_kind: "faction-rule", rule: { ability_id: "combat-doctrines-adeptus-astartes", option_id: "assault-doctrine" } });
+    expect(granted!.parameters).toMatchObject({ rule_kind: "faction-rule", rule: { ability_id: "combat-doctrines-blood-angels", option_id: "assault-doctrine" } });
   });
 
   it("resolves an ability a record defines inside itself to a named-ability reference", () => {
