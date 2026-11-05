@@ -4568,9 +4568,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "azrael"
     ],
@@ -4578,11 +4577,31 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 4,
+        "against": "mortal"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "damage-allocated",
+      "object": "this-unit",
+      "filter": {
+        "attack_type": "mortal"
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    },
+    "source_digest": "d947f9e4216b3b7856dda5f24470e9d543975745017b315c2290a3a1de48a420"
   },
   {
     "ability_id": "in-sacrifice-victory-wrath-of-the-rock-dark-angels",

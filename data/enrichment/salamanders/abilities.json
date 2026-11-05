@@ -300,19 +300,176 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "salamanders",
     "detachment_id": "forgefathers-seekers",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "ability-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "ability": {
+                  "ability_id": "combat-doctrines-adeptus-astartes",
+                  "option_id": "devastator-doctrine"
+                },
+                "aspect": "uses",
+                "operation": "add",
+                "value": 1
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "within": {
+                      "of": "this-unit",
+                      "range": {
+                        "inches": 12
+                      }
+                    }
+                  }
+                }
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTUS ASTARTES"
+                  ]
+                },
+                "modifier": {
+                  "stat": "S",
+                  "operation": "improve",
+                  "value": 1,
+                  "weapons": {
+                    "type": "ranged"
+                  }
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "army-includes",
+                "parameters": {
+                  "filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "VULKAN HE'STAN"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "ability-grant",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "INFERNUS SQUAD"
+                  ]
+                },
+                "modifier": {
+                  "definition": {
+                    "type": "ability-part",
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "ability-part",
+                          "trigger": {
+                            "event": "selected",
+                            "filter": {
+                              "move_types": [
+                                "advance",
+                                "fall-back"
+                              ],
+                              "to": "move"
+                            }
+                          },
+                          "effect": {
+                            "type": "permission",
+                            "target": "this-unit",
+                            "modifier": {
+                              "activity": "start-action",
+                              "allow": true,
+                              "despite": [
+                                "advanced",
+                                "fell-back"
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "type": "ability-part",
+                          "trigger": {
+                            "event": "used",
+                            "filter": {
+                              "kind": "action"
+                            }
+                          },
+                          "effect": {
+                            "type": "permission",
+                            "target": "this-unit",
+                            "modifier": {
+                              "activity": "shoot",
+                              "allow": true,
+                              "despite": [
+                                "performing-action"
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "composition",
+                "with": {
+                  "all_of": [
+                    "SALAMANDERS"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "single-chapter"
+              }
+            }
+          ]
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "1b473f5ec7cefeeb0961c0d5aa768016f204dbb832299d492f20c01bc58473dc"
   },
   {
     "ability_id": "war-tempered-artifice-forgefathers-seekers-salamanders",

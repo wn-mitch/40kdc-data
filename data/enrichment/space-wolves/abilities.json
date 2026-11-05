@@ -911,7 +911,7 @@
             "direction": "granted",
             "rule_kind": "faction-rule",
             "rule": {
-              "ability_id": "combat-doctrines-adeptus-astartes",
+              "ability_id": "combat-doctrines-space-wolves",
               "option_id": "assault-doctrine"
             }
           }
@@ -923,7 +923,7 @@
             "direction": "granted",
             "rule_kind": "faction-rule",
             "rule": {
-              "ability_id": "combat-doctrines-adeptus-astartes",
+              "ability_id": "combat-doctrines-space-wolves",
               "option_id": "devastator-doctrine"
             }
           }
@@ -935,7 +935,7 @@
             "direction": "granted",
             "rule_kind": "faction-rule",
             "rule": {
-              "ability_id": "combat-doctrines-adeptus-astartes",
+              "ability_id": "combat-doctrines-space-wolves",
               "option_id": "tactical-doctrine"
             }
           }
@@ -3398,7 +3398,7 @@
       "type": "ability-activate",
       "target": "this-unit",
       "modifier": {
-        "ability": "combat-doctrines-adeptus-astartes",
+        "ability": "combat-doctrines-space-wolves",
         "select": {
           "by": "player"
         },
@@ -4467,9 +4467,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "arjac-rockfist",
       "bjorn-the-fell-handed",
@@ -4497,11 +4496,127 @@
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "stance-select",
+      "mode": "consumable",
+      "options": [
+        {
+          "id": "assault-doctrine",
+          "name": "Assault Doctrine",
+          "effect": {
+            "type": "ability-part",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": true,
+                "despite": [
+                  "advanced"
+                ]
+              }
+            },
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "move_types": [
+                  "advance"
+                ],
+                "to": "move"
+              }
+            }
+          }
+        },
+        {
+          "id": "devastator-doctrine",
+          "name": "Devastator Doctrine",
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "assault"
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        },
+        {
+          "id": "tactical-doctrine",
+          "name": "Tactical Doctrine",
+          "effect": {
+            "type": "ability-part",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "shoot",
+                    "allow": true,
+                    "despite": [
+                      "fell-back"
+                    ]
+                  }
+                },
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": true,
+                    "despite": [
+                      "fell-back"
+                    ]
+                  }
+                }
+              ]
+            },
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "move_types": [
+                  "fall-back"
+                ],
+                "to": "move"
+              }
+            }
+          }
+        }
+      ],
+      "min_choices": 1,
+      "max_choices": 1
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "27784b8df061d7215e01f5d5c005c1448d89a0dbbf908d61565fff6785359e81"
   },
   {
     "ability_id": "curse-of-the-wulfen-askars-wolfpack-space-wolves",
@@ -4641,9 +4756,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "njal-stormcaller"
     ],
@@ -4651,11 +4765,406 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "psyker-level",
+            "operation": "set",
+            "value": 3
+          }
+        },
+        {
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "ability-part",
+            "duration": "phase",
+            "cost": {
+              "type": "resource-spend",
+              "target": "this-unit",
+              "modifier": {
+                "pool": "psychic-level",
+                "amount": 1,
+                "label": "Psychic Level"
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "movement"
+                        }
+                      },
+                      {
+                        "type": "player-turn-is",
+                        "parameters": {
+                          "turn": "your-turn"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "filter": {
+                            "state": "battle-shocked"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "roll",
+                    "dice": "D6",
+                    "roll_var": "psychic",
+                    "effect": {
+                      "type": "dice-table",
+                      "dice": "D6",
+                      "outcomes": [
+                        {
+                          "results": [
+                            1
+                          ],
+                          "effect": {
+                            "type": "state-change",
+                            "target": "this-unit",
+                            "modifier": {
+                              "state": "battle-shocked",
+                              "set": true
+                            }
+                          }
+                        },
+                        {
+                          "results": [
+                            2,
+                            3,
+                            4,
+                            5,
+                            6
+                          ],
+                          "effect": {
+                            "type": "no-effect"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "select-units",
+                    "selector": {
+                      "filter": {
+                        "owner": "enemy",
+                        "visible": {
+                          "to": "this-model"
+                        }
+                      },
+                      "count": {
+                        "min": 1,
+                        "max": 1
+                      },
+                      "eligibility": {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "within": {
+                              "of": "this-unit",
+                              "range": {
+                                "inches": 12
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "permission",
+                      "target": "selected-unit",
+                      "modifier": {
+                        "activity": "shoot",
+                        "allow": false,
+                        "as_if": "snap-shooting"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "filter": {
+              "kind": "attack"
+            },
+            "subject": {
+              "owner": "enemy"
+            },
+            "object": "this-unit",
+            "optional": true
+          },
+          "duration": "phase",
+          "cost": {
+            "type": "resource-spend",
+            "target": "this-unit",
+            "modifier": {
+              "pool": "psychic-level",
+              "amount": 1,
+              "label": "Psychic Level"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "battle-shocked"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "roll",
+                  "dice": "D6",
+                  "roll_var": "psychic",
+                  "effect": {
+                    "type": "dice-table",
+                    "dice": "D6",
+                    "outcomes": [
+                      {
+                        "results": [
+                          1
+                        ],
+                        "effect": {
+                          "type": "state-change",
+                          "target": "this-unit",
+                          "modifier": {
+                            "state": "battle-shocked",
+                            "set": true
+                          }
+                        }
+                      },
+                      {
+                        "results": [
+                          2,
+                          3,
+                          4,
+                          5,
+                          6
+                        ],
+                        "effect": {
+                          "type": "no-effect"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "stat-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "stat": "detection-range",
+                    "operation": "subtract",
+                    "value": 3
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "ability-part",
+            "duration": "until-start-next-turn",
+            "cost": {
+              "type": "resource-spend",
+              "target": "this-unit",
+              "modifier": {
+                "pool": "psychic-level",
+                "amount": 1,
+                "label": "Psychic Level"
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "shooting"
+                        }
+                      },
+                      {
+                        "type": "player-turn-is",
+                        "parameters": {
+                          "turn": "your-turn"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "filter": {
+                            "state": "battle-shocked"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "roll",
+                    "dice": "D6",
+                    "roll_var": "psychic",
+                    "effect": {
+                      "type": "dice-table",
+                      "dice": "D6",
+                      "outcomes": [
+                        {
+                          "results": [
+                            1
+                          ],
+                          "effect": {
+                            "type": "state-change",
+                            "target": "this-unit",
+                            "modifier": {
+                              "state": "battle-shocked",
+                              "set": true
+                            }
+                          }
+                        },
+                        {
+                          "results": [
+                            2,
+                            3,
+                            4,
+                            5,
+                            6
+                          ],
+                          "effect": {
+                            "type": "no-effect"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "select-units",
+                    "selector": {
+                      "filter": {
+                        "owner": "enemy",
+                        "visible": {
+                          "to": "this-model"
+                        }
+                      },
+                      "count": {
+                        "min": 1,
+                        "max": 1
+                      },
+                      "eligibility": {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "within": {
+                              "of": "this-unit",
+                              "range": {
+                                "inches": 18
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "designate",
+                          "target": "selected-unit",
+                          "modifier": {
+                            "tag": "suppressed"
+                          }
+                        },
+                        {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "selected-unit",
+                              "filter": {
+                                "designated": "suppressed"
+                              }
+                            }
+                          },
+                          "effect": {
+                            "type": "roll-modifier",
+                            "target": "selected-unit",
+                            "modifier": {
+                              "roll": "hit",
+                              "operation": "subtract",
+                              "value": 1
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "329464c4dbbabff55473645a89ab99e2cadc6b23c84bfa351051cc6ef02fa33e"
   },
   {
     "ability_id": "hunting-hounds-fenrisian-wolves-space-wolves",
