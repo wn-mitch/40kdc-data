@@ -532,19 +532,81 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "salamanders",
     "detachment_id": "forgefathers-seekers",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "removes": [
+              {
+                "keyword_id": "blast"
+              }
+            ],
+            "weapons": {
+              "keyword": {
+                "keyword_id": "torrent"
+              }
+            }
+          }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "close-quarters"
+              }
+            ],
+            "weapons": {
+              "keyword": {
+                "keyword_id": "torrent"
+              }
+            }
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "A",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "keyword": {
+                "keyword_id": "torrent"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ],
+        "state": "engaged"
+      }
+    },
+    "source_digest": "00aa12e109824a6d51bb18b028525817dc1813820ca1c1a6efa2f7ed26e38a7e"
   },
   {
     "ability_id": "wrath-and-ruin-forgefathers-seekers-salamanders",

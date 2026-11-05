@@ -3324,9 +3324,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "death-company-captain",
       "death-company-captain-with-jump-pack"
@@ -3335,11 +3334,185 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "model-destroyed",
+              "object": {
+                "level": "model",
+                "member_of": "this-model"
+              },
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-model",
+                "filter": {
+                  "engaged_with": {
+                    "owner": "enemy",
+                    "designated": "warlord"
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "dice-table",
+              "dice": "D6",
+              "outcomes": [
+                {
+                  "results": [
+                    1
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "event-subject",
+                    "modifier": {
+                      "count": "D3"
+                    }
+                  }
+                },
+                {
+                  "results": [
+                    2,
+                    3
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "event-subject",
+                    "modifier": {
+                      "count": 3
+                    }
+                  }
+                },
+                {
+                  "results": [
+                    4,
+                    5,
+                    6
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "event-subject",
+                    "modifier": {
+                      "count": "D3+3"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "this-model",
+                    "filter": {
+                      "engaged_with": {
+                        "owner": "enemy",
+                        "designated": "warlord"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "dice-table",
+              "dice": "D6",
+              "outcomes": [
+                {
+                  "results": [
+                    1
+                  ],
+                  "effect": {
+                    "type": "no-effect"
+                  }
+                },
+                {
+                  "results": [
+                    2,
+                    3
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "event-subject",
+                    "modifier": {
+                      "count": "D3"
+                    }
+                  }
+                },
+                {
+                  "results": [
+                    4,
+                    5
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "event-subject",
+                    "modifier": {
+                      "count": 3
+                    }
+                  }
+                },
+                {
+                  "results": [
+                    6
+                  ],
+                  "effect": {
+                    "type": "mortal-wounds",
+                    "target": "event-subject",
+                    "modifier": {
+                      "count": "D3+3"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "fight"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "optional": true
+    },
+    "source_digest": "61f89e57374bf97615a79d1fc99d327e7e1f297f7c3e86ca8f76d8414dc63d6a"
   },
   {
     "ability_id": "narthecium-blood-angels",

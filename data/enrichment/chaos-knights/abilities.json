@@ -2510,90 +2510,93 @@
     "ability_type": "detachment",
     "behavior": "activated",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "usage": {
+            "frequency": "once-per-battle-round",
+            "per": "army"
           },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "enemy",
-            "visible": {
-              "to": "this-model"
-            }
-          },
-          "count": {
-            "min": 1,
-            "max": 1
-          },
-          "eligibility": {
-            "type": "matches",
-            "parameters": {
-              "subject": "selected-unit",
-              "filter": {
-                "within": {
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "WAR DOG"
-                    ]
-                  },
-                  "range": {
-                    "inches": 12
+          "duration": "phase",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "shooting"
                   }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "enemy",
+                  "visible": {
+                    "to": "this-model"
+                  }
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "owner": "friendly",
+                          "all_of": [
+                            "WAR DOG"
+                          ]
+                        },
+                        "range": {
+                          "inches": 12
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "stat": "detection-range",
+                  "operation": "add",
+                  "value": 6
                 }
               }
             }
           }
         },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "stat-modifier",
-              "target": "selected-unit",
-              "modifier": {
-                "stat": "detection-range",
-                "operation": "add",
-                "value": 6
-              }
-            },
-            {
-              "type": "army-rule",
-              "target": "this-unit",
-              "modifier": {
-                "rule": "detachment-tag-exclusive",
-                "tag": "WAR DOGS"
-              }
-            }
-          ]
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "detachment-tag-exclusive",
+            "tag": "WAR DOGS"
+          }
         }
-      }
+      ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "Once per battle round, per army. In your Shooting phase, one visible enemy unit within 12\" of a friendly WAR DOG gains +6\" detection range. WAR DOGS detachment.",
-    "usage": {
-      "frequency": "once-per-battle-round",
-      "per": "army"
-    },
-    "optional": true
+    "community_notes": "Once per battle round, per army. In your Shooting phase, one visible enemy unit within 12\" of a friendly WAR DOG gains +6\" detection range. WAR DOGS detachment."
   },
   {
     "ability_id": "soul-spoor-auspicator-upgrade-hunting-warpack-chaos-knights",
