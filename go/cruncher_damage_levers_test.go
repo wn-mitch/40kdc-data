@@ -166,3 +166,66 @@ func TestLeversPrintedGrantToFriendlyUnitsTranslatesItsBodyForTheHolders(t *test
 		t.Fatalf("enemy = %#v / %#v", enemy.applied, enemy.unsupported)
 	}
 }
+
+// lobbaAttacks crunches lobbas against ten cultists in the shooting phase: the attacks expected
+// value and whether the resolved keywords still carry Blast.
+func lobbaAttacks(t *testing.T, buffs []any) (float64, bool) {
+	t.Helper()
+	ds := EmbeddedDataset()
+	weapon, ok := ds.Weapons.GetAny("lobba")
+	if !ok {
+		t.Fatal("lobba missing")
+	}
+	unit, ok := ds.Units.GetAny("cultist-mob")
+	if !ok {
+		t.Fatal("cultist-mob missing")
+	}
+	stages, res, err := crunch(map[string]any{
+		"attacker":     map[string]any{"weapon": weapon.Raw, "profileIndex": 0.0},
+		"target":       map[string]any{"unit": unit.Raw, "profileIndex": 0.0, "modelCount": 10.0},
+		"modelsFiring": 1.0,
+		"buffs":        buffs,
+		"context":      shootingCtx(),
+	}, ds)
+	if err != nil {
+		t.Fatal(err)
+	}
+	attacks := math.NaN()
+	for _, s := range stages {
+		if s["name"] == "attacks" {
+			attacks = s["expected"].(float64)
+		}
+	}
+	blast := false
+	for _, e := range res.extraKeywords {
+		if getStr(e.keywordRef, "keyword_id") == "blast" {
+			blast = true
+		}
+	}
+	return attacks, blast
+}
+
+// Hunts: a removal was refused as unmodelled, and one scoped to Torrent weapons must not reach a
+// weapon without it. Mirrors the TS cruncher test of the same name.
+func TestLeversDropARemovedBlastOnlyFromTheScopedWeapons(t *testing.T) {
+	removal := func(weapons map[string]any) *effectTranslation {
+		return effectToBuffs(map[string]any{"type": "weapon-ability-grant", "target": "this-unit", "modifier": map[string]any{
+			"keywords": []any{}, "removes": []any{map[string]any{"keyword_id": "blast"}}, "weapons": weapons,
+		}}, leverSource(), shootingCtx(), "attacker")
+	}
+	all := removal(map[string]any{"type": "ranged"})
+	if len(all.unsupported) != 0 {
+		t.Fatalf("unsupported = %v", all.unsupported)
+	}
+	// A3, plus Blast 3 for each five models in the ten-model target.
+	if attacks, blast := lobbaAttacks(t, nil); attacks != 9 || !blast {
+		t.Fatalf("baseline = %v, blast %v; want 9, true", attacks, blast)
+	}
+	if attacks, blast := lobbaAttacks(t, all.applied); attacks != 3 || blast {
+		t.Fatalf("removed = %v, blast %v; want 3, false", attacks, blast)
+	}
+	torrentOnly := removal(map[string]any{"type": "ranged", "keyword": map[string]any{"keyword_id": "torrent"}})
+	if attacks, _ := lobbaAttacks(t, torrentOnly.applied); attacks != 9 {
+		t.Fatalf("torrent-scoped removal = %v; want 9", attacks)
+	}
+}

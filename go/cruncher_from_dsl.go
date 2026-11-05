@@ -1974,15 +1974,24 @@ func translateKeywordGrant(node, source map[string]any, opts dslOpts, out *effec
 	if !ok {
 		return
 	}
+	// The weapons the scope names lose the keyword, whatever its rating.
+	narrowedRemoval := unhonorableNarrowing(modifier)
+	removalApplicability := combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))
 	for _, raw := range getList(modifier, "removes") {
-		label := "unresolved keyword"
-		if ref, ok := asMap(raw); ok && getStr(ref, "keyword_id") != "" {
-			label = keywordLabel(ref)
+		ref, ok := asMap(raw)
+		keywordID := ""
+		if ok && ref != nil {
+			keywordID = getStr(ref, "keyword_id")
 		}
-		out.unsupported = append(out.unsupported, unsup(
-			"weapon-ability-removal: the cruncher does not model removing a weapon ability (\""+label+"\")",
-			map[string]any{"removes": []any{raw}},
-		))
+		switch {
+		case keywordID == "":
+			out.unsupported = append(out.unsupported, unsup("weapon-ability-removal: invalid structured keyword reference", map[string]any{"removes": []any{raw}}))
+		case narrowedRemoval != "":
+			out.unsupported = append(out.unsupported, unsup("weapon-ability-removal: unresolved "+narrowedRemoval, map[string]any{"removes": []any{raw}}))
+		default:
+			buff := map[string]any{"source": source, "contribution": map[string]any{"type": "removed-keyword", "keyword_id": keywordID}}
+			out.applied = append(out.applied, withApplicability(buff, removalApplicability))
+		}
 	}
 	if modifier["if_present"] != nil {
 		out.unsupported = append(out.unsupported, unsup("weapon-ability-grant: incrementing an existing keyword rating is not modelled", node))
@@ -2587,6 +2596,8 @@ func describeContribution(c map[string]any) string {
 	case "extra-keyword":
 		ref, _ := getMap(c, "keywordRef")
 		return keywordLabel(ref)
+	case "removed-keyword":
+		return "loses " + keywordLabel(map[string]any{"keyword_id": getStr(c, "keyword_id")})
 	case "hit-mod":
 		return signedStr(c["value"]) + " to hit"
 	case "wound-mod":

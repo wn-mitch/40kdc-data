@@ -18,6 +18,7 @@ export const STRATAGEM_TARGET_CASE_PREFIX = "canonical/stratagem-target/";
 export const NAMED_REGION_BENEFICIARY_CASE_PREFIX = "canonical/named-region-beneficiary/";
 export const DESIGNATION_CASE_PREFIX = "canonical/designation/";
 export const MOVE_TYPE_CASE_PREFIX = "canonical/move-type/";
+export const REMOVED_KEYWORD_CASE_PREFIX = "canonical/removed-keyword/";
 
 export interface DslInput {
   caseId: string;
@@ -222,6 +223,36 @@ export function canonicalMoveTypeCases() {
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
     return { caseId: `${MOVE_TYPE_CASE_PREFIX}${id}`, abilityId: row.source.abilityId, ...row, expected: dslProjection(result) };
   });
+}
+
+/** A fabricated weapon-ability removal: "this unit's ranged weapons do not have [Blast]". */
+function removal(weapons: unknown, removes: unknown[] = [{ keyword_id: "blast" }]) {
+  return { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [], removes, weapons } };
+}
+
+/**
+ * Fabricated weapon-ability removals: each valid reference is a `removed-keyword` buff gated like a
+ * grant, an invalid reference or a weapon ref the cruncher cannot resolve is reported, and a lever
+ * that removes a keyword is labelled "loses <keyword>".
+ */
+export function canonicalRemovedKeywordCases() {
+  const source = { kind: "ability", abilityId: "removed-keyword-example", abilityKind: "unit" } as const;
+  const lethal = { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }] } };
+  const rows: Array<{ id: string; effect: unknown }> = [
+    { id: "ranged", effect: removal({ type: "ranged" }) },
+    { id: "torrent-scoped", effect: removal({ type: "ranged", keyword: { keyword_id: "torrent" } }) },
+    { id: "invalid-reference", effect: removal({ type: "ranged" }, [{ keyword_id: "" }, "blast"]) },
+    { id: "unresolved-weapon-ref", effect: removal({ ref: "example-weapon" }) },
+    { id: "choice-label", effect: { type: "choice", options: [removal({ type: "ranged" }), lethal] } },
+  ];
+  return rows.map((row) => withGates(dslExpectation({
+    caseId: `${REMOVED_KEYWORD_CASE_PREFIX}${row.id}`,
+    abilityId: source.abilityId,
+    source,
+    effect: row.effect,
+    context: { phase: "shooting" },
+    perspective: "attacker",
+  })));
 }
 
 /** A lever's stance-option gate, projected only when it has one so ungated goldens keep their shape. */
@@ -664,6 +695,34 @@ export function canonicalRerollSubsetCases(ds: Dataset) {
       name: `Canonical reroll subset: ${row.id}`,
       attacker: { weaponId: weapon.id, profileIndex: 0 }, target: { unitId: unit.id, profileIndex: 0 },
       modelsFiring: 5, context, buffs,
+      expected: { stages: Object.fromEntries(result.stages.map((stage) => [stage.name, Math.round(stage.expected * 1e4) / 1e4])) },
+    } };
+  });
+}
+
+/**
+ * Pin a removed keyword in the damage path: a lobba's Blast 3 against ten cultists adds 6 attacks,
+ * which a removal over ranged weapons takes away and one scoped to Torrent weapons leaves in place.
+ */
+export function canonicalRemovedKeywordCruncherCases(ds: Dataset) {
+  const source = { kind: "ability", abilityId: "fabricated-removed-keyword", abilityKind: "unit" } as const;
+  const inputs: { id: string; effect: unknown }[] = [
+    { id: "blast-ranged", effect: removal({ type: "ranged" }) },
+    { id: "blast-torrent-scoped", effect: removal({ type: "ranged", keyword: { keyword_id: "torrent" } }) },
+  ];
+  const weapon = ds.weapons.getAny("lobba");
+  const unit = ds.units.getAny("cultist-mob");
+  if (!weapon || !unit) throw new Error("canonical removed-keyword corpus requires lobba and cultist-mob");
+  return inputs.map((row) => {
+    const context: EngineContext = { phase: "shooting" };
+    const translated = effectToBuffs(row.effect, source, context);
+    if (translated.unsupported.length || translated.activatable.length) throw new Error(`canonical removed-keyword ${row.id}: expected unconditional extracted buffs`);
+    const target = { unit: unit.raw, profileIndex: 0, modelCount: 10 };
+    const result = crunch({ attacker: { weapon: weapon.raw, profileIndex: 0 }, target, modelsFiring: 1, context, buffs: translated.applied }, ds);
+    return { filename: `canonical-removed-keyword-${row.id}.json`, value: {
+      name: `Canonical removed keyword: ${row.id}`,
+      attacker: { weaponId: weapon.id, profileIndex: 0 }, target: { unitId: unit.id, profileIndex: 0, modelCount: 10 },
+      modelsFiring: 1, context, buffs: translated.applied,
       expected: { stages: Object.fromEntries(result.stages.map((stage) => [stage.name, Math.round(stage.expected * 1e4) / 1e4])) },
     } };
   });

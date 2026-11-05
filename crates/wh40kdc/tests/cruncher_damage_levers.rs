@@ -419,3 +419,56 @@ fn anti_uses_structural_target_predicates_not_printed_keyword_syntax() {
         baseline
     );
 }
+
+/// Lobbas against ten cultists in the shooting phase, under `buffs`: the attacks expected value
+/// and whether the resolved keywords still carry Blast.
+fn lobba_attacks(buffs: Vec<Buff>) -> (f64, bool) {
+    let ds = Dataset::embedded();
+    let input = EngineInput {
+        attacker: AttackProfileRef {
+            weapon: ds.find_weapon("lobba").expect("lobba is bundled"),
+            profile_index: 0,
+        },
+        target: TargetProfileRef {
+            unit: ds.find_unit("cultist-mob").expect("cultist-mob is bundled"),
+            profile_index: 0,
+            model_count: Some(10),
+        },
+        models_firing: 1,
+        buffs,
+        context: EngineContext::new(Phase::Shooting),
+    };
+    let out = crunch(&input, None).expect("crunch succeeds");
+    let attacks = out
+        .stages
+        .iter()
+        .find(|s| s.name == StageName::Attacks)
+        .expect("stage present")
+        .expected;
+    let blast = out
+        .resolved
+        .extra_keywords
+        .iter()
+        .any(|e| e.keyword_ref.keyword_id == "blast");
+    (attacks, blast)
+}
+
+// Hunts: a removal was refused as unmodelled, and one scoped to Torrent weapons must not reach a
+// weapon without it. Mirrors the TS cruncher test of the same name.
+#[test]
+fn drops_a_removed_blast_only_from_the_weapons_the_removals_scope_names() {
+    let removal = |weapons: Value| {
+        translate(
+            json!({ "type": "weapon-ability-grant", "target": "this-unit", "modifier": {
+                "keywords": [], "removes": [{ "keyword_id": "blast" }], "weapons": weapons } }),
+            TranslationPerspective::Attacker,
+        )
+    };
+    let all = removal(json!({ "type": "ranged" }));
+    assert!(all.unsupported.is_empty(), "{:?}", all.unsupported);
+    // A3, plus Blast 3 for each five models in the ten-model target.
+    assert_eq!(lobba_attacks(Vec::new()), (9.0, true));
+    assert_eq!(lobba_attacks(all.applied), (3.0, false));
+    let torrent_only = removal(json!({ "type": "ranged", "keyword": { "keyword_id": "torrent" } }));
+    assert_eq!(lobba_attacks(torrent_only.applied).0, 9.0);
+}

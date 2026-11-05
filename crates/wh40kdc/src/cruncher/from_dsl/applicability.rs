@@ -245,6 +245,10 @@ fn describe_contribution(c: &Value) -> String {
     let v = &c["value"];
     match c["type"].as_str().unwrap_or("") {
         "extra-keyword" => keyword_label(&c["keywordRef"]),
+        "removed-keyword" => format!(
+            "loses {}",
+            keyword_label(&json!({ "keyword_id": c["keyword_id"] }))
+        ),
         "hit-mod" => format!("{} to hit", signed(v)),
         "wound-mod" => format!("{} to wound", signed(v)),
         "save-mod" => format!("{} to save", signed(v)),

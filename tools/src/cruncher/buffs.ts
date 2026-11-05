@@ -65,6 +65,8 @@ export type BuffContribution =
    */
   | { type: "reroll-one"; roll: "hit" | "wound" | "save" | "damage" }
   | { type: "extra-keyword"; keywordRef: WeaponKeywordRef }
+  /** "Your unit's Torrent weapons do not have [Blast]": the weapon loses that keyword, printed or granted. */
+  | { type: "removed-keyword"; keyword_id: string }
   /**
    * Feel-no-pain: roll one D6 per unsaved wound at `threshold`+, ignoring the
    * wound on a pass. `scope` controls which wound stream it applies to:
@@ -650,6 +652,18 @@ export function attackComparisonHolds(comparison: AttackComparison, ctx: Resolve
   }
 }
 
+/** The weapon's keywords: printed, plus those the buffs grant, less those they remove. */
+function keywordRefs(printed: readonly WeaponKeywordRef[] | undefined, buffs: Iterable<Buff>): WeaponKeywordRef[] | undefined {
+  if (printed === undefined) return undefined;
+  const refs = [...printed];
+  const removed = new Set<string>();
+  for (const buff of buffs) {
+    if (buff.contribution.type === "extra-keyword") refs.push(buff.contribution.keywordRef);
+    if (buff.contribution.type === "removed-keyword") removed.add(buff.contribution.keyword_id);
+  }
+  return refs.filter((ref) => !removed.has(ref.keyword_id));
+}
+
 /**
  * The buffs whose gates hold. A weapon-keyword gate reads the weapon's printed keywords plus the
  * keywords other live buffs grant, so one pass is repeated until no further gated buff joins
@@ -684,24 +698,15 @@ function liveBuffs(buffs: Buff[], ctx: ResolveContext): Buff[] {
   // Positive dependencies are monotone. Resolve them first, then apply exclusions against the
   // complete candidate keyword set so a granted keyword cannot bypass an exclusion.
   for (;;) {
-    const refs = printed === undefined ? undefined : [...printed];
-    if (refs) for (const buff of selected) {
-      if (buff.contribution.type === "extra-keyword") refs.push(buff.contribution.keywordRef);
-    }
+    const refs = keywordRefs(printed, selected);
     const next = base.filter((buff) => !selected.has(buff) && gatesHold(buff.applicableWhen, refs, false));
     if (next.length === 0) break;
     for (const buff of next) selected.add(buff);
   }
-  const refs = printed === undefined ? undefined : [...printed];
-  if (refs) for (const buff of selected) {
-    if (buff.contribution.type === "extra-keyword") refs.push(buff.contribution.keywordRef);
-  }
+  const refs = keywordRefs(printed, selected);
   let live = base.filter((buff) => selected.has(buff) && gatesHold(buff.applicableWhen, refs, true));
   for (;;) {
-    const remaining = printed === undefined ? undefined : [...printed];
-    if (remaining) for (const buff of live) {
-      if (buff.contribution.type === "extra-keyword") remaining.push(buff.contribution.keywordRef);
-    }
+    const remaining = keywordRefs(printed, live);
     const next = live.filter((buff) => gatesHold(buff.applicableWhen, remaining, false));
     if (next.length === live.length) return live;
     live = next;
@@ -897,8 +902,13 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
       case "mortal-wounds-on-roll":
         out.rollMortals.push({ roll: c.roll, outcome: c.outcome, count: c.count, source: b.source });
         break;
+      case "removed-keyword":
+        break;
     }
   }
+  // A removed keyword is gone whoever printed or granted it.
+  const removed = new Set(live.flatMap((b) => b.contribution.type === "removed-keyword" ? [b.contribution.keyword_id] : []));
+  if (removed.size > 0) out.extraKeywords = out.extraKeywords.filter((e) => !removed.has(e.keywordRef.keyword_id));
 
   // An ignored roll keeps only its positive modifiers.
   const kept = (contribs: { value: number; source: BuffSource }[], ignored: boolean) => (ignored ? contribs.filter((c) => c.value > 0) : contribs);

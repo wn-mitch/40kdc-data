@@ -13,6 +13,7 @@ import type { GrantedRecord } from "./cruncher/granted-records.js";
 import {
   canonicalDesignationCases,
   canonicalMoveTypeCases,
+  canonicalRemovedKeywordCases,
   canonicalHalfWeaponRangeCases,
   canonicalNamedRegionBeneficiaryCases,
   canonicalRecipientCases,
@@ -22,6 +23,7 @@ import {
   canonicalTriggerSubjectCases,
   DESIGNATION_CASE_PREFIX,
   MOVE_TYPE_CASE_PREFIX,
+  REMOVED_KEYWORD_CASE_PREFIX,
   HALF_WEAPON_RANGE_CASE_PREFIX,
   NAMED_REGION_BENEFICIARY_CASE_PREFIX,
   dslProjection,
@@ -63,6 +65,7 @@ export const CANONICAL_DSL_CASE_PREFIXES: readonly string[] = [
   RECIPIENT_CASE_PREFIX, HALF_WEAPON_RANGE_CASE_PREFIX, SCENARIO_CASE_PREFIX, GRANTED_RECORD_CASE_PREFIX,
   DAMAGE_ZEROING_CASE_PREFIX, IGNORE_MODIFIERS_CASE_PREFIX, TRIGGER_SUBJECT_CASE_PREFIX, STRATAGEM_MODEL_CASE_PREFIX,
   STRATAGEM_TARGET_CASE_PREFIX, NAMED_REGION_BENEFICIARY_CASE_PREFIX, DESIGNATION_CASE_PREFIX, MOVE_TYPE_CASE_PREFIX,
+  REMOVED_KEYWORD_CASE_PREFIX,
 ];
 
 /** Whether a corpus row is one the canonical generator writes (and the seeded refresh leaves alone). */
@@ -78,6 +81,7 @@ export function canonicalDslCases(): Array<Record<string, unknown> & { perspecti
     ...canonicalGrantedRecordCases(), ...canonicalDamageZeroingCases(), ...canonicalIgnoreModifiersCases(),
     ...canonicalTriggerSubjectCases(), ...canonicalStratagemModelCases(), ...canonicalStratagemTargetCases(),
     ...canonicalNamedRegionBeneficiaryCases(), ...canonicalDesignationCases(), ...canonicalMoveTypeCases(),
+    ...canonicalRemovedKeywordCases(),
   ];
 }
 

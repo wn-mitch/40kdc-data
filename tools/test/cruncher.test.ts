@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/dataset.js";
 import { crunch, profileCanTarget, type EngineInput } from "../src/cruncher/index.js";
+import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 
 const ds = Dataset.embedded();
 
@@ -303,5 +304,19 @@ describe("Codex profile targeting", () => {
 
     // A3, plus Blast 3 for each five models in the ten-model target.
     expect(stage(output, "attacks")).toBe(9);
+  });
+
+  // Hunts: a removal was refused as unmodelled, and one scoped to Torrent weapons must not reach a weapon without it.
+  it("drops a removed Blast, only from the weapons the removal's scope names", () => {
+    const removal = (weapons: Record<string, unknown>) => effectToBuffs(
+      { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [], removes: [{ keyword_id: "blast" }], weapons } },
+      { kind: "ability", abilityId: "fabricated", abilityKind: "unit" }, { phase: "shooting" });
+    const all = removal({ type: "ranged" });
+    expect(all.unsupported).toEqual([]);
+    const lobba = (buffs: ReturnType<typeof removal>["applied"]) => crunch(inputFor("lobba", 0, 1, "cultist-mob", { phase: "shooting" }, buffs, 10));
+    const lost = lobba(all.applied);
+    expect(stage(lost, "attacks")).toBe(3);
+    expect(lost.resolved.extraKeywords.some((entry) => entry.keywordRef.keyword_id === "blast")).toBe(false);
+    expect(stage(lobba(removal({ type: "ranged", keyword: { keyword_id: "torrent" } }).applied), "attacks")).toBe(9);
   });
 });

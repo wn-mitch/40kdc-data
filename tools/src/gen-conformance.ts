@@ -69,6 +69,7 @@ import {
   canonicalAttackCompareCases,
   canonicalCriticalWoundCases,
   canonicalRerollSubsetCases,
+  canonicalRemovedKeywordCruncherCases,
   canonicalWeaponScopeCases,
 } from "./gen-conformance-cruncher-cases.js";
 import {
@@ -4505,7 +4506,7 @@ function genCanonicalCruncherCases(): void {
     writeJson(path, corpus);
     console.log(`abilities-resolver/${filename}: ${corpus.cases.length} cases`);
   }
-  for (const { filename, value } of [...canonicalWeaponScopeCases(Dataset.embedded()), ...canonicalAttackCompareCases(Dataset.embedded()), ...canonicalCriticalWoundCases(Dataset.embedded()), ...canonicalRerollSubsetCases(Dataset.embedded())]) {
+  for (const { filename, value } of [...canonicalWeaponScopeCases(Dataset.embedded()), ...canonicalAttackCompareCases(Dataset.embedded()), ...canonicalCriticalWoundCases(Dataset.embedded()), ...canonicalRerollSubsetCases(Dataset.embedded()), ...canonicalRemovedKeywordCruncherCases(Dataset.embedded())]) {
     writeJson(join(CONFORMANCE, "cruncher", filename), value);
   }
 }

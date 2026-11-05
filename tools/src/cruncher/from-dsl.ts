@@ -1238,14 +1238,17 @@ function translateKeywordGrant(
   const modifier = node.modifier;
   if (!isObject(modifier)) return;
   if (Array.isArray(modifier.removes)) {
+    // The weapons the scope names lose the keyword, whatever its rating.
+    const narrowedRemoval = unhonorableNarrowing(modifier);
+    const removalApplicability = combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier));
     for (const ref of modifier.removes) {
-      const label = isObject(ref) && typeof ref.keyword_id === "string"
-        ? keywordLabel({ keyword_id: ref.keyword_id, ...(isObject(ref.parameters) ? { parameters: ref.parameters } : {}) })
-        : "unresolved keyword";
-      out.unsupported.push({
-        reason: `weapon-ability-removal: the cruncher does not model removing a weapon ability ("${label}")`,
-        effectFragment: { removes: [ref] },
-      });
+      if (!isObject(ref) || typeof ref.keyword_id !== "string" || ref.keyword_id.length === 0) {
+        out.unsupported.push({ reason: "weapon-ability-removal: invalid structured keyword reference", effectFragment: { removes: [ref] } });
+      } else if (narrowedRemoval) {
+        out.unsupported.push({ reason: `weapon-ability-removal: unresolved ${narrowedRemoval}`, effectFragment: { removes: [ref] } });
+      } else {
+        out.applied.push(withApplicability({ source, contribution: { type: "removed-keyword", keyword_id: ref.keyword_id } }, removalApplicability));
+      }
     }
   }
   if (modifier.if_present !== undefined) {
@@ -2587,6 +2590,8 @@ function describeContribution(c: BuffContribution): string {
   switch (c.type) {
     case "extra-keyword":
       return keywordLabel(c.keywordRef);
+    case "removed-keyword":
+      return `loses ${keywordLabel({ keyword_id: c.keyword_id })}`;
     case "hit-mod":
       return `${signed(c.value)} to hit`;
     case "wound-mod":

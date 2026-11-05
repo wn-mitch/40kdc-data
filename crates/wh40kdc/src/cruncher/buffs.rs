@@ -201,6 +201,12 @@ pub enum BuffContribution {
     ExtraKeyword {
         keyword_ref: WeaponKeywordRef,
     },
+    /// "Your unit's Torrent weapons do not have [Blast]": the weapon loses that keyword, printed
+    /// or granted.
+    RemovedKeyword {
+        #[serde(rename = "keyword_id")]
+        keyword_id: String,
+    },
     /// Feel-no-pain: roll one D6 per unsaved wound at `threshold`+, ignoring
     /// the wound on a pass. `scope` controls which wound stream it applies to:
     /// `All` (default) fires on every unsaved wound; `Mortal` fires only on
@@ -390,7 +396,8 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
     let mut hit_contribs: Vec<Contribution> = Vec::new();
     let mut wound_contribs: Vec<Contribution> = Vec::new();
 
-    for b in live_buffs(buffs, ctx) {
+    let live = live_buffs(buffs, ctx);
+    for b in &live {
         match &b.contribution {
             BuffContribution::HitMod { value } => {
                 hit_contribs.push(Contribution {
@@ -591,7 +598,20 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
                 count: *count,
                 source: b.source.clone(),
             }),
+            BuffContribution::RemovedKeyword { .. } => {}
         }
+    }
+    // A removed keyword is gone whoever printed or granted it.
+    let removed: Vec<&str> = live
+        .iter()
+        .filter_map(|b| match &b.contribution {
+            BuffContribution::RemovedKeyword { keyword_id } => Some(keyword_id.as_str()),
+            _ => None,
+        })
+        .collect();
+    if !removed.is_empty() {
+        out.extra_keywords
+            .retain(|e| !removed.contains(&e.keyword_ref.keyword_id.as_str()));
     }
 
     // An ignored roll keeps only its positive modifiers.

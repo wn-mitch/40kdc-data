@@ -1540,11 +1540,15 @@ describe("structured weapon grants", () => {
     const result = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [keyword] } }, unitRule, ctx);
     expect(result.applied[0].contribution).toEqual({ type: "extra-keyword", keywordRef: keyword });
   });
-  it("diagnoses structured removals instead of dropping them", () => {
+  it("lowers a structured removal to a removed keyword, and diagnoses one with no keyword id instead of dropping it", () => {
     const removes = [{ keyword_id: "heavy" }];
     const result = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { removes } }, unitRule, ctx);
-    expect(result.applied).toEqual([]);
-    expect(result.unsupported).toEqual([{ reason: 'weapon-ability-removal: the cruncher does not model removing a weapon ability ("Heavy")', effectFragment: { removes }, scope: "unresolved" }]);
+    expect(result.unsupported).toEqual([]);
+    expect(result.applied.map((buff) => buff.contribution)).toEqual([{ type: "removed-keyword", keyword_id: "heavy" }]);
+    const invalid = [{ keyword_id: "" }];
+    const refused = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { removes: invalid } }, unitRule, ctx);
+    expect(refused.applied).toEqual([]);
+    expect(refused.unsupported.map((entry) => entry.reason)).toEqual(["weapon-ability-removal: invalid structured keyword reference"]);
   });
 });
 

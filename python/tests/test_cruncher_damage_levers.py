@@ -255,3 +255,56 @@ def test_printed_grant_to_friendly_units_translates_its_body_for_the_holders() -
         {"phase": "shooting", "targetKeywords": ["example"]},
     )
     assert enemy["applied"] == [] and enemy["unsupported"] == []
+
+
+def _lobba(dataset: Any, buffs: list[dict[str, Any]]) -> tuple[float, bool]:
+    """Lobbas against ten cultists: the attacks expected value and whether Blast stays resolved."""
+    out = crunch(
+        {
+            "attacker": {"weapon": dataset.weapons.get_any("lobba").raw, "profileIndex": 0},
+            "target": {
+                "unit": dataset.units.get_any("cultist-mob").raw,
+                "profileIndex": 0,
+                "modelCount": 10,
+            },
+            "modelsFiring": 1,
+            "buffs": buffs,
+            "context": SHOOTING,
+        },
+        dataset,
+    )
+    attacks = next(stage["expected"] for stage in out["stages"] if stage["name"] == "attacks")
+    blast = any(
+        entry["keywordRef"]["keyword_id"] == "blast" for entry in out["resolved"]["extraKeywords"]
+    )
+    return attacks, blast
+
+
+# Hunts: a removal was refused as unmodelled, and one scoped to Torrent weapons must not reach a
+# weapon without it. Mirrors the TS cruncher test of the same name.
+def test_drops_a_removed_blast_only_from_the_weapons_the_removals_scope_names(
+    dataset: Any,
+) -> None:
+    def removal(weapons: dict[str, Any]) -> dict[str, Any]:
+        return effect_to_buffs(
+            {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                    "keywords": [],
+                    "removes": [{"keyword_id": "blast"}],
+                    "weapons": weapons,
+                },
+            },
+            SOURCE,
+            SHOOTING,
+            "attacker",
+        )
+
+    everything = removal({"type": "ranged"})
+    assert everything["unsupported"] == []
+    # A3, plus Blast 3 for each five models in the ten-model target.
+    assert _lobba(dataset, []) == (9, True)
+    assert _lobba(dataset, everything["applied"]) == (3, False)
+    torrent_only = removal({"type": "ranged", "keyword": {"keyword_id": "torrent"}})
+    assert _lobba(dataset, torrent_only["applied"])[0] == 9

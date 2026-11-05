@@ -76,6 +76,7 @@ _SOURCE_KIND_RANK = {
 
 _REROLL_REACH = {"ones": 1, "ones-and-twos": 2, "all-failures": 3}
 
+
 def _rank(s: BuffSource) -> int:
     if s.get("kind") == "ability":
         return _SOURCE_KIND_RANK.get(f"ability:{s.get('abilityKind')}", 99)
@@ -242,13 +243,7 @@ def _live_buffs(buffs: list[Buff], ctx: EngineContext) -> list[Buff]:
     selected: list[Buff] = [buff for buff in base if not gated(buff)]
     pending = [buff for buff in base if gated(buff)]
     while True:
-        refs = list(printed) if printed is not None else None
-        if refs is not None:
-            refs.extend(
-                buff["contribution"]["keywordRef"]
-                for buff in selected
-                if buff["contribution"].get("type") == "extra-keyword"
-            )
+        refs = _keyword_refs(printed, selected)
         next_buffs = [
             buff
             for buff in pending
@@ -258,7 +253,35 @@ def _live_buffs(buffs: list[Buff], ctx: EngineContext) -> list[Buff]:
             break
         selected.extend(next_buffs)
         pending = [buff for buff in pending if buff not in next_buffs]
+    # A removed keyword can unseat a gate that held while the removal was pending.
+    while True:
+        refs = _keyword_refs(printed, selected)
+        kept = [
+            buff
+            for buff in selected
+            if not gated(buff) or _weapon_gate_holds(buff.get("applicableWhen") or {}, refs, ctx)
+        ]
+        if len(kept) == len(selected):
+            break
+        selected = kept
     return [buff for buff in buffs if buff in selected]
+
+
+def _keyword_refs(
+    printed: list[dict[str, Any]] | None, buffs: list[Buff]
+) -> list[dict[str, Any]] | None:
+    """The weapon's keywords: printed, plus those the buffs grant, less those they remove."""
+    if printed is None:
+        return None
+    refs = list(printed)
+    removed: set[str] = set()
+    for buff in buffs:
+        contribution = buff["contribution"]
+        if contribution.get("type") == "extra-keyword":
+            refs.append(contribution["keywordRef"])
+        elif contribution.get("type") == "removed-keyword":
+            removed.add(contribution["keyword_id"])
+    return [ref for ref in refs if ref.get("keyword_id") not in removed]
 
 
 def _key_of(ref: dict[str, Any]) -> str:
@@ -445,6 +468,17 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
                     "source": source,
                 }
             )
+
+    # A removed keyword is gone whoever printed or granted it.
+    removed = {
+        b["contribution"]["keyword_id"]
+        for b in live
+        if b["contribution"].get("type") == "removed-keyword"
+    }
+    if removed:
+        out["extraKeywords"] = [
+            e for e in out["extraKeywords"] if e["keywordRef"].get("keyword_id") not in removed
+        ]
 
     # An ignored roll keeps only its positive modifiers.
     def kept(contribs: list[dict[str, Any]], ignored: bool) -> list[dict[str, Any]]:

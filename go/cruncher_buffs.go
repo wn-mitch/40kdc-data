@@ -305,25 +305,39 @@ func printedWeaponKeywordRefs(ctx map[string]any) []map[string]any {
 	return nil
 }
 
-// withGrantedKeywords appends the keyword refs that the included buffs grant to printed.
+// withGrantedKeywords returns the weapon's keywords: printed, plus those the included buffs
+// grant, less those they remove.
 func withGrantedKeywords(printed []map[string]any, buffs []any, included []bool) []map[string]any {
 	if printed == nil {
 		return nil
 	}
 	refs := append([]map[string]any{}, printed...)
+	removed := map[string]bool{}
 	for i, bAny := range buffs {
 		if !included[i] {
 			continue
 		}
 		b, _ := asMap(bAny)
 		c, _ := getMap(b, "contribution")
-		if getStr(c, "type") == "extra-keyword" {
+		switch getStr(c, "type") {
+		case "extra-keyword":
 			if ref, ok := getMap(c, "keywordRef"); ok && ref != nil {
 				refs = append(refs, ref)
 			}
+		case "removed-keyword":
+			removed[getStr(c, "keyword_id")] = true
 		}
 	}
-	return refs
+	if len(removed) == 0 {
+		return refs
+	}
+	kept := refs[:0]
+	for _, ref := range refs {
+		if !removed[getStr(ref, "keyword_id")] {
+			kept = append(kept, ref)
+		}
+	}
+	return kept
 }
 
 // liveBuffs reports, per buff, whether its gates hold. A weapon-keyword gate reads
@@ -482,6 +496,7 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 	}
 
 	var hitContribs, woundContribs []contribAcc
+	removed := map[string]bool{}
 	live := liveBuffs(buffs, ctx)
 	for i, bAny := range buffs {
 		b, _ := asMap(bAny)
@@ -617,7 +632,19 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 					out.saveImprove.best = best
 				}
 			}
+		case "removed-keyword":
+			removed[getStr(c, "keyword_id")] = true
 		}
+	}
+	// A removed keyword is gone whoever printed or granted it.
+	if len(removed) > 0 {
+		kept := out.extraKeywords[:0]
+		for _, e := range out.extraKeywords {
+			if !removed[getStr(e.keywordRef, "keyword_id")] {
+				kept = append(kept, e)
+			}
+		}
+		out.extraKeywords = kept
 	}
 	_, ignoreHit := out.ignoreModifiers["hit"]
 	_, ignoreWound := out.ignoreModifiers["wound"]

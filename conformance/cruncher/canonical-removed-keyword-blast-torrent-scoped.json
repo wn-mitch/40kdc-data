@@ -1,0 +1,50 @@
+{
+  "name": "Canonical removed keyword: blast-torrent-scoped",
+  "attacker": {
+    "weaponId": "lobba",
+    "profileIndex": 0
+  },
+  "target": {
+    "unitId": "cultist-mob",
+    "profileIndex": 0,
+    "modelCount": 10
+  },
+  "modelsFiring": 1,
+  "context": {
+    "phase": "shooting"
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-removed-keyword",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "removed-keyword",
+        "keyword_id": "blast"
+      },
+      "applicableWhen": {
+        "phases": [
+          "shooting"
+        ],
+        "weaponKeywords": [
+          {
+            "keyword_id": "torrent"
+          }
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 9,
+      "hits": 4.5,
+      "wounds": 3,
+      "unsaved": 2.5,
+      "damage": 2.5,
+      "after-fnp": 2.5,
+      "models-killed": 2.5
+    }
+  }
+}

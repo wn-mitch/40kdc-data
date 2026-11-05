@@ -161,6 +161,28 @@ fn weapon_gate(
     })
 }
 
+/// The weapon's keywords: printed, plus those the live buffs grant, less those they remove.
+fn keyword_refs<'a>(
+    printed: &'a [WeaponKeywordRef],
+    buffs: &'a [Buff],
+    live: &[bool],
+) -> Vec<&'a WeaponKeywordRef> {
+    let mut refs: Vec<&WeaponKeywordRef> = printed.iter().collect();
+    let mut removed: Vec<&str> = Vec::new();
+    for (index, buff) in buffs.iter().enumerate() {
+        if !live[index] {
+            continue;
+        }
+        match &buff.contribution {
+            BuffContribution::ExtraKeyword { keyword_ref } => refs.push(keyword_ref),
+            BuffContribution::RemovedKeyword { keyword_id } => removed.push(keyword_id),
+            _ => {}
+        }
+    }
+    refs.retain(|r| !removed.contains(&r.keyword_id.as_str()));
+    refs
+}
+
 pub(super) fn live_buffs<'a>(buffs: &'a [Buff], ctx: &EngineContext) -> Vec<&'a Buff> {
     let id_refs: Vec<WeaponKeywordRef> = if ctx.weapon_keyword_refs.is_none() {
         ctx.weapon_keywords
@@ -177,38 +199,28 @@ pub(super) fn live_buffs<'a>(buffs: &'a [Buff], ctx: &EngineContext) -> Vec<&'a 
     let printed = ctx.weapon_keyword_refs.as_deref().unwrap_or(&id_refs);
     let eligible: Vec<bool> = buffs.iter().map(|buff| applies(buff, ctx)).collect();
     let mut live = vec![false; buffs.len()];
-    let mut keywords: Vec<&WeaponKeywordRef> = printed.iter().collect();
+    // Each pass reads the keywords the buffs selected so far grant and remove.
     loop {
-        let mut changed = false;
-        for (index, buff) in buffs.iter().enumerate() {
-            if !live[index]
-                && eligible[index]
-                && buff
-                    .applicable_when
-                    .as_ref()
-                    .is_none_or(|w| weapon_gate(w, ctx, &keywords, false))
-            {
-                live[index] = true;
-                changed = true;
-                if let BuffContribution::ExtraKeyword { keyword_ref } = &buff.contribution {
-                    keywords.push(keyword_ref);
-                }
-            }
-        }
-        if !changed {
+        let keywords = keyword_refs(printed, buffs, &live);
+        let next: Vec<usize> = (0..buffs.len())
+            .filter(|&index| {
+                !live[index]
+                    && eligible[index]
+                    && buffs[index]
+                        .applicable_when
+                        .as_ref()
+                        .is_none_or(|w| weapon_gate(w, ctx, &keywords, false))
+            })
+            .collect();
+        if next.is_empty() {
             break;
+        }
+        for index in next {
+            live[index] = true;
         }
     }
     loop {
-        keywords.clear();
-        keywords.extend(printed.iter());
-        for (index, buff) in buffs.iter().enumerate() {
-            if let (true, BuffContribution::ExtraKeyword { keyword_ref }) =
-                (live[index], &buff.contribution)
-            {
-                keywords.push(keyword_ref);
-            }
-        }
+        let keywords = keyword_refs(printed, buffs, &live);
         let mut changed = false;
         for (index, buff) in buffs.iter().enumerate() {
             if live[index]

@@ -460,19 +460,35 @@ pub(super) fn keyword_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let Some(m) = object(node.get("modifier")) else {
         return;
     };
+    // The weapons the scope names lose the keyword, whatever its rating.
+    let removal_narrowing = unhonorable_narrowing(m);
+    let removal_gate = weapon_applicability(m);
     for keyword in list(m.get("removes")) {
-        let label = if keyword.get("keyword_id").and_then(Value::as_str).is_some() {
-            super::applicability::keyword_label(keyword)
-        } else {
-            "unresolved keyword".into()
-        };
-        out.unsupported.push((
-            format!(
-                "weapon-ability-removal: the cruncher does not model removing a weapon ability (\"{label}\")"
+        match keyword
+            .get("keyword_id")
+            .and_then(Value::as_str)
+            .filter(|id| !id.is_empty())
+        {
+            None => out.unsupported.push((
+                "weapon-ability-removal: invalid structured keyword reference".into(),
+                json!({ "removes": [keyword] }),
+                None,
+            )),
+            Some(_) if removal_narrowing.is_some() => out.unsupported.push((
+                format!(
+                    "weapon-ability-removal: unresolved {}",
+                    removal_narrowing.unwrap_or_default()
+                ),
+                json!({ "removes": [keyword] }),
+                None,
+            )),
+            Some(id) => emit(
+                opts,
+                out,
+                &removal_gate,
+                json!({ "type": "removed-keyword", "keyword_id": id }),
             ),
-            json!({ "removes": [keyword] }),
-            None,
-        ));
+        }
     }
     if m.get("if_present").is_some_and(|value| !value.is_null()) {
         out.unsupported(

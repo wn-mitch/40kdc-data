@@ -97,6 +97,7 @@ _STOCHASTIC_DICE_GATED_REASON = "dice-gated effect: stochastic; not expressible 
 # The failed dice a re-roll can take, narrowest first.
 _REROLL_SUBSETS = ("ones", "ones-and-twos", "all-failures")
 
+
 def effect_to_buffs(
     effect: Any,
     source: BuffSource,
@@ -376,9 +377,7 @@ def _designate_entry(
         # marks it.
         select = node.get("select")
         selector = (
-            select.get("selector")
-            if _is_object(select) and select.get("kind") == "unit"
-            else None
+            select.get("selector") if _is_object(select) and select.get("kind") == "unit" else None
         )
         if (
             _is_object(selector)
@@ -399,9 +398,7 @@ def _designate_entry(
         out["activatable"].extend(sub["activatable"])
         if sub["applied"]:
             designation_value = node.get("designation")
-            designation = (
-                designation_value if isinstance(designation_value, str) else "designated"
-            )
+            designation = designation_value if isinstance(designation_value, str) else "designated"
             out["activatable"].append(
                 {
                     "id": f"{opts['abilityId']}#{designation}",
@@ -413,9 +410,7 @@ def _designate_entry(
     else:
         out["unsupported"].append(
             {
-                "reason": (
-                    "designate-target debuff on the marked unit: not a buff on the bearer"
-                ),
+                "reason": ("designate-target debuff on the marked unit: not a buff on the bearer"),
                 "effectFragment": node,
             }
         )
@@ -1485,21 +1480,37 @@ def _translate_keyword_grant(
         return
     removes = modifier.get("removes")
     if isinstance(removes, list):
+        # The weapons the scope names lose the keyword, whatever its rating.
+        narrowed_removal = _unhonorable_narrowing(modifier)
+        removal_applicability = combine_optional(
+            _weapon_type_applicability(modifier), weapon_applicability(modifier)
+        )
         for keyword in removes:
-            label = (
-                _keyword_label(keyword)
-                if _is_object(keyword) and isinstance(keyword.get("keyword_id"), str)
-                else "unresolved keyword"
-            )
-            out["unsupported"].append(
-                {
-                    "reason": (
-                        "weapon-ability-removal: the cruncher does not model removing "
-                        f'a weapon ability ("{label}")'
-                    ),
-                    "effectFragment": {"removes": [keyword]},
+            keyword_id = keyword.get("keyword_id") if _is_object(keyword) else None
+            if not isinstance(keyword_id, str) or not keyword_id:
+                out["unsupported"].append(
+                    {
+                        "reason": "weapon-ability-removal: invalid structured keyword reference",
+                        "effectFragment": {"removes": [keyword]},
+                    }
+                )
+            elif narrowed_removal:
+                out["unsupported"].append(
+                    {
+                        "reason": f"weapon-ability-removal: unresolved {narrowed_removal}",
+                        "effectFragment": {"removes": [keyword]},
+                    }
+                )
+            else:
+                removal: Buff = {
+                    "source": source,
+                    "contribution": {"type": "removed-keyword", "keyword_id": keyword_id},
                 }
-            )
+                out["applied"].append(
+                    {**removal, "applicableWhen": removal_applicability}
+                    if removal_applicability
+                    else removal
+                )
     if modifier.get("if_present") is not None:
         out["unsupported"].append(
             {
@@ -3379,6 +3390,8 @@ def _describe_contribution(c: dict[str, Any]) -> str:
     ctype = c.get("type")
     if ctype == "extra-keyword":
         return _keyword_label(c["keywordRef"])
+    if ctype == "removed-keyword":
+        return f"loses {_keyword_label({'keyword_id': c['keyword_id']})}"
     if ctype == "hit-mod":
         return f"{_signed(c['value'])} to hit"
     if ctype == "wound-mod":

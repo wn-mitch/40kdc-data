@@ -697,13 +697,14 @@
         }
       },
       "expected": {
-        "applied": [],
-        "unsupportedReasons": [
-          "weapon-ability-removal: the cruncher does not model removing a weapon ability (\"Heavy\")"
+        "applied": [
+          {
+            "type": "removed-keyword",
+            "keyword_id": "heavy"
+          }
         ],
-        "unsupportedScopes": [
-          "unresolved"
-        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }
@@ -17948,6 +17949,280 @@
         ],
         "needKeys": [],
         "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/removed-keyword/ranged",
+      "abilityId": "removed-keyword-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "removed-keyword-example",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [],
+          "removes": [
+            {
+              "keyword_id": "blast"
+            }
+          ],
+          "weapons": {
+            "type": "ranged"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "removed-keyword",
+            "keyword_id": "blast"
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          {
+            "phases": [
+              "shooting"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/removed-keyword/torrent-scoped",
+      "abilityId": "removed-keyword-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "removed-keyword-example",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [],
+          "removes": [
+            {
+              "keyword_id": "blast"
+            }
+          ],
+          "weapons": {
+            "type": "ranged",
+            "keyword": {
+              "keyword_id": "torrent"
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "removed-keyword",
+            "keyword_id": "blast"
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          {
+            "phases": [
+              "shooting"
+            ],
+            "weaponKeywords": [
+              {
+                "keyword_id": "torrent"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/removed-keyword/invalid-reference",
+      "abilityId": "removed-keyword-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "removed-keyword-example",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [],
+          "removes": [
+            {
+              "keyword_id": ""
+            },
+            "blast"
+          ],
+          "weapons": {
+            "type": "ranged"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "weapon-ability-removal: invalid structured keyword reference",
+          "weapon-ability-removal: invalid structured keyword reference"
+        ],
+        "unsupportedScopes": [
+          "unresolved",
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/removed-keyword/unresolved-weapon-ref",
+      "abilityId": "removed-keyword-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "removed-keyword-example",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [],
+          "removes": [
+            {
+              "keyword_id": "blast"
+            }
+          ],
+          "weapons": {
+            "ref": "example-weapon"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "weapon-ability-removal: unresolved weapons.ref",
+          "weapon-ability-grant: unresolved weapons.ref"
+        ],
+        "unsupportedScopes": [
+          "unresolved",
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/removed-keyword/choice-label",
+      "abilityId": "removed-keyword-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "removed-keyword-example",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [],
+              "removes": [
+                {
+                  "keyword_id": "blast"
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          },
+          {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "removed-keyword-example?0",
+            "label": "loses Blast",
+            "group": {
+              "id": "removed-keyword-example?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "removed-keyword",
+                "keyword_id": "blast"
+              }
+            ]
+          },
+          {
+            "id": "removed-keyword-example?1",
+            "label": "Lethal Hits",
+            "group": {
+              "id": "removed-keyword-example?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "extra-keyword",
+                "keywordRef": {
+                  "keyword_id": "lethal-hits"
+                }
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
       }
     }
   ]

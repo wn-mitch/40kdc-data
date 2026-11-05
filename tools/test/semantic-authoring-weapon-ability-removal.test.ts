@@ -263,14 +263,12 @@ describe("describer and cruncher for removals", () => {
     expect(stat).toBe("Improve the Attacks characteristic of ranged weapons with [BLAST] equipped by models in this unit by 1.");
   });
 
-  it("refuses a removal as unsupported in the cruncher and gates a keyword selector on that keyword", () => {
+  it("lowers a removal to a removed keyword under the grant's weapon scope, and gates a keyword selector on that keyword", () => {
     const source: BuffSource = { kind: "ability", abilityId: "zeta-rule", abilityKind: "unit" };
     const ctx: EngineContext = { phase: "shooting", attackerStationary: false };
     const removal = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { removes: [{ keyword_id: "heavy" }], weapons: { type: "ranged" } } }, source, ctx, "attacker");
-    expect(removal.applied).toEqual([]);
-    expect(removal.unsupported.map((entry) => entry.reason)).toEqual([
-      'weapon-ability-removal: the cruncher does not model removing a weapon ability ("Heavy")',
-    ]);
+    expect(removal.unsupported).toEqual([]);
+    expect(removal.applied.map((buff) => [buff.contribution, buff.applicableWhen])).toEqual([[{ type: "removed-keyword", keyword_id: "heavy" }, { phases: ["shooting"] }]]);
     const selector = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "close-quarters" }], weapons: { keyword: { keyword_id: "torrent" } } } }, source, ctx, "attacker");
     expect(selector.unsupported).toEqual([]);
     expect(selector.applied.map((buff) => buff.applicableWhen)).toEqual([{ weaponKeywords: [{ keyword_id: "torrent" }] }]);
