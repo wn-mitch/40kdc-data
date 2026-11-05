@@ -391,3 +391,40 @@ describe("Semantic authoring connective coverage", () => {
     }
   });
 });
+
+describe("chat review closing a gap", () => {
+  const openGap = (db: DatabaseSync, ability: number) => Number(db.prepare(
+    "INSERT INTO gaps (ability_version_id, type, status, description, batch_id) VALUES (?, 'DSL_GAP', 'open', 'fixture gap', NULL)",
+  ).run(ability).lastInsertRowid);
+
+  it("resolves an open gap, and an undo of that batch reopens it", async () => {
+    const { db, source } = fixture(undefined);
+    try {
+      const gap = openGap(db, source);
+      const result = await applyChatReview(db, { reviewer: REVIEWER, decisions: [{ action: "resolve-gap", gap_id: gap, description: "the family now carries it" }] });
+      expect(result.failed).toEqual([]);
+      expect(result.applied).toEqual([{ ability_version_id: source, batch_id: expect.stringMatching(/^gap_/u) }]);
+      expect(db.prepare("SELECT status FROM gaps WHERE id = ?").get(gap)).toEqual({ status: "resolved" });
+      undoBatch(db, result.applied[0]!.batch_id, { reviewer: REVIEWER });
+      expect(db.prepare("SELECT status FROM gaps WHERE id = ?").get(gap)).toEqual({ status: "open" });
+    } finally {
+      db.close();
+    }
+  });
+
+  it("refuses a gap that is unknown or already resolved, and changes nothing", async () => {
+    const { db, source } = fixture(undefined);
+    try {
+      const gap = openGap(db, source);
+      db.prepare("UPDATE gaps SET status = 'resolved' WHERE id = ?").run(gap);
+      const open = openGap(db, source);
+      const resolved = await applyChatReview(db, { reviewer: REVIEWER, decisions: [{ action: "resolve-gap", gap_id: open }, { action: "resolve-gap", gap_id: gap }] });
+      expect(resolved.failed).toEqual([{ error: expect.stringMatching(/is resolved, not open/u) }]);
+      expect(db.prepare("SELECT status FROM gaps WHERE id = ?").get(open)).toEqual({ status: "open" });
+      const unknown = await applyChatReview(db, { reviewer: REVIEWER, decisions: [{ action: "resolve-gap", gap_id: 999999 }] });
+      expect(unknown.failed).toEqual([{ error: "Unknown gap 999999." }]);
+    } finally {
+      db.close();
+    }
+  });
+});

@@ -24,7 +24,7 @@ import { withTransactionAsync } from "./db.js";
  * `ability_version_ids`) for publication, refusing any member publication would reject;
  * `reject-shape` refuses them until their leaves change. `carry-approvals` (optionally one
  * `faction_id`) keeps each approval a family-version migration staled when the recompiled entry is
- * byte-identical.
+ * byte-identical. `resolve-gap` closes the open gap `gap_id` names once the record no longer needs it.
  */
 
 export type ChatDecision = {
@@ -41,13 +41,15 @@ export type ChatDecision = {
   /** For `gap`: the kind of gap and what it is, in Will's words. */
   gap_type?: "DSL_GAP" | "SOURCE_AMBIGUITY" | "RELATION_GAP" | "COMPOSITION_GAP";
   description?: string;
+  /** For `resolve-gap`: the open gap closed. */
+  gap_id?: number;
   /** For `add`: the source fragment; `NAME` locates the record name, and body fragments use their persisted names. */
   fragment?: string;
   /** A leaf of another role contained in (or containing) an existing one, approved as such. */
   allow_overlap?: boolean;
   /** For `correct` of an annotation: same-role leaves inside the new wording that it absorbs (one list, one leaf). */
   merges_annotation_ids?: number[];
-  action: "confirm" | "correct" | "retire" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "add-connective" | "operator" | "move-surface" | "approve-shape" | "reject-shape" | "carry-approvals" | "connective-relation";
+  action: "confirm" | "correct" | "retire" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "add-connective" | "operator" | "move-surface" | "approve-shape" | "reject-shape" | "carry-approvals" | "connective-relation" | "resolve-gap";
   /** For `approve-shape` / `reject-shape`: the shape signature the members compile to. */
   signature?: string;
   /** For `approve-shape` / `reject-shape`: the source versions decided. */
@@ -370,6 +372,10 @@ export async function applyChatReview(db: DatabaseSync, review: ChatReview): Pro
         applied.push({ ability_version_id: item.ability_version_id, batch_id: recordGap(db, item, actor.reviewer) });
         continue;
       }
+      if (item.action === "resolve-gap") {
+        applied.push(resolveGap(db, item, actor.reviewer));
+        continue;
+      }
       const full = decision(db, item);
       if (full.family_version === undefined) delete full.family_version;
       applied.push({ proposal_id: item.proposal_id, annotation_id: item.annotation_id, batch_id: applyAnnotationBatch(db, { reviewer: actor.reviewer, decisions: [full] }, actor).batch_id });
@@ -395,6 +401,20 @@ function recordGap(db: DatabaseSync, item: ChatDecision, reviewer: string): stri
   const gap = db.prepare("INSERT INTO gaps (ability_version_id, type, status, description, batch_id) VALUES (?, ?, 'open', ?, ?)").run(item.ability_version_id, item.gap_type, item.description.trim(), batchId);
   db.prepare("INSERT INTO batch_members (batch_id, entity_kind, entity_id) VALUES (?, 'gap-created', ?)").run(batchId, String(gap.lastInsertRowid));
   return batchId;
+}
+
+/** Close an open gap. The batch's `gap-resolved` member lets an undo reopen it. */
+function resolveGap(db: DatabaseSync, item: ChatDecision, reviewer: string): { ability_version_id: number; batch_id: string } {
+  if (!Number.isInteger(item.gap_id)) throw new Error("resolve-gap needs gap_id.");
+  const gap = db.prepare("SELECT ability_version_id, status FROM gaps WHERE id = ?").get(item.gap_id!) as { ability_version_id: number; status: string } | undefined;
+  if (!gap) throw new Error(`Unknown gap ${item.gap_id}.`);
+  if (gap.status !== "open") throw new Error(`Gap ${item.gap_id} is ${gap.status}, not open.`);
+  const batchId = `gap_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+  const metadata = item.description?.trim() ? { reason: item.description.trim() } : {};
+  db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at, metadata_json) VALUES (?, 'review', ?, ?, ?)").run(batchId, reviewer, new Date().toISOString(), JSON.stringify(metadata));
+  db.prepare("UPDATE gaps SET status = 'resolved' WHERE id = ? AND status = 'open'").run(item.gap_id!);
+  db.prepare("INSERT INTO batch_members (batch_id, entity_kind, entity_id) VALUES (?, 'gap-resolved', ?)").run(batchId, String(item.gap_id));
+  return { ability_version_id: gap.ability_version_id, batch_id: batchId };
 }
 
 export function applyChatReviewFile(db: DatabaseSync, path: string): ReturnType<typeof applyChatReview> {
