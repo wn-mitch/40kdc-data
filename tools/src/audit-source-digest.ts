@@ -4,9 +4,9 @@
  *
  * The command joins the public annotation set to a contributor-owned corpus of
  * printed rules, recomputes each rule's {@link sourceDigest}, and compares it
- * with the annotation's stored `source_digest`. It is READ-ONLY: the write path
- * is the separate `backfill:source-digest` command, because an audit must not
- * mutate tracked data.
+ * with the annotation's stored `source_digest`. It is READ-ONLY: an audit must
+ * not mutate tracked data, and publication (`semantic-authoring/publish.ts`)
+ * writes each record's digest.
  *
  * The corpus lives outside this repository and is only ever read. Every source
  * string is reduced to a digest by {@link parseSourceDigestCorpus} the moment it
@@ -126,13 +126,9 @@ export type RawAbility = Record<string, unknown>;
 /**
  * One live annotation file, parsed and validated but not yet reduced.
  *
- * The audit only needs the flat identity list {@link loadAbilityAnnotations}
- * returns, but `backfill-source-digests.ts` has to write the same files back, so
- * the loader that establishes identity also hands out the authored records.
- * Keeping both behind one function is the whole point: the faction-ownership
- * rule, the pool exclusions, the per-record validation and the
- * duplicate-identity refusal are stated once, so the write path cannot drift
- * from the identity model the audit gates on.
+ * {@link loadAbilityAnnotations} reduces these to the flat identity list the
+ * audit gates on. The faction-ownership rule, the pool exclusions, the
+ * per-record validation and the duplicate-identity refusal are stated here once.
  */
 export interface AbilityAnnotationFile {
   /** `data/enrichment/<dir>/abilities.json` — relative, so it is safe to print. */

@@ -1,6 +1,6 @@
 /**
- * extract-source-corpus.ts — build the `audit:source-digest` /
- * `backfill:source-digest` input corpus from the private MFM dump.
+ * extract-source-corpus.ts — build the `audit:source-digest` input corpus from
+ * the private MFM dump.
  *
  * The digest commands take a faction-scoped corpus of source strings
  * (`{ faction_id: { ability_id: source } }`) and never read source prose from

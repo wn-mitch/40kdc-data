@@ -11,7 +11,7 @@
  *
  * This module is pure: no filesystem, no process state, no output. It is the
  * single definition of source equality shared by `audit-source-digest.ts` and
- * `backfill-source-digests.ts`.
+ * publication.
  *
  * It is deliberately NOT {@link normalizeName} from `data/normalize.ts`: that
  * key answers "did the user type this entity's name?" and throws away

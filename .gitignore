@@ -23,7 +23,6 @@ PAPERCUTS.md
 
 # Local secrets — never commit (e.g. Patreon OAuth client/creator credentials).
 .env
-rube-goldberg-output.txt
 
 # _audit/ is the DSL-authoring worklist (#21). Keep the human-readable summaries
 # (coverage.json, summary.md, proposed/*.md) but ignore the bulky, churn-prone

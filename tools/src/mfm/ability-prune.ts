@@ -20,7 +20,7 @@ import { abilityIdsOf } from "../data/ability-refs.js";
 import * as fs from "fs";
 import * as path from "path";
 
-import { scanAbilityRecordSpans } from "../backfill-source-digests.js";
+import { scanAbilityRecordSpans } from "../json-record-spans.js";
 import type { StagedWrite } from "./apply.js";
 import { CORE_DIR, ENRICHMENT_DIR, readJsonArray } from "./repo-files.js";
 
