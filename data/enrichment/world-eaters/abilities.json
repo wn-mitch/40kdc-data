@@ -5640,7 +5640,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "86bc82e0fc510e788723b92e2e91afdda1733e050a7889967e5ea435ec3ae271",
     "version": "2025-q3",
@@ -5654,18 +5654,23 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "roll-result",
+          "type": "ability-modifier",
           "target": "this-model",
           "modifier": {
-            "roll": "deadly-demise",
-            "succeeds_on": 2
+            "ability": {
+              "keyword": "DEADLY DEMISE"
+            },
+            "aspect": "threshold",
+            "operation": "set",
+            "value": 2
           }
         },
         {
           "type": "ability-grant",
           "target": "this-model",
           "modifier": {
-            "ability": "deadly-demise"
+            "ability": "deadly-demise",
+            "value": "D3+1"
           }
         }
       ]

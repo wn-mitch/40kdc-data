@@ -17,7 +17,7 @@ dump confirmation.
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 181 | 276 |
 | stratagems | 0 | 0 | 1061 | 252 |
-| abilities | 0 | 0 | 3750 | 786 |
+| abilities | 0 | 0 | 3751 | 785 |
 | phase-mappings | 0 | 0 | 1206 | 375 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -59,7 +59,7 @@ dump confirmation.
 | tyranids | 0 | 0 | 159 | 27 |
 | ultramarines | 0 | 0 | 10 | 1 |
 | white-scars | 0 | 0 | 11 | 0 |
-| world-eaters | 0 | 0 | 118 | 29 |
+| world-eaters | 0 | 0 | 119 | 28 |
 
 ## Ability verification outcomes
 
@@ -194,8 +194,8 @@ dump confirmation.
 | white-scars | verified | 11 |
 | world-eaters | digest-differs | 5 |
 | world-eaters | stub | 2 |
-| world-eaters | unpublished | 22 |
-| world-eaters | verified | 118 |
+| world-eaters | unpublished | 21 |
+| world-eaters | verified | 119 |
 
 ## Weapon verification outcomes
 
