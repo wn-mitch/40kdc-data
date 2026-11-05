@@ -42,6 +42,11 @@ export type BuffSource =
 
 
 /** One typed contribution; the engine reads `ResolvedModifiers` for the rest. */
+/** Which failed dice a re-roll takes: a 1, a 1 or 2, or any failure. */
+export type RerollSubset = "ones" | "ones-and-twos" | "all-failures";
+/** A wider subset re-rolls every die a narrower one does, so it dominates when two stack. */
+const REROLL_REACH: Record<RerollSubset, number> = { ones: 1, "ones-and-twos": 2, "all-failures": 3 };
+
 export type BuffContribution =
   | { type: "hit-mod"; value: number }
   | { type: "wound-mod"; value: number }
@@ -51,7 +56,7 @@ export type BuffContribution =
       type: "reroll";
       /** `attacks` re-rolls a random Attacks characteristic's dice. */
       roll: "hit" | "wound" | "save" | "damage" | "attacks";
-      subset: "ones" | "all-failures";
+      subset: RerollSubset;
     }
   /**
    * "Re-roll one Hit roll": one die of the roll, at the player's pick, across the attack pool —
@@ -511,7 +516,7 @@ export type ResolvedModifiers = {
   rerolls: Partial<
     Record<
       "hit" | "wound" | "save" | "damage" | "attacks",
-      { subset: "ones" | "all-failures"; dominantSource: BuffSource }
+      { subset: RerollSubset; dominantSource: BuffSource }
     >
   >;
   /** One re-rolled die per roll, from a `reroll-one`; several sources still give one die. */
@@ -768,7 +773,7 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
           out.rerolls[c.roll] = { subset: incoming, dominantSource: b.source };
         } else {
           const incomingStronger =
-            (incoming === "all-failures" && cur.subset === "ones") ||
+            REROLL_REACH[incoming] > REROLL_REACH[cur.subset] ||
             (incoming === cur.subset && rank(b.source) < rank(cur.dominantSource));
           if (incomingStronger) {
             out.rerolls[c.roll] = { subset: incoming, dominantSource: b.source };

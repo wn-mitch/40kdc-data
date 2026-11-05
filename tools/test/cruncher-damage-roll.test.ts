@@ -31,6 +31,13 @@ describe("damageRoll", () => {
     expect(rolled.distribution.reduce((sum, { probability }) => sum + probability, 0)).toBeCloseTo(1, 12);
   });
 
+  it("rerolls a total of 1 or 2 under ones-and-twos, but only while it is below the fresh mean", () => {
+    // D6: totals 1 and 2 are re-rolled (mean 3.5), 3 to 6 are kept.
+    expect(damageRoll({ ...base, stat: "D6", reroll: "ones-and-twos" }).expected).toBeCloseTo((3 + 4 + 5 + 6) / 6 + (2 / 6) * 3.5, 12);
+    // D3: a 2 equals the mean, so only the 1 is worth re-rolling.
+    expect(damageRoll({ ...base, stat: "D3", reroll: "ones-and-twos" }).expected).toBeCloseTo(7 / 3, 12);
+  });
+
   it("limits a ones reroll to a single die showing 1", () => {
     expect(damageRoll({ ...base, stat: "D6", reroll: "ones" }).expected).toBeCloseTo(3.5 + 2.5 / 6, 12);
     // A 2D6 total can never be 1.

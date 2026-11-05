@@ -18,8 +18,8 @@ import (
 // active. The expectation is taken over that transformed value, so a floor or
 // a reduction acts on each roll rather than on the mean.
 
-// damageRollInput is the per-attack damage request. reroll is "", "ones", or
-// "all-failures".
+// damageRollInput is the per-attack damage request. reroll is "", "ones",
+// "ones-and-twos", or "all-failures".
 type damageRollInput struct {
 	stat      any     // the profile's printed D: a number or a dice expression
 	bonus     float64 // flat bonus added after the roll (Melta at half range)
@@ -167,7 +167,7 @@ func damageRoll(in damageRollInput) (damageRollResult, error) {
 	rerollUsed := false
 	for _, t := range totals {
 		kept := final(float64(t.total) + dice.offset)
-		eligible := in.reroll == "all-failures" || (in.reroll == "ones" && t.total == 1)
+		eligible := in.reroll == "all-failures" || (in.reroll == "ones" && t.total == 1) || (in.reroll == "ones-and-twos" && t.total <= 2)
 		if eligible && kept < fresh {
 			rerollUsed = true
 			for _, again := range totals {

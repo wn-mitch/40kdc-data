@@ -18,7 +18,7 @@ import math
 import re
 from typing import Any, Literal, TypedDict
 
-DamageReroll = Literal["ones", "all-failures"]
+DamageReroll = Literal["ones", "ones-and-twos", "all-failures"]
 
 _DICE_RE = re.compile(r"^(\d*)D(\d+)([+-]\d+)?$", re.IGNORECASE)
 
@@ -125,7 +125,11 @@ def damage_roll(
     reroll_used = False
     for total, probability in totals:
         kept = final(total + offset)
-        eligible = reroll == "all-failures" or (reroll == "ones" and total == 1)
+        eligible = (
+            reroll == "all-failures"
+            or (reroll == "ones" and total == 1)
+            or (reroll == "ones-and-twos" and total <= 2)
+        )
         if eligible and kept < fresh:
             reroll_used = True
             for again, again_probability in totals:

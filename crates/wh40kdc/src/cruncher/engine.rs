@@ -446,10 +446,7 @@ pub fn crunch_model(
                 attacks_reroll,
                 &weapon_profile.stats.a,
             ) {
-                let subset = match reroll {
-                    RerollSubset::Ones => "ones",
-                    RerollSubset::AllFailures => "all-failures",
-                };
+                let subset = reroll.as_str();
                 detail.push_str(&format!("; reroll {subset} of A {}", &**dice));
             }
             detail
@@ -535,10 +532,7 @@ pub fn crunch_model(
                 .rerolls
                 .hit
                 .as_ref()
-                .map(|r| match r.subset {
-                    super::buffs::RerollSubset::Ones => "ones",
-                    super::buffs::RerollSubset::AllFailures => "all-failures",
-                })
+                .map(|r| r.subset.as_str())
                 .unwrap_or("none"),
             if crit_hit_threshold < 6 {
                 format!(", crit {crit_hit_threshold}+")
@@ -1075,10 +1069,7 @@ pub fn crunch_model(
             match damage_reroll {
                 Some(subset) => format!(
                     ", reroll {}{}",
-                    match subset {
-                        super::buffs::RerollSubset::Ones => "ones",
-                        super::buffs::RerollSubset::AllFailures => "all-failures",
-                    },
+                    subset.as_str(),
                     if per_attack.reroll_used { "" } else { " (no effect)" },
                 ),
                 None => String::new(),
@@ -1407,6 +1398,7 @@ fn wound_threshold(s: f64, t: f64) -> i64 {
 enum RerollKind {
     None,
     Ones,
+    OnesAndTwos,
     AllFailures,
 }
 
@@ -1414,6 +1406,7 @@ impl RerollKind {
     fn from_subset(s: super::buffs::RerollSubset) -> Self {
         match s {
             super::buffs::RerollSubset::Ones => RerollKind::Ones,
+            super::buffs::RerollSubset::OnesAndTwos => RerollKind::OnesAndTwos,
             super::buffs::RerollSubset::AllFailures => RerollKind::AllFailures,
         }
     }
@@ -1468,7 +1461,8 @@ fn check_probabilities(args: CheckArgs) -> CheckProbs {
             continue;
         }
         let eligible = matches!(args.reroll, RerollKind::AllFailures)
-            || (matches!(args.reroll, RerollKind::Ones) && face == 1);
+            || (matches!(args.reroll, RerollKind::Ones) && face == 1)
+            || (matches!(args.reroll, RerollKind::OnesAndTwos) && face <= 2);
         if !eligible {
             open += 1.0 / 6.0;
             continue;

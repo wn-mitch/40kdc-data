@@ -256,7 +256,11 @@ fn describe_contribution(c: &Value) -> String {
         "reroll" => format!(
             "re-roll {}{}",
             js_string(c.get("roll")),
-            if c["subset"] == "ones" { " 1s" } else { "" }
+            match c["subset"].as_str() {
+                Some("ones") => " 1s",
+                Some("ones-and-twos") => " 1s and 2s",
+                _ => "",
+            }
         ),
         "reroll-one" => format!("re-roll one {}", js_string(c.get("roll"))),
         "feel-no-pain" => {

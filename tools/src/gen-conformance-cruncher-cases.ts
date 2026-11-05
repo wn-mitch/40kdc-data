@@ -609,6 +609,41 @@ export function canonicalCriticalWoundCases(ds: Dataset) {
   });
 }
 
+/**
+ * Pin which failed dice each re-roll subset takes: "ones-and-twos" re-rolls a failed 1 or 2 and never
+ * a passing 2, and the widest of two stacked subsets wins.
+ */
+export function canonicalRerollSubsetCases(ds: Dataset) {
+  const source = { kind: "ability", abilityId: "fabricated-reroll-subset", abilityKind: "unit" } as const;
+  const reroll = (roll: string, subset: string) => ({ type: "re-roll", target: "this-unit", modifier: { roll, subset } });
+  const inputs: { id: string; effects: unknown[]; weaponId: string }[] = [
+    // Bolt rifle hits on 3+: a 1 and a 2 both fail, so the wider subset gains twice the narrower one.
+    { id: "hit-ones", effects: [reroll("hit", "ones")], weaponId: "bolt-rifle" },
+    { id: "hit-ones-and-twos", effects: [reroll("hit", "ones-and-twos")], weaponId: "bolt-rifle" },
+    { id: "hit-stacked-ones-under-ones-and-twos", effects: [reroll("hit", "ones"), reroll("hit", "ones-and-twos")], weaponId: "bolt-rifle" },
+    // Multi-melta's D6 Damage: a total of 1 or 2 is below a fresh roll's mean, so both are re-rolled.
+    { id: "damage-ones-and-twos", effects: [reroll("damage", "ones-and-twos")], weaponId: "multi-melta" },
+  ];
+  return inputs.map((row) => {
+    const weapon = ds.weapons.getAny(row.weaponId);
+    const unit = ds.units.getAny("intercessor-squad");
+    if (!weapon || !unit) throw new Error(`canonical reroll subset ${row.id}: weapon or target is missing`);
+    const context: EngineContext = { phase: "shooting", withinHalfRange: false, attackerStationary: false };
+    const buffs = row.effects.flatMap((effect) => {
+      const translated = effectToBuffs(effect, source, context);
+      if (translated.unsupported.length || translated.activatable.length) throw new Error(`canonical reroll subset ${row.id}: expected extracted buffs`);
+      return translated.applied;
+    });
+    const result = crunch({ attacker: { weapon: weapon.raw, profileIndex: 0 }, target: { unit: unit.raw, profileIndex: 0 }, modelsFiring: 5, context, buffs }, ds);
+    return { filename: `canonical-reroll-subset-${row.id}.json`, value: {
+      name: `Canonical reroll subset: ${row.id}`,
+      attacker: { weaponId: weapon.id, profileIndex: 0 }, target: { unitId: unit.id, profileIndex: 0 },
+      modelsFiring: 5, context, buffs,
+      expected: { stages: Object.fromEntries(result.stages.map((stage) => [stage.name, Math.round(stage.expected * 1e4) / 1e4])) },
+    } };
+  });
+}
+
 /** Pin gates in the actual damage path: from-dsl's contribution projection omits applicability. */
 export function canonicalWeaponScopeCases(ds: Dataset) {
   const source = { kind: "ability", abilityId: "fabricated-weapon-scope", abilityKind: "unit" } as const;

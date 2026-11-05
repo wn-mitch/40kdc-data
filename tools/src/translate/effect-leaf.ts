@@ -121,9 +121,11 @@ function reRoll(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): st
     counted != null
       ? counted
       : cnt != null
-      ? `${cnt === 1 ? "one" : `up to ${cnt}`} ${failed}${noun}${cnt === 1 ? "" : "s"}${m.subset === "ones" ? " of 1" : ""}`
+      ? `${cnt === 1 ? "one" : `up to ${cnt}`} ${failed}${noun}${cnt === 1 ? "" : "s"}${m.subset === "ones" ? " of 1" : m.subset === "ones-and-twos" ? " of 1 or 2" : ""}`
       : m.subset === "ones"
         ? `${rn === "any" ? "any" : "a"} ${noun} of 1`
+        : m.subset === "ones-and-twos"
+        ? `${rn === "any" ? "any" : "a"} ${noun} of 1 or 2`
         : m.subset === "all-failures"
           ? `a failed ${noun}`
           : rn === "any" ? "any roll" : `the ${noun}`;
@@ -139,7 +141,7 @@ function reRoll(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): st
 }
 
 function failedNoun(m: Record<string, unknown>, noun: string): string {
-  return m.subset === "all-failures" ? `failed ${noun}` : m.subset === "ones" ? `${noun} of 1` : noun;
+  return m.subset === "all-failures" ? `failed ${noun}` : m.subset === "ones" ? `${noun} of 1` : m.subset === "ones-and-twos" ? `${noun} of 1 or 2` : noun;
 }
 
 function rollResult(m: Record<string, unknown>, subj: string): string {

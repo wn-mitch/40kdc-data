@@ -9,7 +9,7 @@
  * a reduction acts on each roll rather than on the mean.
  */
 
-export type DamageReroll = "ones" | "all-failures";
+export type DamageReroll = "ones" | "ones-and-twos" | "all-failures";
 
 export interface DamageRollInput {
   /** The profile's printed D: a number or a dice expression. */
@@ -102,7 +102,7 @@ export function damageRoll(input: DamageRollInput): DamageRoll {
   let rerollUsed = false;
   for (const [total, probability] of totals) {
     const kept = final(total + parsed.offset);
-    const eligible = input.reroll === "all-failures" || (input.reroll === "ones" && total === 1);
+    const eligible = input.reroll === "all-failures" || (input.reroll === "ones" && total === 1) || (input.reroll === "ones-and-twos" && total <= 2);
     if (eligible && kept < fresh) {
       rerollUsed = true;
       for (const [again, againProbability] of totals) add(final(again + parsed.offset), probability * againProbability);

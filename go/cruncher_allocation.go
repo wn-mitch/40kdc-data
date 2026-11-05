@@ -39,7 +39,7 @@ type AttackModel struct {
 	ModelsFiring float64
 	// AttacksStat is one model's Attacks characteristic, before AttacksBonus.
 	AttacksStat any
-	// AttacksReroll is a re-roll of the Attacks dice ("ones" or "all-failures"), kept when at or
+	// AttacksReroll is a re-roll of the Attacks dice ("ones", "ones-and-twos" or "all-failures"), kept when at or
 	// above a fresh roll's mean; "" for none.
 	AttacksReroll string
 	// AttacksBonus is the flat attacks every model adds: the modifier and Blast.

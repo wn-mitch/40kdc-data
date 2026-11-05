@@ -124,13 +124,34 @@ pub enum SetStat {
     D,
 }
 
-/// Re-roll scope. `AllFailures` strictly beats `Ones` when two reroll buffs
-/// collide on the same roll type — [`resolve_buffs`] enforces that ordering.
+/// Re-roll scope: which failed dice a re-roll takes. A wider subset dominates a narrower one when
+/// two reroll buffs collide on the same roll type — [`resolve_buffs`] enforces that ordering.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum RerollSubset {
     Ones,
+    OnesAndTwos,
     AllFailures,
+}
+
+impl RerollSubset {
+    /// The wire name (`ones`, `ones-and-twos`, `all-failures`).
+    pub fn as_str(self) -> &'static str {
+        match self {
+            RerollSubset::Ones => "ones",
+            RerollSubset::OnesAndTwos => "ones-and-twos",
+            RerollSubset::AllFailures => "all-failures",
+        }
+    }
+
+    /// How many failed faces the subset reaches; a wider subset re-rolls every die a narrower one does.
+    fn reach(self) -> u8 {
+        match self {
+            RerollSubset::Ones => 1,
+            RerollSubset::OnesAndTwos => 2,
+            RerollSubset::AllFailures => 3,
+        }
+    }
 }
 
 /// Feel-no-pain scope. `All` (the default) applies to every unsaved wound;
@@ -631,11 +652,11 @@ fn merge_reroll(
             });
         }
         Some(cur) => {
-            // `all-failures` strictly beats `ones`; same-subset uses rank.
-            let stronger = match (incoming, cur.subset) {
-                (RerollSubset::AllFailures, RerollSubset::Ones) => true,
-                (RerollSubset::Ones, RerollSubset::AllFailures) => false,
-                _ => rank(source) < rank(&cur.dominant_source),
+            // A wider subset beats a narrower one; the same subset uses rank.
+            let stronger = match incoming.reach().cmp(&cur.subset.reach()) {
+                std::cmp::Ordering::Greater => true,
+                std::cmp::Ordering::Less => false,
+                std::cmp::Ordering::Equal => rank(source) < rank(&cur.dominant_source),
             };
             if stronger {
                 *cur = RerollState {

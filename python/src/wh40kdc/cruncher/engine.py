@@ -80,7 +80,7 @@ class AttackModel(TypedDict):
     #: One model's Attacks characteristic, before the flat additions below.
     attacksStat: Any
     #: A re-roll of the Attacks dice, kept when at or above a fresh roll's mean (else absent).
-    attacksReroll: NotRequired[Literal["ones", "all-failures"]]
+    attacksReroll: NotRequired[Literal["ones", "ones-and-twos", "all-failures"]]
     #: Flat attacks every model adds: the modifier and Blast.
     attacksBonus: float
     #: Rapid Fire's extra attacks per model when active, else None.
@@ -904,7 +904,11 @@ def _check_probabilities(
             crit_p += initial[1] / 6
             continue
         # Failed initial — eligible for reroll?
-        eligible = reroll == "all-failures" or (reroll == "ones" and face == 1)
+        eligible = (
+            reroll == "all-failures"
+            or (reroll == "ones" and face == 1)
+            or (reroll == "ones-and-twos" and face <= 2)
+        )
         if not eligible:
             open_p += 1 / 6
             continue

@@ -793,7 +793,7 @@ func checkProbabilities(unmodifiedNeeded, modifier float64, reroll string, autoF
 			critP += float64(c) / 6
 			continue
 		}
-		eligible := reroll == "all-failures" || (reroll == "ones" && face == 1)
+		eligible := reroll == "all-failures" || (reroll == "ones" && face == 1) || (reroll == "ones-and-twos" && face <= 2)
 		if !eligible {
 			openP += 1.0 / 6
 			continue

@@ -74,6 +74,8 @@ _SOURCE_KIND_RANK = {
 }
 
 
+_REROLL_REACH = {"ones": 1, "ones-and-twos": 2, "all-failures": 3}
+
 def _rank(s: BuffSource) -> int:
     if s.get("kind") == "ability":
         return _SOURCE_KIND_RANK.get(f"ability:{s.get('abilityKind')}", 99)
@@ -332,7 +334,8 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
             if cur is None:
                 out["rerolls"][c["roll"]] = {"subset": incoming, "dominantSource": source}
             else:
-                incoming_stronger = (incoming == "all-failures" and cur["subset"] == "ones") or (
+                # A wider subset re-rolls every die a narrower one does; the same subset uses rank.
+                incoming_stronger = _REROLL_REACH[incoming] > _REROLL_REACH[cur["subset"]] or (
                     incoming == cur["subset"] and _rank(source) < _rank(cur["dominantSource"])
                 )
                 if incoming_stronger:

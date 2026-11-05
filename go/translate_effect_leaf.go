@@ -214,8 +214,8 @@ func reRollLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		switch m["subset"] {
 		case "all-failures":
 			fn = "failed " + noun
-		case "ones":
-			fn = noun + " of 1"
+		case "ones", "ones-and-twos":
+			fn = noun + rerollFaceSuffix(m["subset"])
 		}
 		which = "a number of " + fn + "s equal to " + diceCase(m["count"])
 	} else if cnt, ok := m["count"].(float64); ok {
@@ -223,17 +223,13 @@ func reRollLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		if cnt == 1 {
 			qty, plural = "one", ""
 		}
-		ones := ""
-		if m["subset"] == "ones" {
-			ones = " of 1"
-		}
-		which = qty + " " + failed + noun + plural + ones
-	} else if m["subset"] == "ones" {
+		which = qty + " " + failed + noun + plural + rerollFaceSuffix(m["subset"])
+	} else if m["subset"] == "ones" || m["subset"] == "ones-and-twos" {
 		article := "a"
 		if rn == "any" {
 			article = "any"
 		}
-		which = article + " " + noun + " of 1"
+		which = article + " " + noun + rerollFaceSuffix(m["subset"])
 	} else if m["subset"] == "all-failures" {
 		which = "a failed " + noun
 	} else if rn == "any" {
@@ -847,4 +843,15 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 		return s
 	}
 	return describeBoardLeaf(e, m, subj, ctx)
+}
+
+// rerollFaceSuffix names the faces a "ones" or "ones-and-twos" re-roll takes (" of 1", " of 1 or 2").
+func rerollFaceSuffix(subset any) string {
+	switch subset {
+	case "ones":
+		return " of 1"
+	case "ones-and-twos":
+		return " of 1 or 2"
+	}
+	return ""
 }

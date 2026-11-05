@@ -18,6 +18,9 @@ var sourceKindRank = map[string]int{
 	"weapon-keyword":               7,
 }
 
+// rerollReach orders re-roll subsets by how many failed faces they take.
+var rerollReach = map[string]int{"ones": 1, "ones-and-twos": 2, "all-failures": 3}
+
 func rankOf(s map[string]any) int {
 	if getStr(s, "kind") == "ability" {
 		if r, ok := sourceKindRank["ability:"+getStr(s, "abilityKind")]; ok {
@@ -507,7 +510,8 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 			if !exists {
 				out.rerolls[roll] = rerollEntry{incoming, rankOf(source)}
 			} else {
-				stronger := (incoming == "all-failures" && cur.subset == "ones") ||
+				// A wider subset re-rolls every die a narrower one does; the same subset uses rank.
+				stronger := rerollReach[incoming] > rerollReach[cur.subset] ||
 					(incoming == cur.subset && rankOf(source) < cur.rank)
 				if stronger {
 					out.rerolls[roll] = rerollEntry{incoming, rankOf(source)}

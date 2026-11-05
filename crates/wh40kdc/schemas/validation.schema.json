@@ -8827,6 +8827,7 @@
                 "subset": {
                   "enum": [
                     "ones",
+                    "ones-and-twos",
                     "all-failures"
                   ]
                 },

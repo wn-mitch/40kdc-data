@@ -232,6 +232,7 @@ fn roll_parsed(
         let eligible = match input.reroll {
             Some(RerollSubset::AllFailures) => true,
             Some(RerollSubset::Ones) => total == 1,
+            Some(RerollSubset::OnesAndTwos) => total <= 2,
             None => false,
         };
         if eligible && kept < fresh {

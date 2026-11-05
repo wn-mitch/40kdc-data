@@ -17,6 +17,7 @@ import {
   type EngineContext,
   resolveBuffs,
   type ResolvedModifiers,
+  type RerollSubset,
   type WeaponKeywordRef,
 } from "./buffs.js";
 import { Dataset } from "../data/dataset.js";
@@ -58,7 +59,7 @@ export type AttackModel = {
   /** One model's Attacks characteristic, before the flat additions below. */
   attacksStat: unknown;
   /** A re-roll of the Attacks dice, kept when at or above a fresh roll's mean. */
-  attacksReroll?: "ones" | "all-failures";
+  attacksReroll?: RerollSubset;
   /** Flat attacks every model adds: the modifier and Blast. */
   attacksBonus: number;
   /** Rapid Fire's extra attacks per model when active, else null. */
@@ -572,7 +573,7 @@ function woundThreshold(S: number, T: number): number {
 function checkProbabilities(args: {
   unmodifiedNeeded: number;
   modifier: number;
-  reroll: "none" | "ones" | "all-failures";
+  reroll: "none" | RerollSubset;
   autoFailOnOne: boolean;
   autoPassOnSix: boolean;
   /** Natural roll ≥ this is a crit. Use 7 to disable crits. */
@@ -600,7 +601,7 @@ function checkProbabilities(args: {
     }
     // Failed initial — eligible for reroll?
     const eligible =
-      args.reroll === "all-failures" || (args.reroll === "ones" && face === 1);
+      args.reroll === "all-failures" || (args.reroll === "ones" && face === 1) || (args.reroll === "ones-and-twos" && face <= 2);
     if (!eligible) {
       open += 1 / 6;
       continue;

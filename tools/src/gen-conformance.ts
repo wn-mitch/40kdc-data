@@ -68,6 +68,7 @@ import { keystoneMeasurements, BOARD_INCHES } from "./terrain/keystones.js";
 import {
   canonicalAttackCompareCases,
   canonicalCriticalWoundCases,
+  canonicalRerollSubsetCases,
   canonicalWeaponScopeCases,
 } from "./gen-conformance-cruncher-cases.js";
 import {
@@ -2114,6 +2115,12 @@ function genEffectTranslation(): void {
         text: describeAbility({ effect: fc.effect as Effect, scope: fc.scope }),
       },
     });
+  }
+  // Pin the faces a ones-and-twos re-roll names, uncounted and counted.
+  for (const modifier of [{ roll: "hit", subset: "ones-and-twos" }, { roll: "wound", subset: "ones-and-twos", count: 1 }]) {
+    const effect = { type: "re-roll", target: "this-unit", modifier } as unknown as Effect;
+    const scope = { duration: "permanent" };
+    cases.push({ caseId: `reroll-ones-and-twos#${cases.length}`, effect, scope, expected: { text: describeAbility({ effect, scope }) } });
   }
   // Pin the charge permission's `after` clause for the sibling moves — they
   // rarely surface in the capped sample above (permission caps out on the
@@ -4471,7 +4478,7 @@ function genCanonicalCruncherCases(): void {
     writeJson(path, corpus);
     console.log(`abilities-resolver/${filename}: ${corpus.cases.length} cases`);
   }
-  for (const { filename, value } of [...canonicalWeaponScopeCases(Dataset.embedded()), ...canonicalAttackCompareCases(Dataset.embedded()), ...canonicalCriticalWoundCases(Dataset.embedded())]) {
+  for (const { filename, value } of [...canonicalWeaponScopeCases(Dataset.embedded()), ...canonicalAttackCompareCases(Dataset.embedded()), ...canonicalCriticalWoundCases(Dataset.embedded()), ...canonicalRerollSubsetCases(Dataset.embedded())]) {
     writeJson(join(CONFORMANCE, "cruncher", filename), value);
   }
 }

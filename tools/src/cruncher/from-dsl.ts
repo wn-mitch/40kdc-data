@@ -821,7 +821,7 @@ function translateReroll(
   if (opts.perspective === "target" && roll !== "save") return;
   const damagePath = roll === "hit" || roll === "wound" || roll === "save" || roll === "damage";
   // Re-rolling a random Attacks characteristic: the engine re-rolls each model's dice below the mean.
-  if (roll === "attacks" && modifier.count === undefined && (subset === "ones" || subset === "all-failures")) {
+  if (roll === "attacks" && modifier.count === undefined && (subset === "ones" || subset === "ones-and-twos" || subset === "all-failures")) {
     if (opts.perspective === "attacker") out.applied.push(withApplicability({ source, contribution: { type: "reroll", roll, subset } }, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))));
     return;
   }
@@ -839,7 +839,7 @@ function translateReroll(
     });
     return;
   }
-  if (damagePath && (subset === "ones" || subset === "all-failures")) {
+  if (damagePath && (subset === "ones" || subset === "ones-and-twos" || subset === "all-failures")) {
     out.applied.push(withApplicability({ source, contribution: { type: "reroll", roll, subset } }, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))));
     return;
   }
@@ -2594,7 +2594,7 @@ function describeContribution(c: BuffContribution): string {
     case "ap-mod":
       return `AP ${c.value}`;
     case "reroll":
-      return `re-roll ${c.roll}${c.subset === "ones" ? " 1s" : ""}`;
+      return `re-roll ${c.roll}${c.subset === "ones" ? " 1s" : c.subset === "ones-and-twos" ? " 1s and 2s" : ""}`;
     case "reroll-one":
       return `re-roll one ${c.roll}`;
     case "feel-no-pain":

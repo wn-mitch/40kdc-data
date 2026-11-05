@@ -72,7 +72,7 @@ pub(super) fn reroll(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     // mean.
     if r == Some("attacks")
         && !m.contains_key("count")
-        && matches!(s, Some("ones" | "all-failures"))
+        && matches!(s, Some("ones" | "ones-and-twos" | "all-failures"))
     {
         if opts.perspective == Attacker {
             emit(
@@ -103,7 +103,7 @@ pub(super) fn reroll(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         );
         return;
     }
-    if damage_path && matches!(s, Some("ones" | "all-failures")) {
+    if damage_path && matches!(s, Some("ones" | "ones-and-twos" | "all-failures")) {
         emit(
             opts,
             out,

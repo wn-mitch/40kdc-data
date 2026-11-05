@@ -33455,6 +33455,7 @@ impl ::std::convert::From<NonTieredRangeRef> for RangeRef {
 ///    "subset": {
 ///      "enum": [
 ///        "ones",
+///        "ones-and-twos",
 ///        "all-failures"
 ///      ]
 ///    },
@@ -33722,6 +33723,7 @@ impl<'de> ::serde::Deserialize<'de> for ReRollEffectModifierVariant0Pool {
 ///{
 ///  "enum": [
 ///    "ones",
+///    "ones-and-twos",
 ///    "all-failures"
 ///  ]
 ///}
@@ -33742,6 +33744,8 @@ impl<'de> ::serde::Deserialize<'de> for ReRollEffectModifierVariant0Pool {
 pub enum ReRollEffectModifierVariant0Subset {
     #[serde(rename = "ones")]
     Ones,
+    #[serde(rename = "ones-and-twos")]
+    OnesAndTwos,
     #[serde(rename = "all-failures")]
     AllFailures,
 }
@@ -33749,6 +33753,7 @@ impl ::std::fmt::Display for ReRollEffectModifierVariant0Subset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Ones => f.write_str("ones"),
+            Self::OnesAndTwos => f.write_str("ones-and-twos"),
             Self::AllFailures => f.write_str("all-failures"),
         }
     }
@@ -33760,6 +33765,7 @@ impl ::std::str::FromStr for ReRollEffectModifierVariant0Subset {
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         match value {
             "ones" => Ok(Self::Ones),
+            "ones-and-twos" => Ok(Self::OnesAndTwos),
             "all-failures" => Ok(Self::AllFailures),
             _ => Err("invalid value".into()),
         }

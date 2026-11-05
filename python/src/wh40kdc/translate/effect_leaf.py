@@ -262,10 +262,10 @@ def _re_roll(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     elif cnt is not None:
         which = (
             f"{'one' if cnt == 1 else f'up to {jstr(cnt)}'} {failed}{noun}{'' if cnt == 1 else 's'}"
-            f"{' of 1' if m.get('subset') == 'ones' else ''}"
+            f"{_subset_suffix(m)}"
         )
-    elif m.get("subset") == "ones":
-        which = f"{'any' if rn == 'any' else 'a'} {noun} of 1"
+    elif m.get("subset") in ("ones", "ones-and-twos"):
+        which = f"{'any' if rn == 'any' else 'a'} {noun}{_subset_suffix(m)}"
     elif m.get("subset") == "all-failures":
         which = f"a failed {noun}"
     else:
@@ -297,7 +297,12 @@ def _re_roll(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
 def _failed_noun(m: dict[str, Any], noun: str) -> str:
     if m.get("subset") == "all-failures":
         return f"failed {noun}"
-    return f"{noun} of 1" if m.get("subset") == "ones" else noun
+    return f"{noun}{_subset_suffix(m)}" if m.get("subset") in ("ones", "ones-and-twos") else noun
+
+
+def _subset_suffix(m: dict[str, Any]) -> str:
+    """The face a ``ones`` or ``ones-and-twos`` re-roll takes, as `` of 1`` or `` of 1 or 2``."""
+    return {"ones": " of 1", "ones-and-twos": " of 1 or 2"}.get(jstr(m.get("subset")), "")
 
 
 def _roll_result(m: dict[str, Any], subj: str) -> str:

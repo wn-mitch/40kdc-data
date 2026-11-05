@@ -1670,7 +1670,7 @@ func translateReroll(node, source map[string]any, opts dslOpts, out *effectTrans
 	damagePath := roll == "hit" || roll == "wound" || roll == "save" || roll == "damage"
 	applicability := combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))
 	// Re-rolling a random Attacks characteristic: the engine re-rolls each model's dice below the mean.
-	if _, capped := modifier["count"]; roll == "attacks" && !capped && (subset == "ones" || subset == "all-failures") {
+	if _, capped := modifier["count"]; roll == "attacks" && !capped && rerollReach[subset] > 0 {
 		if opts.perspective == "attacker" {
 			out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": "reroll", "roll": roll, "subset": subset}}, applicability))
 		}
@@ -1688,7 +1688,7 @@ func translateReroll(node, source map[string]any, opts dslOpts, out *effectTrans
 		out.unsupported = append(out.unsupported, unsup("re-roll: a count-capped permission other than one die of any result is not modelled by the expected-value engine", node))
 		return
 	}
-	if damagePath && (subset == "ones" || subset == "all-failures") {
+	if damagePath && rerollReach[subset] > 0 {
 		out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": "reroll", "roll": roll, "subset": subset}}, applicability))
 		return
 	}
@@ -2585,11 +2585,8 @@ func describeContribution(c map[string]any) string {
 	case "ap-mod":
 		return "AP " + numStr(c["value"])
 	case "reroll":
-		ones := ""
-		if getStr(c, "subset") == "ones" {
-			ones = " 1s"
-		}
-		return "re-roll " + getStr(c, "roll") + ones
+		faces := map[string]string{"ones": " 1s", "ones-and-twos": " 1s and 2s"}[getStr(c, "subset")]
+		return "re-roll " + getStr(c, "roll") + faces
 	case "reroll-one":
 		return "re-roll one " + getStr(c, "roll")
 	case "feel-no-pain":

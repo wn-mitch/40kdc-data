@@ -41,7 +41,7 @@ export function rollEffect(leaf: CompileLeaf, context: EffectContext, target: Ta
       }
       const roll = abilityRollOf(leaf) ?? closed(leaf, "roll");
       const subset = closed(leaf, "subset");
-      const modifier: Node = subset === "ones" ? { roll, subset: "ones" } : subset === "failed" ? { roll, subset: "all-failures" } : { roll, result_scope: "any-result" };
+      const modifier: Node = subset === "ones" || subset === "ones-and-twos" ? { roll, subset } : subset === "failed" ? { roll, subset: "all-failures" } : { roll, result_scope: "any-result" };
       // Version 1 leaves have neither field; version 2 adds them, weapon_type defaulting to "all".
       const count = leaf.parameters.count === undefined ? undefined : closed(leaf, "count");
       if (count !== undefined) modifier.count = count;

@@ -278,6 +278,7 @@ fn re_roll(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
         ""
     };
     let ones = sv(m, "subset") == Some("ones");
+    let ones_and_twos = sv(m, "subset") == Some("ones-and-twos");
     // A counted allowance ("one for each model equipped with …") reads as a number of rolls.
     let counted = nn(m, "count").filter(|c| c.is_object() || c.is_array());
     let which = match cnt {
@@ -285,6 +286,7 @@ fn re_roll(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
             let failed_noun = match sv(m, "subset") {
                 Some("all-failures") => format!("failed {noun}"),
                 Some("ones") => format!("{noun} of 1"),
+                Some("ones-and-twos") => format!("{noun} of 1 or 2"),
                 _ => noun.clone(),
             };
             format!("a number of {failed_noun}s equal to {}", dice_case(counted))
@@ -299,10 +301,17 @@ fn re_roll(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
                     format!("up to {}", jv(c))
                 },
                 if one { "" } else { "s" },
-                if ones { " of 1" } else { "" }
+                if ones {
+                    " of 1"
+                } else if ones_and_twos {
+                    " of 1 or 2"
+                } else {
+                    ""
+                }
             )
         }
         None if ones => format!("{} {noun} of 1", if any { "any" } else { "a" }),
+        None if ones_and_twos => format!("{} {noun} of 1 or 2", if any { "any" } else { "a" }),
         None if sv(m, "subset") == Some("all-failures") => format!("a failed {noun}"),
         None if any => "any roll".to_string(),
         None => format!("the {noun}"),

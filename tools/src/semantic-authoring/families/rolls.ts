@@ -352,6 +352,14 @@ export const ROLL_EXTENSIONS: readonly FamilyExtension[] = [
       return (count as number) > 3 ? standIn(input, "count", 1, previous) : previous(input);
     },
   },
+  {
+    // "re-roll a Hit roll of 1 or 2".
+    family: "reroll",
+    version: 8,
+    description: "As the previous version, plus subset ones-and-twos: a failed roll of 1 or 2 can be re-rolled.",
+    schema: (previous) => withProperties(previous, { subset: widenedEnum(previous, "subset", ["ones-and-twos"]) }),
+    normalize: (input, previous) => (input.subset === "ones-and-twos" ? standIn(input, "subset", "ones", previous) : previous(input)),
+  },
   /**
    * The roll a multi-roll moment changed.
    */

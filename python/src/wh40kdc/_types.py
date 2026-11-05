@@ -1889,7 +1889,7 @@ class Modifier2(TypedDict):
 
 class Modifier3(TypedDict):
     roll: RollSelector
-    subset: Literal["ones", "all-failures"]
+    subset: Literal["ones", "ones-and-twos", "all-failures"]
     result_scope: NotRequired[Literal["any-result"]]
     count: NotRequired[int | str | BattleSizeValue | RollReference | CountOf]
     pool: NotRequired[str]
@@ -1900,7 +1900,7 @@ class Modifier3(TypedDict):
 
 class Modifier4(TypedDict):
     roll: RollSelector
-    subset: NotRequired[Literal["ones", "all-failures"]]
+    subset: NotRequired[Literal["ones", "ones-and-twos", "all-failures"]]
     result_scope: Literal["any-result"]
     count: NotRequired[int | str | BattleSizeValue | RollReference | CountOf]
     pool: NotRequired[str]

@@ -94,6 +94,9 @@ RECIPIENT_SNAPSHOT_UNAVAILABLE = (
 _STOCHASTIC_DICE_GATED_REASON = "dice-gated effect: stochastic; not expressible as a buff"
 
 
+# The failed dice a re-roll can take, narrowest first.
+_REROLL_SUBSETS = ("ones", "ones-and-twos", "all-failures")
+
 def effect_to_buffs(
     effect: Any,
     source: BuffSource,
@@ -912,7 +915,7 @@ def _translate_reroll(
     )
     # Re-rolling a random Attacks characteristic: the engine re-rolls each model's dice below the
     # mean.
-    if roll == "attacks" and modifier.get("count") is None and subset in ("ones", "all-failures"):
+    if roll == "attacks" and modifier.get("count") is None and subset in _REROLL_SUBSETS:
         if opts["perspective"] == "attacker":
             out["applied"].append(
                 with_applicability(
@@ -947,7 +950,7 @@ def _translate_reroll(
             }
         )
         return
-    if damage_path and subset in ("ones", "all-failures"):
+    if damage_path and subset in _REROLL_SUBSETS:
         out["applied"].append(
             with_applicability(
                 {
@@ -3369,7 +3372,7 @@ def _describe_contribution(c: dict[str, Any]) -> str:
     if ctype == "ap-mod":
         return f"AP {_num_str(c['value'])}"
     if ctype == "reroll":
-        ones = " 1s" if c.get("subset") == "ones" else ""
+        ones = {"ones": " 1s", "ones-and-twos": " 1s and 2s"}.get(str(c.get("subset")), "")
         return f"re-roll {c['roll']}{ones}"
     if ctype == "reroll-one":
         return f"re-roll one {c['roll']}"

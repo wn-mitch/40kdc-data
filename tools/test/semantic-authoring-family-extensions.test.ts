@@ -87,6 +87,14 @@ describe("Semantic authoring family extensions", () => {
     expect(result.ok && result.mechanics.effect).toEqual({ type: "ability-grant", target: "this-model", modifier: { ability: "deadly-demise", value: "D6" } });
   });
 
+  it("re-rolls a failed 1 or 2 from reroll version 8, and refuses the subset before it", () => {
+    expect(normalize("reroll", { roll: "hit", subset: "ones-and-twos", weapon_type: "all" })).toEqual({ roll: "hit", subset: "ones-and-twos", weapon_type: "all" });
+    expect(() => normalizeFingerprintParameters("reroll", { roll: "hit", subset: "ones-and-twos", weapon_type: "all" }, 7)).toThrow();
+    expect(() => normalize("reroll", { roll: "hit", subset: "twos", weapon_type: "all" })).toThrow();
+    const result = compileLeaves([leaf("reroll", { roll: "hit", subset: "ones-and-twos", weapon_type: "all" })], "You can re-roll a Hit roll of 1 or 2.");
+    expect(result.ok && result.mechanics.effect).toEqual({ type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones-and-twos" } });
+  });
+
   it("reads 'every keyword plus one of these' bearers and checks them against core groups", () => {
     const eligible = normalize("bearer-eligibility", { keywords: ["Adeptus Astartes"], any_keywords: ["MOUNTED", "INFANTRY"], match: "all", excluded_keywords: [] });
     expect(eligible).toEqual({ keywords: ["ADEPTUS ASTARTES"], any_keywords: ["INFANTRY", "MOUNTED"], match: "all", excluded_keywords: [] });
