@@ -14227,7 +14227,53 @@
     }
   },
   {
-    "caseId": "chainbreaker-imperial-knights#207",
+    "caseId": "catch-dat-red-bit-orks#207",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "heal",
+          "target": "this-unit",
+          "modifier": {
+            "amount": "D3"
+          }
+        },
+        {
+          "type": "marker",
+          "target": "this-unit",
+          "modifier": {
+            "label": "Grot Orderly token",
+            "operation": "place"
+          }
+        },
+        {
+          "type": "marker",
+          "target": "this-unit",
+          "modifier": {
+            "label": "Grot Orderly token",
+            "operation": "remove"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability",
+        "id": "crude-surgery-orks"
+      },
+      "subject": "this-model",
+      "optional": true
+    },
+    "expected": {
+      "text": "Each time this model uses Crude Surgery, you may use this ability:\n  -> The unit regains up to D3 lost wounds.\n  -> Place a Grot Orderly token marker.\n  -> Remove that Grot Orderly token marker from the battlefield."
+    }
+  },
+  {
+    "caseId": "chainbreaker-imperial-knights#208",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -14296,7 +14342,7 @@
     }
   },
   {
-    "caseId": "chaplet-of-sacrifice-hallowed-martyrs-adepta-sororitas#208",
+    "caseId": "chaplet-of-sacrifice-hallowed-martyrs-adepta-sororitas#209",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14397,7 +14443,7 @@
     }
   },
   {
-    "caseId": "cherub-agents-of-the-imperium#209",
+    "caseId": "cherub-agents-of-the-imperium#210",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -14447,7 +14493,7 @@
     }
   },
   {
-    "caseId": "chief-librarian-adeptus-astartes#210",
+    "caseId": "chief-librarian-adeptus-astartes#211",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -14698,7 +14744,7 @@
     }
   },
   {
-    "caseId": "chief-librarian-blood-angels#211",
+    "caseId": "chief-librarian-blood-angels#212",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -14984,7 +15030,7 @@
     }
   },
   {
-    "caseId": "chief-librarian-dark-angels#212",
+    "caseId": "chief-librarian-dark-angels#213",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15226,7 +15272,7 @@
     }
   },
   {
-    "caseId": "close-range-killers-chaos-knights#213",
+    "caseId": "close-range-killers-chaos-knights#214",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15267,7 +15313,7 @@
     }
   },
   {
-    "caseId": "close-range-titan-killer-astra-militarum#214",
+    "caseId": "close-range-titan-killer-astra-militarum#215",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15310,7 +15356,7 @@
     }
   },
   {
-    "caseId": "code-chivalric-imperial-knights#215",
+    "caseId": "code-chivalric-imperial-knights#216",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15551,7 +15597,7 @@
     }
   },
   {
-    "caseId": "codex-fire-patterns-adeptus-astartes#216",
+    "caseId": "codex-fire-patterns-adeptus-astartes#217",
     "effect": {
       "type": "weapon-ability-range",
       "target": {
@@ -15575,7 +15621,7 @@
     }
   },
   {
-    "caseId": "cold-and-calculating-adeptus-astartes#217",
+    "caseId": "cold-and-calculating-adeptus-astartes#218",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15805,7 +15851,7 @@
     }
   },
   {
-    "caseId": "combat-doctrines-adeptus-astartes#218",
+    "caseId": "combat-doctrines-adeptus-astartes#219",
     "effect": {
       "type": "stance-select",
       "mode": "consumable",
@@ -15931,7 +15977,7 @@
     }
   },
   {
-    "caseId": "combat-doctrines-assault-force-adeptus-astartes#219",
+    "caseId": "combat-doctrines-assault-force-adeptus-astartes#220",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16033,7 +16079,7 @@
     }
   },
   {
-    "caseId": "combat-embarkation-kauyon-tau-empire#220",
+    "caseId": "combat-embarkation-kauyon-tau-empire#221",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16101,7 +16147,7 @@
     }
   },
   {
-    "caseId": "combat-squad-chaos-space-marines#221",
+    "caseId": "combat-squad-chaos-space-marines#222",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -16124,7 +16170,7 @@
     }
   },
   {
-    "caseId": "combat-squad-grey-knights#222",
+    "caseId": "combat-squad-grey-knights#223",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -16147,7 +16193,7 @@
     }
   },
   {
-    "caseId": "compact-astra-militarum#223",
+    "caseId": "compact-astra-militarum#224",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -16189,7 +16235,7 @@
     }
   },
   {
-    "caseId": "contemptuous-disregard-court-of-the-phoenician-emperors-children#224",
+    "caseId": "contemptuous-disregard-court-of-the-phoenician-emperors-children#225",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16229,7 +16275,7 @@
     }
   },
   {
-    "caseId": "corrupting-taint-infernal-lance-chaos-knights#225",
+    "caseId": "corrupting-taint-infernal-lance-chaos-knights#226",
     "effect": {
       "type": "select-objective",
       "selector": {
@@ -16268,7 +16314,7 @@
     }
   },
   {
-    "caseId": "courageous-diversion-recon-element-astra-militarum#226",
+    "caseId": "courageous-diversion-recon-element-astra-militarum#227",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -16331,7 +16377,7 @@
     }
   },
   {
-    "caseId": "crewed-platform-storm-guardians-aeldari#227",
+    "caseId": "crewed-platform-storm-guardians-aeldari#228",
     "effect": {
       "type": "destroy-models",
       "target": {
@@ -16357,7 +16403,7 @@
     }
   },
   {
-    "caseId": "cult-ambush-genestealer-cults#228",
+    "caseId": "cult-ambush-genestealer-cults#229",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -16708,7 +16754,7 @@
     }
   },
   {
-    "caseId": "cult-infiltration-genestealer-cults#229",
+    "caseId": "cult-infiltration-genestealer-cults#230",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16751,7 +16797,7 @@
     }
   },
   {
-    "caseId": "curse-of-the-wulfen-space-wolves#230",
+    "caseId": "curse-of-the-wulfen-space-wolves#231",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -16892,7 +16938,7 @@
     }
   },
   {
-    "caseId": "da-gobshot-thunderbuss-brute-bosses-orks#231",
+    "caseId": "da-gobshot-thunderbuss-brute-bosses-orks#232",
     "effect": {
       "type": "weapon-grant",
       "target": "this-model",
@@ -16908,7 +16954,7 @@
     }
   },
   {
-    "caseId": "da-krunch-wurrband-orks#232",
+    "caseId": "da-krunch-wurrband-orks#233",
     "effect": {
       "type": "weapon-grant",
       "target": "this-model",
@@ -16924,7 +16970,7 @@
     }
   },
   {
-    "caseId": "daemonic-allegiance-soul-grinder-chaos-daemons#233",
+    "caseId": "daemonic-allegiance-soul-grinder-chaos-daemons#234",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -17045,7 +17091,7 @@
     }
   },
   {
-    "caseId": "daemonic-patrons-callous-blades-flawless-blades-emperors-children#234",
+    "caseId": "daemonic-patrons-callous-blades-flawless-blades-emperors-children#235",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17128,7 +17174,7 @@
     }
   },
   {
-    "caseId": "daemonkin-aranis-zarkan-chaos-space-marines#235",
+    "caseId": "daemonkin-aranis-zarkan-chaos-space-marines#236",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17171,7 +17217,7 @@
     }
   },
   {
-    "caseId": "damaged#236",
+    "caseId": "damaged#237",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17201,7 +17247,7 @@
     }
   },
   {
-    "caseId": "damaged-1-6-wounds-remaining-adepta-sororitas#237",
+    "caseId": "damaged-1-6-wounds-remaining-adepta-sororitas#238",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17243,7 +17289,7 @@
     }
   },
   {
-    "caseId": "damaged-1-6-wounds-remaining-necrons#238",
+    "caseId": "damaged-1-6-wounds-remaining-necrons#239",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17284,7 +17330,7 @@
     }
   },
   {
-    "caseId": "damaged-1-7-wounds-remaining-chaos-daemons#239",
+    "caseId": "damaged-1-7-wounds-remaining-chaos-daemons#240",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17316,7 +17362,7 @@
     }
   },
   {
-    "caseId": "data-severed-adeptus-mechanicus#240",
+    "caseId": "data-severed-adeptus-mechanicus#241",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17359,7 +17405,7 @@
     }
   },
   {
-    "caseId": "dauntless-bravery-sanguinary-spearhead-blood-angels#241",
+    "caseId": "dauntless-bravery-sanguinary-spearhead-blood-angels#242",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17404,7 +17450,7 @@
     }
   },
   {
-    "caseId": "dauntless-defenders-imperial-knights#242",
+    "caseId": "dauntless-defenders-imperial-knights#243",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17456,7 +17502,7 @@
     }
   },
   {
-    "caseId": "death-korps-medi-pack-astra-militarum#243",
+    "caseId": "death-korps-medi-pack-astra-militarum#244",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17560,51 +17606,6 @@
     },
     "expected": {
       "text": "At the start of your Command phase, you may use this ability, while the unit is below its starting strength:\n  -> Unless at least 2 models in this unit are equipped with the Death Korps Medi Pack wargear, return D3 destroyed DEATH KORPS TROOPERS models to the unit, each with its full wounds remaining.\n  -> If at least 2 models in this unit are equipped with the Death Korps Medi Pack wargear, return D3+1 destroyed DEATH KORPS TROOPERS models to the unit, each with its full wounds remaining."
-    }
-  },
-  {
-    "caseId": "deathstrike-missile-astra-militarum#244",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "choice",
-        "options": [
-          {
-            "type": "marker",
-            "target": "this-model",
-            "modifier": {
-              "label": "deathstrike-target",
-              "operation": "place",
-              "placement": "anywhere"
-            }
-          },
-          {
-            "type": "marker",
-            "target": "this-model",
-            "modifier": {
-              "label": "deathstrike-target",
-              "operation": "relocate",
-              "placement": "anywhere"
-            }
-          }
-        ],
-        "choice_label": "target-action"
-      }
-    },
-    "scope": {
-      "duration": "battle"
-    },
-    "usage": {
-      "frequency": "first-this-battle"
-    },
-    "expected": {
-      "text": "The first time this battle, during the Shooting phase, for the rest of the battle:\n  Select one of the following (Target Action):\n    - Place a deathstrike target marker anywhere.\n    - Move the deathstrike target marker."
     }
   },
   {

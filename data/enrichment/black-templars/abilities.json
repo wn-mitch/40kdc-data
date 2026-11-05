@@ -2235,19 +2235,57 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
     "detachment_id": "vow-sworn-of-vedrenn",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "D",
+          "operation": "improve",
+          "value": 1,
+          "weapons": {
+            "type": "melee"
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "VOW-SWORN BLADEGUARD VETERAN SQUAD",
+          "VOW-SWORN SWORD BRETHREN SQUAD"
+        ]
+      }
+    },
+    "source_digest": "48554a78061b6e36be91f3c05438c88561e6177614e3b088f388933ef32b2dec"
   },
   {
     "ability_id": "heresy-begets-retribution-vow-sworn-crusaders-black-templars",
@@ -3285,9 +3323,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "castellan",
       "chaplain-grimaldus",
@@ -3303,11 +3340,127 @@
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "stance-select",
+      "mode": "consumable",
+      "options": [
+        {
+          "id": "assault-doctrine",
+          "name": "Assault Doctrine",
+          "effect": {
+            "type": "ability-part",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": true,
+                "despite": [
+                  "advanced"
+                ]
+              }
+            },
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "move_types": [
+                  "advance"
+                ],
+                "to": "move"
+              }
+            }
+          }
+        },
+        {
+          "id": "devastator-doctrine",
+          "name": "Devastator Doctrine",
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "assault"
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        },
+        {
+          "id": "tactical-doctrine",
+          "name": "Tactical Doctrine",
+          "effect": {
+            "type": "ability-part",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "shoot",
+                    "allow": true,
+                    "despite": [
+                      "fell-back"
+                    ]
+                  }
+                },
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": true,
+                    "despite": [
+                      "fell-back"
+                    ]
+                  }
+                }
+              ]
+            },
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "move_types": [
+                  "fall-back"
+                ],
+                "to": "move"
+              }
+            }
+          }
+        }
+      ],
+      "min_choices": 1,
+      "max_choices": 1
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "27784b8df061d7215e01f5d5c005c1448d89a0dbbf908d61565fff6785359e81"
   },
   {
     "ability_id": "combat-embarkation-black-templars",

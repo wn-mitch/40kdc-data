@@ -1187,9 +1187,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "deathwatch-terminator-squad"
     ],
@@ -1197,11 +1196,123 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "battle-started",
+            "optional": true
+          },
+          "effect": {
+            "type": "marker",
+            "target": "this-unit",
+            "modifier": {
+              "label": "teleport-homer-token",
+              "operation": "place"
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "used",
+            "filter": {
+              "kind": "stratagem",
+              "id": "rapid-ingress"
+            },
+            "object": "this-unit",
+            "optional": true
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "cost-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "of": "stratagem",
+                  "operation": "decrease",
+                  "amount": 1,
+                  "applies_to": "the-triggering-use"
+                }
+              },
+              {
+                "type": "set-up",
+                "target": "this-unit",
+                "modifier": {
+                  "to": "battlefield",
+                  "min_enemy_distance": {
+                    "inches": 8
+                  },
+                  "mandatory": true,
+                  "near": [
+                    {
+                      "of": {
+                        "marker": "teleport-homer-token"
+                      },
+                      "range": {
+                        "inches": 3
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "marker",
+                "target": "this-unit",
+                "modifier": {
+                  "label": "teleport-homer-token",
+                  "operation": "remove"
+                }
+              }
+            ]
+          },
+          "duration": "resolution"
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "subject": {
+              "owner": "enemy"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-subject",
+                "filter": {
+                  "within": {
+                    "of": {
+                      "marker": "teleport-homer-token"
+                    },
+                    "range": {
+                      "inches": 1
+                    }
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "marker",
+              "target": "this-unit",
+              "modifier": {
+                "label": "teleport-homer-token",
+                "operation": "remove"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "366e36491dee4900ac413d56653dc02c5441f5c62c8ff3fe4c0161df9c1429c6"
   },
   {
     "ability_id": "terminatus-assault-deathwatch",
@@ -1501,9 +1612,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "corvus-blackstar",
       "deathwatch-terminator-squad",
@@ -1520,11 +1630,127 @@
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "stance-select",
+      "mode": "consumable",
+      "options": [
+        {
+          "id": "assault-doctrine",
+          "name": "Assault Doctrine",
+          "effect": {
+            "type": "ability-part",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": true,
+                "despite": [
+                  "advanced"
+                ]
+              }
+            },
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "move_types": [
+                  "advance"
+                ],
+                "to": "move"
+              }
+            }
+          }
+        },
+        {
+          "id": "devastator-doctrine",
+          "name": "Devastator Doctrine",
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "assault"
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        },
+        {
+          "id": "tactical-doctrine",
+          "name": "Tactical Doctrine",
+          "effect": {
+            "type": "ability-part",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "shoot",
+                    "allow": true,
+                    "despite": [
+                      "fell-back"
+                    ]
+                  }
+                },
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": true,
+                    "despite": [
+                      "fell-back"
+                    ]
+                  }
+                }
+              ]
+            },
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "move_types": [
+                  "fall-back"
+                ],
+                "to": "move"
+              }
+            }
+          }
+        }
+      ],
+      "min_choices": 1,
+      "max_choices": 1
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "27784b8df061d7215e01f5d5c005c1448d89a0dbbf908d61565fff6785359e81"
   },
   {
     "ability_id": "dragonfire-rounds-deathwatch-support-deathwatch",

@@ -12908,9 +12908,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "painboy"
     ],
@@ -12918,11 +12917,47 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "heal",
+          "target": "this-unit",
+          "modifier": {
+            "amount": "D3"
+          }
+        },
+        {
+          "type": "marker",
+          "target": "this-unit",
+          "modifier": {
+            "label": "Grot Orderly token",
+            "operation": "place"
+          }
+        },
+        {
+          "type": "marker",
+          "target": "this-unit",
+          "modifier": {
+            "label": "Grot Orderly token",
+            "operation": "remove"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability",
+        "id": "crude-surgery-orks"
+      },
+      "subject": "this-model",
+      "optional": true
+    },
+    "source_digest": "8a775655137ba0e61009550d7b2706d0e1c67d78371cfa70c44c87047eb82e7d"
   },
   {
     "ability_id": "clever-know-wotz-orks",
@@ -14692,19 +14727,38 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "orks",
     "detachment_id": "ardmob",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "Sv",
+            "operation": "set",
+            "value": 3
+          }
+        },
+        {
+          "type": "invulnerable-save",
+          "target": "this-unit",
+          "modifier": {
+            "invuln_sv": 4
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "87fb56a5ded0971aecde6297821eca7db9b225b34a7df12c305e140c179d1a23"
   },
   {
     "ability_id": "krump-em-ardmob-orks",

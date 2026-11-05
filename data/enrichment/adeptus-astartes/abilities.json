@@ -12217,19 +12217,40 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": "tacticus-attack-force",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "consolidation",
+        "distance": "D3+3"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "consolidation"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "TACTICUS"
+        ]
+      }
+    },
+    "source_digest": "5faa7c2ef581dfd21f93f3bf0a7ccc9107b682ce68cfc0106dd8ced09e32b1b9"
   },
   {
     "ability_id": "tactical-mainstay-adeptus-astartes",

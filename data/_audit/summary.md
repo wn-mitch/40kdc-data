@@ -8,20 +8,20 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 |---|--:|--:|--:|--:|--:|--:|--:|--:|
 | _core | 26 | 0 | 1 | 25 | 1 | 0 | 0 | 0 |
 | adepta-sororitas | 148 | 32 | 16 | 101 | 4 | 7 | 0 | 1 |
-| adeptus-astartes | 250 | 50 | 25 | 176 | 17 | 1 | 0 | 3 |
+| adeptus-astartes | 250 | 50 | 25 | 176 | 16 | 1 | 0 | 3 |
 | adeptus-custodes | 158 | 24 | 17 | 118 | 9 | 1 | 0 | 0 |
 | adeptus-mechanicus | 167 | 27 | 12 | 128 | 16 | 0 | 0 | 2 |
 | aeldari | 300 | 44 | 24 | 233 | 26 | 7 | 0 | 5 |
 | agents-of-the-imperium | 138 | 26 | 10 | 102 | 18 | 0 | 0 | 2 |
 | astra-militarum | 251 | 22 | 17 | 212 | 14 | 2 | 0 | 5 |
-| black-templars | 63 | 12 | 7 | 45 | 10 | 0 | 0 | 0 |
-| blood-angels | 61 | 14 | 6 | 41 | 4 | 1 | 0 | 0 |
+| black-templars | 63 | 13 | 7 | 44 | 8 | 0 | 0 | 0 |
+| blood-angels | 61 | 15 | 6 | 40 | 2 | 1 | 0 | 0 |
 | chaos-daemons | 195 | 22 | 14 | 160 | 17 | 7 | 0 | 4 |
 | chaos-knights | 110 | 13 | 15 | 82 | 0 | 2 | 0 | 0 |
 | chaos-space-marines | 281 | 51 | 22 | 211 | 24 | 7 | 0 | 3 |
-| dark-angels | 77 | 15 | 9 | 54 | 7 | 0 | 0 | 2 |
+| dark-angels | 77 | 16 | 9 | 53 | 5 | 0 | 0 | 2 |
 | death-guard | 160 | 17 | 6 | 137 | 16 | 1 | 0 | 3 |
-| deathwatch | 36 | 11 | 2 | 23 | 2 | 1 | 0 | 0 |
+| deathwatch | 36 | 12 | 2 | 22 | 0 | 1 | 0 | 0 |
 | drukhari | 164 | 25 | 16 | 125 | 20 | 5 | 0 | 1 |
 | emperors-children | 148 | 24 | 16 | 108 | 0 | 3 | 0 | 1 |
 | genestealer-cults | 147 | 21 | 6 | 121 | 13 | 1 | 0 | 1 |
@@ -31,7 +31,7 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 | iron-hands | 11 | 4 | 3 | 5 | 1 | 0 | 0 | 0 |
 | leagues-of-votann | 155 | 25 | 11 | 119 | 16 | 0 | 0 | 0 |
 | necrons | 230 | 29 | 23 | 178 | 15 | 1 | 0 | 1 |
-| orks | 209 | 32 | 9 | 168 | 7 | 0 | 0 | 0 |
+| orks | 209 | 32 | 10 | 167 | 5 | 0 | 0 | 0 |
 | raven-guard | 11 | 1 | 0 | 10 | 1 | 0 | 0 | 0 |
 | salamanders | 11 | 5 | 1 | 5 | 3 | 0 | 0 | 0 |
 | space-wolves | 87 | 16 | 6 | 65 | 8 | 5 | 0 | 0 |
@@ -41,23 +41,23 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 | ultramarines | 11 | 4 | 3 | 4 | 1 | 0 | 0 | 0 |
 | white-scars | 11 | 5 | 2 | 5 | 0 | 0 | 0 | 0 |
 | world-eaters | 147 | 13 | 8 | 126 | 2 | 0 | 0 | 0 |
-| **TOTAL** | **4536** | **712** | **365** | **3477** | **314** | **65** | **0** | **44** |
+| **TOTAL** | **4536** | **716** | **366** | **3472** | **303** | **65** | **0** | **44** |
 
 `stub*` = structural (empty-modifier placeholder node) — the authoring worklist. `notes-stub` = flagged in community_notes.
 
 ## Unsupported-effect reasons (offensive walk)
 
-- `319` — effect type "no-effect" is not modelled by the buff layer
-- `242` — effect type "permission" is not modelled by the buff layer
-- `124` — conditional: cannot evaluate condition "matches" against current context
+- `308` — effect type "no-effect" is not modelled by the buff layer
+- `246` — effect type "permission" is not modelled by the buff layer
+- `125` — conditional: cannot evaluate condition "matches" against current context
 - `121` — conditional: cannot evaluate condition "and" against current context
 - `88` — effect type "ability-grant" is not modelled by the buff layer
-- `82` — effect type "army-rule" is not modelled by the buff layer
-- `78` — effect type "cost-modifier" is not modelled by the buff layer
-- `72` — effect type "set-up" is not modelled by the buff layer
+- `84` — effect type "army-rule" is not modelled by the buff layer
+- `79` — effect type "cost-modifier" is not modelled by the buff layer
+- `73` — effect type "set-up" is not modelled by the buff layer
 - `71` — effect type "move-modifier" is not modelled by the buff layer
 - `68` — unit-filter target: identity, state or model membership is unresolved
-- `64` — effect type "move" is not modelled by the buff layer
+- `65` — effect type "move" is not modelled by the buff layer
 - `64` — effect type "ability-modifier" is not modelled by the buff layer
 - `61` — target "event-object" is not resolved by the buff engine
 - `58` — effect type "designate" is not modelled by the buff layer
@@ -77,8 +77,8 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `29` — stat-modifier AP on the attacker: defender-side stat; applies when the buffed unit is the target
 - `29` — effect type "ability-activate" is not modelled by the buff layer
 - `28` — re-roll on "advance" (subset …) is outside the damage path
+- `28` — effect type "heal" is not modelled by the buff layer
 - `28` — effect type "dice-table" is not modelled by the buff layer
-- `27` — effect type "heal" is not modelled by the buff layer
 - `26` — effect type "targeting" is not modelled by the buff layer
 - `26` — stat-modifier on "detection-range" is outside the damage path
 - `25` — conditional: cannot evaluate condition "attachment" against current context
@@ -89,13 +89,13 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `19` — effect type "resource-gain" is not modelled by the buff layer
 - `19` — select-objective: the bound objective marker is not resolved by the buff engine
 - `16` — trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients
+- `15` — stat-modifier Sv: defender-side stat; applies when the buffed unit is the target
 - `15` — post-attack moment: applies only to attacks made after the triggering unit's
 - `15` — effect type "weapon-grant" is not modelled by the buff layer
-- `14` — stat-modifier Sv: defender-side stat; applies when the buffed unit is the target
 - `14` — persistent-designation: retained selection state is not resolved by the buff engine
 - `14` — stat-modifier on "Ld" is outside the damage path
 - `14` — stat-modifier on "Range" is outside the damage path
-- `11` — effect type "marker" is not modelled by the buff layer
+- `13` — effect type "marker" is not modelled by the buff layer
 - `11` — roll-modifier on "advance" is outside the damage path
 - `11` — roll-result on "hit": only a critical threshold on hit or wound rolls is modelled
 - `11` — roll-result on "desperate-escape" is outside the damage path

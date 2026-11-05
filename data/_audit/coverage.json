@@ -29,7 +29,7 @@
       "defensive": 25,
       "inert": 176,
       "stub": 1,
-      "stubStructural": 17,
+      "stubStructural": 16,
       "gwTextLeak": 0,
       "defensiveSkipped": 3
     },
@@ -91,22 +91,22 @@
     {
       "faction": "black-templars",
       "total": 63,
-      "offensive": 12,
+      "offensive": 13,
       "defensive": 7,
-      "inert": 45,
+      "inert": 44,
       "stub": 0,
-      "stubStructural": 10,
+      "stubStructural": 8,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
     {
       "faction": "blood-angels",
       "total": 61,
-      "offensive": 14,
+      "offensive": 15,
       "defensive": 6,
-      "inert": 41,
+      "inert": 40,
       "stub": 1,
-      "stubStructural": 4,
+      "stubStructural": 2,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
@@ -146,11 +146,11 @@
     {
       "faction": "dark-angels",
       "total": 77,
-      "offensive": 15,
+      "offensive": 16,
       "defensive": 9,
-      "inert": 54,
+      "inert": 53,
       "stub": 0,
-      "stubStructural": 7,
+      "stubStructural": 5,
       "gwTextLeak": 0,
       "defensiveSkipped": 2
     },
@@ -168,11 +168,11 @@
     {
       "faction": "deathwatch",
       "total": 36,
-      "offensive": 11,
+      "offensive": 12,
       "defensive": 2,
-      "inert": 23,
+      "inert": 22,
       "stub": 1,
-      "stubStructural": 2,
+      "stubStructural": 0,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
@@ -279,10 +279,10 @@
       "faction": "orks",
       "total": 209,
       "offensive": 32,
-      "defensive": 9,
-      "inert": 168,
+      "defensive": 10,
+      "inert": 167,
       "stub": 0,
-      "stubStructural": 7,
+      "stubStructural": 5,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
@@ -388,26 +388,26 @@
   ],
   "totals": {
     "total": 4536,
-    "offensive": 712,
-    "defensive": 365,
-    "inert": 3477,
+    "offensive": 716,
+    "defensive": 366,
+    "inert": 3472,
     "stub": 65,
-    "stubStructural": 314,
+    "stubStructural": 303,
     "gwTextLeak": 0,
     "defensiveSkipped": 44
   },
   "unsupportedReasons": [
     {
       "reason": "effect type \"no-effect\" is not modelled by the buff layer",
-      "count": 319
+      "count": 308
     },
     {
       "reason": "effect type \"permission\" is not modelled by the buff layer",
-      "count": 242
+      "count": 246
     },
     {
       "reason": "conditional: cannot evaluate condition \"matches\" against current context",
-      "count": 124
+      "count": 125
     },
     {
       "reason": "conditional: cannot evaluate condition \"and\" against current context",
@@ -419,15 +419,15 @@
     },
     {
       "reason": "effect type \"army-rule\" is not modelled by the buff layer",
-      "count": 82
+      "count": 84
     },
     {
       "reason": "effect type \"cost-modifier\" is not modelled by the buff layer",
-      "count": 78
+      "count": 79
     },
     {
       "reason": "effect type \"set-up\" is not modelled by the buff layer",
-      "count": 72
+      "count": 73
     },
     {
       "reason": "effect type \"move-modifier\" is not modelled by the buff layer",
@@ -439,7 +439,7 @@
     },
     {
       "reason": "effect type \"move\" is not modelled by the buff layer",
-      "count": 64
+      "count": 65
     },
     {
       "reason": "effect type \"ability-modifier\" is not modelled by the buff layer",
@@ -518,12 +518,12 @@
       "count": 28
     },
     {
-      "reason": "effect type \"dice-table\" is not modelled by the buff layer",
+      "reason": "effect type \"heal\" is not modelled by the buff layer",
       "count": 28
     },
     {
-      "reason": "effect type \"heal\" is not modelled by the buff layer",
-      "count": 27
+      "reason": "effect type \"dice-table\" is not modelled by the buff layer",
+      "count": 28
     },
     {
       "reason": "effect type \"targeting\" is not modelled by the buff layer",
@@ -566,16 +566,16 @@
       "count": 16
     },
     {
+      "reason": "stat-modifier Sv: defender-side stat; applies when the buffed unit is the target",
+      "count": 15
+    },
+    {
       "reason": "post-attack moment: applies only to attacks made after the triggering unit's",
       "count": 15
     },
     {
       "reason": "effect type \"weapon-grant\" is not modelled by the buff layer",
       "count": 15
-    },
-    {
-      "reason": "stat-modifier Sv: defender-side stat; applies when the buffed unit is the target",
-      "count": 14
     },
     {
       "reason": "persistent-designation: retained selection state is not resolved by the buff engine",
@@ -591,7 +591,7 @@
     },
     {
       "reason": "effect type \"marker\" is not modelled by the buff layer",
-      "count": 11
+      "count": 13
     },
     {
       "reason": "roll-modifier on \"advance\" is outside the damage path",
@@ -4671,11 +4671,11 @@
       "faction": "adeptus-astartes",
       "ability_id": "tactical-focus-tacticus-attack-force-adeptus-astartes",
       "name": "Tactical Focus",
-      "shape": "no-effect",
-      "stub": true,
+      "shape": "move",
+      "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "gap": "effect type \"move\" is not modelled by the buff layer"
     },
     {
       "faction": "adeptus-astartes",
@@ -15721,11 +15721,11 @@
       "faction": "black-templars",
       "ability_id": "heavy-strikes-vow-sworn-of-vedrenn-black-templars",
       "name": "Heavy Strikes",
-      "shape": "no-effect",
-      "stub": true,
+      "shape": "conditional",
+      "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "black-templars",
@@ -15931,11 +15931,11 @@
       "faction": "black-templars",
       "ability_id": "combat-doctrines-black-templars",
       "name": "Combat Doctrines",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
+      "shape": "stance-select",
+      "stub": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "gap": "effect type \"permission\" is not modelled by the buff layer"
     },
     {
       "faction": "black-templars",
@@ -16531,11 +16531,11 @@
       "faction": "blood-angels",
       "ability_id": "combat-doctrines-blood-angels",
       "name": "Combat Doctrines",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
+      "shape": "stance-select",
+      "stub": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "gap": "effect type \"permission\" is not modelled by the buff layer"
     },
     {
       "faction": "blood-angels",
@@ -16571,11 +16571,11 @@
       "faction": "blood-angels",
       "ability_id": "sanguinius-fury-blood-angels",
       "name": "Sanguinius' Fury",
-      "shape": "no-effect",
-      "stub": true,
+      "shape": "sequence",
+      "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "gap": "effect type \"army-rule\" is not modelled by the buff layer"
     },
     {
       "faction": "blood-angels",
@@ -23061,11 +23061,11 @@
       "faction": "dark-angels",
       "ability_id": "dutiful-tenacity-dark-angels",
       "name": "Dutiful Tenacity",
-      "shape": "no-effect",
-      "stub": true,
+      "shape": "sequence",
+      "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "gap": "effect type \"army-rule\" is not modelled by the buff layer"
     },
     {
       "faction": "dark-angels",
@@ -23161,11 +23161,11 @@
       "faction": "dark-angels",
       "ability_id": "combat-doctrines-dark-angels",
       "name": "Combat Doctrines",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
+      "shape": "stance-select",
+      "stub": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "gap": "effect type \"permission\" is not modelled by the buff layer"
     },
     {
       "faction": "dark-angels",
@@ -25061,11 +25061,11 @@
       "faction": "deathwatch",
       "ability_id": "teleport-homer-deathwatch",
       "name": "Teleport Homer",
-      "shape": "no-effect",
-      "stub": true,
+      "shape": "sequence",
+      "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "gap": "effect type \"marker\" is not modelled by the buff layer"
     },
     {
       "faction": "deathwatch",
@@ -25101,11 +25101,11 @@
       "faction": "deathwatch",
       "ability_id": "combat-doctrines-deathwatch",
       "name": "Combat Doctrines",
-      "shape": "no-effect",
-      "stub": true,
-      "offensive": false,
+      "shape": "stance-select",
+      "stub": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "gap": "effect type \"permission\" is not modelled by the buff layer"
     },
     {
       "faction": "deathwatch",
@@ -38141,11 +38141,11 @@
       "faction": "orks",
       "ability_id": "catch-dat-red-bit-orks",
       "name": "Catch Dat Red Bit (Once per battle, per unit)",
-      "shape": "no-effect",
-      "stub": true,
+      "shape": "sequence",
+      "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "gap": "effect type \"heal\" is not modelled by the buff layer"
     },
     {
       "faction": "orks",
@@ -38441,11 +38441,11 @@
       "faction": "orks",
       "ability_id": "extra-platin-ardmob-orks",
       "name": "Extra Platin’",
-      "shape": "no-effect",
-      "stub": true,
+      "shape": "sequence",
+      "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": "stat-modifier Sv: defender-side stat; applies when the buffed unit is the target"
     },
     {
       "faction": "orks",

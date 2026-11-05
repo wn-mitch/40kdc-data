@@ -15,9 +15,9 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1237 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 0 | 181 | 276 |
-| stratagems | 0 | 0 | 1061 | 252 |
-| abilities | 0 | 0 | 3751 | 785 |
+| detachments | 0 | 0 | 183 | 274 |
+| stratagems | 0 | 0 | 1063 | 250 |
+| abilities | 0 | 0 | 3762 | 774 |
 | phase-mappings | 0 | 0 | 1206 | 375 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -27,20 +27,20 @@ dump confirmation.
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 11 | 15 |
 | adepta-sororitas | 0 | 0 | 121 | 27 |
-| adeptus-astartes | 0 | 0 | 213 | 37 |
+| adeptus-astartes | 0 | 0 | 214 | 36 |
 | adeptus-custodes | 0 | 0 | 145 | 13 |
 | adeptus-mechanicus | 0 | 0 | 141 | 26 |
 | aeldari | 0 | 0 | 247 | 53 |
 | agents-of-the-imperium | 0 | 0 | 98 | 40 |
 | astra-militarum | 0 | 0 | 208 | 43 |
-| black-templars | 0 | 0 | 52 | 11 |
-| blood-angels | 0 | 0 | 50 | 11 |
+| black-templars | 0 | 0 | 54 | 9 |
+| blood-angels | 0 | 0 | 52 | 9 |
 | chaos-daemons | 0 | 0 | 163 | 32 |
 | chaos-knights | 0 | 0 | 87 | 23 |
 | chaos-space-marines | 0 | 0 | 230 | 51 |
-| dark-angels | 0 | 0 | 62 | 15 |
+| dark-angels | 0 | 0 | 64 | 13 |
 | death-guard | 0 | 0 | 131 | 29 |
-| deathwatch | 0 | 0 | 31 | 5 |
+| deathwatch | 0 | 0 | 33 | 3 |
 | drukhari | 0 | 0 | 128 | 36 |
 | emperors-children | 0 | 0 | 126 | 22 |
 | genestealer-cults | 0 | 0 | 120 | 27 |
@@ -50,7 +50,7 @@ dump confirmation.
 | iron-hands | 0 | 0 | 9 | 2 |
 | leagues-of-votann | 0 | 0 | 129 | 26 |
 | necrons | 0 | 0 | 194 | 36 |
-| orks | 0 | 0 | 184 | 25 |
+| orks | 0 | 0 | 186 | 23 |
 | raven-guard | 0 | 0 | 10 | 1 |
 | salamanders | 0 | 0 | 6 | 5 |
 | space-wolves | 0 | 0 | 74 | 13 |
@@ -77,9 +77,9 @@ dump confirmation.
 | adeptus-astartes | ambiguous-source | 1 |
 | adeptus-astartes | digest-differs | 13 |
 | adeptus-astartes | no-source | 5 |
-| adeptus-astartes | stub | 17 |
+| adeptus-astartes | stub | 16 |
 | adeptus-astartes | unpublished | 1 |
-| adeptus-astartes | verified | 213 |
+| adeptus-astartes | verified | 214 |
 | adeptus-custodes | ambiguous-source | 1 |
 | adeptus-custodes | digest-differs | 2 |
 | adeptus-custodes | stub | 9 |
@@ -103,12 +103,12 @@ dump confirmation.
 | astra-militarum | unpublished | 18 |
 | astra-militarum | verified | 208 |
 | black-templars | digest-differs | 1 |
-| black-templars | stub | 10 |
-| black-templars | verified | 52 |
+| black-templars | stub | 8 |
+| black-templars | verified | 54 |
 | blood-angels | digest-differs | 6 |
-| blood-angels | stub | 4 |
+| blood-angels | stub | 2 |
 | blood-angels | unpublished | 1 |
-| blood-angels | verified | 50 |
+| blood-angels | verified | 52 |
 | chaos-daemons | digest-differs | 3 |
 | chaos-daemons | stub | 17 |
 | chaos-daemons | unpublished | 12 |
@@ -121,8 +121,8 @@ dump confirmation.
 | chaos-space-marines | unpublished | 15 |
 | chaos-space-marines | verified | 230 |
 | dark-angels | digest-differs | 8 |
-| dark-angels | stub | 7 |
-| dark-angels | verified | 62 |
+| dark-angels | stub | 5 |
+| dark-angels | verified | 64 |
 | death-guard | digest-differs | 4 |
 | death-guard | stub | 16 |
 | death-guard | unpublished | 9 |
@@ -130,8 +130,7 @@ dump confirmation.
 | deathwatch | ambiguous-source | 1 |
 | deathwatch | digest-differs | 1 |
 | deathwatch | no-source | 1 |
-| deathwatch | stub | 2 |
-| deathwatch | verified | 31 |
+| deathwatch | verified | 33 |
 | drukhari | digest-differs | 8 |
 | drukhari | stub | 20 |
 | drukhari | unpublished | 8 |
@@ -166,9 +165,9 @@ dump confirmation.
 | necrons | verified | 194 |
 | orks | ambiguous-source | 1 |
 | orks | digest-differs | 12 |
-| orks | stub | 7 |
+| orks | stub | 5 |
 | orks | unpublished | 5 |
-| orks | verified | 184 |
+| orks | verified | 186 |
 | raven-guard | stub | 1 |
 | raven-guard | verified | 10 |
 | salamanders | digest-differs | 2 |

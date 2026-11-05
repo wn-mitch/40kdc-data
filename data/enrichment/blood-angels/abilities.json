@@ -3174,9 +3174,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "astorath",
       "baal-predator",
@@ -3197,11 +3196,127 @@
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "stance-select",
+      "mode": "consumable",
+      "options": [
+        {
+          "id": "assault-doctrine",
+          "name": "Assault Doctrine",
+          "effect": {
+            "type": "ability-part",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": true,
+                "despite": [
+                  "advanced"
+                ]
+              }
+            },
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "move_types": [
+                  "advance"
+                ],
+                "to": "move"
+              }
+            }
+          }
+        },
+        {
+          "id": "devastator-doctrine",
+          "name": "Devastator Doctrine",
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "assault"
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        },
+        {
+          "id": "tactical-doctrine",
+          "name": "Tactical Doctrine",
+          "effect": {
+            "type": "ability-part",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "shoot",
+                    "allow": true,
+                    "despite": [
+                      "fell-back"
+                    ]
+                  }
+                },
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": true,
+                    "despite": [
+                      "fell-back"
+                    ]
+                  }
+                }
+              ]
+            },
+            "trigger": {
+              "event": "selected",
+              "filter": {
+                "move_types": [
+                  "fall-back"
+                ],
+                "to": "move"
+              }
+            }
+          }
+        }
+      ],
+      "min_choices": 1,
+      "max_choices": 1
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "27784b8df061d7215e01f5d5c005c1448d89a0dbbf908d61565fff6785359e81"
   },
   {
     "ability_id": "death-visions-of-sanguinius-blood-angels",
@@ -3308,19 +3423,87 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "blood-angels",
     "detachment_id": "wrath-of-the-doomed",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "DEATH COMPANY"
+            ]
+          },
+          "modifier": {
+            "definition": {
+              "type": "ability-part",
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "rule-state",
+                    "target": "this-unit",
+                    "modifier": {
+                      "direction": "granted",
+                      "rule_kind": "faction-rule",
+                      "rule": {
+                        "ability_id": "combat-doctrines-adeptus-astartes",
+                        "option_id": "assault-doctrine"
+                      }
+                    }
+                  },
+                  {
+                    "type": "rule-state",
+                    "target": "this-unit",
+                    "modifier": {
+                      "direction": "suppressed",
+                      "rule_kind": "faction-rule",
+                      "rule": {
+                        "ability_id": "combat-doctrines-adeptus-astartes",
+                        "option_id": "devastator-doctrine"
+                      }
+                    }
+                  },
+                  {
+                    "type": "rule-state",
+                    "target": "this-unit",
+                    "modifier": {
+                      "direction": "suppressed",
+                      "rule_kind": "faction-rule",
+                      "rule": {
+                        "ability_id": "combat-doctrines-adeptus-astartes",
+                        "option_id": "tactical-doctrine"
+                      }
+                    }
+                  }
+                ]
+              },
+              "trigger": {
+                "event": "phase-started"
+              }
+            }
+          }
+        },
+        {
+          "type": "army-rule",
+          "target": "this-unit",
+          "modifier": {
+            "rule": "single-chapter"
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "fc52462920cea0149ecc8543ef3f4ffe43cdec3c3d07a430f1d26ae1e39aab5d"
   },
   {
     "ability_id": "strategic-acumen-blood-angels",
