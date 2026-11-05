@@ -160,6 +160,21 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   const attackHeader = (leaf: CompileLeaf) => leaf.role === "EVENT" && leaf.family_id === "attack" && !stratagem;
   const attackFrame = header.some(attackHeader);
   if (header.some((leaf) => (leaf.role === "EVENT" && !attackHeader(leaf)) || HEADER_ONCE.has(leaf.family_id))) {
+    // "Restrictions: Your army can include …" after the moment's effects is about the list, not something the moment
+    // does: the army-only sentences that end the record are parts of their own, and the rest splits as it would alone.
+    const armyFrom = sentences.findIndex((_sentence, position) => position > firstEffectful && sentences.slice(position).every(armyOnly));
+    if (armyFrom !== -1) {
+      const before = sentences.slice(0, armyFrom).flat();
+      const army: CompileLeaf[][] = [];
+      for (const sentence of sentences.slice(armyFrom)) {
+        // "None of these models can be your WARLORD" stays with the composition rule it points back to.
+        const pointsBack = army.at(-1)?.some((leaf) => leaf.family_id === "army-construction" && leaf.parameters.rule === "composition")
+          && sentence.some((leaf) => leaf.family_id === "army-construction" && leaf.parameters.subject === "antecedent");
+        if (pointsBack) army.at(-1)!.push(...sentence);
+        else army.push([...sentence]);
+      }
+      return [...(sentenceSegments(before, sourceText) ?? [before]), ...army];
+    }
     // The header's moment is the whole record's, except across a bold heading line ("**Favoured ka’tah**"): each block
     // under one is a rule of its own, so it neither fires at the header's moment nor splits anywhere else.
     const headed = sentences.map((sentence, position) => position > firstEffectful && hasEffect(sentence.concat(sentences.slice(position + 1).flat()))

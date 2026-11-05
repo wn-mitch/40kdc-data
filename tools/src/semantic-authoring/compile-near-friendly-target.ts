@@ -2,8 +2,11 @@ import type { CompileLeaf } from "./compile-fragments.js";
 
 type Node = Record<string, unknown>;
 
-/** DSL unit-filter fields a Stratagem target's eligibility can carry beyond the keywords the target names. */
-const CARRIED = new Set(["owner", "all_of", "any_of", "state", "not_states"]);
+/**
+ * DSL unit-filter fields a Stratagem target's restrictions can carry beyond the keywords the target names. An
+ * exclusion ("(excluding TERMINATOR units)") becomes the target's excluded keywords.
+ */
+const CARRIED = new Set(["owner", "all_of", "any_of", "none_of", "state", "not_states"]);
 
 /**
  * "When an enemy unit ends a move within 8\" of a friendly K unit. That K unit.": the Stratagem's
@@ -44,6 +47,8 @@ export function bindNearFriendlyTarget(list: readonly CompileLeaf[], target: Nod
   ];
   const checks = [...(eligibility === undefined ? [] : [eligibility as Node]), ...states, check];
   const { count, ...others } = rest;
+  const excluded = [...new Set([...((others.excluded_keywords as string[] | undefined) ?? []), ...((filter.none_of as string[] | undefined) ?? [])])];
+  if (excluded.length > 0) others.excluded_keywords = excluded;
   return { count, side: "your-army", ...others, eligibility: checks.length === 1 ? checks[0]! : { operator: "and", operands: checks } };
 }
 

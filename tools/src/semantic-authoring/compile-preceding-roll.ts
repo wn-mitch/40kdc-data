@@ -141,8 +141,9 @@ function adjacentCondition(leaves: readonly CompileLeaf[], change: number, sourc
   if (/,/u.test(between)) return "refuse";
   const second = leaves[change + 2];
   if (isClauseCondition(second, leaves[change]!) && !/[.:;]/u.test(text(first.end_byte ?? first.start_byte, second!.start_byte))) {
-    // The distance's own unit-filter, with nothing after it that is a third condition.
-    const measured = first.family_id === "unit-position" && first.parameters.of === "following-filter" && second!.family_id === "unit-filter";
+    // The distance's (or engagement's) own unit-filter, with nothing after it that is a third condition.
+    const measured = ((first.family_id === "unit-position" && first.parameters.of === "following-filter")
+      || (first.family_id === "unit-state" && first.parameters.with === "following-filter")) && second!.family_id === "unit-filter";
     if (!measured || isClauseCondition(leaves[change + 3], leaves[change]!)) return "refuse";
     return "attach-with-filter";
   }

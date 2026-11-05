@@ -514,3 +514,28 @@ describe("a duration printed in a later part with a moment of its own", () => {
     expect(parts.map((part) => part.duration)).toEqual([undefined, "attack-sequence"]);
   });
 });
+
+describe("an ability used in any phase", () => {
+  // Hunts: "In any phase" was dropped as no restriction, so a lasting effect with no printed duration lasted the
+  // whole battle instead of until the end of the phase it was used in (core rule 01.02.02).
+  const text = "In any phase, when this unit suffers a mortal wound, this unit can use this ability. If it does, this unit has Feel No Pain 4+ against mortal wounds.";
+  const items = (window: boolean): Items => [
+    ...(window ? [["In any phase", "phase-window", { phase: "any" }] as Items[number]] : []),
+    ["when this unit suffers a mortal wound", "event", { kind: "damage-allocated", attack_type: "mortal", object: "this-unit" }],
+    ["this unit can use this ability", "optional-use", { who: "this-unit" }],
+    ["this unit has Feel No Pain 4+ against mortal wounds", "feel-no-pain", { threshold: 4, against: "mortal", subject: "this-unit" }],
+  ];
+  const scopeOf = (window: boolean) => {
+    const result = compileLeaves(placed(text, ...items(window)), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    return result.mechanics.scope;
+  };
+
+  it("lasts until the end of that phase when no duration is printed", () => {
+    expect(scopeOf(true)).toEqual({ duration: "phase" });
+  });
+
+  it("is permanent with no window at all", () => {
+    expect(scopeOf(false)).toEqual({ duration: "permanent" });
+  });
+});

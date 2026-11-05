@@ -201,6 +201,8 @@ export type CompileOptions = {
   weapons?: WeaponNameContext;
   /** Exact unit datasheet names resolve only within the owning faction. */
   units?: UnitNameContext;
+  /** Set by the compiler: the record printed "in any phase", the phase its lasting effects end with (compile-part-assemble.ts). */
+  anyPhaseWindow?: boolean;
 };
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
@@ -436,7 +438,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const objectiveSelections = list.filter((leaf) => leaf.family_id === "select-objective-open").map((leaf) => String(leaf.parameters.bind_as));
   list = list.map((leaf) => (leaf.family_id === "unit-position" && leaf.parameters.objective === "selected" || (leaf.family_id === "apply-mark" || leaf.family_id === "sticky-objective") && leaf.parameters.subject === "selected-objective") && objectiveSelections.length === 1
     ? { ...leaf, parameters: { ...leaf.parameters, selection_var: objectiveSelections[0] } } : leaf);
-  // "in any phase" with no turn restricts nothing: it says the ability is not phase-bound.
+  // "in any phase" with no turn restricts nothing: it says the ability is not phase-bound. It still names the
+  // phase the ability is used in, which lasting effects with no printed duration last until the end of (core rule 01.02.02).
+  const anyPhase = (leaf: CompileLeaf) => leaf.family_id === "phase-window" && leaf.parameters.phase === "any"
+    && (leaf.parameters.turn === undefined || leaf.parameters.turn === "either");
+  if (list.some(anyPhase)) options = { ...options, anyPhaseWindow: true };
   list = list.filter((leaf) => !(leaf.family_id === "phase-window" && leaf.parameters.phase === "any"
     && (leaf.parameters.turn === undefined || leaf.parameters.turn === "either")));
   // named-region-state is a whole ability by itself: the DSL shape it produces has no room for

@@ -408,7 +408,9 @@ export function assemblePart(
   };
   const windowLeaves = (part: number | null) => list.filter((_, index) => !consumedByContainer.has(index) && (part === null || windowPart(index) === part));
   const usedOrTriggered = durations.length === 0 && (behavior === "reactive" || behavior === "activated");
-  const period = usedOrTriggered && hasLastingEffect(body) ? windowPeriod(windowLeaves(partStarts.length ? 0 : null)) : null;
+  // "In any phase, when …" with no duration: the effects last until the end of the phase the ability is used in.
+  const period = usedOrTriggered && hasLastingEffect(body)
+    ? windowPeriod(windowLeaves(partStarts.length ? 0 : null)) ?? (options.anyPhaseWindow === true ? "phase" : null) : null;
   // A later part's own window gives it a lifetime when it holds a lasting effect and the record's window does not already bound it.
   const partPeriods = partStarts.map((_, position) => usedOrTriggered && period === null && hasLastingEffect(pieces[position + 1])
     ? windowPeriod(windowLeaves(position + 1)) : null);

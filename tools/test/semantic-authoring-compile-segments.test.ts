@@ -148,6 +148,34 @@ describe("Semantic authoring independent sentences", () => {
     expect(JSON.stringify(steps[1])).toContain("GAMMA");
   });
 
+  // Hunts: under an optional-use header the restriction compiled as a step of the in-game choice.
+  it("lowers a trailing army-construction sentence outside a header's moment and optional use", () => {
+    const text = "In your Command phase, you can use this ability. If you do, select one objective marker. Until your next Command phase, friendly GAMMA units add 1 to the Wound roll.\nRestrictions: Your army can include GAMMA units.";
+    const list = placed(text,
+      ["In your Command phase", "phase-window", { phase: "command", turn: "your" }],
+      ["you can use this ability", "optional-use", { who: "you" }],
+      ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
+      ["Your army can include GAMMA units", "army-construction", { rule: "composition", with_keywords: ["GAMMA"] }]);
+    const parts = sentenceSegments(list, text)!;
+    expect(parts).toHaveLength(2);
+    expect(parts[0]!.map((leaf) => leaf.family_id)).toEqual(["phase-window", "optional-use", "roll-modifier"]);
+    expect(parts[1]!.map((leaf) => leaf.family_id)).toEqual(["army-construction"]);
+    const steps = mechanicsOf(list, text).effect.steps as Array<Record<string, any>>;
+    expect(JSON.stringify(steps.at(-1))).toContain("GAMMA");
+    expect(JSON.stringify(steps.at(-1))).not.toContain('"phase-is"');
+  });
+
+  it("keeps a trailing points-back sentence with its composition rule under a header", () => {
+    const text = "Once per battle. Each time this unit shoots, add 1 to the Hit roll. Your army can include GAMMA units. None of these units can be your Warlord.";
+    const list = placed(text,
+      ["Once per battle", "usage-limit", { frequency: "once-per-battle" }],
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
+      ["Your army can include GAMMA units", "army-construction", { rule: "composition", with_keywords: ["GAMMA"] }],
+      ["None of these units can be your Warlord", "army-construction", { rule: "warlord-forbidden", subject: "antecedent" }]);
+    const parts = sentenceSegments(list, text)!;
+    expect(parts.map((part) => part.length)).toEqual([2, 2]);
+  });
+
   it("keeps a later sentence that cannot stand alone tied to the one it replaces", () => {
     // "instead" replaces the first sentence's effect, so the moment sentence stays tied to it. The replacement holds
     // only under the later moment, which no DSL form reads yet (compile-part-instead.ts), so the compile is refused.

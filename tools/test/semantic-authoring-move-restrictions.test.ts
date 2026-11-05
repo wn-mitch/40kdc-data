@@ -3,6 +3,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
+import { foldUnitFilters } from "../src/semantic-authoring/compile-unit-filters.js";
 import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 
@@ -70,6 +71,14 @@ describe("move-end nearest on a make-move (3670 shape)", () => {
 
   it("refuses a nearest end with no unit-filter right after it", () => {
     expect(refused([makeMove(), nearest(), permitEngaged()])).toMatch(/needs a unit-filter right after it/u);
+  });
+
+  // Hunts: a named option's body is folded again after the outer pass; the nearest end that already took its
+  // unit was refused there for having no unit-filter after it.
+  it("keeps a nearest end that already took its unit when the leaves are folded again", () => {
+    const once = foldUnitFilters([makeMove(), nearest(), enemyFilter()]);
+    expect(once.map((item) => item.family_id)).toEqual(["make-move", "move-end-nearest"]);
+    expect(foldUnitFilters(once)).toEqual(once);
   });
 
   it("refuses a nearest end with no move before it", () => {

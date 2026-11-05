@@ -454,10 +454,30 @@ describe("a used moment aimed at a filtered unit, or at one of several rules", (
     });
   });
 
-  it("refuses a filtered object with no unit-filter before it", () => {
+  // Hunts: "When you use the X Stratagem, if you target a friendly Y unit within 12\" of this model" was refused
+  // because the moment's filter and distance follow it.
+  it("makes the filter and distance after the moment, in its sentence, the trigger's object", () => {
+    const words = "When you use the Foo/Bar Stratagem, if you target a friendly ALPHA unit within 12\" of this model with that Stratagem, reduce the CP cost of that use by 1CP.";
+    const mechanics = compiled(placed(words,
+      ["When you use the Foo/Bar Stratagem", "event", { kind: "used", activity: "stratagem", object: "filtered-units", ids: ["foo", "bar"] }],
+      ["you target a friendly ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+      ["within 12\" of this model", "unit-position", { kind: "within", inches: 12, of: "this-model", subject: "filtered-units", negated: false }],
+      cost), words);
+    const object = { owner: "friendly", all_of: ["ALPHA"], within: { of: "this-model", range: { inches: 12 } } };
+    expect(mechanics.trigger).toEqual([
+      { event: "used", filter: { kind: "stratagem", id: "foo" }, object },
+      { event: "used", filter: { kind: "stratagem", id: "bar" }, object },
+    ]);
+  });
+
+  it("refuses a filtered object with no unit-filter next to it in its sentence", () => {
     const words = "When a unit is targeted with a Stratagem, reduce the CP cost of that use by 1CP.";
     expect(errorsOf(placed(words, ["targeted with a Stratagem", "event", { kind: "used", activity: "stratagem", object: "filtered-units" }], cost), words))
-      .toMatch(/unit-filter right before it/u);
+      .toMatch(/unit-filter right before or after it/u);
+    const later = "When a unit is targeted with a Stratagem. A friendly ALPHA unit reduces the CP cost of that use by 1CP.";
+    expect(errorsOf(placed(later, ["targeted with a Stratagem", "event", { kind: "used", activity: "stratagem", object: "filtered-units" }],
+      ["friendly ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+      ["reduces the CP cost of that use by 1CP", ...cost.slice(1)] as [string, string, Record<string, unknown>]), later)).toMatch(/unit-filter right before or after it/u);
   });
 
   it("is one trigger per named Stratagem", () => {

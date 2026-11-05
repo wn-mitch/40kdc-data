@@ -277,6 +277,15 @@ describe("a roll modifier for named weapons", () => {
     refusesWording("+1 to hazard rolls made for its heavy Plasma lamp and Plasma pistol weapons", {}, /not weapons: heavy/u);
   });
 
+  it("takes a subject lead in the wording only when it names the leaf's subject", () => {
+    const lead = "This unit has +1 to **hazard rolls** made for its Plasma lamp and Plasma pistol weapons";
+    const mechanics = mechanicsOf(placed(TEXT, [lead, "roll-modifier", roll()[2]]), TEXT, UNIT);
+    expect((mechanics.effect.steps as Array<{ modifier: Record<string, unknown> }>).map((step) => step.modifier.weapons)).toEqual([{ name: "Plasma lamp" }, { name: "Plasma pistol" }]);
+    expect(refusalOf(placed(TEXT, [lead, "roll-modifier", { ...roll()[2], subject: "this-model" }]), TEXT, UNIT)).toMatch(/"this unit" is not the leaf's subject this-model/u);
+    const model = "This model has +1 to hazard rolls made for its Plasma lamp and Plasma pistol weapons";
+    expect(refusalOf(placed(`${model}.`, [model, "roll-modifier", roll()[2]]), `${model}.`, UNIT)).toMatch(/"this model" is not the leaf's subject this-unit/u);
+  });
+
   it("passes the same wording with every emphasis mark removed", () => {
     const wording = "+1 to hazard rolls made for its Plasma lamp and Plasma pistol weapons";
     const text = `This unit has ${wording}.`;

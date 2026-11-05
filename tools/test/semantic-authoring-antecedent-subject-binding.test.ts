@@ -439,6 +439,17 @@ describe("'That K unit' naming the friendly unit of the WHEN's distance clause (
     expect(coreOf(compileItems(fallBack, fallBackItems({ ...engaged, at: "phase-start" }))).eligibility)
       .toEqual({ type: "unit-state", parameters: { state: "engaged", with: "event-subject", at: "phase-start" } });
   });
+
+  // Hunts: an exclusion on the friendly unit left the target bound to the enemy mover ("names no friendly K unit").
+  it("carries an exclusion on the friendly unit into the target's excluded keywords", () => {
+    const text = "Opponent's Movement phase, when an enemy unit is selected to Fall Back, if that unit is engaged with a friendly PIONEERS unit (excluding TERMINATOR units). That PIONEERS unit. Until the end of the phase, your unit's ranged attacks have [PRECISION].";
+    const items = fallBackItems({ states: ["engaged"], subject: "antecedent", negated: false, with: "following-filter" });
+    items.splice(5, 0, ["(excluding TERMINATOR units)", "unit-filter", { side: "friendly", excluded_keywords: ["TERMINATOR"] }, "WHEN"]);
+    expect(coreOf(compileItems(text, items))).toEqual({
+      count: "one", side: "your-army", selects: "unit", required_keywords: ["PIONEERS"], excluded_keywords: ["TERMINATOR"],
+      eligibility: { type: "unit-state", parameters: { state: "engaged", with: "event-subject" } },
+    });
+  });
 });
 
 describe("'That K unit' after the triggering attacks destroyed a model in a friendly K unit", () => {

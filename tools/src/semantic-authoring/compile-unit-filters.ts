@@ -108,7 +108,7 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       index = pastOwners(list, index, leaf) - 1;
       continue;
     }
-    if (leaf.family_id === "move-end-nearest" && destinationOf(leaf) === "following-filter") {
+    if (leaf.family_id === "move-end-nearest" && destinationOf(leaf) === "following-filter" && leaf.parameters.of === undefined) {
       // A move-end nearest the closest unit names that unit with the unit-filter right after it: the
       // filter after it names the unit the move ends nearest. The leaf takes the filter as `of`.
       if (!isFilter(next) || next!.fragment !== leaf.fragment) throw new CompileError("A move-end nearest the closest unit needs a unit-filter right after it.");
@@ -117,6 +117,7 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       index += 1;
     } else if (leaf.family_id === "move-end-nearest") {
       // An objective destination names no unit: it takes no filter, and a filter after it is left for its own rule.
+      // One that already took its unit (a named option's body compiled again) is kept as it is.
       out.push(leaf);
     } else if (leaf.family_id === "for-each-unit-select" && !bareForEach(leaf) && leaf.parameters.filter === undefined && isFilter(next) && next!.fragment === leaf.fragment
       && (leaf.parameters.scope === undefined || leaf.parameters.scope === next!.parameters.side)) {
@@ -213,7 +214,9 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       const end = list[at - 1]!.end_byte ?? condition.end_byte;
       const named = chain ? { ...leaf, parameters: { ...leaf.parameters, nested_engaged_with: chain.partner } } : leaf;
       // "If a friendly X model is your Warlord": only army-includes reads a Warlord test, and only at muster.
-      const filterNode = dslUnitFilter(named, { warlordTest: condition.family_id === "army-includes" });
+      // "engaged with an enemy WARLORD unit": the unit an engagement names is a participant, so it may be the Warlord.
+      const engagedPartner = condition.family_id === "unit-state" && condition.parameters.with === "following-filter";
+      const filterNode = dslUnitFilter(named, { warlordTest: condition.family_id === "army-includes", warlordTarget: engagedPartner });
       if (measuresTargetedFilter(condition, list[at], leaf)) {
         // "that targeted a friendly X unit" + "within 3\" of this model": the aura is the filter's within (compile-targeted-within.ts).
         out[out.length - 1] = targetedWithin(condition, filterNode, leaf, list[at]!, end);

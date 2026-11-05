@@ -93,6 +93,17 @@ describe("Semantic authoring own-roll conditional change, fight-on-death", () =>
       ["that unit fights", "fight-on-death", { act: "fight", timing: "when-its-unit-fights" }])).toMatch(/beyond the changed D6/u);
   });
 
+  // Hunts: an engagement condition with its own unit-filter after the change was refused as a second condition.
+  it("takes an engagement and the unit-filter it names as one condition", () => {
+    const effect = effectOf("Roll one D6, adding 1 to the result if this model is engaged with an enemy WARLORD unit: on a 4+, that unit fights.",
+      ROLL, ADD, ["this model is engaged with an", "unit-state", { states: ["engaged"], subject: "this-model", negated: false, with: "following-filter" }],
+      ["enemy WARLORD unit", "unit-filter", { side: "enemy", designated: "warlord" }], ["on a 4+", "roll-result", { from: 4 }],
+      ["that unit fights", "fight-on-death", { act: "fight", timing: "when-its-unit-fights" }]);
+    expect(effect.steps.map((step: any) => step.modifier.gate.dice)).toEqual(["D6+1", "D6"]);
+    expect(effect.steps[0].modifier.eligibility).toEqual({ type: "matches", parameters: { subject: "this-model", filter: { engaged_with: { owner: "enemy", designated: "warlord" } } } });
+    expect(effect.steps[1].modifier.eligibility.operator).toBe("not");
+  });
+
   it("refuses a conditional fight-on-death when another effect shares its part", () => {
     expect(errorOf("Roll one D6, adding 1 to the result if your unit is a INFANTRY unit: on a 4+, that unit fights and you gain 1CP.",
       ROLL, ADD, ["if your unit is a INFANTRY unit", ...INFANTRY_UNIT], ["on a 4+", "roll-result", { from: 4 }],

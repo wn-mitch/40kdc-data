@@ -41,7 +41,7 @@ const STAT_PREFIX = /^add\s+\d+\s+to\s+the\s+[a-z' ]+?\s+characteristic\s+of\s+/
 /** How a leaf's wording holds its names: a list in a scope or stat change, one name in a scope, or the weapons a roll is made for. */
 export type NameForm = "names" | "scope" | "roll";
 /** A roll modifier's own roll, sign and amount, which its wording must repeat. */
-export type RollWording = { roll: unknown; operation: unknown; value: unknown };
+export type RollWording = { roll: unknown; operation: unknown; value: unknown; subject?: unknown };
 
 /** A possessive lead, up to four words ("this unit's", "your unit's:", "that enemy unit's"). */
 const POSSESSIVE = /^(?:[a-z'-]+\s+){0,3}?[a-z'-]+'s:?\s+/u;
@@ -49,8 +49,11 @@ const POSSESSIVE = /^(?:[a-z'-]+\s+){0,3}?[a-z'-]+'s:?\s+/u;
 const PRONOUN_LEAD = /^(?:its|their|your|his)\s+/u;
 /** The weapon noun after the names, then an optional verb: "weapons", "weapon", "weapon has:", "weapons have". */
 const NOUN_TAIL = /\s+weapons?(?:\s+(?:has|have)\s*:?)?$/u;
-/** A roll modifier's phrase before its weapons ("+1 to hazard rolls made for its"), with emphasis marks already removed. */
-const ROLL_PREFIX = /^(?:(?:has|have|gets?)\s+)?([+-])(\d+)\s+to\s+(?:the\s+)?(hit|wound|damage|hazard)\s+rolls?\s+made\s+(?:for|with)\s+(?:its|their|your|his)\s+/u;
+/**
+ * A roll modifier's phrase before its weapons ("+1 to hazard rolls made for its", "This unit has +1 to …"), with
+ * emphasis marks already removed. A subject lead ("this unit has") must name the leaf's own subject.
+ */
+const ROLL_PREFIX = /^(?:(?:(this|that)\s+(unit|model)\s+)?(?:has|have|gets?)\s+)?([+-])(\d+)\s+to\s+(?:the\s+)?(hit|wound|damage|hazard)\s+rolls?\s+made\s+(?:for|with)\s+(?:its|their|your|his)\s+/u;
 
 /** The lead a scope's wording may open with: a possessive, else a pronoun. */
 const stripLead = (text: string) => POSSESSIVE.test(text) ? text.replace(POSSESSIVE, "") : text.replace(PRONOUN_LEAD, "");
@@ -65,9 +68,14 @@ function refuseStray(left: string): void {
 function rollRemainder(text: string, roll: RollWording): string {
   const match = ROLL_PREFIX.exec(text);
   if (!match) throw new CompileError("A roll modifier names weapons as \"+N to <roll> rolls made for its <weapons>\"; the wording does not.");
-  if (match[3] !== roll.roll) throw new CompileError(`The wording is a ${match[3]} roll, not the leaf's ${String(roll.roll)} roll.`);
-  if ((match[1] === "-") !== (roll.operation === "subtract")) throw new CompileError("The wording's sign does not match the leaf's operation.");
-  if (match[2] !== String(roll.value)) throw new CompileError("The wording's amount does not match the leaf's value.");
+  const [, pronoun, noun, sign, amount, rolled] = match;
+  if (pronoun !== undefined) {
+    const named = pronoun === "that" ? "antecedent" : `this-${noun}`;
+    if (roll.subject !== named) throw new CompileError(`The wording's "${pronoun} ${noun}" is not the leaf's subject ${String(roll.subject)}.`);
+  }
+  if (rolled !== roll.roll) throw new CompileError(`The wording is a ${rolled} roll, not the leaf's ${String(roll.roll)} roll.`);
+  if ((sign === "-") !== (roll.operation === "subtract")) throw new CompileError("The wording's sign does not match the leaf's operation.");
+  if (amount !== String(roll.value)) throw new CompileError("The wording's amount does not match the leaf's value.");
   return text.slice(match[0].length);
 }
 
@@ -150,7 +158,7 @@ export function resolveAuthoredNames(list: readonly CompileLeaf[], sourceText: s
     const statPrefix = leaf.family_id === "characteristic-modifier";
     const form: NameForm = leaf.family_id === "roll-modifier" ? "roll" : single ? "scope" : "names";
     const names = single ? [String(parameters.weapon_name)] : parameters.weapon_names as string[];
-    const roll = form === "roll" ? { roll: parameters.roll, operation: parameters.operation, value: parameters.value } : undefined;
+    const roll = form === "roll" ? { roll: parameters.roll, operation: parameters.operation, value: parameters.value, subject: parameters.subject } : undefined;
     const printed = resolveNames(names, { weapon_type: parameters.weapon_type ?? "all", subject: parameters.subject, span: spanOf(leaf, sourceText), authored: true, statPrefix, form, roll }, ctx, abilityId);
     return { ...leaf, parameters: { ...parameters, ...(single ? { weapon_name: printed[0] } : { weapon_names: printed }) } };
   });
