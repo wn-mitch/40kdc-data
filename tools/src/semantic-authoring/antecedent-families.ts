@@ -58,6 +58,8 @@ const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "unit-filter": ["member_of"],
   // "based on that unit's Starting Strength": the unit whose row a by-table cost reads (families/army.ts, resource-spend@4).
   "resource-spend": ["table_of"],
+  // "that Psyker unit's psyker level": the unit whose own pool a characteristic-sized gain fills (families/army.ts, resource-gain@6).
+  "resource-gain": ["subject"],
   // "add 3\" to that unit's Contagion Range": the unit an earlier filter, aura or Stratagem target names
   // (families/abilities.ts, ability-modifier@4).
   "ability-modifier": ["subject"],

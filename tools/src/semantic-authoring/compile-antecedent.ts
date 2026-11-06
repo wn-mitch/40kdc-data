@@ -650,6 +650,8 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "move-distance": ["subject"],
   "move-mode-choice": ["subject"],
   "battle-shock-state": ["recipient"],
+  // "a friendly K Psyker unit can use … that Psyker unit's psyker level": the pool of every unit the filter names.
+  "resource-gain": ["subject"],
 };
 const ANY_UNIT_CONDITION_KEYS: Readonly<Record<string, readonly string[]>> = {
   "unit-state": ["subject", "with"], "unit-activity": ["subject"], "unit-position": ["subject", "of"], "unit-keyword": ["subject"], "hit-by-attacks": ["subject"],

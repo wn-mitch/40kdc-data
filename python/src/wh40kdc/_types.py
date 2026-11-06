@@ -410,6 +410,10 @@ class UnitRating(TypedDict):
     rating: Literal[True]
 
 
+class UnitCharacteristic(TypedDict):
+    characteristic: Stat
+
+
 DefiniteOwner: TypeAlias = Owner
 
 
@@ -1644,7 +1648,15 @@ RollKind: TypeAlias = (
 RollSelector: TypeAlias = Literal["any", "all"] | RollKind
 
 
-Quantity: TypeAlias = int | DiceExpression | BattleSizeValue | RollReference | CountOf | UnitRating
+Quantity: TypeAlias = (
+    int
+    | DiceExpression
+    | BattleSizeValue
+    | RollReference
+    | CountOf
+    | UnitRating
+    | UnitCharacteristic
+)
 
 
 class PlacementRegion(TypedDict):

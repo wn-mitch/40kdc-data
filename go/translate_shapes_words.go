@@ -262,6 +262,10 @@ func quantityPhrase(q map[string]any) string {
 	if describerRatingRef(q) {
 		return "its rating"
 	}
+	// A characteristic of the effect's target unit: "its Psyker Level characteristic".
+	if c, ok := q["characteristic"]; ok && c != nil {
+		return "its " + statName(c) + " characteristic"
+	}
 	if isBattleSizeValue(q) {
 		return battleSizeValues(q) + " (Incursion/Strike Force/Onslaught)"
 	}

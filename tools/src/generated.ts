@@ -32,12 +32,19 @@ export type Keyword = string;
  */
 export type KeywordList = Keyword[];
 /**
- * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.
+ * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "quantity".
  */
-export type Quantity = number | DiceExpression | BattleSizeValue | RollReference | CountOf | UnitRating;
+export type Quantity =
+  | number
+  | DiceExpression
+  | BattleSizeValue
+  | RollReference
+  | CountOf
+  | UnitRating
+  | UnitCharacteristic;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "dice-expression".
@@ -77,6 +84,26 @@ export type NonTieredRangeRef =
   | {
       aura_of: EntityId;
     };
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "stat".
+ */
+export type Stat =
+  | "M"
+  | "T"
+  | "Sv"
+  | "W"
+  | "Ld"
+  | "OC"
+  | "A"
+  | "WS"
+  | "BS"
+  | "S"
+  | "AP"
+  | "D"
+  | "Range"
+  | "detection-range"
+  | "psyker-level";
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "comparison".
@@ -120,26 +147,6 @@ export type TestKind = "battle-shock" | "leadership" | "hazard" | "desperate-esc
  * via the `definition` "attack-type".
  */
 export type AttackType = "ranged" | "melee" | "psychic" | "mortal";
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "stat".
- */
-export type Stat =
-  | "M"
-  | "T"
-  | "Sv"
-  | "W"
-  | "Ld"
-  | "OC"
-  | "A"
-  | "WS"
-  | "BS"
-  | "S"
-  | "AP"
-  | "D"
-  | "Range"
-  | "detection-range"
-  | "psyker-level";
 /**
  * A stat that can be a fixed number or a dice expression
  *
@@ -1242,6 +1249,15 @@ export interface CountOf {
  */
 export interface UnitRating {
   rating: true;
+}
+/**
+ * The value of a characteristic of the effect's target unit (a pool that becomes the unit's Psyker Level).
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "unit-characteristic".
+ */
+export interface UnitCharacteristic {
+  characteristic: Stat;
 }
 /**
  * A stable identifier assigned to the same entity by an external data source.
@@ -4246,9 +4262,9 @@ export interface ForEachUnitEffect {
   selector: UnitSelector;
   effect: EffectNode;
   /**
-   * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.
+   * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.
    */
-  max_affected?: number | DiceExpression | BattleSizeValue | RollReference | CountOf | UnitRating;
+  max_affected?: number | DiceExpression | BattleSizeValue | RollReference | CountOf | UnitRating | UnitCharacteristic;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -5073,9 +5089,9 @@ export interface MoveTypeEffect {
         per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
       };
   /**
-   * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.
+   * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.
    */
-  distance?: number | DiceExpression | BattleSizeValue | RollReference | CountOf | UnitRating;
+  distance?: number | DiceExpression | BattleSizeValue | RollReference | CountOf | UnitRating | UnitCharacteristic;
   eligible_if?: AbilityDSLCondition5;
   /**
    * What resolves before the unit moves.

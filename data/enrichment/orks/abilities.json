@@ -13870,9 +13870,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "kill-rig",
       "weirdboy"
@@ -13881,11 +13880,31 @@
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "resource-gain",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ORKS",
+          "PSYKER"
+        ]
+      },
+      "modifier": {
+        "pool": "psychic-level",
+        "amount": {
+          "characteristic": "psyker-level"
+        },
+        "label": "Psychic Level",
+        "set": true
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "round-started"
+    },
+    "source_digest": "224d563a0f5ce255075aea6730da24426f065748e11d7cb945317164b477ec2e"
   },
   {
     "ability_id": "waaagh-ardmob-orks",

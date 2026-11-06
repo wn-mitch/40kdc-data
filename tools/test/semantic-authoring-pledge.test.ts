@@ -151,3 +151,48 @@ describe("an unnamed printed grant whose bonus is printed on the next line (comp
     expect(steps[1].effect.type).toBe("mortal-wounds");
   });
 });
+
+describe("a unit's own pool as large as one of its characteristics (resource-gain amount {characteristic})", () => {
+  const BUDGET = "In a battle round, a friendly **GLOOM WARDENS PSYKER** unit can use powers whose total cost does not exceed that unit's mind rank.";
+  const FILTER: Item = ["a friendly **GLOOM WARDENS PSYKER** unit", "unit-filter", { side: "friendly", keywords: ["GLOOM WARDENS", "PSYKER"] }];
+  const GAIN = (extra: Record<string, unknown>): Item => ["can use powers whose total cost does not exceed that unit's mind rank", "resource-gain",
+    { pool: "psychic-level", set: true, amount: { characteristic: "psyker-level" }, label: "Psychic Level", ...extra }];
+  const ROUND: Item = ["In a battle round", "turn-start", { turn: "battle-round" }];
+
+  it("fills the pool of every unit the filter names each battle round, not the army's pool", () => {
+    const result = compiled([ROUND, FILTER, GAIN({ subject: "antecedent" })], BUDGET);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(result.mechanics).toMatchObject({ trigger: { event: "round-started" }, effect: { type: "resource-gain", target: { owner: "friendly", all_of: ["GLOOM WARDENS", "PSYKER"] },
+      modifier: { pool: "psychic-level", amount: { characteristic: "psyker-level" }, set: true } } });
+  });
+
+  it("fills the bearer's unit's pool with no subject, where a fixed amount stays on this-model", () => {
+    const text = "In a battle round, this unit can use powers whose total cost does not exceed that unit's mind rank.";
+    const result = compiled([ROUND, GAIN({})], text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect((result.mechanics as any).effect.target).toBe("this-unit");
+    const fixed = compiled([ROUND, ["can use powers whose total cost does not exceed that unit's mind rank", "resource-gain", { pool: "psychic-level", amount: 2, set: true }]], text);
+    if (!fixed.ok) throw new Error(fixed.errors.join("; "));
+    expect((fixed.mechanics as any).effect.target).toBe("this-model");
+  });
+
+  it("takes only a unit's own characteristic, alone, and a subject only with it", () => {
+    const version = currentFamilyVersion("resource-gain");
+    const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("resource-gain", parameters, version);
+    expect(normalize({ pool: "psychic-level", amount: { characteristic: "psyker-level" }, set: true, subject: "this-unit" }))
+      .toEqual({ pool: "psychic-level", amount: { characteristic: "psyker-level" }, set: true, subject: "this-unit" });
+    expect(() => normalize({ pool: "fury", amount: { characteristic: "S" } })).toThrow(/characteristic must be one of/u);
+    expect(() => normalize({ pool: "fury", amount: { characteristic: "W", max: 3 } })).toThrow(/takes only the characteristic/u);
+    expect(() => normalize({ pool: "fury", amount: 2, subject: "this-unit" })).toThrow(/needs amount \{characteristic\}/u);
+    expect(() => normalize({ pool: "fury", amount: { characteristic: "W" }, subject: "this-model" })).toThrow(/resource-gain\.subject/u);
+  });
+
+  it("says whose pool and whose characteristic, in the number the subject takes", () => {
+    const one = { type: "resource-gain", target: "this-unit", modifier: { pool: "psychic-level", amount: { characteristic: "psyker-level" }, set: true } };
+    expect(describeAbility({ id: "sample", name: "Sample", effect: one } as any)).toBe("The unit's psychic level becomes its Psyker Level characteristic.");
+    const many = { ...one, target: { owner: "friendly", all_of: ["GLOOM WARDENS", "PSYKER"] } };
+    expect(describeAbility({ id: "sample", name: "Sample", effect: many } as any)).toBe("All friendly GLOOM WARDENS PSYKER units' psychic level becomes their Psyker Level characteristic.");
+    const gain = { type: "resource-gain", target: "this-unit", modifier: { pool: "fury", amount: { characteristic: "W" } } };
+    expect(describeAbility({ id: "sample", name: "Sample", effect: gain } as any)).toBe("You gain a number of Fury equal to its Wounds characteristic.");
+  });
+});

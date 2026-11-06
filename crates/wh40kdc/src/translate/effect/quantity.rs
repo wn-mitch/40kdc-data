@@ -78,6 +78,10 @@ pub(crate) fn quantity_phrase(q: &P) -> String {
     if q.get("rating") == Some(&Value::Bool(true)) {
         return "its rating".to_string();
     }
+    // A characteristic of the effect's target unit: "its Psyker Level characteristic".
+    if let Some(c) = nn(q, "characteristic") {
+        return format!("its {} characteristic", stat_name(Some(c)));
+    }
     if let Some(sizes) = battle_sized(q) {
         return format!("{sizes} (Incursion/Strike Force/Onslaught)");
     }

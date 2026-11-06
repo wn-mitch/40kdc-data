@@ -82,6 +82,8 @@ export function scaleSource(q: P): string {
  */
 export function quantityPhrase(q: P): string {
   if (isRatingRef(q)) return "its rating";
+  // A characteristic of the effect's target unit: "its Psyker Level characteristic".
+  if (q.characteristic != null) return `its ${statName(q.characteristic)} characteristic`;
   if (BATTLE_SIZES.every((k) => q[k] != null)) return `${BATTLE_SIZES.map((k) => jstr(q[k])).join("/")} (Incursion/Strike Force/Onslaught)`;
   if (typeof q.roll_var === "string") {
     if (q.successes_on == null) return "the result of that roll";

@@ -17,6 +17,7 @@ from wh40kdc.translate.effect_words import (
     is_rating_ref,
     jstr,
     roll_name,
+    stat_name,
     title_case,
 )
 
@@ -63,6 +64,9 @@ def quantity_phrase(q: dict[str, Any]) -> str:
     result, or a count. Literal numbers and dice go through ``dice_case``."""
     if is_rating_ref(q):
         return "its rating"
+    # A characteristic of the effect's target unit: "its Psyker Level characteristic".
+    if q.get("characteristic") is not None:
+        return f"its {stat_name(q['characteristic'])} characteristic"
     if _battle_sized(q):
         values = "/".join(jstr(q[k]) for k in _BATTLE_SIZES)
         return f"{values} (Incursion/Strike Force/Onslaught)"

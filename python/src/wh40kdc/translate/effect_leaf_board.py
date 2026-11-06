@@ -895,7 +895,7 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
     if t == "cost-modifier":
         return cost_modifier(m, subj)
     if t == "resource-gain":
-        return resource_gain(m)
+        return resource_gain(m, subj)
     if t == "resource-spend":
         return resource_spend(m, ctx)
     if t == "resource-die":

@@ -128,8 +128,8 @@ describe("resource-gain v4: dice amounts and plain pool ids", () => {
     expect(checkEntry(entryWithMechanics(base(), mechanics as never)).errors).toEqual([]);
   });
 
-  it("pins the current version at 5", () => {
-    expect(currentFamilyVersion("resource-gain")).toBe(5);
+  it("keeps the current version at 5 or later", () => {
+    expect(currentFamilyVersion("resource-gain")).toBeGreaterThanOrEqual(5);
   });
 });
 

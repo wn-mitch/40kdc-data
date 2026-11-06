@@ -787,6 +787,15 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	case "resource-gain":
 		// "you must pledge a number": the pool becomes the number picked, not one more.
 		if m["set"] == true {
+			// "whose total psychic level does not exceed that unit's psyker level": the unit's own
+			// pool becomes its characteristic.
+			if a, ok := m["amount"].(map[string]any); ok && a["characteristic"] != nil {
+				amount := quantityPhrase(a)
+				if rest, ok := strings.CutPrefix(amount, "its "); ok && isPlural(subj) {
+					amount = "their " + rest
+				}
+				return possessive(subj) + " " + dekebab(ejstr(m["pool"])) + " becomes " + amount
+			}
 			if m["amount"] == "any" {
 				return "declare a number as your " + dekebab(ejstr(m["pool"]))
 			}

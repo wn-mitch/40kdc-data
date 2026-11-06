@@ -9,16 +9,23 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from wh40kdc.translate.effect_quantity import amount_of, is_literal, requirement_phrase
+from wh40kdc.translate.effect_quantity import (
+    amount_of,
+    is_literal,
+    quantity_phrase,
+    requirement_phrase,
+)
 from wh40kdc.translate.effect_words import (
     Ctx,
     ability_label,
     dice_case,
     effect_subject,
+    is_plural,
     jstr,
     num,
     num_str,
     or_list,
+    possessive,
     resource_noun,
     roll_name,
     title_case,
@@ -328,11 +335,18 @@ def transport_capacity(m: dict[str, Any]) -> str:
     )
 
 
-def resource_gain(m: dict[str, Any]) -> str:
+def resource_gain(m: dict[str, Any], subj: str) -> str:
     a = m.get("amount")
     pool = str(m.get("pool") or "").replace("-", " ")
     # "you must pledge a number": the pool becomes the number picked, not one more.
     if m.get("set") is True:
+        # "whose total psychic level does not exceed that unit's psyker level": the unit's own
+        # pool becomes its characteristic.
+        if isinstance(a, dict) and a.get("characteristic") is not None:
+            amount = quantity_phrase(a)
+            if is_plural(subj) and amount.startswith("its "):
+                amount = "their " + amount[len("its ") :]
+            return f"{possessive(subj)} {pool} becomes {amount}"
         if a == "any":
             return f"declare a number as your {pool}"
         return f"your {pool} becomes {dice_case(a)}"

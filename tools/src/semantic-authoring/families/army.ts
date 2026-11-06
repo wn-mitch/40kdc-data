@@ -16,6 +16,12 @@ const BATTLE_SIZES = ["incursion", "strike-force", "onslaught"] as const;
 
 const ARMY_MEASURES = ["units", "models", "points"] as const;
 
+/** The characteristics a unit itself has (not its weapons'), which a pool can be as large as. */
+const UNIT_CHARACTERISTICS = ["M", "T", "Sv", "W", "Ld", "OC", "psyker-level"] as const;
+
+/** Whose pool a characteristic-sized gain fills: the bearer's unit, or the units a unit-filter before it names. */
+const POOL_OWNERS = ["this-unit", ANTECEDENT] as const;
+
 const FACTION_ID = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;
 
 const battleSizeSchema = (maximum: number) => ({
@@ -306,6 +312,36 @@ export const ARMY_EXTENSIONS: readonly FamilyExtension[] = [
       if (set !== true) throw new TypeError("resource-gain.set is true or omitted.");
       if (rest.amount === "variable") throw new TypeError("resource-gain.set needs a number: any, a value or dice.");
       return { ...previous(rest), set: true };
+    },
+  },
+  /**
+   * A pool as large as one of the unit's own characteristics: "a Psyker unit can use psychic abilities whose
+   * total psychic level does not exceed that Psyker unit's psyker level" sets the unit's psychic-level pool to
+   * its Psyker Level (set true, amount {characteristic: "psyker-level"}). The pool then belongs to the unit
+   * whose characteristic it reads, so the gain lowers onto this-unit.
+   */
+  {
+    family: "resource-gain",
+    version: 6,
+    description: "As the previous version, plus amount {characteristic}: as many as one of the unit's own characteristics (M, T, Sv, W, Ld, OC or psyker-level). The pool then belongs to that unit: subject names it (this-unit, or antecedent for the units a unit-filter before it names; this-unit when omitted). subject needs a characteristic amount.",
+    schema: (previous) => {
+      const amount = properties(previous).amount!;
+      return withProperties(previous, {
+        amount: { anyOf: [...(amount.anyOf as unknown[]), { type: "object", required: ["characteristic"], properties: { characteristic: { enum: [...UNIT_CHARACTERISTICS] } }, additionalProperties: false }] },
+        subject: optional({ enum: [...POOL_OWNERS] }),
+      });
+    },
+    normalize: (input, previous) => {
+      const { subject, ...rest } = input;
+      const amount = rest.amount as Record<string, unknown>;
+      if (!isObject(amount) || !("characteristic" in amount)) {
+        if (subject !== undefined) throw new TypeError("resource-gain.subject names the unit whose characteristic the amount reads; it needs amount {characteristic}.");
+        return previous(rest);
+      }
+      if (Object.keys(amount).length !== 1) throw new TypeError("resource-gain.amount {characteristic} takes only the characteristic.");
+      const characteristic = enumValue(amount.characteristic, UNIT_CHARACTERISTICS, "resource-gain.amount.characteristic");
+      const owner = subject === undefined ? {} : { subject: enumValue(subject, POOL_OWNERS, "resource-gain.subject") };
+      return { ...standIn(rest, "amount", 1, previous), amount: { characteristic }, ...owner };
     },
   },
   /**

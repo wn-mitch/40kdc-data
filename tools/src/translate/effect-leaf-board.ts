@@ -12,7 +12,7 @@ import {
   rangePhrase, regionPhrase, requirementPhrase, resourceNoun, rollName, signed, testName, titleCase, v, weaponNoun, type Ctx,
   isRatingRef,
   isPlural,
-  abilityLabel,
+  abilityLabel, possessive, quantityPhrase,
 } from "./effect-words.js";
 import { expiryTrail } from "./expiry.js";
 import { forEachUnitSubject } from "./effect.js";
@@ -561,6 +561,8 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     case "cost-modifier": return costModifier(m, subj);
     case "resource-gain": {
       // "you must pledge a number": the pool becomes the number picked, not one more.
+      // "whose total psychic level does not exceed that unit's psyker level": the unit's own pool becomes its characteristic.
+      if (m.set === true && m.amount != null && typeof m.amount === "object" && (m.amount as P).characteristic != null) return `${possessive(subj)} ${dekebab(jstr(m.pool))} becomes ${quantityPhrase(m.amount as P).replace(/^its /u, isPlural(subj) ? "their " : "its ")}`;
       if (m.set === true) return m.amount === "any" ? `declare a number as your ${dekebab(jstr(m.pool))}` : `your ${dekebab(jstr(m.pool))} becomes ${diceCase(m.amount)}`;
       // "a number of Pact points equal to your pledge": as many as another pool holds.
       if (m.amount != null && typeof m.amount === "object" && !Array.isArray(m.amount) && typeof (m.amount as P).pool === "string") {

@@ -41274,6 +41274,52 @@
     }
   },
   {
+    "caseId": "fidelity/resource-gain-set-characteristic",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "round-started"
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-unit",
+        "modifier": {
+          "pool": "psychic-level",
+          "amount": {
+            "characteristic": "psyker-level"
+          },
+          "set": true,
+          "label": "Psychic Level"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> At the start of the battle round: the unit's psychic level becomes its Psyker Level characteristic."
+    }
+  },
+  {
+    "caseId": "fidelity/resource-gain-characteristic",
+    "effect": {
+      "type": "resource-gain",
+      "target": "this-unit",
+      "modifier": {
+        "pool": "fury",
+        "amount": {
+          "characteristic": "W"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, you gain a number of Fury equal to its Wounds characteristic."
+    }
+  },
+  {
     "caseId": "fidelity/heal-two-d3",
     "effect": {
       "type": "heal",

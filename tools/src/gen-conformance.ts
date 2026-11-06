@@ -4206,6 +4206,10 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/targeting-reselect-charge", effect: { type: "targeting", target: "event-subject", modifier: { may: "reselect", kind: "charge" } } },
     // "select one visible terrain feature. That terrain feature is identified".
     { caseId: "fidelity/designate-visible-terrain", effect: { type: "designate", target: "this-unit", modifier: { tag: "identified", subject: { terrain_area: { visible: true } } } } },
+    // A unit's own pool set to one of its characteristics each battle round: a Psyker unit's psychic-level budget.
+    { caseId: "fidelity/resource-gain-set-characteristic", effect: { type: "ability-part", trigger: { event: "round-started" }, effect: { type: "resource-gain", target: "this-unit", modifier: { pool: "psychic-level", amount: { characteristic: "psyker-level" }, set: true, label: "Psychic Level" } } } },
+    // A gain as large as one of the unit's characteristics.
+    { caseId: "fidelity/resource-gain-characteristic", effect: { type: "resource-gain", target: "this-unit", modifier: { pool: "fury", amount: { characteristic: "W" } } } },
     // A heal of a two-dice amount.
     { caseId: "fidelity/heal-two-d3", effect: { type: "heal", target: "this-model", modifier: { amount: "2D3" } } },
     // A cap on a roll after modifiers: "if the result is greater than 6, change it to 6".

@@ -639,6 +639,12 @@
       "consumers": ["tools/src/mfm/gear-projection.ts#mintWeapon"],
       "reason": "Only supported parameterized keyword forms produce value."
     },
+    "/profiles/*/keywords/*/parameters/value/characteristic": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Context-dependent keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
     "/profiles/*/keywords/*/parameters/value/count_of": {
       "provenance": "repo-authored",
       "coverage": "unimplemented",

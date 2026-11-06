@@ -1765,7 +1765,7 @@
       ]
     },
     "quantity": {
-      "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.",
+      "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.",
       "oneOf": [
         {
           "type": "integer",
@@ -1785,6 +1785,9 @@
         },
         {
           "$ref": "#/$defs/unit-rating"
+        },
+        {
+          "$ref": "#/$defs/unit-characteristic"
         }
       ]
     },
@@ -1929,6 +1932,19 @@
         }
       },
       "description": "The rating the unit's datasheet prints for this rule (the D3 of Deadly Demise D3, the 5 of Feel No Pain 5+): the value of the unit's ability_ids entry for the ability that carries this effect."
+    },
+    "unit-characteristic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "characteristic"
+      ],
+      "properties": {
+        "characteristic": {
+          "$ref": "#/$defs/stat"
+        }
+      },
+      "description": "The value of a characteristic of the effect's target unit (a pool that becomes the unit's Psyker Level)."
     },
     "ends-nearest": {
       "type": "object",

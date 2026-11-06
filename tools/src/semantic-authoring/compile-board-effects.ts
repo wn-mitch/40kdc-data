@@ -117,7 +117,9 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       const modifier: Node = { pool, amount };
       if (leaf.parameters.label !== undefined) modifier.label = closed(leaf, "label");
       if (leaf.parameters.set === true) modifier.set = true;
-      return { type: "resource-gain", target: "this-model", modifier };
+      // A pool as large as one of the unit's characteristics is that unit's own pool (a Psyker unit's psychic level).
+      const ownPool = typeof amount === "object" && amount !== null && "characteristic" in amount;
+      return { type: "resource-gain", target: ownPool ? target(leaf.parameters.subject ?? "this-unit") : "this-model", modifier };
     }
     case "resource-spend": {
       const modifier: Node = { pool: closed(leaf, "pool"), amount: closed(leaf, "amount") };

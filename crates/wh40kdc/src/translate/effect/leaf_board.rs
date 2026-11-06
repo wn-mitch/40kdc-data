@@ -546,6 +546,19 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             // "you must pledge a number": the pool becomes the number picked, not one more.
             if is_true(m, "set") {
                 let pool = crate::translate::dekebab(&jstr(m.get("pool")));
+                // "whose total psychic level does not exceed that unit's psyker level": the unit's
+                // own pool becomes its characteristic.
+                if let Some(a) = nn(m, "amount")
+                    .and_then(Value::as_object)
+                    .filter(|a| nn(a, "characteristic").is_some())
+                {
+                    let amount = quantity_phrase(a);
+                    let amount = match amount.strip_prefix("its ") {
+                        Some(rest) if is_plural(subj) => format!("their {rest}"),
+                        _ => amount,
+                    };
+                    return format!("{} {pool} becomes {amount}", possessive(subj));
+                }
                 return if sv(m, "amount") == Some("any") {
                     format!("declare a number as your {pool}")
                 } else {

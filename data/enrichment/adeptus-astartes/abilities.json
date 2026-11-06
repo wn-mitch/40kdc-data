@@ -11079,9 +11079,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "chief-librarian-tigurius",
       "librarian",
@@ -11092,11 +11091,31 @@
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "resource-gain",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES",
+          "PSYKER"
+        ]
+      },
+      "modifier": {
+        "pool": "psychic-level",
+        "amount": {
+          "characteristic": "psyker-level"
+        },
+        "label": "Psychic Level",
+        "set": true
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "round-started"
+    },
+    "source_digest": "19b204a2ae0e5c574168f8014c01a84cfe12c63394de17ae2332f2fce08bf61f"
   },
   {
     "ability_id": "lightning-fast-strike-adeptus-astartes",

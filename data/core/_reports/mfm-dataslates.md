@@ -17,7 +17,7 @@ dump confirmation.
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 190 | 267 |
 | stratagems | 0 | 0 | 1081 | 232 |
-| abilities | 0 | 0 | 3830 | 706 |
+| abilities | 0 | 0 | 3832 | 704 |
 | phase-mappings | 0 | 0 | 1211 | 370 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -27,7 +27,7 @@ dump confirmation.
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 11 | 15 |
 | adepta-sororitas | 0 | 0 | 121 | 27 |
-| adeptus-astartes | 0 | 0 | 229 | 21 |
+| adeptus-astartes | 0 | 0 | 230 | 20 |
 | adeptus-custodes | 0 | 0 | 153 | 5 |
 | adeptus-mechanicus | 0 | 0 | 141 | 26 |
 | aeldari | 0 | 0 | 247 | 53 |
@@ -50,7 +50,7 @@ dump confirmation.
 | iron-hands | 0 | 0 | 10 | 1 |
 | leagues-of-votann | 0 | 0 | 131 | 24 |
 | necrons | 0 | 0 | 194 | 36 |
-| orks | 0 | 0 | 189 | 20 |
+| orks | 0 | 0 | 190 | 19 |
 | raven-guard | 0 | 0 | 11 | 0 |
 | salamanders | 0 | 0 | 9 | 2 |
 | space-wolves | 0 | 0 | 81 | 6 |
@@ -76,9 +76,8 @@ dump confirmation.
 | adepta-sororitas | verified | 121 |
 | adeptus-astartes | digest-differs | 14 |
 | adeptus-astartes | no-source | 5 |
-| adeptus-astartes | stub | 1 |
 | adeptus-astartes | unpublished | 1 |
-| adeptus-astartes | verified | 229 |
+| adeptus-astartes | verified | 230 |
 | adeptus-custodes | digest-differs | 2 |
 | adeptus-custodes | stub | 2 |
 | adeptus-custodes | unpublished | 1 |
@@ -160,9 +159,9 @@ dump confirmation.
 | necrons | unpublished | 14 |
 | necrons | verified | 194 |
 | orks | digest-differs | 12 |
-| orks | stub | 2 |
+| orks | stub | 1 |
 | orks | unpublished | 6 |
-| orks | verified | 189 |
+| orks | verified | 190 |
 | raven-guard | verified | 11 |
 | salamanders | digest-differs | 2 |
 | salamanders | verified | 9 |

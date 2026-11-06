@@ -33776,13 +33776,13 @@ for PlayerTurnIsConditionParametersTurn {
         value.parse()
     }
 }
-///A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.
+///A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.",
+///  "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.",
 ///  "oneOf": [
 ///    {
 ///      "type": "integer",
@@ -33802,6 +33802,9 @@ for PlayerTurnIsConditionParametersTurn {
 ///    },
 ///    {
 ///      "$ref": "#/$defs/unit-rating"
+///    },
+///    {
+///      "$ref": "#/$defs/unit-characteristic"
 ///    }
 ///  ]
 ///}
@@ -33816,6 +33819,7 @@ pub enum Quantity {
     RollReference(RollReference),
     CountOf(CountOf),
     UnitRating(UnitRating),
+    UnitCharacteristic(UnitCharacteristic),
 }
 impl ::std::convert::From<u64> for Quantity {
     fn from(value: u64) -> Self {
@@ -33845,6 +33849,11 @@ impl ::std::convert::From<CountOf> for Quantity {
 impl ::std::convert::From<UnitRating> for Quantity {
     fn from(value: UnitRating) -> Self {
         Self::UnitRating(value)
+    }
+}
+impl ::std::convert::From<UnitCharacteristic> for Quantity {
+    fn from(value: UnitCharacteristic) -> Self {
+        Self::UnitCharacteristic(value)
     }
 }
 ///One reference for every distance. A per_battle_round table is indexed from battle round 1; each later round uses the next entry and the final entry continues for all subsequent rounds. Tier entries are non-tiered range refs, so nested tables are forbidden.
@@ -56165,6 +56174,31 @@ impl ::std::convert::TryFrom<::std::string::String> for UnitAttachmentRole {
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///The value of a characteristic of the effect's target unit (a pool that becomes the unit's Psyker Level).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The value of a characteristic of the effect's target unit (a pool that becomes the unit's Psyker Level).",
+///  "type": "object",
+///  "required": [
+///    "characteristic"
+///  ],
+///  "properties": {
+///    "characteristic": {
+///      "$ref": "#/$defs/stat"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitCharacteristic {
+    pub characteristic: Stat,
 }
 ///Describes the internal model-type breakdown of a unit.
 ///
