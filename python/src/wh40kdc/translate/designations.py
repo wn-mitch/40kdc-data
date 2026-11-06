@@ -131,6 +131,7 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "on-my-signal-fire-target",
         "optimal-expenditure-yp-spent",
         "over-there-target",
+        "overlapping-destruction-target",
         "overlapping-fire",
         "pinned",
         "pinpoint-counter-offensive",
