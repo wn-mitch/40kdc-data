@@ -5205,6 +5205,7 @@ pub struct ArmyIncludesConditionParameters {
 ///      "enum": [
 ///        "warlord-required",
 ///        "warlord-forbidden",
+///        "warlord-allowed",
 ///        "unique",
 ///        "enhancement-forbidden",
 ///        "enhancement-slot",
@@ -5622,6 +5623,7 @@ impl ::std::convert::TryFrom<::std::string::String> for ArmyRuleEffectModifierMe
 ///  "enum": [
 ///    "warlord-required",
 ///    "warlord-forbidden",
+///    "warlord-allowed",
 ///    "unique",
 ///    "enhancement-forbidden",
 ///    "enhancement-slot",
@@ -5654,6 +5656,8 @@ pub enum ArmyRuleEffectModifierRule {
     WarlordRequired,
     #[serde(rename = "warlord-forbidden")]
     WarlordForbidden,
+    #[serde(rename = "warlord-allowed")]
+    WarlordAllowed,
     #[serde(rename = "unique")]
     Unique,
     #[serde(rename = "enhancement-forbidden")]
@@ -5682,6 +5686,7 @@ impl ::std::fmt::Display for ArmyRuleEffectModifierRule {
         match *self {
             Self::WarlordRequired => f.write_str("warlord-required"),
             Self::WarlordForbidden => f.write_str("warlord-forbidden"),
+            Self::WarlordAllowed => f.write_str("warlord-allowed"),
             Self::Unique => f.write_str("unique"),
             Self::EnhancementForbidden => f.write_str("enhancement-forbidden"),
             Self::EnhancementSlot => f.write_str("enhancement-slot"),
@@ -5704,6 +5709,7 @@ impl ::std::str::FromStr for ArmyRuleEffectModifierRule {
         match value {
             "warlord-required" => Ok(Self::WarlordRequired),
             "warlord-forbidden" => Ok(Self::WarlordForbidden),
+            "warlord-allowed" => Ok(Self::WarlordAllowed),
             "unique" => Ok(Self::Unique),
             "enhancement-forbidden" => Ok(Self::EnhancementForbidden),
             "enhancement-slot" => Ok(Self::EnhancementSlot),
@@ -47712,7 +47718,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "army-rule effect",
-///      "description": "[army] A rule that applies when mustering the army.",
+///      "description": "[army] A rule that applies when mustering the army. warlord-allowed: the target can be your Warlord although another rule forbids it.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -48303,7 +48309,7 @@ pub enum SingleEffect {
     },
     /**army-rule effect
 
-[army] A rule that applies when mustering the army.*/
+[army] A rule that applies when mustering the army. warlord-allowed: the target can be your Warlord although another rule forbids it.*/
     #[serde(rename = "army-rule")]
     ArmyRule {
         modifier: ArmyRuleEffectModifier,

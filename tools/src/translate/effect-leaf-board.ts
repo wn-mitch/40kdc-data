@@ -410,6 +410,7 @@ function armyRule(m: Record<string, unknown>, subj: string, ctx: Ctx, target?: u
   switch (m.rule) {
     case "warlord-required": return `${subj} must be your Warlord`;
     case "warlord-forbidden": return `${subj} cannot be your Warlord`;
+    case "warlord-allowed": return `${subj} can be your Warlord`;
     case "unique": return group != null ? `your army can include only one ${singular(group)}` : `your army can include only one of ${subj}`;
     case "enhancement-forbidden": return `${subj} cannot be given Enhancements`;
     case "enhancement-source": return `${subj} can only be given Enhancements from this Detachment`;

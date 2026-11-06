@@ -144,6 +144,19 @@ describe("and/or between conditions (SS-C)", () => {
     expect(JSON.stringify(mixed.ok ? mixed.mechanics : {})).not.toContain('"operator":"or"');
   });
 
+  it("joins a keyword and a state of one unit written \"K unit/below Starting Strength\" as either one", () => {
+    const slash = "While this unit is a GAMMA unit/below Starting Strength, add 1 to the Hit roll.";
+    const traits = (second: [string, string, Record<string, unknown>]) => compileLeaves(placed(slash,
+      ["GAMMA unit", "unit-keyword", { keywords: ["GAMMA"], subject: "this-unit", negated: false }], second,
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), slash);
+    const either = traits(["below Starting Strength", "unit-state", { states: ["below-starting-strength"], subject: "this-unit", negated: false }]);
+    expect(either.ok ? "ok" : either.errors.join(" | ")).toBe("ok");
+    expect(JSON.stringify(either.ok ? either.mechanics : {})).toContain('"operator":"or"');
+    // Two units' traits are not alternatives: a slash between different subjects keeps stacking.
+    const apart = traits(["below Starting Strength", "unit-state", { states: ["below-starting-strength"], subject: "target", negated: false }]);
+    expect(JSON.stringify(apart.ok ? apart.mechanics : {})).not.toContain('"operator":"or"');
+  });
+
   it("keeps two conditions written \"and\" stacked as AND", () => {
     const and = text.replace("and/or", "and");
     const result = compileLeaves(placed(and,

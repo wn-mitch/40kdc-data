@@ -4875,7 +4875,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "army-rule effect",
-          "description": "[army] A rule that applies when mustering the army.",
+          "description": "[army] A rule that applies when mustering the army. warlord-allowed: the target can be your Warlord although another rule forbids it.",
           "required": [
             "type",
             "target",
@@ -4896,6 +4896,7 @@
                   "enum": [
                     "warlord-required",
                     "warlord-forbidden",
+                    "warlord-allowed",
                     "unique",
                     "enhancement-forbidden",
                     "enhancement-slot",

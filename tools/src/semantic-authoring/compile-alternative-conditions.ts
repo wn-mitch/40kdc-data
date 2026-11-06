@@ -65,6 +65,18 @@ function slashedWeaponAbilities(left: CompileLeaf, right: CompileLeaf): boolean 
     && left.parameters.weapon_keyword !== undefined && right.parameters.weapon_keyword !== undefined;
 }
 
+/** Conditions on one unit's own keywords or state, which a slash can join as alternatives. */
+const UNIT_TRAITS = new Set(["unit-keyword", "unit-state"]);
+
+/**
+ * "that is a PSYKER unit/below Starting Strength": a keyword and a state of the same unit printed with
+ * a slash between them are either one. Only unit-keyword and unit-state conditions with one subject fold this way.
+ */
+function slashedUnitTraits(left: CompileLeaf, right: CompileLeaf): boolean {
+  return UNIT_TRAITS.has(left.family_id) && UNIT_TRAITS.has(right.family_id)
+    && left.parameters.subject !== undefined && left.parameters.subject === right.parameters.subject;
+}
+
 /** Whether `right` joins `left` as one alternative: an "or"/"and/or" gap, or the attack-kind pairing. */
 function joinsAsAlternative(bytes: Buffer, left: CompileLeaf, right: CompileLeaf): boolean {
   const gap = between(bytes, left, right);
@@ -74,7 +86,7 @@ function joinsAsAlternative(bytes: Buffer, left: CompileLeaf, right: CompileLeaf
   const commaOr = gap === ",or" && (left.family_id === "optional-cost-paid" || right.family_id === "optional-cost-paid");
   if (gap !== null && (DISJUNCTIVE_GAPS.has(gap) || commaOr)) return !absorbsFilter(left, right) || left.parameters.subject === right.parameters.subject;
   if (distinctPhaseWindows(bytes, left, right)) return true;
-  if (gap === "/" && slashedWeaponAbilities(left, right)) return true;
+  if (gap === "/" && (slashedWeaponAbilities(left, right) || slashedUnitTraits(left, right))) return true;
   return gap === "and" && attackKindOrAttacker(bytes, left, right);
 }
 

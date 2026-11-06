@@ -6515,7 +6515,7 @@ export interface DesignateEffect {
   scaling?: Scaling;
 }
 /**
- * [army] A rule that applies when mustering the army.
+ * [army] A rule that applies when mustering the army. warlord-allowed: the target can be your Warlord although another rule forbids it.
  */
 export interface ArmyRuleEffect {
   type: "army-rule";
@@ -6524,6 +6524,7 @@ export interface ArmyRuleEffect {
     rule:
       | "warlord-required"
       | "warlord-forbidden"
+      | "warlord-allowed"
       | "unique"
       | "enhancement-forbidden"
       | "enhancement-slot"

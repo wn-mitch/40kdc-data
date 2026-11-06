@@ -42,7 +42,7 @@ function battleSizeValue(value: unknown, maximum: number, label: string): Record
 }
 
 /** Rules about the units a group names: the group is the rule's subject (its DSL target). */
-export const ARMY_SUBJECT_RULES = ["warlord-required", "warlord-forbidden", "enhancement-forbidden", "enhancement-source", "limit-exemption"] as const;
+export const ARMY_SUBJECT_RULES = ["warlord-required", "warlord-forbidden", "warlord-allowed", "enhancement-forbidden", "enhancement-source", "limit-exemption"] as const;
 
 
 /** Rules about the list as a whole, which no group of units qualifies. */
@@ -225,6 +225,14 @@ export const ARMY_EXTENSIONS: readonly FamilyExtension[] = [
       }
       return result;
     },
+  },
+  {
+    // "you can select a friendly X CHARACTER model to be your Warlord": a permission past a rule that forbids those models.
+    family: "army-construction",
+    version: 4,
+    description: "As the previous version, plus rule warlord-allowed: the subject can be your Warlord although another rule forbids it. It takes the subject and group sources warlord-forbidden takes.",
+    schema: (previous) => withProperties(previous, { rule: widenedEnum(previous, "rule", ["warlord-allowed"]) }),
+    normalize: (input, previous) => input.rule === "warlord-allowed" ? { ...standIn(input, "rule", "warlord-forbidden", previous) } : previous(input),
   },
   {
     // "If your Army Faction is not X".

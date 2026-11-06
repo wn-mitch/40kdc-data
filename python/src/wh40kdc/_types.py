@@ -3753,6 +3753,7 @@ Modifier54 = TypedDict(
         "rule": Literal[
             "warlord-required",
             "warlord-forbidden",
+            "warlord-allowed",
             "unique",
             "enhancement-forbidden",
             "enhancement-slot",

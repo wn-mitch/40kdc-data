@@ -423,3 +423,20 @@ describe("Leader attachment eligibility (sub-shape E)", () => {
       ["instead", "instead", {}]), text).ok).toBe(false);
   });
 });
+
+describe("army-construction warlord-allowed (version 4)", () => {
+  it("lets the units an earlier filter names be your Warlord, at model level", () => {
+    const text = "When mustering your army, you can select a friendly ALPHA CHARACTER model to be your Warlord.";
+    const [rule] = armyRules(effectOf(placed(text,
+      filter("a friendly ALPHA CHARACTER model", { side: "friendly", level: "model", keywords: ["ALPHA", "CHARACTER"] }),
+      ["to be your Warlord", army, { rule: "warlord-allowed", subject: "antecedent" }]), text));
+    expect(rule).toEqual({ type: "army-rule", target: { owner: "friendly", level: "model", all_of: ["ALPHA", "CHARACTER"] }, modifier: { rule: "warlord-allowed" } });
+  });
+
+  it("checks its parameters exactly as warlord-forbidden does", () => {
+    expect(normalize({ rule: "warlord-allowed", with_keywords: ["ALPHA"] })).toEqual({ rule: "warlord-allowed", with_keywords: ["ALPHA"] });
+    expect(() => normalize({ rule: "warlord-allowed", with_keywords: ["ALPHA"], subject: "antecedent" })).toThrow(/group once/);
+    expect(() => normalize({ rule: "warlord-allowed", with_keywords: ["ALPHA"], subject: "this-model" })).toThrow(/names the subject itself/);
+    expect(() => normalize({ rule: "warlord-allowed", exempt_from: ["retinue-limit"] })).toThrow(/goes with rule: composition/);
+  });
+});

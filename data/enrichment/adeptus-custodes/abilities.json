@@ -6489,19 +6489,133 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "null-maiden-vigil",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "army-rule",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ANATHEMA PSYKANA",
+              "CHARACTER"
+            ],
+            "level": "model"
+          },
+          "modifier": {
+            "rule": "warlord-allowed"
+          }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "keyword-grant",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "PROSECUTOR SQUAD"
+                ]
+              },
+              "modifier": {
+                "keywords": [
+                  "BATTLELINE"
+                ]
+              }
+            },
+            {
+              "type": "ability-grant",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "ANATHEMA PSYKANA"
+                ]
+              },
+              "modifier": {
+                "ability": {
+                  "ability_id": "silent-sisterhood-adeptus-custodes",
+                  "definition_id": "creeping-dread"
+                },
+                "definition": {
+                  "type": "ability-part",
+                  "name": "Creeping Dread (Aura)",
+                  "effect": {
+                    "type": "aura",
+                    "target": "enemy-within-aura",
+                    "modifier": {
+                      "range": {
+                        "inches": 12
+                      },
+                      "effect": {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "or",
+                          "operands": [
+                            {
+                              "type": "matches",
+                              "parameters": {
+                                "subject": "recipient",
+                                "filter": {
+                                  "all_of": [
+                                    "PSYKER"
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "type": "strength",
+                              "parameters": {
+                                "subject": "recipient",
+                                "below": "starting"
+                              }
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "test",
+                          "target": "recipient",
+                          "modifier": {
+                            "test": "battle-shock",
+                            "modifier": -1
+                          }
+                        }
+                      },
+                      "eligible": {
+                        "owner": "enemy"
+                      },
+                      "of": "this-unit"
+                    }
+                  },
+                  "trigger": {
+                    "event": "step-started",
+                    "filter": {
+                      "step": "battle-shock"
+                    },
+                    "condition": {
+                      "type": "player-turn-is",
+                      "parameters": {
+                        "turn": "opponent-turn"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "7d0d26a42dba754dd1230860eee671fd6e7559cdacb2105e664c0a91bc0e8151"
   },
   {
     "ability_id": "slayer-of-tyrants-adeptus-custodes",

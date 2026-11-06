@@ -128,6 +128,8 @@ def army_rule(m: dict[str, Any], subj: str, ctx: Ctx, target: Any = None) -> str
         return f"{subj} must be your Warlord"
     if rule == "warlord-forbidden":
         return f"{subj} cannot be your Warlord"
+    if rule == "warlord-allowed":
+        return f"{subj} can be your Warlord"
     if rule == "unique":
         if group is not None:
             return f"your army can include only one {_singular(group)}"

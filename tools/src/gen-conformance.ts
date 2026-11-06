@@ -4088,6 +4088,8 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/army-rule-composition-datasheets-with", effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", max: 2, with: { owner: "friendly", all_of: ["ALPHA"] }, datasheets: ["alpha-squad"] } } },
     { caseId: "fidelity/army-rule-unique-with", effect: { type: "army-rule", target: "this-unit", modifier: { rule: "unique", with: { owner: "friendly", all_of: ["ALPHA"], level: "model" } } } },
     { caseId: "fidelity/army-rule-warlord-forbidden-group", effect: { type: "army-rule", target: { owner: "friendly", any_of: ["ALPHA", "BETA"], level: "model" }, modifier: { rule: "warlord-forbidden" } } },
+    // "you can select a friendly X CHARACTER model to be your Warlord", past a rule that forbids it.
+    { caseId: "fidelity/army-rule-warlord-allowed-group", effect: { type: "army-rule", target: { owner: "friendly", all_of: ["ALPHA", "CHARACTER"], level: "model" }, modifier: { rule: "warlord-allowed" } } },
     { caseId: "fidelity/army-rule-enhancement-source", effect: { type: "army-rule", target: { owner: "friendly", all_of: ["ALPHA"] }, modifier: { rule: "enhancement-source" } } },
     { caseId: "fidelity/army-rule-limit-exemption-enhancements", effect: { type: "army-rule", target: "this-unit", modifier: { rule: "limit-exemption", exempt_from: ["enhancement-limit"] } } },
     { caseId: "fidelity/army-rule-limit-exemption-unit-enhancements", effect: { type: "army-rule", target: { owner: "friendly", all_of: ["ALPHA"] }, modifier: { rule: "limit-exemption", exempt_from: ["enhancement-limit"] } } },

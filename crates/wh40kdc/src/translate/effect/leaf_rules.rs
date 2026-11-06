@@ -310,6 +310,7 @@ pub(super) fn army_rule(m: &P, subj: &str, ctx: &Ctx, target: Option<&Value>) ->
     match sv(m, "rule") {
         Some("warlord-required") => format!("{subj} must be your Warlord"),
         Some("warlord-forbidden") => format!("{subj} cannot be your Warlord"),
+        Some("warlord-allowed") => format!("{subj} can be your Warlord"),
         Some("unique") => match group {
             Some(g) => format!("your army can include only one {}", singular(&g)),
             None => format!("your army can include only one of {subj}"),

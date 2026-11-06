@@ -230,6 +230,8 @@ func armyRuleLeaf(m map[string]any, subj string, ctx effCtx, target any) string 
 		return subj + " must be your Warlord"
 	case "warlord-forbidden":
 		return subj + " cannot be your Warlord"
+	case "warlord-allowed":
+		return subj + " can be your Warlord"
 	case "unique":
 		if hasGroup {
 			return "your army can include only one " + armySingular(group)

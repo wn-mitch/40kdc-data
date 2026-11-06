@@ -39339,6 +39339,29 @@
     }
   },
   {
+    "caseId": "fidelity/army-rule-warlord-allowed-group",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA",
+          "CHARACTER"
+        ],
+        "level": "model"
+      },
+      "modifier": {
+        "rule": "warlord-allowed"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all friendly ALPHA CHARACTER models can be your Warlord."
+    }
+  },
+  {
     "caseId": "fidelity/army-rule-enhancement-source",
     "effect": {
       "type": "army-rule",
