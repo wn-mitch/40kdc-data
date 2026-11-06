@@ -5687,7 +5687,7 @@ export interface DeathGate {
   }[];
 }
 /**
- * [models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword. starting_strength: each resulting unit's Starting Strength.
+ * [models] Split the target unit: into units of these sizes, one unit per model, one unit per listed model keyword, or equal_units units as equal in size as possible. starting_strength: each resulting unit's Starting Strength.
  */
 export interface SplitUnitEffect {
   type: "split-unit";

@@ -1,6 +1,6 @@
 import type { SemanticFamilyDefinition } from "../contracts.js";
-import { DICE, type FamilyExtension, keywordList, optional, properties, withProperties } from "../family-extension-helpers.js";
-import { enumValue, exactKeys } from "../family-validation.js";
+import { DICE, type FamilyExtension, keywordList, optional, properties, widenedEnum, withProperties } from "../family-extension-helpers.js";
+import { boundedInteger, enumValue, exactKeys } from "../family-validation.js";
 import { HELD_IN, printedKeywordsExtension } from "./shared.js";
 
 /**
@@ -183,6 +183,24 @@ export const SET_UP_EXTENSIONS: readonly FamilyExtension[] = [
  ADD_UNIT_MODELS,
   UNIT_SIZE_DICE,
   printedKeywordsExtension("split-unit", 2),
+  {
+    // "split this unit into two units, each containing as equal a number of models as possible".
+    family: "split-unit",
+    version: 4,
+    description: "As the previous version, plus mode equal with units: split this unit into that many units, each containing as equal a number of models as possible.",
+    schema: (previous) => withProperties(previous, {
+      mode: widenedEnum(previous, "mode", ["equal"]),
+      units: optional({ type: "integer", minimum: 2, maximum: 10, "x-only-when": { mode: ["equal"] } }),
+    }),
+    normalize: (input, previous) => {
+      if (input.mode !== "equal") {
+        if ("units" in input) throw new TypeError("split-unit.units belongs to mode equal.");
+        return previous(input);
+      }
+      exactKeys(input, ["mode", "units"], "split-unit");
+      return { mode: "equal", units: boundedInteger(input.units, 2, 10, "split-unit.units") };
+    },
+  },
   {
     // "Units in Cult Ambush can make an ingress move in the first battle round using this rule".
     family: "reserves-arrival",

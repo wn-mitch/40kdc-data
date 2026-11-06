@@ -4486,9 +4486,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "grey-hunters"
     ],
@@ -4496,11 +4495,21 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "split-unit",
+      "target": "this-unit",
+      "modifier": {
+        "equal_units": 2
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "battle-formations-declared",
+      "optional": true
+    },
+    "source_digest": "57115f4fee019fa6f9e7a9a2860d2203c1865960274b40c6474690626a4a336f"
   },
   {
     "ability_id": "preyslayer-champions-of-fenris-space-wolves",
@@ -4678,19 +4687,31 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "space-wolves",
     "detachment_id": "saga-of-the-great-wolf",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "lance"
+          }
+        ],
+        "weapons": {
+          "type": "melee"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "28f7a4fac9fdda574657f877e1ed3003aa6ef60d2614afec729b86f154fbcac4"
   },
   {
     "ability_id": "storm-shield-fyrri-askar-space-wolves",

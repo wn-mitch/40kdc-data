@@ -488,6 +488,12 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             if sv(m, "by") == Some("model") {
                 return format!("split {subj} into units of one model each{strength}");
             }
+            if let Some(units) = nn(m, "equal_units") {
+                return format!(
+                    "split {subj} into {} units with as equal a number of models as possible{strength}",
+                    jv(units)
+                );
+            }
             let by = m.get("by").and_then(Value::as_object);
             if let Some(kws) = by.and_then(|b| b.get("model_keyword")) {
                 if crate::translate::condition::truthy(Some(kws)) {

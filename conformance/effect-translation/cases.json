@@ -21704,7 +21704,27 @@
     }
   },
   {
-    "caseId": "one-man-army-astra-militarum#299",
+    "caseId": "old-greymanes-space-wolves#299",
+    "effect": {
+      "type": "split-unit",
+      "target": "this-unit",
+      "modifier": {
+        "equal_units": 2
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "battle-formations-declared",
+      "optional": true
+    },
+    "expected": {
+      "text": "When declaring Battle Formations, you may use this ability, split the unit into 2 units with as equal a number of models as possible."
+    }
+  },
+  {
+    "caseId": "one-man-army-astra-militarum#300",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -21817,7 +21837,7 @@
     }
   },
   {
-    "caseId": "orders-astra-militarum#300",
+    "caseId": "orders-astra-militarum#301",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -21836,7 +21856,7 @@
     }
   },
   {
-    "caseId": "orders-cadian-castellan-astra-militarum#301",
+    "caseId": "orders-cadian-castellan-astra-militarum#302",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -21855,7 +21875,7 @@
     }
   },
   {
-    "caseId": "orders-commissar-astra-militarum#302",
+    "caseId": "orders-commissar-astra-militarum#303",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -21878,7 +21898,7 @@
     }
   },
   {
-    "caseId": "orders-commissar-graves-astra-militarum#303",
+    "caseId": "orders-commissar-graves-astra-militarum#304",
     "effect": {
       "type": "issue-orders",
       "menu_from": "voice-of-command-astra-militarum",
@@ -21903,7 +21923,7 @@
     }
   },
   {
-    "caseId": "pain-engine-drukhari#304",
+    "caseId": "pain-engine-drukhari#305",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22002,7 +22022,7 @@
     }
   },
   {
-    "caseId": "paragon-of-sanctity-warpbane-task-force-grey-knights#305",
+    "caseId": "paragon-of-sanctity-warpbane-task-force-grey-knights#306",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -22077,7 +22097,7 @@
     }
   },
   {
-    "caseId": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire#306",
+    "caseId": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire#307",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22170,7 +22190,7 @@
     }
   },
   {
-    "caseId": "pledges-to-the-dark-prince-emperors-children#307",
+    "caseId": "pledges-to-the-dark-prince-emperors-children#308",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22401,7 +22421,7 @@
     }
   },
   {
-    "caseId": "possessed-blade-carnival-of-excess-emperors-children#308",
+    "caseId": "possessed-blade-carnival-of-excess-emperors-children#309",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22521,7 +22541,7 @@
     }
   },
   {
-    "caseId": "power-matrix-necrons#309",
+    "caseId": "power-matrix-necrons#310",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -22666,7 +22686,7 @@
     }
   },
   {
-    "caseId": "powers-of-da-waaagh-orks#310",
+    "caseId": "powers-of-da-waaagh-orks#311",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -22911,7 +22931,7 @@
     }
   },
   {
-    "caseId": "praise-the-fallen-hallowed-martyrs-adepta-sororitas#311",
+    "caseId": "praise-the-fallen-hallowed-martyrs-adepta-sororitas#312",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22976,7 +22996,7 @@
     }
   },
   {
-    "caseId": "prioritised-efficiency-leagues-of-votann#312",
+    "caseId": "prioritised-efficiency-leagues-of-votann#313",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23403,7 +23423,7 @@
     }
   },
   {
-    "caseId": "righteous-rage-bringers-of-flame-adepta-sororitas#313",
+    "caseId": "righteous-rage-bringers-of-flame-adepta-sororitas#314",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23459,7 +23479,7 @@
     }
   },
   {
-    "caseId": "rise-to-the-challenge-peerless-bladesmen-emperors-children#314",
+    "caseId": "rise-to-the-challenge-peerless-bladesmen-emperors-children#315",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23519,7 +23539,7 @@
     }
   },
   {
-    "caseId": "rune-of-mists-spirit-conclave-aeldari#315",
+    "caseId": "rune-of-mists-spirit-conclave-aeldari#316",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23627,7 +23647,7 @@
     }
   },
   {
-    "caseId": "ruthless-reinvestment-leagues-of-votann#316",
+    "caseId": "ruthless-reinvestment-leagues-of-votann#317",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23773,7 +23793,7 @@
     }
   },
   {
-    "caseId": "servo-sentry-astra-militarum#317",
+    "caseId": "servo-sentry-astra-militarum#318",
     "effect": {
       "type": "permission",
       "target": {
@@ -23821,7 +23841,7 @@
     }
   },
   {
-    "caseId": "special-move-types-adeptus-astartes#318",
+    "caseId": "special-move-types-adeptus-astartes#319",
     "effect": {
       "type": "rules-bundle",
       "steps": [
@@ -23976,7 +23996,7 @@
     }
   },
   {
-    "caseId": "special-move-types-adeptus-custodes#319",
+    "caseId": "special-move-types-adeptus-custodes#320",
     "effect": {
       "type": "rules-bundle",
       "steps": [
@@ -24050,7 +24070,7 @@
     }
   },
   {
-    "caseId": "special-move-types-orks#320",
+    "caseId": "special-move-types-orks#321",
     "effect": {
       "type": "rules-bundle",
       "steps": [
@@ -24219,7 +24239,7 @@
     }
   },
   {
-    "caseId": "speednob-support-orks#321",
+    "caseId": "speednob-support-orks#322",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24257,7 +24277,7 @@
     }
   },
   {
-    "caseId": "spirit-leech-tyranids#322",
+    "caseId": "spirit-leech-tyranids#323",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24317,7 +24337,7 @@
     }
   },
   {
-    "caseId": "stalwart-defenders-adeptus-astartes#323",
+    "caseId": "stalwart-defenders-adeptus-astartes#324",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24358,7 +24378,7 @@
     }
   },
   {
-    "caseId": "storm-swift-onslaught-white-scars#324",
+    "caseId": "storm-swift-onslaught-white-scars#325",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24522,7 +24542,7 @@
     }
   },
   {
-    "caseId": "supernova-launcher-experimental-prototype-cadre-tau-empire#325",
+    "caseId": "supernova-launcher-experimental-prototype-cadre-tau-empire#326",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24601,7 +24621,7 @@
     }
   },
   {
-    "caseId": "swift-demise-aeldari#326",
+    "caseId": "swift-demise-aeldari#327",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24667,7 +24687,7 @@
     }
   },
   {
-    "caseId": "taktikal-know-wotz-orks#327",
+    "caseId": "taktikal-know-wotz-orks#328",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24709,7 +24729,7 @@
     }
   },
   {
-    "caseId": "tempestor-prime-astra-militarum#328",
+    "caseId": "tempestor-prime-astra-militarum#329",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24745,7 +24765,7 @@
     }
   },
   {
-    "caseId": "terror-descends-chaos-space-marines#329",
+    "caseId": "terror-descends-chaos-space-marines#330",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24879,7 +24899,7 @@
     }
   },
   {
-    "caseId": "terror-made-manifest-chaos-space-marines#330",
+    "caseId": "terror-made-manifest-chaos-space-marines#331",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -25068,7 +25088,7 @@
     }
   },
   {
-    "caseId": "the-shadow-of-chaos-chaos-daemons#331",
+    "caseId": "the-shadow-of-chaos-chaos-daemons#332",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -25413,7 +25433,7 @@
     }
   },
   {
-    "caseId": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire#332",
+    "caseId": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire#333",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -25493,7 +25513,7 @@
     }
   },
   {
-    "caseId": "tidewall-defence-platform-tau-empire#333",
+    "caseId": "tidewall-defence-platform-tau-empire#334",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25518,28 +25538,6 @@
     },
     "expected": {
       "text": "If this unit has the Tidewall Defence Platform wargear, set this model's Wounds characteristic to 15."
-    }
-  },
-  {
-    "caseId": "unleash-the-lions-lions-of-the-emperor-adeptus-custodes#334",
-    "effect": {
-      "type": "split-unit",
-      "target": "this-unit",
-      "modifier": {
-        "by": "model",
-        "starting_strength": 1
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "applies_to": {
-      "all_of": [
-        "ADEPTUS CUSTODES"
-      ]
-    },
-    "expected": {
-      "text": "Split the unit into units of one model each, each with a Starting Strength of 1.\nApplies to: units with ADEPTUS CUSTODES."
     }
   },
   {
@@ -41239,6 +41237,22 @@
     },
     "expected": {
       "text": "If the unit is equipped with 1+ weapons with [MELTA] or [TORRENT], when resolving this use, the unit gets +1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "fidelity/split-unit-equal-units",
+    "effect": {
+      "type": "split-unit",
+      "target": "this-unit",
+      "modifier": {
+        "equal_units": 2
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, split the unit into 2 units with as equal a number of models as possible."
     }
   },
   {

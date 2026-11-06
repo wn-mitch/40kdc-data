@@ -4198,6 +4198,8 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/equipped-weapon-count-keyword-min", effect: { type: "conditional",
       condition: { type: "equipped-weapon-count", parameters: { subject: "this-unit", weapons: { keyword: [{ keyword_id: "melta" }, { keyword_id: "torrent" }] }, count: { min: 1 } } },
       effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } } } },
+    // "split this unit into two units, each containing as equal a number of models as possible".
+    { caseId: "fidelity/split-unit-equal-units", effect: { type: "split-unit", target: "this-unit", modifier: { equal_units: 2 } } },
     // A heal of a two-dice amount.
     { caseId: "fidelity/heal-two-d3", effect: { type: "heal", target: "this-model", modifier: { amount: "2D3" } } },
     // A cap on a roll after modifiers: "if the result is greater than 6, change it to 6".

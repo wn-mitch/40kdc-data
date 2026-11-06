@@ -5,7 +5,7 @@ structural stub — an effect carrying an empty-modifier placeholder node that s
 DSL authored. This is the actionable counterpart to the per-faction `stub*` counts in
 [`CONTRIBUTING.md`](../../CONTRIBUTING.md) and [`summary.md`](summary.md).
 
-Total: 300 stub abilities.
+Total: 255 stub abilities.
 
 | faction | ability | shape | needs |
 |---|---|---|---|
@@ -18,25 +18,12 @@ Total: 300 stub abilities.
 | adeptus-astartes | captain-of-the-honour-guard-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-astartes | combat-embarkation-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-astartes | forgefather-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | full-throttle-assault-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | laurels-of-vigilance-tactical-brethren-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-astartes | librarian-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-astartes | librarius-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | overlapping-destruction-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-astartes | priority-target-identified-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | righteous-fury-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | rites-of-thermal-appeasement-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-astartes | special-issue-optics-and-ammunition-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | venator-omni-auspex-phobos-shadow-force-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | venator-omni-auspex-phobos-shock-force-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-custodes | fearless-and-unrelenting-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-custodes | no-escape-shadowkeepers-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-custodes | praesidium-shield-tristraens-gilded-blades-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-custodes | praesidium-shield-wargear-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-custodes | selfless-service-emissaries-imperatus-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-custodes | silent-sisterhood-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-custodes | swift-ruin-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-custodes | vexilla-wargear-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-mechanicus | aggressive-impulse-haloscreed-battle-clade-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-mechanicus | auto-divinatory-targeting-cohort-cybernetica-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-mechanicus | baleful-halo-rad-zone-corps-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -96,7 +83,6 @@ Total: 300 stub abilities.
 | agents-of-the-imperium | rites-of-exorcism-ordo-malleus-daemon-hunters-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | agents-of-the-imperium | ritual-of-warding-ordo-malleus-daemon-hunters-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | agents-of-the-imperium | selfless-bodyguard-imperialis-fleet-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| agents-of-the-imperium | strategic-acumen-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | astra-militarum | calm-under-fire-hammer-of-the-emperor-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | astra-militarum | coordinated-action-combined-arms-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | astra-militarum | death-mask-of-ollanius-combined-arms-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -111,15 +97,8 @@ Total: 300 stub abilities.
 | astra-militarum | spec-ops-veteran-grizzled-company-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | astra-militarum | vox-relay-beacon-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | astra-militarum | vox-relay-mechanised-assault-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| black-templars | aquilon-optics-black-templars | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | black-templars | close-range-destruction-black-templars | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | black-templars | combat-embarkation-black-templars | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| black-templars | devout-push-vow-sworn-crusaders-black-templars | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| black-templars | faithful-cenobytes-black-templars | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| black-templars | purge-and-sanctify-black-templars | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| black-templars | righteous-fervour-upgrade-fist-of-the-god-emperor-black-templars | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| black-templars | templar-vows-vow-sworn-of-vedrenn-black-templars | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| blood-angels | death-visions-of-sanguinius-blood-angels | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | blood-angels | oath-of-moment-blood-angels | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-daemons | binding-shadow-shadow-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-daemons | cankerblight-aura-plague-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -139,7 +118,6 @@ Total: 300 stub abilities.
 | chaos-daemons | pyrogenesis-scintillating-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-daemons | spiteful-demise-shadow-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-space-marines | black-crusade-veterans-of-the-long-war-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| chaos-space-marines | bloody-example-dread-talons-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-space-marines | brutal-attrition-fellhammer-siege-host-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-space-marines | cultists-brand-chaos-cult-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-space-marines | dread-reputation-hurons-marauders-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -154,7 +132,6 @@ Total: 300 stub abilities.
 | chaos-space-marines | orbs-of-unlife-pactbound-zealots-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-space-marines | point-blank-destruction-fellhammer-siege-host-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-space-marines | raid-leader-hurons-marauders-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| chaos-space-marines | sadistic-display-nightmare-hunt-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-space-marines | selfless-demise-chaos-cult-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-space-marines | siegecraft-fellhammer-siege-host-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-space-marines | soul-link-deceptors-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -162,11 +139,7 @@ Total: 300 stub abilities.
 | chaos-space-marines | tempting-addendum-soulforged-warpack-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-space-marines | warped-foresight-chaos-cult-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-space-marines | weaponised-hatred-renegade-warband-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| dark-angels | in-sacrifice-victory-wrath-of-the-rock-dark-angels | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | dark-angels | oath-of-moment-dark-angels | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| dark-angels | teleport-homer-dark-angels | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| dark-angels | vowed-target-dark-angels | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| dark-angels | watcher-in-the-dark-azrael-dark-angels | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | blighted-land-mortarions-hammer-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | cornucophagus-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | deaths-heads-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -180,9 +153,7 @@ Total: 300 stub abilities.
 | death-guard | needle-of-nurgle-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | putrid-detonation-virulent-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | shambling-wall-shamblerot-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| death-guard | signal-pox-death-lords-chosen-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | tome-of-bounteous-blessings-tallyband-summoners-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| death-guard | visions-of-virulence-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | drukhari | a-challenge-met-spectacle-of-spite-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | drukhari | conductor-of-torment-reapers-wager-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | drukhari | crucible-of-malediction-realspace-raiders-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -200,7 +171,6 @@ Total: 300 stub abilities.
 | drukhari | pounce-on-the-prey-skysplinter-assault-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | drukhari | power-from-pain-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | drukhari | taken-alive-kabalite-cartel-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| drukhari | toxin-laced-blades-coven-of-agonies-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | drukhari | vicious-blades-skysplinter-assault-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | drukhari | wraithlike-retreat-skysplinter-assault-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | genestealer-cults | acceptable-losses-brood-brothers-auxilia-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -240,11 +210,8 @@ Total: 300 stub abilities.
 | imperial-knights | tales-of-heroism-spearhead-at-arms-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | imperial-knights | thin-their-ranks-spearhead-at-arms-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | imperial-knights | virtue-of-courage-spearhead-at-arms-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| iron-hands | power-of-the-machine-spirit-medusas-wrath-iron-hands | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | leagues-of-votann | adaptable-avarice-persecution-prospect-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | leagues-of-votann | augmented-assault-delve-assault-shift-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| leagues-of-votann | bastion-shield-hearthband-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| leagues-of-votann | claimed-for-the-kindred-bane-slayers-bulwark-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | leagues-of-votann | delvewerke-navigator-delve-assault-shift-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | leagues-of-votann | iron-ambassador-needgaard-oathband-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | leagues-of-votann | metaphysical-brokerage-mercenary-oathband-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -273,18 +240,7 @@ Total: 300 stub abilities.
 | necrons | resurrection-orb-catacomb-command-barge-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | necrons | territorial-imperatives-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | orks | boss-boomer-upgrade-blitz-brigade-orks | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| orks | get-stuck-in-ardmob-orks | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| orks | keep-it-runnin-blitz-brigade-orks | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | orks | unstable-energies-orks | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| raven-guard | raptorial-vigilance-shadowmark-talon-raven-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| salamanders | blazing-earth-forgefathers-seekers-salamanders | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| salamanders | forged-in-fire-forgefathers-seekers-salamanders | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| salamanders | vulkans-quest-salamanders | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| space-wolves | born-hunters-askars-wolfpack-space-wolves | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| space-wolves | combat-doctrines-space-wolves | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| space-wolves | grimnars-mark-saga-of-the-great-wolf-space-wolves | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| space-wolves | high-rune-priest-space-wolves | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| space-wolves | master-of-wolves-space-wolves | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | space-wolves | oath-of-moment-space-wolves | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | space-wolves | old-greymanes-space-wolves | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | space-wolves | skjalds-foretelling-saga-of-the-great-wolf-space-wolves | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -306,6 +262,5 @@ Total: 300 stub abilities.
 | tyranids | tunnel-network-subterranean-assault-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | tyranids | unending-waves-unending-swarm-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | tyranids | unseen-lurkers-vanguard-onslaught-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| ultramarines | mastered-doctrines-ultramarines | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | berzerker-charge-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | icon-of-khorne-frenzied-reavers-jakhals-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |

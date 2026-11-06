@@ -17,7 +17,7 @@ dump confirmation.
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 190 | 267 |
 | stratagems | 0 | 0 | 1080 | 233 |
-| abilities | 0 | 0 | 3821 | 715 |
+| abilities | 0 | 0 | 3822 | 714 |
 | phase-mappings | 0 | 0 | 1211 | 370 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -53,10 +53,10 @@ dump confirmation.
 | orks | 0 | 0 | 189 | 20 |
 | raven-guard | 0 | 0 | 11 | 0 |
 | salamanders | 0 | 0 | 9 | 2 |
-| space-wolves | 0 | 0 | 79 | 8 |
+| space-wolves | 0 | 0 | 81 | 6 |
 | tau-empire | 0 | 0 | 137 | 29 |
 | thousand-sons | 0 | 0 | 128 | 30 |
-| tyranids | 0 | 0 | 159 | 27 |
+| tyranids | 0 | 0 | 158 | 28 |
 | ultramarines | 0 | 0 | 11 | 0 |
 | white-scars | 0 | 0 | 11 | 0 |
 | world-eaters | 0 | 0 | 121 | 26 |
@@ -167,8 +167,8 @@ dump confirmation.
 | salamanders | digest-differs | 2 |
 | salamanders | verified | 9 |
 | space-wolves | digest-differs | 5 |
-| space-wolves | stub | 3 |
-| space-wolves | verified | 79 |
+| space-wolves | stub | 1 |
+| space-wolves | verified | 81 |
 | tau-empire | digest-differs | 5 |
 | tau-empire | stub | 3 |
 | tau-empire | unpublished | 21 |
@@ -179,8 +179,8 @@ dump confirmation.
 | thousand-sons | verified | 128 |
 | tyranids | digest-differs | 4 |
 | tyranids | stub | 13 |
-| tyranids | unpublished | 10 |
-| tyranids | verified | 159 |
+| tyranids | unpublished | 11 |
+| tyranids | verified | 158 |
 | ultramarines | verified | 11 |
 | white-scars | verified | 11 |
 | world-eaters | digest-differs | 5 |

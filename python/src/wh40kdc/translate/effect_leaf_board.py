@@ -825,6 +825,11 @@ def _split_unit(m: dict[str, Any], subj: str) -> str:
     )
     if m.get("by") == "model":
         return f"split {subj} into units of one model each{strength}"
+    if m.get("equal_units") is not None:
+        return (
+            f"split {subj} into {jstr(m['equal_units'])} units with as equal a number of models "
+            f"as possible{strength}"
+        )
     by = m.get("by")
     if isinstance(by, dict) and by.get("model_keyword") is not None:
         return (

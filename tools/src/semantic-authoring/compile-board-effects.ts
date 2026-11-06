@@ -196,6 +196,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       const mode = closed(leaf, "mode");
       const modifier: Node =
         mode === "model" ? { by: "model" }
+          : mode === "equal" ? { equal_units: closed(leaf, "units") }
           : mode === "counts" ? { model_counts: closed(leaf, "model_counts") }
             : { by: { model_keyword: closed(leaf, "model_keywords") } };
       // Folded from a starting-strength qualifier (compile-model-state.ts): each resulting unit's.

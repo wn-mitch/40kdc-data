@@ -347,4 +347,26 @@ export const ELIGIBILITY_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...previous(rest), abilities: [...abilities].sort() };
     },
   },
+  {
+    // "Wolf Guard Battle Leader model only" where core admits the BATTLE LEADER + WOLF GUARD keywords or
+    // the Wolf Guard Battle Leader datasheet, whose own keyword is the whole name.
+    family: "bearer-eligibility",
+    version: 8,
+    description: "As the previous version, plus or_datasheets: the bearer has every keyword, or is a model of one of these datasheets, by core unit id. It takes match all and no datasheets (which narrow the keywords instead of adding to them).",
+    schema: (previous) => withProperties(previous, {
+      or_datasheets: optional({ type: "array", items: { type: "string", pattern: DATASHEET_ID.source }, minItems: 1, uniqueItems: true }),
+    }),
+    normalize: (input, previous) => {
+      if (!("or_datasheets" in input)) return previous(input);
+      const { or_datasheets: datasheets, ...rest } = input;
+      if ("datasheets" in input) throw new TypeError("bearer-eligibility names datasheets that narrow its keywords or or_datasheets that add to them, not both.");
+      if (!Array.isArray(datasheets) || datasheets.length === 0 || datasheets.some((id) => typeof id !== "string" || !DATASHEET_ID.test(id))) {
+        throw new TypeError("bearer-eligibility.or_datasheets lists core unit ids in kebab case.");
+      }
+      if (new Set(datasheets).size !== datasheets.length) throw new TypeError("bearer-eligibility.or_datasheets names a datasheet twice.");
+      const normalized = previous(rest);
+      if (normalized.match !== "all" || normalized.any_keywords !== undefined) throw new TypeError("bearer-eligibility.or_datasheets adds datasheets to keywords all must have; match must be all, with no any_keywords.");
+      return { ...normalized, or_datasheets: [...datasheets].sort() };
+    },
+  },
 ];

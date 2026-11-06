@@ -206,6 +206,26 @@ describe("Semantic authoring restrictions", () => {
     expect(coreCheckErrors(root, "old-hat", named(["tinkerer"]))[0]).toMatch(/core allows/u);
   });
 
+  it("reads keywords or a datasheet as core's keyword group or its datasheet group, and only that union", () => {
+    const either = (keywords: string[], orDatasheets: string[]) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match: "all", excluded_keywords: [], or_datasheets: orDatasheets }), grant()]).checks;
+    const root = dataRoot([], [
+      { id: "saga", ability_id: "saga", keyword_restrictions: ["Hive Faction", "Guard", "Leader"], datasheet_restriction_groups: [{ unit_id: "guard-leader" }] },
+      { id: "plain", ability_id: "plain", keyword_restrictions: ["Hive Faction", "Guard", "Leader"] },
+    ]);
+    writeFileSync(join(root, "core", "fixture", "units.json"), JSON.stringify([
+      { id: "guard-leader", name: "Guard Leader", keywords: ["Character", "Infantry", "Guard Leader"], faction_keywords: ["Hive Faction"] },
+      { id: "named-hero", name: "Named Hero", keywords: ["Character", "Infantry", "Guard", "Leader"], faction_keywords: ["Hive Faction"] },
+    ]));
+    // "Guard Leader model only": the keyword pair, or the datasheet whose own keyword is the whole name.
+    expect(coreCheckErrors(root, "saga", either(["GUARD", "LEADER"], ["guard-leader"]))).toEqual([]);
+    // Either half alone admits too few bearers.
+    expect(coreCheckErrors(root, "saga", compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords: ["GUARD", "LEADER"], match: "all", excluded_keywords: [] }), grant()]).checks)[0]).toMatch(/core allows/u);
+    // A datasheet core does not name, or one where core names none, is refused.
+    expect(coreCheckErrors(root, "saga", either(["GUARD", "LEADER"], ["named-hero"]))[0]).toMatch(/core allows .*the guard-leader datasheet/u);
+    expect(coreCheckErrors(root, "plain", either(["GUARD", "LEADER"], ["guard-leader"]))[0]).toMatch(/or the guard-leader datasheet, but core allows/u);
+    expect(() => either(["GUARD"], [])).toThrow();
+  });
+
   it("compares a chapter enhancement's bearers over its parent's shared roster", () => {
     const bearers = (keywords: string[]) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match: "all", excluded_keywords: [] }), grant()]).checks;
     const root = dataRoot([], []);

@@ -539,6 +539,7 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     case "split-unit": {
       const strength = m.starting_strength != null ? `, each with a Starting Strength of ${jstr(m.starting_strength)}` : "";
       if (m.by === "model") return `split ${subj} into units of one model each${strength}`;
+      if (m.equal_units != null) return `split ${subj} into ${jstr(m.equal_units)} units with as equal a number of models as possible${strength}`;
       const by = m.by as { model_keyword?: unknown[] } | undefined;
       if (by?.model_keyword) return `split ${subj} into one unit of each of its ${andList(by.model_keyword.map(jstr))} models${strength}`;
       const counts = Array.isArray(m.model_counts) ? (m.model_counts as unknown[]).map(jstr) : [];

@@ -747,6 +747,9 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		if m["by"] == "model" {
 			return "split " + subj + " into units of one model each" + strength
 		}
+		if m["equal_units"] != nil {
+			return "split " + subj + " into " + ejstr(m["equal_units"]) + " units with as equal a number of models as possible" + strength
+		}
 		if by, ok := asMap(m["by"]); ok && by != nil && jsTruthy(by["model_keyword"]) {
 			return "split " + subj + " into one unit of each of its " + andList(jstrList(by["model_keyword"])) + " models" + strength
 		}

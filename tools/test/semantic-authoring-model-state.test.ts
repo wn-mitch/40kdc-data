@@ -117,6 +117,20 @@ describe("wounds-remaining, starting-strength and leaves-attached-unit leaves", 
     expect(checkEntry(entryWithMechanics(authoredBase(), mechanics as never)).rendered_text).toContain("into units of one model each, each with a Starting Strength of 1");
   });
 
+  it("splits a unit into equal halves (split-unit@4 mode equal), schema-checked and rendered", () => {
+    const text = "Split this unit into two units of as equal a size as possible.";
+    const mechanics = compiled(text, ["Split this unit into two units of as equal a size as possible", "split-unit", { mode: "equal", units: 2 }]);
+    expect(mechanics.effect).toEqual({ type: "split-unit", target: "this-unit", modifier: { equal_units: 2 } });
+    const check = checkEntry(entryWithMechanics(authoredBase(), mechanics as never));
+    expect(check.errors).toEqual([]);
+    expect(check.rendered_text).toContain("Split the unit into 2 units with as equal a number of models as possible");
+    const norm = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("split-unit", parameters, currentFamilyVersion("split-unit"));
+    expect(() => norm({ mode: "equal" })).toThrow();
+    expect(() => norm({ mode: "equal", units: 1 })).toThrow();
+    expect(() => norm({ mode: "model", units: 2 })).toThrow(/belongs to mode equal/u);
+    expect(norm({ mode: "counts", model_counts: [5, 5] })).toEqual({ mode: "counts", model_counts: [5, 5] });
+  });
+
   it("folds into return-models with the restoration's own wounds semantics", () => {
     const restore: Piece = ["Return one model to this unit", "return-models", { subject: "this-unit", count: "1" }];
     const text = "Return one model to this unit with some wounds remaining.";

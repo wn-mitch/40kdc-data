@@ -47279,7 +47279,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "split-unit effect",
-///      "description": "[models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword. starting_strength: each resulting unit's Starting Strength.",
+///      "description": "[models] Split the target unit: into units of these sizes, one unit per model, one unit per listed model keyword, or equal_units units as equal in size as possible. starting_strength: each resulting unit's Starting Strength.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -48123,7 +48123,7 @@ pub enum SingleEffect {
     },
     /**split-unit effect
 
-[models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword. starting_strength: each resulting unit's Starting Strength.*/
+[models] Split the target unit: into units of these sizes, one unit per model, one unit per listed model keyword, or equal_units units as equal in size as possible. starting_strength: each resulting unit's Starting Strength.*/
     #[serde(rename = "split-unit")]
     SplitUnit {
         modifier: SplitUnitEffectModifier,
@@ -48553,6 +48553,11 @@ impl ::std::convert::TryFrom<::std::string::String> for SourceType {
 ///      "required": [
 ///        "by"
 ///      ]
+///    },
+///    {
+///      "required": [
+///        "equal_units"
+///      ]
 ///    }
 ///  ],
 ///  "properties": {
@@ -48585,6 +48590,11 @@ impl ::std::convert::TryFrom<::std::string::String> for SourceType {
 ///          "additionalProperties": false
 ///        }
 ///      ]
+///    },
+///    "equal_units": {
+///      "description": "Split into this many units, each containing as equal a number of models as possible.",
+///      "type": "integer",
+///      "minimum": 2.0
 ///    },
 ///    "model_counts": {
 ///      "type": "array",
@@ -48621,6 +48631,16 @@ pub enum SplitUnitEffectModifier {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         bind_as: ::std::option::Option<Vec<SplitUnitEffectModifierVariant1BindAsItem>>,
         by: SplitUnitEffectModifierVariant1By,
+        ///Each resulting unit's Starting Strength.
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        starting_strength: ::std::option::Option<::std::num::NonZeroU64>,
+    },
+    Variant2 {
+        ///Names each resulting unit, in model_counts order, for later {selection_var} references.
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        bind_as: ::std::option::Option<Vec<SplitUnitEffectModifierVariant2BindAsItem>>,
+        ///Split into this many units, each containing as equal a number of models as possible.
+        equal_units: i64,
         ///Each resulting unit's Starting Strength.
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         starting_strength: ::std::option::Option<::std::num::NonZeroU64>,
@@ -48813,6 +48833,81 @@ pub enum SplitUnitEffectModifierVariant1By {
 impl ::std::convert::From<Vec<Keyword>> for SplitUnitEffectModifierVariant1By {
     fn from(value: Vec<Keyword>) -> Self {
         Self::ModelKeyword(value)
+    }
+}
+///`SplitUnitEffectModifierVariant2BindAsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct SplitUnitEffectModifierVariant2BindAsItem(::std::string::String);
+impl ::std::ops::Deref for SplitUnitEffectModifierVariant2BindAsItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<SplitUnitEffectModifierVariant2BindAsItem>
+for ::std::string::String {
+    fn from(value: SplitUnitEffectModifierVariant2BindAsItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for SplitUnitEffectModifierVariant2BindAsItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for SplitUnitEffectModifierVariant2BindAsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for SplitUnitEffectModifierVariant2BindAsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for SplitUnitEffectModifierVariant2BindAsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for SplitUnitEffectModifierVariant2BindAsItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///Stable reference to one option within its containing ability.
