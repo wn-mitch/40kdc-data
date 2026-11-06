@@ -305,6 +305,24 @@ export const ABILITY_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...result, matching_weapon: true };
     },
   },
+  {
+    // "While a Warboss model is embarked within this unit, this unit has that Warboss model's **X/Y** ability".
+    family: "ability-record-grant",
+    version: 5,
+    description: "As the previous version, plus held_by_model: the ability is granted only while the model the enclosing while-condition names has it (\"that Warboss model's X ability\"). Each such grant splits that condition into one per ability (compile-held-grants.ts). It takes a plain ability, with no value, rules bundle or printed body.",
+    schema: (previous) => withProperties(previous, { held_by_model: optional({ const: true }) }),
+    normalize: (input, previous) => {
+      if (!("held_by_model" in input)) return previous(input);
+      const { held_by_model: held, ...rest } = input;
+      if (held !== true) throw new TypeError("ability-record-grant.held_by_model is true or omitted.");
+      const result = previous(rest);
+      for (const key of ["value", "rules_bundle", "printed", "granted", "matching_weapon"]) {
+        if (result[key] !== undefined) throw new TypeError(`ability-record-grant.held_by_model grants a plain ability; it takes no ${key}.`);
+      }
+      if (typeof result.ability !== "string") throw new TypeError("ability-record-grant.held_by_model needs the ability it grants.");
+      return { ...result, held_by_model: true };
+    },
+  },
   printedKeywordsExtension("ability-modifier", 3),
   /**
    * Subject antecedent: the unit an earlier filter, aura or Stratagem target names ("add 3\" to

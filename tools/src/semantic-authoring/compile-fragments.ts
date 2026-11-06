@@ -13,6 +13,7 @@ import { containerEffect } from "./compile-containers.js";
 import { printedGrantEffect } from "./compile-granted.js";
 import { testEffect } from "./compile-test-effects.js";
 import { isTargetRef } from "./compile-target-refs.js";
+import { HELD_BY_MODEL } from "./compile-held-grants.js";
 import { namedRange } from "./named-ranges.js";
 import { CompileError } from "./compile-error.js";
 import { namedAbilityStateEffect } from "./compile-named-ability-states.js";
@@ -232,6 +233,8 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
       return {
         type: "ability-grant", target: target(leaf.parameters.subject),
         modifier: { ability: closed(leaf, "ability"), ...(value !== undefined ? { value } : {}), ...(rulesBundle === true ? { rules_bundle: true } : {}) },
+        // "that Warboss model's X ability": compile-held-grants.ts moves this onto the enclosing condition.
+        ...(leaf.parameters.held_by_model === true ? { [HELD_BY_MODEL]: true } : {}),
       };
     }
     case "keyword-grant": {

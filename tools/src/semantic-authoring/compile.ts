@@ -53,6 +53,7 @@ import { planContainers } from "./compile-containers.js";
 import { optionalDesignationUses, timingMoments } from "./compile-redesignate.js";
 import { compileNamedRegionState } from "./compile-named-region.js";
 import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
+import { splitHeldGrants } from "./compile-held-grants.js";
 import { foldConditionExclusions } from "./compile-condition-exclusions.js";
 import { refuseMomentUnderBareUse } from "./compile-nested-moment.js";
 import { refuseSelectionAcrossMoment } from "./compile-selection-moment.js";
@@ -221,7 +222,9 @@ function compileChecked(leaves: readonly CompileLeaf[], sourceText: string | und
   if (moveStart && !leaves.some((leaf) => leaf.family_id === "event" && leaf.parameters.kind === "move-ended")) {
     return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: ["A position at the start of a move needs the record to be triggered by that move ending."] };
   }
-  const result = compileUnchecked(leaves, sourceText, options);
+  const compiled = compileUnchecked(leaves, sourceText, options);
+  // "that Warboss model's X/Y ability": each grant held by the condition's model takes that ability into the condition.
+  const result = compiled.ok && !enclosed ? splitHeldGrants(compiled) : compiled;
   // "That unit must take a test" bound to an aura's recipient with no aura or loop around it reaches no unit.
   const unscoped = result.ok && !enclosed ? unscopedRecipientEffect(result.mechanics.effect) : null;
   if (unscoped !== null) return { ok: false, signature: result.signature, errors: [`A ${unscoped} effect names the unit it is applied to (recipient), but no aura or for-each-unit applies it to any unit.`] };

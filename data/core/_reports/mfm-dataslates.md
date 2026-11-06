@@ -17,7 +17,7 @@ dump confirmation.
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 191 | 266 |
 | stratagems | 0 | 0 | 1081 | 232 |
-| abilities | 0 | 0 | 3833 | 703 |
+| abilities | 0 | 0 | 3834 | 702 |
 | phase-mappings | 0 | 0 | 1211 | 370 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -50,7 +50,7 @@ dump confirmation.
 | iron-hands | 0 | 0 | 10 | 1 |
 | leagues-of-votann | 0 | 0 | 131 | 24 |
 | necrons | 0 | 0 | 194 | 36 |
-| orks | 0 | 0 | 190 | 19 |
+| orks | 0 | 0 | 191 | 18 |
 | raven-guard | 0 | 0 | 11 | 0 |
 | salamanders | 0 | 0 | 9 | 2 |
 | space-wolves | 0 | 0 | 81 | 6 |
@@ -159,9 +159,8 @@ dump confirmation.
 | necrons | unpublished | 14 |
 | necrons | verified | 194 |
 | orks | digest-differs | 12 |
-| orks | stub | 1 |
 | orks | unpublished | 6 |
-| orks | verified | 190 |
+| orks | verified | 191 |
 | raven-guard | verified | 11 |
 | salamanders | digest-differs | 2 |
 | salamanders | verified | 9 |

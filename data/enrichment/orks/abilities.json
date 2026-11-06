@@ -14712,19 +14712,80 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "orks",
     "detachment_id": "blitz-brigade",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": {
+                "owner": "friendly",
+                "all_of": [
+                  "WARBOSS"
+                ],
+                "level": "model",
+                "embarked_in": "this-unit",
+                "has_ability": [
+                  "intimidating-motivation-orks"
+                ]
+              },
+              "filter": {
+                "state": "embarked"
+              }
+            }
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "intimidating-motivation-orks"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": {
+                "owner": "friendly",
+                "all_of": [
+                  "WARBOSS"
+                ],
+                "level": "model",
+                "embarked_in": "this-unit",
+                "has_ability": [
+                  "keep-huntin-orks"
+                ]
+              },
+              "filter": {
+                "state": "embarked"
+              }
+            }
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "keep-huntin-orks"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "f60fc5e296cb2088fbb6aa4a833461197d830cd302054373996867b6abfb008a"
   },
   {
     "ability_id": "cybork-boosta-dread-mob-orks",
