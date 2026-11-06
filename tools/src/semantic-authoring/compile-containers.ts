@@ -433,18 +433,18 @@ export type ContainerPlan = { nodes: Map<number, Node>; consumed: Set<number> };
  */
 export function planContainers(
   list: readonly CompileLeaf[], sentenceOf: readonly number[], nested: ((leaves: readonly CompileLeaf[], objective?: string, name?: string) => Node) | null = null, bullets: readonly boolean[] = [],
-  commas: readonly boolean[] = [], lines: readonly boolean[] = [],
+  commas: readonly boolean[] = [], lines: readonly boolean[] = [], orLines: readonly boolean[] = [],
 ): ContainerPlan {
   const outer = nestedCompiler;
   nestedCompiler = nested;
   try {
-    return planContainerNodes(list, sentenceOf, bullets, commas, lines);
+    return planContainerNodes(list, sentenceOf, bullets, commas, lines, orLines);
   } finally {
     nestedCompiler = outer;
   }
 }
 
-function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly number[], bullets: readonly boolean[], commas: readonly boolean[], lines: readonly boolean[]): ContainerPlan {
+function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly number[], bullets: readonly boolean[], commas: readonly boolean[], lines: readonly boolean[], orLines: readonly boolean[]): ContainerPlan {
   const nodes = new Map<number, Node>();
   const consumed = new Set<number>();
   const replacements = findReplacementOpeners(list, (leaf) => LEADING_CONTAINERS.has(leaf.family_id));
@@ -495,6 +495,9 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     // option, however many sentences it holds, and a container that opens inside a bullet ("Select one
     // objective marker. …") is part of that option rather than the end of the choice.
     const byBullet = !byMarker && leaf.family_id === "choice-open" && bullets[index + 1] === true;
+    // "select one of the following:\rA.\rOr: B. C.": each line that opens with "Or:" starts the next option,
+    // however many sentences it holds; the first option is everything before the first such line.
+    const byOrLine = !byMarker && !byBullet && leaf.family_id === "choice-open" && list.slice(index + 1).some((_item, at) => orLines[index + 1 + at] === true);
     // A choice-open inside a named option ("Unnatural Fortitude: … select one of the following: ■ … ■ …")
     // is that option's own: it and its options run on to the next named-option marker.
     const nestedChoice = (cursor: number) => byMarker && !menu && current[0]?.family_id === optionMarker && list[cursor]!.family_id === "choice-open";
@@ -504,6 +507,8 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
       // A bulleted choice ends at a later choice of its own kind, or at a line after the last bullet;
       // another container is an option's own.
       if (byBullet && (list[cursor]!.family_id === "choice-open" || lines[cursor] === true)) break;
+      // An "Or:" choice ends at a later choice, or at a line after an option that does not open with "Or:".
+      if (byOrLine && (list[cursor]!.family_id === "choice-open" || (lines[cursor] === true && orLines[cursor] !== true && groups.length > 0))) break;
       // A choice of named options ends at a line that opens a moment of its own after an option's effect
       // ("■ B: … On a 5+, ….\nBattle round two onwards\nAt the start of your Command phase, …"): a later part, not option B.
       if (byMarker && !menu && leaf.family_id === "choice-open" && lines[cursor] === true && current[0]?.family_id === optionMarker
@@ -513,10 +518,11 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
       if (list[cursor]!.family_id === "order-rule") continue;
       const starts = byMarker ? list[cursor]!.family_id === optionMarker
         : byBullet ? currentSentence === null || bulletStarts
-          : currentSentence === null || sentence !== currentSentence || bulletStarts || itemStarts;
+          : byOrLine ? currentSentence === null || orLines[cursor] === true
+            : currentSentence === null || sentence !== currentSentence || bulletStarts || itemStarts;
       if (starts) {
         if (currentSentence !== null) {
-          if (bulletStarts) bulletBoundaries += 1;
+          if (bulletStarts || (byOrLine && orLines[cursor] === true)) bulletBoundaries += 1;
           else sentenceBoundaries += 1;
         }
         if (current.length) groups.push(current);

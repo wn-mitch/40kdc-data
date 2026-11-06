@@ -17,7 +17,7 @@ dump confirmation.
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 190 | 267 |
 | stratagems | 0 | 0 | 1081 | 232 |
-| abilities | 0 | 0 | 3826 | 710 |
+| abilities | 0 | 0 | 3828 | 708 |
 | phase-mappings | 0 | 0 | 1211 | 370 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -27,7 +27,7 @@ dump confirmation.
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 11 | 15 |
 | adepta-sororitas | 0 | 0 | 121 | 27 |
-| adeptus-astartes | 0 | 0 | 225 | 25 |
+| adeptus-astartes | 0 | 0 | 227 | 23 |
 | adeptus-custodes | 0 | 0 | 153 | 5 |
 | adeptus-mechanicus | 0 | 0 | 141 | 26 |
 | aeldari | 0 | 0 | 247 | 53 |
@@ -76,9 +76,9 @@ dump confirmation.
 | adepta-sororitas | verified | 121 |
 | adeptus-astartes | digest-differs | 14 |
 | adeptus-astartes | no-source | 5 |
-| adeptus-astartes | stub | 5 |
+| adeptus-astartes | stub | 3 |
 | adeptus-astartes | unpublished | 1 |
-| adeptus-astartes | verified | 225 |
+| adeptus-astartes | verified | 227 |
 | adeptus-custodes | digest-differs | 2 |
 | adeptus-custodes | stub | 2 |
 | adeptus-custodes | unpublished | 1 |

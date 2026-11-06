@@ -47,7 +47,7 @@ import { compileStratagemWindowMoments, compileWindowMoment } from "./compile-wi
 import { foldDelayedMoments } from "./compile-delayed-moment.js";
 import { foldRitualTest } from "./compile-ritual-test.js";
 import { foldEmergencyDisembark } from "./compile-emergency-disembark.js";
-import { bulletBreaks, commaItems, ordered, placements, plainLineBreaks, shapeSignature } from "./compile-placement.js";
+import { bulletBreaks, commaItems, ordered, orLineBreaks, placements, plainLineBreaks, shapeSignature } from "./compile-placement.js";
 import { foldAlternativePools } from "./compile-dice-variants.js";
 import { planContainers } from "./compile-containers.js";
 import { optionalDesignationUses, timingMoments } from "./compile-redesignate.js";
@@ -476,7 +476,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   let containerNodes: Map<number, Node>;
   let consumedByContainer: Set<number>;
   try {
-    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group, objective, name) => nestedPart(group, sourceText, options, objective, name), bulletBreaks(list, sourceText), commaItems(list, sourceText), plainLineBreaks(list, sourceText)));
+    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group, objective, name) => nestedPart(group, sourceText, options, objective, name), bulletBreaks(list, sourceText), commaItems(list, sourceText), plainLineBreaks(list, sourceText), orLineBreaks(list, sourceText)));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

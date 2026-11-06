@@ -60,6 +60,19 @@ export function bulletBreaks(leaves: readonly CompileLeaf[], sourceText: string 
   });
 }
 
+/** A line that opens with "Or:" ("…[Ignores Cover].\rOr: Select one enemy unit …"): the start of a choice's next option. */
+const OR_LINE = /[\r\n][\s*]*or\s*:[\s*]*$/iu;
+
+/** Where a leaf begins a line that opens with "Or:": entry `i` is true when the gap before `leaves[i]` ends in one. */
+export function orLineBreaks(leaves: readonly CompileLeaf[], sourceText: string | undefined): boolean[] {
+  return leaves.map((leaf, index) => {
+    if (index === 0 || sourceText === undefined) return false;
+    const previous = leaves[index - 1]!;
+    if (previous.end_byte === undefined || leaf.start_byte <= previous.end_byte) return false;
+    return OR_LINE.test(exactSpan(sourceText, previous.end_byte, leaf.start_byte));
+  });
+}
+
 /**
  * Where a new line without a bullet sits between leaves: entry `i` is true when the source between
  * `leaves[i-1]` and `leaves[i]` holds a line break and no bullet character. A bulleted list ends there
