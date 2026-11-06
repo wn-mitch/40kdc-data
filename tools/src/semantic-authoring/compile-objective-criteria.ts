@@ -20,12 +20,14 @@ export function foldObjectiveCriteria(list: readonly CompileLeaf[]): CompileLeaf
     const selection = out[head]!;
     const key = leaf.parameters.criterion === "controlled-by-unit" ? "controlled_by_unit" : "clear_of";
     if (selection.parameters[key] !== undefined) throw new CompileError(`A selection of objective markers takes one ${leaf.parameters.criterion} criterion.`);
+    // "that your unit was controlling at the end of the previous phase": control read then, not when the rule triggered.
+    const at = key === "controlled_by_unit" && leaf.parameters.at !== undefined ? { controlled_at: leaf.parameters.at } : {};
     const value = key === "controlled_by_unit" ? leaf.parameters.unit : {
       owner: leaf.parameters.side,
       ...(Array.isArray(leaf.parameters.keywords) ? { all_of: leaf.parameters.keywords } : {}),
       ...(Array.isArray(leaf.parameters.excluded_keywords) ? { none_of: leaf.parameters.excluded_keywords } : {}),
     };
-    out[head] = { ...selection, parameters: { ...selection.parameters, [key]: value } };
+    out[head] = { ...selection, parameters: { ...selection.parameters, [key]: value, ...at } };
   }
   return out;
 }

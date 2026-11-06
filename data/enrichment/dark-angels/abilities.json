@@ -4702,18 +4702,89 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "dark-angels",
     "detachment_id": "wrath-of-the-rock",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-object",
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "use-stratagem",
+              "allow": true,
+              "despite": [
+                "destroyed"
+              ]
+            }
+          },
+          {
+            "type": "select-objective",
+            "selector": {
+              "filter": {
+                "controlled_by_unit": "this-unit",
+                "controlled_at": "previous-phase-end",
+                "clear_of": {
+                  "owner": "enemy",
+                  "none_of": [
+                    "AIRCRAFT"
+                  ]
+                }
+              },
+              "bind_as": "objective",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            "effect": {
+              "type": "objective-sticky",
+              "target": "this-unit",
+              "modifier": {
+                "objective": {
+                  "selection_var": "objective"
+                }
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "destroyed",
+      "object": {
+        "owner": "friendly",
+        "any_of": [
+          "DEATHWING",
+          "RAVENWING"
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "f567630c487419354246c3ec9c1e44afb0221705c0cb69e7331b45cab4dadf3e"
   }
 ]

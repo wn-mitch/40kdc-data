@@ -230,6 +230,28 @@ export const GAP_CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "objective-criterion",
+    version: 2,
+    role: "CONDITION",
+    label: "Which objective markers a selection can take",
+    description: "A qualifier on the objective markers a select-objective-open right before it can select. controlled-by-unit: the marker that unit was controlling when the rule was triggered (\"that: your unit was controlling when it was destroyed\"), or, with at previous-phase-end, at the end of the previous phase (\"that your unit was controlling at the end of the previous phase\"). clear-of: no unit of side (with every keywords, none of excluded_keywords) within range of the marker (\"has no enemy units (excluding AIRCRAFT units) within range of it\").",
+    starter: { criterion: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["criterion"],
+      properties: {
+        criterion: { enum: OBJECTIVE_CRITERIA },
+        unit: { enum: OBJECTIVE_CRITERION_UNITS, "x-only-when": { criterion: ["controlled-by-unit"] } },
+        at: { enum: ["previous-phase-end"], "x-only-when": { criterion: ["controlled-by-unit"] }, "x-optional": true },
+        side: { enum: ["friendly", "enemy", "any"], "x-only-when": { criterion: ["clear-of"] } },
+        keywords: { type: "array", items: { type: "string", minLength: 1 }, minItems: 1, uniqueItems: true, "x-only-when": { criterion: ["clear-of"] }, "x-optional": true },
+        excluded_keywords: { type: "array", items: { type: "string", minLength: 1 }, minItems: 1, uniqueItems: true, "x-only-when": { criterion: ["clear-of"] }, "x-optional": true },
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "destroyed-model-selection",
@@ -399,8 +421,12 @@ export function normalizeGapContainerParameters(family: string, input: Record<st
     case "objective-criterion": {
       const criterion = enumValue(input.criterion, OBJECTIVE_CRITERIA, "objective-criterion.criterion");
       if (criterion === "controlled-by-unit") {
-        exactKeys(input, ["criterion", "unit"], family);
-        return { criterion, unit: enumValue(input.unit, OBJECTIVE_CRITERION_UNITS, "objective-criterion.unit") };
+        exactKeys(input, ["criterion", "unit", ...("at" in input ? ["at"] : [])], family);
+        return {
+          criterion,
+          unit: enumValue(input.unit, OBJECTIVE_CRITERION_UNITS, "objective-criterion.unit"),
+          ...("at" in input ? { at: enumValue(input.at, ["previous-phase-end"], "objective-criterion.at") } : {}),
+        };
       }
       const optional = ["keywords", "excluded_keywords"].filter((key) => key in input);
       exactKeys(input, ["criterion", "side", ...optional], family);

@@ -39,6 +39,21 @@ describe("objective criteria on a select-objective", () => {
     expect(validate?.(effect), JSON.stringify(validate?.errors)).toBe(true);
   });
 
+  // In Sacrifice, Victory: the destroyed unit's control is read at the end of the previous phase, not when it was destroyed.
+  it("carries a previous-phase-end control snapshot into the filter, and refuses it on a clear-of criterion", () => {
+    const text = "Each time this unit is destroyed, select one objective that: your unit was controlling at the end of the previous phase. That objective is secured.";
+    const previous: Item = ["that: your unit was controlling at the end of the previous phase", "objective-criterion", { criterion: "controlled-by-unit", unit: "this-unit", at: "previous-phase-end" }];
+    const result = run(text, DESTROYED, SELECT, previous, SECURED);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const effect = result.mechanics.effect as Record<string, any>;
+    expect(effect.selector.filter).toEqual({ controlled_by_unit: "this-unit", controlled_at: "previous-phase-end" });
+    const validate = createValidator().getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json");
+    expect(validate?.(effect), JSON.stringify(validate?.errors)).toBe(true);
+    // The snapshot names when a unit's control is read, so it needs controlled_by_unit beside it.
+    expect(validate?.({ ...effect, selector: { ...effect.selector, filter: { controlled_at: "previous-phase-end" } } })).toBe(false);
+    expect(() => normalizeFingerprintParameters("objective-criterion", { criterion: "clear-of", side: "enemy", at: "previous-phase-end" }, currentFamilyVersion("objective-criterion"))).toThrow();
+  });
+
   it("refuses a criterion with no objective selection before it, and two criteria of one kind", () => {
     const lone = run("Each time this unit is destroyed, that: your unit was controlling when it was destroyed.", DESTROYED, CONTROLLED);
     expect(lone.ok ? "" : lone.errors.join(" ")).toContain("select-objective-open right before it");

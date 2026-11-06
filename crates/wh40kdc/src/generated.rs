@@ -29043,6 +29043,10 @@ pub struct OathStateConditionParameters {
 ///      "description": "Only objective markers with no unit matching this filter within range of them (\"has no enemy units (excluding AIRCRAFT units) within range of it\").",
 ///      "$ref": "#/$defs/unit-filter"
 ///    },
+///    "controlled_at": {
+///      "description": "When controlled_by_unit's control is read, if not when the rule was triggered: previous-phase-end is the end of the phase before the current one (\"an objective your unit was controlling at the end of the previous phase\"). Only with controlled_by_unit.",
+///      "const": "previous-phase-end"
+///    },
 ///    "controlled_by": {
 ///      "$ref": "#/$defs/owner"
 ///    },
@@ -29113,6 +29117,9 @@ pub struct ObjectiveFilter {
     ///Only objective markers with no unit matching this filter within range of them ("has no enemy units (excluding AIRCRAFT units) within range of it").
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub clear_of: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
+    ///When controlled_by_unit's control is read, if not when the rule was triggered: previous-phase-end is the end of the phase before the current one ("an objective your unit was controlling at the end of the previous phase"). Only with controlled_by_unit.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub controlled_at: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub controlled_by: ::std::option::Option<Owner>,
     ///Only the objective marker this unit was controlling (its models' Level of Control) at the moment the rule was triggered ("an objective your unit was controlling when it was destroyed").
@@ -29140,6 +29147,7 @@ impl ::std::default::Default for ObjectiveFilter {
     fn default() -> Self {
         Self {
             clear_of: Default::default(),
+            controlled_at: Default::default(),
             controlled_by: Default::default(),
             controlled_by_unit: Default::default(),
             designated: Default::default(),

@@ -2086,6 +2086,7 @@ class ObjectiveFilter(TypedDict):
     selection_var: NotRequired[str]
     within: NotRequired[Within1]
     controlled_by_unit: NotRequired[UnitRef]
+    controlled_at: NotRequired[Literal["previous-phase-end"]]
     clear_of: NotRequired[UnitFilter]
 
 

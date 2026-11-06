@@ -495,7 +495,12 @@ def _objective_phrase(f: Any, plural: bool = False, noun: str = "objective") -> 
     # triggered.
     if f.get("controlled_by_unit") is not None:
         unit = unit_ref_phrase(f["controlled_by_unit"])
-        s += f" that {unit} was controlling when the rule was triggered"
+        when = (
+            "at the end of the previous phase"
+            if f.get("controlled_at") == "previous-phase-end"
+            else "when the rule was triggered"
+        )
+        s += f" that {unit} was controlling {when}"
     if f.get("clear_of") is not None:
         bare = re.sub(r"^an? ", "", unit_filter_phrase(f["clear_of"]))
         clear = re.sub(r"\bunit\b", "units", bare, count=1)

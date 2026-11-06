@@ -1646,6 +1646,10 @@ export interface ObjectiveFilter {
     | {
         stratagem_target: EntityId;
       };
+  /**
+   * When controlled_by_unit's control is read, if not when the rule was triggered: previous-phase-end is the end of the phase before the current one ("an objective your unit was controlling at the end of the previous phase"). Only with controlled_by_unit.
+   */
+  controlled_at?: "previous-phase-end";
   clear_of?: UnitFilter1;
 }
 /**
@@ -6419,6 +6423,10 @@ export interface ObjectiveFilter1 {
     | {
         stratagem_target: EntityId;
       };
+  /**
+   * When controlled_by_unit's control is read, if not when the rule was triggered: previous-phase-end is the end of the phase before the current one ("an objective your unit was controlling at the end of the previous phase"). Only with controlled_by_unit.
+   */
+  controlled_at?: "previous-phase-end";
   clear_of?: UnitFilter1;
 }
 /**

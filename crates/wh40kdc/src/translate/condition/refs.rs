@@ -513,11 +513,18 @@ pub(crate) fn objective_phrase(f: &P, plural: bool, noun: &str) -> String {
             place_ref_phrase(within.get("of"))
         ));
     }
-    // "that your unit was controlling when it was destroyed": the unit's control when the rule was triggered.
+    // "that your unit was controlling when it was destroyed": the unit's control when the rule was
+    // triggered, or at the end of the previous phase.
     if let Some(u) = nn(f, "controlled_by_unit") {
+        let when = if is(f, "controlled_at", "previous-phase-end") {
+            "at the end of the previous phase"
+        } else {
+            "when the rule was triggered"
+        };
         s.push_str(&format!(
-            " that {} was controlling when the rule was triggered",
-            unit_ref_phrase(Some(u), "the unit")
+            " that {} was controlling {}",
+            unit_ref_phrase(Some(u), "the unit"),
+            when
         ));
     }
     if let Some(c) = nn(f, "clear_of") {

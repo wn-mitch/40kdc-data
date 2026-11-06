@@ -1146,6 +1146,16 @@
       "type": "object",
       "additionalProperties": false,
       "description": "Which objectives. Every listed property must hold.",
+      "if": {
+        "required": [
+          "controlled_at"
+        ]
+      },
+      "then": {
+        "required": [
+          "controlled_by_unit"
+        ]
+      },
       "properties": {
         "role": {
           "enum": [
@@ -1205,6 +1215,10 @@
         "controlled_by_unit": {
           "$ref": "#/$defs/unit-ref",
           "description": "Only the objective marker this unit was controlling (its models' Level of Control) at the moment the rule was triggered (\"an objective your unit was controlling when it was destroyed\")."
+        },
+        "controlled_at": {
+          "const": "previous-phase-end",
+          "description": "When controlled_by_unit's control is read, if not when the rule was triggered: previous-phase-end is the end of the phase before the current one (\"an objective your unit was controlling at the end of the previous phase\"). Only with controlled_by_unit."
         },
         "clear_of": {
           "$ref": "#/$defs/unit-filter",

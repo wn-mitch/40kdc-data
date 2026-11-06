@@ -495,7 +495,11 @@ func objectivePhrase(f map[string]any, plural bool, noun string) string {
 	}
 	// "that your unit was controlling when it was destroyed": the unit's control when the rule was triggered.
 	if f["controlled_by_unit"] != nil {
-		s += " that " + unitRefPhrase(f["controlled_by_unit"], "the unit") + " was controlling when the rule was triggered"
+		when := "when the rule was triggered"
+		if f["controlled_at"] == "previous-phase-end" {
+			when = "at the end of the previous phase"
+		}
+		s += " that " + unitRefPhrase(f["controlled_by_unit"], "the unit") + " was controlling " + when
 	}
 	if clear, ok := asMap(f["clear_of"]); ok && clear != nil {
 		phrase := leadingArticleRe.ReplaceAllString(unitFilterPhrase(clear), "")

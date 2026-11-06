@@ -4174,6 +4174,10 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/select-objective-controlled-by-unit-clear-of", effect: { type: "select-objective",
       selector: { filter: { controlled_by_unit: "this-unit", clear_of: { owner: "enemy", none_of: ["AIRCRAFT"] } }, bind_as: "objective", count: { min: 1, max: 1 } },
       effect: { type: "objective-sticky", target: "this-unit", modifier: { objective: { selection_var: "objective" } } } } },
+    // The same marker, with the unit's control read at the end of the previous phase instead.
+    { caseId: "fidelity/select-objective-controlled-at-previous-phase-end", effect: { type: "select-objective",
+      selector: { filter: { controlled_by_unit: "this-unit", controlled_at: "previous-phase-end" }, bind_as: "objective", count: { min: 1, max: 1 } },
+      effect: { type: "objective-sticky", target: "this-unit", modifier: { objective: { selection_var: "objective" } } } } },
     // A move's distance ceiling as printed: "can move up to 4\"".
     { caseId: "fidelity/move-modifier-maximum-inches", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], maximum: 4 } } },
     // A targeting restriction that covers only targets meeting a condition (this-unit is the checked target).

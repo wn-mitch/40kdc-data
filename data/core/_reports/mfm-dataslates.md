@@ -15,9 +15,9 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1237 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 0 | 186 | 271 |
-| stratagems | 0 | 0 | 1072 | 241 |
-| abilities | 0 | 0 | 3793 | 743 |
+| detachments | 0 | 0 | 189 | 268 |
+| stratagems | 0 | 0 | 1073 | 240 |
+| abilities | 0 | 0 | 3797 | 739 |
 | phase-mappings | 0 | 0 | 1208 | 373 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -33,12 +33,12 @@ dump confirmation.
 | aeldari | 0 | 0 | 247 | 53 |
 | agents-of-the-imperium | 0 | 0 | 98 | 40 |
 | astra-militarum | 0 | 0 | 208 | 43 |
-| black-templars | 0 | 0 | 55 | 8 |
+| black-templars | 0 | 0 | 56 | 7 |
 | blood-angels | 0 | 0 | 53 | 8 |
 | chaos-daemons | 0 | 0 | 163 | 32 |
 | chaos-knights | 0 | 0 | 87 | 23 |
 | chaos-space-marines | 0 | 0 | 230 | 51 |
-| dark-angels | 0 | 0 | 66 | 11 |
+| dark-angels | 0 | 0 | 67 | 10 |
 | death-guard | 0 | 0 | 134 | 26 |
 | deathwatch | 0 | 0 | 33 | 3 |
 | drukhari | 0 | 0 | 130 | 34 |
@@ -53,11 +53,11 @@ dump confirmation.
 | orks | 0 | 0 | 188 | 21 |
 | raven-guard | 0 | 0 | 11 | 0 |
 | salamanders | 0 | 0 | 8 | 3 |
-| space-wolves | 0 | 0 | 77 | 10 |
+| space-wolves | 0 | 0 | 78 | 9 |
 | tau-empire | 0 | 0 | 137 | 29 |
 | thousand-sons | 0 | 0 | 128 | 30 |
 | tyranids | 0 | 0 | 159 | 27 |
-| ultramarines | 0 | 0 | 10 | 1 |
+| ultramarines | 0 | 0 | 11 | 0 |
 | white-scars | 0 | 0 | 11 | 0 |
 | world-eaters | 0 | 0 | 120 | 27 |
 
@@ -103,8 +103,8 @@ dump confirmation.
 | astra-militarum | unpublished | 18 |
 | astra-militarum | verified | 208 |
 | black-templars | digest-differs | 1 |
-| black-templars | stub | 7 |
-| black-templars | verified | 55 |
+| black-templars | stub | 6 |
+| black-templars | verified | 56 |
 | blood-angels | digest-differs | 6 |
 | blood-angels | stub | 1 |
 | blood-angels | unpublished | 1 |
@@ -121,8 +121,8 @@ dump confirmation.
 | chaos-space-marines | unpublished | 15 |
 | chaos-space-marines | verified | 230 |
 | dark-angels | digest-differs | 8 |
-| dark-angels | stub | 3 |
-| dark-angels | verified | 66 |
+| dark-angels | stub | 2 |
+| dark-angels | verified | 67 |
 | death-guard | digest-differs | 4 |
 | death-guard | stub | 14 |
 | death-guard | unpublished | 8 |
@@ -172,8 +172,8 @@ dump confirmation.
 | salamanders | stub | 1 |
 | salamanders | verified | 8 |
 | space-wolves | digest-differs | 5 |
-| space-wolves | stub | 5 |
-| space-wolves | verified | 77 |
+| space-wolves | stub | 4 |
+| space-wolves | verified | 78 |
 | tau-empire | digest-differs | 5 |
 | tau-empire | stub | 3 |
 | tau-empire | unpublished | 21 |
@@ -186,8 +186,7 @@ dump confirmation.
 | tyranids | stub | 13 |
 | tyranids | unpublished | 10 |
 | tyranids | verified | 159 |
-| ultramarines | stub | 1 |
-| ultramarines | verified | 10 |
+| ultramarines | verified | 11 |
 | white-scars | verified | 11 |
 | world-eaters | digest-differs | 5 |
 | world-eaters | stub | 2 |
