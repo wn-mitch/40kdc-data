@@ -17,7 +17,7 @@ dump confirmation.
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 189 | 268 |
 | stratagems | 0 | 0 | 1073 | 240 |
-| abilities | 0 | 0 | 3797 | 739 |
+| abilities | 0 | 0 | 3798 | 738 |
 | phase-mappings | 0 | 0 | 1208 | 373 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -31,7 +31,7 @@ dump confirmation.
 | adeptus-custodes | 0 | 0 | 146 | 12 |
 | adeptus-mechanicus | 0 | 0 | 141 | 26 |
 | aeldari | 0 | 0 | 247 | 53 |
-| agents-of-the-imperium | 0 | 0 | 98 | 40 |
+| agents-of-the-imperium | 0 | 0 | 99 | 39 |
 | astra-militarum | 0 | 0 | 208 | 43 |
 | black-templars | 0 | 0 | 56 | 7 |
 | blood-angels | 0 | 0 | 53 | 8 |
@@ -95,9 +95,9 @@ dump confirmation.
 | aeldari | verified | 247 |
 | agents-of-the-imperium | ambiguous-source | 1 |
 | agents-of-the-imperium | digest-differs | 10 |
-| agents-of-the-imperium | stub | 18 |
+| agents-of-the-imperium | stub | 17 |
 | agents-of-the-imperium | unpublished | 11 |
-| agents-of-the-imperium | verified | 98 |
+| agents-of-the-imperium | verified | 99 |
 | astra-militarum | digest-differs | 11 |
 | astra-militarum | stub | 14 |
 | astra-militarum | unpublished | 18 |

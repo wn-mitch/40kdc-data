@@ -84,6 +84,25 @@ describe("canonical DSL semantic integrity", () => {
     ]);
   });
 
+  // Agents of the Imperium's Watch Master activates the Space Marine Combat Doctrines for itself.
+  it("lets an activation name another faction's rule, and only an activation", async () => {
+    const activate = (ability: string, option?: string) => ({ type: "ability-activate", target: "this-unit", modifier: { ability, ...(option ? { option } : {}) } });
+    const errors = await issues({
+      "enrichment/example/abilities.json": [{ ability_id: "consumer", effect: { type: "sequence", steps: [
+        activate("foreign-doctrine"), activate("foreign-doctrine", "first"), activate("foreign-doctrine", "absent"), activate("nowhere"),
+        { type: "rule-active", parameters: { rule: "foreign-doctrine" } },
+        { type: "rule-active", parameters: { rule: { ability_id: "foreign-doctrine", option_id: "first" } } },
+      ] } }],
+      "enrichment/another/abilities.json": [menu("foreign-doctrine")],
+    });
+    expect(errors.map((error) => [error.path, error.message])).toEqual([
+      ["/0/effect/steps/2/modifier", 'option "absent" is absent from ability "foreign-doctrine"'],
+      ["/0/effect/steps/3/modifier/ability", 'ability "nowhere" is absent from the dataset'],
+      ["/0/effect/steps/4/parameters/rule", 'rule "foreign-doctrine" is absent from this faction and shared core'],
+      ["/0/effect/steps/5/parameters/rule", 'stance parent "foreign-doctrine" is absent from this faction and shared core'],
+    ]);
+  });
+
   it("rejects duplicate option identities and options allocated to another menu", async () => {
     const errors = await issues({ "enrichment/example/abilities.json": [menu("first-menu", ["same", "same"]), menu("second-menu"), {
       ability_id: "capacity", effect: { type: "stance-selection-capacity", modifier: { ability_id: "first-menu", allocation: "fixed-option", additional_selections: 1, option: { ability_id: "second-menu", option_id: "first" } } },

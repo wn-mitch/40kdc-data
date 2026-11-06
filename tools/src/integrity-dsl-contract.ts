@@ -141,8 +141,12 @@ export async function checkDslContract(root: string, result: ValidationResult): 
     // A shared-roster child (a Space Marine chapter) uses its parent's rules as well as its own.
     const parent = parentOf(faction);
     const resolveAbility = (id: string) => abilities.get(faction)?.get(id) ?? (parent ? abilities.get(parent)?.get(id) : undefined) ?? abilities.get("_core")?.get(id);
-    const checkOption = (abilityId: string, optionId: string, path: string): void => {
-      const parent = resolveAbility(abilityId);
+    // Ability ids are unique across the dataset, so an activation can name another faction's rule
+    // unambiguously: the Agents of the Imperium Watch Master activates the Space Marine Combat
+    // Doctrines for itself. Every other reference stays within the faction, its parent and core.
+    const resolveActivated = (id: string) => resolveAbility(id) ?? [...abilities.values()].find((indexed) => indexed.has(id))?.get(id);
+    const checkOption = (abilityId: string, optionId: string, path: string, resolve = resolveAbility): void => {
+      const parent = resolve(abilityId);
       if (!parent) issues.push({ path, message: `stance parent "${abilityId}" is absent from this faction and shared core` });
       else if (!optionIds(parent).includes(optionId)) issues.push({ path, message: `option "${optionId}" is absent from ability "${abilityId}"` });
     };
@@ -180,9 +184,9 @@ export async function checkDslContract(root: string, result: ValidationResult): 
       if (value.type === "ability-activate" && node(value.modifier)) {
         const modifier = value.modifier;
         if (typeof modifier.ability === "string") {
-          const parent = resolveAbility(modifier.ability);
-          if (!parent) issues.push({ path: `${path}/modifier/ability`, message: `ability "${modifier.ability}" is absent from this faction and shared core` });
-          for (const id of [...(typeof modifier.option === "string" ? [modifier.option] : []), ...strings(modifier.options), ...(node(modifier.select) ? strings(modifier.select.from) : [])]) checkOption(modifier.ability, id, `${path}/modifier`);
+          const parent = resolveActivated(modifier.ability);
+          if (!parent) issues.push({ path: `${path}/modifier/ability`, message: `ability "${modifier.ability}" is absent from the dataset` });
+          for (const id of [...(typeof modifier.option === "string" ? [modifier.option] : []), ...strings(modifier.options), ...(node(modifier.select) ? strings(modifier.select.from) : [])]) checkOption(modifier.ability, id, `${path}/modifier`, resolveActivated);
         }
       }
       if (value.type === "stance-selection-capacity" && node(value.modifier)) {

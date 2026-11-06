@@ -7268,9 +7268,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "watch-master"
     ],
@@ -7278,11 +7277,42 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-activate",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "combat-doctrines-adeptus-astartes",
+          "select": {
+            "by": "player"
+          },
+          "exclusive": true
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "optional": true,
+    "source_digest": "b27b2d96e2fb92921b592884e312ad4676b242cd26108eb367c4cdf060c09c6d"
   },
   {
     "ability_id": "watch-master-agents-of-the-imperium",
