@@ -267,6 +267,10 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 		}
 	}
 	s := subj + " can " + verb + upTo + moveModeClause(m)
+	// An embark's reach replaces the core 3" to the Transport.
+	if m["reach"] != nil {
+		s += " within a Transport it is able to embark within, if every model is within " + rangePhrase(m["reach"]) + " of that Transport instead of 3\""
+	}
 	if m["as_if"] == "movement-phase" {
 		s += " as if it were your Movement phase"
 	}

@@ -24751,6 +24751,10 @@ for MortalWoundsEffectModifierRollPerAttackAttackType {
 ///      },
 ///      "minItems": 1,
 ///      "uniqueItems": true
+///    },
+///    "reach": {
+///      "description": "An embark's distance to the Transport in place of the core 3\": the unit embarks under the core rules if every model is within this distance of a Transport it is able to embark within.",
+///      "$ref": "#/$defs/range-ref"
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -24788,6 +24792,9 @@ pub struct MoveEffectModifier {
     pub move_type: MoveEffectModifierMoveType,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub passthrough: ::std::option::Option<Vec<MoveEffectModifierPassthroughItem>>,
+    ///An embark's distance to the Transport in place of the core 3": the unit embarks under the core rules if every model is within this distance of a Transport it is able to embark within.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub reach: ::std::option::Option<RangeRef>,
 }
 ///The move is made as if it were your Movement phase, outside it.
 ///

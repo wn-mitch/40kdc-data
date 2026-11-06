@@ -3365,6 +3365,10 @@
                 "mode": {
                   "$ref": "../../defs/common.schema.json#/$defs/move-mode"
                 },
+                "reach": {
+                  "$ref": "../../defs/common.schema.json#/$defs/range-ref",
+                  "description": "An embark's distance to the Transport in place of the core 3\": the unit embarks under the core rules if every model is within this distance of a Transport it is able to embark within."
+                },
                 "allow_engagement": {
                   "const": true
                 },
@@ -3410,6 +3414,25 @@
               },
               "required": [
                 "move_type"
+              ],
+              "allOf": [
+                {
+                  "if": {
+                    "required": [
+                      "reach"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "move_type": {
+                        "const": "embark"
+                      }
+                    },
+                    "required": [
+                      "move_type"
+                    ]
+                  }
+                }
               ]
             },
             "scaling": {

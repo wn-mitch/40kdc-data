@@ -23,6 +23,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.as_if !== undefined) modifier.as_if = closed(leaf, "as_if");
       // Version 6: the disembark mode ("an assault disembark move").
       if (leaf.parameters.mode !== undefined) modifier.mode = closed(leaf, "mode");
+      // An embark's distance to its Transport in place of 3" (bindEmbarkAnchors, compile-transport-embark.ts).
+      if (leaf.parameters.reach !== undefined) modifier.reach = closed(leaf, "reach");
       return { type: "move", target: unitOf(leaf, "subject"), modifier };
     }
     case "move-distance": {

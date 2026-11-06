@@ -1,3 +1,4 @@
+import { matchingUnit } from "./compile-conditions.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { targetGroupOf, targetHeads } from "./compile-target-groups.js";
 import { isOneTargetRef } from "./compile-target-refs.js";
@@ -15,10 +16,37 @@ const STRATAGEM_TARGET_FAMILIES = new Set(["stratagem-target", "triggering-targe
 export function refuseEmbarkDestination(list: readonly CompileLeaf[]): void {
   if (!list.some((leaf) => leaf.family_id === "eligible" && leaf.parameters.to === "embark-within")) return;
   const embark = list.find((leaf) => (leaf.family_id === "eligibility-permission" && leaf.parameters.activity === "embark" && leaf.parameters.into === undefined)
-    || (leaf.family_id === "make-move" && leaf.parameters.move_type === "embark"));
+    || (leaf.family_id === "make-move" && leaf.parameters.move_type === "embark" && leaf.parameters.reach === undefined));
   if (embark) {
     throw new CompileError(`The embark at byte ${embark.start_byte} follows a Transport the subject is able to embark within, but the DSL has no destination for an embark yet.`);
   }
+}
+
+/**
+ * "One unit … wholly within 6\" of a friendly Transport unit that unit is able to embark within.
+ * Your unit embarks within that Transport unit": with one Stratagem target, the Transport the
+ * eligibility names (`transport: this-unit`, the Transport its clause names) is the unit the
+ * proximity just before it measures to, so the eligibility takes that proximity's filter. The
+ * embark is then the core embark with the proximity's distance in place of 3\" (`reach`): every
+ * model within it, which is what "wholly within" measures. Runs on bound leaves, where the
+ * eligibility's antecedent subject is the target (`this-unit`); refuseTransportAsSubject refuses
+ * any eligibility this leaves naming the target as its own Transport.
+ */
+export function bindEmbarkAnchors(list: readonly CompileLeaf[]): CompileLeaf[] {
+  if (list.filter((leaf) => STRATAGEM_TARGET_FAMILIES.has(leaf.family_id)).length !== 1) return [...list];
+  let reach: Record<string, unknown> | undefined;
+  const out = list.map((leaf, index) => {
+    if (leaf.family_id !== "eligible" || leaf.parameters.to !== "embark-within" || leaf.parameters.transport !== "this-unit" || leaf.parameters.subject !== "this-unit") return leaf;
+    const anchor = list.slice(0, index).reverse().find((other) => other.family_id === "unit-position");
+    const p = anchor?.parameters;
+    if (anchor === undefined || p!.kind !== "within" || p!.of !== "matching-unit" || p!.subject !== "this-unit"
+      || !Array.isArray(p!.of_keywords) || !p!.of_keywords.includes("TRANSPORT")) return leaf;
+    if (p!.wholly === true && typeof p!.inches === "number") reach = { inches: p!.inches };
+    return { ...leaf, parameters: { ...leaf.parameters, transport: matchingUnit(anchor, "this-unit") } };
+  });
+  if (reach === undefined) return out;
+  return out.map((leaf) => leaf.family_id === "make-move" && leaf.parameters.move_type === "embark" && leaf.parameters.subject === "this-unit"
+    ? { ...leaf, parameters: { ...leaf.parameters, reach } } : leaf);
 }
 
 /**

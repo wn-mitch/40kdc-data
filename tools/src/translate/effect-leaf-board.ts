@@ -191,6 +191,8 @@ function move(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const verb = MOVE_VERBS[jstr(m.move_type)] ?? `make a ${dekebab(jstr(m.move_type))} move`;
   const upTo = m.distance != null ? (verb.startsWith("make ") ? ` of up to ${diceCase(m.distance)}"` : ` up to ${diceCase(m.distance)}"`) : "";
   let s = `${subj} can ${verb}${upTo}${modeClause(m)}`;
+  // An embark's reach replaces the core 3" to the Transport.
+  if (m.reach != null) s += ` within a Transport it is able to embark within, if every model is within ${rangePhrase(m.reach)} of that Transport instead of 3"`;
   if (m.as_if === "movement-phase") s += " as if it were your Movement phase";
   if (Array.isArray(m.passthrough)) s += `, moving over ${passthrough(m.passthrough)} as though they were not there`;
   const ends = m.ends_within as P | undefined;

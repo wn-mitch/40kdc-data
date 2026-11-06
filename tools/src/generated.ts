@@ -5797,6 +5797,17 @@ export interface MoveEffect {
       )[]
     ];
     mode?: MoveMode;
+    /**
+     * One reference for every distance. A per_battle_round table is indexed from battle round 1; each later round uses the next entry and the final entry continues for all subsequent rounds. Tier entries are non-tiered range refs, so nested tables are forbidden.
+     */
+    reach?:
+      | NonTieredRangeRef
+      | {
+          /**
+           * @minItems 1
+           */
+          per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
+        };
     allow_engagement?: true;
     /**
      * allow_engagement is bound to the enemy unit the move ends nearest (ends_nearest.of): models may end within Engagement Range of that unit. Needs ends_nearest.

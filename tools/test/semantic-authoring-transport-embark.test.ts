@@ -523,3 +523,42 @@ describe("Semantic authoring embark destination: the bound pair of the enhanceme
   });
 });
 }
+
+// semantic-authoring-transport-embark: a Transport named by the target's proximity
+{
+const TEXT = "End of the Fight phase. One friendly ALPHA unit wholly within 6\" of a friendly TRANSPORT unit that ALPHA unit is able to embark within. Your ALPHA unit embarks within that TRANSPORT unit.";
+const items = (proximity: Record<string, unknown>): Item[] => [
+  ["End of the Fight phase", "event", { kind: "phase-end", phase: "fight", turn: "either" }, "WHEN"],
+  ["One", "stratagem-target", { count: "one" }, "TARGET"],
+  ["friendly ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }, "TARGET"],
+  ["wholly within 6\" of a friendly TRANSPORT unit", "unit-position", { kind: "within", inches: 6, of: "matching-unit", subject: "this-unit", negated: false, of_keywords: ["TRANSPORT"], of_side: "friendly", ...proximity }, "TARGET"],
+  ["that ALPHA unit is able to embark within", "eligible", { subject: "antecedent", to: "embark-within", transport: "this-unit" }, "TARGET"],
+  ["Your ALPHA unit embarks within that TRANSPORT unit", "make-move", { subject: "this-unit", move_type: "embark" }, "EFFECT"],
+];
+
+describe("Semantic authoring transport eligibility: a Transport the target's proximity names", () => {
+  it("names the proximity's Transport, and embarks with that distance in place of 3\"", () => {
+    const result = compileLeaves(placed(TEXT, ...items({ wholly: true })), TEXT);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(result.mechanics.effect).toEqual({ type: "move", target: "this-unit", modifier: { move_type: "embark", reach: { inches: 6 } } });
+    const operands = (result.core?.target_restrictions as { eligibility: { operands: unknown[] } }).eligibility.operands;
+    expect(operands).toContainEqual({ type: "eligible", parameters: { subject: "this-unit", to: "embark-within", transport: { owner: "friendly", all_of: ["TRANSPORT"] } } });
+    const effectOk = createValidator().getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json")!;
+    expect(effectOk(result.mechanics.effect)).toBe(true);
+  });
+
+  it("keeps refusing when some models may be farther than the distance", () => {
+    // "within 6\"" holds when one model is: the core embark needs every model, so there is no reach to give.
+    expect(refused(TEXT, ...items({}))).toMatch(/no destination for an embark/u);
+  });
+
+  it("names no Transport through a proximity to a unit that is not one", () => {
+    expect(refused(TEXT, ...items({ wholly: true, of_keywords: ["BETA"] }))).toMatch(/Transport as the unit able to embark within itself/u);
+  });
+
+  it("gives a reach only to an embark", () => {
+    const effectOk = createValidator().getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json")!;
+    expect(effectOk({ type: "move", target: "this-unit", modifier: { move_type: "normal", reach: { inches: 6 } } })).toBe(false);
+  });
+});
+}

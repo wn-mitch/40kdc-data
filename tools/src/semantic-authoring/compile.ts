@@ -90,7 +90,7 @@ import { compileWithName, NAME_FRAGMENT } from "./compile-name.js";
 import { lowerPsychicRecord, psychicSegments, type PsychicSegment } from "./compile-psychic-cost.js";
 import type { Mechanics } from "./entries.js";
 import { bindTargetRefs, refuseBareTarget } from "./compile-target-refs.js";
-import { refuseDestinationMismatch, refuseEmbarkDestination, refuseTransportAsSubject } from "./compile-transport-embark.js";
+import { bindEmbarkAnchors, refuseDestinationMismatch, refuseEmbarkDestination, refuseTransportAsSubject } from "./compile-transport-embark.js";
 import { refuseStratagemTargetActivity } from "./compile-triggering-destruction.js";
 import { planConditionOf, type ConditionOfPlan } from "./compile-connective-plan.js";
 import { lowerHistoryMoments } from "./compile-connective-history.js";
@@ -410,7 +410,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const weaponBound = bindFrameAntecedents(ordered(bindWeaponAntecedents(bindEarlierNamed(resolveAuthoredNames(leaves, sourceText, options.weapons, options.abilityId), options.weapons, options.abilityId))));
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
     const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldManoeuvreOwnRoll(foldHistoryWindow(foldByAbility(foldAuraMoments(foldUsedObjects(foldStratagemTail(foldObjectRange(splitIgnoreModifiers(resolveAttackBackrefs(groupMembership(hoistWeaponRecipients(foldWarlordTests(foldEffectAfterAttacks(foldDestructionAfterAttacks(foldDisembarkMoment(foldStepWindow(ordered(weaponBound), sourceText), sourceText), sourceText), sourceText)), sourceText)))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), options.menuActions ?? manoeuvreLookupFor(options.abilityId)), sourceText), sourceText, options.abilityId), sourceText), sourceText);
-    const bound = foldCountScales(bindDesignationSubjects(foldAlternativePools(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(foldForwardComposition(refs.leaves), sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText))), sourceText);
+    // "wholly within 6\" of a friendly Transport unit that unit is able to embark within" (compile-transport-embark.ts).
+    const bound = bindEmbarkAnchors(foldCountScales(bindDesignationSubjects(foldAlternativePools(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(foldForwardComposition(refs.leaves), sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText))), sourceText));
     refuseTransportAsSubject(bound);
     refuseDestinationMismatch(bound, sourceText);
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldFightNext(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldTargetingWeapons(foldDestroyFilters(foldMortalWoundSources(bindEquippedCounts(bound)), sourceText), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText)), sourceText));

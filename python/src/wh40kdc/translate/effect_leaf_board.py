@@ -453,6 +453,12 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         d = dice_case(m["distance"])
         up_to = f' of up to {d}"' if verb.startswith("make ") else f' up to {d}"'
     s = f"{subj} can {verb}{up_to}{_mode_clause(m)}"
+    # An embark's reach replaces the core 3" to the Transport.
+    if m.get("reach") is not None:
+        s += (
+            " within a Transport it is able to embark within,"
+            f' if every model is within {range_phrase(m["reach"])} of that Transport instead of 3"'
+        )
     if m.get("as_if") == "movement-phase":
         s += " as if it were your Movement phase"
     if isinstance(m.get("passthrough"), list):

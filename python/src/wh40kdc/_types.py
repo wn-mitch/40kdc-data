@@ -3458,6 +3458,7 @@ class Modifier34(TypedDict):
         ]
     ]
     mode: NotRequired[MoveMode]
+    reach: NotRequired[RangeRef]
     allow_engagement: NotRequired[Literal[True]]
     engaged_with: NotRequired[Literal["nearest-move-end"]]
     counts_as_move: NotRequired[MovementKind]

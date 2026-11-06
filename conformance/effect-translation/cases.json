@@ -41065,6 +41065,25 @@
     }
   },
   {
+    "caseId": "fidelity/move-embark-reach",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "embark",
+        "reach": {
+          "inches": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit can embark within a Transport it is able to embark within, if every model is within 6\" of that Transport instead of 3\"."
+    }
+  },
+  {
     "caseId": "fidelity/move-modifier-maximum-inches",
     "effect": {
       "type": "move-modifier",
