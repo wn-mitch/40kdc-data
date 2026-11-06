@@ -22,7 +22,8 @@ type Node = Record<string, unknown>;
  * so none of them opens a new part (a colon before a roll's result band does not end its
  * sentence), and neither does a sentence naming "that unit" or "such a weapon" from an earlier one.
  * A sentence whose only effects are printed grants ("Friendly K units have the following ability:") after
- * a part with a moment is a part of its own too: it holds whenever the record applies.
+ * a part with a moment is a part of its own too: it holds whenever the record applies. So is a sentence
+ * whose only effects are transport capacity, a property of the unit that no moment triggers.
  */
 
 // The usage prefix may be printed in parentheses with its owner: "(Once per battle, per army) When …".
@@ -149,6 +150,9 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   // a sentence whose effects are all printed grants (compile-granted.ts folds the granted bodies onto them).
   const standingGrant = (sentence: readonly CompileLeaf[]) => hasEffect(sentence)
     && sentence.every((leaf) => leaf.role !== "EFFECT" || (leaf.family_id === "ability-record-grant" && Array.isArray(leaf.parameters.granted)));
+  // "Each X model in this unit takes up 0 transport capacity" is a property the unit always has: no moment can trigger it.
+  const standingProperty = (sentence: readonly CompileLeaf[]) => hasEffect(sentence)
+    && sentence.every((leaf) => leaf.role !== "EFFECT" || leaf.family_id === "transport-capacity");
   const armyOnly = (sentence: readonly CompileLeaf[]) => hasEffect(sentence)
     && sentence.every((leaf) => leaf.role !== "EFFECT" || leaf.family_id === "army-construction");
   const firstEffectful = sentences.findIndex(hasEffect);
@@ -229,7 +233,7 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   sentences.forEach((sentence, position) => {
     const words = sentenceWords(leaves, starts[position]!, sentence, sourceText);
     // A standing grant after a part with a moment of its own is not that moment's: the moment cannot trigger it.
-    const standing = standingGrant(sentence) && parts.at(-1)!.some((leaf) => leaf.role === "EVENT" && leaf.family_id !== "select-unit" && leaf.family_id !== "dice-roll");
+    const standing = (standingGrant(sentence) || standingProperty(sentence)) && parts.at(-1)!.some((leaf) => leaf.role === "EVENT" && leaf.family_id !== "select-unit" && leaf.family_id !== "dice-roll");
     // A menu whose options begin at named-option markers holds every sentence after its opener: "Each time …" there is one option's moment.
     // A resource-action menu holds every sentence after its opener the same way, even before its first action: a
     // sentence between them ("At the end of the battle round, …") is given back by the container plan.

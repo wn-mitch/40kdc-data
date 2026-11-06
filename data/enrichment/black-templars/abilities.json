@@ -1266,9 +1266,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "gladiator-lancer"
     ],
@@ -1276,11 +1275,69 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "owner": "enemy",
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result",
+              "count": 1
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result",
+              "count": 1
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "damage",
+              "result_scope": "any-result",
+              "count": 1
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "de2840d2d407e9ce989550b59e61938e93f7ca813aaab12d054a0b3958bb0b44"
   },
   {
     "ability_id": "armour-of-faith-black-templars",
@@ -1790,19 +1847,45 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
     "detachment_id": "vow-sworn-crusaders",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "pile-in",
+          "consolidation"
+        ],
+        "maximum": "D3+3"
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "pile-in",
+          "consolidation"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES",
+          "INFANTRY"
+        ]
+      }
+    },
+    "source_digest": "1cc2e7aa0691bed545e8fad93e9f05732b062cf4d4f25928738a7a2a67398444"
   },
   {
     "ability_id": "divine-endurance-vow-sworn-of-vedrenn-black-templars",
@@ -2830,19 +2913,25 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
     "detachment_id": "fist-of-the-god-emperor",
-    "ability_type": "detachment",
+    "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "re-roll",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "advance",
+        "result_scope": "any-result"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "14ce4e7b0b820e7d9270f27844d2d774eb625baa92b2f9596dec95c77383edc5"
   },
   {
     "ability_id": "righteous-zeal-vow-sworn-crusader-squad-black-templars",
@@ -4050,9 +4139,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "chaplain-grimaldus"
     ],
@@ -4060,11 +4148,51 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "model-destroyed",
+            "object": {
+              "owner": "friendly",
+              "all_of": [
+                "CHAPLAIN GRIMALDUS"
+              ],
+              "level": "model"
+            }
+          },
+          "effect": {
+            "type": "destroy-models",
+            "target": {
+              "level": "model",
+              "member_of": "this-unit",
+              "all_of": [
+                "CENOBYTE SERVITOR"
+              ]
+            },
+            "modifier": {
+              "count": "all"
+            }
+          }
+        },
+        {
+          "type": "transport-capacity",
+          "target": "this-unit",
+          "modifier": {
+            "occupancy_kind": "fixed-model-spaces",
+            "subject_kind": "unit-models",
+            "model_keyword": "Cenobyte Servitor",
+            "spaces_per_model": 0
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "339665b621e49e07f6a71843bccbbc547480412f2582169c2f9b3329b3b02d8a"
   },
   {
     "ability_id": "heirs-of-sigismund-vow-sworn-of-vedrenn-black-templars",

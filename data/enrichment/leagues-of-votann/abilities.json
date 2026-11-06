@@ -5385,19 +5385,177 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "hearthband",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-part",
+            "optional": true,
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "this-unit",
+                      "filter": {
+                        "designated": "bastion-shield-yp-spent"
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "resource-spend",
+                    "target": "this-model",
+                    "modifier": {
+                      "pool": "yp-pool",
+                      "amount": 1
+                    }
+                  },
+                  {
+                    "type": "designate",
+                    "target": "this-unit",
+                    "modifier": {
+                      "tag": "bastion-shield-yp-spent",
+                      "clears_on": "phase"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "attacker",
+                    "filter": {
+                      "within": {
+                        "of": "this-unit",
+                        "range": {
+                          "inches": 12
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "this-unit",
+                            "filter": {
+                              "designated": "bastion-shield-yp-spent"
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "attacker",
+                            "filter": {
+                              "within": {
+                                "of": "this-unit",
+                                "range": {
+                                  "inches": 18
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": "attacker",
+              "modifier": {
+                "stat": "AP",
+                "operation": "worsen",
+                "value": 1
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "this-unit",
+                    "filter": {
+                      "designated": "bastion-shield-yp-spent"
+                    }
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "attacker",
+                    "filter": {
+                      "within": {
+                        "of": "this-unit",
+                        "range": {
+                          "inches": 18
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": "attacker",
+              "modifier": {
+                "stat": "AP",
+                "operation": "worsen",
+                "value": 1
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "passive",
+    "source_digest": "611b6544dec16a12f7258d0f4a5cfcf1eac21018dc5f1f3d24df118e81eeb7ed"
   },
   {
     "ability_id": "brekkeknots-hearthband-leagues-of-votann",

@@ -3516,7 +3516,7 @@ class Modifier36(TypedDict):
     ignore_vertical: NotRequired[Literal[True]]
     no_end_in_engagement: NotRequired[Literal[True]]
     distance_bonus: NotRequired[Quantity | int]
-    maximum: NotRequired[Literal["unlimited"] | int]
+    maximum: NotRequired[Literal["unlimited"] | int | str]
     advance: NotRequired[Literal["fixed-6", "fixed-8"]]
     end_on_terrain: NotRequired[Literal[True]]
     ends_nearest: NotRequired[EndsNearest]

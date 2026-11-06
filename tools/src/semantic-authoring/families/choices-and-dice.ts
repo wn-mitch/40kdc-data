@@ -196,6 +196,14 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
     normalize: (input, previous) => input.amount === "that-many" ? standIn(input, "amount", "1", previous) : previous(input),
   },
   {
+    // "this model heals 2D3 wounds".
+    family: "regain-wounds",
+    version: 8,
+    description: "As the previous version, plus amount 2D3 (\"this model heals 2D3 wounds\").",
+    schema: (previous) => withProperties(previous, { amount: widenedEnum(previous, "amount", ["2D3"]) }),
+    normalize: (input, previous) => input.amount === "2D3" ? standIn(input, "amount", "1", previous) : previous(input),
+  },
+  {
     // "suffers D3 mortal wounds; … add 1 to that Psychic test result for each of those mortal wounds suffered".
     family: "roll-modifier",
     version: 12,

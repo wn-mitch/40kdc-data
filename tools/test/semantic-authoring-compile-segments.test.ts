@@ -337,4 +337,18 @@ describe("Semantic authoring record-wide frames and standing menus", () => {
     expect(steps.map((step) => step.type)).toEqual(["ability-part", "sequence"]);
     expect(steps[1]!.steps.map((step: Record<string, any>) => step.type === "ability-part" ? step.trigger.event : step.type)).toEqual(["resource-action-menu", "round-ended"]);
   });
+
+  it("keeps a transport-capacity sentence out of an earlier moment's part", () => {
+    const text = "If this unit's Leader model is destroyed, this unit's Drone models are also destroyed.Each Drone model in this unit takes up 0 transport capacity.";
+    const list = placed(text,
+      ["this unit's Leader model is destroyed", "event", { kind: "model-destroyed", object_owner: "friendly", object_keywords: ["LEADER"] }],
+      ["this unit's Drone models are also destroyed", "destroy-models", { recipient: "this-unit", count: "all", model_keyword: "DRONE" }],
+      ["Each Drone model in this unit takes up 0 transport capacity", "transport-capacity", { shape: "fixed-model-spaces", subject_kind: "unit-models", model_keyword: "Drone", spaces_per_model: 0 }]);
+    const parts = sentenceSegments(list, text)!;
+    expect(parts.map((part) => part.map((leaf) => leaf.family_id))).toEqual([["event", "destroy-models"], ["transport-capacity"]]);
+    // With no moment before it, the capacity sentence is not split off: it is the only rule.
+    const alone = "Each Drone model in this unit takes up 0 transport capacity. Each Drone model in this unit takes up 0 transport capacity.";
+    expect(sentenceSegments(placed(alone,
+      ["Each Drone model in this unit takes up 0 transport capacity", "transport-capacity", { shape: "fixed-model-spaces", subject_kind: "unit-models", model_keyword: "Drone", spaces_per_model: 0 }]), alone)).toBeNull();
+  });
 });

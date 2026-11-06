@@ -18425,7 +18425,57 @@
     }
   },
   {
-    "caseId": "fated-hero-aeldari#259",
+    "caseId": "faithful-cenobytes-black-templars#259",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "model-destroyed",
+            "object": {
+              "owner": "friendly",
+              "all_of": [
+                "CHAPLAIN GRIMALDUS"
+              ],
+              "level": "model"
+            }
+          },
+          "effect": {
+            "type": "destroy-models",
+            "target": {
+              "level": "model",
+              "member_of": "this-unit",
+              "all_of": [
+                "CENOBYTE SERVITOR"
+              ]
+            },
+            "modifier": {
+              "count": "all"
+            }
+          }
+        },
+        {
+          "type": "transport-capacity",
+          "target": "this-unit",
+          "modifier": {
+            "occupancy_kind": "fixed-model-spaces",
+            "subject_kind": "unit-models",
+            "model_keyword": "Cenobyte Servitor",
+            "spaces_per_model": 0
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "-> When a friendly CHAPLAIN GRIMALDUS model is destroyed: destroy CENOBYTE SERVITOR models in the unit.\nFor Transport capacity, each Cenobyte Servitor model occupies 0 model spaces."
+    }
+  },
+  {
+    "caseId": "fated-hero-aeldari#260",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18465,7 +18515,7 @@
     }
   },
   {
-    "caseId": "fates-in-flux-chaos-daemons#260",
+    "caseId": "fates-in-flux-chaos-daemons#261",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18505,7 +18555,7 @@
     }
   },
   {
-    "caseId": "ferocious-show-off-green-tide-orks#261",
+    "caseId": "ferocious-show-off-green-tide-orks#262",
     "effect": {
       "type": "choice",
       "options": [
@@ -18553,7 +18603,7 @@
     }
   },
   {
-    "caseId": "fire-and-fury-bringers-of-flame-adepta-sororitas#262",
+    "caseId": "fire-and-fury-bringers-of-flame-adepta-sororitas#263",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18613,7 +18663,7 @@
     }
   },
   {
-    "caseId": "fire-zone-purge-astra-militarum#263",
+    "caseId": "fire-zone-purge-astra-militarum#264",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -18720,7 +18770,7 @@
     }
   },
   {
-    "caseId": "fires-of-damnation-sanctuary-guardians-adepta-sororitas#264",
+    "caseId": "fires-of-damnation-sanctuary-guardians-adepta-sororitas#265",
     "effect": {
       "type": "rules-bundle",
       "steps": [
@@ -18762,7 +18812,7 @@
     }
   },
   {
-    "caseId": "flow-of-magic-thousand-sons#265",
+    "caseId": "flow-of-magic-thousand-sons#266",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -18917,7 +18967,7 @@
     }
   },
   {
-    "caseId": "forward-assault-warsuit-adeptus-astartes#266",
+    "caseId": "forward-assault-warsuit-adeptus-astartes#267",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -18995,7 +19045,7 @@
     }
   },
   {
-    "caseId": "freeblades-imperial-knights#267",
+    "caseId": "freeblades-imperial-knights#268",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19104,7 +19154,7 @@
     }
   },
   {
-    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#268",
+    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#269",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -19125,7 +19175,7 @@
     }
   },
   {
-    "caseId": "grot-shields-runt-swarm-orks#269",
+    "caseId": "grot-shields-runt-swarm-orks#270",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -19220,7 +19270,7 @@
     }
   },
   {
-    "caseId": "guns-blazing-chaos-space-marines#270",
+    "caseId": "guns-blazing-chaos-space-marines#271",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19333,7 +19383,7 @@
     }
   },
   {
-    "caseId": "hallowed-ground-grey-knights#271",
+    "caseId": "hallowed-ground-grey-knights#272",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -19539,7 +19589,7 @@
     }
   },
   {
-    "caseId": "headhunters-space-wolves#272",
+    "caseId": "headhunters-space-wolves#273",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -19624,7 +19674,7 @@
     }
   },
   {
-    "caseId": "headlong-destruction-chaos-space-marines#273",
+    "caseId": "headlong-destruction-chaos-space-marines#274",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19653,7 +19703,7 @@
     }
   },
   {
-    "caseId": "heirs-of-sigismund-vow-sworn-of-vedrenn-black-templars#274",
+    "caseId": "heirs-of-sigismund-vow-sworn-of-vedrenn-black-templars#275",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -19735,7 +19785,7 @@
     }
   },
   {
-    "caseId": "heroes-of-legend-imperial-knights#275",
+    "caseId": "heroes-of-legend-imperial-knights#276",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -19827,7 +19877,7 @@
     }
   },
   {
-    "caseId": "honour-or-death-dark-angels#276",
+    "caseId": "honour-or-death-dark-angels#277",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -19907,7 +19957,7 @@
     }
   },
   {
-    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-chaos-daemons#277",
+    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-chaos-daemons#278",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19934,7 +19984,7 @@
     }
   },
   {
-    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons#278",
+    "caseId": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons#279",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20006,7 +20056,7 @@
     }
   },
   {
-    "caseId": "hyper-adaptations-tyranids#279",
+    "caseId": "hyper-adaptations-tyranids#280",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20146,7 +20196,7 @@
     }
   },
   {
-    "caseId": "hyperspace-hunters-necrons#280",
+    "caseId": "hyperspace-hunters-necrons#281",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20262,7 +20312,7 @@
     }
   },
   {
-    "caseId": "icon-of-khorne-world-eaters#281",
+    "caseId": "icon-of-khorne-world-eaters#282",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -20304,15 +20354,26 @@
     }
   },
   {
-    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#282",
+    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#283",
     "effect": {
-      "type": "resource-die",
-      "target": "this-model",
-      "modifier": {
-        "pool": "blessings-of-khorne-pool",
-        "operation": "add",
-        "value": "rolled",
-        "count": 1
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "state": "on-battlefield"
+          }
+        }
+      },
+      "effect": {
+        "type": "resource-die",
+        "target": "this-model",
+        "modifier": {
+          "pool": "blessings-of-khorne-pool",
+          "operation": "add",
+          "value": "rolled"
+        }
       }
     },
     "scope": {
@@ -20322,11 +20383,11 @@
       "event": "round-started"
     },
     "expected": {
-      "text": "At the start of the battle round, add a rolled D6 to your Blessings of Khorne."
+      "text": "At the start of the battle round, while this model is on the battlefield, add a rolled D6 to your Blessings of Khorne."
     }
   },
   {
-    "caseId": "imposing-arrival-steel-hammer-astra-militarum#283",
+    "caseId": "imposing-arrival-steel-hammer-astra-militarum#284",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20363,7 +20424,7 @@
     }
   },
   {
-    "caseId": "infested-war-zone-runt-swarm-orks#284",
+    "caseId": "infested-war-zone-runt-swarm-orks#285",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -20444,7 +20505,7 @@
     }
   },
   {
-    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#285",
+    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#286",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -20468,25 +20529,6 @@
     },
     "expected": {
       "text": "Once per battle per army, for the rest of the battle, add a new unit identical to the unit to your army in Strategic Reserves.\nApplies to: units with KROOT."
-    }
-  },
-  {
-    "caseId": "kill-team-agents-of-the-imperium#286",
-    "effect": {
-      "type": "transport-capacity",
-      "target": "this-unit",
-      "modifier": {
-        "occupancy_kind": "fixed-model-spaces",
-        "subject_kind": "unit-models",
-        "model_keyword": "GRAVIS",
-        "spaces_per_model": 2
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "For Transport capacity, each GRAVIS model occupies 2 model spaces."
     }
   },
   {
@@ -28417,7 +28459,26 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-keyword#430",
+    "caseId": "transport-fixed-model-spaces-zero#430",
+    "effect": {
+      "type": "transport-capacity",
+      "target": "this-unit",
+      "modifier": {
+        "occupancy_kind": "fixed-model-spaces",
+        "subject_kind": "unit-models",
+        "model_keyword": "FABLED SERVITOR",
+        "spaces_per_model": 0
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "For Transport capacity, each FABLED SERVITOR model occupies 0 model spaces."
+    }
+  },
+  {
+    "caseId": "transport-equivalent-model-keyword#431",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -28436,7 +28497,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-count#431",
+    "caseId": "transport-equivalent-model-count#432",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -28454,7 +28515,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-inline#432",
+    "caseId": "moved-through-tall-terrain-inline#433",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -28483,7 +28544,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-condition#433",
+    "caseId": "moved-through-tall-terrain-trigger-condition#434",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -28515,7 +28576,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-inline#434",
+    "caseId": "moved-through-tall-terrain-negated-inline#435",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -28549,7 +28610,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-trigger-condition#435",
+    "caseId": "moved-through-tall-terrain-negated-trigger-condition#436",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -28586,7 +28647,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-event#436",
+    "caseId": "moved-through-tall-terrain-trigger-event#437",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -28608,7 +28669,7 @@
     }
   },
   {
-    "caseId": "moved-through-terrain-generic#437",
+    "caseId": "moved-through-terrain-generic#438",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -28637,7 +28698,7 @@
     }
   },
   {
-    "caseId": "aura-role-filtered-effect#438",
+    "caseId": "aura-role-filtered-effect#439",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -41062,6 +41123,42 @@
     },
     "expected": {
       "text": "When resolving this use:\n  -> Select one objective marker that the unit was controlling at the end of the previous phase, binding it as objective: that objective marker remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase."
+    }
+  },
+  {
+    "caseId": "fidelity/move-modifier-maximum-dice",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "pile-in",
+          "consolidation"
+        ],
+        "maximum": "D3+3"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit can move up to D3+3\", during its Pile-in and Consolidation moves."
+    }
+  },
+  {
+    "caseId": "fidelity/heal-two-d3",
+    "effect": {
+      "type": "heal",
+      "target": "this-model",
+      "modifier": {
+        "amount": "2D3"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, this model regains up to 2D3 lost wounds."
     }
   },
   {

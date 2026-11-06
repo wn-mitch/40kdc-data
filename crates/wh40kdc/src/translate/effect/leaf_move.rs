@@ -283,6 +283,9 @@ pub(super) fn move_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
         clauses.push(format!("{subj} can move any distance"));
     } else if let Some(n) = m.get("maximum").and_then(Value::as_f64) {
         clauses.push(format!("{subj} can move up to {}\"", fnum(n)));
+    } else if let Some(dice) = m.get("maximum").filter(|v| v.is_string()) {
+        // A rolled ceiling ("can move up to D3+3\"").
+        clauses.push(format!("{subj} can move up to {}\"", dice_case(Some(dice))));
     }
     if let Some(bonus) = nn(m, "distance_bonus") {
         let n = num(Some(bonus));

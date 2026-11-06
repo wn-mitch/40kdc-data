@@ -3336,6 +3336,15 @@ function genEffectTranslation(): void {
       scope: { duration: "permanent" },
     },
     {
+      id: "transport-fixed-model-spaces-zero",
+      effect: {
+        type: "transport-capacity",
+        target: "this-unit",
+        modifier: { occupancy_kind: "fixed-model-spaces", subject_kind: "unit-models", model_keyword: "FABLED SERVITOR", spaces_per_model: 0 },
+      },
+      scope: { duration: "permanent" },
+    },
+    {
       id: "transport-equivalent-model-keyword",
       effect: {
         type: "transport-capacity",
@@ -4178,6 +4187,10 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/select-objective-controlled-at-previous-phase-end", effect: { type: "select-objective",
       selector: { filter: { controlled_by_unit: "this-unit", controlled_at: "previous-phase-end" }, bind_as: "objective", count: { min: 1, max: 1 } },
       effect: { type: "objective-sticky", target: "this-unit", modifier: { objective: { selection_var: "objective" } } } } },
+    // A rolled ceiling on the named moves: "can move up to D3+3\"".
+    { caseId: "fidelity/move-modifier-maximum-dice", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["pile-in", "consolidation"], maximum: "D3+3" } } },
+    // A heal of a two-dice amount.
+    { caseId: "fidelity/heal-two-d3", effect: { type: "heal", target: "this-model", modifier: { amount: "2D3" } } },
     // A cap on a roll after modifiers: "if the result is greater than 6, change it to 6".
     { caseId: "fidelity/roll-result-at-most", effect: { type: "roll-result", target: "this-unit", modifier: { roll: "charge", at_most: 6 } } },
     // An embark under the core rules with a longer distance to the Transport than 3".

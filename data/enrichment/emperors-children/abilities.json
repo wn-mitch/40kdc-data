@@ -3629,7 +3629,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "7b211753b1133970d3c2b050f52c3af49384877771c9a147e36a5401ad2ecb98",
     "version": "2025-q3",
@@ -3638,12 +3638,13 @@
     "faction_id": "emperors-children",
     "detachment_id": "peerless-bladesmen",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
         "type": "happened",
         "parameters": {
+          "subject": "event-subject",
           "event": "move-ended",
           "filter": {
             "move_types": [
@@ -3658,25 +3659,22 @@
         "options": [
           {
             "type": "weapon-ability-grant",
-            "target": "this-model",
+            "target": "event-subject",
             "modifier": {
-              "weapons": {
-                "type": "melee"
-              },
               "keywords": [
                 {
                   "keyword_id": "lethal-hits"
                 }
-              ]
+              ],
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
             "type": "weapon-ability-grant",
-            "target": "this-model",
+            "target": "event-subject",
             "modifier": {
-              "weapons": {
-                "type": "melee"
-              },
               "keywords": [
                 {
                   "keyword_id": "sustained-hits",
@@ -3684,17 +3682,31 @@
                     "value": 1
                   }
                 }
-              ]
+              ],
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
-        ],
-        "choice_label": "exquisite-swordsmanship-keyword"
+        ]
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "fight"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "EMPEROR'S CHILDREN"
+        ]
+      }
+    }
   },
   {
     "ability_id": "mechanised-murder-emperors-children",

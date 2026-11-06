@@ -1264,7 +1264,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "52b2504b0593c9457ea9f17916a5ca2928760b63cca0b59e14cc5de1cd8f8964",
     "version": "2025-q3",
@@ -1277,13 +1277,24 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "effect": {
-      "type": "resource-die",
-      "target": "this-model",
-      "modifier": {
-        "pool": "blessings-of-khorne-pool",
-        "operation": "add",
-        "value": "rolled",
-        "count": 1
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "state": "on-battlefield"
+          }
+        }
+      },
+      "effect": {
+        "type": "resource-die",
+        "target": "this-model",
+        "modifier": {
+          "pool": "blessings-of-khorne-pool",
+          "operation": "add",
+          "value": "rolled"
+        }
       }
     },
     "scope": {

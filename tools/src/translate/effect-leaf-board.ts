@@ -224,6 +224,8 @@ function moveModifier(m: Record<string, unknown>, subj: string, ctx: Ctx): strin
   const clauses: string[] = [];
   if (m.maximum === "unlimited") clauses.push(`${subj} can move any distance`);
   else if (typeof m.maximum === "number") clauses.push(`${subj} can move up to ${m.maximum}"`);
+  // A rolled ceiling ("can move up to D3+3\"").
+  else if (typeof m.maximum === "string") clauses.push(`${subj} can move up to ${diceCase(m.maximum)}"`);
   if (m.distance_bonus != null) {
     const n = Number(m.distance_bonus);
     const moves = kinds ? `${kinds} moves` : "Move characteristic";

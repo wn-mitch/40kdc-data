@@ -11600,9 +11600,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "captain-titus"
     ],
@@ -11610,11 +11609,79 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "S",
+              "operation": "improve",
+              "value": 1,
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "attacks-resolved",
+              "optional": true
+            },
+            "effect": {
+              "type": "choice",
+              "options": [
+                {
+                  "type": "heal",
+                  "target": "this-model",
+                  "modifier": {
+                    "amount": "D3"
+                  }
+                },
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "model-destroyed",
+                      "object": {
+                        "owner": "enemy",
+                        "level": "model"
+                      },
+                      "filter": {
+                        "by": "this-model"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  "effect": {
+                    "type": "heal",
+                    "target": "this-model",
+                    "modifier": {
+                      "amount": "2D3"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "source_digest": "807e9630ce4998356bb5e674970167ab40cb65bca92cc18f54ed4c4a30a401d5"
   },
   {
     "ability_id": "rites-of-thermal-appeasement-adeptus-astartes",

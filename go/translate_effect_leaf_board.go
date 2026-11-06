@@ -382,6 +382,9 @@ func moveModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 		clauses = append(clauses, subj+" can move any distance")
 	} else if n, ok := m["maximum"].(float64); ok {
 		clauses = append(clauses, subj+" can move up to "+numStr(n)+"\"")
+	} else if dice, ok := m["maximum"].(string); ok {
+		// A rolled ceiling ("can move up to D3+3\"").
+		clauses = append(clauses, subj+" can move up to "+diceCase(dice)+"\"")
 	}
 	if m["distance_bonus"] != nil {
 		n := jsNumber(m["distance_bonus"])

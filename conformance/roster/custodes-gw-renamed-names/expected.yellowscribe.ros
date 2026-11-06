@@ -246,7 +246,9 @@ All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
             </profile>
             <profile name="Swift Ruin (Once per phase, per army)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Nothing happens.</characteristic>
+                <characteristic name="Description">You can: The unit is eligible to be targeted with the Rapid Ingress Stratagem even if it has already been targeted with that Stratagem this phase.
+Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
+The unit's Rapid Ingress ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
               </characteristics>
             </profile>
             <profile name="Take Wing" typeName="Abilities">

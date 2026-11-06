@@ -5955,9 +5955,9 @@ export interface MoveModifierEffect {
      */
     distance_bonus?: Quantity | number;
     /**
-     * unlimited: the selected Advance has no maximum distance. A number: the selected moves can go up to that many inches ("that unit can move up to 4\""). An explicit distance ceiling, not an additional move.
+     * unlimited: the selected Advance has no maximum distance. A number or a dice expression: the selected moves can go up to that many inches ("that unit can move up to 4\"", "up to D3+3\""). An explicit distance ceiling, not an additional move.
      */
-    maximum?: "unlimited" | number;
+    maximum?: "unlimited" | number | string;
     /**
      * Advance without an Advance roll, adding this many inches to Move instead (fixed-6 is the core rule's 6").
      */

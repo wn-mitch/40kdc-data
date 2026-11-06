@@ -3824,9 +3824,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "deathwing-knights"
     ],
@@ -3834,11 +3833,123 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "battle-started",
+            "optional": true
+          },
+          "effect": {
+            "type": "marker",
+            "target": "this-unit",
+            "modifier": {
+              "label": "teleport-homer-token",
+              "operation": "place"
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "used",
+            "filter": {
+              "kind": "stratagem",
+              "id": "rapid-ingress"
+            },
+            "object": "this-unit",
+            "optional": true
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "cost-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "of": "stratagem",
+                  "operation": "decrease",
+                  "amount": 1,
+                  "applies_to": "the-triggering-use"
+                }
+              },
+              {
+                "type": "set-up",
+                "target": "this-unit",
+                "modifier": {
+                  "to": "battlefield",
+                  "min_enemy_distance": {
+                    "inches": 8
+                  },
+                  "mandatory": true,
+                  "near": [
+                    {
+                      "of": {
+                        "marker": "teleport-homer-token"
+                      },
+                      "range": {
+                        "inches": 3
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "marker",
+                "target": "this-unit",
+                "modifier": {
+                  "label": "teleport-homer-token",
+                  "operation": "remove"
+                }
+              }
+            ]
+          },
+          "duration": "resolution"
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "subject": {
+              "owner": "enemy"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-subject",
+                "filter": {
+                  "within": {
+                    "of": {
+                      "marker": "teleport-homer-token"
+                    },
+                    "range": {
+                      "inches": 1
+                    }
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "marker",
+              "target": "this-unit",
+              "modifier": {
+                "label": "teleport-homer-token",
+                "operation": "remove"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "366e36491dee4900ac413d56653dc02c5441f5c62c8ff3fe4c0161df9c1429c6"
   },
   {
     "ability_id": "vowed-target-dark-angels",

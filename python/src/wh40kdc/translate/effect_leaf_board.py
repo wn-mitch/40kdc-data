@@ -533,6 +533,9 @@ def _move_modifier(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         clauses.append(f"{subj} can move any distance")
     elif isinstance(m.get("maximum"), int) and not isinstance(m.get("maximum"), bool):
         clauses.append(f'{subj} can move up to {m["maximum"]}"')
+    elif isinstance(m.get("maximum"), str):
+        # A rolled ceiling ("can move up to D3+3\"").
+        clauses.append(f'{subj} can move up to {dice_case(m["maximum"])}"')
     if m.get("distance_bonus") is not None:
         n = num(m["distance_bonus"])
         moves = f"{kinds} moves" if kinds else "Move characteristic"

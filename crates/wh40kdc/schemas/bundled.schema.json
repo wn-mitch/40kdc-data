@@ -10256,9 +10256,13 @@
                       "type": "integer",
                       "minimum": 1,
                       "maximum": 48
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^\\d*D(3|6)(\\+\\d+)?$"
                     }
                   ],
-                  "description": "unlimited: the selected Advance has no maximum distance. A number: the selected moves can go up to that many inches (\"that unit can move up to 4\\\"\"). An explicit distance ceiling, not an additional move."
+                  "description": "unlimited: the selected Advance has no maximum distance. A number or a dice expression: the selected moves can go up to that many inches (\"that unit can move up to 4\\\"\", \"up to D3+3\\\"\"). An explicit distance ceiling, not an additional move."
                 },
                 "advance": {
                   "enum": [
@@ -10688,7 +10692,7 @@
                     },
                     "spaces_per_model": {
                       "type": "integer",
-                      "minimum": 1
+                      "minimum": 0
                     }
                   },
                   "required": [

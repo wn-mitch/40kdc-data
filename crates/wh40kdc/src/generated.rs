@@ -25652,7 +25652,7 @@ impl ::std::convert::TryFrom<::std::string::String> for MoveMode {
 ///      "const": true
 ///    },
 ///    "maximum": {
-///      "description": "unlimited: the selected Advance has no maximum distance. A number: the selected moves can go up to that many inches (\"that unit can move up to 4\\\"\"). An explicit distance ceiling, not an additional move.",
+///      "description": "unlimited: the selected Advance has no maximum distance. A number or a dice expression: the selected moves can go up to that many inches (\"that unit can move up to 4\\\"\", \"up to D3+3\\\"\"). An explicit distance ceiling, not an additional move.",
 ///      "oneOf": [
 ///        {
 ///          "const": "unlimited"
@@ -25661,6 +25661,10 @@ impl ::std::convert::TryFrom<::std::string::String> for MoveMode {
 ///          "type": "integer",
 ///          "maximum": 48.0,
 ///          "minimum": 1.0
+///        },
+///        {
+///          "type": "string",
+///          "pattern": "^\\d*D(3|6)(\\+\\d+)?$"
 ///        }
 ///      ]
 ///    },
@@ -25783,7 +25787,7 @@ pub struct MoveModifierEffectModifier {
     pub ends_when_replaces: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ignore_vertical: ::std::option::Option<::serde_json::Value>,
-    ///unlimited: the selected Advance has no maximum distance. A number: the selected moves can go up to that many inches ("that unit can move up to 4\""). An explicit distance ceiling, not an additional move.
+    ///unlimited: the selected Advance has no maximum distance. A number or a dice expression: the selected moves can go up to that many inches ("that unit can move up to 4\"", "up to D3+3\""). An explicit distance ceiling, not an additional move.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub maximum: ::std::option::Option<MoveModifierEffectModifierMaximum>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -26060,13 +26064,13 @@ impl ::std::convert::From<i64> for MoveModifierEffectModifierDistanceBonus {
         Self::Integer(value)
     }
 }
-///unlimited: the selected Advance has no maximum distance. A number: the selected moves can go up to that many inches ("that unit can move up to 4\""). An explicit distance ceiling, not an additional move.
+///unlimited: the selected Advance has no maximum distance. A number or a dice expression: the selected moves can go up to that many inches ("that unit can move up to 4\"", "up to D3+3\""). An explicit distance ceiling, not an additional move.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "unlimited: the selected Advance has no maximum distance. A number: the selected moves can go up to that many inches (\"that unit can move up to 4\\\"\"). An explicit distance ceiling, not an additional move.",
+///  "description": "unlimited: the selected Advance has no maximum distance. A number or a dice expression: the selected moves can go up to that many inches (\"that unit can move up to 4\\\"\", \"up to D3+3\\\"\"). An explicit distance ceiling, not an additional move.",
 ///  "oneOf": [
 ///    {
 ///      "const": "unlimited"
@@ -26075,6 +26079,10 @@ impl ::std::convert::From<i64> for MoveModifierEffectModifierDistanceBonus {
 ///      "type": "integer",
 ///      "maximum": 48.0,
 ///      "minimum": 1.0
+///    },
+///    {
+///      "type": "string",
+///      "pattern": "^\\d*D(3|6)(\\+\\d+)?$"
 ///    }
 ///  ]
 ///}
@@ -26085,6 +26093,7 @@ impl ::std::convert::From<i64> for MoveModifierEffectModifierDistanceBonus {
 pub enum MoveModifierEffectModifierMaximum {
     Variant0(::serde_json::Value),
     Variant1(::std::num::NonZeroU64),
+    Variant2(MoveModifierEffectModifierMaximumVariant2),
 }
 impl ::std::convert::From<::serde_json::Value> for MoveModifierEffectModifierMaximum {
     fn from(value: ::serde_json::Value) -> Self {
@@ -26094,6 +26103,89 @@ impl ::std::convert::From<::serde_json::Value> for MoveModifierEffectModifierMax
 impl ::std::convert::From<::std::num::NonZeroU64> for MoveModifierEffectModifierMaximum {
     fn from(value: ::std::num::NonZeroU64) -> Self {
         Self::Variant1(value)
+    }
+}
+impl ::std::convert::From<MoveModifierEffectModifierMaximumVariant2>
+for MoveModifierEffectModifierMaximum {
+    fn from(value: MoveModifierEffectModifierMaximumVariant2) -> Self {
+        Self::Variant2(value)
+    }
+}
+///`MoveModifierEffectModifierMaximumVariant2`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^\\d*D(3|6)(\\+\\d+)?$"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct MoveModifierEffectModifierMaximumVariant2(::std::string::String);
+impl ::std::ops::Deref for MoveModifierEffectModifierMaximumVariant2 {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<MoveModifierEffectModifierMaximumVariant2>
+for ::std::string::String {
+    fn from(value: MoveModifierEffectModifierMaximumVariant2) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for MoveModifierEffectModifierMaximumVariant2 {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^\\d*D(3|6)(\\+\\d+)?$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^\\d*D(3|6)(\\+\\d+)?$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for MoveModifierEffectModifierMaximumVariant2 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MoveModifierEffectModifierMaximumVariant2 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MoveModifierEffectModifierMaximumVariant2 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for MoveModifierEffectModifierMaximumVariant2 {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///The unit can select a mode of its move (applies_to_moves) it otherwise could not: modes "any" is every mode of that move, a list names the modes. ignore_before_moving: the selection disregards the move's Before Moving restrictions ("regardless of that consolidation move's Before Moving restrictions").
@@ -54154,7 +54246,7 @@ impl ::std::convert::TryFrom<::std::string::String> for TestKind {
 ///        },
 ///        "spaces_per_model": {
 ///          "type": "integer",
-///          "minimum": 1.0
+///          "minimum": 0.0
 ///        },
 ///        "subject_kind": {
 ///          "$ref": "#/$defs/transport-occupancy-subject-kind"
@@ -54267,7 +54359,7 @@ pub enum TransportCapacityEffectModifier {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         model_keyword: ::std::option::Option<Keyword>,
         occupancy_kind: ::serde_json::Value,
-        spaces_per_model: ::std::num::NonZeroU64,
+        spaces_per_model: u64,
         subject_kind: TransportOccupancySubjectKind,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         transport_eligibility: ::std::option::Option<TransportEligibility>,

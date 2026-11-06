@@ -427,6 +427,27 @@ export const MOVE_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
   {
+    // "When making that pile-in/consolidation move, your unit can move up to D3+3\"".
+    family: "move-distance",
+    version: 5,
+    description: "As the previous version, plus maximum as a dice expression (\"can move up to D3+3\\\"\"): the named moves can go up to that rolled distance.",
+    schema: (previous) => withProperties(previous, { maximum: { anyOf: [...(properties(previous).maximum!.anyOf as Schema[]), { type: "string", pattern: DICE.source }] } }),
+    normalize: (input, previous) => {
+      if (typeof input.maximum !== "string" || input.maximum === "unlimited") return previous(input);
+      if (!DICE.test(input.maximum)) throw new TypeError("move-distance.maximum must be unlimited, a number of inches or a dice expression such as D3+3.");
+      if (input.bonus !== undefined) throw new TypeError("move-distance.maximum and bonus are mutually exclusive.");
+      return standIn(input, "maximum", 1, previous);
+    },
+  },
+  {
+    // "Each Cenobyte Servitor model in this unit takes up 0 transport capacity".
+    family: "transport-capacity",
+    version: 2,
+    description: "As the previous version, plus spaces_per_model 0 for fixed-model-spaces: those models take up no Transport capacity (\"takes up 0 transport capacity\").",
+    schema: (previous) => withProperties(previous, { spaces_per_model: { ...properties(previous).spaces_per_model!, minimum: 0 } }),
+    normalize: (input, previous) => input.spaces_per_model === 0 ? standIn(input, "spaces_per_model", 1, previous) : previous(input),
+  },
+  {
     // "units embarked within this unit can make a shock disembark move".
     family: "make-move",
     version: 7,
