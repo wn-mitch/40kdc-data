@@ -10374,9 +10374,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "librarian"
     ],
@@ -10384,11 +10383,214 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "psyker-level",
+            "operation": "set",
+            "value": 1
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "selected",
+            "filter": {
+              "move_types": [
+                "advance"
+              ],
+              "to": "move"
+            },
+            "optional": true
+          },
+          "cost": {
+            "type": "resource-spend",
+            "target": "this-unit",
+            "modifier": {
+              "pool": "psychic-level",
+              "amount": 1,
+              "label": "Psychic Level"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "battle-shocked"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "roll",
+                  "dice": "D6",
+                  "roll_var": "psychic",
+                  "effect": {
+                    "type": "dice-table",
+                    "dice": "D6",
+                    "outcomes": [
+                      {
+                        "results": [
+                          1
+                        ],
+                        "effect": {
+                          "type": "state-change",
+                          "target": "this-unit",
+                          "modifier": {
+                            "state": "battle-shocked",
+                            "set": true
+                          }
+                        }
+                      },
+                      {
+                        "results": [
+                          2,
+                          3,
+                          4,
+                          5,
+                          6
+                        ],
+                        "effect": {
+                          "type": "no-effect"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "roll-result",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "advance",
+                    "result": 6
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "ability-part",
+            "duration": "until-start-next-turn",
+            "cost": {
+              "type": "resource-spend",
+              "target": "this-unit",
+              "modifier": {
+                "pool": "psychic-level",
+                "amount": 1,
+                "label": "Psychic Level"
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "movement"
+                        }
+                      },
+                      {
+                        "type": "player-turn-is",
+                        "parameters": {
+                          "turn": "your-turn"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "filter": {
+                            "state": "battle-shocked"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "roll",
+                    "dice": "D6",
+                    "roll_var": "psychic",
+                    "effect": {
+                      "type": "dice-table",
+                      "dice": "D6",
+                      "outcomes": [
+                        {
+                          "results": [
+                            1
+                          ],
+                          "effect": {
+                            "type": "state-change",
+                            "target": "this-unit",
+                            "modifier": {
+                              "state": "battle-shocked",
+                              "set": true
+                            }
+                          }
+                        },
+                        {
+                          "results": [
+                            2,
+                            3,
+                            4,
+                            5,
+                            6
+                          ],
+                          "effect": {
+                            "type": "no-effect"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "invulnerable-save",
+                    "target": "this-unit",
+                    "modifier": {
+                      "invuln_sv": 4
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "d16f3e4dc2f75ebd106ac6267bbdf46e4f941d9b0f508983d95aa60ca409b8bf"
   },
   {
     "ability_id": "librarian-librarian-in-phobos-armour-adeptus-astartes",
