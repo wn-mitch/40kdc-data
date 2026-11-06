@@ -315,3 +315,31 @@ describe("Semantic authoring targeted unit measured from the bearer: shapes and 
     expect(mechanics.effect.condition.operands[1].parameters.object).toEqual({ owner: "friendly", all_of: ["HERETIC ASTARTES"], within: { of: "this-model", range: { inches: 3 } } });
   });
 });
+
+// Templar Vows: "if an enemy PSYKER unit is within 12\"" after a charge declaration compiled as the charge's target.
+describe("Semantic authoring unit-filter after a targeting moment", () => {
+  const reroll: [string, string, Record<string, unknown>] = ["This unit can re-roll that Charge roll", "reroll", { roll: "charge", subset: "all", weapon_type: "all" }];
+
+  it("reads a filter opening an \"if\" clause as that condition's units, not the moment's object", () => {
+    const text = "When this unit declares a charge, if an enemy GROX unit is within 12\" of this unit, you can use this ability. This unit can re-roll that Charge roll.";
+    const list = placed(text,
+      ["When this unit declares a charge", "event", { kind: "targets-selected", action_kind: "charge", subject: "this-unit" }],
+      ["enemy GROX unit", "unit-filter", { side: "enemy", keywords: ["GROX"] }],
+      ["within 12\" of this unit", "unit-position", { kind: "within", inches: 12, of: "this-unit", subject: "filtered-units", negated: false }],
+      ["you can use this ability", "optional-use", { who: "you" }],
+      reroll);
+    const mechanics = compiled(list, text).mechanics as Record<string, any>;
+    expect(mechanics.trigger.object).toBeUndefined();
+    expect(mechanics.effect.condition).toEqual({ type: "matches", parameters: { subject: { owner: "enemy", all_of: ["GROX"] }, filter: { within: { of: "this-unit", range: { inches: 12 } } } } });
+  });
+
+  it("still reads a filter right after the moment as what it targets", () => {
+    const text = "When this unit declares a charge against an enemy GROX unit, this unit can re-roll that Charge roll.";
+    const list = placed(text,
+      ["When this unit declares a charge against", "event", { kind: "targets-selected", action_kind: "charge", subject: "this-unit" }],
+      ["enemy GROX unit", "unit-filter", { side: "enemy", keywords: ["GROX"] }],
+      ["this unit can re-roll that Charge roll", "reroll", { roll: "charge", subset: "all", weapon_type: "all" }]);
+    const mechanics = compiled(list, text).mechanics as Record<string, any>;
+    expect(mechanics.trigger.object).toEqual({ owner: "enemy", all_of: ["GROX"] });
+  });
+});

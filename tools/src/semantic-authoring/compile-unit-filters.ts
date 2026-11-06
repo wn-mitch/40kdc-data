@@ -366,9 +366,11 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       const at = pastOwners(list, index, leaf);
       out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
       index = at;
-    } else if (isFilter(leaf) && objectEvent(out.at(-1))) {
+    } else if (isFilter(leaf) && objectEvent(out.at(-1)) && !/^,?(?:if|while)/u.test(joinerBetween(sourceText, out.at(-1)!, leaf) ?? "")) {
       // "just after a mortal wound is allocated to an" + "ADEPTA SORORITAS unit": what the moment
       // happens to. A "from your army" of the same side after it is the filter's own wording.
+      // "When this unit declares a charge, if an enemy PSYKER unit is within 12\"": a filter opening
+      // a condition after the moment names that condition's units, not the moment's object.
       const at = pastOwners(list, index, leaf);
       const event = out.at(-1)!;
       out[out.length - 1] = { ...event, parameters: { ...event.parameters, object_filter: dslUnitFilter(leaf) } };

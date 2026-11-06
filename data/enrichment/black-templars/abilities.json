@@ -3034,9 +3034,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "emperors-champion-vedrenn",
       "vow-sworn-bladeguard-veteran-squad",
@@ -3047,11 +3046,402 @@
     "detachment_id": "vow-sworn-of-vedrenn",
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "battle-round",
+        "parameters": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "army-faction",
+          "parameters": {
+            "faction": "adeptus-astartes"
+          }
+        },
+        "effect": {
+          "type": "stance-select",
+          "mode": "consumable",
+          "options": [
+            {
+              "id": "abhor-the-witch-destroy-the-witch",
+              "name": "Abhor the Witch, Destroy the Witch",
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "operator": "and",
+                          "operands": [
+                            {
+                              "type": "attack-is",
+                              "parameters": {
+                                "attack_type": "melee"
+                              }
+                            },
+                            {
+                              "type": "matches",
+                              "parameters": {
+                                "filter": {
+                                  "owner": "friendly",
+                                  "all_of": [
+                                    "ADEPTUS ASTARTES"
+                                  ]
+                                },
+                                "subject": "attacker"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "defender",
+                            "filter": {
+                              "all_of": [
+                                "PSYKER"
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "weapon-ability-grant",
+                      "target": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "ADEPTUS ASTARTES"
+                        ]
+                      },
+                      "modifier": {
+                        "keywords": [
+                          {
+                            "keyword_id": "precision"
+                          }
+                        ],
+                        "weapons": {
+                          "type": "melee"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "ability-part",
+                    "trigger": {
+                      "event": "targets-selected",
+                      "filter": {
+                        "kind": "charge"
+                      },
+                      "optional": true
+                    },
+                    "effect": {
+                      "type": "conditional",
+                      "condition": {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": {
+                            "owner": "enemy",
+                            "all_of": [
+                              "PSYKER"
+                            ]
+                          },
+                          "filter": {
+                            "within": {
+                              "of": "this-unit",
+                              "range": {
+                                "inches": 12
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "effect": {
+                        "type": "sequence",
+                        "steps": [
+                          {
+                            "type": "re-roll",
+                            "target": {
+                              "owner": "friendly",
+                              "all_of": [
+                                "ADEPTUS ASTARTES"
+                              ]
+                            },
+                            "modifier": {
+                              "roll": "charge",
+                              "result_scope": "any-result"
+                            }
+                          },
+                          {
+                            "type": "move-modifier",
+                            "target": "event-subject",
+                            "modifier": {
+                              "applies_to_moves": [
+                                "charge"
+                              ],
+                              "ends_when": {
+                                "type": "matches",
+                                "parameters": {
+                                  "subject": "event-subject",
+                                  "filter": {
+                                    "engaged_with": {
+                                      "owner": "enemy",
+                                      "all_of": [
+                                        "PSYKER"
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "accept-any-challenge-no-matter-the-odds",
+              "name": "Accept any Challenge, no Matter the Odds",
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "attack-is",
+                          "parameters": {
+                            "attack_type": "melee"
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "filter": {
+                              "owner": "friendly",
+                              "all_of": [
+                                "ADEPTUS ASTARTES"
+                              ]
+                            },
+                            "subject": "attacker"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "attack-compare",
+                      "parameters": {
+                        "left": {
+                          "of": "attacker",
+                          "stat": "S"
+                        },
+                        "comparison": "lte",
+                        "right": {
+                          "of": "defender",
+                          "stat": "T"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ADEPTUS ASTARTES"
+                    ]
+                  },
+                  "modifier": {
+                    "roll": "wound",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              }
+            },
+            {
+              "id": "suffer-not-the-unclean-to-live",
+              "name": "Suffer Not the Unclean to Live",
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "permission",
+                    "target": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "ADEPTUS ASTARTES"
+                      ]
+                    },
+                    "modifier": {
+                      "activity": "declare-charge",
+                      "allow": true,
+                      "after": [
+                        "fall-back"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "ability-part",
+                    "trigger": {
+                      "event": "move-started",
+                      "filter": {
+                        "move_types": [
+                          "pile-in",
+                          "consolidation"
+                        ]
+                      }
+                    },
+                    "effect": {
+                      "type": "move-modifier",
+                      "target": "event-subject",
+                      "modifier": {
+                        "applies_to_moves": [
+                          "pile-in",
+                          "consolidation"
+                        ],
+                        "ends_nearest": {
+                          "of": {
+                            "owner": "enemy"
+                          },
+                          "waives": "closest-enemy-model"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "uphold-the-honour-of-the-emperor",
+              "name": "Uphold the Honour of the Emperor",
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "ability-part",
+                    "trigger": {
+                      "event": "phase-ended",
+                      "condition": {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "type": "phase-is",
+                            "parameters": {
+                              "phase": "command"
+                            }
+                          },
+                          {
+                            "type": "player-turn-is",
+                            "parameters": {
+                              "turn": "your-turn"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "effect": {
+                      "type": "conditional",
+                      "condition": {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "filter": {
+                                "all_of": [
+                                  "INFANTRY"
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "filter": {
+                                "within": {
+                                  "of": {
+                                    "objective": {
+                                      "controlled_by": "friendly"
+                                    }
+                                  },
+                                  "range": "objective-control"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "effect": {
+                        "type": "objective-sticky",
+                        "target": {
+                          "owner": "friendly",
+                          "all_of": [
+                            "ADEPTUS ASTARTES"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "all_of": [
+                            "INFANTRY"
+                          ]
+                        }
+                      }
+                    },
+                    "effect": {
+                      "type": "permission",
+                      "target": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "ADEPTUS ASTARTES"
+                        ]
+                      },
+                      "modifier": {
+                        "activity": "start-action",
+                        "allow": true,
+                        "despite": [
+                          "advanced"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "min_choices": 1,
+          "max_choices": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "round-started"
+    },
+    "source_digest": "6bd6706fd75eebc65c27db39e70aeb55f5700a1e8397b4db18e0af004f012b65"
   },
   {
     "ability_id": "unsparing-execution-marshals-household-black-templars",

@@ -84,6 +84,23 @@ describe("Semantic authoring independent sentences", () => {
     expect(JSON.stringify(steps[1])).toContain("\"type\":\"select-units\"");
   });
 
+  // Templar Vows: the second bullet compiled inside the first bullet's end-of-Command-phase moment.
+  it("gives a listed item with its own moment a part of its own, so the moment does not reach a sibling item", () => {
+    const text = "If this unit has the **ALPHA** keyword: \n■ At the end of your Command phase, if this unit is within range of an objective marker you control, that objective marker remains under your control. \n■ This unit is eligible to start an Action in a turn in which it Advanced.";
+    const list = placed(text,
+      ["If this unit has the **ALPHA** keyword", "unit-keyword", { keywords: ["ALPHA"], subject: "this-unit", negated: false }],
+      ["At the end of your Command phase", "event", { kind: "phase-end", phase: "command", turn: "your" }],
+      ["if this unit is within range of an objective marker you control", "unit-position", { kind: "objective-range", controlled_by: "you", subject: "this-unit", negated: false }],
+      ["that objective marker remains under your control", "sticky-objective", {}],
+      ["This unit is eligible to start an Action in a turn in which it Advanced", "eligibility-permission", { subject: "this-unit", activity: "start-action", allow: true, despite: ["advanced"] }]);
+    const steps = mechanicsOf(list, text).effect.steps;
+    expect(steps).toHaveLength(2);
+    expect(JSON.stringify(steps[0])).toContain("phase-end");
+    // The permission holds under the header's keyword condition alone, with no moment.
+    expect(JSON.stringify(steps[1])).not.toContain("phase-end");
+    expect(JSON.stringify(steps[1])).toContain("ALPHA");
+  });
+
   it("does not split an ability whose header holds a moment or a usage limit", () => {
     const text = "Once per battle. Each time this unit shoots, add 1 to the Hit roll. Each time this unit fights, add 1 to the Wound roll.";
     const list = placed(text,

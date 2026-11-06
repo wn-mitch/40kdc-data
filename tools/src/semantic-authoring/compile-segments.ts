@@ -236,9 +236,10 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
     const inMenu = (parts.at(-1)!.some((leaf) => isContainerOpener(leaf.family_id)) && parts.at(-1)!.some((leaf) => OPTION_MARKERS.has(leaf.family_id)))
       || parts.at(-1)!.some((leaf) => leaf.family_id === "resource-action-menu-open");
     // "While …: this model has K. In your Shooting phase, you can select …": an item of the list the header's colon
-    // introduces that holds its own selection or phase is a rule of its own under the header's condition, so neither
-    // reaches a sibling item.
-    const ownTiming = (leaves: readonly CompileLeaf[]) => leaves.some((leaf) => leaf.family_id === "select-unit" || leaf.family_id === "phase-window");
+    // introduces that holds its own selection, phase or moment is a rule of its own under the header's condition, so
+    // neither reaches a sibling item.
+    // A moment of its own ("■ At the end of your Command phase, …") times an item as a phase does.
+    const ownTiming = (leaves: readonly CompileLeaf[]) => leaves.some((leaf) => leaf.family_id === "select-unit" || leaf.family_id === "phase-window" || leaf.family_id === "event");
     const headerItem = listed[firstEffectful]! && inList[position]! && !inMenu && (ownTiming(sentence) || ownTiming(parts.at(-1)!));
     const opensPart = position > firstEffectful && (!inList[position] || headerItem) && !inMenu && parts.at(-1)!.some((leaf) => leaf.role === "EFFECT") && (
       headerItem || moments[position] || labels[position] || standing || selfTimedMenu(position)) && !REFERS_BACK.test(words.replace(/^in addition,\s*/iu, "").split(",")[0]!) && !SUCH.test(words);
