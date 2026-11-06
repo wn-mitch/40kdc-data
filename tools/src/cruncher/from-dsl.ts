@@ -2894,6 +2894,8 @@ function evaluateConditionFromContext(
       const side = conditionSide(params.subject, perspective);
       const strength = side === "attacker" ? ctx.attackerStrength : side === "target" ? ctx.targetStrength : undefined;
       if (strength === undefined || (params.below !== "starting" && params.below !== "half")) return "unknown";
+      // At or below half: a unit only known to be below starting may be exactly at half, so it stays undecided.
+      if (params.below === "half" && params.at_or_below === true) return strength === "below-half" ? true : strength === "full" ? false : "unknown";
       return params.below === "half" ? strength === "below-half" : strength !== "full";
     }
     case "wounds": {

@@ -371,7 +371,8 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         return f"{neg}{_subject_of(p)} is an attached unit"
     if ctype == "strength":
         below = "half strength" if p.get("below") == "half" else "starting strength"
-        return f"{neg}{_subject_of(p)} is below {below}"
+        rel = "at or below" if p.get("at_or_below") is True else "below"
+        return f"{neg}{_subject_of(p)} is {rel} {below}"
     if ctype == "model-count":
         kw = f"{_str(p['keyword'])} " if p.get("keyword") is not None else ""
         if p.get("min") is not None and p.get("max") is not None:

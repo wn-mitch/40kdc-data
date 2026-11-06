@@ -347,3 +347,30 @@ describe("Semantic authoring attack comparisons on an Or: option", () => {
     expect(JSON.stringify(second)).not.toContain("attack-compare");
   });
 });
+
+describe("Semantic authoring a sentence after the last Or: option that refers back", () => {
+  // Hunts: "While doing so …" after the last option was swallowed into that option, so the first option lost it.
+  const text = "Your unit can shoot using Snap shooting. Or: Your unit can shoot. While doing so add 1 to the Hit roll.";
+  const items = (doingSo = "While doing so add 1 to the Hit roll"): Item[] => [
+    ["Your unit can shoot using Snap shooting", "eligibility-permission", { subject: "this-unit", activity: "shoot", allow: true, as_if: "snap-shooting" }],
+    ["Or:", "instead", { choice: true }],
+    ["Your unit can shoot", "eligibility-permission", { subject: "this-unit", activity: "shoot", allow: true }],
+    [doingSo, "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
+  ];
+
+  it("applies to every option, not only the last", () => {
+    const effect = compiled(text, placed(text, ...items()));
+    expect(effect.type).toBe("sequence");
+    expect(effect.steps[0].type).toBe("choice");
+    expect(effect.steps[0].options).toHaveLength(2);
+    expect(JSON.stringify(effect.steps[0])).not.toContain("roll-modifier");
+    expect(effect.steps[1].type).toBe("roll-modifier");
+  });
+
+  it("stays in the last option when the sentence does not refer back", () => {
+    const other = "Your unit can shoot using Snap shooting. Or: Your unit can shoot. Add 1 to the Hit roll.";
+    const effect = compiled(other, placed(other, ...items("Add 1 to the Hit roll")));
+    expect(effect.type).toBe("choice");
+    expect(JSON.stringify(effect.options[1])).toContain("roll-modifier");
+  });
+});

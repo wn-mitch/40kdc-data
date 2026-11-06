@@ -36,6 +36,17 @@ describe("rule and turn-start vocabulary", () => {
       "While the Acts of Faith is active",
     );
   });
+
+  it("renders at-or-below half strength apart from strictly below half", () => {
+    const below = { type: "strength", parameters: { subject: "this-unit", below: "half" } };
+    const atOrBelow = { type: "strength", parameters: { subject: "this-unit", below: "half", at_or_below: true } };
+    expect(describeCondition(below)).toBe("the unit is below half strength");
+    expect(describeCondition(atOrBelow)).toBe("the unit is at or below half strength");
+    expect(describeCondition({ operator: "not", operands: [atOrBelow] })).toBe("the unit is not at or below half strength");
+    expect(render({ type: "conditional", condition: atOrBelow, effect: { type: "no-effect" } })).toContain(
+      "While the unit is at or below half strength",
+    );
+  });
 });
 
 describe("ignore-modifiers", () => {

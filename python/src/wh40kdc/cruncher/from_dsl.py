@@ -4059,6 +4059,10 @@ def _evaluate_condition_from_context(
         below = p.get("below")
         if strength is None or below not in ("starting", "half"):
             return "unknown"
+        # At or below half: a unit only known to be below starting may be exactly at half,
+        # so it stays undecided.
+        if below == "half" and p.get("at_or_below") is True:
+            return True if strength == "below-half" else False if strength == "full" else "unknown"
         return strength == "below-half" if below == "half" else strength != "full"
     if ctype == "wounds":
         # Each listed property must hold; the Damaged bracket needs datasheet data the

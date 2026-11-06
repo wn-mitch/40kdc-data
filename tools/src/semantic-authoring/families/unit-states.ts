@@ -295,6 +295,24 @@ export const UNIT_STATE_EXTENSIONS: readonly FamilyExtension[] = [
       return previous(input);
     },
   },
+  {
+    // "If your unit is at half-strength/below half-strength": at or below half its Starting Strength.
+    family: "unit-state",
+    version: 18,
+    description: "As the previous version, plus the state at-or-below-half-strength: the unit has half or fewer of its Starting Strength (\"at half-strength/below half-strength\"); below-half-strength stays strictly below half. It takes what below-half-strength takes.",
+    schema: (previous) => {
+      const states = properties(previous).states as Record<string, unknown>;
+      const items = states.items as Record<string, unknown>;
+      return withProperties(previous, { states: { ...states, items: { ...items, enum: [...(items.enum as string[]), "at-or-below-half-strength"] } } });
+    },
+    normalize: (input, previous) => {
+      const states = Array.isArray(input.states) ? input.states as unknown[] : [];
+      if (!states.includes("at-or-below-half-strength")) return previous(input);
+      if (states.includes("below-half-strength")) throw new TypeError("unit-state: at-or-below-half-strength already covers below-half-strength.");
+      const standing = states.map((state) => state === "at-or-below-half-strength" ? "below-half-strength" : state);
+      return { ...previous({ ...input, states: standing }), states: [...states] };
+    },
+  },
   /**
    * Recipient event-subject: the unit a Stratagem's or ability's moment names, where the family's
    * own enum named only the bearer, a selection or an earlier leaf's unit.

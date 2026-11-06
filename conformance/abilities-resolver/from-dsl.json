@@ -14937,6 +14937,145 @@
       }
     },
     {
+      "caseId": "canonical/scenario/strength-at-or-below-half-below-half",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "strength",
+          "parameters": {
+            "subject": "this-unit",
+            "below": "half",
+            "at_or_below": true
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerStrength": "below-half"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/strength-at-or-below-half-full",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "strength",
+          "parameters": {
+            "subject": "this-unit",
+            "below": "half",
+            "at_or_below": true
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerStrength": "full"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/strength-at-or-below-half-below-starting",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "strength",
+          "parameters": {
+            "subject": "this-unit",
+            "below": "half",
+            "at_or_below": true
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerStrength": "below-starting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"strength\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"at_or_below\":true,\"below\":\"half\",\"subject\":\"this-unit\"},\"type\":\"strength\"}"
+        ],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
       "caseId": "canonical/scenario/condition-fact-undeclared",
       "abilityId": "fabricated-scenario",
       "source": {

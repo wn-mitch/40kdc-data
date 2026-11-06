@@ -214,3 +214,29 @@ def test_keyword_predicate_treats_empty_any_of_as_false() -> None:
     assert keyword_matches_predicate({"any_of": []}, ["INFANTRY"]) is False
     assert keyword_matches_predicate({"not_all_of": []}, ["INFANTRY"]) is False
     assert keyword_matches_predicate({"all_of": ["infantry"], "none_of": ["FLY"]}, ["INFANTRY"])
+
+
+_AT_OR_BELOW_HALF = {
+    "type": "strength",
+    "parameters": {"subject": "this-unit", "below": "half", "at_or_below": True},
+}
+
+
+def test_at_or_below_half_strength_renders_the_inclusive_boundary() -> None:
+    from wh40kdc.translate import describe_condition
+
+    assert describe_condition(_AT_OR_BELOW_HALF) == "the unit is at or below half strength"
+    below = {"type": "strength", "parameters": {"subject": "this-unit", "below": "half"}}
+    assert describe_condition(below) == "the unit is below half strength"
+
+
+@pytest.mark.parametrize(
+    ("strength", "applied", "unsupported"),
+    # A unit known only to be below starting may sit exactly at half: undecided.
+    [("below-half", 1, 0), ("full", 0, 0), ("below-starting", 0, 1)],
+)
+def test_at_or_below_half_strength_outcomes(strength: str, applied: int, unsupported: int) -> None:
+    ctx = {"phase": "shooting", "attackerStrength": strength}
+    result = effect_to_buffs(_conditional(_AT_OR_BELOW_HALF), _SOURCE, ctx, "attacker")
+    assert len(result["applied"]) == applied
+    assert len(result["unsupported"]) == unsupported

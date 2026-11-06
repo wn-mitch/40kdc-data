@@ -276,8 +276,13 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             format!("{neg}{} is an attached unit", subject_of(p, "the unit"))
         }
         "strength" => format!(
-            "{neg}{} is below {}",
+            "{neg}{} is {} {}",
             subject_of(p, "the unit"),
+            if p.get("at_or_below") == Some(&Value::Bool(true)) {
+                "at or below"
+            } else {
+                "below"
+            },
             if is(p, "below", "half") {
                 "half strength"
             } else {

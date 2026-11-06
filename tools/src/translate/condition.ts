@@ -122,7 +122,7 @@ export function describePredicate(c: Condition, negated: boolean): string {
     }
     case "strength": {
       const who = subjectOf(p);
-      return `${neg}${who} is below ${p.below === "half" ? "half strength" : "starting strength"}`;
+      return `${neg}${who} is ${p.at_or_below === true ? "at or below" : "below"} ${p.below === "half" ? "half strength" : "starting strength"}`;
     }
     case "model-count": {
       const kw = p.keyword != null ? `${str(p.keyword)} ` : "";

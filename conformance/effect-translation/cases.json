@@ -36872,6 +36872,69 @@
     }
   },
   {
+    "caseId": "fidelity/condition-at-or-below-half-strength",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "strength",
+        "parameters": {
+          "subject": "this-unit",
+          "below": "half",
+          "at_or_below": true
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "While the unit is at or below half strength, when resolving this use, the unit gets +1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-not-at-or-below-half-strength",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "strength",
+            "parameters": {
+              "subject": "defender",
+              "below": "half",
+              "at_or_below": true
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "wound",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless the target unit is at or below half strength, when resolving this use, the unit gets +1 to Wound rolls."
+    }
+  },
+  {
     "caseId": "fidelity/condition-subject-battle-shocked",
     "effect": {
       "type": "conditional",

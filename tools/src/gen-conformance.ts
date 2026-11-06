@@ -3661,6 +3661,16 @@ function genEffectTranslation(): void {
       condition: { type: "strength", parameters: { subject: "defender", below: "half" } },
       effect: { type: "no-effect" },
     } },
+    { caseId: "fidelity/condition-at-or-below-half-strength", effect: {
+      type: "conditional",
+      condition: { type: "strength", parameters: { subject: "this-unit", below: "half", at_or_below: true } },
+      effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
+    } },
+    { caseId: "fidelity/condition-not-at-or-below-half-strength", effect: {
+      type: "conditional",
+      condition: { operator: "not", operands: [{ type: "strength", parameters: { subject: "defender", below: "half", at_or_below: true } }] },
+      effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } },
+    } },
     { caseId: "fidelity/condition-subject-battle-shocked", effect: {
       type: "conditional",
       condition: { type: "matches", parameters: { subject: "defender", filter: { state: "battle-shocked" } } },

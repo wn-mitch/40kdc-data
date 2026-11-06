@@ -343,6 +343,7 @@ export function canonicalScenarioCases() {
   const fabricatedId = "fabricated-scenario";
   const readyHolders = { type: "designate", target: { owner: "friendly", has_ability: [fabricatedId] }, modifier: { tag: "readied" } };
   const readied = { type: "matches", parameters: { subject: "this-unit", filter: { designated: "readied" } } };
+  const atOrBelowHalf = { type: "strength", parameters: { subject: "this-unit", below: "half", at_or_below: true } };
   const shooting = { type: "phase-is", parameters: { phase: "shooting" } };
   const hitPlus = { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } };
   const woundPlus = { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } };
@@ -529,6 +530,10 @@ export function canonicalScenarioCases() {
     { id: "roll-result-critical-wound-gate", effect: gated(criticalWound), context: { testResults: { leadership: "failure" } } },
     { id: "roll-result-critical-hit-unknown", effect: gated({ type: "roll-result", parameters: { roll: "hit", result: "critical" } }), context: {} },
     { id: "roll-result-critical-wound-defender-unknown", effect: defensive(criticalWound), context: {}, perspective: "target" },
+    // At or below half strength: a unit known only to be below starting may be exactly at half.
+    { id: "strength-at-or-below-half-below-half", effect: gated(atOrBelowHalf), context: { attackerStrength: "below-half" } },
+    { id: "strength-at-or-below-half-full", effect: gated(atOrBelowHalf), context: { attackerStrength: "full" } },
+    { id: "strength-at-or-below-half-below-starting", effect: gated(atOrBelowHalf), context: { attackerStrength: "below-starting" } },
     // Declared answers for leaves the rest of the context leaves undecided.
     { id: "condition-fact-undeclared", effect: gated(engagedWith), context: {} },
     { id: "condition-fact-true", effect: gated(engagedWith), context: { conditionFacts: { [conditionFactKey(engagedWith, "attacker")]: true } } },

@@ -451,7 +451,11 @@ func describePredicate(c map[string]any, negated bool) string {
 		if p["below"] == "half" {
 			below = "half strength"
 		}
-		return neg + subjectOf(p, "the unit") + " is below " + below
+		rel := "below"
+		if p["at_or_below"] == true {
+			rel = "at or below"
+		}
+		return neg + subjectOf(p, "the unit") + " is " + rel + " " + below
 	case "model-count":
 		kw := ""
 		if p["keyword"] != nil {

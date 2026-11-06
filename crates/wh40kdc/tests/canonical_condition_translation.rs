@@ -181,3 +181,42 @@ fn exact_unit_identity_filter_renders_ids_without_name_normalization() {
     );
     assert!(!text.contains("Example Unit"), "{text}");
 }
+
+#[test]
+fn at_or_below_half_strength_names_the_inclusive_boundary() {
+    let at_or_below = json!({"type":"strength","parameters":{"subject":"this-unit","below":"half","at_or_below":true}});
+    assert_eq!(
+        describe_condition_value(&at_or_below),
+        "the unit is at or below half strength"
+    );
+    let below = json!({"type":"strength","parameters":{"subject":"this-unit","below":"half"}});
+    assert_eq!(
+        describe_condition_value(&below),
+        "the unit is below half strength"
+    );
+}
+
+/// A unit known only to be below starting may sit exactly at half, so that outcome stays undecided.
+#[test]
+fn at_or_below_half_strength_outcomes() {
+    use wh40kdc::cruncher::{effect_to_buffs, BuffSource, EngineContext, TranslationPerspective};
+    let effect = json!({"type":"conditional",
+        "condition":{"type":"strength","parameters":{"subject":"this-unit","below":"half","at_or_below":true}},
+        "effect":{"type":"roll-modifier","target":"this-unit","modifier":{"roll":"hit","operation":"add","value":1}}});
+    let source: BuffSource = serde_json::from_value(
+        json!({"kind":"ability","abilityId":"fabricated","abilityKind":"unit"}),
+    )
+    .unwrap();
+    for (strength, applied, unsupported) in [
+        ("below-half", 1, 0),
+        ("full", 0, 0),
+        ("below-starting", 0, 1),
+    ] {
+        let ctx: EngineContext =
+            serde_json::from_value(json!({"phase":"shooting","attackerStrength":strength}))
+                .unwrap();
+        let r = effect_to_buffs(&effect, &source, &ctx, TranslationPerspective::Attacker);
+        assert_eq!(r.applied.len(), applied, "{strength}");
+        assert_eq!(r.unsupported.len(), unsupported, "{strength}");
+    }
+}

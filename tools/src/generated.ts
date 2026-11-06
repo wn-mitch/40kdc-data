@@ -2030,6 +2030,10 @@ export interface StrengthCondition {
   parameters: {
     subject?: UnitRef;
     below: "starting" | "half";
+    /**
+     * With below half: the unit is at or below half its Starting Strength ("at half-strength/below half-strength"), not strictly below it.
+     */
+    at_or_below?: true;
   };
 }
 /**

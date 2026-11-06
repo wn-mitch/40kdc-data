@@ -27,6 +27,15 @@ export function isAdvanceInPlace(node: Node): boolean {
 }
 
 
+/** Whether the sentence `leaf` opens (after `previous`) begins "While doing so" / "When doing so". */
+function opensDoingSo(sourceText: string | undefined, previous: CompileLeaf, leaf: CompileLeaf): boolean {
+  if (sourceText === undefined) return false;
+  const bytes = Buffer.from(sourceText, "utf8");
+  const text = bytes.subarray(previous.end_byte ?? previous.start_byte, leaf.end_byte ?? leaf.start_byte).toString("utf8").replace(/[*_]/gu, "");
+  const opening = text.slice(Math.max(text.lastIndexOf("."), text.lastIndexOf(":"), text.lastIndexOf("\n")) + 1).trim();
+  return /^(?:while|when)\s+doing\s+so\b/iu.test(opening);
+}
+
 /**
  * Resolves each combinator of a part over its planned effects: an "Or:" stretch becomes one
  * choice, and an "instead" makes its clause's effect replace the effect (or group) it names.
@@ -53,7 +62,11 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
       const last = markers.at(-1)!;
       const inline = last > 0 && places[last - 1]!.sentence === places[last]!.sentence;
       const sentenceEnd = inline ? list.findIndex((_, at) => at > last && places[at]!.sentence !== places[last]!.sentence) : -1;
-      const end = sentenceEnd > last && sentenceEnd < upper ? sentenceEnd : upper;
+      // "Or: B. While doing so, …": a later sentence that refers back to the action of whichever option was picked
+      // applies to every option, so the last option ends before it.
+      const sharedAt = inline ? -1 : list.findIndex((leaf, at) => at > last && at < upper && places[at]!.sentence !== places[last]!.sentence
+        && places[at - 1]!.sentence !== places[at]!.sentence && opensDoingSo(sourceText, list[at - 1]!, leaf));
+      const end = sentenceEnd > last && sentenceEnd < upper ? sentenceEnd : sharedAt > last ? sharedAt : upper;
       const limits = end < upper ? [...choiceLimits, end] : choiceLimits;
       // A bound duration would sit inside the choice's options, which the choice does not carry (no split form yet).
       if (planned.some((item) => item.index > lower && item.index < end && boundDuration.has(item.index))) errors.push(CONFLICTING_DURATIONS);

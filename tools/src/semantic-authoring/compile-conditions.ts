@@ -148,7 +148,7 @@ const HISTORY: Record<string, (subject: string | undefined, attackType?: string)
 };
 
 /** A unit-state leaf's states that are not core-rules unit states. */
-const STRENGTH_STATES: Record<string, string> = { "below-starting-strength": "starting", "below-half-strength": "half" };
+const STRENGTH_STATES: Record<string, string> = { "below-starting-strength": "starting", "below-half-strength": "half", "at-or-below-half-strength": "half" };
 
 /** Marks as the designations an effect applies, uppercase as the rules print them. */
 const MARK_TAGS: Record<string, string> = {
@@ -423,7 +423,8 @@ export function condition(leaf: CompileLeaf): Node {
           : STRENGTH_STATES[state] ? who
             : state === "on-battlefield" && !target && leaf.parameters.subject === "this-model" ? "this-model" : who;
         if (leaf.parameters.at !== undefined && (STRENGTH_STATES[state] || state === "carrying-units" || state === "embarked")) throw new CompileError(`unit-state ${state} has no DSL form for an earlier point (at).`);
-        if (STRENGTH_STATES[state]) return pred("strength", { below: STRENGTH_STATES[state] }, subject);
+        // "at half-strength/below half-strength": at or below half its Starting Strength.
+        if (STRENGTH_STATES[state]) return pred("strength", { below: STRENGTH_STATES[state], ...(state === "at-or-below-half-strength" ? { at_or_below: true } : {}) }, subject);
         // Version 13: the subject is embarked within some Transport (the state itself, not the units it carries).
         if (state === "embarked" && leaf.parameters.with !== undefined) throw new CompileError("DSL_GAP: a named unit embarked within a named Transport has no DSL form; unit-state has no embarked-within reference.");
         if (state === "embarked") return pred("unit-state", { state: "embarked" }, subject);

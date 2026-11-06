@@ -275,6 +275,14 @@ describe("Semantic authoring batch-6 widened subject vocabulary (unit-keyword@2,
     conditionCase("unit-state", { states: ["on-battlefield"], subject: "this-model", negated: false }, 4, { type: "matches", parameters: { subject: "this-model", filter: { state: "on-battlefield" } } });
   });
 
+  // Hunts: "at half-strength/below half-strength" was narrowed to strictly below half.
+  it("compiles unit-state@18's at-or-below-half-strength, and refuses it beside below-half-strength", () => {
+    conditionCase("unit-state", { states: ["at-or-below-half-strength"], subject: "this-unit", negated: false }, 18, { type: "strength", parameters: { below: "half", at_or_below: true } });
+    conditionCase("unit-state", { states: ["below-half-strength"], subject: "this-unit", negated: false }, 18, { type: "strength", parameters: { below: "half" } });
+    expect(() => normalizeFingerprintParameters("unit-state", { states: ["at-or-below-half-strength", "below-half-strength"], subject: "this-unit", negated: false }, 18)).toThrow(/already covers/u);
+    expect(() => normalizeFingerprintParameters("unit-state", { states: ["at-or-below-half-strength"], subject: "this-unit", negated: false }, 17)).toThrow();
+  });
+
   it("compiles unit-activity@3's new subjects", () => {
     conditionCase("unit-activity", { activity: "charged-this-turn", subject: "selected-unit", negated: false }, 3,
       { type: "happened", parameters: { subject: "selected-unit", event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" } });

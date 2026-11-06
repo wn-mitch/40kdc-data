@@ -90,6 +90,17 @@ func evaluateScenarioCondition(kind string, params, ctx map[string]any, perspect
 		if !known || (below != "starting" && below != "half") {
 			return nil
 		}
+		// At or below half: a unit only known to be below starting may be exactly at half, so it
+		// stays undecided.
+		if below == "half" && params["at_or_below"] == true {
+			switch strength {
+			case "below-half":
+				return true
+			case "full":
+				return false
+			}
+			return nil
+		}
 		if below == "half" {
 			return strength == "below-half"
 		}

@@ -511,19 +511,99 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "iron-hands",
     "detachment_id": "medusas-wrath",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "event-subject",
+          "object": "this-unit",
+          "filter": {
+            "kind": "attack"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "choice",
+            "options": [
+              {
+                "type": "permission",
+                "target": "this-unit",
+                "modifier": {
+                  "activity": "shoot",
+                  "allow": true,
+                  "as_if": "snap-shooting"
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "strength",
+                  "parameters": {
+                    "below": "half",
+                    "at_or_below": true
+                  }
+                },
+                "effect": {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "shoot",
+                    "allow": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "targeting",
+            "target": "this-unit",
+            "modifier": {
+              "by": "this-unit",
+              "may": "must-target",
+              "kind": "shoot",
+              "target": "event-subject"
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "ADEPTUS ASTARTES",
+              "VEHICLE"
+            ]
+          }
+        }
+      }
+    },
+    "source_digest": "d0bdcad207c98989b57daef28ca8fd24dede1005616b777f11dbb34a5385ef87"
   },
   {
     "ability_id": "spirits-of-iron-medusas-wrath-iron-hands",

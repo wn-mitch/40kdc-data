@@ -377,6 +377,13 @@ fn evaluate_condition_from_context(
                 TranslationPerspective::Target => ctx.target_strength,
             }?;
             match p.get("below").and_then(Value::as_str) {
+                // At or below half: a unit only known to be below starting may be exactly
+                // at half, so it stays undecided.
+                Some("half") if is_true(p, "at_or_below") => match strength {
+                    UnitStrength::BelowHalf => Some(true),
+                    UnitStrength::Full => Some(false),
+                    UnitStrength::BelowStarting => None,
+                },
                 Some("half") => Some(strength == UnitStrength::BelowHalf),
                 Some("starting") => Some(strength != UnitStrength::Full),
                 _ => None,

@@ -57,7 +57,7 @@ export const REGISTRY_ORDER: readonly string[] = [
   "roll-modifier@8", "dice-roll@6", "reroll@7", "roll-modifier@9", "roll-auto-result@4",
   "characteristic-set@9", "unit-filter@14", "make-move@6", "move-distance@2", "eligibility-permission@7",
   "unit-state@16", "unit-position@24", "event@27", "unit-activity@21", "unit-activity@22",
-  "select-unit@6", "unit-state@17", "unit-position@25", "unit-filter@15",
+  "select-unit@6", "unit-state@17", "unit-state@18", "unit-position@25", "unit-filter@15",
   "eligibility-permission@8", "no-advance-roll@4", "roll-modifier@10",
   "named-option@3", "event@28", "named-region-state@2", "named-region-state@3", "unit-filter@16",
   "event@29", "attack@8",

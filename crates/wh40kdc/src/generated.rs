@@ -52094,6 +52094,10 @@ impl ::std::convert::TryFrom<::std::string::String> for StratagemType {
 ///    "below"
 ///  ],
 ///  "properties": {
+///    "at_or_below": {
+///      "description": "With below half: the unit is at or below half its Starting Strength (\"at half-strength/below half-strength\"), not strictly below it.",
+///      "const": true
+///    },
 ///    "below": {
 ///      "enum": [
 ///        "starting",
@@ -52111,6 +52115,9 @@ impl ::std::convert::TryFrom<::std::string::String> for StratagemType {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct StrengthConditionParameters {
+    ///With below half: the unit is at or below half its Starting Strength ("at half-strength/below half-strength"), not strictly below it.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub at_or_below: ::std::option::Option<::serde_json::Value>,
     pub below: StrengthConditionParametersBelow,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub subject: ::std::option::Option<UnitRef>,

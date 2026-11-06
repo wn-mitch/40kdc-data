@@ -2408,6 +2408,7 @@ class SimpleCondition8(TypedDict):
 class Parameters9(TypedDict):
     subject: NotRequired[UnitRef]
     below: Literal["starting", "half"]
+    at_or_below: NotRequired[Literal[True]]
 
 
 class SimpleCondition9(TypedDict):

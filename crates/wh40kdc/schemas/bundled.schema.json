@@ -5819,6 +5819,10 @@
                     "starting",
                     "half"
                   ]
+                },
+                "at_or_below": {
+                  "const": true,
+                  "description": "With below half: the unit is at or below half its Starting Strength (\"at half-strength/below half-strength\"), not strictly below it."
                 }
               },
               "required": [
