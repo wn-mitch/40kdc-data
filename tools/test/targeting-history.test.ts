@@ -78,7 +78,7 @@ const CLEAR = { subject: "enemy-units", may: "target", kind: "shoot", weapon_typ
 
 describe("targeting-restriction version 7: not_engaged_with", () => {
   it("takes this-unit on a may target restriction and refuses it on any other", () => {
-    expect(currentFamilyVersion(FAMILY)).toBe(7);
+    expect(currentFamilyVersion(FAMILY)).toBeGreaterThanOrEqual(7);
     expect(normalize(CLEAR)).toEqual(CLEAR);
     expect(() => normalize({ ...CLEAR, may: "cannot-target" })).toThrow(/only applies when may is target/);
     expect(() => normalize({ ...CLEAR, not_engaged_with: "enemy-units" })).toThrow();
@@ -93,5 +93,28 @@ describe("targeting-restriction version 7: not_engaged_with", () => {
     expect(validate()(effect)).toBe(true);
     expect(validate()({ ...effect, modifier: { ...effect.modifier, may: "cannot-target" } })).toBe(false);
     expect(describeEffectInline(effect as never)).toBe("enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons");
+  });
+});
+
+describe("targeting-restriction version 8: a target that fell back this phase", () => {
+  const FELL_BACK = { type: "happened", parameters: { event: "move-ended", subject: "this-unit", filter: { move_types: ["fall-back"] }, window: "phase" } };
+  const ONLY = { by: "this-unit", target: "enemy-units", may: "must-target", kind: "charge", weapon_type: "all", target_history: ["fell-back-this-phase"] };
+
+  it("accepts the move history with the older histories, in canonical order, and only on the by form", () => {
+    expect(normalize(ONLY)).toEqual(ONLY);
+    expect(normalize({ ...ONLY, target_history: ["fell-back-this-phase", "engaged-with-by-at-turn-start"] }).target_history).toEqual(["engaged-with-by-at-turn-start", "fell-back-this-phase"]);
+    const { by: _by, target: _target, ...bare } = ONLY;
+    expect(() => normalize({ ...bare, subject: "this-unit" })).toThrow(/by form/);
+    expect(() => normalize({ ...ONLY, target_history: ["fell-back-this-phase", "near-at-some-point"] })).toThrow();
+  });
+
+  it("lowers to a target condition on the candidate's own Fall Back move this phase, which the schema accepts", () => {
+    const text = "Fixture rule. When choosing charge targets, it can only choose enemy units that fell back this phase.";
+    const result = compileLeaves(placed(text, ["it can only choose enemy units that fell back this phase", FAMILY, ONLY]), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const effect = { type: "targeting", target: "this-unit", modifier: { by: "this-unit", may: "must-target", kind: "charge", target: { owner: "enemy" }, target_condition: FELL_BACK } };
+    expect(result.mechanics.effect).toEqual(effect);
+    expect(validate()(effect)).toBe(true);
+    expect(describeEffectInline(effect as never)).toMatch(/fell back this phase/u);
   });
 });

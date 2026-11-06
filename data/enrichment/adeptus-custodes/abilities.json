@@ -9086,19 +9086,78 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "shadowkeepers",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "subject": {
+              "owner": "enemy"
+            },
+            "filter": {
+              "move_types": [
+                "fall-back"
+              ]
+            }
+          },
+          "effect": {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": true
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "filter": {
+              "kind": "charge"
+            }
+          },
+          "effect": {
+            "type": "targeting",
+            "target": "this-unit",
+            "modifier": {
+              "by": "this-unit",
+              "may": "must-target",
+              "kind": "charge",
+              "target": {
+                "owner": "enemy"
+              },
+              "target_condition": {
+                "type": "happened",
+                "parameters": {
+                  "event": "move-ended",
+                  "subject": "this-unit",
+                  "filter": {
+                    "move_types": [
+                      "fall-back"
+                    ]
+                  },
+                  "window": "phase"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "source_digest": "164a06eeeed0584cede7dfc3e8714be24893b46d8d9a174da73d2064af40e395"
   },
   {
     "ability_id": "not-a-shell-wasted-aquilan-shield-adeptus-custodes",

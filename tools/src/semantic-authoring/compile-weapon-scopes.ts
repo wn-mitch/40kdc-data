@@ -89,6 +89,7 @@ function bindRoll(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
     parameters: {
       ...leaf.parameters, subject: scope.parameters.subject, weapon_type: scope.parameters.weapon_type,
       ...(scope.parameters.weapon_name !== undefined ? { weapon_name: scope.parameters.weapon_name } : {}),
+      ...(scope.parameters.exclude_weapon_name !== undefined ? { exclude_weapon_name: scope.parameters.exclude_weapon_name } : {}),
     },
   };
 }
@@ -100,7 +101,7 @@ function bindRoll(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
 function bindRemoval(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
   if (scope.parameters.subject === undefined) throw new CompileError("A weapon ability removal has no recipient; it needs a weapon-property scope before it.");
   checkScopeKeyword(scope);
-  if (scope.parameters.weapon_names !== undefined || scope.parameters.weapon_name !== undefined) throw new CompileError("A weapon ability removal cannot be scoped to named weapons; the DSL removal takes no weapon name.");
+  if (scope.parameters.weapon_names !== undefined || scope.parameters.weapon_name !== undefined || scope.parameters.exclude_weapon_name !== undefined) throw new CompileError("A weapon ability removal cannot be scoped to named weapons; the DSL removal takes no weapon name.");
   const keyword = scope.parameters.weapon_keyword;
   return {
     ...leaf,

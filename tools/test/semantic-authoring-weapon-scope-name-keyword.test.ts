@@ -302,3 +302,44 @@ describe("reviewed source keyword lowering", () => {
     expect(keywordRef("Twin Linked")).toEqual({ keyword_id: "twin-linked" });
   });
 });
+
+describe("a scope that leaves out one named weapon (weapon-property-scope@9)", () => {
+  const norm = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("weapon-property-scope", parameters, currentFamilyVersion("weapon-property-scope"));
+
+  it("accepts one excluded name with a weapon type, and refuses it alone or beside another selector", () => {
+    expect(norm({ subject: "this-unit", weapon_type: "melee", exclude_weapon_name: "Twin lash" })).toEqual({ subject: "this-unit", weapon_type: "melee", exclude_weapon_name: "Twin lash" });
+    expect(() => norm({ subject: "this-unit", exclude_weapon_name: "Twin lash" })).toThrow(/needs weapon_type/u);
+    expect(() => norm({ subject: "this-unit", weapon_type: "melee", weapon_name: "Hound's tooth", exclude_weapon_name: "Twin lash" })).toThrow();
+    expect(() => norm({ subject: "this-unit", weapon_type: "melee", weapon_keyword: "Lance", exclude_weapon_name: "Twin lash" })).toThrow();
+  });
+
+  const text = "This unit's Twin lash weapons have +1 to Hit rolls. Other melee weapons have +1 D and [LETHAL HITS].";
+  const pieces = (excluded: string): Piece[] => [
+    ["Twin lash weapons", "weapon-property-scope", { subject: "this-unit", weapon_type: "all", weapon_name: "Twin lash" }],
+    ["have +1 to Hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
+    ["Other melee weapons", "weapon-property-scope", { subject: "this-unit", weapon_type: "melee", exclude_weapon_name: excluded }],
+    ["+1 D", "characteristic-modifier", { characteristics: ["D"], operation: "improve", value: 1 }],
+    ["[LETHAL HITS]", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
+  ];
+
+  it("carries the exclusion, printed, onto the stat and the keyword after it, and not onto the named weapon's roll", () => {
+    const json = JSON.stringify(mechanicsOf(placed(text, ...pieces("twin lash")), text, UNIT));
+    // The stat change and the keyword grant both leave the named weapon out; nothing else does.
+    expect(json.match(/"exclude_name":"Twin lash"/gu)).toHaveLength(2);
+    expect(json).toMatch(/"name":"Twin lash"/u);
+    const roll = "Other melee weapons have +1 to Hit rolls.";
+    const rolled = JSON.stringify(mechanicsOf(placed(roll,
+      ["Other melee weapons", "weapon-property-scope", { subject: "this-unit", weapon_type: "melee", exclude_weapon_name: "Twin lash" }],
+      ["have +1 to Hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), roll, UNIT));
+    expect(rolled).toMatch(/"weapons":\{"type":"melee","exclude_name":"Twin lash"\}/u);
+  });
+
+  it("refuses an excluded name that is no weapon of the unit, or of another type, and a removal under it", () => {
+    expect(refusalOf(placed(text, ...pieces("Zap blade")), text, UNIT)).toMatch(/No weapon named Zap blade/u);
+    expect(refusalOf(placed(text, ...pieces("Fab caster")), text, UNIT)).toMatch(/not a melee weapon/u);
+    const removal = "Other melee weapons do not have the [LETHAL HITS] ability.";
+    expect(refusalOf(placed(removal,
+      ["Other melee weapons", "weapon-property-scope", { subject: "this-unit", weapon_type: "melee", exclude_weapon_name: "Twin lash" }],
+      ["the [LETHAL HITS] ability", "weapon-ability-removal", { keyword: "Lethal Hits" }]), removal, UNIT)).toMatch(/removal cannot be scoped to named weapons/u);
+  });
+});

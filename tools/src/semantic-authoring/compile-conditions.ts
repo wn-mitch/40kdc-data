@@ -752,6 +752,11 @@ export function condition(leaf: CompileLeaf): Node {
       return polarity(leaf, namedEquipmentPredicate(leaf));
     case "equipped-weapon-count": {
       const subject = subjectOf(leaf);
+      // The keyword form: at least min weapons with any of the keywords, across the subject's models.
+      if (leaf.parameters.weapon_keywords !== undefined) {
+        const { weapons } = weaponScope({ ...leaf, parameters: { weapon_keyword: closed(leaf, "weapon_keywords") } }) as { weapons: Node };
+        return polarity(leaf, pred("equipped-weapon-count", { weapons, count: { min: closed(leaf, "min") } }, subject));
+      }
       const name = closed(leaf, "other_than");
       return polarity(leaf, allOf([
         pred("named-weapon", { name, count: 1 }, subject),

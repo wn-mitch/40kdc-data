@@ -311,3 +311,33 @@ describe("equipped-weapon-count: describer", () => {
     });
   });
 }
+
+describe("equipped-weapon-count version 2: a unit's weapons by keyword", () => {
+  const norm = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("equipped-weapon-count", parameters, currentFamilyVersion("equipped-weapon-count"));
+
+  it("accepts at least min weapons with any of the keywords, in canonical order, and keeps the count form", () => {
+    expect(norm({ subject: "this-unit", weapon_keywords: ["Torrent", "Melta"], min: 1 })).toEqual({ subject: "this-unit", weapon_keywords: ["Melta", "Torrent"], min: 1 });
+    expect(norm({ subject: "this-model", weapon_type: "melee", count: 2, other_than: "Close combat weapon" })).toEqual({ subject: "this-model", weapon_type: "melee", count: 2, other_than: "Close combat weapon" });
+  });
+
+  it("refuses a mix of the two forms, a unit on the count form, a keyword outside the list and a missing min", () => {
+    expect(() => norm({ subject: "this-unit", weapon_keywords: ["Torrent"], min: 1, other_than: "Close combat weapon" })).toThrow();
+    expect(() => norm({ subject: "this-unit", weapon_type: "melee", count: 2, other_than: "Close combat weapon" })).toThrow(/keyword form/u);
+    expect(() => norm({ subject: "this-unit", weapon_keywords: ["Fabled"], min: 1 })).toThrow();
+    expect(() => norm({ subject: "this-unit", weapon_keywords: ["Torrent"] })).toThrow();
+  });
+
+  it("lowers to the DSL count with a minimum only, over a keyword set, and renders both keywords", () => {
+    const text = "While this unit is equipped with one or more Torrent/Melta weapons, add 1 to the Hit roll.";
+    const result = compileLeaves(placed(text,
+      ["this unit is equipped with one or more Torrent/Melta weapons", "equipped-weapon-count", { subject: "this-unit", weapon_keywords: ["Melta", "Torrent"], min: 1 }],
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const condition = (result.mechanics.effect as Record<string, any>).condition;
+    expect(condition.type).toBe("equipped-weapon-count");
+    expect(condition.parameters.subject).toBe("this-unit");
+    expect(condition.parameters.count).toEqual({ min: 1 });
+    expect(condition.parameters.weapons).toEqual({ keyword: [{ keyword_id: "melta" }, { keyword_id: "torrent" }] });
+    expect(describePredicate(condition, false)).toBe("the unit is equipped with 1+ weapons with [MELTA] or [TORRENT]");
+  });
+});

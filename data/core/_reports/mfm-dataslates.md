@@ -16,8 +16,8 @@ dump confirmation.
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 190 | 267 |
-| stratagems | 0 | 0 | 1078 | 235 |
-| abilities | 0 | 0 | 3818 | 718 |
+| stratagems | 0 | 0 | 1080 | 233 |
+| abilities | 0 | 0 | 3821 | 715 |
 | phase-mappings | 0 | 0 | 1211 | 370 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -27,8 +27,8 @@ dump confirmation.
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 11 | 15 |
 | adepta-sororitas | 0 | 0 | 121 | 27 |
-| adeptus-astartes | 0 | 0 | 221 | 29 |
-| adeptus-custodes | 0 | 0 | 152 | 6 |
+| adeptus-astartes | 0 | 0 | 222 | 28 |
+| adeptus-custodes | 0 | 0 | 153 | 5 |
 | adeptus-mechanicus | 0 | 0 | 141 | 26 |
 | aeldari | 0 | 0 | 247 | 53 |
 | agents-of-the-imperium | 0 | 0 | 99 | 39 |
@@ -52,7 +52,7 @@ dump confirmation.
 | necrons | 0 | 0 | 194 | 36 |
 | orks | 0 | 0 | 189 | 20 |
 | raven-guard | 0 | 0 | 11 | 0 |
-| salamanders | 0 | 0 | 8 | 3 |
+| salamanders | 0 | 0 | 9 | 2 |
 | space-wolves | 0 | 0 | 79 | 8 |
 | tau-empire | 0 | 0 | 137 | 29 |
 | thousand-sons | 0 | 0 | 128 | 30 |
@@ -76,13 +76,13 @@ dump confirmation.
 | adepta-sororitas | verified | 121 |
 | adeptus-astartes | digest-differs | 14 |
 | adeptus-astartes | no-source | 5 |
-| adeptus-astartes | stub | 9 |
+| adeptus-astartes | stub | 8 |
 | adeptus-astartes | unpublished | 1 |
-| adeptus-astartes | verified | 221 |
+| adeptus-astartes | verified | 222 |
 | adeptus-custodes | digest-differs | 2 |
-| adeptus-custodes | stub | 3 |
+| adeptus-custodes | stub | 2 |
 | adeptus-custodes | unpublished | 1 |
-| adeptus-custodes | verified | 152 |
+| adeptus-custodes | verified | 153 |
 | adeptus-mechanicus | digest-differs | 8 |
 | adeptus-mechanicus | stub | 16 |
 | adeptus-mechanicus | unpublished | 2 |
@@ -165,8 +165,7 @@ dump confirmation.
 | orks | verified | 189 |
 | raven-guard | verified | 11 |
 | salamanders | digest-differs | 2 |
-| salamanders | stub | 1 |
-| salamanders | verified | 8 |
+| salamanders | verified | 9 |
 | space-wolves | digest-differs | 5 |
 | space-wolves | stub | 3 |
 | space-wolves | verified | 79 |

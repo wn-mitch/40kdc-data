@@ -2080,7 +2080,7 @@ export interface LoadoutCondition {
   };
 }
 /**
- * [composition] This model carries exactly count weapons matching the shared weapons scope (for example, type melee while excluding a named weapon).
+ * [composition] The subject's models carry, between them, a number of weapons within count that match the shared weapons scope (for example, exactly 2 melee weapons besides a named weapon, or at least 1 Torrent or Melta weapon).
  */
 export interface EquippedWeaponCountCondition {
   type: "equipped-weapon-count";

@@ -4189,6 +4189,15 @@ function genEffectTranslation(): void {
       effect: { type: "objective-sticky", target: "this-unit", modifier: { objective: { selection_var: "objective" } } } } },
     // A rolled ceiling on the named moves: "can move up to D3+3\"".
     { caseId: "fidelity/move-modifier-maximum-dice", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["pile-in", "consolidation"], maximum: "D3+3" } } },
+    // "you can only select enemy units that made a Fall Back move this phase".
+    { caseId: "fidelity/targeting-target-fell-back-this-phase", effect: { type: "targeting", target: "this-unit", modifier: { by: "this-unit", may: "must-target", kind: "charge", target: { owner: "enemy" },
+      target_condition: { type: "happened", parameters: { event: "move-ended", subject: "this-unit", filter: { move_types: ["fall-back"] }, window: "phase" } } } } },
+    // Melee weapons other than one named weapon: "Other melee weapons have +1 D".
+    { caseId: "fidelity/stat-modifier-exclude-weapon-name", effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "D", operation: "improve", value: 1, weapons: { type: "melee", exclude_name: "Fabled maul" } } } },
+    // "equipped with one or more Torrent/Melta weapons": a minimum over a keyword set, across the unit's models.
+    { caseId: "fidelity/equipped-weapon-count-keyword-min", effect: { type: "conditional",
+      condition: { type: "equipped-weapon-count", parameters: { subject: "this-unit", weapons: { keyword: [{ keyword_id: "melta" }, { keyword_id: "torrent" }] }, count: { min: 1 } } },
+      effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } } } },
     // A heal of a two-dice amount.
     { caseId: "fidelity/heal-two-d3", effect: { type: "heal", target: "this-model", modifier: { amount: "2D3" } } },
     // A cap on a roll after modifiers: "if the result is greater than 6, change it to 6".

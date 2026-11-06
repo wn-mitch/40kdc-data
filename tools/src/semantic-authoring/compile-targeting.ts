@@ -17,6 +17,7 @@ const HISTORY: Record<string, (by: string) => Node> = {
   "engaged-with-by-at-turn-start": (by) => ({ type: "unit-state", parameters: { subject: "this-unit", state: "engaged", with: by, at: "turn-start" } }),
   "attacked-by-another-unit-this-phase": (by) => ({ type: "happened", parameters: { event: "targets-selected", subject: { owner: "any", excluding: by }, object: "this-unit", filter: { kind: "attack" }, window: "phase" } }),
   "charged-by-another-unit-this-phase": (by) => ({ type: "happened", parameters: { event: "targets-selected", subject: { owner: "any", excluding: by }, object: "this-unit", filter: { kind: "charge" }, window: "phase" } }),
+  "fell-back-this-phase": () => ({ type: "happened", parameters: { event: "move-ended", subject: "this-unit", filter: { move_types: ["fall-back"] }, window: "phase" } }),
 };
 
 /** The unit that targets, as a history condition names it; only the ability's own unit or model has one. */

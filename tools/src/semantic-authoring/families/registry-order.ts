@@ -96,4 +96,5 @@ export const REGISTRY_ORDER: readonly string[] = [
   "unit-activity@24",
   "unit-activity@25",
   "regain-wounds@8", "move-distance@5", "transport-capacity@2",
+  "weapon-property-scope@9", "targeting-restriction@8", "equipped-weapon-count@2",
 ];

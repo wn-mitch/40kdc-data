@@ -1,5 +1,5 @@
 import type { FamilyExtension } from "../family-extension-helpers.js";
-import { optional, withProperties } from "../family-extension-helpers.js";
+import { optional, properties, withProperties } from "../family-extension-helpers.js";
 import { enumSet, enumValue } from "../family-validation.js";
 import { TARGETING_KINDS } from "../targeting-families.js";
 
@@ -12,6 +12,9 @@ import { TARGETING_KINDS } from "../targeting-families.js";
 const HISTORY_WINDOWS = ["battle-round"] as const;
 
 const TARGET_HISTORY = ["engaged-with-by-at-turn-start", "attacked-by-another-unit-this-phase", "charged-by-another-unit-this-phase"] as const;
+
+/** Moves the unit being targeted made ("enemy units that made a Fall Back move this phase"); targeting-restriction version 8 adds them. */
+export const MOVE_HISTORY = ["fell-back-this-phase"] as const;
 
 /** The moves after which a restriction holds ("in a turn in which it Advanced or Fell Back, but when doing so"). */
 const AFTER_MOVES = ["advance", "fall-back"] as const;
@@ -74,6 +77,27 @@ export const TARGETING_HISTORY_EXTENSIONS: readonly FamilyExtension[] = [
       const normalized = previous(rest);
       if (normalized.may !== "target") throw new TypeError("targeting-restriction.not_engaged_with only applies when may is target.");
       return { ...normalized, not_engaged_with: enumValue(engaged, NOT_ENGAGED_WITH, "targeting-restriction.not_engaged_with") };
+    },
+  },
+  {
+    // "you can only select enemy units that made a Fall Back move this phase".
+    family: "targeting-restriction",
+    version: 8,
+    description: "As the previous version, plus target_history fell-back-this-phase: the restriction covers only targets that ended a Fall Back move this phase.",
+    schema: (previous) => {
+      const history = properties(previous).target_history!;
+      const items = history.items as Record<string, unknown>;
+      return withProperties(previous, { target_history: { ...history, items: { ...items, enum: [...(items.enum as string[]), ...MOVE_HISTORY] } } });
+    },
+    normalize: (input, previous) => {
+      const history = input.target_history;
+      if (!Array.isArray(history) || !history.some((item) => (MOVE_HISTORY as readonly unknown[]).includes(item))) return previous(input);
+      if (!("by" in input)) throw new TypeError("targeting-restriction.target_history is relative to the unit that targets; it needs the by form.");
+      const all = enumSet(history, [...TARGET_HISTORY, ...MOVE_HISTORY], "targeting-restriction.target_history");
+      const older = all.filter((item) => !(MOVE_HISTORY as readonly string[]).includes(item));
+      const { target_history: _history, ...rest } = input;
+      const normalized = previous(older.length > 0 ? { ...rest, target_history: older } : rest);
+      return { ...normalized, target_history: all };
     },
   },
   {

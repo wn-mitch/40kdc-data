@@ -45901,7 +45901,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///    },
 ///    {
 ///      "title": "equipped-weapon-count condition",
-///      "description": "[composition] This model carries exactly count weapons matching the shared weapons scope (for example, type melee while excluding a named weapon).",
+///      "description": "[composition] The subject's models carry, between them, a number of weapons within count that match the shared weapons scope (for example, exactly 2 melee weapons besides a named weapon, or at least 1 Torrent or Melta weapon).",
 ///      "type": "object",
 ///      "required": [
 ///        "parameters",
@@ -46509,7 +46509,7 @@ pub enum SimpleCondition {
     Loadout { parameters: LoadoutConditionParameters },
     /**equipped-weapon-count condition
 
-[composition] This model carries exactly count weapons matching the shared weapons scope (for example, type melee while excluding a named weapon).*/
+[composition] The subject's models carry, between them, a number of weapons within count that match the shared weapons scope (for example, exactly 2 melee weapons besides a named weapon, or at least 1 Torrent or Melta weapon).*/
     #[serde(rename = "equipped-weapon-count")]
     EquippedWeaponCount { parameters: EquippedWeaponCountConditionParameters },
     /**named-weapon condition

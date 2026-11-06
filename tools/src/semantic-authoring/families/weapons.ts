@@ -1,7 +1,7 @@
 import { ANTECEDENT } from "../antecedent-families.js";
 import type { SemanticFamilyDefinition } from "../contracts.js";
 import { EVENT_SUBJECT, type FamilyExtension, optional, standIn, widenedEnum, withProperties } from "../family-extension-helpers.js";
-import { enumValue, exactKeys } from "../family-validation.js";
+import { boundedInteger, enumSet, enumValue, exactKeys } from "../family-validation.js";
 import { WEAPON_REMOVAL_KEYWORDS } from "../weapon-buff-families.js";
 import { normalizeWave9Keyword, widenKeyword } from "./weapon-keywords.js";
 import { WEAPON, WEAPON_KEYWORDS, WEAPON_NAMES_SCHEMA, antecedentSubject, refuseWith, weaponName, weaponNameList, withoutRequired } from "./shared.js";
@@ -190,6 +190,44 @@ export const WEAPON_EXTENSIONS: readonly FamilyExtension[] = [
       if (input.weapon_type === undefined) throw new TypeError("weapon-property-scope.weapon_name needs weapon_type (all is allowed).");
       const { weapon_name: name, ...rest } = input;
       return { ...previous(rest), weapon_name: weaponName(name, "weapon-property-scope.weapon_name") };
+    },
+  },
+  {
+    // "One Adeptus Astartes unit equipped with one or more Torrent/Melta weapons": a unit's weapons by keyword.
+    family: "equipped-weapon-count",
+    version: 2,
+    description: "As the previous version, or a keyword form: subject this-unit or this-model, weapon_keywords (one or more weapon abilities, any of which counts) and min, holding when the subject's models carry at least min such weapons between them (\"equipped with one or more Torrent/Melta weapons\"). The keyword form names no weapon_type, count or other_than.",
+    schema: (previous) => withoutRequired(withProperties(previous, {
+      subject: widenedEnum(previous, "subject", ["this-unit"]),
+      weapon_keywords: optional({ type: "array", items: { enum: [...WEAPON_KEYWORDS] }, minItems: 1, uniqueItems: true }),
+      min: optional({ type: "integer", minimum: 1, maximum: 12 }),
+    }), ["weapon_type", "count", "other_than"]),
+    normalize: (input, previous) => {
+      if (!("weapon_keywords" in input) && !("min" in input)) {
+        if (input.subject === "this-unit") throw new TypeError("equipped-weapon-count with subject this-unit is the keyword form; it needs weapon_keywords and min.");
+        return previous(input);
+      }
+      exactKeys(input, ["subject", "weapon_keywords", "min", ...("negated" in input ? ["negated"] : [])], "equipped-weapon-count");
+      return {
+        subject: enumValue(input.subject, ["this-unit", "this-model"], "equipped-weapon-count.subject"),
+        weapon_keywords: enumSet(input.weapon_keywords, WEAPON_KEYWORDS, "equipped-weapon-count.weapon_keywords"),
+        min: boundedInteger(input.min, 1, 12, "equipped-weapon-count.min"),
+        ...("negated" in input ? { negated: input.negated === true } : {}),
+      };
+    },
+  },
+  {
+    // "Other melee weapons have +1 D": a type's weapons except the ones with the name a sibling clause gave.
+    family: "weapon-property-scope",
+    version: 9,
+    description: "As the previous version, plus exclude_weapon_name: the scope selects the weapon_type's weapons except those with one printed name (\"other melee weapons\" after a clause about X weapons). weapon_type is required with it (all is allowed). It takes no weapon_name, weapon_names, weapon_keyword, weapon or frame.",
+    schema: (previous) => withProperties(previous, { exclude_weapon_name: optional({ type: "string", minLength: 1 }) }),
+    normalize: (input, previous) => {
+      if (!("exclude_weapon_name" in input)) return previous(input);
+      refuseWith(input, ["weapon_name", "weapon_names", "weapon_keyword", "weapon", "frame"], "weapon-property-scope.exclude_weapon_name");
+      if (input.weapon_type === undefined) throw new TypeError("weapon-property-scope.exclude_weapon_name needs weapon_type (all is allowed).");
+      const { exclude_weapon_name: name, ...rest } = input;
+      return { ...previous(rest), exclude_weapon_name: weaponName(name, "weapon-property-scope.exclude_weapon_name") };
     },
   },
   {

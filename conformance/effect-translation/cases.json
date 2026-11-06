@@ -41146,6 +41146,102 @@
     }
   },
   {
+    "caseId": "fidelity/targeting-target-fell-back-this-phase",
+    "effect": {
+      "type": "targeting",
+      "target": "this-unit",
+      "modifier": {
+        "by": "this-unit",
+        "may": "must-target",
+        "kind": "charge",
+        "target": {
+          "owner": "enemy"
+        },
+        "target_condition": {
+          "type": "happened",
+          "parameters": {
+            "event": "move-ended",
+            "subject": "this-unit",
+            "filter": {
+              "move_types": [
+                "fall-back"
+              ]
+            },
+            "window": "phase"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit must target enemy units with a charge if the target unit fell back this phase."
+    }
+  },
+  {
+    "caseId": "fidelity/stat-modifier-exclude-weapon-name",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "D",
+        "operation": "improve",
+        "value": 1,
+        "weapons": {
+          "type": "melee",
+          "exclude_name": "Fabled maul"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, improve the Damage characteristic of melee weapons other than \"Fabled maul\" equipped by models in this unit by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/equipped-weapon-count-keyword-min",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "equipped-weapon-count",
+        "parameters": {
+          "subject": "this-unit",
+          "weapons": {
+            "keyword": [
+              {
+                "keyword_id": "melta"
+              },
+              {
+                "keyword_id": "torrent"
+              }
+            ]
+          },
+          "count": {
+            "min": 1
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the unit is equipped with 1+ weapons with [MELTA] or [TORRENT], when resolving this use, the unit gets +1 to Hit rolls."
+    }
+  },
+  {
     "caseId": "fidelity/heal-two-d3",
     "effect": {
       "type": "heal",

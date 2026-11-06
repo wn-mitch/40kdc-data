@@ -405,14 +405,7 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         bounds = _obj(p.get("count"))
         minimum = bounds.get("min")
         maximum = bounds.get("max")
-        if minimum is not None and minimum == maximum:
-            quantity = f"exactly {_str(minimum)}"
-        elif minimum is not None:
-            quantity = f"at least {_str(minimum)}"
-        elif maximum is not None:
-            quantity = f"at most {_str(maximum)}"
-        else:
-            quantity = "some"
+        quantity = count_phrase(bounds)
         noun = weapon_noun({"weapons": scope})
         if minimum == maximum == 1:
             noun = re.sub(r"\bweapons\b", "weapon", noun, count=1)

@@ -143,6 +143,17 @@ function spanOf(leaf: CompileLeaf, sourceText: string | undefined): string | und
 }
 
 /**
+ * "Other melee weapons": the weapon a scope leaves out is named by an earlier clause, not in the scope's own
+ * wording, so its name takes no span check. It still resolves to one printed weapon of the scope's type.
+ */
+function resolveExclusion(leaf: CompileLeaf, ctx: WeaponNameContext | undefined, abilityId: string | undefined): CompileLeaf {
+  if (ctx === undefined) throw new CompileError("Named weapons need the record's faction to look them up.");
+  const parameters = leaf.parameters;
+  const [printed] = resolveNames([String(parameters.exclude_weapon_name)], { weapon_type: parameters.weapon_type ?? "all", subject: parameters.subject, authored: false }, ctx, abilityId);
+  return { ...leaf, parameters: { ...parameters, exclude_weapon_name: printed } };
+}
+
+/**
  * Resolve every named-weapon leaf the record prints, with its own wording as the span. A scope or a
  * roll modifier may name one weapon (weapon_name) as well as a list; a stat change's weapon_name is
  * not resolved here.
@@ -150,6 +161,7 @@ function spanOf(leaf: CompileLeaf, sourceText: string | undefined): string | und
 export function resolveAuthoredNames(list: readonly CompileLeaf[], sourceText: string | undefined, ctx: WeaponNameContext | undefined, abilityId: string | undefined): CompileLeaf[] {
   return list.map((leaf) => {
     if (!NAME_LEAVES.has(leaf.family_id)) return leaf;
+    if (leaf.family_id === "weapon-property-scope" && leaf.parameters.exclude_weapon_name !== undefined) return resolveExclusion(leaf, ctx, abilityId);
     const parameters = leaf.parameters;
     const single = SINGLE_NAME_LEAVES.has(leaf.family_id) && parameters.weapon_name !== undefined;
     if (parameters.weapon_names === undefined && !single) return leaf;
