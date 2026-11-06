@@ -23,6 +23,7 @@ import * as path from "node:path";
 import { type AbilityRow, type AbilityRowKind, CORE_FACTION } from "./dump-prose-rows.js";
 import { type DumpProse, loadDumpProse, type OwnerQuery, type ProseQuery, type ProseVariant } from "./dump-prose-lookup.js";
 import { SHARED_ROSTERS } from "./faction-map.js";
+import { buildIdentities, identityRows, type IdentitySet } from "./mirror/identity.js";
 import { readJsonArray, REPO_ROOT } from "./repo-files.js";
 
 /** A resolved record's prose in the old store's entry shape, so `assembleStoreSource` reads it unchanged. */
@@ -71,6 +72,7 @@ export class RepoProse {
   private readonly detachments = new Map<string, Map<string, string[]>>();
   private readonly coreRecords = new Map<string, Map<string, CoreRecord>>();
   private readonly factionCache = new Map<string, Map<string, ProseEntry>>();
+  private identitySet: IdentitySet | undefined;
 
   constructor(
     readonly prose: DumpProse,
@@ -170,10 +172,28 @@ export class RepoProse {
         }
       }
       if (!variants.size) continue;
-      if (variants.size > 1) return { status: "ambiguous", variants: [...variants.values()] };
+      if (variants.size > 1) {
+        const own = this.identityRows(id, [...variants.values()].flatMap((v) => v.rows));
+        if (own) return this.found(dir, record, id, own);
+        return { status: "ambiguous", variants: [...variants.values()] };
+      }
       return this.found(dir, record, id, [...variants.values()][0]!.rows);
     }
     return { status: "missing" };
+  }
+
+  private allRecordIds: Set<string> | undefined;
+
+  /** Every enrichment ability id, across faction dirs. */
+  private recordIds(): Set<string> {
+    this.allRecordIds ??= new Set(this.factions().flatMap((f) => readJsonArray<AbilityRecordRef>(path.join(this.enrichmentDir, f, "abilities.json")).flatMap((r) => (r.ability_id ?? r.id) ? [(r.ability_id ?? r.id)!] : [])));
+    return this.allRecordIds;
+  }
+
+  /** The rows the mirror's identity `id` holds among `candidates` (mirror/identity.ts identityRows). */
+  private identityRows(id: string, candidates: readonly AbilityRow[]): AbilityRow[] | null {
+    this.identitySet ??= buildIdentities(this.prose);
+    return identityRows(this.identitySet, id, candidates, (other) => this.recordIds().has(other));
   }
 
   /** The record's queries, in tiers: the first tier that matches any row answers. */

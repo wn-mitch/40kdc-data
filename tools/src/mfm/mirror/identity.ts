@@ -150,6 +150,28 @@ const patrolSlug = (r: AbilityRow): string | null => {
 };
 
 /** Build every identity from the enumerated rows. Deterministic in the row set alone. */
+/**
+ * Two texts under one owner and name ("Vexilla" as a datasheet's limited wargear choice and as a
+ * loadout item) are two identities with their own ids. Of `candidates`, the rows the identity `id`
+ * holds; null when no identity has that id or none of its rows is a candidate. An identity's rows
+ * print one text up to spacing (`norm`), so when two spellings differ only there ("[Ignores
+ * Cover].If" beside "[Ignores Cover]. If"), the rows of the spelling most of them print answer,
+ * the first by row key on a tie. Every other candidate must belong to an identity `hasRecord` knows.
+ */
+export function identityRows(set: IdentitySet, id: string, candidates: readonly AbilityRow[], hasRecord: (id: string) => boolean): AbilityRow[] | null {
+  const identity = set.byId.get(id);
+  if (!identity) return null;
+  const keys = new Set(identity.rows.map((r) => r.key));
+  const own = candidates.filter((r) => keys.has(r.key));
+  if (own.length === 0 || new Set(own.map((r) => norm(r.text))).size !== 1) return null;
+  // Every other text set aside must be a record of its own, or a printed rule would go unread.
+  const others = candidates.filter((r) => !keys.has(r.key)).map((r) => set.byRowKey.get(r.key));
+  if (others.some((other) => other === undefined || other === id || !hasRecord(other))) return null;
+  const byText = new Map<string, AbilityRow[]>();
+  for (const r of [...own].sort((a, b) => cmp(a.key, b.key))) byText.set(r.text ?? "", [...(byText.get(r.text ?? "") ?? []), r]);
+  return [...byText.values()].reduce((best, rows) => (rows.length > best.length ? rows : best));
+}
+
 export function buildIdentities(set: AbilityRowSet): IdentitySet {
   const undecided: IdentitySet["undecided"] = [];
   const ruleRowKey = new Map<string, AbilityRow[]>();

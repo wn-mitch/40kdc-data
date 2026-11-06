@@ -4,6 +4,7 @@ import { join, resolve } from "node:path";
 
 import { type AbilityRow, type AbilityRowKind, CORE_FACTION, type DumpProse, loadDumpProse, type OwnerQuery, type ProseQuery } from "../mfm/dump-prose.js";
 import { DEFAULT_DUMP_PATH } from "../mfm/loader.js";
+import { buildIdentities, identityRows, type IdentitySet } from "../mfm/mirror/identity.js";
 import { assembleStoreSource } from "../mfm/store-source.js";
 import { hashJson } from "../canonical-hash.js";
 import { semanticAuthoringDataRoot } from "./entries.js";
@@ -241,6 +242,8 @@ export function loadDumpSourceRecords(options: DumpSourceOptions = {}): SourceLo
   const records: SourceRecord[] = [];
   const skipped: SkippedSourceRecord[] = [];
   const conflicts: SourceConflict[] = [];
+  let identitySet: IdentitySet | undefined;
+  let recordIds: Set<string> | undefined;
   {
     for (const { faction, file, row, ability } of identities(dataRoot)) {
       const abilityId = text(ability.ability_id);
@@ -265,6 +268,13 @@ export function loadDumpSourceRecords(options: DumpSourceOptions = {}): SourceLo
       if (variants.size === 0) {
         skipped.push({ file, row, reason: "missing-prose", factionId: faction, abilityId });
         continue;
+      }
+      // Two texts the mirror gives separate ids (mirror/identity.ts): the record reads its own identity's rows.
+      if (variants.size > 1) {
+        identitySet ??= buildIdentities(prose);
+        recordIds ??= new Set(identities(dataRoot).flatMap((entry) => { const id = text(entry.ability.ability_id); return id ? [id] : []; }));
+        const own = identityRows(identitySet, abilityId, [...variants.values()].flatMap((variant) => variant.rows), (other) => recordIds!.has(other));
+        if (own) for (const [key, variant] of [...variants]) if (!variant.rows.some((row) => own.includes(row))) variants.delete(key);
       }
       if (variants.size > 1) {
         const all = [...variants.values()];

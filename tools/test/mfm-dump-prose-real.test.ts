@@ -4,6 +4,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 
 import { AmbiguousProseError, type DumpProse, loadDumpProse, plainBlock, type ProseQuery } from "../src/mfm/dump-prose.js";
 import { DEFAULT_DUMP_PATH, loadDump, type MfmDump } from "../src/mfm/loader.js";
+import { loadRepoProse } from "../src/mfm/record-prose.js";
 import { REPO_ROOT } from "../src/mfm/repo-files.js";
 
 // Pins dump-prose against the real (gitignored) dump. Asserts row ids and structure, never GW prose.
@@ -129,6 +130,17 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("dump prose over the real dum
     expect(codex.rows[0]!.publication?.combatPatrol).toBe(false);
     expect(patrol.rows[0]!.publication?.combatPatrol).toBe(true);
     expect(codex.text).not.toBe(patrol.text);
+  });
+
+  it("reads one datasheet's two same-named texts through the records the mirror gives each", () => {
+    // Custodian Guard Sodality prints Vexilla as a limited wargear choice and as a loadout item.
+    const repo = loadRepoProse();
+    const ref = (id: string) => { const got = repo.forRecord("adeptus-custodes", { ability_id: id, ability_type: "unit", unit_ids: ["custodian-guard-sodality"] }); return got.status === "found" ? got.entry.source.ref : got.status; };
+    expect(ref("vexilla-adeptus-custodes")).toMatch(/#cfcf1648/u);
+    expect(ref("vexilla-wargear-adeptus-custodes")).toMatch(/#a953553a/u);
+    // Two spellings of one text (only a space apart) are one record: the spelling most datasheets print answers.
+    const dakka = repo.forRecord("orks", { ability_id: "more-dakka-orks", ability_type: "unit", unit_ids: ["big-mek", "big-mek-in-mega-armour", "big-mek-with-shokk-attack-gun"] });
+    expect(dakka.status === "found" && dakka.entry.source.ref).toMatch(/#52a0b416/u);
   });
 
   function findAlt(prefix: string): string {
