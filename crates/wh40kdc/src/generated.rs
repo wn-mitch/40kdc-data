@@ -40160,6 +40160,12 @@ pub struct RollResultConditionParameters {
 ///    "roll"
 ///  ],
 ///  "properties": {
+///    "at_most": {
+///      "description": "A result greater than this after modifiers is changed to this value (\"if the result is greater than 6 (after modifiers), change it to 6\").",
+///      "type": "integer",
+///      "maximum": 12.0,
+///      "minimum": 1.0
+///    },
 ///    "count": {
 ///      "description": "Only one roll the player picks gets this result (\"change the result of one Hit roll to an unmodified 6\"); absent, every such roll does.",
 ///      "const": 1
@@ -40223,6 +40229,9 @@ pub struct RollResultConditionParameters {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct RollResultEffectModifier {
+    ///A result greater than this after modifiers is changed to this value ("if the result is greater than 6 (after modifiers), change it to 6").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub at_most: ::std::option::Option<::std::num::NonZeroU64>,
     ///Only one roll the player picks gets this result ("change the result of one Hit roll to an unmodified 6"); absent, every such roll does.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count: ::std::option::Option<::serde_json::Value>,
@@ -46679,7 +46688,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "roll-result effect",
-///      "description": "[roll] Fix a roll's result (pass, fail or a value; unmodified: it counts as that unmodified result), make it succeed only on an unmodified N+, fail on an unmodified N or less, or make it critical on N+ or on any success.",
+///      "description": "[roll] Fix a roll's result (pass, fail or a value; unmodified: it counts as that unmodified result), make it succeed only on an unmodified N+, fail on an unmodified N or less, or make it critical on N+ or on any success, or cap it: at_most changes a result greater than N after modifiers to N.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -47821,7 +47830,7 @@ pub enum SingleEffect {
     },
     /**roll-result effect
 
-[roll] Fix a roll's result (pass, fail or a value; unmodified: it counts as that unmodified result), make it succeed only on an unmodified N+, fail on an unmodified N or less, or make it critical on N+ or on any success.*/
+[roll] Fix a roll's result (pass, fail or a value; unmodified: it counts as that unmodified result), make it succeed only on an unmodified N+, fail on an unmodified N or less, or make it critical on N+ or on any success, or cap it: at_most changes a result greater than N after modifiers to N.*/
     #[serde(rename = "roll-result")]
     RollResult {
         modifier: RollResultEffectModifier,

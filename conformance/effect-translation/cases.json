@@ -41065,6 +41065,23 @@
     }
   },
   {
+    "caseId": "fidelity/roll-result-at-most",
+    "effect": {
+      "type": "roll-result",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "charge",
+        "at_most": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit's Charge rolls count as 6 if the result is greater than 6 after modifiers."
+    }
+  },
+  {
     "caseId": "fidelity/move-embark-reach",
     "effect": {
       "type": "move",

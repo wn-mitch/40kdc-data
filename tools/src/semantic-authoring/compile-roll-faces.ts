@@ -30,3 +30,21 @@ export function foldRollFaces(list: readonly CompileLeaf[]): CompileLeaf[] {
   });
   return out.filter((_leaf, index) => !folded.has(index));
 }
+
+/**
+ * "When making the charge roll, if the result is greater than 6 (after modifiers), change it to 6":
+ * a band from N+1 with no upper bound, directly before a fixed result of N for a named roll, caps that
+ * roll at N. The band folds into the fixed result as `at_most` (roll-result at_most); it is no band of
+ * its own, since the record rolls no dice. Only a result of 6 is fixed today (roll-auto-result
+ * counts-as-6), so only a cap of 6 folds; other bands keep their meaning for compile-dice.ts.
+ */
+export function foldRollCaps(list: readonly CompileLeaf[]): CompileLeaf[] {
+  const capped = new Set<number>();
+  list.forEach((leaf, index) => {
+    const next = list[index + 1];
+    if (leaf.family_id === "roll-result" && leaf.parameters.to === undefined && leaf.parameters.unmodified === undefined && leaf.parameters.from === 7
+      && next?.family_id === "roll-auto-result" && next.parameters.outcome === "counts-as-6" && typeof next.parameters.roll === "string"
+      && next.parameters.count === undefined && next.parameters.rolls === undefined && (next.fragment ?? null) === (leaf.fragment ?? null)) capped.add(index + 1);
+  });
+  return list.flatMap((leaf, index) => capped.has(index + 1) ? [] : capped.has(index) ? [{ ...leaf, parameters: { ...leaf.parameters, at_most: 6 } }] : [leaf]);
+}

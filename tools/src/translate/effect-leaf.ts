@@ -147,6 +147,8 @@ function failedNoun(m: Record<string, unknown>, noun: string): string {
 function rollResult(m: Record<string, unknown>, subj: string): string {
   const roll = rollName(m.roll);
   const lead = m.incoming === true ? incomingLead(m, subj) : "";
+  // A cap: "if the result is greater than 6 (after modifiers), change it to 6".
+  if (m.at_most != null) return `${ofOrPossessive(subj, `${roll} rolls`)}${weaponRollScope(m)} count as ${jstr(m.at_most)} if the result is greater than ${jstr(m.at_most)} after modifiers`;
   if (m.critical_on != null) {
     const crit = m.roll === "wound" ? "Critical Wound" : "Critical Hit";
     if (m.critical_on === "success") return `${lead}each successful ${roll} roll${lead ? "" : ` made by ${subj}`}${weaponRollScope(m)} is a ${crit}`;

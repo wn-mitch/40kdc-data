@@ -56,7 +56,8 @@ function modelLevelExclusion(base: CompileLeaf, exclusion: CompileLeaf): Compile
 /**
  * "One **SQUADRON** unit from your army that is Below Half-strength (excluding **OFFICER** units)": a
  * Stratagem target's exclusion-only filter after the target's own conditions (its owner, and states,
- * positions or model counts of the target) merges into the target's filter, as a selection's does.
+ * positions or model counts of the target) merges into the target's filter, as a selection's does. So
+ * does a filter of alternatives alone ("You can only select a VEHICLE unit if it is a CHARACTER unit").
  */
 export function foldTargetExclusions(
   input: readonly CompileLeaf[],
@@ -72,7 +73,7 @@ export function foldTargetExclusions(
     // An exclusion right after the filter is the merge pass's own case.
     if (cursor === base + 1) continue;
     const exclusion = list[cursor];
-    if (!exclusionOnly(exclusion) || exclusion!.fragment !== target.fragment) continue;
+    if (!(exclusionOnly(exclusion) || alternativesOnly(exclusion)) || exclusion!.fragment !== target.fragment) continue;
     if (exclusion!.parameters.side !== list[base]!.parameters.side) throw new CompileError("An exclusion's side differs from the Stratagem target's side.");
     const merged = mergeFilters(list[base]!, exclusion!);
     if (merged === null) throw new CompileError("An exclusion cannot narrow the Stratagem target's filter (its sides or keyword lists conflict).");
@@ -80,6 +81,16 @@ export function foldTargetExclusions(
     list.splice(cursor, 1);
   }
   return list;
+}
+
+/**
+ * "You can only select a VEHICLE unit if it is a CHARACTER/WALKER unit": a filter of alternatives alone (not
+ * VEHICLE, or CHARACTER, or WALKER) restricts which units the target may be, as an exclusion does.
+ */
+function alternativesOnly(leaf: CompileLeaf | undefined): boolean {
+  if (!isFilter(leaf)) return false;
+  const alternatives = leaf!.parameters.alternatives as unknown[] | undefined;
+  return (alternatives?.length ?? 0) > 0 && Object.keys(leaf!.parameters).every((key) => key === "side" || key === "alternatives");
 }
 
 /** A condition on a Stratagem target its exclusion may sit past: "from your army" of its side, or a state, position or model count of the target. */

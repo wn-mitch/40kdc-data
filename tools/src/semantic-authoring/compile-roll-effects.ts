@@ -80,6 +80,8 @@ export function rollEffect(leaf: CompileLeaf, context: EffectContext, target: Ta
       // "choose whether the result of that roll is a 1 or a 6": a choice of fixed results.
       if (outcome === "chosen") return { type: "choice", options: (leaf.parameters.values as number[]).map((result) => ({ type: "roll-result", target: rollTarget(roll), modifier: { roll, result } })) };
       const modifier: Node = { roll };
+      // "if the result is greater than 6 (after modifiers), change it to 6" (foldRollCaps, compile-roll-faces.ts).
+      if (leaf.parameters.at_most !== undefined) return { type: "roll-result", target: rollTarget(roll), modifier: { roll, at_most: closed(leaf, "at_most"), ...weaponScope(leaf) } };
       if (leaf.parameters.count === 1) modifier.count = 1;
       if (outcome === "succeeds-on") modifier.succeeds_on = closed(leaf, "value");
       else if (outcome === "counts-as-6") modifier.result = 6;

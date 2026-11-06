@@ -9441,19 +9441,96 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "emissaries-imperatus",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "charge"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "opponent-turn"
+                  }
+                }
+              ]
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": true
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "before-roll",
+            "filter": {
+              "roll": "charge"
+            }
+          },
+          "effect": {
+            "type": "roll-result",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "charge",
+              "at_most": 6
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "filter": {
+              "kind": "charge"
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "targeting",
+            "target": "this-unit",
+            "modifier": {
+              "by": "this-unit",
+              "may": "target",
+              "kind": "charge",
+              "range": {
+                "inches": 6
+              },
+              "target": {
+                "owner": "enemy"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "b250de17ad7772a938a7182c3d8c3fc531ea686f9a4eb2a6cc7946d5f98fa7f0"
   },
   {
     "ability_id": "shroud-of-the-hidden-blade-auric-champions-adeptus-custodes",

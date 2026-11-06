@@ -4178,6 +4178,8 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/select-objective-controlled-at-previous-phase-end", effect: { type: "select-objective",
       selector: { filter: { controlled_by_unit: "this-unit", controlled_at: "previous-phase-end" }, bind_as: "objective", count: { min: 1, max: 1 } },
       effect: { type: "objective-sticky", target: "this-unit", modifier: { objective: { selection_var: "objective" } } } } },
+    // A cap on a roll after modifiers: "if the result is greater than 6, change it to 6".
+    { caseId: "fidelity/roll-result-at-most", effect: { type: "roll-result", target: "this-unit", modifier: { roll: "charge", at_most: 6 } } },
     // An embark under the core rules with a longer distance to the Transport than 3".
     { caseId: "fidelity/move-embark-reach", effect: { type: "move", target: "this-unit", modifier: { move_type: "embark", reach: { inches: 6 } } } },
     // A move's distance ceiling as printed: "can move up to 4\"".

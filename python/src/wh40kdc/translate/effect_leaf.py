@@ -308,6 +308,13 @@ def _subset_suffix(m: dict[str, Any]) -> str:
 def _roll_result(m: dict[str, Any], subj: str) -> str:
     roll = roll_name(m.get("roll"))
     lead = _incoming_lead(m, subj) if m.get("incoming") is True else ""
+    # A cap: "if the result is greater than 6 (after modifiers), change it to 6".
+    if m.get("at_most") is not None:
+        cap = jstr(m["at_most"])
+        return (
+            f"{of_or_possessive(subj, f'{roll} rolls')}{weapon_roll_scope(m)}"
+            f" count as {cap} if the result is greater than {cap} after modifiers"
+        )
     if m.get("critical_on") is not None:
         crit = "Critical Wound" if m.get("roll") == "wound" else "Critical Hit"
         if m["critical_on"] == "success":

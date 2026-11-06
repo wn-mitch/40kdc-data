@@ -367,6 +367,14 @@ fn roll_result(m: &P, subj: &str) -> String {
     };
     let led = !lead.is_empty();
     let scope = weapon_roll_scope(m);
+    // A cap: "if the result is greater than 6 (after modifiers), change it to 6".
+    if let Some(cap) = nn(m, "at_most") {
+        let n = jstr(Some(cap));
+        return format!(
+            "{}{scope} count as {n} if the result is greater than {n} after modifiers",
+            of_or_possessive(subj, &format!("{roll} rolls"))
+        );
+    }
     if let Some(crit_on) = nn(m, "critical_on") {
         let crit = if sv(m, "roll") == Some("wound") {
             "Critical Wound"

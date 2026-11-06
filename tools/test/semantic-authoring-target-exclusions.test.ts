@@ -64,6 +64,35 @@ describe("Semantic authoring Stratagem target exclusions", () => {
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.errors.join("; ")).toContain("differs from the Stratagem target's side");
   });
+
+  it("merges a filter of alternatives alone past the target's position", () => {
+    const text = "Your Command phase. One ALPHA unit within 6\" of an enemy unit. You can only select a VEHICLE unit if it is a CHARACTER unit. Until the end of the battle round, your unit's ranged weapons other than [ONE SHOT] ones gain [HAZARDOUS].";
+    const near: Item = ["within 6\" of an enemy unit", "unit-position", { kind: "within", inches: 6, of: "matching-unit", subject: "target", negated: false, of_side: "enemy" }];
+    const only: Item = ["You can only select a VEHICLE unit if it is a CHARACTER unit", "unit-filter", { side: "friendly", alternatives: [{ excluded_keywords: ["VEHICLE"] }, { keywords: ["CHARACTER"] }] }];
+    const result = run(text, WINDOW, ONE, ALPHA, near, only, UNTIL, GRANT);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const eligibility = JSON.stringify(result.core?.target_restrictions);
+    expect(eligibility).toContain('"none_of":["VEHICLE"]');
+    expect(eligibility).toContain('"all_of":["CHARACTER"]');
+    // A filter that also names its own keywords is a unit of its own, not a restriction on the target.
+    const named: Item = ["You can only select a VEHICLE unit if it is a CHARACTER unit", "unit-filter", { side: "friendly", keywords: ["GAMMA"], alternatives: [{ excluded_keywords: ["VEHICLE"] }, { keywords: ["CHARACTER"] }] }];
+    expect(run(text, WINDOW, ONE, ALPHA, near, named, UNTIL, GRANT).ok).toBe(false);
+  });
+});
+
+describe("Semantic authoring roll caps", () => {
+  const text = "When making the charge roll, if the result is greater than 6 (after modifiers), change it to 6.";
+  const moment: Item = ["When making the charge roll", "event", { kind: "before-roll", roll: "charge" }];
+  const band = (from: number): Item => ["if the result is greater than 6 (after modifiers)", "roll-result", { from }];
+  const fix: Item = ["change it to 6", "roll-auto-result", { roll: "charge", outcome: "counts-as-6" }];
+
+  it("caps the named roll at 6 when a band from 7 precedes a fixed 6", () => {
+    expect(nodes(compiled(text, moment, band(7), fix), "roll-result")).toEqual([{ type: "roll-result", target: "this-unit", modifier: { roll: "charge", at_most: 6 } }]);
+  });
+
+  it("leaves any other band to the dice that roll it", () => {
+    expect(run(text, moment, band(5), fix).ok).toBe(false);
+  });
 });
 
 describe("Semantic authoring weapon-ability-grant exclusions", () => {

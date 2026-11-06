@@ -273,6 +273,11 @@ func rollResultLeaf(m map[string]any, subj string) string {
 	if m["incoming"] == true {
 		lead = incomingLead(m, subj)
 	}
+	// A cap: "if the result is greater than 6 (after modifiers), change it to 6".
+	if m["at_most"] != nil {
+		n := ejstr(m["at_most"])
+		return ofOrPossessive(subj, roll+" rolls") + weaponRollScope(m) + " count as " + n + " if the result is greater than " + n + " after modifiers"
+	}
 	if m["critical_on"] != nil {
 		crit := "Critical Hit"
 		if m["roll"] == "wound" {

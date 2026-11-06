@@ -3755,7 +3755,7 @@ export interface ReRollEffect {
   scaling?: Scaling;
 }
 /**
- * [roll] Fix a roll's result (pass, fail or a value; unmodified: it counts as that unmodified result), make it succeed only on an unmodified N+, fail on an unmodified N or less, or make it critical on N+ or on any success.
+ * [roll] Fix a roll's result (pass, fail or a value; unmodified: it counts as that unmodified result), make it succeed only on an unmodified N+, fail on an unmodified N or less, or make it critical on N+ or on any success, or cap it: at_most changes a result greater than N after modifiers to N.
  */
 export interface RollResultEffect {
   type: "roll-result";

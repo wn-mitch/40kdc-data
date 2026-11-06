@@ -42,7 +42,7 @@ import { refuseSuchFilters } from "./compile-such-filter.js";
 import { bindUsedSelections } from "./compile-used-selection.js";
 import { bindSelectionRefs } from "./compile-named-selections.js";
 import { bindThatMany } from "./compile-that-many.js";
-import { foldRollFaces } from "./compile-roll-faces.js";
+import { foldRollCaps, foldRollFaces } from "./compile-roll-faces.js";
 import { compileStratagemWindowMoments, compileWindowMoment } from "./compile-window-moment.js";
 import { foldDelayedMoments } from "./compile-delayed-moment.js";
 import { foldRitualTest } from "./compile-ritual-test.js";
@@ -400,6 +400,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     leaves = bindThatMany(leaves, sourceText);
     // "When this unit makes a save roll: on an unmodified 6, …": the band narrows the moment's roll (compile-roll-faces.ts).
     leaves = foldRollFaces(leaves);
+    // "if the result is greater than 6 (after modifiers), change it to 6": a cap on the named roll (compile-roll-faces.ts).
+    leaves = foldRollCaps(leaves);
     // "… suffers 1 mortal wound after that enemy unit has shot": the effect waits for that moment (compile-delayed-moment.ts).
     leaves = foldDelayedMoments(leaves, sourceText);
     refuseBlastRating(leaves, sourceText);
