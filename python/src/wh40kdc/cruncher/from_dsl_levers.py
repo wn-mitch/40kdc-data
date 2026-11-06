@@ -157,6 +157,17 @@ def translate_ability_grant(
     from wh40kdc.cruncher import from_dsl as dsl
 
     modifier = _modifier(node)
+    # "benefit from the <this record> rule": a reference to an ability this record prints is that
+    # printed body.
+    ability = modifier.get("ability")
+    if (
+        isinstance(ability, dict)
+        and not isinstance(modifier.get("definition"), dict)
+        and ability.get("ability_id") == opts.get("abilityId")
+    ):
+        own = (opts.get("definitions") or {}).get(dsl._js_str(ability.get("definition_id")))
+        if own is not None:
+            modifier = {**modifier, "definition": own}
     if isinstance(modifier.get("ability"), dict) and not isinstance(
         modifier.get("definition"), dict
     ):

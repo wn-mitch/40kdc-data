@@ -299,7 +299,7 @@ function translateEffect(
   });
   const abilityId = source.kind === "ability" ? source.abilityId : "effect";
   // The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
-  const step = onAttackRoll(activation?.trigger, effect, { context, perspective, abilityId, duration: activation?.duration, usage: activation?.usage, selfDesignations: selfDesignations(effect, abilityId) });
+  const step = onAttackRoll(activation?.trigger, effect, { context, perspective, abilityId, duration: activation?.duration, usage: activation?.usage, selfDesignations: selfDesignations(effect, abilityId), definitions: ownDefinitions(effect, abilityId) });
   walk(step.effect, source, step.opts, out);
   if (activation?.usage != null || activation?.cost != null || activation?.optional === true) {
     const { duration: _duration, trigger: _trigger, ...requirement } = activation;
@@ -336,6 +336,8 @@ type WalkOpts = {
   duration?: unknown;
   /** Usage limit inherited from the owning ability or nearest ability part. */
   usage?: unknown;
+  /** The abilities the owning record prints, by definition id, for a grant that names one by reference ({@link ownDefinitions}). */
+  definitions?: ReadonlyMap<string, unknown>;
   /** Tags the owning ability designates on the units holding it ({@link selfDesignations}). */
   selfDesignations?: ReadonlySet<string>;
   /** Inside a part triggered by each hit or wound roll of the attack, that roll and its outcome. */
@@ -1375,6 +1377,26 @@ function translateIgnoreModifiers(node: Record<string, unknown>, source: BuffSou
 }
 
 /**
+ * The abilities a record prints inside itself (an ability-grant whose `ability` is
+ * `{ability_id: <this record>, definition_id}` and which carries the `definition`), by definition id.
+ */
+function ownDefinitions(effect: unknown, abilityId: string): Map<string, unknown> {
+  const found = new Map<string, unknown>();
+  const visit = (value: unknown): void => {
+    if (Array.isArray(value)) { value.forEach(visit); return; }
+    if (!isObject(value)) return;
+    const modifier = value.modifier;
+    if (value.type === "ability-grant" && isObject(modifier) && isObject(modifier.definition) && isObject(modifier.ability)
+      && modifier.ability.ability_id === abilityId && typeof modifier.ability.definition_id === "string" && !found.has(modifier.ability.definition_id)) {
+      found.set(modifier.ability.definition_id, modifier.definition);
+    }
+    Object.values(value).forEach(visit);
+  };
+  visit(effect);
+  return found;
+}
+
+/**
  * A printed grant (`definition`) translates its body for the holders, whether the grant names the
  * ability it prints (`{ability_id, definition_id}`) or not. A named ability without a printed
  * definition is unsupported: its owner is not resolved. Otherwise, the core abilities
@@ -1383,7 +1405,11 @@ function translateIgnoreModifiers(node: Record<string, unknown>, source: BuffSou
  * they contribute nothing to the buffed unit's own attacks.
  */
 function translateAbilityGrant(node: Record<string, unknown>, source: BuffSource, opts: WalkOpts, out: EffectTranslation): void {
-  const modifier = isObject(node.modifier) ? node.modifier : {};
+  let modifier = isObject(node.modifier) ? node.modifier : {};
+  // "benefit from the <this record> rule": a reference to an ability this record prints is that printed body.
+  const own = isObject(modifier.ability) && !isObject(modifier.definition) && modifier.ability.ability_id === opts.abilityId
+    ? opts.definitions?.get(String(modifier.ability.definition_id)) : undefined;
+  if (own !== undefined) modifier = { ...modifier, definition: own };
   if (isObject(modifier.ability) && !isObject(modifier.definition)) {
     out.unsupported.push({ reason: "ability-grant: named ability ownership is not resolved by the buff engine", effectFragment: node });
     return;

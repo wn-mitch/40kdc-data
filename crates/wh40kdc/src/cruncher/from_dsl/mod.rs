@@ -203,6 +203,9 @@ pub(crate) struct WalkOpts<'a> {
     /// Tags the owning ability designates on the units holding it
     /// ([`gated::self_designations`]).
     self_designations: &'a std::collections::BTreeSet<String>,
+    /// The abilities the owning record prints, by definition id, for a grant that names one by
+    /// reference ([`damage_leaves::own_definitions`]).
+    definitions: &'a std::collections::HashMap<String, Value>,
     /// Inside a part triggered by each hit or wound roll of the attack: that roll and its outcome.
     attack_roll: Option<roll_mortals::AttackRoll>,
 }
@@ -424,6 +427,7 @@ fn translate_effect(
     };
     let source_value = serde_json::to_value(source).expect("a buff source serializes");
     let self_designations = gated::self_designations(&effect, ability_id);
+    let definitions = damage_leaves::own_definitions(&effect, ability_id);
     let mut opts = WalkOpts {
         context,
         perspective,
@@ -436,6 +440,7 @@ fn translate_effect(
         granted_holder: false,
         aura_emitter: None,
         self_designations: &self_designations,
+        definitions: &definitions,
         attack_roll: None,
     };
     // The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.

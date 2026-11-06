@@ -442,6 +442,9 @@ describe("Semantic authoring printed grants: a record's grant to other units and
     expect(effect).toContain('"target":{"owner":"friendly","all_of":["MONSTER"]}');
     expect(effect).toContain('"definition":{"type":"ability-part","name":"Shade Ward"');
     expect(effect).not.toContain('"modifier":{"ability":"shade-ward"}');
+    // The body is declared once, in the record's own grant; the grant to MONSTER units names it.
+    expect(effect.split('"definition":').length - 1).toBe(1);
+    expect(effect).toContain('"target":{"owner":"friendly","all_of":["MONSTER"]},"modifier":{"ability":{"ability_id":"shade-ward","definition_id":"shade-ward"}}');
   });
 
   // The "with this ability" header needs the record's id; a grant naming a different id than the record's stays a plain record grant.

@@ -4051,19 +4051,350 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "space-wolves",
     "detachment_id": "saga-of-the-great-wolf",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "recipient",
+                  "filter": {
+                    "has_ability": [
+                      "master-of-wolves-space-wolves"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "ability-grant",
+                    "target": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "ADEPTUS ASTARTES"
+                      ],
+                      "none_of": [
+                        "MONSTER",
+                        "VEHICLE"
+                      ]
+                    },
+                    "modifier": {
+                      "ability": {
+                        "ability_id": "master-of-wolves-space-wolves",
+                        "definition_id": "encircling-jaws"
+                      },
+                      "definition": {
+                        "type": "ability-part",
+                        "name": "Encircling Jaws",
+                        "effect": {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "rule-active",
+                            "parameters": {
+                              "rule": {
+                                "ability_id": "combat-doctrines-space-wolves",
+                                "option_id": "assault-doctrine"
+                              }
+                            }
+                          },
+                          "effect": {
+                            "type": "sequence",
+                            "steps": [
+                              {
+                                "type": "roll-modifier",
+                                "target": "this-unit",
+                                "modifier": {
+                                  "roll": "advance",
+                                  "operation": "add",
+                                  "value": 1
+                                }
+                              },
+                              {
+                                "type": "roll-modifier",
+                                "target": "this-unit",
+                                "modifier": {
+                                  "roll": "charge",
+                                  "operation": "add",
+                                  "value": 1
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "ability-grant",
+                    "target": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "ADEPTUS ASTARTES"
+                      ],
+                      "none_of": [
+                        "MONSTER",
+                        "VEHICLE"
+                      ]
+                    },
+                    "modifier": {
+                      "ability": {
+                        "ability_id": "master-of-wolves-space-wolves",
+                        "definition_id": "hunters-eye"
+                      },
+                      "definition": {
+                        "type": "ability-part",
+                        "name": "Hunter’s Eye",
+                        "effect": {
+                          "type": "conditional",
+                          "condition": {
+                            "type": "rule-active",
+                            "parameters": {
+                              "rule": {
+                                "ability_id": "combat-doctrines-space-wolves",
+                                "option_id": "devastator-doctrine"
+                              }
+                            }
+                          },
+                          "effect": {
+                            "type": "re-roll",
+                            "target": "this-unit",
+                            "modifier": {
+                              "roll": "hit",
+                              "subset": "ones",
+                              "weapons": {
+                                "type": "ranged"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "ability-grant",
+                    "target": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "ADEPTUS ASTARTES"
+                      ],
+                      "none_of": [
+                        "MONSTER",
+                        "VEHICLE"
+                      ]
+                    },
+                    "modifier": {
+                      "ability": {
+                        "ability_id": "master-of-wolves-space-wolves",
+                        "definition_id": "ferocious-strike"
+                      },
+                      "definition": {
+                        "type": "ability-part",
+                        "name": "Ferocious Strike",
+                        "effect": {
+                          "type": "conditional",
+                          "condition": {
+                            "operator": "and",
+                            "operands": [
+                              {
+                                "type": "rule-active",
+                                "parameters": {
+                                  "rule": {
+                                    "ability_id": "combat-doctrines-space-wolves",
+                                    "option_id": "tactical-doctrine"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "matches",
+                                "parameters": {
+                                  "subject": "defender",
+                                  "filter": {
+                                    "within": {
+                                      "of": "attacker",
+                                      "range": {
+                                        "inches": 9
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "effect": {
+                            "type": "weapon-ability-grant",
+                            "target": "this-unit",
+                            "modifier": {
+                              "keywords": [
+                                {
+                                  "keyword_id": "sustained-hits",
+                                  "parameters": {
+                                    "value": 1
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "ability-grant",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "LOGAN GRIMNAR"
+                ]
+              },
+              "modifier": {
+                "ability": {
+                  "ability_id": "master-of-wolves-space-wolves",
+                  "definition_id": "howling-onslaught"
+                },
+                "definition": {
+                  "type": "ability-part",
+                  "name": "Howling Onslaught",
+                  "effect": {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "phase-is",
+                          "parameters": {
+                            "phase": "command"
+                          }
+                        },
+                        {
+                          "type": "player-turn-is",
+                          "parameters": {
+                            "turn": "your-turn"
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "ability-grant",
+                          "target": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "ADEPTUS ASTARTES"
+                            ],
+                            "any_of": [
+                              "MONSTER",
+                              "VEHICLE"
+                            ]
+                          },
+                          "modifier": {
+                            "ability": {
+                              "ability_id": "master-of-wolves-space-wolves",
+                              "definition_id": "encircling-jaws"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ability-grant",
+                          "target": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "ADEPTUS ASTARTES"
+                            ],
+                            "any_of": [
+                              "MONSTER",
+                              "VEHICLE"
+                            ]
+                          },
+                          "modifier": {
+                            "ability": {
+                              "ability_id": "master-of-wolves-space-wolves",
+                              "definition_id": "hunters-eye"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ability-grant",
+                          "target": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "ADEPTUS ASTARTES"
+                            ],
+                            "any_of": [
+                              "MONSTER",
+                              "VEHICLE"
+                            ]
+                          },
+                          "modifier": {
+                            "ability": {
+                              "ability_id": "master-of-wolves-space-wolves",
+                              "definition_id": "ferocious-strike"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "optional": true,
+                  "usage": {
+                    "frequency": "n-per-battle",
+                    "count": 1,
+                    "per": "army"
+                  },
+                  "duration": "until-next-command-phase"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "composition",
+                "with": {
+                  "all_of": [
+                    "SPACE WOLVES"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "single-chapter"
+              }
+            }
+          ]
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "788a771e0c945cb0ae09b3f877e6c938a555de8ea4c1513b362ada25b4e0fb36"
   },
   {
     "ability_id": "oath-of-moment-space-wolves",

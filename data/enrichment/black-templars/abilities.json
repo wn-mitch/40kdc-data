@@ -2652,19 +2652,105 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "black-templars",
     "detachment_id": "fist-of-the-god-emperor",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-started",
+            "filter": {
+              "move_types": [
+                "surge"
+              ]
+            },
+            "subject": {
+              "owner": "friendly",
+              "all_of": [
+                "CRUSADER SQUAD"
+              ]
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "select-objective",
+            "selector": {
+              "filter": {},
+              "bind_as": "closest-objective",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "move-modifier",
+                "target": "event-subject",
+                "modifier": {
+                  "applies_to_moves": [
+                    "surge"
+                  ],
+                  "ends_nearest": {
+                    "of": {
+                      "objective": {
+                        "selection_var": "closest-objective"
+                      }
+                    },
+                    "per": "model",
+                    "instead_of": "closest-enemy-unit"
+                  }
+                }
+              },
+              "trigger": {
+                "event": "move-started",
+                "subject": "event-subject",
+                "filter": {
+                  "move_types": [
+                    "surge"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "composition",
+                "with": {
+                  "all_of": [
+                    "BLACK TEMPLARS"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "single-chapter"
+              }
+            }
+          ]
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "b6df2c39eb4f2a54b399018eda0ef0fdca0a5d578e7bcf91f4eeeada582658e5"
   },
   {
     "ability_id": "reaping-tally-black-templars",

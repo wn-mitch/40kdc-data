@@ -292,6 +292,43 @@ func translateIgnoreModifiers(node, source map[string]any, opts dslOpts, out *ef
 	}
 }
 
+// ownDefinitions is the set of abilities a record prints inside itself (an ability-grant whose
+// `ability` is {ability_id: <this record>, definition_id} and which carries the `definition`), by
+// definition id. The first printing of a definition id wins; an object's keys are visited in
+// sorted order so the choice is deterministic.
+func ownDefinitions(effect any, abilityID string) map[string]any {
+	found := map[string]any{}
+	var visit func(node any)
+	visit = func(node any) {
+		if list, ok := asList(node); ok {
+			for _, item := range list {
+				visit(item)
+			}
+			return
+		}
+		m, ok := asMap(node)
+		if !ok {
+			return
+		}
+		if modifier, ok := asMap(m["modifier"]); ok && m["type"] == "ability-grant" {
+			definition, printed := asMap(modifier["definition"])
+			ability, named := asMap(modifier["ability"])
+			if printed && named && ability["ability_id"] == abilityID {
+				if id, ok := ability["definition_id"].(string); ok {
+					if _, seen := found[id]; !seen {
+						found[id] = definition
+					}
+				}
+			}
+		}
+		for _, key := range sortedKeys(m) {
+			visit(m[key])
+		}
+	}
+	visit(effect)
+	return found
+}
+
 // translateAbilityGrant translates a printed grant's (`definition`) body for the holders, whether
 // the grant names the ability it prints ({ability_id, definition_id}) or not. A named ability
 // without a printed definition is unsupported: its owner is not resolved. Otherwise it handles the core abilities the buff layer models on the unit being attacked:
@@ -299,6 +336,20 @@ func translateIgnoreModifiers(node, source map[string]any, opts dslOpts, out *ef
 // the other defender-side leaves, they contribute nothing to the buffed unit's own attacks.
 func translateAbilityGrant(node, source map[string]any, opts dslOpts, out *effectTranslation) {
 	modifier := modifierOrEmpty(node)
+	// "benefit from the <this record> rule": a reference to an ability this record prints is that
+	// printed body.
+	if ability, named := modifier["ability"].(map[string]any); named && ability["ability_id"] == opts.abilityID {
+		if _, printed := modifier["definition"].(map[string]any); !printed {
+			if own, ok := opts.definitions[jsStr(ability["definition_id"])]; ok {
+				withDefinition := make(map[string]any, len(modifier)+1)
+				for k, v := range modifier {
+					withDefinition[k] = v
+				}
+				withDefinition["definition"] = own
+				modifier = withDefinition
+			}
+		}
+	}
 	if _, named := modifier["ability"].(map[string]any); named {
 		if _, printed := modifier["definition"].(map[string]any); !printed {
 			out.unsupported = append(out.unsupported, unsup("ability-grant: named ability ownership is not resolved by the buff engine", node))

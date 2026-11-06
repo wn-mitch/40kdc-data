@@ -30,6 +30,7 @@ from wh40kdc.cruncher.from_dsl_shapes import (
     UNSUPPORTED_SHAPE_REASONS,
     StanceGate,
     enumerate_roll_allocation,
+    own_definitions,
     roll_label,
     scaled_to_cap,
     self_designation_gate,
@@ -178,6 +179,9 @@ def _translate_effect(
         "usage": activation.get("usage") if activation else None,
         # Tags the owning ability designates on the units holding it.
         "selfDesignations": self_designations(effect, ability_id),
+        # The abilities the owning record prints, by definition id, for a grant naming one by
+        # reference.
+        "definitions": own_definitions(effect, ability_id),
     }
     # The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
     effect, opts = _on_attack_roll(activation.get("trigger") if activation else None, effect, opts)

@@ -174,19 +174,40 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "ultramarines",
     "detachment_id": "blade-of-ultramar",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "army-includes",
+        "parameters": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "MARNEUS CALGAR"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "stance-selection-capacity",
+        "modifier": {
+          "ability_id": "combat-doctrines-adeptus-astartes",
+          "additional_selections": 1,
+          "allocation": "choose-one-option"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "optional": true,
+    "source_digest": "bd8bf8ac9558985ac80aa3024b33fc41f8d2aa08c8cfbd0e3c5a24da07fe72ba"
   },
   {
     "ability_id": "oath-of-macragge-blade-of-ultramar-ultramarines",

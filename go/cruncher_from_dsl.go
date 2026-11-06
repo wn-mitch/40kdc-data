@@ -54,6 +54,9 @@ type dslOpts struct {
 	// selfDesignations holds the tags the owning ability designates on the
 	// units holding it (selfDesignations); nil outside an ability walk.
 	selfDesignations map[string]bool
+	// definitions holds the abilities the owning record prints, by definition id, for a grant
+	// that names one by reference (ownDefinitions).
+	definitions map[string]any
 	// attackRoll is set inside a part triggered by each hit or wound roll of the attack: that
 	// roll and its outcome.
 	attackRoll *attackRollInfo
@@ -135,7 +138,7 @@ func translateEffect(effect any, source map[string]any, context map[string]any, 
 	if len(activation) > 0 {
 		act = activation[0]
 	}
-	opts := dslOpts{context: context, perspective: perspective, abilityID: abilityID, selfDesignations: selfDesignations(effect, abilityID)}
+	opts := dslOpts{context: context, perspective: perspective, abilityID: abilityID, selfDesignations: selfDesignations(effect, abilityID), definitions: ownDefinitions(effect, abilityID)}
 	if act != nil {
 		opts.duration = act["duration"]
 		opts.usage = act["usage"]

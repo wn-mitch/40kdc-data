@@ -4,6 +4,8 @@
 //! `translateRollResult`, `translateIgnoreModifiers`, `translateAbilityGrant`,
 //! `weaponApplicability` and `combineOptional` in `tools/src/cruncher/from-dsl.ts`.
 
+use std::collections::HashMap;
+
 use serde_json::{json, Value};
 
 use super::applicability::combine;
@@ -210,6 +212,42 @@ pub(super) fn ignore_modifiers(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     }
 }
 
+/// The abilities a record prints inside itself (an ability-grant whose `ability` is
+/// `{ability_id: <this record>, definition_id}` and which carries the `definition`), by definition
+/// id. The first printing of a definition id wins.
+pub(super) fn own_definitions(effect: &Value, ability_id: &str) -> HashMap<String, Value> {
+    fn visit(node: &Value, ability_id: &str, found: &mut HashMap<String, Value>) {
+        match node {
+            Value::Array(items) => items.iter().for_each(|item| visit(item, ability_id, found)),
+            Value::Object(n) => {
+                if is_str(n, "type", "ability-grant") {
+                    if let Some(m) = object(n.get("modifier")) {
+                        let definition = m.get("definition").filter(|d| d.is_object());
+                        let ability = object(m.get("ability"));
+                        if let (Some(definition), Some(ability)) = (definition, ability) {
+                            if ability.get("ability_id").and_then(Value::as_str) == Some(ability_id)
+                            {
+                                if let Some(id) =
+                                    ability.get("definition_id").and_then(Value::as_str)
+                                {
+                                    found
+                                        .entry(id.to_owned())
+                                        .or_insert_with(|| definition.clone());
+                                }
+                            }
+                        }
+                    }
+                }
+                n.values().for_each(|value| visit(value, ability_id, found));
+            }
+            _ => {}
+        }
+    }
+    let mut found = HashMap::new();
+    visit(effect, ability_id, &mut found);
+    found
+}
+
 /// A printed grant (`definition`) translates its body for the holders, whether the grant names the
 /// ability it prints (`{ability_id, definition_id}`) or not. A named ability without a printed
 /// definition is unsupported: its owner is not resolved. Otherwise, the core abilities the buff
@@ -218,7 +256,21 @@ pub(super) fn ignore_modifiers(node: &Obj, opts: &WalkOpts, out: &mut Out) {
 /// nothing to the buffed unit's own attacks.
 pub(super) fn ability_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let empty = Obj::new();
-    let m = object(node.get("modifier")).unwrap_or(&empty);
+    let mut m = object(node.get("modifier")).unwrap_or(&empty);
+    // "benefit from the <this record> rule": a reference to an ability this record prints is that
+    // printed body.
+    let resolved;
+    if !m.get("definition").is_some_and(Value::is_object) {
+        let own = object(m.get("ability"))
+            .filter(|a| a.get("ability_id").and_then(Value::as_str) == Some(opts.ability_id))
+            .and_then(|a| opts.definitions.get(&js_string(a.get("definition_id"))));
+        if let Some(own) = own {
+            let mut with_definition = m.clone();
+            with_definition.insert("definition".to_owned(), own.clone());
+            resolved = with_definition;
+            m = &resolved;
+        }
+    }
     if m.get("ability").is_some_and(Value::is_object)
         && !m.get("definition").is_some_and(Value::is_object)
     {

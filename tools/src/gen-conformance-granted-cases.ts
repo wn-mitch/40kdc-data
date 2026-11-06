@@ -71,3 +71,35 @@ export function canonicalGrantedRecordCases() {
     return { ...row, expected };
   });
 }
+
+export const OWN_DEFINITION_CASE_PREFIX = "canonical/own-definition/";
+
+/**
+ * Fabricated grants that name, without printing it, an ability their own record prints in another
+ * grant: the reference translates as that printed body. A definition the record does not print,
+ * or the same effect read as another record's, stays unresolved.
+ */
+export function canonicalOwnDefinitionCases() {
+  const source = { kind: "ability", abilityId: "fabricated-printer", abilityKind: "unit" } as const;
+  const named = { ability_id: "fabricated-printer" };
+  const lethal = { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }] } };
+  const printed = { type: "ability-grant", target: { owner: "friendly", all_of: ["NOT THIS UNIT"] }, modifier: { ability: { ...named, definition_id: "fabricated-part" }, definition: { type: "ability-part", name: "Fabricated Part", effect: lethal } } };
+  const reference = (definition_id: string) => ({ type: "ability-grant", target: "this-unit", modifier: { ability: { ...named, definition_id } } });
+  const inputs: Array<{ id: string; effect: unknown; abilityId?: string }> = [
+    { id: "self-reference", effect: { type: "sequence", steps: [printed, reference("fabricated-part")] } },
+    { id: "unprinted-definition", effect: { type: "sequence", steps: [printed, reference("fabricated-unprinted")] } },
+    { id: "another-record", effect: { type: "sequence", steps: [printed, reference("fabricated-part")] }, abilityId: "fabricated-other-record" },
+  ];
+  return inputs.map((input) => {
+    const rowSource = { ...source, abilityId: input.abilityId ?? source.abilityId };
+    const row: DslInput = {
+      caseId: `${OWN_DEFINITION_CASE_PREFIX}${input.id}`,
+      abilityId: rowSource.abilityId,
+      source: rowSource,
+      effect: input.effect,
+      context: { phase: "shooting" },
+      perspective: "attacker",
+    };
+    return dslExpectation(row);
+  });
+}

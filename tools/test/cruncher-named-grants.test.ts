@@ -25,6 +25,20 @@ describe("a grant of a named ability", () => {
     expect(out.unsupported.map((entry) => entry.reason)).toEqual(["ability-grant: named ability ownership is not resolved by the buff engine"]);
   });
 
+  // Master of Wolves: a later grant of the record's own abilities names them, since each definition is declared once.
+  it("translates a reference to a definition its own record prints elsewhere", () => {
+    const printed = { type: "ability-grant", target: { owner: "friendly", all_of: ["NOT THIS UNIT"] }, modifier: { ability: named, definition: { type: "ability-part", name: "Fabricated Part", effect: lethal } } };
+    const reference = (definition_id: string) => ({ type: "ability-grant", target: "this-unit", modifier: { ability: { ...named, definition_id } } });
+    const out = effectToBuffs({ type: "sequence", steps: [printed, reference("fabricated-part")] }, source, { phase: "shooting" }, "attacker");
+    expect(out.applied.map((buff) => buff.contribution)).toEqual([{ type: "extra-keyword", keywordRef: { keyword_id: "lethal-hits" } }]);
+    // A definition the record does not print, or another record's, stays unresolved.
+    const missing = effectToBuffs({ type: "sequence", steps: [printed, reference("fabricated-other")] }, source, { phase: "shooting" }, "attacker");
+    expect(missing.applied).toEqual([]);
+    expect(missing.unsupported.map((entry) => entry.reason)).toContain("ability-grant: named ability ownership is not resolved by the buff engine");
+    const elsewhere = effectToBuffs({ type: "sequence", steps: [printed, reference("fabricated-part")] }, { ...source, abilityId: "fabricated-other-record" }, { phase: "shooting" }, "attacker");
+    expect(elsewhere.applied).toEqual([]);
+  });
+
   it("reaches a unit a friendly filter selects only by holding the ability being resolved", () => {
     const grant = (has: string) => ({
       type: "ability-grant",

@@ -220,7 +220,7 @@ export function compileGranted(leaves: readonly CompileLeaf[], sourceText: strin
     && abilityId !== undefined && leaf.parameters.ability === abilityId;
   let ownGranted: GrantedBody[] = [];
   const withSelfGrant = (leaves: CompileLeaf[]) => ownGranted.length === 0 ? leaves
-    : leaves.map((leaf) => isSelfGrant(leaf) ? { ...leaf, parameters: { ...leaf.parameters, granted: ownGranted } } : leaf);
+    : leaves.map((leaf) => isSelfGrant(leaf) ? { ...leaf, parameters: { ...leaf.parameters, granted: ownGranted, self_reference: true } } : leaf);
   const compileBodies = (bodies: Fold["bodies"]) => {
   for (const body of bodies) {
     const name = abilityId ? `${body.label ?? "The unnamed granted ability"} in ${abilityId}` : body.label ?? "The unnamed granted ability";
@@ -253,7 +253,7 @@ export function compileGranted(leaves: readonly CompileLeaf[], sourceText: strin
   if (errors.length) return { ok: false, signature, errors };
   const host = fold.host.map((leaf) => {
     if (granted.has(leaf)) return { ...leaf, parameters: { ...leaf.parameters, granted: granted.get(leaf), ...(selfHeld(leaf) ? { granted_self: true } : {}) } };
-    if (isSelfGrant(leaf) && ownGranted.length) return { ...leaf, parameters: { ...leaf.parameters, granted: ownGranted } };
+    if (isSelfGrant(leaf) && ownGranted.length) return { ...leaf, parameters: { ...leaf.parameters, granted: ownGranted, self_reference: true } };
     return leaf;
   });
   const result = compileHost(host, sourceText);
@@ -271,9 +271,13 @@ export function compileGranted(leaves: readonly CompileLeaf[], sourceText: strin
 export function printedGrantEffect(leaf: CompileLeaf, target: Node | string): Node {
   const granted = leaf.parameters.granted as GrantedBody[] | undefined;
   if (!granted?.length) throw new CompileError(`ability-record-grant at byte ${leaf.start_byte} prints its abilities, but no body was folded onto it.`);
+  // A grant of this record to other units names each body the record already prints by reference: a
+  // named definition is declared once, in its owning ability. An unnamed body has no id to name, so it is printed again.
+  const reference = leaf.parameters.self_reference === true;
   const nodes = granted.map((body) => matchingWeapon(leaf, body, leaf.parameters.granted_self === true
     ? structuredClone(body.part)
-    : { type: "ability-grant", target: structuredClone(body.narrow ? narrowTarget(target, body.narrow) : target), modifier: { ...(body.ability ? { ability: body.ability } : {}), definition: structuredClone(body.part) } }));
+    : { type: "ability-grant", target: structuredClone(body.narrow ? narrowTarget(target, body.narrow) : target),
+      modifier: reference && typeof body.ability === "object" ? { ability: structuredClone(body.ability) } : { ...(body.ability ? { ability: body.ability } : {}), definition: structuredClone(body.part) } }));
   return nodes.length === 1 ? nodes[0]! : { type: "sequence", steps: nodes };
 }
 

@@ -219,6 +219,36 @@ def self_designations(effect: Any, ability_id: str) -> frozenset[str]:
     return frozenset(tags)
 
 
+def own_definitions(effect: Any, ability_id: str) -> dict[str, Any]:
+    """The abilities a record prints inside itself (an ability-grant whose ``ability`` is
+    ``{ability_id: <this record>, definition_id}`` and which carries the ``definition``), by
+    definition id. The first printing of a definition id wins."""
+    found: dict[str, Any] = {}
+
+    def visit(node: Any) -> None:
+        if isinstance(node, list):
+            for item in node:
+                visit(item)
+            return
+        if not isinstance(node, dict):
+            return
+        modifier = node.get("modifier")
+        if node.get("type") == "ability-grant" and isinstance(modifier, dict):
+            ability = modifier.get("ability")
+            if (
+                isinstance(modifier.get("definition"), dict)
+                and isinstance(ability, dict)
+                and ability.get("ability_id") == ability_id
+                and isinstance(ability.get("definition_id"), str)
+            ):
+                found.setdefault(ability["definition_id"], modifier["definition"])
+        for value in node.values():
+            visit(value)
+
+    visit(effect)
+    return found
+
+
 def self_designation_gate(condition: dict[str, Any], opts: dict[str, Any]) -> str | None:
     """The tag of a ``this-unit`` designation gate the ability itself grants its holders, when the
     context does not declare the unit's designations: the player readies the unit, so the gate is
