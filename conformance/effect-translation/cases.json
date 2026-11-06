@@ -41253,6 +41253,27 @@
     }
   },
   {
+    "caseId": "fidelity/designate-visible-terrain",
+    "effect": {
+      "type": "designate",
+      "target": "this-unit",
+      "modifier": {
+        "tag": "identified",
+        "subject": {
+          "terrain_area": {
+            "visible": true
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, one visible terrain area is marked as identified."
+    }
+  },
+  {
     "caseId": "fidelity/heal-two-d3",
     "effect": {
       "type": "heal",

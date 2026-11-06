@@ -105,6 +105,7 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "honour-of-the-hold-target",
         "honour-of-the-hold-yp-spent",
         "hunted",
+        "identified",
         "illuminated",
         "illuminated-priority-target",
         "imperial-law-target",

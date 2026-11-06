@@ -4204,6 +4204,8 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/set-up-disembark-within", effect: { type: "set-up", target: "this-unit", modifier: { to: "battlefield", from: "transport", placement: "within" } } },
     // "That enemy unit can then select new charge targets for that charge move".
     { caseId: "fidelity/targeting-reselect-charge", effect: { type: "targeting", target: "event-subject", modifier: { may: "reselect", kind: "charge" } } },
+    // "select one visible terrain feature. That terrain feature is identified".
+    { caseId: "fidelity/designate-visible-terrain", effect: { type: "designate", target: "this-unit", modifier: { tag: "identified", subject: { terrain_area: { visible: true } } } } },
     // A heal of a two-dice amount.
     { caseId: "fidelity/heal-two-d3", effect: { type: "heal", target: "this-model", modifier: { amount: "2D3" } } },
     // A cap on a roll after modifiers: "if the result is greater than 6, change it to 6".

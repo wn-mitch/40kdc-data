@@ -701,6 +701,9 @@ func regionPhrase(r map[string]any) string {
 	where := "a terrain area"
 	if area["footprint"] != nil {
 		where = "the " + dekebab(ejstr(area["footprint"])) + " terrain area"
+	} else if area["visible"] == true {
+		// "select one visible terrain feature": the one area the rule picks, visible to its unit.
+		where = "one visible terrain area"
 	}
 	if area["designated"] != nil {
 		where += " tagged " + dekebab(ejstr(area["designated"]))

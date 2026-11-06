@@ -156,6 +156,11 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.clears_on !== undefined) modifier.clears_on = leaf.parameters.clears_on;
       // apply-mark@5: the selected objective marker carries the tag (designate's objective subject).
       // The stratagem's effect has no unit to tag, so the target is this unit, as optional costs do.
+      // apply-mark@6: the one visible terrain feature the rule picks carries the tag.
+      if (leaf.parameters.subject === "visible-terrain") {
+        modifier.subject = { terrain_area: { visible: true } };
+        return { type: "designate", target: "this-unit", modifier };
+      }
       if (leaf.parameters.subject === "selected-objective") {
         if (typeof leaf.parameters.selection_var !== "string") throw new CompileError("apply-mark names the selected objective marker, but this record selects no objective marker.");
         if (leaf.parameters.by !== undefined) throw new CompileError("A designation on an objective marker has no applier; drop by.");

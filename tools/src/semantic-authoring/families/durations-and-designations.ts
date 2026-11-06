@@ -24,6 +24,9 @@ const WIDENED_TAGS = ["corrupted", "warded"] as const;
  * marker the record's select leaf binds), and any registered designation as the tag. Both are
  * staged through a value the previous version accepts, then put back.
  */
+/** apply-mark's terrain subject: the one terrain feature, visible to the rule's unit, that the rule picks. */
+const VISIBLE_TERRAIN = "visible-terrain";
+
 const APPLY_MARK_OBJECTIVE: FamilyExtension = {
   family: "apply-mark",
   version: 5,
@@ -200,4 +203,16 @@ export const DURATION_AND_DESIGNATION_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
  APPLY_MARK_OBJECTIVE,
+  {
+    // "select one visible terrain feature. That terrain feature is identified": the tag goes on the terrain feature picked.
+    family: "apply-mark",
+    version: 6,
+    description: "As the previous version, plus subject visible-terrain: the rule picks one terrain feature visible to its unit and that feature carries the tag (\"select one visible terrain feature. That terrain feature is identified\"). It takes no by.",
+    schema: (previous) => withProperties(previous, { subject: widenedEnum(previous, "subject", [VISIBLE_TERRAIN]) }),
+    normalize: (input, previous) => {
+      if (input.subject !== VISIBLE_TERRAIN) return previous(input);
+      if ("by" in input) throw new TypeError("apply-mark on a terrain feature has no applier; drop by.");
+      return { ...previous({ ...input, subject: "this-unit" }), subject: VISIBLE_TERRAIN };
+    },
+  },
 ];

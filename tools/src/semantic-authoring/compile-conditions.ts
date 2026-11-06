@@ -663,6 +663,7 @@ export function condition(leaf: CompileLeaf): Node {
       const kind = closed(leaf, "region_kind");
       const region: Node = kind === "territory" ? { territory: closed(leaf, "territory") }
         : kind === "rule-region" ? { rule_region: { region_id: closed(leaf, "region_id"), owner_faction: closed(leaf, "owner_faction") } }
+        : kind === "designated-terrain" ? { terrain_area: { designated: closed(leaf, "designation") } }
         : { terrain_area: { footprint: closed(leaf, "terrain_tag") } };
       const parameters: Node = { region };
       if (leaf.parameters.wholly === true) parameters.wholly = true;

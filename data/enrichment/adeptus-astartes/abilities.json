@@ -11606,9 +11606,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "lieutenant-with-combi-weapon"
     ],
@@ -11616,11 +11615,73 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "designate",
+            "target": "this-unit",
+            "modifier": {
+              "tag": "identified",
+              "subject": {
+                "terrain_area": {
+                  "visible": true
+                }
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "in-region",
+              "parameters": {
+                "subject": "recipient",
+                "region": {
+                  "terrain_area": {
+                    "designated": "identified"
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "enemy"
+              },
+              "modifier": {
+                "stat": "detection-range",
+                "operation": "add",
+                "value": 3
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "activated",
+    "optional": true,
+    "source_digest": "3ef7b507a9eea4826c442a6bbbf4aa4b76a12e8d952dc46b4259ff7c6beadbd4"
   },
   {
     "ability_id": "purgation-push-gravis-linebreaker-force-adeptus-astartes",

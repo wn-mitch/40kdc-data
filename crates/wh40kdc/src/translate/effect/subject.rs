@@ -365,6 +365,10 @@ pub(crate) fn region_phrase(r: &P) -> String {
     let area = obj(nn(r, "terrain_area"));
     let mut place = match nn(area, "footprint") {
         Some(f) => format!("the {} terrain area", dekebab(&jv(f))),
+        // "select one visible terrain feature": the one area the rule picks, visible to its unit.
+        None if area.get("visible").and_then(Value::as_bool) == Some(true) => {
+            "one visible terrain area".to_string()
+        }
         None => "a terrain area".to_string(),
     };
     if let Some(d) = nn(area, "designated") {

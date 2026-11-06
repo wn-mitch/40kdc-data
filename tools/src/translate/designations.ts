@@ -99,6 +99,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "honour-of-the-hold-target",
   "honour-of-the-hold-yp-spent",
   "hunted",
+  "identified",
   "illuminated",
   "illuminated-priority-target",
   "imperial-law-target",

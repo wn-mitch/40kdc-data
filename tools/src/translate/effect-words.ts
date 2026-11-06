@@ -416,7 +416,8 @@ export function regionPhrase(r: P): string {
   if (r.rule_region) return titleCase(jstr((r.rule_region as P).region_id));
   if (r.territory) return territoryPhrase(jstr(r.territory));
   const area = (r.terrain_area ?? {}) as P;
-  let where = area.footprint != null ? `the ${dekebab(jstr(area.footprint))} terrain area` : "a terrain area";
+  // "select one visible terrain feature": the one area the rule picks, visible to its unit.
+  let where = area.footprint != null ? `the ${dekebab(jstr(area.footprint))} terrain area` : area.visible === true ? "one visible terrain area" : "a terrain area";
   if (area.designated != null) where += ` tagged ${dekebab(jstr(area.designated))}`;
   return where;
 }

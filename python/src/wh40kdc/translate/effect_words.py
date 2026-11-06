@@ -625,6 +625,8 @@ def region_phrase(r: dict[str, Any]) -> str:
     where = (
         f"the {dekebab(jstr(area['footprint']))} terrain area"
         if area.get("footprint") is not None
+        else "one visible terrain area"
+        if area.get("visible") is True
         else "a terrain area"
     )
     if area.get("designated") is not None:

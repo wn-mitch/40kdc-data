@@ -4,6 +4,7 @@ import { ANTECEDENT } from "../antecedent-families.js";
 import type { SemanticFamilyDefinition } from "../contracts.js";
 import { ENTITY_ID_PATTERN } from "../core-families.js";
 import { type FamilyExtension, optional, standIn, widenedEnum, withProperties } from "../family-extension-helpers.js";
+import { designationId } from "./shared.js";
 
 /** What a placed marker's near_inches is measured to (battlefield-marker@4). */
 const MARKER_NEAR_OF = ["this-unit", "this-model", "event-subject"] as const;
@@ -391,6 +392,27 @@ export const REGION_EXTENSIONS: readonly FamilyExtension[] = [
         }
       }
       return normalized;
+    },
+  },
+  {
+    // "While an enemy unit is within an identified terrain feature": a terrain feature a rule tagged.
+    family: "in-region",
+    version: 4,
+    description: "As the previous version, plus region_kind designated-terrain with designation: within a terrain feature a rule tagged with that designation (\"within an identified terrain feature\"). Such a leaf takes no terrain_tag, territory or rule region.",
+    schema: (previous) => withProperties(previous, {
+      region_kind: widenedEnum(previous, "region_kind", ["designated-terrain"]),
+      designation: optional({ type: "string", pattern: ENTITY_ID_PATTERN.source, "x-only-when": { region_kind: ["designated-terrain"] } }),
+    }),
+    normalize: (input, previous) => {
+      if (input.region_kind !== "designated-terrain") {
+        if ("designation" in input) throw new TypeError("in-region.designation belongs to region_kind designated-terrain.");
+        return previous(input);
+      }
+      if ("terrain_tag" in input || "territory" in input || "region_id" in input) throw new TypeError("in-region with region_kind designated-terrain takes designation, not terrain_tag, territory or region_id.");
+      const designation = designationId(input.designation, "in-region.designation");
+      const { designation: _designation, region_kind: _kind, ...rest } = input;
+      const { terrain_tag: _placeholder, ...checked } = previous({ ...rest, region_kind: "terrain-area", terrain_tag: "designated-terrain" });
+      return { ...checked, region_kind: "designated-terrain", designation };
     },
   },
 ];

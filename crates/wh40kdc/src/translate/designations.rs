@@ -96,6 +96,7 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "honour-of-the-hold-target",
     "honour-of-the-hold-yp-spent",
     "hunted",
+    "identified",
     "illuminated",
     "illuminated-priority-target",
     "imperial-law-target",

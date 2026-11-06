@@ -44,7 +44,7 @@ function conditionCase(parameters: Record<string, unknown>, expected: Record<str
 
 describe("Semantic authoring named army regions: in-region rule-region", () => {
   it("is at version 3 and compiles a rule region as the rule_region of an in-region test", () => {
-    expect(currentFamilyVersion("in-region")).toBe(3);
+    expect(currentFamilyVersion("in-region")).toBeGreaterThanOrEqual(3);
     conditionCase({ ...RULE_REGION, wholly: true, models: "every" },
       { type: "in-region", parameters: { region: { rule_region: { region_id: "flow-of-magic", owner_faction: "thousand-sons" } }, wholly: true, models: "every" } });
   });
@@ -165,5 +165,31 @@ describe("Semantic authoring named army regions: named-region-state is the whole
     const beside = compileLeaves([region, leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" })]);
     expect(beside.ok).toBe(false);
     if (!beside.ok) expect(beside.errors).toEqual(["named-region-state must be the ability's only leaf."]);
+  });
+});
+
+describe("a terrain feature a rule tags: apply-mark@6 visible-terrain and in-region@4 designated-terrain", () => {
+  it("tags one visible terrain area and reads the tag back as the region an enemy unit stands in", () => {
+    const text = "Select one visible terrain feature. That terrain feature is identified. While an enemy unit is within an identified terrain feature, that enemy unit has +3 to its Move characteristic.";
+    const result = compileLeaves(placed(text, [
+      ["Select one visible terrain feature. That terrain feature is identified", "apply-mark", { subject: "visible-terrain", tag: "identified" }],
+      ["an enemy unit", "unit-filter", { side: "enemy" }],
+      ["is within an identified terrain feature", "in-region", { subject: "antecedent", region_kind: "designated-terrain", designation: "identified" }],
+      ["that enemy unit has +3 to its Move characteristic", "characteristic-modifier", { subject: "antecedent", characteristics: ["M"], operation: "add", value: 3, weapon_type: "all" }],
+    ]), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const json = JSON.stringify(result.mechanics);
+    expect(json).toContain('{"type":"designate","target":"this-unit","modifier":{"tag":"identified","subject":{"terrain_area":{"visible":true}}}}');
+    expect(json).toContain('"region":{"terrain_area":{"designated":"identified"}}');
+    const check = checkEntry(entryWithMechanics(base(), result.mechanics as never));
+    expect(check.errors).toEqual([]);
+    expect(check.rendered_text).toContain("One visible terrain area is marked as identified");
+  });
+
+  it("refuses a terrain tag with an applier, a designation outside the registry, and a designation on another region kind", () => {
+    const norm = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters, currentFamilyVersion(family));
+    expect(() => norm("apply-mark", { subject: "visible-terrain", tag: "identified", by: "this-unit" })).toThrow(/no applier/u);
+    expect(() => norm("in-region", { region_kind: "designated-terrain", designation: "not-a-registered-tag" })).toThrow();
+    expect(() => norm("in-region", { region_kind: "terrain-area", terrain_tag: "ruins", designation: "identified" })).toThrow(/designated-terrain/u);
   });
 });
