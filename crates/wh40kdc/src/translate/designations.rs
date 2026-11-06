@@ -79,6 +79,7 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "focused-hunters-target",
     "focused-immolation-target",
     "focused-strikes-target",
+    "forgefather-target",
     "grav-pinned",
     "grounded",
     "guidance-of-the-ancients",

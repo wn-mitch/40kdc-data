@@ -130,6 +130,20 @@ describe("and/or between conditions (SS-C)", () => {
     expect(json).not.toContain('"operator":"and"');
   });
 
+  it("joins two weapon abilities written \"[A]/[B]\" as either one, and no other slashed pair", () => {
+    const slash = "Each time this unit makes [Melta]/[Torrent] attacks, add 1 to the Hit roll.";
+    const filters = (second: [string, string, Record<string, unknown>]) => compileLeaves(placed(slash,
+      ["[Melta]", "attack-filter", { weapon_keyword: "MELTA" }], second,
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), slash);
+    const either = filters(["[Torrent]", "attack-filter", { weapon_keyword: "TORRENT" }]);
+    expect(either.ok ? "ok" : either.errors.join(" | ")).toBe("ok");
+    expect(JSON.stringify(either.ok ? either.mechanics : {})).toContain('"operator":"or"');
+    // A slash between a weapon ability and another kind of filter keeps today's stacking.
+    const mixed = filters(["[Torrent]", "attack-filter", { attack_type: "ranged" }]);
+    expect(mixed.ok ? "ok" : mixed.errors.join(" | ")).toBe("ok");
+    expect(JSON.stringify(mixed.ok ? mixed.mechanics : {})).not.toContain('"operator":"or"');
+  });
+
   it("keeps two conditions written \"and\" stacked as AND", () => {
     const and = text.replace("and/or", "and");
     const result = compileLeaves(placed(and,

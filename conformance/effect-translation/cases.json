@@ -41256,6 +41256,41 @@
     }
   },
   {
+    "caseId": "fidelity/set-up-disembark-within",
+    "effect": {
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "battlefield",
+        "from": "transport",
+        "placement": "within"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit can be set up on the battlefield from its Transport within the set-up distance of its Transport, instead of wholly within it."
+    }
+  },
+  {
+    "caseId": "fidelity/targeting-reselect-charge",
+    "effect": {
+      "type": "targeting",
+      "target": "event-subject",
+      "modifier": {
+        "may": "reselect",
+        "kind": "charge"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the triggering unit can select new targets for that charge."
+    }
+  },
+  {
     "caseId": "fidelity/heal-two-d3",
     "effect": {
       "type": "heal",

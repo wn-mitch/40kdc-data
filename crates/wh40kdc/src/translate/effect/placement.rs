@@ -44,6 +44,14 @@ pub(crate) fn placement_phrase(m: &P) -> String {
                 "wholly-within" => {
                     format!("wholly within {} of {origin}", range_phrase(m.get("range")))
                 }
+                // A disembark with no range of its own: the core set-up distance, relaxed from wholly within.
+                "within"
+                    if nn(m, "range").is_none()
+                        && m.get("from").and_then(Value::as_str) == Some("transport") =>
+                {
+                    "within the set-up distance of its Transport, instead of wholly within it"
+                        .to_string()
+                }
                 "within" => format!("within {} of {origin}", range_phrase(m.get("range"))),
                 _ => placement_name(&k)
                     .map(str::to_string)

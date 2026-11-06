@@ -1,6 +1,6 @@
 import type { FamilyExtension } from "../family-extension-helpers.js";
-import { optional, properties, withProperties } from "../family-extension-helpers.js";
-import { enumSet, enumValue } from "../family-validation.js";
+import { optional, properties, widenedEnum, withProperties } from "../family-extension-helpers.js";
+import { enumSet, enumValue, exactKeys } from "../family-validation.js";
 import { TARGETING_KINDS } from "../targeting-families.js";
 
 /**
@@ -12,6 +12,9 @@ import { TARGETING_KINDS } from "../targeting-families.js";
 const HISTORY_WINDOWS = ["battle-round"] as const;
 
 const TARGET_HISTORY = ["engaged-with-by-at-turn-start", "attacked-by-another-unit-this-phase", "charged-by-another-unit-this-phase"] as const;
+
+/** The actions whose targets a unit can select again ("can then select new charge targets"). */
+const RESELECT_KINDS = ["charge", "attack", "shoot", "fight"] as const;
 
 /** Moves the unit being targeted made ("enemy units that made a Fall Back move this phase"); targeting-restriction version 8 adds them. */
 export const MOVE_HISTORY = ["fell-back-this-phase"] as const;
@@ -98,6 +101,25 @@ export const TARGETING_HISTORY_EXTENSIONS: readonly FamilyExtension[] = [
       const { target_history: _history, ...rest } = input;
       const normalized = previous(older.length > 0 ? { ...rest, target_history: older } : rest);
       return { ...normalized, target_history: all };
+    },
+  },
+  {
+    // "That enemy unit can then select new charge targets for that charge move".
+    family: "targeting-restriction",
+    version: 9,
+    description: "As the previous version, plus may reselect on the subject form: the subject (this unit, or event-subject: the unit whose selection triggered the ability) having selected targets of kind (charge, attack, shoot or fight), can select new ones for that same action. It takes weapon_type all and no range, target or by.",
+    schema: (previous) => withProperties(previous, {
+      may: { enum: [...(properties(previous).may!.enum as string[]), "reselect"] },
+      subject: widenedEnum(previous, "subject", ["event-subject"]),
+    }),
+    normalize: (input, previous) => {
+      if (input.may !== "reselect") return previous(input);
+      exactKeys(input, ["subject", "may", "kind", "weapon_type"], "targeting-restriction");
+      enumValue(input.kind, RESELECT_KINDS, "targeting-restriction.kind with may reselect");
+      if (input.weapon_type !== "all") throw new TypeError("targeting-restriction with may reselect takes weapon_type all.");
+      const subject = enumValue(input.subject, ["this-unit", "event-subject"], "targeting-restriction.subject with may reselect");
+      const normalized = previous({ ...input, may: "target", subject: "this-unit" });
+      return { ...normalized, subject, may: "reselect" };
     },
   },
   {

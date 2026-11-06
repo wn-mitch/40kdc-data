@@ -4200,6 +4200,10 @@ function genEffectTranslation(): void {
       effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } } } },
     // "split this unit into two units, each containing as equal a number of models as possible".
     { caseId: "fidelity/split-unit-equal-units", effect: { type: "split-unit", target: "this-unit", modifier: { equal_units: 2 } } },
+    // A disembark within, not wholly within, the Transport's set-up distance.
+    { caseId: "fidelity/set-up-disembark-within", effect: { type: "set-up", target: "this-unit", modifier: { to: "battlefield", from: "transport", placement: "within" } } },
+    // "That enemy unit can then select new charge targets for that charge move".
+    { caseId: "fidelity/targeting-reselect-charge", effect: { type: "targeting", target: "event-subject", modifier: { may: "reselect", kind: "charge" } } },
     // A heal of a two-dice amount.
     { caseId: "fidelity/heal-two-d3", effect: { type: "heal", target: "this-model", modifier: { amount: "2D3" } } },
     // A cap on a roll after modifiers: "if the result is greater than 6, change it to 6".

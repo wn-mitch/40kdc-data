@@ -52595,11 +52595,13 @@ impl<'de> ::serde::Deserialize<'de> for TargetProfileName {
 ///      ]
 ///    },
 ///    "may": {
+///      "description": "reselect: the target, having already selected targets of kind, can select new ones for that same action (not a new declaration).",
 ///      "enum": [
 ///        "target",
 ///        "cannot-target",
 ///        "must-target",
-///        "redirect"
+///        "redirect",
+///        "reselect"
 ///      ]
 ///    },
 ///    "not_engaged_with": {
@@ -52657,6 +52659,7 @@ pub struct TargetingEffectModifier {
     pub if_eligible: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub kind: ::std::option::Option<TargetingEffectModifierKind>,
+    ///reselect: the target, having already selected targets of kind, can select new ones for that same action (not a new declaration).
     pub may: TargetingEffectModifierMay,
     ///may target: when targets are selected (of kind, with weapons), the effect's target is not considered to be within Engagement Range of this unit: ranged attacks can target enemy units engaged with it, as if they were not.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -52773,17 +52776,19 @@ impl ::std::convert::TryFrom<::std::string::String> for TargetingEffectModifierK
         value.parse()
     }
 }
-///`TargetingEffectModifierMay`
+///reselect: the target, having already selected targets of kind, can select new ones for that same action (not a new declaration).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
+///  "description": "reselect: the target, having already selected targets of kind, can select new ones for that same action (not a new declaration).",
 ///  "enum": [
 ///    "target",
 ///    "cannot-target",
 ///    "must-target",
-///    "redirect"
+///    "redirect",
+///    "reselect"
 ///  ]
 ///}
 /// ```
@@ -52809,6 +52814,8 @@ pub enum TargetingEffectModifierMay {
     MustTarget,
     #[serde(rename = "redirect")]
     Redirect,
+    #[serde(rename = "reselect")]
+    Reselect,
 }
 impl ::std::fmt::Display for TargetingEffectModifierMay {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -52817,6 +52824,7 @@ impl ::std::fmt::Display for TargetingEffectModifierMay {
             Self::CannotTarget => f.write_str("cannot-target"),
             Self::MustTarget => f.write_str("must-target"),
             Self::Redirect => f.write_str("redirect"),
+            Self::Reselect => f.write_str("reselect"),
         }
     }
 }
@@ -52830,6 +52838,7 @@ impl ::std::str::FromStr for TargetingEffectModifierMay {
             "cannot-target" => Ok(Self::CannotTarget),
             "must-target" => Ok(Self::MustTarget),
             "redirect" => Ok(Self::Redirect),
+            "reselect" => Ok(Self::Reselect),
             _ => Err("invalid value".into()),
         }
     }

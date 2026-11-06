@@ -520,6 +520,15 @@ pub(super) fn targeting(m: &P, subj: &str, ctx: &Ctx) -> String {
         None => subj.to_string(),
     };
     let may = sv(m, "may");
+    // "That enemy unit can then select new charge targets for that charge move".
+    if may == Some("reselect") {
+        let action = if jstr(m.get("kind")) == "charge" {
+            "that charge"
+        } else {
+            "those attacks"
+        };
+        return format!("{subj} can select new targets for {action}");
+    }
     // "That unit cannot be selected by the Noospheric Transference ability": one named ability's
     // selection, by no named unit.
     if let Some(ability) = nn(m, "ability") {

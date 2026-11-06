@@ -191,6 +191,10 @@ def targeting(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     else:
         whom = subj
     may = m.get("may")
+    # "That enemy unit can then select new charge targets for that charge move".
+    if may == "reselect":
+        action = "that charge" if m.get("kind") == "charge" else "those attacks"
+        return f"{subj} can select new targets for {action}"
     # "That unit cannot be selected by the Noospheric Transference ability": one named ability's
     # selection, by no named unit.
     if (

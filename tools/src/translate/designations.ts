@@ -82,6 +82,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "focused-hunters-target",
   "focused-immolation-target",
   "focused-strikes-target",
+  "forgefather-target",
   "grav-pinned",
   "grounded",
   "guidance-of-the-ancients",

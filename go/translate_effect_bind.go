@@ -112,7 +112,11 @@ func placementPhrase(m map[string]any) string {
 		case "wholly-within":
 			parts = append(parts, "wholly within "+rangePhrase(m["range"])+" of this model")
 		case "within":
-			parts = append(parts, "within "+rangePhrase(m["range"])+" of this model")
+			if m["range"] == nil && m["from"] == "transport" {
+				parts = append(parts, "within the set-up distance of its Transport, instead of wholly within it")
+			} else {
+				parts = append(parts, "within "+rangePhrase(m["range"])+" of this model")
+			}
 		default:
 			if ph, ok := placementPhrases[k]; ok {
 				parts = append(parts, ph)

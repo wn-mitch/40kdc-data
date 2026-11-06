@@ -131,6 +131,18 @@ describe("wounds-remaining, starting-strength and leaves-attached-unit leaves", 
     expect(norm({ mode: "counts", model_counts: [5, 5] })).toEqual({ mode: "counts", model_counts: [5, 5] });
   });
 
+  it("relaxes a disembark to within the Transport's set-up distance (set-up@6 placement within)", () => {
+    const text = "Each model in your unit can be set up within the set-up distance of that Transport.";
+    const mechanics = compiled(text, ["Each model in your unit can be set up within the set-up distance of that Transport", "set-up", { subject: "this-unit", to: "battlefield", from: "transport", placement: "within" }]);
+    expect(mechanics.effect).toEqual({ type: "set-up", target: "this-unit", modifier: { to: "battlefield", from: "transport", placement: "within" } });
+    const check = checkEntry(entryWithMechanics(authoredBase(), mechanics as never));
+    expect(check.errors).toEqual([]);
+    expect(check.rendered_text).toContain("from its Transport within the set-up distance of its Transport, instead of wholly within it");
+    const norm = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("set-up", parameters, currentFamilyVersion("set-up"));
+    // Within is the Transport's set-up distance only: a Reserves arrival has no such distance.
+    expect(() => norm({ subject: "this-unit", to: "battlefield", from: "strategic-reserves", placement: "within" })).toThrow(/from transport/u);
+  });
+
   it("folds into return-models with the restoration's own wounds semantics", () => {
     const restore: Piece = ["Return one model to this unit", "return-models", { subject: "this-unit", count: "1" }];
     const text = "Return one model to this unit with some wounds remaining.";

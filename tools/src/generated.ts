@@ -5380,7 +5380,10 @@ export interface TargetingEffect {
   target: UnitRef;
   modifier: {
     by?: UnitRef;
-    may: "target" | "cannot-target" | "must-target" | "redirect";
+    /**
+     * reselect: the target, having already selected targets of kind, can select new ones for that same action (not a new declaration).
+     */
+    may: "target" | "cannot-target" | "must-target" | "redirect" | "reselect";
     target?: UnitRef | "every-eligible";
     range?: RangeRef;
     kind?: "attack" | "shoot" | "fight" | "charge" | "stratagem" | "ability";

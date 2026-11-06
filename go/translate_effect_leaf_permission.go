@@ -212,6 +212,14 @@ func targetingLeaf(m map[string]any, subj string, ctx effCtx) string {
 	} else if m["target"] != nil {
 		whom = effectSubject(m["target"], ctx)
 	}
+	// "That enemy unit can then select new charge targets for that charge move".
+	if m["may"] == "reselect" {
+		action := "those attacks"
+		if m["kind"] == "charge" {
+			action = "that charge"
+		}
+		return subj + " can select new targets for " + action
+	}
 	// "That unit cannot be selected by the Noospheric Transference ability": one named ability's
 	// selection, by no named unit.
 	if m["kind"] == "ability" && m["ability"] != nil && m["by"] == nil && m["may"] != "redirect" {

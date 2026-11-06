@@ -118,3 +118,29 @@ describe("targeting-restriction version 8: a target that fell back this phase", 
     expect(describeEffectInline(effect as never)).toMatch(/fell back this phase/u);
   });
 });
+
+describe("targeting-restriction version 9: a unit selects new targets for the same action", () => {
+  const RESELECT = { subject: "event-subject", may: "reselect", kind: "charge", weapon_type: "all" };
+
+  it("accepts reselect on the subject form for this unit or the triggering unit, and nothing else beside it", () => {
+    expect(normalize(RESELECT)).toEqual(RESELECT);
+    expect(normalize({ ...RESELECT, subject: "this-unit", kind: "shoot" })).toEqual({ ...RESELECT, subject: "this-unit", kind: "shoot" });
+    expect(() => normalize({ ...RESELECT, kind: "stratagem" })).toThrow();
+    expect(() => normalize({ ...RESELECT, range: 12 })).toThrow();
+    expect(() => normalize({ ...RESELECT, weapon_type: "ranged" })).toThrow(/weapon_type all/u);
+    // The widened subject stays the reselect form's: an ordinary restriction still refuses it.
+    expect(() => normalize({ ...RESELECT, may: "cannot-target" })).toThrow();
+  });
+
+  it("lowers to a targeting effect on the triggering unit that the schema accepts and the describer names", () => {
+    const text = "Fixture rule. When an enemy unit selects charge targets, that enemy unit can then select new targets for that charge.";
+    const result = compileLeaves(placed(text,
+      ["When an enemy unit selects charge targets", "event", { kind: "targets-selected", action_kind: "charge" }],
+      ["that enemy unit can then select new targets for that charge", FAMILY, RESELECT]), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const effect = { type: "targeting", target: "event-subject", modifier: { may: "reselect", kind: "charge" } };
+    expect(result.mechanics.effect).toEqual(effect);
+    expect(validate()(effect)).toBe(true);
+    expect(describeEffectInline(effect as never)).toBe("the triggering unit can select new targets for that charge");
+  });
+});

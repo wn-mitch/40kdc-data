@@ -50,6 +50,8 @@ def placement_phrase(m: dict[str, Any], origin: str = "this model") -> str:
         k = jstr(p)
         if k == "wholly-within":
             parts.append(f"wholly within {range_phrase(m.get('range'))} of {origin}")
+        elif k == "within" and m.get("range") is None and m.get("from") == "transport":
+            parts.append("within the set-up distance of its Transport, instead of wholly within it")
         elif k == "within":
             parts.append(f"within {range_phrase(m.get('range'))} of {origin}")
         else:

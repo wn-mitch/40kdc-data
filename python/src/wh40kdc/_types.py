@@ -3156,7 +3156,7 @@ Modifier18 = TypedDict(
     "Modifier18",
     {
         "by": NotRequired[UnitRef],
-        "may": Literal["target", "cannot-target", "must-target", "redirect"],
+        "may": Literal["target", "cannot-target", "must-target", "redirect", "reselect"],
         "target": NotRequired[UnitRef | Literal["every-eligible"]],
         "range": NotRequired[RangeRef],
         "kind": NotRequired[Literal["attack", "shoot", "fight", "charge", "stratagem", "ability"]],

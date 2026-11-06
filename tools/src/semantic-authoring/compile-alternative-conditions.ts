@@ -56,6 +56,15 @@ function distinctPhaseWindows(bytes: Buffer, left: CompileLeaf, right: CompileLe
   return /^\s*and(?:\s+the)?\s*$/iu.test(bytes.subarray(left.end_byte, right.start_byte).toString("utf8"));
 }
 
+/**
+ * "[Melta]/[Torrent] attacks": two weapon abilities printed with a slash between them are either one,
+ * as a datasheet's keyword lists use the slash. Only two weapon-keyword attack filters fold this way.
+ */
+function slashedWeaponAbilities(left: CompileLeaf, right: CompileLeaf): boolean {
+  return left.family_id === "attack-filter" && right.family_id === "attack-filter"
+    && left.parameters.weapon_keyword !== undefined && right.parameters.weapon_keyword !== undefined;
+}
+
 /** Whether `right` joins `left` as one alternative: an "or"/"and/or" gap, or the attack-kind pairing. */
 function joinsAsAlternative(bytes: Buffer, left: CompileLeaf, right: CompileLeaf): boolean {
   const gap = between(bytes, left, right);
@@ -65,6 +74,7 @@ function joinsAsAlternative(bytes: Buffer, left: CompileLeaf, right: CompileLeaf
   const commaOr = gap === ",or" && (left.family_id === "optional-cost-paid" || right.family_id === "optional-cost-paid");
   if (gap !== null && (DISJUNCTIVE_GAPS.has(gap) || commaOr)) return !absorbsFilter(left, right) || left.parameters.subject === right.parameters.subject;
   if (distinctPhaseWindows(bytes, left, right)) return true;
+  if (gap === "/" && slashedWeaponAbilities(left, right)) return true;
   return gap === "and" && attackKindOrAttacker(bytes, left, right);
 }
 

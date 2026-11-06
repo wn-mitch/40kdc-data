@@ -10105,8 +10105,10 @@
                     "target",
                     "cannot-target",
                     "must-target",
-                    "redirect"
-                  ]
+                    "redirect",
+                    "reselect"
+                  ],
+                  "description": "reselect: the target, having already selected targets of kind, can select new ones for that same action (not a new declaration)."
                 },
                 "target": {
                   "oneOf": [

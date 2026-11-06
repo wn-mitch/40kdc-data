@@ -26,6 +26,8 @@ export function placementPhrase(m: Record<string, unknown>, origin = "this model
   const parts = list.map((p) => {
     const k = jstr(p);
     if (k === "wholly-within") return `wholly within ${rangePhrase(m.range)} of ${origin}`;
+    // A disembark with no range of its own: the core set-up distance, relaxed from wholly within.
+    if (k === "within" && m.range == null && m.from === "transport") return "within the set-up distance of its Transport, instead of wholly within it";
     if (k === "within") return `within ${rangePhrase(m.range)} of ${origin}`;
     return PLACEMENTS[k] ?? dekebab(k);
   });

@@ -393,6 +393,8 @@ function targeting(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const who = (m.by != null ? effectSubject(m.by, ctx) : m.target != null ? subj : "units").replace(/^all /, "");
   const attacking = typeof m.by === "object" || who === "units" || isPlural(who) ? (/\bmodels\b/.test(who) ? "the attacking model" : "the attacking unit") : who;
   const whom = m.target === "every-eligible" ? "every eligible target" : m.target != null ? effectSubject(m.target, ctx) : subj;
+  // "That enemy unit can then select new charge targets for that charge move": the same action, new targets.
+  if (m.may === "reselect") return `${subj} can select new targets for ${m.kind === "charge" ? "that charge" : "those attacks"}`;
   // "That unit cannot be selected by the Noospheric Transference ability": one named ability's selection, by no named unit.
   if (m.kind === "ability" && m.ability != null && m.by == null && m.may !== "redirect") {
     return `${whom} ${m.may === "cannot-target" ? "cannot" : m.may === "must-target" ? "must" : "can"} be selected by the ${abilityLabel(m.ability)} ability`;

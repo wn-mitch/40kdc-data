@@ -16,8 +16,8 @@ dump confirmation.
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 190 | 267 |
-| stratagems | 0 | 0 | 1080 | 233 |
-| abilities | 0 | 0 | 3822 | 714 |
+| stratagems | 0 | 0 | 1081 | 232 |
+| abilities | 0 | 0 | 3826 | 710 |
 | phase-mappings | 0 | 0 | 1211 | 370 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -27,13 +27,13 @@ dump confirmation.
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 11 | 15 |
 | adepta-sororitas | 0 | 0 | 121 | 27 |
-| adeptus-astartes | 0 | 0 | 222 | 28 |
+| adeptus-astartes | 0 | 0 | 225 | 25 |
 | adeptus-custodes | 0 | 0 | 153 | 5 |
 | adeptus-mechanicus | 0 | 0 | 141 | 26 |
 | aeldari | 0 | 0 | 247 | 53 |
 | agents-of-the-imperium | 0 | 0 | 99 | 39 |
 | astra-militarum | 0 | 0 | 208 | 43 |
-| black-templars | 0 | 0 | 60 | 3 |
+| black-templars | 0 | 0 | 61 | 2 |
 | blood-angels | 0 | 0 | 53 | 8 |
 | chaos-daemons | 0 | 0 | 163 | 32 |
 | chaos-knights | 0 | 0 | 87 | 23 |
@@ -76,9 +76,9 @@ dump confirmation.
 | adepta-sororitas | verified | 121 |
 | adeptus-astartes | digest-differs | 14 |
 | adeptus-astartes | no-source | 5 |
-| adeptus-astartes | stub | 8 |
+| adeptus-astartes | stub | 5 |
 | adeptus-astartes | unpublished | 1 |
-| adeptus-astartes | verified | 222 |
+| adeptus-astartes | verified | 225 |
 | adeptus-custodes | digest-differs | 2 |
 | adeptus-custodes | stub | 2 |
 | adeptus-custodes | unpublished | 1 |
@@ -100,8 +100,8 @@ dump confirmation.
 | astra-militarum | unpublished | 18 |
 | astra-militarum | verified | 208 |
 | black-templars | digest-differs | 1 |
-| black-templars | stub | 2 |
-| black-templars | verified | 60 |
+| black-templars | stub | 1 |
+| black-templars | verified | 61 |
 | blood-angels | digest-differs | 6 |
 | blood-angels | stub | 1 |
 | blood-angels | unpublished | 1 |

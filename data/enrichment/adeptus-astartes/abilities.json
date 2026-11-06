@@ -6506,9 +6506,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "vulkan-hestan"
     ],
@@ -6516,11 +6515,100 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "forgefather-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 24
+                },
+                "of": "this-model"
+              },
+              "visible": {
+                "to": "this-model"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "or",
+              "operands": [
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "weapons": {
+                      "keyword": {
+                        "keyword_id": "melta"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "weapons": {
+                      "keyword": {
+                        "keyword_id": "torrent"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES"
+                ]
+              },
+              "modifier": {
+                "stat": "S",
+                "operation": "improve",
+                "value": 2
+              }
+            }
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "3a6be7032cbdcb32ee55184482ae70f5e3fa7ceba02268cf406cca927fae302a"
   },
   {
     "ability_id": "helix-gauntlet-adeptus-astartes",
@@ -7412,19 +7500,50 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": "gauntlet-task-force",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "state": "embarked"
+          }
+        }
+      },
+      "effect": {
+        "type": "set-up",
+        "target": "this-unit",
+        "modifier": {
+          "to": "battlefield",
+          "from": "transport",
+          "placement": "within"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "resolution"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS ASTARTES"
+        ]
+      }
+    },
+    "source_digest": "fe2c0f425cc6db9009e1b993444627c967a5856530ba321ffdf7ced63d5647b2"
   },
   {
     "ability_id": "aggressive-reconnaissance-adeptus-astartes",
@@ -8447,9 +8566,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "repulsor"
     ],
@@ -8457,11 +8575,113 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS ASTARTES"
+            ],
+            "not_states": [
+              "engaged"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "targets-selected",
+                  "subject": "event-subject",
+                  "object": "selected-unit",
+                  "window": "event"
+                }
+              },
+              {
+                "type": "eligible",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "to": "embark-within",
+                  "transport": "ability-unit"
+                }
+              },
+              {
+                "type": "within",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 3
+                  },
+                  "models": "every"
+                }
+              }
+            ]
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "permission",
+              "target": "selected-unit",
+              "modifier": {
+                "activity": "embark",
+                "allow": true,
+                "into": "this-unit"
+              }
+            },
+            {
+              "type": "targeting",
+              "target": "event-subject",
+              "modifier": {
+                "may": "reselect",
+                "kind": "charge"
+              }
+            }
+          ]
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "charge"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "optional": true
+    },
+    "source_digest": "9d3f162af6f10a4cef9cd876589be8e311e33d7b82637f8ff02710b5a81c3df0"
   },
   {
     "ability_id": "combat-shield-adeptus-astartes",

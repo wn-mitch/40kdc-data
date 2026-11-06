@@ -182,6 +182,20 @@ export const SET_UP_EXTENSIONS: readonly FamilyExtension[] = [
   },
  ADD_UNIT_MODELS,
   UNIT_SIZE_DICE,
+  {
+    // "each model in your unit can be set up within the set-up distance of that Transport ... instead of wholly within".
+    family: "set-up",
+    version: 6,
+    description: "As the previous version, plus placement within on a disembark (from transport to battlefield): the models can be set up within the set-up distance of the Transport instead of wholly within it.",
+    schema: (previous) => withProperties(previous, { placement: widenedEnum(previous, "placement", ["within"]) }),
+    normalize: (input, previous) => {
+      if (input.placement !== "within") return previous(input);
+      const { placement: _placement, ...rest } = input;
+      const normalized = previous(rest);
+      if (normalized.from !== "transport" || normalized.to !== "battlefield") throw new TypeError("set-up.placement within is the set-up distance of a Transport; it needs from transport and to battlefield.");
+      return { ...normalized, placement: "within" };
+    },
+  },
   printedKeywordsExtension("split-unit", 2),
   {
     // "split this unit into two units, each containing as equal a number of models as possible".
