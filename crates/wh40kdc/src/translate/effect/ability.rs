@@ -98,11 +98,20 @@ pub(super) fn render_top_level(
     if ty(e_map) == "conditional" {
         let inner = child(e_map, "effect");
         let lead_in = condition_lead_in_for(child(e_map, "condition"), is_defensive_effect(inner));
+        let gate = super::recipient_gate::recipient_gate(e_map, &ctx);
+        if let Some(g) = gate
+            .as_ref()
+            .filter(|g| ty(obj(Some(&g.inner))) == "sequence")
+        {
+            // "While a friendly X unit is …:" then that unit's effects.
+            let header = join_nonempty(&[&trig, &lead, &g.lead, trail], ", ");
+            return format!("{}:\n{}", capitalize(&header), block(&g.inner, 1, &g.ctx));
+        }
         if is_container(obj(Some(inner))) {
             let header = join_nonempty(&[&trig, &lead, &lead_in, trail], ", ");
             return format!("{}:\n{}", capitalize(&header), block(inner, 1, &ctx));
         }
-        if let Some(g) = super::recipient_gate::recipient_gate(e_map, &ctx) {
+        if let Some(g) = gate {
             return assemble_sentence(&[&trig, &lead, &g.lead, trail, &inline(&g.inner, &g.ctx)]);
         }
         return assemble_sentence(&[&trig, &lead, &lead_in, trail, &inline(inner, &ctx)]);

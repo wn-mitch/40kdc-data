@@ -7156,10 +7156,14 @@
             ]
           },
           {
-            "type": "wounds",
+            "type": "happened",
             "parameters": {
-              "subject": "this-unit",
-              "lost": true
+              "event": "damage-allocated",
+              "object": "this-unit",
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event"
             }
           }
         ]

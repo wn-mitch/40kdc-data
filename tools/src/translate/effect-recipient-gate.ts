@@ -16,25 +16,37 @@ function namesRecipient(c: Condition): boolean {
   return c.parameters?.subject === "recipient" || (c.operands ?? []).some(namesRecipient);
 }
 
+const isLeaf = (e: Effect): boolean => e.effect == null && e.steps == null && e.options == null;
+
+/** The unit filter a leaf, or every step of a sequence of leaves, is aimed at; null when they do not share one. */
+function sharedFilter(inner: Effect): P | null {
+  const leaves = inner.type === "sequence" ? inner.steps ?? [] : [inner];
+  if (leaves.length === 0 || (inner.type !== "sequence" && !isLeaf(inner)) || !leaves.every(isLeaf)) return null;
+  const target = leaves[0]!.target as unknown;
+  if (target == null || typeof target !== "object" || Array.isArray(target)) return null;
+  const key = JSON.stringify(target);
+  return leaves.every((leaf) => JSON.stringify(leaf.target) === key) ? target as P : null;
+}
+
 /**
  * "While an enemy unit is within 3\" of this unit, that unit has -1 OC": a condition on each unit the effect reaches
- * (subject `recipient`) gating a leaf effect aimed at a unit filter. The condition names the unit with the filter's
- * phrase, its later mentions and the effect say "that unit" (or "that model"). Null when the shape is not that one.
+ * (subject `recipient`) gating a leaf effect, or a sequence of leaves, aimed at one unit filter. The condition names
+ * the unit with the filter's phrase, its later mentions and the effects say "that unit" (or "that model"). Null when
+ * the shape is not that one.
  */
 export function recipientGate(e: Effect, ctx: Ctx): { lead: string; inner: Effect; ctx: Ctx } | null {
   const inner = e.effect;
-  const target = inner?.target as unknown;
-  if (e.condition == null || inner == null || target == null || typeof target !== "object" || Array.isArray(target)) return null;
-  if (inner.effect != null || inner.steps != null || inner.options != null || !namesRecipient(e.condition)) return null;
-  const filter = target as P;
+  if (e.condition == null || inner == null || !namesRecipient(e.condition)) return null;
+  const filter = sharedFilter(inner);
+  if (filter === null) return null;
   const model = filter.level === "model";
   const that = model ? "that model" : "that unit";
-  const lead = conditionLeadIn(asThatUnit(e.condition), isDefensiveEffect(inner)).replaceAll("that unit", that);
+  const lead = conditionLeadIn(asThatUnit(e.condition), isDefensiveEffect(inner.type === "sequence" ? inner.steps![0]! : inner)).replaceAll("that unit", that);
   const at = lead.indexOf(that);
   if (at < 0) return null;
   return {
     lead: `${lead.slice(0, at)}${unitFilterPhrase(filter)}${lead.slice(at + that.length)}`,
-    inner: { ...inner, target: "recipient" },
+    inner: inner.type === "sequence" ? { ...inner, steps: inner.steps!.map((step) => ({ ...step, target: "recipient" })) } : { ...inner, target: "recipient" },
     ctx: model ? { ...ctx, eachModel: true } : { ...ctx, auraRecipient: true },
   };
 }

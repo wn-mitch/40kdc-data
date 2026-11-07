@@ -166,9 +166,12 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
     if t == "conditional":
         inner = _obj(e.get("effect"))
         lead = capitalize(condition_lead_in(_obj(e.get("condition")), is_defensive_effect(inner)))
+        gate = recipient_gate(e, ctx)
+        if gate and gate[1].get("type") == "sequence":
+            body = describe_effect(gate[1], depth + 1, gate[2])
+            return f"{indent}{capitalize(gate[0])}:\n" + body
         if _is_container(inner):
             return f"{indent}{lead}:\n" + describe_effect(inner, depth + 1, ctx)
-        gate = recipient_gate(e, ctx)
         if gate:
             body = describe_effect_inline(gate[1], gate[2])
             return f"{indent}{arrow}{capitalize(gate[0])}, {body}."
@@ -484,10 +487,14 @@ def _render_top_level(e: Effect, scope: Any, usage: Any = None, trigger: Any = N
     if e.get("type") == "conditional":
         inner = _obj(e.get("effect"))
         lead_in = condition_lead_in(_obj(e.get("condition")), is_defensive_effect(inner))
+        gate = recipient_gate(e, ctx)
+        if gate and gate[1].get("type") == "sequence":
+            # "While a friendly X unit is …:" then that unit's effects.
+            header = ", ".join(p for p in (trig, lead, gate[0], trail) if p)
+            return capitalize(header) + ":\n" + describe_effect(gate[1], 1, gate[2])
         if _is_container(inner):
             header = ", ".join(p for p in (trig, lead, lead_in, trail) if p)
             return capitalize(header) + ":\n" + describe_effect(inner, 1, ctx)
-        gate = recipient_gate(e, ctx)
         if gate:
             return _assemble_sentence(
                 [trig, lead, gate[0], trail, describe_effect_inline(gate[1], gate[2])]

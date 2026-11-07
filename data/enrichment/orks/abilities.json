@@ -7599,26 +7599,48 @@
     "detachment_id": "taktikal-brigade",
     "community_notes": "community-authored from 11e source",
     "faction_id": "orks",
-    "trigger": {
-      "event": "phase-ended",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
+    "trigger": [
+      {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
             }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
+          ]
+        }
+      },
+      {
+        "event": "phase-ended",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
             }
-          }
-        ]
+          ]
+        }
       }
-    }
+    ]
   },
   {
     "ability_id": "eadbanger-wurrband-orks",
@@ -10406,7 +10428,7 @@
           },
           "effect": {
             "type": "permission",
-            "target": "this-unit",
+            "target": "event-subject",
             "modifier": {
               "activity": "start-action",
               "allow": true
@@ -11552,49 +11574,54 @@
           }
         },
         {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "keywords": [
-              {
-                "keyword_id": "hazardous"
-              }
-            ],
-            "weapons": {
-              "type": "ranged"
-            }
-          }
-        },
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "keywords": [
-              {
-                "keyword_id": "lethal-hits"
-              }
-            ],
-            "weapons": {
-              "type": "ranged"
-            }
-          }
-        },
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "keywords": [
-              {
-                "keyword_id": "sustained-hits",
-                "parameters": {
-                  "value": 1
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "hazardous"
+                  }
+                ],
+                "weapons": {
+                  "type": "ranged"
                 }
               }
-            ],
-            "weapons": {
-              "type": "ranged"
+            },
+            {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "lethal-hits"
+                  }
+                ],
+                "weapons": {
+                  "type": "ranged"
+                }
+              }
+            },
+            {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "sustained-hits",
+                    "parameters": {
+                      "value": 1
+                    }
+                  }
+                ],
+                "weapons": {
+                  "type": "ranged"
+                }
+              }
             }
-          }
+          ]
         }
       ]
     },

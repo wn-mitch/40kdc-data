@@ -1047,7 +1047,7 @@
         },
         "effect": {
           "type": "re-roll",
-          "target": "this-unit",
+          "target": "selected-unit",
           "modifier": {
             "roll": "charge",
             "result_scope": "any-result"
@@ -7904,7 +7904,7 @@
           "option_id": "assault-doctrine"
         },
         "aspect": "uses",
-        "operation": "lift-limit",
+        "operation": "add",
         "value": 1
       }
     },
@@ -13073,52 +13073,52 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "your-turn"
-                }
-              }
-            ]
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "filter": {
+              "kind": "shoot"
+            }
           },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "state": "engaged"
-                  }
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "phase-is",
+                      "parameters": {
+                        "phase": "shooting"
+                      }
+                    },
+                    {
+                      "type": "player-turn-is",
+                      "parameters": {
+                        "turn": "your-turn"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "state": "engaged"
+                        }
+                      }
+                    }
+                  ]
                 }
-              }
-            ]
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-part",
-            "trigger": {
-              "event": "attacks-resolved",
-              "filter": {
-                "kind": "shoot"
-              }
+              ]
             },
             "effect": {
               "type": "move",
@@ -13128,74 +13128,51 @@
                 "distance": "D6"
               }
             }
-          },
-          {
-            "type": "ability-part",
-            "trigger": {
-              "event": "phase-ended",
-              "condition": {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "phase-is",
-                    "parameters": {
-                      "phase": "fight"
-                    }
-                  },
-                  {
-                    "type": "player-turn-is",
-                    "parameters": {
-                      "turn": "opponent-turn"
-                    }
-                  }
-                ]
-              }
-            },
-            "effect": {
-              "type": "sequence",
-              "steps": [
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended",
+            "condition": {
+              "operator": "and",
+              "operands": [
                 {
-                  "type": "conditional",
-                  "condition": {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "state": "engaged"
-                      }
-                    }
-                  },
-                  "effect": {
-                    "type": "move",
-                    "target": "this-unit",
-                    "modifier": {
-                      "move_type": "fall-back"
-                    }
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "fight"
                   }
                 },
                 {
-                  "type": "conditional",
-                  "condition": {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "state": "engaged"
-                      }
-                    }
-                  },
-                  "effect": {
-                    "type": "move",
-                    "target": "this-unit",
-                    "modifier": {
-                      "move_type": "fall-back",
-                      "distance": 6
-                    }
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "opponent-turn"
                   }
                 }
               ]
             }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "state": "engaged"
+                }
+              }
+            },
+            "effect": {
+              "type": "move",
+              "target": "this-unit",
+              "modifier": {
+                "move_type": "fall-back",
+                "distance": 6
+              }
+            }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -13322,7 +13299,7 @@
           "option_id": "tactical-doctrine"
         },
         "aspect": "uses",
-        "operation": "lift-limit",
+        "operation": "add",
         "value": 1
       }
     },
@@ -14026,19 +14003,35 @@
           }
         },
         {
-          "type": "roll-modifier",
-          "target": {
-            "owner": "friendly",
-            "all_of": [
-              "GRAVIS"
-            ]
+          "type": "conditional",
+          "condition": {
+            "type": "happened",
+            "parameters": {
+              "subject": "recipient",
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "normal"
+                ]
+              },
+              "window": "turn"
+            }
           },
-          "modifier": {
-            "roll": "hit",
-            "operation": "add",
-            "value": 1,
-            "weapons": {
-              "type": "ranged"
+          "effect": {
+            "type": "roll-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "GRAVIS"
+              ]
+            },
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1,
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         }
@@ -15424,11 +15417,28 @@
         "type": "sequence",
         "steps": [
           {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "subset": "ones"
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "rule-active",
+                  "parameters": {
+                    "rule": {
+                      "ability_id": "combat-doctrines-adeptus-astartes",
+                      "option_id": "assault-doctrine"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "subset": "ones"
+              }
             }
           },
           {
@@ -15487,11 +15497,28 @@
         "type": "sequence",
         "steps": [
           {
-            "type": "re-roll",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "subset": "ones"
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "rule-active",
+                  "parameters": {
+                    "rule": {
+                      "ability_id": "combat-doctrines-adeptus-astartes",
+                      "option_id": "assault-doctrine"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "subset": "ones"
+              }
             }
           },
           {

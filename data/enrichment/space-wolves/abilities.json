@@ -627,23 +627,38 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "not",
+        "operator": "and",
         "operands": [
           {
             "type": "matches",
             "parameters": {
+              "subject": "defender",
               "filter": {
-                "within": {
-                  "of": {
-                    "owner": "enemy",
-                    "excluding": "this-unit"
-                  },
-                  "range": {
-                    "inches": 6
+                "owner": "enemy"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "owner": "enemy",
+                        "excluding": "defender"
+                      },
+                      "range": {
+                        "inches": 6
+                      }
+                    }
                   }
                 }
               }
-            }
+            ]
           }
         ]
       },
@@ -826,7 +841,7 @@
             "level": "model"
           },
           "count": {
-            "min": 1,
+            "min": 0,
             "max": 1
           },
           "eligibility": {
@@ -984,7 +999,7 @@
             ]
           },
           "count": {
-            "min": 1,
+            "min": 0,
             "max": 1
           },
           "eligibility": {
@@ -3600,49 +3615,68 @@
             }
           },
           "count": {
-            "min": 1,
+            "min": 0,
             "max": 1
           }
         },
         "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "dice-gated",
-              "dice": "D6",
-              "threshold": 2,
-              "comparison": "gte",
-              "on_success": {
-                "type": "mortal-wounds",
-                "target": "selected-unit",
-                "modifier": {
-                  "count": "D3"
-                }
-              },
-              "on_fail": null
-            },
-            {
-              "type": "conditional",
-              "condition": {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "all_of": [
-                      "VEHICLE"
-                    ]
+          "type": "dice-gated",
+          "dice": "D6",
+          "threshold": 2,
+          "comparison": "gte",
+          "on_success": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "subject": "selected-unit",
+                        "filter": {
+                          "all_of": [
+                            "VEHICLE"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": "selected-unit",
+                  "modifier": {
+                    "count": "D3"
                   }
                 }
               },
-              "effect": {
-                "type": "mortal-wounds",
-                "target": "selected-unit",
-                "modifier": {
-                  "count": "2D3"
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "all_of": [
+                        "VEHICLE"
+                      ]
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": "selected-unit",
+                  "modifier": {
+                    "count": "2D3"
+                  }
                 }
               }
-            }
-          ]
+            ]
+          },
+          "on_fail": null
         }
       }
     },

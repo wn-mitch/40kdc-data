@@ -3,7 +3,10 @@ package wh40kdc
 // A condition on each unit an effect reaches ("While an enemy unit is within 3" of this unit, that
 // unit has -1 OC"). Mirrors tools/src/translate/effect-recipient-gate.ts.
 
-import "strings"
+import (
+	"reflect"
+	"strings"
+)
 
 // recipientGateParts is a gated effect's condition lead-in, its effect aimed at the recipient,
 // and that effect's context.
@@ -59,29 +62,74 @@ func conditionNamesRecipient(c any) bool {
 	return false
 }
 
+func recipientIsLeaf(e map[string]any) bool {
+	return e["effect"] == nil && e["steps"] == nil && e["options"] == nil
+}
+
+// recipientSharedFilter returns the unit filter a leaf, or every step of a sequence of leaves, is
+// aimed at; ok is false when they do not share one.
+func recipientSharedFilter(inner map[string]any) (map[string]any, bool) {
+	leaves := []map[string]any{inner}
+	if inner["type"] == "sequence" {
+		steps, ok := asList(inner["steps"])
+		if !ok {
+			return nil, false
+		}
+		leaves = leaves[:0]
+		for _, step := range steps {
+			m, ok := asMap(step)
+			if !ok || m == nil {
+				return nil, false
+			}
+			leaves = append(leaves, m)
+		}
+	}
+	if len(leaves) == 0 {
+		return nil, false
+	}
+	for _, leaf := range leaves {
+		if !recipientIsLeaf(leaf) {
+			return nil, false
+		}
+	}
+	filter, ok := asMap(leaves[0]["target"])
+	if !ok || filter == nil {
+		return nil, false
+	}
+	for _, leaf := range leaves[1:] {
+		if !reflect.DeepEqual(leaf["target"], leaves[0]["target"]) {
+			return nil, false
+		}
+	}
+	return filter, true
+}
+
 // recipientGate reads a condition on each unit the effect reaches (subject recipient) gating a
-// leaf effect aimed at a unit filter. The condition names the unit with the filter's phrase; its
-// later mentions and the effect say "that unit" (or "that model"). ok is false when the shape is
-// not that one.
+// leaf effect, or a sequence of leaves, aimed at one unit filter. The condition names the unit
+// with the filter's phrase; its later mentions and the effects say "that unit" (or "that model").
+// ok is false when the shape is not that one.
 func recipientGate(e map[string]any, ctx effCtx) (recipientGateParts, bool) {
 	condition := e["condition"]
 	inner, ok := asMap(e["effect"])
-	if condition == nil || !ok || inner == nil {
+	if condition == nil || !ok || inner == nil || !conditionNamesRecipient(condition) {
 		return recipientGateParts{}, false
 	}
-	filter, ok := asMap(inner["target"])
-	if !ok || filter == nil {
+	filter, ok := recipientSharedFilter(inner)
+	if !ok {
 		return recipientGateParts{}, false
 	}
-	if inner["effect"] != nil || inner["steps"] != nil || inner["options"] != nil || !conditionNamesRecipient(condition) {
-		return recipientGateParts{}, false
+	sequence := inner["type"] == "sequence"
+	defended := inner
+	if sequence {
+		steps, _ := asList(inner["steps"])
+		defended = mapOr(steps[0])
 	}
 	model := filter["level"] == "model"
 	that := "that unit"
 	if model {
 		that = "that model"
 	}
-	lead := strings.ReplaceAll(conditionLeadInFor(mapOr(recipientAsThatUnit(condition)), isDefensiveEffect(inner)), "that unit", that)
+	lead := strings.ReplaceAll(conditionLeadInFor(mapOr(recipientAsThatUnit(condition)), isDefensiveEffect(defended)), "that unit", that)
 	at := strings.Index(lead, that)
 	if at < 0 {
 		return recipientGateParts{}, false
@@ -91,7 +139,21 @@ func recipientGate(e map[string]any, ctx effCtx) (recipientGateParts, bool) {
 	for k, v := range inner {
 		gated[k] = v
 	}
-	gated["target"] = "recipient"
+	if sequence {
+		steps, _ := asList(inner["steps"])
+		aimed := make([]any, len(steps))
+		for i, step := range steps {
+			copied := make(map[string]any)
+			for k, v := range mapOr(step) {
+				copied[k] = v
+			}
+			copied["target"] = "recipient"
+			aimed[i] = copied
+		}
+		gated["steps"] = aimed
+	} else {
+		gated["target"] = "recipient"
+	}
 	if model {
 		ctx.eachModel = true
 	} else {

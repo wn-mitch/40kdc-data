@@ -5860,36 +5860,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "your-turn"
-                }
-              }
-            ]
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "dark-pact"
           },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "used",
-              "filter": {
-                "kind": "dark-pact"
-              },
-              "window": "event"
-            }
-          }
-        ]
+          "window": "event"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -5913,14 +5891,34 @@
               }
             },
             "effect": {
-              "type": "stat-modifier",
-              "target": "event-subject",
-              "modifier": {
-                "stat": "S",
-                "operation": "improve",
-                "value": 1,
-                "weapons": {
-                  "type": "ranged"
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "shooting"
+                    }
+                  },
+                  {
+                    "type": "player-turn-is",
+                    "parameters": {
+                      "turn": "your-turn"
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": "event-subject",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "improve",
+                  "value": 1,
+                  "weapons": {
+                    "type": "ranged"
+                  }
                 }
               }
             }

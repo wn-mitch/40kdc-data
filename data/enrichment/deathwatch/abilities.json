@@ -66,7 +66,7 @@
             "owner": "enemy"
           },
           "count": {
-            "min": 1,
+            "min": 0,
             "max": 1
           },
           "eligibility": {
@@ -214,12 +214,27 @@
         "type": "sequence",
         "steps": [
           {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "strength",
+                  "parameters": {
+                    "subject": "defender",
+                    "below": "half"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
             }
           },
           {

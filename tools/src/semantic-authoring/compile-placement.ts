@@ -29,7 +29,28 @@ function gapBetween(previous: CompileLeaf, next: CompileLeaf, sourceText: string
   // A span ending in its own full stop ("have **Fights First.**") closes its sentence at a line break, as a stop in the gap would.
   // A moment that opens a new line without a bullet ("■ Onslaught: 14 points\nEach time …") starts a sentence too: the list before it has ended.
   const lineMoment = next.family_id === "event" && /[\r\n]/u.test(gap) && !BULLET.test(gap);
-  return { sentence: closes || lineMoment || (ends && /[\r\n]/u.test(gap)) || /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
+  // "that unit's ranged attacks:\rDo not have [Heavy].\rHave +1 to hit rolls.": the lines under a colon are items of one list, so a
+  // full stop that ends one item's line does not end the sentence the colon opened.
+  const lineEnd = ends && /^[ \t]*[\r\n]+[ \t]*$/u.test(gap) && !colonListItem(sourceText, previous.start_byte);
+  return { sentence: closes || lineMoment || lineEnd || (ends && /[\r\n]/u.test(gap) && !/^[ \t]*[\r\n]+[ \t]*$/u.test(gap)) || /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
+}
+
+/**
+ * Whether the line holding byte `at` is an item of a list a colon opens: walking up from it, each line
+ * before it is an item that ends in a full stop, until a line that ends in a colon. A blank line, a
+ * bulleted list (BULLET has its own handling) or the start of the text ends the walk with no list.
+ */
+function colonListItem(sourceText: string, at: number): boolean {
+  const before = Buffer.from(sourceText, "utf8").subarray(0, at).toString("utf8");
+  const lines = before.split(/\r\n|\r|\n/u);
+  if (lines.at(-1)!.trim() !== "") return false;
+  for (let index = lines.length - 2; index >= 0; index -= 1) {
+    const line = lines[index]!.replace(/\*/gu, "").trim();
+    if (line === "") return false;
+    if (line.endsWith(":")) return true;
+    if (!line.endsWith(".")) return false;
+  }
+  return false;
 }
 
 /**

@@ -29,7 +29,7 @@ Add 1 to the Strength characteristic of melee weapons equipped by models in this
             <profile name="High Marshal" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">At the start of the Fight phase:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit:
+  -&gt; Select up to one enemy unit if the selected unit is a unit within Engagement Range of the unit:
     -&gt; Roll one D6:
       - On 1: Nothing happens.
       - On 2-3: That unit suffers D3 mortal wounds.

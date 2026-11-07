@@ -921,10 +921,11 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
   switch (e.type) {
     case "conditional": {
       const inner = e.effect ?? {};
+      const gate = recipientGate(e, ctx);
+      if (gate && gate.inner.type === "sequence") return `${indent}${capitalize(gate.lead)}:\n` + describeEffect(gate.inner, depth + 1, gate.ctx);
       if (CONTAINER_TYPES.has(inner.type ?? "")) {
         return `${indent}${capitalize(conditionLeadIn(e.condition ?? {}))}:\n` + describeEffect(inner, depth + 1, ctx);
       }
-      const gate = recipientGate(e, ctx);
       if (gate) return `${indent}${arrow}${capitalize(gate.lead)}, ${describeEffectInline(gate.inner, gate.ctx)}.`;
       return `${indent}${arrow}${capitalize(conditionLeadIn(e.condition ?? {}, isDefensiveEffect(inner)))}, ${describeEffectInline(inner, ctx)}.`;
     }
@@ -1226,12 +1227,17 @@ function renderTopLevel(
   if (e.type === "conditional") {
     const inner = e.effect ?? {};
     const leadIn = conditionLeadIn(e.condition ?? {}, isDefensiveEffect(inner));
+    const gate = recipientGate(e, ctx);
+    if (gate && gate.inner.type === "sequence") {
+      // "While a friendly X unit is …:" then that unit's effects.
+      const header = [trig, lead, gate.lead, trail].filter((p) => p.length > 0).join(", ");
+      return capitalize(header) + ":\n" + describeEffect(gate.inner, 1, gate.ctx);
+    }
     if (CONTAINER_TYPES.has(inner.type ?? "")) {
       // Block: "<trigger>[, <lead-in>][, <duration>]:" then the indented container.
       const header = [trig, lead, leadIn, trail].filter((p) => p.length > 0).join(", ");
       return capitalize(header) + ":\n" + describeEffect(inner, 1, ctx);
     }
-    const gate = recipientGate(e, ctx);
     if (gate) return assembleSentence([trig, lead, gate.lead, trail, describeEffectInline(gate.inner, gate.ctx)]);
     return assembleSentence([trig, lead, leadIn, trail, describeEffectInline(inner, ctx)]);
   }

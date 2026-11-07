@@ -217,6 +217,14 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
     labels.push(label);
     inList.push(!label && (listed[position]! || (position > 0 && inList[position - 1]! && !ends)));
   });
+  // Whether the list holding the sentence at `position` is introduced by a sentence with a condition and no effect
+  // ("If your army includes one or more X units:").
+  const conditionOpensList = (position: number) => {
+    let first = position;
+    while (first > 0 && !listed[first]!) first -= 1;
+    const opener = listed[first]! && first > 0 ? sentences[first - 1]! : undefined;
+    return opener !== undefined && !hasEffect(opener) && opener.some((leaf) => leaf.role === "CONDITION");
+  };
   // A menu whose named options each carry their own moment ("Calistus. Your Movement phase, when …") is used at
   // those moments, not at an earlier sentence's: the sentence that opens it starts a part of its own.
   const selfTimedMenu = (position: number) => {
@@ -251,7 +259,10 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
     // to is that rule's (compile-army.ts), so the sentence stays in that rule's part.
     const pointsBack = armyOnly(sentence) && parts.at(-1)!.some((leaf) => leaf.family_id === "army-construction" && leaf.parameters.rule === "composition")
       && sentence.some((leaf) => leaf.family_id === "army-construction" && leaf.parameters.subject === "antecedent");
-    if (opensPart || (position > firstEffectful && !pointsBack && (armyOnly(sentence) || armyOnly(sentences[position - 1]!)))) parts.push([]);
+    // "If your army includes …:\n□ Your army cannot include …": an army rule listed under a condition is one of the items
+    // that condition introduces, so it stays in the condition's part.
+    const conditionedItem = inList[position]! && conditionOpensList(position);
+    if (opensPart || (position > firstEffectful && !pointsBack && !conditionedItem && (armyOnly(sentence) || armyOnly(sentences[position - 1]!)))) parts.push([]);
     if (position >= firstEffectful) parts.at(-1)!.push(...sentence);
   });
   // A part with no effect (a moment sentence whose effects follow in the next one) joins the next.

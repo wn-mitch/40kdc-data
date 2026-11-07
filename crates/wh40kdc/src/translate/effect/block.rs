@@ -28,10 +28,21 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 child(e, "condition"),
                 is_defensive_effect(inner),
             ));
+            let gate = super::recipient_gate::recipient_gate(e, ctx);
+            if let Some(g) = gate
+                .as_ref()
+                .filter(|g| ty(obj(Some(&g.inner))) == "sequence")
+            {
+                return format!(
+                    "{indent}{}:\n{}",
+                    capitalize(&g.lead),
+                    block(&g.inner, depth + 1, &g.ctx)
+                );
+            }
             if is_container(obj(Some(inner))) {
                 return format!("{indent}{lead}:\n{}", block(inner, depth + 1, ctx));
             }
-            if let Some(g) = super::recipient_gate::recipient_gate(e, ctx) {
+            if let Some(g) = gate {
                 return format!(
                     "{indent}{arrow}{}, {}.",
                     capitalize(&g.lead),

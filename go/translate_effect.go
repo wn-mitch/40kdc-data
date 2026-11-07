@@ -633,10 +633,14 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 	case "conditional":
 		inner := mapOr(e["effect"])
 		lead := capitalize(conditionLeadInFor(mapOr(e["condition"]), isDefensiveEffect(inner)))
+		gate, gated := recipientGate(e, ctx)
+		if gated && gate.inner["type"] == "sequence" {
+			return indent + capitalize(gate.lead) + ":\n" + describeEffect(gate.inner, depth+1, gate.ctx)
+		}
 		if containerTypes[ejstrType(inner)] {
 			return indent + lead + ":\n" + describeEffect(inner, depth+1, ctx)
 		}
-		if gate, ok := recipientGate(e, ctx); ok {
+		if gated {
 			return indent + arrow + capitalize(gate.lead) + ", " + describeEffectInline(gate.inner, gate.ctx) + "."
 		}
 		return indent + arrow + lead + ", " + describeEffectInline(inner, ctx) + "."

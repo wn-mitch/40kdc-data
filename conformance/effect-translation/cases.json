@@ -10740,7 +10740,7 @@
             "owner": "enemy"
           },
           "count": {
-            "min": 1,
+            "min": 0,
             "max": 1
           },
           "eligibility": {
@@ -10777,7 +10777,7 @@
       }
     },
     "expected": {
-      "text": "When the unit ends a Normal move, during the Movement phase, in your turn:\n  -> Select one enemy unit if the selected unit was moved over by the unit during that move: roll 6 D6: for each 4+, that unit suffers 1 mortal wound."
+      "text": "When the unit ends a Normal move, during the Movement phase, in your turn:\n  -> Select up to one enemy unit if the selected unit was moved over by the unit during that move: roll 6 D6: for each 4+, that unit suffers 1 mortal wound."
     }
   },
   {
@@ -48585,6 +48585,170 @@
     "behavior": "reactive",
     "expected": {
       "text": "Roll 2D6, then:\n  -> At the end of each phase, if the Psychic test result is not 10+: the unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "fidelity/recipient-gate-sequence",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "strength",
+        "parameters": {
+          "subject": "recipient",
+          "below": "half"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ALPHA"
+              ]
+            },
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ALPHA"
+              ]
+            },
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "While a friendly ALPHA unit is below half strength:\n  -> You can re-roll a Hit roll of 1 for attacks made by that unit.\n  -> You can re-roll a Wound roll of 1 for attacks made by that unit."
+    }
+  },
+  {
+    "caseId": "fidelity/recipient-gate-sequence-nested",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "OC",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "strength",
+            "parameters": {
+              "subject": "recipient",
+              "below": "half"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ALPHA"
+                  ]
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              },
+              {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ALPHA"
+                  ]
+                },
+                "modifier": {
+                  "roll": "wound",
+                  "subset": "ones"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Add 1 to the unit's Objective Control characteristic.\nWhile a friendly ALPHA unit is below half strength:\n  -> You can re-roll a Hit roll of 1 for attacks made by that unit.\n  -> You can re-roll a Wound roll of 1 for attacks made by that unit."
+    }
+  },
+  {
+    "caseId": "fidelity/recipient-gate-sequence-mixed",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "strength",
+        "parameters": {
+          "subject": "recipient",
+          "below": "half"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ALPHA"
+              ]
+            },
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "BETA"
+              ]
+            },
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones"
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "While the unit is below half strength:\n  -> You can re-roll a Hit roll of 1 for attacks made by all friendly ALPHA units.\n  -> You can re-roll a Wound roll of 1 for attacks made by all friendly BETA units."
     }
   }
 ]

@@ -268,3 +268,20 @@ describe("Semantic authoring t7 keyword menu with a two-run option", () => {
     expect(errorsOf(text, items(null))).toMatch(/some runs qualified and some not/u);
   });
 });
+
+describe("a keyword menu whose last option prints its keywords as a comma list (compile-keyword-menu.ts)", () => {
+  const TEXT = "This unit's ranged attacks have: [Alpha Hits]. Or: [Beta Hits 1]. Or: [Hazardous], [Alpha Hits], [Beta Hits 1].";
+  const frame: Item = ["This unit's ranged attacks have", "weapon-ability-grant", { subject: "this-unit", weapon_type: "ranged" }];
+  const keyword = (name: string): Item => [name, "weapon-ability-keyword", { keyword: name }];
+
+  it("keeps the comma-listed keywords together as one option", () => {
+    const items = [frame, keyword("Lethal Hits"), keyword("Sustained Hits 1"), keyword("Hazardous"), keyword("Lethal Hits"), keyword("Sustained Hits 1")];
+    const text = TEXT.replace("Alpha Hits]. Or", "Lethal Hits]. Or").replace("Beta Hits 1]. Or", "Sustained Hits 1]. Or")
+      .replace("[Alpha Hits], [Beta Hits 1].", "[Lethal Hits], [Sustained Hits 1].");
+    const choice = mechanicsOf(text, items).effect;
+    expect(choice.type).toBe("choice");
+    expect(choice.options).toHaveLength(3);
+    expect(choice.options[2].type).toBe("sequence");
+    expect(choice.options[2].steps.map((step: any) => step.modifier.keywords[0].keyword_id)).toEqual(["hazardous", "lethal-hits", "sustained-hits"]);
+  });
+});

@@ -430,3 +430,21 @@ describe("weapon-has-ability: compilation", () => {
     expect(steps[1]!.modifier).toEqual({ roll: "hit", critical_on: 5 });
   });
 });
+
+describe("the lines of a list a colon opens, each ending in a full stop", () => {
+  // "In a turn a friendly X unit made a Normal move, that unit's ranged attacks:" then one property per line.
+  const leaves = (text: string) => placed(text,
+    ["friendly GAMMA unit", "unit-filter", { side: "friendly", keywords: ["GAMMA"] }],
+    ["made a **normal move**", "unit-activity", { activities: ["made-normal-move-this-turn"], subject: "antecedent", negated: false }],
+    ["that unit’s ranged attacks:", "weapon-property-scope", { subject: "antecedent", weapon_type: "ranged" }],
+    ["Do not have [Heavy].", "weapon-ability-removal", { keyword: "Heavy" }],
+    ["Have +1 to **hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
+
+  it("keeps every item under the lead-in's condition across line breaks", () => {
+    const text = "In a turn a friendly GAMMA unit made a **normal move**, that unit’s ranged attacks:\rDo not have [Heavy].\rHave +1 to **hit rolls**.";
+    const effect = compiledEffect(text, leaves(text));
+    // No item escapes the condition: the removal and the roll each sit under the moved-this-turn test.
+    expect(effect.steps.map((step: any) => [step.type, step.effect?.type])).toEqual([["conditional", "weapon-ability-grant"], ["conditional", "roll-modifier"]]);
+    expect(effect).toEqual(compiledEffect(text.replace(/\r/gu, " "), leaves(text.replace(/\r/gu, " "))));
+  });
+});

@@ -312,33 +312,53 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "stat-modifier",
-              "target": "this-model",
-              "modifier": {
-                "stat": "S",
-                "operation": "add",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "move-ended",
+                  "filter": {
+                    "move_types": [
+                      "charge"
+                    ]
+                  },
+                  "window": "turn"
                 }
               }
-            },
-            {
-              "type": "stat-modifier",
-              "target": "this-model",
-              "modifier": {
-                "stat": "AP",
-                "operation": "add",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
+            ]
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "AP",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
                 }
               }
-            }
-          ]
+            ]
+          }
         },
         {
           "type": "conditional",

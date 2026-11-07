@@ -440,3 +440,24 @@ describe("army-construction warlord-allowed (version 4)", () => {
     expect(() => normalize({ rule: "warlord-allowed", exempt_from: ["retinue-limit"] })).toThrow(/goes with rule: composition/);
   });
 });
+
+describe("army rules listed under a condition (compile-segments.ts)", () => {
+  const text = "You cannot include units from more than one Chapter in your army.\nIf your army includes one or more units from the Alpha Chapter:\n□ **GAMMA** units from your army gain the Delta ability.\n□ Your army cannot include any **BETA** models.";
+  const list = () => placed(text,
+    ["You cannot include units from more than one Chapter in your army", "army-construction", { rule: "single-chapter" }],
+    ["If your army includes one or more", "army-includes", { quantifier: "some", with: "following-filter" }],
+    ["units from the Alpha Chapter", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+    ["**GAMMA** units from your army", "unit-filter", { side: "friendly", keywords: ["GAMMA"] }],
+    ["gain the Delta ability", "rule-state", { subject: "antecedent", direction: "granted", rule_kind: "keyword", rule: "DELTA" }],
+    ["Your army cannot include any **BETA** models", "army-construction", { rule: "composition", with_keywords: ["BETA"], max: 0 }],
+  );
+
+  it("gate the listed army rule by the condition, and leave the rule before the list ungated", () => {
+    const effect = effectOf(list(), text);
+    const [first, gated] = effect.steps;
+    expect(first).toMatchObject({ type: "army-rule", modifier: { rule: "single-chapter" } });
+    expect(gated.type).toBe("conditional");
+    expect(gated.condition.type).toBe("army-includes");
+    expect(armyRules(gated.effect)).toEqual([expect.objectContaining({ modifier: expect.objectContaining({ rule: "composition", max: 0 }) })]);
+  });
+});

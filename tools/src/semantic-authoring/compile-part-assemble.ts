@@ -29,7 +29,7 @@ import { AURA_RECIPIENT } from "./compile-antecedent.js";
 import type { PartFrame } from "./compile-part-classify.js";
 import type { planEffects } from "./compile-part-plan.js";
 import { loopUnderBand, stepsBeforeLoop, wrapBandLoop } from "./compile-band-loop.js";
-import { firstPartRounds } from "./compile-round-sections.js";
+import { firstPartContradicted } from "./compile-round-sections.js";
 import { firstPartLoop, loopInSelection, selectionPerPass, type PartBindings } from "./compile-part-bindings.js";
 
 type Node = Record<string, unknown>;
@@ -509,8 +509,11 @@ export function assemblePart(
       const own = pieces[position + 1]!;
       return own.length === 1 ? own[0]! : { type: "sequence", steps: own };
     });
-    // A record-wide battle-round condition that a later part's own rounds exclude heads the first part only (compile-round-sections.ts).
-    const sectioned = entryTrigger ? firstPartRounds(global, rawEffects) : [];
+    // A record-wide gate that a later part contradicts (its own rounds, phase, player turn or the negated condition)
+    // heads the first part only (compile-round-sections.ts).
+    const sectioned = entryTrigger
+      ? firstPartContradicted(global, partStarts.map((part, position) => ({ trigger: asTrigger(partMoments(part, position)), effect: rawEffects[position] })))
+      : [];
     if (sectioned.length) {
       const own = sectioned.filter((node, at) => sectioned.findIndex((other) => JSON.stringify(other) === JSON.stringify(node)) === at);
       partSteps[0] = { ...partSteps[0]!, effect: gated(own, partSteps[0]!.effect as Node) };
@@ -551,6 +554,9 @@ export function assemblePart(
         partSteps[partSteps.length - 1] = { ...owner, effect: { type: "sequence", steps: [...before, { ...node, duration: "phase" }] } };
       } else partSteps.push(node);
     });
+    // No entry moment and no lead-in effects: the first moment's part is the first part, and a record-wide gate a later
+    // part contradicts ("In your Shooting phase, … if unengaged, …. Or: At the end of your opponent's Fight phase, if
+    // engaged, …") heads that part alone (compile-round-sections.ts).
     if (nestedSteps.length) {
       const entry = partSteps[0]!;
       const inner = entry.effect as Node;

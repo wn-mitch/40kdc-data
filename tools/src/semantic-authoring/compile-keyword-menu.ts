@@ -5,18 +5,20 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
  * A keyword-less weapon-ability-grant frame followed by a menu whose options are printed keyword runs,
  * each run with its own target qualifier ("[Lethal Hits: Monster/Vehicle]. Or: [Sustained Hits 1:
  * non-Monster/Vehicle]. Or: If A, [Lethal Hits: Monster/Vehicle] and [Sustained Hits 1: non-Monster/Vehicle]").
- * A menu option is a group of one or more keyword runs joined by "and", with an optional condition that
- * opens the group. The fold folds the frame into one grant carrying `option_groups`; the keyword leaves,
+ * A menu option is a group of one or more keyword runs joined by "and" or by a bare comma ("Or: [Hazardous],
+ * [Lethal Hits], [Sustained Hits 1]"), with an optional condition that opens the group. The fold folds the frame into one grant carrying `option_groups`; the keyword leaves,
  * their qualifiers, the group conditions and the "Or:" markers are removed from the list.
  *
- * Only a menu with at least two options, one of which holds two or more runs, is folded here. Other
- * keyword menus keep the path in compile-weapon-keywords.ts. Qualifiers must be all or none across the
- * menu's runs: a run without its qualifier beside qualified runs is refused.
+ * Only a menu with at least two options, one of which holds two or more runs, is folded here: a qualified
+ * menu, or an unqualified one whose multi-run option is a comma list. Other keyword menus keep the path in compile-weapon-keywords.ts. Qualifiers must be
+ * all or none across the menu's runs: a run without its qualifier beside qualified runs is refused.
  */
 
 const KEYWORD = "weapon-ability-keyword";
 const isFrame = (leaf: CompileLeaf) => leaf.family_id === "weapon-ability-grant" && leaf.parameters.keyword === undefined && leaf.parameters.keywords === undefined;
 const ALL_JOINER = /\band\b/iu;
+/** "], [": two runs of one option printed as a comma list. */
+const COMMA_JOINER = /^[\s\]\[*]*,[\s\]\[*]*$/u;
 /** A gap that starts a new option: a sentence break, a line break, or an "Or" word. */
 const OPTION_BREAK = /[.\r\n]|\bor\b/iu;
 
@@ -76,12 +78,17 @@ function foldOneMenu(list: CompileLeaf[], frame: number, source: Buffer | undefi
   let previous: CompileLeaf = leaf;
   let pending: CompileLeaf | undefined;
   let at = frame + 1;
+  // Whether an option prints two runs as a bare comma list, which marks the runs as one option without qualifiers.
+  let commaRuns = false;
   while (at < list.length && list[at]!.fragment === fragment && !isContainerOpener(list[at]!.family_id)) {
     const other = list[at]!;
     const gap = gapText(source, previous, other);
     if (other.family_id === KEYWORD) {
       const breakGap = OPTION_BREAK.test(gap);
-      const joined = ALL_JOINER.test(gap) && !breakGap;
+      // A comma joins two runs; after an option's opening condition (", [Lethal Hits") it only ends the condition.
+      const commaJoined = pending === undefined && COMMA_JOINER.test(gap) && !breakGap;
+      if (commaJoined && items.length > 0) commaRuns = true;
+      const joined = (ALL_JOINER.test(gap) || commaJoined) && !breakGap;
       if (items.length > 0 && !joined && !breakGap && pending === undefined) return undefined;
       if (pending !== undefined && joined) return undefined;
       const opens = items.length === 0 || !joined;
@@ -124,8 +131,8 @@ function foldOneMenu(list: CompileLeaf[], frame: number, source: Buffer | undefi
     return { keywords: own.map((item) => item.keyword), qualifiers: own.map((item) => item.qualifier), ...(gate ? { gate } : {}) };
   });
   const qualified = items.filter((item) => item.qualifier !== null).length;
-  if (options.length < 2 || !options.some((option) => option.keywords.length > 1) || qualified === 0) return undefined;
-  if (qualified !== items.length) {
+  if (options.length < 2 || !options.some((option) => option.keywords.length > 1) || (qualified === 0 && !commaRuns)) return undefined;
+  if (qualified !== 0 && qualified !== items.length) {
     throw new CompileError("A keyword menu with some runs qualified and some not is not compiled; each run needs its own qualifier or none.");
   }
   const keywords = [...new Set(items.map((item) => item.keyword))];

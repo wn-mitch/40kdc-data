@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { firstPartRounds } from "../src/semantic-authoring/compile-round-sections.js";
+import { firstPartContradicted, firstPartRounds } from "../src/semantic-authoring/compile-round-sections.js";
 import { withSharedRoll } from "../src/semantic-authoring/compile-shared-roll.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { describeAbility } from "../src/translate/index.js";
@@ -170,5 +170,40 @@ describe("battle-round conditions over the first part only (compile-round-sectio
     expect(firstPartRounds(global, [{ type: "conditional", condition: { type: "battle-round", parameters: { min: 2, max: 5 } } }])).toEqual([ROUND_ONE]);
     expect(firstPartRounds(global, [{ type: "conditional", condition: { type: "battle-round", parameters: { min: 1, max: 1 } } }])).toEqual([global[1]]);
     expect(firstPartRounds(global, [{ type: "conditional", condition: { type: "phase-is", parameters: { phase: "fight" } } }])).toEqual([]);
+  });
+});
+
+describe("record-wide gates a later part contradicts head the first part only (compile-round-sections.ts)", () => {
+  const text = "In your Shooting phase, when this unit has shot, if this unit is **unclenched**, this unit can make a **normal move** of up to D6\".Or: At the end of your opponent's Fight phase if this unit is **engaged**, this unit can make a **fall-back move**.";
+  const items: Item[] = [
+    ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+    ["when this unit has shot", "event", { kind: "after-shooting" }],
+    ["if this unit is **unclenched", "unit-state", { states: ["engaged"], subject: "this-unit", negated: true }],
+    ["this unit can make a **normal move** of up to D6", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }],
+    ["At the end of your opponent's Fight phase", "event", { kind: "phase-end", phase: "fight", turn: "opponent" }],
+    ["if this unit is **engaged", "unit-state", { states: ["engaged"], subject: "this-unit", negated: false }],
+    ["this unit can make a **fall-back move", "make-move", { subject: "this-unit", move_type: "fall-back" }],
+  ];
+
+  it("leave the later part free of the first part's phase, turn and negated state", () => {
+    const mechanics = mechanicsOf(items, text);
+    const [first, later] = mechanics.effect.steps;
+    expect(JSON.stringify(first)).toContain('"phase":"shooting"');
+    expect(JSON.stringify(first)).toContain('"operator":"not"');
+    expect(JSON.stringify(later)).not.toContain('"phase":"shooting"');
+    expect(JSON.stringify(later)).not.toContain('"operator":"not"');
+    expect(describeAbility(mechanics)).toContain("At the end of your opponent's Fight phase");
+  });
+
+  it("keep a gate no later part contradicts over the whole record", () => {
+    const engaged = { type: "matches", parameters: { filter: { state: "engaged" } } };
+    const shooting = { type: "phase-is", parameters: { phase: "shooting" } };
+    const global = [shooting, { operator: "not", operands: [engaged] }];
+    expect(firstPartContradicted(global, [{ trigger: { event: "selected", condition: shooting }, effect: { type: "conditional", condition: engaged } }]))
+      .toEqual([global[1]]);
+    expect(firstPartContradicted(global, [{ trigger: { event: "phase-ended", condition: { type: "phase-is", parameters: { phase: "fight" } } } }]))
+      .toEqual([shooting]);
+    // A condition the later part only negates further agrees with the gate.
+    expect(firstPartContradicted(global, [{ effect: { type: "conditional", condition: { operator: "not", operands: [engaged] } } }])).toEqual([]);
   });
 });

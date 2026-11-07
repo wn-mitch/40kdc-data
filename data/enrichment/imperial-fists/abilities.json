@@ -331,6 +331,9 @@
         "target": "this-model",
         "modifier": {
           "to": "battlefield",
+          "min_enemy_distance": {
+            "inches": 1
+          },
           "placement": "closest-to-destruction",
           "wounds_remaining": 3
         }

@@ -4585,7 +4585,8 @@
       "target": {
         "owner": "friendly",
         "all_of": [
-          "ADEPTUS ASTARTES"
+          "ADEPTUS ASTARTES",
+          "DARK ANGELS"
         ],
         "any_of": [
           "BLADEGUARD ANCIENT",

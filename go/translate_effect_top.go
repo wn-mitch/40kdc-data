@@ -372,11 +372,17 @@ func renderTopLevel(e, scope map[string]any, usage, trigger any) string {
 	if e["type"] == "conditional" {
 		inner := mapOr(e["effect"])
 		leadIn := conditionLeadInFor(mapOr(e["condition"]), isDefensiveEffect(inner))
+		gate, gated := recipientGate(e, ctx)
+		if gated && gate.inner["type"] == "sequence" {
+			// "While a friendly X unit is …:" then that unit's effects.
+			header := joinNonEmpty([]string{trig, lead, gate.lead, trail}, ", ")
+			return capitalize(header) + ":\n" + describeEffect(gate.inner, 1, gate.ctx)
+		}
 		if containerTypes[ejstrType(inner)] {
 			header := joinNonEmpty([]string{trig, lead, leadIn, trail}, ", ")
 			return capitalize(header) + ":\n" + describeEffect(inner, 1, ctx)
 		}
-		if gate, ok := recipientGate(e, ctx); ok {
+		if gated {
 			return assembleSentence([]string{trig, lead, gate.lead, trail, describeEffectInline(gate.inner, gate.ctx)})
 		}
 		return assembleSentence([]string{trig, lead, leadIn, trail, describeEffectInline(inner, ctx)})
