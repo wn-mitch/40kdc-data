@@ -10,7 +10,10 @@
  *
  * The host sends its own local mutations via sendOps() — already applied
  * locally (optimistic); the server acks rather than echoing, so there is no
- * rebase. Joining is free (the link token is the auth); creation is
+ * rebase. A peer op that arrives while this client has unacked ops was
+ * ordered BEFORE them by the server, so applying it on top of the optimistic
+ * state would invert that order (same-path edits would diverge for good);
+ * the client hard-resyncs instead. Joining is free (the link token is the auth); creation is
  * entitlement-gated by the worker.
  *
  * Two room flavors share this client:
@@ -96,6 +99,8 @@ let pendingJoin: { docId: string; token: string } | null = null;
  *  (snapshot fallback) from a dropped established connection (reconnect). */
 let welcomed = false;
 let clientSeq = 0;
+/** Op batches sent on the current socket that the server hasn't acked yet. */
+let unackedOps = 0;
 let reconnectDelay = RECONNECT_MIN_MS;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 /** Deliberate leave — suppresses the reconnect loop. */
@@ -320,6 +325,7 @@ export function sendOps(ops: DocOp[]): void {
     return;
   }
   clientSeq += 1;
+  unackedOps += 1;
   ws.send(JSON.stringify({ t: "op", clientSeq, ops }));
 }
 
@@ -336,6 +342,7 @@ function connect(t: Target, token: string, nickname: string): void {
   connectToken = token;
   nicknameMemo = nickname;
   welcomed = false;
+  unackedOps = 0;
   docSession.status = "connecting";
   docSession.code = t.kind === "session" ? t.code : null;
   docSession.docId = t.kind === "doc" ? t.docId : null;
@@ -354,8 +361,10 @@ function connect(t: Target, token: string, nickname: string): void {
     } catch {
       return;
     }
+    if (ws !== socket) return; // superseded socket — its traffic is stale
     if (msg.t === "welcome") {
       welcomed = true;
+      unackedOps = 0;
       docSession.status = "connected";
       docSession.role = msg.role;
       docSession.participantId = msg.participantId;
@@ -370,8 +379,16 @@ function connect(t: Target, token: string, nickname: string): void {
         if (msg.role === "viewer" && !docSession.viewerLink) docSession.viewerLink = link;
       }
       callbacks?.onDoc(msg.doc);
+    } else if (msg.t === "ack") {
+      unackedOps = Math.max(0, unackedOps - 1);
     } else if (msg.t === "op") {
-      callbacks?.onRemoteOps(msg.ops);
+      if (unackedOps > 0) {
+        // Ordered before our in-flight ops — take the server's document
+        // rather than replaying it out of order (see the header).
+        socket.close(4000, "resync");
+      } else {
+        callbacks?.onRemoteOps(msg.ops);
+      }
     } else if (msg.t === "presence") {
       docSession.participants = msg.participants;
     } else if (msg.t === "error") {

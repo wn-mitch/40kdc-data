@@ -53,6 +53,26 @@ describe("share-token minting", () => {
     expect((await api(`/docs/${id}/shared?token=${rotated.body.editorToken}`)).status).toBe(200);
   });
 
+  it("hands concurrent first shares the same token pair", async () => {
+    const token = await mintToken("share-race");
+    const id = await makeDoc(token);
+    const results = await Promise.all(
+      Array.from({ length: 10 }, () => api(`/docs/${id}/share`, { method: "POST", token, body: {} })),
+    );
+    for (const r of results) {
+      expect(r.status).toBe(200);
+      expect(r.body.editorToken).toBe(results[0].body.editorToken);
+      expect(r.body.viewerToken).toBe(results[0].body.viewerToken);
+    }
+    // Every link handed out still opens the doc.
+    expect((await api(`/docs/${id}/shared?token=${results[0].body.editorToken}`)).status).toBe(200);
+  });
+
+  it("404s sharing an unknown id", async () => {
+    const token = await mintToken("share-missing");
+    expect((await api(`/docs/no-such-doc/share`, { method: "POST", token })).status).toBe(404);
+  });
+
   it("never leaks tokens through doc reads or listings", async () => {
     const token = await mintToken("share-leak");
     const id = await makeDoc(token);

@@ -194,8 +194,13 @@ export default {
     if (request.method === "GET" && wsMatch) {
       const code = normalizeCode(decodeURIComponent(wsMatch[1]), SESSION_CODE_LEN);
       if (!code) return json({ error: "bad_code" }, 400);
+      // `doc` switches a room into doc-bound mode and is only ever server-set
+      // (below) — strip a client-supplied one so a session code can't be
+      // pointed at someone else's document.
+      const fwd = new URL(request.url);
+      fwd.searchParams.delete("doc");
       // getByName → the same code always reaches the same room instance.
-      return env.DOC_ROOM.get(env.DOC_ROOM.idFromName(code)).fetch(request);
+      return env.DOC_ROOM.get(env.DOC_ROOM.idFromName(code)).fetch(new Request(fwd, request));
     }
 
     // GET /docs/:id/ws → live editing of a cloud doc (doc-bound room). Free
@@ -225,19 +230,18 @@ export default {
       if (text === null) return json({ error: "bad_payload" }, 400);
 
       const cap = Number(env.MAX_LINKS_PER_OWNER ?? DEFAULT_MAX_LINKS);
-      const count = await env.DB.prepare("SELECT COUNT(*) AS n FROM shortlinks WHERE owner = ?")
-        .bind(owner)
-        .first<{ n: number }>();
-      if ((count?.n ?? 0) >= cap) return json({ error: "link_quota_exceeded" }, 403);
-
       for (let attempt = 0; attempt < LINK_MINT_ATTEMPTS; attempt++) {
         const code = newLinkCode();
         try {
-          await env.DB.prepare(
-            "INSERT INTO shortlinks (code, kind, payload, owner, created_at) VALUES (?, ?, ?, ?, ?)",
+          // The quota check rides in the INSERT itself: one statement, so
+          // concurrent mints can't all pass a count taken before any insert.
+          const inserted = await env.DB.prepare(
+            "INSERT INTO shortlinks (code, kind, payload, owner, created_at) " +
+              "SELECT ?, ?, ?, ?, ? WHERE (SELECT COUNT(*) FROM shortlinks WHERE owner = ?) < ?",
           )
-            .bind(code, body.kind, text, owner, Date.now())
+            .bind(code, body.kind, text, owner, Date.now(), owner, cap)
             .run();
+          if (inserted.meta.changes === 0) return json({ error: "link_quota_exceeded" }, 403);
           return json({ code });
         } catch {
           // PK collision (astronomically rare) — roll a fresh code.
@@ -299,18 +303,16 @@ export default {
       if (text === null) return json({ error: "bad_payload" }, 400);
 
       const cap = Number(env.MAX_DOCS_PER_OWNER ?? DEFAULT_MAX_DOCS);
-      const count = await env.DB.prepare("SELECT COUNT(*) AS n FROM documents WHERE owner = ?")
-        .bind(owner)
-        .first<{ n: number }>();
-      if ((count?.n ?? 0) >= cap) return json({ error: "doc_quota_exceeded" }, 403);
-
       const id = crypto.randomUUID();
       const now = Date.now();
-      await env.DB.prepare(
-        "INSERT INTO documents (id, owner, kind, name, payload, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      // Quota check inside the INSERT (one atomic statement) — see /links.
+      const inserted = await env.DB.prepare(
+        "INSERT INTO documents (id, owner, kind, name, payload, created_at, updated_at) " +
+          "SELECT ?, ?, ?, ?, ?, ?, ? WHERE (SELECT COUNT(*) FROM documents WHERE owner = ?) < ?",
       )
-        .bind(id, owner, body.kind, name, text, now, now)
+        .bind(id, owner, body.kind, name, text, now, now, owner, cap)
         .run();
+      if (inserted.meta.changes === 0) return json({ error: "doc_quota_exceeded" }, 403);
       return json({ id, updated_at: now });
     }
 
@@ -322,24 +324,19 @@ export default {
     if (request.method === "POST" && shareMatch) {
       const id = decodeURIComponent(shareMatch[1]);
       const body = await readJson(request);
-      const row = await env.DB.prepare(
-        "SELECT editor_token, viewer_token FROM documents WHERE id = ? AND owner = ?",
-      )
-        .bind(id, owner)
-        .first<{ editor_token: string | null; viewer_token: string | null }>();
+      // One statement either way, returning the tokens the row ends up with.
+      // Without regenerate, COALESCE keeps tokens that already exist, so two
+      // concurrent first shares agree on one pair instead of the second
+      // silently invalidating the links the first handed out.
+      const sql =
+        body.regenerate === true
+          ? "UPDATE documents SET editor_token = ?, viewer_token = ? WHERE id = ? AND owner = ? RETURNING editor_token, viewer_token"
+          : "UPDATE documents SET editor_token = COALESCE(editor_token, ?), viewer_token = COALESCE(viewer_token, ?) WHERE id = ? AND owner = ? RETURNING editor_token, viewer_token";
+      const row = await env.DB.prepare(sql)
+        .bind(crypto.randomUUID(), crypto.randomUUID(), id, owner)
+        .first<{ editor_token: string; viewer_token: string }>();
       if (!row) return json({ error: "not_found" }, 404);
-
-      if (row.editor_token && row.viewer_token && body.regenerate !== true) {
-        return json({ id, editorToken: row.editor_token, viewerToken: row.viewer_token });
-      }
-      const editorToken = crypto.randomUUID();
-      const viewerToken = crypto.randomUUID();
-      await env.DB.prepare(
-        "UPDATE documents SET editor_token = ?, viewer_token = ? WHERE id = ? AND owner = ?",
-      )
-        .bind(editorToken, viewerToken, id, owner)
-        .run();
-      return json({ id, editorToken, viewerToken });
+      return json({ id, editorToken: row.editor_token, viewerToken: row.viewer_token });
     }
 
     // /docs/:id → fetch / update / delete (owner-scoped: the WHERE clause
@@ -381,19 +378,30 @@ export default {
           return json({ error: "doc_live" }, 409);
         }
 
-        // Optimistic-concurrency hint: a stale ifUpdatedAt means another
-        // device wrote since this client last read — surface, don't clobber.
-        if (typeof body.ifUpdatedAt === "number" && body.ifUpdatedAt !== row.updated_at) {
+        // Optimistic concurrency: a stale ifUpdatedAt means another device
+        // wrote since this client last read — surface, don't clobber. The
+        // version check is repeated in the UPDATE's WHERE so a write landing
+        // between the read above and this statement still fails it. Without
+        // ifUpdatedAt the write is last-write-wins. updated_at strictly
+        // increases (never repeats a millisecond), so it stays a usable version.
+        const ifUpdatedAt = typeof body.ifUpdatedAt === "number" ? body.ifUpdatedAt : null;
+        if (ifUpdatedAt !== null && ifUpdatedAt !== row.updated_at) {
           return json({ error: "conflict", updated_at: row.updated_at, name: row.name }, 409);
         }
-
-        const now = Date.now();
-        await env.DB.prepare(
-          "UPDATE documents SET name = ?, payload = ?, updated_at = ? WHERE id = ? AND owner = ?",
+        const updated = await env.DB.prepare(
+          "UPDATE documents SET name = COALESCE(?, name), payload = ?, updated_at = MAX(?, updated_at + 1) " +
+            "WHERE id = ? AND owner = ? AND (? IS NULL OR updated_at = ?) RETURNING updated_at",
         )
-          .bind(name ?? row.name, text, now, id, owner)
-          .run();
-        return json({ id, updated_at: now });
+          .bind(name ?? null, text, Date.now(), id, owner, ifUpdatedAt, ifUpdatedAt)
+          .first<{ updated_at: number }>();
+        if (updated) return json({ id, updated_at: updated.updated_at });
+        const current = await env.DB.prepare(
+          "SELECT name, updated_at FROM documents WHERE id = ? AND owner = ?",
+        )
+          .bind(id, owner)
+          .first<{ name: string; updated_at: number }>();
+        if (!current) return json({ error: "not_found" }, 404);
+        return json({ error: "conflict", updated_at: current.updated_at, name: current.name }, 409);
       }
 
       if (request.method === "DELETE") {

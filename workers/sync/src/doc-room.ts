@@ -150,6 +150,11 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
     const token = url.searchParams.get("token") ?? "";
 
     let role: "editor" | "viewer" | null;
+    if (docId !== null && this.readMeta("code") !== null) {
+      // An ephemeral session room never becomes doc-bound. The worker strips
+      // a client `doc` param on session routes; this is the room's own guard.
+      return new Response("no such document", { status: 404 });
+    }
     if (docId !== null) {
       // Doc-bound: tokens live on the D1 row — one indexed point read both
       // validates the token and (when cold) hydrates the room.
@@ -341,6 +346,12 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
 
     const last = Number(this.readMeta("last_activity") ?? "0");
     if (Date.now() - last < this.ttlMs()) {
+      // The registry sweeps slots by their stamp, not by liveness: re-stamp
+      // on every active alarm (at most a TTL apart, inside the sweep horizon)
+      // so a long-lived room — ephemeral, or doc-bound with no edits — keeps
+      // its slot and its doc_live guard.
+      const key = this.registryKey();
+      if (key) await this.registry().refresh(key);
       await this.armAlarm();
       return;
     }
@@ -354,6 +365,11 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
         return;
       }
       if (this.readMeta("doc_id") === null && this.readMeta("code") === null) return;
+      if (this.readMeta("dirty") === "1") {
+        // An edit landed during the D1 write — the room is active again.
+        await this.armAlarm();
+        return;
+      }
     }
     await this.shutdown("session expired");
   }
@@ -386,12 +402,17 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
 
   /** Write the room's doc back to its D1 row. An UPDATE that touches no rows
    *  means the doc was deleted out from under the room — shut down instead of
-   *  resurrecting it. Throws propagate to callers (they own retry policy). */
+   *  resurrecting it. Throws propagate to callers (they own retry policy).
+   *  The D1 write is external I/O, so ops can land while it is in flight; the
+   *  room stays dirty (with a fresh debounce) unless the seq it wrote is still
+   *  current. updated_at strictly increases, matching the worker's PUT, so a
+   *  client holding a pre-flush ifUpdatedAt always sees a conflict. */
   private async persistIfDirty(): Promise<void> {
     const docId = this.readMeta("doc_id");
     if (docId === null || this.readMeta("dirty") !== "1") return;
+    const writtenSeq = this.readMeta("seq");
     const result = await this.env.DB.prepare(
-      "UPDATE documents SET payload = ?, updated_at = ? WHERE id = ?",
+      "UPDATE documents SET payload = ?, updated_at = MAX(?, updated_at + 1) WHERE id = ?",
     )
       .bind(this.readMeta("doc"), Date.now(), docId)
       .run();
@@ -399,7 +420,12 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
       await this.shutdown("doc deleted");
       return;
     }
-    this.ctx.storage.sql.exec("DELETE FROM meta WHERE k IN ('dirty', 'persist_due')");
+    this.ctx.storage.sql.exec("DELETE FROM meta WHERE k = 'persist_due'");
+    if (this.readMeta("seq") === writtenSeq) {
+      this.ctx.storage.sql.exec("DELETE FROM meta WHERE k = 'dirty'");
+    } else {
+      await this.schedulePersist();
+    }
     // Long-lived active rooms re-stamp their slot so the sweep can't reap it.
     await this.registry().refresh(`doc:${docId}`);
   }
