@@ -1867,58 +1867,96 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "023c6d5b377cc599ace12fce67984b655b32f31511a8d34bfcbfad72f943d51e",
+    "source_digest": "5f83ad2684258579762bf3839f793a727cdc4fb02a2eaf8e8fce5910ccbf0e11",
     "version": "2025-q3",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "set-up",
-          "target": "this-model",
-          "modifier": {
-            "to": "strategic-reserves"
-          }
-        },
-        {
-          "type": "set-up",
-          "target": "this-unit",
-          "modifier": {
-            "to": "battlefield",
-            "from": "strategic-reserves",
-            "turns": [
-              1,
-              2,
-              3
-            ],
-            "ignore_limits": true
-          }
-        },
-        {
-          "type": "for-each-unit",
-          "selector": {
-            "filter": {
-              "owner": "friendly"
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "set-up",
+              "target": "this-unit",
+              "modifier": {
+                "to": "strategic-reserves",
+                "mandatory": true
+              }
             },
-            "eligibility": {
-              "type": "unit-state",
-              "parameters": {
-                "state": "embarked",
-                "with": "this-model"
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "battle-round",
+                    "parameters": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  },
+                  {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "movement"
+                        }
+                      },
+                      {
+                        "type": "player-turn-is",
+                        "parameters": {
+                          "turn": "your-turn"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "effect": {
+                "type": "move",
+                "target": "this-unit",
+                "modifier": {
+                  "move_type": "ingress"
+                }
               }
             }
+          ]
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "set-up"
           },
           "effect": {
-            "type": "set-up",
-            "target": "recipient",
-            "modifier": {
-              "to": "battlefield",
-              "from": "transport",
-              "min_enemy_distance": {
-                "inches": 8
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "move",
+                "target": {
+                  "owner": "friendly",
+                  "embarked_in": "this-unit"
+                },
+                "modifier": {
+                  "move_type": "disembark",
+                  "mode": "assault"
+                }
+              },
+              {
+                "type": "set-up",
+                "target": "event-subject",
+                "modifier": {
+                  "to": "battlefield",
+                  "min_enemy_distance": {
+                    "inches": 8
+                  },
+                  "mandatory": true
+                }
               }
-            }
+            ]
           }
         }
       ]
@@ -1930,7 +1968,7 @@
       "drop-pod"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "adeptus-astartes"
   },
   {

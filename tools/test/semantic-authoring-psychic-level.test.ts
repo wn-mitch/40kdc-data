@@ -246,3 +246,21 @@ describe("Semantic authoring psychic-level follow-up shapes (fabricated)", () =>
     expect(JSON.stringify((result as unknown as { mechanics: unknown }).mechanics)).toContain('"stat":"Range"');
   });
 });
+
+describe("Semantic authoring psychic headings as cards print them", () => {
+  it("reads a heading whose colon sits inside the bold", () => {
+    const text = "**Alpha Hex (psychic level 2):** In your Shooting phase, roll one D6 (psychic). On a 4+, this unit has +1 Sv.";
+    const result = compiled(text, [cost("psychic level 2", 2), shooting, ...psychicTest, sv]);
+    expectCompiled(result);
+    expect(spendOf((result as unknown as { mechanics: { effect: Record<string, unknown> } }).mechanics.effect).modifier.amount).toBe(2);
+  });
+
+  it("skips a heading that holds no leaf at all, as another body's heading in a granted record does", () => {
+    const text = "**Alpha Hex (psychic level 2)**\nroll one D6 (psychic). On a 4+, this unit has +1 Sv.\n**Beta Ward (psychic level 1)**\nA second ability described elsewhere.";
+    const result = compiled(text, [cost("psychic level 2", 2), ...psychicTest, sv]);
+    expectCompiled(result);
+    const part = (result as unknown as { mechanics: { effect: Record<string, unknown> } }).mechanics.effect;
+    expect(part.type).toBe("ability-part");
+    expect(spendOf(part).modifier.amount).toBe(2);
+  });
+});

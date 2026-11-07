@@ -68,6 +68,8 @@ function actor(ref: unknown): string {
   // A moment nested in an attack's: the unit making that attack.
   if (ref === "attacker") return "the attacking unit";
   if (ref === "selected-unit") return "the selected unit";
+  // A moment nested in a triggered effect: the unit that triggered it.
+  if (ref === "event-subject") return "the triggering unit";
   if (typeof ref === "object") {
     const f = ref as P;
     // The unit an aura reaches, as the effect's aura names it (effect.ts withAuraRecipient).

@@ -68,3 +68,31 @@ describe("mark-objective and the reaction while an objective is tagged", () => {
     expect(() => normalizeFingerprintParameters("mark-objective", { tag: "not-a-designation", objective: "controlled-by-unit" }, 1)).toThrow(/not a registered designation/);
   });
 });
+
+describe("a selected objective tagged for later sentences that read it from an attack", () => {
+  const text = "In your Command phase, you can use this ability. If you do, select one objective. That objective is your vowed objective until your next Command phase. Friendly Alpha unit's attacks that target an enemy unit within range of your vowed objective have +1 to wound rolls.";
+  const items: Item[] = [
+    ["In your Command phase", "phase-window", { phase: "command", turn: "your" }],
+    ["you can use this ability", "optional-use", { who: "you" }],
+    ["select one objective", "select-objective-open", { bind_as: "objective", count: 1 }],
+    ["That objective is your vowed objective", "apply-mark", { subject: "selected-objective", tag: "vowed-objective" }],
+    ["until your next Command phase", "duration", { endpoint: "start-of-next-command-phase" }],
+    ["Friendly Alpha", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+    ["unit's attacks that target an", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "any", target: "following-filter" }],
+    ["enemy unit", "unit-filter", { side: "enemy" }],
+    ["within range of your vowed objective", "unit-position", { kind: "objective-range", controlled_by: "any", subject: "target", negated: false, objective: "selected" }],
+    ["have +1 to wound rolls", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
+  ];
+
+  it("keeps the attack sentence inside the selection, where it reads the selected objective", () => {
+    const result = run(text, ...items);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const json = JSON.stringify(result.mechanics.effect);
+    const selection = JSON.stringify((result.mechanics.effect as Record<string, any>).effect);
+    expect(selection).toMatch(/^\{"type":"select-objective"/);
+    // The mark and the attack bonus are both the selection's, and the bonus reads that selection.
+    expect(selection).toContain('"tag":"vowed-objective"');
+    expect(selection).toContain('"roll":"wound"');
+    expect(json.match(/"selection_var":"objective"/g)).toHaveLength(2);
+  });
+});

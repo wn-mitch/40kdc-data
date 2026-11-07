@@ -1,4 +1,5 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
+import { SHARED_ROSTERS } from "../mfm/faction-map.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { foldName } from "./compile-weapon-names.js";
 
@@ -6,11 +7,21 @@ type UnitIdentity = { id: string; name: string };
 export type UnitNameContext = { faction_id: string; units?: readonly UnitIdentity[] };
 const catalogs = new Map<string, readonly UnitIdentity[]>();
 
+/**
+ * The faction's datasheets: its own units.json and those of its shared-roster parents (a Space Marine
+ * chapter fields the adeptus-astartes units), one entry per unit id.
+ */
 function unitsIn(context: UnitNameContext): readonly UnitIdentity[] {
   if (context.units) return context.units;
   const cached = catalogs.get(context.faction_id);
   if (cached) return cached;
-  const units = JSON.parse(readFileSync(new URL(`../../../data/core/${context.faction_id}/units.json`, import.meta.url), "utf8")) as UnitIdentity[];
+  const byId = new Map<string, UnitIdentity>();
+  for (const dir of [context.faction_id, ...(SHARED_ROSTERS[context.faction_id] ?? [])]) {
+    const file = new URL(`../../../data/core/${dir}/units.json`, import.meta.url);
+    if (!existsSync(file)) continue;
+    for (const unit of JSON.parse(readFileSync(file, "utf8")) as UnitIdentity[]) if (!byId.has(unit.id)) byId.set(unit.id, unit);
+  }
+  const units = [...byId.values()];
   catalogs.set(context.faction_id, units);
   return units;
 }

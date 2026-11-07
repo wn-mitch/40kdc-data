@@ -275,6 +275,31 @@ export const DICE_FAMILIES: readonly SemanticFamilyDefinition[] = [
     },
   },
   {
+    // "roll either one D6 or two D6 (keep re-rolling duplicate results)": the leaf covers "or two D6 (…".
+    id: "dice-count-option",
+    version: 1,
+    role: "EFFECT",
+    label: "Or roll more dice",
+    description: "The player can roll count dice instead of the one D6 the dice-roll right before it rolls, each result applying on the roll's table; distinct: a repeated result is re-rolled (\"keep re-rolling duplicate results\"). A dice-count-rolled condition gates what applies only when the player rolled count dice.",
+    starter: { count: 2 },
+    parameterSchema: {
+      type: "object",
+      required: ["count"],
+      properties: { count: { type: "integer", minimum: 2, maximum: 6 }, distinct: { const: true } },
+      additionalProperties: false,
+    },
+  },
+  {
+    // "If you rolled two D6, …".
+    id: "dice-count-rolled",
+    version: 1,
+    role: "CONDITION",
+    label: "If you rolled that many dice",
+    description: "Holds when the player took the record's dice-count option and rolled count dice (\"if you rolled two D6\"); count is the option's.",
+    starter: { count: 2 },
+    parameterSchema: { type: "object", required: ["count"], properties: { count: { type: "integer", minimum: 2, maximum: 6 } }, additionalProperties: false },
+  },
+  {
     id: "end-attack-sequence",
     version: 1,
     role: "EFFECT",
@@ -391,6 +416,14 @@ export function normalizeDiceParameters(family: string, input: Record<string, un
     case "end-attack-sequence":
       exactKeys(input, [], family);
       return {};
+    case "dice-count-option": {
+      exactKeys(input, "distinct" in input ? ["count", "distinct"] : ["count"], family);
+      if ("distinct" in input && input.distinct !== true) throw new TypeError("dice-count-option.distinct is true or absent.");
+      return { count: boundedInteger(input.count, 2, 6, "dice-count-option.count"), ...(input.distinct === true ? { distinct: true } : {}) };
+    }
+    case "dice-count-rolled":
+      exactKeys(input, ["count"], family);
+      return { count: boundedInteger(input.count, 2, 6, "dice-count-rolled.count") };
     default:
       return null;
   }

@@ -29,10 +29,22 @@ function gapBetween(previous: CompileLeaf, next: CompileLeaf, sourceText: string
   // A span ending in its own full stop ("have **Fights First.**") closes its sentence at a line break, as a stop in the gap would.
   // A moment that opens a new line without a bullet ("■ Onslaught: 14 points\nEach time …") starts a sentence too: the list before it has ended.
   const lineMoment = next.family_id === "event" && /[\r\n]/u.test(gap) && !BULLET.test(gap);
+  // "1‑2\n+1 A\n3‑4\n+2 S\nIf you …": a printed table's row ends at the line break after its result cell.
+  const bandRow = /[\r\n]/u.test(gap) && afterBandCell(sourceText, previous.start_byte);
   // "that unit's ranged attacks:\rDo not have [Heavy].\rHave +1 to hit rolls.": the lines under a colon are items of one list, so a
   // full stop that ends one item's line does not end the sentence the colon opened.
   const lineEnd = ends && /^[ \t]*[\r\n]+[ \t]*$/u.test(gap) && !colonListItem(sourceText, previous.start_byte);
-  return { sentence: closes || lineMoment || lineEnd || (ends && /[\r\n]/u.test(gap) && !/^[ \t]*[\r\n]+[ \t]*$/u.test(gap)) || /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
+  return { sentence: closes || lineMoment || bandRow || lineEnd || (ends && /[\r\n]/u.test(gap) && !/^[ \t]*[\r\n]+[ \t]*$/u.test(gap)) || /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
+}
+
+/** A printed table's result cell on a line of its own: "1‑2", "3", "5+". */
+const BAND_CELL = /^[ \t]*\d+(?:[ \t]*[‑–-][ \t]*\d+)?\+?[ \t]*$/u;
+
+/** Whether the line holding byte `at` follows a line that is only a result cell, as a table row's effect does. */
+function afterBandCell(sourceText: string, at: number): boolean {
+  const before = Buffer.from(sourceText, "utf8").subarray(0, at).toString("utf8");
+  const lines = before.split(/\r\n|[\r\n]/u);
+  return lines.length >= 2 && BAND_CELL.test(lines.at(-2)!);
 }
 
 /**

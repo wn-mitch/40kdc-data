@@ -1,4 +1,5 @@
 import { oathCondition } from "./compile-oath.js";
+import { DICE_COUNT_MARKER, DICE_COUNT_ROLLED } from "./compile-dice-count-choice.js";
 import { abilityUseCondition } from "./compile-ability-use.js";
 /**
  * Condition and trigger DSL fragments, split out of `compile-fragments.ts` (batch 6) so that
@@ -365,6 +366,8 @@ export function condition(leaf: CompileLeaf): Node {
     if (withTransport && filter.embarked_in !== undefined && filter.embarked_in !== transport) throw new CompileError("A unit-filter embarked within one unit and a state embarked within another name different Transports; one DSL filter holds one.");
     return withFilter(condition({ ...leaf, parameters }), withTransport ? { ...filter, embarked_in: transport } : filter) as Node;
   }
+  // "If you rolled two D6": which count of a dice-count option the player picked (compile-dice-count-choice.ts).
+  if (leaf.family_id === DICE_COUNT_ROLLED) return { type: DICE_COUNT_MARKER, count: leaf.parameters.count };
   // A moment a reviewed "if" makes a condition on what happened (compile-connective-history.ts).
   if (leaf.family_id === "__happened") return { type: "happened", parameters: structuredClone(leaf.parameters.happened as Node) };
   // "(excluding units with X that are not Y)" folded by compile-condition-exclusions.ts: none of the units meeting all of the group.

@@ -3878,5 +3878,214 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "caseId": "fidelity/nested-trigger-event-subject",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "selected",
+        "filter": {
+          "to": "attack"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        },
+        "optional": true
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "dice-table",
+            "dice": "D6",
+            "outcomes": [
+              {
+                "results": [
+                  1,
+                  2,
+                  3
+                ],
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "event-subject",
+                  "modifier": {
+                    "stat": "A",
+                    "operation": "improve",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "results": [
+                  4,
+                  5,
+                  6
+                ],
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "event-subject",
+                  "modifier": {
+                    "stat": "S",
+                    "operation": "improve",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "attacks-resolved",
+              "subject": "event-subject",
+              "filter": {
+                "kind": "attack"
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "event-subject",
+              "modifier": {
+                "test": "hazard"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    }
+  },
+  {
+    "caseId": "fidelity/dice-count-choice",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "selected",
+        "filter": {
+          "to": "attack"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        },
+        "optional": true
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "dice-table",
+            "dice": "D6",
+            "outcomes": [
+              {
+                "results": [
+                  1,
+                  2,
+                  3
+                ],
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "event-subject",
+                  "modifier": {
+                    "stat": "A",
+                    "operation": "improve",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "results": [
+                  4,
+                  5,
+                  6
+                ],
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "event-subject",
+                  "modifier": {
+                    "stat": "S",
+                    "operation": "improve",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "dice-table",
+                "dice": "D6",
+                "outcomes": [
+                  {
+                    "results": [
+                      1,
+                      2,
+                      3
+                    ],
+                    "effect": {
+                      "type": "stat-modifier",
+                      "target": "event-subject",
+                      "modifier": {
+                        "stat": "A",
+                        "operation": "improve",
+                        "value": 1
+                      }
+                    }
+                  },
+                  {
+                    "results": [
+                      4,
+                      5,
+                      6
+                    ],
+                    "effect": {
+                      "type": "stat-modifier",
+                      "target": "event-subject",
+                      "modifier": {
+                        "stat": "S",
+                        "operation": "improve",
+                        "value": 1
+                      }
+                    }
+                  }
+                ],
+                "count": 2,
+                "distinct": true
+              },
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "attacks-resolved",
+                  "subject": "event-subject",
+                  "filter": {
+                    "kind": "attack"
+                  }
+                },
+                "effect": {
+                  "type": "test",
+                  "target": "event-subject",
+                  "modifier": {
+                    "test": "hazard"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    }
   }
 ]

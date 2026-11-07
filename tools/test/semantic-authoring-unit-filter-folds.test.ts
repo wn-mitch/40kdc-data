@@ -452,3 +452,16 @@ describe("Semantic authoring aura-range side against the unit-filter before it",
     expect(result.ok ? "" : result.errors.join(" ")).toMatch(/aura-range's side differs/);
   });
 });
+
+describe("a designation the filtered units carry", () => {
+  it("binds \"is riled up\" after a friendly filter to that filter's units, the recipients of the effect", () => {
+    const text = "While a friendly Alpha unit is riled up, that unit's ranged attacks have +1 to hit rolls.";
+    const result = mechanics(text,
+      ["friendly Alpha unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+      ["riled up", "designated-filter", { subject: "antecedent", tag: "riled-up", negated: false }],
+      ["that unit's ranged attacks have +1 to hit rolls", "roll-modifier", { subject: "antecedent", roll: "hit", operation: "add", value: 1, weapon_type: "ranged" }]);
+    expect(result.effect).toEqual({ type: "conditional",
+      condition: { type: "matches", parameters: { subject: "recipient", filter: { designated: "riled-up" } } },
+      effect: { type: "roll-modifier", target: { owner: "friendly", all_of: ["ALPHA"] }, modifier: { roll: "hit", operation: "add", value: 1, weapons: { type: "ranged" } } } });
+  });
+});

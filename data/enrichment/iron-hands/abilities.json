@@ -136,43 +136,230 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "85b936c8f7a6437be7c58fe02b26f03706ed14a42ec3f17938781f0d9d323e3e",
+    "source_digest": "b63d506a424f93a363551fc88b650eb47f32b9245ff86d6bac708e4236a74856",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "iron-hands",
     "detachment_id": "medusas-wrath",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "choice",
-      "choice_label": "Armoured Wrath re-roll",
-      "options": [
+      "type": "sequence",
+      "steps": [
         {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "subset": "all-failures"
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "any_of": [
+                      "CAANOK VAR",
+                      "IRON FATHER FEIRROS"
+                    ]
+                  },
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result",
+              "count": 1
+            }
           }
         },
         {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "wound",
-            "subset": "all-failures"
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "any_of": [
+                      "CAANOK VAR",
+                      "IRON FATHER FEIRROS"
+                    ]
+                  },
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result",
+              "count": 1
+            }
           }
         },
         {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "damage",
-            "subset": "all-failures"
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "friendly",
+                    "any_of": [
+                      "CAANOK VAR",
+                      "IRON FATHER FEIRROS"
+                    ]
+                  },
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "damage",
+              "result_scope": "any-result",
+              "count": 1
+            }
           }
+        },
+        {
+          "type": "choice",
+          "options": [
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "event-subject",
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "CAANOK VAR",
+                              "IRON FATHER FEIRROS"
+                            ]
+                          },
+                          "range": {
+                            "inches": 6
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "result_scope": "any-result",
+                  "count": 1
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "event-subject",
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "CAANOK VAR",
+                              "IRON FATHER FEIRROS"
+                            ]
+                          },
+                          "range": {
+                            "inches": 6
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "wound",
+                  "result_scope": "any-result",
+                  "count": 1
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "event-subject",
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "friendly",
+                            "any_of": [
+                              "CAANOK VAR",
+                              "IRON FATHER FEIRROS"
+                            ]
+                          },
+                          "range": {
+                            "inches": 6
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "damage",
+                  "result_scope": "any-result",
+                  "count": 1
+                }
+              }
+            }
+          ]
         }
       ]
     },
@@ -180,9 +367,34 @@
       "duration": "permanent"
     },
     "community_notes": "[APPROX] Once per phase, each ADEPTUS ASTARTES unit may re-roll one Hit, Wound, or Damage roll (see 'usage'). The single-roll re-roll is modeled with subset 'all-failures' per the sibling convention. Full rule in raw-text store.",
-    "usage": {
-      "frequency": "once-per-phase"
-    }
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "shoot"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS ASTARTES"
+          ]
+        },
+        "optional": true
+      },
+      {
+        "event": "selected",
+        "filter": {
+          "to": "fight"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS ASTARTES"
+          ]
+        },
+        "optional": true
+      }
+    ]
   },
   {
     "ability_id": "target-augury-web-medusas-wrath-iron-hands",

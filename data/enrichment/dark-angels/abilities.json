@@ -760,9 +760,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "f677295a120cd16831c62ef0f5eeebc362e5b1a1ea209f5b8c9d410c62c1d4fd",
+    "source_digest": "1488b35357d3e9d6d6da2b2de3a3d0d91176928a8dda325a671743b8c61d34ef",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -771,50 +771,37 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "weapons": {
-              "type": "melee"
-            },
-            "keywords": [
-              {
-                "keyword_id": "lethal-hits"
-              }
-            ]
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "within": {
-                  "range": "objective-control",
-                  "of": {
-                    "objective": {}
-                  }
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "within": {
+              "of": {
+                "objective": {
+                  "designated": "vowed-objective"
                 }
-              }
-            }
-          },
-          "effect": {
-            "type": "roll-result",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "critical_on": 5,
-              "weapons": {
-                "type": "melee"
-              }
+              },
+              "range": "objective-control"
             }
           }
         }
-      ]
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -3998,52 +3985,70 @@
             "effect": {
               "type": "ability-part",
               "effect": {
-                "type": "conditional",
-                "condition": {
-                  "operator": "and",
-                  "operands": [
-                    {
-                      "type": "matches",
-                      "parameters": {
-                        "subject": "defender",
-                        "filter": {
-                          "owner": "enemy"
-                        }
-                      }
-                    },
-                    {
-                      "type": "matches",
-                      "parameters": {
-                        "subject": "defender",
-                        "filter": {
-                          "within": {
-                            "of": {
-                              "objective": {
-                                "selection_var": "objective"
-                              }
-                            },
-                            "range": "objective-control"
-                          }
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "designate",
+                    "target": "this-unit",
+                    "modifier": {
+                      "tag": "vowed-objective",
+                      "clears_on": "until-next-command-phase",
+                      "subject": {
+                        "objective": {
+                          "selection_var": "objective"
                         }
                       }
                     }
-                  ]
-                },
-                "effect": {
-                  "type": "roll-modifier",
-                  "target": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "DEATHWING",
-                      "INFANTRY"
-                    ]
                   },
-                  "modifier": {
-                    "roll": "wound",
-                    "operation": "add",
-                    "value": 1
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "defender",
+                            "filter": {
+                              "owner": "enemy"
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "defender",
+                            "filter": {
+                              "within": {
+                                "of": {
+                                  "objective": {
+                                    "selection_var": "objective"
+                                  }
+                                },
+                                "range": "objective-control"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "roll-modifier",
+                      "target": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "DEATHWING",
+                          "INFANTRY"
+                        ]
+                      },
+                      "modifier": {
+                        "roll": "wound",
+                        "operation": "add",
+                        "value": 1
+                      }
+                    }
                   }
-                }
+                ]
               },
               "duration": "until-next-command-phase"
             }

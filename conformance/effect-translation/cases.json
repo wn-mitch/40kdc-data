@@ -22648,252 +22648,7 @@
     }
   },
   {
-    "caseId": "powers-of-da-waaagh-orks#311",
-    "effect": {
-      "type": "for-each-unit",
-      "selector": {
-        "filter": {
-          "owner": "friendly",
-          "all_of": [
-            "ORKS",
-            "PSYKER"
-          ],
-          "level": "model"
-        }
-      },
-      "effect": {
-        "type": "rules-bundle",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "selected-unit",
-            "modifier": {
-              "stat": "S",
-              "operation": "add",
-              "value": 1,
-              "weapons": {
-                "keyword": {
-                  "keyword_id": "psychic"
-                }
-              }
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "selected-unit",
-            "modifier": {
-              "stat": "S",
-              "operation": "add",
-              "value": 1,
-              "weapons": {
-                "keyword": {
-                  "keyword_id": "psychic"
-                }
-              }
-            },
-            "scaling": {
-              "per": 5,
-              "of": "models-in-or-embarked-in-bearer",
-              "round": "down"
-            }
-          },
-          {
-            "type": "ability-part",
-            "name": "Roar of Mork",
-            "kind": "psychic",
-            "level": 1,
-            "effect": {
-              "type": "conditional",
-              "condition": {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "phase-is",
-                    "parameters": {
-                      "phase": "movement"
-                    }
-                  },
-                  {
-                    "type": "player-turn-is",
-                    "parameters": {
-                      "turn": "your-turn"
-                    }
-                  },
-                  {
-                    "operator": "not",
-                    "operands": [
-                      {
-                        "type": "matches",
-                        "parameters": {
-                          "filter": {
-                            "state": "battle-shocked"
-                          }
-                        }
-                      }
-                    ]
-                  }
-                ]
-              },
-              "effect": {
-                "type": "sequence",
-                "steps": [
-                  {
-                    "type": "dice-gated",
-                    "dice": "D6",
-                    "threshold": 1,
-                    "comparison": "eq",
-                    "on_success": {
-                      "type": "state-change",
-                      "target": "selected-unit",
-                      "modifier": {
-                        "state": "battle-shocked",
-                        "set": true
-                      }
-                    }
-                  },
-                  {
-                    "type": "select-units",
-                    "selector": {
-                      "filter": {
-                        "owner": "enemy",
-                        "within": {
-                          "range": {
-                            "inches": 12
-                          },
-                          "of": "this-model"
-                        }
-                      },
-                      "count": {
-                        "min": 1,
-                        "max": 1
-                      },
-                      "eligibility": {
-                        "operator": "and",
-                        "operands": [
-                          {
-                            "operator": "not",
-                            "operands": [
-                              {
-                                "type": "matches",
-                                "parameters": {
-                                  "filter": {
-                                    "all_of": [
-                                      "MONSTER"
-                                    ]
-                                  },
-                                  "subject": "recipient"
-                                }
-                              }
-                            ]
-                          },
-                          {
-                            "operator": "not",
-                            "operands": [
-                              {
-                                "type": "matches",
-                                "parameters": {
-                                  "filter": {
-                                    "all_of": [
-                                      "VEHICLE"
-                                    ]
-                                  },
-                                  "subject": "recipient"
-                                }
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    },
-                    "effect": {
-                      "type": "test",
-                      "target": "selected-unit",
-                      "modifier": {
-                        "test": "battle-shock",
-                        "modifier": -1
-                      },
-                      "scaling": {
-                        "per": 10,
-                        "of": "models-in-bearer-unit",
-                        "round": "down"
-                      }
-                    }
-                  }
-                ]
-              }
-            },
-            "optional": true
-          },
-          {
-            "type": "ability-part",
-            "name": "Visions of Violence",
-            "kind": "psychic",
-            "level": 1,
-            "trigger": {
-              "event": "phase-started",
-              "condition": {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "fight"
-                }
-              }
-            },
-            "effect": {
-              "type": "conditional",
-              "condition": {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "state": "battle-shocked"
-                      }
-                    }
-                  }
-                ]
-              },
-              "effect": {
-                "type": "sequence",
-                "steps": [
-                  {
-                    "type": "dice-gated",
-                    "dice": "D6",
-                    "threshold": 1,
-                    "comparison": "eq",
-                    "on_success": {
-                      "type": "state-change",
-                      "target": "selected-unit",
-                      "modifier": {
-                        "state": "battle-shocked",
-                        "set": true
-                      }
-                    }
-                  },
-                  {
-                    "type": "ability-grant",
-                    "target": "selected-unit",
-                    "modifier": {
-                      "ability": "fights-first"
-                    }
-                  }
-                ]
-              }
-            },
-            "optional": true
-          }
-        ]
-      }
-    },
-    "scope": {
-      "duration": "battle"
-    },
-    "expected": {
-      "text": "For the rest of the battle:\n  For each friendly ORKS PSYKER model:\n    -> Add 1 to the Strength characteristic of weapons with [PSYCHIC] equipped by that model.\n    -> Add 1 to the Strength characteristic of weapons with [PSYCHIC] equipped by that model for every 5 models in or embarked within this model.\n    -> You can use Roar of Mork (Psychic level 1): during the Movement phase, in your turn, while the unit is not Battle-shocked, roll one D6: on exactly 1, that model is Battle-shocked; select one enemy unit within 12\" of this model without the MONSTER keyword and without the VEHICLE keyword: that unit must take a Battle-shock test, applying -1 to that test for every 10 models in this unit.\n    -> At the start of the Fight phase, you can use Visions of Violence (Psychic level 1): while the unit is not Battle-shocked, roll one D6: on exactly 1, that model is Battle-shocked; that model gains the Fights First ability."
-    }
-  },
-  {
-    "caseId": "praise-the-fallen-hallowed-martyrs-adepta-sororitas#312",
+    "caseId": "praise-the-fallen-hallowed-martyrs-adepta-sororitas#311",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -22958,7 +22713,7 @@
     }
   },
   {
-    "caseId": "prioritised-efficiency-leagues-of-votann#313",
+    "caseId": "prioritised-efficiency-leagues-of-votann#312",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23385,7 +23140,7 @@
     }
   },
   {
-    "caseId": "righteous-rage-bringers-of-flame-adepta-sororitas#314",
+    "caseId": "righteous-rage-bringers-of-flame-adepta-sororitas#313",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23441,7 +23196,7 @@
     }
   },
   {
-    "caseId": "rise-to-the-challenge-peerless-bladesmen-emperors-children#315",
+    "caseId": "rise-to-the-challenge-peerless-bladesmen-emperors-children#314",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23501,7 +23256,7 @@
     }
   },
   {
-    "caseId": "rune-of-mists-spirit-conclave-aeldari#316",
+    "caseId": "rune-of-mists-spirit-conclave-aeldari#315",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -23609,7 +23364,7 @@
     }
   },
   {
-    "caseId": "ruthless-reinvestment-leagues-of-votann#317",
+    "caseId": "ruthless-reinvestment-leagues-of-votann#316",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -23755,7 +23510,7 @@
     }
   },
   {
-    "caseId": "servo-sentry-astra-militarum#318",
+    "caseId": "servo-sentry-astra-militarum#317",
     "effect": {
       "type": "permission",
       "target": {
@@ -23803,7 +23558,7 @@
     }
   },
   {
-    "caseId": "special-move-types-adeptus-astartes#319",
+    "caseId": "special-move-types-adeptus-astartes#318",
     "effect": {
       "type": "rules-bundle",
       "steps": [
@@ -23958,7 +23713,7 @@
     }
   },
   {
-    "caseId": "special-move-types-adeptus-custodes#320",
+    "caseId": "special-move-types-adeptus-custodes#319",
     "effect": {
       "type": "rules-bundle",
       "steps": [
@@ -24032,7 +23787,7 @@
     }
   },
   {
-    "caseId": "special-move-types-orks#321",
+    "caseId": "special-move-types-orks#320",
     "effect": {
       "type": "rules-bundle",
       "steps": [
@@ -24201,7 +23956,7 @@
     }
   },
   {
-    "caseId": "speednob-support-orks#322",
+    "caseId": "speednob-support-orks#321",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24239,7 +23994,7 @@
     }
   },
   {
-    "caseId": "spirit-leech-tyranids#323",
+    "caseId": "spirit-leech-tyranids#322",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24299,7 +24054,7 @@
     }
   },
   {
-    "caseId": "stalwart-defenders-adeptus-astartes#324",
+    "caseId": "stalwart-defenders-adeptus-astartes#323",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24340,7 +24095,7 @@
     }
   },
   {
-    "caseId": "storm-swift-onslaught-white-scars#325",
+    "caseId": "storm-swift-onslaught-white-scars#324",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24504,7 +24259,7 @@
     }
   },
   {
-    "caseId": "supernova-launcher-experimental-prototype-cadre-tau-empire#326",
+    "caseId": "supernova-launcher-experimental-prototype-cadre-tau-empire#325",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24583,7 +24338,7 @@
     }
   },
   {
-    "caseId": "swift-demise-aeldari#327",
+    "caseId": "swift-demise-aeldari#326",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24649,7 +24404,7 @@
     }
   },
   {
-    "caseId": "taktikal-know-wotz-orks#328",
+    "caseId": "taktikal-know-wotz-orks#327",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24691,7 +24446,7 @@
     }
   },
   {
-    "caseId": "tempestor-prime-astra-militarum#329",
+    "caseId": "tempestor-prime-astra-militarum#328",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -24727,7 +24482,7 @@
     }
   },
   {
-    "caseId": "terror-descends-chaos-space-marines#330",
+    "caseId": "terror-descends-chaos-space-marines#329",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -24861,7 +24616,7 @@
     }
   },
   {
-    "caseId": "terror-made-manifest-chaos-space-marines#331",
+    "caseId": "terror-made-manifest-chaos-space-marines#330",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -25050,7 +24805,7 @@
     }
   },
   {
-    "caseId": "the-shadow-of-chaos-chaos-daemons#332",
+    "caseId": "the-shadow-of-chaos-chaos-daemons#331",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -25395,7 +25150,7 @@
     }
   },
   {
-    "caseId": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire#333",
+    "caseId": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire#332",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -25475,7 +25230,7 @@
     }
   },
   {
-    "caseId": "tidewall-defence-platform-tau-empire#334",
+    "caseId": "tidewall-defence-platform-tau-empire#333",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25503,7 +25258,7 @@
     }
   },
   {
-    "caseId": "using-sir-hekhtur-imperial-knights#335",
+    "caseId": "using-sir-hekhtur-imperial-knights#334",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -25561,7 +25316,7 @@
     }
   },
   {
-    "caseId": "violent-fury-space-wolves#336",
+    "caseId": "violent-fury-space-wolves#335",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25594,7 +25349,7 @@
     }
   },
   {
-    "caseId": "ability-grant-scouts#337",
+    "caseId": "ability-grant-scouts#336",
     "effect": {
       "type": "ability-grant",
       "target": "this-unit",
@@ -25611,7 +25366,7 @@
     }
   },
   {
-    "caseId": "ability-grant-deadly-demise-dice#338",
+    "caseId": "ability-grant-deadly-demise-dice#337",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -25628,7 +25383,7 @@
     }
   },
   {
-    "caseId": "reroll-ones-and-twos#339",
+    "caseId": "reroll-ones-and-twos#338",
     "effect": {
       "type": "re-roll",
       "target": "this-unit",
@@ -25645,7 +25400,7 @@
     }
   },
   {
-    "caseId": "reroll-ones-and-twos#340",
+    "caseId": "reroll-ones-and-twos#339",
     "effect": {
       "type": "re-roll",
       "target": "this-unit",
@@ -25663,7 +25418,7 @@
     }
   },
   {
-    "caseId": "history-move-verb#341",
+    "caseId": "history-move-verb#340",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25700,7 +25455,7 @@
     }
   },
   {
-    "caseId": "history-move-verb#342",
+    "caseId": "history-move-verb#341",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25738,7 +25493,7 @@
     }
   },
   {
-    "caseId": "history-move-verb#343",
+    "caseId": "history-move-verb#342",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -25776,7 +25531,7 @@
     }
   },
   {
-    "caseId": "move-type#344",
+    "caseId": "move-type#343",
     "effect": {
       "type": "move-type",
       "name": "Example Drop Move",
@@ -25825,7 +25580,7 @@
     }
   },
   {
-    "caseId": "move-type#345",
+    "caseId": "move-type#344",
     "effect": {
       "type": "move-type",
       "name": "Example Jet Move",
@@ -25887,7 +25642,7 @@
     }
   },
   {
-    "caseId": "move-type#346",
+    "caseId": "move-type#345",
     "effect": {
       "type": "move-type",
       "name": "Example Bare Move",
@@ -25902,7 +25657,7 @@
     }
   },
   {
-    "caseId": "move-type#347",
+    "caseId": "move-type#346",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -26009,7 +25764,7 @@
     }
   },
   {
-    "caseId": "move-type#348",
+    "caseId": "move-type#347",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26080,7 +25835,7 @@
     }
   },
   {
-    "caseId": "recipient-gate#349",
+    "caseId": "recipient-gate#348",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26117,7 +25872,7 @@
     }
   },
   {
-    "caseId": "recipient-gate#350",
+    "caseId": "recipient-gate#349",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26169,7 +25924,7 @@
     }
   },
   {
-    "caseId": "recipient-gate#351",
+    "caseId": "recipient-gate#350",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -26223,7 +25978,7 @@
     }
   },
   {
-    "caseId": "recipient-gate#352",
+    "caseId": "recipient-gate#351",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26260,7 +26015,7 @@
     }
   },
   {
-    "caseId": "recipient-gate#353",
+    "caseId": "recipient-gate#352",
     "effect": {
       "type": "ability-part",
       "name": "Example Part",
@@ -26301,7 +26056,7 @@
     }
   },
   {
-    "caseId": "permission-charge-after-disembark#354",
+    "caseId": "permission-charge-after-disembark#353",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -26321,7 +26076,7 @@
     }
   },
   {
-    "caseId": "permission-charge-after-fall-back#355",
+    "caseId": "permission-charge-after-fall-back#354",
     "effect": {
       "type": "permission",
       "target": "this-model",
@@ -26341,7 +26096,7 @@
     }
   },
   {
-    "caseId": "unit-state-engaged#356",
+    "caseId": "unit-state-engaged#355",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26368,7 +26123,7 @@
     }
   },
   {
-    "caseId": "unit-state-on-battlefield#357",
+    "caseId": "unit-state-on-battlefield#356",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26395,7 +26150,7 @@
     }
   },
   {
-    "caseId": "unit-state-embarked#358",
+    "caseId": "unit-state-embarked#357",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26422,7 +26177,7 @@
     }
   },
   {
-    "caseId": "unit-state-unengaged#359",
+    "caseId": "unit-state-unengaged#358",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26454,7 +26209,7 @@
     }
   },
   {
-    "caseId": "unit-state-negated#360",
+    "caseId": "unit-state-negated#359",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26486,7 +26241,7 @@
     }
   },
   {
-    "caseId": "unit-state-in-strategic-reserves#361",
+    "caseId": "unit-state-in-strategic-reserves#360",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26513,7 +26268,7 @@
     }
   },
   {
-    "caseId": "owned-by-enemy#362",
+    "caseId": "owned-by-enemy#361",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26541,7 +26296,7 @@
     }
   },
   {
-    "caseId": "fights-first-cond#363",
+    "caseId": "fights-first-cond#362",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26570,7 +26325,7 @@
     }
   },
   {
-    "caseId": "scaling-attacks-per-models#364",
+    "caseId": "scaling-attacks-per-models#363",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
@@ -26595,7 +26350,7 @@
     }
   },
   {
-    "caseId": "scaling-strength-wounds-lost#365",
+    "caseId": "scaling-strength-wounds-lost#364",
     "effect": {
       "type": "stat-modifier",
       "target": "this-model",
@@ -26619,7 +26374,7 @@
     }
   },
   {
-    "caseId": "dice-pool-inline-label#366",
+    "caseId": "dice-pool-inline-label#365",
     "effect": {
       "type": "choice",
       "options": [
@@ -26667,7 +26422,7 @@
     }
   },
   {
-    "caseId": "closest-eligible-within-range#367",
+    "caseId": "closest-eligible-within-range#366",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -26697,7 +26452,7 @@
     }
   },
   {
-    "caseId": "dice-pool-requirement-anyof#368",
+    "caseId": "dice-pool-requirement-anyof#367",
     "effect": {
       "type": "dice-pool-allocation",
       "pool": {
@@ -26751,7 +26506,7 @@
     }
   },
   {
-    "caseId": "rule-state-forgo-faction-rule#369",
+    "caseId": "rule-state-forgo-faction-rule#368",
     "effect": {
       "type": "ability-part",
       "cost": {
@@ -26781,7 +26536,7 @@
     }
   },
   {
-    "caseId": "rule-state-faction-rule-granted#370",
+    "caseId": "rule-state-faction-rule-granted#369",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -26799,7 +26554,7 @@
     }
   },
   {
-    "caseId": "rule-state-cover-granted#371",
+    "caseId": "rule-state-cover-granted#370",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -26817,7 +26572,7 @@
     }
   },
   {
-    "caseId": "permission-advance-forbidden#372",
+    "caseId": "permission-advance-forbidden#371",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -26834,7 +26589,7 @@
     }
   },
   {
-    "caseId": "rule-state-overwatch-against-bearer#373",
+    "caseId": "rule-state-overwatch-against-bearer#372",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -26852,7 +26607,7 @@
     }
   },
   {
-    "caseId": "rule-state-desperate-escape-granted#374",
+    "caseId": "rule-state-desperate-escape-granted#373",
     "effect": {
       "type": "rule-state",
       "target": {
@@ -26875,7 +26630,7 @@
     }
   },
   {
-    "caseId": "rule-state-desperate-escape-suppressed#375",
+    "caseId": "rule-state-desperate-escape-suppressed#374",
     "effect": {
       "type": "rule-state",
       "target": "this-model",
@@ -26893,7 +26648,7 @@
     }
   },
   {
-    "caseId": "rule-state-ability-granted#376",
+    "caseId": "rule-state-ability-granted#375",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -26911,7 +26666,7 @@
     }
   },
   {
-    "caseId": "rule-state-keyword-suppressed#377",
+    "caseId": "rule-state-keyword-suppressed#376",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -26929,7 +26684,7 @@
     }
   },
   {
-    "caseId": "rule-state-ordered-retreat-suppressed#378",
+    "caseId": "rule-state-ordered-retreat-suppressed#377",
     "effect": {
       "type": "rule-state",
       "target": {
@@ -26954,7 +26709,7 @@
     }
   },
   {
-    "caseId": "rule-state-ordered-retreat-granted#379",
+    "caseId": "rule-state-ordered-retreat-granted#378",
     "effect": {
       "type": "rule-state",
       "target": "this-unit",
@@ -26972,7 +26727,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-anti-titanic#380",
+    "caseId": "weapon-ability-grant-anti-titanic#379",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -26996,7 +26751,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-anti-infantry#381",
+    "caseId": "weapon-ability-grant-anti-infantry#380",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -27020,7 +26775,7 @@
     }
   },
   {
-    "caseId": "weapon-ability-grant-rated-value#382",
+    "caseId": "weapon-ability-grant-rated-value#381",
     "effect": {
       "type": "weapon-ability-grant",
       "target": "this-unit",
@@ -27043,7 +26798,7 @@
     }
   },
   {
-    "caseId": "roll-result-battle-shock-pass#383",
+    "caseId": "roll-result-battle-shock-pass#382",
     "effect": {
       "type": "roll-result",
       "target": "this-unit",
@@ -27060,7 +26815,7 @@
     }
   },
   {
-    "caseId": "roll-result-hit-six#384",
+    "caseId": "roll-result-hit-six#383",
     "effect": {
       "type": "roll-result",
       "target": "this-unit",
@@ -27077,7 +26832,7 @@
     }
   },
   {
-    "caseId": "ability-grant-firing-deck#385",
+    "caseId": "ability-grant-firing-deck#384",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -27094,7 +26849,7 @@
     }
   },
   {
-    "caseId": "permission-disembark-after-move#386",
+    "caseId": "permission-disembark-after-move#385",
     "effect": {
       "type": "permission",
       "target": "this-model",
@@ -27114,7 +26869,7 @@
     }
   },
   {
-    "caseId": "usage-once-per-turn#387",
+    "caseId": "usage-once-per-turn#386",
     "effect": {
       "type": "cp-gain",
       "target": "this-model",
@@ -27133,7 +26888,7 @@
     }
   },
   {
-    "caseId": "usage-n-per-battle-per-unit#388",
+    "caseId": "usage-n-per-battle-per-unit#387",
     "effect": {
       "type": "stat-modifier",
       "target": "this-unit",
@@ -27156,7 +26911,7 @@
     }
   },
   {
-    "caseId": "trigger-enemy-ended-move#389",
+    "caseId": "trigger-enemy-ended-move#388",
     "effect": {
       "type": "move",
       "target": "this-model",
@@ -27185,7 +26940,7 @@
     }
   },
   {
-    "caseId": "trigger-on-model-destroyed#390",
+    "caseId": "trigger-on-model-destroyed#389",
     "effect": {
       "type": "mortal-wounds",
       "target": {
@@ -27212,7 +26967,7 @@
     }
   },
   {
-    "caseId": "trigger-before-save-with-condition#391",
+    "caseId": "trigger-before-save-with-condition#390",
     "effect": {
       "type": "re-roll",
       "target": "this-unit",
@@ -27243,7 +26998,7 @@
     }
   },
   {
-    "caseId": "move-passthrough-models-terrain#392",
+    "caseId": "move-passthrough-models-terrain#391",
     "effect": {
       "type": "move-modifier",
       "target": "this-model",
@@ -27262,7 +27017,7 @@
     }
   },
   {
-    "caseId": "move-passthrough-applies#393",
+    "caseId": "move-passthrough-applies#392",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -27285,7 +27040,7 @@
     }
   },
   {
-    "caseId": "move-ignore-vertical#394",
+    "caseId": "move-ignore-vertical#393",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -27301,7 +27056,7 @@
     }
   },
   {
-    "caseId": "move-modifier-distance-bonus#395",
+    "caseId": "move-modifier-distance-bonus#394",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -27322,7 +27077,7 @@
     }
   },
   {
-    "caseId": "stat-modifier-move-negative#396",
+    "caseId": "stat-modifier-move-negative#395",
     "effect": {
       "type": "stat-modifier",
       "target": "defender",
@@ -27340,7 +27095,7 @@
     }
   },
   {
-    "caseId": "roll-modifier-advance-bonus#397",
+    "caseId": "roll-modifier-advance-bonus#396",
     "effect": {
       "type": "roll-modifier",
       "target": "this-unit",
@@ -27358,7 +27113,7 @@
     }
   },
   {
-    "caseId": "move-pile-in#398",
+    "caseId": "move-pile-in#397",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -27375,7 +27130,7 @@
     }
   },
   {
-    "caseId": "move-consolidation#399",
+    "caseId": "move-consolidation#398",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -27392,7 +27147,7 @@
     }
   },
   {
-    "caseId": "move-surge#400",
+    "caseId": "move-surge#399",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -27409,7 +27164,7 @@
     }
   },
   {
-    "caseId": "move-normal-after-shooting#401",
+    "caseId": "move-normal-after-shooting#400",
     "effect": {
       "type": "move",
       "target": "this-unit",
@@ -27426,7 +27181,7 @@
     }
   },
   {
-    "caseId": "set-up-reserves-max-units#402",
+    "caseId": "set-up-reserves-max-units#401",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -27454,7 +27209,7 @@
     }
   },
   {
-    "caseId": "marker-relocate#403",
+    "caseId": "marker-relocate#402",
     "effect": {
       "type": "marker",
       "target": "this-unit",
@@ -27474,7 +27229,7 @@
     }
   },
   {
-    "caseId": "set-up-redeploy-filtered#404",
+    "caseId": "set-up-redeploy-filtered#403",
     "effect": {
       "type": "set-up",
       "target": {
@@ -27497,7 +27252,7 @@
     }
   },
   {
-    "caseId": "ability-grant-infiltrators#405",
+    "caseId": "ability-grant-infiltrators#404",
     "effect": {
       "type": "ability-grant",
       "target": "this-unit",
@@ -27513,7 +27268,7 @@
     }
   },
   {
-    "caseId": "aura-range-bonus#406",
+    "caseId": "aura-range-bonus#405",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -27532,7 +27287,7 @@
     }
   },
   {
-    "caseId": "issue-orders-eligible-keywords#407",
+    "caseId": "issue-orders-eligible-keywords#406",
     "effect": {
       "type": "issue-orders",
       "count": 1,
@@ -27564,7 +27319,7 @@
     }
   },
   {
-    "caseId": "issue-orders-menu-from#408",
+    "caseId": "issue-orders-menu-from#407",
     "effect": {
       "type": "issue-orders",
       "count": 1,
@@ -27588,7 +27343,7 @@
     }
   },
   {
-    "caseId": "aura-army-emitter-tiered-capped#409",
+    "caseId": "aura-army-emitter-tiered-capped#408",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -27635,7 +27390,7 @@
     }
   },
   {
-    "caseId": "aura-any-emitter-keyword-clauses#410",
+    "caseId": "aura-any-emitter-keyword-clauses#409",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -27676,7 +27431,7 @@
     }
   },
   {
-    "caseId": "aura-model-emitter-keywords#411",
+    "caseId": "aura-model-emitter-keywords#410",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -27708,7 +27463,7 @@
     }
   },
   {
-    "caseId": "aura-unit-origin#412",
+    "caseId": "aura-unit-origin#411",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -27739,7 +27494,7 @@
     }
   },
   {
-    "caseId": "aura-unit-origin-emitter-keywords#413",
+    "caseId": "aura-unit-origin-emitter-keywords#412",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -27772,7 +27527,7 @@
     }
   },
   {
-    "caseId": "aura-tiered-effect#414",
+    "caseId": "aura-tiered-effect#413",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -27809,7 +27564,7 @@
     }
   },
   {
-    "caseId": "set-up-deep-strike-min-distance#415",
+    "caseId": "set-up-deep-strike-min-distance#414",
     "effect": {
       "type": "set-up",
       "target": "this-unit",
@@ -27829,7 +27584,7 @@
     }
   },
   {
-    "caseId": "move-modifier-engagement-no-end#416",
+    "caseId": "move-modifier-engagement-no-end#415",
     "effect": {
       "type": "move-modifier",
       "target": "this-model",
@@ -27848,7 +27603,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-after-fall-back#417",
+    "caseId": "permission-shoot-after-fall-back#416",
     "effect": {
       "type": "permission",
       "target": "this-unit",
@@ -27868,7 +27623,7 @@
     }
   },
   {
-    "caseId": "permission-shoot-and-charge-after-fall-back#418",
+    "caseId": "permission-shoot-and-charge-after-fall-back#417",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -27904,7 +27659,7 @@
     }
   },
   {
-    "caseId": "superlative-strategist-aeldari#419",
+    "caseId": "superlative-strategist-aeldari#418",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -27957,7 +27712,7 @@
     }
   },
   {
-    "caseId": "deceptive-feint#420",
+    "caseId": "deceptive-feint#419",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -28042,7 +27797,7 @@
     }
   },
   {
-    "caseId": "heal-selected-model#421",
+    "caseId": "heal-selected-model#420",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -28095,7 +27850,7 @@
     }
   },
   {
-    "caseId": "marker-next-to-target#422",
+    "caseId": "marker-next-to-target#421",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -28144,7 +27899,7 @@
     }
   },
   {
-    "caseId": "psychic-model-bundle#423",
+    "caseId": "psychic-model-bundle#422",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -28223,7 +27978,7 @@
     }
   },
   {
-    "caseId": "designate-bearer-target-with-eligibility#424",
+    "caseId": "designate-bearer-target-with-eligibility#423",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -28304,7 +28059,7 @@
     }
   },
   {
-    "caseId": "conditional-selected-to-shoot-this-phase#425",
+    "caseId": "conditional-selected-to-shoot-this-phase#424",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -28335,7 +28090,7 @@
     }
   },
   {
-    "caseId": "transport-capacity#426",
+    "caseId": "transport-capacity#425",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -28356,7 +28111,7 @@
     }
   },
   {
-    "caseId": "transport-grouped-single-keyword-model#427",
+    "caseId": "transport-grouped-single-keyword-model#426",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -28377,7 +28132,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#428",
+    "caseId": "transport-fixed-model-spaces-with-capacity-eligibility#427",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -28398,7 +28153,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-with-embark-as#429",
+    "caseId": "transport-fixed-model-spaces-with-embark-as#428",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -28419,7 +28174,7 @@
     }
   },
   {
-    "caseId": "transport-fixed-model-spaces-zero#430",
+    "caseId": "transport-fixed-model-spaces-zero#429",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -28438,7 +28193,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-keyword#431",
+    "caseId": "transport-equivalent-model-keyword#430",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -28457,7 +28212,7 @@
     }
   },
   {
-    "caseId": "transport-equivalent-model-count#432",
+    "caseId": "transport-equivalent-model-count#431",
     "effect": {
       "type": "transport-capacity",
       "target": "this-model",
@@ -28475,7 +28230,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-inline#433",
+    "caseId": "moved-through-tall-terrain-inline#432",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -28504,7 +28259,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-condition#434",
+    "caseId": "moved-through-tall-terrain-trigger-condition#433",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -28536,7 +28291,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-inline#435",
+    "caseId": "moved-through-tall-terrain-negated-inline#434",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -28570,7 +28325,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-trigger-condition#436",
+    "caseId": "moved-through-tall-terrain-negated-trigger-condition#435",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -28607,7 +28362,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-event#437",
+    "caseId": "moved-through-tall-terrain-trigger-event#436",
     "effect": {
       "type": "ability-grant",
       "target": "this-model",
@@ -28629,7 +28384,7 @@
     }
   },
   {
-    "caseId": "moved-through-terrain-generic#438",
+    "caseId": "moved-through-terrain-generic#437",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -28658,7 +28413,7 @@
     }
   },
   {
-    "caseId": "aura-role-filtered-effect#439",
+    "caseId": "aura-role-filtered-effect#438",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -48749,6 +48504,221 @@
     },
     "expected": {
       "text": "While the unit is below half strength:\n  -> You can re-roll a Hit roll of 1 for attacks made by all friendly ALPHA units.\n  -> You can re-roll a Wound roll of 1 for attacks made by all friendly BETA units."
+    }
+  },
+  {
+    "caseId": "fidelity/nested-trigger-event-subject",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "selected",
+        "filter": {
+          "to": "attack"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        },
+        "optional": true
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "dice-table",
+            "dice": "D6",
+            "outcomes": [
+              {
+                "results": [
+                  1,
+                  2,
+                  3
+                ],
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "event-subject",
+                  "modifier": {
+                    "stat": "A",
+                    "operation": "improve",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "results": [
+                  4,
+                  5,
+                  6
+                ],
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "event-subject",
+                  "modifier": {
+                    "stat": "S",
+                    "operation": "improve",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "attacks-resolved",
+              "subject": "event-subject",
+              "filter": {
+                "kind": "attack"
+              }
+            },
+            "effect": {
+              "type": "test",
+              "target": "event-subject",
+              "modifier": {
+                "test": "hazard"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "expected": {
+      "text": "Until the end of the phase:\n  -> When a friendly unit is selected to shoot or fight (the triggering unit must have ALPHA), you may use this ability:\n    -> Roll one D6:\n      - On 1-3: Improve the triggering unit's Attacks characteristic by 1.\n      - On 4-6: Improve the triggering unit's Strength characteristic by 1.\n    -> After the triggering unit resolves its attacks: the triggering unit must take a Hazard test."
+    }
+  },
+  {
+    "caseId": "fidelity/dice-count-choice",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "selected",
+        "filter": {
+          "to": "attack"
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        },
+        "optional": true
+      },
+      "effect": {
+        "type": "choice",
+        "options": [
+          {
+            "type": "dice-table",
+            "dice": "D6",
+            "outcomes": [
+              {
+                "results": [
+                  1,
+                  2,
+                  3
+                ],
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "event-subject",
+                  "modifier": {
+                    "stat": "A",
+                    "operation": "improve",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "results": [
+                  4,
+                  5,
+                  6
+                ],
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "event-subject",
+                  "modifier": {
+                    "stat": "S",
+                    "operation": "improve",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "dice-table",
+                "dice": "D6",
+                "outcomes": [
+                  {
+                    "results": [
+                      1,
+                      2,
+                      3
+                    ],
+                    "effect": {
+                      "type": "stat-modifier",
+                      "target": "event-subject",
+                      "modifier": {
+                        "stat": "A",
+                        "operation": "improve",
+                        "value": 1
+                      }
+                    }
+                  },
+                  {
+                    "results": [
+                      4,
+                      5,
+                      6
+                    ],
+                    "effect": {
+                      "type": "stat-modifier",
+                      "target": "event-subject",
+                      "modifier": {
+                        "stat": "S",
+                        "operation": "improve",
+                        "value": 1
+                      }
+                    }
+                  }
+                ],
+                "count": 2,
+                "distinct": true
+              },
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "attacks-resolved",
+                  "subject": "event-subject",
+                  "filter": {
+                    "kind": "attack"
+                  }
+                },
+                "effect": {
+                  "type": "test",
+                  "target": "event-subject",
+                  "modifier": {
+                    "test": "hazard"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "expected": {
+      "text": "Until the end of the phase:\n  -> When a friendly unit is selected to shoot or fight (the triggering unit must have ALPHA), you may use this ability:\n    Select one of the following:\n      - Roll one D6: on 1-3, improve the triggering unit's Attacks characteristic by 1; on 4-6, improve the triggering unit's Strength characteristic by 1.\n      - Roll 2 D6 and resolve each one (re-rolling any repeated result): on 1-3, improve the triggering unit's Attacks characteristic by 1; on 4-6, improve the triggering unit's Strength characteristic by 1; after the triggering unit resolves its attacks: the triggering unit must take a Hazard test."
     }
   }
 ]

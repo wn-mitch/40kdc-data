@@ -45,9 +45,10 @@ export type OtherwiseElse = {
  * leaf (rawSentences, compile-placement.ts); `unnegatable` holds leaves the else cannot take (end
  * conditions, selection eligibility, leaves a container or a timing moment already consumed).
  */
-export function otherwiseElse(list: readonly CompileLeaf[], places: readonly Placement[], raw: readonly number[], sourceText: string | undefined, unnegatable: ReadonlySet<number>): OtherwiseElse {
+export function otherwiseElse(list: readonly CompileLeaf[], places: readonly Placement[], sentences: readonly number[], sourceText: string | undefined, unnegatable: ReadonlySet<number>): OtherwiseElse {
   const result: OtherwiseElse = { gates: [], moved: new Set(), errors: [] };
   const bytes = sourceText === undefined ? null : Buffer.from(sourceText, "utf8");
+  const raw = listBlocks(list, sentences, bytes);
   const effectful = new Set(list.flatMap((leaf, at) => leaf.role === "EFFECT" ? [raw[at]!] : []));
   const firstEffectOf = (sentence: number) => list.findIndex((leaf, at) => leaf.role === "EFFECT" && raw[at] === sentence);
   const firstEffectSentence = effectful.size === 0 ? -1 : Math.min(...effectful);
@@ -63,7 +64,8 @@ export function otherwiseElse(list: readonly CompileLeaf[], places: readonly Pla
     const opening = bytes === null || leaf.end_byte === undefined ? "" : bytes.subarray(leaf.start_byte, leaf.end_byte).toString("utf8");
     if (!OPENS_OTHERWISE.test(opening) || (at > 0 && raw[at - 1] === sentence)) return refuse(OTHERWISE_TEXT);
     if (!effectful.has(sentence)) return refuse(OTHERWISE_NO_EFFECT);
-    const preceding = sentence - 1;
+    // The block before (for plain sentences, the sentence before).
+    const preceding = at > 0 ? raw[at - 1]! : -1;
     const precedingFirst = list.findIndex((_, other) => raw[other] === preceding);
     if (preceding < 0 || !effectful.has(preceding) || (precedingFirst !== -1 && list[precedingFirst]!.family_id === OTHERWISE_FAMILY)) return refuse(OTHERWISE_NO_PRECEDING);
     const gateAt = leading(preceding);
@@ -81,14 +83,51 @@ export function otherwiseElse(list: readonly CompileLeaf[], places: readonly Pla
       // An attack-type or attacker gate narrows a designation's attacks (compile.ts), so it cannot move into a sentence gate.
       if (text.includes('"attack-is"') || text.includes('"subject":"attacker"')) return refuse(OTHERWISE_UNNEGATABLE);
       const gate = negate(allOf(nodes)!);
-      result.gates.push({ sentence: places[at]!.sentence, gate });
-      if (preceding === firstEffectSentence) for (const index of gateAt) result.moved.add(index);
+      // Every merged sentence of the Otherwise block takes the else gate; a list block's later items
+      // ("If X you can:\nA.\nB.") take the gate its opener's conditions set, which a move would leave on A only.
+      const mergedOf = (block: number) => [...new Set(list.flatMap((_, other) => raw[other] === block ? [places[other]!.sentence] : []))];
+      for (const merged of mergedOf(sentence)) result.gates.push({ sentence: merged, gate: merged === places[at]!.sentence ? gate : structuredClone(gate) });
+      if (preceding === firstEffectSentence) {
+        for (const index of gateAt) result.moved.add(index);
+        const own = new Set(gateAt.map((index) => places[index]!.sentence));
+        for (const merged of mergedOf(preceding)) if (!own.has(merged)) result.gates.push({ sentence: merged, gate: structuredClone(allOf(nodes)!) });
+      }
     } catch (error) {
       if (!(error instanceof CompileError)) throw error;
       refuse(error.message);
     }
   });
   return result;
+}
+
+/** "Or: …" ending a gap: the next option of a pick, not a list a colon opens. */
+const OR_OPENER = /\bor:\s*$/iu;
+
+/**
+ * Each leaf's block: its raw sentence, except that a sentence ending in a colon ("If X you can:", "Otherwise
+ * you can:") and the item sentences after it, up to the next sentence that ends in a colon or opens with an
+ * otherwise leaf, are one block numbered by the opener. Blocks are only ever compared, never used as merged sentences.
+ */
+function listBlocks(list: readonly CompileLeaf[], raw: readonly number[], bytes: Buffer | null): number[] {
+  if (bytes === null) return [...raw];
+  const opensList = (sentence: number): boolean => {
+    const last = raw.lastIndexOf(sentence);
+    const next = list[last + 1];
+    const leaf = list[last]!;
+    if (next === undefined || leaf.end_byte === undefined || next.start_byte < leaf.end_byte) return false;
+    const gap = bytes.subarray(leaf.end_byte, next.start_byte).toString("utf8");
+    return /:\s*$/u.test(gap) && !OR_OPENER.test(gap);
+  };
+  const block: number[] = [];
+  let open: number | null = null;
+  list.forEach((leaf, at) => {
+    const sentence = raw[at]!;
+    const starts = at === 0 || raw[at - 1] !== sentence;
+    if (starts && (leaf.family_id === OTHERWISE_FAMILY || (open !== null && opensList(sentence)))) open = null;
+    block.push(open ?? sentence);
+    if (starts && open === null && opensList(sentence)) open = sentence;
+  });
+  return block;
 }
 
 /**

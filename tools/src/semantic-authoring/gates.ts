@@ -101,6 +101,8 @@ const CRUNCHER_CONTEXT: EngineContext = { phase: "shooting", attackerStationary:
  * see the single call site at from-dsl.ts's `translateConditional`.
  */
 const HONEST_UNKNOWN_CONDITION = /^conditional: cannot evaluate condition /u;
+/** "+1 S for every 5 models in this unit": the size is a count on the board, which a context-free crunch cannot know. */
+const SCALED_BY_BOARD_COUNT = /^[a-z-]+: the value scales with [a-z-]+; not resolved by the buff engine$/u;
 const RUNTIME_CONTEXT_UNKNOWN: Readonly<Record<string, true>> = {
   "unit-filter target: identity, state or model membership is unresolved": true,
   "select-units: candidate identity or state is unavailable": true,
@@ -239,7 +241,7 @@ export function classifyUnsupported(
         outsideDamagePath += asTarget.outsideDamagePath;
         unrecognizedShape += asTarget.unrecognizedShape;
       }
-    } else if (HONEST_UNKNOWN_CONDITION.test(item.reason)
+    } else if (HONEST_UNKNOWN_CONDITION.test(item.reason) || SCALED_BY_BOARD_COUNT.test(item.reason)
       || (RUNTIME_CONTEXT_UNKNOWN[item.reason] === true && validEffect(item.effectFragment))) honestUnknown += 1;
     else if (isOutsideDamagePath(item)) outsideDamagePath += 1;
     else {

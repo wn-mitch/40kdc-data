@@ -20,7 +20,8 @@ export type PsychicSegment = { cost: CompileLeaf; leaves: CompileLeaf[] };
 
 type Heading = { start: number; end: number; level: number };
 
-const HEADING = /\*\*[^*\n]*\(psychic level (\d+)\)\*\*/gu;
+/** "**Name (psychic level N)**", also printed with its colon inside the bold ("**Name (psychic level N):**"). */
+const HEADING = /\*\*[^*\n]*\(psychic level (\d+)\):?\*\*/gu;
 
 /** A psychic ability's roll: the psychic test (a dice roll whose result is named psychic). */
 const isPsychicRoll = (leaf: CompileLeaf) => leaf.family_id === "dice-roll" && leaf.parameters.roll_var === "psychic";
@@ -60,7 +61,8 @@ export function psychicSegments(leaves: readonly CompileLeaf[], sourceText: stri
     if (!segment) throw new CompileError("A leaf sits outside every psychic ability heading; a record with psychic-level costs holds only psychic abilities.");
     segment.leaves.push(leaf);
   }
-  return segments.map((segment) => {
+  // A granted body compiles against the whole record's text: another body's heading holds none of its leaves.
+  return segments.filter((segment) => segment.cost !== undefined || segment.leaves.length > 0).map((segment) => {
     if (!segment.cost) throw new CompileError("A psychic ability heading has no psychic-level cost leaf.");
     if (!segment.leaves.some(isPsychicRoll)) throw new CompileError("A psychic ability's cost needs its psychic roll in the same ability.");
     return { cost: segment.cost, leaves: segment.leaves };

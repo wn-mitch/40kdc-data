@@ -23,6 +23,13 @@ const isRemoval = (leaf: CompileLeaf) => leaf.family_id === REMOVAL;
 const isBound = (leaf: CompileLeaf) => isStat(leaf) || isWeaponRoll(leaf) || isRemoval(leaf);
 const isProperty = (leaf: CompileLeaf) => isBound(leaf) || leaf.family_id === KEYWORD;
 
+/**
+ * A result band in front of a stat adjustment the scope binds ("attacks have: 1-2 +1 A, 3-4 +2 S"):
+ * the band gates that one adjustment and keeps its place in front of it.
+ */
+const isBandBefore = (list: readonly CompileLeaf[], at: number, fragment: unknown) =>
+  list[at]!.family_id === "roll-result" && list[at + 1] !== undefined && list[at + 1]!.fragment === fragment && isStat(list[at + 1]!);
+
 function between(source: Buffer | undefined, left: CompileLeaf, right: CompileLeaf): string {
   return source && left.end_byte !== undefined ? source.subarray(left.end_byte, right.start_byte).toString("utf8") : "";
 }
@@ -257,15 +264,21 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
     let containsBound = false;
     let choice = false;
     let boundaryStop = false;
+    let banded = false;
     while (end < list.length && list[end]!.fragment === scope.fragment) {
       const leaf = list[end]!;
       if (isChoiceMarker(leaf)) {
         if (end === first || !choiceMarkerAfter(list, source, end)) break;
+      } else if (isBandBefore(list, end, scope.fragment)) {
+        if (/[.;]/u.test(between(source, list[end - 1]!, leaf))) break;
+        banded = true;
       } else if (!isProperty(leaf)) {
         break;
       } else if (end === first) {
         const gap = between(source, list[end - 1]!, leaf);
         if (/[.;]/u.test(gap) || OPTION_OPENER.test(gap)) break;
+      } else if (list[end - 1]!.family_id === "roll-result") {
+        // The band was checked against the run before it; its stat follows it on the table row.
       } else if (!isChoiceMarker(list[end - 1]!)) {
         // The stat after a choice marker was checked against the marker by choiceMarkerAfter.
         if (!sameRun(source, list[end - 1]!, leaf)) break;
@@ -319,7 +332,10 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
     let inKeywords = false;
     for (let at = first; at < end; at += 1) {
       const leaf = list[at]!;
-      if (isStat(leaf)) {
+      if (banded && leaf.family_id === "roll-result") {
+        result.push(leaf);
+        inKeywords = false;
+      } else if (isStat(leaf)) {
         result.push(bindStat(leaf, scope));
         inKeywords = false;
       } else if (isRemoval(leaf)) {

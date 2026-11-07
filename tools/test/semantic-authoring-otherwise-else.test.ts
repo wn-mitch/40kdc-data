@@ -309,3 +309,34 @@ describe("otherwise@1 parameters", () => {
     expect(() => normalizeFingerprintParameters("otherwise", { negated: true }, currentFamilyVersion("otherwise"))).toThrow();
   });
 });
+
+describe("an Otherwise list after a conditioned list (each opened by a colon)", () => {
+  const text = "If your unit is not engaged you can:Move six inches.Move four inches.Otherwise you can:Fall back.Or: Move one inch.";
+  const pieces: Piece[] = [
+    ["your unit is not engaged", "unit-state", engaged],
+    ["you can", "optional-use", { who: "you" }],
+    ["Move six inches", "make-move", move(6)],
+    ["Move four inches", "make-move", move(4)],
+    ["Otherwise", "otherwise", {}],
+    ["you can", "optional-use", { who: "you" }],
+    ["Fall back", "make-move", fallBack],
+    ["Or:", "instead", { choice: true }],
+    ["Move one inch", "make-move", move(1)],
+  ];
+  const gateOf = (node: Node): Node | undefined => node.type === "conditional" ? node.condition : undefined;
+  const moveOf = (node: Node): Node => node.type === "conditional" ? node.effect : node;
+
+  it("gates every item of the first list on the condition, and every item of the Otherwise list on its negation", () => {
+    const steps = effectOf(text, ...pieces).steps as Node[];
+    expect(steps.slice(0, 2).map((step) => [gateOf(step), moveOf(step).modifier.distance])).toEqual([[notEngaged, 6], [notEngaged, 4]]);
+    const pick = steps[2]!;
+    expect(pick.type).toBe("choice");
+    expect(pick.options.map((option: Node) => [gateOf(option), moveOf(option).modifier.move_type])).toEqual([[engagedNode, "fall-back"], [engagedNode, "normal"]]);
+  });
+
+  it("starts the Otherwise list's pick at Otherwise, so the conditioned list stays outside it", () => {
+    const pick = (effectOf(text, ...pieces).steps as Node[]).find((step) => step.type === "choice")!;
+    expect(pick.options).toHaveLength(2);
+    expect(JSON.stringify(pick)).not.toContain('"distance":6');
+  });
+});

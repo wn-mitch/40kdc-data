@@ -88,6 +88,7 @@ import { bindAdditiveOptions } from "./compile-additive-option.js";
 import { bindIgnoreLists } from "./compile-ignore-list.js";
 import type { CoreCheck } from "./core-checks.js";
 import { compileWithName, NAME_FRAGMENT } from "./compile-name.js";
+import { foldDiceCountChoice, takeDiceCountOption } from "./compile-dice-count-choice.js";
 import { lowerPsychicRecord, psychicSegments, type PsychicSegment } from "./compile-psychic-cost.js";
 import type { Mechanics } from "./entries.js";
 import { bindTargetRefs, refuseBareTarget } from "./compile-target-refs.js";
@@ -319,6 +320,24 @@ function containsRollMarker(value: unknown): boolean {
  * (compile-segments.ts): a reviewed leaf has said they resolve together.
  */
 function compileRecord(given: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}, oneRule = false): Compiled {
+  // "Roll either one D6 or two D6": the record compiles with one die, then its table becomes the choice (compile-dice-count-choice.ts).
+  let countChoice: ReturnType<typeof takeDiceCountOption>;
+  try { countChoice = takeDiceCountOption(given); } catch (error) {
+    if (!(error instanceof CompileError)) throw error;
+    return { ok: false, signature: shapeSignature(ordered(given), sourceText), errors: [error.message] };
+  }
+  if (countChoice.option) {
+    const one = compileRecordBody(countChoice.leaves, sourceText, options, oneRule);
+    if (!one.ok) return { ...one, signature: shapeSignature(ordered(given), sourceText) };
+    try { return { ...one, signature: shapeSignature(ordered(given), sourceText), mechanics: foldDiceCountChoice(one.mechanics, countChoice.option) as typeof one.mechanics }; } catch (error) {
+      if (!(error instanceof CompileError)) throw error;
+      return { ok: false, signature: shapeSignature(ordered(given), sourceText), errors: [error.message] };
+    }
+  }
+  return compileRecordBody(given, sourceText, options, oneRule);
+}
+
+function compileRecordBody(given: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}, oneRule = false): Compiled {
   // "Those attacks" are named across the whole record before it splits into parts (compile-bound-attacks.ts).
   // "only within Engagement Range of …" folds onto the engaged state before filters attach to their neighbours (compile-engagement-exclusive.ts).
   let qualified: CompileLeaf[];

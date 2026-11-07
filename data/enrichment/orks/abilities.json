@@ -2486,122 +2486,196 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "1f01d0ea5238983540aa8c82316d76e94fe09dddaa8e329e693d431ee54849fb",
+    "source_digest": "4a08824b55bc6cce25702f0fbbc476eaaaa75e42c55345d54267a457d67c3f2f",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "orks",
     "detachment_id": "dread-mob",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
         "operator": "or",
         "operands": [
           {
-            "type": "matches",
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "phase-is",
             "parameters": {
-              "filter": {
-                "all_of": [
-                  "MEK"
-                ]
-              }
+              "phase": "fight"
             }
-          },
-          {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "ORKS"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "WALKER"
-                    ]
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "GROTS"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "VEHICLE"
-                    ]
-                  }
-                }
-              }
-            ]
           }
         ]
       },
       "effect": {
-        "type": "choice",
-        "choice_label": "Try Dat Button!",
-        "options": [
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
+        "type": "ability-part",
+        "trigger": {
+          "event": "selected",
+          "filter": {
+            "to": "attack"
+          },
+          "subject": {
+            "owner": "friendly",
+            "all_of": [
+              "ORKS",
+              "WALKER"
+            ],
+            "none_of": [
+              "TITANIC"
+            ]
+          },
+          "optional": true
+        },
+        "effect": {
+          "type": "choice",
+          "options": [
+            {
+              "type": "dice-table",
+              "dice": "D6",
+              "outcomes": [
                 {
-                  "keyword_id": "sustained-hits",
-                  "parameters": {
-                    "value": 1
+                  "results": [
+                    1,
+                    2
+                  ],
+                  "effect": {
+                    "type": "stat-modifier",
+                    "target": "event-subject",
+                    "modifier": {
+                      "stat": "A",
+                      "operation": "improve",
+                      "value": 1
+                    }
+                  }
+                },
+                {
+                  "results": [
+                    3,
+                    4
+                  ],
+                  "effect": {
+                    "type": "stat-modifier",
+                    "target": "event-subject",
+                    "modifier": {
+                      "stat": "S",
+                      "operation": "improve",
+                      "value": 2
+                    }
+                  }
+                },
+                {
+                  "results": [
+                    5,
+                    6
+                  ],
+                  "effect": {
+                    "type": "stat-modifier",
+                    "target": "event-subject",
+                    "modifier": {
+                      "stat": "AP",
+                      "operation": "improve",
+                      "value": 1
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "dice-table",
+                  "dice": "D6",
+                  "outcomes": [
+                    {
+                      "results": [
+                        1,
+                        2
+                      ],
+                      "effect": {
+                        "type": "stat-modifier",
+                        "target": "event-subject",
+                        "modifier": {
+                          "stat": "A",
+                          "operation": "improve",
+                          "value": 1
+                        }
+                      }
+                    },
+                    {
+                      "results": [
+                        3,
+                        4
+                      ],
+                      "effect": {
+                        "type": "stat-modifier",
+                        "target": "event-subject",
+                        "modifier": {
+                          "stat": "S",
+                          "operation": "improve",
+                          "value": 2
+                        }
+                      }
+                    },
+                    {
+                      "results": [
+                        5,
+                        6
+                      ],
+                      "effect": {
+                        "type": "stat-modifier",
+                        "target": "event-subject",
+                        "modifier": {
+                          "stat": "AP",
+                          "operation": "improve",
+                          "value": 1
+                        }
+                      }
+                    }
+                  ],
+                  "count": 2,
+                  "distinct": true
+                },
+                {
+                  "type": "ability-part",
+                  "trigger": {
+                    "event": "attacks-resolved",
+                    "subject": "event-subject",
+                    "filter": {
+                      "kind": "attack"
+                    }
+                  },
+                  "effect": {
+                    "type": "test",
+                    "target": "event-subject",
+                    "modifier": {
+                      "test": "hazard"
+                    }
                   }
                 }
               ]
             }
-          },
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "lethal-hits"
-                }
-              ]
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "AP",
-              "operation": "improve",
-              "value": 2
-            }
-          }
-        ]
+          ]
+        }
       }
     },
     "scope": {
@@ -9835,143 +9909,109 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "317c0337ea1744afe40ff81ddcfb52b2d82876547af55255eebaecf2c0ce93c7",
     "version": "2025-q3",
     "effect": {
-      "type": "for-each-unit",
-      "selector": {
-        "filter": {
-          "owner": "friendly",
-          "all_of": [
-            "ORKS",
-            "PSYKER"
-          ],
-          "level": "model"
-        }
-      },
-      "effect": {
-        "type": "rules-bundle",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "selected-unit",
-            "modifier": {
-              "stat": "S",
-              "operation": "add",
-              "value": 1,
-              "weapons": {
-                "keyword": {
-                  "keyword_id": "psychic"
-                }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ORKS",
+              "PSYKER"
+            ],
+            "level": "model"
+          },
+          "modifier": {
+            "stat": "S",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "keyword": {
+                "keyword_id": "psychic"
+              }
+            }
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "ORKS",
+              "PSYKER"
+            ],
+            "level": "model"
+          },
+          "modifier": {
+            "stat": "S",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "keyword": {
+                "keyword_id": "psychic"
               }
             }
           },
-          {
-            "type": "stat-modifier",
-            "target": "selected-unit",
-            "modifier": {
-              "stat": "S",
-              "operation": "add",
-              "value": 1,
-              "weapons": {
-                "keyword": {
-                  "keyword_id": "psychic"
-                }
-              }
-            },
-            "scaling": {
-              "per": 5,
-              "of": "models-in-or-embarked-in-bearer",
-              "round": "down"
-            }
-          },
-          {
-            "type": "ability-part",
-            "name": "Roar of Mork",
-            "kind": "psychic",
-            "level": 1,
-            "effect": {
-              "type": "conditional",
-              "condition": {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "phase-is",
-                    "parameters": {
-                      "phase": "movement"
-                    }
-                  },
-                  {
-                    "type": "player-turn-is",
-                    "parameters": {
-                      "turn": "your-turn"
-                    }
-                  },
-                  {
-                    "operator": "not",
-                    "operands": [
-                      {
-                        "type": "matches",
-                        "parameters": {
-                          "filter": {
-                            "state": "battle-shocked"
-                          }
-                        }
-                      }
-                    ]
-                  }
-                ]
+          "scaling": {
+            "per": 5,
+            "of": "models-in-or-embarked-in-bearer"
+          }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "ability-grant",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "ORKS",
+                  "PSYKER"
+                ],
+                "level": "model"
               },
-              "effect": {
-                "type": "sequence",
-                "steps": [
-                  {
-                    "type": "dice-gated",
-                    "dice": "D6",
-                    "threshold": 1,
-                    "comparison": "eq",
-                    "on_success": {
-                      "type": "state-change",
-                      "target": "selected-unit",
+              "modifier": {
+                "ability": {
+                  "ability_id": "powers-of-da-waaagh-orks",
+                  "definition_id": "roar-of-mork"
+                },
+                "definition": {
+                  "type": "ability-part",
+                  "name": "Roar of Mork",
+                  "effect": {
+                    "type": "ability-part",
+                    "cost": {
+                      "type": "resource-spend",
+                      "target": "this-unit",
                       "modifier": {
-                        "state": "battle-shocked",
-                        "set": true
+                        "pool": "psychic-level",
+                        "amount": 1,
+                        "label": "Psychic Level"
                       }
-                    }
-                  },
-                  {
-                    "type": "select-units",
-                    "selector": {
-                      "filter": {
-                        "owner": "enemy",
-                        "within": {
-                          "range": {
-                            "inches": 12
-                          },
-                          "of": "this-model"
-                        }
-                      },
-                      "count": {
-                        "min": 1,
-                        "max": 1
-                      },
-                      "eligibility": {
+                    },
+                    "effect": {
+                      "type": "conditional",
+                      "condition": {
                         "operator": "and",
                         "operands": [
                           {
-                            "operator": "not",
+                            "operator": "and",
                             "operands": [
                               {
-                                "type": "matches",
+                                "type": "phase-is",
                                 "parameters": {
-                                  "filter": {
-                                    "all_of": [
-                                      "MONSTER"
-                                    ]
-                                  },
-                                  "subject": "recipient"
+                                  "phase": "movement"
+                                }
+                              },
+                              {
+                                "type": "player-turn-is",
+                                "parameters": {
+                                  "turn": "your-turn"
                                 }
                               }
                             ]
@@ -9983,100 +10023,218 @@
                                 "type": "matches",
                                 "parameters": {
                                   "filter": {
-                                    "all_of": [
-                                      "VEHICLE"
-                                    ]
-                                  },
-                                  "subject": "recipient"
+                                    "state": "battle-shocked"
+                                  }
                                 }
                               }
                             ]
                           }
                         ]
-                      }
-                    },
-                    "effect": {
-                      "type": "test",
-                      "target": "selected-unit",
-                      "modifier": {
-                        "test": "battle-shock",
-                        "modifier": -1
                       },
-                      "scaling": {
-                        "per": 10,
-                        "of": "models-in-bearer-unit",
-                        "round": "down"
-                      }
-                    }
-                  }
-                ]
-              }
-            },
-            "optional": true
-          },
-          {
-            "type": "ability-part",
-            "name": "Visions of Violence",
-            "kind": "psychic",
-            "level": 1,
-            "trigger": {
-              "event": "phase-started",
-              "condition": {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "fight"
-                }
-              }
-            },
-            "effect": {
-              "type": "conditional",
-              "condition": {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "matches",
-                    "parameters": {
-                      "filter": {
-                        "state": "battle-shocked"
-                      }
-                    }
-                  }
-                ]
-              },
-              "effect": {
-                "type": "sequence",
-                "steps": [
-                  {
-                    "type": "dice-gated",
-                    "dice": "D6",
-                    "threshold": 1,
-                    "comparison": "eq",
-                    "on_success": {
-                      "type": "state-change",
-                      "target": "selected-unit",
-                      "modifier": {
-                        "state": "battle-shocked",
-                        "set": true
+                      "effect": {
+                        "type": "sequence",
+                        "steps": [
+                          {
+                            "type": "roll",
+                            "dice": "D6",
+                            "roll_var": "psychic",
+                            "effect": {
+                              "type": "dice-table",
+                              "dice": "D6",
+                              "outcomes": [
+                                {
+                                  "results": [
+                                    1
+                                  ],
+                                  "effect": {
+                                    "type": "state-change",
+                                    "target": "this-unit",
+                                    "modifier": {
+                                      "state": "battle-shocked",
+                                      "set": true
+                                    }
+                                  }
+                                },
+                                {
+                                  "results": [
+                                    2,
+                                    3,
+                                    4,
+                                    5,
+                                    6
+                                  ],
+                                  "effect": {
+                                    "type": "no-effect"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "select-units",
+                            "selector": {
+                              "filter": {
+                                "owner": "enemy",
+                                "none_of": [
+                                  "MONSTER",
+                                  "VEHICLE"
+                                ]
+                              },
+                              "count": {
+                                "min": 1,
+                                "max": 1
+                              },
+                              "eligibility": {
+                                "type": "matches",
+                                "parameters": {
+                                  "subject": "selected-unit",
+                                  "filter": {
+                                    "within": {
+                                      "of": "this-unit",
+                                      "range": {
+                                        "inches": 12
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "effect": {
+                              "type": "test",
+                              "target": "selected-unit",
+                              "modifier": {
+                                "test": "battle-shock",
+                                "modifier": -1
+                              },
+                              "scaling": {
+                                "per": 10,
+                                "of": "models-in-bearer-unit",
+                                "round": "down"
+                              }
+                            }
+                          }
+                        ]
                       }
                     }
                   },
-                  {
-                    "type": "ability-grant",
-                    "target": "selected-unit",
-                    "modifier": {
-                      "ability": "fights-first"
-                    }
-                  }
-                ]
+                  "optional": true
+                }
               }
             },
-            "optional": true
-          }
-        ]
-      }
+            {
+              "type": "ability-grant",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "ORKS",
+                  "PSYKER"
+                ],
+                "level": "model"
+              },
+              "modifier": {
+                "ability": {
+                  "ability_id": "powers-of-da-waaagh-orks",
+                  "definition_id": "visions-of-violence"
+                },
+                "definition": {
+                  "type": "ability-part",
+                  "name": "Visions of Violence",
+                  "effect": {
+                    "type": "ability-part",
+                    "trigger": {
+                      "event": "phase-started",
+                      "condition": {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "fight"
+                        }
+                      },
+                      "optional": true
+                    },
+                    "duration": "phase",
+                    "cost": {
+                      "type": "resource-spend",
+                      "target": "this-unit",
+                      "modifier": {
+                        "pool": "psychic-level",
+                        "amount": 1,
+                        "label": "Psychic Level"
+                      }
+                    },
+                    "effect": {
+                      "type": "conditional",
+                      "condition": {
+                        "operator": "not",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "filter": {
+                                "state": "battle-shocked"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "effect": {
+                        "type": "sequence",
+                        "steps": [
+                          {
+                            "type": "roll",
+                            "dice": "D6",
+                            "roll_var": "psychic",
+                            "effect": {
+                              "type": "dice-table",
+                              "dice": "D6",
+                              "outcomes": [
+                                {
+                                  "results": [
+                                    1
+                                  ],
+                                  "effect": {
+                                    "type": "state-change",
+                                    "target": "this-unit",
+                                    "modifier": {
+                                      "state": "battle-shocked",
+                                      "set": true
+                                    }
+                                  }
+                                },
+                                {
+                                  "results": [
+                                    2,
+                                    3,
+                                    4,
+                                    5,
+                                    6
+                                  ],
+                                  "effect": {
+                                    "type": "no-effect"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "ability-grant",
+                            "target": "this-unit",
+                            "modifier": {
+                              "ability": "fights-first"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [],
     "ability_type": "detachment",
@@ -10238,7 +10396,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "e2f25955fabc007354e8a1d5360004f821aabccba9b2eef2345f80d7302928f8",
     "version": "2025-q3",
@@ -10246,67 +10404,44 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "set-up",
+          "type": "army-rule",
           "target": {
             "owner": "friendly",
             "all_of": [
-              "ORKS",
-              "AIRCRAFT"
+              "AIRCRAFT",
+              "ORKS"
             ]
           },
           "modifier": {
-            "allow": true,
-            "to": "strategic-reserves",
-            "ignore_limits": true
+            "rule": "limit-exemption",
+            "exempt_from": [
+              "strategic-reserves-points"
+            ]
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "owner": "friendly"
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "all_of": [
-                      "ORKS"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "any_of": [
-                      "AIRCRAFT",
-                      "DEFFKOPTAS"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "designated": "RILED UP"
-                  }
-                }
+            "type": "matches",
+            "parameters": {
+              "subject": "recipient",
+              "filter": {
+                "designated": "riled-up"
               }
-            ]
+            }
           },
           "effect": {
             "type": "roll-modifier",
-            "target": "this-model",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ORKS"
+              ],
+              "any_of": [
+                "AIRCRAFT",
+                "DEFFKOPTAS"
+              ]
+            },
             "modifier": {
               "roll": "hit",
               "operation": "add",
@@ -10320,7 +10455,7 @@
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [],
     "ability_type": "detachment",

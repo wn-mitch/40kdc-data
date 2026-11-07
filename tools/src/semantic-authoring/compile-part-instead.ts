@@ -45,7 +45,9 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
   const { list, places, errors, combinators, triggerIndexes, optionalSpends, global } = frame;
   // Where an "Or:" group ends: another combinator, or a moment after the first effect (a later part).
   const leadingEffect = list.findIndex((leaf) => leaf.role === "EFFECT");
-  const choiceBoundaries = [...combinators, ...triggerIndexes.filter((index) => leadingEffect !== -1 && index > leadingEffect)];
+  // An Otherwise opens the else branch, so an "Or:" stretch after it starts there (compile-otherwise.ts).
+  const otherwiseAt = list.flatMap((leaf, at) => leaf.family_id === "otherwise" ? [at] : []);
+  const choiceBoundaries = [...combinators, ...otherwiseAt, ...triggerIndexes.filter((index) => leadingEffect !== -1 && index > leadingEffect)];
   // The "Or:" markers of one stretch (no other combinator or later moment between them) make one choice.
   const choices = new Set(combinators.filter((index) => list[index]!.parameters.choice === true));
   const choiceLimits = choiceBoundaries.filter((index) => !choices.has(index));

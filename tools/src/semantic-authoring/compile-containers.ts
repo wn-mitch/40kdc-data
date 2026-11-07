@@ -624,8 +624,11 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     }
     if (leaf.family_id === "persistent-designation-open") refuseEstablishmentCount(list, sentenceOf, index);
     // A selected objective's body may span several sentences ("While in range, this model has: A, B, C" splits at
-    // each bullet). They fold into one body unless a later sentence opens a moment of its own.
-    if (leaf.family_id === "select-objective-open" && sentences.length > 1 && !sentences.slice(1).some((group) => group.some(opensOwnMoment))) {
+    // each bullet). They fold into one body unless a later sentence opens a moment of its own. An attack frame
+    // ("That objective is your vowed objective …. Friendly X units' attacks that target …") opens no moment: it says
+    // which attacks the body's effect changes.
+    const opensBodyMoment = (item: CompileLeaf) => opensOwnMoment(item) && item.family_id !== "attack";
+    if (leaf.family_id === "select-objective-open" && sentences.length > 1 && !sentences.slice(1).some((group) => group.some(opensBodyMoment))) {
       sentences = [sentences.flat()];
     }
     if (SINGLE_BODY_CONTAINERS.has(leaf.family_id)) {

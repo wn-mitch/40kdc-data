@@ -315,4 +315,13 @@ describe("pipeline-8b cruncher unsupported classification", () => {
       expect(bindEventSubject(filtered, nested, { phase: "shooting", attackerKeywords: ["example"] }, "attacker")).toBe(nested);
     });
   });
+
+  it("counts a stat scaled by a count of models on the board as a runtime unknown, and keeps an unscaled miss a real gap", () => {
+    const scaled = { type: "stat-modifier", target: { owner: "friendly", all_of: ["EXAMPLE"], level: "model" }, modifier: { stat: "S", operation: "improve", value: 1, weapons: { keyword: { keyword_id: "psychic" } } }, scaling: { per: 5, of: "models-in-or-embarked-in-bearer" } };
+    const unsupported = effectToBuffs(scaled, source, ctx, "attacker").unsupported;
+    expect(unsupported.map((item) => item.reason)).toEqual(["stat-modifier: the value scales with models-in-or-embarked-in-bearer; not resolved by the buff engine"]);
+    expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 1, outsideDamagePath: 0, unrecognizedShape: 0 });
+    expect(classifyUnsupported([{ reason: "stat-modifier: the value scales with; not resolved by the buff engine", effectFragment: scaled }]))
+      .toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
+  });
 });

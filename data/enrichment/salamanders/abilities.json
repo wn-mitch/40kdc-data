@@ -114,9 +114,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "fdf2e70507b067d3ad65b2fb1224d9138980275aa78f37f1120ff9e384a4a5cc",
+    "source_digest": "a2a87d0c59ab6449bb23ee69bf8b2d3b9d7204d5b45e644f952a174da8e0cb1d",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -126,52 +126,83 @@
     "behavior": "reactive",
     "trigger": {
       "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
       "subject": {
         "owner": "enemy"
       },
-      "filter": {
-        "kind": "shoot"
-      }
+      "optional": true
     },
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "select-units",
-          "selector": {
-            "filter": {
-              "owner": "friendly"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            },
-            "eligibility": {
-              "type": "unit-state",
-              "parameters": {
-                "state": "embarked",
-                "with": "this-unit"
-              }
-            }
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "event-subject",
+          "object": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS ASTARTES",
+              "TRANSPORT"
+            ]
           },
-          "effect": {
+          "filter": {
+            "kind": "attack"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
             "type": "move",
-            "target": "selected-unit",
+            "target": "this-unit",
             "modifier": {
               "move_type": "disembark"
             }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "shooting_type": "normal"
+              }
+            },
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "shoot",
+                "allow": true,
+                "as_if": "shooting-phase"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "shooting_type": "normal"
+              }
+            },
+            "effect": {
+              "type": "targeting",
+              "target": "this-unit",
+              "modifier": {
+                "by": "this-unit",
+                "may": "must-target",
+                "kind": "shoot",
+                "target": "event-subject"
+              }
+            }
           }
-        },
-        {
-          "type": "permission",
-          "target": "this-unit",
-          "modifier": {
-            "activity": "shoot",
-            "allow": true,
-            "as_if": "shooting-phase"
-          }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "phase"

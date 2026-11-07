@@ -58,6 +58,7 @@ var designationTerms = map[string]struct{ adjective, noun string }{
 	"slayers-oath":               {noun: "Slayer's Oath"},
 	"vendetta-target":            {noun: "Vendetta target"},
 	"victim":                     {noun: "victim"},
+	"vowed-objective":            {adjective: "vowed"},
 	"sabotaged":                  {adjective: "Sabotaged"},
 	"warded":                     {adjective: "Warded"},
 	"corrupted":                  {adjective: "Corrupted"},
