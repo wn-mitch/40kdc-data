@@ -25,6 +25,11 @@ export default defineWorkersConfig(async () => {
               // (the 200-link loop blew the 5s test timeout on CI runners).
               MAX_DOCS_PER_OWNER: "5",
               MAX_LINKS_PER_OWNER: "5",
+              // Storage is shared across files and most tests leave their room
+              // registered, so the production cap of 20 runs out partway through
+              // the suite in some file orders. The capacity test fills the
+              // registry itself (up to 100), so it still reaches this ceiling.
+              MAX_DOC_SESSIONS: "60",
               // Exercise the CONFIGURED alert path (the production shape), not
               // just the no-webhook early return. Tests stub global fetch, and
               // the host does not resolve, so nothing leaves the runner.

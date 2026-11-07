@@ -4,7 +4,7 @@
  * exactness, viewer write-drop, bad-batch rejection, reconnect freshness, and
  * capacity caps.
  */
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { env, runDurableObjectAlarm, runInDurableObject, SELF } from "cloudflare:test";
 import { api, mintToken } from "./helpers";
 import type { ServerMessage } from "../src/doc-protocol";
@@ -256,5 +256,48 @@ describe("registry lease", () => {
     expect(await stampOf()).toBe(0);
     expect(await runDurableObjectAlarm(env.DOC_ROOM.get(env.DOC_ROOM.idFromName(code)))).toBe(true);
     expect(await stampOf()).toBeGreaterThan(Date.now() - 60_000);
+  });
+});
+
+describe("code collisions", () => {
+  it("rerolls a colliding code without releasing the live room's slot", async () => {
+    const fixed = crypto.getRandomValues(new Uint8Array(6));
+    const real = crypto.getRandomValues.bind(crypto);
+    let forced = 2; // the first session's code, then the second's first attempt
+    const spy = vi.spyOn(crypto, "getRandomValues").mockImplementation(((arr: Uint8Array) => {
+      if (arr instanceof Uint8Array && arr.length === 6 && forced > 0) {
+        forced--;
+        arr.set(fixed);
+        return arr;
+      }
+      return real(arr);
+    }) as typeof crypto.getRandomValues);
+    try {
+      const first = await createSession();
+      const second = await createSession();
+      expect(second.code).not.toBe(first.code);
+      const registry = env.SYNC_REGISTRY.get(env.SYNC_REGISTRY.idFromName("global"));
+      expect(await registry.has(first.code)).toBe(true);
+      expect(await registry.has(second.code)).toBe(true);
+    } finally {
+      spy.mockRestore();
+    }
+  });
+});
+
+describe("resync hello", () => {
+  it("answers a repeated hello with a welcome that includes the socket's earlier ops", async () => {
+    const { code, editorToken } = await createSession();
+    const a = await connect(code, editorToken, "A");
+    await a.next(); // welcome
+    a.ws.send(JSON.stringify({ t: "op", clientSeq: 1, ops: [{ o: "set", p: ["teamName"], v: "Mine" }] }));
+    a.ws.send(JSON.stringify({ t: "hello", nickname: "A", lastSeq: 0, id: 7 }));
+    const ack = await a.next();
+    expect(ack.t).toBe("ack");
+    const welcome = await a.next();
+    if (welcome.t !== "welcome") throw new Error(`expected welcome, got ${welcome.t}`);
+    expect(welcome.doc).toMatchObject({ teamName: "Mine" });
+    expect(welcome.seq).toBe(1);
+    expect(welcome.helloId).toBe(7); // echoed so the client knows it's the answer
   });
 });

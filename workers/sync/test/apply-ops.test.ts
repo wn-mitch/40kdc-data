@@ -67,4 +67,14 @@ describe("applyDocOps", () => {
     expect(() => applyDocOps({}, [{ o: "del", p: [] }])).toThrow(OpError);
     expect(() => applyDocOps([], [{ o: "splice", p: [], i: 5, d: 0, ins: [] }])).toThrow(OpError);
   });
+
+  it("rejects a set with no value at the root or nested, leaving the doc intact", () => {
+    const doc = { teamName: "Crusaders" };
+    const noValue = (p: string[]) => ({ o: "set", p }) as unknown as DocOp;
+    expect(() => applyDocOps(doc, [noValue([])])).toThrow(OpError);
+    expect(() => applyDocOps(doc, [noValue(["teamName"])])).toThrow(OpError);
+    expect(doc).toEqual({ teamName: "Crusaders" });
+    // null is a real JSON value and still sets.
+    expect(applyDocOps(doc, [{ o: "set", p: ["teamName"], v: null }])).toEqual({ teamName: null });
+  });
 });

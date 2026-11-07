@@ -269,8 +269,8 @@ export default {
         if (tokens) {
           return json({ code, editorToken: tokens.editorToken, viewerToken: tokens.viewerToken });
         }
-        // Code collided with a live room — release the duplicate slot, reroll.
-        await registry.release(code);
+        // Code collided with a live room. The registry row is that room's own
+        // slot (tryAcquire upserts by code), so it stays; just reroll.
       }
       return json({ error: "mint_failed" }, 500);
     }
@@ -364,20 +364,26 @@ export default {
         if (name === null) return json({ error: "bad_name" }, 400);
 
         const row = await env.DB.prepare(
-          "SELECT name, updated_at FROM documents WHERE id = ? AND owner = ?",
+          "SELECT name, updated_at, live_until FROM documents WHERE id = ? AND owner = ?",
         )
           .bind(id, owner)
-          .first<{ name: string; updated_at: number }>();
+          .first<{ name: string; updated_at: number; live_until: number | null }>();
         if (!row) return json({ error: "not_found" }, 404);
 
         // While a live room holds this doc, the room is the source of truth —
         // a snapshot PUT would be clobbered by its next persist. Refuse
-        // honestly and steer the client to the live session instead.
+        // honestly and steer the client to the live session instead. The
+        // room's D1 lease (migration 0005) is checked inside the UPDATE, so a
+        // room going live mid-request can't slip between check and write.
+        if (row.live_until !== null && row.live_until >= Date.now()) {
+          return json({ error: "doc_live" }, 409);
+        }
+        // The registry slot also marks a live room, including rooms that went
+        // live before leases existed and have not renewed one yet.
         const registry = env.SYNC_REGISTRY.get(env.SYNC_REGISTRY.idFromName("global"));
         if (await registry.has(`doc:${id}`)) {
           return json({ error: "doc_live" }, 409);
         }
-
         // Optimistic concurrency: a stale ifUpdatedAt means another device
         // wrote since this client last read — surface, don't clobber. The
         // version check is repeated in the UPDATE's WHERE so a write landing
@@ -388,19 +394,24 @@ export default {
         if (ifUpdatedAt !== null && ifUpdatedAt !== row.updated_at) {
           return json({ error: "conflict", updated_at: row.updated_at, name: row.name }, 409);
         }
+        const now = Date.now();
         const updated = await env.DB.prepare(
           "UPDATE documents SET name = COALESCE(?, name), payload = ?, updated_at = MAX(?, updated_at + 1) " +
-            "WHERE id = ? AND owner = ? AND (? IS NULL OR updated_at = ?) RETURNING updated_at",
+            "WHERE id = ? AND owner = ? AND (? IS NULL OR updated_at = ?) " +
+            "AND (live_until IS NULL OR live_until < ?) RETURNING updated_at",
         )
-          .bind(name ?? null, text, Date.now(), id, owner, ifUpdatedAt, ifUpdatedAt)
+          .bind(name ?? null, text, now, id, owner, ifUpdatedAt, ifUpdatedAt, now)
           .first<{ updated_at: number }>();
         if (updated) return json({ id, updated_at: updated.updated_at });
         const current = await env.DB.prepare(
-          "SELECT name, updated_at FROM documents WHERE id = ? AND owner = ?",
+          "SELECT name, updated_at, live_until FROM documents WHERE id = ? AND owner = ?",
         )
           .bind(id, owner)
-          .first<{ name: string; updated_at: number }>();
+          .first<{ name: string; updated_at: number; live_until: number | null }>();
         if (!current) return json({ error: "not_found" }, 404);
+        if (current.live_until !== null && current.live_until >= now) {
+          return json({ error: "doc_live" }, 409);
+        }
         return json({ error: "conflict", updated_at: current.updated_at, name: current.name }, 409);
       }
 

@@ -13,7 +13,10 @@
  * rebase. A peer op that arrives while this client has unacked ops was
  * ordered BEFORE them by the server, so applying it on top of the optimistic
  * state would invert that order (same-path edits would diverge for good);
- * the client hard-resyncs instead. Joining is free (the link token is the auth); creation is
+ * the client resyncs instead: it re-sends `hello` (with an id) on the same
+ * socket, and the welcome that echoes that id is ordered after every op this
+ * socket already sent, so it carries their server-ordered result. Edits made
+ * while that welcome is pending are queued and replayed onto it. Joining is free (the link token is the auth); creation is
  * entitlement-gated by the worker.
  *
  * Two room flavors share this client:
@@ -41,7 +44,7 @@ import {
   type DocKind,
 } from "./sync-api";
 import { saveNickname, storedNickname } from "./nickname";
-import type { DocOp, Participant, ServerMessage } from "./doc-protocol";
+import { applyDocOps, type DocOp, type Participant, type ServerMessage } from "./doc-protocol";
 
 const RECONNECT_MIN_MS = 1_000;
 const RECONNECT_MAX_MS = 15_000;
@@ -101,6 +104,11 @@ let welcomed = false;
 let clientSeq = 0;
 /** Op batches sent on the current socket that the server hasn't acked yet. */
 let unackedOps = 0;
+/** Id of the resync hello whose welcome hasn't arrived yet (null: none). */
+let pendingHelloId: number | null = null;
+let helloSeq = 0;
+/** Local edits made while a resync is pending, replayed onto its welcome. */
+let queuedOps: DocOp[][] = [];
 let reconnectDelay = RECONNECT_MIN_MS;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 /** Deliberate leave — suppresses the reconnect loop. */
@@ -324,6 +332,17 @@ export function sendOps(ops: DocOp[]): void {
   ) {
     return;
   }
+  if (pendingHelloId !== null) {
+    // Sent now, it would reach the server after the resync hello, so the
+    // welcome would omit it while replacing local state. Replay it instead.
+    queuedOps.push(ops);
+    return;
+  }
+  transmit(ops);
+}
+
+function transmit(ops: DocOp[]): void {
+  if (!ws) return;
   clientSeq += 1;
   unackedOps += 1;
   ws.send(JSON.stringify({ t: "op", clientSeq, ops }));
@@ -336,13 +355,24 @@ function wsUrl(t: Target, token: string): string {
     : `${base}/session/${t.code}/ws?token=${encodeURIComponent(token)}`;
 }
 
+function sameTarget(a: Target | null, b: Target): boolean {
+  if (!a || a.kind !== b.kind) return false;
+  return a.kind === "doc" ? a.docId === (b as { docId: string }).docId : a.code === (b as { code: string }).code;
+}
+
 function connect(t: Target, token: string, nickname: string): void {
+  // Edits queued during a resync survive a reconnect to the same room: the
+  // new socket's first welcome is ordered after nothing of ours, so they are
+  // replayed onto it like the resync answer.
+  // (leaveDocSession nulls the target, so a leave always clears them.)
+  if (!sameTarget(target, t)) queuedOps = [];
   closing = false;
   target = t;
   connectToken = token;
   nicknameMemo = nickname;
   welcomed = false;
   unackedOps = 0;
+  pendingHelloId = null;
   docSession.status = "connecting";
   docSession.code = t.kind === "session" ? t.code : null;
   docSession.docId = t.kind === "doc" ? t.docId : null;
@@ -363,6 +393,20 @@ function connect(t: Target, token: string, nickname: string): void {
     }
     if (ws !== socket) return; // superseded socket — its traffic is stale
     if (msg.t === "welcome") {
+      if (pendingHelloId !== null && msg.helloId !== pendingHelloId) {
+        // Unsolicited (the room reloaded its row) while our resync is out:
+        // the answer to our hello is ordered later and supersedes it.
+        return;
+      }
+      if (pendingHelloId === null && welcomed && unackedOps > 0) {
+        // A re-welcome (the room reloaded its row) while our ops are still in
+        // flight: the server will apply them to the reloaded doc after this
+        // welcome, so adopting it would drop them locally. Resync; the answer
+        // carries their server-ordered result.
+        resync(socket);
+        return;
+      }
+      pendingHelloId = null;
       welcomed = true;
       unackedOps = 0;
       docSession.status = "connected";
@@ -378,14 +422,30 @@ function connect(t: Target, token: string, nickname: string): void {
         if (msg.role === "editor" && !docSession.editorLink) docSession.editorLink = link;
         if (msg.role === "viewer" && !docSession.viewerLink) docSession.viewerLink = link;
       }
-      callbacks?.onDoc(msg.doc);
+      let doc = msg.doc;
+      // Replay edits queued during a resync (or carried across a reconnect)
+      // onto the welcome, sending the ones that still apply; the rest target
+      // state that's gone. The queue is empty for any other welcome.
+      const replay = queuedOps;
+      queuedOps = [];
+      for (const ops of replay) {
+        try {
+          doc = applyDocOps(doc, ops);
+        } catch {
+          continue;
+        }
+        transmit(ops);
+      }
+      callbacks?.onDoc(doc);
     } else if (msg.t === "ack") {
       unackedOps = Math.max(0, unackedOps - 1);
     } else if (msg.t === "op") {
-      if (unackedOps > 0) {
+      if (pendingHelloId !== null) {
+        // Already reflected in the welcome that answers our resync hello.
+      } else if (unackedOps > 0) {
         // Ordered before our in-flight ops — take the server's document
         // rather than replaying it out of order (see the header).
-        socket.close(4000, "resync");
+        resync(socket);
       } else {
         callbacks?.onRemoteOps(msg.ops);
       }
@@ -393,13 +453,13 @@ function connect(t: Target, token: string, nickname: string): void {
       docSession.participants = msg.participants;
     } else if (msg.t === "error") {
       if (msg.code === "bad_ops") {
-        // The doc diverged — hard-resync: reconnect for a fresh welcome.
-        socket.close(4000, "resync");
+        // The doc diverged — resync for a fresh welcome.
+        resync(socket);
       } else if (msg.code === "doc_too_large") {
         // The room refused to outgrow the cloud cap; resync sheds the
         // over-cap local change.
         docSession.error = "That change made the document too large to sync — it was rolled back.";
-        socket.close(4000, "resync");
+        resync(socket);
       } else if (msg.code === "read_only") {
         docSession.error = "You're viewing this session — ask for an editor link to make changes.";
       }
@@ -430,6 +490,13 @@ function connect(t: Target, token: string, nickname: string): void {
   socket.addEventListener("error", () => {
     /* close fires next; the close handler owns retry */
   });
+}
+
+/** Ask for a fresh welcome on the same socket (see the header). */
+function resync(socket: WebSocket): void {
+  if (pendingHelloId !== null) return;
+  pendingHelloId = ++helloSeq;
+  socket.send(JSON.stringify({ t: "hello", nickname: nicknameMemo, lastSeq: 0, id: pendingHelloId }));
 }
 
 /** A doc-bound join was refused — open the at-rest doc read-only when the

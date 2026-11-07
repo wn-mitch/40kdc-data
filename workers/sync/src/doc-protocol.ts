@@ -37,7 +37,9 @@ export interface Participant {
 }
 
 export type ClientMessage =
-  | { t: "hello"; nickname?: string; lastSeq: number }
+  /** `id` marks a resync hello; the welcome that answers it echoes it as
+   *  `helloId`, so a client can tell that welcome from an unsolicited one. */
+  | { t: "hello"; nickname?: string; lastSeq: number; id?: number }
   | { t: "nick"; nickname: string }
   | { t: "op"; clientSeq: number; ops: DocOp[] };
 
@@ -52,6 +54,8 @@ export type ServerMessage =
       doc: unknown;
       seq: number;
       participants: Participant[];
+      /** The `id` of the hello this welcome answers, when it carried one. */
+      helloId?: number;
     }
   | { t: "op"; seq: number; ops: DocOp[]; from: string }
   | { t: "ack"; clientSeq: number; seq: number }

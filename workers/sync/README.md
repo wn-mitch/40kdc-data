@@ -26,8 +26,11 @@ secrets. Resolving a shortlink or joining a live session is anonymous.
   editor/viewer share tokens (`POST /docs/:id/share`); opening
   `?d=<docId>&token=` joins a `DocRoom` keyed `doc:<id>` that hydrates from
   the D1 row and persists edits back (debounced, on last-leave, and at idle
-  eviction) — the Google-docs model. While a room is live, snapshot `PUT`s
-  409 (`doc_live`); `DELETE` always wins and tears the room down. When the
+  eviction) — the Google-docs model. A live room holds a lease on its row
+  (`documents.live_until`, claimed in the same statement it loads the doc
+  from, renewed while active, cleared at shutdown, expiring TTL + 30 min after
+  its last renewal). While the lease is held, snapshot `PUT`s 409
+  (`doc_live`); `DELETE` always wins and tears the room down. When the
   room can't be joined (capacity), `GET /docs/:id/shared?token=` serves the
   at-rest doc read-only.
 
