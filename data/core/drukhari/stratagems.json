@@ -1,6 +1,6 @@
 [
   {
-    "id": "a-challenge-met-spectacle-of-spite",
+    "id": "a-challenge-met-spectacle-of-spite-drukhari",
     "name": "A CHALLENGE MET",
     "category": "detachment",
     "type": "battle-tactic",
@@ -12,7 +12,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "a-challenge-met-spectacle-of-spite-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "id": "acrobatic-display-exhibition-of-slaughter",
+    "id": "acrobatic-display-exhibition-of-slaughter-drukhari",
     "name": "Acrobatic Display",
     "category": "detachment",
     "detachment_id": "exhibition-of-slaughter",
@@ -39,8 +39,15 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "acrobatic-display-exhibition-of-slaughter",
+    "target_restrictions": {
+      "required_keywords": [
+        "Wych Cult"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "acrobatic-display-exhibition-of-slaughter-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -57,7 +64,7 @@
     ]
   },
   {
-    "id": "acrobatic-display-spectacle-of-spite",
+    "id": "acrobatic-display-spectacle-of-spite-drukhari",
     "name": "ACROBATIC DISPLAY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -68,11 +75,27 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Wych Cult"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "acrobatic-display-spectacle-of-spite-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -86,7 +109,7 @@
     ]
   },
   {
-    "id": "agonising-onslaught-coven-of-agonies",
+    "id": "agonising-onslaught-coven-of-agonies-drukhari",
     "name": "Agonising Onslaught",
     "category": "detachment",
     "detachment_id": "coven-of-agonies",
@@ -97,21 +120,31 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "agonising-onslaught-coven-of-agonies",
+    "target_restrictions": {
+      "required_keywords": [
+        "Coven of Agonies"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "agonising-onslaught-coven-of-agonies-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "fff33d37-0b36-416a-ae76-ee55ca028e31"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
-    "id": "berserk-fugue-spectacle-of-spite",
+    "id": "berserk-fugue-spectacle-of-spite-drukhari",
     "name": "BERSERK FUGUE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -122,11 +155,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Wych Cult"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "berserk-fugue-spectacle-of-spite-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -140,7 +189,7 @@
     ]
   },
   {
-    "id": "connoisseurs-of-pain-covenite-coterie",
+    "id": "connoisseurs-of-pain-covenite-coterie-drukhari",
     "name": "CONNOISSEURS OF PAIN",
     "category": "detachment",
     "type": "battle-tactic",
@@ -152,11 +201,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Drukhari"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "connoisseurs-of-pain-covenite-coterie-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -170,7 +235,7 @@
     ]
   },
   {
-    "id": "dance-macabre-reapers-wager",
+    "id": "dance-macabre-reapers-wager-drukhari",
     "name": "DANCE MACABRE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -181,11 +246,55 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "DRUKHARI",
+                  "HARLEQUINS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "dance-macabre-reapers-wager-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -199,7 +308,7 @@
     ]
   },
   {
-    "id": "dark-harvest-realspace-raiders",
+    "id": "dark-harvest-realspace-raiders-drukhari",
     "name": "DARK HARVEST",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -210,11 +319,49 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Wracks"
+        ],
+        "name": "first",
+        "count": "up-to",
+        "count_max": 2,
+        "mode": "a",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      },
+      {
+        "required_keywords": [
+          "Drukhari"
+        ],
+        "name": "second",
+        "count": "one",
+        "mode": "b",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      }
+    ],
+    "ability_id": "dark-harvest-realspace-raiders-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -228,7 +375,7 @@
     ]
   },
   {
-    "id": "deadly-debut-spectacle-of-spite",
+    "id": "deadly-debut-spectacle-of-spite-drukhari",
     "name": "DEADLY DEBUT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -239,11 +386,58 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Drukhari"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "charge"
+                ]
+              },
+              "window": "turn"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "deadly-debut-spectacle-of-spite-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -257,7 +451,7 @@
     ]
   },
   {
-    "id": "deadly-deceivers-kabalite-cartel",
+    "id": "deadly-deceivers-kabalite-cartel-drukhari",
     "name": "DEADLY DECEIVERS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -268,11 +462,40 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "BLADES FOR HIRE",
+                  "KABAL"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "deadly-deceivers-kabalite-cartel-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -286,7 +509,7 @@
     ]
   },
   {
-    "id": "distillers-of-fear-covenite-coterie",
+    "id": "distillers-of-fear-covenite-coterie-drukhari",
     "name": "DISTILLERS OF FEAR",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -297,11 +520,46 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Haemonculus Covens"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "distillers-of-fear-covenite-coterie-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -315,7 +573,7 @@
     ]
   },
   {
-    "id": "dividends-of-agony-tools-of-torment",
+    "id": "dividends-of-agony-tools-of-torment-drukhari",
     "name": "Dividends of Agony",
     "category": "detachment",
     "detachment_id": "tools-of-torment",
@@ -325,8 +583,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "dividends-of-agony-tools-of-torment",
+    "target_restrictions": {
+      "required_keywords": [
+        "Haemonculus Covens"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "dividends-of-agony-tools-of-torment-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -343,7 +608,7 @@
     ]
   },
   {
-    "id": "double-cross-kabalite-cartel",
+    "id": "double-cross-kabalite-cartel-drukhari",
     "name": "DOUBLE-CROSS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -355,7 +620,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "double-cross-kabalite-cartel-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -372,7 +637,7 @@
     ]
   },
   {
-    "id": "eager-for-the-kill-realspace-raiders",
+    "id": "eager-for-the-kill-realspace-raiders-drukhari",
     "name": "EAGER FOR THE KILL",
     "category": "detachment",
     "type": "battle-tactic",
@@ -384,7 +649,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "eager-for-the-kill-realspace-raiders-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -401,7 +666,7 @@
     ]
   },
   {
-    "id": "enemies-without-number-kabalite-cartel",
+    "id": "enemies-without-number-kabalite-cartel-drukhari",
     "name": "ENEMIES WITHOUT NUMBER",
     "category": "detachment",
     "type": "epic-deed",
@@ -413,7 +678,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "enemies-without-number-kabalite-cartel-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -430,7 +695,7 @@
     ]
   },
   {
-    "id": "enfolding-nightmare-covenite-coterie",
+    "id": "enfolding-nightmare-covenite-coterie-drukhari",
     "name": "ENFOLDING NIGHTMARE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -441,11 +706,27 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Haemonculus Covens"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "enfolding-nightmare-covenite-coterie-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -459,7 +740,7 @@
     ]
   },
   {
-    "id": "fateful-role-reapers-wager",
+    "id": "fateful-role-reapers-wager-drukhari",
     "name": "FATEFUL ROLE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -470,11 +751,40 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "DRUKHARI",
+                  "HARLEQUINS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "fateful-role-reapers-wager-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -488,7 +798,7 @@
     ]
   },
   {
-    "id": "feigned-weakness-spectacle-of-spite",
+    "id": "feigned-weakness-spectacle-of-spite-drukhari",
     "name": "FEIGNED WEAKNESS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -499,11 +809,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Drukhari"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "feigned-weakness-spectacle-of-spite-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -517,7 +834,7 @@
     ]
   },
   {
-    "id": "fighting-shadows-realspace-raiders",
+    "id": "fighting-shadows-realspace-raiders-drukhari",
     "name": "FIGHTING SHADOWS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -529,11 +846,30 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Drukhari"
+      ],
+      "excluded_keywords": [
+        "Haemonculus Covens"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "fighting-shadows-realspace-raiders-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -547,7 +883,7 @@
     ]
   },
   {
-    "id": "hardened-physiology-coven-of-agonies",
+    "id": "hardened-physiology-coven-of-agonies-drukhari",
     "name": "Hardened Physiology",
     "category": "detachment",
     "detachment_id": "coven-of-agonies",
@@ -558,21 +894,32 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "hardened-physiology-coven-of-agonies",
+    "target_restrictions": {
+      "required_keywords": [
+        "Coven of Agonies",
+        "Wracks"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
+    "ability_id": "hardened-physiology-coven-of-agonies-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "8109853a-f449-4a5c-825f-aec1a917eeb5"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
-    "id": "insensible-to-pain-realspace-raiders",
+    "id": "insensible-to-pain-realspace-raiders-drukhari",
     "name": "INSENSIBLE TO PAIN",
     "category": "detachment",
     "type": "battle-tactic",
@@ -584,11 +931,27 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Haemonculus Covens"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "insensible-to-pain-realspace-raiders-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -602,7 +965,7 @@
     ]
   },
   {
-    "id": "instinctive-spite-realspace-raiders",
+    "id": "instinctive-spite-realspace-raiders-drukhari",
     "name": "INSTINCTIVE SPITE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -615,7 +978,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "instinctive-spite-realspace-raiders-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -632,7 +995,7 @@
     ]
   },
   {
-    "id": "killers-from-the-dark-spires-kabalite-agonysts",
+    "id": "killers-from-the-dark-spires-kabalite-agonysts-drukhari",
     "name": "Killers From the Dark Spires",
     "category": "detachment",
     "detachment_id": "kabalite-agonysts",
@@ -642,11 +1005,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "killers-from-the-dark-spires-kabalite-agonysts",
+    "target_restrictions": {
+      "required_keywords": [
+        "Kabalite Warriors"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "killers-from-the-dark-spires-kabalite-agonysts-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -660,7 +1030,7 @@
     ]
   },
   {
-    "id": "making-a-point-kabalite-cartel",
+    "id": "making-a-point-kabalite-cartel-drukhari",
     "name": "MAKING A POINT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -671,11 +1041,54 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "HAND OF THE ARCHON",
+                  "KABALITE WARRIORS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "making-a-point-kabalite-cartel-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -689,7 +1102,7 @@
     ]
   },
   {
-    "id": "malicious-frenzy-reapers-wager",
+    "id": "malicious-frenzy-reapers-wager-drukhari",
     "name": "MALICIOUS FRENZY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -701,11 +1114,69 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "DRUKHARI",
+                  "HARLEQUINS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "malicious-frenzy-reapers-wager-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -719,7 +1190,7 @@
     ]
   },
   {
-    "id": "murderers-circus-reapers-wager",
+    "id": "murderers-circus-reapers-wager-drukhari",
     "name": "MURDERER’S CIRCUS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -730,11 +1201,40 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "DRUKHARI",
+                  "HARLEQUINS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "murderers-circus-reapers-wager-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -748,7 +1248,7 @@
     ]
   },
   {
-    "id": "night-shield-skysplinter-assault",
+    "id": "night-shield-skysplinter-assault-drukhari",
     "name": "NIGHT SHIELD",
     "category": "detachment",
     "type": "wargear",
@@ -759,11 +1259,28 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Drukhari",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "night-shield-skysplinter-assault-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -777,7 +1294,7 @@
     ]
   },
   {
-    "id": "planned-strikes-exhibition-of-slaughter",
+    "id": "planned-strikes-exhibition-of-slaughter-drukhari",
     "name": "Planned Strikes",
     "category": "detachment",
     "detachment_id": "exhibition-of-slaughter",
@@ -787,11 +1304,18 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "planned-strikes-exhibition-of-slaughter",
+    "target_restrictions": {
+      "required_keywords": [
+        "Wych Cult"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "planned-strikes-exhibition-of-slaughter-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -805,7 +1329,7 @@
     ]
   },
   {
-    "id": "poisoners-art-covenite-coterie",
+    "id": "poisoners-art-covenite-coterie-drukhari",
     "name": "POISONER’S ART",
     "category": "detachment",
     "type": "epic-deed",
@@ -816,11 +1340,18 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Haemonculus Covens"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "poisoners-art-covenite-coterie-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -834,7 +1365,7 @@
     ]
   },
   {
-    "id": "postmortality-covenite-coterie",
+    "id": "postmortality-covenite-coterie-drukhari",
     "name": "POSTMORTALITY",
     "category": "detachment",
     "type": "epic-deed",
@@ -850,7 +1381,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "postmortality-covenite-coterie-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -867,7 +1398,7 @@
     ]
   },
   {
-    "id": "pounce-on-the-prey-skysplinter-assault",
+    "id": "pounce-on-the-prey-skysplinter-assault-drukhari",
     "name": "POUNCE ON THE PREY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -879,7 +1410,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "pounce-on-the-prey-skysplinter-assault-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -896,7 +1427,7 @@
     ]
   },
   {
-    "id": "powerful-creations-coven-of-agonies",
+    "id": "powerful-creations-coven-of-agonies-drukhari",
     "name": "Powerful Creations",
     "category": "detachment",
     "detachment_id": "coven-of-agonies",
@@ -906,21 +1437,32 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "powerful-creations-coven-of-agonies",
+    "target_restrictions": {
+      "required_keywords": [
+        "Coven of Agonies",
+        "Monster"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "powerful-creations-coven-of-agonies-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "bd66d7c1-a2c3-4a8d-962a-7ffb17d0998e"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
-    "id": "preternatural-agility-spectacle-of-spite",
+    "id": "preternatural-agility-spectacle-of-spite-drukhari",
     "name": "PRETERNATURAL AGILITY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -932,11 +1474,26 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Wych Cult"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
+    "ability_id": "preternatural-agility-spectacle-of-spite-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -950,7 +1507,7 @@
     ]
   },
   {
-    "id": "prioritised-victim-kabalite-agonysts",
+    "id": "prioritised-victim-kabalite-agonysts-drukhari",
     "name": "Prioritised Victim",
     "category": "detachment",
     "detachment_id": "kabalite-agonysts",
@@ -961,8 +1518,16 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "prioritised-victim-kabalite-agonysts",
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Blades for Hire",
+        "Kabal"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "prioritised-victim-kabalite-agonysts-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -979,7 +1544,7 @@
     ]
   },
   {
-    "id": "raid-and-fade-realspace-raiders",
+    "id": "raid-and-fade-realspace-raiders-drukhari",
     "name": "RAID AND FADE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -990,11 +1555,89 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Kabalite Warriors"
+        ],
+        "name": "first",
+        "count": "up-to",
+        "count_max": 2,
+        "mode": "a",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "engaged"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Drukhari"
+        ],
+        "excluded_keywords": [
+          "Aircraft",
+          "Scourges"
+        ],
+        "name": "second",
+        "count": "one",
+        "mode": "b",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "engaged"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "ability_id": "raid-and-fade-realspace-raiders-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1008,7 +1651,7 @@
     ]
   },
   {
-    "id": "salting-the-wound-tools-of-torment",
+    "id": "salting-the-wound-tools-of-torment-drukhari",
     "name": "Salting the Wound",
     "category": "detachment",
     "detachment_id": "tools-of-torment",
@@ -1018,11 +1661,19 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "salting-the-wound-tools-of-torment",
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Cronos",
+        "Talos"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "salting-the-wound-tools-of-torment-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1036,7 +1687,7 @@
     ]
   },
   {
-    "id": "scintillating-tempo-reapers-wager",
+    "id": "scintillating-tempo-reapers-wager-drukhari",
     "name": "SCINTILLATING TEMPO",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1048,11 +1699,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "scintillating-tempo-reapers-wager-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1066,7 +1721,7 @@
     ]
   },
   {
-    "id": "sculpting-the-stage-exhibition-of-slaughter",
+    "id": "sculpting-the-stage-exhibition-of-slaughter-drukhari",
     "name": "Sculpting the Stage",
     "category": "detachment",
     "detachment_id": "exhibition-of-slaughter",
@@ -1076,11 +1731,18 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "sculpting-the-stage-exhibition-of-slaughter",
+    "target_restrictions": {
+      "required_keywords": [
+        "Wych Cult"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "sculpting-the-stage-exhibition-of-slaughter-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1094,7 +1756,7 @@
     ]
   },
   {
-    "id": "shadows-reach-kabalite-agonysts",
+    "id": "shadows-reach-kabalite-agonysts-drukhari",
     "name": "Shadows’ Reach",
     "category": "detachment",
     "detachment_id": "kabalite-agonysts",
@@ -1104,11 +1766,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "shadows-reach-kabalite-agonysts",
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "shadows-reach-kabalite-agonysts-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1122,7 +1788,7 @@
     ]
   },
   {
-    "id": "shorten-the-odds-reapers-wager",
+    "id": "shorten-the-odds-reapers-wager-drukhari",
     "name": "SHORTEN THE ODDS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1133,11 +1799,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "shorten-the-odds-reapers-wager-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1151,7 +1821,7 @@
     ]
   },
   {
-    "id": "skyborne-annihilation-skysplinter-assault",
+    "id": "skyborne-annihilation-skysplinter-assault-drukhari",
     "name": "SKYBORNE ANNIHILATION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1162,11 +1832,53 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Drukhari"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "disembarked",
+              "window": "turn"
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "skyborne-annihilation-skysplinter-assault-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1180,7 +1892,7 @@
     ]
   },
   {
-    "id": "swooping-mockery-skysplinter-assault",
+    "id": "swooping-mockery-skysplinter-assault-drukhari",
     "name": "SWOOPING MOCKERY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1191,11 +1903,45 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Drukhari",
+        "Transport"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ability_id": "swooping-mockery-skysplinter-assault-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1209,7 +1955,7 @@
     ]
   },
   {
-    "id": "symphony-of-suffering-covenite-coterie",
+    "id": "symphony-of-suffering-covenite-coterie-drukhari",
     "name": "SYMPHONY OF SUFFERING",
     "category": "detachment",
     "type": "epic-deed",
@@ -1220,11 +1966,18 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Drukhari"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "symphony-of-suffering-covenite-coterie-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1238,7 +1991,7 @@
     ]
   },
   {
-    "id": "tailored-toxins-kabalite-cartel",
+    "id": "tailored-toxins-kabalite-cartel-drukhari",
     "name": "TAILORED TOXINS",
     "category": "detachment",
     "type": "epic-deed",
@@ -1250,11 +2003,69 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "BLADES FOR HIRE",
+                  "KABAL"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ability_id": "tailored-toxins-kabalite-cartel-drukhari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1268,7 +2079,7 @@
     ]
   },
   {
-    "id": "taken-alive-kabalite-cartel",
+    "id": "taken-alive-kabalite-cartel-drukhari",
     "name": "TAKEN ALIVE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1280,7 +2091,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "taken-alive-kabalite-cartel-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1297,7 +2108,7 @@
     ]
   },
   {
-    "id": "urgent-metamorphosis-tools-of-torment",
+    "id": "urgent-metamorphosis-tools-of-torment-drukhari",
     "name": "Urgent Metamorphosis",
     "category": "detachment",
     "detachment_id": "tools-of-torment",
@@ -1307,8 +2118,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "urgent-metamorphosis-tools-of-torment",
+    "target_restrictions": {
+      "required_keywords": [
+        "Haemonculus Covens"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
+    "ability_id": "urgent-metamorphosis-tools-of-torment-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1325,7 +2143,7 @@
     ]
   },
   {
-    "id": "vicious-blades-skysplinter-assault",
+    "id": "vicious-blades-skysplinter-assault-drukhari",
     "name": "VICIOUS BLADES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1337,7 +2155,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "vicious-blades-skysplinter-assault-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1354,7 +2172,7 @@
     ]
   },
   {
-    "id": "wraithlike-retreat-skysplinter-assault",
+    "id": "wraithlike-retreat-skysplinter-assault-drukhari",
     "name": "WRAITHLIKE RETREAT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1366,7 +2184,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "wraithlike-retreat-skysplinter-assault-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

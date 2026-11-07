@@ -28,3 +28,23 @@ def detachment_cap_for_battle_size(battle_size: str | None) -> int | None:
     if battle_size == "incursion":
         return 2
     return None
+
+
+def unit_limit_for_battle_size(battle_size: str | None) -> int | None:
+    """11e unit limit per datasheet (incursion 2, strike-force 3); BATTLELINE and
+    DEDICATED TRANSPORT double it, every EPIC HERO is limited to 1. ``None`` when unknown.
+    """
+    if battle_size == "strike-force":
+        return 3
+    if battle_size == "incursion":
+        return 2
+    return None
+
+
+def enhancement_limit_for_battle_size(battle_size: str | None) -> int | None:
+    """11e Enhancement limit (incursion 2, strike-force 4); ``None`` when unknown."""
+    if battle_size == "strike-force":
+        return 4
+    if battle_size == "incursion":
+        return 2
+    return None

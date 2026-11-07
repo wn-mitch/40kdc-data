@@ -36,7 +36,7 @@ function authoritativeEntry(rawStoreRoot, factionId, abilityId, storeKey) {
   const expectedKey = `${factionId}/${abilityId}`
   if (storeKey !== expectedKey) throw new Error(`source store key mismatch: expected ${expectedKey}`)
   const rows = JSON.parse(readFileSync(join(rawStoreRoot, `${factionId}.json`), 'utf8'))
-  if (!Array.isArray(rows)) throw new TypeError('raw store faction file must be an array')
+  if (!Array.isArray(rows)) throw new TypeError('prose export faction file must be an array')
   const matches = rows.filter(entry => (entry.ability_id ?? entry.id) === abilityId)
   if (matches.length !== 1) throw new Error(`authoritative source entry count: ${matches.length}`)
   return matches[0]

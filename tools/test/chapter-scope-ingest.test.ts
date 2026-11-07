@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { MfmDump } from "../src/mfm/loader.js";
 import { buildChapterScopeCanon } from "../src/mfm/chapter-scope.js";
+import { partialDump } from "./mfm-fixture.js";
 
 /**
  * The chapter-scope ingest derives Space Marine chapter access from the dump
@@ -16,7 +17,7 @@ import { buildChapterScopeCanon } from "../src/mfm/chapter-scope.js";
  * A synthetic dump keeps it runnable without _private/dump.json.
  */
 function dump(): MfmDump {
-  return new MfmDump({
+  return partialDump({
     data: {
       faction_keyword: [
         { id: "fk-aa", parentFactionKeywordId: null, localisations: { en: { name: "Adeptus Astartes" } } },

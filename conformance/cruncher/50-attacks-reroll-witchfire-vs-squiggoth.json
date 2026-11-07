@@ -1,0 +1,42 @@
+{
+  "name": "Pavane of Slaanesh witchfire (A D6) vs Gargantuan Squiggoth, re-roll the Attacks dice",
+  "attacker": {
+    "weaponId": "pavane-of-slaanesh",
+    "profileIndex": 0
+  },
+  "modelsFiring": 2,
+  "target": {
+    "unitId": "gargantuan-squiggoth",
+    "profileIndex": 0,
+    "modelCount": 1
+  },
+  "context": {
+    "phase": "shooting",
+    "attackerStationary": false,
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "manual",
+        "label": "re-roll Attacks (test)"
+      },
+      "contribution": {
+        "type": "reroll",
+        "roll": "attacks",
+        "subset": "all-failures"
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 8.5,
+      "hits": 7.0833,
+      "wounds": 2.3611,
+      "unsaved": 0.5903,
+      "damage": 3.5417,
+      "after-fnp": 3.5417,
+      "models-killed": 0.1181
+    }
+  }
+}

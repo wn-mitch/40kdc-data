@@ -4,9 +4,7 @@
  *
  * Why: the MFM dump models loadouts across ~5 prose-dependent table systems (no
  * clean structural `replaces`/count), so wargear is sourced from BSData instead.
- * `import-catalog.ts` already parses `.cat` XML + resolves entryLinks but
- * deliberately stubs out the loadout tree ("a wrong swap rule is worse than none").
- * This tool builds exactly that extractor, with a global cross-`.cat` id index
+ * This tool parses `.cat` XML and resolves entryLinks into the loadout tree, with a global cross-`.cat` id index
  * (faction catalogs link a shared library via `<catalogueLink>`).
  *
  * BattleScribe encodes a model's loadout options at FOUR structural levels, and

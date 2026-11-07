@@ -2,10 +2,9 @@
  * enhancements.ts — Phase 3A: reconcile enhancement point costs against the
  * GW MFM dump.
  *
- * The repo enhancement id is `detachmentScopedId(name, detachment-name)`, which
- * is exactly how the dump's (enhancement, detachment) pair slugs — so matching is
- * a direct id lookup. For each matched enhancement we set the canon `cost`, clear
- * `points_provisional`, and stamp the confirmed launch dataslate (cost is the
+ * The repo enhancement id is the one `mfm:mirror` derives from the dump row
+ * ({@link enhancementRepoId}), so matching is a direct id lookup. For each matched enhancement we set the canon `cost`, clear
+ * `points_provisional`, and stamp the current dump's dataslate (cost is the
  * provisional field here, so confirming it is precisely what those flags record —
  * unlike Phase 2 dispositions, where touching game_version would over-claim).
  *
@@ -15,6 +14,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { detachmentScopedId, nameToId } from "../converters/id-generator.js";
+import { mirrorIds } from "./mirror/ids.js";
 import { MfmDump, type DetachmentRow,
 type EnhancementRow,
 type MfmTableName, type MfmStringKey, type MfmRow, } from "./loader.js";
@@ -23,9 +23,17 @@ import { repoDirForFactionName, repoDirs } from "./faction-map.js";
 import { requiredKeywordsForDetachment } from "./detachment-fields.js";
 import { keywordLabel, factionKeywordLabel, keywordLabels } from "./keywords.js";
 import type { StagedWrite } from "./apply.js";
+import { currentGameVersion } from "./dataslate.js";
+import {
+  canonicalDatasheetGroups,
+  coreUnitIdsByDatasheet,
+  type DatasheetRestriction,
+  type DatasheetUnitResolver,
+  sameDatasheetGroups,
+} from "./enhancement-datasheets.js";
+import { RULES_TEXT_ELIGIBILITY } from "./enhancement-overrides.js";
 
 
-const CONFIRMED = { edition: "11th", dataslate: "launch" };
 
 interface EnhRecord {
   id: string;
@@ -39,6 +47,8 @@ interface EnhRecord {
   exclusion_keywords?: string[] | null;
   keyword_restrictions?: string[] | null;
   keyword_restriction_groups?: string[][] | null;
+  datasheet_restriction_groups?: DatasheetRestriction[] | null;
+  required_ability_ids?: string[];
   attachment_bodyguard_ids?: string[];
   [k: string]: unknown;
 }
@@ -60,11 +70,13 @@ export interface DirEnhResult {
   maxTargetsChanged: { id: string; from: number; to: number }[];
   /** Source-owned exclusions that were replaced or cleared. */
   exclusionChanged: { id: string; from: string[] | null; to: string[] | null }[];
+  /** Source-owned required core abilities that were replaced or cleared. */
+  requiredAbilitiesChanged: { id: string; from: string[] | null; to: string[] | null }[];
   /** Source-owned eligibility representation that was replaced or cleared. */
   eligibilityChanged: {
     id: string;
-    from: { keyword_restrictions: string[] | null; keyword_restriction_groups: string[][] | null };
-    to: { keyword_restrictions: string[] | null; keyword_restriction_groups: string[][] | null };
+    from: EligibilityShape;
+    to: EligibilityShape;
   }[];
   attachmentBodyguardsChanged: { id: string; from: string[] | null; to: string[] | null }[];
   /** Dump keyword ids that did not resolve to a repo label (the eligibility source
@@ -107,19 +119,20 @@ export function cleanEnhName(name: string): string {
  *  the value is `number | null` and callers must not overwrite an authored cost
  *  with null. */
 export function buildEnhCanon(dump: MfmDump): Map<string, number | null> {
-  const detName = dump.byId("detachment");
   const m = new Map<string, number | null>();
   for (const e of dump.table("enhancement")) {
-    const en = dump.enName(e);
-    const dn = dump.enName(detName.get(e.detachmentId));
-    if (!en || !dn) continue;
-    try {
-      m.set(detachmentScopedId(en, dn), e.basePointsCost);
-    } catch {
-      /* unsluggable — skip */
-    }
+    const id = enhancementRepoId(dump, e);
+    if (id) m.set(id, e.basePointsCost);
   }
   return m;
+}
+
+/**
+ * Repo id for a dump enhancement: the id `mfm:mirror` gives the row
+ * (`<name with its printed tag>-<detachment>-<faction>`). Null for a row no faction owns.
+ */
+export function enhancementRepoId(dump: MfmDump, e: { id: string }): string | null {
+  return mirrorIds(dump).idOf("enhancement", e.id) ?? null;
 }
 
 /** groupBy that tolerates a focused fixture omitting the table (returns empty). */
@@ -149,19 +162,27 @@ function sameGroups(
   return sameLabels(canonical(a), canonical(b));
 }
 
-/** The core schema deliberately has one eligibility representation at a time. */
-function eligibilityShape(fields: EnhFields): {
+/** The source-owned eligibility fields of a core enhancement. */
+export interface EligibilityShape {
   keyword_restrictions: string[] | null;
   keyword_restriction_groups: string[][] | null;
-} {
+  datasheet_restriction_groups: DatasheetRestriction[] | null;
+}
+
+/**
+ * The core schema deliberately has one keyword-eligibility representation at a time; datasheet
+ * groups sit beside it as further alternatives.
+ */
+function eligibilityShape(fields: EnhFields): EligibilityShape {
   const groups = fields.keyword_restriction_groups ?? [];
+  const datasheet_restriction_groups = fields.datasheet_restriction_groups;
   if (groups.length === 1) {
-    return { keyword_restrictions: groups[0], keyword_restriction_groups: null };
+    return { keyword_restrictions: groups[0], keyword_restriction_groups: null, datasheet_restriction_groups };
   }
   if (groups.length > 1) {
-    return { keyword_restrictions: null, keyword_restriction_groups: groups };
+    return { keyword_restrictions: null, keyword_restriction_groups: groups, datasheet_restriction_groups };
   }
-  return { keyword_restrictions: null, keyword_restriction_groups: null };
+  return { keyword_restrictions: null, keyword_restriction_groups: null, datasheet_restriction_groups };
 }
 
 /** Structured enhancement fields the dump can supply beyond cost. */
@@ -169,15 +190,18 @@ function eligibilityShape(fields: EnhFields): {
 export interface EnhancementEligibilityRecord {
   keyword_restrictions?: string[] | null;
   keyword_restriction_groups?: string[][] | null;
+  datasheet_restriction_groups?: DatasheetRestriction[] | null;
   exclusion_keywords?: string[] | null;
+  required_ability_ids?: string[];
 }
 
 export interface EligibilityReconcileResult {
   eligibility?: {
-    from: { keyword_restrictions: string[] | null; keyword_restriction_groups: string[][] | null };
-    to: { keyword_restrictions: string[] | null; keyword_restriction_groups: string[][] | null };
+    from: EligibilityShape;
+    to: EligibilityShape;
   };
   exclusions?: { from: string[] | null; to: string[] | null };
+  abilities?: { from: string[] | null; to: string[] | null };
 }
 
 /** Reconcile the source-owned eligibility fields without ever retaining both forms. */
@@ -188,14 +212,17 @@ export function reconcileEnhancementEligibility(
   const result: EligibilityReconcileResult = {};
   if (fields.unresolvedKeywordIds.length > 0) return result;
 
-  const from = {
+  const from: EligibilityShape = {
     keyword_restrictions: record.keyword_restrictions ?? null,
     keyword_restriction_groups: record.keyword_restriction_groups ?? null,
+    datasheet_restriction_groups: record.datasheet_restriction_groups ?? null,
   };
   const to = eligibilityShape(fields);
   if (
     !sameLabels(from.keyword_restrictions, to.keyword_restrictions) ||
     !sameGroups(from.keyword_restriction_groups, to.keyword_restriction_groups) ||
+    !sameDatasheetGroups(from.datasheet_restriction_groups, to.datasheet_restriction_groups) ||
+    (to.datasheet_restriction_groups === null && record.datasheet_restriction_groups !== undefined) ||
     (to.keyword_restrictions === null && record.keyword_restrictions !== undefined) ||
     (to.keyword_restriction_groups === null && record.keyword_restriction_groups !== undefined)
   ) {
@@ -204,6 +231,8 @@ export function reconcileEnhancementEligibility(
     else record.keyword_restrictions = to.keyword_restrictions;
     if (to.keyword_restriction_groups === null) delete record.keyword_restriction_groups;
     else record.keyword_restriction_groups = to.keyword_restriction_groups;
+    if (to.datasheet_restriction_groups === null) delete record.datasheet_restriction_groups;
+    else record.datasheet_restriction_groups = to.datasheet_restriction_groups;
   }
 
   const exclusionFrom = record.exclusion_keywords ?? null;
@@ -212,6 +241,13 @@ export function reconcileEnhancementEligibility(
     result.exclusions = { from: exclusionFrom, to: fields.exclusion_keywords };
     if (fields.exclusion_keywords === null) delete record.exclusion_keywords;
     else record.exclusion_keywords = fields.exclusion_keywords;
+  }
+
+  const abilitiesFrom = record.required_ability_ids ?? null;
+  if (!sameLabels(abilitiesFrom, fields.required_ability_ids)) {
+    result.abilities = { from: abilitiesFrom, to: fields.required_ability_ids };
+    if (fields.required_ability_ids === null) delete record.required_ability_ids;
+    else record.required_ability_ids = fields.required_ability_ids;
   }
   return result;
 }
@@ -224,32 +260,70 @@ export interface EnhFields {
   keyword_restrictions: string[] | null;
   /** Exact required-keyword groups: AND within each group, OR across groups. */
   keyword_restriction_groups: string[][] | null;
+  /** Datasheet-scoped groups, by repo unit id: further alternatives (OR) to the keyword groups. */
+  datasheet_restriction_groups: DatasheetRestriction[] | null;
   /** Extra bodyguard datasheets the enhancement permits its bearer to join. */
   attachment_bodyguard_ids: string[] | null;
+  /** Core abilities the bearer's datasheet must have, by core ability id, sorted; null when none. */
+  required_ability_ids: string[] | null;
   /** True when >1 required-keyword group carries a different member set. */
   keywordRestrictionsAmbiguous: boolean;
-  /** Dump keyword/faction-keyword ids that did not resolve to a repo label. */
+  /** Dump keyword, faction-keyword and required-ability ids that did not resolve to a repo label or core ability. */
   unresolvedKeywordIds: string[];
 }
 
+/** The core ability catalog's ids (Deep Strike, Scouts, …), which a required ability must name. */
+function coreAbilityCatalogIds(): Set<string> {
+  return new Set(readJsonArray<{ id: string }>(path.join(CORE_DIR, "unit-keywords.json")).map((ability) => ability.id));
+}
+
+/** The dump's placeholder required keyword: a keyword row named "DNU" that no unit carries. */
+const PLACEHOLDER_KEYWORD = "DNU";
+
+/**
+ * The bearer keyword the printed rule names for each enhancement whose dump
+ * eligibility is the "DNU" placeholder: each card names the one model that may have
+ * it ("C'TAN SHARD OF THE NIGHTBRINGER model only", "EVERSOR ASSASSIN models only").
+ * A "DNU" group with no entry here is unresolved, so it never reaches the repo.
+ */
+const PLACEHOLDER_BEARER_KEYWORDS: Readonly<Record<string, string>> = {
+  "singularity-matrix-pantheon-of-woe-necrons": "C’tan Shard of the Deceiver",
+  "quantum-goad-pantheon-of-woe-necrons": "C’tan Shard of the Nightbringer",
+  "animus-damper-pantheon-of-woe-necrons": "C’tan Shard of the Void Dragon",
+  "reletavistic-tether-pantheon-of-woe-necrons": "Transcendent C’tan",
+  "intraneural-biotech-veiled-blade-elimination-force-agents-of-the-imperium": "Eversor Assassin",
+  "decoy-targets-veiled-blade-elimination-force-agents-of-the-imperium": "Callidus Assassin",
+  "esoteric-explosives-veiled-blade-elimination-force-agents-of-the-imperium": "Culexus Assassin",
+  "micromelta-rounds-veiled-blade-elimination-force-agents-of-the-imperium": "Vindicare Assassin",
+};
+
 /**
  * Enhancement repo-id → structured fields, from the dump. Keyed identically to
- * {@link buildEnhCanon} (`detachmentScopedId(cleanEnhName, detachment)`) so a
+ * {@link buildEnhCanon} ({@link enhancementRepoId}) so a
  * matched repo enhancement's fields line up with its cost.
  *
  *   - upgrade_tag           ← enhancementType === "upgrade" (11e upgrade class)
  *   - max_targets           ← limit (how many copies may be taken; default 1)
  *   - exclusion_keywords    ← enhancement_excluded_keyword.keywordId → labels
  *   - keyword_restrictions  ← required-keyword-group keyword + faction-keyword members
+ *   - required_ability_ids  ← enhancement_datasheet_ability → a core datasheet_ability → its core ability id
  *
  * Required-keyword groups model "bearer must have keyword(s)". Every non-empty
- * source group becomes one conjunction in `keyword_restriction_groups`, including
- * a datasheet name when the group is datasheet-scoped. The groups are alternatives
- * (OR). The committed record uses the legacy flat field for one conjunction
- * and the grouped field for alternatives; the two forms are mutually exclusive.
+ * keyword-only source group becomes one conjunction in `keyword_restriction_groups`.
+ * A datasheet-scoped group becomes a `datasheet_restriction_groups` entry naming the
+ * repo unit `unitIdOf` maps the datasheet to, with the group's keywords; a datasheet
+ * no single unit maps to is unresolved. All groups are alternatives (OR). The
+ * committed record uses the legacy flat field for one keyword conjunction and the
+ * grouped field for alternatives; the two forms are mutually exclusive.
  */
-export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
+export function buildEnhFieldCanon(
+  dump: MfmDump,
+  unitIdOf: DatasheetUnitResolver = coreUnitIdsByDatasheet(),
+  coreAbilityIds: ReadonlySet<string> = coreAbilityCatalogIds(),
+): Map<string, EnhFields> {
   const detName = dump.byId("detachment");
+  const abilitiesByEnh = safeGroupBy(dump, "enhancement_datasheet_ability", "enhancementId");
+  const datasheetAbilityById = dump.tables.datasheet_ability ? dump.byId("datasheet_ability") : undefined;
   const excludedByEnh = safeGroupBy(dump, "enhancement_excluded_keyword", "enhancementId");
   const groupsByEnh = safeGroupBy(dump, "enhancement_required_keyword_group", "enhancementId");
   const kwByGroup = safeGroupBy(dump, "enhancement_required_keyword_group_keyword", "enhancementRequiredKeywordGroupId");
@@ -263,15 +337,8 @@ export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
 
   const out = new Map<string, EnhFields>();
   for (const e of dump.table("enhancement")) {
-    const en = dump.enName(e);
-    const dn = dump.enName(detName.get(e.detachmentId));
-    if (!en || !dn) continue;
-    let id: string;
-    try {
-      id = detachmentScopedId(en, dn);
-    } catch {
-      continue; // unsluggable — skip
-    }
+    const id = enhancementRepoId(dump, e);
+    if (!id) continue;
 
     const unresolved: string[] = [];
     const exclusion_keywords = keywordLabels(
@@ -282,11 +349,14 @@ export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
 
     const datasheetById = dump.tables.datasheet ? dump.byId("datasheet") : undefined;
     const groupSets: string[][] = [];
+    const datasheetGroups: DatasheetRestriction[] = [];
+    const absentDatasheets: string[] = [];
     for (const g of groupsByEnh.get(e.id) ?? []) {
       const members = new Set<string>();
       for (const r of kwByGroup.get(g.id) ?? []) {
         const label = keywordLabel(dump, r.keywordId);
-        if (label) members.add(label);
+        const bearer = label === PLACEHOLDER_KEYWORD ? PLACEHOLDER_BEARER_KEYWORDS[id] : label;
+        if (bearer) members.add(bearer);
         else unresolved.push(r.keywordId);
       }
       for (const r of fkwByGroup.get(g.id) ?? []) {
@@ -294,17 +364,20 @@ export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
         if (label) members.add(label);
         else unresolved.push(r.factionKeywordId);
       }
-      // A datasheet-scoped group names the specific unit the enhancement (usually a
-      // wargear upgrade) attaches to; the repo authors that datasheet name as a
-      // restriction keyword (e.g. "Exorcist"). Include it so a FILL of an empty field
-      // carries the unit specificity, not just the army keyword.
+      // A datasheet-scoped group admits that one datasheet (with the group's keywords), never
+      // another unit that carries the datasheet's name as a keyword.
       if (g.datasheetId) {
-        const dsName = dump.enName(datasheetById?.get(g.datasheetId));
-        if (dsName) members.add(dsName);
-        else unresolved.push(g.datasheetId);
+        const unit = unitIdOf(g.datasheetId);
+        if (unit === "none") absentDatasheets.push(g.datasheetId);
+        else if (unit === "ambiguous") unresolved.push(g.datasheetId);
+        else datasheetGroups.push(members.size ? { unit_id: unit.unit_id, keywords: [...members] } : { unit_id: unit.unit_id });
+        continue;
       }
       if (members.size) groupSets.push([...members].sort((a, b) => a.localeCompare(b)));
     }
+    // A datasheet no core unit carries admits no repo bearer, so its group drops out beside other
+    // groups; alone it would leave the enhancement unrestricted, so it stays unresolved.
+    if (absentDatasheets.length && groupSets.length === 0 && datasheetGroups.length === 0) unresolved.push(...absentDatasheets);
     const distinctGroupSets = [...new Map(groupSets.map((s) => [JSON.stringify(s), s])).values()];
     const union = [...new Set(distinctGroupSets.flat())].sort((a, b) => a.localeCompare(b));
     const attachmentBodyguardIds = new Set<string>();
@@ -316,16 +389,33 @@ export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
       }
     }
 
+    // "<KEYWORD> model with the Deep Strike ability only": a core ability the bearer's datasheet must have.
+    const requiredAbilities = new Set<string>();
+    for (const relation of abilitiesByEnh.get(e.id) ?? []) {
+      const row = datasheetAbilityById?.get(relation.datasheetAbilityId);
+      const name = dump.enName(row);
+      const coreId = row?.abilityType === "core" && name ? nameToId(name) : undefined;
+      if (coreId !== undefined && coreAbilityIds.has(coreId)) requiredAbilities.add(coreId);
+      else unresolved.push(relation.datasheetAbilityId);
+    }
+
+    // The dump's own rules text wins over its eligibility rows where the two disagree.
+    const override = RULES_TEXT_ELIGIBILITY[e.id];
+    const abilityIds = override?.required_ability_ids ?? [...requiredAbilities];
+    const keywordGroups = override?.keyword_restriction_groups ?? distinctGroupSets;
+    const keywordUnion = override?.keyword_restriction_groups ? [...new Set(keywordGroups.flat())].sort((a, b) => a.localeCompare(b)) : union;
     out.set(id, {
       upgrade_tag: e.enhancementType === "upgrade",
       max_targets: typeof e.limit === "number" ? e.limit : 1,
-      exclusion_keywords,
-      keyword_restrictions: union.length ? union : null,
-      keyword_restriction_groups: distinctGroupSets.length ? distinctGroupSets : null,
+      exclusion_keywords: override?.exclusion_keywords ?? exclusion_keywords,
+      keyword_restrictions: keywordUnion.length ? keywordUnion : null,
+      keyword_restriction_groups: keywordGroups.length ? keywordGroups : null,
+      datasheet_restriction_groups: canonicalDatasheetGroups(datasheetGroups),
       attachment_bodyguard_ids: attachmentBodyguardIds.size
         ? [...attachmentBodyguardIds].sort((a, b) => a.localeCompare(b))
         : null,
-      keywordRestrictionsAmbiguous: distinctGroupSets.length > 1,
+      required_ability_ids: abilityIds.length ? [...abilityIds].sort((a, b) => a.localeCompare(b)) : null,
+      keywordRestrictionsAmbiguous: keywordGroups.length > 1,
       unresolvedKeywordIds: [...new Set(unresolved)],
     });
   }
@@ -339,18 +429,11 @@ export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
  * Id'd exactly as `buildEnhCanon` keys its canon so the ids line up.
  */
 export function combatPatrolEnhIds(dump: MfmDump): Set<string> {
-  const detName = dump.byId("detachment");
   const ids = new Set<string>();
   for (const e of dump.table("enhancement")) {
     if (!e.isCombatPatrol) continue;
-    const en = dump.enName(e);
-    const dn = dump.enName(detName.get(e.detachmentId));
-    if (!en || !dn) continue;
-    try {
-      ids.add(detachmentScopedId(en, dn));
-    } catch {
-      /* unsluggable — skip */
-    }
+    const id = enhancementRepoId(dump, e);
+    if (id) ids.add(id);
   }
   return ids;
 }
@@ -391,10 +474,10 @@ export function normalizeEnhancementNames(dump: MfmDump): EnhNormResult {
     const dn = dump.enName(detName.get(e.detachmentId));
     if (!en || !dn) continue;
     let base: string;
-    let rawId: string;
+    const rawId = enhancementRepoId(dump, e);
+    if (!rawId) continue;
     try {
       base = detachmentScopedId(cleanEnhName(en), dn);
-      rawId = detachmentScopedId(en, dn);
     } catch {
       continue; // unsluggable — skip
     }
@@ -463,6 +546,7 @@ export function runEnhancements(
   write: boolean,
   opts: { includeCombatPatrol?: boolean } = {}
 ): EnhReport {
+  const confirmed = currentGameVersion(dump);
   const canon = buildEnhCanon(dump);
   const fieldCanon = buildEnhFieldCanon(dump);
   const matchedIds = new Set<string>();
@@ -507,6 +591,7 @@ export function runEnhancements(
       exclusionChanged: [],
       eligibilityChanged: [],
       attachmentBodyguardsChanged: [],
+      requiredAbilitiesChanged: [],
       unresolvedKeywords: [],
     };
     for (const e of enhs) {
@@ -526,15 +611,15 @@ export function runEnhancements(
       }
       const needsConfirm =
         e.points_provisional !== false ||
-        e.game_version?.dataslate !== CONFIRMED.dataslate ||
-        e.game_version?.edition !== CONFIRMED.edition;
+        e.game_version?.dataslate !== confirmed.dataslate ||
+        e.game_version?.edition !== confirmed.edition;
       if (needsConfirm) res.confirmed++;
       // Mutate in-memory in BOTH modes; the dry-run rehearsal validates the result.
       if (cost !== null) e.cost = cost;
       e.points_provisional = false;
       if (e.game_version) {
-        e.game_version.edition = CONFIRMED.edition;
-        e.game_version.dataslate = CONFIRMED.dataslate;
+        e.game_version.edition = confirmed.edition;
+        e.game_version.dataslate = confirmed.dataslate;
       }
       if (cpIds.has(e.id)) e.game_modes = ["combat-patrol"];
 
@@ -555,6 +640,9 @@ export function runEnhancements(
         }
         if (changes.exclusions) {
           res.exclusionChanged.push({ id: e.id, ...changes.exclusions });
+        }
+        if (changes.abilities) {
+          res.requiredAbilitiesChanged.push({ id: e.id, ...changes.abilities });
         }
         const attachmentAuthored = e.attachment_bodyguard_ids ?? null;
         if (!sameLabels(attachmentAuthored, f.attachment_bodyguard_ids)) {
@@ -579,10 +667,11 @@ export function runEnhancements(
     const sourceDetachment = dump.byId("detachment").get(source.detachmentId);
     const detachmentName = dump.enName(sourceDetachment);
     if (!name || !detachmentName) continue;
-    let id: string;
+    const repoId = enhancementRepoId(dump, source);
+    if (!repoId) continue;
+    const id = repoId;
     let detachmentId: string;
     try {
-      id = detachmentScopedId(name, detachmentName);
       detachmentId = nameToId(detachmentName);
     } catch {
       continue;
@@ -647,12 +736,14 @@ export function runEnhancements(
     }
     const record: EnhRecord = {
       id,
+      // The dump ref ties the seed to its row; without it `mfm:mirror` retires the seed as unprinted.
+      external_refs: [{ namespace: "mfm", id: source.id }],
       name,
       detachment_id: detachmentId,
       cost: source.basePointsCost,
       ability_id: null,
       is_unique: true,
-      game_version: { ...CONFIRMED },
+      game_version: { ...confirmed },
       points_provisional: false,
       upgrade_tag: fields.upgrade_tag,
       max_targets: fields.max_targets,
@@ -664,8 +755,17 @@ export function runEnhancements(
     if (eligibility.keyword_restriction_groups) {
       record.keyword_restriction_groups = eligibility.keyword_restriction_groups;
     }
+    if (eligibility.datasheet_restriction_groups) {
+      record.datasheet_restriction_groups = eligibility.datasheet_restriction_groups;
+    }
+    if (fields.exclusion_keywords) {
+      record.exclusion_keywords = fields.exclusion_keywords;
+    }
     if (fields.attachment_bodyguard_ids) {
       record.attachment_bodyguard_ids = fields.attachment_bodyguard_ids;
+    }
+    if (fields.required_ability_ids && fields.unresolvedKeywordIds.length === 0) {
+      record.required_ability_ids = fields.required_ability_ids;
     }
 
     const enhancements = enhancementsByDir.get(location.dir);
@@ -711,15 +811,15 @@ export function buildEnhReport(report: EnhReport, write: boolean): string {
   L.push("authoritative when all source keywords resolve: they replace stale core");
   L.push("values and absent source relations clear them. Prose is never read or written.");
   L.push("");
-  L.push("| Dir | Matched | Cost | upgrade | max_tgt | eligibility | exclusions | Repo-only |");
-  L.push("|---|--:|--:|--:|--:|--:|--:|--:|");
+  L.push("| Dir | Matched | Cost | upgrade | max_tgt | eligibility | exclusions | abilities | Repo-only |");
+  L.push("|---|--:|--:|--:|--:|--:|--:|--:|--:|");
   for (const d of dirs.filter((d) => d.matched || d.unmatchedRepo.length)) {
     L.push(
-      `| ${d.dir} | ${d.matched} | ${d.costChanged.length} | ${d.upgradeChanged.length} | ${d.maxTargetsChanged.length} | ${d.eligibilityChanged.length} | ${d.exclusionChanged.length} | ${d.unmatchedRepo.length} |`
+      `| ${d.dir} | ${d.matched} | ${d.costChanged.length} | ${d.upgradeChanged.length} | ${d.maxTargetsChanged.length} | ${d.eligibilityChanged.length} | ${d.exclusionChanged.length} | ${d.requiredAbilitiesChanged.length} | ${d.unmatchedRepo.length} |`
     );
   }
   L.push(
-    `| **TOTAL** | **${sum((d) => d.matched)}** | **${sum((d) => d.costChanged.length)}** | **${sum((d) => d.upgradeChanged.length)}** | **${sum((d) => d.maxTargetsChanged.length)}** | **${sum((d) => d.eligibilityChanged.length)}** | **${sum((d) => d.exclusionChanged.length)}** | **${sum((d) => d.unmatchedRepo.length)}** |`
+    `| **TOTAL** | **${sum((d) => d.matched)}** | **${sum((d) => d.costChanged.length)}** | **${sum((d) => d.upgradeChanged.length)}** | **${sum((d) => d.maxTargetsChanged.length)}** | **${sum((d) => d.eligibilityChanged.length)}** | **${sum((d) => d.exclusionChanged.length)}** | **${sum((d) => d.requiredAbilitiesChanged.length)}** | **${sum((d) => d.unmatchedRepo.length)}** |`
   );
   L.push("");
   for (const d of dirs) {
@@ -729,6 +829,7 @@ export function buildEnhReport(report: EnhReport, write: boolean): string {
       d.maxTargetsChanged.length ||
       d.eligibilityChanged.length ||
       d.exclusionChanged.length ||
+      d.requiredAbilitiesChanged.length ||
       d.unresolvedKeywords.length ||
       d.unmatchedRepo.length;
     if (!hasDetail) continue;
@@ -754,6 +855,12 @@ export function buildEnhReport(report: EnhReport, write: boolean): string {
     if (d.exclusionChanged.length) {
       L.push("", "**exclusion_keywords changes:**");
       d.exclusionChanged.forEach((c) =>
+        L.push(`- ${c.id}: ${JSON.stringify(c.from)} → ${JSON.stringify(c.to)}`),
+      );
+    }
+    if (d.requiredAbilitiesChanged.length) {
+      L.push("", "**required_ability_ids changes:**");
+      d.requiredAbilitiesChanged.forEach((c) =>
         L.push(`- ${c.id}: ${JSON.stringify(c.from)} → ${JSON.stringify(c.to)}`),
       );
     }

@@ -79,6 +79,37 @@
       "items": { "$ref": "#/$defs/unit-minimum" },
       "description": "Minimum unit counts the detachment requires while selected (e.g. Houndpack Lance: 'your army must include three or more WAR DOG units'). Each entry requires at least `min` units carrying `keyword`. Empty/absent when the detachment imposes no minimum."
     },
+    "mandatory_warlord_datasheet_ids": {
+      "type": "array",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+      "uniqueItems": true,
+      "description": "While this detachment is selected, the army's Warlord must be one of these datasheets (e.g. Devoted of Ynnead: Yvraine or The Yncarne). The requirement also makes them eligible to be Warlord when an allied rule would otherwise bar it. Empty/absent when the detachment imposes no Warlord requirement."
+    },
+    "granted_warlord_datasheet_ids": {
+      "type": "array",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+      "uniqueItems": true,
+      "description": "Datasheets this detachment allows to be the army's Warlord while it is selected, even when the allied rule they were included under bars it (e.g. Ghosts of the Webway: a Troupe Master, Shadowseer or Death Jester). A permission, not a requirement. Empty/absent when the detachment grants none."
+    },
+    "keyword_limit_overrides": {
+      "type": "array",
+      "description": "Replacement caps for the army faction's `keyword_limits` while this detachment is selected (e.g. Ghosts of the Webway: up to three TROUPE MASTER units instead of one). An entry applies to the faction cap with the identical `keywords` set. Empty/absent when the detachment changes no cap.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "keywords": { "$ref": "../defs/common.schema.json#/$defs/keyword-list" },
+          "max": { "type": "integer", "minimum": 0 }
+        },
+        "required": ["keywords", "max"]
+      }
+    },
+    "excluded_datasheet_ids": {
+      "type": "array",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+      "uniqueItems": true,
+      "description": "Datasheets an army cannot include while this detachment is selected (e.g. Shadow Legion bars named Greater Daemons such as Skarbrand). Empty/absent when the detachment bars none."
+    },
     "game_version": { "$ref": "../defs/game-version-ref.schema.json" },
     "game_modes": {
       "$ref": "../defs/common.schema.json#/$defs/game-modes",

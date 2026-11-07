@@ -1,0 +1,88 @@
+{
+  "name": "bolt-rifle (saturation) x5 vs intercessor, the attacker's best set wins: A 3 over 2, S 10, AP -2 over -1",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting"
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-set-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "stat-set",
+        "stat": "A",
+        "value": 2
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-other-set-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "stat-set",
+        "stat": "A",
+        "value": 3
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-set-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "stat-set",
+        "stat": "S",
+        "value": 10
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-set-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "stat-set",
+        "stat": "AP",
+        "value": -2
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-other-set-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "stat-set",
+        "stat": "AP",
+        "value": -1
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 15,
+      "hits": 10,
+      "wounds": 8.3333,
+      "unsaved": 5.5556,
+      "damage": 5.5556,
+      "after-fnp": 5.5556,
+      "models-killed": 2.7778
+    }
+  }
+}

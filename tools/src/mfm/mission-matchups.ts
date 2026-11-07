@@ -17,7 +17,7 @@
  *   - mission_id            ← primaryMissionId → primary_mission name → nameToId
  *                             (matches missions.ts' `nameToId(en-name)` card ids).
  *
- * `game_version` is repo-authored (launch); seeded records are stamped CONFIRMED.
+ * `game_version` is repo-authored; seeded records carry the dump's current dataslate.
  * Existing records are corrected field-by-field (dump is authoritative); a repo
  * record with no dump row is reported (possible removal), never deleted here.
  *
@@ -32,9 +32,9 @@ import { MfmDump } from "./loader.js";
 import { dispositionIdMap } from "./dispositions.js";
 import { CORE_DIR, readJsonArray } from "./repo-files.js";
 import type { StagedWrite } from "./apply.js";
+import { currentGameVersion } from "./dataslate.js";
 
 const MATCHUPS_PATH = path.join(CORE_DIR, "mission-matchups.json");
-const CONFIRMED = { edition: "11th", dataslate: "launch" } as const;
 
 interface MatchupRecord {
   id: string;
@@ -104,6 +104,7 @@ export interface MatchupReport {
 const FIELDS = ["disposition", "opponent_disposition", "mission_id"] as const;
 
 export function runMissionMatchups(dump: MfmDump): MatchupReport {
+  const confirmed = currentGameVersion(dump);
   const unresolvedDump: string[] = [];
   const canon = buildMatchupCanon(dump, unresolvedDump);
   const records = readJsonArray<MatchupRecord>(MATCHUPS_PATH);
@@ -127,7 +128,7 @@ export function runMissionMatchups(dump: MfmDump): MatchupReport {
         disposition: c.disposition,
         opponent_disposition: c.opponent_disposition,
         mission_id: c.mission_id,
-        game_version: { ...CONFIRMED },
+        game_version: { ...confirmed },
       };
       records.push(seed);
       byId.set(id, seed);

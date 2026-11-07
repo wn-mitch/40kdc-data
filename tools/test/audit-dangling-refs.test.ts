@@ -56,22 +56,23 @@ function writeCoreVocabulary(root: string): void {
   write(root, "core/weapon-keywords.json", [
     { id: "lethal-hits", name: "Lethal Hits" },
   ]);
-  write(root, "core/stratagems.json", [{ id: "counter-offensive" }]);
+  write(root, "core/stratagems.json", [{ id: "counteroffensive" }]);
   write(root, "core/alpha/stratagems.json", [{ id: "go-to-ground-alpha" }]);
   // Scratch/example directories must not widen the accepted vocabulary.
   write(root, "core/_example/units.json", [{ id: "x", keywords: ["EXAMPLE ONLY"] }]);
   write(root, "core/_example/stratagems.json", [{ id: "example-only-stratagem" }]);
 }
 
-function keywordCondition(type: string, keyword: string): unknown {
-  return { type, parameters: { keyword } };
+/** A `has-keyword` condition on one keyword; `subject` defaults to the unit with the ability. */
+function keywordCondition(subject: string | undefined, keyword: string): unknown {
+  return { type: "has-keyword", parameters: { ...(subject ? { subject } : {}), all_of: [keyword] } };
 }
 
 /** A realistic `conditional` effect whose gate gates on one keyword. */
-function keywordGate(type: string, keyword: string): unknown {
+function keywordGate(subject: string | undefined, keyword: string): unknown {
   return {
     type: "conditional",
-    condition: keywordCondition(type, keyword),
+    condition: keywordCondition(subject, keyword),
     effect: { type: "modify-stat", modifier: { stat: "toughness", value: 1 } },
   };
 }
@@ -121,7 +122,7 @@ describe("buildReferenceVocabularies", () => {
 
   it("collects stratagem ids from the root and every faction file, exactly", async () => {
     const { stratagems } = await buildReferenceVocabularies(root);
-    expect([...stratagems].sort()).toEqual(["counter-offensive", "go-to-ground-alpha"]);
+    expect([...stratagems].sort()).toEqual(["counteroffensive", "go-to-ground-alpha"]);
     expect(stratagems.has("Counter-Offensive")).toBe(false);
   });
 
@@ -154,27 +155,27 @@ describe("collectDanglingAbilityReferences", () => {
 
   it("resolves keywords supplied by any of the four vocabulary sources", async () => {
     write(root, "enrichment/alpha/abilities.json", [
-      { ability_id: "unit-label", effect: keywordCondition("unit-has-keyword", "infantry") },
-      { ability_id: "faction-label", effect: keywordCondition("target-has-keyword", "ALPHA LEGION") },
-      { ability_id: "faction-record-label", effect: keywordCondition("unit-has-keyword", "Alpha Faction Label") },
-      { ability_id: "unit-catalog", effect: keywordCondition("unit-has-keyword", "Feel No Pain") },
-      { ability_id: "weapon-catalog", effect: keywordCondition("target-has-keyword", "lethal-hits") },
+      { ability_id: "unit-label", effect: keywordCondition(undefined, "infantry") },
+      { ability_id: "faction-label", effect: keywordCondition("defender", "ALPHA LEGION") },
+      { ability_id: "faction-record-label", effect: keywordCondition(undefined, "Alpha Faction Label") },
+      { ability_id: "unit-catalog", effect: keywordCondition(undefined, "Feel No Pain") },
+      { ability_id: "weapon-catalog", effect: keywordCondition("defender", "lethal-hits") },
     ]);
     expect(await collectDanglingAbilityReferences(root)).toEqual([]);
   });
 
   it("reports unresolved keyword operands with their exact DSL location", async () => {
     write(root, "enrichment/alpha/abilities.json", [
-      { ability_id: "resolved", effect: keywordGate("unit-has-keyword", "MONSTER") },
-      { ability_id: "dangling", effect: keywordGate("target-has-keyword", "A") },
+      { ability_id: "resolved", effect: keywordGate(undefined, "MONSTER") },
+      { ability_id: "dangling", effect: keywordGate("defender", "A") },
     ]);
     expect(await collectDanglingAbilityReferences(root)).toEqual([
       {
         kind: "keyword",
-        reference_type: "target-has-keyword",
+        reference_type: "has-keyword",
         source_file: "enrichment/alpha/abilities.json",
         ability_id: "dangling",
-        path: "/1/effect/condition/parameters/keyword",
+        path: "/1/effect/condition/parameters/all_of/0",
         value: "A",
       },
     ]);
@@ -184,20 +185,20 @@ describe("collectDanglingAbilityReferences", () => {
     write(root, "enrichment/alpha/abilities.json", [
       {
         ability_id: "nested",
-        trigger: { condition: keywordCondition("unit-has-keyword", "TRIGGERED") },
+        trigger: { event: "phase-started", condition: keywordCondition(undefined, "TRIGGERED") },
         effect: {
           type: "sequence",
           steps: [
             {
               type: "conditional",
               condition: {
-                type: "and",
+                operator: "and",
                 operands: [
-                  keywordCondition("target-has-keyword", "OPERAND"),
-                  { type: "not", operands: [keywordCondition("unit-has-keyword", "DEEP")] },
+                  keywordCondition("defender", "OPERAND"),
+                  { operator: "not", operands: [keywordCondition(undefined, "DEEP")] },
                 ],
               },
-              effect: { type: "cp-refund", modifier: { stratagem: "not-a-stratagem" } },
+              effect: { type: "cost-modifier", modifier: { of: "stratagem", id: "not-a-stratagem", operation: "set", amount: 0 } },
             },
           ],
         },
@@ -205,16 +206,82 @@ describe("collectDanglingAbilityReferences", () => {
     ]);
     const findings = await collectDanglingAbilityReferences(root);
     expect(findings.map((finding) => finding.path)).toEqual([
-      "/0/effect/steps/0/condition/operands/0/parameters/keyword",
-      "/0/effect/steps/0/condition/operands/1/operands/0/parameters/keyword",
-      "/0/effect/steps/0/effect/modifier/stratagem",
-      "/0/trigger/condition/parameters/keyword",
+      "/0/effect/steps/0/condition/operands/0/parameters/all_of/0",
+      "/0/effect/steps/0/condition/operands/1/operands/0/parameters/all_of/0",
+      "/0/effect/steps/0/effect/modifier/id",
+      "/0/trigger/condition/parameters/all_of/0",
     ]);
     expect(findings.map((finding) => finding.value)).toEqual([
       "OPERAND",
       "DEEP",
       "not-a-stratagem",
       "TRIGGERED",
+    ]);
+  });
+
+  it("checks every entry of both has-keyword lists, and no other operand", async () => {
+    write(root, "enrichment/alpha/abilities.json", [
+      {
+        ability_id: "lists",
+        effect: {
+          type: "conditional",
+          condition: {
+            type: "has-keyword",
+            parameters: { subject: "defender", all_of: ["INFANTRY", "ALL MISSING"], any_of: ["ANY MISSING", "MONSTER"] },
+          },
+          effect: { type: "modify-stat", modifier: { stat: "toughness", value: 1 } },
+        },
+      },
+      {
+        // A keyword the player picks names the ability that picks it, not a keyword.
+        ability_id: "chosen",
+        effect: { type: "has-keyword", parameters: { subject: "defender", chosen_by: "not-a-keyword" } },
+      },
+    ]);
+    const findings = await collectDanglingAbilityReferences(root);
+    expect(findings.map((finding) => [finding.reference_type, finding.path, finding.value])).toEqual([
+      ["has-keyword", "/0/effect/condition/parameters/all_of/1", "ALL MISSING"],
+      ["has-keyword", "/0/effect/condition/parameters/any_of/0", "ANY MISSING"],
+    ]);
+  });
+
+  it("checks the keyword lists of unit filters in triggers and predicates", async () => {
+    write(root, "enrichment/alpha/abilities.json", [
+      {
+        ability_id: "filters",
+        trigger: {
+          event: "targets-selected",
+          filter: { kind: "attack" },
+          subject: { owner: "enemy", all_of: ["SUBJECT MISSING"], none_of: ["MONSTER"] },
+          object: "this-unit",
+        },
+        effect: {
+          type: "conditional",
+          condition: {
+            type: "within",
+            parameters: {
+              // A filter nested inside a has-keyword subject is still a filter.
+              of: { owner: "friendly", any_of: ["INFANTRY", "OF MISSING"], none_of: ["NONE MISSING"], visible: true },
+              range: { inches: 6 },
+            },
+          },
+          effect: { type: "modify-stat", modifier: { stat: "toughness", value: 1 } },
+        },
+      },
+      {
+        ability_id: "keyword-subject",
+        effect: {
+          type: "has-keyword",
+          parameters: { subject: { owner: "enemy", all_of: ["SUBJECT FILTER MISSING"] }, all_of: ["MONSTER"] },
+        },
+      },
+    ]);
+    const findings = await collectDanglingAbilityReferences(root);
+    expect(findings.map((finding) => [finding.ability_id, finding.reference_type, finding.path, finding.value])).toEqual([
+      ["filters", "unit-filter", "/0/effect/condition/parameters/of/any_of/1", "OF MISSING"],
+      ["filters", "unit-filter", "/0/effect/condition/parameters/of/none_of/0", "NONE MISSING"],
+      ["filters", "unit-filter", "/0/trigger/subject/all_of/0", "SUBJECT MISSING"],
+      ["keyword-subject", "unit-filter", "/1/effect/parameters/subject/all_of/0", "SUBJECT FILTER MISSING"],
     ]);
   });
 
@@ -227,12 +294,20 @@ describe("collectDanglingAbilityReferences", () => {
         effect: {
           type: "sequence",
           steps: [
-            // A condition type outside the supported pair.
-            { type: "unit-has-role", parameters: { keyword: "ALSO NOT A REFERENCE" } },
+            // A condition type other than has-keyword, even one carrying a keyword list.
+            { type: "unit-has-role", parameters: { keyword: "ALSO NOT A REFERENCE", all_of: ["NOR THIS"] } },
+            // A legacy keyword condition is the schema's to reject, not a reference.
+            { type: "unit-has-keyword", parameters: { keyword: "LEGACY" } },
             // An effect that carries a stratagem string as display text.
             { type: "ability-grant", modifier: { stratagem: "display text only" } },
             // Non-string operands stay out of the report.
-            { type: "target-has-keyword", parameters: { keyword: ["A"] } },
+            { type: "has-keyword", parameters: { subject: "defender", all_of: [["A"]] } },
+            // A dice requirement's any_of holds requirements, not keywords.
+            { type: "dice-pool-allocation", options: [{ requirement: { any_of: [{ type: "pair" }, { type: "triple" }] } }] },
+            // An object with a keyword list beside a non-filter key is not a unit filter.
+            { type: "sequence", steps: [], meta: { all_of: ["NOT A FILTER"], label: "x" } },
+            // A designation names a tag, not a keyword.
+            { type: "within", parameters: { of: { owner: "enemy", designated: "NOT A KEYWORD" } } },
           ],
         },
       },
@@ -242,31 +317,30 @@ describe("collectDanglingAbilityReferences", () => {
 
   it("compares stratagem ids exactly while keyword matching normalizes", async () => {
     write(root, "enrichment/alpha/abilities.json", [
-      { ability_id: "exact", effect: { type: "cp-refund", modifier: { stratagem: "counter-offensive" } } },
-      { ability_id: "wrong-case", effect: { type: "cp-refund", modifier: { stratagem: "Counter-Offensive" } } },
-      {
-        ability_id: "cost-modifier",
-        effect: { type: "stratagem-cost-modifier", modifier: { stratagem: "counter offensive" } },
-      },
+      { ability_id: "exact", effect: { type: "cost-modifier", modifier: { of: "stratagem", id: "counteroffensive", operation: "set", amount: 0 } } },
+      { ability_id: "wrong-case", effect: { type: "cost-modifier", modifier: { of: "stratagem", id: "Counter-Offensive", operation: "set", amount: 0 } } },
+      { ability_id: "permission", effect: { type: "permission", modifier: { activity: "use-stratagem", allow: true, stratagem: "counter offensive" } } },
+      // A manoeuvre's cost names no Stratagem, so its id is not audited as one.
+      { ability_id: "manoeuvre", effect: { type: "cost-modifier", modifier: { of: "manoeuvre", id: "not-a-stratagem", operation: "decrease", amount: 1 } } },
     ]);
     const findings = await collectDanglingAbilityReferences(root);
     expect(findings.map((finding) => [finding.ability_id, finding.reference_type, finding.value])).toEqual([
-      ["cost-modifier", "stratagem-cost-modifier", "counter offensive"],
-      ["wrong-case", "cp-refund", "Counter-Offensive"],
+      ["permission", "permission", "counter offensive"],
+      ["wrong-case", "cost-modifier", "Counter-Offensive"],
     ]);
     expect(findings.every((finding) => finding.kind === "stratagem")).toBe(true);
   });
 
   it("audits the shared _core enrichment pool and sorts findings deterministically", async () => {
     write(root, "enrichment/_core/abilities.json", [
-      { ability_id: "shared", effect: keywordCondition("unit-has-keyword", "SHARED MARKER") },
+      { ability_id: "shared", effect: keywordCondition(undefined, "SHARED MARKER") },
     ]);
     write(root, "enrichment/beta/abilities.json", [
-      { ability_id: "zulu", effect: keywordCondition("unit-has-keyword", "ZULU") },
-      { ability_id: "alfa", effect: keywordCondition("unit-has-keyword", "ALFA") },
+      { ability_id: "zulu", effect: keywordCondition(undefined, "ZULU") },
+      { ability_id: "alfa", effect: keywordCondition(undefined, "ALFA") },
     ]);
     write(root, "enrichment/alpha/abilities.json", [
-      { ability_id: "mike", effect: keywordCondition("unit-has-keyword", "MIKE") },
+      { ability_id: "mike", effect: keywordCondition(undefined, "MIKE") },
     ]);
     const findings = await collectDanglingAbilityReferences(root);
     expect(findings.map((finding) => [finding.source_file, finding.ability_id])).toEqual([
@@ -283,7 +357,7 @@ describe("collectDanglingAbilityReferences", () => {
     writeFileSync(join(root, "enrichment/alpha/abilities.json"), "[ { broken");
     write(root, "enrichment/beta/abilities.json", { ability_id: "not-an-array" });
     write(root, "enrichment/_core/abilities.json", [
-      { ability_id: "readable", effect: keywordCondition("unit-has-keyword", "MISSING") },
+      { ability_id: "readable", effect: keywordCondition(undefined, "MISSING") },
     ]);
     const findings = await collectDanglingAbilityReferences(root);
     expect(findings.map((finding) => finding.ability_id)).toEqual(["readable"]);
@@ -292,7 +366,7 @@ describe("collectDanglingAbilityReferences", () => {
 
 describe("runDanglingRefsAudit", () => {
   let root: string;
-  let previousExitCode: number | string | undefined;
+  let previousExitCode: typeof process.exitCode;
 
   beforeEach(() => {
     root = setupDataRoot();
@@ -309,7 +383,7 @@ describe("runDanglingRefsAudit", () => {
 
   it("prints a clean report and leaves the exit status untouched", async () => {
     write(root, "enrichment/alpha/abilities.json", [
-      { ability_id: "resolved", effect: keywordCondition("unit-has-keyword", "INFANTRY") },
+      { ability_id: "resolved", effect: keywordCondition(undefined, "INFANTRY") },
     ]);
     const log = vi.spyOn(console, "log").mockImplementation(() => {});
     await runDanglingRefsAudit(root);
@@ -319,10 +393,10 @@ describe("runDanglingRefsAudit", () => {
 
   it("prints every diagnostic and fails the process when findings exist", async () => {
     write(root, "enrichment/alpha/abilities.json", [
-      { ability_id: "dangling-keyword", effect: keywordGate("target-has-keyword", "A") },
+      { ability_id: "dangling-keyword", effect: keywordGate("defender", "A") },
       {
         ability_id: "dangling-stratagem",
-        effect: { type: "cp-refund", modifier: { stratagem: "fire-overwatch-or-heroic" } },
+        effect: { type: "cost-modifier", modifier: { of: "stratagem", id: "fire-overwatch-or-heroic", operation: "set", amount: 0 } },
       },
     ]);
     const log = vi.spyOn(console, "log").mockImplementation(() => {});
@@ -330,10 +404,10 @@ describe("runDanglingRefsAudit", () => {
     const output = log.mock.calls.map(([line]) => String(line)).join("\n");
     expect(output).toContain("enrichment/alpha/abilities.json");
     expect(output).toContain(
-      '  dangling-keyword /0/effect/condition/parameters/keyword keyword (target-has-keyword) → "A"',
+      '  dangling-keyword /0/effect/condition/parameters/all_of/0 keyword (has-keyword) → "A"',
     );
     expect(output).toContain(
-      '  dangling-stratagem /1/effect/modifier/stratagem stratagem (cp-refund) → "fire-overwatch-or-heroic"',
+      '  dangling-stratagem /1/effect/modifier/id stratagem (cost-modifier) → "fire-overwatch-or-heroic"',
     );
     expect(output).toContain("2 dangling ability reference(s): 1 keyword, 1 stratagem.");
     expect(process.exitCode).toBe(1);
@@ -345,15 +419,15 @@ describe("formatDanglingRefs", () => {
     const findings: DanglingReference[] = [
       {
         kind: "keyword",
-        reference_type: "target-has-keyword",
+        reference_type: "has-keyword",
         source_file: "enrichment/alpha/abilities.json",
         ability_id: "one",
-        path: "/0/effect/condition/parameters/keyword",
+        path: "/0/effect/condition/parameters/all_of/0",
         value: "A",
       },
       {
         kind: "stratagem",
-        reference_type: "stratagem-cost-modifier",
+        reference_type: "cost-modifier",
         source_file: "enrichment/beta/abilities.json",
         ability_id: "two",
         path: "/3/effect/modifier/stratagem",
@@ -383,10 +457,16 @@ describe("production dangling-reference disputes", () => {
       (finding) => finding.kind === "stratagem" && finding.value === "fire-overwatch-or-heroic",
     );
 
+    // Every "A" operand has been re-encoded from the rules: fated-hero and oathbound gate on the
+    // keyword the player picks (`has-keyword` `chosen_by`), optimised-for-slaughter on the
+    // defender's MONSTER or VEHICLE keyword. None may come back, and none may stay marked.
     expect(
-      new Set(keywordFindings.map((finding) => `${finding.source_file}:${finding.ability_id}`)).size,
-    ).toBe(50);
-    expect(stratagemFindings).toHaveLength(18);
+      [...new Set(keywordFindings.map((finding) => finding.ability_id))].sort(),
+    ).toEqual([]);
+    // The legacy `fire-overwatch-or-heroic` cp-refund operand is now a choice of two
+    // cost-modifiers naming the real `fire-overwatch` / `heroic-intervention` Stratagems.
+    // None may come back, and no ability may keep the stale dispute mark.
+    expect(stratagemFindings.map((finding) => `${finding.source_file}:${finding.ability_id}`)).toEqual([]);
 
     for (const finding of confirmed) {
       const abilities = JSON.parse(

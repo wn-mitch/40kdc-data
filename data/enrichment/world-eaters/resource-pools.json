@@ -7,9 +7,10 @@
     "generation": [
       {
         "condition": {
-          "type": "timing-is",
+          "type": "happened",
           "parameters": {
-            "timing": "start-of-phase"
+            "event": "round-started",
+            "window": "event"
           }
         },
         "amount": 8
@@ -29,9 +30,13 @@
     "generation": [
       {
         "condition": {
-          "type": "timing-is",
+          "type": "happened",
           "parameters": {
-            "timing": "enemy-unit-destroyed"
+            "event": "destroyed",
+            "window": "event",
+            "object": {
+              "owner": "enemy"
+            }
           }
         },
         "amount": 1
@@ -51,9 +56,13 @@
     "generation": [
       {
         "condition": {
-          "type": "timing-is",
+          "type": "happened",
           "parameters": {
-            "timing": "enemy-unit-destroyed"
+            "event": "destroyed",
+            "window": "event",
+            "object": {
+              "owner": "enemy"
+            }
           }
         },
         "amount": 1

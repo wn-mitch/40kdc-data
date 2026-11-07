@@ -13,10 +13,15 @@ export type MfmSyncDependencies = {
 };
 
 export const MFM_SYNC_COMMANDS: readonly IngestMfmCommand[] = [
+  "reissued-refs",
   "normalize-enhancements",
   "cull-legends",
   "seed-units",
   "seed-detachments",
+  // The mirror and every reconciler join on `mfm` refs; entities authored outside the dump carry none.
+  "external-refs",
+  // Reconcilers below key on mirrored ids; the closing mirror picks up entities seeded after it.
+  "mirror",
   "base-sizes",
   "wargear",
   "wargear-budgets",
@@ -35,8 +40,11 @@ export const MFM_SYNC_COMMANDS: readonly IngestMfmCommand[] = [
   "missions",
   "mission-matchups",
   "allies",
+  "mirror",
   "coverage",
   "golden",
+  // Last: every record's stamp is decided against the dataset the passes above produced.
+  "dataslates",
 ];
 
 const productionDependencies: MfmSyncDependencies = {

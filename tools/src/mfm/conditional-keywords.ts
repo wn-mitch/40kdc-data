@@ -58,6 +58,18 @@ export function runConditionalKeywords(dump: MfmDump, onlyDir?: string): Conditi
 
   const conditionsByDatasheet = dump.groupBy("conditional_keyword", "datasheetId");
   const detachments = dump.byId("detachment");
+  // Detachments the dump prints. A repo grant tied to any other detachment (a faction-pack
+  // detachment the dump does not carry yet) is outside the dump's say and is kept.
+  const dumpDetachmentIds = new Set<string>();
+  for (const detachment of dump.table("detachment")) {
+    const name = dump.enName(detachment);
+    if (!name) continue;
+    try {
+      dumpDetachmentIds.add(nameToId(name));
+    } catch {
+      continue;
+    }
+  }
   const staged: StagedWrite[] = [];
   const results: ConditionalKeywordDirResult[] = [];
   const unsupported: ConditionalKeywordReport["unsupported"] = [];
@@ -127,7 +139,10 @@ export function runConditionalKeywords(dump: MfmDump, onlyDir?: string): Conditi
     let changed = 0;
     for (const unitId of matched) {
       const unit = byId.get(unitId)!;
-      const next = sortEntries(grantsByUnit.get(unitId) ?? []);
+      const kept = (unit.conditional_keywords ?? []).filter(
+        (entry) => entry.required_detachment_id && !dumpDetachmentIds.has(entry.required_detachment_id),
+      );
+      const next = sortEntries([...(grantsByUnit.get(unitId) ?? []), ...kept]);
       if (same(unit.conditional_keywords, next)) continue;
       if (next.length) unit.conditional_keywords = next;
       else delete unit.conditional_keywords;

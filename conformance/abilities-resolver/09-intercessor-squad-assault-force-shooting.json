@@ -1,0 +1,21 @@
+{
+  "name": "Intercessor Squad (adeptus-astartes) in Assault Force, shooting: only the patrol's listed army rules apply; codex rules no patrol rule replaces (Librarius, Special Move Types, Transhuman Strategist) leave the army kind too",
+  "input": {
+    "unitId": "intercessor-squad",
+    "factionId": "adeptus-astartes",
+    "detachmentId": "assault-force"
+  },
+  "phase": "shooting",
+  "expected": {
+    "army": [
+      "combat-doctrines-assault-force-adeptus-astartes"
+    ],
+    "detachment": [
+      "indomitable-resolve-adeptus-astartes"
+    ],
+    "unit": [
+      "bolter-discipline-adeptus-astartes",
+      "tactical-mainstay-adeptus-astartes"
+    ]
+  }
+}

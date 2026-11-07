@@ -30,7 +30,7 @@ type affordabilitySpec struct {
 // cheapestNextCopy is the cheapest cost to field one more copy of view at army
 // ordinal nextOrdinal (minimum over the tiers in effect for hostFaction's army).
 func cheapestNextCopy(view *UnitView, nextOrdinal int, hostFaction map[string]any) int {
-	tiers := hostPointsTiers(view.Raw, hostFaction)
+	tiers := hostPointsTiers(view.Raw, hostFaction, nil)
 	if len(tiers) == 0 {
 		return 0
 	}

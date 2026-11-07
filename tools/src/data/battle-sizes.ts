@@ -37,3 +37,31 @@ export function detachmentCapForBattleSize(battleSize: BattleSize | null): numbe
       return null;
   }
 }
+
+/**
+ * 11e unit limit: how many units with the same datasheet an army may include
+ * (`incursion` 2, `strike-force` 3). BATTLELINE and DEDICATED TRANSPORT units
+ * double it; every EPIC HERO is limited to 1 regardless. Null when unknown.
+ */
+export function unitLimitForBattleSize(battleSize: BattleSize | null): number | null {
+  switch (battleSize) {
+    case "strike-force":
+      return 3;
+    case "incursion":
+      return 2;
+    default:
+      return null;
+  }
+}
+
+/** 11e Enhancement limit for a battle size (`incursion` 2, `strike-force` 4); null when unknown. */
+export function enhancementLimitForBattleSize(battleSize: BattleSize | null): number | null {
+  switch (battleSize) {
+    case "strike-force":
+      return 4;
+    case "incursion":
+      return 2;
+    default:
+      return null;
+  }
+}

@@ -58,14 +58,22 @@
       "warpsword"
     ],
     "ability_ids": [
-      "daemonic-allegiance",
-      "deadly-demise-d3",
+      "daemonic-allegiance-soul-grinder-chaos-daemons",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
       "deep-strike",
-      "scuttling-walker"
+      "scuttling-walker-chaos-daemons",
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -127,14 +135,19 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "harbinger-of-death",
-      "malefic-destruction",
+      "harbinger-of-death-chaos-daemons",
+      "malefic-destruction-chaos-daemons",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "daemonic-allegiance-chaos-daemons",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -199,15 +212,20 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "daemonic-lord",
-      "prince-of-darkness-aura",
-      "unholy-vigour",
+      "daemonic-lord-chaos-daemons",
+      "prince-of-darkness-chaos-daemons",
+      "unholy-vigour-chaos-daemons",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "daemonic-allegiance-chaos-daemons",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -275,16 +293,27 @@
       "streams-of-brackish-filth"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "deluge-of-nurgle-aura",
-      "feel-no-pain-6",
-      "greater-daemon-of-nurgle-aura",
-      "virulent-blessing-psychic",
-      "deep-strike"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "deluge-of-nurgle-chaos-daemons",
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      "greater-daemon-of-nurgle-chaos-daemons",
+      "virulent-blessing-chaos-daemons",
+      "deep-strike",
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -351,15 +380,16 @@
       "serrated-claws"
     ],
     "ability_ids": [
-      "dazzling-acrobatics",
+      "dazzling-acrobatics-chaos-daemons",
       "fights-first",
       "lone-operative",
-      "the-eternal-dance",
-      "deep-strike"
+      "the-eternal-dance-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -424,15 +454,22 @@
       "slashing-claws"
     ],
     "ability_ids": [
-      "daemonic-icon",
-      "horrifying-beauty",
-      "instrument-of-chaos",
+      {
+        "id": "daemonic-icon-chaos-daemons",
+        "wargear": "daemonic-icon"
+      },
+      "horrifying-beauty-chaos-daemons",
+      {
+        "id": "instrument-of-chaos-chaos-daemons",
+        "wargear": "instrument-of-chaos"
+      },
       "deep-strike",
-      "fights-first"
+      "fights-first",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -519,12 +556,13 @@
     ],
     "ability_ids": [
       "infiltrators",
-      "mischief-makers",
-      "deep-strike"
+      "mischief-makers-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -589,14 +627,15 @@
       "blade-of-blood"
     ],
     "ability_ids": [
-      "a-gory-path",
-      "bloodmaster",
+      "a-gory-path-chaos-daemons",
+      "bloodmaster-chaos-daemons",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -670,14 +709,15 @@
     ],
     "ability_ids": [
       "leader",
-      "symphony-of-pain-psychic",
-      "tranceweaver",
+      "symphony-of-pain-chaos-daemons",
+      "tranceweaver-chaos-daemons",
       "deep-strike",
-      "fights-first"
+      "fights-first",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -751,12 +791,13 @@
       "screamer-bites"
     ],
     "ability_ids": [
-      "eldritch-flames-psychic",
-      "deep-strike"
+      "eldritch-flames-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -816,7 +857,9 @@
       "Tzeentch",
       "Horrors",
       "Pink",
-      "Brimstone"
+      "Brimstone",
+      "Blue",
+      "Pink Horrors"
     ],
     "faction_keywords": [
       "Legiones Daemonica"
@@ -834,13 +877,22 @@
       "pink-claws"
     ],
     "ability_ids": [
-      "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two",
-      "split",
-      "deep-strike"
+      "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-chaos-daemons",
+      "split-pink-horrors-chaos-daemons",
+      "deep-strike",
+      {
+        "id": "daemonic-icon-chaos-daemons",
+        "wargear": "daemonic-icon"
+      },
+      {
+        "id": "instrument-of-chaos-chaos-daemons",
+        "wargear": "instrument-of-chaos"
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -858,13 +910,6 @@
         ],
         "count": 1,
         "per_models": 0
-      }
-    ],
-    "allied_points": [
-      {
-        "models": 10,
-        "cost": 115,
-        "host_faction": "thousand-sons"
       }
     ],
     "external_refs": [
@@ -930,15 +975,16 @@
       "ravaging-claws-infernal-enrapturess"
     ],
     "ability_ids": [
-      "discordant-disruption-aura",
-      "harmonic-alignment",
+      "discordant-disruption-chaos-daemons",
+      "harmonic-alignment-chaos-daemons",
       "leader",
       "deep-strike",
-      "fights-first"
+      "fights-first",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1010,12 +1056,21 @@
       "plaguesword"
     ],
     "ability_ids": [
-      "infected-outbreak",
-      "deep-strike"
+      "infected-outbreak-chaos-daemons",
+      "deep-strike",
+      {
+        "id": "daemonic-icon-chaos-daemons",
+        "wargear": "daemonic-icon"
+      },
+      {
+        "id": "instrument-of-chaos-chaos-daemons",
+        "wargear": "instrument-of-chaos"
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1109,16 +1164,27 @@
       "witstealer-sword"
     ],
     "ability_ids": [
-      "daemon-lord-of-slaanesh-aura",
-      "greater-daemon-of-slaanesh-aura",
-      "mesmerising-form",
-      "shining-aegis",
+      "daemon-lord-of-slaanesh-chaos-daemons",
+      "greater-daemon-of-slaanesh-chaos-daemons",
+      "mesmerising-form-chaos-daemons",
+      {
+        "id": "shining-aegis-chaos-daemons",
+        "wargear": "shining-aegis"
+      },
       "deep-strike",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1194,14 +1260,23 @@
       "soulpiercer"
     ],
     "ability_ids": [
-      "monarch-of-the-hunt",
-      "no-prey-can-evade",
+      "monarch-of-the-hunt-chaos-daemons",
+      "no-prey-can-evade-chaos-daemons",
       "deep-strike",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "greater-daemon-of-slaanesh-chaos-daemons",
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1271,13 +1346,25 @@
       "slashing-claws"
     ],
     "ability_ids": [
-      "scouts-9",
-      "unholy-speed",
-      "deep-strike"
+      {
+        "id": "scouts",
+        "value": 9
+      },
+      "unholy-speed-chaos-daemons",
+      "deep-strike",
+      {
+        "id": "daemonic-icon-chaos-daemons",
+        "wargear": "daemonic-icon"
+      },
+      {
+        "id": "instrument-of-chaos-chaos-daemons",
+        "wargear": "instrument-of-chaos"
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1363,11 +1450,14 @@
     ],
     "ability_ids": [
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "delightful-agonies-chaos-daemons",
+      "prince-of-slaanesh-chaos-daemons",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1438,12 +1528,13 @@
       "lamprey-bite"
     ],
     "ability_ids": [
-      "slashing-dive",
-      "deep-strike"
+      "slashing-dive-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1508,12 +1599,21 @@
       "hellblade"
     ],
     "ability_ids": [
-      "bane-of-cowards",
-      "deep-strike"
+      "bane-of-cowards-chaos-daemons",
+      "deep-strike",
+      {
+        "id": "daemonic-icon-chaos-daemons",
+        "wargear": "daemonic-icon"
+      },
+      {
+        "id": "instrument-of-chaos-chaos-daemons",
+        "wargear": "instrument-of-chaos"
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1531,13 +1631,6 @@
         ],
         "count": 1,
         "per_models": 0
-      }
-    ],
-    "allied_points": [
-      {
-        "models": 10,
-        "cost": 90,
-        "host_faction": "world-eaters"
       }
     ],
     "external_refs": [
@@ -1614,15 +1707,23 @@
       "staff-of-tzeentch"
     ],
     "ability_ids": [
-      "daemon-lord-of-tzeentch-aura",
-      "greater-daemon-of-tzeentch-aura",
-      "master-of-magicks-psychic",
+      "daemon-lord-of-tzeentch-chaos-daemons",
+      "greater-daemon-of-tzeentch-chaos-daemons",
+      "master-of-magicks-chaos-daemons",
       "deep-strike",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1695,14 +1796,15 @@
       "herald-combat-weapon"
     ],
     "ability_ids": [
-      "changecaster",
+      "changecaster-chaos-daemons",
       "leader",
-      "storm-of-mutating-sorcery-psychic",
-      "deep-strike"
+      "storm-of-mutating-sorcery-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1755,7 +1857,8 @@
       "Chaos",
       "Daemon",
       "Nurgle",
-      "Feculent Gnarlmaw"
+      "Feculent Gnarlmaw",
+      "Frame"
     ],
     "faction_keywords": [
       "Legiones Daemonica"
@@ -1770,14 +1873,15 @@
     },
     "weapon_ids": [],
     "ability_ids": [
-      "diseased-cover",
-      "fortification",
-      "shroud-of-flies-aura",
-      "infiltrators"
+      "diseased-cover-chaos-daemons",
+      "fortification-chaos-daemons",
+      "shroud-of-flies-chaos-daemons",
+      "infiltrators",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1855,15 +1959,27 @@
       "putrid-vomit"
     ],
     "ability_ids": [
-      "daemon-lord-of-nurgle-aura",
-      "nurgle-s-rot-psychic",
+      "daemon-lord-of-nurgle-chaos-daemons",
+      "nurgles-rot-chaos-daemons",
       "deep-strike",
-      "feel-no-pain-6",
-      "deadly-demise-d6"
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "greater-daemon-of-nurgle-chaos-daemons",
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1914,7 +2030,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 200,
+        "cost": 210,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -1927,7 +2043,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 240,
+        "cost": 250,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1956,12 +2072,21 @@
       "juggernauts-bladed-horn"
     ],
     "ability_ids": [
-      "brass-stampede",
-      "deep-strike"
+      "brass-stampede-chaos-daemons",
+      "deep-strike",
+      {
+        "id": "daemonic-icon-chaos-daemons",
+        "wargear": "daemonic-icon"
+      },
+      {
+        "id": "instrument-of-chaos-chaos-daemons",
+        "wargear": "instrument-of-chaos"
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1979,38 +2104,6 @@
         ],
         "count": 1,
         "per_models": 0
-      }
-    ],
-    "allied_points": [
-      {
-        "models": 3,
-        "cost": 95,
-        "unit_count_min": 1,
-        "unit_count_max": 2,
-        "host_faction": "world-eaters"
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 190,
-        "unit_count_min": 1,
-        "unit_count_max": 2,
-        "host_faction": "world-eaters"
-      },
-      {
-        "models": 3,
-        "cost": 115,
-        "unit_count_min": 3,
-        "unit_count_max": null,
-        "host_faction": "world-eaters"
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 210,
-        "unit_count_min": 3,
-        "unit_count_max": null,
-        "host_faction": "world-eaters"
       }
     ],
     "external_refs": [
@@ -2060,14 +2153,14 @@
       },
       {
         "models": 3,
-        "cost": 105,
+        "cost": 115,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 205,
+        "cost": 215,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2095,28 +2188,16 @@
       "barbed-tail-and-dissecting-claws"
     ],
     "ability_ids": [
-      "soporific-musk",
-      "deep-strike"
+      "soporific-musk-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
-    "allied_points": [
-      {
-        "models": 3,
-        "cost": 90,
-        "host_faction": "emperors-children"
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 190,
-        "host_faction": "emperors-children"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -2156,7 +2237,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 315
+        "cost": 330
       }
     ],
     "keywords": [
@@ -2184,15 +2265,20 @@
       "slaughter-and-carnage"
     ],
     "ability_ids": [
-      "greater-daemon-of-khorne-aura",
-      "murderlust",
-      "rage-embodied-aura",
+      "greater-daemon-of-khorne-chaos-daemons",
+      "murderlust-chaos-daemons",
+      "rage-embodied-chaos-daemons",
       "deep-strike",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "damaged-1-7-wounds-remaining-chaos-daemons",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2260,17 +2346,24 @@
       "the-blade-of-shadows"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
       "deep-strike",
-      "shadow-form-abilities",
+      "shadow-form-abilities-chaos-daemons",
       "stealth",
-      "supreme-commander",
-      "the-dark-master-aura",
-      "the-shadow-of-chaos"
+      "supreme-commander-chaos-daemons",
+      "the-dark-master-chaos-daemons",
+      "the-shadow-of-chaos-chaos-daemons",
+      {
+        "id": "damaged",
+        "value": 7
+      }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2344,14 +2437,15 @@
       "lopping-shears"
     ],
     "ability_ids": [
-      "beast-handler",
+      "beast-handler-chaos-daemons",
       "leader",
-      "seed-the-garden-of-nurgle",
-      "deep-strike"
+      "seed-the-garden-of-nurgle-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2427,15 +2521,16 @@
       "ravaging-claws-contorted-epitome"
     ],
     "ability_ids": [
-      "horrible-fascination-psychic",
+      "horrible-fascination-chaos-daemons",
       "leader",
-      "swallow-energy-psychic",
+      "swallow-energy-chaos-daemons",
       "deep-strike",
-      "fights-first"
+      "fights-first",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2516,15 +2611,18 @@
       "foul-balesword"
     ],
     "ability_ids": [
-      "feculent-despair-aura-psychic",
-      "feel-no-pain-5",
+      "feculent-despair-chaos-daemons",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
       "leader",
-      "poxbringer",
+      "poxbringer-chaos-daemons",
       "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2601,14 +2699,15 @@
       "screamer-bites"
     ],
     "ability_ids": [
-      "fateskimmer",
+      "fateskimmer-chaos-daemons",
       "leader",
-      "rider-of-the-immaterial-winds",
-      "deep-strike"
+      "rider-of-the-immaterial-winds-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2685,12 +2784,13 @@
       "slashing-claws-hellflayers"
     ],
     "ability_ids": [
-      "cutting-down-the-foe",
-      "deep-strike"
+      "cutting-down-the-foe-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2764,12 +2864,21 @@
       "plaguesword"
     ],
     "ability_ids": [
-      "death-s-heads",
-      "deep-strike"
+      "deaths-heads-chaos-daemons",
+      "deep-strike",
+      {
+        "id": "daemonic-icon-chaos-daemons",
+        "wargear": "daemonic-icon"
+      },
+      {
+        "id": "instrument-of-chaos-chaos-daemons",
+        "wargear": "instrument-of-chaos"
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2864,14 +2973,23 @@
       "lash-of-khorne"
     ],
     "ability_ids": [
-      "daemon-lord-of-khorne-aura",
-      "relentless-carnage",
+      "daemon-lord-of-khorne-chaos-daemons",
+      "relentless-carnage-chaos-daemons",
       "deep-strike",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      "greater-daemon-of-khorne-chaos-daemons",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2945,15 +3063,16 @@
       "flamer-mouths-exalted-flamer"
     ],
     "ability_ids": [
-      "blazing-warpfire-psychic",
-      "flames-of-change-psychic",
+      "blazing-warpfire-chaos-daemons",
+      "flames-of-change-chaos-daemons",
       "leader",
-      "manifestation-of-destruction",
-      "deep-strike"
+      "manifestation-of-destruction-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3027,14 +3146,15 @@
       "juggernauts-bladed-horn"
     ],
     "ability_ids": [
-      "devastating-charge",
+      "devastating-charge-chaos-daemons",
       "leader",
-      "skullmaster-s-fury",
-      "deep-strike"
+      "skullmasters-fury-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3107,14 +3227,15 @@
       "balesword-and-nurgling-attendants"
     ],
     "ability_ids": [
-      "blessed-by-the-plague-god",
+      "blessed-by-the-plague-god-chaos-daemons",
       "leader",
-      "tally-of-pestilence",
-      "deep-strike"
+      "tally-of-pestilence-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3183,15 +3304,19 @@
       "soul-rending-fangs"
     ],
     "ability_ids": [
-      "brass-collar-of-bloody-vengeance",
+      {
+        "id": "brass-collar-of-bloody-vengeance-chaos-daemons",
+        "wargear": "brass-collar-of-bloody-vengeance"
+      },
       "leader",
-      "pack-leader",
-      "prey-of-the-blood-god",
-      "deep-strike"
+      "pack-leader-chaos-daemons",
+      "prey-of-the-blood-god-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3258,14 +3383,15 @@
       "plaguesword-and-distended-maw"
     ],
     "ability_ids": [
-      "keep-counting",
+      "keep-counting-chaos-daemons",
       "leader",
-      "meet-your-quota",
-      "deep-strike"
+      "meet-your-quota-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3321,7 +3447,8 @@
       "Chaos",
       "Daemon",
       "Slaanesh",
-      "Tormentbringer on Exalted Seeker Chariot"
+      "Tormentbringer on Exalted Seeker Chariot",
+      "Tormentbringer"
     ],
     "faction_keywords": [
       "Legiones Daemonica"
@@ -3341,14 +3468,15 @@
       "slashing-claws-tormentbringer"
     ],
     "ability_ids": [
-      "hysterical-frenzy",
+      "hysterical-frenzy-chaos-daemons",
       "leader",
-      "tormentbringer-aura",
-      "deep-strike"
+      "tormentbringer-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3422,13 +3550,14 @@
     ],
     "ability_ids": [
       "leader",
-      "lord-of-decapitations",
-      "skulls-for-khorne",
-      "deep-strike"
+      "lord-of-decapitations-chaos-daemons",
+      "skulls-for-khorne-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3504,13 +3633,14 @@
       "blade-of-blood"
     ],
     "ability_ids": [
-      "blood-throne",
-      "champion-slayer",
-      "deep-strike"
+      "blood-throne-chaos-daemons",
+      "champion-slayer-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3562,7 +3692,8 @@
       "Chaos",
       "Daemon",
       "Khorne",
-      "Skull Altar"
+      "Skull Altar",
+      "Frame"
     ],
     "faction_keywords": [
       "Legiones Daemonica"
@@ -3577,14 +3708,15 @@
     },
     "weapon_ids": [],
     "ability_ids": [
-      "cover",
-      "shadow-of-khorne-aura",
-      "fortification",
-      "infiltrators"
+      "cover-chaos-daemons",
+      "shadow-of-khorne-chaos-daemons",
+      "fortification-chaos-daemons",
+      "infiltrators",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3649,14 +3781,15 @@
       "marotter"
     ],
     "ability_ids": [
-      "disease-of-mirth-aura",
-      "jolly-gutpipes",
+      "disease-of-mirth-chaos-daemons",
+      "jolly-gutpipes-chaos-daemons",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3732,14 +3865,23 @@
       "staff-of-tomorrow"
     ],
     "ability_ids": [
-      "one-head-looks-back-aura",
-      "one-head-looks-forward",
+      "one-head-looks-back-chaos-daemons",
+      "one-head-looks-forward-chaos-daemons",
       "deep-strike",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "greater-daemon-of-tzeentch-chaos-daemons",
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3788,7 +3930,9 @@
       "Daemon",
       "Tzeentch",
       "Horrors",
-      "Brimstone"
+      "Brimstone",
+      "Blue",
+      "Blue Horrors"
     ],
     "faction_keywords": [
       "Legiones Daemonica"
@@ -3806,24 +3950,19 @@
       "coruscating-blue-flames"
     ],
     "ability_ids": [
-      "exploding-horrors",
-      "sullen-malevolence-aura",
+      "exploding-horrors-chaos-daemons",
+      "sullen-malevolence-chaos-daemons",
       "deep-strike",
-      "infiltrators"
+      "infiltrators",
+      "split-chaos-daemons",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
-    "allied_points": [
-      {
-        "models": 10,
-        "cost": 90,
-        "host_faction": "thousand-sons"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -3890,14 +4029,15 @@
       "sharp-quills"
     ],
     "ability_ids": [
-      "p-tarix-s-sorcerous-syphon-aura",
-      "xirat-p-s-sorcerous-barrages-psychic",
+      "ptarixs-sorcerous-syphon-chaos-daemons",
+      "xiratps-sorcerous-barrages-chaos-daemons",
       "deep-strike",
-      "lone-operative"
+      "lone-operative",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3965,15 +4105,16 @@
       "the-tricksters-staff"
     ],
     "ability_ids": [
-      "formless-horror",
-      "mischief-and-confusion",
+      "formless-horror-chaos-daemons",
+      "mischief-and-confusion-chaos-daemons",
       "stealth",
       "deep-strike",
-      "lone-operative"
+      "lone-operative",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4044,14 +4185,15 @@
       "herald-combat-weapon"
     ],
     "ability_ids": [
-      "altered-reality-psychic",
-      "fluxmaster",
+      "altered-reality-chaos-daemons",
+      "fluxmaster-chaos-daemons",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4128,12 +4270,13 @@
       "flickering-flames"
     ],
     "ability_ids": [
-      "bounding-leaps",
-      "deep-strike"
+      "bounding-leaps-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4200,29 +4343,24 @@
       "putrid-appendages"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "grotesque-regeneration",
-      "scouts-6",
-      "deep-strike"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "grotesque-regeneration-chaos-daemons",
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
-    "allied_points": [
-      {
-        "models": 1,
-        "cost": 70,
-        "host_faction": "death-guard"
-      },
-      {
-        "models": 2,
-        "cost": 140,
-        "host_faction": "death-guard"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -4257,7 +4395,7 @@
     "points": [
       {
         "models": 5,
-        "cost": 75
+        "cost": 80
       },
       {
         "models": 6,
@@ -4289,13 +4427,17 @@
       "gore-drenched-fangs"
     ],
     "ability_ids": [
-      "collar-of-khorne",
-      "hunters-from-the-warp",
-      "deep-strike"
+      {
+        "id": "collar-of-khorne-chaos-daemons",
+        "wargear": "collar-of-khorne"
+      },
+      "hunters-from-the-warp-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4361,12 +4503,13 @@
       "skull-cannon"
     ],
     "ability_ids": [
-      "skulls-of-the-fallen",
-      "deep-strike"
+      "skulls-of-the-fallen-chaos-daemons",
+      "deep-strike",
+      "the-shadow-of-chaos-chaos-daemons"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,

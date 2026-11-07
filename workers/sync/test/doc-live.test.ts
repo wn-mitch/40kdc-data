@@ -5,7 +5,7 @@
  * at-capacity snapshot fallback.
  */
 import { describe, expect, it } from "vitest";
-import { env, SELF } from "cloudflare:test";
+import { env, runDurableObjectAlarm, runInDurableObject, SELF } from "cloudflare:test";
 import { api, mintToken } from "./helpers";
 import type { ServerMessage } from "../src/doc-protocol";
 
@@ -172,6 +172,71 @@ describe("persistence back to D1", () => {
     expect(got.status).toBe(200);
     expect(got.body.payload.teamName).toBe("Persisted");
     expect(got.body.updated_at).toBeGreaterThanOrEqual(createdAt);
+  });
+
+  it("keeps an edit that lands while a flush is writing to D1", async () => {
+    const { token, id, editorToken } = await makeSharedDoc("live-inflight");
+    const a = await connectDoc(id, editorToken, "Alice");
+    await a.next(); // welcome
+    const op = (clientSeq: number, v: string) =>
+      a.ws.send(JSON.stringify({ t: "op", clientSeq, ops: [{ o: "set", p: ["teamName"], v }] }));
+    op(1, "First");
+    await a.next(); // ack
+
+    // Hold the room's D1 write open so a second op can land mid-flush.
+    let writeStarted!: () => void;
+    const started = new Promise<void>((r) => (writeStarted = r));
+    let releaseWrite!: () => void;
+    const gate = new Promise<void>((r) => (releaseWrite = r));
+    const flush = runInDurableObject(room(id), async (instance) => {
+      const self = instance as unknown as { env: { DB: D1Database } };
+      const realDb = self.env.DB;
+      const gatedDb = {
+        prepare: (sql: string) => ({
+          bind: (...args: unknown[]) => ({
+            run: async () => {
+              writeStarted();
+              await gate;
+              return realDb.prepare(sql).bind(...args).run();
+            },
+          }),
+        }),
+      };
+      self.env = { ...self.env, DB: gatedDb as unknown as D1Database };
+      try {
+        await instance.persistNow();
+      } finally {
+        self.env = { ...self.env, DB: realDb };
+      }
+    });
+    await started;
+    op(2, "Second");
+    await a.next(); // ack — applied while the first write is in flight
+    releaseWrite();
+    await flush;
+
+    expect((await api(`/docs/${id}`, { token })).body.payload.teamName).toBe("First");
+    await room(id).persistNow();
+    expect((await api(`/docs/${id}`, { token })).body.payload.teamName).toBe("Second");
+  });
+
+  it("a doc-bound room with no edits still re-stamps its slot", async () => {
+    const { token, id, viewerToken } = await makeSharedDoc("live-lease");
+    const v = await connectDoc(id, viewerToken, "Watcher");
+    await v.next(); // welcome — live, never dirty
+    await runInDurableObject(registry(), (_instance, state) => {
+      state.storage.sql.exec("UPDATE active SET created_at = 0 WHERE code = ?", `doc:${id}`);
+    });
+    expect(await runDurableObjectAlarm(room(id))).toBe(true);
+    const stamp = await runInDurableObject(registry(), (_instance, state) =>
+      state.storage.sql
+        .exec<{ created_at: number }>("SELECT created_at FROM active WHERE code = ?", `doc:${id}`)
+        .toArray()[0]?.created_at,
+    );
+    expect(stamp).toBeGreaterThan(Date.now() - 60_000);
+    // Still live, so snapshot PUTs stay refused.
+    const put = await api(`/docs/${id}`, { method: "PUT", token, body: { payload: PLAN } });
+    expect(put.body.error).toBe("doc_live");
   });
 
   it("refuses snapshot PUTs while live (doc_live), accepts after release", async () => {

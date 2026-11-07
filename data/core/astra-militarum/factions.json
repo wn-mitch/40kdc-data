@@ -24,7 +24,17 @@
       }
     ],
     "faction_rule_ids": [
-      "voice-of-command"
+      "voice-of-command-astra-militarum"
+    ],
+    "keyword_limits": [
+      {
+        "keywords": [
+          "Commissar Graves",
+          "Commissar Graves on Foot"
+        ],
+        "max": 1,
+        "mode": "alternatives"
+      }
     ]
   }
 ]

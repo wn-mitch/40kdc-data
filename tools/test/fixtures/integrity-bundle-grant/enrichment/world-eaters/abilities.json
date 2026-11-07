@@ -1,38 +1,42 @@
 [
   {
     "ability_id": "bundle-target",
-    "effect": { "type": "rules-bundle", "target": "self", "steps": [] }
+    "effect": { "type": "rules-bundle", "steps": [{ "type": "stat-modifier", "target": "this-unit", "modifier": { "stat": "OC", "operation": "add", "value": 1 } }] }
   },
   {
     "ability_id": "ordinary-target",
-    "effect": { "type": "stat-modifier", "target": "self", "modifier": { "stat": "T", "operation": "add", "value": 1 } }
+    "effect": {"type":"stat-modifier","target":"this-model","modifier":{"stat":"T","operation":"add","value":1}}
   },
   {
     "ability_id": "valid-bundle-grant",
     "effect": {
       "type": "ability-grant",
-      "modifier": { "ability_id": "bundle-target", "rules_bundle": true }
+      "target": "this-unit",
+      "modifier": { "ability": "bundle-target", "rules_bundle": true }
     }
   },
   {
     "ability_id": "dangling-bundle-grant",
     "effect": {
       "type": "ability-grant",
-      "modifier": { "ability_id": "missing-bundle", "rules_bundle": true }
+      "target": "this-unit",
+      "modifier": { "ability": "missing-bundle", "rules_bundle": true }
     }
   },
   {
     "ability_id": "foreign-bundle-grant",
     "effect": {
       "type": "ability-grant",
-      "modifier": { "ability_id": "foreign-bundle", "rules_bundle": true }
+      "target": "this-unit",
+      "modifier": { "ability": "foreign-bundle", "rules_bundle": true }
     }
   },
   {
     "ability_id": "ordinary-bundle-grant",
     "effect": {
       "type": "ability-grant",
-      "modifier": { "ability_id": "ordinary-target", "rules_bundle": true }
+      "target": "this-unit",
+      "modifier": { "ability": "ordinary-target", "rules_bundle": true }
     }
   }
 ]

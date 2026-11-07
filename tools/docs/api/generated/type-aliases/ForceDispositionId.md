@@ -8,7 +8,7 @@
 
 > **ForceDispositionId** = `"take-and-hold"` \| `"disruption"` \| `"purge-the-foe"` \| `"priority-assets"` \| `"reconnaissance"`
 
-Defined in: [generated.ts:89](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L89)
+Defined in: [generated.ts:243](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L243)
 
 One of the five confirmed 11e launch Force Dispositions. Shared by force-disposition entities and the mission-matchup matrix.
 

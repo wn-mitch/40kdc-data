@@ -20,23 +20,29 @@
  *   units.json               — remove the unit
  *   wargear-options.json     — remove entries whose unit_id was dropped
  *   unit-compositions.json   — remove entries whose unit_id was dropped
- *   leader-attachments.json  — remove entries whose leader_id was dropped; strip
- *                              dropped ids from eligible_bodyguard_ids (drop the
- *                              whole entry if it empties — schema minItems 1)
+ *   leader-attachments.json  — remove dropped leaders and bodyguards; drop
+ *                              conditional groups requiring a dropped unit,
+ *                              but keep groups excluding one (that exclusion
+ *                              is always satisfied while the unit is absent).
+ *                              Drop entries with no eligible bodyguards left.
  *   weapons.json / wargear.json — remove items referenced by zero SURVIVING
  *                              unit.weapon_ids / wargear-option refs /
  *                              unit-composition models[].default_weapon_ids
  *
- * Enrichment abilities are NOT edited (community-authored, often shared): abilities
- * left referenced by zero surviving units are reported for manual review only.
+ * Enrichment abilities follow their units (see `ability-prune.ts`): dead `unit_ids`
+ * are stripped, and an ability no surviving unit carries is removed with its phase
+ * mappings. That pass runs against every surviving unit, so it also clears abilities
+ * left behind by an earlier cull.
  */
 import * as fs from "fs";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
 import { MfmDump, type DatasheetRow } from "./loader.js";
 import { readJsonArray, CORE_DIR } from "./repo-files.js";
-import { repoDirs } from "./faction-map.js";
+import { repoDirForFactionName, repoDirs } from "./faction-map.js";
+import { effectiveDir } from "./seed-units.js";
 import type { StagedWrite } from "./apply.js";
+import { pruneAbilities, type AbilityPrune } from "./ability-prune.js";
 
 
 
@@ -69,6 +75,12 @@ interface UnitComposition {
 interface LeaderAttachment {
   leader_id: string;
   eligible_bodyguard_ids: string[];
+  conditional_groups?: Array<{
+    role: "leader" | "support";
+    eligible_bodyguard_ids: string[];
+    required_roster_unit_ids?: string[];
+    excluded_roster_unit_ids?: string[];
+  }>;
   [k: string]: unknown;
 }
 interface IdItem {
@@ -87,19 +99,24 @@ export interface DirCull {
   bodyguardRefsStripped: number;
   weaponsRemoved: string[];
   wargearRemoved: string[];
-  abilitiesOrphaned: string[]; // ability_ids referenced by zero surviving units (report only)
 }
 export interface CullReport {
   dirs: DirCull[];
   totalDropped: number;
   aborted: string | null; // reason, if the sanity tripwire fired
+  abilities: AbilityPrune[];
   staged: StagedWrite[];
 }
 
-/** Build the global live + Legends datasheet name-slug sets from the dump. */
-function dumpSlugSets(dump: MfmDump): { live: Set<string>; legends: Set<string> } {
+/** Build the global live + Legends datasheet name-slug sets from the dump, the live slugs routed
+ *  to each repo dir (a supplement's datasheets file under its parent roster's dir), and the live
+ *  datasheet ids. */
+export function dumpSlugSets(dump: MfmDump): { live: Set<string>; legends: Set<string>; liveByDir: Map<string, Set<string>>; liveIds: Set<string> } {
   const live = new Set<string>();
   const legends = new Set<string>();
+  const liveByDir = new Map<string, Set<string>>();
+  const liveIds = new Set<string>();
+  const fkNames = dump.byId("faction_keyword");
   for (const ds of dump.table("datasheet")) {
     const n = dump.enName(ds);
     if (!n) continue;
@@ -110,8 +127,14 @@ function dumpSlugSets(dump: MfmDump): { live: Set<string>; legends: Set<string> 
       continue;
     }
     (ds.isLegends ? legends : live).add(id);
+    if (ds.isLegends) continue;
+    liveIds.add(ds.id);
+    const fk = dump.factionKeywordOfDatasheet(ds.id);
+    const routed = fk ? repoDirForFactionName(dump.enName(fkNames.get(fk))) : null;
+    const dir = routed ? (effectiveDir(routed) ?? routed) : null;
+    if (dir) (liveByDir.get(dir) ?? liveByDir.set(dir, new Set()).get(dir)!).add(id);
   }
-  return { live, legends };
+  return { live, legends, liveByDir, liveIds };
 }
 
 /** Advisory: a culled slug that is a prefix of (or shares a prefix with) a live
@@ -128,8 +151,22 @@ function nearLiveSlug(droppedId: string, live: Set<string>, repoUnitIds: Set<str
   return undefined;
 }
 
+/**
+ * Live in THIS dir: the unit links a live datasheet, or a live datasheet its dir's books print has
+ * its name. A same-named datasheet in another faction's book (the Grey Knights Razorback) does not
+ * keep a Space Marine copy that only Legends still prints.
+ */
+export function liveInDir(
+  unit: { id: string; external_refs?: { namespace?: string; id?: string }[] },
+  dir: string,
+  sets: { liveByDir: Map<string, Set<string>>; liveIds: Set<string> },
+): boolean {
+  const refs = (unit.external_refs ?? []).filter((r) => r.namespace === "mfm" && r.id).map((r) => r.id!);
+  return refs.some((m) => sets.liveIds.has(m)) || (sets.liveByDir.get(dir)?.has(unit.id) ?? false);
+}
+
 export function runCull(dump: MfmDump, write: boolean): CullReport {
-  const { live, legends } = dumpSlugSets(dump);
+  const { live, legends, liveByDir, liveIds } = dumpSlugSets(dump);
 
   // First pass (read-only): compute drops per dir and the grand total, so the
   // sanity tripwire can refuse a write BEFORE any file is touched.
@@ -154,7 +191,7 @@ export function runCull(dump: MfmDump, write: boolean): CullReport {
     const units = readJsonArray<Unit>(path.join(CORE_DIR, dir, "units.json"));
     if (!units.length) continue;
     for (const u of units) allRepoUnitIds.add(u.id);
-    const dropList = units.filter((u) => !live.has(u.id));
+    const dropList = units.filter((u) => !liveInDir(u, dir, { liveByDir, liveIds }));
     const droppedIds = new Set(dropList.map((u) => u.id));
     const options = readJsonArray<WargearOption>(path.join(CORE_DIR, dir, "wargear-options.json"));
     const comps = readJsonArray<UnitComposition>(path.join(CORE_DIR, dir, "unit-compositions.json"));
@@ -178,6 +215,7 @@ export function runCull(dump: MfmDump, write: boolean): CullReport {
       totalDropped,
       aborted: `cull set is ${totalDropped} units (> ${SANITY_MAX_DROP}) — implausible; refusing to write. Inspect the dump / name matching before proceeding.`,
       staged: [],
+      abilities: [],
     };
   }
 
@@ -195,7 +233,6 @@ export function runCull(dump: MfmDump, write: boolean): CullReport {
       bodyguardRefsStripped: 0,
       weaponsRemoved: [],
       wargearRemoved: [],
-      abilitiesOrphaned: [],
     };
 
     for (const u of dropList) {
@@ -225,15 +262,30 @@ export function runCull(dump: MfmDump, write: boolean): CullReport {
         res.leaderEntriesRemoved++;
         continue;
       }
-      const kept = la.eligible_bodyguard_ids.filter((b) => !droppedIds.has(b));
-      const stripped = la.eligible_bodyguard_ids.length - kept.length;
-      res.bodyguardRefsStripped += stripped;
-      if (kept.length === 0) {
-        // every eligible bodyguard was a dropped unit — the attachment is dead
+      const original = la.eligible_bodyguard_ids;
+      const kept = original.filter((b) => !droppedIds.has(b));
+      res.bodyguardRefsStripped += original.length - kept.length;
+      const groups = (la.conditional_groups ?? []).flatMap((group) => {
+        const survivingBodyguards = group.eligible_bodyguard_ids.filter((id) => !droppedIds.has(id));
+        res.bodyguardRefsStripped += group.eligible_bodyguard_ids.length - survivingBodyguards.length;
+        // A dropped excluded unit can no longer appear in a roster, so its
+        // exclusion is always satisfied. Keep the group and its role.
+        if (
+          !survivingBodyguards.length ||
+          group.required_roster_unit_ids?.some((id) => droppedIds.has(id))
+        ) return [];
+        return [{ ...group, eligible_bodyguard_ids: survivingBodyguards }];
+      });
+      if (!kept.length && !groups.length) {
         res.leaderEntriesRemoved++;
         continue;
       }
-      survivingLeaders.push(stripped ? { ...la, eligible_bodyguard_ids: kept } : la);
+      const { eligible_bodyguard_ids: _oldEligible, conditional_groups: _oldGroups, ...base } = la;
+      survivingLeaders.push({
+        ...base,
+        eligible_bodyguard_ids: kept,
+        ...(groups.length ? { conditional_groups: groups } : {}),
+      });
     }
 
     // orphan weapons/wargear: referenced by zero surviving entity ANYWHERE (global)
@@ -246,20 +298,6 @@ export function runCull(dump: MfmDump, write: boolean): CullReport {
     const wargear = readJsonArray<IdItem>(wargearPath);
     const survivingWargear = wargear.filter((w) => w.id && globalReferenced.has(w.id));
     res.wargearRemoved = wargear.filter((w) => w.id && !globalReferenced.has(w.id)).map((w) => w.id!).sort();
-
-    // orphaned abilities (report only): an ability a dropped unit carried that no
-    // surviving unit still references — i.e. the cull removed its last user. (Not
-    // "every unreferenced ability": detachment/stratagem/enhancement entries in
-    // abilities.json are never unit-referenced and are not orphaned by a unit cull.)
-    const droppedAbilityIds = new Set<string>();
-    for (const u of dropList)
-      for (const aid of (u as { ability_ids?: string[] }).ability_ids ?? []) droppedAbilityIds.add(aid);
-    if (droppedAbilityIds.size) {
-      const stillUsed = new Set<string>();
-      for (const u of survivingUnits)
-        for (const aid of (u as { ability_ids?: string[] }).ability_ids ?? []) stillUsed.add(aid);
-      res.abilitiesOrphaned = [...droppedAbilityIds].filter((a) => !stillUsed.has(a)).sort();
-    }
 
     // Stage the surviving sets in BOTH modes (same per-file conditions as the prior
     // write) so the dry-run rehearsal validates the post-cull tree — catching e.g. a
@@ -280,7 +318,10 @@ export function runCull(dump: MfmDump, write: boolean): CullReport {
     dirs.push(res);
   }
 
-  return { dirs, totalDropped, aborted: null, staged };
+  const surviving = new Map(all.map((d) => [d.dir, d.units.filter((u) => !d.droppedIds.has(u.id))]));
+  const abilities = pruneAbilities(surviving as Map<string, { id: string; ability_ids?: string[] }[]>);
+  staged.push(...abilities.staged);
+  return { dirs, totalDropped, aborted: null, staged, abilities: abilities.dirs };
 }
 
 export function buildCullReport(report: CullReport, write: boolean): string {
@@ -297,24 +338,24 @@ export function buildCullReport(report: CullReport, write: boolean): string {
     "Drops repo units absent from the live (non-Legends) dump and prunes their wargear-options,"
   );
   L.push(
-    "unit-compositions, leader-attachment refs, and now-orphaned weapons/wargear. Abilities are"
+    "unit-compositions, leader-attachment refs, and now-orphaned weapons/wargear. Abilities follow"
   );
-  L.push("reported, not edited.");
+  L.push("their units: dead `unit_ids` are stripped, and an ability no surviving unit carries is removed.");
   L.push("");
   const sum = (f: (d: DirCull) => number) => dirs.reduce((a, d) => a + f(d), 0);
   L.push(
-    "| Dir | Units dropped | (legends/FW) | Wargear-opts | Comps | Leader entries | Bodyguard refs | Weapons | Wargear | Abilities orphaned |"
+    "| Dir | Units dropped | (legends/FW) | Wargear-opts | Comps | Leader entries | Bodyguard refs | Weapons | Wargear |"
   );
-  L.push("|---|--:|:--|--:|--:|--:|--:|--:|--:|--:|");
+  L.push("|---|--:|:--|--:|--:|--:|--:|--:|--:|");
   for (const d of dirs) {
     const leg = d.dropped.filter((x) => x.kind === "legends").length;
     const fw = d.dropped.filter((x) => x.kind === "forge-world").length;
     L.push(
-      `| ${d.dir} | ${d.dropped.length} | ${leg}/${fw} | ${d.wargearOptionsRemoved} | ${d.compositionsRemoved} | ${d.leaderEntriesRemoved} | ${d.bodyguardRefsStripped} | ${d.weaponsRemoved.length} | ${d.wargearRemoved.length} | ${d.abilitiesOrphaned.length} |`
+      `| ${d.dir} | ${d.dropped.length} | ${leg}/${fw} | ${d.wargearOptionsRemoved} | ${d.compositionsRemoved} | ${d.leaderEntriesRemoved} | ${d.bodyguardRefsStripped} | ${d.weaponsRemoved.length} | ${d.wargearRemoved.length} |`
     );
   }
   L.push(
-    `| **TOTAL** | **${totalDropped}** | ${sum((d) => d.dropped.filter((x) => x.kind === "legends").length)}/${sum((d) => d.dropped.filter((x) => x.kind === "forge-world").length)} | **${sum((d) => d.wargearOptionsRemoved)}** | **${sum((d) => d.compositionsRemoved)}** | **${sum((d) => d.leaderEntriesRemoved)}** | **${sum((d) => d.bodyguardRefsStripped)}** | **${sum((d) => d.weaponsRemoved.length)}** | **${sum((d) => d.wargearRemoved.length)}** | **${sum((d) => d.abilitiesOrphaned.length)}** |`
+    `| **TOTAL** | **${totalDropped}** | ${sum((d) => d.dropped.filter((x) => x.kind === "legends").length)}/${sum((d) => d.dropped.filter((x) => x.kind === "forge-world").length)} | **${sum((d) => d.wargearOptionsRemoved)}** | **${sum((d) => d.compositionsRemoved)}** | **${sum((d) => d.leaderEntriesRemoved)}** | **${sum((d) => d.bodyguardRefsStripped)}** | **${sum((d) => d.weaponsRemoved.length)}** | **${sum((d) => d.wargearRemoved.length)}** |`
   );
   L.push("");
 
@@ -337,8 +378,17 @@ export function buildCullReport(report: CullReport, write: boolean): string {
       L.push(`- ${x.id} (${x.kind}${x.flaggedLegend ? ", is_legend" : ""})`);
     if (d.weaponsRemoved.length) L.push("", `**Weapons removed (orphaned):** ${d.weaponsRemoved.join(", ")}`);
     if (d.wargearRemoved.length) L.push("", `**Wargear removed (orphaned):** ${d.wargearRemoved.join(", ")}`);
-    if (d.abilitiesOrphaned.length)
-      L.push("", `**Abilities now referenced by 0 surviving units (review):** ${d.abilitiesOrphaned.join(", ")}`);
+    L.push("");
+  }
+  if (report.abilities.length) {
+    L.push("## Abilities", "");
+    L.push("| Dir | Removed | Unit refs stripped | Phase mappings removed |");
+    L.push("|---|--:|--:|--:|");
+    for (const a of report.abilities)
+      L.push(`| ${a.dir} | ${a.removed.length} | ${a.unitRefsStripped} | ${a.phaseMappingsRemoved} |`);
+    L.push("");
+    for (const a of report.abilities)
+      if (a.removed.length) L.push(`- ${a.dir}: ${a.removed.join(", ")}`);
     L.push("");
   }
   return L.join("\n") + "\n";

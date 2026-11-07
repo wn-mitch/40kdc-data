@@ -56,18 +56,18 @@ describe("auditPhrasing", () => {
       {
         faction: "test-b",
         abilities: [
-          // Empty modifier → describer renders "reduce incoming damage to self by ?".
+          // Empty modifier → describer renders "subtract ? from the Damage characteristic …".
           {
             ability_id: "broken-grant",
-            effect: { type: "damage-reduction", target: "self", modifier: {} } as never,
+            effect: { type: "damage-reduction", target: "this-model", modifier: {} } as never,
           },
         ],
       },
       {
         faction: "test-a",
         abilities: [
-          { ability_id: "clean-deep-strike", effect: { type: "deep-strike" } as never },
-          { ability_id: "another-clean", effect: { type: "deep-strike" } as never },
+          { ability_id: "clean-deep-strike", effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "deep-strike" } } as never },
+          { ability_id: "another-clean", effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "deep-strike" } } as never },
         ],
       },
     ]);
@@ -94,7 +94,7 @@ describe("auditPhrasing", () => {
 
   it("names a missing ability by its id", () => {
     const report = auditPhrasing([
-      { faction: "f", abilities: [{ ability_id: "nameless", effect: { type: "deep-strike" } as never }] },
+      { faction: "f", abilities: [{ ability_id: "nameless", effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "deep-strike" } } as never }] },
     ]);
     expect(report.rows[0].name).toBe("nameless");
   });

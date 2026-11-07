@@ -210,8 +210,10 @@ function expandDenseLines(text: string): string[] {
         out.push(metadata[1], metadata[2], metadata[3]);
         continue;
       }
+      // A count after a "," or ":" is an item inside one `Model: a, 2x b`
+      // list, not the start of a collapsed line, so it never splits.
       const countParts = bulletPart.split(
-        /(?<=[^\s•◦*])[\t \u00a0]+(?=\d+[x×]\s)/u,
+        /(?<=[^\s•◦*,:])[\t \u00a0]+(?=\d+[x×]\s)/u,
       );
       for (let part of countParts) {
         const leadingBullet = /^[•◦]\s*(.+)$/u.exec(part.trim());

@@ -1,0 +1,43 @@
+{
+  "name": "Imported roster",
+  "generated_by": null,
+  "faction_raw_name": "Space Marines",
+  "detachment_raw_names": [
+    "Gladius Task Force"
+  ],
+  "force_disposition_raw_name": null,
+  "battle_size_raw": "Combat Patrol (500 Point limit)",
+  "declared_limit": 75,
+  "total_reported": 75,
+  "total_computed": 75,
+  "units": [
+    {
+      "raw_name": "Assault Intercessor Squad",
+      "is_character": false,
+      "model_count": 1,
+      "points": 75,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Assault Intercessor Sergeant",
+          "count": 1
+        },
+        {
+          "raw_name": "Assault Intercessor",
+          "count": 4
+        },
+        {
+          "raw_name": "Chainsword",
+          "count": 5
+        },
+        {
+          "raw_name": "Heavy bolt pistol",
+          "count": 5
+        }
+      ]
+    }
+  ],
+  "multi_force": false
+}

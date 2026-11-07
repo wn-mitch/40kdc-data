@@ -45,6 +45,7 @@ import {
 } from "./loader.js";
 import { CORE_DIR, readJsonArray } from "./repo-files.js";
 import type { StagedWrite } from "./apply.js";
+import { repoDirForFactionName } from "./faction-map.js";
 
 
 // ─────────────────── output shape ───────────────────
@@ -71,6 +72,7 @@ interface AlliedRuleOut {
   source_datasheet_ids?: string[];
   points_limits?: AlliedPointsLimitOut[];
   keyword_limits?: AlliedKeywordLimitOut[];
+  exclusive?: boolean;
   cannot_be_warlord?: boolean;
   cannot_take_enhancements?: boolean;
   warlord_datasheet_ids?: string[];
@@ -120,7 +122,7 @@ const OVERLAY: Record<string, OverlayEntry> = {
     id: "brood-brothers",
     name: "Brood Brothers",
     label: "Brood Brothers",
-    removes_ability_ids: ["voice-of-command"],
+    removes_ability_ids: ["voice-of-command-astra-militarum"],
     warlord_required_keyword: "Genestealer Cults",
     notes:
       "A Genestealer Cults army may include ASTRA MILITARUM units. A GENESTEALER CULTS model must be the Warlord; included Astra Militarum models lose Voice of Command.",
@@ -289,6 +291,71 @@ export interface AlliesReport {
   staged: StagedWrite[];
 }
 
+/**
+ * The repo dir a datasheet's own publication files it under (Codex: World Eaters →
+ * `world-eaters`), or null. Breaks the tie when a pool's datasheet ids resolve in
+ * several dirs: a daemon cult-legion view (World Eaters' Bloodletters) shares its id
+ * with the chaos-daemons unit, but the pool lists the view's datasheet.
+ */
+function publicationDir(dump: MfmDump, datasheet: DatasheetRow | undefined): string | null {
+  const pub = datasheet ? dump.byId("publication").get(datasheet.publicationId) : undefined;
+  if (!pub?.factionKeywordId) return null;
+  return repoDirForFactionName(dump.enName(dump.byId("faction_keyword").get(pub.factionKeywordId)));
+}
+
+/**
+ * Whether a pool's own required detachment offers an enhancement its datasheets can
+ * take: some enhancement of a `allied_faction_required_detachment` detachment has a
+ * required keyword group (groups are alternatives; a group's keywords all apply)
+ * that one of the pool's datasheets satisfies through its miniature keywords or
+ * faction keywords. The dump's `canTakeEnhancements: false` is contradicted for such
+ * a pool — Tallyband Summoners' Entropic Knell is a Great Unclean One enhancement, so
+ * the Plague Legions pool cannot carry a blanket enhancement lock.
+ */
+export function detachmentOffersPoolEnhancement(
+  dump: MfmDump,
+  detachmentIds: readonly string[],
+  datasheetIds: readonly string[],
+): boolean {
+  if (detachmentIds.length === 0 || datasheetIds.length === 0) return false;
+  const kw = dump.byId("keyword");
+  const fk = dump.byId("faction_keyword");
+  const minisByDs = dump.groupBy("miniature", "datasheetId");
+  const mkByMini = dump.groupBy("miniature_keyword", "miniatureId");
+  const dfkByDs = dump.groupBy("datasheet_faction_keyword", "datasheetId");
+  const keywordSets = datasheetIds.map((dsId) => {
+    const names = new Set<string>();
+    for (const m of minisByDs.get(dsId) ?? [])
+      for (const r of mkByMini.get(m.id!) ?? []) {
+        const n = dump.enName(kw.get(r.keywordId));
+        if (n) names.add(n);
+      }
+    for (const r of dfkByDs.get(dsId) ?? []) {
+      const n = dump.enName(fk.get(r.factionKeywordId));
+      if (n) names.add(n);
+    }
+    return names;
+  });
+  const enhByDet = dump.groupBy("enhancement", "detachmentId");
+  const groupsByEnh = dump.groupBy("enhancement_required_keyword_group", "enhancementId");
+  const gkByGroup = dump.groupBy("enhancement_required_keyword_group_keyword", "enhancementRequiredKeywordGroupId");
+  const gfkByGroup = dump.groupBy(
+    "enhancement_required_keyword_group_faction_keyword",
+    "enhancementRequiredKeywordGroupId",
+  );
+  for (const detId of detachmentIds)
+    for (const enh of enhByDet.get(detId) ?? [])
+      for (const group of groupsByEnh.get(enh.id!) ?? []) {
+        const required = [
+          ...(gkByGroup.get(group.id!) ?? []).map((r) => dump.enName(kw.get(r.keywordId))),
+          ...(gfkByGroup.get(group.id!) ?? []).map((r) => dump.enName(fk.get(r.factionKeywordId))),
+        ].filter((n): n is string => !!n);
+        if (required.length === 0) continue;
+        if (keywordSets.some((have) => required.every((n) => have.has(n)))) return true;
+      }
+  return false;
+}
+
 // ─────────────────── extractor ───────────────────
 
 export function runAllies(dump: MfmDump): AlliesReport {
@@ -336,7 +403,7 @@ export function runAllies(dump: MfmDump): AlliesReport {
     const overlay = OVERLAY[af.id];
 
     // (2) datasheets → resolved unit ids + the faction(s) each lives in.
-    const resolved: { id: string; factions: Set<string> }[] = [];
+    const resolved: { id: string; factions: Set<string>; home: string | null }[] = [];
     const missingDatasheets: string[] = [];
     for (const row of dsByAf.get(af.id) ?? []) {
       const name = dump.enName(ds.get(row.datasheetId));
@@ -346,7 +413,7 @@ export function runAllies(dump: MfmDump): AlliesReport {
         missingDatasheets.push(name ?? row.datasheetId);
         continue;
       }
-      resolved.push({ id, factions });
+      resolved.push({ id, factions, home: publicationDir(dump, ds.get(row.datasheetId)) });
     }
 
     const parentNames = [
@@ -373,7 +440,16 @@ export function runAllies(dump: MfmDump): AlliesReport {
         intersection = new Set([...prev].filter((f) => r.factions.has(f)));
       }
     }
-    const sourceFaction = intersection && intersection.size === 1 ? [...intersection][0] : null;
+    // Several common dirs (a cult-legion view shares its id with the chaos-daemons
+    // unit): the dir every listed datasheet's own publication files it under wins.
+    const homes = new Set(resolved.map((r) => r.home));
+    const commonHome = homes.size === 1 ? [...homes][0] : null;
+    const sourceFaction =
+      intersection && intersection.size === 1
+        ? [...intersection][0]
+        : intersection && commonHome && intersection.has(commonHome)
+          ? commonHome
+          : null;
 
     // (4) datasheet allowlist (scoped to the source faction when known).
     const datasheetIds = [
@@ -468,13 +544,32 @@ export function runAllies(dump: MfmDump): AlliesReport {
     if (pointsLimits.length > 0) rule.points_limits = pointsLimits;
     if (keywordLimits.length > 0) rule.keyword_limits = keywordLimits;
 
+    // (12) exclusive: a sibling-faction pool (`isSiblingFaction`) gated by a required
+    // detachment and drawn from one repo faction lists datasheets printed in the
+    // host's own codex (World Eaters' Blood Legions, Asuryani's Ynnari). Those units
+    // exist only for this rule, so they are not ordinary picks of the source faction.
+    // A detachment's own Warlord rule (Devoted of Ynnead: Yvraine or the Yncarne)
+    // lives on the detachment (`mandatory_warlord_datasheet_ids`) and overrides this
+    // pool's `cannot_be_warlord` for the named datasheets.
+    if (af.isSiblingFaction && detIds.length > 0 && sourceFaction)
+      rule.exclusive = true;
+
     // (8) warlord lock: a pool with no allowed-warlord minis bars its units from
     // Warlord; one with an allowlist instead names exactly who may be Warlord.
     if (warlordDatasheetIds.length > 0) rule.warlord_datasheet_ids = warlordDatasheetIds;
     else rule.cannot_be_warlord = true;
 
-    // (7) enhancement lock.
-    if (!af.canTakeEnhancements) rule.cannot_take_enhancements = true;
+    // (7) enhancement lock — unless the pool's own required detachment prints an
+    // enhancement its datasheets can take (see detachmentOffersPoolEnhancement).
+    if (
+      !af.canTakeEnhancements &&
+      !detachmentOffersPoolEnhancement(
+        dump,
+        (detByAf.get(af.id) ?? []).map((r) => r.detachmentId),
+        (dsByAf.get(af.id) ?? []).map((r) => r.datasheetId),
+      )
+    )
+      rule.cannot_take_enhancements = true;
 
     if (overlay?.warlord_required_keyword)
       rule.warlord_required_keyword = overlay.warlord_required_keyword;

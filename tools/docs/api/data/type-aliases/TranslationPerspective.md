@@ -8,11 +8,11 @@
 
 > **TranslationPerspective** = `"attacker"` \| `"target"`
 
-Defined in: [cruncher/from-dsl.ts:97](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/from-dsl.ts#L97)
+Defined in: [cruncher/from-dsl.ts:168](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/from-dsl.ts#L168)
 
 Whose perspective the translation runs from.
 
-- `"attacker"`: the buffed unit is *firing*. `target: "unit"/"self"` etc.
+- `"attacker"`: the buffed unit is *firing*. `target: "this-unit"/"this-model"` etc.
   become attacker-side mods (re-rolls, hit/wound mods, A/S shifts, granted
   keywords). `target: "defender"` is silently dropped — that's incoming
   penalty math relevant when the buffed unit is the *target*, surfaced via
@@ -24,6 +24,6 @@ Whose perspective the translation runs from.
   only mods (re-rolls, hit/wound mods, A/S shifts) drop silently because
   they describe what the buffed unit does when *attacking*.
 
-The bs-modifier effect (a -1 to incoming hit rolls, e.g. Benefit of Cover)
-becomes a `hit-mod` buff under target perspective so it stacks correctly
-with attacker-side modifiers in the resolver's ±1 cap.
+A Ballistic Skill stat-modifier on the attacker (a -1 to incoming hit rolls,
+e.g. Benefit of Cover) becomes a `hit-mod` buff under target perspective so
+it stacks correctly with attacker-side modifiers in the resolver's ±1 cap.

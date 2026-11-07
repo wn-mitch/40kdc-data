@@ -5,7 +5,7 @@
  * capacity caps.
  */
 import { describe, expect, it } from "vitest";
-import { env, SELF } from "cloudflare:test";
+import { env, runDurableObjectAlarm, runInDurableObject, SELF } from "cloudflare:test";
 import { api, mintToken } from "./helpers";
 import type { ServerMessage } from "../src/doc-protocol";
 
@@ -205,5 +205,56 @@ describe("live editing", () => {
       headers: { Upgrade: "websocket" },
     });
     expect(over.status).toBe(503);
+  });
+});
+
+describe("session isolation", () => {
+  it("ignores a client doc param: someone else's doc token can't take over a session", async () => {
+    const { code, editorToken } = await createSession();
+    const attacker = await mintToken("hijacker");
+    const doc = await api("/docs", {
+      method: "POST",
+      token: attacker,
+      body: { kind: "team-plan", name: "bait", payload: { teamName: "Hijacked" } },
+    });
+    const share = await api(`/docs/${doc.body.id}/share`, { method: "POST", token: attacker });
+
+    const hijack = await SELF.fetch(
+      `https://sync.test/session/${code}/ws?token=${share.body.editorToken}&doc=${doc.body.id}`,
+      { headers: { Upgrade: "websocket" } },
+    );
+    expect(hijack.status).toBe(403);
+    // The room itself also refuses doc-bound mode once it is a session.
+    const direct = await env.DOC_ROOM.get(env.DOC_ROOM.idFromName(code)).fetch(
+      new Request(`https://room/?doc=${doc.body.id}&token=${share.body.editorToken}`, {
+        headers: { Upgrade: "websocket" },
+      }),
+    );
+    expect(direct.status).toBe(404);
+
+    const victim = await connect(code, editorToken, "Victim");
+    const welcome = await victim.next();
+    if (welcome.t !== "welcome") throw new Error("expected welcome");
+    expect(welcome.doc).toEqual(PLAN);
+  });
+});
+
+describe("registry lease", () => {
+  it("an active session re-stamps its slot on each alarm, so the sweep keeps it", async () => {
+    const { code } = await createSession();
+    const registry = env.SYNC_REGISTRY.get(env.SYNC_REGISTRY.idFromName("global"));
+    const stampOf = () =>
+      runInDurableObject(registry, (_instance, state) =>
+        state.storage.sql
+          .exec<{ created_at: number }>("SELECT created_at FROM active WHERE code = ?", code)
+          .toArray()[0]?.created_at,
+      );
+    // Age the slot to well past the sweep horizon.
+    await runInDurableObject(registry, (_instance, state) => {
+      state.storage.sql.exec("UPDATE active SET created_at = 0 WHERE code = ?", code);
+    });
+    expect(await stampOf()).toBe(0);
+    expect(await runDurableObjectAlarm(env.DOC_ROOM.get(env.DOC_ROOM.idFromName(code)))).toBe(true);
+    expect(await stampOf()).toBeGreaterThan(Date.now() - 60_000);
   });
 });

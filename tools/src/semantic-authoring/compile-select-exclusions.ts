@@ -1,0 +1,124 @@
+import { awaitsFollowingFilter } from "./families/shared.js";
+import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+
+const isFilter = (leaf: CompileLeaf | undefined) => leaf?.family_id === "unit-filter";
+
+/**
+ * "select one enemy unit within 8\" of the bearer's unit (excluding **MONSTER** units)": an
+ * exclusion-only unit-filter after a selection's distance folds into the selection's filter. This
+ * pass moves that exclusion to sit right after its select (or merges it into the filter there), so
+ * the select fold reads one filter. The exclusion must name the selection's side, and only conditions on the
+ * selected unit (distances and model counts) may sit between the select and the exclusion ("that has 6 or
+ * fewer models that is wholly within 6\" of this unit (you cannot select a unit that can FLY)"); otherwise
+ * it stays where it is and refuses.
+ */
+export function foldSelectExclusions(
+  input: readonly CompileLeaf[],
+  mergeFilters: (first: CompileLeaf, second: CompileLeaf) => CompileLeaf | null,
+): CompileLeaf[] {
+  const list = [...input];
+  for (let index = 0; index < list.length; index += 1) {
+    const select = list[index]!;
+    if (select.family_id !== "select-unit") continue;
+    const base = isFilter(list[index + 1]) && list[index + 1]!.fragment === select.fragment ? index + 1 : null;
+    let cursor = base === null ? index + 1 : index + 2;
+    while (selectionCondition(list[cursor], select)) cursor += 1;
+    const exclusion = list[cursor];
+    if (!exclusionOnly(exclusion) || exclusion!.fragment !== select.fragment) continue;
+    const selectedSide = select.parameters.scope ?? (base === null ? undefined : list[base]!.parameters.side);
+    // With no side on the select or its filter, the exclusion alone names the side: the select fold reads it.
+    if (selectedSide === undefined) continue;
+    if (exclusion!.parameters.side !== selectedSide) throw new CompileError("An exclusion's side differs from the select-unit's side.");
+    if (base === null) {
+      list.splice(cursor, 1);
+      list.splice(index + 1, 0, exclusion!);
+      continue;
+    }
+    const merged = mergeFilters(list[base]!, modelLevelExclusion(list[base]!, exclusion!));
+    if (merged === null) throw new CompileError("An exclusion cannot narrow the select-unit's filter (its sides or keyword lists conflict).");
+    list[base] = merged;
+    list.splice(cursor, 1);
+  }
+  return list;
+}
+
+/**
+ * "select one visible enemy model (excluding Lone Operative units)": a unit's ability is every one of its models'
+ * ability, so an exclusion of units by ability narrows a model selection as the same exclusion of models. Keyword
+ * exclusions keep their level (a model can lack a keyword its unit has).
+ */
+function modelLevelExclusion(base: CompileLeaf, exclusion: CompileLeaf): CompileLeaf {
+  const abilitiesOnly = Object.keys(exclusion.parameters).every((key) => key === "side" || key === "excluded_abilities");
+  if (base.parameters.level !== "model" || exclusion.parameters.level !== undefined || !abilitiesOnly) return exclusion;
+  return { ...exclusion, parameters: { ...exclusion.parameters, level: "model" } };
+}
+
+/**
+ * "One **SQUADRON** unit from your army that is Below Half-strength (excluding **OFFICER** units)": a
+ * Stratagem target's exclusion-only filter after the target's own conditions (its owner, and states,
+ * positions or model counts of the target) merges into the target's filter, as a selection's does. So
+ * does a filter of alternatives alone ("You can only select a VEHICLE unit if it is a CHARACTER unit").
+ */
+export function foldTargetExclusions(
+  input: readonly CompileLeaf[],
+  mergeFilters: (first: CompileLeaf, second: CompileLeaf) => CompileLeaf | null,
+): CompileLeaf[] {
+  const list = [...input];
+  for (let index = 0; index < list.length; index += 1) {
+    const target = list[index]!;
+    if (target.family_id !== "stratagem-target" || !isFilter(list[index + 1]) || list[index + 1]!.fragment !== target.fragment) continue;
+    const base = index + 1;
+    let cursor = base + 1;
+    while (targetCondition(list[cursor], list[base]!)) cursor += 1;
+    // An exclusion right after the filter is the merge pass's own case.
+    if (cursor === base + 1) continue;
+    const exclusion = list[cursor];
+    if (!(exclusionOnly(exclusion) || alternativesOnly(exclusion)) || exclusion!.fragment !== target.fragment) continue;
+    if (exclusion!.parameters.side !== list[base]!.parameters.side) throw new CompileError("An exclusion's side differs from the Stratagem target's side.");
+    const merged = mergeFilters(list[base]!, exclusion!);
+    if (merged === null) throw new CompileError("An exclusion cannot narrow the Stratagem target's filter (its sides or keyword lists conflict).");
+    list[base] = merged;
+    list.splice(cursor, 1);
+  }
+  return list;
+}
+
+/**
+ * "You can only select a VEHICLE unit if it is a CHARACTER/WALKER unit": a filter of alternatives alone (not
+ * VEHICLE, or CHARACTER, or WALKER) restricts which units the target may be, as an exclusion does.
+ */
+function alternativesOnly(leaf: CompileLeaf | undefined): boolean {
+  if (!isFilter(leaf)) return false;
+  const alternatives = leaf!.parameters.alternatives as unknown[] | undefined;
+  return (alternatives?.length ?? 0) > 0 && Object.keys(leaf!.parameters).every((key) => key === "side" || key === "alternatives");
+}
+
+/** A condition on a Stratagem target its exclusion may sit past: "from your army" of its side, or a state, position or model count of the target. */
+function targetCondition(leaf: CompileLeaf | undefined, filter: CompileLeaf): boolean {
+  if (leaf === undefined || leaf.fragment !== filter.fragment || awaitsFollowingFilter(leaf.parameters)) return false;
+  if (leaf.family_id === "unit-owner") return leaf.parameters.owner === filter.parameters.side;
+  return ["unit-state", "unit-position", "model-count"].includes(leaf.family_id) && ["antecedent", "target", "this-unit"].includes(String(leaf.parameters.subject));
+}
+
+/**
+ * A condition on the selected unit a selection's exclusion may sit past: a side-less aura-range, a unit-position
+ * measured to the selection's own units, or a model count of the selected unit.
+ */
+function selectionCondition(leaf: CompileLeaf | undefined, select: CompileLeaf): boolean {
+  if (leaf === undefined || leaf.fragment !== select.fragment || awaitsFollowingFilter(leaf.parameters)) return false;
+  if (leaf.family_id === "aura-range") return leaf.parameters.side === undefined;
+  return (leaf.family_id === "unit-position" || leaf.family_id === "model-count") && ["selected-unit", "antecedent", "target"].includes(String(leaf.parameters.subject));
+}
+
+/** Parameters an exclusion-only unit-filter may carry: the side it names and the keywords or abilities it excludes. */
+const EXCLUSION_KEYS = new Set(["side", "excluded_keywords", "excluded_all_keywords", "excluded_abilities"]);
+
+/** A unit-filter that only excludes units ("(excluding **MONSTER** units)"), so it can narrow a selection but not name one. */
+export function exclusionOnly(leaf: CompileLeaf | undefined): boolean {
+  if (!isFilter(leaf) || !Object.keys(leaf!.parameters).every((key) => EXCLUSION_KEYS.has(key))) return false;
+  const excluded = (leaf!.parameters.excluded_keywords as unknown[] | undefined)?.length ?? 0;
+  const allExcluded = (leaf!.parameters.excluded_all_keywords as unknown[] | undefined)?.length ?? 0;
+  // "(excluding Lone Operative units)": units with the ability.
+  const abilities = (leaf!.parameters.excluded_abilities as unknown[] | undefined)?.length ?? 0;
+  return excluded + allExcluded + abilities > 0;
+}

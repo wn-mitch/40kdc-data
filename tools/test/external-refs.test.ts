@@ -184,8 +184,8 @@ describe("external source identities", () => {
   it("backfills only explicit game-datacards node ids", () => {
     const store = new CoreExternalRefStore();
     const eightboundRefs = [...(unitRefs(store, "eightbound") ?? [])];
-    const crimsonFistsRefs = [
-      ...(refs(store, "faction", "crimson-fists", "crimson-fists") ?? []),
+    const imperialFistsRefs = [
+      ...(refs(store, "faction", "imperial-fists", "imperial-fists") ?? []),
     ];
     const stats = syncGameDatacardsExternalRefs(
       store,
@@ -234,15 +234,15 @@ describe("external source identities", () => {
         store,
         "enhancement",
         "adeptus-astartes",
-        "artificer-armour-gladius-task-force",
+        "artificer-armour-gladius-task-force-adeptus-astartes",
       ),
     ).toContainEqual({
       namespace: "game-datacards",
       id: "exact-artificer-armour-id",
     });
     expect([
-      ...(refs(store, "faction", "crimson-fists", "crimson-fists") ?? []),
-    ]).toEqual(crimsonFistsRefs);
+      ...(refs(store, "faction", "imperial-fists", "imperial-fists") ?? []),
+    ]).toEqual(imperialFistsRefs);
   });
 
   it("reports canonical entities rather than replicated file copies", () => {

@@ -3,6 +3,7 @@
  * isolation, the 409 conflict hint, quotas, and validation.
  */
 import { describe, expect, it } from "vitest";
+import { env } from "cloudflare:test";
 import { api, mintToken } from "./helpers";
 import { DOC_KINDS } from "../src/index";
 
@@ -176,6 +177,68 @@ describe("docs CRUD", () => {
     });
     expect(over.status).toBe(403);
     expect(over.body.error).toBe("doc_quota_exceeded");
+  });
+
+  it("holds the doc quota against concurrent creates", async () => {
+    const token = await mintToken("burst-hoarder");
+    const results = await Promise.all(
+      Array.from({ length: 10 }, (_, i) =>
+        api("/docs", { method: "POST", token, body: { kind: "list", name: `b${i}`, payload: { i } } }),
+      ),
+    );
+    expect(results.filter((r) => r.status === 200)).toHaveLength(5);
+    expect(results.filter((r) => r.status === 403)).toHaveLength(5);
+    const listed = await api("/docs", { token });
+    expect(listed.body.docs).toHaveLength(5);
+  });
+});
+
+describe("PUT versioning", () => {
+  async function makeVersioned(sub: string) {
+    const token = await mintToken(sub);
+    const created = await api("/docs", {
+      method: "POST",
+      token,
+      body: { kind: "list", name: "v1", payload: { v: 1 } },
+    });
+    return { token, id: created.body.id as string, version: created.body.updated_at as number };
+  }
+
+  it("lets exactly one of several concurrent PUTs on the same version win", async () => {
+    const { token, id, version } = await makeVersioned("put-racer");
+    const results = await Promise.all(
+      [2, 3, 4, 5].map((v) =>
+        api(`/docs/${id}`, { method: "PUT", token, body: { payload: { v }, ifUpdatedAt: version } }),
+      ),
+    );
+    const winners = results.filter((r) => r.status === 200);
+    expect(winners).toHaveLength(1);
+    for (const r of results.filter((r) => r.status !== 200)) {
+      expect(r.status).toBe(409);
+      expect(r.body.error).toBe("conflict");
+      expect(r.body.updated_at).toBe(winners[0].body.updated_at);
+    }
+    const doc = await api(`/docs/${id}`, { token });
+    expect(doc.body.updated_at).toBe(winners[0].body.updated_at);
+  });
+
+  it("always advances updated_at, even when the clock does not", async () => {
+    const { token, id } = await makeVersioned("put-clock");
+    // A row stamped ahead of the clock: a Date.now() stamp would move the
+    // version backwards and a same-millisecond write would repeat it.
+    const ahead = Date.now() + 60_000;
+    await env.DB.prepare("UPDATE documents SET updated_at = ? WHERE id = ?").bind(ahead, id).run();
+    const first = await api(`/docs/${id}`, {
+      method: "PUT",
+      token,
+      body: { payload: { v: 2 }, ifUpdatedAt: ahead },
+    });
+    expect(first.status).toBe(200);
+    expect(first.body.updated_at).toBe(ahead + 1);
+    const second = await api(`/docs/${id}`, { method: "PUT", token, body: { payload: { v: 3 } } });
+    expect(second.body.updated_at).toBe(ahead + 2);
+    // The name survives a PUT that doesn't send one.
+    expect((await api(`/docs/${id}`, { token })).body.name).toBe("v1");
   });
 });
 

@@ -1,4 +1,6 @@
 import * as path from "node:path";
+import { SHARED_ROSTERS } from "./mfm/faction-map.js";
+import { suffixed } from "./mfm/mirror/identity.js";
 import { fileURLToPath } from "node:url";
 import {
   CoreExternalRefStore,
@@ -270,12 +272,16 @@ export function syncGameDatacardsExternalRefs(
           if (!node || typeof node.detachment !== "string") continue;
           const name = englishText(node.name);
           if (!name) continue;
-          let id: string;
+          let base: string;
           try {
-            id = detachmentScopedId(name, node.detachment);
+            base = detachmentScopedId(name, node.detachment);
           } catch {
             continue;
           }
+          // Ids carry the printing faction (`<name>-<detachment>-<faction>`); a chapter dir
+          // replicates its parent's detachments, so its own suffix is tried before the parent's.
+          const candidates = [...new Set([faction, ...(SHARED_ROSTERS[faction] ?? [])].map((f) => suffixed(base, f)))];
+          const id = candidates.find((c) => store.get(entityType, faction, c)) ?? candidates[0]!;
           add(store, stats, entityType, faction, id, "game-datacards", node.id);
         }
       }

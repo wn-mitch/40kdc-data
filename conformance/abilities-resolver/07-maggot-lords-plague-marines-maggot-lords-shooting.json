@@ -1,0 +1,21 @@
+{
+  "name": "Maggot Lords Plague Marines (death-guard) in Maggot Lords, shooting: the patrol's Nurgle's Gift replaces only the codex Nurgle's Gift; the shared Pact of Decay stays",
+  "input": {
+    "unitId": "maggot-lords-plague-marines",
+    "factionId": "death-guard",
+    "detachmentId": "maggot-lords"
+  },
+  "phase": "shooting",
+  "expected": {
+    "army": [
+      "nurgles-gift-maggot-lords-death-guard",
+      "pact-of-decay-death-guard"
+    ],
+    "detachment": [
+      "creeping-rot-death-guard"
+    ],
+    "unit": [
+      "infused-with-the-blessings-of-nurgle-maggot-lords-plague-marines-death-guard"
+    ]
+  }
+}

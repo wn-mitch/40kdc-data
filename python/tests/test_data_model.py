@@ -15,11 +15,18 @@ import pytest
 from wh40kdc.data.collection import Collection
 
 
-def test_deduplicates_abilities_by_faction_and_id(dataset: Any) -> None:
-    keys = [f"{a.raw.get('faction_id') or ''}::{a.id}" for a in dataset.abilities.all]
-    assert len(set(keys)) == len(keys)
-    idols = [a for a in dataset.abilities.all if a.id == "idol-of-blessed-blood"]
-    assert len(idols) == 2, "both factions' idol-of-blessed-blood copies survive dedupe"
+def test_keeps_every_ability_record_under_a_unique_id(dataset: Any) -> None:
+    # Ids are unique across factions and every faction record names its faction, so no
+    # record is dropped as a duplicate and each id carries its faction suffix.
+    ids = [a.id for a in dataset.abilities.all]
+    assert len(set(ids)) == len(ids)
+    from wh40kdc.data.bundle import raw_data
+
+    assert len(ids) == len(raw_data()["abilities"])
+    for a in dataset.abilities.all:
+        faction = a.raw.get("faction_id")
+        if faction:
+            assert a.id == faction or a.id.endswith(f"-{faction}"), a.id
 
 
 def test_by_external_ref_returns_every_exact_match() -> None:
@@ -52,16 +59,19 @@ def test_by_external_ref_returns_every_exact_match() -> None:
     assert collection.by_external_ref("source", "Shared") == []
 
 
-def test_resolves_shared_ability_id_to_units_own_factions_copy(dataset: Any) -> None:
-    # `idol-of-blessed-blood` is authored in both world-eaters and
-    # chaos-space-marines (shared Khorne Lord of Skulls datasheet); each
-    # faction's unit must see its own faction's copy.
-    for faction in ("world-eaters", "chaos-space-marines"):
-        unit = dataset.units.get_in_faction("khorne-lord-of-skulls", faction)
-        assert unit is not None
-        idol = next((a for a in unit.abilities if a.id == "idol-of-blessed-blood"), None)
-        assert idol is not None, f"idol-of-blessed-blood on {faction} lord of skulls"
-        assert idol.raw.get("faction_id") == faction
+def test_shared_datasheet_copies_get_only_what_their_own_datasheet_prints(dataset: Any) -> None:
+    # The World Eaters Lord of Skulls prints the Idol of Blessed Blood; the CSM one does not.
+    we = dataset.units.get_in_faction("khorne-lord-of-skulls", "world-eaters")
+    csm = dataset.units.get_in_faction("khorne-lord-of-skulls", "chaos-space-marines")
+    assert we is not None and csm is not None
+    assert "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters" in [
+        a.id for a in we.abilities
+    ]
+    assert not any(a.id.startswith("idol-of-blessed-blood") for a in csm.abilities)
+    # Both print Deadly Demise at the same rating, read from the unit's ability_ids entry.
+    assert we.rating_of("deadly-demise") == "D6+2"
+    assert csm.rating_of("deadly-demise") == "D6+2"
+    assert we.rating_of("not-an-ability") is None
 
 
 def test_core_pool_abilities_resolve_via_fallback(dataset: Any) -> None:
@@ -102,10 +112,14 @@ def test_get_raises_for_shared_weapon_id_without_faction(dataset: Any) -> None:
     assert dataset.weapons.get_any("lascannon") is not None
 
 
-def test_get_raises_for_shared_ability_id_without_faction(dataset: Any) -> None:
-    with pytest.raises(LookupError, match="Ambiguous ability lookup"):
-        dataset.abilities.get("idol-of-blessed-blood")
-    assert dataset.abilities.get_any("idol-of-blessed-blood") is not None
+def test_ability_get_is_exact_and_old_bare_ids_miss(dataset: Any) -> None:
+    idol = dataset.abilities.get("idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters")
+    assert idol is not None and idol.raw.get("faction_id") == "world-eaters"
+    # The pre-mirror bare ids carry no alias: a stale reference misses rather than guessing.
+    assert dataset.abilities.get("idol-of-blessed-blood") is None
+    assert dataset.abilities.get("berzerker-frenzy") is None  # mfm:mirror keep — the stale bare id
+    assert dataset.abilities.get("deadly-demise-d3") is None
+    assert dataset.abilities.get("berzerker-frenzy-world-eaters") is not None
 
 
 # ---------------------------------------------------------------------------
@@ -140,43 +154,47 @@ def test_leader_personal_invuln_does_not_buff_the_bodyguard_unit(dataset: Any) -
         },
         {"phase": "shooting"},
     )
-    assert _invulns(attached, "shadowfield") == []
+    assert _invulns(attached, "shadowfield-drukhari") == []
 
     # The Archon crunched as itself still keeps it (source kind "unit").
     own = dataset.defensive_buffs_for(
         {"unitId": "archon", "factionId": "drukhari"}, {"phase": "shooting"}
     )
-    assert [b["contribution"] for b in _invulns(own, "shadowfield")] == [
+    assert [b["contribution"] for b in _invulns(own, "shadowfield-drukhari")] == [
         {"type": "invulnerable-save", "threshold": 4}
     ]
 
 
 def test_unit_scoped_leader_rule_still_buffs_the_attached_unit(dataset: Any) -> None:
-    """Mental Fortress reads "models in that unit have a 4+ invulnerable save" —
-    authored `target: "unit"`, so the model-scope gate must not touch it."""
+    """Epidemius's rule gives the whole unit he leads an invulnerable save — a
+    unit-wide rule, so the model-scope gate must not touch it."""
     attached = dataset.defensive_buffs_for(
         {
-            "unitId": "intercessor-squad",
-            "factionId": "adeptus-astartes",
-            "attachedUnitIds": ["librarian"],
+            "unitId": "plaguebearers",
+            "factionId": "chaos-daemons",
+            "attachedUnitIds": ["epidemius"],
+            "attachmentRoles": {
+                "epidemius": "leader",
+                "plaguebearers": "bodyguard",
+            },
         },
         {"phase": "fight"},
     )
-    buffs = _invulns(attached, "mental-fortress-psychic")
+    buffs = _invulns(attached, "blessed-by-the-plague-god-chaos-daemons")
     assert len(buffs) == 1
     assert buffs[0]["source"]["abilityKind"] == "attached"
-    assert buffs[0]["source"]["sourceUnitId"] == "librarian"
+    assert buffs[0]["source"]["sourceUnitId"] == "epidemius"
 
 
 def test_dropped_model_scoped_effect_is_reported_as_unsupported(dataset: Any) -> None:
     from wh40kdc.cruncher import effect_to_buffs
 
-    ability = dataset.abilities.get_any("shadowfield")
+    ability = dataset.abilities.get_any("shadowfield-drukhari")
     translated = effect_to_buffs(
         ability.raw.get("effect"),
         {
             "kind": "ability",
-            "abilityId": "shadowfield",
+            "abilityId": "shadowfield-drukhari",
             "abilityKind": "attached",
             "sourceUnitId": "archon",
         },
@@ -205,24 +223,28 @@ def test_gate_is_attacker_side_too_and_spares_unit_scoped_grants(dataset: Any) -
         },
         {"phase": "command"},
     )
-    assert keywords_from(led, "psychic-gifts") == []
+    assert keywords_from(led, "psychic-gifts-agents-of-the-imperium") == []
     alone = dataset.buffs_for(
         {"unitId": "inquisitor", "factionId": "agents-of-the-imperium"},
         {"phase": "command"},
     )
-    assert keywords_from(alone, "psychic-gifts") == ["psyker"]
+    assert keywords_from(alone, "psychic-gifts-agents-of-the-imperium") == []
 
-    # Surgical Precision is unit-scoped, so an attached Apothecary Biologis
-    # still grants [LETHAL HITS] to the squad it joined.
-    aggressors = dataset.buffs_for(
+    # A Palatine's rule grants [LETHAL HITS] to the whole unit she leads, so the
+    # attached Palatine still grants it.
+    sisters = dataset.buffs_for(
         {
-            "unitId": "aggressor-squad",
-            "factionId": "adeptus-astartes",
-            "attachedUnitIds": ["apothecary-biologis"],
+            "unitId": "battle-sisters-squad",
+            "factionId": "adepta-sororitas",
+            "attachedUnitIds": ["palatine"],
+            "attachmentRoles": {
+                "palatine": "leader",
+                "battle-sisters-squad": "bodyguard",
+            },
         },
         {"phase": "shooting"},
     )
-    assert keywords_from(aggressors, "surgical-precision") == ["lethal-hits"]
+    assert keywords_from(sisters, "fury-of-the-righteous-adepta-sororitas") == ["lethal-hits"]
 
 
 def test_entity_backed_rules_bundle_expands_before_buff_translation() -> None:
@@ -240,12 +262,12 @@ def test_entity_backed_rules_bundle_expands_before_buff_translation() -> None:
                 "steps": [
                     {
                         "type": "re-roll",
-                        "target": "unit",
+                        "target": "this-unit",
                         "modifier": {"roll": "hit", "subset": "ones"},
                     },
                     {
                         "type": "re-roll",
-                        "target": "unit",
+                        "target": "this-unit",
                         "modifier": {"roll": "wound", "subset": "ones"},
                     },
                 ],
@@ -257,8 +279,8 @@ def test_entity_backed_rules_bundle_expands_before_buff_translation() -> None:
             "faction_id": "orks",
             "effect": {
                 "type": "ability-grant",
-                "target": "unit",
-                "modifier": {"ability_id": "shared-rules", "rules_bundle": True},
+                "target": "this-unit",
+                "modifier": {"ability": "shared-rules", "rules_bundle": True},
             },
         },
         {
@@ -270,8 +292,8 @@ def test_entity_backed_rules_bundle_expands_before_buff_translation() -> None:
                 "steps": [
                     {
                         "type": "ability-grant",
-                        "target": "unit",
-                        "modifier": {"ability_id": "cycle-b", "rules_bundle": True},
+                        "target": "this-unit",
+                        "modifier": {"ability": "cycle-b", "rules_bundle": True},
                     }
                 ],
             },
@@ -285,8 +307,8 @@ def test_entity_backed_rules_bundle_expands_before_buff_translation() -> None:
                 "steps": [
                     {
                         "type": "ability-grant",
-                        "target": "unit",
-                        "modifier": {"ability_id": "cycle-a", "rules_bundle": True},
+                        "target": "this-unit",
+                        "modifier": {"ability": "cycle-a", "rules_bundle": True},
                     }
                 ],
             },
@@ -340,3 +362,261 @@ def test_weapon_keyword_target_gates_apply_in_linked_buff_apis(dataset: Any) -> 
         for group in stackable
         for buff in group["buffs"]
     )
+
+
+def _gating_dataset() -> Any:
+    """The five fabricated gating abilities also pinned in tools/test/buff-gating.test.ts and Go."""
+    from wh40kdc.data.bundle import empty_raw_data
+    from wh40kdc.data.dataset import Dataset
+
+    reroll = {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {"roll": "hit", "subset": "ones"},
+    }
+    base = {"faction_id": "orks", "effect": reroll}
+    raw = empty_raw_data()
+    raw["abilities"] = [
+        {
+            **base,
+            "ability_id": "fixture-usage",
+            "name": "Fixture Usage",
+            "behavior": "passive",
+            "usage": {"frequency": "n-per-battle", "count": 1},
+        },
+        {
+            **base,
+            "ability_id": "fixture-stratagem",
+            "name": "Fixture Stratagem",
+            "ability_type": "stratagem",
+            "behavior": "activated",
+            "usage": {"frequency": "once-per-turn"},
+        },
+        {
+            **base,
+            "ability_id": "fixture-moment",
+            "name": "Fixture Moment",
+            "behavior": "reactive",
+            "trigger": {"event": "selected", "filter": {"to": "shoot"}},
+            "usage": {"frequency": "once-per-turn"},
+        },
+        {
+            **base,
+            "ability_id": "fixture-attack-step",
+            "name": "Fixture Attack Step",
+            "behavior": "reactive",
+            "trigger": {
+                "event": "before-roll",
+                "subject": {"owner": "any"},
+                "filter": {"roll": "hit"},
+            },
+        },
+        {
+            **base,
+            "ability_id": "fixture-charge",
+            "name": "Fixture Charge",
+            "behavior": "reactive",
+            "trigger": {"event": "move-ended", "filter": {"move_types": ["charge"]}},
+        },
+    ]
+    return Dataset(raw)
+
+
+def _gated(ability_id: str, context: dict[str, Any] | None = None) -> tuple[int, list[str]]:
+    ability = _gating_dataset().abilities.get_in_faction(ability_id, "orks")
+    assert ability is not None
+    result = ability.describe_buffs(
+        {"kind": "ability", "abilityId": ability_id, "abilityKind": "unit"},
+        context or {"phase": "fight"},
+    )
+    return len(result["applied"]), [lever["id"] for lever in result["activatable"]]
+
+
+def test_usage_and_trigger_gating_match_the_reference() -> None:
+    assert _gated("fixture-usage") == (0, ["fixture-usage#activate"])
+    assert _gated("fixture-stratagem") == (0, ["fixture-stratagem#activate"])
+    assert _gated("fixture-moment") == (0, ["fixture-moment@selected:shoot"])
+    assert _gated("fixture-attack-step") == (1, [])
+    assert _gated("fixture-charge", {"phase": "fight", "attackerCharged": True}) == (1, [])
+    assert _gated("fixture-charge", {"phase": "fight", "attackerCharged": False}) == (0, [])
+
+
+def test_public_historical_enhancement_snapshot_persists_recipient_buffs() -> None:
+    from wh40kdc.data import Dataset, empty_raw_data
+
+    version = {"edition": "11th", "dataslate": "test"}
+
+    def unit(
+        unit_id: str, keywords: list[str], ability_ids: list[str] | None = None
+    ) -> dict[str, Any]:
+        return {
+            "id": unit_id,
+            "name": unit_id,
+            "faction_id": "orks",
+            "profiles": [
+                {
+                    "name": unit_id,
+                    "M": 6,
+                    "S": 4,
+                    "T": 5,
+                    "W": 2,
+                    "Sv": 4,
+                    "Ld": 7,
+                    "OC": 2,
+                }
+            ],
+            "keywords": keywords,
+            "faction_keywords": ["Orks"],
+            "model_count": {"min": 1, "max": 5},
+            "ability_ids": ability_ids or [],
+            "game_version": version,
+        }
+
+    raw = empty_raw_data()
+    raw["units"] = [
+        unit("source-leader", ["Character", "Infantry"]),
+        unit("source-bodyguard", ["Infantry"]),
+    ]
+    raw["abilities"] = [
+        {
+            "ability_id": "enhancement-buff",
+            "name": "Enhancement Buff",
+            "faction_id": "orks",
+            "ability_type": "unit",
+            "behavior": "reactive",
+            "trigger": {"event": "battle-start"},
+            "scope": {"duration": "battle"},
+            "effect": {
+                "type": "for-each-unit",
+                "selector": {"filter": {"level": "model", "attachment_role": "bodyguard"}},
+                "effect": {
+                    "type": "sequence",
+                    "steps": [
+                        {
+                            "type": "stat-modifier",
+                            "target": "recipient",
+                            "modifier": {"stat": "S", "operation": "improve", "value": 1},
+                        },
+                        {
+                            "type": "stat-modifier",
+                            "target": "recipient",
+                            "modifier": {"stat": "T", "operation": "improve", "value": 1},
+                        },
+                    ],
+                },
+            },
+            "game_version": version,
+        }
+    ]
+    raw["enhancements"] = [
+        {
+            "id": "enhancement-buff-entry",
+            "name": "Enhancement Buff",
+            "detachment_id": "test-detachment",
+            "cost": 20,
+            "keyword_restrictions": ["Orks"],
+            "ability_id": "enhancement-buff",
+            "game_version": version,
+        }
+    ]
+    ds = Dataset(raw)
+    input_ = {
+        "unitId": "source-bodyguard",
+        "factionId": "orks",
+        "detachmentId": "test-detachment",
+    }
+    source = {
+        "kind": "ability",
+        "abilityId": "enhancement-buff",
+        "abilityKind": "attached",
+        "sourceUnitId": "source-leader",
+    }
+    selector = {"filter": {"level": "model", "attachment_role": "bodyguard"}}
+    trigger = {"event": "battle-start"}
+    snapshot = {
+        "source": source,
+        "sourceUnitId": "source-leader",
+        "trigger": trigger,
+        "selectionPath": "",
+        "selector": selector,
+        "perspective": "attacker",
+        "recipientUnitId": "source-bodyguard",
+        "selected": True,
+    }
+    def stack_contributions(context: dict[str, Any]) -> list[dict[str, Any]]:
+        result = ds.stackable_buffs_for(input_, context)
+        return [
+            buff["contribution"]
+            for lever in result["buffs"]
+            for buff in lever.get("buffs", [])
+        ]
+
+    before = stack_contributions({"phase": "command", "attackerUnitId": "source-bodyguard"})
+    after = stack_contributions(
+        {
+            "phase": "command",
+            "attackerUnitId": "source-bodyguard",
+            "recipientSnapshots": [snapshot],
+        }
+    )
+    assert before == []
+    assert {buff["type"] for buff in after} == {"strength-mod"}
+    target_snapshot = {**snapshot, "perspective": "target"}
+    ability = ds.abilities.get_in_faction("enhancement-buff", "orks")
+    assert ability is not None
+    target_result = ability.describe_buffs(
+        source,
+        {
+            "phase": "command",
+            "targetUnitId": "source-bodyguard",
+            "recipientSnapshots": [target_snapshot],
+        },
+        "target",
+    )
+    target_buffs = list(target_result["applied"])
+    target_buffs.extend(
+        buff
+        for lever in target_result["activatable"]
+        for buff in lever.get("buffs", [])
+    )
+    assert {buff["contribution"]["type"] for buff in target_buffs} == {"toughness-mod"}
+
+    not_selected = {**snapshot, "selected": False}
+    assert stack_contributions(
+        {
+            "phase": "command",
+            "attackerUnitId": "source-bodyguard",
+            "recipientSnapshots": [not_selected],
+        }
+    ) == []
+    wrong_source = {**snapshot, "sourceUnitId": "other-leader"}
+    assert stack_contributions(
+        {
+            "phase": "command",
+            "attackerUnitId": "source-bodyguard",
+            "recipientSnapshots": [wrong_source],
+        }
+    ) == []
+    wrong_detachment = {**input_, "detachmentId": "other-detachment"}
+    assert ds.stackable_buffs_for(
+        wrong_detachment,
+        {
+            "phase": "command",
+            "attackerUnitId": "source-bodyguard",
+            "recipientSnapshots": [snapshot],
+        },
+    )["buffs"] == []
+
+    ability = ds.abilities.get_in_faction("enhancement-buff", "orks")
+    assert ability is not None
+    conflict = ability.describe_buffs(
+        source,
+        {
+            "phase": "command",
+            "attackerUnitId": "source-bodyguard",
+            "recipientSnapshots": [snapshot, {**snapshot, "selected": False}],
+        },
+        "attacker",
+    )
+    assert conflict["applied"] == []
+    assert conflict["unsupported"][0]["reason"] == "conflicting trigger-time recipient snapshots"

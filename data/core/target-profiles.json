@@ -31,7 +31,7 @@
     "name": "Invader ATV (light vehicle)",
     "description": "Light fast-attack vehicle: the low-wound vehicle benchmark.",
     "faction_id": "adeptus-astartes",
-    "unit_id": "invader-atv",
+    "unit_id": "invader-atvs",
     "model_count_override": null,
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   },
@@ -39,8 +39,8 @@
     "id": "predator",
     "name": "Predator (battle tank)",
     "description": "Generic tracked battle tank: the mid-toughness armour benchmark.",
-    "faction_id": "adeptus-astartes",
-    "unit_id": "predator-destructor",
+    "faction_id": "chaos-space-marines",
+    "unit_id": "chaos-predator-destructor",
     "model_count_override": null,
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   },

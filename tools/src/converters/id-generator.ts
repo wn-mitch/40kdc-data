@@ -28,8 +28,8 @@ export function nameToId(name: string): string {
  * is always appended — even when the name is unique — because names repeat
  * across detachments (e.g. two different "Flawless Construction"s), so a bare
  * name slug collides. Unit/faction abilities (no detachment) stay bare and use
- * `nameToId` directly. See CLAUDE.md "Ability ids, the raw-text store, and
- * share tokens".
+ * `nameToId` directly. See CLAUDE.md "Ability ids, rule prose, and share
+ * tokens".
  */
 export function detachmentScopedId(name: string, detachment: string): string {
   return `${nameToId(name)}-${nameToId(detachment)}`;

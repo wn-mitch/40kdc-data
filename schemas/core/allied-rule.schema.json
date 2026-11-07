@@ -71,6 +71,11 @@
       ],
       "description": "Optional cap on the number of units included via this rule, independent of points. null = no unit-count cap."
     },
+    "exclusive": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when the pool's units are not part of the source faction's own roster: an army of `source_faction_id` may take them only through this rule (its detachment gate, caps and locks), never as ordinary picks. Models a sibling-faction pool printed in the host's own codex, e.g. World Eaters' Blood Legions daemons, available only under Khorne Daemonkin."
+    },
     "cannot_be_warlord": {
       "type": "boolean",
       "default": false,

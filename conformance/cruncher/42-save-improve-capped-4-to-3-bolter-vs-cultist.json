@@ -1,0 +1,50 @@
+{
+  "name": "bolt-rifle (saturation) x5 vs cultists whose Save is set to 4+ then improved by 1, no better than 3+",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "cultist-mob",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting"
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "manual",
+        "label": "set to 4+"
+      },
+      "contribution": {
+        "type": "save-characteristic",
+        "value": 4
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-capped-armour-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "save-improve",
+        "value": 1,
+        "best": 3
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 6.6667,
+      "wounds": 4.4444,
+      "unsaved": 2.2222,
+      "damage": 2.2222,
+      "after-fnp": 2.2222,
+      "models-killed": 2.2222
+    }
+  }
+}

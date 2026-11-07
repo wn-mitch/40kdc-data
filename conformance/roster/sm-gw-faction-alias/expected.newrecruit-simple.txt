@@ -1,0 +1,13 @@
+Adeptus Astartes - Imported roster - [75 pts]
+
+# ++ Army Roster ++ [75 pts]
+## Configuration
+List Name: Imported roster
+Faction: Adeptus Astartes
+Detachment: Gladius Task Force
+Force Disposition: Priority Assets
+
+## Battleline [75 pts]
+Assault Intercessor Squad [75 pts]:
+• 1x Assault Intercessor Sergeant: Chainsword, Heavy bolt pistol
+• 4x Assault Intercessor: Chainsword, Heavy bolt pistol

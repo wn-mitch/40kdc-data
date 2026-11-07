@@ -19,7 +19,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 165
+        "cost": 155
       }
     ],
     "keywords": [
@@ -27,7 +27,8 @@
       "Character",
       "Chaos",
       "Daemon",
-      "Daemon Prince"
+      "Daemon Prince",
+      "Heretic Astartes Daemon Prince"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -45,15 +46,19 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "ascended-daemon",
-      "daemonic-allegiance",
-      "dark-blessing-aura",
-      "deadly-demise-d3",
-      "lord-of-chaos"
+      "ascended-daemon-chaos-space-marines",
+      "daemonic-allegiance-chaos-space-marines",
+      "dark-blessing-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "lord-of-chaos-heretic-astartes-daemon-prince-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -92,7 +97,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 180
+        "cost": 170
       }
     ],
     "keywords": [
@@ -101,7 +106,8 @@
       "Character",
       "Chaos",
       "Daemon",
-      "Daemon Prince with Wings"
+      "Daemon Prince with Wings",
+      "Heretic Astartes Daemon Prince with Wings"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -119,14 +125,19 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "daemonic-destruction",
+      "daemonic-destruction-chaos-space-marines",
       "deep-strike",
-      "flying-horror",
-      "deadly-demise-d3"
+      "flying-horror-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "daemonic-allegiance-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -165,7 +176,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 85
       }
     ],
     "keywords": [
@@ -175,8 +186,7 @@
       "Chaos",
       "Terminator",
       "Sorcerer in Terminator Armour",
-      "Tzeentch",
-      "Sorcerer"
+      "Tzeentch"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -191,22 +201,24 @@
     },
     "weapon_ids": [
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-sorcerer-in-terminator-armour",
       "force-weapon",
       "infernal-gaze"
     ],
     "ability_ids": [
-      "chaos-familiar",
-      "death-hex-psychic",
-      "empyric-guidance-psychic",
+      {
+        "id": "chaos-familiar-chaos-space-marines",
+        "wargear": "chaos-familiar"
+      },
+      "death-hex-chaos-space-marines",
       "leader",
-      "marked-by-fate-psychic",
-      "warptime-psychic",
-      "deep-strike"
+      "warptime-chaos-space-marines",
+      "deep-strike",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -214,14 +226,14 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 100,
+        "cost": 110,
         "unit_count_min": 1,
         "unit_count_max": 2,
         "host_faction": "thousand-sons"
       },
       {
         "models": 1,
-        "cost": 110,
+        "cost": 120,
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "thousand-sons"
@@ -267,12 +279,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 100
+        "cost": 105
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 180
+        "cost": 190
       }
     ],
     "keywords": [
@@ -296,8 +308,8 @@
     "weapon_ids": [
       "accursed-weapon",
       "astartes-chainsword",
-      "bolt-pistol",
-      "boltgun",
+      "bolt-pistol-nemesis-claw",
+      "boltgun-nemesis-claw",
       "close-combat-weapon",
       "flamer",
       "heavy-bolter",
@@ -311,14 +323,18 @@
       "power-fist"
     ],
     "ability_ids": [
-      "attached-unit",
+      "attached-unit-chaos-space-marines",
       "stealth",
-      "visions-of-suffering-psychic",
-      "voice-eater"
+      "visions-of-suffering-chaos-space-marines",
+      {
+        "id": "voice-eater-chaos-space-marines",
+        "wargear": "voice-eater"
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -386,7 +402,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 65
       }
     ],
     "keywords": [
@@ -404,29 +420,26 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 32
+      "diameter": 40
     },
     "model_count": {
       "min": 1,
       "max": 1
     },
     "weapon_ids": [
-      "bolt-pistol",
+      "bolt-pistol-sorcerer",
       "force-weapon",
       "infernal-gaze"
     ],
     "ability_ids": [
-      "empyric-guidance-psychic",
-      "gift-of-chaos-psychic",
+      "gift-of-chaos-chaos-space-marines",
       "leader",
-      "prescience-psychic",
-      "twisted-sorceries-psychic",
-      "warped-interference-psychic",
-      "wracking-agonies-psychic"
+      "prescience-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -434,14 +447,14 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 95,
+        "cost": 100,
         "unit_count_min": 1,
         "unit_count_max": 2,
         "host_faction": "thousand-sons"
       },
       {
         "models": 1,
-        "cost": 105,
+        "cost": 110,
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "thousand-sons"
@@ -521,7 +534,8 @@
       "Damned",
       "Dark Commune",
       "Character",
-      "Cult Demagogue"
+      "Cult Demagogue",
+      "Psyker"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -542,14 +556,18 @@
       "warp-curse"
     ],
     "ability_ids": [
-      "chaos-icon",
-      "dark-ritual",
-      "faithful-flock",
-      "leader"
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      },
+      "dark-ritual-chaos-space-marines",
+      "faithful-flock-chaos-space-marines",
+      "leader",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -595,7 +613,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 65
       }
     ],
     "keywords": [
@@ -617,18 +635,19 @@
       "max": 1
     },
     "weapon_ids": [
-      "bolt-pistol",
+      "bolt-pistol-master-of-possession",
       "rite-of-possession",
       "staff-of-possession"
     ],
     "ability_ids": [
-      "daemonkin-psychic",
+      "daemonkin-chaos-space-marines",
       "leader",
-      "sacrificial-dagger"
+      "sacrificial-dagger-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -706,12 +725,13 @@
       "fleshmetal-guns"
     ],
     "ability_ids": [
-      "warp-rift-firepower",
-      "deep-strike"
+      "warp-rift-firepower-chaos-space-marines",
+      "deep-strike",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -750,7 +770,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 160
+        "cost": 155
       }
     ],
     "keywords": [
@@ -758,7 +778,8 @@
       "Character",
       "Chaos",
       "Daemon",
-      "Lord Discordant"
+      "Lord Discordant",
+      "Lord Discordant on Helstalker"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -782,12 +803,13 @@
       "techno-virus-injector"
     ],
     "ability_ids": [
-      "corrupt-machine-spirits",
-      "spirit-thief"
+      "corrupt-machine-spirits-chaos-space-marines",
+      "spirit-thief-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -825,12 +847,29 @@
     "points": [
       {
         "models": 5,
-        "cost": 175
+        "cost": 185,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 350
+        "cost": 370,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 5,
+        "cost": 215,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 6,
+        "models_max": 10,
+        "cost": 400,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -854,19 +893,20 @@
       "accursed-weapon",
       "chainfist",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-terminator-squad",
       "heavy-flamer",
       "paired-accursed-weapons-chaos-terminator-squad",
       "power-fist",
       "reaper-autocannon"
     ],
     "ability_ids": [
-      "despoilers",
-      "deep-strike"
+      "despoilers-chaos-space-marines",
+      "deep-strike",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -971,13 +1011,14 @@
       "close-combat-weapon-cultist-firebrand"
     ],
     "ability_ids": [
-      "cursed-flames",
-      "fiery-faith",
-      "leader"
+      "cursed-flames-chaos-space-marines",
+      "fiery-faith-chaos-space-marines",
+      "leader",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1042,7 +1083,9 @@
       "Nurgle",
       "Slaanesh",
       "Tzeentch",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Land Raider"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -1058,21 +1101,29 @@
     "weapon_ids": [
       "armoured-tracks",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-land-raider",
       "havoc-launcher",
       "soulshatter-lascannon",
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "transport_capacity": {
       "capacity": 12
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1088,6 +1139,36 @@
       {
         "namespace": "mfm",
         "id": "773f87bc-a214-4022-9652-dafaa5bd5fb7"
+      }
+    ],
+    "allied_points": [
+      {
+        "models": 1,
+        "cost": 200,
+        "unit_count_min": 1,
+        "unit_count_max": 2,
+        "host_faction": "world-eaters"
+      },
+      {
+        "models": 1,
+        "cost": 220,
+        "unit_count_min": 3,
+        "unit_count_max": null,
+        "host_faction": "world-eaters"
+      },
+      {
+        "models": 1,
+        "cost": 210,
+        "unit_count_min": 1,
+        "unit_count_max": 2,
+        "host_faction": "emperors-children"
+      },
+      {
+        "models": 1,
+        "cost": 230,
+        "unit_count_min": 3,
+        "unit_count_max": null,
+        "host_faction": "emperors-children"
       }
     ]
   },
@@ -1110,27 +1191,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 120,
+        "cost": 130,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 250,
+        "cost": 260,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 130,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 260,
+        "cost": 280,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1153,14 +1234,19 @@
       "max": 10
     },
     "weapon_ids": [
-      "hideous-mutations"
+      "hideous-mutations-possessed"
     ],
     "ability_ids": [
-      "unholy-bloodshed"
+      "unholy-bloodshed-chaos-space-marines",
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1250,13 +1336,14 @@
       "power-fist-traitor-enforcer"
     ],
     "ability_ids": [
-      "brutal-example",
+      "brutal-example-chaos-space-marines",
       "leader",
-      "mutated-bodyguard"
+      "mutated-bodyguard-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1316,7 +1403,7 @@
     "points": [
       {
         "models": 3,
-        "cost": 65
+        "cost": 70
       }
     ],
     "keywords": [
@@ -1339,18 +1426,19 @@
     },
     "weapon_ids": [
       "accursed-crozius",
-      "bolt-pistol",
+      "bolt-pistol-dark-apostle",
       "close-combat-weapon-dark-apostle"
     ],
     "ability_ids": [
-      "dark-zealotry",
-      "demagogue",
+      "dark-zealotry-chaos-space-marines",
+      "demagogue-chaos-space-marines",
       "leader",
-      "malign-sacrifice"
+      "malign-sacrifice-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1407,10 +1495,8 @@
       "Chaos",
       "Chaos Spawn",
       "Nurgle",
-      "Spawn",
       "Slaanesh",
       "Tzeentch",
-      "Mutant",
       "Khorne"
     ],
     "faction_keywords": [
@@ -1428,19 +1514,16 @@
       "hideous-mutations-chaos-spawn"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "feel-no-pain-5",
-      "lethal-ichor",
-      "mind-breaking-mutations-aura",
-      "regenerating-monstrosities",
-      "scouts-6",
-      "scouts-8",
-      "scuttling-horrors",
-      "to-slake-its-rage"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "mind-breaking-mutations-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1504,13 +1587,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 145,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 155,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1522,7 +1605,9 @@
       "Predator Annihilator",
       "Nurgle",
       "Tzeentch",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Predator Annihilator"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -1538,50 +1623,41 @@
     "weapon_ids": [
       "armoured-tracks-chaos-predator-annihilator",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-predator-annihilator",
       "havoc-launcher",
       "heavy-bolter-chaos-predator-annihilator",
       "lascannon",
       "predator-twin-lascannon"
     ],
     "ability_ids": [
-      "annihilator",
-      "blood-hungry-annihilator",
-      "ensorcelled-annihilation",
-      "metalophagic-infection",
-      "deadly-demise-d3"
+      "annihilator-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
     "allied_points": [
       {
         "models": 1,
-        "cost": 140,
-        "unit_count_min": 1,
-        "unit_count_max": 2,
-        "host_faction": "thousand-sons"
-      },
-      {
-        "models": 1,
-        "cost": 150,
-        "unit_count_min": 3,
-        "unit_count_max": null,
-        "host_faction": "thousand-sons"
-      },
-      {
-        "models": 1,
-        "cost": 135,
+        "cost": 130,
         "unit_count_min": 1,
         "unit_count_max": 2,
         "host_faction": "death-guard"
       },
       {
         "models": 1,
-        "cost": 145,
+        "cost": 140,
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "death-guard"
@@ -1669,12 +1745,16 @@
       "soulflayer-tendrils-and-claws"
     ],
     "ability_ids": [
-      "soul-eater",
-      "deadly-demise-d3"
+      "soul-eater-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1712,13 +1792,13 @@
     "points": [
       {
         "models": 5,
-        "cost": 125,
+        "cost": 135,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 135,
+        "cost": 145,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1742,8 +1822,8 @@
     "weapon_ids": [
       "accursed-weapon",
       "astartes-chainsword-havocs",
-      "boltgun",
-      "close-combat-weapon",
+      "boltgun-havocs",
+      "close-combat-weapon-havocs",
       "flamer",
       "havoc-autocannon",
       "havoc-heavy-bolter",
@@ -1756,11 +1836,12 @@
       "power-fist"
     ],
     "ability_ids": [
-      "stabilisation-talons"
+      "stabilisation-talons-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1804,7 +1885,8 @@
     "keywords": [
       "Fortification",
       "Chaos",
-      "Noctilith Crown"
+      "Noctilith Crown",
+      "Frame"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -1821,14 +1903,18 @@
       "lashing-warp-energies"
     ],
     "ability_ids": [
-      "fortification",
-      "malevolent-locus-aura",
-      "malign-cover",
-      "deadly-demise-d6"
+      "fortification-chaos-space-marines",
+      "malevolent-locus-chaos-space-marines",
+      "malign-cover-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1866,27 +1952,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 110,
+        "cost": 115,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 210,
+        "cost": 225,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 120,
+        "cost": 125,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 220,
+        "cost": 235,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1913,8 +1999,8 @@
     "weapon_ids": [
       "accursed-weapon",
       "astartes-chainsword",
-      "bolt-pistol",
-      "close-combat-weapon",
+      "bolt-pistol-raptors",
+      "close-combat-weapon-raptors",
       "flamer",
       "heavy-melee-weapon",
       "meltagun",
@@ -1923,13 +2009,14 @@
       "plasma-pistol"
     ],
     "ability_ids": [
-      "fearsome-aura",
-      "terrifying-assault",
-      "deep-strike"
+      "fearsome-chaos-space-marines",
+      "terrifying-assault-chaos-space-marines",
+      "deep-strike",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1992,7 +2079,6 @@
     "keywords": [
       "Vehicle",
       "Walker",
-      "Smoke",
       "Chaos",
       "Daemon",
       "Defiler",
@@ -2021,16 +2107,24 @@
       "hades-lascannon",
       "electroscourge",
       "ectoplasma-destructor",
-      "magma-cutters"
+      "magma-cutters-defiler"
     ],
     "ability_ids": [
-      "daemonforge",
-      "deadly-demise-d6",
-      "scuttling-walker"
+      "daemonforge-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "scuttling-walker-chaos-space-marines",
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2094,13 +2188,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 150,
+        "cost": 145,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 160,
+        "cost": 155,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2112,7 +2206,9 @@
       "Predator Destructor",
       "Nurgle",
       "Tzeentch",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Predator Destructor"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -2128,36 +2224,41 @@
     "weapon_ids": [
       "armoured-tracks-chaos-predator-destructor",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-predator-destructor",
       "havoc-launcher",
       "heavy-bolter-chaos-predator-destructor",
       "lascannon",
       "predator-autocannon"
     ],
     "ability_ids": [
-      "destructor",
-      "ensorcelled-destruction",
-      "hail-of-corrosive-disease",
-      "punishing-suppression",
-      "deadly-demise-d3"
+      "destructor-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
     "allied_points": [
       {
         "models": 1,
-        "cost": 145,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2,
         "host_faction": "death-guard"
       },
       {
         "models": 1,
-        "cost": 155,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "death-guard"
@@ -2225,27 +2326,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 135,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 270,
+        "cost": 280,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 145,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 280,
+        "cost": 290,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2269,19 +2370,24 @@
     },
     "weapon_ids": [
       "accursed-weapon",
-      "bolt-pistol",
-      "boltgun",
-      "combi-weapon",
+      "bolt-pistol-chosen",
+      "boltgun-chosen",
+      "combi-weapon-chosen",
       "paired-accursed-weapons-chosen",
       "plasma-pistol",
       "power-fist-chosen"
     ],
     "ability_ids": [
-      "chosen-marauders"
+      "chosen-marauders-chaos-space-marines",
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2302,7 +2408,7 @@
       },
       {
         "items": [
-          "combi-weapon"
+          "combi-weapon-chosen"
         ],
         "count": 4,
         "per_models": 10
@@ -2356,7 +2462,7 @@
     "points": [
       {
         "models": 10,
-        "cost": 70
+        "cost": 65
       }
     ],
     "keywords": [
@@ -2391,11 +2497,12 @@
       "power-weapon"
     ],
     "ability_ids": [
-      "twisted-defence-force"
+      "twisted-defence-force-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2484,14 +2591,21 @@
       "heldrake-claws"
     ],
     "ability_ids": [
-      "airborne-predator",
-      "flame-wreathed",
+      "airborne-predator-chaos-space-marines",
       "hover",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2529,13 +2643,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 185,
+        "cost": 180,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 195,
+        "cost": 190,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2545,7 +2659,9 @@
       "Smoke",
       "Chaos",
       "Vindicator",
-      "Tzeentch"
+      "Tzeentch",
+      "Frame",
+      "Chaos Vindicator"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -2561,17 +2677,25 @@
     "weapon_ids": [
       "armoured-tracks-chaos-vindicator",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-vindicator",
       "demolisher-cannon",
       "havoc-launcher"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "siege-shield"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "siege-shield-chaos-space-marines",
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2587,6 +2711,22 @@
       {
         "namespace": "mfm",
         "id": "00bf212d-7582-4d98-bbf9-78abc292edd3"
+      }
+    ],
+    "allied_points": [
+      {
+        "models": 1,
+        "cost": 185,
+        "unit_count_min": 1,
+        "unit_count_max": 2,
+        "host_faction": "thousand-sons"
+      },
+      {
+        "models": 1,
+        "cost": 195,
+        "unit_count_min": 3,
+        "unit_count_max": null,
+        "host_faction": "thousand-sons"
       }
     ]
   },
@@ -2609,13 +2749,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 160,
+        "cost": 155,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 170,
+        "cost": 165,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2649,14 +2789,20 @@
       "hades-autocannon"
     ],
     "ability_ids": [
-      "blazing-salvoes",
-      "daemonic-ordnance",
-      "furious-onslaught",
-      "deadly-demise-d3"
+      "daemonic-ordnance-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2731,7 +2877,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 65
       }
     ],
     "keywords": [
@@ -2760,14 +2906,15 @@
       "plasma-pistol-warpsmith"
     ],
     "ability_ids": [
-      "enrage-machine-spirits",
+      "enrage-machine-spirits-chaos-space-marines",
       "leader",
-      "master-of-mechanisms",
-      "warpsmith"
+      "master-of-mechanisms-chaos-space-marines",
+      "warpsmith-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2807,7 +2954,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 85
+        "cost": 90
       }
     ],
     "keywords": [
@@ -2838,13 +2985,15 @@
       "power-fist-chaos-lord-in-terminator-armour"
     ],
     "ability_ids": [
-      "formidably-resilient",
+      "formidably-resilient-chaos-space-marines",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "lord-of-chaos-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2889,27 +3038,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 110,
+        "cost": 120,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 210,
+        "cost": 220,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 120,
+        "cost": 130,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 220,
+        "cost": 230,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2932,8 +3081,8 @@
       "max": 10
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "boltgun",
+      "bolt-pistol-red-corsairs-raiders",
+      "boltgun-red-corsairs-raiders",
       "hand-flamer",
       "meltagun",
       "power-fist",
@@ -2941,11 +3090,12 @@
     ],
     "ability_ids": [
       "infiltrators",
-      "trophy-takers"
+      "trophy-takers-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2984,7 +3134,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 75
       }
     ],
     "keywords": [
@@ -3008,18 +3158,17 @@
     },
     "weapon_ids": [
       "axe-of-dismemberment",
-      "bolt-pistol"
+      "bolt-pistol-master-of-executions"
     ],
     "ability_ids": [
-      "a-worthy-skull",
-      "forwards-for-blood",
-      "leader",
-      "trophy-taker",
-      "warp-sighted-butcher"
+      "trophy-taker-chaos-space-marines",
+      "warp-sighted-butcher-chaos-space-marines",
+      "support",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3082,7 +3231,7 @@
       {
         "models": 9,
         "models_max": 16,
-        "cost": 195,
+        "cost": 185,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -3095,7 +3244,7 @@
       {
         "models": 9,
         "models_max": 16,
-        "cost": 215,
+        "cost": 205,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3122,13 +3271,20 @@
       "hideous-mutations-accursed-cultists"
     ],
     "ability_ids": [
-      "howling-horde",
-      "feel-no-pain-6",
-      "scouts-6"
+      "howling-horde-chaos-space-marines",
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3166,7 +3322,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 125
       }
     ],
     "keywords": [
@@ -3204,24 +3360,24 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "dark-ascension-aura",
-      "deadly-demise-1",
-      "devoted-to-destruction",
-      "diseased-malice",
-      "frenzy",
-      "froth-spattered-frenzy",
-      "terrifying-assault"
+      "dark-ascension-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "devoted-to-destruction-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
     "allied_points": [
       {
         "models": 1,
-        "cost": 110,
+        "cost": 105,
         "host_faction": "death-guard"
       },
       {
@@ -3276,7 +3432,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 85
       }
     ],
     "keywords": [
@@ -3286,7 +3442,8 @@
       "Fly",
       "Grenades",
       "Chaos",
-      "Chaos Lord"
+      "Chaos Lord",
+      "Chaos Lord with Jump Pack"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -3307,13 +3464,15 @@
       "twin-lightning-claws"
     ],
     "ability_ids": [
-      "cruel-hunter",
+      "cruel-hunter-chaos-space-marines",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "lord-of-chaos-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3392,11 +3551,12 @@
       "brutal-assault-weapon"
     ],
     "ability_ids": [
-      "for-the-dark-gods"
+      "for-the-dark-gods-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3435,7 +3595,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 95
       }
     ],
     "keywords": [
@@ -3464,12 +3624,14 @@
       "power-fist-chaos-lord"
     ],
     "ability_ids": [
-      "chance-for-glory",
-      "leader"
+      "chance-for-glory-chaos-space-marines",
+      "leader",
+      "lord-of-chaos-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3514,12 +3676,12 @@
     "points": [
       {
         "models": 3,
-        "cost": 70
+        "cost": 80
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 130
+        "cost": 150
       }
     ],
     "keywords": [
@@ -3543,8 +3705,8 @@
     "weapon_ids": [
       "accursed-weapon",
       "astartes-chainsword",
-      "bolt-pistol",
-      "close-combat-weapon",
+      "bolt-pistol-chaos-bikers",
+      "close-combat-weapon-chaos-bikers",
       "combi-bolter",
       "combi-weapon",
       "flamer",
@@ -3554,11 +3716,16 @@
       "power-fist"
     ],
     "ability_ids": [
-      "rapid-assault"
+      "rapid-assault-chaos-space-marines",
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3615,27 +3782,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 125,
+        "cost": 130,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 280,
+        "cost": 290,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 135,
+        "cost": 140,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 290,
+        "cost": 300,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3664,12 +3831,13 @@
       "warp-claws"
     ],
     "ability_ids": [
-      "warp-strike",
-      "deep-strike"
+      "warp-strike-chaos-space-marines",
+      "deep-strike",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3738,11 +3906,12 @@
       "plasma-pistol-fellgor-beastmen"
     ],
     "ability_ids": [
-      "bestial-raiders"
+      "bestial-raiders-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3796,7 +3965,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 125
       }
     ],
     "keywords": [
@@ -3827,16 +3996,20 @@
       "maulerfiend-fists"
     ],
     "ability_ids": [
-      "glutton-for-punishment",
-      "savage-exaltation",
-      "siege-crawler",
-      "snarling-protector",
-      "the-scent-of-blood",
-      "deadly-demise-d3"
+      "siege-crawler-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3940,7 +4113,9 @@
       "Nurgle",
       "Slaanesh",
       "Tzeentch",
-      "Khorne"
+      "Khorne",
+      "Frame",
+      "Chaos Rhino"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -3956,17 +4131,20 @@
     "weapon_ids": [
       "armoured-tracks-chaos-rhino",
       "combi-bolter",
-      "combi-weapon",
+      "combi-weapon-chaos-rhino",
       "havoc-launcher"
     ],
     "ability_ids": [
-      "assault-vehicle",
-      "fire-support",
-      "firing-deck-2",
-      "meet-any-challenge",
-      "self-repair",
-      "sorcerous-support",
-      "deadly-demise-d3"
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      "self-repair-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "transport_capacity": {
       "capacity": 12,
@@ -3976,7 +4154,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4073,12 +4251,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 90
+        "cost": 95
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 170
+        "cost": 180
       }
     ],
     "keywords": [
@@ -4103,9 +4281,9 @@
       "accursed-weapon",
       "astartes-chainsword",
       "balefire-tome",
-      "bolt-pistol",
-      "boltgun",
-      "close-combat-weapon",
+      "bolt-pistol-legionaries",
+      "boltgun-legionaries",
+      "close-combat-weapon-legionaries",
       "flamer",
       "havoc-autocannon-legionaries",
       "heavy-bolter",
@@ -4118,11 +4296,16 @@
       "reaper-chaincannon"
     ],
     "ability_ids": [
-      "veterans-of-the-long-war"
+      "veterans-of-the-long-war-chaos-space-marines",
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4191,7 +4374,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 65
       }
     ],
     "keywords": [
@@ -4218,14 +4401,15 @@
       "power-sword"
     ],
     "ability_ids": [
-      "brutal-raider",
+      "brutal-raider-chaos-space-marines",
       "leader",
-      "raider-s-due",
-      "infiltrators"
+      "raiders-due-chaos-space-marines",
+      "infiltrators",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4275,7 +4459,7 @@
     "points": [
       {
         "models": 5,
-        "cost": 145
+        "cost": 150
       }
     ],
     "keywords": [
@@ -4284,7 +4468,8 @@
       "Grenades",
       "Chaos",
       "Chaos Undivided",
-      "Masters of the Maelstrom"
+      "Masters of the Maelstrom",
+      "Psyker"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -4310,14 +4495,15 @@
       "reductor-array"
     ],
     "ability_ids": [
-      "choice-samples",
-      "fleet-command",
-      "masters-of-the-maelstrom",
-      "plunder"
+      "choice-samples-chaos-space-marines",
+      "fleet-command-chaos-space-marines",
+      "plunder-chaos-space-marines",
+      "support",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4385,15 +4571,23 @@
       "vashtorrs-hammer"
     ],
     "ability_ids": [
-      "indentured-daemon-engines",
-      "reorder-reality",
-      "unholy-mechanisms-aura",
+      "indentured-daemon-engines-chaos-space-marines",
+      "reorder-reality-chaos-space-marines",
+      "unholy-mechanisms-chaos-space-marines",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4432,7 +4626,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 135
       }
     ],
     "keywords": [
@@ -4448,7 +4642,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 32
+      "diameter": 50
     },
     "model_count": {
       "min": 1,
@@ -4459,15 +4653,19 @@
       "tyrants-claw-heavy-flamer"
     ],
     "ability_ids": [
-      "hamadrya-s-knowledge-psychic",
+      "hamadryas-knowledge-chaos-space-marines",
       "leader",
-      "lord-of-badab-aura",
+      "lord-of-badab-chaos-space-marines",
       "deep-strike",
-      "feel-no-pain-5"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4507,7 +4705,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 95
       }
     ],
     "keywords": [
@@ -4536,14 +4734,15 @@
       "heralds-talon"
     ],
     "ability_ids": [
-      "head-taker",
-      "herald-of-the-apocalypse-aura",
+      "head-taker-chaos-space-marines",
+      "herald-of-the-apocalypse-chaos-space-marines",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4583,7 +4782,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 295
+        "cost": 300
       }
     ],
     "keywords": [
@@ -4611,15 +4810,16 @@
       "talon-of-horus"
     ],
     "ability_ids": [
-      "dark-destiny",
+      "dark-destiny-chaos-space-marines",
       "leader",
-      "supreme-commander",
-      "warmaster",
-      "deep-strike"
+      "supreme-commander-chaos-space-marines",
+      "warmaster-chaos-space-marines",
+      "deep-strike",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4669,7 +4869,7 @@
     "points": [
       {
         "models": 2,
-        "cost": 100
+        "cost": 110
       }
     ],
     "keywords": [
@@ -4698,15 +4898,19 @@
       "xyclos-needler"
     ],
     "ability_ids": [
-      "chirurgeon",
-      "enhanced-warriors",
+      "chirurgeon-chaos-space-marines",
+      "enhanced-warriors-chaos-space-marines",
       "leader",
-      "surgeon-acolyte",
-      "feel-no-pain-5"
+      "surgeon-acolyte-chaos-space-marines",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4750,7 +4954,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 95
       }
     ],
     "keywords": [
@@ -4777,13 +4981,14 @@
       "cyphers-plasma-pistol"
     ],
     "ability_ids": [
-      "agent-of-discord-aura",
-      "guns-blazing",
-      "lone-operative"
+      "agent-of-discord-chaos-space-marines",
+      "guns-blazing-chaos-space-marines",
+      "lone-operative",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4839,7 +5044,9 @@
       "Chaos",
       "Khorne",
       "Daemon",
-      "Lord of Skulls"
+      "Lord of Skulls",
+      "Frame",
+      "Khorne Lord of Skulls"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -4861,14 +5068,24 @@
       "skullhurler"
     ],
     "ability_ids": [
-      "deadly-demise-d6-2",
-      "idol-of-blessed-blood",
-      "plough-through-the-enemy",
-      "super-heavy-war-engine"
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "plough-through-the-enemy-chaos-space-marines",
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      },
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4928,7 +5145,7 @@
       },
       {
         "models": 3,
-        "cost": 175,
+        "cost": 185,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -4954,13 +5171,13 @@
       "fleshmetal-weapons"
     ],
     "ability_ids": [
-      "cult-of-destruction",
-      "death-frenzy",
-      "deep-strike"
+      "deep-strike",
+      "crushing-charge-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4999,7 +5216,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 120
+        "cost": 130
       }
     ],
     "keywords": [
@@ -5020,7 +5237,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -5048,6 +5265,13 @@
         "namespace": "mfm",
         "id": "b390ed9e-515f-46f4-8fab-ad6a526b9623"
       }
+    ],
+    "ability_ids": [
+      "architect-of-ruin-chaos-space-marines",
+      "deep-strike",
+      "headlong-destruction-chaos-space-marines",
+      "leader",
+      "dark-pacts-chaos-space-marines"
     ]
   },
   {
@@ -5079,7 +5303,8 @@
       "Infantry",
       "Master of Possession",
       "Psyker",
-      "Zarkan's Daemonkin"
+      "Zarkan's Daemonkin",
+      "Aranis Zarkan"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -5089,17 +5314,19 @@
       "max": 1
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "rite-of-possession",
+      "bolt-pistol-aranis-zarkan",
+      "rite-of-possession-aranis-zarkan",
       "staff-of-possession"
     ],
     "ability_ids": [
-      "daemonkin-psychic-zarkans-daemonkin",
-      "leader"
+      "daemonkin-aranis-zarkan-chaos-space-marines",
+      "sacrificial-dagger-aranis-zarkan-chaos-space-marines",
+      "cults-of-the-dark-gods-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
@@ -5147,7 +5374,8 @@
       "Damned",
       "Explosives",
       "Infantry",
-      "Zarkan's Daemonkin"
+      "Zarkan's Daemonkin",
+      "Zarkan's Daemonkin Cultist Mob"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -5157,16 +5385,18 @@
       "max": 10
     },
     "weapon_ids": [
-      "autopistol",
+      "autopistol-zarkans-daemonkin-cultist-mob",
       "blades-and-cudgels",
-      "bolt-pistol"
+      "bolt-pistol-zarkans-daemonkin-cultist-mob"
     ],
     "ability_ids": [
-      "for-the-dark-gods"
+      "for-the-dark-gods-zarkans-daemonkin-cultist-mob-chaos-space-marines",
+      "cults-of-the-dark-gods-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
@@ -5212,7 +5442,8 @@
       "Chaos",
       "Explosives",
       "Infantry",
-      "Zarkan's Daemonkin"
+      "Zarkan's Daemonkin",
+      "Zarkan's Daemonkin Legionaries"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -5223,20 +5454,23 @@
     },
     "weapon_ids": [
       "accursed-weapon",
-      "bolt-pistol",
+      "bolt-pistol-zarkans-daemonkin-legionaries",
       "boltgun",
       "fists-and-knives",
       "heavy-bolter",
       "meltagun",
-      "plasma-pistol"
+      "plasma-pistol-zarkans-daemonkin-legionaries"
     ],
     "ability_ids": [
-      "chaos-icon",
-      "veterans-of-the-long-war-zarkans-daemonkin"
+      "veterans-of-the-long-war-zarkans-daemonkin-legionaries-chaos-space-marines",
+      "chaos-icon-zarkans-daemonkin-legionaries-chaos-space-marines",
+      "combat-squad-chaos-space-marines",
+      "cults-of-the-dark-gods-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
@@ -5280,7 +5514,8 @@
       "Chaos",
       "Daemon",
       "Infantry",
-      "Zarkan's Daemonkin"
+      "Zarkan's Daemonkin",
+      "Zarkan's Daemonkin Possessed"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -5293,11 +5528,14 @@
       "hideous-mutations"
     ],
     "ability_ids": [
-      "unholy-bloodshed-zarkans-daemonkin"
+      "unholy-bloodshed-zarkans-daemonkin-possessed-chaos-space-marines",
+      "chaos-icon-zarkans-daemonkin-possessed-chaos-space-marines",
+      "cults-of-the-dark-gods-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"

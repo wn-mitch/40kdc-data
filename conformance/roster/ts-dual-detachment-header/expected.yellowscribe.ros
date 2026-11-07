@@ -22,7 +22,11 @@
             </profile>
             <profile name="Glimpse of Eternity (Psychic)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per turn, this model can change Any rolls to a 6.</characteristic>
+                <characteristic name="Description">You can: Once per turn per unit:
+  Select one of the following:
+    - One of the unit's Hit rolls counts as 6.
+    - One of the unit's Wound rolls counts as 6.
+    - One of the unit's saving throw rolls counts as 6.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">
@@ -33,6 +37,16 @@
             <profile name="Malefic Maelstrom (Psychic)" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While this model is leading a unit, the unit's weapons gain [SUSTAINED HITS 1].</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Cabal of Sorcerers" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of your Shooting phase, once per turn per model, if your Army Faction is THOUSAND SONS:
+  -&gt; Attempt one of the Rituals below (each Ritual can be attempted once per turn across your army). To do so, take a Psychic test: roll 2D6, and you can roll one additional D6; if any two of its dice show the same result, the unit suffers D3 mortal wounds; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual:
+    - Destiny’s Ruin (Warp Charge 5): Until the end of the phase: select one enemy unit if the selected unit is within 24" of this model and the selected unit is visible to this model (your Destinys Ruin Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 10+, you can re-roll a Hit roll of 1 for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 10+, you can re-roll the Hit roll for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.
+    - Temporal Surge (Warp Charge 6): Until the end of the turn: select one friendly unit with the SCINTILLATING LEGIONS or THOUSAND SONS keyword if the selected unit is unengaged and the selected unit is within 24" of this model and the selected unit is visible to this model: unless the Psychic test result is 10+, that unit can make a Normal move of up to D6"; if the Psychic test result is 10+, that unit can make a Normal move of up to 6"; that unit cannot declare a charge.
+    - Doombolt (Warp Charge 7): Select one enemy unit if the selected unit is within 24" of this model and the selected unit is visible to this model and (the selected unit does not have the Lone Operative ability or the selected unit is an attached unit or the selected unit is within 12" of this model): unless the Psychic test result is 11+, that unit suffers D3 mortal wounds; if the Psychic test result is 11+, that unit suffers D3+3 mortal wounds.
+    - Twist of Fate (Warp Charge 9): Until the end of the phase: select one enemy unit if the selected unit is within 24" of this model and the selected unit is visible to this model (your Twist of Fate Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 12+, improve the Armour Penetration characteristic of all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword by 1; if the Psychic test result is 12+, improve the Armour Penetration characteristic of all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword by 2.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -97,8 +111,8 @@
                         <characteristic name="Range">12"</characteristic>
                         <characteristic name="A">1</characteristic>
                         <characteristic name="BS">2+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-2</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Pistol</characteristic>
                       </characteristics>

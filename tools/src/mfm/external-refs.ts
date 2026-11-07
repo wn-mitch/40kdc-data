@@ -3,7 +3,8 @@ import {
   EXTERNAL_REF_ENTITY_FILES,
   type ExternalRefEntityType,
 } from "../core-external-refs.js";
-import { detachmentScopedId, nameToId } from "../converters/id-generator.js";
+import { enhancementRepoId } from "./enhancements.js";
+import { nameToId } from "../converters/id-generator.js";
 import type { StagedWrite } from "./apply.js";
 import { collectSeedDetachments } from "./seed-detachments.js";
 import { effectiveDir } from "./seed-units.js";
@@ -17,6 +18,7 @@ import {
 } from "./weapon-variants.js";
 import type { GameVersion } from "./gear-projection.js";
 import { findDatasheet } from "./project-loadout.js";
+import { currentGameVersion } from "./dataslate.js";
 
 export interface MfmExternalRefsReport {
   added: Record<ExternalRefEntityType, number>;
@@ -116,12 +118,8 @@ export function runMfmExternalRefs(
       dump.byId("detachment").get(source.detachmentId),
     );
     if (!name || !detachmentName) continue;
-    let id: string;
-    try {
-      id = detachmentScopedId(name, detachmentName);
-    } catch {
-      continue;
-    }
+    const id = enhancementRepoId(dump, source);
+    if (!id) continue;
     for (const dir of detachmentDirs.get(source.detachmentId) ?? []) {
       attach("enhancement", dir, id, source.id);
     }
@@ -153,10 +151,7 @@ export function runMfmExternalRefs(
     const home = datasheetHomes.get(datasheet.id);
     if (!home) continue;
     const gameVersion = (store.get("unit", home.dir, home.unitId)
-      ?.game_version as GameVersion | undefined) ?? {
-      edition: "11th",
-      dataslate: "launch",
-    };
+      ?.game_version as GameVersion | undefined) ?? currentGameVersion(dump);
     for (const item of wargearItemsForDatasheet(dump, datasheet.id)) {
       if (!item.id) continue;
       if (item.wargearType === "weapon") {

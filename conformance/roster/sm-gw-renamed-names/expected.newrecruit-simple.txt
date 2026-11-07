@@ -1,0 +1,12 @@
+Adeptus Astartes - Imported roster - [310 pts]
+
+# ++ Army Roster ++ [310 pts]
+## Configuration
+List Name: Imported roster
+Faction: Adeptus Astartes
+Detachment: Gladius Task Force
+Force Disposition: Priority Assets
+
+## Battleline [310 pts]
+Marneus Calgar in Armour of Antilochus [180 pts]: Warlord, Gauntlets of Ultramar
+Death Company Marines with Jump Packs [130 pts]: 5x Astartes chainsword, 5x Heavy bolt pistol

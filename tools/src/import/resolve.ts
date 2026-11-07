@@ -14,6 +14,8 @@
  *
  * @packageDocumentation
  */
+import { isCombatPatrolDetachment } from "../abilities-resolver/index.js";
+import { unitAbilityIds } from "../data/ability-refs.js";
 import type { Dataset } from "../data/dataset.js";
 import type { UnitView } from "../data/entities.js";
 import { detachmentCapForBattleSize } from "../data/battle-sizes.js";
@@ -50,6 +52,7 @@ const DETACHMENT_SOURCE_ALIASES: Readonly<Record<string, string>> = {
   radzone: "Rad-Zone Corps",
 };
 const SOURCE_NAME_ALIASES: Readonly<Record<string, string>> = {
+  "astartes chainsword": "Chainsword",
   "exo armour grenade launcher": "Exoarmour grenade launcher",
   "kombi rokkit": "Kombi-weapon",
   "kombi shoota": "Kombi-weapon",
@@ -164,11 +167,28 @@ function mapBattleSize(raw: string | null): BattleSize | null {
 /** 11e detachment-point budget for a battle size; null when the size is unknown. */
 const detachmentCap = detachmentCapForBattleSize;
 
+/**
+ * The game-mode view a roster resolves against. A list on the matched-play view (the default)
+ * whose detachment is a Combat Patrol detachment, by id or exact name, is a Combat Patrol list:
+ * its units and enhancements are listed only there. Any other view is the caller's choice.
+ */
+function rosterGameModeView(parsed: ParsedRoster, ds: Dataset): Dataset {
+  if (ds.gameMode !== "matched-play") return ds;
+  const patrol = ds.forGameMode("combat-patrol");
+  const names = new Set(parsed.detachment_raw_names.map(normalizeName));
+  const isPatrolList = patrol.detachments.all.some((detachment) =>
+    isCombatPatrolDetachment(detachment) &&
+    (parsed.detachment_raw_names.includes(detachment.id) || names.has(normalizeName(detachment.name ?? ""))));
+  return isPatrolList ? patrol : ds;
+}
+
 export function resolve(
   parsed: ParsedRoster,
   ds: Dataset,
   format: RosterFormat = "listforge",
 ): Roster {
+  const view = rosterGameModeView(parsed, ds);
+  if (view !== ds) return resolve(parsed, view, format);
   const diag = new DiagnosticsBuilder();
 
 
@@ -639,9 +659,8 @@ function resolveWargearItemId(ds: Dataset, hit: UnitView | null, rawName: string
 function resolveUnitAbilityId(ds: Dataset, hit: UnitView | null, rawName: string): string | null {
   if (!hit) return null;
   const targets = lookupNameKeys(rawName);
-  for (const id of hit.raw.ability_ids ?? []) {
-    const ability =
-      ds.abilities.getInFaction(id, hit.raw.faction_id) ?? ds.abilities.getAny(id);
+  for (const id of unitAbilityIds(hit.raw.ability_ids)) {
+    const ability = ds.abilities.getAny(id);
     if (
       ability &&
       sourceNameVariants(ability.name).some((variant) => targets.has(normalizeName(variant)))
@@ -1141,6 +1160,9 @@ function applyLeaderAttachments(
   const bodyguardIds = new Set(
     units.filter((u, i) => u.ref.id && !parsedUnits[i].is_character).map((u) => u.ref.id as string),
   );
+  const rosterUnitIds = new Set(
+    units.map((u) => u.ref.id).filter((id): id is string => id != null),
+  );
 
   units.forEach((unit, i) => {
     if (parsedUnits[i].leader_attachment != null) return; // explicit already applied
@@ -1156,11 +1178,21 @@ function applyLeaderAttachments(
     const resolvedUnit = factionId
       ? (ds.units.getInFaction(leaderId, factionId) ?? ds.units.getAny(leaderId))
       : ds.units.getAny(leaderId);
-    if (resolvedUnit?.raw.attachment_role !== "support") return;
+    if ((ds.conditionalAttachmentRole(leaderId, rosterUnitIds) ?? resolvedUnit?.raw.attachment_role) !== "support") return;
 
-    const attachment = ds.leaderAttachments.find((la) => la.leader_id === leaderId);
-    if (!attachment) return;
-    const bodyguardId = attachment.eligible_bodyguard_ids.find((id) => bodyguardIds.has(id));
+    let bodyguardId: string | undefined;
+    for (const attachment of ds.leaderAttachments) {
+      if (attachment.leader_id !== leaderId) continue;
+      bodyguardId = attachment.eligible_bodyguard_ids.find((id) => bodyguardIds.has(id));
+      if (bodyguardId) break;
+      for (const group of attachment.conditional_groups ?? []) {
+        if (!(group.required_roster_unit_ids ?? []).every((id) => rosterUnitIds.has(id)) ||
+          (group.excluded_roster_unit_ids ?? []).some((id) => rosterUnitIds.has(id))) continue;
+        bodyguardId = group.eligible_bodyguard_ids.find((id) => bodyguardIds.has(id));
+        if (bodyguardId) break;
+      }
+      if (bodyguardId) break;
+    }
     if (!bodyguardId) return;
 
     const bodyguard = units.find((u) => u.ref.id === bodyguardId);

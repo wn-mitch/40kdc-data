@@ -4,13 +4,15 @@
 product
 
 ## Users
-- **Schema consumers**: Rust + TS developers building Warhammer 40K tools (list
-  builders, damage calculators, roster importers) who depend on
-  `@alpaca-software/40kdc-data` or the `wh40kdc` crate to skip rebuilding
+- **Schema consumers**: TypeScript, Rust, Python and Go developers building
+  Warhammer 40K tools (list builders, damage calculators, roster importers)
+  who depend on `@alpaca-software/40kdc-data`, the `wh40kdc` crate, the
+  `wh40kdc` PyPI package or the `wh40kdc` Go module to skip rebuilding
   datasheet plumbing from scratch.
-- **Enrichment authors**: community contributors hand-encoding ability
-  mechanics in the DSL — they live in JSON, value editor ergonomics over
-  visual flourish, and care that their schemas validate.
+- **Enrichment authors**: community contributors who review the semantic leaves
+  the compiler lowers to ability DSL (see `SEMANTIC_AUTHORING.md`) — they live
+  in JSON, value editor ergonomics over visual flourish, and care that their
+  records validate.
 - **Salvo end-users**: 40K players using the example damage calculator to
   answer "what happens if X shoots Y?" mid-game or pre-game — phone first,
   desktop second, attention partial, hands often otherwise occupied.
@@ -21,7 +23,9 @@ tooling, and prove the package's surface area through a small set of example
 apps. Salvo is the headline example: a Warhammer 40K 11th-edition damage
 calculator that exercises the dataset's units / weapons / abilities / phases
 end-to-end through one focused user task — projecting a shooting or melee
-salvo's expected damage against a target.
+salvo's expected damage against a target. Facts the engine cannot know (target
+below Half-strength, charged this turn) become Yes/No toggles rather than silent
+assumptions.
 
 ## Strategic principles
 - **Data first, app second**: the package is the product. Examples exist to

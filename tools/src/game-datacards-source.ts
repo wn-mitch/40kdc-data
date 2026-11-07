@@ -44,7 +44,6 @@ export const GAME_DATACARDS_FACTION_FILES: Readonly<
   "dark-angels": ["darkangels", "space_marines"],
   deathwatch: ["deathwatch", "space_marines"],
   "space-wolves": ["spacewolves", "space_marines"],
-  "crimson-fists": ["space_marines"],
   "imperial-fists": ["space_marines"],
   "iron-hands": ["space_marines"],
   "raven-guard": ["space_marines"],

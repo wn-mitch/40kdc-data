@@ -2361,13 +2361,8 @@ export async function projectBattlemasterRestApi(
   };
 }
 
-function hasBattlemasterSource(value: unknown): boolean {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "source" in value &&
-    value.source === SOURCE
-  );
+function hasBattlemasterSource(value: { source?: string }): boolean {
+  return value.source === SOURCE;
 }
 
 export function mergeBattlemasterProjection(

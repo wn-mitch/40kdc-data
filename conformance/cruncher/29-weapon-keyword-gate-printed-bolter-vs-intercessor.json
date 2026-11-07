@@ -1,0 +1,72 @@
+{
+  "name": "bolt-rifle (saturation) x5 vs intercessor within half range, a weapon-keyword gate on a printed keyword (Assault) applies and one on an absent keyword (Heavy) drops",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting",
+    "withinHalfRange": true
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-keyword-gate",
+        "abilityKind": "unit"
+      },
+      "applicableWhen": {
+        "weaponKeywords": [
+          {
+            "keyword_id": "assault"
+          }
+        ]
+      },
+      "contribution": {
+        "type": "extra-keyword",
+        "keywordRef": {
+          "keyword_id": "lethal-hits"
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-keyword-gate",
+        "abilityKind": "unit"
+      },
+      "applicableWhen": {
+        "weaponKeywords": [
+          {
+            "keyword_id": "heavy"
+          }
+        ]
+      },
+      "contribution": {
+        "type": "extra-keyword",
+        "keywordRef": {
+          "keyword_id": "sustained-hits",
+          "parameters": {
+            "value": 1
+          }
+        }
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 15,
+      "hits": 10,
+      "wounds": 6.25,
+      "unsaved": 3.125,
+      "damage": 3.125,
+      "after-fnp": 3.125,
+      "models-killed": 1.5625
+    }
+  }
+}

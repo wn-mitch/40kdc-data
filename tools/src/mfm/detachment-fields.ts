@@ -6,13 +6,18 @@
  *   - restrictions.required_keywords ← detachment_faction_keyword (applicability)
  *   - tags                           ← detachment_unique_keyword (mutual-exclusivity)
  *   - detachment_rule_ids            ← detachment_rule (named rule → ability link)
+ *   - mandatory_warlord_datasheet_ids ← detachment_mandatory_warlord_miniature
+ *   - granted_warlord_datasheet_ids   ← detachment_granted_warlord_miniature
+ *   - excluded_datasheet_ids          ← detachment_excluded_datasheet
+ *   - keyword_limit_overrides         ← restriction_group_detachment_limit.maxRosterLimit
+ *     (authoritative; each miniature/datasheet resolves to a repo unit id by name slug)
  *
  * ── detachment_rule_ids: structural rule-ability association ──
  * detachment_rule lists the named rule(s) a detachment carries. The rule PROSE is
- * authored enrichment (DSL / raw-text store) and never enters this repo; only the
+ * GW's, stays in the private dump and never enters this repo; only the
  * structural id LINK is dump-derived here. Each dump rule display name is slugged
  * with {@link nameToId} (the same bare-id form the authored rule abilities use,
- * e.g. "Warp Rifts" → `warp-rifts`) and reconciled against the detachment's authored
+ * e.g. "Warp Rifts" → `warp-rifts-chaos-daemons`) and reconciled against the detachment's authored
  * `detachment_rule_id` (deprecated singular) + `detachment_rule_ids`. A link is only
  * ever WRITTEN when its slug resolves to an ability already authored in the dir's
  * enrichment — an unresolved id would fail `integrity.ts`, and inventing the ability
@@ -46,12 +51,13 @@
  *
  * IP: reads only ids and English keyword display names. No rules/lore prose.
  */
+import { mirrorIds } from "./mirror/ids.js";
 import * as fs from "fs";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
 import { MfmDump } from "./loader.js";
 import { CORE_DIR, ENRICHMENT_DIR, readJsonArray } from "./repo-files.js";
-import { repoDirForFactionName, repoDirs } from "./faction-map.js";
+import { CODEX_CHAPTERS, repoDirForFactionName, repoDirs } from "./faction-map.js";
 import { keywordLabel, factionKeywordLabel } from "./keywords.js";
 import type { StagedWrite } from "./apply.js";
 
@@ -74,7 +80,129 @@ interface DetRecord {
   detachment_rule_id?: string | null;
   detachment_rule_ids?: string[] | null;
   restrictions?: DetachmentRestrictions | null;
+  mandatory_warlord_datasheet_ids?: string[];
+  granted_warlord_datasheet_ids?: string[];
+  excluded_datasheet_ids?: string[];
+  keyword_limit_overrides?: { keywords: string[]; max: number }[];
   [k: string]: unknown;
+}
+
+/**
+ * Replacement army-wide keyword caps a detachment sets, from
+ * `restriction_group_detachment_limit` rows with a `maxRosterLimit` (Ghosts of the
+ * Webway: up to three of each Harlequin leader). The restriction group's keyword rows
+ * give `keywords`, matching the faction's `keyword_limits` entry they replace. A
+ * `minRosterLimit` row (Houndpack Lance: three or more WAR DOG units) is a minimum,
+ * carried by `unit_minimums`, and is not projected here. Sorted for a stable diff.
+ */
+export function keywordLimitOverridesForDetachment(
+  dump: MfmDump,
+  detId: string,
+): { keywords: string[]; max: number }[] {
+  const kwByGroup = dump.groupBy("keyword_restriction_group_keyword", "keywordRestrictionGroupId");
+  const out: { keywords: string[]; max: number }[] = [];
+  for (const r of dump.table("restriction_group_detachment_limit")) {
+    if (r.detachmentId !== detId || r.maxRosterLimit === null || r.maxRosterLimit === undefined) continue;
+    const keywords = [
+      ...new Set(
+        (kwByGroup.get(r.restrictionGroupId) ?? [])
+          .map((k) => keywordLabel(dump, k.keywordId))
+          .filter((k): k is string => !!k),
+      ),
+    ].sort((a, b) => a.localeCompare(b));
+    if (keywords.length) out.push({ keywords, max: r.maxRosterLimit });
+  }
+  return out.sort((a, b) => a.keywords.join("+").localeCompare(b.keywords.join("+")));
+}
+
+/** The three datasheet-list requirements a detachment carries (see file header). */
+export type DatasheetListField =
+  | "mandatory_warlord_datasheet_ids"
+  | "granted_warlord_datasheet_ids"
+  | "excluded_datasheet_ids";
+
+export const DATASHEET_LIST_FIELDS: readonly DatasheetListField[] = [
+  "mandatory_warlord_datasheet_ids",
+  "granted_warlord_datasheet_ids",
+  "excluded_datasheet_ids",
+];
+
+/**
+ * A detachment's datasheet-list requirements as repo unit ids, sorted. Warlord rows
+ * name a miniature (resolved to its datasheet); exclusions name a datasheet. Each
+ * datasheet's English name slugs to the unit id; a slug with no repo unit lands in
+ * `unresolved` and is left out (an unresolved id would fail integrity).
+ */
+export function datasheetListsForDetachment(
+  dump: MfmDump,
+  detId: string,
+  unitIds: ReadonlySet<string>,
+  unresolved?: string[],
+): Record<DatasheetListField, string[]> {
+  const ds = dump.byId("datasheet");
+  const mini = dump.byId("miniature");
+  const resolve = (datasheetId: string | undefined): string | null => {
+    const name = datasheetId ? dump.enName(ds.get(datasheetId)) : undefined;
+    let id: string | null = null;
+    try {
+      id = name ? nameToId(name) : null;
+    } catch {
+      id = null;
+    }
+    if (id && unitIds.has(id)) return id;
+    if (unresolved) unresolved.push(name ?? datasheetId ?? "?");
+    return null;
+  };
+  const collect = (datasheetIds: (string | undefined)[]): string[] =>
+    [...new Set(datasheetIds.map(resolve).filter((id): id is string => !!id))].sort((a, b) =>
+      a.localeCompare(b),
+    );
+  const rows = <T,>(table: string): T[] =>
+    ((dump.tables as Record<string, unknown[] | undefined>)[table] ?? []) as T[];
+  type MiniRow = { detachmentId: string; miniatureId: string };
+  type DsRow = { detachmentId: string; datasheetId: string };
+  return {
+    mandatory_warlord_datasheet_ids: collect(
+      rows<MiniRow>("detachment_mandatory_warlord_miniature")
+        .filter((r) => r.detachmentId === detId)
+        .map((r) => mini.get(r.miniatureId)?.datasheetId),
+    ),
+    granted_warlord_datasheet_ids: collect(
+      rows<MiniRow>("detachment_granted_warlord_miniature")
+        .filter((r) => r.detachmentId === detId)
+        .map((r) => mini.get(r.miniatureId)?.datasheetId),
+    ),
+    excluded_datasheet_ids: collect(
+      rows<DsRow>("detachment_excluded_datasheet")
+        .filter((r) => r.detachmentId === detId)
+        .map((r) => r.datasheetId),
+    ),
+  };
+}
+
+/** Replace (or clear) each datasheet-list field; returns the fields that changed. */
+export function applyDatasheetLists(
+  det: DetRecord,
+  lists: Record<DatasheetListField, string[]>,
+): DatasheetListField[] {
+  const changed: DatasheetListField[] = [];
+  for (const field of DATASHEET_LIST_FIELDS) {
+    if (same(det[field], lists[field])) continue;
+    changed.push(field);
+    if (lists[field].length) det[field] = [...lists[field]];
+    else delete det[field];
+  }
+  return changed;
+}
+
+/** Every unit id authored across data/core. */
+function loadAllUnitIds(): Set<string> {
+  const ids = new Set<string>();
+  for (const dir of repoDirs()) {
+    const p = path.join(CORE_DIR, dir, "units.json");
+    if (fs.existsSync(p)) for (const u of readJsonArray<{ id: string }>(p)) ids.add(u.id);
+  }
+  return ids;
 }
 
 /**
@@ -106,8 +234,19 @@ export function requiredKeywordsForDetachment(
     else if (unresolved) unresolved.push(e.factionKeywordId);
   }
   if (labels.length === 0) return null;
+  // A detachment a codex chapter owns is locked to that chapter: an Adeptus Astartes roster may
+  // take Blade of Ultramar only with Ultramarines units. Since data version 963 the dump names
+  // the chapter as the owner instead of listing it beside the Adeptus Astartes owner. Chapters
+  // with their own codex also own their detachments but stay unlocked, so allies remain legal.
+  if (ownName && dir && CODEX_CHAPTERS.has(dir) && labels.length === 1 && labels[0] === ownName) {
+    return [ownName];
+  }
   // Ownership keyword present ⇒ roster-wide enumeration, not a restriction.
   if (ownName && labels.includes(ownName)) return null;
+  // Listing the parent army's keyword (Adeptus Astartes beside every chapter, as Deathwatch
+  // Support does, with no owner of its own) is also an enumeration of everyone: required keywords
+  // must ALL be held, so keeping the list would bar every unit.
+  if (labels.includes("Adeptus Astartes")) return null;
   // Ownership absent: a genuine lock keeps only labels narrower than the roster.
   // Drop the roster/home keyword (slug == dir) and the owner itself — requiring
   // the roster keyword restricts nothing.
@@ -135,22 +274,26 @@ export function tagsForDetachment(dump: MfmDump, detId: string, unresolved?: str
 }
 
 /**
- * Bare slug ids for a detachment's dump rule(s) — one `nameToId` per
- * `detachment_rule` row's English display name, sorted and de-duplicated. This is
- * the same bare-id form the authored rule abilities use (`ability_id`), so it can be
- * reconciled directly against `detachment_rule_id`/`detachment_rule_ids`. A name that
- * cannot slug (throws the entity-id pattern) is skipped. Reads only ids and display
- * names — never rule prose.
+ * Ids for a detachment's dump rule(s) — the id `mfm:mirror` gives each
+ * `detachment_rule` row (`<name>-<faction>`), sorted and de-duplicated. This is the
+ * id the rule's ability record carries, so it reconciles directly against
+ * `detachment_rule_id`/`detachment_rule_ids`. Reads only ids — never rule prose.
  */
 export function ruleIdsForDetachment(dump: MfmDump, detId: string): string[] {
   const ids = new Set<string>();
+  const mirror = mirrorIds(dump);
   for (const r of dump.children("detachment_rule.detachmentId", detId)) {
-    const name = dump.enName(r);
-    if (!name) continue;
-    try {
-      ids.add(nameToId(name));
-    } catch {
-      /* name that cannot form a valid entity id (e.g. all-punctuation) — skip */
+    const id = mirror.idOf("detachment_rule", r.id);
+    if (id) ids.add(id);
+  }
+  // A Combat Patrol's army rules apply only when that patrol is played, so they ride its detachment
+  // (the same links `mfm:mirror` writes; see mirror/rule-links.ts).
+  const pubId = dump.byId("detachment").get(detId)?.publicationId;
+  const publication = pubId ? dump.byId("publication").get(pubId) : undefined;
+  if (publication?.isCombatPatrol && dump.tables.army_rule) {
+    for (const r of dump.table("army_rule")) {
+      if (r.publicationId !== pubId) continue;
+      for (const id of mirror.idsOf("army_rule", r.id, "army-rule")) ids.add(id);
     }
   }
   return [...ids].sort((a, b) => a.localeCompare(b));
@@ -237,6 +380,8 @@ export interface DirDetFieldResult {
   ruleConfirmed: number;
   ruleReview: { id: string; authored: string[]; derived: string[] }[];
   ruleUnauthored: { id: string; derived: string[] }[];
+  listsChanged: { id: string; fields: (DatasheetListField | "keyword_limit_overrides")[] }[];
+  unresolvedDatasheets: { id: string; names: string[] }[];
   unresolvedKeywords: { id: string; ids: string[] }[];
 }
 
@@ -276,6 +421,7 @@ export function applyAuthoritativeDetachmentFields(
 export function runDetachmentFields(dump: MfmDump): DetFieldsReport {
   const detIdByRepoId = dumpDetIdByRepoId(dump);
   const abilityIds = makeAbilityIdLoader();
+  const unitIds = loadAllUnitIds();
   const dirs: DirDetFieldResult[] = [];
   const staged: StagedWrite[] = [];
 
@@ -295,6 +441,8 @@ export function runDetachmentFields(dump: MfmDump): DetFieldsReport {
       ruleConfirmed: 0,
       ruleReview: [],
       ruleUnauthored: [],
+      listsChanged: [],
+      unresolvedDatasheets: [],
       unresolvedKeywords: [],
     };
     let changed = false;
@@ -351,6 +499,25 @@ export function runDetachmentFields(dump: MfmDump): DetFieldsReport {
         }
       }
 
+      // Warlord requirements/permissions and datasheet exclusions — authoritative.
+      const unresolvedDs: string[] = [];
+      const listFields = applyDatasheetLists(
+        det,
+        datasheetListsForDetachment(dump, detId, unitIds, unresolvedDs),
+      );
+      if (listFields.length) {
+        res.listsChanged.push({ id: det.id, fields: listFields });
+        changed = true;
+      }
+      const overrides = keywordLimitOverridesForDetachment(dump, detId);
+      if (JSON.stringify(det.keyword_limit_overrides ?? []) !== JSON.stringify(overrides)) {
+        if (overrides.length) det.keyword_limit_overrides = overrides;
+        else delete det.keyword_limit_overrides;
+        res.listsChanged.push({ id: det.id, fields: ["keyword_limit_overrides"] });
+        changed = true;
+      }
+      if (unresolvedDs.length) res.unresolvedDatasheets.push({ id: det.id, names: [...new Set(unresolvedDs)] });
+
       if (unresolved.length) res.unresolvedKeywords.push({ id: det.id, ids: [...new Set(unresolved)] });
     }
 
@@ -396,6 +563,8 @@ export function buildDetFieldsReport(report: DetFieldsReport, write: boolean): s
     d.ruleFilled.forEach((c) => details.push(`- detachment_rule_ids filled ${c.id}: [${c.to.join(", ")}]`));
     d.ruleReview.forEach((c) => details.push(`- detachment_rule_ids REVIEW ${c.id}: authored [${c.authored.join(", ")}] vs dump [${c.derived.join(", ")}]`));
     d.ruleUnauthored.forEach((c) => details.push(`- detachment_rule_ids UNAUTHORED ${c.id}: dump rule(s) [${c.derived.join(", ")}] have no authored ability yet`));
+    d.listsChanged.forEach((c) => details.push(`- datasheet lists changed ${c.id}: ${c.fields.join(", ")}`));
+    d.unresolvedDatasheets.forEach((c) => details.push(`- unresolved datasheets ${c.id}: ${c.names.join(", ")}`));
     d.unresolvedKeywords.forEach((c) => details.push(`- unresolved keyword ids ${c.id}: ${c.ids.join(", ")}`));
     if (details.length) L.push(`## ${d.dir}`, ...details, "");
   }

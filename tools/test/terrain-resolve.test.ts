@@ -52,7 +52,7 @@ const RECT_6x4: TerrainTemplate = {
   footprint: { type: "rectangle", width: 6, height: 4 },
 };
 
-function layoutWith(piece: Partial<TerrainLayout["pieces"][number]> & { position: Vec2 }): TerrainLayout {
+function layoutWith(piece: Partial<NonNullable<TerrainLayout["pieces"]>[number]> & { position: Vec2 }): TerrainLayout {
   return {
     id: "t",
     name: "t",

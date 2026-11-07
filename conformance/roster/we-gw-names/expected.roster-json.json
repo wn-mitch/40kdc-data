@@ -13,7 +13,7 @@
         "resolved": true,
         "candidates": []
       },
-      "dp_cost": 3
+      "dp_cost": 2
     }
   ],
   "battle_size": null,
@@ -40,7 +40,7 @@
       "wargear": [
         {
           "ref": {
-            "id": "chainblade",
+            "id": "chainblade-khorne-berzerkers",
             "raw_name": "Chainblade",
             "resolved": true,
             "candidates": []

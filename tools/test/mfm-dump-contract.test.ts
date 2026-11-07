@@ -204,6 +204,21 @@ describe("MFM dump contract generation", () => {
     expect(validateDumpCatalog(populated, reviewed)).toEqual([]);
     expect(() => buildDumpSchema(populated, reviewed)).not.toThrow();
   });
+
+  it("keeps reviewed fields and relations when a formerly populated table becomes empty", () => {
+    const noEdges = clone(dump()) as { data: { edge: Array<Record<string, unknown>> } };
+    noEdges.data.edge = [];
+    const reviewed = clone(catalog());
+    reviewed.tables.edge.row_shape = "unobserved";
+    expect(validateDumpCatalog(noEdges, reviewed)).toEqual([]);
+    const schema = buildDumpSchema(noEdges, reviewed);
+    const data = (schema.properties as Record<string, Record<string, unknown>>).data;
+    const edge = (data.properties as Record<string, Record<string, unknown>>).edge;
+    expect(edge.maxItems).toBe(0);
+    expect(validateDumpCatalog(dump(), reviewed)).toContain(
+      'Catalog table "edge" row_shape is "unobserved" but the dump is "observed"',
+    );
+  });
   it("closes generated rows and emits no source values", () => {
     const schema = buildDumpSchema(dump(), catalog());
     const validate = new Ajv2020({ strict: false }).compile(schema);

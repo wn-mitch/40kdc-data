@@ -8,14 +8,12 @@
  *   - core stratagems/enhancements ids (and ability_id when set)
  *   - core detachment link fields + unit ability_ids
  *   - enrichment ability_ids
- *   - the out-of-repo store keys
- * index.json is regenerated separately from the migrated store.
  *
  * Ambiguity: an old id shared by >1 entity (pre-existing duplicate-id bug) is
  * resolved per reference by the referrer's detachment context when available;
  * otherwise left unchanged and REPORTED.
  *
- * Usage: npx tsx tools/src/migrate-ability-ids.ts [--store <dir>] [--apply]
+ * Usage: npx tsx tools/src/migrate-ability-ids.ts [--apply]
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
 import { resolve, join } from "node:path";
@@ -27,8 +25,6 @@ const REPO = resolve(__dirname, "../..");
 const CORE = resolve(REPO, "data/core");
 const ENRICH = resolve(REPO, "data/enrichment");
 const args = process.argv.slice(2);
-const flag = (n: string): string | undefined => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : undefined; };
-const STORE_ROOT = resolve(REPO, flag("--store") ?? "../40kdc-abilities");
 const APPLY = args.includes("--apply");
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -103,13 +99,6 @@ for (const faction of factions) {
     const abils: Json[] = readJSON(ep);
     for (const a of abils) if (typeof a.ability_id === "string") a.ability_id = remap(faction, a.ability_id, a.detachment_id ?? null);
     write(ep, abils);
-  }
-  // 5. store faction file: ability_id keys
-  const sp = join(STORE_ROOT, `${faction}.json`);
-  if (existsSync(sp)) {
-    const store: Json[] = readJSON(sp);
-    for (const e of store) if (typeof e.ability_id === "string") e.ability_id = remap(faction, e.ability_id, e.detachment_id ?? null);
-    write(sp, store);
   }
 }
 

@@ -15,6 +15,8 @@ mod newrecruit_simple;
 mod newrecruit_wtc;
 mod roster_json;
 mod rosterizer;
+// Yellowscribe reads datasheets from the Dataset, so it needs the embedded data.
+#[cfg(feature = "bundled-data")]
 mod yellowscribe;
 
 pub use atc_2026::{Atc2026CompactSerializer, Atc2026FullSerializer};
@@ -24,6 +26,7 @@ pub use newrecruit_wtc::{NewRecruitWtcCompactSerializer, NewRecruitWtcFullSerial
 pub use roster_json::RosterJsonSerializer;
 pub use rosterizer::RosterizerSerializer;
 
+#[cfg(feature = "bundled-data")]
 use crate::data::Dataset;
 use crate::import::Roster;
 
@@ -43,8 +46,9 @@ pub enum ExportFormat {
     Atc2026Compact,
     Atc2026Full,
     /// Dataset-backed BattleScribe `.ros` for Yellowscribe → Tabletop Simulator.
-    /// Export-only, and the sole format that requires a [`Dataset`]; reach it
-    /// through [`export_roster_with_dataset`] (a bare [`export_roster`] panics).
+    /// Export-only, and the sole format that requires a `Dataset`; reach it
+    /// through `export_roster_with_dataset` (`bundled-data` feature; a bare
+    /// [`export_roster`] panics).
     Yellowscribe,
 }
 
@@ -59,7 +63,7 @@ pub trait RosterSerializer {
 ///
 /// Every format here is Dataset-free. The one Dataset-backed format
 /// ([`ExportFormat::Yellowscribe`]) needs full datasheet data, so it is served
-/// by [`export_roster_with_dataset`] instead — calling `export_roster` with it
+/// by `export_roster_with_dataset` (`bundled-data` feature) instead — calling `export_roster` with it
 /// panics rather than silently emitting an incomplete roster.
 pub fn export_roster(roster: &Roster, format: ExportFormat) -> String {
     match format {
@@ -84,6 +88,8 @@ pub fn export_roster(roster: &Roster, format: ExportFormat) -> String {
 /// (stat lines, weapon profiles, keywords, ability text) against `dataset`;
 /// every other format is Dataset-free and ignores it, delegating to
 /// [`export_roster`]. Mirror of the TS `exportRoster(roster, format, dataset)`.
+/// Needs the `bundled-data` feature.
+#[cfg(feature = "bundled-data")]
 pub fn export_roster_with_dataset(
     roster: &Roster,
     format: ExportFormat,

@@ -15,18 +15,56 @@ faction-less :meth:`Collection.get` of a shared id raises under ``__debug__``
 (any run without ``-O`` — the Python analogue of the TS non-production
 tripwire); deliberately faction-less callers use :meth:`Collection.get_any`.
 
+A collection may be game-mode scoped (``game_modes_of``): listing methods
+(``all``, iteration, ``size``/``len``, ``by_faction``, ``find``, ``find_all``)
+skip records whose effective game modes lack the collection's mode, while id
+lookups (``get``, ``get_any``, ``get_in_faction``, ``has``, ``by_external_ref``)
+resolve every record whatever the mode, so share tokens, saved rosters and
+internal references keep resolving. :meth:`Collection.with_game_mode` builds a
+view over the same indexes for another mode.
+
 Python mirror of ``tools/src/data/collection.ts``.
 """
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterator, Mapping
-from typing import Any, Generic, TypeVar
+import copy
+from collections.abc import Callable, Iterator, Mapping, Sequence
+from typing import Any, Generic, Literal, TypeVar, cast, get_args
 
 from wh40kdc.data.normalize import normalize_name
 
 T = TypeVar("T")
 V = TypeVar("V")
+
+GameModeView = Literal["matched-play", "combat-patrol", "boarding-actions", "crusade", "all"]
+"""A game mode a dataset view lists, or ``"all"`` to list every record."""
+
+GAME_MODE_VIEWS: tuple[GameModeView, ...] = get_args(GameModeView)
+"""Every accepted :data:`GameModeView` value."""
+
+DEFAULT_GAME_MODE: GameModeView = "matched-play"
+"""The view a dataset lists when no mode is chosen."""
+
+
+def check_game_mode(mode: str) -> GameModeView:
+    """Return ``mode`` as a :data:`GameModeView`, raising ``ValueError`` if unknown."""
+    if mode not in GAME_MODE_VIEWS:
+        raise ValueError(
+            f'Unknown game mode "{mode}"; expected one of {", ".join(GAME_MODE_VIEWS)}'
+        )
+    return cast(GameModeView, mode)
+
+
+def in_game_mode(game_modes: Sequence[str] | None, mode: GameModeView) -> bool:
+    """Whether a record with these ``game_modes`` is listed in ``mode``.
+
+    An absent or empty ``game_modes`` means matched play only; ``"all"`` lists
+    everything.
+    """
+    if mode == "all":
+        return True
+    return mode in game_modes if game_modes else mode == "matched-play"
 
 
 class Collection(Generic[T, V]):
@@ -49,7 +87,13 @@ class Collection(Generic[T, V]):
         guard_unscoped: bool = False,
         entity_label: str = "entity",
         id_aliases: Mapping[str, str] | None = None,
+        game_modes_of: Callable[[T], Sequence[str] | None] | None = None,
+        game_mode: GameModeView = DEFAULT_GAME_MODE,
     ) -> None:
+        # Set only for record types that carry ``game_modes``; unset collections
+        # list every record in every mode.
+        self._game_modes_of = game_modes_of
+        self._game_mode: GameModeView = check_game_mode(game_mode)
         self._id_of = id_of
         self._name_of = name_of
         self._wrap = wrap
@@ -123,14 +167,46 @@ class Collection(Generic[T, V]):
                     self._ambiguous_ids.add(id_)
 
     @property
+    def game_mode(self) -> GameModeView:
+        """The game mode listing methods filter to."""
+        return self._game_mode
+
+    def with_game_mode(
+        self, mode: GameModeView, wrap: Callable[[T], V] | None = None
+    ) -> Collection[T, V]:
+        """A view of this collection listing ``mode``, sharing every index.
+
+        ``wrap`` replaces the record wrapper (a dataset view rebinds its linked
+        entity views to itself). Nothing is re-indexed or copied beyond the
+        collection object itself.
+        """
+        view = copy.copy(self)
+        view._game_mode = check_game_mode(mode)
+        if wrap is not None:
+            view._wrap = wrap
+        return view
+
+    def _visible(self, item: T) -> bool:
+        """Whether listing methods return ``item`` in this collection's mode."""
+        if self._game_modes_of is None or self._game_mode == "all":
+            return True
+        return in_game_mode(self._game_modes_of(item), self._game_mode)
+
+    def _listed(self, items: list[T]) -> list[T]:
+        """``items`` restricted to the records visible in this collection's mode."""
+        if self._game_modes_of is None or self._game_mode == "all":
+            return items
+        return [item for item in items if self._visible(item)]
+
+    @property
     def all(self) -> list[V]:
-        """Every record, deduplicated by id, in first-seen order."""
-        return [self._wrap(item) for item in self._items]
+        """Every record listed in this mode, deduplicated by id, in first-seen order."""
+        return [self._wrap(item) for item in self._listed(self._items)]
 
     @property
     def size(self) -> int:
-        """Number of distinct records."""
-        return len(self._items)
+        """Number of distinct records listed in this mode."""
+        return len(self._listed(self._items))
 
     def get(self, id: str) -> V | None:
         """Look up by exact id.
@@ -217,30 +293,36 @@ class Collection(Generic[T, V]):
 
         An exact id match returns just that record; otherwise every
         normalized-name-exact match is returned, falling back to every
-        normalized-name-substring match.
+        normalized-name-substring match. Every step skips records not listed in
+        this collection's mode, so a hidden exact-id match falls through to name
+        matching.
         """
         by_id = self._raw_by_id(query)
-        if by_id is not None:
+        if by_id is not None and self._visible(by_id):
             return [self._wrap(by_id)]
 
         key = normalize_name(query)
-        exact = self._by_norm.get(key)
+        exact = self._listed(self._by_norm.get(key) or [])
         if exact:
             return [self._wrap(item) for item in exact]
 
         if self._name_of is None or key == "":
             return []
-        return [self._wrap(item) for norm, item in self._norm_names if key in norm]
+        return [
+            self._wrap(item)
+            for norm, item in self._norm_names
+            if key in norm and self._visible(item)
+        ]
 
     def by_faction(self, faction_id: str) -> list[V]:
-        """All records belonging to a faction id (empty if the type has no faction)."""
-        return [self._wrap(item) for item in self._by_faction_id.get(faction_id, [])]
+        """Records of a faction id listed in this mode (empty if the type has no faction)."""
+        return [self._wrap(item) for item in self._listed(self._by_faction_id.get(faction_id, []))]
 
     def __iter__(self) -> Iterator[V]:
-        return iter(self._wrap(item) for item in self._items)
+        return (self._wrap(item) for item in self._listed(self._items))
 
     def __len__(self) -> int:
-        return len(self._items)
+        return self.size
 
 
 def id_collection(
@@ -248,6 +330,7 @@ def id_collection(
     faction_of: Callable[[Any], str | None] | None = None,
     *,
     id_aliases: Mapping[str, str] | None = None,
+    game_modes_of: Callable[[Any], Sequence[str] | None] | None = None,
 ) -> Collection[Any, Any]:
     """Build a passthrough collection for an id-bearing record type.
 
@@ -267,4 +350,5 @@ def id_collection(
         external_refs_of=lambda i: i.get("external_refs"),
         wrap=lambda i: i,
         id_aliases=id_aliases,
+        game_modes_of=game_modes_of,
     )

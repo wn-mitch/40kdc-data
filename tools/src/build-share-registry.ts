@@ -21,7 +21,11 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import {
+import { dataset } from "./data/index.js";
+
+// Every game mode: a share token must encode any record a list can hold, Combat
+// Patrol content included, so the registry draws ids from the "all" view.
+const {
   alliedRules,
   detachments,
   enhancements,
@@ -30,7 +34,7 @@ import {
   units,
   wargear,
   weapons,
-} from "./data/index.js";
+} = dataset.forGameMode("all");
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REGISTRY_PATH = resolve(__dirname, "../../data/share-registry.json");

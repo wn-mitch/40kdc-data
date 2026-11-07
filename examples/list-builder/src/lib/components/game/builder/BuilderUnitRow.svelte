@@ -23,7 +23,7 @@ let { unit, draft, selected, onselect, onclone, onremove }: Props = $props();
 
 const armyFaction = $derived(draft.factionId ?? undefined);
 const raw = $derived(unitRaw(unit.datasheetId, unit.factionId, armyFaction));
-const points = $derived(unitPoints(unit, armyFaction, unitOrdinals(draft.units).get(unit.key)));
+const points = $derived(unitPoints(unit, armyFaction, unitOrdinals(draft.units).get(unit.key), draft.detachmentIds));
 const summary = $derived(loadoutSummary(unit));
 /** Selected enhancement's display name, surfaced as a blue chip in the row. */
 const enhancement = $derived(unit.enhancementId ? enhancementName(unit.enhancementId) : null);

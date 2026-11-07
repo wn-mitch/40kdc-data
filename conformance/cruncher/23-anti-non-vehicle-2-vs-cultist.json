@@ -1,0 +1,48 @@
+{
+  "name": "bolt-rifle (saturation) x5 vs cultist mob, manual Anti-Non-Vehicle 2+ buff (negated target matches)",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "cultist-mob",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting",
+    "attackerStationary": false,
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "manual",
+        "label": "Anti-Non-Vehicle 2+ (test)"
+      },
+      "contribution": {
+        "type": "extra-keyword",
+        "keywordRef": {
+          "keyword_id": "anti",
+          "parameters": {
+            "excluded_target_keywords": [
+              "VEHICLE"
+            ],
+            "threshold": 2
+          }
+        }
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 6.6667,
+      "wounds": 5.5556,
+      "unsaved": 5.5556,
+      "damage": 5.5556,
+      "after-fnp": 5.5556,
+      "models-killed": 5.5556
+    }
+  }
+}

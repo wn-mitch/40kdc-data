@@ -16,7 +16,7 @@ import { units } from "@alpaca-software/40kdc-data";
 
 units.find("Kharn")!.abilities
   .filter(a => a.phases.includes("fight"))
-  .map(a => a.id); // ["legendary-killer", "berzerker-frenzy"]
+  .map(a => a.id); // ["berzerker-frenzy-world-eaters", "legendary-killer-world-eaters"]
 ```
 
 ## Install
@@ -24,6 +24,8 @@ units.find("Kharn")!.abilities
 ```bash
 npm install @alpaca-software/40kdc-data
 ```
+
+The package requires Node 20 or later.
 
 ## The shape
 
@@ -49,6 +51,26 @@ Records resolve their links lazily:
 
 The full underlying record is always available via `.raw`.
 
+### Game modes
+
+A `Dataset` is a view of one game mode; `dataset.gameMode` names it. The
+embedded `dataset` and the top-level collections are the matched-play view.
+Listings and name searches (`all`, iteration, `find`, `findAll`, `byFaction`,
+and the reverse listings such as `unitsWithKeyword`) skip units, weapons,
+detachments, enhancements, Stratagems, wargear options and unit compositions
+whose `game_modes` lack the view's mode. Lookups by id (`get`, `has`,
+`byExternalRef`) and per-record links resolve every record in every view, so
+share tokens and saved rosters keep resolving.
+
+```ts
+import { dataset } from "@alpaca-software/40kdc-data";
+
+const combatPatrol = dataset.forGameMode("combat-patrol");
+const everything = dataset.forGameMode("all");
+```
+
+`forGameMode` caches its views and throws on an unknown mode.
+
 ### Name matching is built for a global player base
 
 Warhammer 40,000 is played worldwide, and many names carry diacritics or
@@ -70,6 +92,88 @@ Open-source example apps built on this package:
 - [Mission Matrix](https://mission-matrix.alpacasoft.dev) — the 11th-edition Force Disposition matchup grid.
 - [Layout Editor](https://layout-editor.alpacasoft.dev) — author terrain layouts on a board; exports terrain-layout JSON.
 - [Hull Tracer](https://hull-tracer.alpacasoft.dev) — trace a model's collision hull from a top-down photo; exports geometry-only hull-shape JSON.
+
+## Complete lever selections
+
+`Dataset.stackableBuffsFor` returns stable lever ids, intersecting activation
+pools, provider dependencies, and exact option-capacity metadata. Validate a
+complete proposed selection with the public `isLegalLeverSelection` helper
+before passing its contributions to `crunch`; a scalar sum of pool caps is not
+equivalent when pools overlap or a raise is fixed to a subset of option ids.
+
+```ts
+import { isLegalLeverSelection } from "@alpaca-software/40kdc-data";
+
+const { buffs, groups } = dataset.stackableBuffsFor(input, context);
+const selectedIds = new Set(buffs.filter(b => b.enabled).map(b => b.id));
+if (isLegalLeverSelection(buffs, groups, selectedIds)) {
+  // Use only the contributions from this complete, legal selection.
+}
+
+```
+
+`id` and `{ability_id, option_id}` references are stable identities; display
+labels and option names are presentation only.
+
+## Undecided conditions and mortal wounds
+
+Some rules depend on facts the engine context cannot know, such as whether the
+target is below Half-strength or the unit charged this turn. `stackableBuffsFor`
+returns each such leaf condition in `needs`, with a stable `key` and the ability
+that raised it; `defensiveNeedsFor` does the same for the defending unit. Answer
+a need by setting `context.conditionFacts[key]` to `true` or `false`; a key that
+is absent leaves the condition undecided.
+
+```ts
+const { needs } = dataset.stackableBuffsFor(input, context);
+const answered = {
+  ...context,
+  conditionFacts: Object.fromEntries(needs.map(n => [n.key, true])),
+};
+const { buffs, groups } = dataset.stackableBuffsFor(input, answered);
+```
+
+Mortal wounds an ability inflicts on a hit or wound roll are buffs and join the
+attack's damage. `Dataset.mortalWoundSourcesFor(input, context)` lists the
+mortal wounds a unit's abilities inflict outside its attacks (after a Charge
+move, at the start of a phase), each with its moment, expected mortal wounds
+before Feel No Pain, and the `needs` it assumes.
+
+Every fragment the buff layer cannot model carries a `scope`: `out-of-scope`
+(no damage content for the attack), `encounter-layer` (acts outside the attack,
+through deaths, mortal wounds, healing or a later moment) or `unresolved` (could
+change the damage, but the engine cannot evaluate it).
+
+## Local-stack damage matrix
+
+`npm run damage:stack` exercises the same public damage path as Salvo:
+`Dataset.stackableBuffsFor`, `isLegalLeverSelection`,
+`Dataset.defensiveBuffsFor`, the shared loadout helpers, and `crunch`. It searches
+a local combined unit (bodyguard plus legal leader/support attachments), up to
+three detachments within three detachment points, legal Enhancements, at most
+one Stratagem, and external supporting abilities. This is deliberately not a
+whole-army roster optimizer.
+
+The default scope is the four fully ported factions
+`chaos-space-marines,adeptus-mechanicus,death-guard,tau-empire`, every target
+profile, and both `shooting,fight`. Override it with comma-separated
+`HC_FACTIONS`, `HC_TARGETS` (`all` or ids), and `HC_PHASES`. `HC_OUTPUT` selects
+the JSON report. `HC_SCENARIO` names a JSON file of board and game state
+(battle round, unit strength, objectives, regions) that every cell assumes. A run resumes the cells of an existing report at that path only
+when its config, scenario and a fingerprint of `tools/src` (code and embedded data)
+all match; otherwise it logs why and starts over. `HC_BODYGUARDS`, `HC_TOP`, and `HC_DEEP` accept a
+positive integer or `Infinity`; all three default to `Infinity`, so candidate
+truncation is never silent. Loadout legality remains exhaustive; its assignment
+search prunes only equipment totals that no later replacement can reduce and
+prioritizes exact target bags without changing rendered loadout grouping. The
+report records effective limits, assumptions, lever requirements and costs,
+supporting units, legal loadouts, defensive translation warnings, and every
+unsupported mechanic without embedding source rules text.
+
+Expanding this campaign to 27 factions requires an explicit ordered 27-faction
+manifest. The data package exposes more faction views than that and does not
+define which 27 belong to this campaign, so directory enumeration is not a
+stable substitute.
 
 ## Also: schema validation
 

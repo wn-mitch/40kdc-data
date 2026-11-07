@@ -55,6 +55,7 @@ import {
 import { repoDirForFactionName } from "./faction-map.js";
 import { nameToId } from "../converters/id-generator.js";
 import { applyWrites, type StagedWrite } from "./apply.js";
+import { currentGameVersion } from "./dataslate.js";
 import {
   mintWeapon,
   mintWargear,
@@ -316,7 +317,7 @@ function projectUnit(
   if (!unit) throw new Error(`unit "${unitId}" not found in ${dir}/units.json`);
   const ds = findDatasheet(dump, unitId, dir);
   if (!ds) throw new Error(`no unambiguous dump datasheet for "${unitId}" in ${dir}`);
-  const gv: GameVersion = unit.game_version ?? { edition: "11th", dataslate: "launch" };
+  const gv: GameVersion = unit.game_version ?? currentGameVersion(dump);
 
   // Valid repo weapon ids (for resolve-before-mint): existing faction weapons +
   // anything already on units / options in this faction.

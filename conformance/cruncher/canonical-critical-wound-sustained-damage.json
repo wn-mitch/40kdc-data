@@ -1,0 +1,60 @@
+{
+  "name": "Canonical critical wound: sustained-damage",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 0
+  },
+  "target": {
+    "unitId": "aggressor-squad",
+    "profileIndex": 0
+  },
+  "modelsFiring": 5,
+  "context": {
+    "phase": "shooting",
+    "withinHalfRange": true,
+    "attackerStationary": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-critical-wound",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "extra-keyword",
+        "keywordRef": {
+          "keyword_id": "sustained-hits",
+          "parameters": {
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-critical-wound",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "damage-mod",
+        "value": 1
+      },
+      "applicableWhen": {
+        "onCritical": "wound"
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 8.3333,
+      "wounds": 4.1667,
+      "unsaved": 2.0833,
+      "damage": 4.8611,
+      "after-fnp": 4.8611,
+      "models-killed": 1.6204
+    }
+  }
+}

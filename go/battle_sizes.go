@@ -32,3 +32,30 @@ func detachmentCapForBattleSize(battleSize string) (int, bool) {
 		return 0, false
 	}
 }
+
+// unitLimitForBattleSize is the 11e unit limit per datasheet (incursion 2,
+// strike-force 3); BATTLELINE and DEDICATED TRANSPORT double it and every EPIC
+// HERO is limited to 1. The bool is false when the size is unknown.
+func unitLimitForBattleSize(battleSize string) (int, bool) {
+	switch battleSize {
+	case "strike-force":
+		return 3, true
+	case "incursion":
+		return 2, true
+	default:
+		return 0, false
+	}
+}
+
+// enhancementLimitForBattleSize is the 11e Enhancement limit (incursion 2,
+// strike-force 4); the bool is false when the size is unknown.
+func enhancementLimitForBattleSize(battleSize string) (int, bool) {
+	switch battleSize {
+	case "strike-force":
+		return 4, true
+	case "incursion":
+		return 2, true
+	default:
+		return 0, false
+	}
+}

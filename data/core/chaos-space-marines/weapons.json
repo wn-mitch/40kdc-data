@@ -19,7 +19,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -68,7 +68,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -95,8 +95,8 @@
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
@@ -112,12 +112,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "b95f-e352-4d05-937c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "46534af0-d99f-49aa-9374-5c1f3aa116f9"
       },
       {
         "namespace": "mfm",
@@ -171,7 +175,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -221,7 +225,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -266,7 +270,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -303,7 +307,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -332,7 +336,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -343,6 +347,9 @@
         "namespace": "mfm",
         "id": "7d1aa4c7-694d-4567-a433-11d6bc4c0f6e"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -388,7 +395,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -427,7 +434,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -446,6 +453,10 @@
         "namespace": "mfm",
         "id": "56baafb2-492a-4636-8398-955494a9428d"
       }
+    ],
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
     ]
   },
   {
@@ -491,7 +502,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -535,7 +546,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -587,7 +598,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -602,6 +613,10 @@
         "namespace": "mfm",
         "id": "c0eda557-9ead-49c3-bc29-cfeac8710258"
       }
+    ],
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
     ]
   },
   {
@@ -653,7 +668,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -672,7 +687,7 @@
         "range": "Melee",
         "stats": {
           "A": 5,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 1,
           "WS": 3
@@ -689,7 +704,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -722,7 +737,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -759,7 +774,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -778,6 +793,10 @@
         "namespace": "mfm",
         "id": "8d9171e4-3a68-4b0c-8aee-cc09457ab860"
       }
+    ],
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
     ]
   },
   {
@@ -800,7 +819,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -827,7 +846,7 @@
         "range": "Melee",
         "stats": {
           "A": 4,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 1,
           "WS": 3
@@ -837,7 +856,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -873,7 +892,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -910,7 +929,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -947,7 +966,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1033,7 +1052,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1070,7 +1089,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1103,7 +1122,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1185,7 +1204,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1229,7 +1248,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1244,6 +1263,10 @@
         "namespace": "mfm",
         "id": "aae523bb-d34e-4f95-a0af-11d859ae8fab"
       }
+    ],
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
     ]
   },
   {
@@ -1308,7 +1331,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1341,7 +1364,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1374,7 +1397,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1414,7 +1437,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1462,7 +1485,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1514,7 +1537,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1551,7 +1574,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1588,7 +1611,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1628,7 +1651,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1675,7 +1698,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1716,7 +1739,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1752,7 +1775,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1795,7 +1818,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1828,7 +1851,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1865,7 +1888,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1898,7 +1921,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1931,7 +1954,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1946,6 +1969,9 @@
         "namespace": "mfm",
         "id": "942def7d-248f-45c4-a216-21176ff00cb6"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -1968,7 +1994,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2001,7 +2027,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2038,7 +2064,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2071,7 +2097,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2104,7 +2130,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2141,7 +2167,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2174,7 +2200,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2207,7 +2233,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2247,7 +2273,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2296,7 +2322,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2329,7 +2355,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2362,7 +2388,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2395,7 +2421,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2428,7 +2454,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2525,7 +2551,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2615,7 +2641,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2652,7 +2678,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2692,7 +2718,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2741,7 +2767,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2781,7 +2807,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2814,7 +2840,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2847,7 +2873,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2880,7 +2906,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2924,7 +2950,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2961,7 +2987,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2998,7 +3024,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3031,7 +3057,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3064,7 +3090,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3107,7 +3133,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3150,7 +3176,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3191,7 +3217,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3224,7 +3250,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3267,7 +3293,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3300,7 +3326,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3340,7 +3366,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3373,7 +3399,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3413,7 +3439,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3453,7 +3479,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3490,7 +3516,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3523,7 +3549,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3556,7 +3582,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3589,7 +3615,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3626,7 +3652,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3659,7 +3685,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3692,7 +3718,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3729,7 +3755,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3792,7 +3818,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3825,7 +3851,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3865,7 +3891,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3898,7 +3924,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3931,7 +3957,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3968,7 +3994,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4005,7 +4031,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4045,7 +4071,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4078,7 +4104,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4118,7 +4144,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4155,7 +4181,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4188,7 +4214,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4225,7 +4251,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4262,7 +4288,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4295,7 +4321,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4339,7 +4365,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4372,7 +4398,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4405,7 +4431,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4449,7 +4475,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4516,7 +4542,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4582,7 +4608,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4650,7 +4676,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4683,7 +4709,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4739,7 +4765,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4776,7 +4802,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4820,7 +4846,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4857,7 +4883,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4886,7 +4912,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4919,7 +4945,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -4942,7 +4968,7 @@
         "range": 12,
         "stats": {
           "A": 6,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 1,
           "BS": 2
@@ -4967,7 +4993,7 @@
         "range": "Melee",
         "stats": {
           "A": 6,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 1,
           "WS": 2
@@ -4984,7 +5010,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5046,7 +5072,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5083,7 +5109,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5123,7 +5149,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5160,7 +5186,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5197,7 +5223,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5230,7 +5256,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5275,7 +5301,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5485,25 +5511,37 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "sweep",
+        "name": "clawed sweeps",
         "range": "Melee",
         "stats": {
-          "A": 8,
-          "S": 5,
-          "AP": -1,
+          "A": 6,
+          "S": 6,
+          "AP": -2,
           "D": 1,
           "WS": 3
         },
         "keywords": []
       },
       {
-        "name": "strike",
+        "name": "rending strikes",
         "range": "Melee",
         "stats": {
           "A": 4,
-          "S": 6,
-          "AP": -2,
-          "D": 2,
+          "S": 9,
+          "AP": -3,
+          "D": 3,
+          "WS": 3
+        },
+        "keywords": []
+      },
+      {
+        "name": "thunderous blows",
+        "range": "Melee",
+        "stats": {
+          "A": 2,
+          "S": 12,
+          "AP": -4,
+          "D": "D6+2",
           "WS": 3
         },
         "keywords": []
@@ -5511,12 +5549,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "b850-4247-d1d9-9295"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0c69789f-590b-417c-8b30-eca02d39df1e"
       }
     ]
   },
@@ -5723,7 +5765,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5767,7 +5809,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5800,7 +5842,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5833,7 +5875,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5866,7 +5908,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5899,7 +5941,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5932,7 +5974,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5965,7 +6007,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -5988,7 +6030,7 @@
         "range": "Melee",
         "stats": {
           "A": 7,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 1,
           "WS": 2
@@ -5998,7 +6040,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6017,7 +6059,7 @@
         "range": "Melee",
         "stats": {
           "A": 5,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 1,
           "WS": 3
@@ -6027,7 +6069,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6046,8 +6088,8 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 2
         },
@@ -6060,7 +6102,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6070,6 +6112,10 @@
       {
         "namespace": "mfm",
         "id": "32dc85ab-06e6-4673-b59f-5697c1128f79"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e2979ad4-0801-4d5e-bd9c-0c7efaa230df"
       }
     ]
   },
@@ -6097,7 +6143,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6134,7 +6180,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6157,8 +6203,8 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 2
         },
@@ -6171,7 +6217,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6181,6 +6227,10 @@
       {
         "namespace": "mfm",
         "id": "32dc85ab-06e6-4673-b59f-5697c1128f79"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e2979ad4-0801-4d5e-bd9c-0c7efaa230df"
       }
     ]
   },
@@ -6194,7 +6244,7 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 1,
           "BS": 3
@@ -6208,7 +6258,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6231,8 +6281,8 @@
         "range": 12,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 2
         },
@@ -6245,7 +6295,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6255,6 +6305,10 @@
       {
         "namespace": "mfm",
         "id": "32dc85ab-06e6-4673-b59f-5697c1128f79"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e2979ad4-0801-4d5e-bd9c-0c7efaa230df"
       }
     ]
   },
@@ -6285,7 +6339,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6326,7 +6380,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6359,7 +6413,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6392,7 +6446,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6425,7 +6479,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6458,7 +6512,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6495,7 +6549,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6528,7 +6582,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6561,7 +6615,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6584,8 +6638,8 @@
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 2
         },
@@ -6601,7 +6655,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6611,6 +6665,10 @@
       {
         "namespace": "mfm",
         "id": "31446857-0af3-4fb6-8ba5-603eadfdb0d4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9a1d5aad-539a-4013-8a06-3af5b6839e08"
       }
     ]
   },
@@ -6624,8 +6682,8 @@
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 2
         },
@@ -6641,7 +6699,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6651,6 +6709,10 @@
       {
         "namespace": "mfm",
         "id": "31446857-0af3-4fb6-8ba5-603eadfdb0d4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9a1d5aad-539a-4013-8a06-3af5b6839e08"
       }
     ]
   },
@@ -6664,8 +6726,8 @@
         "range": 24,
         "stats": {
           "A": 1,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
@@ -6691,7 +6753,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6724,7 +6786,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6764,7 +6826,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6804,7 +6866,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6837,7 +6899,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6870,7 +6932,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6907,7 +6969,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6947,7 +7009,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -6996,7 +7058,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7033,7 +7095,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7070,7 +7132,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7107,7 +7169,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7169,7 +7231,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7225,7 +7287,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7281,7 +7343,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7337,7 +7399,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7393,7 +7455,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7449,7 +7511,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7482,7 +7544,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7515,7 +7577,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7548,7 +7610,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7581,7 +7643,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7614,7 +7676,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7637,19 +7699,12 @@
         "range": 48,
         "stats": {
           "A": 2,
-          "S": 12,
+          "S": 10,
           "AP": -2,
           "D": "D6+1",
-          "BS": 4
+          "BS": 3
         },
-        "keywords": [
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
+        "keywords": []
       },
       {
         "name": "frag",
@@ -7659,29 +7714,27 @@
           "S": 5,
           "AP": -1,
           "D": 1,
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
           {
             "keyword_id": "blast"
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 3
-            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "db71-036c-d005-6634"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7d185410-a8e1-4b49-8024-fb6ddd79f359"
       }
     ]
   },
@@ -7712,7 +7765,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7738,29 +7791,27 @@
           "S": 12,
           "AP": -3,
           "D": 3,
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
           {
             "keyword_id": "blast"
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 2
-            }
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "6b1a-2c96-ea28-db94"
+      },
+      {
+        "namespace": "mfm",
+        "id": "956552e1-4b77-4b8b-adf2-31c2528e4f52"
       }
     ]
   },
@@ -7773,7 +7824,7 @@
         "name": "Electroscourge",
         "range": "Melee",
         "stats": {
-          "A": 7,
+          "A": 5,
           "S": 12,
           "AP": -2,
           "D": 2,
@@ -7781,25 +7832,29 @@
         },
         "keywords": [
           {
-            "keyword_id": "extra-attacks"
-          },
-          {
             "keyword_id": "sustained-hits",
             "parameters": {
               "value": 2
             }
+          },
+          {
+            "keyword_id": "extra-attacks"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "ed7d-a957-2d33-1d2d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "97960942-6725-4b6e-873b-92dd9f44bdf7"
       }
     ]
   },
@@ -7816,26 +7871,23 @@
           "S": 12,
           "AP": -3,
           "D": "D6+1",
-          "BS": 4
+          "BS": 3
         },
-        "keywords": [
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 1
-            }
-          }
-        ]
+        "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "2fb7-ce9a-84c8-d398"
+      },
+      {
+        "namespace": "mfm",
+        "id": "738dd9ef-8ba8-4392-b8c8-45350a7d5f3e"
       }
     ]
   },
@@ -7852,35 +7904,33 @@
           "S": 9,
           "AP": -1,
           "D": 3,
-          "BS": 4
+          "BS": 3
         },
         "keywords": [
-          {
-            "keyword_id": "devastating-wounds"
-          },
-          {
-            "keyword_id": "rapid-fire",
-            "parameters": {
-              "value": 2
-            }
-          },
           {
             "keyword_id": "sustained-hits",
             "parameters": {
               "value": 1
             }
+          },
+          {
+            "keyword_id": "devastating-wounds"
           }
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
         "namespace": "bsdata",
         "id": "120a-e254-8840-b075"
+      },
+      {
+        "namespace": "mfm",
+        "id": "69ff7700-1deb-4910-b32d-8ffaa9e82e13"
       }
     ]
   },
@@ -7903,13 +7953,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "8a2fe7be-95bf-4a5b-aa82-ff65f37a5550"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -7931,13 +7984,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
         "namespace": "mfm",
         "id": "48a7f131-d573-4c51-979b-fc572340023a"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -7970,7 +8026,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -7980,6 +8036,1638 @@
       {
         "namespace": "mfm",
         "id": "dd30857e-3982-477e-90de-ec68381d7a8b"
+      }
+    ]
+  },
+  {
+    "id": "autopistol-zarkans-daemonkin-cultist-mob",
+    "name": "Autopistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Autopistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "4128-d8b4-4f3b-ae20"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "5103-4dd1-a06a-fff"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "5c28-6755-4396-1124"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "7947-709d-87d2-28ac"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "b57d-c0ee-ea4f-bbb8"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "c42f-7ec3-2301-d273"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ec60-b06e-6ba8-8c83"
+      },
+      {
+        "namespace": "mfm",
+        "id": "20bb3d39-fec5-4664-8b0b-967e4deccaa5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c4264e96-49d6-40d7-806f-c0c061bec825"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "bolt-pistol-chaos-bikers",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29eaac84-a81c-471d-bfac-972cd68795ec"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-chosen",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29eaac84-a81c-471d-bfac-972cd68795ec"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-dark-apostle",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29eaac84-a81c-471d-bfac-972cd68795ec"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-legionaries",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29eaac84-a81c-471d-bfac-972cd68795ec"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-master-of-executions",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29eaac84-a81c-471d-bfac-972cd68795ec"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-master-of-possession",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29eaac84-a81c-471d-bfac-972cd68795ec"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-nemesis-claw",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29eaac84-a81c-471d-bfac-972cd68795ec"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-raptors",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29eaac84-a81c-471d-bfac-972cd68795ec"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-red-corsairs-raiders",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29eaac84-a81c-471d-bfac-972cd68795ec"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-sorcerer",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29eaac84-a81c-471d-bfac-972cd68795ec"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-aranis-zarkan",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "23fcde7a-ff7e-4067-8c98-0bb1bcb299a8"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "bolt-pistol-zarkans-daemonkin-legionaries",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "23fcde7a-ff7e-4067-8c98-0bb1bcb299a8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f6083ab1-10e5-4e41-82f3-927af11a9253"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "bolt-pistol-zarkans-daemonkin-cultist-mob",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a6320688-9ac8-400b-858e-ec72b27e2506"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "boltgun-chosen",
+    "name": "Boltgun",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Boltgun",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1e9a7039-df38-4623-a37f-28883ad0dd70"
+      },
+      {
+        "namespace": "mfm",
+        "id": "534673d1-2546-4273-86cc-2574f12a7254"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7d1aa4c7-694d-4567-a433-11d6bc4c0f6e"
+      }
+    ]
+  },
+  {
+    "id": "boltgun-havocs",
+    "name": "Boltgun",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Boltgun",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1e9a7039-df38-4623-a37f-28883ad0dd70"
+      },
+      {
+        "namespace": "mfm",
+        "id": "534673d1-2546-4273-86cc-2574f12a7254"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7d1aa4c7-694d-4567-a433-11d6bc4c0f6e"
+      }
+    ]
+  },
+  {
+    "id": "boltgun-legionaries",
+    "name": "Boltgun",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Boltgun",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1e9a7039-df38-4623-a37f-28883ad0dd70"
+      },
+      {
+        "namespace": "mfm",
+        "id": "534673d1-2546-4273-86cc-2574f12a7254"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7d1aa4c7-694d-4567-a433-11d6bc4c0f6e"
+      }
+    ]
+  },
+  {
+    "id": "boltgun-nemesis-claw",
+    "name": "Boltgun",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Boltgun",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1e9a7039-df38-4623-a37f-28883ad0dd70"
+      },
+      {
+        "namespace": "mfm",
+        "id": "534673d1-2546-4273-86cc-2574f12a7254"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7d1aa4c7-694d-4567-a433-11d6bc4c0f6e"
+      }
+    ]
+  },
+  {
+    "id": "boltgun-red-corsairs-raiders",
+    "name": "Boltgun",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Boltgun",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1e9a7039-df38-4623-a37f-28883ad0dd70"
+      },
+      {
+        "namespace": "mfm",
+        "id": "534673d1-2546-4273-86cc-2574f12a7254"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7d1aa4c7-694d-4567-a433-11d6bc4c0f6e"
+      }
+    ]
+  },
+  {
+    "id": "close-combat-weapon-chaos-bikers",
+    "name": "Close combat weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Close Combat Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3854-44a6-5746-d602"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "b12c-308b-9920-b09a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a8879b7-d022-48c4-951d-c2fa84f69d4f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0cd704db-446f-4192-9895-46de31e27ad1"
+      }
+    ]
+  },
+  {
+    "id": "close-combat-weapon-havocs",
+    "name": "Close combat weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Close Combat Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3854-44a6-5746-d602"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "b12c-308b-9920-b09a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a8879b7-d022-48c4-951d-c2fa84f69d4f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0cd704db-446f-4192-9895-46de31e27ad1"
+      }
+    ]
+  },
+  {
+    "id": "close-combat-weapon-legionaries",
+    "name": "Close combat weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Close Combat Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3854-44a6-5746-d602"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "b12c-308b-9920-b09a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a8879b7-d022-48c4-951d-c2fa84f69d4f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0cd704db-446f-4192-9895-46de31e27ad1"
+      }
+    ]
+  },
+  {
+    "id": "close-combat-weapon-raptors",
+    "name": "Close combat weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Close Combat Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3854-44a6-5746-d602"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "b12c-308b-9920-b09a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a8879b7-d022-48c4-951d-c2fa84f69d4f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0cd704db-446f-4192-9895-46de31e27ad1"
+      }
+    ]
+  },
+  {
+    "id": "combi-weapon-chaos-land-raider",
+    "name": "Combi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Combi-weapon",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "31fc-c03a-7a50-f8f2"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8284-661f-8e4c-9e65"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "cc61-d9ed-f24-e511"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
+      }
+    ]
+  },
+  {
+    "id": "combi-weapon-chaos-predator-annihilator",
+    "name": "Combi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Combi-weapon",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "31fc-c03a-7a50-f8f2"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8284-661f-8e4c-9e65"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "cc61-d9ed-f24-e511"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
+      }
+    ]
+  },
+  {
+    "id": "combi-weapon-chaos-predator-destructor",
+    "name": "Combi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Combi-weapon",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "31fc-c03a-7a50-f8f2"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8284-661f-8e4c-9e65"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "cc61-d9ed-f24-e511"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
+      }
+    ]
+  },
+  {
+    "id": "combi-weapon-chaos-rhino",
+    "name": "Combi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Combi-weapon",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "31fc-c03a-7a50-f8f2"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8284-661f-8e4c-9e65"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "cc61-d9ed-f24-e511"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
+      }
+    ]
+  },
+  {
+    "id": "combi-weapon-chaos-terminator-squad",
+    "name": "Combi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Combi-weapon",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "31fc-c03a-7a50-f8f2"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8284-661f-8e4c-9e65"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "cc61-d9ed-f24-e511"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
+      }
+    ]
+  },
+  {
+    "id": "combi-weapon-chaos-vindicator",
+    "name": "Combi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Combi-weapon",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "31fc-c03a-7a50-f8f2"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8284-661f-8e4c-9e65"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "cc61-d9ed-f24-e511"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
+      }
+    ]
+  },
+  {
+    "id": "combi-weapon-sorcerer-in-terminator-armour",
+    "name": "Combi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Combi-weapon",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "31fc-c03a-7a50-f8f2"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8284-661f-8e4c-9e65"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "cc61-d9ed-f24-e511"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
+      }
+    ]
+  },
+  {
+    "id": "hideous-mutations-possessed",
+    "name": "Hideous mutations",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Hideous mutations",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 6,
+          "AP": -1,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "f1e7-9862-8735-1bc4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5f1f7113-bcbf-4553-8b92-89d020e76594"
+      },
+      {
+        "namespace": "mfm",
+        "id": "942def7d-248f-45c4-a216-21176ff00cb6"
+      }
+    ]
+  },
+  {
+    "id": "magma-cutters-defiler",
+    "name": "Magma cutters",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Magma cutters",
+        "range": 12,
+        "stats": {
+          "A": 2,
+          "S": 9,
+          "AP": -4,
+          "D": "D6",
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "melta",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1b0bc096-0a9a-431f-8c74-36a3aec37f1b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1b871eb2-b7eb-43cf-a083-87308e5ecf59"
+      }
+    ]
+  },
+  {
+    "id": "plasma-pistol-zarkans-daemonkin-legionaries",
+    "name": "Plasma pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Standard",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 7,
+          "AP": -2,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      },
+      {
+        "name": "Supercharge",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -3,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          },
+          {
+            "keyword_id": "hazardous"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2e9b7c68-3bb3-4693-a62a-cf03795652b2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f948ce6b-42e8-4d7e-9305-0bd7080946e2"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "rite-of-possession-aranis-zarkan",
+    "name": "Rite of Possession",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Focused Witchfire",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 6,
+          "AP": -3,
+          "D": 3,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "hazardous"
+          },
+          {
+            "keyword_id": "close-quarters"
+          },
+          {
+            "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "precision"
+          },
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Psyker",
+              "threshold": 2
+            }
+          }
+        ]
+      },
+      {
+        "name": "Witchfire",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": -3,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Psyker",
+              "threshold": 2
+            }
+          },
+          {
+            "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "precision"
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1d4-7e6b-efa1-e660"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d9bf26c-5d80-4e3a-8890-1854bd6959fc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "35af123f-9d9e-448a-8975-0fd5faef7135"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "combi-weapon-chosen",
+    "name": "Combi-weapon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Combi-weapon",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "31fc-c03a-7a50-f8f2"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "8284-661f-8e4c-9e65"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "cc61-d9ed-f24-e511"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6238e1cb-8255-4acb-8020-6e4f870019ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7475c3d-9d81-423c-b920-b7f7ff602f00"
       }
     ]
   }

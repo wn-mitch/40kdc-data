@@ -1,0 +1,16 @@
+Adepta Sororitas - Combat Patrol import - [0 pts]
+
+# ++ Army Roster ++ [0 pts]
+## Configuration
+List Name: Combat Patrol import
+Faction: Adepta Sororitas
+Detachment: Sanctuary Guardians
+
+## Battleline [0 pts]
+Sanctuary Canoness Adalya [0 pts]: Warlord, Condemnor boltgun, Hallowed chainsword
+Sanctuary Guardians Battle Sisters Squad [0 pts]:
+• 1x Battle Sister with Simulacrum Imperialis: Bolt pistol, Boltgun, simulacrum imperialis, Stocks and Fists
+• 1x Battle Sister with Ministorum Flamer: Bolt pistol, Ministorum flamer, Stocks and Fists
+• 6x Battle Sister: 6x Bolt pistol, Boltgun, 6x Stocks and Fists
+• 1x Battle Sister with Ministorum Heavy Flamer: Bolt pistol, Ministorum heavy flamer, Stocks and Fists
+• 1x Sister Superior: Bolt pistol, Combi-weapon, Power weapon, Stocks and Fists

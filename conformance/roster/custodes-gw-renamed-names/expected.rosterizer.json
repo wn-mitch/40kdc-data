@@ -1,0 +1,128 @@
+{
+  "slug": "",
+  "key": "",
+  "visible": "hidden",
+  "locked": false,
+  "rulebook": {
+    "name": "40kdc",
+    "game": "Warhammer 40,000",
+    "publisher": "Alpaca Software",
+    "url": "https://40kdc.dev",
+    "genre": "wargame"
+  },
+  "snapshot": {
+    "item": "Roster§Roster",
+    "name": "Imported roster",
+    "quantity": 1,
+    "stats": {
+      "Points": {
+        "value": 360
+      }
+    },
+    "assets": {
+      "included": [
+        {
+          "item": "Faction§Adeptus Custodes",
+          "name": "Adeptus Custodes",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Lions of the Emperor",
+          "name": "Lions of the Emperor",
+          "quantity": 1
+        },
+        {
+          "item": "Force Disposition§Disruption",
+          "name": "Disruption",
+          "quantity": 1
+        },
+        {
+          "item": "Unit§Witchseekers",
+          "name": "Witchseekers",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 50
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Close combat weapon",
+                "name": "Close combat weapon",
+                "quantity": 4
+              },
+              {
+                "item": "Weapon§Witchseeker flamer",
+                "name": "Witchseeker flamer",
+                "quantity": 4
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Prosecutors",
+          "name": "Prosecutors",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 50
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Boltgun",
+                "name": "Boltgun",
+                "quantity": 4
+              },
+              {
+                "item": "Weapon§Close combat weapon",
+                "name": "Close combat weapon",
+                "quantity": 4
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Vigilators",
+          "name": "Vigilators",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 100
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Executioner greatblade",
+                "name": "Executioner greatblade",
+                "quantity": 10
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Venatari Custodians",
+          "name": "Venatari Custodians",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 160
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Venatari lance",
+                "name": "Venatari lance",
+                "quantity": 3
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

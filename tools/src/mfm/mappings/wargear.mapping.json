@@ -98,7 +98,7 @@
       "transforms": [],
       "filters": [],
       "precedence": [
-        "Reuse the source unit game_version; otherwise use the repository launch default"
+        "Reuse the source unit game_version; otherwise use the current dump dataslate"
       ],
       "consumers": [
         "tools/src/mfm/project-loadout.ts#projectUnit",

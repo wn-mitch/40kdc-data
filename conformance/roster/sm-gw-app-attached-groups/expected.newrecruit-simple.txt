@@ -1,0 +1,21 @@
+Adeptus Astartes - Attached Groups Test - [395 pts]
+
+# ++ Army Roster ++ [395 pts]
+## Configuration
+List Name: Attached Groups Test
+Faction: Adeptus Astartes
+Detachment: Gladius Task Force
+Force Disposition: Priority Assets
+
+## Battleline [395 pts]
+Captain [90 pts]: Attachment: leader -> Intercessor Squad, Warlord, Heavy Bolt Pistol, Master-crafted bolter, Master-crafted power weapon
+Intercessor Squad [85 pts]:
+• 1x Intercessor Sergeant: Bolt Pistol, Bolt Rifle, Knives and Fists
+• 4x Intercessor: Bolt Pistol, Bolt Rifle, Knives and Fists
+Assault Intercessor Squad [85 pts]:
+• 1x Assault Intercessor Sergeant: Chainsword, Heavy Bolt Pistol
+• 4x Assault Intercessor: Chainsword, Heavy Bolt Pistol
+Lieutenant [50 pts]: Attachment: leader -> Assault Intercessor Squad, Bolt Pistol, Ceramite Fists, Master-crafted bolter
+Intercessor Squad [85 pts]:
+• 1x Intercessor Sergeant: Bolt Pistol, Bolt Rifle, Knives and Fists
+• 4x Intercessor: Bolt Pistol, Bolt Rifle, Knives and Fists

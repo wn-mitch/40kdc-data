@@ -18,7 +18,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 140
+        "cost": 135
       }
     ],
     "keywords": [
@@ -45,11 +45,16 @@
     ],
     "ability_ids": [
       "deep-strike",
-      "subterranean-tunnels"
+      "subterranean-tunnels-tyranids",
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -93,7 +98,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 135
+        "cost": 130
       }
     ],
     "keywords": [
@@ -119,12 +124,17 @@
       "mawloc-scything-talons"
     ],
     "ability_ids": [
-      "terror-from-the-deep",
-      "deep-strike"
+      "terror-from-the-deep-tyranids",
+      "deep-strike",
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -202,11 +212,13 @@
       "venom-cannon"
     ],
     "ability_ids": [
-      "adaptable-predators"
+      "adaptable-predators-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -300,14 +312,19 @@
       "tyrant-talons"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "paroxysm-psychic",
-      "will-of-the-hive-mind",
-      "deep-strike"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "paroxysm-tyranids",
+      "will-of-the-hive-mind-tyranids",
+      "deep-strike",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -360,7 +377,6 @@
       "Monster",
       "Titanic",
       "Fly",
-      "Aircraft",
       "Transport",
       "Great Devourer",
       "Harridan"
@@ -381,16 +397,24 @@
       "gargantuan-scything-talons"
     ],
     "ability_ids": [
-      "deadly-demise-2d6",
-      "frenzied-metabolism",
-      "hover"
+      {
+        "id": "deadly-demise",
+        "value": "2D6"
+      },
+      "frenzied-metabolism-tyranids",
+      "hover",
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      "synapse-tyranids"
     ],
     "transport_capacity": {
       "capacity": 20
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -463,13 +487,22 @@
       "psychic-tendril"
     ],
     "ability_ids": [
-      "deadly-demise-d6",
-      "singular-purpose",
-      "unnatural-resilience"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "singular-purpose-tyranids",
+      "unnatural-resilience-tyranids",
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -535,14 +568,16 @@
       "prime-talons"
     ],
     "ability_ids": [
-      "alpha-warrior",
-      "death-blow",
+      "alpha-warrior-winged-tyranid-prime-tyranids",
+      "death-blow-tyranids",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -612,13 +647,13 @@
     "ability_ids": [
       "fights-first",
       "infiltrators",
-      "pouncing-leap",
+      "pouncing-leap-tyranids",
       "stealth",
-      "synapse"
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -673,7 +708,8 @@
       "Towering",
       "Transport",
       "Great Devourer",
-      "Hierophant"
+      "Hierophant",
+      "Frame"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -693,16 +729,28 @@
       "titanic-scything-talons"
     ],
     "ability_ids": [
-      "apex-beast",
-      "stalking-forward",
-      "deadly-demise-2d6"
+      "apex-beast-tyranids",
+      "stalking-forward-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "2D6"
+      },
+      {
+        "id": "damaged",
+        "value": 10
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 6
+      },
+      "synapse-tyranids"
     ],
     "transport_capacity": {
       "capacity": 20
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -770,15 +818,20 @@
       "synaptic-pulse"
     ],
     "ability_ids": [
-      "domination-of-the-hive-mind-aura",
-      "hive-commander",
+      "domination-of-the-hive-mind-tyranids",
+      "hive-commander-tyranids",
       "leader",
-      "malign-presence-aura",
-      "deadly-demise-d3"
+      "malign-presence-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -850,12 +903,20 @@
       "powerful-limbs"
     ],
     "ability_ids": [
-      "symbiotic-targeting",
-      "deadly-demise-d3"
+      "symbiotic-targeting-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -922,12 +983,13 @@
       "toxic-lashes"
     ],
     "ability_ids": [
-      "foul-spores-aura",
-      "stealth"
+      "foul-spores-tyranids",
+      "stealth",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -994,11 +1056,13 @@
       "tyranid-warrior-claws-and-talons-tyranid-warriors-with-melee-bio-weapons"
     ],
     "ability_ids": [
-      "adaptive-instincts"
+      "adaptive-instincts-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1069,13 +1133,14 @@
     },
     "weapon_ids": [],
     "ability_ids": [
-      "bio-minefield",
-      "floating-death",
-      "deep-strike"
+      "bio-minefield-tyranids",
+      "deep-strike",
+      "floating-death-spore-mines-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1132,7 +1197,8 @@
       "Dedicated Transport",
       "Great Devourer",
       "Vanguard Invader",
-      "Tyrannocyte"
+      "Tyrannocyte",
+      "Frame"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -1150,16 +1216,20 @@
       "tyrannocyte-bio-weapons"
     ],
     "ability_ids": [
-      "aerial-seeding",
+      "aerial-seeding-tyranids",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "synapse-tyranids"
     ],
     "transport_capacity": {
       "capacity": 20
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1230,12 +1300,13 @@
       "spinemaws"
     ],
     "ability_ids": [
-      "chitinous-horrors-aura",
-      "deep-strike"
+      "chitinous-horrors-tyranids",
+      "deep-strike",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1305,12 +1376,16 @@
       "spore-mine-launcher"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "seed-spore-mines"
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "seed-spore-mines-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1375,17 +1450,18 @@
       "lictor-claws-and-talons"
     ],
     "ability_ids": [
-      "fear-of-the-unseen-aura",
-      "feeder-tendrils",
+      "fear-of-the-unseen-tyranids",
+      "feeder-tendrils-tyranids",
       "fights-first",
-      "hunter-organism",
+      "hunter-organism-tyranids",
       "infiltrators",
       "lone-operative",
-      "stealth"
+      "stealth",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1471,13 +1547,16 @@
       "venom-bolt"
     ],
     "ability_ids": [
-      "alpha-invader",
-      "hypersensory-array",
-      "deep-strike"
+      "alpha-invader-tyranids",
+      "hypersensory-array-tyranids",
+      "deep-strike",
+      "leader",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1550,12 +1629,22 @@
       "toxinjector-harpoon"
     ],
     "ability_ids": [
-      "harpoon-barbs",
-      "deadly-demise-d6"
+      "harpoon-barbs-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      "singular-purpose-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1617,13 +1706,17 @@
       "sporocyst-bio-weapons"
     ],
     "ability_ids": [
-      "hive-defences",
-      "seed-mucolids",
-      "deadly-demise-d3"
+      "hive-defences-tyranids",
+      "seed-mucolids-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1675,7 +1768,8 @@
     "keywords": [
       "Monster",
       "Great Devourer",
-      "Tyrannofex"
+      "Tyrannofex",
+      "Frame"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -1697,12 +1791,20 @@
       "stinger-salvoes"
     ],
     "ability_ids": [
-      "resilient-organism",
-      "deadly-demise-d6"
+      "resilient-organism-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1783,15 +1885,18 @@
       "piercing-claws-and-talons"
     ],
     "ability_ids": [
-      "neural-disruption",
-      "psychological-saboteur-aura",
+      "neural-disruption-tyranids",
+      "psychological-saboteur-tyranids",
       "stealth",
       "infiltrators",
-      "lone-operative"
+      "lone-operative",
+      "feeder-tendrils-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1856,14 +1961,21 @@
       "talons-and-betentacled-maw"
     ],
     "ability_ids": [
-      "bio-stimulus-aura",
-      "feeding-frenzy",
-      "feel-no-pain-5",
-      "deadly-demise-1"
+      "bio-stimulus-tyranids",
+      "feeding-frenzy-tyranids",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1933,12 +2045,14 @@
       "warp-blast"
     ],
     "ability_ids": [
-      "spirit-leech-aura-psychic",
-      "warp-field-aura-psychic"
+      "spirit-leech-tyranids",
+      "warp-field-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2005,14 +2119,19 @@
       "broodlord-claws-and-talons"
     ],
     "ability_ids": [
-      "hypnotic-gaze-psychic",
+      "hypnotic-gaze-tyranids",
       "leader",
-      "scouts-8",
-      "vicious-insight"
+      {
+        "id": "scouts",
+        "value": 8
+      },
+      "vicious-insight-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2081,12 +2200,20 @@
       "twin-stranglethorn-cannon"
     ],
     "ability_ids": [
-      "spore-mine-cysts",
-      "deadly-demise-d3"
+      "spore-mine-cysts-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2125,7 +2252,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 65
       }
     ],
     "keywords": [
@@ -2153,15 +2280,17 @@
       "clawed-limbs"
     ],
     "ability_ids": [
-      "it-itches",
-      "parasitic-infection",
+      "it-itches-tyranids",
+      "parasitic-infection-tyranids",
       "deep-strike",
       "stealth",
-      "lone-operative"
+      "lone-operative",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2229,11 +2358,12 @@
       "scything-talons-and-rending-claws"
     ],
     "ability_ids": [
-      "guardian-organism"
+      "guardian-organism-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2307,12 +2437,16 @@
       "scream-killer-talons"
     ],
     "ability_ids": [
-      "death-scream",
-      "deadly-demise-1"
+      "death-scream-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2376,14 +2510,14 @@
     },
     "weapon_ids": [],
     "ability_ids": [
-      "bio-minefield",
+      "bio-minefield-tyranids",
       "deep-strike",
-      "floating-death",
-      "synapse"
+      "floating-death-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2452,11 +2586,12 @@
       "hormagaunt-talons"
     ],
     "ability_ids": [
-      "bounding-leap"
+      "bounding-leap-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2544,12 +2679,16 @@
       "genestealers-claws-and-talons"
     ],
     "ability_ids": [
-      "vanguard-predator",
-      "scouts-8"
+      "vanguard-predator-tyranids",
+      {
+        "id": "scouts",
+        "value": 8
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2593,7 +2732,8 @@
     "keywords": [
       "Monster",
       "Great Devourer",
-      "Toxicrene"
+      "Toxicrene",
+      "Frame"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -2611,13 +2751,17 @@
       "massive-toxic-lashes"
     ],
     "ability_ids": [
-      "grasping-tendrils",
-      "hypertoxic-miasma-aura",
-      "deadly-demise-d3"
+      "grasping-tendrils-tyranids",
+      "hypertoxic-miasma-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2712,12 +2856,16 @@
       "flamespurt"
     ],
     "ability_ids": [
-      "burning-spray",
-      "deadly-demise-1"
+      "burning-spray-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2756,7 +2904,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 120
       }
     ],
     "keywords": [
@@ -2785,13 +2933,15 @@
     ],
     "ability_ids": [
       "leader",
-      "neuroloids",
-      "node-lash-psychic",
-      "psychic-terror-psychic"
+      "neuroloids-tyranids",
+      "node-lash-tyranids",
+      "psychic-terror-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2831,7 +2981,7 @@
     "points": [
       {
         "models": 10,
-        "cost": 60
+        "cost": 55
       },
       {
         "models": 11,
@@ -2867,11 +3017,12 @@
       "termagant-spinefists"
     ],
     "ability_ids": [
-      "skulking-horrors"
+      "skulking-horrors-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -2941,12 +3092,15 @@
       "scything-talons"
     ],
     "ability_ids": [
-      "aggressive-leader-beast",
-      "leader"
+      "aggressive-leader-beast-tyranids",
+      "leader",
+      "alpha-warrior-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3032,11 +3186,12 @@
       "shockcannon"
     ],
     "ability_ids": [
-      "defensive-stance"
+      "defensive-stance-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3074,12 +3229,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 55
+        "cost": 50
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 110
+        "cost": 100
       }
     ],
     "keywords": [
@@ -3103,11 +3258,12 @@
       "chitinous-claws-and-teeth-barbgaunts"
     ],
     "ability_ids": [
-      "disruption-bombardment"
+      "disruption-bombardment-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3178,11 +3334,12 @@
       "chitinous-claws-and-teeth-neurogaunts"
     ],
     "ability_ids": [
-      "neurocytes"
+      "neurocytes-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3251,12 +3408,20 @@
       "thorax-spur"
     ],
     "ability_ids": [
-      "airborne-predator",
-      "deadly-demise-d3"
+      "airborne-predator-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3295,7 +3460,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 160
+        "cost": 150
       }
     ],
     "keywords": [
@@ -3324,13 +3489,22 @@
       "stinger-salvoes"
     ],
     "ability_ids": [
-      "brood-progenitor-aura-psychic",
-      "spawn-termagants",
-      "deadly-demise-d6"
+      "brood-progenitor-tyranids",
+      "spawn-termagants-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3369,7 +3543,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 140
+        "cost": 130
       }
     ],
     "keywords": [
@@ -3395,14 +3569,18 @@
       "old-one-eyes-claws-and-talons"
     ],
     "ability_ids": [
-      "alpha-leader",
+      "alpha-leader-tyranids",
       "leader",
-      "unstoppable-monster",
-      "feel-no-pain-5"
+      "unstoppable-monster-tyranids",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3476,12 +3654,21 @@
       "psychic-overload"
     ],
     "ability_ids": [
-      "encephalic-diffusion-aura-psychic",
-      "deadly-demise-d3"
+      "encephalic-diffusion-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3556,12 +3743,16 @@
       "stranglethorn-cannon-carnifexes"
     ],
     "ability_ids": [
-      "blistering-assault",
-      "deadly-demise-1"
+      "blistering-assault-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3630,12 +3821,18 @@
     ],
     "ability_ids": [
       "leader",
-      "onslaught-aura-psychic",
-      "deadly-demise-d3"
+      "onslaught-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "will-of-the-hive-mind-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3675,12 +3872,12 @@
     "points": [
       {
         "models": 10,
-        "cost": 80
+        "cost": 75
       },
       {
         "models": 11,
         "models_max": 20,
-        "cost": 155
+        "cost": 150
       }
     ],
     "keywords": [
@@ -3709,12 +3906,13 @@
       "fleshborer"
     ],
     "ability_ids": [
-      "winged-swarm",
-      "deep-strike"
+      "winged-swarm-tyranids",
+      "deep-strike",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3791,12 +3989,20 @@
       "shovelling-claws"
     ],
     "ability_ids": [
-      "grisly-spectacle",
-      "deadly-demise-d3"
+      "grisly-spectacle-tyranids",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3858,15 +4064,17 @@
       "lictor-claws-and-talons"
     ],
     "ability_ids": [
-      "pheromone-trail",
+      "pheromone-trail-tyranids",
       "stealth",
       "infiltrators",
       "lone-operative",
-      "fights-first"
+      "fights-first",
+      "feeder-tendrils-tyranids",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3937,12 +4145,13 @@
       "ravener-claws-and-talons"
     ],
     "ability_ids": [
-      "death-from-below",
-      "deep-strike"
+      "death-from-below-tyranids",
+      "deep-strike",
+      "synapse-tyranids"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -3981,7 +4190,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 120
       }
     ],
     "keywords": [
@@ -3991,7 +4200,8 @@
       "Monster",
       "Burrower",
       "Vanguard Invader",
-      "The Red Terror"
+      "The Red Terror",
+      "Mobile"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -4002,7 +4212,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -4027,6 +4237,12 @@
         "namespace": "mfm",
         "id": "657c1613-454f-49a9-9619-ba906aac38ce"
       }
+    ],
+    "ability_ids": [
+      "deep-strike",
+      "subterranean-hunter-tyranids",
+      "swallow-whole-tyranids",
+      "synapse-tyranids"
     ]
   },
   {
@@ -4059,7 +4275,8 @@
       "Synapse",
       "Vanguard Invader",
       "Vardenghast Swarm",
-      "Winged Tyranid Prime"
+      "Winged Tyranid Prime",
+      "Terror of Vardenghast"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -4070,7 +4287,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
@@ -4085,8 +4302,10 @@
       "prime-talons"
     ],
     "ability_ids": [
-      "shadow-in-the-warp",
-      "synapse"
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids",
+      "bio-reserves-tyranids",
+      "death-blow-terror-of-vardenghast-tyranids"
     ],
     "external_refs": [
       {
@@ -4119,7 +4338,8 @@
     ],
     "keywords": [
       "Infantry",
-      "Vardenghast Swarm"
+      "Vardenghast Swarm",
+      "Vardenghast Swarm Barbgaunts"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -4130,7 +4350,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
@@ -4142,13 +4362,13 @@
       "diameter": 40
     },
     "weapon_ids": [
-      "barblauncher",
-      "chitinous-claws-and-teeth-barbgaunts"
+      "barblauncher-vardenghast-swarm-barbgaunts",
+      "chitinous-claws-and-teeth-vardenghast-swarm-barbgaunts"
     ],
     "ability_ids": [
-      "disruption-bombardment-vardenghast-swarm",
-      "shadow-in-the-warp",
-      "synapse"
+      "disruption-bombardment-vardenghast-swarm-barbgaunts-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "external_refs": [
       {
@@ -4183,7 +4403,8 @@
       "Harvester",
       "Monster",
       "Smoke",
-      "Vardenghast Swarm"
+      "Vardenghast Swarm",
+      "Vardenghast Swarm Psychophage"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -4194,7 +4415,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
@@ -4207,14 +4428,14 @@
       "length": 92
     },
     "weapon_ids": [
-      "psychoclastic-torrent",
+      "psychoclastic-torrent-vardenghast-swarm-psychophage",
       "talons-and-betentacled-maw"
     ],
     "ability_ids": [
-      "feeding-frenzy-vardenghast-swarm",
-      "bio-stimulus-aura-vardenghast-swarm",
-      "shadow-in-the-warp",
-      "synapse"
+      "feeding-frenzy-vardenghast-swarm-psychophage-tyranids",
+      "bio-stimulus-vardenghast-swarm-psychophage-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "external_refs": [
       {
@@ -4250,7 +4471,8 @@
       "Battleline",
       "Endless Multitude",
       "Infantry",
-      "Vardenghast Swarm"
+      "Vardenghast Swarm",
+      "Vardenghast Swarm Termagants"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -4261,7 +4483,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
@@ -4273,13 +4495,13 @@
       "diameter": 28.5
     },
     "weapon_ids": [
-      "chitinous-claws-and-teeth-termagants",
-      "fleshborer"
+      "fleshborer",
+      "chitinous-claws-and-teeth"
     ],
     "ability_ids": [
-      "skulking-horrors-vardenghast-swarm",
-      "shadow-in-the-warp",
-      "synapse"
+      "skulking-horrors-vardenghast-swarm-termagants-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "external_refs": [
       {
@@ -4317,7 +4539,8 @@
     "keywords": [
       "Infantry",
       "Vanguard Invader",
-      "Vardenghast Swarm"
+      "Vardenghast Swarm",
+      "Vardenghast Swarm Von Ryan's Leapers"
     ],
     "faction_keywords": [
       "Tyranids"
@@ -4328,7 +4551,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
@@ -4340,12 +4563,12 @@
       "diameter": 40
     },
     "weapon_ids": [
-      "leapers-talons"
+      "chitinous-talons"
     ],
     "ability_ids": [
-      "pouncing-leap-vardenghast-swarm",
-      "shadow-in-the-warp",
-      "synapse"
+      "pouncing-leap-vardenghast-swarm-von-ryans-leapers-tyranids",
+      "shadow-in-the-warp-tyranids",
+      "synapse-tyranids"
     ],
     "external_refs": [
       {

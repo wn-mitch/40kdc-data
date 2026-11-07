@@ -4,7 +4,9 @@
   "mapping_version": 1,
   "root_tables": [
     "datasheet_bodyguard_group",
-    "datasheet_bodyguard_group_datasheet"
+    "datasheet_bodyguard_group_datasheet",
+    "datasheet_bodyguard_group_excluded_roster_datasheet",
+    "datasheet_bodyguard_group_required_roster_datasheet"
   ],
   "fields": {
     "/leader_id": {
@@ -67,7 +69,7 @@
       "transforms": [
         {
           "symbol": "tools/src/mfm/attachment.ts#runAttachmentRoles",
-          "operation": "Traverse each leader group through its eligibility junction, resolve permitted bodyguard datasheet names, convert them to repository ids, deduplicate, and sort them."
+          "operation": "Traverse unconditional groups only, resolve permitted bodyguard datasheets to repository IDs, deduplicate, and sort."
         },
         {
           "symbol": "tools/src/converters/id-generator.ts#nameToId",
@@ -75,16 +77,16 @@
         }
       ],
       "filters": [
-        "Retain only bodyguards that resolve to unit ids in the current faction directory."
+        "Retain only bodyguards in the current faction directory from groups without roster conditions."
       ],
       "precedence": [
         "The junction is an eligibility relation, never ownership.",
-        "A dump-derived record supersedes the existing record for the same leader_id; when no bodyguard resolves, the existing record is preserved because the schema requires at least one id."
+        "A dump-derived record supersedes the existing record for the same leader_id; a leader with only conditional groups has an empty unconditional array."
       ],
       "consumers": [
         "tools/src/mfm/attachment.ts#runAttachmentRoles"
       ],
-      "reason": "The current projection emits explicit eligible bodyguard unit ids from datasheet_bodyguard_group_datasheet."
+      "reason": "This array contains only unconditional eligibility; roster-dependent bodyguards remain in conditional_groups."
     },
     "/eligible_bodyguard_ids/*": {
       "provenance": "derived",
@@ -111,16 +113,16 @@
         }
       ],
       "filters": [
-        "Retain only ids present in the current faction unit file."
+        "Retain only ids in the current faction unit file from groups without roster conditions."
       ],
       "precedence": [
         "The eligibility junction does not establish unit ownership.",
-        "Sorted unique ids are emitted only when at least one bodyguard resolves."
+        "Sorted unique ids are emitted for unconditional groups; conditional-only leaders carry an empty array."
       ],
       "consumers": [
         "tools/src/mfm/attachment.ts#runAttachmentRoles"
       ],
-      "reason": "Each array item is a currently projected repository id for a permitted bodyguard datasheet."
+      "reason": "Each item is an unconditional permitted bodyguard."
     },
     "/eligible_bodyguard_keywords": {
       "provenance": "derived",
@@ -200,6 +202,132 @@
       ],
       "reason": "Each member is a keyword label resolved from a datasheet_bodyguard_group_keyword edge."
     },
+    "/conditional_groups": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": ["data.datasheet_bodyguard_group.bodyguardType", "data.datasheet_bodyguard_group_excluded_roster_datasheet.datasheetId", "data.datasheet_bodyguard_group_required_roster_datasheet.datasheetId"],
+      "joins": [],
+      "transforms": [
+        { "symbol": "tools/src/mfm/attachment.ts#runAttachmentRoles", "operation": "Retain each roster-conditional bodyguard group separately with its role." }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": ["tools/src/mfm/attachment.ts#runAttachmentRoles"],
+      "reason": "Conditional eligibility cannot be flattened into the unconditional bodyguard set."
+    },
+    "/conditional_groups/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": ["data.datasheet_bodyguard_group.bodyguardType"],
+      "joins": [],
+      "transforms": [
+        { "symbol": "tools/src/mfm/attachment.ts#runAttachmentRoles", "operation": "Project one conditioned source group per emitted attachment variant." }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": ["tools/src/mfm/attachment.ts#runAttachmentRoles"],
+      "reason": "Each conditional group retains its own source role and roster predicates."
+    },
+    "/conditional_groups/*/role": {
+      "provenance": "direct",
+      "coverage": "implemented",
+      "sources": ["data.datasheet_bodyguard_group.bodyguardType"],
+      "joins": [],
+      "transforms": [
+        { "symbol": "tools/src/mfm/attachment.ts#runAttachmentRoles", "operation": "Copy the source group's leader or support role." }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": ["tools/src/mfm/attachment.ts#runAttachmentRoles"],
+      "reason": "An active conditional group overrides the flat unit role."
+    },
+    "/conditional_groups/*/eligible_bodyguard_ids": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": ["data.datasheet_bodyguard_group_datasheet.datasheetId", "data.datasheet.localisations.*.name"],
+      "joins": [
+        { "relation": "datasheet_bodyguard_group_datasheet.datasheetBodyguardGroupId", "direction": "children", "purpose": "eligibility" },
+        { "relation": "datasheet_bodyguard_group_datasheet.datasheetId", "direction": "parent", "purpose": "eligibility" }
+      ],
+      "transforms": [
+        { "symbol": "tools/src/mfm/attachment.ts#runAttachmentRoles", "operation": "Resolve eligible bodyguard datasheets to unit IDs within this group." }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": ["tools/src/mfm/attachment.ts#runAttachmentRoles"],
+      "reason": "Group-local eligibility must be checked alongside roster conditions."
+    },
+    "/conditional_groups/*/eligible_bodyguard_ids/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": ["data.datasheet_bodyguard_group_datasheet.datasheetId", "data.datasheet.localisations.*.name"],
+      "joins": [],
+      "transforms": [
+        { "symbol": "tools/src/mfm/attachment.ts#runAttachmentRoles", "operation": "Convert one permitted bodyguard datasheet into a repository unit ID." }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": ["tools/src/mfm/attachment.ts#runAttachmentRoles"],
+      "reason": "Each item is a resolved eligible bodyguard for the conditional group."
+    },
+    "/conditional_groups/*/required_roster_unit_ids": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": ["data.datasheet_bodyguard_group_required_roster_datasheet.datasheetId", "data.datasheet.localisations.*.name"],
+      "joins": [
+        { "relation": "datasheet_bodyguard_group_required_roster_datasheet.datasheetBodyguardGroupId", "direction": "children", "purpose": "eligibility" },
+        { "relation": "datasheet_bodyguard_group_required_roster_datasheet.datasheetId", "direction": "parent", "purpose": "eligibility" }
+      ],
+      "transforms": [
+        { "symbol": "tools/src/mfm/attachment.ts#runAttachmentRoles", "operation": "Resolve every required roster datasheet for this group to a unit ID." }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": ["tools/src/mfm/attachment.ts#runAttachmentRoles"],
+      "reason": "All required units must be present for this group to apply."
+    },
+    "/conditional_groups/*/required_roster_unit_ids/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": ["data.datasheet_bodyguard_group_required_roster_datasheet.datasheetId", "data.datasheet.localisations.*.name"],
+      "joins": [],
+      "transforms": [
+        { "symbol": "tools/src/mfm/attachment.ts#runAttachmentRoles", "operation": "Convert one required roster datasheet to a unit ID." }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": ["tools/src/mfm/attachment.ts#runAttachmentRoles"],
+      "reason": "A condition references a concrete roster unit."
+    },
+    "/conditional_groups/*/excluded_roster_unit_ids": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": ["data.datasheet_bodyguard_group_excluded_roster_datasheet.datasheetId", "data.datasheet.localisations.*.name"],
+      "joins": [
+        { "relation": "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetBodyguardGroupId", "direction": "children", "purpose": "eligibility" },
+        { "relation": "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetId", "direction": "parent", "purpose": "eligibility" }
+      ],
+      "transforms": [
+        { "symbol": "tools/src/mfm/attachment.ts#runAttachmentRoles", "operation": "Resolve excluded roster datasheets to unit IDs for this group." }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": ["tools/src/mfm/attachment.ts#runAttachmentRoles"],
+      "reason": "No excluded unit may be present for this group to apply."
+    },
+    "/conditional_groups/*/excluded_roster_unit_ids/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": ["data.datasheet_bodyguard_group_excluded_roster_datasheet.datasheetId", "data.datasheet.localisations.*.name"],
+      "joins": [],
+      "transforms": [
+        { "symbol": "tools/src/mfm/attachment.ts#runAttachmentRoles", "operation": "Convert one excluded roster datasheet to a unit ID." }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": ["tools/src/mfm/attachment.ts#runAttachmentRoles"],
+      "reason": "A condition references a concrete roster unit."
+    },
     "/game_version": {
       "provenance": "repo-authored",
       "coverage": "implemented",
@@ -256,11 +384,6 @@
     }
   },
   "unmapped_mfm_fields": [
-    {
-      "source": "data.datasheet_bodyguard_group.bodyguardType",
-      "candidate_pointer": null,
-      "reason": "This controls the separate unit attachment_role flattening in attachment.ts; leader-attachment.schema.json has no role destination. The projection uses leader-wins: all-support groups yield support, otherwise leader."
-    },
     {
       "source": "data.datasheet_bodyguard_group.excludedDetachmentId",
       "candidate_pointer": null,

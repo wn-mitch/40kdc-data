@@ -7,14 +7,19 @@ list). Read this before working in any app; the conventions below are shared.
 
 ## The apps
 
-`data-explorer`, `hull-tracer`, `layout-editor`, `list-builder`, `mission-matrix`,
-`salvo`, `teams-planner`. `_shared/` is a library, not an app.
+`atc-viewer`, `codex`, `data-explorer`, `hull-tracer`, `layout-editor`,
+`list-builder`, `mechanic-evidence`, `mission-matrix`, `salvo`, `teams-planner`.
+`_shared/` is a library, not an app. `mechanic-evidence` is a local viewer for the
+DSL campaign graph server (`.omp/skills/dsl-campaign/graph/server.js`): it proxies
+`/api` to `127.0.0.1:4310` (override with `VITE_MECHANIC_GRAPH_PROXY_TARGET`),
+does not import the data package, and has no Cloudflare deploy.
 
 Every app is the **same stack**: Svelte 5 (runes — `$state`/`$derived`/`$props`/
 `$effect`), Vite 6, TypeScript strict, vitest. Tailwind v4 via `@tailwindcss/vite`
-with tokens in a `@theme` block in `src/app.css` (list-builder, hull-tracer,
-mission-matrix, teams-planner); the rest use plain CSS. PWA (`vite-plugin-pwa` via
-`_shared/pwa-config.ts`) on mission-matrix and teams-planner.
+with tokens in a `@theme` block in `src/app.css` (atc-viewer, list-builder,
+hull-tracer, mission-matrix, teams-planner); the rest use plain CSS. PWA
+(`vite-plugin-pwa` via `_shared/pwa-config.ts`) on mission-matrix and
+teams-planner.
 
 ## `_shared/` — relative-import source library
 
@@ -33,6 +38,14 @@ Apps depend on the workspace package (`"@alpaca-software/40kdc-data": "*"`) and 
 the linked API: `Dataset.embedded()` for game data, plus typed exports
 (`exportRoster`, `EXPORT_FORMATS`, `encodeShareToken`/`decodeShareToken`, the
 entity types).
+
+`Dataset.embedded()` is the **matched-play view**: its listings and name searches
+skip Combat Patrol-only units, detachments, enhancements, stratagems, weapons,
+wargear options and compositions, while id lookups still resolve them. Call
+`ds.forGameMode("combat-patrol" | "all")` when an app needs to list those records
+(list-builder reads compositions through `forGameMode('all')`). Importers resolve
+a list whose detachment is a Combat Patrol detachment against the Combat Patrol
+view on their own.
 
 **Two rules that bite if ignored:**
 
@@ -69,9 +82,10 @@ version against the package version.
 
 ## Deploy
 
-Each app is an assets-only Cloudflare Worker: `wrangler.jsonc` with
-`assets.directory: ./dist`, `not_found_handling: "single-page-application"`, and a
-custom `*.alpacasoft.dev` route. `wrangler deploy` from the app dir. `base`
+Each deployed app (all but `mechanic-evidence`) is an assets-only Cloudflare
+Worker: `wrangler.jsonc` with `assets.directory: ./dist`,
+`not_found_handling: "single-page-application"`, and a custom `*.alpacasoft.dev`
+route. `wrangler deploy` from the app dir. `base`
 honours `TOOLLET_BASE` for subpath hosting (unused in prod — alpacasoft.dev is
 root).
 

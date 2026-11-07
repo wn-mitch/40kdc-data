@@ -5,6 +5,11 @@ import "sort"
 // Dataset ties the embedded records together: it owns every Collection, builds
 // the cross-entity indexes once, and is the hub the linked views resolve
 // against. Go mirror of python .../data/dataset.py.
+//
+// A Dataset is a view with a game mode (see GameMode / ForGameMode in
+// game_mode.go): the listings of units, weapons, detachments, enhancements,
+// stratagems, wargear options and unit compositions show only records legal
+// in that mode, while id lookups resolve every record in every view.
 type Dataset struct {
 	// Richly-linked collections.
 	Units          *Collection[*UnitView]
@@ -32,7 +37,8 @@ type Dataset struct {
 	ResourcePools      *Collection[any]
 	UnitKeywords       *Collection[any]
 
-	// Id-less collections, exposed as plain lists.
+	// Id-less collections, exposed as plain lists. UnitCompositions is a
+	// listing, filtered by the view's game mode.
 	LeaderAttachments []any
 	UnitCompositions  []any
 	GameVersions      []any
@@ -46,16 +52,32 @@ type Dataset struct {
 	weaponsByKeyword     map[string][]any
 	unitsByKeyword       map[string][]any
 	wargearOptionsByUnit map[string][]any
+
+	// Game-mode view state (game_mode.go). gameMode is a game-mode id or
+	// "all"; visible is nil for "all". root is the "all" view every view of
+	// the same records shares, and views caches its per-mode views.
+	gameMode            string
+	visible             func(any) bool
+	root                *Dataset
+	views               *gameModeViews
+	allUnitCompositions []any
 }
 
 func factionIDOf(i any) string { return getStr(i.(map[string]any), "faction_id") }
 
-// EmbeddedDataset builds the dataset from the package's embedded data.
+// EmbeddedDataset builds the matched-play view of the package's embedded data.
 func EmbeddedDataset() *Dataset { return NewDataset(embeddedRawData()) }
 
-// NewDataset builds a Dataset from raw collection data.
+// NewDataset builds the matched-play view of raw collection data. Use
+// ForGameMode on the result for another mode or "all".
 func NewDataset(raw rawData) *Dataset {
-	ds := &Dataset{}
+	return buildDataset(raw).viewFor(defaultGameMode)
+}
+
+// buildDataset builds the "all" view: every collection, list and index over raw.
+func buildDataset(raw rawData) *Dataset {
+	ds := &Dataset{gameMode: gameModeAll, views: newGameModeViews()}
+	ds.root = ds
 
 	ds.Units = newCollection(raw["units"], func(i any) *UnitView {
 		return &UnitView{Raw: i.(map[string]any), ds: ds}
@@ -102,28 +124,22 @@ func NewDataset(raw rawData) *Dataset {
 	ds.Factions = newCollection(raw["factions"], func(i any) *FactionView {
 		return &FactionView{Raw: i.(map[string]any), ds: ds}
 	}, collectionOpts{
-		idOf:      func(i any) string { return getStr(i.(map[string]any), "id") },
-		nameOf:    func(i any) string { return getStr(i.(map[string]any), "name") },
+		idOf:   func(i any) string { return getStr(i.(map[string]any), "id") },
+		nameOf: func(i any) string { return getStr(i.(map[string]any), "name") },
+		// Factions answer to alternate names ("Space Marines" for Adeptus
+		// Astartes) as exact matches, ahead of the substring fallback.
+		aliasesOf: func(i any) []string { return getStrList(i.(map[string]any), "aliases") },
 		idAliases: embeddedRegistryAliases(),
 	})
 	ds.Abilities = newCollection(raw["abilities"], func(i any) *AbilityView {
 		return &AbilityView{Raw: i.(map[string]any), ds: ds}
 	}, collectionOpts{
-		idOf: func(i any) string { return getStr(i.(map[string]any), "ability_id") },
-		// An ability_id is shared across factions with per-faction copies that
-		// legitimately diverge; key on (faction_id, id) so every faction's copy
-		// is kept and a unit resolves its own faction's ability — same scheme
-		// as weapons (issue #59). faction_id is stamped at bundle time; only
-		// the shared _core pool stays faction-less (first-wins fallback).
-		dedupeKeyOf: func(i any) string {
-			m := i.(map[string]any)
-			return getStr(m, "faction_id") + "::" + getStr(m, "ability_id")
-		},
-		nameOf:    func(i any) string { return getStr(i.(map[string]any), "name") },
-		factionOf: factionIDOf,
-		// Per-faction copies diverge (DSL fidelity, unit_ids) — same guard as weapons.
-		guardUnscoped: true,
-		entityLabel:   "ability",
+		// Ability ids are unique across the dataset (`<name>-<faction>`; core rules bare),
+		// so a plain Get is exact. An old bare faction id resolves to nothing.
+		idOf:        func(i any) string { return getStr(i.(map[string]any), "ability_id") },
+		nameOf:      func(i any) string { return getStr(i.(map[string]any), "name") },
+		factionOf:   factionIDOf,
+		entityLabel: "ability",
 	})
 
 	ds.TargetProfiles = idCollection(raw["target_profiles"], factionIDOf)
@@ -159,6 +175,7 @@ func NewDataset(raw rawData) *Dataset {
 
 	ds.LeaderAttachments = raw["leader_attachments"]
 	ds.UnitCompositions = raw["unit_compositions"]
+	ds.allUnitCompositions = raw["unit_compositions"]
 	ds.GameVersions = raw["game_versions"]
 	ds.InteractionFlags = raw["interaction_flags"]
 	ds.PhaseMappings = raw["phase_mappings"]
@@ -189,9 +206,11 @@ func (ds *Dataset) unitsWithWeapon(weaponID string) []*UnitView {
 
 func (ds *Dataset) weaponsWithKeyword(keywordID string) []*WeaponView {
 	items := ds.weaponsByKeyword[keywordID]
-	out := make([]*WeaponView, len(items))
-	for i, w := range items {
-		out[i] = &WeaponView{Raw: w.(map[string]any), ds: ds}
+	out := make([]*WeaponView, 0, len(items))
+	for _, w := range items {
+		if ds.shows(w) {
+			out = append(out, &WeaponView{Raw: w.(map[string]any), ds: ds})
+		}
 	}
 	return out
 }
@@ -213,11 +232,12 @@ func (ds *Dataset) wargearOptionsOf(unit map[string]any) []any {
 // unitCompositionOf returns the (models, tiers) of the unit's faction-scoped
 // composition — keyed by (faction_id, unit_id) so a shared chassis resolves the
 // right faction's composition. Both are nil when the unit has no composition.
-// Mirror of TS Dataset.unitCompositionOf.
+// A per-unit lookup, so it ignores the view's game mode. Mirror of TS
+// Dataset.unitCompositionOf.
 func (ds *Dataset) unitCompositionOf(unit map[string]any) (models, tiers []any) {
 	fid := getStr(unit, "faction_id")
 	uid := getStr(unit, "id")
-	for _, cAny := range ds.UnitCompositions {
+	for _, cAny := range ds.allUnitCompositions {
 		c, _ := asMap(cAny)
 		if getStr(c, "unit_id") == uid && getStr(c, "faction_id") == fid {
 			return getList(c, "models"), getList(c, "tiers")
@@ -356,24 +376,106 @@ func matchesBodyguardKeywords(la, unit map[string]any) bool {
 	return allIn(have, lowerAll(req))
 }
 
-// leadersAttachableTo returns the leaders whose leader-attachment data lists
-// bodyguardUnitID among its eligible bodyguards — by explicit id or by keyword
-// eligibility (e.g. an Inquisitor leading any Imperium Battleline Infantry
-// unit) — sorted by name. Faction-agnostic (GetAny). Go mirror of TS
-// Dataset.leadersAttachableTo.
+// conditionalAttachmentGroupApplies reports whether a conditional attachment
+// group applies to the supplied roster. A nil present-unit set means no roster
+// context was provided, so every group remains a possible option.
+func conditionalAttachmentGroupApplies(group map[string]any, presentUnitIDs map[string]struct{}) bool {
+	if presentUnitIDs == nil {
+		return true
+	}
+	for _, id := range getStrList(group, "required_roster_unit_ids") {
+		if _, present := presentUnitIDs[id]; !present {
+			return false
+		}
+	}
+	for _, id := range getStrList(group, "excluded_roster_unit_ids") {
+		if _, present := presentUnitIDs[id]; present {
+			return false
+		}
+	}
+	return true
+}
+
+// firstPresentEligibleBodyguardID returns the first roster bodyguard allowed
+// by an attachment, preserving the authored order across flat and conditional
+// eligibility. candidateIDs is the importer's non-character bodyguard set.
+func firstPresentEligibleBodyguardID(attachment map[string]any, presentUnitIDs map[string]struct{}, candidateIDs map[string]bool) string {
+	for _, id := range getStrList(attachment, "eligible_bodyguard_ids") {
+		if candidateIDs[id] {
+			return id
+		}
+	}
+	for _, groupAny := range getList(attachment, "conditional_groups") {
+		group, ok := asMap(groupAny)
+		if !ok || !conditionalAttachmentGroupApplies(group, presentUnitIDs) {
+			continue
+		}
+		for _, id := range getStrList(group, "eligible_bodyguard_ids") {
+			if candidateIDs[id] {
+				return id
+			}
+		}
+	}
+	return ""
+}
+
+// attachmentRole uses conditional groups when their roster predicates apply.
+// If more than one applies, leader wins so a solo-capable unit is not forced
+// to attach; otherwise the unit's flat attachment_role remains authoritative.
+func (ds *Dataset) attachmentRole(leaderUnitID, defaultRole string, presentUnitIDs map[string]struct{}) string {
+	conditionalRole := ""
+	for _, attachmentAny := range ds.LeaderAttachments {
+		attachment, _ := asMap(attachmentAny)
+		if getStr(attachment, "leader_id") != leaderUnitID {
+			continue
+		}
+		for _, groupAny := range getList(attachment, "conditional_groups") {
+			group, ok := asMap(groupAny)
+			if !ok || !conditionalAttachmentGroupApplies(group, presentUnitIDs) {
+				continue
+			}
+			switch getStr(group, "role") {
+			case "leader":
+				return "leader"
+			case "support":
+				conditionalRole = "support"
+			}
+		}
+	}
+	if conditionalRole != "" {
+		return conditionalRole
+	}
+	return defaultRole
+}
+
+// leadersAttachableTo returns every leader that could attach to bodyguardUnitID
+// without roster context. Conditional groups therefore contribute their union
+// of possible bodyguards. A shared leader chassis carries one attachment record
+// per faction, so leaders are deduped by id.
 func (ds *Dataset) leadersAttachableTo(bodyguardUnitID string) []*UnitView {
+	return ds.leadersAttachableToInRoster(bodyguardUnitID, nil)
+}
+
+// leadersAttachableToInRoster returns leaders that can attach to
+// bodyguardUnitID in the supplied roster context.
+func (ds *Dataset) leadersAttachableToInRoster(bodyguardUnitID string, presentUnitIDs map[string]struct{}) []*UnitView {
 	var bodyguard map[string]any
 	if bg, ok := ds.Units.GetAny(bodyguardUnitID); ok {
 		bodyguard = bg.Raw
 	}
 	var out []*UnitView
+	seen := map[string]bool{}
 	for _, laAny := range ds.LeaderAttachments {
-		la := laAny.(map[string]any)
-		eligible := false
-		for _, id := range getStrList(la, "eligible_bodyguard_ids") {
-			if id == bodyguardUnitID {
-				eligible = true
-				break
+		la, _ := asMap(laAny)
+		eligible := contains(getStrList(la, "eligible_bodyguard_ids"), bodyguardUnitID)
+		if !eligible {
+			for _, groupAny := range getList(la, "conditional_groups") {
+				group, ok := asMap(groupAny)
+				if ok && conditionalAttachmentGroupApplies(group, presentUnitIDs) &&
+					contains(getStrList(group, "eligible_bodyguard_ids"), bodyguardUnitID) {
+					eligible = true
+					break
+				}
 			}
 		}
 		if !eligible && bodyguard != nil {
@@ -382,7 +484,8 @@ func (ds *Dataset) leadersAttachableTo(bodyguardUnitID string) []*UnitView {
 		if !eligible {
 			continue
 		}
-		if leader, ok := ds.Units.GetAny(getStr(la, "leader_id")); ok {
+		if leader, ok := ds.Units.GetAny(getStr(la, "leader_id")); ok && ds.shows(leader.Raw) && !seen[leader.ID()] {
+			seen[leader.ID()] = true
 			out = append(out, leader)
 		}
 	}
@@ -390,11 +493,13 @@ func (ds *Dataset) leadersAttachableTo(bodyguardUnitID string) []*UnitView {
 	return out
 }
 
-// bodyguardsAttachableFrom is the inverse of leadersAttachableTo: the body units
-// the given leader can attach to — by explicit id or keyword eligibility —
-// deduped by id and sorted by name. Go mirror of TS
-// Dataset.bodyguardsAttachableFrom.
+// bodyguardsAttachableFrom lists every possible bodyguard when no roster
+// context is supplied. Conditional groups then contribute their union.
 func (ds *Dataset) bodyguardsAttachableFrom(leaderUnitID string) []*UnitView {
+	return ds.bodyguardsAttachableFromInRoster(leaderUnitID, nil)
+}
+
+func (ds *Dataset) bodyguardsAttachableFromInRoster(leaderUnitID string, presentUnitIDs map[string]struct{}) []*UnitView {
 	seen := map[string]struct{}{}
 	var out []*UnitView
 	add := func(u *UnitView) {
@@ -405,13 +510,24 @@ func (ds *Dataset) bodyguardsAttachableFrom(leaderUnitID string) []*UnitView {
 		out = append(out, u)
 	}
 	for _, laAny := range ds.LeaderAttachments {
-		la := laAny.(map[string]any)
+		la, _ := asMap(laAny)
 		if getStr(la, "leader_id") != leaderUnitID {
 			continue
 		}
 		for _, id := range getStrList(la, "eligible_bodyguard_ids") {
-			if u, ok := ds.Units.GetAny(id); ok {
+			if u, ok := ds.Units.GetAny(id); ok && ds.shows(u.Raw) {
 				add(u)
+			}
+		}
+		for _, groupAny := range getList(la, "conditional_groups") {
+			group, ok := asMap(groupAny)
+			if !ok || !conditionalAttachmentGroupApplies(group, presentUnitIDs) {
+				continue
+			}
+			for _, id := range getStrList(group, "eligible_bodyguard_ids") {
+				if u, ok := ds.Units.GetAny(id); ok && ds.shows(u.Raw) {
+					add(u)
+				}
 			}
 		}
 		if len(getStrList(la, "eligible_bodyguard_keywords")) > 0 {
@@ -520,7 +636,7 @@ func (ds *Dataset) buildIndexes(raw rawData) {
 	}
 	for _, unitAny := range raw["units"] {
 		unit := unitAny.(map[string]any)
-		for _, abilityID := range getStrList(unit, "ability_ids") {
+		for _, abilityID := range unitAbilityIDs(unit) {
 			ds.unitsByAbility[abilityID] = append(ds.unitsByAbility[abilityID], unit)
 		}
 		for _, weaponID := range getStrList(unit, "weapon_ids") {
@@ -567,10 +683,13 @@ func (ds *Dataset) buildIndexes(raw rawData) {
 	}
 }
 
+// wrapUnits wraps the units of items visible in ds's game mode.
 func wrapUnits(ds *Dataset, items []any) []*UnitView {
-	out := make([]*UnitView, len(items))
-	for i, u := range items {
-		out[i] = &UnitView{Raw: u.(map[string]any), ds: ds}
+	out := make([]*UnitView, 0, len(items))
+	for _, u := range items {
+		if ds.shows(u) {
+			out = append(out, &UnitView{Raw: u.(map[string]any), ds: ds})
+		}
 	}
 	return out
 }

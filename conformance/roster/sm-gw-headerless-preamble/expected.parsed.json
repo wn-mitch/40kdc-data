@@ -1,0 +1,100 @@
+{
+  "name": "Preamble Sweep",
+  "generated_by": null,
+  "faction_raw_name": "Space Marines",
+  "detachment_raw_names": [
+    "Gladius Task Force"
+  ],
+  "battle_size_raw": "Strike Force (2 000 points)",
+  "force_disposition_raw_name": "Take and Hold",
+  "declared_limit": 2000,
+  "total_reported": 1995,
+  "total_computed": 425,
+  "units": [
+    {
+      "raw_name": "Captain",
+      "is_character": true,
+      "model_count": 1,
+      "points": 110,
+      "is_warlord": false,
+      "enhancement_raw_name": "Artificer Armour",
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Master-crafted power weapon",
+          "count": 1
+        },
+        {
+          "raw_name": "Heavy bolt pistol",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Lieutenant",
+      "is_character": true,
+      "model_count": 1,
+      "points": 50,
+      "is_warlord": true,
+      "enhancement_raw_name": "Adept of the Codex",
+      "keyword_overrides": [
+        "Adeptus Astartes"
+      ],
+      "enhancement_points": 20,
+      "wargear": [
+        {
+          "raw_name": "Master-crafted power weapon",
+          "count": 1
+        },
+        {
+          "raw_name": "Bolt pistol",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Land Raider",
+      "is_character": false,
+      "model_count": 1,
+      "points": 245,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Armoured tracks",
+          "count": 1
+        },
+        {
+          "raw_name": "Godhammer lascannon",
+          "count": 2
+        },
+        {
+          "raw_name": "Twin Heavy Bolter",
+          "count": 1
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Land Raider",
+          "count": 1,
+          "wargear": [
+            {
+              "raw_name": "Armoured tracks",
+              "count": 1
+            },
+            {
+              "raw_name": "Godhammer lascannon",
+              "count": 2
+            },
+            {
+              "raw_name": "Twin Heavy Bolter",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "multi_force": false
+}

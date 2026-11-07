@@ -39,7 +39,7 @@ jobs:
       - run: cd go && go build -o wh40kdc-runner ./cmd/wh40kdc-runner
       - run: pip install jsonschema referencing
 
-      # 1. Full corpus replay, every pairing. The validator/compare/loadout
+      # 1. Full corpus replay, every pairing. The compare/loadout
       # areas only run where both runners implement them (the differ skips a
       # pairing's area on UNKNOWN_OP).
       - name: Corpus parity (TS vs Rust)

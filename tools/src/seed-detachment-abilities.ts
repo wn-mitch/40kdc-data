@@ -1,10 +1,10 @@
 /**
- * Seed empty-modifier DSL stubs for new-detachment abilities — the detachment
+ * Seed DSL stubs (`stub: true`, effect `no-effect`) for new-detachment abilities — the detachment
  * rule, plus every stratagem and enhancement — so they flow through the normal
  * `author-input → author-batch propose/apply` authoring workflow.
  *
  * The authoring pipeline only fleshes stubs that already exist (it iterates
- * `hasEmptyModifier` entries). The faction-pack merge created the *core*
+ * `isStubEntry` entries). The faction-pack merge created the *core*
  * stratagem/enhancement entities with `ability_id: null` and left detachment
  * rules unmodelled, so nothing was authorable. This tool closes that gap:
  *
@@ -18,13 +18,14 @@
  * trimmed to the new detachments). Idempotent: an ability id that already exists
  * is left untouched (so hand-authored rules survive), and an already-wired core
  * entity is skipped. Real mechanics are authored downstream — the stub effect is
- * the empty-modifier placeholder the pipeline recognises. No GW prose is written.
+ * the `stub: true` no-effect placeholder the pipeline recognises. No GW prose is written.
  *
  * Usage: tsx tools/src/seed-detachment-abilities.ts <faction-id>… | --all-xenos
  */
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { STUB_EFFECT } from "./audit-coverage.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const DATA_ROOT = resolve(__dirname, "../../data");
@@ -65,8 +66,9 @@ function emptyStub(
     detachment_id: detachmentId,
     ability_type: abilityType,
     behavior: "passive",
-    effect: { type: "stat-modifier", target: "unit", modifier: {} },
-    scope: { range: "unit", duration: "permanent" },
+    stub: true,
+    effect: { ...STUB_EFFECT },
+    scope: { duration: "permanent" },
   };
 }
 

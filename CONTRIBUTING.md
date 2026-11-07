@@ -18,41 +18,36 @@ Enrichment data (phase mappings, timing flags, interaction flags, ability DSL en
 3. Run `cd tools && npm run validate` to verify your data
 4. Submit a PR with a clear description of what's covered
 
-### Authoring ability DSL with Claude
+### Authoring ability DSL
 
-Most enrichment work is turning empty-modifier ability *stubs* into real DSL.
-That's automated as a batched, Claude-assisted pipeline: **you bring your own
-core dataset and your own Claude tokens.** The model only classifies and judges
-fidelity — assembly and schema validation are pure TypeScript, so it can't
-invent enums or leak rules text.
+Ability semantics are authored through the semantic-authoring workbench
+(`tools/src/semantic-authoring/`). [`SEMANTIC_AUTHORING.md`](SEMANTIC_AUTHORING.md)
+is the settled architecture; read it before changing how abilities are authored.
+Models propose segmentation, families and parameters. A human reviewer
+authorizes each trusted leaf, directly or by approving a scoped wording that
+then applies wherever it occurs in scope. When trusted leaves cover a record's
+whole source, the deterministic compiler lowers it to canonical DSL; no model
+writes canonical DSL. A compiled record publishes only after it passes the
+schema, canonical-form and integrity checks, renders describer text, carries no
+damage-path effect the cruncher cannot model, and the reviewer approves its
+shape.
 
-Source rules live outside this repository. Point `ARMY_ASSIST_JSON` at your
-private normalized datasource (default `~/army-assist/src/assets/json`), then
-run the loop from `tools/`:
+The workbench reads rule text from the private MFM dump (`_private/dump.json`)
+and keeps its database under `_private/round5c/`. List its commands from
+`tools/`:
 
 ```bash
 cd tools
-# 1. Join each empty-modifier stub to its correct private source rule.
-#    Generated authoring inputs stay ignored under data/_audit/author-input/.
-ARMY_ASSIST_JSON=/path/to/private/json npm run author:input -- <faction|--all>
-# 2. Batched `claude -p --json-schema`: classify → assemble → AJV-validate →
-#    verify. Writes proposals only; live data is untouched. → data/_audit/proposed/
-npm run author:propose -- <faction|--all> [--model <claude-model>] [--batch N]
-npm run author:review                              # 3. inspect proposals
-npm run author:repair  -- <faction>               # 3b. (optional) re-run failures
-# 4. Splice GATED proposals (schema-valid + verifier-faithful + confidence≠low +
-#    not complex-flagged) into live abilities.json. Only rewrites entries that
-#    are STILL empty stubs, so re-running never clobbers authored work.
-npm run author:apply   -- <faction|--all> [--min-confidence high|medium] [--dry-run]
-npm run validate                                   # 5. schema-check
-npm run audit:coverage                             # 6. re-measure coverage
+npm run semantic-authoring -- commands
+npm run validate                                   # schema + integrity
+npm run audit:coverage                             # re-measure coverage
 ```
 
 Then PR the resulting `data/enrichment/<faction>/abilities.json` diffs.
 
-Source prose must remain in `_private/`, an ignored author-input directory, or
-the private `40kdc-abilities` store. Commit only structured DSL and
-community-authored notes.
+Source prose must remain in `_private/` (the MFM dump, read with
+`cd tools && npm run prose -- get <faction> <ability_id>`) or an ignored
+author-input directory. Commit only structured DSL and community-authored notes.
 
 ### Coverage report — what needs authoring
 
@@ -71,33 +66,42 @@ Repair worklist by faction — abilities still needing DSL work (not total cover
 
 | faction | stub\* | notes-stub | gw-leak | def-skipped |
 |---|--:|--:|--:|--:|
-| adeptus-astartes | 6 | 16 | 0 | 7 |
-| thousand-sons | 6 | 12 | 0 | 2 |
-| chaos-space-marines | 5 | 17 | 0 | 6 |
-| death-guard | 4 | 7 | 0 | 3 |
-| adeptus-custodes | 4 | 3 | 0 | 3 |
-| emperors-children | 3 | 8 | 0 | 1 |
-| world-eaters | 3 | 0 | 0 | 0 |
-| aeldari | 2 | 7 | 0 | 5 |
-| adepta-sororitas | 2 | 7 | 0 | 1 |
-| orks | 2 | 3 | 0 | 2 |
-| tyranids | 1 | 5 | 0 | 5 |
-| drukhari | 1 | 5 | 0 | 1 |
-| astra-militarum | 1 | 3 | 0 | 5 |
-| necrons | 1 | 2 | 0 | 1 |
-| genestealer-cults | 1 | 1 | 0 | 1 |
-| agents-of-the-imperium | 1 | 0 | 0 | 2 |
-| dark-angels | 1 | 0 | 0 | 0 |
-| chaos-daemons | 0 | 7 | 0 | 4 |
-| imperial-knights | 0 | 5 | 0 | 1 |
-| tau-empire | 0 | 3 | 0 | 3 |
+| aeldari | 26 | 7 | 0 | 5 |
+| chaos-space-marines | 22 | 7 | 0 | 3 |
+| drukhari | 19 | 5 | 0 | 1 |
+| chaos-daemons | 17 | 7 | 0 | 4 |
+| agents-of-the-imperium | 17 | 0 | 0 | 2 |
+| adeptus-mechanicus | 16 | 0 | 0 | 2 |
+| necrons | 15 | 1 | 0 | 1 |
+| astra-militarum | 14 | 2 | 0 | 5 |
+| death-guard | 14 | 1 | 0 | 3 |
+| leagues-of-votann | 14 | 0 | 0 | 0 |
+| tyranids | 13 | 4 | 0 | 5 |
+| imperial-knights | 13 | 3 | 0 | 1 |
+| genestealer-cults | 13 | 1 | 0 | 1 |
+| grey-knights | 11 | 0 | 0 | 0 |
+| adeptus-astartes | 8 | 1 | 0 | 3 |
+| adepta-sororitas | 4 | 7 | 0 | 1 |
+| space-wolves | 3 | 5 | 0 | 0 |
+| tau-empire | 3 | 3 | 0 | 3 |
+| thousand-sons | 2 | 3 | 0 | 1 |
+| adeptus-custodes | 2 | 1 | 0 | 0 |
+| black-templars | 2 | 0 | 0 | 0 |
+| orks | 2 | 0 | 0 | 0 |
+| world-eaters | 2 | 0 | 0 | 0 |
+| blood-angels | 1 | 1 | 0 | 0 |
+| dark-angels | 1 | 0 | 0 | 2 |
+| _core | 1 | 0 | 0 | 0 |
+| emperors-children | 0 | 3 | 0 | 1 |
 | chaos-knights | 0 | 2 | 0 | 0 |
-| grey-knights | 0 | 1 | 0 | 0 |
-| adeptus-mechanicus | 0 | 0 | 0 | 2 |
-| _core | 0 | 0 | 0 | 0 |
-| blood-angels | 0 | 0 | 0 | 0 |
-| leagues-of-votann | 0 | 0 | 0 | 0 |
-| **TOTAL** | **44** | **114** | **0** | **55** |
+| deathwatch | 0 | 1 | 0 | 0 |
+| imperial-fists | 0 | 0 | 0 | 0 |
+| iron-hands | 0 | 0 | 0 | 0 |
+| raven-guard | 0 | 0 | 0 | 0 |
+| salamanders | 0 | 0 | 0 | 0 |
+| ultramarines | 0 | 0 | 0 | 0 |
+| white-scars | 0 | 0 | 0 | 0 |
+| **TOTAL** | **255** | **65** | **0** | **44** |
 
 `stub*` = empty-modifier placeholder nodes (highest need first) · `notes-stub` = flagged in `community_notes` · `gw-leak` = suspected verbatim GW text · `def-skipped` = defensive abilities skipped by the buff walk. Enumerated stub ids: [`data/_audit/worklist.md`](data/_audit/worklist.md). Full total+repair breakdown: [`data/_audit/summary.md`](data/_audit/summary.md).
 <!-- coverage:end -->
@@ -117,44 +121,40 @@ If you need core data for your tools:
 
 ### Base sizes
 
-`base_size_mm` on units (and per-model on `unit-compositions`) is populated by a
-dedicated, additive converter — **not** by `convert-faction` (re-running that
-regresses unrelated committed data). Sources, in priority order:
-
-1. **GW Chapter Approved Tournament Companion — Base Size Guide** (authoritative for
-   current matched-play units). Base sizes are numerical facts, so the extracted
-   `name → size` rows are committed at `tools/src/converters/data/base-size-guide.json`.
-   The **PDF itself is GW copyright and is never committed.**
-2. **bevy-deploy-helper** (`../bevy-deploy-helper/assets/`) — fallback for the Forge
-   World / Legends units the tournament guide omits.
-
-To refresh from a newer guide revision (download the PDF locally first):
+`base_size_mm` on units (and per-model on `unit-compositions`) comes from the GW
+MFM dump (`_private/dump.json`, gitignored) through the `base-sizes` ingest pass,
+**not** from `convert-faction`. The dump's per-datasheet base-size label is
+authoritative for the unit and for every composition model; a labelled per-model
+list (`Sword Brother: 40mm`) is matched to composition models by name. An
+authored oval within 1 mm of the dump's value is kept, because the GW app rounds
+oval dimensions. Categories with no dimensions (`Hull`, `Large Flying Base`,
+`Unique`), bare lists and labels that match no model are reported, never
+guessed. The pass is a dry run unless given `--write`:
 
 ```bash
-pdftotext -layout tournament-companion.pdf tc.txt
 cd tools
-tsx src/converters/base-size-guide-extract.ts tc.txt > src/converters/data/base-size-guide.json
-tsx src/cli.ts populate-base-sizes   # patches data/core/*/{units,unit-compositions}.json
+npx tsx src/ingest-mfm.ts base-sizes           # report only
+npx tsx src/ingest-mfm.ts base-sizes --write   # patches data/core/*/{units,unit-compositions}.json
 ```
 
-The populate step writes a report to `data/core/_reports/_base-sizes.unresolved.json`
-listing unmatched units, bevy fallbacks, and unresolved models.
+It writes `data/core/_reports/mfm-base-sizes.md`, and lists what it could not
+attribute in `_private/mfm/unmatched-base-sizes.json`.
 
-**Draft entries.** Categories the guide gives without standard millimetres
-(`flying-base`, `hull`, `unique`) — and any non-authoritative value — are written
-with `"draft": true`. These are placeholders to revisit: hand-author the real
-dimensions in the relevant `units.json` / `unit-compositions.json` and drop the
-`draft` flag. Find them with:
+**Draft entries.** A value written from the dump carries no `draft` flag. Entries
+the dump gives no dimensions for (`flying-base`, `hull`, `unique`) keep
+`"draft": true` as placeholders: hand-author the real dimensions in the relevant
+`units.json` / `unit-compositions.json` and drop the `draft` flag. Find them with:
 
 ```bash
 jq -r '.[] | select(.base_size_mm.draft) | .id' data/core/*/units.json
 ```
 
-After editing schemas or data, regenerate downstream artifacts:
-`npm run bundle:schemas && npm run codegen:types && npm run codegen:data`,
-`cargo run -p xtask -- codegen`, `cargo run -p xtask -- bundle-data`. A base-size
-change that touches conformance also bumps `conformance/SPEC_VERSION` and the
-`tools/package.json` + `crates/wh40kdc/Cargo.toml` versions in lockstep.
+After editing schemas or data, regenerate every downstream artifact with
+`just regen` (TS, Rust, Python, Go and the conformance corpus, in order). A
+base-size change that touches conformance also bumps `conformance/SPEC_VERSION`;
+a release moves the four version files (`tools/package.json`,
+`crates/wh40kdc/Cargo.toml`, `python/src/wh40kdc/_version.py`, `go/version.go`)
+in lockstep.
 
 ## Tooling
 
@@ -162,12 +162,14 @@ The validation CLI lives under `tools/`. Standard PR workflow:
 
 1. Fork and create a feature branch
 2. Make changes, add tests
-3. Run `npm test` and `npm run validate`
+3. Run `just preflight` from the repository root. It reproduces every CI check
+   on the data, library and parity jobs. `cd tools && npm test` and
+   `npm run validate` are the quick inner-loop checks.
 4. Submit a PR
 
 ## Cross-language parity
 
-`40kdc-data` ships in multiple languages (TypeScript, Rust, and over time Python and R). Behavior is held in agreement by the `conformance/` corpus. The high-level strategy is in [`CONFORMANCE.md`](CONFORMANCE.md); the runner wire format is in [`conformance/RUNNER_PROTOCOL.md`](conformance/RUNNER_PROTOCOL.md).
+`40kdc-data` ships in TypeScript, Rust, Python and Go, with R planned. Behavior is held in agreement by the `conformance/` corpus. The high-level strategy is in [`CONFORMANCE.md`](CONFORMANCE.md); the runner wire format is in [`conformance/RUNNER_PROTOCOL.md`](conformance/RUNNER_PROTOCOL.md).
 
 **The load-bearing rule:**
 
@@ -179,7 +181,7 @@ This keeps the corpus from silently encoding any single implementation's quirks.
 
 1. Change the implementation in language X.
 2. Regenerate (or hand-author) the affected goldens. For TS today: `cd tools && npm run gen:conformance`.
-3. Run `just conformance-verify --impl <other-lang>` and confirm it passes against the updated goldens.
+3. Run the other implementation's own suite (`cargo test -p wh40kdc`, `cd python && pytest`, or `cd go && go test ./...`) and the differ pairing (`python3 tooling/parity/differ.py --pair ts,<rust|py|go>`), and confirm both pass against the updated goldens.
 4. Include both the implementation diff *and* the corpus diff *and* the second-impl verification in the same PR.
 
 **`SPEC_VERSION` bumps:**
@@ -189,10 +191,10 @@ This keeps the corpus from silently encoding any single implementation's quirks.
 
 ### Adding a language port
 
-1. Implement the public-API surface inventoried in [`CONFORMANCE.md`](CONFORMANCE.md): Dataset linked queries, importers and exporters for all six formats, the cruncher, the validator (or a documented choice to omit one of these — but the omission needs to be deliberate, not accidental).
+1. Implement the public-API surface inventoried in [`CONFORMANCE.md`](CONFORMANCE.md): Dataset linked queries, the roster importers and exporters, the cruncher, the validator (or a documented choice to omit one of these — but the omission needs to be deliberate, not accidental).
 2. Ship a runner binary conforming to [`conformance/RUNNER_PROTOCOL.md`](conformance/RUNNER_PROTOCOL.md). The runner is a thin entry point into the public API; it doesn't introduce new logic.
 3. Wire the runner into the cross-impl differ in `tooling/parity/` so CI can pair it against every other implementation.
-4. Confirm every corpus case passes (`just conformance-verify --impl <your-lang>`) before opening the PR.
+4. Confirm every corpus case passes (the port's own conformance tests, plus `python3 tooling/parity/differ.py --pair ts,<your-lang>` once the differ knows the runner) before opening the PR.
 5. Add the port to the "For Tool Developers" section in `README.md` and the implementation-status table in `CONFORMANCE.md`.
 
 ### Python development
@@ -207,10 +209,11 @@ ruff check .
 mypy src
 ```
 
-Three generated artifacts are committed and drift-checked in CI — regenerate
+The generated files (`_bundle.json`, `schemas/`, `_spec.py`, `_types.py` under
+`python/src/wh40kdc/`) are committed and drift-checked in CI. Regenerate them
 after schema or data changes (the bundle comes from the Rust crate's
-`bundle.generated.json`, the shared bundler whose file-walk order all three
-implementations inherit):
+`bundle.generated.json`, the shared bundler whose file-walk order every port
+inherits):
 
 ```bash
 cd tools && npm run bundle:schemas && cd ..

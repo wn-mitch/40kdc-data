@@ -1,0 +1,112 @@
+{
+  "slug": "",
+  "key": "",
+  "visible": "hidden",
+  "locked": false,
+  "rulebook": {
+    "name": "40kdc",
+    "game": "Warhammer 40,000",
+    "publisher": "Alpaca Software",
+    "url": "https://40kdc.dev",
+    "genre": "wargame"
+  },
+  "snapshot": {
+    "item": "Roster§Roster",
+    "name": "Deathstrike Battery",
+    "quantity": 1,
+    "stats": {
+      "Points": {
+        "value": 185
+      }
+    },
+    "assets": {
+      "included": [
+        {
+          "item": "Faction§Astra Militarum",
+          "name": "Astra Militarum",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Combined Arms",
+          "name": "Combined Arms",
+          "quantity": 1
+        },
+        {
+          "item": "Force Disposition§Take And Hold",
+          "name": "Take And Hold",
+          "quantity": 1
+        },
+        {
+          "item": "Battle Size§Strike Force (2000 Point limit)",
+          "name": "Strike Force (2000 Point limit)",
+          "quantity": 1
+        },
+        {
+          "item": "Unit§Primaris Psyker",
+          "name": "Primaris Psyker",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 60
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Force weapon",
+                "name": "Force weapon",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Laspistol",
+                "name": "Laspistol",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Psychic Maelstrom",
+                "name": "Psychic Maelstrom",
+                "quantity": 1
+              }
+            ],
+            "traits": [
+              {
+                "item": "Trait§Warlord",
+                "name": "Warlord",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Deathstrike",
+          "name": "Deathstrike",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 125
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Armoured tracks",
+                "name": "Armoured tracks",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Deathstrike missile",
+                "name": "Deathstrike missile",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Heavy bolter",
+                "name": "Heavy bolter",
+                "quantity": 1
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

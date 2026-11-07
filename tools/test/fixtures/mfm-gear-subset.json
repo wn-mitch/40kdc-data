@@ -1,0 +1,824 @@
+{
+  "metadata": {
+    "data_version": 867,
+    "fixture": "mfm-gear-subset"
+  },
+  "data": {
+    "publication": [
+      {
+        "id": "10fc296f-bb09-4357-863d-60c90596f559",
+        "factionKeywordId": "51ac31b0-93ff-4c94-a9a5-5c1a97fbbb75",
+        "factionBackgroundImage": "https://d3ocysny7bghv8.cloudfront.net/7fdc1c25-ea5b-4c11-b704-a98162a0f311",
+        "isCoreRules": false,
+        "displayOrder": 0,
+        "productId": null,
+        "isLegends": false,
+        "errataDate": null,
+        "isCombatPatrol": false,
+        "localisations": {
+          "en": {
+            "name": "Codex Supplement: Deathwatch"
+          }
+        }
+      },
+      {
+        "id": "31cf0b5f-c858-4b3c-bcfb-a2721b043eec",
+        "factionKeywordId": "60ecf26b-0c2b-4ea3-8a29-5f06bd02f6d8",
+        "factionBackgroundImage": "https://d3ocysny7bghv8.cloudfront.net/00770bc1-7bdb-41cd-8a94-df42bc6d4bbf",
+        "isCoreRules": false,
+        "displayOrder": 11,
+        "productId": "60030116008",
+        "isLegends": false,
+        "errataDate": "26 August 2026",
+        "isCombatPatrol": false,
+        "localisations": {
+          "en": {
+            "name": "Codex: Adeptus Mechanicus"
+          }
+        }
+      },
+      {
+        "id": "d5b4294c-d5ff-4829-b88e-8b4adda6e0c4",
+        "factionKeywordId": "0b30f1e3-1e5c-4823-afa1-07951433a270",
+        "factionBackgroundImage": "https://d3ocysny7bghv8.cloudfront.net/4b3a72f7-14b9-42a6-ba32-176d6f5f3800",
+        "isCoreRules": false,
+        "displayOrder": 0,
+        "productId": "60030103014",
+        "isLegends": false,
+        "errataDate": null,
+        "isCombatPatrol": false,
+        "localisations": {
+          "en": {
+            "name": "Codex: Orks"
+          }
+        }
+      },
+      {
+        "id": "8d0e0c3c-8758-4d38-ac8e-34545f6b3ead",
+        "factionKeywordId": "01623188-9470-4441-96b0-e06eb2572bb5",
+        "factionBackgroundImage": "https://d3ocysny7bghv8.cloudfront.net/685c92ea-d7e7-4c24-9d34-38fca844ec87",
+        "isCoreRules": false,
+        "displayOrder": 0,
+        "productId": "60030101066",
+        "isLegends": false,
+        "errataDate": "30 September 2026",
+        "isCombatPatrol": false,
+        "localisations": {
+          "en": {
+            "name": "Codex: Space Marines"
+          }
+        }
+      }
+    ],
+    "faction_keyword": [
+      {
+        "id": "0b30f1e3-1e5c-4823-afa1-07951433a270",
+        "parentFactionKeywordId": null,
+        "excludedFromArmyBuilder": false,
+        "rosterHeaderImage": "https://d3ocysny7bghv8.cloudfront.net/d8c1b231-e370-45c5-b442-a3a16570245c",
+        "armySelectionImage": "https://d3ocysny7bghv8.cloudfront.net/3681eab1-2e0c-400d-8419-9f3e7349625e",
+        "moreInfoImage": "https://d3ocysny7bghv8.cloudfront.net/755a9908-fc3c-411b-9237-eb0986993199",
+        "rosterFactionImage": "https://d3ocysny7bghv8.cloudfront.net/660249db-2d87-4536-93f2-351cffcff8dc",
+        "mandatoryWarlordId": null,
+        "localisations": {
+          "en": {
+            "name": "Orks"
+          }
+        }
+      },
+      {
+        "id": "51ac31b0-93ff-4c94-a9a5-5c1a97fbbb75",
+        "parentFactionKeywordId": "01623188-9470-4441-96b0-e06eb2572bb5",
+        "excludedFromArmyBuilder": false,
+        "rosterHeaderImage": "https://d3ocysny7bghv8.cloudfront.net/1a3d5d1f-1eeb-4a41-a413-1b62df3a7e30",
+        "armySelectionImage": "https://d3ocysny7bghv8.cloudfront.net/9ae2dd26-758e-4ed9-9042-e78acaee7336",
+        "moreInfoImage": "https://d3ocysny7bghv8.cloudfront.net/a345b5a1-8bee-4e8f-b1c1-52612c86e089",
+        "rosterFactionImage": "https://d3ocysny7bghv8.cloudfront.net/1e89e9f1-3c93-4935-a3da-e37d03293982",
+        "mandatoryWarlordId": null,
+        "localisations": {
+          "en": {
+            "name": "Deathwatch"
+          }
+        }
+      },
+      {
+        "id": "60ecf26b-0c2b-4ea3-8a29-5f06bd02f6d8",
+        "parentFactionKeywordId": null,
+        "excludedFromArmyBuilder": false,
+        "rosterHeaderImage": "https://d3ocysny7bghv8.cloudfront.net/7d5b563c-170d-462b-aa1d-e1474a7c219c",
+        "armySelectionImage": "https://d3ocysny7bghv8.cloudfront.net/6382899b-2169-4a9c-9516-1ed71ec8fc2b",
+        "moreInfoImage": "https://d3ocysny7bghv8.cloudfront.net/6034e7d0-65e7-4fda-8992-9405c91666b2",
+        "rosterFactionImage": "https://d3ocysny7bghv8.cloudfront.net/fd35b29f-d166-41fc-893d-35487f7e6005",
+        "mandatoryWarlordId": null,
+        "localisations": {
+          "en": {
+            "name": "Adeptus Mechanicus"
+          }
+        }
+      },
+      {
+        "id": "01623188-9470-4441-96b0-e06eb2572bb5",
+        "parentFactionKeywordId": null,
+        "excludedFromArmyBuilder": false,
+        "rosterHeaderImage": "https://d3ocysny7bghv8.cloudfront.net/20a7223b-976a-486e-beeb-db58b1dfd548",
+        "armySelectionImage": "https://d3ocysny7bghv8.cloudfront.net/48f74623-b1e3-4d85-83c4-7fda763e85db",
+        "moreInfoImage": "https://d3ocysny7bghv8.cloudfront.net/1e530521-84d9-4867-8b4b-b2f42f77bb9d",
+        "rosterFactionImage": "https://d3ocysny7bghv8.cloudfront.net/bb534fde-2368-4feb-97c0-e9ee37d24664",
+        "mandatoryWarlordId": null,
+        "localisations": {
+          "en": {
+            "name": "Adeptus Astartes"
+          }
+        }
+      }
+    ],
+    "detachment": [
+      {
+        "id": "0f071f29-4547-4912-b020-d667768633b4",
+        "publicationId": "d5b4294c-d5ff-4829-b88e-8b4adda6e0c4",
+        "displayOrder": 0,
+        "bannerImage": "https://d3ocysny7bghv8.cloudfront.net/a46ae383-551a-4d97-abd7-4d8608593d7e",
+        "rowImage": "https://d3ocysny7bghv8.cloudfront.net/7818aaab-fc87-48ce-b4a7-4316d3e4ac4a",
+        "isCombatPatrol": false,
+        "isFreeFromEntitlements": false,
+        "detachmentPointsCost": 1,
+        "pointsCost": null,
+        "localisations": {
+          "en": {
+            "name": "Brute Bosses"
+          }
+        }
+      },
+      {
+        "id": "89c022fe-0f5b-4ff4-9b10-a17665571fdb",
+        "publicationId": "d5b4294c-d5ff-4829-b88e-8b4adda6e0c4",
+        "displayOrder": 0,
+        "bannerImage": "https://d3ocysny7bghv8.cloudfront.net/337053c7-6ab0-4c11-b0e7-478590946769",
+        "rowImage": "https://d3ocysny7bghv8.cloudfront.net/26a37e44-53ae-4a29-a2fb-c1cadbb22290",
+        "isCombatPatrol": false,
+        "isFreeFromEntitlements": false,
+        "detachmentPointsCost": 1,
+        "pointsCost": null,
+        "localisations": {
+          "en": {
+            "name": "Wurrband"
+          }
+        }
+      },
+      {
+        "id": "8a1e297b-d845-493b-9371-1e245b85b98a",
+        "publicationId": "31cf0b5f-c858-4b3c-bcfb-a2721b043eec",
+        "displayOrder": 0,
+        "bannerImage": "https://d3ocysny7bghv8.cloudfront.net/e28eddd9-cb63-4a39-99c2-eefc17f59abc",
+        "rowImage": "https://d3ocysny7bghv8.cloudfront.net/5e63d1e6-e56d-4a91-b274-98e305dd499e",
+        "isCombatPatrol": false,
+        "isFreeFromEntitlements": true,
+        "detachmentPointsCost": 2,
+        "pointsCost": null,
+        "localisations": {
+          "en": {
+            "name": "Lords of the Forge"
+          }
+        }
+      },
+      {
+        "id": "c1d55a39-555a-4af4-8401-ec09e1231edf",
+        "publicationId": "10fc296f-bb09-4357-863d-60c90596f559",
+        "displayOrder": 0,
+        "bannerImage": "https://d3ocysny7bghv8.cloudfront.net/28e0ca2d-7ef8-46a1-abfb-0fb00d84f7f8",
+        "rowImage": "https://d3ocysny7bghv8.cloudfront.net/c9d76827-368f-4eb0-9548-8aaaa5a5379b",
+        "isCombatPatrol": false,
+        "isFreeFromEntitlements": false,
+        "detachmentPointsCost": 3,
+        "pointsCost": null,
+        "localisations": {
+          "en": {
+            "name": "Black Spear Task Force"
+          }
+        }
+      },
+      {
+        "id": "6fead3ce-6ab9-4637-9c53-70af7ee47328",
+        "publicationId": "8d0e0c3c-8758-4d38-ac8e-34545f6b3ead",
+        "displayOrder": 0,
+        "bannerImage": "https://d3ocysny7bghv8.cloudfront.net/a6ef3bfb-8d4f-4279-962c-58fad7ba436f",
+        "rowImage": "https://d3ocysny7bghv8.cloudfront.net/e015c265-804a-4bb9-aadb-3a221d38a5b0",
+        "isCombatPatrol": false,
+        "isFreeFromEntitlements": false,
+        "detachmentPointsCost": 1,
+        "pointsCost": null,
+        "localisations": {
+          "en": {
+            "name": "Assault Brethren"
+          }
+        }
+      }
+    ],
+    "enhancement": [
+      {
+        "id": "5622055e-1188-444d-8912-1e81003bb7cb",
+        "detachmentId": "89c022fe-0f5b-4ff4-9b10-a17665571fdb",
+        "basePointsCost": 10,
+        "isCombatPatrol": false,
+        "isCombatPatrolDefault": false,
+        "publicationId": "d5b4294c-d5ff-4829-b88e-8b4adda6e0c4",
+        "displayOrder": 0,
+        "cannotBeWarlord": false,
+        "isIncludedInEnhancementLimit": true,
+        "isEquipableByEpicHero": false,
+        "isEquipableByNonCharacterUnit": false,
+        "enhancementType": "miniature",
+        "limit": 1,
+        "localisations": {
+          "en": {
+            "name": "Da Krunch"
+          }
+        }
+      },
+      {
+        "id": "a05131fc-4a8b-4fda-ab70-f07856ba0161",
+        "detachmentId": "8a1e297b-d845-493b-9371-1e245b85b98a",
+        "basePointsCost": 30,
+        "isCombatPatrol": false,
+        "isCombatPatrolDefault": false,
+        "publicationId": "31cf0b5f-c858-4b3c-bcfb-a2721b043eec",
+        "displayOrder": 0,
+        "cannotBeWarlord": false,
+        "isIncludedInEnhancementLimit": true,
+        "isEquipableByEpicHero": false,
+        "isEquipableByNonCharacterUnit": false,
+        "enhancementType": "miniature",
+        "limit": 1,
+        "localisations": {
+          "en": {
+            "name": "TL-4ø9"
+          }
+        }
+      },
+      {
+        "id": "ad49f962-e2f9-4347-96af-a775bd34e6c6",
+        "detachmentId": "89c022fe-0f5b-4ff4-9b10-a17665571fdb",
+        "basePointsCost": 15,
+        "isCombatPatrol": false,
+        "isCombatPatrolDefault": false,
+        "publicationId": "d5b4294c-d5ff-4829-b88e-8b4adda6e0c4",
+        "displayOrder": 0,
+        "cannotBeWarlord": false,
+        "isIncludedInEnhancementLimit": true,
+        "isEquipableByEpicHero": false,
+        "isEquipableByNonCharacterUnit": false,
+        "enhancementType": "miniature",
+        "limit": 1,
+        "localisations": {
+          "en": {
+            "name": "'Eadbanger"
+          }
+        }
+      },
+      {
+        "id": "dd83cfb3-7274-41f4-a532-49a1fb3c2eb1",
+        "detachmentId": "0f071f29-4547-4912-b020-d667768633b4",
+        "basePointsCost": 20,
+        "isCombatPatrol": false,
+        "isCombatPatrolDefault": false,
+        "publicationId": "d5b4294c-d5ff-4829-b88e-8b4adda6e0c4",
+        "displayOrder": 0,
+        "cannotBeWarlord": false,
+        "isIncludedInEnhancementLimit": true,
+        "isEquipableByEpicHero": false,
+        "isEquipableByNonCharacterUnit": false,
+        "enhancementType": "miniature",
+        "limit": 1,
+        "localisations": {
+          "en": {
+            "name": "Da Gobshot Thunderbuss"
+          }
+        }
+      },
+      {
+        "id": "5e55b1f8-40fd-4155-b876-d6da302b1dbe",
+        "detachmentId": "6fead3ce-6ab9-4637-9c53-70af7ee47328",
+        "basePointsCost": 20,
+        "isCombatPatrol": false,
+        "isCombatPatrolDefault": false,
+        "publicationId": "8d0e0c3c-8758-4d38-ac8e-34545f6b3ead",
+        "displayOrder": 0,
+        "cannotBeWarlord": false,
+        "isIncludedInEnhancementLimit": true,
+        "isEquipableByEpicHero": false,
+        "isEquipableByNonCharacterUnit": false,
+        "enhancementType": "miniature",
+        "limit": 1,
+        "localisations": {
+          "en": {
+            "name": "Imperium’s Sword"
+          }
+        }
+      },
+      {
+        "id": "11b647e3-e8b0-4057-8717-c473987dba8e",
+        "detachmentId": "c1d55a39-555a-4af4-8401-ec09e1231edf",
+        "basePointsCost": 10,
+        "isCombatPatrol": false,
+        "isCombatPatrolDefault": false,
+        "publicationId": "10fc296f-bb09-4357-863d-60c90596f559",
+        "displayOrder": 0,
+        "cannotBeWarlord": false,
+        "isIncludedInEnhancementLimit": true,
+        "isEquipableByEpicHero": false,
+        "isEquipableByNonCharacterUnit": false,
+        "enhancementType": "miniature",
+        "limit": 1,
+        "localisations": {
+          "en": {
+            "name": "The Thief of Secrets"
+          }
+        }
+      }
+    ],
+    "enhancement_wargear_item_profile": [
+      {
+        "enhancementId": "5622055e-1188-444d-8912-1e81003bb7cb",
+        "wargearItemProfileId": "81c0a9d5-f165-465c-8ffa-9a508a4ce48b"
+      },
+      {
+        "enhancementId": "a05131fc-4a8b-4fda-ab70-f07856ba0161",
+        "wargearItemProfileId": "d088b600-22ea-427f-9fe4-ea1a8202e2f8"
+      },
+      {
+        "enhancementId": "ad49f962-e2f9-4347-96af-a775bd34e6c6",
+        "wargearItemProfileId": "64e7fe8e-5433-4b67-86bc-40b0c685e574"
+      },
+      {
+        "enhancementId": "dd83cfb3-7274-41f4-a532-49a1fb3c2eb1",
+        "wargearItemProfileId": "191ae704-6286-4051-9170-ef618224a61b"
+      },
+      {
+        "enhancementId": "5e55b1f8-40fd-4155-b876-d6da302b1dbe",
+        "wargearItemProfileId": "750c6c96-923c-4458-ba5c-a0c4193a5452"
+      },
+      {
+        "enhancementId": "11b647e3-e8b0-4057-8717-c473987dba8e",
+        "wargearItemProfileId": "9b0a83f9-ec2a-4ed1-96ff-3dd890526cc1"
+      }
+    ],
+    "wargear_item": [
+      {
+        "id": "189ee391-f402-4ad1-a044-2106662c7948",
+        "wargearType": "wargear",
+        "noMultiProfileIcon": false,
+        "localisations": {
+          "en": {
+            "name": "MV15 Gun Drone"
+          }
+        }
+      },
+      {
+        "id": "191ae704-6286-4051-9170-ef618224a61b",
+        "wargearType": "weapon",
+        "noMultiProfileIcon": false,
+        "localisations": {
+          "en": {
+            "name": "Da Gobshot Thunderbuss"
+          }
+        }
+      },
+      {
+        "id": "21d80668-7582-4409-af0a-dd65c1292ff9",
+        "wargearType": "wargear",
+        "noMultiProfileIcon": false,
+        "localisations": {
+          "en": {
+            "name": "Missile Drone"
+          }
+        }
+      },
+      {
+        "id": "64e7fe8e-5433-4b67-86bc-40b0c685e574",
+        "wargearType": "weapon",
+        "noMultiProfileIcon": false,
+        "localisations": {
+          "en": {
+            "name": "'Eadbanger"
+          }
+        }
+      },
+      {
+        "id": "750c6c96-923c-4458-ba5c-a0c4193a5452",
+        "wargearType": "weapon",
+        "noMultiProfileIcon": false,
+        "localisations": {
+          "en": {
+            "name": "Imperium’s Sword"
+          }
+        }
+      },
+      {
+        "id": "7b869f23-60c0-4d2a-8d4d-b6dbe9fff367",
+        "wargearType": "wargear",
+        "noMultiProfileIcon": false,
+        "localisations": {
+          "en": {
+            "name": "Gun Drone"
+          }
+        }
+      },
+      {
+        "id": "81c0a9d5-f165-465c-8ffa-9a508a4ce48b",
+        "wargearType": "weapon",
+        "noMultiProfileIcon": false,
+        "localisations": {
+          "en": {
+            "name": "Da Krunch"
+          }
+        }
+      },
+      {
+        "id": "9b0a83f9-ec2a-4ed1-96ff-3dd890526cc1",
+        "wargearType": "weapon",
+        "noMultiProfileIcon": false,
+        "localisations": {
+          "en": {
+            "name": "The Thief of Secrets"
+          }
+        }
+      },
+      {
+        "id": "d088b600-22ea-427f-9fe4-ea1a8202e2f8",
+        "wargearType": "weapon",
+        "noMultiProfileIcon": false,
+        "localisations": {
+          "en": {
+            "name": "TL-4ø9"
+          }
+        }
+      },
+      {
+        "id": "e63aac10-6f51-4d7d-afff-4ef394b32978",
+        "wargearType": "wargear",
+        "noMultiProfileIcon": false,
+        "localisations": {
+          "en": {
+            "name": "Recon Drone"
+          }
+        }
+      }
+    ],
+    "wargear_item_profile": [
+      {
+        "id": "191ae704-6286-4051-9170-ef618224a61b",
+        "displayOrder": 0,
+        "range": "24\"",
+        "attacks": "6",
+        "ballisticSkill": "4+",
+        "weaponSkill": null,
+        "strength": "7",
+        "armourPenetration": "-2",
+        "damage": "2",
+        "wargearItemId": "191ae704-6286-4051-9170-ef618224a61b",
+        "type": "ranged",
+        "localisations": {
+          "en": {
+            "name": "Da Gobshot Thunderbuss"
+          }
+        }
+      },
+      {
+        "id": "53457960-cc49-4e47-95ad-639753b2c0ce",
+        "displayOrder": 5,
+        "range": "20\"",
+        "attacks": "2",
+        "ballisticSkill": "5+",
+        "weaponSkill": null,
+        "strength": "5",
+        "armourPenetration": "0",
+        "damage": "1",
+        "wargearItemId": "7b869f23-60c0-4d2a-8d4d-b6dbe9fff367",
+        "type": "ranged",
+        "localisations": {
+          "en": {
+            "name": "Twin pulse carbine"
+          }
+        }
+      },
+      {
+        "id": "56801715-1a6f-4f98-be1a-07ebf47f1d69",
+        "displayOrder": 1,
+        "range": "18\"",
+        "attacks": "4",
+        "ballisticSkill": "5+",
+        "weaponSkill": null,
+        "strength": "5",
+        "armourPenetration": "0",
+        "damage": "1",
+        "wargearItemId": "e63aac10-6f51-4d7d-afff-4ef394b32978",
+        "type": "ranged",
+        "localisations": {
+          "en": {
+            "name": "Drone burst cannon"
+          }
+        }
+      },
+      {
+        "id": "64e7fe8e-5433-4b67-86bc-40b0c685e574",
+        "displayOrder": 0,
+        "range": "24\"",
+        "attacks": "2",
+        "ballisticSkill": "4+",
+        "weaponSkill": null,
+        "strength": "6",
+        "armourPenetration": "-3",
+        "damage": "3",
+        "wargearItemId": "64e7fe8e-5433-4b67-86bc-40b0c685e574",
+        "type": "ranged",
+        "localisations": {
+          "en": {
+            "name": "'Eadbanger"
+          }
+        }
+      },
+      {
+        "id": "718cc338-d27f-4e91-9904-e09d70b6df07",
+        "displayOrder": 1,
+        "range": "10\"",
+        "attacks": "2",
+        "ballisticSkill": "5+",
+        "weaponSkill": null,
+        "strength": "6",
+        "armourPenetration": "-1",
+        "damage": "1",
+        "wargearItemId": "189ee391-f402-4ad1-a044-2106662c7948",
+        "type": "ranged",
+        "localisations": {
+          "en": {
+            "name": "Twin pulse blaster"
+          }
+        }
+      },
+      {
+        "id": "81c0a9d5-f165-465c-8ffa-9a508a4ce48b",
+        "displayOrder": 0,
+        "range": "24\"",
+        "attacks": "3",
+        "ballisticSkill": "4+",
+        "weaponSkill": null,
+        "strength": "5",
+        "armourPenetration": "-1",
+        "damage": "1",
+        "wargearItemId": "81c0a9d5-f165-465c-8ffa-9a508a4ce48b",
+        "type": "ranged",
+        "localisations": {
+          "en": {
+            "name": "Da Krunch"
+          }
+        }
+      },
+      {
+        "id": "c569af94-8adc-4b65-bee3-1b4545e246c6",
+        "displayOrder": 6,
+        "range": "30\"",
+        "attacks": "2",
+        "ballisticSkill": "5+",
+        "weaponSkill": null,
+        "strength": "7",
+        "armourPenetration": "-1",
+        "damage": "2",
+        "wargearItemId": "21d80668-7582-4409-af0a-dd65c1292ff9",
+        "type": "ranged",
+        "localisations": {
+          "en": {
+            "name": "Missile pod"
+          }
+        }
+      },
+      {
+        "id": "d088b600-22ea-427f-9fe4-ea1a8202e2f8",
+        "displayOrder": 0,
+        "range": "24\"",
+        "attacks": "3",
+        "ballisticSkill": "2+",
+        "weaponSkill": null,
+        "strength": "11",
+        "armourPenetration": "-2",
+        "damage": "D3+2",
+        "wargearItemId": "d088b600-22ea-427f-9fe4-ea1a8202e2f8",
+        "type": "ranged",
+        "localisations": {
+          "en": {
+            "name": "TL-4ø9"
+          }
+        }
+      },
+      {
+        "id": "750c6c96-923c-4458-ba5c-a0c4193a5452",
+        "displayOrder": 0,
+        "range": "Melee",
+        "attacks": "6",
+        "ballisticSkill": null,
+        "weaponSkill": "2+",
+        "strength": "7",
+        "armourPenetration": "-3",
+        "damage": "3",
+        "wargearItemId": "750c6c96-923c-4458-ba5c-a0c4193a5452",
+        "type": "melee",
+        "localisations": {
+          "en": {
+            "name": "Imperium’s Sword"
+          }
+        }
+      },
+      {
+        "id": "9b0a83f9-ec2a-4ed1-96ff-3dd890526cc1",
+        "displayOrder": 0,
+        "range": "Melee",
+        "attacks": "6",
+        "ballisticSkill": null,
+        "weaponSkill": "2+",
+        "strength": "6",
+        "armourPenetration": "-3",
+        "damage": "2",
+        "wargearItemId": "9b0a83f9-ec2a-4ed1-96ff-3dd890526cc1",
+        "type": "melee",
+        "localisations": {
+          "en": {
+            "name": "The Thief of Secrets"
+          }
+        }
+      }
+    ],
+    "wargear_item_profile_wargear_ability": [
+      {
+        "id": "0d28d994-5c3a-43f4-b6c4-39489a0b004a",
+        "displayOrder": 2,
+        "wargearItemProfileId": "81c0a9d5-f165-465c-8ffa-9a508a4ce48b",
+        "wargearAbilityId": "0bd8096a-2929-48d6-ae33-5b742ba001e6"
+      },
+      {
+        "id": "0f07c4dd-ac29-4a64-9996-c93928e57f77",
+        "displayOrder": 1,
+        "wargearItemProfileId": "718cc338-d27f-4e91-9904-e09d70b6df07",
+        "wargearAbilityId": "04ea6c95-503d-4922-803b-bed920a8cded"
+      },
+      {
+        "id": "3b532bcd-1d61-468d-ae1a-b3ffb79e0e30",
+        "displayOrder": 2,
+        "wargearItemProfileId": "64e7fe8e-5433-4b67-86bc-40b0c685e574",
+        "wargearAbilityId": "b18be6e7-5492-4a4a-b668-846873d0efc0"
+      },
+      {
+        "id": "49ed8a55-619f-4b90-986b-5fff42ad4260",
+        "displayOrder": 2,
+        "wargearItemProfileId": "53457960-cc49-4e47-95ad-639753b2c0ce",
+        "wargearAbilityId": "2dae4edb-5b78-4ddf-bce5-1cd27fee78e8"
+      },
+      {
+        "id": "780df2c1-1482-4a6c-8e04-428ba3dad434",
+        "displayOrder": 0,
+        "wargearItemProfileId": "191ae704-6286-4051-9170-ef618224a61b",
+        "wargearAbilityId": "a54a5f2f-6889-4b39-aa99-b0ee6b82d2e2"
+      },
+      {
+        "id": "79a9d754-df72-442b-be08-a81800b29e33",
+        "displayOrder": 3,
+        "wargearItemProfileId": "81c0a9d5-f165-465c-8ffa-9a508a4ce48b",
+        "wargearAbilityId": "b18be6e7-5492-4a4a-b668-846873d0efc0"
+      },
+      {
+        "id": "9366a01f-6916-4529-a44b-8bb29ff3d830",
+        "displayOrder": 1,
+        "wargearItemProfileId": "d088b600-22ea-427f-9fe4-ea1a8202e2f8",
+        "wargearAbilityId": "0498c0f8-c30e-4954-99cf-a7091f7244cc"
+      },
+      {
+        "id": "a8f200a8-912f-4fff-a7f3-31346c5f2cf9",
+        "displayOrder": 0,
+        "wargearItemProfileId": "64e7fe8e-5433-4b67-86bc-40b0c685e574",
+        "wargearAbilityId": "0498c0f8-c30e-4954-99cf-a7091f7244cc"
+      },
+      {
+        "id": "c3e64eaa-0ac2-4eb9-9b19-0c7f819e8169",
+        "displayOrder": 1,
+        "wargearItemProfileId": "191ae704-6286-4051-9170-ef618224a61b",
+        "wargearAbilityId": "d20f24be-1a70-46be-8ac9-76dba1b6b69b"
+      },
+      {
+        "id": "c46d05e6-6733-4c0e-bc26-379063d81d2d",
+        "displayOrder": 2,
+        "wargearItemProfileId": "718cc338-d27f-4e91-9904-e09d70b6df07",
+        "wargearAbilityId": "2dae4edb-5b78-4ddf-bce5-1cd27fee78e8"
+      },
+      {
+        "id": "d5af41f1-e27d-46de-b0de-ce7975fee8f0",
+        "displayOrder": 1,
+        "wargearItemProfileId": "64e7fe8e-5433-4b67-86bc-40b0c685e574",
+        "wargearAbilityId": "ecf86c6c-8a30-42e5-b949-5ee58c9745a0"
+      },
+      {
+        "id": "dba4078a-e447-4025-9886-6f3dad434923",
+        "displayOrder": 0,
+        "wargearItemProfileId": "81c0a9d5-f165-465c-8ffa-9a508a4ce48b",
+        "wargearAbilityId": "13531f55-af03-410e-a20c-057ba725f1fc"
+      },
+      {
+        "id": "e13d2d8c-0858-4c71-a610-607c2e14fb36",
+        "displayOrder": 1,
+        "wargearItemProfileId": "53457960-cc49-4e47-95ad-639753b2c0ce",
+        "wargearAbilityId": "04ea6c95-503d-4922-803b-bed920a8cded"
+      },
+      {
+        "id": "e7408f86-f2b7-4587-bb82-c7c767fd2aa6",
+        "displayOrder": 0,
+        "wargearItemProfileId": "d088b600-22ea-427f-9fe4-ea1a8202e2f8",
+        "wargearAbilityId": "ff3280df-46f1-43af-8e00-7eac919c9f9c"
+      },
+      {
+        "id": "eebd4aca-c3e7-4d44-b2e2-44428ae26b77",
+        "displayOrder": 1,
+        "wargearItemProfileId": "81c0a9d5-f165-465c-8ffa-9a508a4ce48b",
+        "wargearAbilityId": "0498c0f8-c30e-4954-99cf-a7091f7244cc"
+      }
+    ],
+    "wargear_ability": [
+      {
+        "id": "0bd8096a-2929-48d6-ae33-5b742ba001e6",
+        "localisations": {
+          "en": {
+            "name": "LETHAL HITS"
+          }
+        }
+      },
+      {
+        "id": "04ea6c95-503d-4922-803b-bed920a8cded",
+        "localisations": {
+          "en": {
+            "name": "Assault"
+          }
+        }
+      },
+      {
+        "id": "b18be6e7-5492-4a4a-b668-846873d0efc0",
+        "localisations": {
+          "en": {
+            "name": "PSYCHIC"
+          }
+        }
+      },
+      {
+        "id": "2dae4edb-5b78-4ddf-bce5-1cd27fee78e8",
+        "localisations": {
+          "en": {
+            "name": "Twin-linked"
+          }
+        }
+      },
+      {
+        "id": "a54a5f2f-6889-4b39-aa99-b0ee6b82d2e2",
+        "localisations": {
+          "en": {
+            "name": "LETHAL HITS: non-MONSTER/VEHICLE"
+          }
+        }
+      },
+      {
+        "id": "0498c0f8-c30e-4954-99cf-a7091f7244cc",
+        "localisations": {
+          "en": {
+            "name": "HAZARDOUS"
+          }
+        }
+      },
+      {
+        "id": "d20f24be-1a70-46be-8ac9-76dba1b6b69b",
+        "localisations": {
+          "en": {
+            "name": "RAPID FIRE 6"
+          }
+        }
+      },
+      {
+        "id": "ecf86c6c-8a30-42e5-b949-5ee58c9745a0",
+        "localisations": {
+          "en": {
+            "name": "PRECISION"
+          }
+        }
+      },
+      {
+        "id": "13531f55-af03-410e-a20c-057ba725f1fc",
+        "localisations": {
+          "en": {
+            "name": "BLAST 3"
+          }
+        }
+      },
+      {
+        "id": "ff3280df-46f1-43af-8e00-7eac919c9f9c",
+        "localisations": {
+          "en": {
+            "name": "DEVASTATING WOUNDS"
+          }
+        }
+      }
+    ]
+  }
+}

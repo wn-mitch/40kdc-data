@@ -1,6 +1,6 @@
 package wh40kdc
 
-// crunch / attribution op handlers. Go mirror of the cruncher handlers in
+// crunch / attribution / allocate op handlers. Go mirror of the cruncher handlers in
 // python .../runner.py. Only the per-stage `expected` (and attribution's
 // baseline/lifts/residual/intrinsics) crosses the wire.
 
@@ -86,4 +86,40 @@ func (s *RunnerState) handleAttribution(args any) map[string]any {
 		return errResp("CRUNCH_ERROR", detail(err.Error()))
 	}
 	return okResp(toAny(stages))
+}
+
+func (s *RunnerState) handleAllocate(args any) map[string]any {
+	a, ok := asMap(args)
+	if !ok {
+		return errResp("INVALID_INPUT", detail("allocate args must be an object"))
+	}
+	input, errR := s.buildEngineInput(a, "allocate")
+	if errR != nil {
+		return errR
+	}
+	var defences AllocationDefences
+	if raw, present := a["zeroing"]; present && raw != nil {
+		value, ok := asMap(raw)
+		if !ok {
+			return errResp("INVALID_INPUT", detail("allocate.zeroing must be an object"))
+		}
+		zeroing, err := ParseDamageZeroing(value)
+		if err != nil {
+			return errResp("CRUNCH_ERROR", detail(err.Error()))
+		}
+		defences.Zeroing = zeroing
+	}
+	out, err := AllocateWith(input, s.dataset(), defences)
+	if err != nil {
+		return errResp("CRUNCH_ERROR", detail(err.Error()))
+	}
+	distribution := make([]any, len(out.ModelsDestroyedDistribution))
+	for i, p := range out.ModelsDestroyedDistribution {
+		distribution[i] = p
+	}
+	return okResp(map[string]any{
+		"damageDealt":                 out.DamageDealt,
+		"modelsDestroyed":             out.ModelsDestroyed,
+		"modelsDestroyedDistribution": distribution,
+	})
 }

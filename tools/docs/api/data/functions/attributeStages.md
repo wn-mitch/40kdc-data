@@ -8,7 +8,7 @@
 
 > **attributeStages**(`input`, `dataset?`, `opts?`): [`AttributedStage`](../type-aliases/AttributedStage.md)[]
 
-Defined in: [cruncher/attribution.ts:92](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/attribution.ts#L92)
+Defined in: [cruncher/attribution.ts:92](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/cruncher/attribution.ts#L92)
 
 Decompose each pipeline stage of `crunch(input)` into the marginal lift of
 every toggleable buff group, via leave-one-out recompute.

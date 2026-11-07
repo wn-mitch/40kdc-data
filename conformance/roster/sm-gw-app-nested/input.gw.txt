@@ -1,0 +1,38 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Imperium - Adeptus Astartes
++ DETACHMENT: Gladius Task Force
++ FORCE DISPOSITION: Priority Assets
++ TOTAL ARMY POINTS: 275pts
++
++ NUMBER OF UNITS: 3
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Attached Units
+Attached Unit 1
+
+Captain (105 Points)
+  • Attached as: Leader (Character)
+  • Warlord
+  • Artificer Armour (+15 pts)
+  • 1x Heavy Bolt Pistol
+  • 1x Master-crafted bolter
+  • 1x Master-crafted power weapon
+
+Intercessor Squad (85 Points)
+  • Attached as: Bodyguard
+  • 1x Intercessor Sergeant
+     ◦ 1x Bolt Pistol
+     ◦ 1x Bolt Rifle
+     ◦ 1x Knives and Fists
+  • 4x Intercessor
+     ◦ 4x Bolt Pistol
+     ◦ 4x Bolt Rifle
+     ◦ 4x Knives and Fists
+
+BATTLELINE
+
+Intercessor Squad (85 Points)
+  • 5x Intercessor
+     ◦ 5x Bolt Pistol
+     ◦ 5x Bolt Rifle
+     ◦ 5x Knives and Fists

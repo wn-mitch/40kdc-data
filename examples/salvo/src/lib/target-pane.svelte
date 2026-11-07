@@ -2,6 +2,7 @@
   import { salvo, ds } from "./store.svelte.js";
   import { resolveRosterUnit } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
+  import DefenderBuild from "./defender-build.svelte";
 
   const factions = $derived(
     ds.factions.all.slice().sort((a, b) => a.name.localeCompare(b.name)),
@@ -103,20 +104,23 @@
   });
 </script>
 
-<div class="tabs">
-  <button class:active={salvo.targetMode === "dataset"} onclick={() => salvo.selectTargetMode("dataset")}>Dataset</button>
+<div class="tabs" role="group" aria-label="Target source">
+  <button class:active={salvo.targetMode === "dataset"} aria-pressed={salvo.targetMode === "dataset"} onclick={() => salvo.selectTargetMode("dataset")}>Dataset</button>
   <button
     class:active={salvo.targetMode === "roster"}
+    aria-pressed={salvo.targetMode === "roster"}
     disabled={!salvo.targetRoster}
+    title={salvo.targetRoster ? undefined : "Import a target list first"}
     onclick={() => salvo.selectTargetMode("roster")}>Imported list</button
   >
-  <button class:active={salvo.targetMode === "manual"} onclick={() => salvo.selectTargetMode("manual")}>Manual</button>
+  <button class:active={salvo.targetMode === "manual"} aria-pressed={salvo.targetMode === "manual"} onclick={() => salvo.selectTargetMode("manual")}>Manual</button>
 </div>
 
 {#if salvo.targetMode === "dataset"}
   <div class="row">
-    <label>Preset</label>
+    <label for="tgt-preset">Preset</label>
     <select
+      id="tgt-preset"
       class="grow"
       value={salvo.targetPresetId ?? ""}
       onchange={(e) => {
@@ -125,15 +129,16 @@
         else salvo.targetPresetId = null;
       }}
     >
-      <option value="">— archetype preset —</option>
+      <option value="">Archetype preset (optional)</option>
       {#each targetPresets as p (p.id)}
         <option value={p.id}>{p.name}</option>
       {/each}
     </select>
   </div>
   <div class="row">
-    <label>Faction</label>
+    <label for="tgt-faction">Faction</label>
     <select
+      id="tgt-faction"
       class="grow"
       value={salvo.datasetTargetFactionId ?? ""}
       onchange={(e) => {
@@ -149,8 +154,9 @@
     </select>
   </div>
   <div class="row">
-    <label>Unit</label>
+    <label for="tgt-unit">Unit</label>
     <select
+      id="tgt-unit"
       class="grow"
       value={salvo.datasetTargetUnitId ?? ""}
       onchange={(e) => {
@@ -158,7 +164,7 @@
         salvo.datasetTargetUnitId = (e.currentTarget as HTMLSelectElement).value || null;
       }}
     >
-      <option value="">— pick a target unit —</option>
+      <option value="">Pick a target unit</option>
       {#each datasetUnits as u (`${u.raw.faction_id}/${u.id}`)}
         <option value={u.id}>
           {u.name}{sharedDatasetNames.has(u.name)
@@ -170,11 +176,12 @@
   </div>
 {:else if salvo.targetMode === "roster"}
   {#if rosterPicks.length === 0}
-    <EmptyState>Import a target list in the Import pane.</EmptyState>
+    <EmptyState>Paste the opponent's list under "Target" in Import roster.</EmptyState>
   {:else}
     <div class="row">
-      <label>Unit</label>
+      <label for="tgt-roster-unit">Unit</label>
       <select
+        id="tgt-roster-unit"
         class="grow"
         value={salvo.rosterTargetUnitIndex ?? ""}
         onchange={(e) => {
@@ -182,7 +189,7 @@
           salvo.rosterTargetUnitIndex = v === "" ? null : Number(v);
         }}
       >
-        <option value="">— pick a target unit —</option>
+        <option value="">Pick a target unit</option>
         {#each rosterPicks as p (p.i)}
           <option value={p.i}>{p.view!.name} ({p.ru.model_count} models)</option>
         {/each}
@@ -191,18 +198,21 @@
   {/if}
 {/if}
 
-<div class="stats-grid">
+{#if salvo.targetMode === "manual"}
+  <p class="hint dim">Enter the target's profile. Picking a unit fills these in.</p>
+{/if}
+<div class="stats-grid" role="group" aria-label="Target profile">
   <label class="stat-row">
-    <span class="stat-label">T</span>
-    <input type="number" min="1" bind:value={salvo.manualTarget.T} />
+    <span class="stat-label" title="Toughness">T</span>
+    <input aria-label="Toughness" type="number" min="1" bind:value={salvo.manualTarget.T} />
   </label>
   <label class="stat-row">
-    <span class="stat-label">Sv</span>
-    <input type="number" min="2" max="7" bind:value={salvo.manualTarget.Sv} />
+    <span class="stat-label" title="Save">Sv</span>
+    <input aria-label="Save" type="number" min="2" max="7" bind:value={salvo.manualTarget.Sv} />
   </label>
   <label class="stat-row">
-    <span class="stat-label">Inv</span>
-    <input
+    <span class="stat-label" title="Invulnerable save">Inv</span>
+    <input aria-label="Invulnerable save"
       type="number"
       min="2"
       max="7"
@@ -215,16 +225,16 @@
     />
   </label>
   <label class="stat-row">
-    <span class="stat-label">W</span>
-    <input type="number" min="1" bind:value={salvo.manualTarget.W} />
+    <span class="stat-label" title="Wounds">W</span>
+    <input aria-label="Wounds" type="number" min="1" bind:value={salvo.manualTarget.W} />
   </label>
   <label class="stat-row">
     <span class="stat-label">Models</span>
     <input type="number" min="1" bind:value={salvo.manualTarget.modelCount} />
   </label>
   <label class="stat-row">
-    <span class="stat-label">FNP</span>
-    <input
+    <span class="stat-label" title="Feel No Pain">FNP</span>
+    <input aria-label="Feel No Pain"
       type="number"
       min="2"
       max="7"
@@ -239,8 +249,9 @@
 </div>
 
 <div class="row keywords-row">
-  <label>Keywords</label>
+  <label for="tgt-keywords">Keywords</label>
   <input
+    id="tgt-keywords"
     class="grow"
     type="text"
     placeholder="comma-separated, e.g. infantry, vehicle"
@@ -258,10 +269,12 @@
   />
 </div>
 
+<DefenderBuild />
+
 <style>
   .stats-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-2);
     margin-top: var(--space-2);
   }
@@ -277,4 +290,5 @@
   }
   .stat-row input { flex: 1; min-width: 0; }
   .keywords-row { margin-top: var(--space-2); }
+  .hint { margin: 0 0 var(--space-2); font-size: var(--text-xs); }
 </style>

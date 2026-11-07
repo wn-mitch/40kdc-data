@@ -1,0 +1,42 @@
+{
+  "name": "Canonical reroll subset: hit-ones-and-twos",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 0
+  },
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "modelsFiring": 5,
+  "context": {
+    "phase": "shooting",
+    "withinHalfRange": false,
+    "attackerStationary": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-reroll-subset",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "reroll",
+        "roll": "hit",
+        "subset": "ones-and-twos"
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 5,
+      "hits": 4.4444,
+      "wounds": 2.963,
+      "unsaved": 1.4815,
+      "damage": 2.963,
+      "after-fnp": 2.963,
+      "models-killed": 1.4815
+    }
+  }
+}

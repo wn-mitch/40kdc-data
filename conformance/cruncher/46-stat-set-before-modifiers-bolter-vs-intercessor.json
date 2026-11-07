@@ -1,0 +1,86 @@
+{
+  "name": "bolt-rifle (saturation) x5 vs intercessor, set A 3, AP -3 and D 2 apply before an Attacks +1 and an AP worsening of 1",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting"
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-set-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "stat-set",
+        "stat": "A",
+        "value": 3
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-set-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "stat-set",
+        "stat": "AP",
+        "value": -3
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-set-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "stat-set",
+        "stat": "D",
+        "value": 2
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-mod-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "attacks-mod",
+        "value": 1
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-mod-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "ap-mod",
+        "value": 1
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 20,
+      "hits": 13.3333,
+      "wounds": 6.6667,
+      "unsaved": 4.4444,
+      "damage": 8.8889,
+      "after-fnp": 8.8889,
+      "models-killed": 4.4444
+    }
+  }
+}

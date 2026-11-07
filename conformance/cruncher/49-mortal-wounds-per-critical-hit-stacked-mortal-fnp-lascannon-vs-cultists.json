@@ -1,0 +1,78 @@
+{
+  "name": "lascannon vs cultists with Devastating Wounds, two sources of D3 mortal wounds per critical hit and a mortal-only FNP",
+  "attacker": {
+    "weaponId": "lascannon",
+    "profileIndex": 0
+  },
+  "modelsFiring": 3,
+  "target": {
+    "unitId": "cultist-mob",
+    "profileIndex": 0,
+    "modelCount": 10
+  },
+  "context": {
+    "phase": "shooting",
+    "attackerStationary": false,
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "manual",
+        "label": "Devastating Wounds (test)"
+      },
+      "contribution": {
+        "type": "extra-keyword",
+        "keywordRef": {
+          "keyword_id": "devastating-wounds"
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "manual",
+        "label": "D3 MW per critical hit (test)"
+      },
+      "contribution": {
+        "type": "mortal-wounds-on-roll",
+        "roll": "hit",
+        "outcome": "critical",
+        "count": 2
+      }
+    },
+    {
+      "source": {
+        "kind": "manual",
+        "label": "1 MW per critical hit (test)"
+      },
+      "contribution": {
+        "type": "mortal-wounds-on-roll",
+        "roll": "hit",
+        "outcome": "critical",
+        "count": 1
+      }
+    },
+    {
+      "source": {
+        "kind": "manual",
+        "label": "5+ FNP vs mortals"
+      },
+      "contribution": {
+        "type": "feel-no-pain",
+        "threshold": 5,
+        "scope": "mortal"
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 3,
+      "hits": 2,
+      "wounds": 1.6667,
+      "unsaved": 1.3333,
+      "damage": 9.8333,
+      "after-fnp": 8.7778,
+      "models-killed": 8.7778
+    }
+  }
+}

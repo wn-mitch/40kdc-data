@@ -69,4 +69,18 @@ describe("shortlinks", () => {
     expect(over.status).toBe(403);
     expect(over.body.error).toBe("link_quota_exceeded");
   });
+
+  it("holds the link quota against concurrent mints", async () => {
+    const token = await mintToken("burst-linker");
+    const results = await Promise.all(
+      Array.from({ length: 10 }, (_, i) =>
+        api("/links", { method: "POST", token, body: { kind: "list", payload: { i } } }),
+      ),
+    );
+    expect(results.filter((r) => r.status === 200)).toHaveLength(5);
+    for (const r of results.filter((r) => r.status !== 200)) {
+      expect(r.status).toBe(403);
+      expect(r.body.error).toBe("link_quota_exceeded");
+    }
+  });
 });

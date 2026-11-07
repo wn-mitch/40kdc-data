@@ -214,7 +214,12 @@ func ysWeaponProfiles(weapon *WeaponView) []*ysEl {
 			if r == nil {
 				r = float64(0)
 			}
-			rng = ysFmtMove(r)
+			if r == "N/A" {
+				// An "N/A" range is printed as-is, without the inch mark.
+				rng = "N/A"
+			} else {
+				rng = ysFmtMove(r)
+			}
 		} else {
 			rng = "Melee"
 		}

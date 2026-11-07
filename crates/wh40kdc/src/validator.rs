@@ -1,23 +1,46 @@
 //! Schema validation with the closed cross-implementation error-code enum.
 //!
 //! A hand-rolled JSON Schema draft-2020-12 *subset* validator over the embedded
-//! [`crate::BUNDLED_SCHEMA`] document — every entity schema lives under its
-//! `$defs`, and AJV bundling rewrote all `$ref`s to local `#/$defs/...`
-//! pointers, so no cross-file resolution is needed. Maps validation failures
+//! [`crate::VALIDATION_SCHEMA`] document — every entity schema lives under its
+//! `$defs`, and bundling rewrote all `$ref`s to local `#/$defs/...` pointers, so
+//! no cross-file resolution is needed. Every keyword that document uses is
+//! either evaluated here or listed as unenforced (`format`); a test fails on
+//! any other. Maps validation failures
 //! onto the closed `(path, code)` enum pinned by `conformance/validator`
 //! (`REQUIRED_MISSING`, `TYPE_MISMATCH`, `ENUM_VIOLATION`, `PATTERN_MISMATCH`,
 //! `RANGE_VIOLATION`, `ADDITIONAL_PROPERTY`, `UNIQUE_VIOLATION`). Wording is the
 //! implementation's prerogative — only the codes cross the wire.
 //!
 //! Rust mirror of `python/src/wh40kdc/validator.py` (the closed-enum mapping)
-//! and the Go `validator.go`. Pattern/format checks are treated as always-valid
-//! (no corpus case exercises a pattern failure, and the `regex` dep stays
-//! scoped to the importer) — adding one would be a `SPEC_VERSION` bump anyway.
+//! and the Go `validator.go`. `pattern` is matched with ASCII-only classes
+//! (`\d` is `[0-9]`), as AJV and Go's RE2 match it; `format` is treated as
+//! always-valid, as Go and Python's jsonschema treat it.
 
-use std::collections::HashSet;
-use std::sync::OnceLock;
+use std::collections::{HashMap, HashSet};
+use std::sync::{Mutex, OnceLock};
+
+use regex::{Regex, RegexBuilder};
 
 use serde_json::Value;
+
+/// Compile a schema `pattern` once per process. ASCII mode keeps `\d`, `\w` and
+/// `\s` to their ASCII meaning; a pattern that only compiles with Unicode
+/// semantics (one whose `.` could match a partial character) falls back to them.
+fn pattern(source: &str) -> Option<Regex> {
+    static CACHE: OnceLock<Mutex<HashMap<String, Option<Regex>>>> = OnceLock::new();
+    let cache = CACHE.get_or_init(|| Mutex::new(HashMap::new()));
+    let mut cache = cache.lock().unwrap_or_else(|e| e.into_inner());
+    cache
+        .entry(source.to_string())
+        .or_insert_with(|| {
+            RegexBuilder::new(source)
+                .unicode(false)
+                .build()
+                .or_else(|_| Regex::new(source))
+                .ok()
+        })
+        .clone()
+}
 
 /// The wire validator targets — each is a key under the bundled schema's
 /// `$defs`.
@@ -28,6 +51,7 @@ pub const VALIDATOR_TARGETS: &[&str] = &[
     "ability",
     "wargear",
     "wargear-option",
+    "stratagem",
 ];
 
 fn keyword_to_code(keyword: &str) -> Option<&'static str> {
@@ -47,7 +71,7 @@ fn keyword_to_code(keyword: &str) -> Option<&'static str> {
 fn bundled() -> &'static Value {
     static ROOT: OnceLock<Value> = OnceLock::new();
     ROOT.get_or_init(|| {
-        serde_json::from_str(crate::BUNDLED_SCHEMA).expect("bundled schema is valid JSON")
+        serde_json::from_str(crate::VALIDATION_SCHEMA).expect("validation schema is valid JSON")
     })
 }
 
@@ -154,6 +178,33 @@ fn check_object(
                     }
                 }
             }
+            if let Some(mp) = schema.get("minProperties").and_then(Value::as_u64) {
+                if (inst.len() as u64) < mp {
+                    push(out, path, "minProperties");
+                }
+            }
+            if let Some(mp) = schema.get("maxProperties").and_then(Value::as_u64) {
+                if (inst.len() as u64) > mp {
+                    push(out, path, "maxProperties");
+                }
+            }
+            if let Some(Value::Object(dr)) = schema.get("dependentRequired") {
+                for (trigger, req) in dr {
+                    if !inst.contains_key(trigger) {
+                        continue;
+                    }
+                    for name in req
+                        .as_array()
+                        .into_iter()
+                        .flatten()
+                        .filter_map(Value::as_str)
+                    {
+                        if !inst.contains_key(name) {
+                            push(out, path, "dependentRequired");
+                        }
+                    }
+                }
+            }
             let props = schema.get("properties").and_then(Value::as_object);
             for (k, val) in inst {
                 if let Some(sub) = props.and_then(|p| p.get(k)) {
@@ -204,6 +255,21 @@ fn check_object(
                     push(out, path, "maxItems");
                 }
             }
+            if let Some(contains) = schema.get("contains") {
+                let matches = arr.iter().filter(|e| is_valid(root, contains, e)).count() as u64;
+                let min = schema
+                    .get("minContains")
+                    .and_then(Value::as_u64)
+                    .unwrap_or(1);
+                if matches < min {
+                    push(out, path, "contains");
+                }
+                if let Some(max) = schema.get("maxContains").and_then(Value::as_u64) {
+                    if matches > max {
+                        push(out, path, "maxContains");
+                    }
+                }
+            }
             if schema.get("uniqueItems").and_then(Value::as_bool) == Some(true)
                 && has_duplicate(arr)
             {
@@ -222,7 +288,12 @@ fn check_object(
                     push(out, path, "maxLength");
                 }
             }
-            // pattern / format intentionally treated as always-valid.
+            if let Some(Value::String(p)) = schema.get("pattern") {
+                if pattern(p).is_some_and(|re| !re.is_match(s)) {
+                    push(out, path, "pattern");
+                }
+            }
+            // format intentionally treated as always-valid.
         }
         Value::Number(n) => {
             let x = n.as_f64().unwrap_or(f64::NAN);
@@ -264,6 +335,25 @@ fn check_object(
             for sub in one_of {
                 check(root, sub, instance, path, out);
             }
+        } else if valid_count > 1 {
+            // More than one matching branch fails oneOf; the keyword maps to no code.
+            push(out, path, "oneOf");
+        }
+    }
+    if let Some(not) = schema.get("not") {
+        if is_valid(root, not, instance) {
+            push(out, path, "not");
+        }
+    }
+    // if/then/else: the taken branch's own errors are reported (as AJV and jsonschema do).
+    if let Some(cond) = schema.get("if") {
+        let branch = if is_valid(root, cond, instance) {
+            schema.get("then")
+        } else {
+            schema.get("else")
+        };
+        if let Some(branch) = branch {
+            check(root, branch, instance, path, out);
         }
     }
     if let Some(Value::Array(any_of)) = schema.get("anyOf") {
@@ -318,4 +408,138 @@ fn has_duplicate(arr: &[Value]) -> bool {
         }
     }
     false
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Keywords `check_object` evaluates.
+    const EVALUATED: &[&str] = &[
+        "$ref",
+        "type",
+        "enum",
+        "const",
+        "required",
+        "properties",
+        "additionalProperties",
+        "minProperties",
+        "maxProperties",
+        "dependentRequired",
+        "prefixItems",
+        "items",
+        "minItems",
+        "maxItems",
+        "contains",
+        "minContains",
+        "maxContains",
+        "uniqueItems",
+        "pattern",
+        "minLength",
+        "maxLength",
+        "minimum",
+        "maximum",
+        "exclusiveMinimum",
+        "exclusiveMaximum",
+        "allOf",
+        "oneOf",
+        "anyOf",
+        "not",
+        "if",
+        "then",
+        "else",
+    ];
+    /// Assertion keywords the schemas use that this validator does not evaluate.
+    const UNENFORCED_KEYWORDS: &[&str] = &["format"];
+    /// Keywords that assert nothing.
+    const ANNOTATIONS: &[&str] = &[
+        "$schema",
+        "$id",
+        "$defs",
+        "$comment",
+        "title",
+        "description",
+        "default",
+        "examples",
+        "deprecated",
+    ];
+
+    fn audit(schema: &Value, at: &str, unknown: &mut Vec<String>) {
+        let Value::Object(s) = schema else { return };
+        for (k, v) in s {
+            let here = format!("{at}/{k}");
+            if !EVALUATED.contains(&k.as_str())
+                && !ANNOTATIONS.contains(&k.as_str())
+                && !UNENFORCED_KEYWORDS.contains(&k.as_str())
+            {
+                unknown.push(here.clone());
+            }
+            match (k.as_str(), v) {
+                ("properties" | "$defs", Value::Object(m)) => {
+                    for (name, sub) in m {
+                        audit(sub, &format!("{here}/{name}"), unknown);
+                    }
+                }
+                ("allOf" | "anyOf" | "oneOf" | "prefixItems", Value::Array(a)) => {
+                    for (i, sub) in a.iter().enumerate() {
+                        audit(sub, &format!("{here}/{i}"), unknown);
+                    }
+                }
+                (
+                    "items" | "additionalProperties" | "contains" | "not" | "if" | "then" | "else",
+                    _,
+                ) => audit(v, &here, unknown),
+                _ => {}
+            }
+        }
+    }
+
+    /// A schema keyword this validator neither evaluates nor lists as unenforced
+    /// would be silently ignored, so data it rejects would validate here.
+    #[test]
+    fn every_schema_keyword_is_evaluated_or_listed() {
+        let mut unknown = Vec::new();
+        audit(bundled(), "#", &mut unknown);
+        assert!(
+            unknown.is_empty(),
+            "unsupported schema keywords: {unknown:?}"
+        );
+    }
+
+    /// A pattern that fails to compile would be skipped, so every schema pattern must compile.
+    #[test]
+    fn every_schema_pattern_compiles() {
+        fn walk(n: &Value, bad: &mut Vec<String>) {
+            match n {
+                Value::Object(m) => {
+                    if let Some(Value::String(p)) = m.get("pattern") {
+                        if pattern(p).is_none() {
+                            bad.push(p.clone());
+                        }
+                    }
+                    m.values().for_each(|v| walk(v, bad));
+                }
+                Value::Array(a) => a.iter().for_each(|v| walk(v, bad)),
+                _ => {}
+            }
+        }
+        let mut bad = Vec::new();
+        walk(bundled(), &mut bad);
+        assert!(bad.is_empty(), "uncompilable patterns: {bad:?}");
+    }
+
+    /// `\d` is ASCII, as in AJV and Go: an Arabic-Indic digit is not a digit.
+    #[test]
+    fn pattern_digits_are_ascii() {
+        let re = pattern(r"^\d{1,2}(th)?$").expect("compiles");
+        assert!(re.is_match("11th"));
+        assert!(!re.is_match("\u{0661}\u{0661}th"));
+    }
+
+    /// The validation schema carries the conditionals the codegen bundle strips.
+    #[test]
+    fn validation_schema_keeps_conditionals() {
+        assert!(crate::VALIDATION_SCHEMA.contains("\"if\""));
+        assert!(!crate::BUNDLED_SCHEMA.contains("\"if\""));
+    }
 }

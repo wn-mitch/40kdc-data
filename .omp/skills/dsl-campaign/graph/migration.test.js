@@ -34,7 +34,7 @@ function fixture({ prohibited = false } = {}) {
   writeFileSync(join(raw, 'index.json'), JSON.stringify({ schema_version: 1, factions: { fabricated: { 'helix-test': { raw_text: sourceText } } } }))
   writeFileSync(join(repo, 'data', 'enrichment', 'fabricated', 'abilities.json'), JSON.stringify([{
     ability_id: 'helix-test', name: 'Helix Test', authored_by: 'community', game_version: { edition: '11th', dataslate: 'test' }, ability_type: 'datasheet', behavior: 'passive',
-    effect: { type: 'feel-no-pain', target: 'unit', modifier: { threshold: 6 } }, scope: { range: 'unit', duration: 'permanent' },
+    effect: { type: 'feel-no-pain', target: 'this-unit', modifier: { threshold: 6 } }, scope: { duration: 'permanent' },
   }]))
   const store = new GraphStore(graph, { verify: false })
   store.createNode({ kind: 'repository-version', payload: { workspace_hash: 'a'.repeat(64), files: [], tool_versions: {}, runner_hashes: [], schema_version: 5, policy_version: 2 } })

@@ -1,3 +1,7 @@
+import { spawnSync } from "node:child_process";
+import { chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { describe, expect, it } from "vitest";
 import { findAnchors, captureBody, type CardAnchor } from "../src/author-input-pack.js";
 import type { Block } from "../src/pack-blocks.js";
@@ -53,5 +57,33 @@ describe("captureBody (column isolation)", () => {
   it("includes the card's own WHEN/EFFECT prose below the name", () => {
     const body = captureBody(blocks, dominance, anchors);
     expect(body).toContain("WHEN: Your Command phase.");
+  });
+});
+
+describe("faction pack CLI paths", () => {
+  it("passes repository-relative single and directory PDF paths to pdftotext", () => {
+    const root = join(import.meta.dirname, "../..");
+    mkdirSync(join(root, "_private"), { recursive: true });
+    const fixture = mkdtempSync(join(root, "_private", "pack-path-test-"));
+    try {
+      const stub = join(fixture, "pdftotext");
+      writeFileSync(stub, "#!/bin/sh\nprintf '%s\\n' \"$@\" >&2\nexit 1\n");
+      chmodSync(stub, 0o755);
+      const pdf = join(fixture, "space-marines_faction_pack.pdf");
+      writeFileSync(pdf, "");
+      const relativeDir = `_private/${fixture.split("/").at(-1)!}`;
+      const run = (args: string[]) => spawnSync("npx", ["tsx", "src/extract-faction-pack.ts", ...args], {
+        cwd: join(root, "tools"),
+        env: { ...process.env, PATH: `${fixture}:${process.env.PATH}` },
+        encoding: "utf8",
+      });
+      for (const args of [[`${relativeDir}/space-marines_faction_pack.pdf`, "--faction", "fixture"], ["--all", "--dir", relativeDir], [pdf, "--faction", "fixture"]]) {
+        const result = run(args);
+        expect(result.status).not.toBe(0);
+        expect(result.stderr).toContain(pdf);
+      }
+    } finally {
+      rmSync(fixture, { recursive: true, force: true });
+    }
   });
 });
