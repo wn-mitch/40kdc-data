@@ -1,0 +1,13 @@
+Astra Militarum - Deathstrike Battery - [2000 pts]
+
+# ++ Army Roster ++ [185 pts]
+## Configuration
+List Name: Deathstrike Battery
+Faction: Astra Militarum
+Battle Size: Strike Force (2000 Point limit)
+Detachment: Combined Arms
+Force Disposition: Take And Hold
+
+## Battleline [185 pts]
+Primaris Psyker [60 pts]: Warlord, Force weapon, Laspistol, Psychic Maelstrom
+Deathstrike [125 pts]: Armoured tracks, Deathstrike missile, Heavy bolter

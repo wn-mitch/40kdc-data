@@ -21,6 +21,7 @@
  * M2's broader ability translator.
  */
 import type { Buff, BuffSource, EngineContext, WeaponKeywordRef } from "./buffs.js";
+import { matchesUnitFilter } from "./unit-filter.js";
 
 /** Keywords whose math the engine encodes directly (catalog `effect` is null). */
 const ENGINE_DISPATCH_KEYWORDS = new Set([
@@ -41,6 +42,7 @@ function keywordAppliesToTarget(
   context: EngineContext,
 ): boolean {
   if (!parameters) return true;
+  if (context.targetKeywords === undefined && (parameters.required_target_keywords_any !== undefined || parameters.excluded_target_keywords !== undefined)) return false;
   const targetKeywords = new Set((context.targetKeywords ?? []).map((keyword) => keyword.toLowerCase()));
   const required = parameters.required_target_keywords_any;
   if (Array.isArray(required) && !required.some((keyword) => typeof keyword === "string" && targetKeywords.has(keyword.toLowerCase()))) {
@@ -175,11 +177,8 @@ function conditionalBuffs(
   const condition = node.condition;
   const effect = node.effect;
   if (!isObject(condition)) return [];
-  const negated = condition.negated === true;
   const verdict = evaluateCondition(condition, ctx);
-  if (verdict === "unknown") return [];
-  const active = negated ? !verdict : verdict;
-  if (!active) return [];
+  if (verdict !== true) return [];
   return walk(effect, source, ctx);
 }
 
@@ -193,15 +192,21 @@ function evaluateCondition(
   condition: Record<string, unknown>,
   ctx: EngineContext,
 ): boolean | "unknown" {
+  if (condition.operator === "not" && Array.isArray(condition.operands) && isObject(condition.operands[0])) {
+    const v = evaluateCondition(condition.operands[0], ctx);
+    return v === "unknown" ? v : !v;
+  }
+  const parameters = isObject(condition.parameters) ? condition.parameters : {};
   switch (condition.type) {
-    case "remained-stationary":
-      return ctx.attackerStationary === true;
-    case "target-has-keyword": {
-      const parameters = isObject(condition.parameters) ? condition.parameters : {};
-      const kw = parameters.keyword;
-      if (typeof kw !== "string") return "unknown";
-      return (ctx.targetKeywords ?? []).includes(kw.toLowerCase());
+    case "happened": {
+      const filter = isObject(parameters.filter) ? parameters.filter : {};
+      const types = Array.isArray(filter.move_types) ? filter.move_types : [];
+      if (parameters.event === "move-ended" && types.length === 1 && types[0] === "remain-stationary" && parameters.subject == null)
+        return ctx.attackerStationary === true;
+      return "unknown";
     }
+    case "matches":
+      return parameters.subject === "defender" ? matchesUnitFilter(parameters.filter, ctx, "target", "enemy") : "unknown";
     default:
       return "unknown";
   }

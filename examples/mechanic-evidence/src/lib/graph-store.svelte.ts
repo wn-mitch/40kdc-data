@@ -180,7 +180,7 @@ export class GraphStore {
   private generation = 0;
   private stopped = true;
   private campaignProgressGeneration = 0;
-  private filterTimer: number | null = null;
+  private filterTimer: ReturnType<typeof setTimeout> | null = null;
   private projectionNodes = new Map<string, ProjectionNode>();
   private projectionEdges = new Map<string, ProjectionEdge>();
   private expandedBranches = new Set<string>();

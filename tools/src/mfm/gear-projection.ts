@@ -7,7 +7,7 @@ export interface GameVersion {
 
 export interface WeaponProfile {
   name: string;
-  range: number | "Melee";
+  range: number | "Melee" | "N/A";
   stats: {
     A: number | string;
     BS?: number | null;
@@ -17,6 +17,8 @@ export interface WeaponProfile {
     D: number | string;
   };
   keywords?: { keyword_id: string; parameters?: Record<string, unknown> }[];
+  /** A Hunter profile can only target units with one of these keywords. */
+  target_restrictions?: { required_keywords_any?: string[]; excluded_keywords?: string[] };
 }
 
 export interface WeaponRecord {
@@ -43,11 +45,32 @@ export interface MintContext {
 }
 
 /** Parse one dump wargear ability display name into repo keyword references. */
-function mapWeaponKeyword(
+export function mapWeaponKeyword(
   raw: string,
 ): { keyword_id: string; parameters?: Record<string, unknown> }[] | null {
   const name = raw.trim();
+  // A qualified keyword ("LETHAL HITS: non-MONSTER/VEHICLE", "DEVASTATING WOUNDS: INFANTRY")
+  // applies only against targets with (or without) the named keywords.
+  const qualified = name.match(/^(.+?):\s*(non-)?([A-Za-z][A-Za-z /]*)$/);
+  if (qualified) {
+    const base = mapWeaponKeyword(qualified[1]);
+    if (!base || base.length !== 1) return null;
+    const keywords = qualified[3]
+      .split("/")
+      .map((keyword) => keyword.trim())
+      .filter(Boolean)
+      .map((keyword) => keyword.toLowerCase().replace(/\b\w/g, (character) => character.toUpperCase()));
+    const key = qualified[2] ? "excluded_target_keywords" : "required_target_keywords_any";
+    return [{ keyword_id: base[0].keyword_id, parameters: { ...base[0].parameters, [key]: keywords } }];
+  }
   const lower = name.toLowerCase();
+  // "ANTI-non-MONSTER/VEHICLE 2+": Anti against every target without the named keywords.
+  const antiNot = lower.match(/^anti-non-([a-z/ ]+?)\s*(\d)\+$/);
+  if (antiNot) {
+    const excluded = antiNot[1].split("/").map((target) => target.trim()).filter(Boolean)
+      .map((target) => target.replace(/\b\w/g, (character) => character.toUpperCase()));
+    return [{ keyword_id: "anti", parameters: { threshold: Number(antiNot[2]), excluded_target_keywords: excluded } }];
+  }
   const anti = lower.match(/^anti-([a-z/ ]+?)\s*(\d)\+$/);
   if (anti) {
     const threshold = Number(anti[2]);
@@ -83,7 +106,7 @@ function mapWeaponKeyword(
     };
     if (byBase[base])
       return [{ keyword_id: byBase[base], parameters: { value } }];
-    if (base === "blast") return [{ keyword_id: "blast" }];
+    if (base === "blast") return [{ keyword_id: "blast", parameters: { value } }];
   }
 
   const flat: Record<string, string> = {
@@ -116,6 +139,7 @@ function mapWeaponKeyword(
     "reverberating summons": "reverberating-summons",
     bubblechukka: "bubblechukka",
     "dead choppy": "dead-choppy",
+    "blinding light": "blinding-light",
     harpooned: "harpooned",
     hooked: "hooked",
     impaled: "impaled",
@@ -148,18 +172,30 @@ export function parseSkill(value: string | null | undefined): number | null {
   return numeric >= 2 && numeric <= 6 ? numeric : null;
 }
 
+/** The keywords a Hunter profile names, title-cased as the repo stores them ("Monster", "Vehicle"). */
+export function hunterKeywords(raw: string | null | undefined): string[] {
+  if (!raw) return [];
+  return raw
+    .replace(/\*/g, "")
+    .split(/[/,]/)
+    .map((keyword) => keyword.trim())
+    .filter(Boolean)
+    .map((keyword) => keyword.toLowerCase().replace(/\b\w/g, (character) => character.toUpperCase()));
+}
+
 function parseArmourPenetration(value: string | null | undefined): number {
   const numeric = Number.parseInt((value ?? "0").trim(), 10);
   return Number.isFinite(numeric) ? numeric : 0;
 }
 
-function parseRange(
+export function parseRange(
   value: string | null | undefined,
   type: string,
-): number | "Melee" {
+): number | "Melee" | "N/A" {
   if (type === "melee") return "Melee";
   const normalized = (value ?? "").trim();
   if (/melee/i.test(normalized)) return "Melee";
+  if (/^n\/a$/i.test(normalized)) return "N/A";
   const numeric = Number.parseInt(normalized.replace(/["”]/g, ""), 10);
   if (!Number.isFinite(numeric))
     throw new Error(`unparseable range "${value}"`);
@@ -212,6 +248,16 @@ export function mintWeapon(
       keywords.push(...mapped);
     }
 
+    // A Hunter profile names the target keywords it may be used against
+    // ("**MONSTER/VEHICLE**"): one [HUNTER] reference per keyword, and the profile's
+    // target restriction.
+    const hunterTargets = hunterKeywords(profile.localisations?.en?.hunterProfileKeyword);
+    if (hunterTargets.length > 0) {
+      keywords.push(...hunterTargets.map((target_keyword) => ({ keyword_id: "hunter", parameters: { target_keyword } })));
+    } else if (dump.enName(profile) === "Hunter") {
+      ctx.warnings.push(`weapon "${name}": Hunter profile names no target keyword (left unrestricted)`);
+    }
+
     const profileName =
       profiles.length > 1
         ? (dump.enName(profile) ?? profile.localisations?.en?.name ?? name)
@@ -221,6 +267,7 @@ export function mintWeapon(
       range: parseRange(profile.range, profile.type),
       stats,
       ...(keywords.length > 0 ? { keywords } : {}),
+      ...(hunterTargets.length > 0 ? { target_restrictions: { required_keywords_any: hunterTargets } } : {}),
     };
   });
 

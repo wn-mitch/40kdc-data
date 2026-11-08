@@ -1,0 +1,17 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ PLAYER NAME: —
++ TEAM NAME: —
++ FACTIONS USED: Adeptus Astartes
++ DISPOSITION: Priority Assets
++ DETACHMENT: Gladius Task Force
++ ARMY POINTS: 75pts
++
++ WARLORD: —
++ ENHANCEMENT: —
++ LEADER/SUPPORT: —
++ NUMBER OF UNITS: 1
++++++++++++++++++++++++++++++++++++++++++++++++
+
+5x Assault Intercessor Squad (75 pts): 
+• 1x Assault Intercessor Sergeant: Chainsword, Heavy bolt pistol
+• 4x Assault Intercessor: Chainsword, Heavy bolt pistol

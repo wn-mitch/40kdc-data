@@ -33,6 +33,9 @@ export function validateOps(ops: DocOp[]): void {
       if (!segOk) throw new OpError("bad path segment");
     }
     if (op.o === "set") {
+      // JSON has no undefined, so a missing value is a malformed op — applying
+      // it would drop the key (nested) or blank the whole document (root).
+      if (!("v" in op) || op.v === undefined) throw new OpError("set requires a value");
       if (op.p.length === 0) continue; // whole-doc replace is allowed
     } else if (op.o === "del") {
       if (op.p.length === 0) throw new OpError("cannot delete the document root");

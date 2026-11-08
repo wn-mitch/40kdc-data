@@ -1,0 +1,16 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ LIST NAME: Imported roster
++ FACTION KEYWORD: Adeptus Astartes
++ DETACHMENT: Gladius Task Force
++ FORCE DISPOSITION: Priority Assets
++ TOTAL ARMY POINTS: 75pts
++ POINTS LIMIT: 75pts
++
++ WARLORD: —
++ ENHANCEMENT: —
++ NUMBER OF UNITS: 1
++++++++++++++++++++++++++++++++++++++++++++++++
+
+5x Assault Intercessor Squad (75 pts): 
+• 1x Assault Intercessor Sergeant: Chainsword, Heavy bolt pistol
+• 4x Assault Intercessor: Chainsword, Heavy bolt pistol

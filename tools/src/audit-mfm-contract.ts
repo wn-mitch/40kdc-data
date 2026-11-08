@@ -542,7 +542,7 @@ export function renderReport(input: AuditInput): string {
   L.push("not read as oversights.");
   L.push("");
   L.push(
-    "- **GW prose → out-of-repo store.** Ability/rules/lore text is never committed here; it lands in the sibling `40kdc-abilities` store (tracked by `npm run audit:store-coverage`)."
+    "- **GW prose → private dump only.** Ability/rules/lore text is never committed here; tools read it from `_private/dump.json` through `mfm/record-prose.ts` (`npm run prose`)."
   );
   L.push("- **Artwork references** (`bannerImage`, `rowImage`) are excluded from published data.");
   L.push(
@@ -556,7 +556,7 @@ export function renderReport(input: AuditInput): string {
   );
   if (proseTables.length) {
     L.push("");
-    L.push("Populated prose/artwork-dominant tables with no consumer (route to the store, not the repo):");
+    L.push("Populated prose/artwork-dominant tables with no consumer (prose stays in the private dump, not the repo):");
     L.push("");
     L.push("| Table | Rows | ip_class | Description |");
     L.push("|---|--:|---|---|");

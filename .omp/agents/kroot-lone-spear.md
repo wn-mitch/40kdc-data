@@ -91,7 +91,7 @@ payload and `output_node_id`, not a copied summary. Stale leases and cross-chart
     { "param": "denies", "change": "add set-up-only enum value distinct from both", "unblocks": ["picket-line", "cordon"] }
   ],
   "members_needing_own_shape": [
-    { "ability_id": "null-field", "why": "modifier-immunity mechanic — distinct shape, do not force" }
+    { "ability_id": "null-field", "why": "ignore-modifiers mechanic — distinct shape, do not force" }
   ],
   "deferred_candidates": [{ "ability_id": "null-field", "faction": "necrons", "why": "distinct mechanic; route to its own shape" }, { "ability_id": "later-discovery", "faction": "example-faction", "why": "nearby but outside frozen acceptance family" }],
   "confidence": 0.8

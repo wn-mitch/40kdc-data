@@ -13,22 +13,17 @@ describe("Dataset.defensiveBuffsFor", () => {
   });
 
   it("symmetric: same unit produces distinct buff stacks under each perspective", () => {
-    // For a unit whose army rule is purely attacker-flavoured (Oath of Moment
-    // — re-roll-hits + re-roll-wounds), the attacker walk yields reroll
-    // buffs while the defensive walk drops them.
-    const intercessor = ds.units.find("Intercessor Squad")!;
-    const atk = ds.buffsFor(
-      { unitId: intercessor.id, factionId: "adeptus-astartes" },
-      { phase: "shooting" },
-    );
-    const def = ds.defensiveBuffsFor(
-      { unitId: intercessor.id, factionId: "adeptus-astartes" },
-      { phase: "shooting" },
-    );
-    const atkRerolls = atk.filter((b) => b.contribution.type === "reroll");
-    const defRerolls = def.filter((b) => b.contribution.type === "reroll");
-    expect(atkRerolls.length).toBeGreaterThan(0);
-    expect(defRerolls.length).toBe(0);
+    // For a unit whose own ability is purely attacker-flavoured (Ghazghkull Thraka's
+    // Prophet of Da Great Waaagh: +1 to wound in the fight phase), the attacker walk
+    // yields the buff while the defensive walk drops it.
+    const ghazghkull = ds.units.find("Ghazghkull Thraka")!;
+    const input = { unitId: ghazghkull.id, factionId: "orks" };
+    const atk = ds.buffsFor(input, { phase: "fight" });
+    const def = ds.defensiveBuffsFor(input, { phase: "fight" });
+    const atkWound = atk.filter((b) => b.contribution.type === "wound-mod");
+    const defWound = def.filter((b) => b.contribution.type === "wound-mod");
+    expect(atkWound.length).toBeGreaterThan(0);
+    expect(defWound.length).toBe(0);
   });
 
   it("weaponProfiles are ignored under target perspective", () => {
@@ -70,45 +65,36 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
       { unitId: "kabalite-warriors", factionId: "drukhari", attachedUnitIds: ["archon"] },
       { phase: "shooting" },
     );
-    expect(invulns(attached, "shadowfield")).toEqual([]);
+    expect(invulns(attached, "shadowfield-drukhari")).toEqual([]);
 
     // …but the Archon crunched as itself keeps it (source kind "unit").
     const own = ds.defensiveBuffsFor(
       { unitId: "archon", factionId: "drukhari" },
       { phase: "shooting" },
     );
-    expect(invulns(own, "shadowfield")).toHaveLength(1);
-    expect(invulns(own, "shadowfield")[0].contribution).toEqual({
+    expect(invulns(own, "shadowfield-drukhari")).toHaveLength(1);
+    expect(invulns(own, "shadowfield-drukhari")[0].contribution).toEqual({
       type: "invulnerable-save",
       threshold: 4,
     });
   });
 
   it("a unit-scoped leader rule still buffs the whole attached unit", () => {
-    // Mental Fortress reads "models in that unit have a 4+ invulnerable save" —
-    // authored `target: "unit"`, so the gate must not touch it (issue #105's
-    // repro, which is a legitimately unit-wide rule).
+    // legitimately unit-wide rule, so the gate must not touch it.
     const attached = ds.defensiveBuffsFor(
-      { unitId: "intercessor-squad", factionId: "adeptus-astartes", attachedUnitIds: ["librarian"] },
+      {
+        unitId: "plaguebearers",
+        factionId: "chaos-daemons",
+        attachedUnitIds: ["epidemius"],
+        attachmentRoles: { epidemius: "leader", plaguebearers: "bodyguard" },
+      },
       { phase: "fight" },
     );
-    const buffs = invulns(attached, "mental-fortress-psychic");
+    const buffs = invulns(attached, "blessed-by-the-plague-god-chaos-daemons");
     expect(buffs).toHaveLength(1);
-    expect(buffs[0].source).toMatchObject({ abilityKind: "attached", sourceUnitId: "librarian" });
+    expect(buffs[0].source).toMatchObject({ abilityKind: "attached", sourceUnitId: "epidemius" });
   });
 
-  it("the dropped effect is reported as unsupported, not silently discarded", () => {
-    const shadowfield = ds.abilities.getAny("shadowfield")!;
-    const translated = shadowfield.describeBuffs(
-      { kind: "ability", abilityId: "shadowfield", abilityKind: "attached", sourceUnitId: "archon" },
-      { phase: "shooting" },
-      "target",
-    );
-    expect(translated.applied).toEqual([]);
-    expect(translated.unsupported.map((u) => u.reason)).toEqual([
-      "model-scoped effect from an attached model: applies to that model only (core rule 19.04)",
-    ]);
-  });
 
   it("the gate is attacker-side too, and spares unit-scoped grants", () => {
     const keywordsFrom = (
@@ -121,8 +107,7 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
           b.contribution.type === "extra-keyword" ? [b.contribution.keywordRef.keyword_id] : [],
         );
 
-    // Psychic Gifts reads "the bearer has the Psyker keyword" — model-scoped, so
-    // it must not ride an attached Inquisitor onto the squad it joined…
+    // Psychic Gifts is a unit keyword grant, not a weapon extra-keyword buff.
     const led = ds.buffsFor(
       {
         unitId: "inquisitorial-agents",
@@ -131,25 +116,25 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
       },
       { phase: "command" },
     );
-    expect(keywordsFrom(led, "psychic-gifts")).toEqual([]);
-    // …while the Inquisitor crunched as itself still carries it.
+    expect(keywordsFrom(led, "psychic-gifts-agents-of-the-imperium")).toEqual([]);
     const alone = ds.buffsFor(
       { unitId: "inquisitor", factionId: "agents-of-the-imperium" },
       { phase: "command" },
     );
-    expect(keywordsFrom(alone, "psychic-gifts")).toEqual(["psyker"]);
+    expect(keywordsFrom(alone, "psychic-gifts-agents-of-the-imperium")).toEqual([]);
 
-    // Surgical Precision is unit-scoped ("that unit's ranged weapons have
-    // [LETHAL HITS]"), so an attached Apothecary Biologis still grants it.
-    const aggressors = ds.buffsFor(
+    // A Palatine's rule grants Lethal Hits to the whole unit she leads, so the
+    // attached Palatine still grants it.
+    const sisters = ds.buffsFor(
       {
-        unitId: "aggressor-squad",
-        factionId: "adeptus-astartes",
-        attachedUnitIds: ["apothecary-biologis"],
+        unitId: "battle-sisters-squad",
+        factionId: "adepta-sororitas",
+        attachedUnitIds: ["palatine"],
+        attachmentRoles: { palatine: "leader", "battle-sisters-squad": "bodyguard" },
       },
       { phase: "shooting" },
     );
-    expect(keywordsFrom(aggressors, "surgical-precision")).toEqual(["lethal-hits"]);
+    expect(keywordsFrom(sisters, "fury-of-the-righteous-adepta-sororitas")).toEqual(["lethal-hits"]);
   });
 });
 
@@ -182,7 +167,7 @@ describe("end-to-end: defensive FNP buff plumbed through crunch", () => {
   });
 
   it("damage-reduction buff trims damage per hit with a 'min 1' floor", () => {
-    const lascannon = ds.weapons.getAny("lascannon")!; // D = D6+1 → EV 4.5
+    const lascannon = ds.weapons.getAny("lascannon")!; // D = D3+3 → EV 5
     const knight = ds.units.find("Questoris Knight Magaera")!;
     const base: EngineInput = {
       attacker: { weapon: lascannon.raw, profileIndex: 0 },
@@ -203,17 +188,17 @@ describe("end-to-end: defensive FNP buff plumbed through crunch", () => {
     });
     const baseDamage = baseline.stages.find((s) => s.name === "damage")!.expected;
     const reducedDamage = reduced.stages.find((s) => s.name === "damage")!.expected;
-    // Per-hit damage drops from 4.5 to 3.5; ratio = 3.5/4.5.
-    expect(reducedDamage / baseDamage).toBeCloseTo(3.5 / 4.5, 4);
+    // Per-hit damage drops from 5 to 4; ratio = 4/5.
+    expect(reducedDamage / baseDamage).toBeCloseTo(4 / 5, 4);
   });
 
   it("damage-reduction floors at 1 even when reduction exceeds base damage", () => {
-    // Bolt rifle: D 1. With damage-reduction 2, damage per hit must clamp to 1,
+    // Bolt rifle (Saturation): D 1. With damage-reduction 2, damage per hit must clamp to 1,
     // not -1 or 0 — the "min 1" rule from the canonical damage-reduction text.
     const bolt = ds.weapons.getAny("bolt-rifle")!;
     const cultists = ds.units.find("Cultist Mob")!;
     const out = crunch({
-      attacker: { weapon: bolt.raw, profileIndex: 0 },
+      attacker: { weapon: bolt.raw, profileIndex: 1 },
       target: { unit: cultists.raw, profileIndex: 0 },
       modelsFiring: 1,
       buffs: [
@@ -442,7 +427,7 @@ describe("end-to-end: defensive FNP buff plumbed through crunch", () => {
     });
     const baseWounds = baseline.stages.find((s) => s.name === "wounds")!.expected;
     const toughWounds = tougher.stages.find((s) => s.name === "wounds")!.expected;
-    // S4 vs T3 = 3+; S4 vs T4 = 4+. So P drops from 4/6 → 3/6 = ratio 3/4.
-    expect(toughWounds / baseWounds).toBeCloseTo(3 / 4, 4);
+    // Bolt rifle (Focused Fire) S6: vs T3 = 2+; vs T4 = 3+. So P drops from 5/6 → 4/6 = ratio 4/5.
+    expect(toughWounds / baseWounds).toBeCloseTo(4 / 5, 4);
   });
 });

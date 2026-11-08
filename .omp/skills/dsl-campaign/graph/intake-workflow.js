@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { executePreparedIntake } from './intake.js'
+import { proseRoot } from './prose-source.js'
 import { createTrustedAgent } from './workflow-runtime.js'
 
 export const meta = {
@@ -16,7 +17,7 @@ export const meta = {
 if (typeof args === 'string') args = JSON.parse(args)
 if (!args?.repo_root || !args?.graph_root || !args?.prepared_batch_path) throw new Error('repo_root, graph_root, and prepared_batch_path required')
 const prepared = JSON.parse(readFileSync(resolve(args.repo_root, args.prepared_batch_path), 'utf8'))
-const rawStoreRoot = resolve(args.repo_root, '../40kdc-abilities')
+const rawStoreRoot = args.raw_store_root ? resolve(args.repo_root, args.raw_store_root) : proseRoot(resolve(args.repo_root))
 const executionEnvelopes = Object.assign({}, ...prepared.entries.map(entry => entry.execution_envelopes))
 const graphAgent = createTrustedAgent({
   driverArgs: { graph_root: resolve(args.repo_root, args.graph_root), execution_envelopes: executionEnvelopes },

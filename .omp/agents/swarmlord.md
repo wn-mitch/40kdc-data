@@ -1,6 +1,6 @@
 ---
 name: swarmlord
-description: Sonnet cross-faction expansion scout. Given a rule shape that works (an effect type, condition, or encoding pattern), finds abilities in OTHER factions coverable by the same shape — via embeddings clustering/candidates plus keyword sweeps over the prose store — to widen coverage per work cycle. Use for "where else does <shape> apply?", "find the family for this mechanic". Prompt must include the shape and an example ability_id. Returns a single JSON object as final message.
+description: Sonnet cross-faction expansion scout. Given a rule shape that works (an effect type, condition, or encoding pattern), finds abilities in OTHER factions coverable by the same shape — via embeddings clustering/candidates plus keyword sweeps over the dump prose — to widen coverage per work cycle. Use for "where else does <shape> apply?", "find the family for this mechanic". Prompt must include the shape and an example ability_id. Returns a single JSON object as final message.
 model: openai-codex/gpt-5.6-luna
 tools: Read, Grep, Glob, Bash
 output:
@@ -60,9 +60,9 @@ inquisitor deliberate on your numbers.
 shapes.
 
 ## Tool inventory
-- Keyword sweep over the prose store:
-  `grep -c -i '<distinctive phrase>' ../40kdc-abilities/*.json` per faction, then
-  `jq '[.[] | select(.raw_text | test("<regex>"; "i")) | .ability_id]' ../40kdc-abilities/<faction>.json`.
+- Keyword sweep over the dump prose:
+  `cd tools && npm run prose -- grep '<regex>'` (all factions; `--faction <f>` to
+  narrow) prints one `<faction>/<ability_id>` line per match.
   Pick phrases that are the RULE's fingerprint, not flavor.
 - Mechanic-level (when phrasing varies):
   `cd ../40kdc-embeddings && .venv/bin/python -m wh40kdc_embeddings candidates`
@@ -72,8 +72,8 @@ shapes.
   `grep -A6 '"ability_id": "<id>"' data/enrichment/<faction>/abilities.json` —
   classify `current_encoding` honestly; an ability already well-encoded on
   another shape is NOT a candidate.
-- Store coverage context: `data/_audit/store-coverage.md` — no prose, no sweep;
-  note the gap instead.
+- Prose coverage: an ability `npm run prose -- get` cannot resolve has no dump prose
+  to sweep; note the gap instead.
 
 ## Design principles
 - Same-slug shared abilities (e.g. across SM chapters, WE/CSM shared entities)
@@ -101,10 +101,17 @@ Mined from 30 ability-coverage session transcripts (2026-07-12). Own-words rules
 - Grep ALL per-faction copies of a shared ability_id before declaring a fix complete — copies diverge independently (blood-hungry-annihilator across CSM/DG/TS/WE, idol-of-blessed-blood across WE+CSM), and the linked-API Collection dedup is first-wins by id, so an unauthored stub silently shadows a freshly-authored copy.
 - Justify a new first-class shape when it consolidates a large family that today fakes the mechanic with an ad-hoc field — grep the corpus for the hack pattern (context:'vs-selected-keyword'/'vs-marked' for ~25-30 mark/spot/suppress abilities) before deciding a mechanic needs new authoring vs is a consolidation.
 - Run a dataset-wide grep to quantify how many abilities across all factions already use or would benefit from a shape before committing to a schema change — this reframes 'fix 4 flagged abilities' into 'fix ~250 across 23 factions', changing the whole scoping decision.
-- Grep the existing dataset for other abilities already using a target effect/grant type (ability-grant{ingress-move} 6x, ability-grant{advance-and-charge} 3x) to match the canonical established pattern when re-homing a mechanic, rather than inventing a new one.
+- Grep the existing dataset for other abilities already using a target effect/grant type (move{move_type: ingress}, permission{activity: declare-charge, after: [advance]}) to match the canonical established pattern when re-homing a mechanic, rather than inventing a new one.
 - Rank authoring targets by coverage x tightness (cluster size x min_sim), not size alone — a large loose cluster is a single-linkage chaining artifact; dedupe by ability_id before quoting a 'how many shapes to design' number, since exact-duplicate clusters (min_sim 1.0) are one id copy-pasted across detachments.
-- Pull the actual faction pack PDF where one exists (astra-militarum aerial-deployment) rather than inferring by analogy; where no source exists, an ability's own existing DSL shape can unambiguously encode the intended mechanic, and you approximate only the genuinely-unsourced preconditions explicitly (flagging a Hover-mode gate).
-- Treat a flagged shape as a required generalization when the user names a harder relative mechanic — pool-add-die gained count_per_pool and consumes_pool specifically to cover Icon of Khorne's per-pool scaling before implementation started.
-- Reuse canonical shapes across factions: leadership-modifier{test:battle-shock} for a forced test, recon-star-designation-force for ingress-move timing, unit-keyword-grant + unit-has-keyword for a shared cross-datasheet tag — read the closest analogous family's already-encoded convention and copy it.
-- Route keyword/ability GRANTS to the existing unit-keyword-grant/ability-grant shape, not to a newly-generalized rule-state(granted,...) — even though rule-state could technically encode it, that would create a second way to say the same thing (the exact sprawl the generalization was meant to kill).
+- Pull the actual faction pack PDF where one exists (astra-militarum aerial-deployment)
+  rather than inferring by analogy; where no source exists, preserve the existing
+  DSL only when its mechanic is unambiguous and flag unsourced preconditions as
+  `DSL_GAP` for human review.
+- Treat a flagged shape as a required generalization when the user names a harder relative mechanic — resource-die{operation: add} gained count_per_pool and consumes_pool specifically to cover Icon of Khorne's per-pool scaling before implementation started.
+- Reuse canonical shapes across factions: `test{test:battle-shock}` for a forced
+  test, recon-star-designation-force for ingress-move timing, and
+  `keyword-grant{keywords}` plus `matches` with a typed `all_of` filter for a
+  shared cross-datasheet tag — read the closest analogous family's established
+  convention and copy it.
+- Route keyword/ability GRANTS to the existing keyword-grant/ability-grant shape, not to a newly-generalized rule-state(granted,...) — even though rule-state could technically encode it, that would create a second way to say the same thing (the exact sprawl the generalization was meant to kill).
 - Treat World Eaters as the authored golden reference faction — at the 0.85 cosine threshold its abilities correctly cluster as mostly outliers because they're distinctively authored; a low WE outlier rate is a harness sanity check, not a bug, and cross-faction near-duplicates only show with --faction all.

@@ -1,0 +1,21 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Imperium - Adeptus Custodes
++ DETACHMENT: Lions of the Emperor
++ TOTAL ARMY POINTS: 360pts
++
++ NUMBER OF UNITS: 4
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Witchseekers (50 pts)
+• 4x Close combat weapon
+• 4x Witchseeker flamer
+
+Prosecutors (50 pts)
+• 4x Boltgun
+• 4x Close combat weapon
+
+Vigilators (100 pts)
+• 10x Executioner greatblade
+
+Venatari Custodians (160 pts)
+• 3x Venatari lance

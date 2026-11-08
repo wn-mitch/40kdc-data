@@ -54,5 +54,8 @@ func (s *RunnerState) handleTranslateEffect(args any) map[string]any {
 			ability["trigger"] = t
 		}
 	}
+	if a["optional"] == true {
+		ability["optional"] = true
+	}
 	return okResp(map[string]any{"text": describeAbility(ability)})
 }

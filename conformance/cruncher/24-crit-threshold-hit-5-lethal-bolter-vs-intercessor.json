@@ -1,0 +1,52 @@
+{
+  "name": "bolt-rifle (saturation) x5 vs intercessor, critical hits on 5+ with Lethal Hits",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting"
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-crit-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "crit-threshold",
+        "roll": "hit",
+        "value": 5
+      }
+    },
+    {
+      "source": {
+        "kind": "manual",
+        "label": "lethal hits"
+      },
+      "contribution": {
+        "type": "extra-keyword",
+        "keywordRef": {
+          "keyword_id": "lethal-hits"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 6.6667,
+      "wounds": 5,
+      "unsaved": 2.5,
+      "damage": 2.5,
+      "after-fnp": 2.5,
+      "models-killed": 1.25
+    }
+  }
+}

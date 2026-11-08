@@ -1,0 +1,26 @@
+{
+  "name": "Skitarii Vanguard (adeptus-mechanicus) in Skitarii Hunter Cohort, shooting: a Combat Patrol's army rule never applies outside its detachment",
+  "input": {
+    "unitId": "skitarii-vanguard",
+    "factionId": "adeptus-mechanicus",
+    "detachmentId": "skitarii-hunter-cohort"
+  },
+  "phase": "shooting",
+  "expected": {
+    "army": [
+      "doctrina-imperatives-adeptus-mechanicus"
+    ],
+    "detachment": [
+      "stealth-optimisation-adeptus-mechanicus"
+    ],
+    "detachment-stratagem": [
+      "binharic-offence-skitarii-hunter-cohort-adeptus-mechanicus",
+      "bionic-endurance-skitarii-hunter-cohort-adeptus-mechanicus",
+      "isolate-and-destroy-skitarii-hunter-cohort-adeptus-mechanicus",
+      "shroud-protocols-skitarii-hunter-cohort-adeptus-mechanicus"
+    ],
+    "unit": [
+      "omnispex-adeptus-mechanicus"
+    ]
+  }
+}

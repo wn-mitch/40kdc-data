@@ -243,14 +243,39 @@ function stableJson(v: unknown): string {
   return JSON.stringify(sortKeys(v), null, 2) + "\n";
 }
 
+/** Reject a stale or malformed snapshot before either audit artifact is built or written. */
+function checkGoldenVersion(version: number | undefined, goldenPath: string): void {
+  if (!Number.isSafeInteger(version) || version! < 0) throw new Error(`Invalid incoming MFM data_version: ${String(version)}.`);
+  let text: string;
+  try {
+    text = fs.readFileSync(goldenPath, "utf8");
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return;
+    throw error;
+  }
+  let existing: unknown;
+  try {
+    existing = JSON.parse(text);
+  } catch {
+    throw new Error(`Invalid existing MFM golden JSON at ${goldenPath}; incoming version ${version}.`);
+  }
+  const current = existing && typeof existing === "object" && "data_version" in existing ? existing.data_version : undefined;
+  if (typeof current !== "number" || !Number.isSafeInteger(current) || current < 0) {
+    throw new Error(`Invalid existing MFM data_version ${String(current)}; incoming version ${version}.`);
+  }
+  if (version! < current) throw new Error(`MFM golden downgrade rejected: incoming version ${version}, existing version ${current}.`);
+}
+
 /** Regenerate `mfm-golden.json` + `mfm-gaps.json` from the dump. Always writes
  *  (audit-only; never mutates `data/core`), so the `--write` flag does not apply. */
-export function writeGolden(dump: MfmDump): void {
+export function writeGolden(dump: MfmDump, paths = { golden: GOLDEN_PATH, gaps: GAPS_PATH }): void {
+  checkGoldenVersion(dump.version, paths.golden);
   const golden = buildGolden(dump);
   const gaps = buildGaps(golden);
-  fs.mkdirSync(AUDIT_DIR, { recursive: true });
-  fs.writeFileSync(GOLDEN_PATH, stableJson(golden));
-  fs.writeFileSync(GAPS_PATH, stableJson(gaps));
+  fs.mkdirSync(path.dirname(paths.golden), { recursive: true });
+  fs.mkdirSync(path.dirname(paths.gaps), { recursive: true });
+  fs.writeFileSync(paths.golden, stableJson(golden));
+  fs.writeFileSync(paths.gaps, stableJson(gaps));
 
   const countByMode = (m: GoldenManifest): Record<string, number> => {
     const counts: Record<string, number> = {};
@@ -271,11 +296,11 @@ export function writeGolden(dump: MfmDump): void {
   const goldenCounts = countByMode(golden);
   const gapCounts = countByMode(gaps);
   console.log(
-    `Wrote ${path.relative(REPO_ROOT, GOLDEN_PATH)} — data_version ${golden.data_version}, ` +
+    `Wrote ${path.relative(REPO_ROOT, paths.golden)} — data_version ${golden.data_version}, ` +
       `${total(goldenCounts)} golden ids (${fmt(goldenCounts)}).`,
   );
   console.log(
-    `Wrote ${path.relative(REPO_ROOT, GAPS_PATH)} — ` +
+    `Wrote ${path.relative(REPO_ROOT, paths.gaps)} — ` +
       `${total(gapCounts)} allowlisted gap ids (${fmt(gapCounts)}).`,
   );
 }

@@ -1,0 +1,14 @@
+Adeptus Custodes - Imported roster - [360 pts]
+
+# ++ Army Roster ++ [360 pts]
+## Configuration
+List Name: Imported roster
+Faction: Adeptus Custodes
+Detachment: Lions of the Emperor
+Force Disposition: Disruption
+
+## Battleline [360 pts]
+Witchseekers [50 pts]: 4x Close combat weapon, 4x Witchseeker flamer
+Prosecutors [50 pts]: 4x Boltgun, 4x Close combat weapon
+Vigilators [100 pts]: 10x Executioner greatblade
+Venatari Custodians [160 pts]: 3x Venatari lance

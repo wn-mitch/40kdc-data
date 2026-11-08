@@ -5,71 +5,9 @@
  * at-capacity snapshot fallback.
  */
 import { describe, expect, it } from "vitest";
-import { env, SELF } from "cloudflare:test";
+import { env, runDurableObjectAlarm, runInDurableObject, SELF } from "cloudflare:test";
 import { api, mintToken } from "./helpers";
-import type { ServerMessage } from "../src/doc-protocol";
-
-const PLAN = { teamName: "Crusaders", size: 5, playersById: {}, playerOrder: [] };
-
-/** Create a cloud doc and mint its share tokens. */
-async function makeSharedDoc(sub: string, payload: unknown = PLAN) {
-  const token = await mintToken(sub);
-  const created = await api("/docs", {
-    method: "POST",
-    token,
-    body: { kind: "team-plan", name: "GT prep", payload },
-  });
-  expect(created.status).toBe(200);
-  const id = created.body.id as string;
-  const share = await api(`/docs/${id}/share`, { method: "POST", token });
-  expect(share.status).toBe(200);
-  return {
-    token,
-    id,
-    createdAt: created.body.updated_at as number,
-    editorToken: share.body.editorToken as string,
-    viewerToken: share.body.viewerToken as string,
-  };
-}
-
-/** Connect to a doc-bound room and collect messages; hello sent immediately. */
-async function connectDoc(id: string, linkToken: string, nickname: string) {
-  const res = await SELF.fetch(`https://sync.test/docs/${id}/ws?token=${linkToken}`, {
-    headers: { Upgrade: "websocket" },
-  });
-  expect(res.status).toBe(101);
-  const ws = res.webSocket!;
-  const queue: ServerMessage[] = [];
-  const waiters: Array<(m: ServerMessage) => void> = [];
-  ws.addEventListener("message", (e) => {
-    const msg = JSON.parse(e.data as string) as ServerMessage;
-    const waiter = waiters.shift();
-    if (waiter) waiter(msg);
-    else queue.push(msg);
-  });
-  ws.accept();
-  ws.send(JSON.stringify({ t: "hello", nickname, lastSeq: 0 }));
-  function next(timeoutMs = 2000): Promise<ServerMessage> {
-    const queued = queue.shift();
-    if (queued) return Promise.resolve(queued);
-    return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => reject(new Error("timed out waiting for message")), timeoutMs);
-      waiters.push((m) => {
-        clearTimeout(timer);
-        resolve(m);
-      });
-    });
-  }
-  return { ws, next };
-}
-
-function room(id: string) {
-  return env.DOC_ROOM.get(env.DOC_ROOM.idFromName(`doc:${id}`));
-}
-
-function registry() {
-  return env.SYNC_REGISTRY.get(env.SYNC_REGISTRY.idFromName("global"));
-}
+import { connectDoc, makeSharedDoc, PLAN, registry, room, wrappedDb } from "./live-helpers";
 
 describe("doc-bound joins", () => {
   it("welcomes with the D1 payload, doc name, and the token's role", async () => {
@@ -174,6 +112,177 @@ describe("persistence back to D1", () => {
     expect(got.body.updated_at).toBeGreaterThanOrEqual(createdAt);
   });
 
+  it("keeps an edit that lands while a flush is writing to D1", async () => {
+    const { token, id, editorToken } = await makeSharedDoc("live-inflight");
+    const a = await connectDoc(id, editorToken, "Alice");
+    await a.next(); // welcome
+    const op = (clientSeq: number, v: string) =>
+      a.ws.send(JSON.stringify({ t: "op", clientSeq, ops: [{ o: "set", p: ["teamName"], v }] }));
+    op(1, "First");
+    await a.next(); // ack
+
+    // Hold the room's D1 write open so a second op can land mid-flush.
+    let writeStarted!: () => void;
+    const started = new Promise<void>((r) => (writeStarted = r));
+    let releaseWrite!: () => void;
+    const gate = new Promise<void>((r) => (releaseWrite = r));
+    const flush = runInDurableObject(room(id), async (instance) => {
+      const self = instance as unknown as { env: { DB: D1Database } };
+      const realDb = self.env.DB;
+      self.env = {
+        ...self.env,
+        DB: wrappedDb(realDb, async () => {
+          writeStarted();
+          await gate;
+        }),
+      };
+      try {
+        await instance.persistNow();
+      } finally {
+        self.env = { ...self.env, DB: realDb };
+      }
+    });
+    await started;
+    op(2, "Second");
+    await a.next(); // ack — applied while the first write is in flight
+    releaseWrite();
+    await flush;
+
+    expect((await api(`/docs/${id}`, { token })).body.payload.teamName).toBe("First");
+    await room(id).persistNow();
+    expect((await api(`/docs/${id}`, { token })).body.payload.teamName).toBe("Second");
+  });
+
+  it("runs overlapping flushes one at a time, so the newest snapshot lands last", async () => {
+    const { token, id, editorToken } = await makeSharedDoc("live-overlap");
+    const a = await connectDoc(id, editorToken, "Alice");
+    await a.next(); // welcome
+    const op = (clientSeq: number, v: string) =>
+      a.ws.send(JSON.stringify({ t: "op", clientSeq, ops: [{ o: "set", p: ["teamName"], v }] }));
+    op(1, "First");
+    await a.next(); // ack
+
+    // Gate only the first D1 write; any later write runs straight through.
+    let writeStarted!: () => void;
+    const started = new Promise<void>((r) => (writeStarted = r));
+    let releaseWrite!: () => void;
+    const gate = new Promise<void>((r) => (releaseWrite = r));
+    let second!: Promise<void>;
+    const first = runInDurableObject(room(id), async (instance) => {
+      const self = instance as unknown as { env: { DB: D1Database } };
+      const realDb = self.env.DB;
+      self.env = {
+        ...self.env,
+        DB: wrappedDb(realDb, async (_sql, call) => {
+          if (call === 0) {
+            writeStarted();
+            await gate;
+          }
+        }),
+      };
+      try {
+        await instance.persistNow();
+        await second;
+      } finally {
+        self.env = { ...self.env, DB: realDb };
+      }
+    });
+    await started;
+    op(2, "Second");
+    await a.next(); // ack
+    second = runInDurableObject(room(id), (instance) => instance.persistNow());
+    // Let the second flush run as far as it can before the first is released.
+    await new Promise((r) => setTimeout(r, 20));
+    releaseWrite();
+    await first;
+    expect((await api(`/docs/${id}`, { token })).body.payload.teamName).toBe("Second");
+  });
+
+  it("keeps its slot stamped while a dirty eviction flush keeps failing", async () => {
+    const { id, editorToken } = await makeSharedDoc("live-outage");
+    const a = await connectDoc(id, editorToken, "Alice");
+    await a.next(); // welcome
+    a.ws.send(JSON.stringify({ t: "op", clientSeq: 1, ops: [{ o: "set", p: ["teamName"], v: "Unsaved" }] }));
+    await a.next(); // ack — dirty
+    await runInDurableObject(registry(), (_instance, state) => {
+      state.storage.sql.exec("UPDATE active SET created_at = 0 WHERE code = ?", `doc:${id}`);
+    });
+    await runInDurableObject(room(id), async (instance, state) => {
+      // Idle past the TTL with D1 down: the eviction flush fails and retries.
+      state.storage.sql.exec("UPDATE meta SET v = '0' WHERE k = 'last_activity'");
+      const self = instance as unknown as { env: { DB: D1Database } };
+      const realDb = self.env.DB;
+      self.env = {
+        ...self.env,
+        DB: wrappedDb(realDb, () => {
+          throw new Error("D1 unavailable");
+        }),
+      };
+      try {
+        await instance.alarm();
+      } finally {
+        self.env = { ...self.env, DB: realDb };
+      }
+    });
+    const stamp = await runInDurableObject(registry(), (_instance, state) =>
+      state.storage.sql
+        .exec<{ created_at: number }>("SELECT created_at FROM active WHERE code = ?", `doc:${id}`)
+        .toArray()[0]?.created_at,
+    );
+    expect(stamp).toBeGreaterThan(Date.now() - 60_000);
+  });
+
+  it("a doc-bound room with no edits still re-stamps its slot", async () => {
+    const { token, id, viewerToken } = await makeSharedDoc("live-lease");
+    const v = await connectDoc(id, viewerToken, "Watcher");
+    await v.next(); // welcome — live, never dirty
+    await runInDurableObject(registry(), (_instance, state) => {
+      state.storage.sql.exec("UPDATE active SET created_at = 0 WHERE code = ?", `doc:${id}`);
+    });
+    expect(await runDurableObjectAlarm(room(id))).toBe(true);
+    const stamp = await runInDurableObject(registry(), (_instance, state) =>
+      state.storage.sql
+        .exec<{ created_at: number }>("SELECT created_at FROM active WHERE code = ?", `doc:${id}`)
+        .toArray()[0]?.created_at,
+    );
+    expect(stamp).toBeGreaterThan(Date.now() - 60_000);
+    // Still live, so snapshot PUTs stay refused.
+    const put = await api(`/docs/${id}`, { method: "PUT", token, body: { payload: PLAN } });
+    expect(put.body.error).toBe("doc_live");
+  });
+
+  it("refuses a PUT while the D1 lease is held, even if the registry has no slot", async () => {
+    // The registry check and the write are separate steps; the lease rides in
+    // the UPDATE, so a room that went live between them still blocks the PUT.
+    const { token, id } = await makeSharedDoc("lease-guard");
+    await env.DB.prepare("UPDATE documents SET live_until = ? WHERE id = ?")
+      .bind(Date.now() + 60_000, id)
+      .run();
+    expect(await registry().has(`doc:${id}`)).toBe(false);
+    const refused = await api(`/docs/${id}`, { method: "PUT", token, body: { payload: PLAN } });
+    expect(refused.status).toBe(409);
+    expect(refused.body.error).toBe("doc_live");
+
+    // An expired lease (a room that died without clearing it) doesn't block.
+    await env.DB.prepare("UPDATE documents SET live_until = ? WHERE id = ?")
+      .bind(Date.now() - 1, id)
+      .run();
+    expect((await api(`/docs/${id}`, { method: "PUT", token, body: { payload: PLAN } })).status).toBe(200);
+  });
+
+  it("claims the lease when it goes live and loads the doc through that claim", async () => {
+    const { token, id, editorToken } = await makeSharedDoc("lease-claim");
+    const before = Date.now();
+    const a = await connectDoc(id, editorToken, "Alice");
+    await a.next(); // welcome
+    const row = await env.DB.prepare("SELECT live_until FROM documents WHERE id = ?")
+      .bind(id)
+      .first<{ live_until: number | null }>();
+    expect(row?.live_until).toBeGreaterThan(before);
+    // The owner's GET never exposes the lease column.
+    expect((await api(`/docs/${id}`, { token })).body).not.toHaveProperty("live_until");
+  });
+
   it("refuses snapshot PUTs while live (doc_live), accepts after release", async () => {
     const { token, id, editorToken } = await makeSharedDoc("live-putguard");
     const a = await connectDoc(id, editorToken, "Alice");
@@ -187,8 +296,12 @@ describe("persistence back to D1", () => {
     expect(refused.status).toBe(409);
     expect(refused.body.error).toBe("doc_live");
 
-    // Simulate the room's slot being released (idle eviction).
-    await registry().release(`doc:${id}`);
+    // Idle eviction: the room shuts down, releasing its slot and its lease.
+    await runInDurableObject(room(id), (_instance, state) => {
+      state.storage.sql.exec("UPDATE meta SET v = '0' WHERE k = 'last_activity'");
+    });
+    expect(await runDurableObjectAlarm(room(id))).toBe(true);
+    expect(await registry().has(`doc:${id}`)).toBe(false);
     const accepted = await api(`/docs/${id}`, {
       method: "PUT",
       token,

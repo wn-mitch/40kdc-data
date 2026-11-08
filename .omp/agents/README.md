@@ -43,7 +43,7 @@ frontmatter both pin it). Some agents spawn helper agents themselves (see `spawn
 
 ## IP boundary (applies to every agent)
 
-GW rules prose may be **read** (the out-of-repo store `../40kdc-abilities`, the
+GW rules prose may be **read** (the private MFM dump via `npm run prose`, the
 embeddings-harness reports) and **returned to the orchestrator** inside the JSON
 final message, but must never be **written into any file inside this repo**.
 Anything an agent writes to committed files — `community_notes`, `[APPROX]`
@@ -79,7 +79,7 @@ shape-scout sub-loop.
 
 Suite-wide rules mined from 30 ability-coverage session transcripts (2026-07-12):
 
-- The IP boundary is absolute: raw GW prose lives only in the out-of-repo 40kdc-abilities store; the embeddings harness is a derivative that must live in the sibling ../40kdc-embeddings, use a local sentence-transformer (never an external API), never be committed, and be advisory triage only (never a deterministic conformance gate); all reports emit ids/scores/types/describer-English or de-IP'd fingerprints only.
+- The IP boundary is absolute: raw GW prose lives only in the private MFM dump (`_private/dump.json`) and exports of it under `_private/`; the embeddings harness is a derivative that must live in the sibling ../40kdc-embeddings, use a local sentence-transformer (never an external API), never be committed, and be advisory triage only (never a deterministic conformance gate); all reports emit ids/scores/types/describer-English or de-IP'd fingerprints only.
 - TypeScript is the byte-identical oracle (tools/src/translate/effect.ts, condition.ts, cruncher/from-dsl.ts) — Rust/Python/Go must reproduce identical output pinned by the conformance corpus; port logic faithfully, not approximately, and prove parity with tooling/parity/differ.py, not with each port's own suite.
 - Adding a new effect shape is never a loose tweak: it requires a schema oneOf branch, four-language type regen, a describer arm in each language (inline AND container forms), cruncher recursion support, a conformance golden, a SPEC_VERSION bump, and the four-file version lockstep — ship it as a patch release, and prove one construct end-to-end (schema->codegen->4 describers->cruncher->conformance->differ) as a vertical slice before batch-applying the pattern.
 - `just preflight` is THE pre-push CI mirror (regen drift + four suites + version lockstep); activate python/.venv on PEP-668 machines and seal jj work with `jj new` first, since git-based verify-clean falsely flags uncommitted work as drift under jj.

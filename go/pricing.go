@@ -90,7 +90,20 @@ func keywordSlug(name string) string {
 // faction carries apply (an Agents unit's imperium price). With no matching
 // entry — or a nil hostFaction — the native table stands. Mirror of
 // tools/src/data/pricing.ts hostPointsTiers.
-func hostPointsTiers(unit, hostFaction map[string]any) []any {
+func hostPointsTiers(unit, hostFaction map[string]any, detachmentIDs []string) []any {
+	// detachment_pricing entries naming a selected detachment replace every other
+	// table (a C'tan Shard under Pantheon of Woe). Mirror of TS hostPointsTiers.
+	var selected []any
+	for _, tAny := range getList(unit, "detachment_pricing") {
+		if t, ok := asMap(tAny); ok {
+			if id, _ := t["detachment_id"].(string); contains(detachmentIDs, id) {
+				selected = append(selected, tAny)
+			}
+		}
+	}
+	if len(selected) > 0 {
+		return selected
+	}
 	native := getList(unit, "points")
 	entries := getList(unit, "allied_points")
 	if hostFaction == nil || len(entries) == 0 {
@@ -132,7 +145,13 @@ func hostPointsTiers(unit, hostFaction map[string]any) []any {
 // this IS baseUnitPoints. Size coverage is identical across tables (allied
 // tiers reprice the native sizes), so pointsTierMissing stays native-only.
 func hostUnitPoints(unit map[string]any, modelCount, ordinal int, hostFaction map[string]any) int {
-	return tierCost(hostPointsTiers(unit, hostFaction), modelCount, ordinal)
+	return armyUnitPoints(unit, modelCount, ordinal, hostFaction, nil)
+}
+
+// armyUnitPoints is hostUnitPoints with the army's selected detachments, so a
+// detachment_pricing entry for one of them prices the unit.
+func armyUnitPoints(unit map[string]any, modelCount, ordinal int, hostFaction map[string]any, detachmentIDs []string) int {
+	return tierCost(hostPointsTiers(unit, hostFaction, detachmentIDs), modelCount, ordinal)
 }
 
 // pointsTierMissing reports whether no points tier covers modelCount for this

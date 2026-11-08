@@ -2,7 +2,7 @@
 + PLAYER NAME: —
 + TEAM NAME: —
 + FACTIONS USED: Death Guard
-+ DISPOSITION: Take And Hold
++ DISPOSITION: Purge The Foe
 + DETACHMENT: Virulent Vectorium
 + ARMY POINTS: 165pts
 +

@@ -142,21 +142,25 @@ func rosterJSONParse(decoded any) (map[string]any, error) {
 		units = append(units, rosterJSONLowerUnit(uAny))
 	}
 
-	return map[string]any{
+	parsed := map[string]any{
 		"name":         roster["name"],
 		"generated_by": source["generated_by"],
 		// Id slug passes through as the raw name — id-match before name lookup.
 		"faction_raw_name":     roster["faction_id"],
 		"detachment_raw_names": detachmentRawNames,
 		"battle_size_raw":      battleSizeRaw,
-		"force_disposition":    roster["force_disposition"],
 		"declared_limit":       points["declared_limit"],
 		"total_reported":       points["total_reported"],
 		"total_computed":       points["total_computed"],
 		"units":                units,
 		// The canonical shape carries a single primary faction.
 		"multi_force": false,
-	}, nil
+	}
+	// Absent, the key is omitted, as every other adapter leaves it.
+	if roster["force_disposition"] != nil {
+		parsed["force_disposition"] = roster["force_disposition"]
+	}
+	return parsed, nil
 }
 
 var rosterJSONAdapter = formatAdapter{

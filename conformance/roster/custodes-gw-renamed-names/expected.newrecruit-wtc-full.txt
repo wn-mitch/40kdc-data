@@ -1,0 +1,26 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ LIST NAME: Imported roster
++ FACTION KEYWORD: Adeptus Custodes
++ DETACHMENT: Lions of the Emperor
++ FORCE DISPOSITION: Disruption
++ TOTAL ARMY POINTS: 360pts
++ POINTS LIMIT: 360pts
++
++ WARLORD: —
++ ENHANCEMENT: —
++ NUMBER OF UNITS: 4
++++++++++++++++++++++++++++++++++++++++++++++++
+
+BATTLELINE
+
+1x Witchseekers (50 pts)
+1 with 4x Close combat weapon, 4x Witchseeker flamer
+
+1x Prosecutors (50 pts)
+1 with 4x Boltgun, 4x Close combat weapon
+
+1x Vigilators (100 pts)
+1 with 10x Executioner greatblade
+
+1x Venatari Custodians (160 pts)
+1 with 3x Venatari lance

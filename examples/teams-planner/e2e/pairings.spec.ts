@@ -207,7 +207,7 @@ test("entitled user imports a scouted matrix team as the opponent", async ({ pag
       .replace(/\+/g, "-")
       .replace(/\//g, "_")
       .replace(/=+$/, "");
-    localStorage.setItem("alpacasoft.entitlement", `${b64}.sig`);
+    sessionStorage.setItem("alpacasoft.entitlement", `${b64}.sig`);
   }, SCOUTED_MATRIX);
 
   await page.goto("/#sim");

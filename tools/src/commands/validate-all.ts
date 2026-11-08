@@ -8,10 +8,11 @@ export async function validateAllCommand(opts: {
   reporter: string;
 }): Promise<void> {
   const ajv = createValidator();
+  const fast = createValidator({ allErrors: false });
   const mode = opts.reporter as ReporterMode;
 
-  const coreResult = await validateFiles(ajv, "core/**/*.json");
-  const enrichmentResult = await validateFiles(ajv, "enrichment/**/*.json");
+  const coreResult = await validateFiles(ajv, "core/**/*.json", undefined, fast);
+  const enrichmentResult = await validateFiles(ajv, "enrichment/**/*.json", undefined, fast);
   const sourceBoundary = await validatePublicSourceBoundary();
 
   const combined: ValidationResult = {

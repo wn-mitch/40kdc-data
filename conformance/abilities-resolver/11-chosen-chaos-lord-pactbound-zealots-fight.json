@@ -1,0 +1,33 @@
+{
+  "name": "Chosen led by a Chaos Lord (chaos-space-marines) in Pactbound Zealots, fight: the Chaos Lord alone is a CHARACTER HERETIC ASTARTES model that is not an EPIC HERO, so Eye of the Gods is eligible",
+  "input": {
+    "unitId": "chosen",
+    "factionId": "chaos-space-marines",
+    "detachmentId": "pactbound-zealots",
+    "attachedUnitIds": [
+      "chaos-lord"
+    ]
+  },
+  "phase": "fight",
+  "expected": {
+    "army": [
+      "cults-of-the-dark-gods-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
+    ],
+    "detachment": [
+      "marks-of-chaos-chaos-space-marines"
+    ],
+    "detachment-stratagem": [
+      "eternal-hate-pactbound-zealots-chaos-space-marines",
+      "eye-of-the-gods-pactbound-zealots-chaos-space-marines"
+    ],
+    "unit": [
+      "chaos-icon-chaos-space-marines"
+    ],
+    "attached": [
+      "chance-for-glory-chaos-space-marines",
+      "leader",
+      "lord-of-chaos-chaos-space-marines"
+    ]
+  }
+}

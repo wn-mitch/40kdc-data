@@ -21,7 +21,12 @@
  * Space Marine datasheet a chapter section reprices). {@link hostPointsTiers}
  * selects the tier table in effect for a host army and
  * {@link hostUnitPoints} prices from it; {@link baseUnitPoints} stays
- * native-only for callers without army context. Mirror of
+ * native-only for callers without army context.
+ *
+ * A unit may also carry `detachment_pricing` — tiers scoped to a `detachment_id`
+ * that replace every other table while that detachment is selected (a C'tan Shard
+ * under Pantheon of Woe). They take precedence over both `allied_points` and
+ * `points` when the caller passes the selected detachment ids. Mirror of
  * `crates/wh40kdc/src/data/pricing.rs`.
  *
  * @packageDocumentation
@@ -30,8 +35,9 @@ import type { Faction, Unit } from "../generated.js";
 
 type PointsTier = NonNullable<Unit["points"]>[number];
 type AlliedTier = NonNullable<Unit["allied_points"]>[number];
-/** The band/size/cost shape shared by native and allied tiers. */
-type CostTier = PointsTier | AlliedTier;
+type DetachmentTier = NonNullable<Unit["detachment_pricing"]>[number];
+/** The band/size/cost shape shared by native, allied and detachment tiers. */
+type CostTier = PointsTier | AlliedTier | DetachmentTier;
 
 /** True when `ordinal` (1-based army copy) falls within `tier`'s ordinal band. */
 function tierCoversOrdinal(tier: CostTier, ordinal: number): boolean {
@@ -86,12 +92,16 @@ function keywordSlug(name: string): string {
  * entry naming a super-faction keyword the army's faction carries applies (an
  * Agents unit's `imperium` price in any Imperium army). With no matching
  * entry — or no army context at all — the native table stands, matching
- * consumers that ignore allied pricing.
+ * consumers that ignore allied pricing. Before all of that, `detachment_pricing`
+ * entries naming any of `detachmentIds` are the table (see the module doc).
  */
 export function hostPointsTiers(
   unit: Unit,
   hostFaction?: Faction | null,
+  detachmentIds: readonly string[] = [],
 ): readonly CostTier[] {
+  const selected = (unit.detachment_pricing ?? []).filter((t) => detachmentIds.includes(t.detachment_id));
+  if (selected.length > 0) return selected;
   const native = unit.points ?? [];
   const entries = unit.allied_points ?? [];
   if (!hostFaction || entries.length === 0 || unit.faction_id === hostFaction.id) return native;
@@ -113,8 +123,9 @@ export function hostUnitPoints(
   modelCount: number,
   ordinal = 1,
   hostFaction?: Faction | null,
+  detachmentIds: readonly string[] = [],
 ): number {
-  return tierCost(hostPointsTiers(unit, hostFaction), modelCount, ordinal);
+  return tierCost(hostPointsTiers(unit, hostFaction, detachmentIds), modelCount, ordinal);
 }
 
 /**

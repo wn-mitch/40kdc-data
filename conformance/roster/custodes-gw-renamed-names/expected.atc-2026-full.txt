@@ -1,0 +1,27 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ PLAYER NAME: —
++ TEAM NAME: —
++ FACTIONS USED: Adeptus Custodes
++ DISPOSITION: Disruption
++ DETACHMENT: Lions Of The Emperor
++ ARMY POINTS: 360pts
++
++ WARLORD: —
++ ENHANCEMENT: —
++ LEADER/SUPPORT: —
++ NUMBER OF UNITS: 4
++++++++++++++++++++++++++++++++++++++++++++++++
+
+BATTLELINE
+
+1x Witchseekers (50 pts)
+1 with 4x Close combat weapon, 4x Witchseeker flamer
+
+1x Prosecutors (50 pts)
+1 with 4x Boltgun, 4x Close combat weapon
+
+1x Vigilators (100 pts)
+1 with 10x Executioner greatblade
+
+1x Venatari Custodians (160 pts)
+1 with 3x Venatari lance

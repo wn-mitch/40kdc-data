@@ -25,6 +25,10 @@
     "version": {
       "$ref": "../../defs/common.schema.json#/$defs/dataslate-version"
     },
+    "stub": {
+      "const": true,
+      "description": "A seeded placeholder awaiting authoring: its effect is not the ability's mechanics. Removed when an authored effect replaces it."
+    },
     "supersedes": {
       "oneOf": [
         {
@@ -61,7 +65,7 @@
           "type": "null"
         }
       ],
-      "description": "For detachment/enhancement/stratagem-type abilities, the associated detachment"
+      "description": "The detachment a detachment-, enhancement- or stratagem-type ability belongs to. On a faction-type ability it names the Combat Patrol detachment whose box prints this copy of an army rule: the copy applies only in that detachment, where `interactions` entries of type `replaces` name the codex army rules it stands in for. Null on a codex army rule, which applies in every detachment except a Combat Patrol detachment whose `detachment_rule_ids` omit it."
     },
     "ability_type": {
       "type": "string",
@@ -84,6 +88,11 @@
       ],
       "description": "How this ability interacts with the game flow — not a runtime predicate"
     },
+    "optional": {
+      "type": "boolean",
+      "const": true,
+      "description": "The player chooses whether to use this ability, which has no trigger. Absent when the ability always applies, when a trigger decides when it is used, or for a Stratagem, which is always the player's choice."
+    },
     "effect": {
       "$ref": "effect.schema.json"
     },
@@ -97,19 +106,10 @@
       "$ref": "#/$defs/ability-usage"
     },
     "applies_to": {
-      "description": "Static, human-curated keyword filter naming which datasheet units this ability benefits, for roster-side highlighting. A unit matches when it carries every keyword in `required_keywords` (across its `keywords` + `faction_keywords`) and none in `excluded_keywords`. This is a denormalized projection distinct from the runtime `effect` condition tree (which mixes static class, runtime-granted markers, and timing gates and must not be scraped for scope). Absent/null means no resolvable unit scope — consumers render no highlight rather than guess.",
+      "description": "Static, human-curated keyword predicate naming which datasheet units this ability benefits, for roster-side highlighting. Null or absence means no resolvable scope; {} matches every unit. This projection is distinct from runtime effect conditions.",
       "oneOf": [
         {
-          "type": "object",
-          "properties": {
-            "required_keywords": {
-              "$ref": "../../defs/common.schema.json#/$defs/keyword-list"
-            },
-            "excluded_keywords": {
-              "$ref": "../../defs/common.schema.json#/$defs/keyword-list"
-            }
-          },
-          "additionalProperties": false
+          "$ref": "../../defs/common.schema.json#/$defs/keyword-predicate"
         },
         {
           "type": "null"
@@ -166,71 +166,40 @@
   "additionalProperties": false,
   "$defs": {
     "trigger": {
-      "description": "A single reactive trigger: the game `event` (closed dispatch key), `subject` (whose action triggered it), `proximity` (spatial gate in inches), optional `move_types` (restricts a move event to given move kinds), `condition` (extra gate reusing the condition tree), `optional` ('you can' reactions), `cost` (stratagem-style CP), and `window` (how long the granted reaction stays open).",
+      "description": "A single reactive trigger: an event family (`event`), who acted (`subject`, default this-unit; clock events have none), what the action was aimed at (`object`), which one (`filter`: the move, roll, Stratagem or ability), a spatial gate (`proximity`), an extra gate (`condition`, where phase and turn go), `optional` for 'you can' reactions, a CP `cost`, and the `window` a granted reaction stays open.",
       "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event"
+      ],
       "properties": {
         "event": {
           "$ref": "../../defs/common.schema.json#/$defs/game-event"
         },
         "subject": {
-          "type": "string",
-          "enum": [
-            "self",
-            "bearer",
-            "friendly-unit",
-            "enemy-unit",
-            "any-unit",
-            "model-in-bearer",
-            "friendly-model",
-            "enemy-model"
-          ]
+          "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
         },
-        "caused_by": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "source": { "enum": ["bearer-model", "bearer-unit"] },
-            "attack_type": { "enum": ["melee", "ranged"] },
-            "weapon_keyword": { "type": "string", "minLength": 1 }
-          },
-          "required": ["source"],
-          "description": "Bind a destruction event to its actual causing model or unit. Supplying attack_type or weapon_keyword further requires a qualifying attack by that source."
+        "object": {
+          "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+        },
+        "filter": {
+          "$ref": "../../defs/common.schema.json#/$defs/event-filter"
         },
         "proximity": {
           "type": "object",
-          "properties": {
-            "of": {
-              "type": "string",
-              "enum": [
-                "self",
-                "bearer",
-                "attached-unit",
-                "bearer-unit"
-              ]
-            },
-            "range": {
-              "type": "number",
-              "exclusiveMinimum": 0
-            }
-          },
+          "additionalProperties": false,
           "required": [
             "range"
           ],
-          "additionalProperties": false
-        },
-        "move_types": {
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "type": "string",
-            "enum": [
-              "normal",
-              "advance",
-              "fall-back",
-              "charge"
-            ]
+          "properties": {
+            "of": {
+              "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+            },
+            "range": {
+              "$ref": "../../defs/common.schema.json#/$defs/range-ref"
+            }
           },
-          "description": "Restricts a move-related event (e.g. enemy-unit-ended-move) to these move kinds — e.g. [normal, advance, fall-back] for 'a Normal, Advance or Fall Back move'."
+          "description": "The event happened within range of `of` (default this-unit)."
         },
         "condition": {
           "$ref": "condition.schema.json"
@@ -257,6 +226,16 @@
           "minLength": 1,
           "$comment": "Names the triggering event's bound object for later reference by a condition in the same reactive action. Internal only; never rendered."
         },
+        "binds_die_variable": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}."
+        },
+        "binds_selected_die_variable": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}."
+        },
         "source_ability": {
           "type": "object",
           "properties": {
@@ -264,11 +243,7 @@
               "$ref": "../../defs/common.schema.json#/$defs/entity-id"
             },
             "owner": {
-              "type": "string",
-              "enum": [
-                "friendly",
-                "enemy"
-              ]
+              "$ref": "../../defs/common.schema.json#/$defs/definite-owner"
             },
             "keywords": {
               "type": "array",
@@ -287,50 +262,10 @@
             "keywords"
           ],
           "additionalProperties": false,
-          "description": "Filter an ability-target-selected event by its source ability and source unit. The trigger subject is the selected unit. This does not infer that the source ability was used from a tag or phase."
-        },
-        "subject_keywords": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "minItems": 1,
-          "uniqueItems": true,
-          "description": "All keywords required on the event subject itself: the triggering unit or individual model, not the ability bearer."
-        },
-        "subject_excluded_keywords": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "minItems": 1,
-          "uniqueItems": true,
-          "description": "The event subject must have none of these keywords."
-        },
-        "binds_die_variable": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}."
-        },
-        "binds_selected_die_variable": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}."
+          "description": "The ability whose selection fired a `targets-selected {kind: ability}` trigger. Required there and allowed nowhere else."
         }
       },
-      "required": [
-        "event"
-      ],
-      "additionalProperties": false,
       "allOf": [
-        {
-          "if": { "required": ["caused_by"] },
-          "then": {
-            "properties": { "event": { "enum": ["on-unit-destroyed", "on-model-destroyed"] } }
-          }
-        },
         {
           "if": {
             "required": [
@@ -340,21 +275,45 @@
           "then": {
             "properties": {
               "event": {
-                "const": "ability-target-selected"
+                "const": "targets-selected"
+              },
+              "filter": {
+                "required": [
+                  "kind"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "ability"
+                  }
+                }
               }
-            }
+            },
+            "required": [
+              "filter"
+            ]
           }
         },
         {
           "if": {
+            "required": [
+              "event",
+              "filter"
+            ],
             "properties": {
               "event": {
-                "const": "ability-target-selected"
+                "const": "targets-selected"
+              },
+              "filter": {
+                "required": [
+                  "kind"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "ability"
+                  }
+                }
               }
-            },
-            "required": [
-              "event"
-            ]
+            }
           },
           "then": {
             "required": [
@@ -372,7 +331,7 @@
           "then": {
             "properties": {
               "event": {
-                "const": "miracle-die-generated"
+                "const": "resource-gained"
               }
             },
             "required": [
@@ -389,7 +348,7 @@
           "then": {
             "properties": {
               "event": {
-                "const": "act-of-faith-performed"
+                "const": "used"
               }
             },
             "required": [
@@ -415,7 +374,22 @@
       ]
     },
     "ability-usage": {
-      "description": "How often the ability may be used, beyond what scope.duration captures. `scope.duration: one-use` already models 'once per battle'; this models finer limits (once per turn/phase, N per battle) and an optional per-army/unit/model granularity.",
+      "description": "How often the ability may be used: one limit, or several that all apply (once per battle per model AND one model per battle round).",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ability-usage-limit"
+        },
+        {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/ability-usage-limit"
+          }
+        }
+      ]
+    },
+    "ability-usage-limit": {
+      "description": "One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired).",
       "type": "object",
       "properties": {
         "frequency": {

@@ -1,0 +1,45 @@
+{
+  "name": "Canonical removed keyword: blast-ranged",
+  "attacker": {
+    "weaponId": "lobba",
+    "profileIndex": 0
+  },
+  "target": {
+    "unitId": "cultist-mob",
+    "profileIndex": 0,
+    "modelCount": 10
+  },
+  "modelsFiring": 1,
+  "context": {
+    "phase": "shooting"
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-removed-keyword",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "removed-keyword",
+        "keyword_id": "blast"
+      },
+      "applicableWhen": {
+        "phases": [
+          "shooting"
+        ]
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 3,
+      "hits": 1.5,
+      "wounds": 1,
+      "unsaved": 0.8333,
+      "damage": 0.8333,
+      "after-fnp": 0.8333,
+      "models-killed": 0.8333
+    }
+  }
+}

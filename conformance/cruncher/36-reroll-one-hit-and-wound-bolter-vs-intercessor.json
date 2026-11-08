@@ -1,0 +1,50 @@
+{
+  "name": "bolt-rifle (saturation) x5 vs intercessor, re-roll one Hit roll and one Wound roll",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting",
+    "attackerStationary": false,
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "manual",
+        "label": "Re-roll one hit (test)"
+      },
+      "contribution": {
+        "type": "reroll-one",
+        "roll": "hit"
+      }
+    },
+    {
+      "source": {
+        "kind": "manual",
+        "label": "Re-roll one wound (test)"
+      },
+      "contribution": {
+        "type": "reroll-one",
+        "roll": "wound"
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 7.3218,
+      "wounds": 4.1576,
+      "unsaved": 2.0788,
+      "damage": 2.0788,
+      "after-fnp": 2.0788,
+      "models-killed": 1.0394
+    }
+  }
+}

@@ -8,9 +8,11 @@ import {
   makeResolver,
   limitedSetBudgets,
   wargearItemsForDatasheet,
+  strandedByRebuild,
 } from "../src/mfm/wargear.js";
 import { mintWeapon } from "../src/mfm/gear-projection.js";
 import { resolveMfmWeaponEntityId } from "../src/mfm/weapon-variants.js";
+import { partialDump } from "./mfm-fixture.js";
 
 /**
  * A hand-built minimal dump exercising the full derivation: two model types
@@ -20,7 +22,7 @@ import { resolveMfmWeaponEntityId } from "../src/mfm/weapon-variants.js";
  */
 describe("mintWeapon", () => {
   it("projects a source weapon profile into the core schema shape", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -115,7 +117,7 @@ function fixtureDump(): MfmDump {
     wargearType: "weapon",
     localisations: { en: { name } },
   });
-  return new MfmDump({
+  return partialDump({
     data: {
       miniature: [
         {
@@ -310,7 +312,7 @@ const resolve = (name: string) => {
 
 describe("wargearItemsForDatasheet", () => {
   it("collects selectable non-weapon equipment from datasheet loadout paths", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -427,7 +429,7 @@ function crossProductDump(): MfmDump {
     wargearItemId: string,
     loadoutChoiceId: string,
   ) => ({ id, count: 1, wargearItemId, loadoutChoiceId });
-  return new MfmDump({
+  return partialDump({
     data: {
       miniature: [
         {
@@ -625,7 +627,7 @@ function deathCompanyDump(): MfmDump {
       );
     }
   }
-  return new MfmDump({
+  return partialDump({
     data: {
       miniature: [
         {
@@ -900,7 +902,7 @@ function perSlotDump(): MfmDump {
     wargearItemId: string,
     loadoutChoiceId: string,
   ) => ({ id, count: 1, wargearItemId, loadoutChoiceId });
-  return new MfmDump({
+  return partialDump({
     data: {
       miniature: [
         {
@@ -1195,7 +1197,7 @@ describe("deriveDefaults quantity rule + heterogeneity guard (option-group model
       .replace(/^-|-$/g, "");
   // deriveWargear touches the choice/limit tables; provide empty defaults.
   const mkDump = (data: Record<string, unknown[]>) =>
-    new MfmDump({
+    partialDump({
       data: {
         loadout_choice_set: [],
         loadout_choice: [],
@@ -1336,6 +1338,72 @@ describe("deriveDefaults quantity rule + heterogeneity guard (option-group model
     );
   });
 
+  // A Breachers-shaped miniature: 4 models whose defaults sit in two groups (3 with gun A, 1
+  // with gun B, each with a knife) and one per-model choice set over all three loadouts.
+  const splitDump = (opts: { firstGroupDefault?: number; recordedBase?: boolean } = {}) =>
+    mkDump({
+      miniature: [{ id: "m1", displayOrder: 0, localisations: { en: { name: "Retinue" } } }],
+      unit_composition: [{ id: "uc", datasheetId: "dsS", isDefault: true, displayOrder: 1, points: 0, referenceGroupingKeywordId: null }],
+      unit_composition_miniature: [{ id: "ucm", min: 4, max: 4, unitCompositionId: "uc", miniatureId: "m1" }],
+      wargear_item: [wi("wi-a", "Gun A"), wi("wi-b", "Gun B"), wi("wi-c", "Gun C"), wi("wi-k", "Knife")],
+      wargear_option_group: [
+        { id: "g1", displayOrder: 1, datasheetId: "dsS", miniatureId: "m1", isStaticWargear: false },
+        { id: "g2", displayOrder: 2, datasheetId: "dsS", miniatureId: "m1", isStaticWargear: false },
+      ],
+      wargear_option: [
+        { id: "o1", wargearItemId: "wi-a", wargearOptionGroupId: "g1", inputType: "stepper", defaultValue: opts.firstGroupDefault ?? 3, points: 0, displayOrder: 1 },
+        { id: "o2", wargearItemId: "wi-k", wargearOptionGroupId: "g1", inputType: "stepper", defaultValue: opts.firstGroupDefault ?? 3, points: 0, displayOrder: 2 },
+        { id: "o3", wargearItemId: "wi-b", wargearOptionGroupId: "g2", inputType: "checkbox", defaultValue: 1, points: 0, displayOrder: 1 },
+        { id: "o4", wargearItemId: "wi-k", wargearOptionGroupId: "g2", inputType: "checkbox", defaultValue: 1, points: 0, displayOrder: 2 },
+      ],
+      loadout_choice_set: [{ id: "s1", datasheetId: "dsS", miniatureId: "m1", limit: 1, alternate: false, allowDuplicates: false }],
+      loadout_choice: [{ id: "c1", loadoutChoiceSetId: "s1" }, { id: "c2", loadoutChoiceSetId: "s1" }, { id: "c3", loadoutChoiceSetId: "s1" }],
+      loadout_choice_wargear_item: [
+        { id: "x1", loadoutChoiceId: "c1", wargearItemId: "wi-a", count: 1 },
+        { id: "x2", loadoutChoiceId: "c1", wargearItemId: "wi-k", count: 1 },
+        { id: "x3", loadoutChoiceId: "c2", wargearItemId: "wi-b", count: 1 },
+        { id: "x4", loadoutChoiceId: "c2", wargearItemId: "wi-k", count: 1 },
+        { id: "x5", loadoutChoiceId: "c3", wargearItemId: "wi-c", count: 1 },
+        { id: "x6", loadoutChoiceId: "c3", wargearItemId: "wi-k", count: 1 },
+      ],
+      ...(opts.recordedBase
+        ? {
+            base_miniature_loadout: [{ id: "b1", datasheetId: "dsS", miniatureId: "m1" }],
+            base_miniature_loadout_wargear_option: [
+              { id: "bo1", baseMiniatureLoadoutId: "b1", wargearOptionId: "o1", count: 1 },
+              { id: "bo2", baseMiniatureLoadoutId: "b1", wargearOptionId: "o2", count: 1 },
+            ],
+          }
+        : {}),
+    });
+
+  it("splits a multi-group miniature with no recorded base into one default per group", () => {
+    const d = deriveWargear(splitDump(), "dsS", slug);
+    expect(d.defaultsByModel.has("Retinue")).toBe(false);
+    expect(d.defaultsSplitByModel.get("Retinue")).toEqual([
+      { ids: ["gun-a", "knife"], count: 3 },
+      { ids: ["gun-b", "knife"], count: 1 },
+    ]);
+    // Each row's base gets its own swap, so every model can reach every loadout.
+    expect(d.options.map((o) => ({ replaces: o.replaces, choice: o.replacement ?? o.replacement_choice }))).toEqual([
+      { replaces: ["gun-a"], choice: [["gun-b"], ["gun-c"]] },
+      { replaces: ["gun-b"], choice: [["gun-a"], ["gun-c"]] },
+    ]);
+  });
+
+  it("leaves the miniature unpopulated when its default groups do not cover its models", () => {
+    // The groups cover 2 + 1 of the 4 models, so the fourth model's default is unknown.
+    const d = deriveWargear(splitDump({ firstGroupDefault: 2 }), "dsS", slug);
+    expect(d.defaultsSplitByModel.has("Retinue")).toBe(false);
+    expect(d.defaultsByModel.has("Retinue")).toBe(false);
+  });
+
+  it("keeps a recorded base loadout over the split (Voidsmen-at-Arms)", () => {
+    const d = deriveWargear(splitDump({ recordedBase: true }), "dsS", slug);
+    expect(d.defaultsByModel.get("Retinue")).toEqual(["gun-a", "knife"]);
+    expect(d.defaultsSplitByModel.has("Retinue")).toBe(false);
+  });
+
   it("leaves a datasheet-wide (miniatureId null) default group to MANUAL_DEFAULTS", () => {
     const dump = mkDump({
       miniature: [
@@ -1402,7 +1470,7 @@ describe("deriveWargear per-model swaps and ratio caps", () => {
   // "Trooper" with an uncapped swap (any number) and a swap that is governed by
   // a 1-per-5 wargear_limit (the ratio is the only per-option cap source).
   function dump(): MfmDump {
-    return new MfmDump({
+    return partialDump({
       data: {
         miniature: [
           {
@@ -1763,6 +1831,22 @@ describe("makeResolver per-unit priority overrides", () => {
   });
 });
 
+describe("makeResolver fuzzy fallback", () => {
+  it("bridges one-edit spelling drift", () => {
+    const audit: { name: string; from: string; to: string }[] = [];
+    const r = makeResolver(new Set(["absolver-bolt-pistol"]), audit);
+    expect(r("Absolvor bolt pistol")).toBe("absolver-bolt-pistol");
+    expect(audit).toHaveLength(1);
+  });
+
+  it("never bridges a reviewed pair of distinct weapons one edit apart", () => {
+    const audit: { name: string; from: string; to: string }[] = [];
+    const r = makeResolver(new Set(["balesword", "plague-flail"]), audit);
+    expect(r("Bilesword")).toBeNull();
+    expect(audit).toEqual([]);
+  });
+});
+
 describe("limitedSetBudgets — per-item duplicate cap capture", () => {
   // A multi-item shared set (the Cadian special-weapon pattern): pick `choiceLimit`
   // per `modelCount` models, but no more than `duplicateLimit` of the SAME item.
@@ -1779,7 +1863,7 @@ describe("limitedSetBudgets — per-item duplicate cap capture", () => {
     }>,
     defaultModelCount?: number,
   ) =>
-    new MfmDump({
+    partialDump({
       data: {
         wargear_item: [
           {
@@ -1934,7 +2018,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
   it("a multi-item choice scales the cap: choiceLimit counts picks, not copies", () => {
     // Wolf Guard Terminators: one choice = [assault cannon + power fist],
     // limit (5,1)/(10,2) — two picks at 10 models legally sum to FOUR items.
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -1997,7 +2081,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
   });
 
   it("an item-row count: 2 scales the cap (the Seraphim 2-hand-flamer swap)", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2064,7 +2148,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
   it("excludes derived-default items from the budget (the boltgun+simulacrum class)", () => {
     // The choice retains the model's default boltgun ("that model's boltgun cannot
     // be replaced") — counting it would make every STOCK squad flag.
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2137,7 +2221,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
   });
 
   it("excludes items shared with another limited set (the Kommandos close-combat-weapon)", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2228,7 +2312,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
   });
 
   it("excludes items another model type's option adds (the Plague champion plasma gun)", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2315,7 +2399,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
   });
 
   it("excludes items an uncapped option adds (the Boyz any-number shoota ccw)", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2402,7 +2486,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
     // the enforcement). A WE Terminator branch [chainfist + combi-weapon] is the
     // set's own chainfist pick with the free combi-bolter swap alongside — NOT
     // an ungoverned path, so chainfist must stay policed.
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2471,7 +2555,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
     // record AND a lone-swap record of the same miniature; per-record
     // per_n_models caps then stack the single allowance. The summed budget is
     // the only correct enforcement there.
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2545,7 +2629,7 @@ describe("limitedSetBudgets — choice bundles, copy counts, and exclusions", ()
   });
 
   it("drops a set whose every item is excluded", () => {
-    const dump = new MfmDump({
+    const dump = partialDump({
       data: {
         wargear_item: [
           {
@@ -2615,5 +2699,43 @@ describe("withinEditDistance1", () => {
     expect(withinEditDistance1("lascannon", "autocannon")).toBe(false);
     expect(withinEditDistance1("meltagun", "plasma-gun")).toBe(false);
     expect(withinEditDistance1("bolt-rifle", "bolt-pistol")).toBe(false);
+  });
+});
+
+describe("strandedByRebuild", () => {
+  const options: never[] = [];
+
+  it("strands a kept row's old defaults when the dump prints new ones", () => {
+    // A two-row squad collapses to one renamed row whose dump defaults swap a weapon.
+    const models = [
+      { name: "Fabricated Squad Leader", min: 1, max: 1, default_weapon_ids: ["old-gun", "old-blade"] },
+      { name: "Fabricated Trooper", min: 3, max: 9, default_weapon_ids: ["old-gun", "old-blade"] },
+    ];
+    const view = [{ name: "Fabricated Troopers", defaults: ["old-gun", "new-stock"] }];
+    expect(strandedByRebuild(models, view, options)).toEqual(["old-blade"]);
+  });
+
+  it("keeps a kept row's old defaults when the dump prints none for it", () => {
+    const models = [
+      { name: "Fabricated Leader", min: 1, max: 1, default_weapon_ids: ["leader-sword"] },
+      { name: "Fabricated Trooper", min: 3, max: 9, default_weapon_ids: ["trooper-gun"] },
+    ];
+    const view = [{ name: "Fabricated Trooper", defaults: undefined }];
+    expect(strandedByRebuild(models, view, options)).toEqual(["leader-sword"]);
+  });
+
+  it("counts a weapon an option still reaches, and a kept row's variants, as kept", () => {
+    const models = [
+      {
+        name: "Fabricated Trooper",
+        min: 3,
+        max: 9,
+        default_weapon_ids: ["old-gun"],
+        loadout_variants: [{ name: "Heavy", weapon_ids: ["heavy-gun"] }],
+      },
+      { name: "Fabricated Gunner", min: 0, max: 1, default_weapon_ids: ["heavy-gun", "spare-blade"] },
+    ];
+    const view = [{ name: "Fabricated Trooper", defaults: ["new-gun"] }];
+    expect(strandedByRebuild(models, view, [{ replacement: ["old-gun"] }])).toEqual(["spare-blade"]);
   });
 });

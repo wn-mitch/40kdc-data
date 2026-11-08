@@ -76,16 +76,18 @@ function sampleList(): ShareList {
 
 describe("share-v1 codec", () => {
   it("allocates every current shareable id and documents stale slots", () => {
+    // Every game mode: the registry must allocate Combat Patrol ids too.
+    const every = dataset.forGameMode("all");
     const currentIds: Record<ShareKind, Set<string>> = {
-      faction: new Set(dataset.factions.all.map((entity) => entity.id)),
-      detachment: new Set(dataset.detachments.all.map((entity) => entity.id)),
-      unit: new Set(dataset.units.all.map((entity) => entity.id)),
+      faction: new Set(every.factions.all.map((entity) => entity.id)),
+      detachment: new Set(every.detachments.all.map((entity) => entity.id)),
+      unit: new Set(every.units.all.map((entity) => entity.id)),
       wargear: new Set(
-        [...dataset.weapons.all, ...dataset.wargear.all].map((entity) => entity.id),
+        [...every.weapons.all, ...every.wargear.all].map((entity) => entity.id),
       ),
-      enhancement: new Set(dataset.enhancements.all.map((entity) => entity.id)),
-      ally_rule: new Set(dataset.alliedRules.all.map((entity) => entity.id)),
-      disposition: new Set(dataset.forceDispositions.all.map((entity) => entity.id)),
+      enhancement: new Set(every.enhancements.all.map((entity) => entity.id)),
+      ally_rule: new Set(every.alliedRules.all.map((entity) => entity.id)),
+      disposition: new Set(every.forceDispositions.all.map((entity) => entity.id)),
     };
 
     const missing = Object.fromEntries(

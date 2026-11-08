@@ -1,7 +1,7 @@
 [
   {
     "id": "clean-unit",
-    "ability_ids": ["deadly-demise-d3", "blessings-of-khorne"],
+    "ability_ids": ["deadly-demise", "blessings-of-khorne-world-eaters"],
     "faction_keywords": ["World Eaters"]
   }
 ]

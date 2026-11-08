@@ -5,7 +5,8 @@ The Warhammer 40K dataset for the
 layer — the canonical community schema for 40K game entities. This crate is the
 Rust counterpart of the `@alpaca-software/40kdc-data` npm package: it ships the
 generated entity types, the **whole dataset embedded** behind a linked, typed
-API, and a **ListForge army-list importer**.
+API, roster **importers and exporters**, share tokens, the damage cruncher, the
+DSL/scoring describers, and a schema validator.
 
 Every type is generated from the project's JSON Schemas (JSON Schema draft
 2020-12) via [`typify`](https://crates.io/crates/typify), so the Rust structs
@@ -31,7 +32,7 @@ let shooting: Vec<&str> = ds
     .map(|a| a.ability_id.as_str())
     .collect();
 
-assert_eq!(shooting, ["berzerker-frenzy"]);
+assert_eq!(shooting, ["berzerker-frenzy-world-eaters"]);
 assert_eq!(ds.faction_of(kharn).unwrap().id.as_str(), "world-eaters");
 ```
 
@@ -40,12 +41,22 @@ phase-mappings, joined for you by [`Dataset::phases_of`]. Name matching is share
 with the npm package via the exported [`normalize_name`] (NFD diacritic strip,
 casefold, quote/whitespace normalization).
 
+`Dataset::embedded()` is the matched-play view. Listings and name lookups skip
+units, weapons, detachments, enhancements, Stratagems, wargear options and unit
+compositions whose `game_modes` lack the view's mode; lookups by id resolve
+every record. `ds.for_game_mode("combat-patrol")` or `ds.for_game_mode("all")`
+returns another cached view, and errors with `UnknownGameMode` on an unknown
+mode.
+
 ## Army-list importer
 
-The `import` feature turns a ListForge "share" export (URL, base64 segment, or
-raw JSON) into a resolved 40kdc `Roster`, keyed on entity ids and validatable
-against `roster.schema.json`. It reads only an allowlist of structural fields, so
-it never carries reproduced rules text into its output.
+The `import` feature turns a roster export into a resolved 40kdc `Roster`, keyed
+on entity ids and validatable against `roster.schema.json`. It reads ListForge
+(share URL, base64 segment, JSON or text), NewRecruit (JSON, wtc-compact,
+wtc-full, simple), the GW app export, Rosterizer and canonical Roster JSON. It
+reads only an allowlist of structural fields, so it never carries reproduced
+rules text into its output. A list whose detachment is a Combat Patrol
+detachment resolves against the Combat Patrol view.
 
 ```rust
 use wh40kdc::Dataset;
@@ -56,9 +67,10 @@ println!("{} of {} units resolved",
     roster.diagnostics.resolved_units, roster.units.len());
 ```
 
-The importer is multi-format by design: `decode` and `resolve` are written once,
-and each source format (ListForge today; New Recruit, Rosterizer, … next) is a
-small `FormatAdapter` that lowers a payload to the shared `ParsedRoster`.
+`try_import_roster` detects the format and returns a typed failure instead of
+an error when no adapter matches. `decode` and `resolve` are written once, and
+each source format is a small `FormatAdapter` that lowers a payload to the
+shared `ParsedRoster`.
 
 ## Types-only usage
 
@@ -67,7 +79,7 @@ disable default features:
 
 ```toml
 [dependencies]
-wh40kdc = { version = "0.2", default-features = false }
+wh40kdc = { version = "1", default-features = false }
 serde_json = "1"
 ```
 
@@ -78,10 +90,11 @@ let units: Vec<Unit> = serde_json::from_str(&units_json)?;
 let weapons: Vec<Weapon> = serde_json::from_str(&weapons_json)?;
 ```
 
-The bundled schema is available as a string for downstream validation:
+The full schema, conditional rules included, is available as a string for
+downstream validation (`BUNDLED_SCHEMA` is the codegen copy without them):
 
 ```rust
-let schema: serde_json::Value = serde_json::from_str(wh40kdc::BUNDLED_SCHEMA)?;
+let schema: serde_json::Value = serde_json::from_str(wh40kdc::VALIDATION_SCHEMA)?;
 ```
 
 ## Damage projection
@@ -99,18 +112,9 @@ let ds = Dataset::embedded();
 let weapon = ds.find_weapon("bolt-rifle").unwrap();
 let target = ds.find_unit("intercessor-squad").unwrap();
 
-let ctx = EngineContext {
-    phase: Phase::Shooting,
-    attacker_stationary: Some(false),
-    attacker_charged: None,
-    within_half_range: Some(false),
-    attacker_in_cover: None,
-    target_in_cover: None,
-    attacker_keywords: None,
-    target_keywords: None,
-    timing: None,
-    attacker_attached: None,
-};
+let mut ctx = EngineContext::new(Phase::Shooting);
+ctx.attacker_stationary = Some(false);
+ctx.within_half_range = Some(false);
 let out = crunch(&EngineInput {
     attacker: AttackProfileRef { weapon, profile_index: 0 },
     target: TargetProfileRef { unit: target, profile_index: 0, model_count: None },
@@ -121,26 +125,59 @@ let out = crunch(&EngineInput {
 // out.stages: attacks → hits → wounds → unsaved → damage → after-fnp → models-killed
 ```
 
+`EngineContext.condition_facts` answers leaf conditions the rest of the context
+leaves undecided, keyed by the stable `key` of each `ConditionNeed` an
+unsupported fragment reports.
+`Dataset::mortal_wound_sources_for` lists the mortal wounds a unit's abilities
+inflict outside its attacks, each with its moment and expected value before
+Feel No Pain.
+
+Persistent event-selected recipients require caller-supplied
+`EngineContext.recipient_snapshots`, plus `attacker_unit_id` or `target_unit_id`.
+Each typed `RecipientSnapshot` identifies the source ability and source unit,
+the exact canonical trigger (including its condition), selector and selection
+JSON pointer, the recipient perspective/unit, and whether it was selected.
+Current attachment roles never establish historical membership. Missing,
+mismatched or conflicting evidence remains explicitly unsupported.
+Current `unit_ids` filters use those same perspective-specific context identities,
+matching IDs exactly rather than matching names or keywords. Missing identity
+remains unknown.
+
+`Dataset.historical_snapshot_abilities` rediscovers an attested source after
+detachment, checking that its source unit owns the ability intrinsically or can
+legally carry its enhancement in the selected detachment. Pass those entries
+to `Dataset.describe_buffs` with the same context. Snapshot evidence binds only
+the original recipient pool; independent conditions, melee/ranged restrictions
+and model-only effects retain their normal evaluation.
+
 ## Cargo features
 
 - `bundled-data` *(default)* — the embedded dataset and the linked data API
   (`Dataset`, `Collection`, `normalize_name`).
-- `import` *(default)* — the army-list importer (implies `bundled-data`).
-- `export` *(default)* — the roster exporter (NewRecruit JSON / wtc-compact /
-  wtc-full / simple / canonical Roster JSON / Rosterizer). Dataset-free.
+- `import` *(default)* — the army-list importers (implies `bundled-data`).
+- `export` *(default)* — the roster exporters (NewRecruit JSON / wtc-compact /
+  wtc-full / simple, canonical Roster JSON, Rosterizer, ATC 2026 compact/full).
+  Dataset-free. The Yellowscribe export also needs `bundled-data` and goes
+  through `export_roster_with_dataset`.
 - `cruncher` *(default)* — the expected-value damage engine (implies
   `bundled-data`).
+- `share` *(default)* — `share-v1` list tokens (`encode_share_token` /
+  `decode_share_token`). Embeds its own id registry; no dataset.
+- `validate` *(default)* — the schema validator (`validate_target`) over
+  `VALIDATION_SCHEMA`, emitting the shared closed-enum error codes.
 
-Disable all four with `default-features = false` for a types-only build.
+Disable all six with `default-features = false` for a types-only build. The
+describers (`translate`), applies-to scope, terrain and scoring modules depend
+only on the generated types and stay available in that build.
 
 ## Regenerating
 
-Two artifacts are checked in. To regenerate after a change:
+The generated artifacts are checked in. To regenerate after a change:
 
 ```sh
-cd tools && npm run bundle:schemas   # rebuild crates/wh40kdc/schemas/bundled.schema.json
+cd tools && npm run bundle:schemas   # rebuild schemas/bundled.schema.json and schemas/validation.schema.json
 cargo run -p xtask -- codegen        # rewrite src/generated.rs from the schema
-cargo run -p xtask -- bundle-data    # rewrite src/data/bundle.generated.json from data/
+cargo run -p xtask -- bundle-data    # rewrite src/data/bundle.generated.json and src/share/registry.generated.json
 ```
 
 CI fails if the committed artifacts drift from the schemas or the data.

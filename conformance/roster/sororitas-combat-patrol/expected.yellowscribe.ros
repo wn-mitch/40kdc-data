@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<roster id="roster0" name="Combat Patrol import" gameSystemId="sys-352e-adc2-7639-d6a9" gameSystemName="Warhammer 40,000">
+  <forces>
+    <force id="force0" name="Adepta Sororitas" catalogueName="Adepta Sororitas">
+      <selections>
+        <selection id="unit0" name="Sanctuary Canoness Adalya" type="unit" number="1">
+          <profiles>
+            <profile name="Canoness Adalya" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">6"</characteristic>
+                <characteristic name="T">3</characteristic>
+                <characteristic name="SV">3+</characteristic>
+                <characteristic name="W">4</characteristic>
+                <characteristic name="LD">7+</characteristic>
+                <characteristic name="OC">1</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Divine Guidance (Once per turn per unit)" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">When a friendly unit is selected to shoot or fight (the triggering unit must have SANCTUARY GUARDIANS), you may use this ability, you can re-roll the Hit roll for attacks made by the triggering unit.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Null Rod" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">The unit has the Feel No Pain 4+ ability against Psychic Attacks and mortal wounds.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Acts of Faith" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Adepta Sororitas"/>
+            <category name="Canoness"/>
+            <category name="Character"/>
+            <category name="Explosives"/>
+            <category name="Imperium"/>
+            <category name="Infantry"/>
+            <category name="Sanctuary Guardians"/>
+            <category name="Sanctuary Canoness Adalya"/>
+          </categories>
+          <selections>
+            <selection id="unit0-m0" name="Sanctuary Canoness Adalya" type="model" number="1">
+              <selections>
+                <selection id="unit0-m0-w0" name="Condemnor boltgun" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Condemnor Boltgun" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">2+</characteristic>
+                        <characteristic name="S">4</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Devastating Wounds, Anti-Psyker 2+, Precision, Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit0-m0-w1" name="Hallowed chainsword" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Hallowed chainsword" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">5</characteristic>
+                        <characteristic name="WS">2+</characteristic>
+                        <characteristic name="S">3</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+        <selection id="unit1" name="Sanctuary Guardians Battle Sisters Squad" type="unit" number="1">
+          <profiles>
+            <profile name="Battle Sister with Simulacrum Imperialis" typeName="Unit">
+              <characteristics>
+                <characteristic name="M">6"</characteristic>
+                <characteristic name="T">3</characteristic>
+                <characteristic name="SV">3+</characteristic>
+                <characteristic name="W">1</characteristic>
+                <characteristic name="LD">7+</characteristic>
+                <characteristic name="OC">2</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Cherub (Once per battle per unit)" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">When an Act of Faith is performed, you may use this ability, you gain 1 Miracle die.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Defenders of the Faith" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Simulacrum Imperialis" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Simulacrum Imperialis" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Acts of Faith" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">Nothing happens.</characteristic>
+              </characteristics>
+            </profile>
+          </profiles>
+          <categories>
+            <category name="Faction: Adepta Sororitas"/>
+            <category name="Battleline"/>
+            <category name="Explosives"/>
+            <category name="Imperium"/>
+            <category name="Infantry"/>
+            <category name="Sanctuary Guardians"/>
+            <category name="Sanctuary Guardians Battle Sisters Squad"/>
+          </categories>
+          <selections>
+            <selection id="unit1-m0" name="Battle Sister with Simulacrum Imperialis" type="model" number="1">
+              <selections>
+                <selection id="unit1-m0-w0" name="Bolt pistol" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Bolt pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">4</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Pistol</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m0-w1" name="Boltgun" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Boltgun" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">4</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m0-w3" name="Stocks and Fists" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Stocks and Fists" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="WS">4+</characteristic>
+                        <characteristic name="S">3</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+            <selection id="unit1-m1" name="Battle Sister with Ministorum Flamer" type="model" number="1">
+              <selections>
+                <selection id="unit1-m1-w0" name="Bolt pistol" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Bolt pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">4</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Pistol</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m1-w1" name="Ministorum flamer" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Ministorum flamer" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">D6</characteristic>
+                        <characteristic name="BS">N/A</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Ignores Cover, Torrent</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m1-w2" name="Stocks and Fists" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Stocks and Fists" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="WS">4+</characteristic>
+                        <characteristic name="S">3</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+            <selection id="unit1-m2" name="Battle Sister" type="model" number="6">
+              <selections>
+                <selection id="unit1-m2-w0" name="Bolt pistol" type="upgrade" number="36">
+                  <profiles>
+                    <profile name="Bolt pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">4</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Pistol</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m2-w1" name="Boltgun" type="upgrade" number="6">
+                  <profiles>
+                    <profile name="Boltgun" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">4</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m2-w2" name="Stocks and Fists" type="upgrade" number="36">
+                  <profiles>
+                    <profile name="Stocks and Fists" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="WS">4+</characteristic>
+                        <characteristic name="S">3</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+            <selection id="unit1-m3" name="Battle Sister with Ministorum Heavy Flamer" type="model" number="1">
+              <selections>
+                <selection id="unit1-m3-w0" name="Bolt pistol" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Bolt pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">4</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Pistol</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m3-w1" name="Ministorum heavy flamer" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Ministorum heavy flamer" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">D6</characteristic>
+                        <characteristic name="BS">N/A</characteristic>
+                        <characteristic name="S">6</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Ignores Cover, Torrent</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m3-w2" name="Stocks and Fists" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Stocks and Fists" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="WS">4+</characteristic>
+                        <characteristic name="S">3</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+            <selection id="unit1-m4" name="Sister Superior" type="model" number="1">
+              <selections>
+                <selection id="unit1-m4-w0" name="Bolt pistol" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Bolt pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">4</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Pistol</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m4-w1" name="Combi-weapon" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Combi-weapon" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">4+</characteristic>
+                        <characteristic name="S">4</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Anti-Infantry 4+, Devastating Wounds, Rapid Fire 1</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m4-w2" name="Power weapon" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Power weapon" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">2</characteristic>
+                        <characteristic name="WS">4+</characteristic>
+                        <characteristic name="S">4</characteristic>
+                        <characteristic name="AP">-2</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m4-w3" name="Stocks and Fists" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Stocks and Fists" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="WS">4+</characteristic>
+                        <characteristic name="S">3</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+          </selections>
+        </selection>
+      </selections>
+    </force>
+  </forces>
+</roster>

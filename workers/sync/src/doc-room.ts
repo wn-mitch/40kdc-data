@@ -28,6 +28,7 @@
  * releases their registry slot.
  */
 import { DurableObject } from "cloudflare:workers";
+import { claimLease, clearLease, persistRow, renewLease, type LiveRow } from "./doc-row";
 import { applyDocOps, OpError } from "./apply-ops";
 import type { ClientMessage, Participant, ServerMessage } from "./doc-protocol";
 import type { SyncRegistry, SyncRegistryEnv } from "./sync-registry";
@@ -46,6 +47,18 @@ const DEFAULT_MAX_VIEWERS = 20;
 const DEFAULT_TTL_MINUTES = 120;
 /** Debounce window for writing a doc-bound room's edits back to D1. */
 const DEFAULT_PERSIST_SECONDS = 15;
+/** Distinct unconfirmed flush digests kept. Each is a doc state a flush may
+ *  have committed; one flush per debounce during an outage stays far below. */
+const MAX_UNCONFIRMED = 512;
+
+/** SHA-256 hex of a payload — identifies a flush without storing it twice. */
+async function digest(text: string): Promise<string> {
+  const bytes = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)));
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+/** Lease slack past the TTL — matches the registry's sweep slack. */
+const LEASE_SLACK_MS = 30 * 60_000;
 /** Same cap the worker enforces on PUT bodies — a live room must never grow
  *  a doc it couldn't persist. */
 const DEFAULT_MAX_PAYLOAD_BYTES = 256 * 1024;
@@ -62,6 +75,11 @@ interface SocketInfo {
 }
 
 export class DocRoom extends DurableObject<DocRoomEnv> {
+  /** Tail of the D1 row queue — see serial(). */
+  private rowTail: Promise<void> = Promise.resolve();
+  /** The cold join bringing the room live, while it is in flight. */
+  private coldJoin: Promise<{ status: number; body: string } | null> | null = null;
+
   constructor(ctx: DurableObjectState, env: DocRoomEnv) {
     super(ctx, env);
     ctx.blockConcurrencyWhile(async () => {
@@ -91,6 +109,11 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
 
   private ttlMs(): number {
     return Number(this.env.DOC_SESSION_TTL_MINUTES ?? DEFAULT_TTL_MINUTES) * 60_000;
+  }
+
+  /** When a lease claimed or renewed now expires. */
+  private leaseUntil(): number {
+    return Date.now() + this.ttlMs() + LEASE_SLACK_MS;
   }
 
   private persistMs(): number {
@@ -150,17 +173,19 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
     const token = url.searchParams.get("token") ?? "";
 
     let role: "editor" | "viewer" | null;
+    if (docId !== null && this.readMeta("code") !== null) {
+      // An ephemeral session room never becomes doc-bound. The worker strips
+      // a client `doc` param on session routes; this is the room's own guard.
+      return new Response("no such document", { status: 404 });
+    }
     if (docId !== null) {
-      // Doc-bound: tokens live on the D1 row — one indexed point read both
-      // validates the token and (when cold) hydrates the room.
+      // Doc-bound: tokens live on the D1 row. A cold join then loads the doc
+      // through the lease claim below, not this read.
       const row = await this.env.DB.prepare(
-        "SELECT kind, name, payload, editor_token, viewer_token FROM documents WHERE id = ?",
+        "SELECT editor_token, viewer_token FROM documents WHERE id = ?",
       )
         .bind(docId)
         .first<{
-          kind: string;
-          name: string;
-          payload: string;
           editor_token: string | null;
           viewer_token: string | null;
         }>();
@@ -173,17 +198,16 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
             : null;
       if (!role) return new Response("bad token", { status: 403 });
       if (this.readMeta("doc_id") === null) {
-        // First join brings the doc live — it must win a registry slot.
-        if (!(await this.registry().tryAcquire(`doc:${docId}`))) {
-          return new Response("at capacity", { status: 503 });
+        // Concurrent cold joins share one bring-live, so a straggler can't
+        // re-initialize a room that has already taken edits.
+        this.coldJoin ??= this.bringLive(docId).finally(() => {
+          this.coldJoin = null;
+        });
+        const refused = await this.coldJoin;
+        if (refused) return new Response(refused.body, { status: refused.status });
+        if (this.readMeta("doc_id") === null) {
+          return new Response("no such document", { status: 404 }); // deleted meanwhile
         }
-        this.writeMeta("doc_id", docId);
-        this.writeMeta("kind", row.kind);
-        this.writeMeta("name", row.name);
-        this.writeMeta("doc", row.payload);
-        this.writeMeta("seq", "0");
-        this.touch();
-        await this.ctx.storage.setAlarm(Date.now() + this.ttlMs());
       }
       // Warm: the row's payload is ignored — the room is the live truth.
     } else {
@@ -221,6 +245,37 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
     return new Response(null, { status: 101, webSocket: client });
   }
 
+  /** Win a registry slot, then claim the lease and load the doc in one
+   *  statement: any snapshot PUT either landed before this read (and is
+   *  loaded) or sees the lease. Returns the refusal, or null once live. */
+  private async bringLive(docId: string): Promise<{ status: number; body: string } | null> {
+    const key = `doc:${docId}`;
+    if (!(await this.registry().tryAcquire(key))) return { status: 503, body: "at capacity" };
+    let live: LiveRow | null;
+    try {
+      live = await claimLease(this.env.DB, docId, this.leaseUntil());
+    } catch {
+      // The claim may have committed with only its reply lost; drop it so no
+      // lease outlives a room that never went live.
+      await clearLease(this.env.DB, docId);
+      await this.registry().release(key);
+      return { status: 503, body: "unavailable" };
+    }
+    if (!live) {
+      await this.registry().release(key);
+      return { status: 404, body: "no such document" };
+    }
+    this.writeMeta("doc_id", docId);
+    this.writeMeta("kind", live.kind);
+    this.writeMeta("name", live.name);
+    this.writeMeta("doc", live.payload);
+    this.writeMeta("version", String(live.updated_at));
+    this.writeMeta("seq", "0");
+    this.touch();
+    await this.ctx.storage.setAlarm(Date.now() + this.ttlMs());
+    return null;
+  }
+
   async webSocketMessage(ws: WebSocket, raw: string | ArrayBuffer): Promise<void> {
     if (typeof raw !== "string" || raw.length > 512 * 1024) {
       this.send(ws, { t: "error", code: "bad_message", message: "malformed message" });
@@ -240,17 +295,7 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
       info.nickname = (msg.nickname ?? "").slice(0, MAX_NICKNAME_LEN).trim() || "anonymous";
       info.ready = true;
       ws.serializeAttachment(info);
-      const name = this.readMeta("name");
-      this.send(ws, {
-        t: "welcome",
-        participantId: info.participantId,
-        role: info.role,
-        kind: this.readMeta("kind") ?? "",
-        ...(name !== null ? { name } : {}),
-        doc: JSON.parse(this.readMeta("doc") ?? "null"),
-        seq: Number(this.readMeta("seq") ?? "0"),
-        participants: this.participants(),
-      });
+      this.sendWelcome(ws, info, typeof msg.id === "number" ? msg.id : undefined);
       this.broadcastPresence(ws);
       return;
     }
@@ -290,7 +335,8 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
       const seq = Number(this.readMeta("seq") ?? "0") + 1;
       this.writeMeta("doc", text);
       this.writeMeta("seq", String(seq));
-      if (this.readMeta("doc_id") !== null) await this.schedulePersist();
+      // Ack and broadcast before any await: another op could otherwise take
+      // seq+1 and reach peers first, and clients apply ops in arrival order.
       this.send(ws, { t: "ack", clientSeq: msg.clientSeq, seq });
       for (const peer of this.ctx.getWebSockets()) {
         if (peer === ws) continue;
@@ -298,6 +344,7 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
         if (!peerInfo?.ready) continue;
         this.send(peer, { t: "op", seq, ops: msg.ops, from: info.participantId });
       }
+      if (this.readMeta("doc_id") !== null) await this.schedulePersist();
     }
   }
 
@@ -341,6 +388,21 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
 
     const last = Number(this.readMeta("last_activity") ?? "0");
     if (Date.now() - last < this.ttlMs()) {
+      // The registry sweeps slots by their stamp, not by liveness: re-stamp
+      // on every active alarm (at most a TTL apart, inside the sweep horizon)
+      // so a long-lived room — ephemeral, or doc-bound with no edits — keeps
+      // its slot and its doc_live guard.
+      const key = this.registryKey();
+      if (key) await this.registry().refresh(key);
+      try {
+        await this.renewDocLease();
+      } catch {
+        // D1 unavailable: retry on the persist cadence, well inside the lease
+        // slack, rather than a full TTL from now.
+        await this.ctx.storage.setAlarm(Date.now() + this.persistMs());
+        return;
+      }
+      if (this.readMeta("doc_id") === null && this.readMeta("code") === null) return;
       await this.armAlarm();
       return;
     }
@@ -349,11 +411,19 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
       try {
         await this.persistIfDirty();
       } catch {
-        // Losing edits is worse than holding a slot: keep the room and retry.
+        // Losing edits is worse than holding a slot: keep the room and retry,
+        // and keep its slot stamped so the sweep can't reap a room still alive.
+        const key = this.registryKey();
+        if (key) await this.registry().refresh(key);
         await this.ctx.storage.setAlarm(Date.now() + this.persistMs());
         return;
       }
       if (this.readMeta("doc_id") === null && this.readMeta("code") === null) return;
+      if (this.readMeta("dirty") === "1") {
+        // An edit landed during the D1 write — the room is active again.
+        await this.armAlarm();
+        return;
+      }
     }
     await this.shutdown("session expired");
   }
@@ -362,6 +432,9 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
    *  worker calls this on every doc DELETE; a room that never went live is a
    *  cheap no-op. */
   async docDeleted(): Promise<void> {
+    // A delete can land while a cold join holds the claimed row but hasn't
+    // published doc_id yet; let that join finish, then tear it down.
+    if (this.coldJoin) await this.coldJoin.catch(() => null);
     if (this.readMeta("doc_id") === null) return;
     await this.shutdown("doc deleted");
   }
@@ -384,24 +457,143 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
     if (current === null || current > due) await this.ctx.storage.setAlarm(due);
   }
 
-  /** Write the room's doc back to its D1 row. An UPDATE that touches no rows
-   *  means the doc was deleted out from under the room — shut down instead of
-   *  resurrecting it. Throws propagate to callers (they own retry policy). */
-  private async persistIfDirty(): Promise<void> {
+  /** Write the room's doc back to its D1 row, fenced on the room's version
+   *  (doc-row.ts). A row that changed or vanished goes to reconcileRow rather
+   *  than being overwritten or resurrected. Throws propagate to callers (they
+   *  own retry policy).
+   *  The D1 write is external I/O, so ops can land while it is in flight; the
+   *  room stays dirty (with a fresh debounce) unless the seq it wrote is still
+   *  current. updated_at strictly increases, matching the worker's PUT, so a
+   *  client holding a pre-flush ifUpdatedAt always sees a conflict. */
+  private persistIfDirty(): Promise<void> {
+    return this.serial(() => this.persistOnce());
+  }
+
+  /** Run D1 row work one call at a time. Flushes (alarm, last socket closing,
+   *  persistNow) and lease renewals all read and advance the room's version;
+   *  interleaved, an older snapshot could land last, or a renewal could take
+   *  the room's own write for an outside one. */
+  private serial(fn: () => Promise<void>): Promise<void> {
+    const run = this.rowTail.then(fn);
+    this.rowTail = run.catch(() => {});
+    return run;
+  }
+
+  private async persistOnce(): Promise<void> {
     const docId = this.readMeta("doc_id");
     if (docId === null || this.readMeta("dirty") !== "1") return;
-    const result = await this.env.DB.prepare(
-      "UPDATE documents SET payload = ?, updated_at = ? WHERE id = ?",
-    )
-      .bind(this.readMeta("doc"), Date.now(), docId)
-      .run();
-    if (result.meta.changes === 0) {
-      await this.shutdown("doc deleted");
+    const writtenSeq = this.readMeta("seq");
+    const doc = this.readMeta("doc");
+    // Record the attempt first: if D1 commits it but the reply is lost, the
+    // retry fails the version fence, and reconcileRow must recognise the row
+    // as this room's own write rather than an outside one.
+    const attempt = await digest(doc ?? "");
+    const wasUnconfirmed = this.unconfirmed().includes(attempt);
+    this.noteUnconfirmed(attempt);
+    const version = await persistRow(this.env.DB, docId, doc, this.leaseUntil(), this.knownVersion());
+    if (version === null) {
+      // A fence miss is a definite answer: this attempt wrote nothing.
+      if (!wasUnconfirmed) this.dropUnconfirmed(attempt);
+      await this.reconcileRow(docId);
       return;
     }
-    this.ctx.storage.sql.exec("DELETE FROM meta WHERE k IN ('dirty', 'persist_due')");
+    this.ctx.storage.sql.exec("DELETE FROM meta WHERE k = 'unconfirmed'");
+    this.writeMeta("version", String(version));
+    this.ctx.storage.sql.exec("DELETE FROM meta WHERE k = 'persist_due'");
+    if (this.readMeta("seq") === writtenSeq) {
+      this.ctx.storage.sql.exec("DELETE FROM meta WHERE k = 'dirty'");
+    } else {
+      await this.schedulePersist();
+    }
     // Long-lived active rooms re-stamp their slot so the sweep can't reap it.
     await this.registry().refresh(`doc:${docId}`);
+  }
+
+  /** Digests of flushes sent since the last confirmed one (newest last). */
+  private unconfirmed(): string[] {
+    return JSON.parse(this.readMeta("unconfirmed") ?? "[]") as string[];
+  }
+
+  private noteUnconfirmed(d: string): void {
+    const list = this.unconfirmed();
+    if (list.includes(d)) return; // a retry of the same state adds nothing
+    this.writeMeta("unconfirmed", JSON.stringify([...list, d].slice(-MAX_UNCONFIRMED)));
+  }
+
+  private dropUnconfirmed(d: string): void {
+    this.writeMeta("unconfirmed", JSON.stringify(this.unconfirmed().filter((x) => x !== d)));
+  }
+
+  /** The D1 version this room last read or wrote (null: not yet tracked). */
+  private knownVersion(): number | null {
+    const v = this.readMeta("version");
+    return v === null ? null : Number(v);
+  }
+
+  /** Extend a doc-bound room's D1 lease (see doc-row.ts). Throws on a D1
+   *  error; the alarm owns the retry. */
+  private renewDocLease(): Promise<void> {
+    return this.serial(async () => {
+      const docId = this.readMeta("doc_id");
+      if (docId === null) return;
+      if (this.knownVersion() === null) {
+        // A room from before version tracking has no baseline to renew
+        // against. Unsaved edits: write them, which starts tracking. Clean:
+        // re-read the row through the lease claim (it adopts whatever is there).
+        if (this.readMeta("dirty") === "1") await this.persistOnce();
+        else await this.reconcileRow(docId);
+        return;
+      }
+      const version = await renewLease(this.env.DB, docId, this.leaseUntil(), this.knownVersion());
+      if (version === null) await this.reconcileRow(docId);
+      else this.writeMeta("version", String(version));
+    });
+  }
+
+  /** The row changed under the room (a snapshot PUT that landed while the
+   *  lease had lapsed) or was deleted. Deleted: shut down. Changed: the PUT
+   *  was acknowledged with a whole document, so the room adopts it, drops
+   *  the edits it could not save, re-claims the lease, and re-welcomes every
+   *  participant so their clients load the adopted document. */
+  private async reconcileRow(docId: string): Promise<void> {
+    // Hold ops while reloading: one acked during the claim would be applied
+    // to the doc about to be replaced, and then dropped.
+    const outcome = await this.ctx.blockConcurrencyWhile(async (): Promise<"deleted" | "own" | "adopted"> => {
+      // Read through the lease claim: a PUT either precedes this read (and is
+      // adopted) or sees the lease and is refused.
+      const row = await claimLease(this.env.DB, docId, this.leaseUntil());
+      if (!row) return "deleted";
+      this.writeMeta("version", String(row.updated_at));
+      if (this.unconfirmed().includes(await digest(row.payload))) {
+        // Our own write, committed with its reply lost. Keep the room's
+        // (possibly newer) doc and dirty flag; the next flush writes it.
+        this.ctx.storage.sql.exec("DELETE FROM meta WHERE k = 'unconfirmed'");
+        return "own";
+      }
+      this.ctx.storage.sql.exec("DELETE FROM meta WHERE k = 'unconfirmed'");
+      const changed =
+        row.payload !== this.readMeta("doc") ||
+        row.name !== this.readMeta("name") ||
+        row.kind !== this.readMeta("kind");
+      this.ctx.storage.sql.exec("DELETE FROM meta WHERE k IN ('dirty', 'persist_due')");
+      if (!changed) return "adopted";
+      this.writeMeta("kind", row.kind);
+      this.writeMeta("name", row.name);
+      this.writeMeta("doc", row.payload);
+      this.writeMeta("seq", String(Number(this.readMeta("seq") ?? "0") + 1));
+      for (const ws of this.ctx.getWebSockets()) {
+        const info = ws.deserializeAttachment() as SocketInfo | null;
+        if (info?.ready) this.sendWelcome(ws, info);
+      }
+      return "adopted";
+    });
+    if (outcome === "deleted") {
+      await this.shutdown("doc deleted");
+    } else if (outcome === "own" && this.readMeta("dirty") === "1") {
+      // Re-arm a fresh debounce for the doc the lost-reply flush left unsaved.
+      this.ctx.storage.sql.exec("DELETE FROM meta WHERE k = 'persist_due'");
+      await this.schedulePersist();
+    }
   }
 
   /** Re-arm for whichever deadline comes first: a pending persist or idle
@@ -420,21 +612,43 @@ export class DocRoom extends DurableObject<DocRoomEnv> {
    *  table is recreated empty (deleteAll drops it but this activation may
    *  still field calls) and any pending alarm cleared. */
   private async shutdown(reason: string): Promise<void> {
-    const key = this.registryKey();
-    for (const ws of this.ctx.getWebSockets()) {
-      try {
-        ws.close(1001, reason);
-      } catch {
-        /* already gone */
+    // Hold every other event until teardown is done: a join that ran during
+    // the awaits below would bring a fresh room live, and this shutdown would
+    // then release its registry slot and clear its lease.
+    await this.ctx.blockConcurrencyWhile(async () => {
+      const key = this.registryKey();
+      const docId = this.readMeta("doc_id");
+      for (const ws of this.ctx.getWebSockets()) {
+        try {
+          ws.close(1001, reason);
+        } catch {
+          /* already gone */
+        }
       }
-    }
-    await this.ctx.storage.deleteAll();
-    await this.ctx.storage.deleteAlarm();
-    this.ctx.storage.sql.exec("CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT NOT NULL)");
-    if (key) await this.registry().release(key);
+      await this.ctx.storage.deleteAll();
+      await this.ctx.storage.deleteAlarm();
+      this.ctx.storage.sql.exec("CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT NOT NULL)");
+      if (key) await this.registry().release(key);
+      if (docId !== null) await clearLease(this.env.DB, docId);
+    });
   }
 
   // ── helpers ─────────────────────────────────────────────────────────────────
+
+  private sendWelcome(ws: WebSocket, info: SocketInfo, helloId?: number): void {
+    const name = this.readMeta("name");
+    this.send(ws, {
+      t: "welcome",
+      participantId: info.participantId,
+      role: info.role,
+      kind: this.readMeta("kind") ?? "",
+      ...(name !== null ? { name } : {}),
+      doc: JSON.parse(this.readMeta("doc") ?? "null"),
+      seq: Number(this.readMeta("seq") ?? "0"),
+      participants: this.participants(),
+      ...(helloId !== undefined ? { helloId } : {}),
+    });
+  }
 
   private socketsExcept(except: WebSocket): WebSocket[] {
     return this.ctx.getWebSockets().filter((ws) => ws !== except);

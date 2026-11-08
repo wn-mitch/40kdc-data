@@ -1,0 +1,347 @@
+{
+  "name": "Combat Patrol import",
+  "source": {
+    "format": "roster-json",
+    "generated_by": "40kdc"
+  },
+  "faction_id": "adepta-sororitas",
+  "detachments": [
+    {
+      "ref": {
+        "id": "sanctuary-guardians",
+        "raw_name": "Sanctuary Guardians",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 1
+    }
+  ],
+  "battle_size": null,
+  "force_disposition": null,
+  "points": {
+    "declared_limit": null,
+    "detachment_cap": null,
+    "total_reported": 0,
+    "total_computed": 0
+  },
+  "units": [
+    {
+      "ref": {
+        "id": "sanctuary-canoness-adalya",
+        "raw_name": "Sanctuary Canoness Adalya",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 0,
+      "is_warlord": true,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "condemnor-boltgun-sanctuary-canoness-adalya",
+            "raw_name": "Condemnor boltgun",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "hallowed-chainsword",
+            "raw_name": "Hallowed chainsword",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "sanctuary-guardians-battle-sisters-squad",
+        "raw_name": "Sanctuary Guardians Battle Sisters Squad",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 10,
+      "points": 0,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "bolt-pistol",
+            "raw_name": "Bolt pistol",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 40
+        },
+        {
+          "ref": {
+            "id": "boltgun",
+            "raw_name": "Boltgun",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 7
+        },
+        {
+          "ref": {
+            "id": "simulacrum-imperialis",
+            "raw_name": "simulacrum imperialis",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "stocks-and-fists",
+            "raw_name": "Stocks and Fists",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 40
+        },
+        {
+          "ref": {
+            "id": "ministorum-flamer",
+            "raw_name": "Ministorum flamer",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "ministorum-heavy-flamer",
+            "raw_name": "Ministorum heavy flamer",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "combi-weapon",
+            "raw_name": "Combi-weapon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "power-weapon-sanctuary-guardians-battle-sisters-squad",
+            "raw_name": "Power weapon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Battle Sister with Simulacrum Imperialis",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "bolt-pistol",
+                "raw_name": "Bolt pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "boltgun",
+                "raw_name": "Boltgun",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "simulacrum-imperialis",
+                "raw_name": "simulacrum imperialis",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "stocks-and-fists",
+                "raw_name": "Stocks and Fists",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Battle Sister with Ministorum Flamer",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "bolt-pistol",
+                "raw_name": "Bolt pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "ministorum-flamer",
+                "raw_name": "Ministorum flamer",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "stocks-and-fists",
+                "raw_name": "Stocks and Fists",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Battle Sister",
+          "count": 6,
+          "wargear": [
+            {
+              "ref": {
+                "id": "bolt-pistol",
+                "raw_name": "Bolt pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 6
+            },
+            {
+              "ref": {
+                "id": "boltgun",
+                "raw_name": "Boltgun",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "stocks-and-fists",
+                "raw_name": "Stocks and Fists",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 6
+            }
+          ]
+        },
+        {
+          "model_name": "Battle Sister with Ministorum Heavy Flamer",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "bolt-pistol",
+                "raw_name": "Bolt pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "ministorum-heavy-flamer",
+                "raw_name": "Ministorum heavy flamer",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "stocks-and-fists",
+                "raw_name": "Stocks and Fists",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Sister Superior",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "bolt-pistol",
+                "raw_name": "Bolt pistol",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "combi-weapon",
+                "raw_name": "Combi-weapon",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "power-weapon-sanctuary-guardians-battle-sisters-squad",
+                "raw_name": "Power weapon",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "stocks-and-fists",
+                "raw_name": "Stocks and Fists",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "leader_attachment": null
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "pre-launch-provisional"
+  },
+  "diagnostics": {
+    "resolved_units": 2,
+    "unresolved_units": 0,
+    "resolved_weapons": 10,
+    "unresolved_weapons": 0,
+    "warnings": []
+  }
+}

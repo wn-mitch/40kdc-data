@@ -6,6 +6,7 @@
  *   - faction_rule_ids  ← army_rule via army_rule_faction_keyword → nameToId
  *   - parent_faction_id ← faction_keyword.parentFactionKeywordId → repo dir
  *   - aliases           ← faction_keyword.localisations.en.commonName (additive)
+ *   - keyword_limits    ← keyword_restriction_group (+ _keyword), authoritative
  *
  * `faction_rule_ids` contains every faction-wide ability slug in display order.
  * When the dump owns rules, reconciliation fills an absent authored field with all
@@ -15,11 +16,13 @@
  * IP: reads only ids and English display names (army-rule / faction-keyword names),
  * never rules or lore prose.
  */
+import { mirrorIds } from "./mirror/ids.js";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
 import { MfmDump } from "./loader.js";
 import { readJsonArray, CORE_DIR } from "./repo-files.js";
 import { repoDirs, repoDirForFactionName } from "./faction-map.js";
+import { factionKeywordLabel, keywordLabel } from "./keywords.js";
 import type { StagedWrite } from "./apply.js";
 
 interface FactionRecord {
@@ -28,7 +31,88 @@ interface FactionRecord {
   faction_rule_ids?: string[];
   parent_faction_id?: string | null;
   aliases?: string[];
+  keyword_limits?: KeywordLimit[];
   [k: string]: unknown;
+}
+
+/** One army-wide keyword cap (see the faction schema's `keyword_limits`). */
+export interface KeywordLimit {
+  keywords: string[];
+  max: number;
+  mode?: "alternatives";
+  exempt_faction_keywords?: string[];
+}
+
+/**
+ * Label set per live (non-Legends) datasheet: its miniatures' keywords, its faction
+ * keywords and its own name — the same identity a roster check matches against.
+ */
+function datasheetLabelSets(dump: MfmDump): Set<string>[] {
+  const minis = dump.groupBy("miniature", "datasheetId");
+  const mkByMini = dump.groupBy("miniature_keyword", "miniatureId");
+  const dfk = dump.groupBy("datasheet_faction_keyword", "datasheetId");
+  const out: Set<string>[] = [];
+  for (const ds of dump.table("datasheet")) {
+    if (ds.isLegends) continue;
+    const labels = new Set<string>();
+    const name = dump.enName(ds);
+    if (name) labels.add(name);
+    for (const m of minis.get(ds.id!) ?? [])
+      for (const r of mkByMini.get(m.id!) ?? []) {
+        const k = keywordLabel(dump, r.keywordId);
+        if (k) labels.add(k);
+      }
+    for (const r of dfk.get(ds.id!) ?? []) {
+      const k = factionKeywordLabel(dump, r.factionKeywordId);
+      if (k) labels.add(k);
+    }
+    out.push(labels);
+  }
+  return out;
+}
+
+/**
+ * Army-wide keyword caps per repo dir, from `keyword_restriction_group`: the group's
+ * faction keyword routes to the dir (Asuryani → aeldari), its keyword rows become
+ * `keywords` (a unit counts when it carries all of them), `limit` becomes `max`, and
+ * `excludedFactionKeywordId` becomes `exempt_faction_keywords`. A group with no
+ * limit (Chaos Knights' WAR DOG group, which only carries Houndpack Lance's minimum)
+ * imposes no army-wide cap and is skipped. Sorted for a stable diff.
+ *
+ * How a group's keywords combine follows from where they live. When one live
+ * datasheet carries them all (EPIC HERO + YVRAINE, or a single PATRIARCH keyword),
+ * they name that datasheet and the cap counts units carrying all of them. When no
+ * datasheet carries them all, each keyword names a different datasheet — the group
+ * lists alternatives — and the cap counts distinct alternatives present (`mode:
+ * "alternatives"`): COMMANDER FARSIGHT / ETHEREAL with limit 1 is "Farsight or
+ * Ethereals, never both", COMMISSAR GRAVES / COMMISSAR GRAVES ON FOOT is "one
+ * version of Graves", matching the datasheet rules the dump prints for both.
+ */
+export function keywordLimitsByDir(dump: MfmDump): Map<string, KeywordLimit[]> {
+  const out = new Map<string, KeywordLimit[]>();
+  const labelSets = datasheetLabelSets(dump);
+  const kwByGroup = dump.groupBy("keyword_restriction_group_keyword", "keywordRestrictionGroupId");
+  for (const g of dump.table("keyword_restriction_group")) {
+    if (g.limit === null || g.limit === undefined) continue;
+    const dir = repoDirForFactionName(factionKeywordLabel(dump, g.factionKeywordId) ?? undefined);
+    if (!dir) continue;
+    const keywords = [
+      ...new Set((kwByGroup.get(g.id) ?? []).map((r) => keywordLabel(dump, r.keywordId)).filter((k): k is string => !!k)),
+    ].sort((a, b) => a.localeCompare(b));
+    if (keywords.length === 0) continue;
+    const exempt = factionKeywordLabel(dump, g.excludedFactionKeywordId);
+    const alternatives = keywords.length > 1 && !labelSets.some((labels) => keywords.every((k) => labels.has(k)));
+    const entry: KeywordLimit = {
+      keywords,
+      max: g.limit,
+      ...(alternatives ? { mode: "alternatives" as const } : {}),
+      ...(exempt ? { exempt_faction_keywords: [exempt] } : {}),
+    };
+    (out.get(dir) ?? out.set(dir, []).get(dir)!).push(entry);
+  }
+  for (const list of out.values())
+    list.sort((a, b) => a.keywords.join("+").localeCompare(b.keywords.join("+")));
+  return out;
 }
 
 export interface DirFactionResult {
@@ -40,6 +124,7 @@ export interface DirFactionResult {
   parentConfirmed?: boolean;
   parentReview?: { authored: string; derived: string };
   aliasesAdded: string[];
+  keywordLimitsChanged?: boolean;
 }
 
 export interface FactionFieldsReport {
@@ -85,23 +170,17 @@ function factionKeywordByDir(dump: MfmDump): Map<string, string> {
 
 export function runFactionFields(dump: MfmDump): FactionFieldsReport {
   const fkByDir = factionKeywordByDir(dump);
+  const limitsByDir = keywordLimitsByDir(dump);
 
-  // fkId → nameToId of every army rule the keyword owns. Strip a trailing
-  // parenthetical tag ("Nurgle's Gift (Aura)") the repo drops from the slug, so the
-  // derived candidate matches the authored faction_rule_ids (mirrors cleanEnhName).
+  // fkId → the army rule rows the keyword owns; each becomes the id `mfm:mirror` gives it
+  // in the faction's dir (`<name>-<faction>`).
   const armyRuleById = dump.byId("army_rule");
+  const ids = mirrorIds(dump);
   const armyRulesByFk = new Map<string, string[]>();
   for (const edge of dump.table("army_rule_faction_keyword")) {
-    const name = dump.enName(armyRuleById.get(edge.armyRuleId))?.replace(/\s*\([^)]*\)\s*$/, "").trim();
-    if (!name) continue;
-    let slug: string;
-    try {
-      slug = nameToId(name);
-    } catch {
-      continue;
-    }
+    if (!armyRuleById.get(edge.armyRuleId)) continue;
     const list = armyRulesByFk.get(edge.factionKeywordId) ?? [];
-    if (!list.includes(slug)) list.push(slug);
+    if (!list.includes(edge.armyRuleId)) list.push(edge.armyRuleId);
     armyRulesByFk.set(edge.factionKeywordId, list);
   }
 
@@ -117,17 +196,35 @@ export function runFactionFields(dump: MfmDump): FactionFieldsReport {
     const record = records.find((r) => r.id === dir) ?? records[0];
     if (!record) continue;
 
-    const fkId = fkByDir.get(dir);
-    if (!fkId) {
-      unresolvedDirs.push(dir);
-      continue;
-    }
-
     const res: DirFactionResult = { dir, aliasesAdded: [] };
     let changed = false;
 
+    // keyword_limits — authoritative: replace, or clear when the dump has none. Keyed by
+    // the group's own faction keyword route, so it applies even when the dir's home
+    // keyword is ambiguous (aeldari: Asuryani / Harlequins / Ynnari).
+    const limits = limitsByDir.get(dir) ?? [];
+    if (JSON.stringify(record.keyword_limits ?? []) !== JSON.stringify(limits)) {
+      if (limits.length) record.keyword_limits = limits;
+      else delete record.keyword_limits;
+      res.keywordLimitsChanged = true;
+      changed = true;
+    }
+
+    const fkId = fkByDir.get(dir);
+    if (!fkId) {
+      unresolvedDirs.push(dir);
+      if (changed) {
+        staged.push({ path: p, value: records });
+        dirs.push(res);
+      }
+      continue;
+    }
+
     // faction_rule_ids — fill-only / confirm / review.
-    const candidates = armyRulesByFk.get(fkId) ?? [];
+    const candidates = [...new Set((armyRulesByFk.get(fkId) ?? []).flatMap((row) => {
+      const id = ids.idOf("army_rule", row, dir) ?? ids.idOf("army_rule", row);
+      return id ? [id] : [];
+    }))];
     const ruleAuthored = record.faction_rule_ids;
     if (candidates.length > 0) {
       if (ruleAuthored === undefined) {
@@ -202,6 +299,7 @@ export function buildFactionFieldsReport(report: FactionFieldsReport, write: boo
     if (d.parentFilled) details.push(`- parent_faction_id filled: ${d.parentFilled}`);
     if (d.parentReview) details.push(`- parent_faction_id REVIEW: authored ${d.parentReview.authored} vs dump ${d.parentReview.derived}`);
     if (d.aliasesAdded.length) details.push(`- aliases added: ${d.aliasesAdded.join(", ")}`);
+    if (d.keywordLimitsChanged) details.push(`- keyword_limits replaced from keyword_restriction_group`);
     if (details.length) {
       L.push(`## ${d.dir}`, ...details, "");
     }

@@ -100,6 +100,28 @@
       "consumers": [],
       "reason": "Canonical catalog display names are repository-authored; localized MFM ability labels are only parser input for weapon-profile references."
     },
+    "/optional_parameters": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "Optional parameter contracts are repository-authored catalog semantics; absence does not imply a default rating."
+    },
+    "/optional_parameters/*": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "Each optional parameter-key definition belongs to the repository-authored keyword catalog."
+    },
     "/required_parameters": {
       "provenance": "repo-authored",
       "coverage": "unimplemented",

@@ -1,0 +1,15 @@
+Adeptus Astartes - Preamble Sweep - [2000 pts]
+
+# ++ Army Roster ++ [425 pts]
+## Configuration
+List Name: Preamble Sweep
+Faction: Adeptus Astartes
+Battle Size: Strike Force (2000 Point limit)
+Detachment: Gladius Task Force
+Force Disposition: Take And Hold
+
+## Battleline [425 pts]
+Captain [110 pts]: Enhancement: Artificer Armour, Master-crafted power weapon, Heavy bolt pistol, Master-crafted bolter
+Lieutenant [70 pts]: Adept of the Codex [20 pts], Warlord, 40kdc Keyword: Adeptus Astartes, Master-crafted power weapon, Bolt pistol, Ceramite Fists
+Land Raider [245 pts]:
+• 1x Land Raider: Armoured tracks, 2x Godhammer lascannon, Twin Heavy Bolter

@@ -25,6 +25,26 @@ pub fn detachment_cap_for_battle_size(battle_size: Option<BattleSize>) -> Option
     }
 }
 
+/// 11e unit limit: units with the same datasheet an army may include
+/// (`incursion` 2, `strike-force` 3). BATTLELINE and DEDICATED TRANSPORT units
+/// double it; every EPIC HERO is limited to 1. `None` when the size is unknown.
+pub fn unit_limit_for_battle_size(battle_size: Option<BattleSize>) -> Option<u64> {
+    match battle_size {
+        Some(BattleSize::StrikeForce) => Some(3),
+        Some(BattleSize::Incursion) => Some(2),
+        None => None,
+    }
+}
+
+/// 11e Enhancement limit (`incursion` 2, `strike-force` 4); `None` when unknown.
+pub fn enhancement_limit_for_battle_size(battle_size: Option<BattleSize>) -> Option<u64> {
+    match battle_size {
+        Some(BattleSize::StrikeForce) => Some(4),
+        Some(BattleSize::Incursion) => Some(2),
+        None => None,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

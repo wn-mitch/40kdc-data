@@ -44,42 +44,57 @@
       : [],
   );
 
-  const matrix = $derived.by(() => {
+  const matrixResult = $derived.by<{ value: ReturnType<typeof buildMatrix>; error?: string }>(() => {
     if (!salvo.compareFactionId || attackers.length === 0 || targets.length === 0) {
-      return [];
-    }
-    return buildMatrix(
-      ds,
-      attackers,
-      targets,
-      salvo.compareDistance,
-      salvo.comparePhase,
-      "best-weapon",
-    );
-  });
-
-  // --- Loadouts sub-mode -------------------------------------------------
-  const loadoutEnum = $derived.by(() => {
-    if (salvo.compareMode !== "loadouts" || !salvo.compareFactionId || !salvo.compareLoadoutUnitId) {
-      return null;
+      return { value: [] };
     }
     try {
-      return enumerateLoadouts(ds, salvo.compareFactionId, salvo.compareLoadoutUnitId);
-    } catch {
-      return null;
+      return {
+        value: buildMatrix(
+          ds,
+          attackers,
+          targets,
+          salvo.compareDistance,
+          salvo.comparePhase,
+          "best-weapon",
+        ),
+      };
+    } catch (err) {
+      return { value: [], error: (err as Error).message };
     }
   });
+  const matrix = $derived(matrixResult.value);
 
-  const loadoutRankings = $derived.by<LoadoutRanking[]>(() => {
-    if (!loadoutEnum || loadoutEnum.configs.length === 0 || targets.length === 0) return [];
-    return rankLoadouts(
-      ds,
-      loadoutEnum.configs,
-      targets,
-      salvo.compareDistance,
-      salvo.comparePhase,
-    );
+  // --- Loadouts sub-mode -------------------------------------------------
+  const loadoutResult = $derived.by<{ value: ReturnType<typeof enumerateLoadouts> | null; error?: string }>(() => {
+    if (salvo.compareMode !== "loadouts" || !salvo.compareFactionId || !salvo.compareLoadoutUnitId) {
+      return { value: null };
+    }
+    try {
+      return { value: enumerateLoadouts(ds, salvo.compareFactionId, salvo.compareLoadoutUnitId) };
+    } catch (err) {
+      return { value: null, error: (err as Error).message };
+    }
   });
+  const loadoutEnum = $derived(loadoutResult.value);
+
+  const rankingResult = $derived.by<{ value: LoadoutRanking[]; error?: string }>(() => {
+    if (!loadoutEnum || loadoutEnum.configs.length === 0 || targets.length === 0) return { value: [] };
+    try {
+      return {
+        value: rankLoadouts(
+          ds,
+          loadoutEnum.configs,
+          targets,
+          salvo.compareDistance,
+          salvo.comparePhase,
+        ),
+      };
+    } catch (err) {
+      return { value: [], error: (err as Error).message };
+    }
+  });
+  const loadoutRankings = $derived(rankingResult.value);
 
   function toggleProfile(id: string): void {
     const set = new Set(salvo.compareTargetIds);
@@ -88,24 +103,25 @@
     salvo.compareTargetIds = [...set];
   }
 
-  let copied = $state(false);
+  let copyState = $state<"idle" | "copied" | "failed">("idle");
   async function exportMarkdown(): Promise<void> {
     const md = matrixToMarkdown(matrix, targets, "best-weapon");
     try {
       await navigator.clipboard.writeText(md);
-      copied = true;
-      setTimeout(() => (copied = false), 1500);
+      copyState = "copied";
     } catch {
-      // Clipboard blocked (e.g. insecure context) — no-op; the table is on screen.
+      // Clipboard blocked (e.g. insecure context): say so; the table is still on screen.
+      copyState = "failed";
     }
+    setTimeout(() => (copyState = "idle"), 1500);
   }
 </script>
 
 <div class="controls">
   <div class="row">
-    <div class="phase-toggle mode-toggle">
-      <button class:active={salvo.compareMode === "matrix"} onclick={() => (salvo.compareMode = "matrix")}>Unit × target matrix</button>
-      <button class:active={salvo.compareMode === "loadouts"} onclick={() => (salvo.compareMode = "loadouts")}>Best loadout</button>
+    <div class="phase-toggle mode-toggle" role="group" aria-label="Comparison">
+      <button class:active={salvo.compareMode === "matrix"} aria-pressed={salvo.compareMode === "matrix"} onclick={() => (salvo.compareMode = "matrix")}>Unit × target matrix</button>
+      <button class:active={salvo.compareMode === "loadouts"} aria-pressed={salvo.compareMode === "loadouts"} onclick={() => (salvo.compareMode = "loadouts")}>Best loadout</button>
     </div>
   </div>
 
@@ -125,6 +141,15 @@
     </select>
   </div>
 
+  {#if matrixResult.error}
+    <p class="error" role="alert">The matrix could not be built: {matrixResult.error}</p>
+  {/if}
+  {#if rankingResult.error}
+    <p class="error" role="alert">Loadouts could not be ranked: {rankingResult.error}</p>
+  {/if}
+  {#if loadoutResult.error}
+    <p class="error" role="alert">Loadouts could not be enumerated: {loadoutResult.error}</p>
+  {/if}
   {#if salvo.compareMode === "loadouts"}
     <div class="row">
       <label for="cmp-unit">Unit</label>
@@ -152,10 +177,11 @@
       max="72"
       bind:value={salvo.compareDistance}
     />
-    <div class="phase-toggle">
+    <div class="phase-toggle" role="group" aria-label="Phase">
       {#each ["shooting", "fight"] as const as ph (ph)}
         <button
           class:active={salvo.comparePhase === ph}
+          aria-pressed={salvo.comparePhase === ph}
           onclick={() => (salvo.comparePhase = ph)}>{ph}</button
         >
       {/each}
@@ -191,9 +217,11 @@
         Expected models killed per model firing each unit's best {salvo.comparePhase} weapon at
         {salvo.compareDistance}". Bold ≥ 1.0.
       </span>
-      <button onclick={exportMarkdown}>{copied ? "Copied!" : "Export markdown"}</button>
+      <button onclick={exportMarkdown}>{copyState === "copied" ? "Copied!" : copyState === "failed" ? "Copy blocked" : "Export markdown"}</button>
     </div>
-    <div class="table-wrap">
+    <!-- A scrollable region must be keyboard-focusable so it can be scrolled without a mouse. -->
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <div class="table-wrap" role="region" aria-label="Unit by target matrix" tabindex="0">
       <table>
         <thead>
           <tr>
@@ -235,7 +263,9 @@
       compare slots relatively. Bold ≥ 1.0.
     </span>
   </div>
-  <div class="table-wrap">
+  <!-- A scrollable region must be keyboard-focusable so it can be scrolled without a mouse. -->
+  <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+  <div class="table-wrap" role="region" aria-label="Loadout ranking" tabindex="0">
     <table>
       <thead>
         <tr>
@@ -288,9 +318,12 @@
     gap: 2px;
     margin-left: auto;
   }
+  .phase-toggle:not(.mode-toggle) button { text-transform: capitalize; }
   .phase-toggle button.active {
-    background: var(--accent, #444);
-    color: #fff;
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-foreground);
+    font-weight: 600;
   }
   .profiles {
     display: flex;
@@ -340,6 +373,10 @@
   .table-wrap {
     overflow-x: auto;
   }
+  .table-wrap:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+  }
   table {
     border-collapse: collapse;
     font-size: var(--text-sm);
@@ -361,11 +398,11 @@
     text-align: left;
     position: sticky;
     left: 0;
-    background: var(--bg, #1a1a1a);
+    background: var(--panel);
   }
   td.strong {
     font-weight: 700;
-    color: var(--accent-text, #e8e8e8);
+    color: var(--text);
   }
   td.zero {
     color: var(--muted);

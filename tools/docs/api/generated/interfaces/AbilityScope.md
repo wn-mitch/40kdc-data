@@ -6,35 +6,15 @@
 
 # Interface: AbilityScope
 
-Defined in: [generated.ts:1437](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1437)
+Defined in: [generated.ts:8407](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L8407)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "scope".
 
-## Indexable
-
-> \[`k`: `string`\]: `unknown`
-
 ## Properties
-
-### range
-
-> **range**: `"self"` \| `"unit"` \| `"attached"` \| `"aura-6"` \| `"aura-9"` \| `"aura-12"` \| `"aura-custom"` \| `"engagement-range"` \| `"any-visible"` \| `"any-on-battlefield"` \| `"terrain-within-range"`
-
-Defined in: [generated.ts:1438](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1438)
-
-***
 
 ### duration
 
-> **duration**: `"phase"` \| `"turn"` \| `"battle-round"` \| `"battle"` \| `"until-next-command-phase"` \| `"one-use"` \| `"permanent"`
+> **duration**: [`ScopeDuration`](../type-aliases/ScopeDuration.md)
 
-Defined in: [generated.ts:1450](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1450)
-
-***
-
-### range\_inches?
-
-> `optional` **range\_inches?**: `number`
-
-Defined in: [generated.ts:1451](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1451)
+Defined in: [generated.ts:8408](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L8408)

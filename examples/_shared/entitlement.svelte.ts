@@ -2,9 +2,10 @@
  * Entitlement state for the 40kdc example apps (runes + browser glue over
  * entitlement-core.ts). Mirrors shadowboxing's flow: "Connect Patreon"
  * round-trips through keys.alpacasoft.dev and lands the token back in the
- * URL FRAGMENT; access keys redeem to the same token. The token lives in
- * localStorage — per-origin, so each app connects once (a silent redirect
- * for an active patron).
+ * URL FRAGMENT; access keys redeem to the same token. The token is a bearer
+ * credential for the owner's whole cloud namespace, valid for days, so it
+ * lives in sessionStorage: it survives reloads in the tab but not closing it,
+ * and each tab connects once (a silent redirect for an active patron).
  */
 import {
   connectUrl,
@@ -19,6 +20,19 @@ const KEYS_URL: string =
   "https://keys.alpacasoft.dev";
 
 const STORAGE_KEY = "alpacasoft.entitlement";
+
+/** Move a token an older build left in localStorage into this tab's session
+ *  and drop the persisted copy, so the credential stops outliving the tab. */
+function retireLegacyToken(): void {
+  try {
+    const legacy = localStorage.getItem(STORAGE_KEY);
+    if (legacy === null) return;
+    localStorage.removeItem(STORAGE_KEY);
+    if (sessionStorage.getItem(STORAGE_KEY) === null) sessionStorage.setItem(STORAGE_KEY, legacy);
+  } catch {
+    /* storage blocked — nothing to migrate */
+  }
+}
 
 export const entitlement = $state({
   /** A live (unexpired) token is stored. */
@@ -42,10 +56,11 @@ function syncState(): void {
 /** The stored token if it is still live, else null (expired tokens are
  *  dropped eagerly so `connected` never lies). */
 export function storedEntitlement(): string | null {
+  retireLegacyToken();
   try {
-    const token = localStorage.getItem(STORAGE_KEY);
+    const token = sessionStorage.getItem(STORAGE_KEY);
     if (tokenLive(token)) return token;
-    if (token) localStorage.removeItem(STORAGE_KEY);
+    if (token) sessionStorage.removeItem(STORAGE_KEY);
     return null;
   } catch {
     return null;
@@ -77,7 +92,7 @@ export async function redeemKey(key: string): Promise<boolean> {
     }
     const { entitlement: token } = (await res.json()) as { entitlement: string };
     try {
-      localStorage.setItem(STORAGE_KEY, token);
+      sessionStorage.setItem(STORAGE_KEY, token);
     } catch {
       /* storage blocked — token lost, user can retry */
     }
@@ -97,7 +112,7 @@ export function maybeCaptureEntitlement(): void {
   const result = parseEntitlementFragment(window.location.hash);
   if (result && "token" in result) {
     try {
-      localStorage.setItem(STORAGE_KEY, result.token);
+      sessionStorage.setItem(STORAGE_KEY, result.token);
     } catch {
       /* storage blocked — token lost, user can reconnect */
     }
@@ -112,6 +127,7 @@ export function maybeCaptureEntitlement(): void {
 /** Drop the stored token (a "sign out" for the patron features). */
 export function disconnect(): void {
   try {
+    sessionStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem(STORAGE_KEY);
   } catch {
     /* nothing to drop */

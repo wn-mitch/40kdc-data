@@ -295,3 +295,117 @@ def test_resolver_handles_source_aliases_profile_names_abilities_and_all_parts()
         ("kombi-weapon", 2),
         ("special-ritual", 1),
     ]
+
+
+def test_resolver_autolinks_only_when_conditional_role_is_support() -> None:
+    raw = empty_raw_data()
+    raw["factions"] = [{"id": "fabricated", "name": "Fabricated Faction"}]
+    raw["units"] = [
+        {
+            "id": "conditional-character",
+            "name": "Conditional Character",
+            "faction_id": "fabricated",
+            "role": "character",
+            "attachment_role": "leader",
+        },
+        {
+            "id": "required-character",
+            "name": "Required Character",
+            "faction_id": "fabricated",
+            "role": "character",
+        },
+        {
+            "id": "support-bodyguard",
+            "name": "Support Bodyguard",
+            "faction_id": "fabricated",
+        },
+    ]
+    raw["leader_attachments"] = [
+        {
+            "leader_id": "conditional-character",
+            "eligible_bodyguard_ids": [],
+            "conditional_groups": [
+                {
+                    "role": "leader",
+                    "eligible_bodyguard_ids": ["support-bodyguard"],
+                    "excluded_roster_unit_ids": ["required-character"],
+                },
+                {
+                    "role": "support",
+                    "eligible_bodyguard_ids": ["support-bodyguard"],
+                    "required_roster_unit_ids": ["required-character"],
+                },
+            ],
+        }
+    ]
+
+    def parsed_unit(raw_name: str, is_character: bool) -> dict[str, Any]:
+        return {
+            "raw_name": raw_name,
+            "is_character": is_character,
+            "model_count": 1,
+            "points": 0,
+            "is_warlord": False,
+            "enhancement_raw_name": None,
+            "enhancement_points": None,
+            "wargear": [],
+            "leader_attachment": None,
+        }
+
+    def parsed(units: list[dict[str, Any]]) -> dict[str, Any]:
+        return {
+            "name": "Fabricated roster",
+            "generated_by": None,
+            "faction_raw_name": "Fabricated Faction",
+            "detachment_raw_names": [],
+            "force_disposition_raw_name": None,
+            "battle_size_raw": None,
+            "declared_limit": None,
+            "total_reported": 0,
+            "total_computed": 0,
+            "units": units,
+        }
+
+    dataset = Dataset(raw)
+    without_required = resolve(
+        parsed(
+            [
+                parsed_unit("Conditional Character", True),
+                parsed_unit("Support Bodyguard", False),
+            ]
+        ),
+        dataset,
+    )
+    assert without_required["units"][0]["leader_attachment"] is None
+
+    with_required = resolve(
+        parsed(
+            [
+                parsed_unit("Conditional Character", True),
+                parsed_unit("Required Character", True),
+                parsed_unit("Support Bodyguard", False),
+            ]
+        ),
+        dataset,
+    )
+    assert with_required["units"][0]["leader_attachment"] == {
+        "bodyguard_ref": {
+            "id": "support-bodyguard",
+            "raw_name": "Support Bodyguard",
+            "resolved": True,
+            "candidates": [],
+        },
+        "role": "support",
+        "provisional": True,
+    }
+
+    without_bodyguard = resolve(
+        parsed(
+            [
+                parsed_unit("Conditional Character", True),
+                parsed_unit("Required Character", True),
+            ]
+        ),
+        dataset,
+    )
+    assert without_bodyguard["units"][0]["leader_attachment"] is None

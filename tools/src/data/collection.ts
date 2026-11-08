@@ -20,10 +20,57 @@
  * faction context on purpose (roster import, the conformance runner) calls
  * {@link Collection.getAny} instead.
  *
+ * A collection may be game-mode scoped (see {@link CollectionConfig.gameModesOf}):
+ * listing methods (`all`, iteration, `size`, `byFaction`, `find`, `findAll`)
+ * skip records whose effective game modes lack the collection's mode, while id
+ * lookups (`get`, `getAny`, `getInFaction`, `has`, `byExternalRef`) resolve
+ * every record whatever the mode, so share tokens, saved rosters and internal
+ * references keep resolving. {@link Collection.withGameMode} builds a view over
+ * the same indexes for another mode.
+ *
  * @packageDocumentation
  */
 import { externalRefKey } from "../external-refs.js";
+import type { GameModeId } from "../generated.js";
 import { normalizeName } from "./normalize.js";
+
+/** A game mode a dataset view lists, or `"all"` to list every record. */
+export type GameModeView = GameModeId | "all";
+
+/** Every accepted {@link GameModeView} value. */
+export const GAME_MODE_VIEWS: readonly GameModeView[] = [
+  "matched-play",
+  "combat-patrol",
+  "boarding-actions",
+  "crusade",
+  "all",
+];
+
+/** The view a dataset lists when no mode is chosen: matched play. */
+export const DEFAULT_GAME_MODE: GameModeView = "matched-play";
+
+/** Throw unless `mode` is a {@link GameModeView}. */
+export function assertGameModeView(mode: string): asserts mode is GameModeView {
+  if (!(GAME_MODE_VIEWS as readonly string[]).includes(mode)) {
+    throw new Error(
+      `Unknown game mode "${mode}"; expected one of ${GAME_MODE_VIEWS.join(", ")}`,
+    );
+  }
+}
+
+/**
+ * Whether a record with these `game_modes` is listed in `mode`. An absent or
+ * empty `game_modes` means matched play only; `"all"` lists everything.
+ */
+export function inGameMode(
+  gameModes: readonly string[] | null | undefined,
+  mode: GameModeView,
+): boolean {
+  if (mode === "all") return true;
+  return gameModes && gameModes.length > 0
+    ? gameModes.includes(mode)
+    : mode === "matched-play";
+}
 
 /**
  * True only in a production build. The {@link CollectionConfig.guardUnscoped}
@@ -85,8 +132,34 @@ export interface CollectionConfig<T, V> {
    * the right collection without changing behaviour.
    */
   entityLabel?: string;
+  /**
+   * The record's `game_modes`, for record types that carry the field. When set,
+   * the collection is game-mode scoped: listing methods skip records not in
+   * {@link gameMode} (see module docs). Unset collections list every record in
+   * every mode.
+   */
+  gameModesOf?: (item: T) => readonly string[] | null | undefined;
+  /** The mode listing methods filter to. Defaults to {@link DEFAULT_GAME_MODE}. */
+  gameMode?: GameModeView;
   /** Wrap a raw record in its linked view. */
   wrap: (item: T) => V;
+}
+
+/** Indexes shared by every game-mode view of one collection. */
+interface CollectionIndex<T> {
+  items: T[];
+  byId: Map<string, T>;
+  byNorm: Map<string, T[]>;
+  byFactionId: Map<string, T[]>;
+  byExternalRefKey: Map<string, T[]>;
+  idOf: (item: T) => string;
+  nameOf?: (item: T) => string | undefined;
+  gameModesOf?: (item: T) => readonly string[] | null | undefined;
+  idAliases?: Readonly<Record<string, string>>;
+  /** Ids registered under >1 faction; only populated when guarding. */
+  ambiguousIds?: Set<string>;
+  /** Noun for the guard throw message. */
+  entityLabel: string;
 }
 
 /**
@@ -98,86 +171,61 @@ export interface CollectionConfig<T, V> {
  * @typeParam V - the linked view type returned to callers
  */
 export class Collection<T, V> implements Iterable<V> {
-  private readonly items: T[] = [];
-  private readonly byId = new Map<string, T>();
-  private readonly byNorm = new Map<string, T[]>();
-  private readonly byFactionId = new Map<string, T[]>();
-  private readonly byExternalRefKey = new Map<string, T[]>();
-  private readonly idOf: (item: T) => string;
-  private readonly nameOf?: (item: T) => string | undefined;
-  private readonly idAliases?: Readonly<Record<string, string>>;
+  private readonly ix: CollectionIndex<T>;
   private readonly wrapFn: (item: T) => V;
-  /** Ids registered under >1 faction; only populated when guarding. */
-  private readonly ambiguousIds?: Set<string>;
-  /** Noun for the guard throw message. */
-  private readonly entityLabel: string;
+  /** The game mode listing methods filter to. */
+  readonly gameMode: GameModeView;
+  /** `ix.items` filtered to {@link gameMode}; the same array when unscoped. */
+  private readonly listed: T[];
 
   constructor(cfg: CollectionConfig<T, V>) {
-    this.idOf = cfg.idOf;
-    this.nameOf = cfg.nameOf;
-    this.idAliases = cfg.idAliases;
     this.wrapFn = cfg.wrap;
-    this.entityLabel = cfg.entityLabel ?? "entity";
-    const dedupeKeyOf = cfg.dedupeKeyOf ?? cfg.idOf;
-    const seen = new Set<string>();
-    // id -> distinct faction ids it appears under (only tracked when guarding).
-    const idFactions = cfg.guardUnscoped
-      ? new Map<string, Set<string>>()
-      : undefined;
-    for (const item of cfg.items) {
-      const dedupeKey = dedupeKeyOf(item);
-      if (seen.has(dedupeKey)) continue; // first-wins dedup
-      seen.add(dedupeKey);
-      this.items.push(item);
+    this.gameMode = cfg.gameMode ?? DEFAULT_GAME_MODE;
+    this.ix = buildIndex(cfg);
+    this.listed = this.filterListed(this.ix.items);
+  }
 
-      const id = cfg.idOf(item);
-      if (!this.byId.has(id)) this.byId.set(id, item); // first-wins for shared ids
+  /**
+   * A view of this collection listing `mode` instead, sharing every index (no
+   * rebuild). `wrap` re-binds linked views to the caller's dataset view;
+   * omitted, records wrap as they do here.
+   */
+  withGameMode(mode: GameModeView, wrap?: (item: T) => V): Collection<T, V> {
+    assertGameModeView(mode);
+    const view = Object.create(Collection.prototype) as Collection<T, V>;
+    const fields = view as unknown as {
+      ix: CollectionIndex<T>;
+      wrapFn: (item: T) => V;
+      gameMode: GameModeView;
+      listed: T[];
+    };
+    fields.ix = this.ix;
+    fields.wrapFn = wrap ?? this.wrapFn;
+    fields.gameMode = mode;
+    fields.listed = view.filterListed(this.ix.items);
+    return view;
+  }
 
-      const name = cfg.nameOf?.(item);
-      if (name) push(this.byNorm, normalizeName(name), item);
+  /** Whether a record is listed in this view's mode. */
+  private isListed(item: T): boolean {
+    const modesOf = this.ix.gameModesOf;
+    return !modesOf || inGameMode(modesOf(item), this.gameMode);
+  }
 
-      // Alias names answer to the same record. Index them after the canonical
-      // name and skip any alias that normalizes to an already-registered name,
-      // so an alias can never displace the canonical owner of a normalized key.
-      for (const alias of cfg.aliasesOf?.(item) ?? []) {
-        const aliasKey = normalizeName(alias);
-        if (
-          aliasKey === "" ||
-          aliasKey === (name ? normalizeName(name) : undefined)
-        )
-          continue;
-        push(this.byNorm, aliasKey, item);
-      }
-      for (const ref of cfg.externalRefsOf?.(item) ?? []) {
-        push(this.byExternalRefKey, externalRefKey(ref.namespace, ref.id), item);
-      }
-
-      const faction = cfg.factionOf?.(item);
-      if (faction) {
-        push(this.byFactionId, faction, item);
-        if (idFactions) {
-          const set = idFactions.get(id);
-          if (set) set.add(faction);
-          else idFactions.set(id, new Set([faction]));
-        }
-      }
-    }
-    if (idFactions) {
-      this.ambiguousIds = new Set();
-      for (const [id, factions] of idFactions) {
-        if (factions.size > 1) this.ambiguousIds.add(id);
-      }
-    }
+  /** The records of `items` listed in this view's mode (`items` itself when all are). */
+  private filterListed(items: T[]): T[] {
+    if (!this.ix.gameModesOf || this.gameMode === "all") return items;
+    return items.filter((item) => this.isListed(item));
   }
 
   /** Every record, deduplicated by id, in first-seen order. */
   get all(): V[] {
-    return this.items.map((item) => this.wrapFn(item));
+    return this.listed.map((item) => this.wrapFn(item));
   }
 
   /** Number of distinct records. */
   get size(): number {
-    return this.items.length;
+    return this.listed.length;
   }
 
   /**
@@ -188,9 +236,9 @@ export class Collection<T, V> implements Iterable<V> {
    * unknown. In production this degrades to first-wins.
    */
   get(id: string): V | undefined {
-    if (!PRODUCTION && this.ambiguousIds?.has(id)) {
+    if (!PRODUCTION && this.ix.ambiguousIds?.has(id)) {
       throw new Error(
-        `Ambiguous ${this.entityLabel} lookup: "${id}" exists under multiple factions; ` +
+        `Ambiguous ${this.ix.entityLabel} lookup: "${id}" exists under multiple factions; ` +
           `faction-less get() would return whichever copy registered first ` +
           `(wrong divergent fields). Use getInFaction("${id}", factionId), ` +
           `or getAny("${id}") when faction is genuinely unknown (import / conformance).`,
@@ -206,10 +254,10 @@ export class Collection<T, V> implements Iterable<V> {
    * id still resolves. Aliases are pre-flattened, so one hop is enough.
    */
   private rawById(id: string): T | undefined {
-    const direct = this.byId.get(id);
+    const direct = this.ix.byId.get(id);
     if (direct) return direct;
-    const aliased = this.idAliases?.[id];
-    return aliased !== undefined ? this.byId.get(aliased) : undefined;
+    const aliased = this.ix.idAliases?.[id];
+    return aliased !== undefined ? this.ix.byId.get(aliased) : undefined;
   }
 
   /**
@@ -232,9 +280,11 @@ export class Collection<T, V> implements Iterable<V> {
    */
   getInFaction(id: string, factionId: string): V | undefined {
     // Resolve a renamed id to its current form before scoping to the faction.
-    const resolvedId = this.byId.has(id) ? id : (this.idAliases?.[id] ?? id);
-    const list = this.byFactionId.get(factionId);
-    const item = list?.find((i) => this.idOf(i) === resolvedId);
+    const resolvedId = this.ix.byId.has(id)
+      ? id
+      : (this.ix.idAliases?.[id] ?? id);
+    const list = this.ix.byFactionId.get(factionId);
+    const item = list?.find((i) => this.ix.idOf(i) === resolvedId);
     return item ? this.wrapFn(item) : undefined;
   }
 
@@ -249,7 +299,9 @@ export class Collection<T, V> implements Iterable<V> {
    * identity, and one record may carry several ids from the same namespace.
    */
   byExternalRef(namespace: string, id: string): V[] {
-    return (this.byExternalRefKey.get(externalRefKey(namespace, id)) ?? []).map(
+    return (
+      this.ix.byExternalRefKey.get(externalRefKey(namespace, id)) ?? []
+    ).map(
       (item) => this.wrapFn(item),
     );
   }
@@ -273,29 +325,105 @@ export class Collection<T, V> implements Iterable<V> {
    * match returns just that record; otherwise every normalized-name-exact match
    * is returned, falling back to every normalized-name-substring match. Useful
    * to surface (rather than silently collapse) names shared across factions.
+   * Every step skips records outside this view's game mode, the exact-id step
+   * included: a name search lists, so it never returns a hidden record (use
+   * {@link getAny} to resolve one by id).
    */
   findAll(query: string): V[] {
     const byId = this.rawById(query);
-    if (byId) return [this.wrapFn(byId)];
+    if (byId && this.isListed(byId)) return [this.wrapFn(byId)];
 
     const key = normalizeName(query);
-    const exact = this.byNorm.get(key);
-    if (exact && exact.length > 0) return exact.map((i) => this.wrapFn(i));
+    const exact = this.filterListed(this.ix.byNorm.get(key) ?? []);
+    if (exact.length > 0) return exact.map((i) => this.wrapFn(i));
 
-    if (!this.nameOf || key === "") return [];
-    return this.items
-      .filter((item) => normalizeName(this.nameOf!(item) ?? "").includes(key))
+    const nameOf = this.ix.nameOf;
+    if (!nameOf || key === "") return [];
+    return this.listed
+      .filter((item) => normalizeName(nameOf(item) ?? "").includes(key))
       .map((item) => this.wrapFn(item));
   }
 
-  /** All records belonging to a faction id (empty if the type has no faction). */
+  /**
+   * All records belonging to a faction id that this view's game mode lists
+   * (empty if the type has no faction).
+   */
   byFaction(factionId: string): V[] {
-    return (this.byFactionId.get(factionId) ?? []).map((i) => this.wrapFn(i));
+    return this.filterListed(this.ix.byFactionId.get(factionId) ?? []).map(
+      (i) => this.wrapFn(i),
+    );
   }
 
   [Symbol.iterator](): Iterator<V> {
-    return this.items.map((item) => this.wrapFn(item))[Symbol.iterator]();
+    return this.listed.map((item) => this.wrapFn(item))[Symbol.iterator]();
   }
+}
+
+/** Build the shared indexes for a collection's records. */
+function buildIndex<T, V>(cfg: CollectionConfig<T, V>): CollectionIndex<T> {
+  const ix: CollectionIndex<T> = {
+    items: [],
+    byId: new Map(),
+    byNorm: new Map(),
+    byFactionId: new Map(),
+    byExternalRefKey: new Map(),
+    idOf: cfg.idOf,
+    nameOf: cfg.nameOf,
+    gameModesOf: cfg.gameModesOf,
+    idAliases: cfg.idAliases,
+    entityLabel: cfg.entityLabel ?? "entity",
+  };
+  const dedupeKeyOf = cfg.dedupeKeyOf ?? cfg.idOf;
+  const seen = new Set<string>();
+  // id -> distinct faction ids it appears under (only tracked when guarding).
+  const idFactions = cfg.guardUnscoped
+    ? new Map<string, Set<string>>()
+    : undefined;
+  for (const item of cfg.items) {
+    const dedupeKey = dedupeKeyOf(item);
+    if (seen.has(dedupeKey)) continue; // first-wins dedup
+    seen.add(dedupeKey);
+    ix.items.push(item);
+
+    const id = cfg.idOf(item);
+    if (!ix.byId.has(id)) ix.byId.set(id, item); // first-wins for shared ids
+
+    const name = cfg.nameOf?.(item);
+    if (name) push(ix.byNorm, normalizeName(name), item);
+
+    // Alias names answer to the same record. Index them after the canonical
+    // name and skip any alias that normalizes to an already-registered name,
+    // so an alias can never displace the canonical owner of a normalized key.
+    for (const alias of cfg.aliasesOf?.(item) ?? []) {
+      const aliasKey = normalizeName(alias);
+      if (
+        aliasKey === "" ||
+        aliasKey === (name ? normalizeName(name) : undefined)
+      )
+        continue;
+      push(ix.byNorm, aliasKey, item);
+    }
+    for (const ref of cfg.externalRefsOf?.(item) ?? []) {
+      push(ix.byExternalRefKey, externalRefKey(ref.namespace, ref.id), item);
+    }
+
+    const faction = cfg.factionOf?.(item);
+    if (faction) {
+      push(ix.byFactionId, faction, item);
+      if (idFactions) {
+        const set = idFactions.get(id);
+        if (set) set.add(faction);
+        else idFactions.set(id, new Set([faction]));
+      }
+    }
+  }
+  if (idFactions) {
+    ix.ambiguousIds = new Set();
+    for (const [id, factions] of idFactions) {
+      if (factions.size > 1) ix.ambiguousIds.add(id);
+    }
+  }
+  return ix;
 }
 
 function push<K, T>(map: Map<K, T[]>, key: K, value: T): void {

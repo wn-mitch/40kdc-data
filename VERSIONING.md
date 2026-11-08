@@ -8,13 +8,23 @@ Every entity and enrichment entry carries a `game_version` object:
 
 ```json
 {
-  "edition": "10th",
-  "dataslate": "2025-q3"
+  "edition": "11th",
+  "dataslate": "2026-10-14"
 }
 ```
 
 - **edition**: The game edition (e.g., `10th`, `11th`)
-- **dataslate**: Quarterly balance update identifier (e.g., `2025-q3`)
+- **dataslate**: The balance or rules update the record matches. The registry
+  `data/core/game-versions.json` lists every dataslate with its effective date
+  and the slate it supersedes. A slate that follows a Munitorum Field Manual
+  release is named by that release's date (`2026-09-30`, `2026-10-14`), and
+  `tools/src/mfm/dataslate.ts` maps each MFM dump `data_version` to its slate.
+  Other slates use a kebab-case slug (`pre-launch-provisional`, `launch`,
+  `codex-orks`), and the 10th-edition archive uses quarterly tags (`2025-q3`).
+
+The `ingest-mfm dataslates` pass stamps a record with the current dump's slate
+only when the record matches the dump. Records that claim a dump-confirmed slate but fail that
+check fall back to `pre-launch-provisional`.
 
 ## Game Modes
 
@@ -27,34 +37,43 @@ Orthogonal to `game_version` (the *edition* axis), army-construction entities ca
 - An **absent** `game_modes` means `["matched-play"]` (the competitive default), so every existing matched-play entity validates unchanged.
 - The vocabulary is the closed enum `game-mode-id` in `schemas/$defs/common.schema.json`: `matched-play` (competitive) plus `combat-patrol`, `boarding-actions`, `crusade` (non-competitive). Per-mode metadata — notably `is_competitive` — lives in the registry `data/core/game-modes.json`, mirroring `game-versions.json` / `force-dispositions.json`.
 - Only the army-construction entities carry it: `unit`, `detachment`, `enhancement`, `stratagem`, `weapon`, `unit-composition`, `wargear-option`. Faction / mission / registry entities do not.
+- Stratagems, weapons and wargear options take their modes from the records that use them: a Stratagem from its detachment, a wargear option from its unit, and a weapon from every unit that carries it, can take it, or equips it by default. Validation fails when a stamp drifts; `npm run stamp:game-modes -- --write` (from `tools/`) re-derives them, and MFM ingest writes re-derive them before validating.
+- The data packages read this axis as views. A `Dataset` lists one game mode, matched play by default; `forGameMode("combat-patrol" | "all")` opens another view. Id lookups resolve records outside the view, so share tokens and saved rosters keep resolving.
 - The MFM completeness golden dimensions coverage by mode: the headline competitive number excludes non-matched-play content, and each non-competitive mode is tracked on its own dimension. Only `combat-patrol` is auto-detected from the dump (`publication.isCombatPatrol`); the rest are schema-homed for hand-authoring. See `11e-migration.md` § "Game modes axis" for the full rationale.
 
 ## Git Tags
 
-Releases are tagged as `{edition}/{dataslate}`:
+The 10th-edition dataset is tagged `10th/2025-q3`.
 
-```
-10th/2025-q3
-11th/2025-q4
-```
+Package releases carry one shared semantic version across the four packages
+(`tools/package.json`, `crates/wh40kdc/Cargo.toml`,
+`python/src/wh40kdc/_version.py`, `go/version.go`; CI fails on drift). CI tags
+each release per registry: `npm-v{version}`, `wh40kdc-v{version}` (crates.io),
+`pypi-v{version}`, and `go/v{version}`.
 
 ## Data File Organization
 
-Enrichment data is organized by edition and dataslate:
+Data is organized by faction, not by dataslate. Each faction has a directory
+under `data/core/` and `data/enrichment/`, and each record carries its own
+`game_version`:
 
 ```
-data/enrichment/
-├── 10th/
-│   └── 2026-q1/
-│       ├── phase-mappings/
-│       ├── interaction-flags/
-│       └── abilities/
-└── 11th/
-    └── 2025-q3/
-        └── ...
+data/
+├── core/
+│   ├── game-versions.json
+│   ├── game-modes.json
+│   └── world-eaters/
+│       ├── units.json
+│       ├── weapons.json
+│       └── ...
+└── enrichment/
+    └── world-eaters/
+        ├── abilities.json
+        └── phase-mappings.json
 ```
 
-A new dataslate creates a new subdirectory. Previous dataslate data can be copied forward and diff-edited.
+A new dataslate adds an entry to `game-versions.json`; records move to it as
+they are checked against its source.
 
 ## Game Phases Across Editions
 

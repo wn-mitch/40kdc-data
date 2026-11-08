@@ -128,6 +128,8 @@ func (s *RunnerState) Dispatch(req map[string]any) map[string]any {
 		return s.handleLoadout(args)
 	case "attribution":
 		return s.handleAttribution(args)
+	case "allocate":
+		return s.handleAllocate(args)
 	case "translate_scoring":
 		return s.handleTranslateScoring(args)
 	case "translate_effect":

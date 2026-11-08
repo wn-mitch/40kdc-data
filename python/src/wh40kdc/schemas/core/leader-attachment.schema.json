@@ -8,8 +8,7 @@
     "leader_id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
     "eligible_bodyguard_ids": {
       "type": "array",
-      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
-      "minItems": 1
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }
     },
     "eligible_bodyguard_keywords": {
       "type": "array",
@@ -17,8 +16,41 @@
       "minItems": 1,
       "description": "Optional keyword-based eligibility: any unit whose keyword set (keywords ∪ faction_keywords, case-insensitive) contains ALL of these is also an eligible bodyguard, in addition to eligible_bodyguard_ids. Models rules like an Inquisitor leading any IMPERIUM BATTLELINE INFANTRY unit."
     },
+    "conditional_groups": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Attachment eligibility and role that apply only when all required roster units and no excluded roster units are present.",
+      "items": {
+        "type": "object",
+        "minProperties": 3,
+        "properties": {
+          "role": { "type": "string", "enum": ["leader", "support"] },
+          "eligible_bodyguard_ids": {
+            "type": "array",
+            "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+            "minItems": 1
+          },
+          "required_roster_unit_ids": {
+            "type": "array",
+            "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+            "minItems": 1
+          },
+          "excluded_roster_unit_ids": {
+            "type": "array",
+            "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+            "minItems": 1
+          }
+        },
+        "required": ["role", "eligible_bodyguard_ids"],
+        "additionalProperties": false
+      }
+    },
     "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
   },
   "required": ["leader_id", "eligible_bodyguard_ids", "game_version"],
+  "if": {
+    "properties": { "eligible_bodyguard_ids": { "maxItems": 0 } }
+  },
+  "then": { "required": ["conditional_groups"] },
   "additionalProperties": false
 }

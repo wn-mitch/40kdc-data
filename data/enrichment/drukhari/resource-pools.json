@@ -7,27 +7,57 @@
     "generation": [
       {
         "condition": {
-          "type": "timing-is",
+          "operator": "and",
+          "operands": [
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "phase-started",
+                "window": "event"
+              }
+            },
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        },
+        "amount": 1
+      },
+      {
+        "condition": {
+          "type": "happened",
           "parameters": {
-            "timing": "start-of-command-phase"
+            "event": "destroyed",
+            "window": "event",
+            "object": {
+              "owner": "enemy"
+            }
           }
         },
         "amount": 1
       },
       {
         "condition": {
-          "type": "timing-is",
+          "type": "happened",
           "parameters": {
-            "timing": "enemy-unit-destroyed"
-          }
-        },
-        "amount": 1
-      },
-      {
-        "condition": {
-          "type": "timing-is",
-          "parameters": {
-            "timing": "enemy-unit-fails-battle-shock"
+            "event": "after-roll",
+            "window": "event",
+            "subject": {
+              "owner": "enemy"
+            },
+            "filter": {
+              "roll": "battle-shock",
+              "result": "failure"
+            }
           }
         },
         "amount": 1

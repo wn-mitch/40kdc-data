@@ -394,7 +394,9 @@ describe("Battlemaster read-only projector", () => {
       "synthetic.tts",
       canonicalTemplates(),
     );
-    const existingLayouts: TerrainLayout[] = [
+    // Data-file records carry fields the resolver types omit.
+    type DataRecord<T> = T & { [field: string]: unknown };
+    const existingLayouts: DataRecord<TerrainLayout>[] = [
       {
         ...projection.terrain_layouts[0]!,
         name: "Superseded layout",
@@ -409,7 +411,7 @@ describe("Battlemaster read-only projector", () => {
         game_version: { edition: "11th", dataslate: "pre-launch-provisional" },
       },
     ];
-    const existingTemplates: TerrainTemplate[] = [
+    const existingTemplates: DataRecord<TerrainTemplate>[] = [
       {
         id: "bm-old-composite",
         name: "Stale Battlemaster template",

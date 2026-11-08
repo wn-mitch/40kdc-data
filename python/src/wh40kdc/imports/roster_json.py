@@ -97,14 +97,13 @@ def _parse(decoded: Any) -> dict[str, Any]:
     battle_size = roster.get("battle_size")
     battle_size_raw = _BATTLE_SIZE_LABELS.get(battle_size) if battle_size is not None else None
     points = roster["points"]
-    return {
+    parsed: dict[str, Any] = {
         "name": roster["name"],
         "generated_by": roster["source"].get("generated_by"),
         # Id slug passes through as the raw name — id-match before name lookup.
         "faction_raw_name": roster.get("faction_id"),
         "detachment_raw_names": [d["ref"]["raw_name"] for d in roster["detachments"]],
         "battle_size_raw": battle_size_raw,
-        "force_disposition": roster.get("force_disposition"),
         "declared_limit": points["declared_limit"],
         "total_reported": points["total_reported"],
         "total_computed": points["total_computed"],
@@ -112,6 +111,10 @@ def _parse(decoded: Any) -> dict[str, Any]:
         # The canonical shape carries a single primary faction.
         "multi_force": False,
     }
+    # Absent, the key is omitted, as every other adapter leaves it.
+    if roster.get("force_disposition") is not None:
+        parsed["force_disposition"] = roster["force_disposition"]
+    return parsed
 
 
 roster_json_adapter = FormatAdapter(id="roster-json", matches=_matches, parse=_parse)

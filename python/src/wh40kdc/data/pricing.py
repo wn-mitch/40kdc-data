@@ -25,7 +25,7 @@ Python mirror of ``tools/src/data/pricing.ts`` /
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any
 
 Unit = dict[str, Any]
@@ -78,7 +78,11 @@ def _keyword_slug(name: str) -> str:
     return "-".join(name.strip().lower().split())
 
 
-def host_points_tiers(unit: Unit, host_faction: Mapping[str, Any] | None) -> list[PointsTier]:
+def host_points_tiers(
+    unit: Unit,
+    host_faction: Mapping[str, Any] | None,
+    detachment_ids: Sequence[str] = (),
+) -> list[PointsTier]:
     """The points tiers in effect for a unit fielded in ``host_faction``'s army.
 
     A unit native to the host army (its ``faction_id`` IS the army's faction)
@@ -88,7 +92,14 @@ def host_points_tiers(unit: Unit, host_faction: Mapping[str, Any] | None) -> lis
     reprice); otherwise entries naming a super-faction keyword the army's
     faction carries apply (an Agents unit's ``imperium`` price). With no
     matching entry — or no army context at all — the native table stands.
+    Before all of that, ``detachment_pricing`` entries naming any of
+    ``detachment_ids`` are the table (a C'tan Shard under Pantheon of Woe).
     """
+    selected = [
+        t for t in unit.get("detachment_pricing") or [] if t.get("detachment_id") in detachment_ids
+    ]
+    if selected:
+        return selected
     native = unit.get("points") or []
     entries = unit.get("allied_points") or []
     if host_faction is None or not entries:
@@ -109,6 +120,7 @@ def host_unit_points(
     model_count: int,
     ordinal: int = 1,
     host_faction: Mapping[str, Any] | None = None,
+    detachment_ids: Sequence[str] = (),
 ) -> int:
     """:func:`base_unit_points`, priced from the tier table in effect inside
     ``host_faction``'s army (see :func:`host_points_tiers`). With no
@@ -116,7 +128,7 @@ def host_unit_points(
     across tables (allied tiers reprice the native sizes), so
     :func:`points_tier_missing` stays native-only.
     """
-    return _tier_cost(host_points_tiers(unit, host_faction), model_count, ordinal)
+    return _tier_cost(host_points_tiers(unit, host_faction, detachment_ids), model_count, ordinal)
 
 
 def points_tier_missing(unit: Unit, model_count: int, ordinal: int = 1) -> bool:

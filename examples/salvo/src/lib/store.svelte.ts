@@ -1,7 +1,9 @@
+import { scenarioContext, type Scenario } from "./scenario.js";
 import {
   Dataset,
   tryImportRoster,
   type AdapterTrial,
+  type EngineContext,
   type Roster,
   type RosterFormat,
   type Buff,
@@ -156,6 +158,18 @@ class SalvoState {
    * 18"). Null = unset → range gates stay permissive.
    */
   targetDistance = $state<number | null>(null);
+  /**
+   * Friendly units outside the combined unit whose auras and unit selections
+   * may reach it ("nearby" providers the player vouches for).
+   */
+  supportUnitIds = $state<string[]>([]);
+  /** Declared board and game state; unset fields leave their abilities unresolved. */
+  scenario = $state<Scenario>({});
+  /**
+   * Keys of the mortal-wound sources (charges, phase starts) the player counts in the combined
+   * total; off by default, since each needs its moment to happen.
+   */
+  mortalSourcesActive = $state<string[]>([]);
 
   /** Effective on/off for a lever, honouring any user override of its default. */
   isBuffEnabled(id: string, defaultEnabled: boolean): boolean {
@@ -185,6 +199,14 @@ class SalvoState {
    * hand so a stale preset's model-count override doesn't linger.
    */
   targetPresetId = $state<string | null>(null);
+  /** The defending army's detachment, Stratagems it uses on the target, and the target's Enhancement. */
+  defenderDetachmentId = $state<string | null>(null);
+  defenderStratagemIds = $state<string[]>([]);
+  defenderEnhancementId = $state<string | null>(null);
+  /** The target's wargear, with the unit it was chosen for. */
+  defenderWargear = $state<{ unitId: string; wargear: Record<string, number> } | null>(null);
+  /** The defender's on/off choices for the target's optional abilities (lever id → on), with the unit they were chosen for. */
+  defenderLevers = $state<{ unitId: string; overrides: Record<string, boolean> } | null>(null);
 
   // Fleet comparison (the "Compare" view).
   compareFactionId = $state<string | null>("world-eaters");
@@ -196,6 +218,50 @@ class SalvoState {
   compareMode = $state<"matrix" | "loadouts">("matrix");
   /** Unit whose loadouts are ranked in "loadouts" sub-mode. */
   compareLoadoutUnitId = $state<string | null>(null);
+
+  /** The dataset unit being attacked, when the target is a dataset or roster unit. */
+  get targetUnitId(): string | null {
+    if (this.targetMode === "dataset") return this.datasetTargetUnitId;
+    if (this.targetMode === "roster") return this.targetRoster?.units[this.rosterTargetUnitIndex ?? -1]?.ref.id ?? null;
+    return null;
+  }
+
+  /** The wargear chosen for the current target; null (its out-of-the-box loadout) once the target changes. */
+  get targetWargear(): Record<string, number> | null {
+    return this.defenderWargear && this.defenderWargear.unitId === this.targetUnitId ? this.defenderWargear.wargear : null;
+  }
+
+  /** The defender's choices for the current target's optional abilities; none once the target changes. */
+  get targetLeverOverrides(): Record<string, boolean> {
+    return this.defenderLevers && this.defenderLevers.unitId === this.targetUnitId ? this.defenderLevers.overrides : {};
+  }
+
+  /** Turn one of the current target's optional abilities on or off. */
+  setTargetLever(id: string, on: boolean): void {
+    const unitId = this.targetUnitId;
+    if (!unitId) return;
+    this.defenderLevers = { unitId, overrides: { ...this.targetLeverOverrides, [id]: on } };
+  }
+
+  /**
+   * The engine context the projection crunches under: the phase, the attacker's movement and
+   * range flags, cover, the distance and the declared scenario. The defender's levers are listed
+   * under it too, so a lever behind an answered condition is offered exactly when it can apply.
+   */
+  get projectionContext(): EngineContext {
+    return {
+      phase: this.phase,
+      attackerStationary: this.contextFlags.attackerStationary,
+      withinHalfRange: this.contextFlags.withinHalfRange,
+      attackerCharged: this.contextFlags.attackerCharged,
+      targetInCover: this.manualBuffsActive.has("cover"),
+      attackerAttached: this.attachedUnitIds.length > 0,
+      // Drives range-gated abilities (e.g. Furious Onslaught's 18" reroll). Unset
+      // → range gates stay permissive.
+      ...(this.targetDistance !== null ? { distanceInches: this.targetDistance } : {}),
+      ...scenarioContext(this.scenario),
+    };
+  }
 
   /** Apply a target-profile preset: point the dataset target at its unit. */
   applyTargetPreset(profileId: string): void {

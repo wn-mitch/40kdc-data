@@ -8,7 +8,7 @@
 
 > **TerrainAreaKeyword** = `"obscuring"` \| `"hidden"` \| `"plunging-fire"`
 
-Defined in: [generated.ts:125](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L125)
+Defined in: [generated.ts:295](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/generated.ts#L295)
 
 An 11e terrain-area keyword. Confirmed launch set; extend as further keywords publish on dataslate.
 

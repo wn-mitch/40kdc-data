@@ -1,0 +1,80 @@
+{
+  "name": "bolt-rifle (saturation) x5 vs intercessor, BS improved by 2 floors at 2+, an Attacks lift for another weapon is dropped",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting"
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-skill-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "skill-mod",
+        "stat": "BS",
+        "value": 2
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-skill-rule",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "skill-mod",
+        "stat": "WS",
+        "value": 1
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-named-rule",
+        "abilityKind": "unit"
+      },
+      "applicableWhen": {
+        "weaponName": "power fist"
+      },
+      "contribution": {
+        "type": "attacks-mod",
+        "value": 1
+      }
+    },
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-named-rule",
+        "abilityKind": "unit"
+      },
+      "applicableWhen": {
+        "weaponName": "bolt rifles"
+      },
+      "contribution": {
+        "type": "attacks-mod",
+        "value": 1
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 15,
+      "hits": 12.5,
+      "wounds": 6.25,
+      "unsaved": 3.125,
+      "damage": 3.125,
+      "after-fnp": 3.125,
+      "models-killed": 1.5625
+    }
+  }
+}

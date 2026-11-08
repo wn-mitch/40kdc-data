@@ -64,7 +64,9 @@ input:focus, select:focus, textarea:focus {
    Below 1100px the columns stack as a single scrolling document. */
 .app {
   display: grid;
-  grid-template-columns: 1fr;
+  /* minmax(0, 1fr), not 1fr: a bare 1fr track grows to its widest child's
+     min-content (a long <select> option), which overflowed phone widths. */
+  grid-template-columns: minmax(0, 1fr);
   grid-template-areas:
     "header"
     "tabs"
@@ -77,7 +79,7 @@ input:focus, select:focus, textarea:focus {
 
 @media (min-width: 960px) {
   .app {
-    grid-template-columns: minmax(380px, 480px) 1fr;
+    grid-template-columns: minmax(380px, 480px) minmax(0, 1fr);
     grid-template-rows: auto auto 1fr auto;
     grid-template-areas:
       "header header"
@@ -93,7 +95,7 @@ input:focus, select:focus, textarea:focus {
 
 @media (min-width: 1600px) {
   .app {
-    grid-template-columns: 560px 1fr;
+    grid-template-columns: 560px minmax(0, 1fr);
   }
 }
 
@@ -113,21 +115,30 @@ footer.app-footer { grid-area: footer; }
   gap: var(--space-1, 4px);
   padding: var(--space-2) var(--space-3) 0;
 }
-.view-tabs button {
-  padding: var(--space-1, 6px) var(--space-3, 14px);
-  background: transparent;
-  border: 1px solid var(--border, #2a2a2a);
-  border-bottom: none;
-  border-radius: 6px 6px 0 0;
-  color: var(--muted);
-  cursor: pointer;
+.view-tabs {
+  border-bottom: 1px solid var(--border);
 }
+.view-tabs button {
+  padding: var(--space-2) var(--space-4);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  margin-bottom: -1px;
+}
+.view-tabs button:hover { color: var(--text); border-color: var(--border-strong); }
 .view-tabs button.active {
-  background: var(--surface, #1f1f1f);
-  color: var(--fg, #e8e8e8);
+  background: var(--panel);
+  color: var(--text);
+  font-weight: 600;
+  border-color: var(--border);
+  box-shadow: inset 0 2px 0 var(--accent);
 }
 
 .column {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -173,7 +184,8 @@ footer.app-footer { grid-area: footer; }
 }
 
 .row { display: flex; gap: var(--space-2); align-items: center; margin-bottom: var(--space-2); flex-wrap: wrap; }
-.row label { color: var(--muted); font-size: var(--text-xs); min-width: 70px; }
+.row label, .row .label { color: var(--muted); font-size: var(--text-xs); min-width: 70px; }
+.row .tabs { margin-bottom: 0; }
 .row .grow { flex: 1; min-width: 0; }
 
 textarea {
@@ -268,8 +280,11 @@ select { max-width: 100%; }
   border-bottom: none;
   padding-top: var(--space-3);
   font-size: var(--text-md);
-  color: var(--accent);
+  color: var(--text);
 }
+/* The answer the user came for (damage after FNP, models killed) carries the
+   accent; the intermediate stages stay neutral so the eye lands on it. */
+.stages tr.total td.headline { color: var(--accent); font-size: var(--text-lg); }
 .stages tr.total td.value { font-weight: 600; }
 .stages tr.total:hover { background: transparent; }
 
@@ -281,6 +296,7 @@ select { max-width: 100%; }
 
 .dim { color: var(--muted); }
 .error { color: var(--danger); font-size: var(--text-xs); margin-top: var(--space-1); }
+.success { color: var(--good); }
 
 .empty-state {
   padding: var(--space-3);
@@ -305,6 +321,7 @@ select { max-width: 100%; }
 }
 .tabs button {
   flex: 1;
+  text-transform: capitalize;
   font-size: var(--text-xs);
   padding: var(--space-1) var(--space-2);
   border: none;
@@ -326,7 +343,7 @@ select { max-width: 100%; }
   cursor: not-allowed;
 }
 
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
 
 details > summary {
   cursor: pointer;
@@ -334,3 +351,37 @@ details > summary {
   font-size: var(--text-xs);
 }
 details > summary:hover { color: var(--text); }
+
+/* Phone: 16px side gutter, 16px form text (smaller text makes iOS Safari
+   zoom the page on focus) and touch-sized controls. */
+@media (max-width: 640px) {
+  .column, .column.output { padding: var(--space-3) var(--space-4); }
+  .view-tabs { padding: var(--space-2) var(--space-4) 0; }
+  input:not([type="checkbox"]):not([type="radio"]), select, textarea { font-size: 16px; }
+  input:not([type="checkbox"]):not([type="radio"]), select { min-height: 40px; }
+  button { min-height: 40px; padding: var(--space-2) var(--space-3); font-size: var(--text-sm); }
+  .tabs button { min-height: 36px; }
+  .ability-row { min-height: 40px; }
+  input[type="checkbox"] { width: 18px; height: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Room under the footer for the phone result dock (result-dock.svelte). */
+@media (max-width: 959px) {
+  .app:has(.dock) { padding-bottom: 80px; }
+}

@@ -157,17 +157,18 @@ fn linked_query_abilities_of_returns_ordered_ids() {
         "args": {"query": "abilities_of", "input": {"unitId": "kharn-the-betrayer"}}
     })]);
     let abilities = responses[0]["value"].as_array().expect("array");
-    // Must contain the four canonical abilities; order pinned by data file.
+    // Kharn's datasheet abilities and the army rule it prints; order pinned by data file.
     assert_eq!(
         abilities
             .iter()
             .map(|v| v.as_str().unwrap())
             .collect::<Vec<_>>(),
         vec![
-            "berzerker-frenzy",
+            "berzerker-frenzy-world-eaters",
             "leader",
-            "legendary-killer",
-            "the-betrayer"
+            "legendary-killer-world-eaters",
+            "the-betrayer-world-eaters",
+            "blessings-of-khorne-world-eaters"
         ],
     );
 }

@@ -7,6 +7,7 @@ export function formatReport(
   result: ValidationResult,
   mode: ReporterMode,
   title = "40kdc Data Validation Report",
+  maxDiagnosticsPerRecord = Infinity,
 ): string {
   if (mode === "json") {
     return JSON.stringify(result, null, 2);
@@ -27,8 +28,12 @@ export function formatReport(
     for (const err of result.errors) {
       const loc = err.index >= 0 ? `[${err.index}]` : "";
       lines.push(chalk.red(`  ✗ ${err.file}${loc}`));
-      for (const e of err.errors) {
+      for (let i = 0; i < Math.min(err.errors.length, maxDiagnosticsPerRecord); i++) {
+        const e = err.errors[i]!;
         lines.push(chalk.yellow(`    ${e.path}: ${e.message}`));
+      }
+      if (err.errors.length > maxDiagnosticsPerRecord) {
+        lines.push(chalk.yellow(`    (${err.errors.length - maxDiagnosticsPerRecord} additional diagnostics omitted for this record)`));
       }
     }
   } else {

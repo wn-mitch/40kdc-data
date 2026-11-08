@@ -1,0 +1,85 @@
+{
+  "cases": [
+    {
+      "caseId": "army-faction-from-input",
+      "input": {
+        "unitId": "beasts-of-nurgle",
+        "factionId": "chaos-daemons"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "sources": [
+          {
+            "abilityId": "the-shadow-of-chaos-chaos-daemons",
+            "id": "the-shadow-of-chaos-chaos-daemons",
+            "moment": "before-roll:battle-shock",
+            "expected": 2,
+            "needKeys": [
+              "attacker:{\"parameters\":{\"region\":{\"rule_region\":{\"owner_faction\":\"chaos-daemons\",\"region_id\":\"the-shadow-of-chaos\"}},\"subject\":\"event-subject\"},\"type\":\"in-region\"}",
+              "attacker:{\"parameters\":{\"filter\":{\"within\":{\"of\":{\"any_of\":[\"BLOODTHIRSTER\",\"GREAT UNCLEAN ONE\",\"KAIROS FATEWEAVER\",\"KEEPER OF SECRETS\",\"LORD OF CHANGE\",\"ROTIGUS\",\"SHALAXI HELBANE\",\"SKARBRAND\"],\"owner\":\"friendly\"},\"range\":{\"inches\":6}}},\"subject\":\"event-subject\"},\"type\":\"matches\"}",
+              "attacker:{\"parameters\":{\"result\":\"failure\",\"roll\":\"battle-shock\"},\"type\":\"roll-result\"}"
+            ]
+          }
+        ],
+        "unsupported": [
+          {
+            "abilityId": "deadly-demise",
+            "reason": "mortal-wounds: for-each-unit reaches units of either side"
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "army-faction-from-unit",
+      "input": {
+        "unitId": "beasts-of-nurgle"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "expected": {
+        "sources": [
+          {
+            "abilityId": "the-shadow-of-chaos-chaos-daemons",
+            "id": "the-shadow-of-chaos-chaos-daemons",
+            "moment": "before-roll:battle-shock",
+            "expected": 2,
+            "needKeys": [
+              "attacker:{\"parameters\":{\"region\":{\"rule_region\":{\"owner_faction\":\"chaos-daemons\",\"region_id\":\"the-shadow-of-chaos\"}},\"subject\":\"event-subject\"},\"type\":\"in-region\"}",
+              "attacker:{\"parameters\":{\"filter\":{\"within\":{\"of\":{\"any_of\":[\"BLOODTHIRSTER\",\"GREAT UNCLEAN ONE\",\"KAIROS FATEWEAVER\",\"KEEPER OF SECRETS\",\"LORD OF CHANGE\",\"ROTIGUS\",\"SHALAXI HELBANE\",\"SKARBRAND\"],\"owner\":\"friendly\"},\"range\":{\"inches\":6}}},\"subject\":\"event-subject\"},\"type\":\"matches\"}",
+              "attacker:{\"parameters\":{\"result\":\"failure\",\"roll\":\"battle-shock\"},\"type\":\"roll-result\"}"
+            ]
+          }
+        ],
+        "unsupported": [
+          {
+            "abilityId": "deadly-demise",
+            "reason": "mortal-wounds: for-each-unit reaches units of either side"
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "army-faction-context-wins",
+      "input": {
+        "unitId": "beasts-of-nurgle",
+        "factionId": "chaos-daemons"
+      },
+      "context": {
+        "phase": "shooting",
+        "armyFaction": "adeptus-astartes"
+      },
+      "expected": {
+        "sources": [],
+        "unsupported": [
+          {
+            "abilityId": "deadly-demise",
+            "reason": "mortal-wounds: for-each-unit reaches units of either side"
+          }
+        ]
+      }
+    }
+  ]
+}

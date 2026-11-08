@@ -58,17 +58,23 @@ shadows. `.focus-ring` applies the 2px accent focus box.
 
 ## Layout
 
-Three zones, glanceable on a phone at the table:
+One column of sections, glanceable on a phone at the table:
 
-- **Primary + active secondary** stacked on the left (the cards you are reading).
-- **Scorecard** centered: a compact VP ledger (primary, secondary, total) — a
-  running tally, *not* a hero-metric big-number treatment.
-- **Drawn-secondaries hand** on the right: drawn cards with remaining cap; tap to
-  make one active and assert the awards you scored.
+- **Disposition matrix**: pick both Force Dispositions to read the matchup's
+  mission cards. On phones (below the `sm` breakpoint) pill rows replace the
+  matrix.
+- **Terrain**: the matchup's terrain layouts, once both dispositions are picked.
+- **Scoreboard** (sticky): battle round, the WTC 20-point result and reset; a
+  compact running tally, *not* a hero-metric big-number treatment.
+- **Player columns** (You and Opponent): command points, the per-round WTC grid,
+  scored secondaries, the primary mission card with its scoring panel, and the
+  drawn-secondaries hand (tap a card to make it active and assert the awards you
+  scored).
 
-Collapses to a single column under ~560px (phone is the primary device). The
-disposition matrix stays as the primary selector on wide screens; pill rows
-replace it on phones.
+The two player columns sit side by side from the `lg` breakpoint. Below it one
+column shows at a time and the scoreboard carries the You/Opponent switcher;
+the hidden column stays mounted so in-progress scoring is kept. Phone is the
+primary device.
 
 ## Anti-references / slop guards
 

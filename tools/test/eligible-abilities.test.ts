@@ -1,18 +1,30 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/dataset.js";
+import { reachesOtherUnits } from "../src/abilities-resolver/resolver.js";
+import { emptyRawData } from "../src/data/types.js";
 
 const ds = Dataset.embedded();
 
 describe("Dataset.eligibleAbilities", () => {
-  it("surfaces the Oath of Moment faction rule for adeptus-astartes units", () => {
+  it("surfaces a Combat Patrol's army rule only in its own detachment", () => {
     const intercessor = ds.units.find("Intercessor Squad");
     expect(intercessor, "intercessor-squad missing").toBeDefined();
-    const result = ds.eligibleAbilities(
-      { unitId: intercessor!.id, factionId: "adeptus-astartes" },
-      "shooting",
-    );
-    const armyIds = result.filter((e) => e.source.kind === "army").map((e) => e.ability.id);
-    expect(armyIds).toContain("oath-of-moment");
+    const armyIds = (detachmentId?: string) => ds
+      .eligibleAbilities({ unitId: intercessor!.id, factionId: "adeptus-astartes", detachmentId }, "shooting")
+      .filter((e) => e.source.kind === "army")
+      .map((e) => e.ability.id);
+    expect(armyIds("assault-force")).toContain("combat-doctrines-assault-force-adeptus-astartes");
+    expect(armyIds()).not.toContain("combat-doctrines-assault-force-adeptus-astartes");
+    expect(armyIds("gladius-task-force")).not.toContain("combat-doctrines-assault-force-adeptus-astartes");
+  });
+
+  it("offers Templar Vows only as the Vow-Sworn Crusaders detachment rule", () => {
+    const sources = (detachmentId: string) => ds
+      .eligibleAbilities({ unitId: "intercessor-squad", factionId: "black-templars", detachmentId }, "fight")
+      .filter((e) => e.ability.id === "templar-vows-black-templars")
+      .map((e) => e.source.kind);
+    expect(sources("vow-sworn-crusaders")).toEqual(["detachment"]);
+    expect(sources("gladius-task-force")).toEqual([]);
   });
 
   it("returns nothing for an unknown unit", () => {
@@ -21,16 +33,15 @@ describe("Dataset.eligibleAbilities", () => {
 
   it("filters by phase", () => {
     const intercessor = ds.units.find("Intercessor Squad")!;
-    // Pick a phase Oath of Moment doesn't trigger in — the faction rule is
-    // phase-permissive (no explicit phase-mapping), so the resolver keeps it
-    // available everywhere. This test pins that "no mapping = surface in
-    // every phase" behaviour against accidental tightening.
+    // The army rule is phase-permissive (no explicit phase-mapping), so the
+    // resolver keeps it available everywhere. This test pins that
+    // "no mapping = surface in every phase" behaviour against tightening.
     const inCommand = ds.eligibleAbilities(
-      { unitId: intercessor.id, factionId: "adeptus-astartes" },
+      { unitId: intercessor.id, factionId: "adeptus-astartes", detachmentId: "assault-force" },
       "command",
     );
     const armyIds = inCommand.filter((e) => e.source.kind === "army").map((e) => e.ability.id);
-    expect(armyIds).toContain("oath-of-moment");
+    expect(armyIds).toContain("combat-doctrines-assault-force-adeptus-astartes");
   });
 
   it("includes the unit's own ability_ids", () => {
@@ -89,26 +100,23 @@ describe("Dataset.eligibleAbilities", () => {
 });
 
 describe("Dataset.buffsFor (M2 — abilities)", () => {
-  it("Oath of Moment contributes a hit reroll", () => {
+  it("Combat Doctrines is a stance: nothing auto-applies, Devastator surfaces as a lever", () => {
     const intercessor = ds.units.find("Intercessor Squad")!;
-    const buffs = ds.buffsFor(
-      { unitId: intercessor.id, factionId: "adeptus-astartes" },
-      { phase: "shooting" },
-    );
-    // Oath of Moment marks one enemy unit; attacks against it re-roll the Hit
-    // roll. (The +1 to Wound is a mono-codex roster precondition, carried in
-    // community_notes rather than the runtime buff layer.)
-    const rerolls = buffs.filter((b) => b.contribution.type === "reroll");
-    const rerollTypes = rerolls.map((b) =>
-      b.contribution.type === "reroll" ? b.contribution.roll : null,
-    );
-    expect(rerollTypes).toContain("hit");
-    expect(rerollTypes).not.toContain("wound");
-    // And it's tagged as army-source.
-    const oathSourced = rerolls.filter(
-      (b) => b.source.kind === "ability" && b.source.abilityId === "oath-of-moment",
-    );
-    expect(oathSourced.length).toBe(1);
+    const ctx = { phase: "shooting" as const };
+    // The authored Combat Doctrines is the Assault Force patrol's copy, eligible in that detachment.
+    const input = { unitId: intercessor.id, factionId: "adeptus-astartes", detachmentId: "assault-force" };
+    // The army rule is a player-selected stance, so the attacker walk applies
+    // no army-sourced buff — a passive reroll here would mean the rule was
+    // modelled as always-on again.
+    const armyBuffs = ds
+      .buffsFor(input, ctx)
+      .filter((b) => b.source.kind === "ability" && b.source.abilityKind === "army");
+    expect(armyBuffs).toEqual([]);
+    // Its one buff-bearing option is offered as a mutually-exclusive lever.
+    const { buffs: levers } = ds.stackableBuffsFor(input, ctx);
+    const devastator = levers.find((l) => l.id === "combat-doctrines-assault-force-adeptus-astartes#devastator-doctrine");
+    expect(devastator, "Devastator Doctrine lever missing").toBeDefined();
+    expect(devastator!.group).toBe("combat-doctrines-assault-force-adeptus-astartes?stance");
   });
 
   it("respects optedInStratagemIds — stratagems are excluded by default", () => {
@@ -126,17 +134,100 @@ describe("Dataset.buffsFor (M2 — abilities)", () => {
 
   it("concatenates weapon-profile keyword buffs with ability buffs", () => {
     const intercessor = ds.units.find("Intercessor Squad")!;
-    const buffs = ds.buffsFor(
-      {
-        unitId: intercessor.id,
-        factionId: "adeptus-astartes",
-        weaponProfiles: [{ weaponId: "bolt-rifle", profileIndex: 0 }],
-      },
-      { phase: "shooting", attackerStationary: true },
+    const base = { unitId: intercessor.id, factionId: "adeptus-astartes" };
+    const ctx = { phase: "shooting" as const, attackerStationary: true };
+    const withoutWeapon = ds.buffsFor(base, ctx);
+    const withWeapon = ds.buffsFor(
+      { ...base, weaponProfiles: [{ weaponId: "bolt-rifle", profileIndex: 0 }] },
+      ctx,
     );
-    // Heavy (stationary) buff from bolt-rifle + Oath of Moment rerolls.
-    const sources = buffs.map((b) => `${b.source.kind}:${"keywordId" in b.source ? b.source.keywordId : b.source.kind === "ability" ? b.source.abilityId : ""}`);
-    expect(sources).toContain("weapon-keyword:heavy");
-    expect(sources).toContain("ability:oath-of-moment");
+    // The profile's Heavy (stationary) keyword contributes a buff the bare
+    // ability walk does not produce: the two sources concatenate onto one stack.
+    const keywords = (bs: typeof withWeapon) =>
+      bs.map((b) => `${b.source.kind}:${"keywordId" in b.source ? b.source.keywordId : ""}`);
+    expect(keywords(withWeapon)).toContain("weapon-keyword:heavy");
+    expect(keywords(withoutWeapon)).not.toContain("weapon-keyword:heavy");
+    expect(withWeapon.length).toBeGreaterThan(withoutWeapon.length);
+  });
+});
+
+describe("grant definition reach", () => {
+  const definition = {
+    effect: {
+      type: "re-roll",
+      target: { owner: "friendly", within: { range: { inches: 6 }, of: "this-unit" } },
+      modifier: { roll: "hit", subset: "ones" },
+    },
+  };
+
+  it("isolates model-only granted definitions without hiding unit-granted auras", () => {
+    expect(reachesOtherUnits({ type: "ability-grant", target: "this-model", modifier: { definition } })).toBe(false);
+    expect(reachesOtherUnits({ type: "ability-grant", target: "model-in-this-unit", modifier: { definition } })).toBe(false);
+    expect(reachesOtherUnits({ type: "ability-grant", target: { level: "model", member_of: "this-unit" }, modifier: { definition } })).toBe(false);
+    expect(reachesOtherUnits({ type: "ability-grant", target: "this-unit", modifier: { definition } })).toBe(true);
+    expect(reachesOtherUnits({ type: "ability-grant", target: { owner: "friendly", level: "model" }, modifier: { definition } })).toBe(true);
+  });
+});
+
+describe("actual attachment membership", () => {
+  const base = ds.units.find("Intercessor Squad")!.raw;
+  const ability = {
+    ability_id: "bodyguard-rule",
+    name: "Bodyguard Rule",
+    faction_id: base.faction_id,
+    game_version: base.game_version,
+    effect: {
+      type: "re-roll",
+      target: { level: "model", member_of: "this-unit", attachment_role: "bodyguard" },
+      modifier: { roll: "hit", subset: "ones" },
+    },
+  };
+  const attached = new Dataset({
+    ...emptyRawData(),
+    abilities: [ability as never],
+    units: [
+      { ...base, id: "character-bodyguard", keywords: ["Character", "Infantry"], ability_ids: ["bodyguard-rule", "leader"] },
+      { ...base, id: "first-leader", keywords: ["Character"], ability_ids: ["leader"] },
+      { ...base, id: "second-leader", keywords: ["Infantry"], ability_ids: [] },
+    ],
+  });
+  const attachmentRoles = { "character-bodyguard": "bodyguard", "first-leader": "leader", "second-leader": "leader" } as const;
+  const input = (unitId: string) => ({
+    unitId,
+    factionId: base.faction_id,
+    attachedUnitIds: Object.keys(attachmentRoles).filter((id) => id !== unitId),
+    attachmentRoles,
+  });
+
+  it("includes CHARACTER bodyguards and excludes every actual leader, not Leader capability", () => {
+    expect(attached.buffsFor(input("character-bodyguard"), { phase: "shooting" })
+      .map((buff) => buff.contribution)).toEqual([{ type: "reroll", roll: "hit", subset: "ones" }]);
+    expect(attached.buffsFor(input("first-leader"), { phase: "shooting" })).toEqual([]);
+    expect(attached.buffsFor(input("second-leader"), { phase: "shooting" })).toEqual([]);
+  });
+
+  it("does not guess a bodyguard role from attachment presence or CHARACTER", () => {
+    const { attachmentRoles: _roles, ...unknownRoles } = input("character-bodyguard");
+    expect(attached.buffsFor(unknownRoles, { phase: "shooting" })).toEqual([]);
+  });
+
+  it("keeps explicit context roles and caller context intact", () => {
+    const context = { phase: "shooting", attackerAttachmentRole: "leader" } as const;
+    expect(attached.buffsFor(input("character-bodyguard"), context)).toEqual([]);
+    expect(context).toEqual({ phase: "shooting", attackerAttachmentRole: "leader" });
+  });
+
+  it("uses the defender's actual role without confusing it with the attacker", () => {
+    const defending = new Dataset({
+      ...emptyRawData(),
+      units: attached.units.all.map((unit) => unit.raw),
+      abilities: [{
+        ...ability,
+        effect: { ...ability.effect, modifier: { roll: "save", subset: "ones" } },
+      } as never],
+    });
+    expect(defending.defensiveBuffsFor(input("character-bodyguard"), { phase: "shooting", attackerAttachmentRole: "leader" })
+      .map((buff) => buff.contribution)).toEqual([{ type: "reroll", roll: "save", subset: "ones" }]);
+    expect(defending.defensiveBuffsFor(input("first-leader"), { phase: "shooting", attackerAttachmentRole: "bodyguard" })).toEqual([]);
   });
 });

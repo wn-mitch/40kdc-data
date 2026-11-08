@@ -171,7 +171,9 @@ describe("Codex snapshot projection", () => {
     const sourceInventory = inventory();
     sourceInventory.entities.units[0].weapon_ids = ["retired-weapon"];
     sourceInventory.entities.weapons = [{ id: "retired-weapon", game_version: version }];
-    sourceInventory.entities.unit_compositions[0].models[0].default_weapon_ids = ["retired-weapon"];
+    const models = sourceInventory.entities.unit_compositions[0].models;
+    if (!Array.isArray(models)) throw new Error("fixture composition has no models");
+    models[0].default_weapon_ids = ["retired-weapon"];
     sourceInventory.retire = { weapons: ["retired-weapon"] };
     expect(() => projectInventory(sourceInventory, current())).toThrow(/cannot retire weapons:retired-weapon/);
   });

@@ -1,0 +1,15 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ LIST NAME: Imported roster
++ FACTION KEYWORD: Adeptus Astartes
++ DETACHMENT: Gladius Task Force
++ FORCE DISPOSITION: Priority Assets
++ TOTAL ARMY POINTS: 310pts
++ POINTS LIMIT: 310pts
++
++ WARLORD: Char1: Marneus Calgar in Armour of Antilochus
++ ENHANCEMENT: —
++ NUMBER OF UNITS: 2
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char1: 1x Marneus Calgar in Armour of Antilochus (180 pts): Gauntlets of Ultramar, Warlord
+1x Death Company Marines with Jump Packs (130 pts): 5x Astartes chainsword, 5x Heavy bolt pistol

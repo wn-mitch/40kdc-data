@@ -1,3 +1,7 @@
+import json
+import subprocess
+import sys
+
 from wh40kdc.imports.gw_headerless import gw_headerless_adapter
 
 _EVENT_EXPORT = """Participant
@@ -59,3 +63,32 @@ Tunnel Guide (70 Points)
     assert guide["enhancement_raw_name"] == "Fabricated Relic"
     assert guide["model_count"] == 3
     assert {item["raw_name"] for item in guide["wargear"]} == {"Tool"}
+
+
+_KEYWORDS = [f"Fabricated Keyword {letter}" for letter in "ABCDEFGHIJ"]
+_KEYWORD_LIST = (
+    "Keyword Order (100 points)\n\nCHARACTERS\n\nCaptain (100 points)\n"
+    + "".join(f"  • This Datasheet also has the {k} keyword\n" for k in _KEYWORDS)
+    + "  • 1x Bolt pistol\n"
+)
+_PARSE_KEYWORDS = (
+    "import json, sys\n"
+    "from wh40kdc.imports.gw_headerless import gw_headerless_adapter\n"
+    "unit = gw_headerless_adapter.parse(sys.stdin.read())['units'][0]\n"
+    "print(json.dumps(unit['keyword_overrides']))\n"
+)
+
+
+def test_keyword_overrides_keep_source_order_under_any_hash_seed() -> None:
+    # String hashing is randomized per process, so an order taken from a set
+    # differs between seeds. Each seed runs in its own interpreter.
+    for seed in ("0", "1", "2", "3", "4"):
+        result = subprocess.run(
+            [sys.executable, "-c", _PARSE_KEYWORDS],
+            input=_KEYWORD_LIST,
+            capture_output=True,
+            text=True,
+            check=True,
+            env={"PYTHONHASHSEED": seed, "PYTHONPATH": ":".join(sys.path)},
+        )
+        assert json.loads(result.stdout) == _KEYWORDS, f"PYTHONHASHSEED={seed}"

@@ -1,7 +1,13 @@
 """Linked, typed access to the embedded dataset."""
 
 from wh40kdc.data.bundle import COLLECTION_KEYS, RawData, empty_raw_data, raw_data
-from wh40kdc.data.collection import Collection
+from wh40kdc.data.collection import (
+    DEFAULT_GAME_MODE,
+    GAME_MODE_VIEWS,
+    Collection,
+    GameModeView,
+    in_game_mode,
+)
 from wh40kdc.data.dataset import Dataset
 from wh40kdc.data.entities import (
     AbilityView,
@@ -25,10 +31,13 @@ from wh40kdc.data.pricing import base_unit_points, points_tier_missing
 
 __all__ = [
     "COLLECTION_KEYS",
+    "DEFAULT_GAME_MODE",
+    "GAME_MODE_VIEWS",
     "AbilityView",
     "Collection",
     "Dataset",
     "FactionView",
+    "GameModeView",
     "RawData",
     "UnitView",
     "WeaponKeywordView",
@@ -38,6 +47,7 @@ __all__ = [
     "check_unit_legality",
     "clamp_weapon_count",
     "empty_raw_data",
+    "in_game_mode",
     "loadout_candidates",
     "maximal_loadout",
     "normalize_name",

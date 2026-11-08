@@ -1,0 +1,207 @@
+{
+  "slug": "",
+  "key": "",
+  "visible": "hidden",
+  "locked": false,
+  "rulebook": {
+    "name": "40kdc",
+    "game": "Warhammer 40,000",
+    "publisher": "Alpaca Software",
+    "url": "https://40kdc.dev",
+    "genre": "wargame"
+  },
+  "snapshot": {
+    "item": "Roster§Roster",
+    "name": "Combat Patrol import",
+    "quantity": 1,
+    "assets": {
+      "included": [
+        {
+          "item": "Faction§Adepta Sororitas",
+          "name": "Adepta Sororitas",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Sanctuary Guardians",
+          "name": "Sanctuary Guardians",
+          "quantity": 1
+        },
+        {
+          "item": "Unit§Sanctuary Canoness Adalya",
+          "name": "Sanctuary Canoness Adalya",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 0
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Condemnor boltgun",
+                "name": "Condemnor boltgun",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Hallowed chainsword",
+                "name": "Hallowed chainsword",
+                "quantity": 1
+              }
+            ],
+            "traits": [
+              {
+                "item": "Trait§Warlord",
+                "name": "Warlord",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Sanctuary Guardians Battle Sisters Squad",
+          "name": "Sanctuary Guardians Battle Sisters Squad",
+          "quantity": 10,
+          "stats": {
+            "Points": {
+              "value": 0
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Model§Battle Sister with Simulacrum Imperialis",
+                "name": "Battle Sister with Simulacrum Imperialis",
+                "quantity": 1,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Bolt pistol",
+                      "name": "Bolt pistol",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Boltgun",
+                      "name": "Boltgun",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§simulacrum imperialis",
+                      "name": "simulacrum imperialis",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Stocks and Fists",
+                      "name": "Stocks and Fists",
+                      "quantity": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "item": "Model§Battle Sister with Ministorum Flamer",
+                "name": "Battle Sister with Ministorum Flamer",
+                "quantity": 1,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Bolt pistol",
+                      "name": "Bolt pistol",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Ministorum flamer",
+                      "name": "Ministorum flamer",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Stocks and Fists",
+                      "name": "Stocks and Fists",
+                      "quantity": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "item": "Model§Battle Sister",
+                "name": "Battle Sister",
+                "quantity": 6,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Bolt pistol",
+                      "name": "Bolt pistol",
+                      "quantity": 36
+                    },
+                    {
+                      "item": "Weapon§Boltgun",
+                      "name": "Boltgun",
+                      "quantity": 6
+                    },
+                    {
+                      "item": "Weapon§Stocks and Fists",
+                      "name": "Stocks and Fists",
+                      "quantity": 36
+                    }
+                  ]
+                }
+              },
+              {
+                "item": "Model§Battle Sister with Ministorum Heavy Flamer",
+                "name": "Battle Sister with Ministorum Heavy Flamer",
+                "quantity": 1,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Bolt pistol",
+                      "name": "Bolt pistol",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Ministorum heavy flamer",
+                      "name": "Ministorum heavy flamer",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Stocks and Fists",
+                      "name": "Stocks and Fists",
+                      "quantity": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "item": "Model§Sister Superior",
+                "name": "Sister Superior",
+                "quantity": 1,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Bolt pistol",
+                      "name": "Bolt pistol",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Combi-weapon",
+                      "name": "Combi-weapon",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Power weapon",
+                      "name": "Power weapon",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Stocks and Fists",
+                      "name": "Stocks and Fists",
+                      "quantity": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

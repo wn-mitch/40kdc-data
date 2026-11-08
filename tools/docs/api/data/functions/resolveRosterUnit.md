@@ -6,9 +6,9 @@
 
 # Function: resolveRosterUnit()
 
-> **resolveRosterUnit**(`rosterUnit`, `dataset`): [`UnitView`](../classes/UnitView.md) \| `undefined`
+> **resolveRosterUnit**(`rosterUnit`, `dataset`, `factionId?`): [`UnitView`](../classes/UnitView.md) \| `undefined`
 
-Defined in: [data/roster-resolve.ts:23](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/roster-resolve.ts#L23)
+Defined in: [data/roster-resolve.ts:33](https://github.com/wn-mitch/40kdc-data/blob/421139971c86ec118e72d39959ebf2264a8a8f2b/tools/src/data/roster-resolve.ts#L33)
 
 Resolve a roster's unit entry against the dataset, returning the linked
 [UnitView](../classes/UnitView.md). Returns `undefined` when:
@@ -28,6 +28,10 @@ own `diagnostics` field.
 ### dataset
 
 [`Dataset`](../classes/Dataset.md)
+
+### factionId?
+
+`string` \| `null`
 
 ## Returns
 

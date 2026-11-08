@@ -5,7 +5,7 @@ Chaos Space Marines - Imported roster - [295 pts]
 List Name: Imported roster
 Faction: Chaos Space Marines
 Detachment: Huron’s Marauders
-Force Disposition: Purge The Foe
+Force Disposition: Disruption
 
 ## Battleline [295 pts]
 Chaos Rhino [75 pts]: Armoured tracks, Combi-bolter

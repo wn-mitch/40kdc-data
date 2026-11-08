@@ -23,6 +23,7 @@ var validatorTargets = map[string]string{
 	"ability":        "https://40kdc.dev/schemas/enrichment/ability-dsl/ability.schema.json",
 	"wargear":        "https://40kdc.dev/schemas/core/wargear.schema.json",
 	"wargear-option": "https://40kdc.dev/schemas/core/wargear-option.schema.json",
+	"stratagem":      "https://40kdc.dev/schemas/core/stratagem.schema.json",
 }
 
 var keywordToCode = map[string]string{
@@ -102,6 +103,46 @@ func (v *SchemaValidator) validateTarget(target string, value any) []map[string]
 }
 
 func (v *SchemaValidator) valid(schema any, instance any, base string) bool {
+	// Boolean probes reject impossible variants before visiting recursive payloads.
+	// Diagnostic checks still collect every failed branch.
+	for {
+		object, ok := schema.(map[string]any)
+		if !ok {
+			break
+		}
+		ref, hasRef := object["$ref"].(string)
+		if !hasRef || len(object) != 1 {
+			break
+		}
+		schema, base = v.resolveRef(base, ref)
+	}
+	if object, ok := schema.(map[string]any); ok {
+		if kind, exists := object["type"]; exists && !typeMatchesAny(kind, instance) {
+			return false
+		}
+		if value, ok := instance.(map[string]any); ok {
+			requiredNames, _ := object["required"].([]any)
+			for _, required := range requiredNames {
+				name, _ := required.(string)
+				if _, present := value[name]; !present {
+					return false
+				}
+			}
+			if properties, ok := object["properties"].(map[string]any); ok {
+				for name, property := range properties {
+					constraint, ok := property.(map[string]any)
+					if !ok {
+						continue
+					}
+					expected, constant := constraint["const"]
+					actual, present := value[name]
+					if constant && present && !jsonEqual(actual, expected) {
+						return false
+					}
+				}
+			}
+		}
+	}
 	var vs []violation
 	v.check(schema, instance, "", base, &vs)
 	return len(vs) == 0
@@ -207,6 +248,26 @@ func (v *SchemaValidator) checkSchema(schema map[string]any, instance any, path,
 				}
 			}
 		}
+		if mp, ok := schema["minProperties"]; ok && len(inst) < asInt(mp) {
+			*out = append(*out, violation{path, "minProperties"})
+		}
+		if mp, ok := schema["maxProperties"]; ok && len(inst) > asInt(mp) {
+			*out = append(*out, violation{path, "maxProperties"})
+		}
+		if dr, ok := schema["dependentRequired"].(map[string]any); ok {
+			for trigger, reqAny := range dr {
+				if _, present := inst[trigger]; !present {
+					continue
+				}
+				req, _ := reqAny.([]any)
+				for _, rAny := range req {
+					r, _ := rAny.(string)
+					if _, present := inst[r]; !present {
+						*out = append(*out, violation{path, "dependentRequired"})
+					}
+				}
+			}
+		}
 		props, _ := schema["properties"].(map[string]any)
 		for k, val := range inst {
 			if sub, ok := props[k]; ok {
@@ -242,6 +303,24 @@ func (v *SchemaValidator) checkSchema(schema map[string]any, instance any, path,
 		}
 		if ma, ok := schema["maxItems"]; ok && len(inst) > asInt(ma) {
 			*out = append(*out, violation{path, "maxItems"})
+		}
+		if contains, ok := schema["contains"]; ok {
+			matches := 0
+			for _, e := range inst {
+				if v.valid(contains, e, base) {
+					matches++
+				}
+			}
+			minContains := 1
+			if mc, ok := schema["minContains"]; ok {
+				minContains = asInt(mc)
+			}
+			if matches < minContains {
+				*out = append(*out, violation{path, "contains"})
+			}
+			if mc, ok := schema["maxContains"]; ok && matches > asInt(mc) {
+				*out = append(*out, violation{path, "maxContains"})
+			}
 		}
 		if u, ok := schema["uniqueItems"].(bool); ok && u {
 			if hasDuplicate(inst) {
@@ -294,6 +373,23 @@ func (v *SchemaValidator) checkSchema(schema map[string]any, instance any, path,
 			for _, sub := range oneOf {
 				v.check(sub, instance, path, base, out)
 			}
+		} else if validCount > 1 {
+			// More than one branch matching fails oneOf (AJV and jsonschema report only the
+			// oneOf error, which maps to no code but makes the instance invalid).
+			*out = append(*out, violation{path, "oneOf"})
+		}
+	}
+	if not, ok := schema["not"]; ok && v.valid(not, instance, base) {
+		*out = append(*out, violation{path, "not"})
+	}
+	// if/then/else: the branch's own errors are reported (as jsonschema and AJV do).
+	if cond, ok := schema["if"]; ok {
+		if v.valid(cond, instance, base) {
+			if then, ok := schema["then"]; ok {
+				v.check(then, instance, path, base, out)
+			}
+		} else if els, ok := schema["else"]; ok {
+			v.check(els, instance, path, base, out)
 		}
 	}
 	if anyOf, ok := schema["anyOf"].([]any); ok {

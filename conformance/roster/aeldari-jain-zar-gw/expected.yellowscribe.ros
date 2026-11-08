@@ -27,7 +27,7 @@
             </profile>
             <profile name="Storm of Silence" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Against CHARACTER targets, you can re-roll the Wound roll.</characteristic>
+                <characteristic name="Description">Against CHARACTER targets, you can re-roll the Wound roll for attacks made by this model.</characteristic>
               </characteristics>
             </profile>
             <profile name="Whirling Death" typeName="Abilities">
@@ -37,7 +37,21 @@
             </profile>
             <profile name="Fights First" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Fights First ability.</characteristic>
+                <characteristic name="Description">While the unit has the Fights First ability, the unit gains the Fights First ability.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Battle Focus" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">-&gt; At the start of the battle round: if your Army Faction is AELDARI, you gain 2/4/6 Battle Focus tokens (Incursion/Strike Force/Onslaught).
+If your Army Faction is AELDARI:
+  -&gt; Actions may be performed when their conditions are met. A unit may perform at most one action per phase; unless stated otherwise, a given action may be triggered once per phase:
+    - Swift as the Wind: when a friendly unit is selected to make a Normal, Advance or Fall Back move, spend 1 Battle Focus token, add 2 to the unit's Move characteristic, until the end of the phase (may be triggered more than once per phase if a different unit performs it each time).
+    - Flitting Shadows: when a friendly unit is selected to make a Normal, Advance or Fall Back move or when a friendly unit is set up or after a friendly unit selects targets for its charge but before it makes a Charge move, spend 1 Battle Focus token, your opponent cannot target the unit with Overwatch, until the end of the turn.
+    - Star Engines: when a friendly unit is selected to make an Advance move (only usable by one VEHICLE unit), spend 1 Battle Focus token, ranged weapons equipped by models in this unit gain [ASSAULT], until the end of the turn.
+    - Sudden Strike: each time a friendly unit ends a Charge move, spend 1 Battle Focus token, add 3" to the unit's Pile-in and Consolidation moves, until the end of the turn.
+    - Opportunity Seized: each time an enemy unit Falls Back (only usable by one unit (excluding TITANIC units), the selected unit was engaged with that unit at the start of the phase), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1".
+    - Fade Back: after an enemy unit shoots (only usable by one unit (excluding TITANIC units), during the Shooting phase and in the opponent's turn and the selected unit was hit by an attack from the triggering unit during its just-finished shooting sequence), spend 1 Battle Focus token, the unit can make a Normal move of up to D6+1".
+  -&gt; At the end of the battle round: spend all your Battle Focus tokens.</characteristic>
               </characteristics>
             </profile>
           </profiles>

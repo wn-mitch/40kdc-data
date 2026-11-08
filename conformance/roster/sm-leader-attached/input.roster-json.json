@@ -92,8 +92,8 @@
         },
         {
           "ref": {
-            "id": "astartes-chainsword-assault-intercessor-squad",
-            "raw_name": "Astartes chainsword",
+            "id": "chainsword",
+            "raw_name": "Chainsword",
             "resolved": true,
             "candidates": []
           },
@@ -107,8 +107,8 @@
           "wargear": [
             {
               "ref": {
-                "id": "astartes-chainsword-assault-intercessor-squad",
-                "raw_name": "Astartes chainsword",
+                "id": "chainsword",
+                "raw_name": "Chainsword",
                 "resolved": true,
                 "candidates": []
               },
@@ -131,8 +131,8 @@
           "wargear": [
             {
               "ref": {
-                "id": "astartes-chainsword-assault-intercessor-squad",
-                "raw_name": "Astartes chainsword",
+                "id": "chainsword",
+                "raw_name": "Chainsword",
                 "resolved": true,
                 "candidates": []
               },

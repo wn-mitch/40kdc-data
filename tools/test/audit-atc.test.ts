@@ -1,5 +1,8 @@
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { findRegressions, type AtcAuditReport } from "../src/audit-atc.js";
+import { auditAtcCorpus, findRegressions, renderMarkdown, type AtcAuditReport } from "../src/audit-atc.js";
 
 function report(overrides: Partial<AtcAuditReport["headline"]> = {}): AtcAuditReport {
   return {
@@ -88,5 +91,23 @@ describe("findRegressions", () => {
       },
     });
     expect(findRegressions(report(), fresh)).toEqual(["grouping.solver-null: 1 → 2"]);
+  });
+});
+
+describe("the ATC audit report", () => {
+  it("never quotes the player or team names a list carries", () => {
+    const root = mkdtempSync(join(tmpdir(), "atc-audit-"));
+    const dir = join(root, "examples/atc-viewer/src/data");
+    mkdirSync(dir, { recursive: true });
+    const lists = [
+      "Player Name: Zebulon Quillfeather\nnot a list format anyone reads",
+      "Team Name: The Quillfeather Irregulars\nCHARACTERS\nZebulonhead (90 points)",
+      "+ PLAYER NAME: Zebulon Quillfeather\n+ FACTION KEYWORD: Quillfeather Host\n+ DETACHMENT: Player Name: Zebulon Quillfeather",
+    ];
+    const teams = [{ name: "The Quillfeather Irregulars", players: lists.map((armyListText) => ({ name: "Zebulon Quillfeather", faction: "Orks", armyListText })) }];
+    for (const file of ["atc-2026.json", "atc-5s.json"]) writeFileSync(join(dir, file), JSON.stringify({ teams }));
+    const report = auditAtcCorpus({ rootDir: root });
+    expect(report.headline.lists).toBe(6);
+    expect(`${JSON.stringify(report)}\n${renderMarkdown(report)}`).not.toMatch(/Quillfeather|Zebulon/);
   });
 });

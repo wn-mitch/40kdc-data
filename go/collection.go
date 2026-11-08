@@ -51,6 +51,12 @@ type Collection[V any] struct {
 	entityLabel  string
 	// Renamed-id map (old id -> current id); nil unless set via opts.
 	idAliases map[string]string
+	// visible filters the listing methods (All, Size, ByFaction, Find,
+	// FindAll) of a game-mode view; nil shows every record. Id lookups (Get,
+	// GetAny, GetInFaction, Has, ByExternalRef) ignore it.
+	visible func(any) bool
+	// size is the number of visible records.
+	size int
 }
 
 func newCollection[V any](items []any, wrap func(any) V, opts collectionOpts) *Collection[V] {
@@ -143,20 +149,51 @@ func newCollection[V any](items []any, wrap func(any) V, opts collectionOpts) *C
 			}
 		}
 	}
+	c.size = len(c.items)
 	return c
 }
 
-// All returns every record, deduplicated by id, in first-seen order.
-func (c *Collection[V]) All() []V {
-	out := make([]V, len(c.items))
-	for i, item := range c.items {
-		out[i] = c.wrap(item)
+// view returns a collection over the same records and indexes whose listing
+// methods show only records visible passes (nil shows all), and whose records
+// wrap with wrap (nil keeps the current wrap). Nothing is copied but the
+// struct header, so a view costs one pass to count its visible records.
+func (c *Collection[V]) view(wrap func(any) V, visible func(any) bool) *Collection[V] {
+	cp := *c
+	if wrap != nil {
+		cp.wrap = wrap
+	}
+	cp.visible = visible
+	cp.size = len(c.items)
+	if visible != nil {
+		cp.size = 0
+		for _, item := range c.items {
+			if visible(item) {
+				cp.size++
+			}
+		}
+	}
+	return &cp
+}
+
+// shows reports whether a record is visible to this collection's listings.
+func (c *Collection[V]) shows(item any) bool { return c.visible == nil || c.visible(item) }
+
+// wrapVisible wraps the visible records of items, preserving order.
+func (c *Collection[V]) wrapVisible(items []any) []V {
+	out := make([]V, 0, len(items))
+	for _, item := range items {
+		if c.shows(item) {
+			out = append(out, c.wrap(item))
+		}
 	}
 	return out
 }
 
-// Size returns the number of distinct records.
-func (c *Collection[V]) Size() int { return len(c.items) }
+// All returns every visible record, deduplicated by id, in first-seen order.
+func (c *Collection[V]) All() []V { return c.wrapVisible(c.items) }
+
+// Size returns the number of distinct visible records.
+func (c *Collection[V]) Size() int { return c.size }
 
 // Get looks up by exact id.
 //
@@ -253,40 +290,52 @@ func (c *Collection[V]) Find(query string) (V, bool) {
 	return matches[0], true
 }
 
-// FindAll returns all records matching a query: exact id → exact normalized
-// name → normalized-name substring.
+// FindAll returns all visible records matching a query: exact id → exact
+// normalized name → normalized-name substring. A hidden record is absent from
+// every step, so a query naming only hidden records falls through to the next.
 func (c *Collection[V]) FindAll(query string) []V {
-	if item, ok := c.rawByID(query); ok {
+	if item, ok := c.visibleByID(query); ok {
 		return []V{c.wrap(item)}
 	}
 	key := NormalizeName(query)
-	if exact, ok := c.byNorm[key]; ok && len(exact) > 0 {
-		out := make([]V, len(exact))
-		for i, item := range exact {
-			out[i] = c.wrap(item)
-		}
-		return out
+	if exact := c.wrapVisible(c.byNorm[key]); len(exact) > 0 {
+		return exact
 	}
 	if c.nameOf == nil || key == "" {
 		return nil
 	}
 	var out []V
 	for _, item := range c.items {
-		if strings.Contains(NormalizeName(c.nameOf(item)), key) {
+		if c.shows(item) && strings.Contains(NormalizeName(c.nameOf(item)), key) {
 			out = append(out, c.wrap(item))
 		}
 	}
 	return out
 }
 
-// ByFaction returns all records belonging to a faction id.
-func (c *Collection[V]) ByFaction(factionID string) []V {
-	items := c.byFaction[factionID]
-	out := make([]V, len(items))
-	for i, item := range items {
-		out[i] = c.wrap(item)
+// visibleByID is rawByID restricted to visible records. The by-id index keeps
+// the first-registered copy of a shared id, so when that copy is hidden it
+// falls back to the first visible copy carrying the same (alias-resolved) id.
+func (c *Collection[V]) visibleByID(id string) (any, bool) {
+	item, ok := c.rawByID(id)
+	if !ok {
+		return nil, false
 	}
-	return out
+	if c.shows(item) {
+		return item, true
+	}
+	resolved := c.idOf(item)
+	for _, candidate := range c.items {
+		if c.idOf(candidate) == resolved && c.shows(candidate) {
+			return candidate, true
+		}
+	}
+	return nil, false
+}
+
+// ByFaction returns all visible records belonging to a faction id.
+func (c *Collection[V]) ByFaction(factionID string) []V {
+	return c.wrapVisible(c.byFaction[factionID])
 }
 
 // idCollection builds a passthrough collection for an id-bearing record type

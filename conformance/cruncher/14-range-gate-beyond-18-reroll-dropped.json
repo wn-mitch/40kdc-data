@@ -1,8 +1,8 @@
 {
-  "name": "bolt-rifle x5 vs cultists, reroll gated to 18\" \u2014 beyond range (30\"), reroll dropped",
+  "name": "bolt-rifle (saturation) x5 vs cultists, reroll gated to 18\" — beyond range (30\"), reroll dropped",
   "attacker": {
     "weaponId": "bolt-rifle",
-    "profileIndex": 0
+    "profileIndex": 1
   },
   "modelsFiring": 5,
   "target": {
@@ -17,7 +17,7 @@
     {
       "source": {
         "kind": "ability",
-        "abilityId": "furious-onslaught",
+        "abilityId": "furious-onslaught-world-eaters",
         "abilityKind": "unit"
       },
       "applicableWhen": {

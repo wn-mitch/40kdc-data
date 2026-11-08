@@ -8,8 +8,9 @@ names, points, and everything else from the embedded dataset.
 
 This document is the wire contract for anyone implementing encode/decode against
 40kdc tokens (the reference implementations are TypeScript `tools/src/share/`,
-Rust `crates/wh40kdc/src/share/`, and Python `python/src/wh40kdc/share.py`; the
-`conformance/share/` corpus pins them byte-for-byte).
+Rust `crates/wh40kdc/src/share/`, Python `python/src/wh40kdc/share.py`, and Go
+`go/share.go`, which the Go conformance runner exposes but the module does not
+export; the `conformance/share/` corpus pins them byte-for-byte).
 
 ## Why not gzip?
 
@@ -56,7 +57,12 @@ Invariants (`npm run registry:build` enforces them):
 
 Each language package embeds its own copy of the registry (TS inlines it into
 `registry.generated.ts`; Rust `include_str!`s `registry.generated.json`; Python
-ships `_share_registry.json`), all regenerated from the one committed artifact.
+ships `_share_registry.json`; Go embeds `go/share_registry.json`), all
+regenerated from the one committed artifact.
+
+A decoded id resolves in every game-mode view of a `Dataset`: views filter
+listings and name searches, not lookups by id, so a token that names a Combat
+Patrol unit decodes and resolves against the default matched-play dataset.
 
 ## ShareList
 

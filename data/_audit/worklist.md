@@ -5,52 +5,262 @@ structural stub — an effect carrying an empty-modifier placeholder node that s
 DSL authored. This is the actionable counterpart to the per-faction `stub*` counts in
 [`CONTRIBUTING.md`](../../CONTRIBUTING.md) and [`summary.md`](summary.md).
 
-Total: 45 stub abilities.
+Total: 255 stub abilities.
 
 | faction | ability | shape | needs |
 |---|---|---|---|
-| adepta-sororitas | blazing-ire-bringers-of-flame | sequence | effect type "disembark" is not modelled by the buff layer |
-| adepta-sororitas | divine-aspect-army-of-faith | battle-shock-test | effect type "battle-shock-test" is not modelled by the buff layer |
-| adeptus-astartes | burning-vengeance-firestorm-assault-force | sequence | effect type "disembark" is not modelled by the buff layer |
-| adeptus-astartes | heroes-of-ultramar | unit-attachment | effect type "unit-attachment" is not modelled by the buff layer |
-| adeptus-astartes | mission-tactics | stat-modifier | stat-modifier: operation "undefined" not supported |
-| adeptus-astartes | onslaught-of-fire-firestorm-assault-force | sequence | empty modifier |
-| adeptus-astartes | sagas | stat-modifier | stat-modifier: operation "undefined" not supported |
-| adeptus-astartes | strike-from-the-shadows-vanguard-spearhead | sequence | stat-modifier on "BS" is outside the damage path |
-| adeptus-custodes | desperations-price-null-maiden-vigil | battle-shock-test | effect type "battle-shock-test" is not modelled by the buff layer |
-| adeptus-custodes | huntress-eye-null-maiden-vigil | battle-shock-test | effect type "battle-shock-test" is not modelled by the buff layer |
-| adeptus-custodes | inspirational-exemplar-auric-champions | remove-battle-shock | effect type "remove-battle-shock" is not modelled by the buff layer |
-| adeptus-custodes | shoulder-the-mantle-auric-champions | unit-attachment | effect type "unit-attachment" is not modelled by the buff layer |
-| aeldari | far-reaching-doom | stat-modifier | stat-modifier: operation "undefined" not supported |
-| aeldari | support-artillery | unit-attachment | effect type "unit-attachment" is not modelled by the buff layer |
-| astra-militarum | brutal-disciplinarian | select-units | effect type "remove-battle-shock" is not modelled by the buff layer |
-| chaos-space-marines | frenzy | stat-modifier | stat-modifier: operation "undefined" not supported |
-| chaos-space-marines | masters-of-the-maelstrom | unit-attachment | effect type "unit-attachment" is not modelled by the buff layer |
-| chaos-space-marines | super-heavy-war-engine | stat-modifier | stat-modifier: operation "undefined" not supported |
-| chaos-space-marines | the-scent-of-blood | stat-modifier | stat-modifier: operation "undefined" not supported |
-| chaos-space-marines | wracking-agonies-psychic | stat-modifier | stat-modifier: operation "undefined" not supported |
-| dark-angels | overpowering-exaction-lions-blade-task-force | battle-shock-test | effect type "battle-shock-test" is not modelled by the buff layer |
-| death-guard | daemonforge | stat-modifier | stat-modifier: operation "undefined" not supported |
-| death-guard | dark-ascension-aura | stat-modifier | stat-modifier: operation "undefined" not supported |
-| death-guard | frenzy | stat-modifier | stat-modifier: operation "undefined" not supported |
-| death-guard | mind-breaking-mutations-aura | stat-modifier | stat-modifier: operation "undefined" not supported |
-| drukhari | exacting-cruelty | stat-modifier | stat-modifier: operation "undefined" not supported |
-| emperors-children | mind-breaking-mutations-aura | stat-modifier | stat-modifier: operation "undefined" not supported |
-| emperors-children | reactive-disembarkation-rapid-evisceration | disembark | effect type "disembark" is not modelled by the buff layer |
-| emperors-children | the-scent-of-blood | stat-modifier | stat-modifier: operation "undefined" not supported |
-| genestealer-cults | hordes-of-the-faithful | stat-modifier | stat-modifier: operation "undefined" not supported |
-| necrons | engrammatic-logic | select-units | selection/history/model/attack predicates are not resolved by the buff engine |
-| orks | da-grand-warlords-ladz | stat-modifier | stat-modifier: operation "undefined" not supported |
-| orks | makari-hoist-dat-banner | stat-modifier | stat-modifier: operation "undefined" not supported |
-| orks | nazdregs-know-wotz | stat-modifier | stat-modifier: operation "undefined" not supported |
-| orks | supreme-kunnin | stat-modifier | stat-modifier: operation "undefined" not supported |
-| thousand-sons | daemonforge | stat-modifier | stat-modifier: operation "undefined" not supported |
-| thousand-sons | dark-ascension-aura | stat-modifier | stat-modifier: operation "undefined" not supported |
-| thousand-sons | frenzy | stat-modifier | stat-modifier: operation "undefined" not supported |
-| thousand-sons | mind-breaking-mutations-aura | stat-modifier | stat-modifier: operation "undefined" not supported |
-| thousand-sons | the-scent-of-blood | stat-modifier | stat-modifier: operation "undefined" not supported |
-| thousand-sons | wracking-agonies-psychic | stat-modifier | stat-modifier: operation "undefined" not supported |
-| tyranids | mindhunger | stat-modifier | stat-modifier: operation "undefined" not supported |
-| world-eaters | butcher-lord-cult-of-blood | sequence | effect type "unit-attachment" is not modelled by the buff layer |
-| world-eaters | disciple-of-khorne-khorne-daemonkin | sequence | effect type "unit-attachment" is not modelled by the buff layer |
-| world-eaters | fury-unleashed-goretrack-onslaught | conditional | conditional: cannot evaluate condition "undefined" against current context |
+| _core | support | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adepta-sororitas | acts-of-faith-sanctuary-guardians-adepta-sororitas | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adepta-sororitas | blessed-believers-adepta-sororitas | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adepta-sororitas | simulacrum-imperialis-sanctuary-guardians-adepta-sororitas | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adepta-sororitas | simulacrum-imperialis-wargear-adepta-sororitas | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-astartes | aggressive-disembarkation-gauntlet-task-force-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-astartes | captain-of-the-honour-guard-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-astartes | combat-embarkation-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-astartes | forgefather-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-astartes | librarian-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-astartes | librarius-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-astartes | priority-target-identified-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-astartes | special-issue-optics-and-ammunition-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-custodes | fearless-and-unrelenting-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-custodes | silent-sisterhood-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | aggressive-impulse-haloscreed-battle-clade-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | auto-divinatory-targeting-cohort-cybernetica-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | baleful-halo-rad-zone-corps-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | data-blessed-autosermon-data-psalm-conclave-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | emotionless-clarity-cohort-cybernetica-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | extinction-order-rad-zone-corps-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | incense-exhausts-explorator-maniple-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | infoslave-skull-explorator-maniple-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | litany-of-the-electromancer-data-psalm-conclave-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | mantle-of-the-gnosticarch-data-psalm-conclave-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | mechanical-guidance-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | necromechanic-cohort-cybernetica-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | neural-overload-haloscreed-battle-clade-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | priority-reclamation-explorator-maniple-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | radial-suffusion-rad-zone-corps-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| adeptus-mechanicus | reactive-safeguard-explorator-maniple-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | adrenal-infusions-eldritch-raiders-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | agile-reach-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | blitzing-firepower-warhost-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | branching-fates-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | breath-of-vaul-guardian-battlehost-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | crewed-platform-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | disparate-paths-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | doom-inescapable-aspect-host-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | drakolithe-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | echoes-of-ulthanesh-windrider-host-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | elemental-ensnarement-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | ethereal-pathway-guardian-battlehost-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | impeding-fire-eldritch-raiders-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | lucid-eye-seer-council-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | murders-jest-ghosts-of-the-webway-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | pall-of-dread-devoted-of-ynnead-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | preternatural-precision-aspect-host-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | psychic-communion-warlock-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | runes-of-warding-seer-council-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | seers-eye-spirit-conclave-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | soul-bridge-spirit-conclave-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | spirit-mark-psychic-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | tears-of-isha-spiritseer-kygharil-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | to-their-final-breath-aspect-host-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | vauls-vengeance-guardian-battlehost-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| aeldari | veterans-of-the-void-eldritch-raiders-aeldari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | adaptive-tactics-ordo-xenos-alien-hunters-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | assigned-agents-inquisitors-hand-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | auspex-array-wargear-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | digital-weapons-imperialis-fleet-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | displacer-field-imperialis-fleet-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | exact-punishment-ordo-hereticus-purgation-force-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | execution-order-ordo-hereticus-purgation-force-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | gift-of-the-prescient-ordo-malleus-daemon-hunters-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | hellfire-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | kraken-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | line-of-fire-ordo-hereticus-purgation-force-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | marked-for-death-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | no-escape-aura-ordo-hereticus-purgation-force-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | rapid-tactical-relocation-ordo-xenos-alien-hunters-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | rites-of-exorcism-ordo-malleus-daemon-hunters-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | ritual-of-warding-ordo-malleus-daemon-hunters-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| agents-of-the-imperium | selfless-bodyguard-imperialis-fleet-agents-of-the-imperium | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| astra-militarum | calm-under-fire-hammer-of-the-emperor-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| astra-militarum | coordinated-action-combined-arms-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| astra-militarum | death-mask-of-ollanius-combined-arms-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| astra-militarum | focus-attacks-draydens-lance-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| astra-militarum | hasty-extraction-mechanised-assault-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| astra-militarum | loyal-protector-ogryn-bodyguard-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| astra-militarum | order-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| astra-militarum | over-the-top-siege-regiment-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| astra-militarum | reactive-command-combined-arms-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| astra-militarum | reinforcements-combined-arms-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| astra-militarum | snap-to-it-grizzled-company-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| astra-militarum | spec-ops-veteran-grizzled-company-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| astra-militarum | vox-relay-beacon-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| astra-militarum | vox-relay-mechanised-assault-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| black-templars | close-range-destruction-black-templars | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| black-templars | combat-embarkation-black-templars | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| blood-angels | oath-of-moment-blood-angels | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | binding-shadow-shadow-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | cankerblight-aura-plague-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | cavalcade-of-blades-legion-of-excess-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | corrupt-realspace-daemonic-incursion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | daemonic-allegiance-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | delirium-unmade-scintillating-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | encroaching-darkness-shadow-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | ficklefire-scintillating-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | flickering-reality-scintillating-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | gateway-unto-damnation-blood-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | impossible-eclipse-scintillating-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | inescapable-eye-scintillating-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | infernal-puppeteer-scintillating-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | maggot-maws-plague-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | plague-of-woes-plague-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | pyrogenesis-scintillating-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-daemons | spiteful-demise-shadow-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | black-crusade-veterans-of-the-long-war-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | brutal-attrition-fellhammer-siege-host-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | cultists-brand-chaos-cult-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | dread-reputation-hurons-marauders-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | eater-of-dread-dread-talons-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | eye-of-tzeentch-pactbound-zealots-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | falsehood-deceptors-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | fratricidal-trophies-renegade-warband-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | from-all-sides-deceptors-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | glut-of-souls-soulforged-warpack-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | hardened-killers-hurons-marauders-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | mortal-thralls-chaos-cult-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | orbs-of-unlife-pactbound-zealots-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | point-blank-destruction-fellhammer-siege-host-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | raid-leader-hurons-marauders-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | selfless-demise-chaos-cult-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | siegecraft-fellhammer-siege-host-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | soul-link-deceptors-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | talisman-of-burning-blood-pactbound-zealots-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | tempting-addendum-soulforged-warpack-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | warped-foresight-chaos-cult-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| chaos-space-marines | weaponised-hatred-renegade-warband-chaos-space-marines | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| dark-angels | oath-of-moment-dark-angels | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | blighted-land-mortarions-hammer-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | cornucophagus-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | deaths-heads-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | eyestinger-storm-mortarions-hammer-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | final-ingredient-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | grip-of-the-walking-pox-shamblerot-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | leechspore-eruption-virulent-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | lord-of-the-walking-pox-shamblerot-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | mireslick-tallyband-summoners-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | mobile-vector-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | needle-of-nurgle-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | putrid-detonation-virulent-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | shambling-wall-shamblerot-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | tome-of-bounteous-blessings-tallyband-summoners-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | a-challenge-met-spectacle-of-spite-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | conductor-of-torment-reapers-wager-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | crucible-of-malediction-realspace-raiders-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | dark-vitality-realspace-raiders-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | double-cross-kabalite-cartel-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | eager-for-the-kill-realspace-raiders-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | enemies-without-number-kabalite-cartel-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | eye-of-spite-realspace-raiders-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | instinctive-spite-realspace-raiders-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | leechbite-plate-kabalite-cartel-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | master-regenesist-covenite-coterie-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | pain-engine-coven-of-agonies-cronos-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | pharmacophex-spectacle-of-spite-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | postmortality-covenite-coterie-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | pounce-on-the-prey-skysplinter-assault-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | power-from-pain-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | taken-alive-kabalite-cartel-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | vicious-blades-skysplinter-assault-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| drukhari | wraithlike-retreat-skysplinter-assault-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| genestealer-cults | acceptable-losses-brood-brothers-auxilia-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| genestealer-cults | avenge-the-star-children-final-day-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| genestealer-cults | cartographic-data-leech-outlander-claw-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| genestealer-cults | coordinated-trap-host-of-ascension-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| genestealer-cults | cult-ambush-claw-of-ascension-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| genestealer-cults | cult-icon-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| genestealer-cults | divine-imperative-final-day-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| genestealer-cults | evasive-vanguard-biosanctic-broodsurge-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| genestealer-cults | in-the-shadow-of-iron-brood-brothers-auxilia-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| genestealer-cults | psi-surge-final-day-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| genestealer-cults | symbiotic-destruction-brood-brothers-auxilia-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| genestealer-cults | synaptic-auger-final-day-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| genestealer-cults | vengeance-for-the-martyr-xenocreed-congregation-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| grey-knights | aegis-eternal-warpbane-task-force-grey-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| grey-knights | duty-unending-brotherhood-strike-grey-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| grey-knights | exigent-assignments-crowes-sanctifiers-grey-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| grey-knights | flames-of-sanctity-warpbane-task-force-grey-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| grey-knights | hexwrought-reprisal-banishers-grey-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| grey-knights | inescapable-judgement-psychic-hallowed-conclave-grey-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| grey-knights | necessary-end-augurium-task-force-grey-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| grey-knights | sigil-of-exigence-sanctic-spearhead-grey-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| grey-knights | strike-from-the-warp-grey-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| grey-knights | unending-fidelity-hallowed-conclave-grey-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| grey-knights | warding-chant-banishers-grey-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| imperial-knights | acquisitor-at-arms-gate-warden-lance-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| imperial-knights | bondsman-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| imperial-knights | exemplars-wisdom-spearhead-at-arms-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| imperial-knights | fortress-of-intimidation-gate-warden-lance-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| imperial-knights | heros-tread-questoris-companions-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| imperial-knights | magos-questoris-questor-forgepact-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| imperial-knights | mantle-of-the-mentor-spearhead-at-arms-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| imperial-knights | martial-tuition-spearhead-at-arms-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| imperial-knights | moment-of-glory-questoris-companions-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| imperial-knights | squires-of-the-hunt-spearhead-at-arms-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| imperial-knights | tales-of-heroism-spearhead-at-arms-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| imperial-knights | thin-their-ranks-spearhead-at-arms-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| imperial-knights | virtue-of-courage-spearhead-at-arms-imperial-knights | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| leagues-of-votann | adaptable-avarice-persecution-prospect-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| leagues-of-votann | augmented-assault-delve-assault-shift-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| leagues-of-votann | delvewerke-navigator-delve-assault-shift-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| leagues-of-votann | iron-ambassador-needgaard-oathband-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| leagues-of-votann | metaphysical-brokerage-mercenary-oathband-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| leagues-of-votann | nomad-strategist-persecution-prospect-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| leagues-of-votann | piledriver-delve-assault-shift-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| leagues-of-votann | secure-positions-brandfast-oathband-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| leagues-of-votann | signature-restoration-brandfast-oathband-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| leagues-of-votann | tactical-alchemy-brandfast-oathband-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| leagues-of-votann | unstoppable-force-delve-assault-shift-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| leagues-of-votann | vengeance-flare-brandfast-oathband-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| leagues-of-votann | wall-of-steel-hearthfyre-arsenal-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| leagues-of-votann | writ-of-acquisition-persecution-prospect-leagues-of-votann | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | atomic-disintegrators-cryptek-conclave-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | autodivinator-canoptek-court-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | blood-fuelled-cruelty-annihilation-legion-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | cosmic-precision-hypercrypt-legion-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | dimensional-corridor-hypercrypt-legion-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | disharmonisation-cascade-pantheon-of-woe-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | honourable-combatant-obeisance-phalanx-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | mass-transmogrification-pantheon-of-woe-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | mortis-protocols-cursed-legion-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | murderous-reanimation-annihilation-legion-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | phase-melding-pantheon-of-woe-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | protocol-of-the-eternal-revenant-awakened-dynasty-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | reletavistic-tether-pantheon-of-woe-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | resurrection-orb-catacomb-command-barge-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| necrons | territorial-imperatives-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| orks | boss-boomer-upgrade-blitz-brigade-orks | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| orks | unstable-energies-orks | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| space-wolves | oath-of-moment-space-wolves | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| space-wolves | old-greymanes-space-wolves | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| space-wolves | skjalds-foretelling-saga-of-the-great-wolf-space-wolves | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tau-empire | battlesuit-support-system-tau-empire | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tau-empire | for-the-greater-good-sudden-dawn-cadre-tau-empire | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tau-empire | rapid-disembark-tau-empire | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | committed-to-the-ritual-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | spirit-snare-zadophon-the-soul-eater-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tyranids | adrenal-surge-invasion-fleet-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tyranids | bio-reserves-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tyranids | biophagic-flow-aura-assimilation-swarm-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tyranids | irresistible-will-synaptic-nexus-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tyranids | parasitic-payload-warrior-bioform-onslaught-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tyranids | preservation-imperative-unending-swarm-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tyranids | rapacious-hunger-assimilation-swarm-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tyranids | reclaim-biomass-assimilation-swarm-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tyranids | regenerating-monstrosity-assimilation-swarm-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tyranids | replenishing-swarms-subterranean-assault-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tyranids | tunnel-network-subterranean-assault-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tyranids | unending-waves-unending-swarm-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| tyranids | unseen-lurkers-vanguard-onslaught-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| world-eaters | berzerker-charge-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| world-eaters | icon-of-khorne-frenzied-reavers-jakhals-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |

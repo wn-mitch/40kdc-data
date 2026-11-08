@@ -17,13 +17,35 @@
             </profile>
             <profile name="Aquilon Optics" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll the Damage roll.</characteristic>
+                <characteristic name="Description">You can re-roll a failed Damage roll.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Aquilon Optics" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While making ranged attacks, while the target is an enemy unit with the MONSTER or VEHICLE keyword:
+  -&gt; You can re-roll one Hit roll.
+  -&gt; You can re-roll one Wound roll.
+  -&gt; You can re-roll one Damage roll.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Combat Doctrines" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
+  -&gt; Select one (each may be chosen once per battle):
+    - Assault Doctrine: when the unit is selected to make an Advance move: the unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: when the unit is selected to make a Fall Back move: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -33,6 +55,7 @@
             <category name="Frame"/>
             <category name="Imperium"/>
             <category name="Smoke"/>
+            <category name="Gladiator Lancer"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="Gladiator Lancer" type="model" number="1">
@@ -67,7 +90,7 @@
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit0-m0-w2" name="Lancer laser destroyer" type="upgrade" number="1">
+                <selection id="unit0-m0-w2" name="Laser Destroyer" type="upgrade" number="1">
                   <profiles>
                     <profile name="Laser Destroyer" typeName="Ranged Weapons">
                       <characteristics>
@@ -75,7 +98,7 @@
                         <characteristic name="A">2</characteristic>
                         <characteristic name="BS">3+</characteristic>
                         <characteristic name="S">14</characteristic>
-                        <characteristic name="AP">-5</characteristic>
+                        <characteristic name="AP">-3</characteristic>
                         <characteristic name="D">D6+3</characteristic>
                         <characteristic name="Keywords">Heavy</characteristic>
                       </characteristics>
@@ -105,13 +128,27 @@
             </profile>
             <profile name="Duty Eternal" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Each time an attack targets the unit, reduce the Damage of that attack by 1.</characteristic>
+                <characteristic name="Description">When the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
+  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Combat Doctrines" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
+  -&gt; Select one (each may be chosen once per battle):
+    - Assault Doctrine: when the unit is selected to make an Advance move: the unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: when the unit is selected to make a Fall Back move: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -121,6 +158,7 @@
             <category name="Dreadnought"/>
             <category name="Imperium"/>
             <category name="Walker"/>
+            <category name="Redemptor Dreadnought"/>
           </categories>
           <selections>
             <selection id="unit1-m0" name="Redemptor Dreadnought" type="model" number="1">
@@ -181,21 +219,6 @@
                         <characteristic name="AP">-3</characteristic>
                         <characteristic name="D">D3+3</characteristic>
                         <characteristic name="Keywords"></characteristic>
-                      </characteristics>
-                    </profile>
-                  </profiles>
-                </selection>
-                <selection id="unit1-m0-w4" name="Storm Bolters" type="upgrade" number="1">
-                  <profiles>
-                    <profile name="Storm Bolters" typeName="Ranged Weapons">
-                      <characteristics>
-                        <characteristic name="Range">24"</characteristic>
-                        <characteristic name="A">4</characteristic>
-                        <characteristic name="BS">3+</characteristic>
-                        <characteristic name="S">5</characteristic>
-                        <characteristic name="AP">-1</characteristic>
-                        <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Rapid Fire 4</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>
