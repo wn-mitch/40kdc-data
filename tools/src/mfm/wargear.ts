@@ -918,9 +918,10 @@ function sourcedLimitedSetBudgets(
   // The default composition lets us detect offset progressions such as
   // Death Company jump packs: 2 picks at 5 models, 3 at 10.
   let defaultModelCount = 0;
+  let modelCounts = new Map<string, number>();
   try {
-    defaultModelCount = [...modelCountByMiniId(dump, datasheetId).values()]
-      .reduce((sum, count) => sum + count, 0);
+    modelCounts = modelCountByMiniId(dump, datasheetId);
+    defaultModelCount = [...modelCounts.values()].reduce((sum, count) => sum + count, 0);
   } catch {
     /* focused fixture without composition tables */
   }
@@ -929,9 +930,11 @@ function sourcedLimitedSetBudgets(
   // a focused fixture may omit the default-loadout tables (the real dump never
   // does); it then simply contributes no default exclusions.
   const defaultIds = new Set<string>();
+  const defaultsByMini = new Map<string, readonly string[]>();
   try {
     const defaults = deriveDefaults(dump, datasheetId, resolve, [], []);
-    for (const ids of defaults.byMiniId.values()) {
+    for (const [miniId, ids] of defaults.byMiniId) {
+      defaultsByMini.set(miniId, ids);
       for (const id of ids) defaultIds.add(id);
     }
     for (const rows of defaults.splitByMiniId.values()) for (const row of rows) for (const id of row.ids) defaultIds.add(id);
@@ -1007,6 +1010,14 @@ function sourcedLimitedSetBudgets(
     const setMini = s.miniatureId ? miniNameOf(s.miniatureId) : null;
     const emit = (budget: WargearBudget) =>
       out.push({ budget, miniatureId: s.miniatureId ?? null });
+
+    const stock = stockChoiceBudget(
+      choicesOfSet.get(s.id) ?? [],
+      limitsBySet.get(s.id) ?? [],
+      s.miniatureId ? defaultsByMini.get(s.miniatureId) : undefined,
+      s.miniatureId ? modelCounts.get(s.miniatureId) : undefined,
+    );
+    if (stock) emit(stock);
 
     // Uncapped-branch leakage: a branch that grants some of this set's items
     // WITHOUT realizing one of the set's choices is an ungoverned path (the
@@ -1134,6 +1145,48 @@ function sourcedLimitedSetBudgets(
     }
   }
   return out;
+}
+
+/**
+ * The budget of a flat limited set that lists its miniature's stock loadout as one of its choices
+ * (Tankbustas: `5 busta rokkit launchas` / `1 pulsa rokkit` / `1 busta rokkit launcha`, pick 2).
+ * The stock choice spends a pick, so the extra copies the remaining picks add are the cap. Stock
+ * items are derived defaults, which the ordinary budget excludes, so without this the extra copy of
+ * a stock item is uncapped. The budget sums the stock copies with the most the remaining picks can
+ * add. Returns undefined for any other shape.
+ */
+function stockChoiceBudget(
+  choices: readonly (readonly { id: string; copies: number }[])[],
+  limits: readonly { modelCount: number; choiceLimit: number; duplicateLimit?: number | null }[],
+  miniDefaults: readonly string[] | undefined,
+  modelCount: number | undefined,
+): WargearBudget | undefined {
+  if (!miniDefaults || modelCount === undefined || modelCount < 2) return undefined;
+  if (limits.length === 0 || limits.some((limit) => limit.modelCount !== 0)) return undefined;
+  const binding = limits
+    .filter((limit) => limit.choiceLimit > 0)
+    .sort((a, b) => a.choiceLimit - b.choiceLimit)[0];
+  if (!binding) return undefined;
+  // A stock item appears once in each model's default loadout, so the stock choice lists it once per model.
+  const isStock = (choice: readonly { id: string; copies: number }[]) =>
+    choice.length > 0 &&
+    choice.every((item) => item.copies === modelCount && miniDefaults.filter((id) => id === item.id).length === 1);
+  const stock = choices.filter(isStock);
+  if (stock.length === 0) return undefined;
+  const extras = choices.filter((choice) => choice.length > 0 && !isStock(choice));
+  if (extras.length === 0) return undefined;
+  const picks = Math.max(0, binding.choiceLimit - stock.length);
+  const repeats = Math.min(binding.duplicateLimit ?? picks, picks);
+  const takes = extras
+    .flatMap((choice) => Array<number>(repeats).fill(choice.reduce((sum, item) => sum + item.copies, 0)))
+    .sort((a, b) => b - a)
+    .slice(0, picks);
+  const items = new Set([...stock, ...extras].flat().map((item) => item.id));
+  return {
+    items: [...items].sort(),
+    count: stock.flat().reduce((sum, item) => sum + item.copies, 0) + takes.reduce((sum, take) => sum + take, 0),
+    per_models: 0,
+  };
 }
 
 /**

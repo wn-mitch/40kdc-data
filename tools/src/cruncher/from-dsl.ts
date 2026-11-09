@@ -844,7 +844,10 @@ function translateReroll(
   const damagePath = roll === "hit" || roll === "wound" || roll === "save" || roll === "damage";
   // Re-rolling a random Attacks characteristic: the engine re-rolls each model's dice below the mean.
   if (roll === "attacks" && modifier.count === undefined && (subset === "ones" || subset === "ones-and-twos" || subset === "all-failures")) {
-    if (opts.perspective === "attacker") out.applied.push(withApplicability({ source, contribution: { type: "reroll", roll, subset } }, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))));
+    if (opts.perspective === "attacker") out.applied.push(withApplicability(
+      { source, contribution: { type: "reroll", roll, subset } },
+      withModelWargearApplicability(node, source, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))),
+    ));
     return;
   }
   // "Re-roll one Hit roll": one die across the pool, which the engine prices (engine.ts oneRerollDice).
@@ -852,7 +855,10 @@ function translateReroll(
   // uncapped reroll would silently overstate the effect.
   if (modifier.count !== undefined && damagePath) {
     if (modifier.count === 1 && subset === "all-failures") {
-      out.applied.push(withApplicability({ source, contribution: { type: "reroll-one", roll } }, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))));
+      out.applied.push(withApplicability(
+        { source, contribution: { type: "reroll-one", roll } },
+        withModelWargearApplicability(node, source, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))),
+      ));
       return;
     }
     out.unsupported.push({
@@ -862,7 +868,10 @@ function translateReroll(
     return;
   }
   if (damagePath && (subset === "ones" || subset === "ones-and-twos" || subset === "all-failures")) {
-    out.applied.push(withApplicability({ source, contribution: { type: "reroll", roll, subset } }, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))));
+    out.applied.push(withApplicability(
+      { source, contribution: { type: "reroll", roll, subset } },
+      withModelWargearApplicability(node, source, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))),
+    ));
     return;
   }
   out.unsupported.push({
@@ -1334,6 +1343,21 @@ function combineOptional(a: BuffApplicability | undefined, b: BuffApplicability 
 
 function withApplicability(buff: Buff, applicability: BuffApplicability | undefined): Buff {
   return applicability ? { ...buff, applicableWhen: applicability } : buff;
+}
+
+/**
+ * A model recipient only narrows scoring when the ability itself is printed by
+ * a wargear item. Other model targets remain subject to the existing
+ * recipient-resolution rules.
+ */
+function withModelWargearApplicability(
+  node: Record<string, unknown>,
+  source: BuffSource,
+  applicability: BuffApplicability | undefined,
+): BuffApplicability | undefined {
+  return source.kind === "ability" && source.wargearId !== undefined && node.target === "this-model"
+    ? combineOptional(applicability, { modelScoped: true })
+    : applicability;
 }
 
 /**

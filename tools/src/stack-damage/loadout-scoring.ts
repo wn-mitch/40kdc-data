@@ -36,6 +36,13 @@ export interface SelectedWeaponProfile {
   /** The Hit roll modifier the loadout rules imposed on this profile; absent when none. */
   hitModifier?: number;
   stages: readonly { name: string; expected: number }[];
+  /** Wargear carried by the group whose attacks this row represents, when model groups were known. */
+  modelWargear?: readonly string[];
+  /**
+   * This row took the unit's re-roll-one permissions (one Hit roll, one Wound roll): the loadout
+   * spends them on the single row they add the most to, so the other rows score without them.
+   */
+  rerollOne?: true;
 }
 
 /** Identically-equipped models: `count` models, each carrying `weapons` (per-model counts). */

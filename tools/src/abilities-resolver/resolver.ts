@@ -32,6 +32,7 @@
 import type { Phase, Stratagem } from "../generated.js";
 import type { Dataset } from "../data/dataset.js";
 import type { AbilityView } from "../data/entities.js";
+import { abilityRefId, abilityRefValue, abilityRefWargear } from "../data/ability-refs.js";
 import { normalizeName } from "../data/normalize.js";
 
 export type EligibleAbilitySource =
@@ -39,8 +40,8 @@ export type EligibleAbilitySource =
   | { kind: "detachment"; detachmentId: string }
   /** `selectsModel`: the Stratagem targets one model of the unit (`target_restrictions.selects: "model"`). */
   | { kind: "detachment-stratagem"; stratagemId: string; cpCost: number; selectsModel?: true }
-  | { kind: "unit"; unitId: string }
-  | { kind: "attached"; unitId: string }
+  | { kind: "unit"; unitId: string; wargearId?: string }
+  | { kind: "attached"; unitId: string; wargearId?: string }
   | { kind: "support"; sourceUnitId: string };
 
 export type EligibilityInput = {
@@ -155,14 +156,15 @@ export function resolveEligibleAbilities(
 
   // 4. Unit's own abilities. A unit lists the army rules its datasheet prints, but an army rule is
   // the army's (step 1, which also applies a Combat Patrol's replacements), never the unit's own.
-  for (const ability of unit.abilities) {
-    if (ability.raw.ability_type === "faction") continue;
-    if (!phaseMatches(ability, phase)) continue;
+  for (const ref of unit.raw.ability_ids ?? []) {
+    const ability = dataset.abilities.get(abilityRefId(ref));
+    if (!ability || ability.raw.ability_type === "faction" || !phaseMatches(ability, phase)) continue;
+    const wargearId = abilityRefWargear(ref);
     pushUnique(out, seen, {
       ability,
-      source: { kind: "unit", unitId: input.unitId },
+      source: { kind: "unit", unitId: input.unitId, ...(wargearId ? { wargearId } : {}) },
       phases: intersect(ability.phases, phase),
-      ...rated(unit.ratingOf(ability.id)),
+      ...rated(abilityRefValue(ref)),
     });
   }
 
@@ -172,14 +174,15 @@ export function resolveEligibleAbilities(
   for (const memberId of input.attachedUnitIds ?? []) {
     const member = resolveUnit(memberId, factionId);
     if (!member) continue;
-    for (const ability of member.abilities) {
-      if (ability.raw.ability_type === "faction") continue;
-      if (!phaseMatches(ability, phase)) continue;
+    for (const ref of member.raw.ability_ids ?? []) {
+      const ability = dataset.abilities.get(abilityRefId(ref));
+      if (!ability || ability.raw.ability_type === "faction" || !phaseMatches(ability, phase)) continue;
+      const wargearId = abilityRefWargear(ref);
       pushUnique(out, seen, {
         ability,
-        source: { kind: "attached", unitId: memberId },
+        source: { kind: "attached", unitId: memberId, ...(wargearId ? { wargearId } : {}) },
         phases: intersect(ability.phases, phase),
-        ...rated(member.ratingOf(ability.id)),
+        ...rated(abilityRefValue(ref)),
       });
     }
   }

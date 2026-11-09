@@ -5319,7 +5319,7 @@
         "steps": [
           {
             "type": "re-roll",
-            "target": "this-unit",
+            "target": "this-model",
             "modifier": {
               "roll": "hit",
               "result_scope": "any-result"
@@ -5327,7 +5327,7 @@
           },
           {
             "type": "re-roll",
-            "target": "this-unit",
+            "target": "this-model",
             "modifier": {
               "roll": "wound",
               "result_scope": "any-result"

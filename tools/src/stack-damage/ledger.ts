@@ -7,6 +7,7 @@ import { canTakeEnhancement, grantedRecordIds, grantedRecordLevers } from "../da
 import type { DamageScoringSession } from "./scoring.js";
 import type { StackMemberResult, StackResult } from "./model.js";
 import { printedWargear, WEAPON_GRANT_REASON } from "./weapon-grants.js";
+import { stackEligibleAbilities } from "./stratagem-eligibility.js";
 
 /**
  * What became of one provider in a cell's winning stack:
@@ -111,11 +112,24 @@ function sourceOf(entry: EligibleAbility): BuffSource {
   const { ability, source } = entry;
   switch (source.kind) {
     case "attached":
-      return { kind: "ability", abilityId: ability.id, abilityKind: "attached", sourceUnitId: source.unitId };
+      return {
+        kind: "ability",
+        abilityId: ability.id,
+        abilityKind: "attached",
+        sourceUnitId: source.unitId,
+        ...(source.wargearId ? { wargearId: source.wargearId } : {}),
+      };
     case "support":
       return { kind: "ability", abilityId: ability.id, abilityKind: "support", sourceUnitId: source.sourceUnitId };
     case "detachment-stratagem":
       return { kind: "ability", abilityId: ability.id, abilityKind: "detachment-stratagem", ...(source.selectsModel ? { selectsModel: true } : {}) };
+    case "unit":
+      return {
+        kind: "ability",
+        abilityId: ability.id,
+        abilityKind: "unit",
+        ...(source.wargearId ? { wargearId: source.wargearId } : {}),
+      };
     default:
       return { kind: "ability", abilityId: ability.id, abilityKind: source.kind };
   }
@@ -212,7 +226,7 @@ export function buildLedger(session: DamageScoringSession, result: StackResult):
     const grants = memberGrants(session, result, scored);
     for (const detachmentId of spec.detachmentIds.length > 0 ? spec.detachmentIds : [undefined]) {
       const input = session.eligibilityInput(spec, member, detachmentId);
-      for (const eligible of dataset.eligibleAbilities(input, context.phase)) {
+      for (const eligible of stackEligibleAbilities(dataset, input, context.phase)) {
         if (eligible.source.kind === "army" && replaced.has(eligible.ability.id)) continue;
         const source = sourceOf(eligible);
         const translation = eligible.ability.describeBuffs(source, context, "attacker", eligible.rating);

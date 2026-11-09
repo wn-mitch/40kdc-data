@@ -87,6 +87,23 @@ describe("Dataset.eligibleAbilities", () => {
     expect(result.some((e) => e.source.kind === "unit")).toBe(true);
   });
 
+  it("preserves the equipment that prints a unit ability", () => {
+    const pairedKrumpas = ds
+      .eligibleAbilities({ unitId: "nobz", factionId: "orks" }, "fight")
+      .find((entry) => entry.ability.id === "paired-krumpas-orks");
+
+    expect(pairedKrumpas?.source).toMatchObject({
+      kind: "unit",
+      unitId: "nobz",
+      wargearId: "paired-krumpas",
+    });
+
+    const buff = ds
+      .buffsFor({ unitId: "nobz", factionId: "orks" }, { phase: "fight" })
+      .find((entry) => entry.source.kind === "ability" && entry.source.abilityId === "paired-krumpas-orks");
+    expect(buff?.source).toMatchObject({ wargearId: "paired-krumpas" });
+  });
+
   it("pools an attached bodyguard's abilities onto the selected leader (reverse direction)", () => {
     const result = ds.eligibleAbilities(
       { unitId: "kharn-the-betrayer", attachedUnitIds: ["khorne-berzerkers"] },
