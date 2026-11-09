@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { Dataset, type EngineContext } from "@alpaca-software/40kdc-data";
 
-import { crunchLine, enabledLeverBuffs, memberMortalSources, memberUnits, mortalSourceBlocked, mortalSourceKey, mortalSourceLine, synthTarget, targetDefences } from "./output-model.js";
-import { DEFAULT_TARGET } from "./store.svelte.js";
+import { coveringLever, crunchLine, enabledLeverBuffs, leverRows, memberLevers, memberMortalSources, memberUnits, mortalSourceBlocked, mortalSourceKey, mortalSourceLine, synthTarget, targetDefences } from "./output-model.js";
+import { DEFAULT_TARGET, MANUAL_BUFF_TOGGLES } from "./store.svelte.js";
 import { weaponLines } from "./weapon-lines.js";
 import { RAW_DATA } from "../../../../tools/dist/data/bundle.generated.js";
 
@@ -100,5 +100,40 @@ describe("mortal wounds outside the attack", () => {
     expect(error).toBeUndefined();
     expect(sources.some((entry) => entry.abilityId === "krushin-impetus-orks")).toBe(false);
     expect(unverified).toContain(fixture.abilities.getInFaction("krushin-impetus-orks", "orks")!.name);
+  });
+});
+
+describe("the combined unit's ability rows", () => {
+  const berzerkers = { unitId: "khorne-berzerkers", factionId: "world-eaters", detachmentId: "berzerker-warband", attachedUnitIds: ["kharn-the-betrayer"], supportUnitIds: [] };
+  const perMember = memberLevers(ds, berzerkers, { phase: "fight", attackerCharged: true });
+  const rows = leverRows(perMember);
+  const row = (abilityId: string) => rows.filter((r) => r.lever.source.kind === "ability" && r.lever.source.abilityId === abilityId);
+
+  it("lists an ability every member reads once, switching each member's copy", () => {
+    // Each row shows the selected unit's view: its own rule, or the leader's rule attached to it.
+    for (const [abilityId, kind] of [["legendary-killer-world-eaters", "attached"], ["murderous-charge-world-eaters", "unit"]] as const) {
+      const [only, ...rest] = row(abilityId);
+      expect(rest, abilityId).toEqual([]);
+      expect([...only!.ids].sort(), abilityId).toEqual([`attached:${abilityId}`, `unit:${abilityId}`]);
+      expect(only!.lever.source, abilityId).toMatchObject({ abilityKind: kind });
+    }
+  });
+
+  it("keeps one row per blessing and every member's levers reachable", () => {
+    expect(row("blessings-of-khorne-world-eaters").length).toBeGreaterThanOrEqual(3);
+    const ids = new Set(rows.flatMap((r) => r.ids));
+    for (const { levers } of perMember) for (const lever of levers.buffs) expect(ids.has(lever.id), lever.id).toBe(true);
+  });
+
+  it("marks a manual toggle covered while an enabled lever grants the same effect", () => {
+    const levers = perMember[0]!.levers.buffs;
+    const lethal = MANUAL_BUFF_TOGGLES.find((t) => t.id === "lethal-hits")!.build();
+    const warpBlades = (lever: { id: string }) => lever.id === "blessings-of-khorne-world-eaters#Warp Blades";
+    expect(levers.some(warpBlades)).toBe(true);
+    expect(coveringLever(lethal, levers, () => false)).toBeUndefined();
+    expect(coveringLever(lethal, levers, warpBlades)?.id).toBe("blessings-of-khorne-world-eaters#Warp Blades");
+    // Sustained Hits is a different keyword: Warp Blades does not cover it.
+    const sustained = MANUAL_BUFF_TOGGLES.find((t) => t.id === "sustained-hits")!.build();
+    expect(coveringLever(sustained, levers, warpBlades)).toBeUndefined();
   });
 });

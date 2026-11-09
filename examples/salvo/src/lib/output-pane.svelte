@@ -13,6 +13,7 @@
     type AttributedStage,
     type Buff,
     type BuffSource,
+    type StackableBuff,
     type EngineContext,
     type EngineInput,
     clampWeaponCount,
@@ -40,6 +41,7 @@
     memberUnits as resolveMembers,
     memberWargear,
     unionLevers,
+    coveringLever,
     synthTarget,
     targetDefences,
   } from "./output-model.js";
@@ -101,7 +103,10 @@
   /** The buffs one member attacks with: its enabled levers, the manual toggles and the target's defences. */
   function buffsOf(memberId: string): Buff[] {
     const levers = perMember.find((member) => member.memberId === memberId)?.levers.buffs ?? [];
-    return [...enabledLeverBuffs(levers, (b) => salvo.isBuffEnabled(b.id, b.enabled)), ...manualBuffs, ...defensive.buffs];
+    const isEnabled = (b: StackableBuff) => salvo.isBuffEnabled(b.id, b.enabled);
+    // A manual toggle an enabled lever already grants would count the same effect twice.
+    const manual = manualBuffs.filter((buff) => !coveringLever(buff, levers, isEnabled));
+    return [...enabledLeverBuffs(levers, isEnabled), ...manual, ...defensive.buffs];
   }
   const contextOf = (memberId: string) => perMember.find((member) => member.memberId === memberId)?.context ?? context;
   // The selected unit's buffs, for the single-weapon projection and the debug snapshot.

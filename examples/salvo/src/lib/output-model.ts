@@ -400,3 +400,51 @@ export function mortalSourceStages(line: { damage: number; afterFnp: number }): 
     ({ name, expected, detail: "mortal wounds from abilities", baseline: expected, lifts: [], residual: 0, intrinsics: [] });
   return [stage("damage", line.damage), stage("after-fnp", line.afterFnp)];
 }
+
+/**
+ * One ability lever as the player sees it on the combined unit: every member's copy of it. A
+ * member reads its own ability as `unit:<id>` and another member's as `attached:<id>`; both are
+ * the same rule, switched on and off together.
+ */
+export type LeverRow = { key: string; lever: StackableBuff; ids: string[] };
+
+/** A lever's identity across the combined unit's members. */
+export function leverRowKey(lever: StackableBuff): string {
+  return lever.id.replace(/^(?:unit|attached):/, "");
+}
+
+/**
+ * The members' levers merged into one row per {@link leverRowKey}, in first-seen order. The row
+ * shows the first member's copy: the selected unit's view, naming any other member the ability
+ * comes from.
+ */
+export function leverRows(perMember: readonly MemberLevers[]): LeverRow[] {
+  const rows = new Map<string, LeverRow>();
+  for (const { levers } of perMember) {
+    for (const lever of levers.buffs) {
+      const key = leverRowKey(lever);
+      const row = rows.get(key);
+      if (!row) {
+        rows.set(key, { key, lever, ids: [lever.id] });
+        continue;
+      }
+      if (!row.ids.includes(lever.id)) row.ids.push(lever.id);
+    }
+  }
+  return [...rows.values()];
+}
+
+/** Whether two contributions are the same effect: the same keyword, or the same modifier and value. */
+function sameEffect(a: Buff["contribution"], b: Buff["contribution"]): boolean {
+  if (a.type !== b.type) return false;
+  if (a.type === "extra-keyword" && b.type === "extra-keyword") return a.keywordRef.keyword_id === b.keywordRef.keyword_id;
+  return ("value" in a ? a.value : undefined) === ("value" in b ? b.value : undefined);
+}
+
+/**
+ * The first enabled lever that already grants a manual toggle's effect, if any. A manual toggle it
+ * covers adds nothing the lever does not, and applying both would count the effect twice.
+ */
+export function coveringLever(manual: Buff, levers: readonly StackableBuff[], isEnabled: (lever: StackableBuff) => boolean): StackableBuff | undefined {
+  return levers.find((lever) => isEnabled(lever) && lever.buffs.some((buff) => sameEffect(buff.contribution, manual.contribution)));
+}
