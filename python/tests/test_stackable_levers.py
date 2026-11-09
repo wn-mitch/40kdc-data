@@ -338,19 +338,38 @@ def _with_granted_effect(wrap: Any) -> Dataset:
     return Dataset(raw)
 
 
-def test_granted_record_keeps_its_intersecting_usage_pools() -> None:
+def test_granted_record_usage_limit_does_not_cap_each_stance_pick() -> None:
     ds = _with_granted_effect(lambda record: {"usage": {"frequency": "n-per-battle", "count": 1}})
     result = ds.stackable_buffs_for(MOB, {"phase": "fight"})
     levers = {b["id"]: b for b in result["buffs"]}
     lever = levers["fix-grant-rule>fix-granted#stable-lethal"]
     assert lever["group"] == "fix-grant-rule>fix-granted?stance"
-    assert "fix-grant-rule>fix-granted?usage" in lever["groups"]
-    assert {
-        "id": "fix-grant-rule>fix-granted?usage",
-        "abilityId": "fix-granted",
-        "label": "Fix Granted",
-        "maxActivations": 1,
-    } in result["groups"]
+    assert not lever.get("groups")
+    assert lever["requires"][0]["usage"] == {"frequency": "n-per-battle", "count": 1}
+    assert not any(group["id"].endswith("?usage") for group in result["groups"])
+
+
+def test_blessings_of_khorne_are_capped_by_their_pool_not_the_round_limit() -> None:
+    result = Dataset.embedded().stackable_buffs_for(
+        {
+            "unitId": "khorne-berzerkers",
+            "factionId": "world-eaters",
+            "detachmentId": "berzerker-warband",
+            "attachedUnitIds": ["kharn-the-betrayer"],
+        },
+        {"phase": "fight"},
+    )
+    blessings = [
+        b
+        for b in result["buffs"]
+        if b["source"].get("abilityId") == "blessings-of-khorne-world-eaters"
+    ]
+    assert len(blessings) >= 3
+    for lever in blessings:
+        assert lever["group"] == "blessings-of-khorne-world-eaters"
+        assert not lever.get("groups")
+    pool = next(g for g in result["groups"] if g["id"] == "blessings-of-khorne-world-eaters")
+    assert pool["maxActivations"] == 2
 
 
 def test_granted_record_keeps_its_capacity_providers() -> None:

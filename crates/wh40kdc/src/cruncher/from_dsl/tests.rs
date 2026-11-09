@@ -418,7 +418,7 @@ fn local_reactions_keep_trigger_eligibility_and_parent_shared_usage() {
 }
 
 #[test]
-fn shared_usage_preserves_the_independent_stance_cap() {
+fn shared_usage_leaves_stance_picks_to_the_stance_cap() {
     let mut result = run(json!({"type": "stance-select", "mode": "re-selectable",
         "max_choices": 2, "options": [{"id": "fixed", "name": "Display name",
             "effect": {"type": "roll-modifier", "target": "this-unit",
@@ -432,8 +432,30 @@ fn shared_usage_preserves_the_independent_stance_cap() {
     assert_eq!(lever.id, "x#fixed");
     assert_eq!(lever.group.as_ref().unwrap().id, "x?stance");
     assert_eq!(lever.group.as_ref().unwrap().max_activations, 2);
-    assert_eq!(lever.groups.as_ref().unwrap()[0].id, "x?usage");
-    assert_eq!(lever.groups.as_ref().unwrap()[0].max_activations, 1);
+    assert!(lever.groups.is_none());
+}
+
+#[test]
+fn once_per_round_dice_pool_is_capped_by_its_max_activations() {
+    let option = |name: &str, min: i64| {
+        json!({"id": name, "name": name, "requirement": {"type": "pair", "min_value": min},
+            "effect": {"type": "roll-modifier", "target": "this-unit",
+                "modifier": {"roll": "hit", "operation": "add", "value": 1}}})
+    };
+    let mut result = run(json!({"type": "dice-pool-allocation",
+        "pool": {"count": 8, "die": "D6"}, "max_activations": 2,
+        "options": [option("A", 1), option("B", 2), option("C", 3)]}));
+    apply_activation(
+        &mut result,
+        "x",
+        json!({"usage": {"frequency": "once-per-battle-round", "per": "army"}}),
+    );
+    assert_eq!(result.activatable.len(), 3);
+    for lever in &result.activatable {
+        assert_eq!(lever.group.as_ref().unwrap().id, "x");
+        assert_eq!(lever.group.as_ref().unwrap().max_activations, 2);
+        assert!(lever.groups.is_none());
+    }
 }
 
 #[test]

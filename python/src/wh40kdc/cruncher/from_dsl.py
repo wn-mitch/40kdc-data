@@ -214,7 +214,10 @@ def _translate_effect(
             out["activatable"].append(lever)
             out["applied"] = []
         for lever in out["activatable"]:
-            if group and lever.get("group", {}).get("id") != group["id"]:
+            # The usage limit counts activations of the ability. Options picked within one
+            # activation (a dice pool, choice, stance or order) are capped by their own pool.
+            pooled = _is_activation_pool((lever.get("group") or {}).get("id"), ability_id)
+            if group and not pooled and lever.get("group", {}).get("id") != group["id"]:
                 if lever.get("group"):
                     lever["groups"] = [*(lever.get("groups") or []), group]
                 else:
@@ -226,6 +229,13 @@ def _translate_effect(
             }
             lever["requires"] = [requirement, *(lever.get("requires") or [])]
     return out
+
+
+def _is_activation_pool(group_id: Any, ability_id: str) -> bool:
+    """Whether ``group_id`` is a pool of ``ability_id`` picked together in one activation."""
+    return isinstance(group_id, str) and any(
+        group_id == f"{ability_id}{suffix}" for suffix in ("", "?choice", "?stance", "?order")
+    )
 
 
 def _is_object(value: Any) -> TypeGuard[dict[str, Any]]:

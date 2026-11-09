@@ -197,16 +197,29 @@ func translateEffect(effect any, source map[string]any, context map[string]any, 
 		if !ok || lever == nil {
 			continue
 		}
+		// The usage limit counts activations of the ability. Options picked within one
+		// activation (a dice pool, choice, stance or order) are capped by their own pool.
 		if group != nil {
 			if existing, _ := getMap(lever, "group"); existing == nil {
 				lever["group"] = group
-			} else if getStr(existing, "id") != getStr(group, "id") {
+			} else if getStr(existing, "id") != getStr(group, "id") && !isActivationPool(getStr(existing, "id"), abilityID) {
 				lever["groups"] = append(getList(lever, "groups"), group)
 			}
 		}
 		lever["requires"] = append(append([]any{}, requires...), getList(lever, "requires")...)
 	}
 	return out
+}
+
+// isActivationPool reports whether groupID is a pool of abilityID whose options
+// one activation picks together.
+func isActivationPool(groupID, abilityID string) bool {
+	for _, suffix := range []string{"", "?choice", "?stance", "?order"} {
+		if groupID == abilityID+suffix {
+			return true
+		}
+	}
+	return false
 }
 
 // isModelScopedFromAttachedMember reports whether this node is a model-scoped

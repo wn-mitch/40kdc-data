@@ -310,7 +310,9 @@ function translateEffect(
     const group = counts.length > 0 ? { id: `${abilityId}?usage`, maxActivations: Math.min(...counts) } : undefined;
     if (out.applied.length > 0) out.activatable.push({ id: `${abilityId}#activate`, label: labelForBuffs(out.applied), buffs: out.applied.splice(0), group });
     for (const lever of out.activatable) {
-      if (group && lever.group?.id !== group.id) {
+      // The usage limit counts activations of the ability. Options picked within one activation
+      // (a dice pool, choice, stance or order) are capped by their own pool, not each by the limit.
+      if (group && lever.group?.id !== group.id && !isActivationPool(lever.group?.id, abilityId)) {
         if (lever.group) lever.groups = [...(lever.groups ?? []), group];
         else lever.group = group;
       }
@@ -318,6 +320,14 @@ function translateEffect(
     }
   }
   return out;
+}
+
+/** Suffixes of the pools whose options are picked together in one activation of the ability. */
+const ACTIVATION_POOL_SUFFIXES = ["", "?choice", "?stance", "?order"];
+
+/** Whether `groupId` is a pool of `abilityId` whose options one activation picks together. */
+function isActivationPool(groupId: string | undefined, abilityId: string): boolean {
+  return groupId !== undefined && ACTIVATION_POOL_SUFFIXES.some((suffix) => groupId === `${abilityId}${suffix}`);
 }
 
 type WalkOpts = {

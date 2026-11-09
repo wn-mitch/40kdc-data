@@ -913,6 +913,9 @@ class Dataset:
         # translator so attachment-role conditions and keyword filters evaluate.
         # Clone — never mutate the caller's context. An explicitly-set value wins.
         ctx = self._with_rule_copies(self._derived_context(input, context), faction_id)
+        # The input's faction is the army whose rules the resolver walks, so it is the Army Faction.
+        if ctx.get("armyFaction") is None:
+            ctx["armyFaction"] = faction_id
         if ctx.get("attackerKeywords") is None and combined:
             ctx["attackerKeywords"] = combined_keywords_lower(combined)
         if ctx.get("attackerModelKeywords") is None and combined:
