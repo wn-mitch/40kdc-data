@@ -128,7 +128,262 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Atalan Jackal",
+          "models": 4,
+          "items": [
+            {
+              "id": "atalan-small-arms",
+              "count": 4
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Atalan Wolfquad",
+          "models": 1,
+          "items": [
+            {
+              "id": "atalan-small-arms",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "heavy-stubber",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Atalan Jackal",
+          "items": [
+            {
+              "id": "atalan-small-arms",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Atalan Wolfquad",
+          "items": [
+            {
+              "id": "atalan-small-arms",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "heavy-stubber",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Atalan Jackal",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "atalan-power-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Atalan Jackal",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "atalan-small-arms",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "grenade-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Atalan Wolfquad",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "atalan-incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-stubber",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "mining-laser",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Atalan Wolfquad",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "atalan-small-arms",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Atalan Jackal",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            },
+            {
+              "models": 8,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "grenade-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Atalan Jackal",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 2
+            },
+            {
+              "models": 8,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "atalan-power-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Atalan Jackal",
+          "id": "atalan-power-weapon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Atalan Jackal",
+          "id": "atalan-small-arms",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Atalan Jackal",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Atalan Jackal",
+          "id": "grenade-launcher",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Atalan Wolfquad",
+          "id": "atalan-incinerator",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Atalan Wolfquad",
+          "id": "atalan-small-arms",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Atalan Wolfquad",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Atalan Wolfquad",
+          "id": "heavy-stubber",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Atalan Wolfquad",
+          "id": "mining-laser",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "kelermorph",
@@ -163,7 +418,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Kelermorph",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-kelermorph",
+              "count": 1
+            },
+            {
+              "id": "liberator-autostubs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Kelermorph",
+          "items": [
+            {
+              "id": "close-combat-weapon-kelermorph",
+              "count": 1
+            },
+            {
+              "id": "liberator-autostubs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Kelermorph",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-kelermorph",
+                "count": 1
+              },
+              {
+                "id": "liberator-autostubs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Kelermorph",
+          "id": "close-combat-weapon-kelermorph",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kelermorph",
+          "id": "liberator-autostubs",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "neophyte-hybrids",
@@ -346,7 +670,403 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Neophyte Hybrid",
+          "models": 9,
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 9
+            },
+            {
+              "id": "close-combat-weapon-neophyte-hybrids",
+              "count": 9
+            },
+            {
+              "id": "hybrid-firearm",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Neophyte Leader",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-neophyte-hybrids",
+              "count": 1
+            },
+            {
+              "id": "hybrid-firearm",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Neophyte Hybrid",
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-neophyte-hybrids",
+              "count": 1
+            },
+            {
+              "id": "hybrid-firearm",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Neophyte Leader",
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-neophyte-hybrids",
+              "count": 1
+            },
+            {
+              "id": "hybrid-firearm",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Neophyte Hybrid",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-neophyte-hybrids",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Neophyte Hybrid",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cult-icon",
+                "count": 1
+              },
+              {
+                "id": "hybrid-firearm",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "grenade-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-stubber-neophyte-hybrids",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hybrid-firearm",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "mining-laser-neophyte-hybrids",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "seismic-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "webber",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Neophyte Leader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "anointed-pistol",
+                "count": 1
+              },
+              {
+                "id": "chainsword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "anointed-pistol",
+                "count": 1
+              },
+              {
+                "id": "power-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon-neophyte-hybrids",
+                "count": 1
+              },
+              {
+                "id": "hybrid-firearm",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Neophyte Leader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Neophyte Hybrid",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "cult-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Neophyte Hybrid",
+          "breakpoints": [
+            {
+              "models": 10,
+              "choices": 2,
+              "per_choice": 1
+            },
+            {
+              "models": 20,
+              "choices": 4,
+              "per_choice": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "grenade-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "webber",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Neophyte Hybrid",
+          "breakpoints": [
+            {
+              "models": 10,
+              "choices": 2,
+              "per_choice": 1
+            },
+            {
+              "models": 20,
+              "choices": 4,
+              "per_choice": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "heavy-stubber-neophyte-hybrids",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "mining-laser-neophyte-hybrids",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "seismic-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Neophyte Hybrid",
+          "id": "autopistol",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Neophyte Hybrid",
+          "id": "close-combat-weapon-neophyte-hybrids",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Neophyte Hybrid",
+          "id": "cult-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Neophyte Hybrid",
+          "id": "flamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Neophyte Hybrid",
+          "id": "grenade-launcher",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Neophyte Hybrid",
+          "id": "heavy-stubber-neophyte-hybrids",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Neophyte Hybrid",
+          "id": "hybrid-firearm",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Neophyte Hybrid",
+          "id": "mining-laser-neophyte-hybrids",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Neophyte Hybrid",
+          "id": "seismic-cannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Neophyte Hybrid",
+          "id": "webber",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Neophyte Leader",
+          "id": "anointed-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Neophyte Leader",
+          "id": "autopistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Neophyte Leader",
+          "id": "chainsword",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Neophyte Leader",
+          "id": "close-combat-weapon-neophyte-hybrids",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Neophyte Leader",
+          "id": "hybrid-firearm",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Neophyte Leader",
+          "id": "power-weapon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "clamavus",
@@ -381,7 +1101,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Clamavus",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol-clamavus",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-clamavus",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Clamavus",
+          "items": [
+            {
+              "id": "autopistol-clamavus",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-clamavus",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Clamavus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol-clamavus",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-clamavus",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Clamavus",
+          "id": "autopistol-clamavus",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Clamavus",
+          "id": "close-combat-weapon-clamavus",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "reductus-saboteur",
@@ -418,7 +1207,112 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Reductus Saboteur",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol-reductus-saboteur",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-reductus-saboteur",
+              "count": 1
+            },
+            {
+              "id": "demolition-charges",
+              "count": 1
+            },
+            {
+              "id": "remote-explosives",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Reductus Saboteur",
+          "items": [
+            {
+              "id": "autopistol-reductus-saboteur",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-reductus-saboteur",
+              "count": 1
+            },
+            {
+              "id": "demolition-charges",
+              "count": 1
+            },
+            {
+              "id": "remote-explosives",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Reductus Saboteur",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol-reductus-saboteur",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-reductus-saboteur",
+                "count": 1
+              },
+              {
+                "id": "demolition-charges",
+                "count": 1
+              },
+              {
+                "id": "remote-explosives",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Reductus Saboteur",
+          "id": "autopistol-reductus-saboteur",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Reductus Saboteur",
+          "id": "close-combat-weapon-reductus-saboteur",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Reductus Saboteur",
+          "id": "demolition-charges",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Reductus Saboteur",
+          "id": "remote-explosives",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "patriarch",
@@ -452,7 +1346,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Patriarch",
+          "models": 1,
+          "items": [
+            {
+              "id": "patriarchs-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Patriarch",
+          "items": [
+            {
+              "id": "patriarchs-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Patriarch",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "patriarchs-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Patriarch",
+          "id": "patriarchs-claws",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "goliath-truck",
@@ -489,7 +1434,112 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Goliath Truck",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "demolition-charge-cache",
+              "count": 1
+            },
+            {
+              "id": "heavy-stubber-goliath-truck",
+              "count": 1
+            },
+            {
+              "id": "twin-autocannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Goliath Truck",
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "demolition-charge-cache",
+              "count": 1
+            },
+            {
+              "id": "heavy-stubber-goliath-truck",
+              "count": 1
+            },
+            {
+              "id": "twin-autocannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Goliath Truck",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "demolition-charge-cache",
+                "count": 1
+              },
+              {
+                "id": "heavy-stubber-goliath-truck",
+                "count": 1
+              },
+              {
+                "id": "twin-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Goliath Truck",
+          "id": "armoured-hull",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Goliath Truck",
+          "id": "demolition-charge-cache",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Goliath Truck",
+          "id": "heavy-stubber-goliath-truck",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Goliath Truck",
+          "id": "twin-autocannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "biophagus",
@@ -526,7 +1576,112 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Biophagus",
+          "models": 1,
+          "items": [
+            {
+              "id": "alchemicus-familiar",
+              "count": 1
+            },
+            {
+              "id": "autopistol-biophagus",
+              "count": 1
+            },
+            {
+              "id": "chemical-vials",
+              "count": 1
+            },
+            {
+              "id": "injector-goad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Biophagus",
+          "items": [
+            {
+              "id": "alchemicus-familiar",
+              "count": 1
+            },
+            {
+              "id": "autopistol-biophagus",
+              "count": 1
+            },
+            {
+              "id": "chemical-vials",
+              "count": 1
+            },
+            {
+              "id": "injector-goad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Biophagus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "alchemicus-familiar",
+                "count": 1
+              },
+              {
+                "id": "autopistol-biophagus",
+                "count": 1
+              },
+              {
+                "id": "chemical-vials",
+                "count": 1
+              },
+              {
+                "id": "injector-goad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Biophagus",
+          "id": "alchemicus-familiar",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Biophagus",
+          "id": "autopistol-biophagus",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Biophagus",
+          "id": "chemical-vials",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Biophagus",
+          "id": "injector-goad",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "acolyte-iconward",
@@ -561,7 +1716,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Acolyte Iconward",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol-acolyte-iconward",
+              "count": 1
+            },
+            {
+              "id": "cult-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Acolyte Iconward",
+          "items": [
+            {
+              "id": "autopistol-acolyte-iconward",
+              "count": 1
+            },
+            {
+              "id": "cult-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Acolyte Iconward",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol-acolyte-iconward",
+                "count": 1
+              },
+              {
+                "id": "cult-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Acolyte Iconward",
+          "id": "autopistol-acolyte-iconward",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Acolyte Iconward",
+          "id": "cult-claws",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "achilles-ridgerunners",
@@ -608,7 +1832,180 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Achilles Ridgerunner",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull-achilles-ridgerunners",
+              "count": 1
+            },
+            {
+              "id": "flare-launcher",
+              "count": 1
+            },
+            {
+              "id": "heavy-mining-laser",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-stubber",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Achilles Ridgerunner",
+          "items": [
+            {
+              "id": "armoured-hull-achilles-ridgerunners",
+              "count": 1
+            },
+            {
+              "id": "flare-launcher",
+              "count": 1
+            },
+            {
+              "id": "heavy-mining-laser",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-stubber",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Achilles Ridgerunner",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "achilles-missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-mining-laser",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-mortar",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Achilles Ridgerunner",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull-achilles-ridgerunners",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-stubber",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Achilles Ridgerunner",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "flare-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "spotter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "survey-augur",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Achilles Ridgerunner",
+          "id": "achilles-missile-launcher",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Achilles Ridgerunner",
+          "id": "armoured-hull-achilles-ridgerunners",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Achilles Ridgerunner",
+          "id": "flare-launcher",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Achilles Ridgerunner",
+          "id": "heavy-mining-laser",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Achilles Ridgerunner",
+          "id": "heavy-mortar",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Achilles Ridgerunner",
+          "id": "spotter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Achilles Ridgerunner",
+          "id": "survey-augur",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Achilles Ridgerunner",
+          "id": "twin-heavy-stubber",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "primus",
@@ -644,7 +2041,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Primus",
+          "models": 1,
+          "items": [
+            {
+              "id": "cult-bonesword",
+              "count": 1
+            },
+            {
+              "id": "scoped-needle-pistol",
+              "count": 1
+            },
+            {
+              "id": "toxin-injector-claw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Primus",
+          "items": [
+            {
+              "id": "cult-bonesword",
+              "count": 1
+            },
+            {
+              "id": "scoped-needle-pistol",
+              "count": 1
+            },
+            {
+              "id": "toxin-injector-claw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Primus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cult-bonesword",
+                "count": 1
+              },
+              {
+                "id": "scoped-needle-pistol",
+                "count": 1
+              },
+              {
+                "id": "toxin-injector-claw",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Primus",
+          "id": "cult-bonesword",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Primus",
+          "id": "scoped-needle-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Primus",
+          "id": "toxin-injector-claw",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "abominant",
@@ -678,7 +2162,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Abominant",
+          "models": 1,
+          "items": [
+            {
+              "id": "power-sledgehammer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Abominant",
+          "items": [
+            {
+              "id": "power-sledgehammer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Abominant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "power-sledgehammer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Abominant",
+          "id": "power-sledgehammer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "nexos",
@@ -713,7 +2248,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Nexos",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol-nexos",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-nexos",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Nexos",
+          "items": [
+            {
+              "id": "autopistol-nexos",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-nexos",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Nexos",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol-nexos",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-nexos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Nexos",
+          "id": "autopistol-nexos",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Nexos",
+          "id": "close-combat-weapon-nexos",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sanctus",
@@ -747,7 +2351,80 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sanctus",
+          "models": 1,
+          "items": [
+            {
+              "id": "sanctus-bio-dagger",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sanctus",
+          "items": [
+            {
+              "id": "sanctus-bio-dagger",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sanctus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-sanctus",
+                "count": 1
+              },
+              {
+                "id": "cult-sniper-rifle",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "sanctus-bio-dagger",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sanctus",
+          "id": "close-combat-weapon-sanctus",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sanctus",
+          "id": "cult-sniper-rifle",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sanctus",
+          "id": "sanctus-bio-dagger",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "jackal-alphus",
@@ -784,7 +2461,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Jackal Alphus",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol-jackal-alphus",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-jackal-alphus",
+              "count": 1
+            },
+            {
+              "id": "cult-sniper-rifle-jackal-alphus",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Jackal Alphus",
+          "items": [
+            {
+              "id": "autopistol-jackal-alphus",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-jackal-alphus",
+              "count": 1
+            },
+            {
+              "id": "cult-sniper-rifle-jackal-alphus",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Jackal Alphus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol-jackal-alphus",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-jackal-alphus",
+                "count": 1
+              },
+              {
+                "id": "cult-sniper-rifle-jackal-alphus",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Jackal Alphus",
+          "id": "autopistol-jackal-alphus",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Jackal Alphus",
+          "id": "close-combat-weapon-jackal-alphus",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Jackal Alphus",
+          "id": "cult-sniper-rifle-jackal-alphus",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "aberrants",
@@ -850,7 +2614,97 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Aberrant Hypermorph",
+          "models": 1,
+          "items": [
+            {
+              "id": "aberrant-weapons",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Aberrant",
+          "models": 4,
+          "items": [
+            {
+              "id": "aberrant-weapons",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Aberrant Hypermorph",
+          "items": [
+            {
+              "id": "aberrant-weapons",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Aberrant",
+          "items": [
+            {
+              "id": "aberrant-weapons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Aberrant Hypermorph",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "aberrant-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Aberrant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "aberrant-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Aberrant Hypermorph",
+          "id": "aberrant-weapons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Aberrant",
+          "id": "aberrant-weapons",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "acolyte-hybrids-with-autopistols",
@@ -965,7 +2819,216 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Acolyte Hybrid",
+          "models": 4,
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 4
+            },
+            {
+              "id": "cult-claws-and-knife",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Acolyte Leader",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "cult-claws-and-knife",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Acolyte Hybrid",
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "cult-claws-and-knife",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Acolyte Leader",
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "cult-claws-and-knife",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Acolyte Hybrid",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "cult-claws-and-knife",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "cult-claws-and-knife",
+                "count": 1
+              },
+              {
+                "id": "cult-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-mining-tool",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Acolyte Leader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "cult-claws-and-knife",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "leaders-cult-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Acolyte Hybrid",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "cult-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Acolyte Hybrid",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 3
+            },
+            {
+              "models": 10,
+              "choices": 6
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "heavy-mining-tool",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Acolyte Hybrid",
+          "id": "autopistol",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Acolyte Hybrid",
+          "id": "cult-claws-and-knife",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Acolyte Hybrid",
+          "id": "cult-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Acolyte Hybrid",
+          "id": "heavy-mining-tool",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Acolyte Leader",
+          "id": "autopistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Acolyte Leader",
+          "id": "cult-claws-and-knife",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Acolyte Leader",
+          "id": "leaders-cult-weapons",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hybrid-metamorphs",
@@ -1070,7 +3133,199 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hybrid Metamorph",
+          "models": 4,
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 4
+            },
+            {
+              "id": "metamorph-mutations",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Metamorph Leader",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "leaders-cult-weapons-hybrid-metamorphs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hybrid Metamorph",
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "metamorph-mutations",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Metamorph Leader",
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "leaders-cult-weapons-hybrid-metamorphs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hybrid Metamorph",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "metamorph-mutations",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "cult-icon",
+                "count": 1
+              },
+              {
+                "id": "metamorph-mutations",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hand-flamer",
+                "count": 1
+              },
+              {
+                "id": "metamorph-mutations",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Metamorph Leader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "leaders-cult-weapons-hybrid-metamorphs",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hand-flamer",
+                "count": 1
+              },
+              {
+                "id": "leaders-cult-weapons-hybrid-metamorphs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Hybrid Metamorph",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "cult-icon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Hybrid Metamorph",
+          "id": "autopistol",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Hybrid Metamorph",
+          "id": "cult-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hybrid Metamorph",
+          "id": "hand-flamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Hybrid Metamorph",
+          "id": "metamorph-mutations",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Metamorph Leader",
+          "id": "autopistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Metamorph Leader",
+          "id": "hand-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Metamorph Leader",
+          "id": "leaders-cult-weapons-hybrid-metamorphs",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "acolyte-hybrids-with-hand-flamers",
@@ -1184,7 +3439,219 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Acolyte Hybrid",
+          "models": 4,
+          "items": [
+            {
+              "id": "cult-claws-and-knife",
+              "count": 4
+            },
+            {
+              "id": "hand-flamer",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Acolyte Leader",
+          "models": 1,
+          "items": [
+            {
+              "id": "cult-claws-and-knife",
+              "count": 1
+            },
+            {
+              "id": "hand-flamer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Acolyte Hybrid",
+          "items": [
+            {
+              "id": "cult-claws-and-knife",
+              "count": 1
+            },
+            {
+              "id": "hand-flamer",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Acolyte Leader",
+          "items": [
+            {
+              "id": "cult-claws-and-knife",
+              "count": 1
+            },
+            {
+              "id": "hand-flamer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Acolyte Hybrid",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cult-claws-and-knife",
+                "count": 1
+              },
+              {
+                "id": "cult-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "cult-claws-and-knife",
+                "count": 1
+              },
+              {
+                "id": "demolition-charges-acolyte-hybrids-with-hand-flamers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "cult-claws-and-knife",
+                "count": 1
+              },
+              {
+                "id": "hand-flamer",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Acolyte Leader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cult-claws-and-knife",
+                "count": 1
+              },
+              {
+                "id": "hand-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hand-flamer",
+                "count": 1
+              },
+              {
+                "id": "leaders-cult-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 2
+            },
+            {
+              "models": 10,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "demolition-charges-acolyte-hybrids-with-hand-flamers",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Acolyte Hybrid",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "cult-icon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Acolyte Hybrid",
+          "id": "cult-claws-and-knife",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Acolyte Hybrid",
+          "id": "cult-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Acolyte Hybrid",
+          "id": "demolition-charges-acolyte-hybrids-with-hand-flamers",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Acolyte Hybrid",
+          "id": "hand-flamer",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Acolyte Leader",
+          "id": "cult-claws-and-knife",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Acolyte Leader",
+          "id": "hand-flamer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Acolyte Leader",
+          "id": "leaders-cult-weapons",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "locus",
@@ -1218,7 +3685,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Locus",
+          "models": 1,
+          "items": [
+            {
+              "id": "locus-blades",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Locus",
+          "items": [
+            {
+              "id": "locus-blades",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Locus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "locus-blades",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Locus",
+          "id": "locus-blades",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "goliath-rockgrinder",
@@ -1255,7 +3773,146 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Goliath Rockgrinder",
+          "models": 1,
+          "items": [
+            {
+              "id": "demolition-charge-cache",
+              "count": 1
+            },
+            {
+              "id": "drilldozer-blade",
+              "count": 1
+            },
+            {
+              "id": "heavy-mining-laser",
+              "count": 1
+            },
+            {
+              "id": "heavy-stubber-goliath-rockgrinder",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Goliath Rockgrinder",
+          "items": [
+            {
+              "id": "demolition-charge-cache",
+              "count": 1
+            },
+            {
+              "id": "drilldozer-blade",
+              "count": 1
+            },
+            {
+              "id": "heavy-mining-laser",
+              "count": 1
+            },
+            {
+              "id": "heavy-stubber-goliath-rockgrinder",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Goliath Rockgrinder",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "clearance-incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-mining-laser",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-seismic-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Goliath Rockgrinder",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "demolition-charge-cache",
+                "count": 1
+              },
+              {
+                "id": "drilldozer-blade",
+                "count": 1
+              },
+              {
+                "id": "heavy-stubber-goliath-rockgrinder",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Goliath Rockgrinder",
+          "id": "clearance-incinerator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Goliath Rockgrinder",
+          "id": "demolition-charge-cache",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Goliath Rockgrinder",
+          "id": "drilldozer-blade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Goliath Rockgrinder",
+          "id": "heavy-mining-laser",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Goliath Rockgrinder",
+          "id": "heavy-seismic-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Goliath Rockgrinder",
+          "id": "heavy-stubber-goliath-rockgrinder",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "benefictus",
@@ -1290,7 +3947,62 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Benefictus",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-benefictus",
+              "count": 1
+            },
+            {
+              "id": "psionic-cascade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Benefictus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-benefictus",
+                "count": 1
+              },
+              {
+                "id": "psionic-cascade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Benefictus",
+          "id": "close-combat-weapon-benefictus",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Benefictus",
+          "id": "psionic-cascade",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "purestrain-genestealers",
@@ -1333,7 +4045,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Purestrain Genestealer",
+          "models": 5,
+          "items": [
+            {
+              "id": "cult-claws-and-talons",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Purestrain Genestealer",
+          "items": [
+            {
+              "id": "cult-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Purestrain Genestealer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cult-claws-and-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Purestrain Genestealer",
+          "id": "cult-claws-and-talons",
+          "input": "stepper",
+          "default": 5
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "magus",
@@ -1368,7 +4131,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Magus",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol-magus",
+              "count": 1
+            },
+            {
+              "id": "force-stave",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Magus",
+          "items": [
+            {
+              "id": "autopistol-magus",
+              "count": 1
+            },
+            {
+              "id": "force-stave",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Magus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol-magus",
+                "count": 1
+              },
+              {
+                "id": "force-stave",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Magus",
+          "id": "autopistol-magus",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Magus",
+          "id": "force-stave",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "claw-of-ascension-achilles-ridgerunner",
@@ -1408,7 +4240,76 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Achilles Ridgerunner",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull-claw-of-ascension-achilles-ridgerunner",
+              "count": 1
+            },
+            {
+              "id": "missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-stubber",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Achilles Ridgerunner",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull-claw-of-ascension-achilles-ridgerunner",
+                "count": 1
+              },
+              {
+                "id": "missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-stubber",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Achilles Ridgerunner",
+          "id": "armoured-hull-claw-of-ascension-achilles-ridgerunner",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Achilles Ridgerunner",
+          "id": "missile-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Achilles Ridgerunner",
+          "id": "twin-heavy-stubber",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "claw-of-ascension-atalan-jackals",
@@ -1489,7 +4390,164 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Atalan Jackal with Power Weapon",
+          "models": 1,
+          "items": [
+            {
+              "id": "power-weapon-claw-of-ascension-atalan-jackals",
+              "count": 1
+            },
+            {
+              "id": "stolen-firearms",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Atalan Jackal",
+          "models": 3,
+          "items": [
+            {
+              "id": "stolen-blade-claw-of-ascension-atalan-jackals",
+              "count": 3
+            },
+            {
+              "id": "stolen-firearms",
+              "count": 3
+            }
+          ]
+        },
+        {
+          "model": "Atalan Wolfquad",
+          "models": 1,
+          "items": [
+            {
+              "id": "mining-laser",
+              "count": 1
+            },
+            {
+              "id": "stolen-blade-claw-of-ascension-atalan-jackals",
+              "count": 1
+            },
+            {
+              "id": "stolen-firearms",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Atalan Jackal with Power Weapon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "power-weapon-claw-of-ascension-atalan-jackals",
+                "count": 1
+              },
+              {
+                "id": "stolen-firearms",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Atalan Jackal",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "stolen-blade-claw-of-ascension-atalan-jackals",
+                "count": 1
+              },
+              {
+                "id": "stolen-firearms",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Atalan Wolfquad",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "mining-laser",
+                "count": 1
+              },
+              {
+                "id": "stolen-blade-claw-of-ascension-atalan-jackals",
+                "count": 1
+              },
+              {
+                "id": "stolen-firearms",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Atalan Jackal with Power Weapon",
+          "id": "power-weapon-claw-of-ascension-atalan-jackals",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Atalan Jackal with Power Weapon",
+          "id": "stolen-firearms",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Atalan Jackal",
+          "id": "stolen-blade-claw-of-ascension-atalan-jackals",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Atalan Jackal",
+          "id": "stolen-firearms",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Atalan Wolfquad",
+          "id": "mining-laser",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Atalan Wolfquad",
+          "id": "stolen-blade-claw-of-ascension-atalan-jackals",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Atalan Wolfquad",
+          "id": "stolen-firearms",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "claw-of-ascension-hybrid-metamorphs",
@@ -1565,7 +4623,136 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Metamorph Leader",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "leaders-weapon-symbiote",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Metamorph with Hand Flamer",
+          "models": 3,
+          "items": [
+            {
+              "id": "hand-flamer",
+              "count": 3
+            },
+            {
+              "id": "metamorph-mutations",
+              "count": 3
+            }
+          ]
+        },
+        {
+          "model": "Metamorph",
+          "models": 1,
+          "items": [
+            {
+              "id": "metamorph-mutations",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Metamorph Leader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "leaders-weapon-symbiote",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Metamorph with Hand Flamer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hand-flamer",
+                "count": 1
+              },
+              {
+                "id": "metamorph-mutations",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Metamorph",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "metamorph-mutations",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Metamorph Leader",
+          "id": "autopistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Metamorph Leader",
+          "id": "leaders-weapon-symbiote",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Metamorph with Hand Flamer",
+          "id": "hand-flamer",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Metamorph with Hand Flamer",
+          "id": "metamorph-mutations",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Metamorph",
+          "id": "metamorph-mutations",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "shanus-daskovian",
@@ -1605,6 +4792,75 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Shanus Daskovian",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol-shanus-daskovian",
+              "count": 1
+            },
+            {
+              "id": "cult-sniper-rifle-shanus-daskovian",
+              "count": 1
+            },
+            {
+              "id": "stolen-blade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Shanus Daskovian",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol-shanus-daskovian",
+                "count": 1
+              },
+              {
+                "id": "cult-sniper-rifle-shanus-daskovian",
+                "count": 1
+              },
+              {
+                "id": "stolen-blade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Shanus Daskovian",
+          "id": "autopistol-shanus-daskovian",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Shanus Daskovian",
+          "id": "cult-sniper-rifle-shanus-daskovian",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Shanus Daskovian",
+          "id": "stolen-blade",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

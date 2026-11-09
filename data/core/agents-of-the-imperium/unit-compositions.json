@@ -138,7 +138,328 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Death Cult Assassin",
+          "models": 1,
+          "items": [
+            {
+              "id": "death-cult-blades",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Miraculist",
+          "models": 1,
+          "items": [
+            {
+              "id": "burning-hands",
+              "count": 1
+            },
+            {
+              "id": "holy-fire",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Missionary",
+          "models": 2,
+          "items": [
+            {
+              "id": "ministorum-flamer",
+              "count": 1
+            },
+            {
+              "id": "plasma-gun",
+              "count": 1
+            },
+            {
+              "id": "sanctifier-melee-weapon",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "model": "Salvationist",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "salvationist-medikit",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sanctifier",
+          "models": 4,
+          "items": [
+            {
+              "id": "ministorum-hand-flamer",
+              "count": 4
+            },
+            {
+              "id": "sanctifier-melee-weapon",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Death Cult Assassin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "death-cult-blades",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Miraculist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "burning-hands",
+                "count": 1
+              },
+              {
+                "id": "holy-fire",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Missionary",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "holy-fire",
+                "count": 1
+              },
+              {
+                "id": "plasma-gun",
+                "count": 1
+              },
+              {
+                "id": "sanctifier-melee-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              },
+              {
+                "id": "sanctifier-melee-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              },
+              {
+                "id": "sanctifier-melee-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-gun",
+                "count": 1
+              },
+              {
+                "id": "sanctifier-melee-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Salvationist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "salvationist-medikit",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sanctifier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 1
+              },
+              {
+                "id": "simulacrum-imperialis",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 1
+              },
+              {
+                "id": "sanctifier-melee-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Death Cult Assassin",
+          "id": "death-cult-blades",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Miraculist",
+          "id": "burning-hands",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Miraculist",
+          "id": "holy-fire",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Missionary",
+          "id": "holy-fire",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Missionary",
+          "id": "meltagun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Missionary",
+          "id": "ministorum-flamer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Missionary",
+          "id": "plasma-gun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Missionary",
+          "id": "sanctifier-melee-weapon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Salvationist",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Salvationist",
+          "id": "salvationist-medikit",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sanctifier",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sanctifier",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sanctifier",
+          "id": "ministorum-hand-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sanctifier",
+          "id": "ministorum-hand-flamer",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Sanctifier",
+          "id": "sanctifier-melee-weapon",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Sanctifier",
+          "id": "simulacrum-imperialis",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "watch-captain-artemis",
@@ -182,7 +503,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Watch Captain Artemis",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellfire-extremis",
+              "count": 1
+            },
+            {
+              "id": "master-crafted-power-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Watch Captain Artemis",
+          "items": [
+            {
+              "id": "hellfire-extremis",
+              "count": 1
+            },
+            {
+              "id": "master-crafted-power-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Watch Captain Artemis",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellfire-extremis",
+                "count": 1
+              },
+              {
+                "id": "master-crafted-power-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Watch Captain Artemis",
+          "id": "hellfire-extremis",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Watch Captain Artemis",
+          "id": "master-crafted-power-weapon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "inquisitorial-chimera",
@@ -228,7 +618,299 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Inquisitorial Chimera",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter",
+              "count": 1
+            },
+            {
+              "id": "lasgun-array",
+              "count": 1
+            },
+            {
+              "id": "multi-laser",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Inquisitorial Chimera",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "hunter-killer-missile",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Inquisitorial Chimera",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "lasgun-array",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Inquisitorial Chimera",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 1
+              },
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "heavy-stubber",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 1
+              },
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 1
+              },
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 1
+              },
+              {
+                "id": "heavy-stubber",
+                "count": 1
+              },
+              {
+                "id": "multi-laser",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 1
+              },
+              {
+                "id": "multi-laser",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 1
+              },
+              {
+                "id": "multi-laser",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 2
+              },
+              {
+                "id": "heavy-stubber",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 2
+              },
+              {
+                "id": "storm-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "heavy-stubber",
+                "count": 1
+              },
+              {
+                "id": "multi-laser",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "multi-laser",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 2
+              },
+              {
+                "id": "heavy-stubber",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 2
+              },
+              {
+                "id": "storm-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "storm-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Inquisitorial Chimera",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitorial Chimera",
+          "id": "heavy-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Inquisitorial Chimera",
+          "id": "heavy-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitorial Chimera",
+          "id": "heavy-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Inquisitorial Chimera",
+          "id": "heavy-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Inquisitorial Chimera",
+          "id": "heavy-stubber",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Inquisitorial Chimera",
+          "id": "hunter-killer-missile",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Inquisitorial Chimera",
+          "id": "lasgun-array",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitorial Chimera",
+          "id": "multi-laser",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitorial Chimera",
+          "id": "storm-bolter",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "callidus-assassin",
@@ -281,7 +963,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Callidus Assassin",
+          "models": 1,
+          "items": [
+            {
+              "id": "neural-shredder",
+              "count": 1
+            },
+            {
+              "id": "phase-sword-and-poison-blades",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Callidus Assassin",
+          "items": [
+            {
+              "id": "neural-shredder",
+              "count": 1
+            },
+            {
+              "id": "phase-sword-and-poison-blades",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Callidus Assassin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "neural-shredder",
+                "count": 1
+              },
+              {
+                "id": "phase-sword-and-poison-blades",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Callidus Assassin",
+          "id": "neural-shredder",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Callidus Assassin",
+          "id": "phase-sword-and-poison-blades",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "inquisitor-greyfax",
@@ -326,7 +1077,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Inquisitor Greyfax",
+          "models": 1,
+          "items": [
+            {
+              "id": "castigation",
+              "count": 1
+            },
+            {
+              "id": "condemnor-stake",
+              "count": 1
+            },
+            {
+              "id": "master-crafted-power-sword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Inquisitor Greyfax",
+          "items": [
+            {
+              "id": "castigation",
+              "count": 1
+            },
+            {
+              "id": "condemnor-stake",
+              "count": 1
+            },
+            {
+              "id": "master-crafted-power-sword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Inquisitor Greyfax",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "castigation",
+                "count": 1
+              },
+              {
+                "id": "condemnor-stake",
+                "count": 1
+              },
+              {
+                "id": "master-crafted-power-sword",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Inquisitor Greyfax",
+          "id": "castigation",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitor Greyfax",
+          "id": "condemnor-stake",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitor Greyfax",
+          "id": "master-crafted-power-sword",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sisters-of-battle-immolator",
@@ -371,7 +1209,149 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sisters of Battle Immolator",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter-sisters-of-battle-immolator",
+              "count": 1
+            },
+            {
+              "id": "immolation-flamers",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sisters of Battle Immolator",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter-sisters-of-battle-immolator",
+              "count": 1
+            },
+            {
+              "id": "immolation-flamers",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sisters of Battle Immolator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "hunter-killer-missile-sisters-of-battle-immolator",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sisters of Battle Immolator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "heavy-bolter-sisters-of-battle-immolator",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sisters of Battle Immolator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "immolation-flamers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sisters of Battle Immolator",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sisters of Battle Immolator",
+          "id": "heavy-bolter-sisters-of-battle-immolator",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sisters of Battle Immolator",
+          "id": "hunter-killer-missile-sisters-of-battle-immolator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sisters of Battle Immolator",
+          "id": "immolation-flamers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sisters of Battle Immolator",
+          "id": "twin-heavy-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sisters of Battle Immolator",
+          "id": "twin-multi-melta",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "inquisitorial-agents",
@@ -495,7 +1475,328 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Gun Servitor",
+          "models": 1,
+          "items": [
+            {
+              "id": "agent-melee-weapon",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter-inquisitorial-agents",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Inquisitorial Agent",
+          "models": 5,
+          "items": [
+            {
+              "id": "agent-firearm",
+              "count": 5
+            },
+            {
+              "id": "agent-melee-weapon",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Gun Servitor",
+          "items": [
+            {
+              "id": "agent-melee-weapon",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter-inquisitorial-agents",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Inquisitorial Agent",
+          "items": [
+            {
+              "id": "agent-firearm",
+              "count": 1
+            },
+            {
+              "id": "agent-melee-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Gun Servitor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "agent-melee-weapon",
+                "count": 1
+              },
+              {
+                "id": "heavy-bolter-inquisitorial-agents",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "agent-melee-weapon",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "agent-melee-weapon",
+                "count": 1
+              },
+              {
+                "id": "plasma-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Inquisitorial Agent",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "agent-firearm",
+                "count": 1
+              },
+              {
+                "id": "agent-melee-weapon",
+                "count": 1
+              },
+              {
+                "id": "eviscerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "agent-firearm",
+                "count": 1
+              },
+              {
+                "id": "agent-melee-weapon",
+                "count": 1
+              },
+              {
+                "id": "mystic-stave",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "agent-firearm",
+                "count": 1
+              },
+              {
+                "id": "agent-melee-weapon",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "agent-firearm",
+                "count": 1
+              },
+              {
+                "id": "agent-melee-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "picks": 2,
+          "repeats": true,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "tome-skull",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "breakpoints": [
+            {
+              "models": 6,
+              "choices": 1
+            },
+            {
+              "models": 11,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "tome-skull",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Inquisitorial Agent",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "eviscerator",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Inquisitorial Agent",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "mystic-stave",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Inquisitorial Agent",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "id": "tome-skull",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Gun Servitor",
+          "id": "agent-melee-weapon",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Gun Servitor",
+          "id": "heavy-bolter-inquisitorial-agents",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Gun Servitor",
+          "id": "multi-melta",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Gun Servitor",
+          "id": "plasma-cannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Inquisitorial Agent",
+          "id": "agent-firearm",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Inquisitorial Agent",
+          "id": "agent-melee-weapon",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Inquisitorial Agent",
+          "id": "eviscerator",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Inquisitorial Agent",
+          "id": "mystic-stave",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Inquisitorial Agent",
+          "id": "plasma-pistol",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "inquisitor",
@@ -540,7 +1841,204 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Inquisitor",
+          "models": 1,
+          "items": [
+            {
+              "id": "blessed-wardings",
+              "count": 1
+            },
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "inquisitorial-melee-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Inquisitor",
+          "items": [
+            {
+              "id": "blessed-wardings",
+              "count": 1
+            },
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "inquisitorial-melee-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Inquisitor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blessed-wardings",
+                "count": 1
+              },
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "inquisitorial-melee-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "blessed-wardings",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon",
+                "count": 1
+              },
+              {
+                "id": "inquisitorial-melee-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "force-weapon",
+                "count": 1
+              },
+              {
+                "id": "psychic-gifts",
+                "count": 1
+              },
+              {
+                "id": "psychic-shock-wave",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "inquisitorial-melee-weapon",
+                "count": 1
+              },
+              {
+                "id": "psychic-gifts",
+                "count": 1
+              },
+              {
+                "id": "psychic-shock-wave",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              },
+              {
+                "id": "force-weapon",
+                "count": 1
+              },
+              {
+                "id": "psychic-gifts",
+                "count": 1
+              },
+              {
+                "id": "psychic-shock-wave",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              },
+              {
+                "id": "inquisitorial-melee-weapon",
+                "count": 1
+              },
+              {
+                "id": "psychic-gifts",
+                "count": 1
+              },
+              {
+                "id": "psychic-shock-wave",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Inquisitor",
+          "id": "blessed-wardings",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitor",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitor",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Inquisitor",
+          "id": "force-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Inquisitor",
+          "id": "inquisitorial-melee-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitor",
+          "id": "psychic-gifts",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Inquisitor",
+          "id": "psychic-shock-wave",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "grey-knights-terminator-squad",
@@ -608,7 +2106,237 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Grey Knights Terminators",
+          "models": 4,
+          "items": [
+            {
+              "id": "nemesis-force-weapon",
+              "count": 4
+            },
+            {
+              "id": "storm-bolter-grey-knights-terminator-squad",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Terminator Justicar",
+          "models": 1,
+          "items": [
+            {
+              "id": "nemesis-force-weapon",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-grey-knights-terminator-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Grey Knights Terminators",
+          "items": [
+            {
+              "id": "nemesis-force-weapon",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-grey-knights-terminator-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Terminator Justicar",
+          "items": [
+            {
+              "id": "nemesis-force-weapon",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-grey-knights-terminator-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Grey Knights Terminators",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ancients-banner",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-grey-knights-terminator-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "narthecium",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "psilencer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "psycannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "storm-bolter-grey-knights-terminator-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Grey Knights Terminators",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Terminator Justicar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-grey-knights-terminator-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Grey Knights Terminators",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "psilencer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "psycannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Grey Knights Terminators",
+          "id": "ancients-banner",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grey Knights Terminators",
+          "id": "incinerator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grey Knights Terminators",
+          "id": "narthecium",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grey Knights Terminators",
+          "id": "nemesis-force-weapon",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Grey Knights Terminators",
+          "id": "psilencer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grey Knights Terminators",
+          "id": "psycannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grey Knights Terminators",
+          "id": "storm-bolter-grey-knights-terminator-squad",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Terminator Justicar",
+          "id": "nemesis-force-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Terminator Justicar",
+          "id": "storm-bolter-grey-knights-terminator-squad",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "voidsmen-at-arms",
@@ -703,7 +2431,244 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Canid",
+          "models": 1,
+          "items": [
+            {
+              "id": "vicious-bite",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Voidmaster",
+          "models": 1,
+          "items": [
+            {
+              "id": "artificer-shotgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-voidsmen-at-arms",
+              "count": 1
+            },
+            {
+              "id": "laspistol",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Voidsman",
+          "models": 4,
+          "items": [
+            {
+              "id": "close-combat-weapon-voidsmen-at-arms",
+              "count": 4
+            },
+            {
+              "id": "lasgun",
+              "count": 3
+            },
+            {
+              "id": "laspistol",
+              "count": 4
+            },
+            {
+              "id": "voidsman-rotor-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Canid",
+          "items": [
+            {
+              "id": "vicious-bite",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Voidmaster",
+          "items": [
+            {
+              "id": "artificer-shotgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-voidsmen-at-arms",
+              "count": 1
+            },
+            {
+              "id": "laspistol",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Voidsman",
+          "items": [
+            {
+              "id": "close-combat-weapon-voidsmen-at-arms",
+              "count": 1
+            },
+            {
+              "id": "lasgun",
+              "count": 1
+            },
+            {
+              "id": "laspistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Canid",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "vicious-bite",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Voidmaster",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "artificer-shotgun",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-voidsmen-at-arms",
+                "count": 1
+              },
+              {
+                "id": "laspistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Voidsman",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-voidsmen-at-arms",
+                "count": 1
+              },
+              {
+                "id": "lasgun",
+                "count": 1
+              },
+              {
+                "id": "laspistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon-voidsmen-at-arms",
+                "count": 1
+              },
+              {
+                "id": "laspistol",
+                "count": 1
+              },
+              {
+                "id": "voidsman-rotor-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Canid",
+          "id": "vicious-bite",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Voidmaster",
+          "id": "artificer-shotgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Voidmaster",
+          "id": "close-combat-weapon-voidsmen-at-arms",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Voidmaster",
+          "id": "laspistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Voidsman",
+          "id": "close-combat-weapon-voidsmen-at-arms",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Voidsman",
+          "id": "close-combat-weapon-voidsmen-at-arms",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Voidsman",
+          "id": "lasgun",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Voidsman",
+          "id": "laspistol",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Voidsman",
+          "id": "laspistol",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Voidsman",
+          "id": "voidsman-rotor-cannon",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "deathwatch-kill-team",
@@ -800,7 +2765,452 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Deathwatch Veteran",
+          "models": 4,
+          "items": [
+            {
+              "id": "boltgun",
+              "count": 4
+            },
+            {
+              "id": "power-weapon",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Watch Sergeant",
+          "models": 1,
+          "items": [
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "power-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Deathwatch Veteran",
+          "items": [
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "power-weapon",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Watch Sergeant",
+          "items": [
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "power-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Deathwatch Veteran",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "black-shield-blades",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "boltgun",
+                "count": 1
+              },
+              {
+                "id": "power-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "boltgun",
+                "count": 1
+              },
+              {
+                "id": "storm-shield",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "deathwatch-shotgun",
+                "count": 1
+              },
+              {
+                "id": "knives-and-fists",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "frag-cannon",
+                "count": 1
+              },
+              {
+                "id": "knives-and-fists",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-thunder-hammer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "infernus-heavy-bolter",
+                "count": 1
+              },
+              {
+                "id": "knives-and-fists",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "knives-and-fists",
+                "count": 1
+              },
+              {
+                "id": "stalker-pattern-boltgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon",
+                "count": 1
+              },
+              {
+                "id": "storm-shield",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Watch Sergeant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "boltgun",
+                "count": 1
+              },
+              {
+                "id": "power-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "boltgun",
+                "count": 1
+              },
+              {
+                "id": "xenophase-blade",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon-deathwatch-kill-team",
+                "count": 1
+              },
+              {
+                "id": "power-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon-deathwatch-kill-team",
+                "count": 1
+              },
+              {
+                "id": "xenophase-blade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Deathwatch Veteran",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "frag-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "infernus-heavy-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "stalker-pattern-boltgun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 2
+            },
+            {
+              "models": 10,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "deathwatch-shotgun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 2
+            },
+            {
+              "models": 10,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "heavy-thunder-hammer",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 2
+            },
+            {
+              "models": 10,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "storm-shield",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Deathwatch Veteran",
+          "id": "black-shield-blades",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "id": "boltgun",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "id": "boltgun",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "id": "deathwatch-shotgun",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "id": "frag-cannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "id": "heavy-thunder-hammer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "id": "infernus-heavy-bolter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "id": "knives-and-fists",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "id": "knives-and-fists",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "id": "knives-and-fists",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "id": "knives-and-fists",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "id": "power-weapon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "id": "power-weapon",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "id": "stalker-pattern-boltgun",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran",
+          "id": "storm-shield",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Watch Sergeant",
+          "id": "boltgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Watch Sergeant",
+          "id": "combi-weapon-deathwatch-kill-team",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Watch Sergeant",
+          "id": "power-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Watch Sergeant",
+          "id": "xenophase-blade",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "eversor-assassin",
@@ -853,7 +3263,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Eversor Assassin",
+          "models": 1,
+          "items": [
+            {
+              "id": "executioner-pistol",
+              "count": 1
+            },
+            {
+              "id": "power-sword-and-neuro-gauntlet",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Eversor Assassin",
+          "items": [
+            {
+              "id": "executioner-pistol",
+              "count": 1
+            },
+            {
+              "id": "power-sword-and-neuro-gauntlet",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Eversor Assassin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "executioner-pistol",
+                "count": 1
+              },
+              {
+                "id": "power-sword-and-neuro-gauntlet",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Eversor Assassin",
+          "id": "executioner-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Eversor Assassin",
+          "id": "power-sword-and-neuro-gauntlet",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "imperial-rhino",
@@ -897,7 +3376,96 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Imperial Rhino",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-imperial-rhino",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Imperial Rhino",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-imperial-rhino",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Imperial Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "hunter-killer-missile-imperial-rhino",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-imperial-rhino",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-imperial-rhino",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Imperial Rhino",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Imperial Rhino",
+          "id": "hunter-killer-missile-imperial-rhino",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Imperial Rhino",
+          "id": "storm-bolter-imperial-rhino",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "aquila-kill-team",
@@ -1122,7 +3690,511 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+          "models": 1,
+          "items": [
+            {
+              "id": "deathwatch-marksman-bolt-carbine",
+              "count": 1
+            },
+            {
+              "id": "knives-and-fists",
+              "count": 1
+            },
+            {
+              "id": "special-issue-bolt-pistol",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol-aquila-kill-team",
+              "count": 1
+            },
+            {
+              "id": "heavy-thunder-hammer",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol-aquila-kill-team",
+              "count": 1
+            },
+            {
+              "id": "knives-and-fists",
+              "count": 1
+            },
+            {
+              "id": "stalker-bolt-rifle",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
+          "models": 0,
+          "items": [
+            {
+              "id": "special-issue-bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "xenophase-blade",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Gravis Veteran",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol-aquila-kill-team",
+              "count": 1
+            },
+            {
+              "id": "infernus-heavy-bolter-aquila-kill-team",
+              "count": 1
+            },
+            {
+              "id": "knives-and-fists",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Kill Team Sergeant",
+          "models": 1,
+          "items": [
+            {
+              "id": "plasma-pistol-aquila-kill-team",
+              "count": 1
+            },
+            {
+              "id": "power-weapon-aquila-kill-team",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+          "items": [
+            {
+              "id": "deathwatch-marksman-bolt-carbine",
+              "count": 1
+            },
+            {
+              "id": "knives-and-fists",
+              "count": 1
+            },
+            {
+              "id": "special-issue-bolt-pistol",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+          "items": [
+            {
+              "id": "bolt-pistol-aquila-kill-team",
+              "count": 1
+            },
+            {
+              "id": "heavy-thunder-hammer",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+          "items": [
+            {
+              "id": "bolt-pistol-aquila-kill-team",
+              "count": 1
+            },
+            {
+              "id": "knives-and-fists",
+              "count": 1
+            },
+            {
+              "id": "stalker-bolt-rifle",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
+          "items": [
+            {
+              "id": "special-issue-bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "xenophase-blade",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Gravis Veteran",
+          "items": [
+            {
+              "id": "bolt-pistol-aquila-kill-team",
+              "count": 1
+            },
+            {
+              "id": "infernus-heavy-bolter-aquila-kill-team",
+              "count": 1
+            },
+            {
+              "id": "knives-and-fists",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Kill Team Sergeant",
+          "items": [
+            {
+              "id": "plasma-pistol-aquila-kill-team",
+              "count": 1
+            },
+            {
+              "id": "power-weapon-aquila-kill-team",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "deathwatch-marksman-bolt-carbine",
+                "count": 1
+              },
+              {
+                "id": "knives-and-fists",
+                "count": 1
+              },
+              {
+                "id": "special-issue-bolt-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-aquila-kill-team",
+                "count": 1
+              },
+              {
+                "id": "heavy-thunder-hammer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol-aquila-kill-team",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-aquila-kill-team",
+                "count": 1
+              },
+              {
+                "id": "storm-shield",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-aquila-kill-team",
+                "count": 1
+              },
+              {
+                "id": "knives-and-fists",
+                "count": 1
+              },
+              {
+                "id": "plasma-incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol-aquila-kill-team",
+                "count": 1
+              },
+              {
+                "id": "knives-and-fists",
+                "count": 1
+              },
+              {
+                "id": "stalker-bolt-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "special-issue-bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "xenophase-blade",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Gravis Veteran",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-aquila-kill-team",
+                "count": 1
+              },
+              {
+                "id": "frag-cannon-aquila-kill-team",
+                "count": 1
+              },
+              {
+                "id": "knives-and-fists",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol-aquila-kill-team",
+                "count": 1
+              },
+              {
+                "id": "grenade-launcher-aquila-kill-team",
+                "count": 1
+              },
+              {
+                "id": "hellstorm-bolt-rifle",
+                "count": 1
+              },
+              {
+                "id": "knives-and-fists",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol-aquila-kill-team",
+                "count": 1
+              },
+              {
+                "id": "infernus-heavy-bolter-aquila-kill-team",
+                "count": 1
+              },
+              {
+                "id": "knives-and-fists",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kill Team Sergeant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "plasma-pistol-aquila-kill-team",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-aquila-kill-team",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+          "id": "deathwatch-marksman-bolt-carbine",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+          "id": "knives-and-fists",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
+          "id": "special-issue-bolt-pistol",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+          "id": "bolt-pistol-aquila-kill-team",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+          "id": "heavy-thunder-hammer",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+          "id": "power-weapon-aquila-kill-team",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
+          "id": "storm-shield",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+          "id": "bolt-pistol-aquila-kill-team",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+          "id": "knives-and-fists",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+          "id": "plasma-incinerator",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
+          "id": "stalker-bolt-rifle",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
+          "id": "special-issue-bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
+          "id": "xenophase-blade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gravis Veteran",
+          "id": "bolt-pistol-aquila-kill-team",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Gravis Veteran",
+          "id": "frag-cannon-aquila-kill-team",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Gravis Veteran",
+          "id": "grenade-launcher-aquila-kill-team",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Gravis Veteran",
+          "id": "hellstorm-bolt-rifle",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Gravis Veteran",
+          "id": "infernus-heavy-bolter-aquila-kill-team",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Gravis Veteran",
+          "id": "knives-and-fists",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Kill Team Sergeant",
+          "id": "plasma-pistol-aquila-kill-team",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kill Team Sergeant",
+          "id": "power-weapon-aquila-kill-team",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "vindicare-assassin",
@@ -1176,7 +4248,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Vindicare Assassin",
+          "models": 1,
+          "items": [
+            {
+              "id": "exitus-pistol",
+              "count": 1
+            },
+            {
+              "id": "exitus-rifle",
+              "count": 1
+            },
+            {
+              "id": "vindicare-combat-knife",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Vindicare Assassin",
+          "items": [
+            {
+              "id": "exitus-pistol",
+              "count": 1
+            },
+            {
+              "id": "exitus-rifle",
+              "count": 1
+            },
+            {
+              "id": "vindicare-combat-knife",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Vindicare Assassin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "exitus-pistol",
+                "count": 1
+              },
+              {
+                "id": "exitus-rifle",
+                "count": 1
+              },
+              {
+                "id": "vindicare-combat-knife",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Vindicare Assassin",
+          "id": "exitus-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Vindicare Assassin",
+          "id": "exitus-rifle",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Vindicare Assassin",
+          "id": "vindicare-combat-knife",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "exaction-squad",
@@ -1372,7 +4531,422 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Cyber-mastiff",
+          "models": 1,
+          "items": [
+            {
+              "id": "mechanical-bite",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Exaction Vigilant",
+          "models": 9,
+          "items": [
+            {
+              "id": "arbites-combat-shotgun",
+              "count": 9
+            },
+            {
+              "id": "arbites-shotpistol",
+              "count": 9
+            },
+            {
+              "id": "close-combat-weapon-exaction-squad",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Proctor-Exactant",
+          "models": 1,
+          "items": [
+            {
+              "id": "arbites-combat-shotgun",
+              "count": 1
+            },
+            {
+              "id": "arbites-shotpistol",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-exaction-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Cyber-mastiff",
+          "items": [
+            {
+              "id": "mechanical-bite",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Exaction Vigilant",
+          "items": [
+            {
+              "id": "arbites-combat-shotgun",
+              "count": 1
+            },
+            {
+              "id": "arbites-shotpistol",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-exaction-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Proctor-Exactant",
+          "items": [
+            {
+              "id": "arbites-combat-shotgun",
+              "count": 1
+            },
+            {
+              "id": "arbites-shotpistol",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-exaction-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Cyber-mastiff",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "mechanical-bite",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Exaction Vigilant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arbites-combat-shotgun",
+                "count": 1
+              },
+              {
+                "id": "arbites-medi-kit",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "arbites-combat-shotgun",
+                "count": 1
+              },
+              {
+                "id": "excruciator-maul",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "arbites-combat-shotgun",
+                "count": 1
+              },
+              {
+                "id": "soulguilt-scanner",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "arbites-combat-shotgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "arbites-grenade-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "executioner-shotgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-stubber",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "webber",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Exaction Vigilant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arbites-shotpistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-exaction-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Proctor-Exactant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "nuncio-acquila",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Proctor-Exactant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arbites-combat-shotgun",
+                "count": 1
+              },
+              {
+                "id": "arbites-shotpistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-exaction-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Exaction Vigilant",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "arbites-medi-kit",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Exaction Vigilant",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "excruciator-maul",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Exaction Vigilant",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "soulguilt-scanner",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Exaction Vigilant",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "arbites-grenade-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "executioner-shotgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-stubber",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "webber",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Cyber-mastiff",
+          "id": "mechanical-bite",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Exaction Vigilant",
+          "id": "arbites-combat-shotgun",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Exaction Vigilant",
+          "id": "arbites-grenade-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Exaction Vigilant",
+          "id": "arbites-medi-kit",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Exaction Vigilant",
+          "id": "arbites-shotpistol",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Exaction Vigilant",
+          "id": "close-combat-weapon-exaction-squad",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Exaction Vigilant",
+          "id": "excruciator-maul",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Exaction Vigilant",
+          "id": "executioner-shotgun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Exaction Vigilant",
+          "id": "heavy-stubber",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Exaction Vigilant",
+          "id": "soulguilt-scanner",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Exaction Vigilant",
+          "id": "webber",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Proctor-Exactant",
+          "id": "arbites-combat-shotgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Proctor-Exactant",
+          "id": "arbites-shotpistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Proctor-Exactant",
+          "id": "close-combat-weapon-exaction-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Proctor-Exactant",
+          "id": "nuncio-acquila",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "imperial-navy-breachers",
@@ -1439,6 +5013,344 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
+    },
+    "loadout": {
+      "stock": [
+        {
+          "model": "Navis Armsman",
+          "models": 9,
+          "items": [
+            {
+              "id": "close-combat-weapon-imperial-navy-breachers",
+              "count": 9
+            },
+            {
+              "id": "endurant-shield",
+              "count": 1
+            },
+            {
+              "id": "navis-heavy-shotgun",
+              "count": 1
+            },
+            {
+              "id": "navis-las-volley",
+              "count": 1
+            },
+            {
+              "id": "navis-shotgun",
+              "count": 7
+            }
+          ]
+        },
+        {
+          "model": "Navis Sergeant-at-Arms",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-imperial-navy-breachers",
+              "count": 1
+            },
+            {
+              "id": "navis-shotgun",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Navis Sergeant-at-Arms",
+          "items": [
+            {
+              "id": "close-combat-weapon-imperial-navy-breachers",
+              "count": 1
+            },
+            {
+              "id": "navis-shotgun",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Navis Armsman",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "demolition-charge",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Navis Armsman",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "chainfist",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-imperial-navy-breachers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-imperial-navy-breachers",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-imperial-navy-breachers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon-imperial-navy-breachers",
+                "count": 1
+              },
+              {
+                "id": "endurant-shield",
+                "count": 1
+              },
+              {
+                "id": "navis-heavy-shotgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon-imperial-navy-breachers",
+                "count": 1
+              },
+              {
+                "id": "meltagun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon-imperial-navy-breachers",
+                "count": 1
+              },
+              {
+                "id": "navis-las-volley",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon-imperial-navy-breachers",
+                "count": 1
+              },
+              {
+                "id": "navis-shotgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon-imperial-navy-breachers",
+                "count": 1
+              },
+              {
+                "id": "plasma-gun-imperial-navy-breachers",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Navis Sergeant-at-Arms",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "chainsword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol-imperial-navy-breachers",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-imperial-navy-breachers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "navis-shotgun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Navis Sergeant-at-Arms",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-imperial-navy-breachers",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Navis Armsman",
+          "id": "autopistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Navis Armsman",
+          "id": "autopistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Navis Armsman",
+          "id": "chainfist",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Navis Armsman",
+          "id": "close-combat-weapon-imperial-navy-breachers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Navis Armsman",
+          "id": "close-combat-weapon-imperial-navy-breachers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Navis Armsman",
+          "id": "close-combat-weapon-imperial-navy-breachers",
+          "input": "stepper",
+          "default": 7
+        },
+        {
+          "model": "Navis Armsman",
+          "id": "demolition-charge",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Navis Armsman",
+          "id": "endurant-shield",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Navis Armsman",
+          "id": "meltagun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Navis Armsman",
+          "id": "navis-heavy-shotgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Navis Armsman",
+          "id": "navis-las-volley",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Navis Armsman",
+          "id": "navis-shotgun",
+          "input": "stepper",
+          "default": 7
+        },
+        {
+          "model": "Navis Armsman",
+          "id": "plasma-gun-imperial-navy-breachers",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Navis Armsman",
+          "id": "power-weapon-imperial-navy-breachers",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Navis Sergeant-at-Arms",
+          "id": "autopistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Navis Sergeant-at-Arms",
+          "id": "bolt-pistol-imperial-navy-breachers",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Navis Sergeant-at-Arms",
+          "id": "chainsword",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Navis Sergeant-at-Arms",
+          "id": "close-combat-weapon-imperial-navy-breachers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Navis Sergeant-at-Arms",
+          "id": "navis-shotgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Navis Sergeant-at-Arms",
+          "id": "power-weapon-imperial-navy-breachers",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
     }
   },
   {
@@ -1492,7 +5404,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Culexus Assassin",
+          "models": 1,
+          "items": [
+            {
+              "id": "animus-speculum",
+              "count": 1
+            },
+            {
+              "id": "life-draining-touch",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Culexus Assassin",
+          "items": [
+            {
+              "id": "animus-speculum",
+              "count": 1
+            },
+            {
+              "id": "life-draining-touch",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Culexus Assassin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "animus-speculum",
+                "count": 1
+              },
+              {
+                "id": "life-draining-touch",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Culexus Assassin",
+          "id": "animus-speculum",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Culexus Assassin",
+          "id": "life-draining-touch",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "vigilant-squad",
@@ -1647,7 +5628,323 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Cyber-mastiff",
+          "models": 1,
+          "items": [
+            {
+              "id": "mechanical-bite",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Proctor-Vigilant",
+          "models": 1,
+          "items": [
+            {
+              "id": "arbites-combat-shotgun",
+              "count": 1
+            },
+            {
+              "id": "arbites-shotpistol",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-vigilant-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Vigilant",
+          "models": 9,
+          "items": [
+            {
+              "id": "arbites-combat-shotgun",
+              "count": 9
+            },
+            {
+              "id": "arbites-shotpistol",
+              "count": 9
+            },
+            {
+              "id": "close-combat-weapon-vigilant-squad",
+              "count": 9
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Cyber-mastiff",
+          "items": [
+            {
+              "id": "mechanical-bite",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Proctor-Vigilant",
+          "items": [
+            {
+              "id": "arbites-combat-shotgun",
+              "count": 1
+            },
+            {
+              "id": "arbites-shotpistol",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-vigilant-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Vigilant",
+          "items": [
+            {
+              "id": "arbites-combat-shotgun",
+              "count": 1
+            },
+            {
+              "id": "arbites-shotpistol",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-vigilant-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Cyber-mastiff",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "mechanical-bite",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Proctor-Vigilant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "nuncio-acquila",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Proctor-Vigilant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arbites-combat-shotgun",
+                "count": 1
+              },
+              {
+                "id": "arbites-shotpistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-vigilant-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Vigilant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arbites-combat-shotgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "arbites-grenade-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "executioner-shotgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-stubber",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "webber",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Vigilant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arbites-shotpistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-vigilant-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Vigilant",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "arbites-grenade-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "executioner-shotgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-stubber",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "webber",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Cyber-mastiff",
+          "id": "mechanical-bite",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Proctor-Vigilant",
+          "id": "arbites-combat-shotgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Proctor-Vigilant",
+          "id": "arbites-shotpistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Proctor-Vigilant",
+          "id": "close-combat-weapon-vigilant-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Proctor-Vigilant",
+          "id": "nuncio-acquila",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Vigilant",
+          "id": "arbites-combat-shotgun",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Vigilant",
+          "id": "arbites-grenade-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Vigilant",
+          "id": "arbites-shotpistol",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Vigilant",
+          "id": "close-combat-weapon-vigilant-squad",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Vigilant",
+          "id": "executioner-shotgun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Vigilant",
+          "id": "heavy-stubber",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Vigilant",
+          "id": "webber",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "subductor-squad",
@@ -1740,7 +6037,193 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Cyber-mastiff",
+          "models": 1,
+          "items": [
+            {
+              "id": "mechanical-bite",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Proctor-Subductor",
+          "models": 1,
+          "items": [
+            {
+              "id": "arbites-shotpistol",
+              "count": 1
+            },
+            {
+              "id": "shock-maul",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Subductor",
+          "models": 9,
+          "items": [
+            {
+              "id": "arbites-shotpistol",
+              "count": 9
+            },
+            {
+              "id": "shock-maul",
+              "count": 9
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Cyber-mastiff",
+          "items": [
+            {
+              "id": "mechanical-bite",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Proctor-Subductor",
+          "items": [
+            {
+              "id": "arbites-shotpistol",
+              "count": 1
+            },
+            {
+              "id": "shock-maul",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Subductor",
+          "items": [
+            {
+              "id": "arbites-shotpistol",
+              "count": 1
+            },
+            {
+              "id": "shock-maul",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Cyber-mastiff",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "mechanical-bite",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Proctor-Subductor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "nuncio-acquila",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Proctor-Subductor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arbites-shotpistol",
+                "count": 1
+              },
+              {
+                "id": "shock-maul",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Subductor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arbites-shotpistol",
+                "count": 1
+              },
+              {
+                "id": "shock-maul",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Cyber-mastiff",
+          "id": "mechanical-bite",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Proctor-Subductor",
+          "id": "arbites-shotpistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Proctor-Subductor",
+          "id": "nuncio-acquila",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Proctor-Subductor",
+          "id": "shock-maul",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Subductor",
+          "id": "arbites-shotpistol",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Subductor",
+          "id": "shock-maul",
+          "input": "stepper",
+          "default": 9
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "navigator",
@@ -1784,7 +6267,62 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Navigator",
+          "models": 1,
+          "items": [
+            {
+              "id": "force-orb-cane",
+              "count": 1
+            },
+            {
+              "id": "laspistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Navigator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "force-orb-cane",
+                "count": 1
+              },
+              {
+                "id": "laspistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Navigator",
+          "id": "force-orb-cane",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Navigator",
+          "id": "laspistol",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "inquisitor-draxus",
@@ -1829,7 +6367,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Inquisitor Draxus",
+          "models": 1,
+          "items": [
+            {
+              "id": "dirgesinger",
+              "count": 1
+            },
+            {
+              "id": "power-fist",
+              "count": 1
+            },
+            {
+              "id": "psychic-tempest",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Inquisitor Draxus",
+          "items": [
+            {
+              "id": "dirgesinger",
+              "count": 1
+            },
+            {
+              "id": "power-fist",
+              "count": 1
+            },
+            {
+              "id": "psychic-tempest",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Inquisitor Draxus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dirgesinger",
+                "count": 1
+              },
+              {
+                "id": "power-fist",
+                "count": 1
+              },
+              {
+                "id": "psychic-tempest",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Inquisitor Draxus",
+          "id": "dirgesinger",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitor Draxus",
+          "id": "power-fist",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitor Draxus",
+          "id": "psychic-tempest",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "watch-master",
@@ -1872,7 +6497,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Watch Master",
+          "models": 1,
+          "items": [
+            {
+              "id": "vigil-spear",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Watch Master",
+          "items": [
+            {
+              "id": "vigil-spear",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Watch Master",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "vigil-spear",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Watch Master",
+          "id": "vigil-spear",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "inquisitor-coteaz",
@@ -1918,7 +6594,108 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Inquisitor Coteaz",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "glovodan-psyber-eagle",
+              "count": 1
+            },
+            {
+              "id": "nemesis-daemon-hammer",
+              "count": 1
+            },
+            {
+              "id": "psychic-blast",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Inquisitor Coteaz",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "nemesis-daemon-hammer",
+              "count": 1
+            },
+            {
+              "id": "psychic-blast",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Inquisitor Coteaz",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "glovodan-psyber-eagle",
+                "count": 1
+              },
+              {
+                "id": "nemesis-daemon-hammer",
+                "count": 1
+              },
+              {
+                "id": "psychic-blast",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Inquisitor Coteaz",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitor Coteaz",
+          "id": "glovodan-psyber-eagle",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitor Coteaz",
+          "id": "nemesis-daemon-hammer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitor Coteaz",
+          "id": "psychic-blast",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sisters-of-battle-squad",
@@ -2132,7 +6909,627 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Battle Sister",
+          "models": 9,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 9
+            },
+            {
+              "id": "boltgun-sisters-of-battle-squad",
+              "count": 9
+            },
+            {
+              "id": "close-combat-weapon-sisters-of-battle-squad",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Sister Superior",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun-sisters-of-battle-squad",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-sisters-of-battle-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Battle Sister",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun-sisters-of-battle-squad",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-sisters-of-battle-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sister Superior",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun-sisters-of-battle-squad",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-sisters-of-battle-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Battle Sister",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "artificer-crafted-storm-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "boltgun-sisters-of-battle-squad",
+                "count": 1
+              },
+              {
+                "id": "simulacrum-imperialis",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "boltgun-sisters-of-battle-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter-sisters-of-battle-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun-sisters-of-battle-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Battle Sister",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-sisters-of-battle-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sister Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "chainsword-sisters-of-battle-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon-sisters-of-battle-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sister Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "boltgun-sisters-of-battle-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon-sisters-of-battle-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "condemnor-boltgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "inferno-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol-sisters-of-battle-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sister Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-sisters-of-battle-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Battle Sister",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "artificer-crafted-storm-bolter",
+                "count": 1
+              },
+              {
+                "id": "heavy-bolter-sisters-of-battle-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "artificer-crafted-storm-bolter",
+                "count": 1
+              },
+              {
+                "id": "meltagun-sisters-of-battle-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "artificer-crafted-storm-bolter",
+                "count": 1
+              },
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "artificer-crafted-storm-bolter",
+                "count": 1
+              },
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "artificer-crafted-storm-bolter",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "artificer-crafted-storm-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "artificer-crafted-storm-bolter",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter-sisters-of-battle-squad",
+                "count": 1
+              },
+              {
+                "id": "meltagun-sisters-of-battle-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter-sisters-of-battle-squad",
+                "count": 1
+              },
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter-sisters-of-battle-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun-sisters-of-battle-squad",
+                "count": 1
+              },
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun-sisters-of-battle-squad",
+                "count": 1
+              },
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun-sisters-of-battle-squad",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun-sisters-of-battle-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun-sisters-of-battle-squad",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              },
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-flamer",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Battle Sister",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "boltgun-sisters-of-battle-squad",
+                "count": 1
+              },
+              {
+                "id": "simulacrum-imperialis",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Battle Sister",
+          "id": "artificer-crafted-storm-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "artificer-crafted-storm-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "bolt-pistol",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Battle Sister",
+          "id": "boltgun-sisters-of-battle-squad",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Battle Sister",
+          "id": "close-combat-weapon-sisters-of-battle-squad",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Battle Sister",
+          "id": "heavy-bolter-sisters-of-battle-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "meltagun-sisters-of-battle-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "meltagun-sisters-of-battle-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "ministorum-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "ministorum-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "ministorum-heavy-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "multi-melta",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "simulacrum-imperialis",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sister Superior",
+          "id": "boltgun-sisters-of-battle-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sister Superior",
+          "id": "chainsword-sisters-of-battle-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "close-combat-weapon-sisters-of-battle-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sister Superior",
+          "id": "combi-weapon-sisters-of-battle-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "condemnor-boltgun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "inferno-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "ministorum-hand-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "plasma-pistol-sisters-of-battle-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "power-weapon-sisters-of-battle-squad",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "corvus-blackstar",
@@ -2180,7 +7577,162 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Corvus Blackstar",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "auspex-array",
+              "count": 1
+            },
+            {
+              "id": "blackstar-rocket-launcher",
+              "count": 2
+            },
+            {
+              "id": "twin-assault-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Corvus Blackstar",
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "auspex-array",
+              "count": 1
+            },
+            {
+              "id": "blackstar-rocket-launcher",
+              "count": 2
+            },
+            {
+              "id": "twin-assault-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Corvus Blackstar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "auspex-array",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Corvus Blackstar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blackstar-rocket-launcher",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "stormstrike-missile-launcher",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Corvus Blackstar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "twin-assault-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Corvus Blackstar",
+          "id": "armoured-hull",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Corvus Blackstar",
+          "id": "auspex-array",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Corvus Blackstar",
+          "id": "blackstar-rocket-launcher",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Corvus Blackstar",
+          "id": "hurricane-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Corvus Blackstar",
+          "id": "stormstrike-missile-launcher",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Corvus Blackstar",
+          "id": "twin-assault-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Corvus Blackstar",
+          "id": "twin-lascannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ministorum-priest",
@@ -2223,7 +7775,80 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ministorum Priest",
+          "models": 1,
+          "items": [
+            {
+              "id": "zealots-vindictor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ministorum Priest",
+          "items": [
+            {
+              "id": "zealots-vindictor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ministorum Priest",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "holy-pistol",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-ministorum-priest",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "zealots-vindictor",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Ministorum Priest",
+          "id": "holy-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Ministorum Priest",
+          "id": "power-weapon-ministorum-priest",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Ministorum Priest",
+          "id": "zealots-vindictor",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "rogue-trader-entourage",
@@ -2341,7 +7966,265 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Death Cult Assassin",
+          "models": 1,
+          "items": [
+            {
+              "id": "dartmask",
+              "count": 1
+            },
+            {
+              "id": "death-cult-power-blade",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Lectro‐Maester",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-rogue-trader-entourage",
+              "count": 1
+            },
+            {
+              "id": "voltaic-pistol",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Rejuvenat Adept",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-rogue-trader-entourage",
+              "count": 1
+            },
+            {
+              "id": "healing-serum",
+              "count": 1
+            },
+            {
+              "id": "laspistol",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Rogue Trader",
+          "models": 1,
+          "items": [
+            {
+              "id": "household-pistol",
+              "count": 1
+            },
+            {
+              "id": "monomolecular-cane-rapier",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Death Cult Assassin",
+          "items": [
+            {
+              "id": "dartmask",
+              "count": 1
+            },
+            {
+              "id": "death-cult-power-blade",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Lectro‐Maester",
+          "items": [
+            {
+              "id": "close-combat-weapon-rogue-trader-entourage",
+              "count": 1
+            },
+            {
+              "id": "voltaic-pistol",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Rejuvenat Adept",
+          "items": [
+            {
+              "id": "close-combat-weapon-rogue-trader-entourage",
+              "count": 1
+            },
+            {
+              "id": "healing-serum",
+              "count": 1
+            },
+            {
+              "id": "laspistol",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Rogue Trader",
+          "items": [
+            {
+              "id": "household-pistol",
+              "count": 1
+            },
+            {
+              "id": "monomolecular-cane-rapier",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Death Cult Assassin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dartmask",
+                "count": 1
+              },
+              {
+                "id": "death-cult-power-blade",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Lectro‐Maester",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-rogue-trader-entourage",
+                "count": 1
+              },
+              {
+                "id": "voltaic-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Rejuvenat Adept",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-rogue-trader-entourage",
+                "count": 1
+              },
+              {
+                "id": "healing-serum",
+                "count": 1
+              },
+              {
+                "id": "laspistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Rogue Trader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "household-pistol",
+                "count": 1
+              },
+              {
+                "id": "monomolecular-cane-rapier",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Death Cult Assassin",
+          "id": "dartmask",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Death Cult Assassin",
+          "id": "death-cult-power-blade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lectro‐Maester",
+          "id": "close-combat-weapon-rogue-trader-entourage",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lectro‐Maester",
+          "id": "voltaic-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Rejuvenat Adept",
+          "id": "close-combat-weapon-rogue-trader-entourage",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Rejuvenat Adept",
+          "id": "healing-serum",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Rejuvenat Adept",
+          "id": "laspistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Rogue Trader",
+          "id": "household-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Rogue Trader",
+          "id": "monomolecular-cane-rapier",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "inquisitor-kroyle",
@@ -2386,6 +8269,111 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
+    },
+    "loadout": {
+      "stock": [
+        {
+          "model": "Inquisitor Kroyle",
+          "models": 1,
+          "items": [
+            {
+              "id": "butcher-blade",
+              "count": 1
+            },
+            {
+              "id": "garralisks-claws-and-teeth",
+              "count": 1
+            },
+            {
+              "id": "jindarii-tox-cycler",
+              "count": 1
+            },
+            {
+              "id": "stubcarbine",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Inquisitor Kroyle",
+          "items": [
+            {
+              "id": "butcher-blade",
+              "count": 1
+            },
+            {
+              "id": "garralisks-claws-and-teeth",
+              "count": 1
+            },
+            {
+              "id": "jindarii-tox-cycler",
+              "count": 1
+            },
+            {
+              "id": "stubcarbine",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Inquisitor Kroyle",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "butcher-blade",
+                "count": 1
+              },
+              {
+                "id": "garralisks-claws-and-teeth",
+                "count": 1
+              },
+              {
+                "id": "jindarii-tox-cycler",
+                "count": 1
+              },
+              {
+                "id": "stubcarbine",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Inquisitor Kroyle",
+          "id": "butcher-blade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitor Kroyle",
+          "id": "garralisks-claws-and-teeth",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitor Kroyle",
+          "id": "jindarii-tox-cycler",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitor Kroyle",
+          "id": "stubcarbine",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
     }
   },
   {
@@ -2424,7 +8412,62 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Eversor Assassin",
+          "models": 1,
+          "items": [
+            {
+              "id": "executioner-pistol-inquisitors-hand-eversor-assassin",
+              "count": 1
+            },
+            {
+              "id": "power-sword-and-neuro-gauntlet",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Eversor Assassin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "executioner-pistol-inquisitors-hand-eversor-assassin",
+                "count": 1
+              },
+              {
+                "id": "power-sword-and-neuro-gauntlet",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Eversor Assassin",
+          "id": "executioner-pistol-inquisitors-hand-eversor-assassin",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Eversor Assassin",
+          "id": "power-sword-and-neuro-gauntlet",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "inquisitors-hand-inquisitorial-agents",
@@ -2521,7 +8564,222 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Gun Servitor",
+          "models": 1,
+          "items": [
+            {
+              "id": "agents-implement",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter-inquisitors-hand-inquisitorial-agents",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Inquisitorial Agent with Agent’s Firearm and Agent’s Implement",
+          "models": 3,
+          "items": [
+            {
+              "id": "agent-firearm-inquisitors-hand-inquisitorial-agents",
+              "count": 3
+            },
+            {
+              "id": "agents-implement",
+              "count": 3
+            }
+          ]
+        },
+        {
+          "model": "Inquisitorial Agent with Agent’s Firearm, Agent’s Implement and Mystic Stave",
+          "models": 1,
+          "items": [
+            {
+              "id": "agent-firearm-inquisitors-hand-inquisitorial-agents",
+              "count": 1
+            },
+            {
+              "id": "agents-implement",
+              "count": 1
+            },
+            {
+              "id": "mystic-stave",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Inquisitorial Agent with Agent’s Firearm, Plasma Pistol and Agent’s Implement",
+          "models": 1,
+          "items": [
+            {
+              "id": "agent-firearm-inquisitors-hand-inquisitorial-agents",
+              "count": 1
+            },
+            {
+              "id": "agents-implement",
+              "count": 1
+            },
+            {
+              "id": "plasma-pistol-inquisitors-hand-inquisitorial-agents",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Gun Servitor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "agents-implement",
+                "count": 1
+              },
+              {
+                "id": "heavy-bolter-inquisitors-hand-inquisitorial-agents",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Inquisitorial Agent with Agent’s Firearm and Agent’s Implement",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "agent-firearm-inquisitors-hand-inquisitorial-agents",
+                "count": 1
+              },
+              {
+                "id": "agents-implement",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Inquisitorial Agent with Agent’s Firearm, Agent’s Implement and Mystic Stave",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "agent-firearm-inquisitors-hand-inquisitorial-agents",
+                "count": 1
+              },
+              {
+                "id": "agents-implement",
+                "count": 1
+              },
+              {
+                "id": "mystic-stave",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Inquisitorial Agent with Agent’s Firearm, Plasma Pistol and Agent’s Implement",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "agent-firearm-inquisitors-hand-inquisitorial-agents",
+                "count": 1
+              },
+              {
+                "id": "agents-implement",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol-inquisitors-hand-inquisitorial-agents",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Gun Servitor",
+          "id": "agents-implement",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gun Servitor",
+          "id": "heavy-bolter-inquisitors-hand-inquisitorial-agents",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitorial Agent with Agent’s Firearm and Agent’s Implement",
+          "id": "agent-firearm-inquisitors-hand-inquisitorial-agents",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Inquisitorial Agent with Agent’s Firearm and Agent’s Implement",
+          "id": "agents-implement",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Inquisitorial Agent with Agent’s Firearm, Agent’s Implement and Mystic Stave",
+          "id": "agent-firearm-inquisitors-hand-inquisitorial-agents",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitorial Agent with Agent’s Firearm, Agent’s Implement and Mystic Stave",
+          "id": "agents-implement",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitorial Agent with Agent’s Firearm, Agent’s Implement and Mystic Stave",
+          "id": "mystic-stave",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitorial Agent with Agent’s Firearm, Plasma Pistol and Agent’s Implement",
+          "id": "agent-firearm-inquisitors-hand-inquisitorial-agents",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitorial Agent with Agent’s Firearm, Plasma Pistol and Agent’s Implement",
+          "id": "agents-implement",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Inquisitorial Agent with Agent’s Firearm, Plasma Pistol and Agent’s Implement",
+          "id": "plasma-pistol-inquisitors-hand-inquisitorial-agents",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "inquisitors-hand-vigilant-squad",
@@ -2638,7 +8896,280 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Cyber-Mastiff",
+          "models": 1,
+          "items": [
+            {
+              "id": "mechanical-bite",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Proctor-Vigilant",
+          "models": 1,
+          "items": [
+            {
+              "id": "combat-shotgun",
+              "count": 1
+            },
+            {
+              "id": "gun-stocks",
+              "count": 1
+            },
+            {
+              "id": "shotpistol",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Vigilant with Combat Shotgun, Shotpistol and Gun Stocks",
+          "models": 6,
+          "items": [
+            {
+              "id": "combat-shotgun",
+              "count": 6
+            },
+            {
+              "id": "gun-stocks",
+              "count": 6
+            },
+            {
+              "id": "shotpistol",
+              "count": 6
+            }
+          ]
+        },
+        {
+          "model": "Vigilant with Grenade Launcher, Shotpistol and Gun Stocks",
+          "models": 1,
+          "items": [
+            {
+              "id": "grenade-launcher",
+              "count": 1
+            },
+            {
+              "id": "gun-stocks",
+              "count": 1
+            },
+            {
+              "id": "shotpistol",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Vigilant with Shotpistol, Webber and Gun Stocks",
+          "models": 1,
+          "items": [
+            {
+              "id": "gun-stocks",
+              "count": 1
+            },
+            {
+              "id": "shotpistol",
+              "count": 1
+            },
+            {
+              "id": "webber",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Cyber-Mastiff",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "mechanical-bite",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Proctor-Vigilant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "combat-shotgun",
+                "count": 1
+              },
+              {
+                "id": "gun-stocks",
+                "count": 1
+              },
+              {
+                "id": "shotpistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Vigilant with Combat Shotgun, Shotpistol and Gun Stocks",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "combat-shotgun",
+                "count": 1
+              },
+              {
+                "id": "gun-stocks",
+                "count": 1
+              },
+              {
+                "id": "shotpistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Vigilant with Grenade Launcher, Shotpistol and Gun Stocks",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "grenade-launcher",
+                "count": 1
+              },
+              {
+                "id": "gun-stocks",
+                "count": 1
+              },
+              {
+                "id": "shotpistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Vigilant with Shotpistol, Webber and Gun Stocks",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gun-stocks",
+                "count": 1
+              },
+              {
+                "id": "shotpistol",
+                "count": 1
+              },
+              {
+                "id": "webber",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Cyber-Mastiff",
+          "id": "mechanical-bite",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Proctor-Vigilant",
+          "id": "combat-shotgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Proctor-Vigilant",
+          "id": "gun-stocks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Proctor-Vigilant",
+          "id": "shotpistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Vigilant with Combat Shotgun, Shotpistol and Gun Stocks",
+          "id": "combat-shotgun",
+          "input": "stepper",
+          "default": 6
+        },
+        {
+          "model": "Vigilant with Combat Shotgun, Shotpistol and Gun Stocks",
+          "id": "gun-stocks",
+          "input": "stepper",
+          "default": 6
+        },
+        {
+          "model": "Vigilant with Combat Shotgun, Shotpistol and Gun Stocks",
+          "id": "shotpistol",
+          "input": "stepper",
+          "default": 6
+        },
+        {
+          "model": "Vigilant with Grenade Launcher, Shotpistol and Gun Stocks",
+          "id": "grenade-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Vigilant with Grenade Launcher, Shotpistol and Gun Stocks",
+          "id": "gun-stocks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Vigilant with Grenade Launcher, Shotpistol and Gun Stocks",
+          "id": "shotpistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Vigilant with Shotpistol, Webber and Gun Stocks",
+          "id": "gun-stocks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Vigilant with Shotpistol, Webber and Gun Stocks",
+          "id": "shotpistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Vigilant with Shotpistol, Webber and Gun Stocks",
+          "id": "webber",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "preacher-teguen",
@@ -2675,6 +9206,47 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Preacher Teguen",
+          "models": 1,
+          "items": [
+            {
+              "id": "zealots-vindictor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Preacher Teguen",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "zealots-vindictor",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Preacher Teguen",
+          "id": "zealots-vindictor",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

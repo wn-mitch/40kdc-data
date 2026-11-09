@@ -139,10 +139,145 @@
         "additionalProperties": false
       }
     },
+    "loadout": {
+      "description": "The unit's wargear rules in the structure of GW's Munitorum Field Manual data, keyed by repo item ids and model names; a name several rows of `models` share is written `name#k` for the k-th of them. Each model makes `picks` choices from every slot on its model row (or takes its alternate slot instead of all of them); limits cap the unit's choices; uniform sets make every model on a row carry the same main option. Absent for units the MFM does not cover.",
+      "type": "object",
+      "properties": {
+        "stock": {
+          "description": "The default unit: for each model row, its model count and the unit-wide copies of each item. A row without `model` holds wargear the unit takes once.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "model": { "type": "string", "minLength": 1 },
+              "models": { "type": "integer", "minimum": 0 },
+              "items": { "$ref": "#/$defs/items" }
+            },
+            "required": ["models", "items"],
+            "additionalProperties": false
+          }
+        },
+        "templates": {
+          "description": "What one model of a row carries when added beyond the default unit.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/model-items" }
+        },
+        "slots": {
+          "description": "Per-model choice menus. A model's wargear is the union of its picks across its row's slots.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "model": { "description": "The model row the slot belongs to; absent for a slot the unit fills once.", "type": "string", "minLength": 1 },
+              "picks": { "description": "Choices each model makes from this slot.", "type": "integer", "minimum": 1 },
+              "repeats": { "description": "Whether one choice can be picked more than once.", "type": "boolean" },
+              "alternate": { "description": "A model takes this slot instead of every non-alternate slot on its row.", "type": "boolean" },
+              "choices": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/items" } }
+            },
+            "required": ["picks", "repeats", "alternate", "choices"],
+            "additionalProperties": false
+          }
+        },
+        "limits": {
+          "description": "Caps on how many of a set of choices the unit may take, counted on the unit's item copies.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "model": { "description": "The model row whose copies count; absent to count the whole unit's.", "type": "string", "minLength": 1 },
+              "breakpoints": {
+                "description": "The cap is the `choices` of the breakpoint with the largest `models` at or below the unit's model count, or 0 when none is.",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "models": { "type": "integer", "minimum": 0 },
+                    "choices": { "type": "integer", "minimum": 0 },
+                    "per_choice": { "description": "How many times one choice may be taken; absent for no limit.", "type": "integer", "minimum": 1 }
+                  },
+                  "required": ["models", "choices"],
+                  "additionalProperties": false
+                }
+              },
+              "choices": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/items" } }
+            },
+            "required": ["breakpoints", "choices"],
+            "additionalProperties": false
+          }
+        },
+        "options": {
+          "description": "The app's wargear widgets: one entry per option it shows on a model row (or for the unit, when `model` is absent), with the item the option adds, its input and its default copies. A checkbox is taken at most once, so a row whose every option for an item is a checkbox carries at most that many copies of it (or its stock copies, when more). A row the default unit has at most one model of, whose stock options are all checkboxes, shows its widgets per model, so its caps scale with its model count.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "model": { "type": "string", "minLength": 1 },
+              "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+              "input": { "enum": ["checkbox", "stepper"] },
+              "default": { "description": "Copies of the item the default unit's row takes through this option.", "type": "integer", "minimum": 0 }
+            },
+            "required": ["id", "input", "default"],
+            "additionalProperties": false
+          }
+        },
+        "uniform": {
+          "description": "Every model on the row (or in the unit, when `model` is absent) that takes no substitute carries the same main option.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "model": { "type": "string", "minLength": 1 },
+              "choices": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "items": { "$ref": "#/$defs/items" },
+                    "substitute": { "type": "boolean" }
+                  },
+                  "required": ["items", "substitute"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["choices"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["stock", "templates", "slots", "limits", "options", "uniform"],
+      "additionalProperties": false
+    },
     "game_version": { "$ref": "../defs/game-version-ref.schema.json" },
     "game_modes": {
       "$ref": "../defs/common.schema.json#/$defs/game-modes",
       "description": "Game modes this unit composition is legal or authored for; absent implies matched-play."
+    }
+  },
+  "$defs": {
+    "items": {
+      "description": "A multiset of items: each repo weapon or wargear id with its copy count.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+          "count": { "type": "integer", "minimum": 1 }
+        },
+        "required": ["id", "count"],
+        "additionalProperties": false
+      }
+    },
+    "model-items": {
+      "type": "object",
+      "properties": {
+        "model": { "type": "string", "minLength": 1 },
+        "items": { "$ref": "#/$defs/items" }
+      },
+      "required": ["model", "items"],
+      "additionalProperties": false
     }
   },
   "required": ["unit_id", "faction_id", "models", "game_version"],

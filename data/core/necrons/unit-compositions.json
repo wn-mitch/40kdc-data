@@ -36,7 +36,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ghost Ark",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-bulk",
+              "count": 1
+            },
+            {
+              "id": "gauss-flayer-array",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ghost Ark",
+          "items": [
+            {
+              "id": "armoured-bulk",
+              "count": 1
+            },
+            {
+              "id": "gauss-flayer-array",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ghost Ark",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-bulk",
+                "count": 1
+              },
+              {
+                "id": "gauss-flayer-array",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Ghost Ark",
+          "id": "armoured-bulk",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Ghost Ark",
+          "id": "gauss-flayer-array",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "seraptek-heavy-construct",
@@ -72,7 +141,108 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Seraptek Heavy Construct",
+          "models": 1,
+          "items": [
+            {
+              "id": "singularity-generator",
+              "count": 2
+            },
+            {
+              "id": "titanic-forelimbs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Seraptek Heavy Construct",
+          "items": [
+            {
+              "id": "singularity-generator",
+              "count": 2
+            },
+            {
+              "id": "titanic-forelimbs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Seraptek Heavy Construct",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "singularity-generator",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "synaptic-obliterator",
+                "count": 2
+              },
+              {
+                "id": "transdimensional-projector",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Seraptek Heavy Construct",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "titanic-forelimbs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Seraptek Heavy Construct",
+          "id": "singularity-generator",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Seraptek Heavy Construct",
+          "id": "synaptic-obliterator",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Seraptek Heavy Construct",
+          "id": "titanic-forelimbs",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Seraptek Heavy Construct",
+          "id": "transdimensional-projector",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "triarch-praetorians",
@@ -115,7 +285,108 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Triarch Praetorian",
+          "models": 5,
+          "items": [
+            {
+              "id": "rod-of-covenant",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Triarch Praetorian",
+          "items": [
+            {
+              "id": "rod-of-covenant",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Triarch Praetorian",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "particle-caster",
+                "count": 1
+              },
+              {
+                "id": "voidblade",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rod-of-covenant",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Triarch Praetorian",
+          "id": "particle-caster",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Triarch Praetorian",
+          "id": "rod-of-covenant",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Triarch Praetorian",
+          "id": "voidblade",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": [
+        {
+          "model": "Triarch Praetorian",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "particle-caster",
+                  "count": 1
+                },
+                {
+                  "id": "voidblade",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "rod-of-covenant",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "necron-warriors",
@@ -159,7 +430,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Necron Warrior",
+          "models": 10,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 10
+            },
+            {
+              "id": "gauss-flayer",
+              "count": 10
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Necron Warrior",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "gauss-flayer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Necron Warrior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Necron Warrior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gauss-flayer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "gauss-reaper",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Necron Warrior",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 10
+        },
+        {
+          "model": "Necron Warrior",
+          "id": "gauss-flayer",
+          "input": "stepper",
+          "default": 10
+        },
+        {
+          "model": "Necron Warrior",
+          "id": "gauss-reaper",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "canoptek-macrocytes",
@@ -194,7 +556,178 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Canoptek Macrocytes",
+          "models": 5,
+          "items": [
+            {
+              "id": "claws",
+              "count": 5
+            },
+            {
+              "id": "gauss-scalpel",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Canoptek Macrocytes",
+          "items": [
+            {
+              "id": "claws",
+              "count": 1
+            },
+            {
+              "id": "gauss-scalpel",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Canoptek Macrocytes",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "accelerator-mandible",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "atomiser-beam",
+                "count": 1
+              },
+              {
+                "id": "nanoscarab-projector",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "gauss-scalpel",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "tesla-caster",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Canoptek Macrocytes",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Canoptek Macrocytes",
+          "id": "accelerator-mandible",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Canoptek Macrocytes",
+          "id": "atomiser-beam",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Canoptek Macrocytes",
+          "id": "claws",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Canoptek Macrocytes",
+          "id": "gauss-scalpel",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Canoptek Macrocytes",
+          "id": "nanoscarab-projector",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Canoptek Macrocytes",
+          "id": "tesla-caster",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": [
+        {
+          "model": "Canoptek Macrocytes",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "accelerator-mandible",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            },
+            {
+              "items": [
+                {
+                  "id": "atomiser-beam",
+                  "count": 1
+                },
+                {
+                  "id": "nanoscarab-projector",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            },
+            {
+              "items": [
+                {
+                  "id": "gauss-scalpel",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "tesla-caster",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "technomancer",
@@ -228,7 +761,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Technomancer",
+          "models": 1,
+          "items": [
+            {
+              "id": "staff-of-light",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Technomancer",
+          "items": [
+            {
+              "id": "staff-of-light",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Technomancer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "staff-of-light",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Technomancer",
+          "id": "staff-of-light",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "night-scythe",
@@ -264,7 +848,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Night Scythe",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-bulk",
+              "count": 1
+            },
+            {
+              "id": "twin-tesla-destructor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Night Scythe",
+          "items": [
+            {
+              "id": "armoured-bulk",
+              "count": 1
+            },
+            {
+              "id": "twin-tesla-destructor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Night Scythe",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-bulk",
+                "count": 1
+              },
+              {
+                "id": "twin-tesla-destructor",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Night Scythe",
+          "id": "armoured-bulk",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Night Scythe",
+          "id": "twin-tesla-destructor",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "overlord",
@@ -299,7 +952,126 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Overlord",
+          "models": 1,
+          "items": [
+            {
+              "id": "overlords-blade",
+              "count": 1
+            },
+            {
+              "id": "tachyon-arrow",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Overlord",
+          "items": [
+            {
+              "id": "overlords-blade",
+              "count": 1
+            },
+            {
+              "id": "tachyon-arrow",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Overlord",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "overlords-blade",
+                "count": 1
+              },
+              {
+                "id": "tachyon-arrow",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "resurrection-orb",
+                "count": 1
+              },
+              {
+                "id": "staff-of-light-overlord",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "resurrection-orb",
+                "count": 1
+              },
+              {
+                "id": "voidscythe",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "staff-of-light-overlord",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "voidscythe",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Overlord",
+          "id": "overlords-blade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Overlord",
+          "id": "resurrection-orb",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Overlord",
+          "id": "staff-of-light-overlord",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Overlord",
+          "id": "tachyon-arrow",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Overlord",
+          "id": "voidscythe",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "royal-warden",
@@ -334,7 +1106,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Royal Warden",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-royal-warden",
+              "count": 1
+            },
+            {
+              "id": "relic-gauss-blaster",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Royal Warden",
+          "items": [
+            {
+              "id": "close-combat-weapon-royal-warden",
+              "count": 1
+            },
+            {
+              "id": "relic-gauss-blaster",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Royal Warden",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-royal-warden",
+                "count": 1
+              },
+              {
+                "id": "relic-gauss-blaster",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Royal Warden",
+          "id": "close-combat-weapon-royal-warden",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Royal Warden",
+          "id": "relic-gauss-blaster",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "canoptek-doomstalker",
@@ -370,7 +1211,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Canoptek Doomstalker",
+          "models": 1,
+          "items": [
+            {
+              "id": "doomsday-blaster",
+              "count": 1
+            },
+            {
+              "id": "doomstalker-limbs",
+              "count": 1
+            },
+            {
+              "id": "twin-gauss-flayer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Canoptek Doomstalker",
+          "items": [
+            {
+              "id": "doomsday-blaster",
+              "count": 1
+            },
+            {
+              "id": "doomstalker-limbs",
+              "count": 1
+            },
+            {
+              "id": "twin-gauss-flayer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Canoptek Doomstalker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "doomsday-blaster",
+                "count": 1
+              },
+              {
+                "id": "doomstalker-limbs",
+                "count": 1
+              },
+              {
+                "id": "twin-gauss-flayer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Canoptek Doomstalker",
+          "id": "doomsday-blaster",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Canoptek Doomstalker",
+          "id": "doomstalker-limbs",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Canoptek Doomstalker",
+          "id": "twin-gauss-flayer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "immortals",
@@ -414,7 +1342,122 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Immortal",
+          "models": 5,
+          "items": [
+            {
+              "id": "close-combat-weapon-immortals",
+              "count": 5
+            },
+            {
+              "id": "gauss-blaster",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Immortal",
+          "items": [
+            {
+              "id": "close-combat-weapon-immortals",
+              "count": 1
+            },
+            {
+              "id": "gauss-blaster",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Immortal",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-immortals",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Immortal",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gauss-blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "tesla-carbine",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Immortal",
+          "id": "close-combat-weapon-immortals",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Immortal",
+          "id": "gauss-blaster",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Immortal",
+          "id": "tesla-carbine",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": [
+        {
+          "model": "Immortal",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "gauss-blaster",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "tesla-carbine",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "cryptothralls",
@@ -449,7 +1492,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Cryptothrall",
+          "models": 2,
+          "items": [
+            {
+              "id": "scouring-eye",
+              "count": 2
+            },
+            {
+              "id": "scythed-limbs",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Cryptothrall",
+          "items": [
+            {
+              "id": "scouring-eye",
+              "count": 1
+            },
+            {
+              "id": "scythed-limbs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Cryptothrall",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "scouring-eye",
+                "count": 1
+              },
+              {
+                "id": "scythed-limbs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Cryptothrall",
+          "id": "scouring-eye",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Cryptothrall",
+          "id": "scythed-limbs",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "orikan-the-diviner",
@@ -483,7 +1595,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Orikan the Diviner",
+          "models": 1,
+          "items": [
+            {
+              "id": "staff-of-tomorrow",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Orikan the Diviner",
+          "items": [
+            {
+              "id": "staff-of-tomorrow",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Orikan the Diviner",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "staff-of-tomorrow",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Orikan the Diviner",
+          "id": "staff-of-tomorrow",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tesseract-vault",
@@ -523,7 +1686,129 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tesseract Vault",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-bulk-tesseract-vault",
+              "count": 1
+            },
+            {
+              "id": "tesla-sphere-tesseract-vault",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "models": 0,
+          "items": [
+            {
+              "id": "antimatter-meteor",
+              "count": 1
+            },
+            {
+              "id": "cosmic-fire",
+              "count": 1
+            },
+            {
+              "id": "times-arrow",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Tesseract Vault",
+          "items": [
+            {
+              "id": "armoured-bulk-tesseract-vault",
+              "count": 1
+            },
+            {
+              "id": "tesla-sphere-tesseract-vault",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Tesseract Vault",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-bulk-tesseract-vault",
+                "count": 1
+              },
+              {
+                "id": "tesla-sphere-tesseract-vault",
+                "count": 4
+              }
+            ]
+          ]
+        },
+        {
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "antimatter-meteor",
+                "count": 1
+              },
+              {
+                "id": "cosmic-fire",
+                "count": 1
+              },
+              {
+                "id": "times-arrow",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "id": "antimatter-meteor",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "id": "cosmic-fire",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "id": "times-arrow",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tesseract Vault",
+          "id": "armoured-bulk-tesseract-vault",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tesseract Vault",
+          "id": "tesla-sphere-tesseract-vault",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tomb-blades",
@@ -568,7 +1853,164 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tomb Blade",
+          "models": 3,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 3
+            },
+            {
+              "id": "twin-gauss-blaster",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Tomb Blade",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "twin-gauss-blaster",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Tomb Blade",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "nebuloscope",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shadowloom",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tomb Blade",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "shieldvanes",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tomb Blade",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tomb Blade",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "particle-beamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-gauss-blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-tesla-carbine",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Tomb Blade",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Tomb Blade",
+          "id": "nebuloscope",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Tomb Blade",
+          "id": "particle-beamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Tomb Blade",
+          "id": "shadowloom",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Tomb Blade",
+          "id": "shieldvanes",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Tomb Blade",
+          "id": "twin-gauss-blaster",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Tomb Blade",
+          "id": "twin-tesla-carbine",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "psychomancer",
@@ -602,7 +2044,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Psychomancer",
+          "models": 1,
+          "items": [
+            {
+              "id": "abyssal-lance",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Psychomancer",
+          "items": [
+            {
+              "id": "abyssal-lance",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Psychomancer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "abyssal-lance",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Psychomancer",
+          "id": "abyssal-lance",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lokhust-heavy-destroyers",
@@ -655,7 +2148,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lokhust Heavy Destroyer",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-lokhust-heavy-destroyers",
+              "count": 1
+            },
+            {
+              "id": "gauss-destructor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lokhust Heavy Destroyer",
+          "items": [
+            {
+              "id": "close-combat-weapon-lokhust-heavy-destroyers",
+              "count": 1
+            },
+            {
+              "id": "gauss-destructor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lokhust Heavy Destroyer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-lokhust-heavy-destroyers",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Lokhust Heavy Destroyer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "enmitic-exterminator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "gauss-destructor",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lokhust Heavy Destroyer",
+          "id": "close-combat-weapon-lokhust-heavy-destroyers",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Lokhust Heavy Destroyer",
+          "id": "enmitic-exterminator",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Lokhust Heavy Destroyer",
+          "id": "gauss-destructor",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "skorpekh-destroyers",
@@ -698,7 +2282,101 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skorpekh Destroyer",
+          "models": 3,
+          "items": [
+            {
+              "id": "skorpekh-hyperphase-weapons",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Skorpekh Destroyer",
+          "items": [
+            {
+              "id": "skorpekh-hyperphase-weapons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Skorpekh Destroyer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "plasmacyte",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skorpekh Destroyer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "skorpekh-hyperphase-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Skorpekh Destroyer",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            },
+            {
+              "models": 6,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "plasmacyte",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Skorpekh Destroyer",
+          "id": "plasmacyte",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Skorpekh Destroyer",
+          "id": "skorpekh-hyperphase-weapons",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "convergence-of-dominion",
@@ -750,7 +2428,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Convergence of Dominion Starsteles",
+          "models": 1,
+          "items": [
+            {
+              "id": "transdimensional-abductor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Convergence of Dominion Starsteles",
+          "items": [
+            {
+              "id": "transdimensional-abductor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Convergence of Dominion Starsteles",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "transdimensional-abductor",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Convergence of Dominion Starsteles",
+          "id": "transdimensional-abductor",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "skorpekh-lord",
@@ -786,7 +2515,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skorpekh Lord",
+          "models": 1,
+          "items": [
+            {
+              "id": "enmitic-annihilator",
+              "count": 1
+            },
+            {
+              "id": "flensing-claw",
+              "count": 1
+            },
+            {
+              "id": "hyperphase-harvester",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Skorpekh Lord",
+          "items": [
+            {
+              "id": "enmitic-annihilator",
+              "count": 1
+            },
+            {
+              "id": "flensing-claw",
+              "count": 1
+            },
+            {
+              "id": "hyperphase-harvester",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Skorpekh Lord",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "enmitic-annihilator",
+                "count": 1
+              },
+              {
+                "id": "flensing-claw",
+                "count": 1
+              },
+              {
+                "id": "hyperphase-harvester",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Skorpekh Lord",
+          "id": "enmitic-annihilator",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skorpekh Lord",
+          "id": "flensing-claw",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skorpekh Lord",
+          "id": "hyperphase-harvester",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "deathmarks",
@@ -830,7 +2646,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Deathmark",
+          "models": 5,
+          "items": [
+            {
+              "id": "close-combat-weapon-deathmarks",
+              "count": 5
+            },
+            {
+              "id": "synaptic-disintegrator",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Deathmark",
+          "items": [
+            {
+              "id": "close-combat-weapon-deathmarks",
+              "count": 1
+            },
+            {
+              "id": "synaptic-disintegrator",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Deathmark",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-deathmarks",
+                "count": 1
+              },
+              {
+                "id": "synaptic-disintegrator",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Deathmark",
+          "id": "close-combat-weapon-deathmarks",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Deathmark",
+          "id": "synaptic-disintegrator",
+          "input": "stepper",
+          "default": 5
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "triarch-stalker",
@@ -865,7 +2750,110 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Triarch Stalker",
+          "models": 1,
+          "items": [
+            {
+              "id": "heat-ray",
+              "count": 1
+            },
+            {
+              "id": "stalkers-forelimbs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Triarch Stalker",
+          "items": [
+            {
+              "id": "heat-ray",
+              "count": 1
+            },
+            {
+              "id": "stalkers-forelimbs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Triarch Stalker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heat-ray",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-gauss-cannon-array",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "particle-shredder",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Triarch Stalker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "stalkers-forelimbs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Triarch Stalker",
+          "id": "heat-ray",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Triarch Stalker",
+          "id": "heavy-gauss-cannon-array",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Triarch Stalker",
+          "id": "particle-shredder",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Triarch Stalker",
+          "id": "stalkers-forelimbs",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "imotekh-the-stormlord",
@@ -900,7 +2888,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Imotekh the Stormlord",
+          "models": 1,
+          "items": [
+            {
+              "id": "gauntlet-of-fire",
+              "count": 1
+            },
+            {
+              "id": "staff-of-the-destroyer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Imotekh the Stormlord",
+          "items": [
+            {
+              "id": "gauntlet-of-fire",
+              "count": 1
+            },
+            {
+              "id": "staff-of-the-destroyer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Imotekh the Stormlord",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gauntlet-of-fire",
+                "count": 1
+              },
+              {
+                "id": "staff-of-the-destroyer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Imotekh the Stormlord",
+          "id": "gauntlet-of-fire",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Imotekh the Stormlord",
+          "id": "staff-of-the-destroyer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "obelisk",
@@ -939,7 +2996,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Obelisk",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-bulk-obelisk",
+              "count": 1
+            },
+            {
+              "id": "tesla-sphere",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Obelisk",
+          "items": [
+            {
+              "id": "armoured-bulk-obelisk",
+              "count": 1
+            },
+            {
+              "id": "tesla-sphere",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Obelisk",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-bulk-obelisk",
+                "count": 1
+              },
+              {
+                "id": "tesla-sphere",
+                "count": 4
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Obelisk",
+          "id": "armoured-bulk-obelisk",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Obelisk",
+          "id": "tesla-sphere",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "canoptek-reanimator",
@@ -975,7 +3101,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Canoptek Reanimator",
+          "models": 1,
+          "items": [
+            {
+              "id": "atomiser-beam-canoptek-reanimator",
+              "count": 2
+            },
+            {
+              "id": "reanimators-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Canoptek Reanimator",
+          "items": [
+            {
+              "id": "atomiser-beam-canoptek-reanimator",
+              "count": 2
+            },
+            {
+              "id": "reanimators-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Canoptek Reanimator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "atomiser-beam-canoptek-reanimator",
+                "count": 2
+              },
+              {
+                "id": "reanimators-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Canoptek Reanimator",
+          "id": "atomiser-beam-canoptek-reanimator",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Canoptek Reanimator",
+          "id": "reanimators-claws",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "catacomb-command-barge",
@@ -1013,7 +3208,131 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Catacomb Command Barge",
+          "models": 1,
+          "items": [
+            {
+              "id": "gauss-cannon",
+              "count": 1
+            },
+            {
+              "id": "staff-of-light-catacomb-command-barge",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Catacomb Command Barge",
+          "items": [
+            {
+              "id": "gauss-cannon",
+              "count": 1
+            },
+            {
+              "id": "staff-of-light-catacomb-command-barge",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Catacomb Command Barge",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "resurrection-orb",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Catacomb Command Barge",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gauss-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "tesla-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Catacomb Command Barge",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "overlords-blade",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "staff-of-light-catacomb-command-barge",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Catacomb Command Barge",
+          "id": "gauss-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Catacomb Command Barge",
+          "id": "overlords-blade",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Catacomb Command Barge",
+          "id": "resurrection-orb",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Catacomb Command Barge",
+          "id": "staff-of-light-catacomb-command-barge",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Catacomb Command Barge",
+          "id": "tesla-cannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lokhust-destroyers",
@@ -1078,7 +3397,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lokhust Destroyer",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-lokhust-destroyers",
+              "count": 1
+            },
+            {
+              "id": "gauss-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lokhust Destroyer",
+          "items": [
+            {
+              "id": "close-combat-weapon-lokhust-destroyers",
+              "count": 1
+            },
+            {
+              "id": "gauss-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lokhust Destroyer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-lokhust-destroyers",
+                "count": 1
+              },
+              {
+                "id": "gauss-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lokhust Destroyer",
+          "id": "close-combat-weapon-lokhust-destroyers",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Lokhust Destroyer",
+          "id": "gauss-cannon",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lychguard",
@@ -1121,7 +3509,108 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lychguard",
+          "models": 5,
+          "items": [
+            {
+              "id": "warscythe",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lychguard",
+          "items": [
+            {
+              "id": "warscythe",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lychguard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dispersion-shield",
+                "count": 1
+              },
+              {
+                "id": "hyperphase-sword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "warscythe",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lychguard",
+          "id": "dispersion-shield",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Lychguard",
+          "id": "hyperphase-sword",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Lychguard",
+          "id": "warscythe",
+          "input": "stepper",
+          "default": 5
+        }
+      ],
+      "uniform": [
+        {
+          "model": "Lychguard",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "dispersion-shield",
+                  "count": 1
+                },
+                {
+                  "id": "hyperphase-sword",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "warscythe",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "monolith",
@@ -1160,7 +3649,116 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Monolith",
+          "models": 1,
+          "items": [
+            {
+              "id": "gauss-flux-arc",
+              "count": 4
+            },
+            {
+              "id": "particle-whip",
+              "count": 1
+            },
+            {
+              "id": "portal-of-exile",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Monolith",
+          "items": [
+            {
+              "id": "gauss-flux-arc",
+              "count": 4
+            },
+            {
+              "id": "particle-whip",
+              "count": 1
+            },
+            {
+              "id": "portal-of-exile",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Monolith",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "death-ray",
+                "count": 4
+              }
+            ],
+            [
+              {
+                "id": "gauss-flux-arc",
+                "count": 4
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Monolith",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "particle-whip",
+                "count": 1
+              },
+              {
+                "id": "portal-of-exile",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Monolith",
+          "id": "death-ray",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Monolith",
+          "id": "gauss-flux-arc",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Monolith",
+          "id": "particle-whip",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Monolith",
+          "id": "portal-of-exile",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "overlord-with-translocation-shroud",
@@ -1195,7 +3793,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Overlord with Translocation Shroud",
+          "models": 1,
+          "items": [
+            {
+              "id": "overlords-blade",
+              "count": 1
+            },
+            {
+              "id": "resurrection-orb",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Overlord with Translocation Shroud",
+          "items": [
+            {
+              "id": "overlords-blade",
+              "count": 1
+            },
+            {
+              "id": "resurrection-orb",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Overlord with Translocation Shroud",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "overlords-blade",
+                "count": 1
+              },
+              {
+                "id": "resurrection-orb",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Overlord with Translocation Shroud",
+          "id": "overlords-blade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Overlord with Translocation Shroud",
+          "id": "resurrection-orb",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "canoptek-scarab-swarms",
@@ -1238,7 +3905,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Canoptek Scarab Swarm",
+          "models": 3,
+          "items": [
+            {
+              "id": "feeder-mandibles",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Canoptek Scarab Swarm",
+          "items": [
+            {
+              "id": "feeder-mandibles",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Canoptek Scarab Swarm",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "feeder-mandibles",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Canoptek Scarab Swarm",
+          "id": "feeder-mandibles",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "canoptek-wraiths",
@@ -1281,7 +3999,103 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Canoptek Wraith",
+          "models": 3,
+          "items": [
+            {
+              "id": "vicious-claws",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Canoptek Wraith",
+          "items": [
+            {
+              "id": "vicious-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Canoptek Wraith",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "particle-caster-canoptek-wraiths",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "transdimensional-beamer",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Canoptek Wraith",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "vicious-claws",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "whip-coils",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Canoptek Wraith",
+          "id": "particle-caster-canoptek-wraiths",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Canoptek Wraith",
+          "id": "transdimensional-beamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Canoptek Wraith",
+          "id": "vicious-claws",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Canoptek Wraith",
+          "id": "whip-coils",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "trazyn-the-infinite",
@@ -1315,7 +4129,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Trazyn the Infinite",
+          "models": 1,
+          "items": [
+            {
+              "id": "empathic-obliterator",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Trazyn the Infinite",
+          "items": [
+            {
+              "id": "empathic-obliterator",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Trazyn the Infinite",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "empathic-obliterator",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Trazyn the Infinite",
+          "id": "empathic-obliterator",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lokhust-lord",
@@ -1352,7 +4217,103 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lokhust Lord",
+          "models": 1,
+          "items": [
+            {
+              "id": "staff-of-light-lokhust-lord",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lokhust Lord",
+          "items": [
+            {
+              "id": "staff-of-light-lokhust-lord",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lokhust Lord",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "nanoscarab-amulet",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "resurrection-orb",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Lokhust Lord",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lords-blade",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "staff-of-light-lokhust-lord",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lokhust Lord",
+          "id": "lords-blade",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Lokhust Lord",
+          "id": "nanoscarab-amulet",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Lokhust Lord",
+          "id": "resurrection-orb",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Lokhust Lord",
+          "id": "staff-of-light-lokhust-lord",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ctan-shard-of-the-nightbringer",
@@ -1396,7 +4357,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "C’tan Shard of the Nightbringer",
+          "models": 1,
+          "items": [
+            {
+              "id": "gaze-of-death",
+              "count": 1
+            },
+            {
+              "id": "scythe-of-the-nightbringer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "C’tan Shard of the Nightbringer",
+          "items": [
+            {
+              "id": "gaze-of-death",
+              "count": 1
+            },
+            {
+              "id": "scythe-of-the-nightbringer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "C’tan Shard of the Nightbringer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gaze-of-death",
+                "count": 1
+              },
+              {
+                "id": "scythe-of-the-nightbringer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "C’tan Shard of the Nightbringer",
+          "id": "gaze-of-death",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "C’tan Shard of the Nightbringer",
+          "id": "scythe-of-the-nightbringer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "flayed-ones",
@@ -1439,7 +4469,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Flayed One",
+          "models": 5,
+          "items": [
+            {
+              "id": "flayer-claws",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Flayed One",
+          "items": [
+            {
+              "id": "flayer-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Flayed One",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "flayer-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Flayed One",
+          "id": "flayer-claws",
+          "input": "stepper",
+          "default": 5
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "annihilation-barge",
@@ -1478,7 +4559,116 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Annihilation Barge",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-bulk",
+              "count": 1
+            },
+            {
+              "id": "gauss-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-tesla-destructor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Annihilation Barge",
+          "items": [
+            {
+              "id": "armoured-bulk",
+              "count": 1
+            },
+            {
+              "id": "gauss-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-tesla-destructor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Annihilation Barge",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-bulk",
+                "count": 1
+              },
+              {
+                "id": "twin-tesla-destructor",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Annihilation Barge",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gauss-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "tesla-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Annihilation Barge",
+          "id": "armoured-bulk",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Annihilation Barge",
+          "id": "gauss-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Annihilation Barge",
+          "id": "tesla-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Annihilation Barge",
+          "id": "twin-tesla-destructor",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "illuminor-szeras",
@@ -1513,7 +4703,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Illuminor Szeras",
+          "models": 1,
+          "items": [
+            {
+              "id": "eldritch-lance",
+              "count": 1
+            },
+            {
+              "id": "impaling-legs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Illuminor Szeras",
+          "items": [
+            {
+              "id": "eldritch-lance",
+              "count": 1
+            },
+            {
+              "id": "impaling-legs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Illuminor Szeras",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "eldritch-lance",
+                "count": 1
+              },
+              {
+                "id": "impaling-legs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Illuminor Szeras",
+          "id": "eldritch-lance",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Illuminor Szeras",
+          "id": "impaling-legs",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "nekrosor-ammentar",
@@ -1550,7 +4809,112 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Nekrosor Ammentar",
+          "models": 1,
+          "items": [
+            {
+              "id": "blade-tail-and-whip-coils",
+              "count": 1
+            },
+            {
+              "id": "enmitic-disintegrators",
+              "count": 1
+            },
+            {
+              "id": "nullstone-field-generator-aura",
+              "count": 1
+            },
+            {
+              "id": "unmaker-gauntlet",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Nekrosor Ammentar",
+          "items": [
+            {
+              "id": "blade-tail-and-whip-coils",
+              "count": 1
+            },
+            {
+              "id": "enmitic-disintegrators",
+              "count": 1
+            },
+            {
+              "id": "nullstone-field-generator-aura",
+              "count": 1
+            },
+            {
+              "id": "unmaker-gauntlet",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Nekrosor Ammentar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blade-tail-and-whip-coils",
+                "count": 1
+              },
+              {
+                "id": "enmitic-disintegrators",
+                "count": 1
+              },
+              {
+                "id": "nullstone-field-generator-aura",
+                "count": 1
+              },
+              {
+                "id": "unmaker-gauntlet",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Nekrosor Ammentar",
+          "id": "blade-tail-and-whip-coils",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Nekrosor Ammentar",
+          "id": "enmitic-disintegrators",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Nekrosor Ammentar",
+          "id": "nullstone-field-generator-aura",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Nekrosor Ammentar",
+          "id": "unmaker-gauntlet",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "canoptek-tomb-crawlers",
@@ -1585,7 +4949,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Canoptek Tomb Crawlers",
+          "models": 2,
+          "items": [
+            {
+              "id": "claws-canoptek-tomb-crawlers",
+              "count": 2
+            },
+            {
+              "id": "twin-gauss-reaper",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Canoptek Tomb Crawlers",
+          "items": [
+            {
+              "id": "claws-canoptek-tomb-crawlers",
+              "count": 1
+            },
+            {
+              "id": "twin-gauss-reaper",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Canoptek Tomb Crawlers",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "claws-canoptek-tomb-crawlers",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Canoptek Tomb Crawlers",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "transdimensional-isolator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-gauss-reaper",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Canoptek Tomb Crawlers",
+          "id": "claws-canoptek-tomb-crawlers",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Canoptek Tomb Crawlers",
+          "id": "transdimensional-isolator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Canoptek Tomb Crawlers",
+          "id": "twin-gauss-reaper",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ophydian-destroyers",
@@ -1628,7 +5083,101 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ophydian Destroyer",
+          "models": 3,
+          "items": [
+            {
+              "id": "ophydian-hyperphase-weapons",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ophydian Destroyer",
+          "items": [
+            {
+              "id": "ophydian-hyperphase-weapons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ophydian Destroyer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "plasmacyte",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Ophydian Destroyer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ophydian-hyperphase-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Ophydian Destroyer",
+          "breakpoints": [
+            {
+              "models": 3,
+              "choices": 1
+            },
+            {
+              "models": 6,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "plasmacyte",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Ophydian Destroyer",
+          "id": "ophydian-hyperphase-weapons",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Ophydian Destroyer",
+          "id": "plasmacyte",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "plasmancer",
@@ -1662,7 +5211,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Plasmancer",
+          "models": 1,
+          "items": [
+            {
+              "id": "plasmic-lance",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Plasmancer",
+          "items": [
+            {
+              "id": "plasmic-lance",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Plasmancer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "plasmic-lance",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Plasmancer",
+          "id": "plasmic-lance",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "doomsday-ark",
@@ -1702,7 +5302,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Doomsday Ark",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-bulk",
+              "count": 1
+            },
+            {
+              "id": "doomsday-cannon",
+              "count": 1
+            },
+            {
+              "id": "gauss-flayer-array",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Doomsday Ark",
+          "items": [
+            {
+              "id": "armoured-bulk",
+              "count": 1
+            },
+            {
+              "id": "doomsday-cannon",
+              "count": 1
+            },
+            {
+              "id": "gauss-flayer-array",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Doomsday Ark",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-bulk",
+                "count": 1
+              },
+              {
+                "id": "doomsday-cannon",
+                "count": 1
+              },
+              {
+                "id": "gauss-flayer-array",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Doomsday Ark",
+          "id": "armoured-bulk",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Doomsday Ark",
+          "id": "doomsday-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Doomsday Ark",
+          "id": "gauss-flayer-array",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hexmark-destroyer",
@@ -1737,7 +5424,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hexmark Destroyer",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-hexmark-destroyer",
+              "count": 1
+            },
+            {
+              "id": "enmitic-disintegrator-pistols",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hexmark Destroyer",
+          "items": [
+            {
+              "id": "close-combat-weapon-hexmark-destroyer",
+              "count": 1
+            },
+            {
+              "id": "enmitic-disintegrator-pistols",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hexmark Destroyer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-hexmark-destroyer",
+                "count": 1
+              },
+              {
+                "id": "enmitic-disintegrator-pistols",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Hexmark Destroyer",
+          "id": "close-combat-weapon-hexmark-destroyer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hexmark Destroyer",
+          "id": "enmitic-disintegrator-pistols",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ctan-shard-of-the-void-dragon",
@@ -1782,7 +5538,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "C’tan Shard of the Void Dragon",
+          "models": 1,
+          "items": [
+            {
+              "id": "canoptek-tail-blades",
+              "count": 1
+            },
+            {
+              "id": "spear-of-the-void-dragon",
+              "count": 1
+            },
+            {
+              "id": "voltaic-storm",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "C’tan Shard of the Void Dragon",
+          "items": [
+            {
+              "id": "canoptek-tail-blades",
+              "count": 1
+            },
+            {
+              "id": "spear-of-the-void-dragon",
+              "count": 1
+            },
+            {
+              "id": "voltaic-storm",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "C’tan Shard of the Void Dragon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "canoptek-tail-blades",
+                "count": 1
+              },
+              {
+                "id": "spear-of-the-void-dragon",
+                "count": 1
+              },
+              {
+                "id": "voltaic-storm",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "C’tan Shard of the Void Dragon",
+          "id": "canoptek-tail-blades",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "C’tan Shard of the Void Dragon",
+          "id": "spear-of-the-void-dragon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "C’tan Shard of the Void Dragon",
+          "id": "voltaic-storm",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ctan-shard-of-the-deceiver",
@@ -1826,7 +5669,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "C’tan Shard of the Deceiver",
+          "models": 1,
+          "items": [
+            {
+              "id": "cosmic-insanity",
+              "count": 1
+            },
+            {
+              "id": "golden-fists",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "C’tan Shard of the Deceiver",
+          "items": [
+            {
+              "id": "cosmic-insanity",
+              "count": 1
+            },
+            {
+              "id": "golden-fists",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "C’tan Shard of the Deceiver",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cosmic-insanity",
+                "count": 1
+              },
+              {
+                "id": "golden-fists",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "C’tan Shard of the Deceiver",
+          "id": "cosmic-insanity",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "C’tan Shard of the Deceiver",
+          "id": "golden-fists",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "doom-scythe",
@@ -1863,7 +5775,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Doom Scythe",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-bulk",
+              "count": 1
+            },
+            {
+              "id": "heavy-death-ray",
+              "count": 1
+            },
+            {
+              "id": "twin-tesla-destructor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Doom Scythe",
+          "items": [
+            {
+              "id": "armoured-bulk",
+              "count": 1
+            },
+            {
+              "id": "heavy-death-ray",
+              "count": 1
+            },
+            {
+              "id": "twin-tesla-destructor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Doom Scythe",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-bulk",
+                "count": 1
+              },
+              {
+                "id": "heavy-death-ray",
+                "count": 1
+              },
+              {
+                "id": "twin-tesla-destructor",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Doom Scythe",
+          "id": "armoured-bulk",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Doom Scythe",
+          "id": "heavy-death-ray",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Doom Scythe",
+          "id": "twin-tesla-destructor",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "geomancer",
@@ -1897,7 +5896,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Geomancer",
+          "models": 1,
+          "items": [
+            {
+              "id": "tremorglaive",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Geomancer",
+          "items": [
+            {
+              "id": "tremorglaive",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Geomancer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "tremorglaive",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Geomancer",
+          "id": "tremorglaive",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "the-silent-king",
@@ -1953,7 +6003,151 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Szarekh",
+          "models": 1,
+          "items": [
+            {
+              "id": "sceptre-of-eternal-glory",
+              "count": 1
+            },
+            {
+              "id": "staff-of-stars",
+              "count": 1
+            },
+            {
+              "id": "weapons-of-the-final-triarch",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Triarchal Menhir",
+          "models": 2,
+          "items": [
+            {
+              "id": "annihilator-beam",
+              "count": 2
+            },
+            {
+              "id": "armoured-bulk-the-silent-king",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Szarekh",
+          "items": [
+            {
+              "id": "sceptre-of-eternal-glory",
+              "count": 1
+            },
+            {
+              "id": "staff-of-stars",
+              "count": 1
+            },
+            {
+              "id": "weapons-of-the-final-triarch",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Triarchal Menhir",
+          "items": [
+            {
+              "id": "annihilator-beam",
+              "count": 1
+            },
+            {
+              "id": "armoured-bulk-the-silent-king",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Szarekh",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "sceptre-of-eternal-glory",
+                "count": 1
+              },
+              {
+                "id": "staff-of-stars",
+                "count": 1
+              },
+              {
+                "id": "weapons-of-the-final-triarch",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Triarchal Menhir",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "annihilator-beam",
+                "count": 1
+              },
+              {
+                "id": "armoured-bulk-the-silent-king",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Szarekh",
+          "id": "sceptre-of-eternal-glory",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Szarekh",
+          "id": "staff-of-stars",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Szarekh",
+          "id": "weapons-of-the-final-triarch",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Triarchal Menhir",
+          "id": "annihilator-beam",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Triarchal Menhir",
+          "id": "armoured-bulk-the-silent-king",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chronomancer",
@@ -1987,7 +6181,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chronomancer",
+          "models": 1,
+          "items": [
+            {
+              "id": "chronomancers-stave",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chronomancer",
+          "items": [
+            {
+              "id": "chronomancers-stave",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chronomancer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chronomancers-stave",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chronomancer",
+          "id": "chronomancers-stave",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "transcendent-ctan",
@@ -2032,7 +6277,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Transcendent C’tan",
+          "models": 1,
+          "items": [
+            {
+              "id": "crackling-tendrils",
+              "count": 1
+            },
+            {
+              "id": "seismic-assault",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Transcendent C’tan",
+          "items": [
+            {
+              "id": "crackling-tendrils",
+              "count": 1
+            },
+            {
+              "id": "seismic-assault",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Transcendent C’tan",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "crackling-tendrils",
+                "count": 1
+              },
+              {
+                "id": "seismic-assault",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Transcendent C’tan",
+          "id": "crackling-tendrils",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Transcendent C’tan",
+          "id": "seismic-assault",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "canoptek-spyders",
@@ -2075,7 +6389,121 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Canoptek Spyder",
+          "models": 1,
+          "items": [
+            {
+              "id": "automaton-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Canoptek Spyder",
+          "items": [
+            {
+              "id": "automaton-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Canoptek Spyder",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "fabricator-claw-array-aura",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Canoptek Spyder",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "gloom-prism-aura",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Canoptek Spyder",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "particle-beamer-canoptek-spyders",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Canoptek Spyder",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "automaton-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Canoptek Spyder",
+          "id": "automaton-claws",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Canoptek Spyder",
+          "id": "fabricator-claw-array-aura",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Canoptek Spyder",
+          "id": "gloom-prism-aura",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Canoptek Spyder",
+          "id": "particle-beamer-canoptek-spyders",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "amonhotekhs-guard-canoptek-doomstalker",
@@ -2114,7 +6542,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Canoptek Doomstalker",
+          "models": 1,
+          "items": [
+            {
+              "id": "doomsday-blaster-amonhotekhs-guard-canoptek-doomstalker",
+              "count": 1
+            },
+            {
+              "id": "doomstalker-limbs",
+              "count": 1
+            },
+            {
+              "id": "twin-gauss-flayer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Canoptek Doomstalker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "doomsday-blaster-amonhotekhs-guard-canoptek-doomstalker",
+                "count": 1
+              },
+              {
+                "id": "doomstalker-limbs",
+                "count": 1
+              },
+              {
+                "id": "twin-gauss-flayer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Canoptek Doomstalker",
+          "id": "doomsday-blaster-amonhotekhs-guard-canoptek-doomstalker",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Canoptek Doomstalker",
+          "id": "doomstalker-limbs",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Canoptek Doomstalker",
+          "id": "twin-gauss-flayer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "amonhotekhs-guard-canoptek-scarab-swarms",
@@ -2151,7 +6648,48 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Canoptek Scarab Swarm",
+          "models": 3,
+          "items": [
+            {
+              "id": "feeder-mandibles",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Canoptek Scarab Swarm",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "feeder-mandibles",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Canoptek Scarab Swarm",
+          "id": "feeder-mandibles",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "amonhotekhs-guard-necron-warriors",
@@ -2208,7 +6746,106 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Necron Warrior with Gauss Flayer and Combat Attachments",
+          "models": 5,
+          "items": [
+            {
+              "id": "combat-attachments",
+              "count": 5
+            },
+            {
+              "id": "gauss-flayer",
+              "count": 5
+            }
+          ]
+        },
+        {
+          "model": "Necron Warrior with Gauss Reaper and Combat Attachments",
+          "models": 5,
+          "items": [
+            {
+              "id": "combat-attachments",
+              "count": 5
+            },
+            {
+              "id": "gauss-reaper",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Necron Warrior with Gauss Flayer and Combat Attachments",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "combat-attachments",
+                "count": 1
+              },
+              {
+                "id": "gauss-flayer",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Necron Warrior with Gauss Reaper and Combat Attachments",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "combat-attachments",
+                "count": 1
+              },
+              {
+                "id": "gauss-reaper",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Necron Warrior with Gauss Flayer and Combat Attachments",
+          "id": "combat-attachments",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Necron Warrior with Gauss Flayer and Combat Attachments",
+          "id": "gauss-flayer",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Necron Warrior with Gauss Reaper and Combat Attachments",
+          "id": "combat-attachments",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Necron Warrior with Gauss Reaper and Combat Attachments",
+          "id": "gauss-reaper",
+          "input": "stepper",
+          "default": 5
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "amonhotekhs-guard-skorpekh-destroyers",
@@ -2263,7 +6900,78 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skorpekh Destroyer with Plasmacyte",
+          "models": 1,
+          "items": [
+            {
+              "id": "hyperphase-blades",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Skorpekh Destroyer",
+          "models": 2,
+          "items": [
+            {
+              "id": "hyperphase-blades",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Skorpekh Destroyer with Plasmacyte",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hyperphase-blades",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skorpekh Destroyer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hyperphase-blades",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Skorpekh Destroyer with Plasmacyte",
+          "id": "hyperphase-blades",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skorpekh Destroyer",
+          "id": "hyperphase-blades",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "overlord-amonhotekh",
@@ -2297,6 +7005,61 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Overlord Amonhotekh",
+          "models": 1,
+          "items": [
+            {
+              "id": "overlords-blade",
+              "count": 1
+            },
+            {
+              "id": "tachyon-arrow",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Overlord Amonhotekh",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "overlords-blade",
+                "count": 1
+              },
+              {
+                "id": "tachyon-arrow",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Overlord Amonhotekh",
+          "id": "overlords-blade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Overlord Amonhotekh",
+          "id": "tachyon-arrow",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

@@ -66,7 +66,225 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Celestian Sacresant",
+          "models": 4,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 4
+            },
+            {
+              "id": "hallowed-mace",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Sacresant Superior",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "hallowed-mace",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Celestian Sacresant",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "hallowed-mace",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sacresant Superior",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "hallowed-mace",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Celestian Sacresant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "anointed-halberd",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hallowed-mace",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Celestian Sacresant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sacresant Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "anointed-halberd",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hallowed-mace",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "spear-of-the-faithful",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sacresant Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "inferno-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Celestian Sacresant",
+          "id": "anointed-halberd",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Celestian Sacresant",
+          "id": "bolt-pistol",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Celestian Sacresant",
+          "id": "hallowed-mace",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Sacresant Superior",
+          "id": "anointed-halberd",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sacresant Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sacresant Superior",
+          "id": "hallowed-mace",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sacresant Superior",
+          "id": "inferno-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sacresant Superior",
+          "id": "ministorum-hand-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sacresant Superior",
+          "id": "plasma-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sacresant Superior",
+          "id": "spear-of-the-faithful",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "mortifiers",
@@ -111,7 +329,187 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Mortifier",
+          "models": 1,
+          "items": [
+            {
+              "id": "heavy-bolter",
+              "count": 2
+            },
+            {
+              "id": "twin-penitent-buzz-blades",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Mortifier",
+          "items": [
+            {
+              "id": "heavy-bolter",
+              "count": 2
+            },
+            {
+              "id": "twin-penitent-buzz-blades",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Mortifier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "anchorite-sarcophagus",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Mortifier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 1
+              },
+              {
+                "id": "mortifier-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "mortifier-flamer",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Mortifier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "penitent-buzz-blade",
+                "count": 1
+              },
+              {
+                "id": "penitent-flail",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-penitent-buzz-blades",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-penitent-flails",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Mortifier",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "anchorite-sarcophagus",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Mortifier",
+          "id": "anchorite-sarcophagus",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Mortifier",
+          "id": "heavy-bolter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Mortifier",
+          "id": "heavy-bolter",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Mortifier",
+          "id": "mortifier-flamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Mortifier",
+          "id": "penitent-buzz-blade",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Mortifier",
+          "id": "penitent-flail",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Mortifier",
+          "id": "twin-penitent-buzz-blades",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Mortifier",
+          "id": "twin-penitent-flails",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "canoness-with-jump-pack",
@@ -145,7 +543,92 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Canoness with Jump Pack",
+          "models": 1,
+          "items": [
+            {
+              "id": "blessed-halberd",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Canoness with Jump Pack",
+          "items": [
+            {
+              "id": "blessed-halberd",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Canoness with Jump Pack",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blessed-halberd",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "holy-eviscerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 1
+              },
+              {
+                "id": "power-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Canoness with Jump Pack",
+          "id": "blessed-halberd",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Canoness with Jump Pack",
+          "id": "holy-eviscerator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Canoness with Jump Pack",
+          "id": "ministorum-hand-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Canoness with Jump Pack",
+          "id": "power-weapon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "palatine",
@@ -180,7 +663,92 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Palatine",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol-palatine",
+              "count": 1
+            },
+            {
+              "id": "palatine-blade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Palatine",
+          "items": [
+            {
+              "id": "bolt-pistol-palatine",
+              "count": 1
+            },
+            {
+              "id": "palatine-blade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Palatine",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-palatine",
+                "count": 1
+              },
+              {
+                "id": "palatine-blade",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "palatine-blade",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol-palatine",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Palatine",
+          "id": "bolt-pistol-palatine",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Palatine",
+          "id": "palatine-blade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Palatine",
+          "id": "plasma-pistol-palatine",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sanctifiers",
@@ -292,7 +860,328 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Death Cult Assassin",
+          "models": 1,
+          "items": [
+            {
+              "id": "death-cult-blades",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Miraculist",
+          "models": 1,
+          "items": [
+            {
+              "id": "burning-hands",
+              "count": 1
+            },
+            {
+              "id": "holy-fire",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Missionary",
+          "models": 2,
+          "items": [
+            {
+              "id": "ministorum-flamer",
+              "count": 1
+            },
+            {
+              "id": "plasma-gun",
+              "count": 1
+            },
+            {
+              "id": "sanctifier-melee-weapon",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "model": "Salvationist",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "salvationist-medikit",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sanctifier",
+          "models": 4,
+          "items": [
+            {
+              "id": "ministorum-hand-flamer",
+              "count": 4
+            },
+            {
+              "id": "sanctifier-melee-weapon",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Death Cult Assassin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "death-cult-blades",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Miraculist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "burning-hands",
+                "count": 1
+              },
+              {
+                "id": "holy-fire",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Missionary",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "holy-fire",
+                "count": 1
+              },
+              {
+                "id": "plasma-gun",
+                "count": 1
+              },
+              {
+                "id": "sanctifier-melee-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              },
+              {
+                "id": "sanctifier-melee-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              },
+              {
+                "id": "sanctifier-melee-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-gun",
+                "count": 1
+              },
+              {
+                "id": "sanctifier-melee-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Salvationist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "salvationist-medikit",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sanctifier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 1
+              },
+              {
+                "id": "simulacrum-imperialis",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 1
+              },
+              {
+                "id": "sanctifier-melee-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Death Cult Assassin",
+          "id": "death-cult-blades",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Miraculist",
+          "id": "burning-hands",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Miraculist",
+          "id": "holy-fire",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Missionary",
+          "id": "holy-fire",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Missionary",
+          "id": "meltagun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Missionary",
+          "id": "ministorum-flamer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Missionary",
+          "id": "plasma-gun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Missionary",
+          "id": "sanctifier-melee-weapon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Salvationist",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Salvationist",
+          "id": "salvationist-medikit",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sanctifier",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sanctifier",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sanctifier",
+          "id": "ministorum-hand-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sanctifier",
+          "id": "ministorum-hand-flamer",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Sanctifier",
+          "id": "sanctifier-melee-weapon",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Sanctifier",
+          "id": "simulacrum-imperialis",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "arco-flagellants",
@@ -335,7 +1224,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Arco-flagellant",
+          "models": 3,
+          "items": [
+            {
+              "id": "arco-flails",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Arco-flagellant",
+          "items": [
+            {
+              "id": "arco-flails",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Arco-flagellant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arco-flails",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Arco-flagellant",
+          "id": "arco-flails",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "celestian-insidiants",
@@ -390,7 +1330,260 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Celestian Insidiant Superior",
+          "models": 1,
+          "items": [
+            {
+              "id": "condemnor-bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "null-mace",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Celestian Insidiant",
+          "models": 9,
+          "items": [
+            {
+              "id": "condemnor-bolt-pistol",
+              "count": 9
+            },
+            {
+              "id": "null-mace",
+              "count": 9
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Celestian Insidiant Superior",
+          "items": [
+            {
+              "id": "condemnor-bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "null-mace",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Celestian Insidiant",
+          "items": [
+            {
+              "id": "condemnor-bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "null-mace",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Celestian Insidiant Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "condemnor-bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "null-mace",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "inferno-pistol",
+                "count": 1
+              },
+              {
+                "id": "null-mace",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Celestian Insidiant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blessed-sword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "condemnor-bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "null-mace",
+                "count": 1
+              },
+              {
+                "id": "simulacrum-imperialis",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "condemnor-bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "null-mace",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "denuncia-oratory",
+                "count": 1
+              },
+              {
+                "id": "null-mace",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 1
+              },
+              {
+                "id": "null-mace",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "virge-of-admonition",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Celestian Insidiant",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "blessed-sword",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Celestian Insidiant",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Celestian Insidiant Superior",
+          "id": "condemnor-bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Celestian Insidiant Superior",
+          "id": "inferno-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Celestian Insidiant Superior",
+          "id": "null-mace",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Celestian Insidiant",
+          "id": "blessed-sword",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Celestian Insidiant",
+          "id": "condemnor-bolt-pistol",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Celestian Insidiant",
+          "id": "denuncia-oratory",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Celestian Insidiant",
+          "id": "ministorum-hand-flamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Celestian Insidiant",
+          "id": "null-mace",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Celestian Insidiant",
+          "id": "simulacrum-imperialis",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Celestian Insidiant",
+          "id": "virge-of-admonition",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "imagifier",
@@ -426,7 +1619,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Imagifier",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-imagifier",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Imagifier",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-imagifier",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Imagifier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "boltgun",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-imagifier",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Imagifier",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Imagifier",
+          "id": "boltgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Imagifier",
+          "id": "close-combat-weapon-imagifier",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "triumph-of-saint-katherine",
@@ -462,7 +1742,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Triumph of Saint Katherine",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistols",
+              "count": 1
+            },
+            {
+              "id": "relic-weapons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Triumph of Saint Katherine",
+          "items": [
+            {
+              "id": "bolt-pistols",
+              "count": 1
+            },
+            {
+              "id": "relic-weapons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Triumph of Saint Katherine",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistols",
+                "count": 1
+              },
+              {
+                "id": "relic-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Triumph of Saint Katherine",
+          "id": "bolt-pistols",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Triumph of Saint Katherine",
+          "id": "relic-weapons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "seraphim-squad",
@@ -572,7 +1921,279 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Seraphim Superior",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 2
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Seraphim",
+          "models": 4,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 8
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Seraphim Superior",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 2
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Seraphim",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 2
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Seraphim Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "chainsword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-seraphim-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "chainsword",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-seraphim-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Seraphim Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Seraphim",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "inferno-pistol",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Seraphim",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Seraphim",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 2
+            },
+            {
+              "models": 10,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "inferno-pistol",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Seraphim Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Seraphim Superior",
+          "id": "bolt-pistol",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Seraphim Superior",
+          "id": "chainsword",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Seraphim Superior",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Seraphim Superior",
+          "id": "plasma-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Seraphim Superior",
+          "id": "power-weapon-seraphim-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Seraphim",
+          "id": "bolt-pistol",
+          "input": "stepper",
+          "default": 8
+        },
+        {
+          "model": "Seraphim",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Seraphim",
+          "id": "inferno-pistol",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Seraphim",
+          "id": "ministorum-hand-flamer",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "repentia-squad",
@@ -639,7 +2260,115 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Repentia Superior",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "neural-whips",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sister Repentia",
+          "models": 4,
+          "items": [
+            {
+              "id": "penitent-eviscerator",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Repentia Superior",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "neural-whips",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sister Repentia",
+          "items": [
+            {
+              "id": "penitent-eviscerator",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Repentia Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "neural-whips",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sister Repentia",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "penitent-eviscerator",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Repentia Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Repentia Superior",
+          "id": "neural-whips",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sister Repentia",
+          "id": "penitent-eviscerator",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "dialogus",
@@ -674,7 +2403,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Dialogus",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "dialogus-staff",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Dialogus",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "dialogus-staff",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Dialogus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "dialogus-staff",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Dialogus",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Dialogus",
+          "id": "dialogus-staff",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "dogmata",
@@ -709,7 +2507,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Dogmata",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "mace-of-the-righteous",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Dogmata",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "mace-of-the-righteous",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Dogmata",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "mace-of-the-righteous",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Dogmata",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Dogmata",
+          "id": "mace-of-the-righteous",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "immolator",
@@ -745,7 +2612,149 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Immolator",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter",
+              "count": 1
+            },
+            {
+              "id": "immolation-flamers",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Immolator",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter",
+              "count": 1
+            },
+            {
+              "id": "immolation-flamers",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Immolator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "hunter-killer-missile",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Immolator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "heavy-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Immolator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "immolation-flamers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Immolator",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Immolator",
+          "id": "heavy-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Immolator",
+          "id": "hunter-killer-missile",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Immolator",
+          "id": "immolation-flamers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Immolator",
+          "id": "twin-heavy-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Immolator",
+          "id": "twin-multi-melta",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hospitaller",
@@ -780,7 +2789,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hospitaller",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "chirurgeons-tools",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hospitaller",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "chirurgeons-tools",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hospitaller",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "chirurgeons-tools",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Hospitaller",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hospitaller",
+          "id": "chirurgeons-tools",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "morvenn-vahl",
@@ -816,7 +2894,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Morvenn Vahl",
+          "models": 1,
+          "items": [
+            {
+              "id": "fidelis",
+              "count": 1
+            },
+            {
+              "id": "lance-of-illumination",
+              "count": 1
+            },
+            {
+              "id": "paragon-missile-launcher",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Morvenn Vahl",
+          "items": [
+            {
+              "id": "fidelis",
+              "count": 1
+            },
+            {
+              "id": "lance-of-illumination",
+              "count": 1
+            },
+            {
+              "id": "paragon-missile-launcher",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Morvenn Vahl",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "fidelis",
+                "count": 1
+              },
+              {
+                "id": "lance-of-illumination",
+                "count": 1
+              },
+              {
+                "id": "paragon-missile-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Morvenn Vahl",
+          "id": "fidelis",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Morvenn Vahl",
+          "id": "lance-of-illumination",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Morvenn Vahl",
+          "id": "paragon-missile-launcher",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "retributor-squad",
@@ -873,7 +3038,352 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Retributor Superior",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-retributor-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Retributor",
+          "models": 4,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 4
+            },
+            {
+              "id": "close-combat-weapon-retributor-squad",
+              "count": 4
+            },
+            {
+              "id": "heavy-bolter-retributor-squad",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Retributor Superior",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-retributor-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Retributor",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-retributor-squad",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter-retributor-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Retributor Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "chainsword-retributor-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon-retributor-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Retributor Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "boltgun",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-retributor-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-retributor-squad",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-retributor-squad",
+                "count": 1
+              },
+              {
+                "id": "condemnor-boltgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-retributor-squad",
+                "count": 1
+              },
+              {
+                "id": "inferno-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-retributor-squad",
+                "count": 1
+              },
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-retributor-squad",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 2
+              },
+              {
+                "id": "close-combat-weapon-retributor-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Retributor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-retributor-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Retributor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-bolter-retributor-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Retributor Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Retributor Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Retributor Superior",
+          "id": "boltgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Retributor Superior",
+          "id": "chainsword-retributor-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Retributor Superior",
+          "id": "close-combat-weapon-retributor-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Retributor Superior",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Retributor Superior",
+          "id": "condemnor-boltgun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Retributor Superior",
+          "id": "inferno-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Retributor Superior",
+          "id": "ministorum-hand-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Retributor Superior",
+          "id": "plasma-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Retributor Superior",
+          "id": "power-weapon-retributor-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Retributor",
+          "id": "bolt-pistol",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Retributor",
+          "id": "close-combat-weapon-retributor-squad",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Retributor",
+          "id": "heavy-bolter-retributor-squad",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Retributor",
+          "id": "ministorum-heavy-flamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Retributor",
+          "id": "multi-melta",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sisters-novitiate-squad",
@@ -929,7 +3439,367 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Novitiate Superior",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-sisters-novitiate-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sister Novitiate",
+          "models": 9,
+          "items": [
+            {
+              "id": "autogun",
+              "count": 9
+            },
+            {
+              "id": "autopistol",
+              "count": 9
+            },
+            {
+              "id": "close-combat-weapon-sisters-novitiate-squad",
+              "count": 9
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Novitiate Superior",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-sisters-novitiate-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sister Novitiate",
+          "items": [
+            {
+              "id": "autogun",
+              "count": 1
+            },
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-sisters-novitiate-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Novitiate Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "boltgun",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-sisters-novitiate-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-sisters-novitiate-squad",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-sisters-novitiate-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon-sisters-novitiate-squad",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-sisters-novitiate-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sister Novitiate",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autogun",
+                "count": 1
+              },
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-sisters-novitiate-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-sisters-novitiate-squad",
+                "count": 1
+              },
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-sisters-novitiate-squad",
+                "count": 1
+              },
+              {
+                "id": "sacred-banner",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-sisters-novitiate-squad",
+                "count": 1
+              },
+              {
+                "id": "simulacrum-imperialis",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "novitiate-melee-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Sister Novitiate",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-sisters-novitiate-squad",
+                "count": 1
+              },
+              {
+                "id": "sacred-banner",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sister Novitiate",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-sisters-novitiate-squad",
+                "count": 1
+              },
+              {
+                "id": "simulacrum-imperialis",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sister Novitiate",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-sisters-novitiate-squad",
+                "count": 1
+              },
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Novitiate Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Novitiate Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Novitiate Superior",
+          "id": "boltgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Novitiate Superior",
+          "id": "close-combat-weapon-sisters-novitiate-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Novitiate Superior",
+          "id": "plasma-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Novitiate Superior",
+          "id": "power-weapon-sisters-novitiate-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Novitiate",
+          "id": "autogun",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Sister Novitiate",
+          "id": "autopistol",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Sister Novitiate",
+          "id": "close-combat-weapon-sisters-novitiate-squad",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Sister Novitiate",
+          "id": "ministorum-flamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Sister Novitiate",
+          "id": "novitiate-melee-weapons",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Sister Novitiate",
+          "id": "sacred-banner",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Novitiate",
+          "id": "simulacrum-imperialis",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "daemonifuge",
@@ -983,7 +3853,115 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ephrael Stern",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "sanctity",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Kyganil of the Bloody Tears",
+          "models": 1,
+          "items": [
+            {
+              "id": "the-outcasts-weapons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ephrael Stern",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "sanctity",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Kyganil of the Bloody Tears",
+          "items": [
+            {
+              "id": "the-outcasts-weapons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ephrael Stern",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "sanctity",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kyganil of the Bloody Tears",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "the-outcasts-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Ephrael Stern",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Ephrael Stern",
+          "id": "sanctity",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kyganil of the Bloody Tears",
+          "id": "the-outcasts-weapons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sororitas-rhino",
@@ -1018,7 +3996,97 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sororitas Rhino",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sororitas Rhino",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sororitas Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "hunter-killer-missile",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sororitas Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sororitas Rhino",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sororitas Rhino",
+          "id": "hunter-killer-missile",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sororitas Rhino",
+          "id": "storm-bolter",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "paragon-warsuits",
@@ -1076,7 +4144,361 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Paragon Superior",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter",
+              "count": 1
+            },
+            {
+              "id": "paragon-storm-bolters",
+              "count": 1
+            },
+            {
+              "id": "paragon-war-blade",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Paragon",
+          "models": 2,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 2
+            },
+            {
+              "id": "heavy-bolter",
+              "count": 2
+            },
+            {
+              "id": "paragon-storm-bolters",
+              "count": 2
+            },
+            {
+              "id": "paragon-war-blade",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Paragon Superior",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter",
+              "count": 1
+            },
+            {
+              "id": "paragon-storm-bolters",
+              "count": 1
+            },
+            {
+              "id": "paragon-war-blade",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Paragon",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter",
+              "count": 1
+            },
+            {
+              "id": "paragon-storm-bolters",
+              "count": 1
+            },
+            {
+              "id": "paragon-war-blade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Paragon Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Paragon Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "multi-melta-paragon-warsuits",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Paragon Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "paragon-grenade-launchers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "paragon-storm-bolters",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Paragon Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "paragon-war-blade",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "paragon-war-mace",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Paragon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Paragon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "multi-melta-paragon-warsuits",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Paragon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "paragon-grenade-launchers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "paragon-storm-bolters",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Paragon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "paragon-war-blade",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "paragon-war-mace",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Paragon Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Paragon Superior",
+          "id": "heavy-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Paragon Superior",
+          "id": "ministorum-heavy-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Paragon Superior",
+          "id": "multi-melta-paragon-warsuits",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Paragon Superior",
+          "id": "paragon-grenade-launchers",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Paragon Superior",
+          "id": "paragon-storm-bolters",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Paragon Superior",
+          "id": "paragon-war-blade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Paragon Superior",
+          "id": "paragon-war-mace",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Paragon",
+          "id": "bolt-pistol",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Paragon",
+          "id": "heavy-bolter",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Paragon",
+          "id": "ministorum-heavy-flamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Paragon",
+          "id": "multi-melta-paragon-warsuits",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Paragon",
+          "id": "paragon-grenade-launchers",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Paragon",
+          "id": "paragon-storm-bolters",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Paragon",
+          "id": "paragon-war-blade",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Paragon",
+          "id": "paragon-war-mace",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "castigator",
@@ -1114,7 +4536,158 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Castigator",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "castigator-autocannons",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Castigator",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "castigator-autocannons",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Castigator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "hunter-killer-missile",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Castigator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "storm-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Castigator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "heavy-bolter",
+                "count": 3
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Castigator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "castigator-autocannons",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "castigator-battle-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Castigator",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Castigator",
+          "id": "castigator-autocannons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Castigator",
+          "id": "castigator-battle-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Castigator",
+          "id": "heavy-bolter",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Castigator",
+          "id": "hunter-killer-missile",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Castigator",
+          "id": "storm-bolter",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "exorcist",
@@ -1150,7 +4723,137 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Exorcist",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "exorcist-missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Exorcist",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "exorcist-missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Exorcist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "hunter-killer-missile",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Exorcist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "heavy-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Exorcist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "exorcist-conflagration-rockets",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "exorcist-missile-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Exorcist",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Exorcist",
+          "id": "exorcist-conflagration-rockets",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Exorcist",
+          "id": "exorcist-missile-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Exorcist",
+          "id": "heavy-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Exorcist",
+          "id": "hunter-killer-missile",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "penitent-engines",
@@ -1194,7 +4897,120 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Penitent Engine",
+          "models": 1,
+          "items": [
+            {
+              "id": "penitent-flamers",
+              "count": 1
+            },
+            {
+              "id": "twin-penitent-buzz-blades-penitent-engines",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Penitent Engine",
+          "items": [
+            {
+              "id": "penitent-flamers",
+              "count": 1
+            },
+            {
+              "id": "twin-penitent-buzz-blades-penitent-engines",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Penitent Engine",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "penitent-buzz-blade-penitent-engines",
+                "count": 1
+              },
+              {
+                "id": "penitent-flail-penitent-engines",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-penitent-buzz-blades-penitent-engines",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-penitent-flails-penitent-engines",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Penitent Engine",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "penitent-flamers",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Penitent Engine",
+          "id": "penitent-buzz-blade-penitent-engines",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Penitent Engine",
+          "id": "penitent-flail-penitent-engines",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Penitent Engine",
+          "id": "penitent-flamers",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Penitent Engine",
+          "id": "twin-penitent-buzz-blades-penitent-engines",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Penitent Engine",
+          "id": "twin-penitent-flails-penitent-engines",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "junith-eruita",
@@ -1229,7 +5045,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Junith Eruita",
+          "models": 1,
+          "items": [
+            {
+              "id": "mace-of-castigation",
+              "count": 1
+            },
+            {
+              "id": "twin-ministorum-heavy-flamer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Junith Eruita",
+          "items": [
+            {
+              "id": "mace-of-castigation",
+              "count": 1
+            },
+            {
+              "id": "twin-ministorum-heavy-flamer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Junith Eruita",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "mace-of-castigation",
+                "count": 1
+              },
+              {
+                "id": "twin-ministorum-heavy-flamer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Junith Eruita",
+          "id": "mace-of-castigation",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Junith Eruita",
+          "id": "twin-ministorum-heavy-flamer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ministorum-priest",
@@ -1263,7 +5148,80 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ministorum Priest",
+          "models": 1,
+          "items": [
+            {
+              "id": "zealots-vindictor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ministorum Priest",
+          "items": [
+            {
+              "id": "zealots-vindictor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ministorum Priest",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "holy-pistol",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-ministorum-priest",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "zealots-vindictor",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Ministorum Priest",
+          "id": "holy-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Ministorum Priest",
+          "id": "power-weapon-ministorum-priest",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Ministorum Priest",
+          "id": "zealots-vindictor",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "zephyrim-squad",
@@ -1332,7 +5290,176 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Zephyrim Superior",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "power-weapon-zephyrim-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Zephyrim",
+          "models": 4,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 4
+            },
+            {
+              "id": "power-weapon-zephyrim-squad",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Zephyrim Superior",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "power-weapon-zephyrim-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Zephyrim",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "power-weapon-zephyrim-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Zephyrim Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "sacred-banner",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Zephyrim Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Zephyrim Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "power-weapon-zephyrim-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Zephyrim",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-zephyrim-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Zephyrim Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Zephyrim Superior",
+          "id": "plasma-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Zephyrim Superior",
+          "id": "power-weapon-zephyrim-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Zephyrim Superior",
+          "id": "sacred-banner",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Zephyrim",
+          "id": "bolt-pistol",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Zephyrim",
+          "id": "power-weapon-zephyrim-squad",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "dominion-squad",
@@ -1431,7 +5558,431 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Dominion Superior",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun-dominion-squad",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-dominion-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Dominion",
+          "models": 9,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 9
+            },
+            {
+              "id": "boltgun-dominion-squad",
+              "count": 9
+            },
+            {
+              "id": "close-combat-weapon-dominion-squad",
+              "count": 9
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Dominion Superior",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun-dominion-squad",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-dominion-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Dominion",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun-dominion-squad",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-dominion-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Dominion Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "chainsword-dominion-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon-dominion-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Dominion Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "boltgun-dominion-squad",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-dominion-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-dominion-squad",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-dominion-squad",
+                "count": 1
+              },
+              {
+                "id": "condemnor-boltgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-dominion-squad",
+                "count": 1
+              },
+              {
+                "id": "inferno-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-dominion-squad",
+                "count": 1
+              },
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-dominion-squad",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 2
+              },
+              {
+                "id": "close-combat-weapon-dominion-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Dominion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "artificer-crafted-storm-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "boltgun-dominion-squad",
+                "count": 1
+              },
+              {
+                "id": "simulacrum-imperialis",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "boltgun-dominion-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun-dominion-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-flamer-dominion-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Dominion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-dominion-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Dominion",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "boltgun-dominion-squad",
+                "count": 1
+              },
+              {
+                "id": "simulacrum-imperialis",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Dominion",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "artificer-crafted-storm-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun-dominion-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-flamer-dominion-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Dominion Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Dominion Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Dominion Superior",
+          "id": "boltgun-dominion-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Dominion Superior",
+          "id": "chainsword-dominion-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Dominion Superior",
+          "id": "close-combat-weapon-dominion-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Dominion Superior",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Dominion Superior",
+          "id": "condemnor-boltgun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Dominion Superior",
+          "id": "inferno-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Dominion Superior",
+          "id": "ministorum-hand-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Dominion Superior",
+          "id": "plasma-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Dominion Superior",
+          "id": "power-weapon-dominion-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Dominion",
+          "id": "artificer-crafted-storm-bolter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Dominion",
+          "id": "bolt-pistol",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Dominion",
+          "id": "boltgun-dominion-squad",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Dominion",
+          "id": "close-combat-weapon-dominion-squad",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Dominion",
+          "id": "meltagun-dominion-squad",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Dominion",
+          "id": "ministorum-flamer-dominion-squad",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Dominion",
+          "id": "simulacrum-imperialis",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "saint-celestine",
@@ -1484,7 +6035,115 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Celestine",
+          "models": 1,
+          "items": [
+            {
+              "id": "the-ardent-blade",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Geminae Superia",
+          "models": 2,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 2
+            },
+            {
+              "id": "power-weapon-saint-celestine",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Celestine",
+          "items": [
+            {
+              "id": "the-ardent-blade",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Geminae Superia",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "power-weapon-saint-celestine",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Celestine",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "the-ardent-blade",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Geminae Superia",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-saint-celestine",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Celestine",
+          "id": "the-ardent-blade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Geminae Superia",
+          "id": "bolt-pistol",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Geminae Superia",
+          "id": "power-weapon-saint-celestine",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "battle-sisters-squad",
@@ -1686,7 +6345,641 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Battle Sister",
+          "models": 9,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 9
+            },
+            {
+              "id": "boltgun",
+              "count": 9
+            },
+            {
+              "id": "close-combat-weapon-battle-sisters-squad",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Sister Superior",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-battle-sisters-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Battle Sister",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-battle-sisters-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sister Superior",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-battle-sisters-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Battle Sister",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "artificer-crafted-storm-bolter-battle-sisters-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "boltgun",
+                "count": 1
+              },
+              {
+                "id": "simulacrum-imperialis",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "boltgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter-battle-sisters-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun-battle-sisters-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Battle Sister",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-battle-sisters-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sister Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "chainsword-battle-sisters-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon-battle-sisters-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sister Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "boltgun",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-battle-sisters-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "condemnor-boltgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "inferno-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "ministorum-hand-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 2
+              },
+              {
+                "id": "close-combat-weapon-battle-sisters-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Battle Sister",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "artificer-crafted-storm-bolter-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "heavy-bolter-battle-sisters-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "artificer-crafted-storm-bolter-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "meltagun-battle-sisters-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "artificer-crafted-storm-bolter-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "artificer-crafted-storm-bolter-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "artificer-crafted-storm-bolter-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "artificer-crafted-storm-bolter-battle-sisters-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "artificer-crafted-storm-bolter-battle-sisters-squad",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "meltagun-battle-sisters-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter-battle-sisters-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun-battle-sisters-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun-battle-sisters-squad",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              },
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ministorum-flamer",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Battle Sister",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "boltgun",
+                "count": 1
+              },
+              {
+                "id": "simulacrum-imperialis",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Battle Sister",
+          "id": "artificer-crafted-storm-bolter-battle-sisters-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "artificer-crafted-storm-bolter-battle-sisters-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "bolt-pistol",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Battle Sister",
+          "id": "boltgun",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Battle Sister",
+          "id": "close-combat-weapon-battle-sisters-squad",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Battle Sister",
+          "id": "heavy-bolter-battle-sisters-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "meltagun-battle-sisters-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "meltagun-battle-sisters-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "ministorum-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "ministorum-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "ministorum-heavy-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "multi-melta",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battle Sister",
+          "id": "simulacrum-imperialis",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sister Superior",
+          "id": "boltgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sister Superior",
+          "id": "chainsword-battle-sisters-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "close-combat-weapon-battle-sisters-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sister Superior",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "condemnor-boltgun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "inferno-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "ministorum-hand-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "plasma-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sister Superior",
+          "id": "power-weapon-battle-sisters-squad",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "canoness",
@@ -1721,7 +7014,360 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Canoness",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol-canoness",
+              "count": 1
+            },
+            {
+              "id": "hallowed-chainsword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Canoness",
+          "items": [
+            {
+              "id": "bolt-pistol-canoness",
+              "count": 1
+            },
+            {
+              "id": "hallowed-chainsword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Canoness",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blessed-blade",
+                "count": 1
+              },
+              {
+                "id": "bolt-pistol-canoness",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "blessed-blade",
+                "count": 1
+              },
+              {
+                "id": "condemnor-boltgun-canoness",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "blessed-blade",
+                "count": 1
+              },
+              {
+                "id": "inferno-pistol-canoness",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "blessed-blade",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol-canoness",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol-canoness",
+                "count": 1
+              },
+              {
+                "id": "brazier-of-holy-fire",
+                "count": 1
+              },
+              {
+                "id": "hallowed-chainsword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol-canoness",
+                "count": 1
+              },
+              {
+                "id": "hallowed-chainsword",
+                "count": 1
+              },
+              {
+                "id": "null-rod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol-canoness",
+                "count": 1
+              },
+              {
+                "id": "hallowed-chainsword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-pistol-canoness",
+                "count": 1
+              },
+              {
+                "id": "power-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "brazier-of-holy-fire",
+                "count": 1
+              },
+              {
+                "id": "condemnor-boltgun-canoness",
+                "count": 1
+              },
+              {
+                "id": "hallowed-chainsword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "brazier-of-holy-fire",
+                "count": 1
+              },
+              {
+                "id": "hallowed-chainsword",
+                "count": 1
+              },
+              {
+                "id": "inferno-pistol-canoness",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "brazier-of-holy-fire",
+                "count": 1
+              },
+              {
+                "id": "hallowed-chainsword",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol-canoness",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "condemnor-boltgun-canoness",
+                "count": 1
+              },
+              {
+                "id": "hallowed-chainsword",
+                "count": 1
+              },
+              {
+                "id": "null-rod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "condemnor-boltgun-canoness",
+                "count": 1
+              },
+              {
+                "id": "hallowed-chainsword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "condemnor-boltgun-canoness",
+                "count": 1
+              },
+              {
+                "id": "power-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hallowed-chainsword",
+                "count": 1
+              },
+              {
+                "id": "inferno-pistol-canoness",
+                "count": 1
+              },
+              {
+                "id": "null-rod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hallowed-chainsword",
+                "count": 1
+              },
+              {
+                "id": "inferno-pistol-canoness",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hallowed-chainsword",
+                "count": 1
+              },
+              {
+                "id": "null-rod",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol-canoness",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hallowed-chainsword",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol-canoness",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "inferno-pistol-canoness",
+                "count": 1
+              },
+              {
+                "id": "power-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-pistol-canoness",
+                "count": 1
+              },
+              {
+                "id": "power-weapon",
+                "count": 1
+              },
+              {
+                "id": "rod-of-office",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-pistol-canoness",
+                "count": 1
+              },
+              {
+                "id": "power-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Canoness",
+          "id": "blessed-blade",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Canoness",
+          "id": "bolt-pistol-canoness",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Canoness",
+          "id": "brazier-of-holy-fire",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Canoness",
+          "id": "condemnor-boltgun-canoness",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Canoness",
+          "id": "hallowed-chainsword",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Canoness",
+          "id": "inferno-pistol-canoness",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Canoness",
+          "id": "null-rod",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Canoness",
+          "id": "plasma-pistol-canoness",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Canoness",
+          "id": "power-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Canoness",
+          "id": "rod-of-office",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "aestred-thurga-and-agathae-dolan",
@@ -1775,7 +7421,133 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Aestred Thurga",
+          "models": 1,
+          "items": [
+            {
+              "id": "blade-of-vigil",
+              "count": 1
+            },
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Agathae Dolan",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "scribes-staff",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Aestred Thurga",
+          "items": [
+            {
+              "id": "blade-of-vigil",
+              "count": 1
+            },
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Agathae Dolan",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "scribes-staff",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Aestred Thurga",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blade-of-vigil",
+                "count": 1
+              },
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Agathae Dolan",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "scribes-staff",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Aestred Thurga",
+          "id": "blade-of-vigil",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Aestred Thurga",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Agathae Dolan",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Agathae Dolan",
+          "id": "scribes-staff",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "intranzia-fraye",
@@ -1814,7 +7586,130 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Intranzia Fraye",
+          "models": 1,
+          "items": [
+            {
+              "id": "heavy-bolter-intranzia-fraye",
+              "count": 2
+            },
+            {
+              "id": "mace-of-saint-praxedes",
+              "count": 1
+            },
+            {
+              "id": "melta-missile-array",
+              "count": 1
+            },
+            {
+              "id": "ministorum-heavy-flamer",
+              "count": 2
+            },
+            {
+              "id": "throne-of-blame",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Intranzia Fraye",
+          "items": [
+            {
+              "id": "heavy-bolter-intranzia-fraye",
+              "count": 1
+            },
+            {
+              "id": "mace-of-saint-praxedes",
+              "count": 1
+            },
+            {
+              "id": "melta-missile-array",
+              "count": 1
+            },
+            {
+              "id": "ministorum-heavy-flamer",
+              "count": 1
+            },
+            {
+              "id": "throne-of-blame",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Intranzia Fraye",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-bolter-intranzia-fraye",
+                "count": 2
+              },
+              {
+                "id": "mace-of-saint-praxedes",
+                "count": 1
+              },
+              {
+                "id": "melta-missile-array",
+                "count": 1
+              },
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 2
+              },
+              {
+                "id": "throne-of-blame",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Intranzia Fraye",
+          "id": "heavy-bolter-intranzia-fraye",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Intranzia Fraye",
+          "id": "mace-of-saint-praxedes",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Intranzia Fraye",
+          "id": "melta-missile-array",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Intranzia Fraye",
+          "id": "ministorum-heavy-flamer",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Intranzia Fraye",
+          "id": "throne-of-blame",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sanctuary-guardians-celestian-sacresants",
@@ -1871,7 +7766,106 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Celestian Sacresants",
+          "models": 4,
+          "items": [
+            {
+              "id": "bolt-pistol-sanctuary-guardians-celestian-sacresants",
+              "count": 4
+            },
+            {
+              "id": "hallowed-mace",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Sacresant Superior",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol-sanctuary-guardians-celestian-sacresants",
+              "count": 1
+            },
+            {
+              "id": "hallowed-mace",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Celestian Sacresants",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-sanctuary-guardians-celestian-sacresants",
+                "count": 1
+              },
+              {
+                "id": "hallowed-mace",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sacresant Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-sanctuary-guardians-celestian-sacresants",
+                "count": 1
+              },
+              {
+                "id": "hallowed-mace",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Celestian Sacresants",
+          "id": "bolt-pistol-sanctuary-guardians-celestian-sacresants",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Celestian Sacresants",
+          "id": "hallowed-mace",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Sacresant Superior",
+          "id": "bolt-pistol-sanctuary-guardians-celestian-sacresants",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sacresant Superior",
+          "id": "hallowed-mace",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sanctuary-guardians-arco-flagellants",
@@ -1908,7 +7902,48 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Arco-Flagellents",
+          "models": 10,
+          "items": [
+            {
+              "id": "arco-flails",
+              "count": 10
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Arco-Flagellents",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arco-flails",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Arco-Flagellents",
+          "id": "arco-flails",
+          "input": "stepper",
+          "default": 10
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sanctuary-canoness-adalya",
@@ -1946,7 +7981,62 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Canoness Adalya",
+          "models": 1,
+          "items": [
+            {
+              "id": "condemnor-boltgun-sanctuary-canoness-adalya",
+              "count": 1
+            },
+            {
+              "id": "hallowed-chainsword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Canoness Adalya",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "condemnor-boltgun-sanctuary-canoness-adalya",
+                "count": 1
+              },
+              {
+                "id": "hallowed-chainsword",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Canoness Adalya",
+          "id": "condemnor-boltgun-sanctuary-canoness-adalya",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Canoness Adalya",
+          "id": "hallowed-chainsword",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sanctuary-guardians-battle-sisters-squad",
@@ -2077,6 +8167,335 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Battle Sister with Ministorum Flamer",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "ministorum-flamer",
+              "count": 1
+            },
+            {
+              "id": "stocks-and-fists",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Battle Sister with Ministorum Heavy Flamer",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "ministorum-heavy-flamer",
+              "count": 1
+            },
+            {
+              "id": "stocks-and-fists",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Battle Sister with Simulacrum Imperialis",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "simulacrum-imperialis",
+              "count": 1
+            },
+            {
+              "id": "stocks-and-fists",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Battle Sister",
+          "models": 6,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 6
+            },
+            {
+              "id": "boltgun",
+              "count": 6
+            },
+            {
+              "id": "stocks-and-fists",
+              "count": 6
+            }
+          ]
+        },
+        {
+          "model": "Sister Superior",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "combi-weapon",
+              "count": 1
+            },
+            {
+              "id": "power-weapon-sanctuary-guardians-battle-sisters-squad",
+              "count": 1
+            },
+            {
+              "id": "stocks-and-fists",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Battle Sister with Ministorum Flamer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "ministorum-flamer",
+                "count": 1
+              },
+              {
+                "id": "stocks-and-fists",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Battle Sister with Ministorum Heavy Flamer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "ministorum-heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "stocks-and-fists",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Battle Sister with Simulacrum Imperialis",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "boltgun",
+                "count": 1
+              },
+              {
+                "id": "simulacrum-imperialis",
+                "count": 1
+              },
+              {
+                "id": "stocks-and-fists",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Battle Sister",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "boltgun",
+                "count": 1
+              },
+              {
+                "id": "stocks-and-fists",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sister Superior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-sanctuary-guardians-battle-sisters-squad",
+                "count": 1
+              },
+              {
+                "id": "stocks-and-fists",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Battle Sister with Ministorum Flamer",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Battle Sister with Ministorum Flamer",
+          "id": "ministorum-flamer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Battle Sister with Ministorum Flamer",
+          "id": "stocks-and-fists",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Battle Sister with Ministorum Heavy Flamer",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Battle Sister with Ministorum Heavy Flamer",
+          "id": "ministorum-heavy-flamer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Battle Sister with Ministorum Heavy Flamer",
+          "id": "stocks-and-fists",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Battle Sister with Simulacrum Imperialis",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Battle Sister with Simulacrum Imperialis",
+          "id": "boltgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Battle Sister with Simulacrum Imperialis",
+          "id": "simulacrum-imperialis",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Battle Sister with Simulacrum Imperialis",
+          "id": "stocks-and-fists",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Battle Sister",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 6
+        },
+        {
+          "model": "Battle Sister",
+          "id": "boltgun",
+          "input": "stepper",
+          "default": 6
+        },
+        {
+          "model": "Battle Sister",
+          "id": "stocks-and-fists",
+          "input": "checkbox",
+          "default": 6
+        },
+        {
+          "model": "Sister Superior",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sister Superior",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sister Superior",
+          "id": "power-weapon-sanctuary-guardians-battle-sisters-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sister Superior",
+          "id": "stocks-and-fists",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

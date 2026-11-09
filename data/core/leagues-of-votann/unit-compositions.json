@@ -32,7 +32,62 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Memnyr Strategist",
+          "models": 1,
+          "items": [
+            {
+              "id": "autoch-pattern-bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Memnyr Strategist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Memnyr Strategist",
+          "id": "autoch-pattern-bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Memnyr Strategist",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "einhyr-hearthguard",
@@ -104,7 +159,363 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Einhyr Hearthguard",
+          "models": 4,
+          "items": [
+            {
+              "id": "concussion-gauntlet",
+              "count": 4
+            },
+            {
+              "id": "etacarn-plasma-gun",
+              "count": 4
+            },
+            {
+              "id": "exoarmour-grenade-launcher",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Hesyr",
+          "models": 1,
+          "items": [
+            {
+              "id": "concussion-gauntlet",
+              "count": 1
+            },
+            {
+              "id": "etacarn-plasma-gun",
+              "count": 1
+            },
+            {
+              "id": "exoarmour-grenade-launcher",
+              "count": 1
+            },
+            {
+              "id": "weavefield-crest",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Einhyr Hearthguard",
+          "items": [
+            {
+              "id": "concussion-gauntlet",
+              "count": 1
+            },
+            {
+              "id": "etacarn-plasma-gun",
+              "count": 1
+            },
+            {
+              "id": "exoarmour-grenade-launcher",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Hesyr",
+          "items": [
+            {
+              "id": "concussion-gauntlet",
+              "count": 1
+            },
+            {
+              "id": "etacarn-plasma-gun",
+              "count": 1
+            },
+            {
+              "id": "exoarmour-grenade-launcher",
+              "count": 1
+            },
+            {
+              "id": "weavefield-crest",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Einhyr Hearthguard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "concussion-gauntlet",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-blade-gauntlet",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Einhyr Hearthguard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "etacarn-plasma-gun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "volkanite-disintegrator",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Einhyr Hearthguard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "exoarmour-grenade-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hesyr",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "concussion-gauntlet",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "graviton-hammer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-blade-gauntlet",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hesyr",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "etacarn-plasma-gun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "volkanite-disintegrator",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hesyr",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "exoarmour-grenade-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hesyr",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "teleport-crest",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "weavefield-crest",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Einhyr Hearthguard",
+          "id": "concussion-gauntlet",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Einhyr Hearthguard",
+          "id": "etacarn-plasma-gun",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Einhyr Hearthguard",
+          "id": "exoarmour-grenade-launcher",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Einhyr Hearthguard",
+          "id": "plasma-blade-gauntlet",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Einhyr Hearthguard",
+          "id": "volkanite-disintegrator",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Hesyr",
+          "id": "concussion-gauntlet",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hesyr",
+          "id": "etacarn-plasma-gun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hesyr",
+          "id": "exoarmour-grenade-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hesyr",
+          "id": "graviton-hammer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hesyr",
+          "id": "plasma-blade-gauntlet",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hesyr",
+          "id": "teleport-crest",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hesyr",
+          "id": "volkanite-disintegrator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hesyr",
+          "id": "weavefield-crest",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": [
+        {
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "concussion-gauntlet",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "graviton-hammer",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            },
+            {
+              "items": [
+                {
+                  "id": "plasma-blade-gauntlet",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "etacarn-plasma-gun",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "volkanite-disintegrator",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "grimnyr",
@@ -158,7 +569,133 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "CORV",
+          "models": 2,
+          "items": [
+            {
+              "id": "autoch-pattern-bolter",
+              "count": 2
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "model": "Grimnyr",
+          "models": 1,
+          "items": [
+            {
+              "id": "ancestral-ward-stave",
+              "count": 1
+            },
+            {
+              "id": "ancestral-wrath",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "CORV",
+          "items": [
+            {
+              "id": "autoch-pattern-bolter",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Grimnyr",
+          "items": [
+            {
+              "id": "ancestral-ward-stave",
+              "count": 1
+            },
+            {
+              "id": "ancestral-wrath",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "CORV",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-bolter",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Grimnyr",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ancestral-ward-stave",
+                "count": 1
+              },
+              {
+                "id": "ancestral-wrath",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "CORV",
+          "id": "autoch-pattern-bolter",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "CORV",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Grimnyr",
+          "id": "ancestral-ward-stave",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Grimnyr",
+          "id": "ancestral-wrath",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hernkyn-pioneers",
@@ -293,7 +830,260 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hernkyn Pioneer",
+          "models": 3,
+          "items": [
+            {
+              "id": "bolt-revolver",
+              "count": 3
+            },
+            {
+              "id": "bolt-shotgun",
+              "count": 3
+            },
+            {
+              "id": "magna-coil-autocannon",
+              "count": 3
+            },
+            {
+              "id": "plasma-knife",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hernkyn Pioneer",
+          "items": [
+            {
+              "id": "bolt-revolver",
+              "count": 1
+            },
+            {
+              "id": "bolt-shotgun",
+              "count": 1
+            },
+            {
+              "id": "magna-coil-autocannon",
+              "count": 1
+            },
+            {
+              "id": "plasma-knife",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hernkyn Pioneer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "hylas-rotary-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ion-beamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "multiwave-comms-array",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "panspectral-scanner",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rollbar-searchlight",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hernkyn Pioneer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-revolver",
+                "count": 1
+              },
+              {
+                "id": "bolt-shotgun",
+                "count": 1
+              },
+              {
+                "id": "magna-coil-autocannon",
+                "count": 1
+              },
+              {
+                "id": "plasma-knife",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Hernkyn Pioneer",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "multiwave-comms-array",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hernkyn Pioneer",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "panspectral-scanner",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hernkyn Pioneer",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "rollbar-searchlight",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hernkyn Pioneer",
+          "breakpoints": [
+            {
+              "models": 3,
+              "choices": 1
+            },
+            {
+              "models": 6,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "hylas-rotary-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ion-beamer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Hernkyn Pioneer",
+          "id": "bolt-revolver",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Hernkyn Pioneer",
+          "id": "bolt-shotgun",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Hernkyn Pioneer",
+          "id": "hylas-rotary-cannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Hernkyn Pioneer",
+          "id": "ion-beamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Hernkyn Pioneer",
+          "id": "magna-coil-autocannon",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Hernkyn Pioneer",
+          "id": "multiwave-comms-array",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hernkyn Pioneer",
+          "id": "panspectral-scanner",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hernkyn Pioneer",
+          "id": "plasma-knife",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Hernkyn Pioneer",
+          "id": "rollbar-searchlight",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "cthonian-earthshakers",
@@ -330,7 +1120,140 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Cthonian Earthshakers",
+          "models": 2,
+          "items": [
+            {
+              "id": "autoch-pattern-bolt-pistol",
+              "count": 4
+            },
+            {
+              "id": "breacher-ordnance",
+              "count": 2
+            },
+            {
+              "id": "plasma-picks",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Cthonian Earthshakers",
+          "items": [
+            {
+              "id": "autoch-pattern-bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "breacher-ordnance",
+              "count": 1
+            },
+            {
+              "id": "plasma-picks",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Cthonian Earthshakers",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-bolt-pistol",
+                "count": 2
+              },
+              {
+                "id": "plasma-picks",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Cthonian Earthshakers",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "breacher-ordnance",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "tremor-shells",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Cthonian Earthshakers",
+          "id": "autoch-pattern-bolt-pistol",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Cthonian Earthshakers",
+          "id": "breacher-ordnance",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Cthonian Earthshakers",
+          "id": "plasma-picks",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Cthonian Earthshakers",
+          "id": "tremor-shells",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": [
+        {
+          "model": "Cthonian Earthshakers",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "breacher-ordnance",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "tremor-shells",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "kapricus-carrier",
@@ -367,7 +1290,100 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Kapricus Carrier",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "magna-coil-autocannon",
+              "count": 1
+            },
+            {
+              "id": "twin-magna-coil-autocannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Kapricus Carrier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "magna-coil-autocannon",
+                "count": 1
+              },
+              {
+                "id": "smoke-launcher",
+                "count": 1
+              },
+              {
+                "id": "twin-magna-coil-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "magna-coil-autocannon",
+                "count": 1
+              },
+              {
+                "id": "twin-magna-coil-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Kapricus Carrier",
+          "id": "armoured-hull",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kapricus Carrier",
+          "id": "magna-coil-autocannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kapricus Carrier",
+          "id": "smoke-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kapricus Carrier",
+          "id": "twin-magna-coil-autocannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ironkin-steeljacks-with-heavy-volkanite-disintegrators",
@@ -436,7 +1452,160 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ironkin Steeljack",
+          "models": 2,
+          "items": [
+            {
+              "id": "heavy-volkanite-disintegrator",
+              "count": 2
+            },
+            {
+              "id": "plasma-knife-ironkin-steeljacks-with-heavy-volkanite-disintegrators",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "model": "Steeljack Theyn",
+          "models": 1,
+          "items": [
+            {
+              "id": "heavy-volkanite-disintegrator",
+              "count": 1
+            },
+            {
+              "id": "plasma-knife-ironkin-steeljacks-with-heavy-volkanite-disintegrators",
+              "count": 1
+            },
+            {
+              "id": "preymark-crest",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ironkin Steeljack",
+          "items": [
+            {
+              "id": "heavy-volkanite-disintegrator",
+              "count": 1
+            },
+            {
+              "id": "plasma-knife-ironkin-steeljacks-with-heavy-volkanite-disintegrators",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ironkin Steeljack",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-volkanite-disintegrator",
+                "count": 1
+              },
+              {
+                "id": "plasma-knife-ironkin-steeljacks-with-heavy-volkanite-disintegrators",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Steeljack Theyn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-bolter-ironkin-steeljacks-with-heavy-volkanite-disintegrators",
+                "count": 1
+              },
+              {
+                "id": "plasma-sword",
+                "count": 1
+              },
+              {
+                "id": "preymark-crest",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-volkanite-disintegrator",
+                "count": 1
+              },
+              {
+                "id": "plasma-knife-ironkin-steeljacks-with-heavy-volkanite-disintegrators",
+                "count": 1
+              },
+              {
+                "id": "preymark-crest",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Ironkin Steeljack",
+          "id": "heavy-volkanite-disintegrator",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Ironkin Steeljack",
+          "id": "plasma-knife-ironkin-steeljacks-with-heavy-volkanite-disintegrators",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Steeljack Theyn",
+          "id": "autoch-pattern-bolter-ironkin-steeljacks-with-heavy-volkanite-disintegrators",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Steeljack Theyn",
+          "id": "heavy-volkanite-disintegrator",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Steeljack Theyn",
+          "id": "plasma-knife-ironkin-steeljacks-with-heavy-volkanite-disintegrators",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Steeljack Theyn",
+          "id": "plasma-sword",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Steeljack Theyn",
+          "id": "preymark-crest",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hekaton-land-fortress",
@@ -475,7 +1644,224 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hekaton Land Fortress",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-wheels",
+              "count": 1
+            },
+            {
+              "id": "cyclic-ion-cannon",
+              "count": 1
+            },
+            {
+              "id": "matr-autocannon",
+              "count": 1
+            },
+            {
+              "id": "panspectral-scanner",
+              "count": 1
+            },
+            {
+              "id": "twin-bolt-cannon",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hekaton Land Fortress",
+          "items": [
+            {
+              "id": "armoured-wheels",
+              "count": 1
+            },
+            {
+              "id": "cyclic-ion-cannon",
+              "count": 1
+            },
+            {
+              "id": "matr-autocannon",
+              "count": 1
+            },
+            {
+              "id": "panspectral-scanner",
+              "count": 1
+            },
+            {
+              "id": "twin-bolt-cannon",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hekaton Land Fortress",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-wheels",
+                "count": 1
+              },
+              {
+                "id": "matr-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hekaton Land Fortress",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cyclic-ion-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-magna-rail-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "sp-heavy-conversion-beamer",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hekaton Land Fortress",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hekaton-warhead",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "panspectral-scanner",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hekaton Land Fortress",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "twin-bolt-cannon",
+                "count": 1
+              },
+              {
+                "id": "twin-ion-beamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-bolt-cannon",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "twin-ion-beamer",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Hekaton Land Fortress",
+          "id": "armoured-wheels",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hekaton Land Fortress",
+          "id": "cyclic-ion-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hekaton Land Fortress",
+          "id": "heavy-magna-rail-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hekaton Land Fortress",
+          "id": "hekaton-warhead",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hekaton Land Fortress",
+          "id": "matr-autocannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hekaton Land Fortress",
+          "id": "panspectral-scanner",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hekaton Land Fortress",
+          "id": "sp-heavy-conversion-beamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hekaton Land Fortress",
+          "id": "twin-bolt-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hekaton Land Fortress",
+          "id": "twin-bolt-cannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Hekaton Land Fortress",
+          "id": "twin-ion-beamer",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "buri-aegnirssen",
@@ -510,7 +1896,62 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Buri Aegnirssen",
+          "models": 1,
+          "items": [
+            {
+              "id": "autoch-pattern-bolt-pistol-buri-aegnirssen",
+              "count": 1
+            },
+            {
+              "id": "bane",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Buri Aegnirssen",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-bolt-pistol-buri-aegnirssen",
+                "count": 1
+              },
+              {
+                "id": "bane",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Buri Aegnirssen",
+          "id": "autoch-pattern-bolt-pistol-buri-aegnirssen",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Buri Aegnirssen",
+          "id": "bane",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "brokhyr-iron-master",
@@ -626,7 +2067,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Berehk Stornbröw",
+          "models": 1,
+          "items": [
+            {
+              "id": "kromloks-revenge",
+              "count": 1
+            },
+            {
+              "id": "warforge-gauntlets",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Berehk Stornbröw",
+          "items": [
+            {
+              "id": "kromloks-revenge",
+              "count": 1
+            },
+            {
+              "id": "warforge-gauntlets",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Berehk Stornbröw",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kromloks-revenge",
+                "count": 1
+              },
+              {
+                "id": "warforge-gauntlets",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Berehk Stornbröw",
+          "id": "kromloks-revenge",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Berehk Stornbröw",
+          "id": "warforge-gauntlets",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ironkin-steeljacks-with-melee-weapons",
@@ -724,7 +2234,170 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ironkin Steeljack",
+          "models": 2,
+          "items": [
+            {
+              "id": "autoch-pattern-bolter-ironkin-steeljacks-with-melee-weapons",
+              "count": 2
+            },
+            {
+              "id": "plasma-sword",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "model": "Steeljack Theyn",
+          "models": 1,
+          "items": [
+            {
+              "id": "autoch-pattern-bolter-ironkin-steeljacks-with-melee-weapons",
+              "count": 1
+            },
+            {
+              "id": "plasma-sword",
+              "count": 1
+            },
+            {
+              "id": "preymark-crest",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ironkin Steeljack",
+          "items": [
+            {
+              "id": "autoch-pattern-bolter-ironkin-steeljacks-with-melee-weapons",
+              "count": 1
+            },
+            {
+              "id": "plasma-sword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ironkin Steeljack",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-bolter-ironkin-steeljacks-with-melee-weapons",
+                "count": 1
+              },
+              {
+                "id": "concussion-gauntlet-ironkin-steeljacks-with-melee-weapons",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "autoch-pattern-bolter-ironkin-steeljacks-with-melee-weapons",
+                "count": 1
+              },
+              {
+                "id": "plasma-sword",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Steeljack Theyn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-bolter-ironkin-steeljacks-with-melee-weapons",
+                "count": 1
+              },
+              {
+                "id": "concussion-gauntlet-ironkin-steeljacks-with-melee-weapons",
+                "count": 1
+              },
+              {
+                "id": "preymark-crest",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "autoch-pattern-bolter-ironkin-steeljacks-with-melee-weapons",
+                "count": 1
+              },
+              {
+                "id": "plasma-sword",
+                "count": 1
+              },
+              {
+                "id": "preymark-crest",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Ironkin Steeljack",
+          "id": "autoch-pattern-bolter-ironkin-steeljacks-with-melee-weapons",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Ironkin Steeljack",
+          "id": "concussion-gauntlet-ironkin-steeljacks-with-melee-weapons",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Ironkin Steeljack",
+          "id": "plasma-sword",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Steeljack Theyn",
+          "id": "autoch-pattern-bolter-ironkin-steeljacks-with-melee-weapons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Steeljack Theyn",
+          "id": "concussion-gauntlet-ironkin-steeljacks-with-melee-weapons",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Steeljack Theyn",
+          "id": "plasma-sword",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Steeljack Theyn",
+          "id": "preymark-crest",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "uthar-the-destined",
@@ -760,7 +2433,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ûthar the Destined",
+          "models": 1,
+          "items": [
+            {
+              "id": "blade-of-the-ancestors",
+              "count": 1
+            },
+            {
+              "id": "rampart-crest",
+              "count": 1
+            },
+            {
+              "id": "volkanite-disintegrator-uthar-the-destined",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ûthar the Destined",
+          "items": [
+            {
+              "id": "blade-of-the-ancestors",
+              "count": 1
+            },
+            {
+              "id": "rampart-crest",
+              "count": 1
+            },
+            {
+              "id": "volkanite-disintegrator-uthar-the-destined",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ûthar the Destined",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blade-of-the-ancestors",
+                "count": 1
+              },
+              {
+                "id": "rampart-crest",
+                "count": 1
+              },
+              {
+                "id": "volkanite-disintegrator-uthar-the-destined",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Ûthar the Destined",
+          "id": "blade-of-the-ancestors",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Ûthar the Destined",
+          "id": "rampart-crest",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Ûthar the Destined",
+          "id": "volkanite-disintegrator-uthar-the-destined",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hernkyn-yaegirs",
@@ -882,7 +2642,266 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hernkyn Yaegir",
+          "models": 9,
+          "items": [
+            {
+              "id": "bolt-shotgun",
+              "count": 9
+            },
+            {
+              "id": "close-combat-weapon-hernkyn-yaegirs",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Yaegir Theyn",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-shotgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-hernkyn-yaegirs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hernkyn Yaegir",
+          "items": [
+            {
+              "id": "bolt-shotgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-hernkyn-yaegirs",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Yaegir Theyn",
+          "items": [
+            {
+              "id": "bolt-shotgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-hernkyn-yaegirs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hernkyn Yaegir",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "apm-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-revolver",
+                "count": 1
+              },
+              {
+                "id": "plasma-knife",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-shotgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "magna-coil-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hernkyn Yaegir",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-hernkyn-yaegirs",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Yaegir Theyn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-revolver",
+                "count": 1
+              },
+              {
+                "id": "plasma-knife",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bolt-shotgun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Yaegir Theyn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-hernkyn-yaegirs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Hernkyn Yaegir",
+          "id": "apm-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hernkyn Yaegir",
+          "id": "bolt-revolver",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Hernkyn Yaegir",
+          "id": "bolt-shotgun",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Hernkyn Yaegir",
+          "id": "close-combat-weapon-hernkyn-yaegirs",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Hernkyn Yaegir",
+          "id": "magna-coil-rifle",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hernkyn Yaegir",
+          "id": "plasma-knife",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Yaegir Theyn",
+          "id": "bolt-revolver",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Yaegir Theyn",
+          "id": "bolt-shotgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Yaegir Theyn",
+          "id": "close-combat-weapon-hernkyn-yaegirs",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Yaegir Theyn",
+          "id": "plasma-knife",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": [
+        {
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "apm-launcher",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            },
+            {
+              "items": [
+                {
+                  "id": "bolt-revolver",
+                  "count": 1
+                },
+                {
+                  "id": "plasma-knife",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "bolt-shotgun",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "magna-coil-rifle",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "einhyr-champion",
@@ -918,7 +2937,138 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Einhyr Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "autoch-pattern-combi-bolter",
+              "count": 1
+            },
+            {
+              "id": "mass-hammer",
+              "count": 1
+            },
+            {
+              "id": "weavefield-crest",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Einhyr Champion",
+          "items": [
+            {
+              "id": "autoch-pattern-combi-bolter",
+              "count": 1
+            },
+            {
+              "id": "mass-hammer",
+              "count": 1
+            },
+            {
+              "id": "weavefield-crest",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Einhyr Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-combi-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Einhyr Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "darkstar-axe",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "mass-hammer",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Einhyr Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "teleport-crest",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "weavefield-crest",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Einhyr Champion",
+          "id": "autoch-pattern-combi-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Einhyr Champion",
+          "id": "darkstar-axe",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Einhyr Champion",
+          "id": "mass-hammer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Einhyr Champion",
+          "id": "teleport-crest",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Einhyr Champion",
+          "id": "weavefield-crest",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "brokhyr-thunderkyn",
@@ -962,7 +3112,143 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Brôkhyr Thunderkyn",
+          "models": 3,
+          "items": [
+            {
+              "id": "bolt-cannon",
+              "count": 3
+            },
+            {
+              "id": "close-combat-weapon-brokhyr-thunderkyn",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Brôkhyr Thunderkyn",
+          "items": [
+            {
+              "id": "bolt-cannon",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-brokhyr-thunderkyn",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Brôkhyr Thunderkyn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "graviton-blast-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "sp-conversion-beamer",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Brôkhyr Thunderkyn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-brokhyr-thunderkyn",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Brôkhyr Thunderkyn",
+          "id": "bolt-cannon",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Brôkhyr Thunderkyn",
+          "id": "close-combat-weapon-brokhyr-thunderkyn",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Brôkhyr Thunderkyn",
+          "id": "graviton-blast-cannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Brôkhyr Thunderkyn",
+          "id": "sp-conversion-beamer",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": [
+        {
+          "model": "Brôkhyr Thunderkyn",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "bolt-cannon",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "graviton-blast-cannon",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "sp-conversion-beamer",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "arkanyst-evaluator",
@@ -997,7 +3283,62 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Arkanyst Evaluator",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "transmatter-inverter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Arkanyst Evaluator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "transmatter-inverter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Arkanyst Evaluator",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Arkanyst Evaluator",
+          "id": "transmatter-inverter",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "kapricus-defenders",
@@ -1043,7 +3384,137 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Kapricus Defender",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "magna-rail-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-magna-coil-autocannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Kapricus Defender",
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "magna-rail-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-magna-coil-autocannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Kapricus Defender",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "smoke-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kapricus Defender",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "twin-magna-coil-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kapricus Defender",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hylas-rotary-cannon-kapricus-defenders",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "magna-rail-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Kapricus Defender",
+          "id": "armoured-hull",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Kapricus Defender",
+          "id": "hylas-rotary-cannon-kapricus-defenders",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Kapricus Defender",
+          "id": "magna-rail-cannon",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Kapricus Defender",
+          "id": "smoke-launcher",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Kapricus Defender",
+          "id": "twin-magna-coil-autocannon",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "cthonian-beserks",
@@ -1086,7 +3557,179 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Cthonian Beserk",
+          "models": 5,
+          "items": [
+            {
+              "id": "heavy-plasma-axe",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Cthonian Beserk",
+          "items": [
+            {
+              "id": "heavy-plasma-axe",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Cthonian Beserk",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "concussion-maul",
+                "count": 1
+              },
+              {
+                "id": "mole-grenade-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "concussion-maul",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-plasma-axe",
+                "count": 1
+              },
+              {
+                "id": "mole-grenade-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-plasma-axe",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-concussion-gauntlet",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Cthonian Beserk",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "mole-grenade-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Cthonian Beserk",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "twin-concussion-gauntlet",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Cthonian Beserk",
+          "id": "concussion-maul",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Cthonian Beserk",
+          "id": "heavy-plasma-axe",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Cthonian Beserk",
+          "id": "mole-grenade-launcher",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Cthonian Beserk",
+          "id": "twin-concussion-gauntlet",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": [
+        {
+          "model": "Cthonian Beserk",
+          "choices": [
+            {
+              "items": [],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "concussion-maul",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "twin-concussion-gauntlet",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "sagitaur",
@@ -1122,7 +3765,138 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sagitaur",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-wheels-sagitaur",
+              "count": 1
+            },
+            {
+              "id": "hylas-beam-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-bolt-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sagitaur",
+          "items": [
+            {
+              "id": "armoured-wheels-sagitaur",
+              "count": 1
+            },
+            {
+              "id": "hylas-beam-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-bolt-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sagitaur",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-wheels-sagitaur",
+                "count": 1
+              },
+              {
+                "id": "twin-bolt-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sagitaur",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hylas-beam-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "l7-missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "sagitaur-missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "matr-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sagitaur",
+          "id": "armoured-wheels-sagitaur",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sagitaur",
+          "id": "hylas-beam-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sagitaur",
+          "id": "l7-missile-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sagitaur",
+          "id": "matr-autocannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sagitaur",
+          "id": "sagitaur-missile-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sagitaur",
+          "id": "twin-bolt-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "kahl",
@@ -1158,7 +3932,150 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Kâhl",
+          "models": 1,
+          "items": [
+            {
+              "id": "autoch-pattern-combi-bolter",
+              "count": 1
+            },
+            {
+              "id": "forgewrought-plasma-axe",
+              "count": 1
+            },
+            {
+              "id": "rampart-crest",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Kâhl",
+          "items": [
+            {
+              "id": "autoch-pattern-combi-bolter",
+              "count": 1
+            },
+            {
+              "id": "forgewrought-plasma-axe",
+              "count": 1
+            },
+            {
+              "id": "rampart-crest",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Kâhl",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "volkanite-disintegrator-kahl",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kâhl",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "forgewrought-plasma-axe",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "mass-gauntlet",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kâhl",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "rampart-crest",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "teleport-crest",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Kâhl",
+          "id": "autoch-pattern-combi-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kâhl",
+          "id": "forgewrought-plasma-axe",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kâhl",
+          "id": "mass-gauntlet",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kâhl",
+          "id": "rampart-crest",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kâhl",
+          "id": "teleport-crest",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kâhl",
+          "id": "volkanite-disintegrator-kahl",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hearthkyn-warriors",
@@ -1332,7 +4249,396 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hearthkyn Warrior",
+          "models": 9,
+          "items": [
+            {
+              "id": "autoch-pattern-bolt-pistol",
+              "count": 9
+            },
+            {
+              "id": "autoch-pattern-bolter",
+              "count": 9
+            },
+            {
+              "id": "close-combat-weapon-hearthkyn-warriors",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Theyn",
+          "models": 1,
+          "items": [
+            {
+              "id": "autoch-pattern-bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "autoch-pattern-bolter",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-hearthkyn-warriors",
+              "count": 1
+            },
+            {
+              "id": "weavefield-crest",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hearthkyn Warrior",
+          "items": [
+            {
+              "id": "autoch-pattern-bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "autoch-pattern-bolter",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-hearthkyn-warriors",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Theyn",
+          "items": [
+            {
+              "id": "autoch-pattern-bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "autoch-pattern-bolter",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-hearthkyn-warriors",
+              "count": 1
+            },
+            {
+              "id": "weavefield-crest",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hearthkyn Warrior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-hearthkyn-warriors",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hearthkyn Warrior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "etacarn-plasma-beamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hylas-auto-rifle",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hylas-rotary-cannon-hearthkyn-warriors",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ion-blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "l7-missile-launcher-hearthkyn-warriors",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "magna-rail-rifle",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-knife",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Theyn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "theyns-melee-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Theyn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-hearthkyn-warriors",
+                "count": 1
+              },
+              {
+                "id": "weavefield-crest",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Theyn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ion-blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "theyns-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Hearthkyn Warrior",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 2,
+              "per_choice": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "etacarn-plasma-beamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hylas-auto-rifle",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hylas-rotary-cannon-hearthkyn-warriors",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "l7-missile-launcher-hearthkyn-warriors",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "magna-rail-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hearthkyn Warrior",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "plasma-knife",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Hearthkyn Warrior",
+          "id": "autoch-pattern-bolt-pistol",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Hearthkyn Warrior",
+          "id": "autoch-pattern-bolter",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Hearthkyn Warrior",
+          "id": "close-combat-weapon-hearthkyn-warriors",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Hearthkyn Warrior",
+          "id": "etacarn-plasma-beamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hearthkyn Warrior",
+          "id": "hylas-auto-rifle",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hearthkyn Warrior",
+          "id": "hylas-rotary-cannon-hearthkyn-warriors",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hearthkyn Warrior",
+          "id": "ion-blaster",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Hearthkyn Warrior",
+          "id": "l7-missile-launcher-hearthkyn-warriors",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hearthkyn Warrior",
+          "id": "magna-rail-rifle",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hearthkyn Warrior",
+          "id": "plasma-knife",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Theyn",
+          "id": "autoch-pattern-bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Theyn",
+          "id": "autoch-pattern-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Theyn",
+          "id": "close-combat-weapon-hearthkyn-warriors",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Theyn",
+          "id": "ion-blaster",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Theyn",
+          "id": "theyns-melee-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Theyn",
+          "id": "theyns-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Theyn",
+          "id": "weavefield-crest",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "bane-slayers-bulwark-brokhyr-thunderkyn",
@@ -1370,7 +4676,62 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Brokhyr Thunderkyn",
+          "models": 3,
+          "items": [
+            {
+              "id": "powered-strikes",
+              "count": 3
+            },
+            {
+              "id": "sp-conversion-beamer",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Brokhyr Thunderkyn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "powered-strikes",
+                "count": 1
+              },
+              {
+                "id": "sp-conversion-beamer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Brokhyr Thunderkyn",
+          "id": "powered-strikes",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Brokhyr Thunderkyn",
+          "id": "sp-conversion-beamer",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "bane-slayers-bulwark-einhyr-hearthguard",
@@ -1429,7 +4790,134 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Einhyr Hearthguard",
+          "models": 4,
+          "items": [
+            {
+              "id": "exoarmour-grenade-launcher-bane-slayers-bulwark-einhyr-hearthguard",
+              "count": 4
+            },
+            {
+              "id": "plasma-blade-gauntlet",
+              "count": 4
+            },
+            {
+              "id": "volkanite-disintegrator",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Hesyr",
+          "models": 1,
+          "items": [
+            {
+              "id": "exoarmour-grenade-launcher-bane-slayers-bulwark-einhyr-hearthguard",
+              "count": 1
+            },
+            {
+              "id": "graviton-hammer",
+              "count": 1
+            },
+            {
+              "id": "volkanite-disintegrator",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Einhyr Hearthguard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "exoarmour-grenade-launcher-bane-slayers-bulwark-einhyr-hearthguard",
+                "count": 1
+              },
+              {
+                "id": "plasma-blade-gauntlet",
+                "count": 1
+              },
+              {
+                "id": "volkanite-disintegrator",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hesyr",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "exoarmour-grenade-launcher-bane-slayers-bulwark-einhyr-hearthguard",
+                "count": 1
+              },
+              {
+                "id": "graviton-hammer",
+                "count": 1
+              },
+              {
+                "id": "volkanite-disintegrator",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Einhyr Hearthguard",
+          "id": "exoarmour-grenade-launcher-bane-slayers-bulwark-einhyr-hearthguard",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Einhyr Hearthguard",
+          "id": "plasma-blade-gauntlet",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Einhyr Hearthguard",
+          "id": "volkanite-disintegrator",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Hesyr",
+          "id": "exoarmour-grenade-launcher-bane-slayers-bulwark-einhyr-hearthguard",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hesyr",
+          "id": "graviton-hammer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hesyr",
+          "id": "volkanite-disintegrator",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "bane-slayers-bulwark-hearthkyn-warriors",
@@ -1547,7 +5035,294 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol and Plasma Knife",
+          "models": 1,
+          "items": [
+            {
+              "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+              "count": 1
+            },
+            {
+              "id": "plasma-knife",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, HYLas Auto Rifle and Armoured Fists",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-fists",
+              "count": 1
+            },
+            {
+              "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+              "count": 1
+            },
+            {
+              "id": "hylas-auto-rifle",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Ion Blaster and Armoured Fists",
+          "models": 6,
+          "items": [
+            {
+              "id": "armoured-fists",
+              "count": 6
+            },
+            {
+              "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+              "count": 6
+            },
+            {
+              "id": "ion-blaster",
+              "count": 6
+            }
+          ]
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Magna-Rail Rifle and Armoured Fists",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-fists",
+              "count": 1
+            },
+            {
+              "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+              "count": 1
+            },
+            {
+              "id": "magna-rail-rifle",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Theyn",
+          "models": 1,
+          "items": [
+            {
+              "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+              "count": 1
+            },
+            {
+              "id": "theyns-armaments",
+              "count": 1
+            },
+            {
+              "id": "theyns-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol and Plasma Knife",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+                "count": 1
+              },
+              {
+                "id": "plasma-knife",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, HYLas Auto Rifle and Armoured Fists",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-fists",
+                "count": 1
+              },
+              {
+                "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+                "count": 1
+              },
+              {
+                "id": "hylas-auto-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Ion Blaster and Armoured Fists",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-fists",
+                "count": 1
+              },
+              {
+                "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+                "count": 1
+              },
+              {
+                "id": "ion-blaster",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Magna-Rail Rifle and Armoured Fists",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-fists",
+                "count": 1
+              },
+              {
+                "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+                "count": 1
+              },
+              {
+                "id": "magna-rail-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Theyn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+                "count": 1
+              },
+              {
+                "id": "theyns-armaments",
+                "count": 1
+              },
+              {
+                "id": "theyns-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol and Plasma Knife",
+          "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol and Plasma Knife",
+          "id": "plasma-knife",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, HYLas Auto Rifle and Armoured Fists",
+          "id": "armoured-fists",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, HYLas Auto Rifle and Armoured Fists",
+          "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, HYLas Auto Rifle and Armoured Fists",
+          "id": "hylas-auto-rifle",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Ion Blaster and Armoured Fists",
+          "id": "armoured-fists",
+          "input": "stepper",
+          "default": 6
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Ion Blaster and Armoured Fists",
+          "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+          "input": "stepper",
+          "default": 6
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Ion Blaster and Armoured Fists",
+          "id": "ion-blaster",
+          "input": "stepper",
+          "default": 6
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Magna-Rail Rifle and Armoured Fists",
+          "id": "armoured-fists",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Magna-Rail Rifle and Armoured Fists",
+          "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Magna-Rail Rifle and Armoured Fists",
+          "id": "magna-rail-rifle",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Theyn",
+          "id": "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Theyn",
+          "id": "theyns-armaments",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Theyn",
+          "id": "theyns-pistol-bane-slayers-bulwark-hearthkyn-warriors",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "vynn-bane-slayer",
@@ -1585,6 +5360,61 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Vynn Bane-Slayer",
+          "models": 1,
+          "items": [
+            {
+              "id": "autoch-pattern-combi-bolter",
+              "count": 1
+            },
+            {
+              "id": "mass-hammer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Vynn Bane-Slayer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "mass-hammer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Vynn Bane-Slayer",
+          "id": "autoch-pattern-combi-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Vynn Bane-Slayer",
+          "id": "mass-hammer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

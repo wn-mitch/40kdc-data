@@ -816,6 +816,19 @@ class TerrainTemplate(TypedDict):
     game_version: GameVersionRef
 
 
+class Item(TypedDict):
+    id: EntityId
+    count: int
+
+
+Items: TypeAlias = list[Item]
+
+
+class ModelItems(TypedDict):
+    model: str
+    items: Items
+
+
 class LoadoutVariant(TypedDict):
     name: str
     weapon_ids: list[EntityId]
@@ -857,11 +870,64 @@ class Tier(TypedDict):
     models: list[Model1]
 
 
+class StockItem(TypedDict):
+    model: NotRequired[str]
+    models: int
+    items: Items
+
+
+class Slot(TypedDict):
+    model: NotRequired[str]
+    picks: int
+    repeats: bool
+    alternate: bool
+    choices: list[Items]
+
+
+class Breakpoint(TypedDict):
+    models: int
+    choices: int
+    per_choice: NotRequired[int]
+
+
+class Limit(TypedDict):
+    model: NotRequired[str]
+    breakpoints: list[Breakpoint]
+    choices: list[Items]
+
+
+class Option(TypedDict):
+    model: NotRequired[str]
+    id: EntityId
+    input: Literal["checkbox", "stepper"]
+    default: int
+
+
+class Choice(TypedDict):
+    items: Items
+    substitute: bool
+
+
+class UniformItem(TypedDict):
+    model: NotRequired[str]
+    choices: list[Choice]
+
+
+class Loadout(TypedDict):
+    stock: list[StockItem]
+    templates: list[ModelItems]
+    slots: list[Slot]
+    limits: list[Limit]
+    options: list[Option]
+    uniform: list[UniformItem]
+
+
 class UnitComposition(TypedDict):
     unit_id: EntityId
     faction_id: EntityId
     models: list[Model]
     tiers: NotRequired[list[Tier]]
+    loadout: NotRequired[Loadout]
     game_version: GameVersionRef
     game_modes: NotRequired[GameModes]
 
@@ -1280,7 +1346,7 @@ class CapPer(TypedDict):
     period: Literal["phase", "turn", "battle-round"]
 
 
-Option: TypeAlias = str
+Option1: TypeAlias = str
 
 
 FromItem: TypeAlias = str
@@ -1452,14 +1518,14 @@ class OrRandom(TypedDict):
     faces: list[Face]
 
 
-class Option3(TypedDict):
+class Option4(TypedDict):
     ability_id: EntityId
     option_id: EntityId
 
 
 class Modifier63(TypedDict):
-    option: NotRequired[Option3]
-    options: NotRequired[list[Option3]]
+    option: NotRequired[Option4]
+    options: NotRequired[list[Option4]]
     additional_selections: int
     allocation: Literal["choose-one-option", "fixed-option"]
     ability_id: EntityId
@@ -1686,7 +1752,7 @@ class Modifier16(TypedDict):
     ability: EntityId
     procedure: NotRequired[Literal["oath"]]
     option: NotRequired[str]
-    options: NotRequired[list[Option]]
+    options: NotRequired[list[Option1]]
     all_options: NotRequired[Literal[True]]
     exclusive: NotRequired[Literal[True]]
     select: NotRequired[Select]
@@ -3978,7 +4044,7 @@ class ConditionalEffect(TypedDict):
     effect: EffectNode
 
 
-class Option1(TypedDict):
+class Option2(TypedDict):
     id: EntityId
     name: str
     requirement: DiceRequirementSpec
@@ -3989,7 +4055,7 @@ class DicePoolAllocationEffect(TypedDict):
     type: Literal["dice-pool-allocation"]
     pool: Pool
     max_activations: int
-    options: list[Option1]
+    options: list[Option2]
 
 
 class SelectUnitsEffect(TypedDict):
@@ -4036,7 +4102,7 @@ class DesignateTargetEffect(TypedDict):
     duration: NotRequired[ScopeDuration]
 
 
-class Option2(TypedDict):
+class Option3(TypedDict):
     id: str
     name: str
     effect: EffectNode
@@ -4046,7 +4112,7 @@ class StanceSelectEffect(TypedDict):
     type: Literal["stance-select"]
     mode: Literal["re-selectable", "consumable"]
     additive: NotRequired[Literal[True]]
-    options: list[Option2]
+    options: list[Option3]
     min_choices: NotRequired[int]
     max_choices: NotRequired[int]
     initial: NotRequired[str]
@@ -4064,7 +4130,7 @@ class RiskRewardEffect(TypedDict):
     risk: Risk
 
 
-class Option5(TypedDict):
+class Option6(TypedDict):
     id: NotRequired[str]
     name: str
     effect: EffectNode
@@ -4082,7 +4148,7 @@ class IssueOrdersEffect(TypedDict):
     ends_on: NotRequired[list[Literal["battle-shocked"]]]
     one_at_a_time: NotRequired[Literal[True]]
     benefit: NotRequired[KeywordPredicate]
-    options: NotRequired[list[Option5]]
+    options: NotRequired[list[Option6]]
     menu_from: NotRequired[EntityId]
     only_options: NotRequired[list[EntityId]]
 

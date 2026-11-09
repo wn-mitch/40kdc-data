@@ -293,6 +293,510 @@
         "tools/src/mfm/wargear.ts#runCompositionNames"
       ],
       "reason": "The miniature flag marks a CHARACTER model that cannot be given an Enhancement."
+    },
+    "/loadout": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_option_group.datasheetId", "data.loadout_choice_set.datasheetId", "data.limited_wargear_choice_set.datasheetId", "data.all_model_wargear_choice_set.datasheetId"],
+      "joins": [{ "relation": "wargear_option_group.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Lift the datasheet's option groups, loadout choice sets, limited choice sets and all-model choice sets into one loadout object." }],
+      "filters": ["Skip a unit whose items or model rows do not all resolve.","Refuse a mandatory limited set or static option group, whose meaning is unverified."], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "The loadout mirrors the MFM wargear tables row for row, keyed by repository item ids and model names."
+    },
+    "/loadout/limits": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.limited_wargear_choice_set.datasheetId", "data.limited_wargear_choice.limitedWargearChoiceSetId", "data.limited_wargear_choice_wargear_item.limitedWargearChoiceId", "data.limited_wargear_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "limited_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice.limitedWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice_wargear_item.limitedWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "limited_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Emit one entry per limit, sorted by serialized content for byte-stable output." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Each limits entry is one limited_wargear_choice_set row of the datasheet."
+    },
+    "/loadout/limits/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.limited_wargear_choice_set.datasheetId", "data.limited_wargear_choice.limitedWargearChoiceSetId", "data.limited_wargear_choice_wargear_item.limitedWargearChoiceId", "data.limited_wargear_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "limited_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice.limitedWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice_wargear_item.limitedWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "limited_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Emit one entry per limit, sorted by serialized content for byte-stable output." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Each limits entry is one limited_wargear_choice_set row of the datasheet."
+    },
+    "/loadout/limits/*/breakpoints": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.limited_wargear_choice_set.datasheetId", "data.limited_wargear_choice.limitedWargearChoiceSetId", "data.limited_wargear_choice_wargear_item.limitedWargearChoiceId", "data.limited_wargear_choice_wargear_item.wargearItemId", "data.wargear_limit.limitedWargearChoiceSetId"],
+      "joins": [{ "relation": "limited_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice.limitedWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice_wargear_item.limitedWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "limited_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }, { "relation": "wargear_limit.limitedWargearChoiceSetId", "direction": "children", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Copy the wargear_limit row's fields onto a breakpoint." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "One breakpoint per wargear_limit row of the set, sorted by model count."
+    },
+    "/loadout/limits/*/breakpoints/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.limited_wargear_choice_set.datasheetId", "data.limited_wargear_choice.limitedWargearChoiceSetId", "data.limited_wargear_choice_wargear_item.limitedWargearChoiceId", "data.limited_wargear_choice_wargear_item.wargearItemId", "data.wargear_limit.limitedWargearChoiceSetId"],
+      "joins": [{ "relation": "limited_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice.limitedWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice_wargear_item.limitedWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "limited_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }, { "relation": "wargear_limit.limitedWargearChoiceSetId", "direction": "children", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Copy the wargear_limit row's fields onto a breakpoint." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "One breakpoint per wargear_limit row of the set, sorted by model count."
+    },
+    "/loadout/limits/*/breakpoints/*/choices": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_limit.choiceLimit"],
+      "joins": [{ "relation": "limited_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice.limitedWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice_wargear_item.limitedWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "limited_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }, { "relation": "wargear_limit.limitedWargearChoiceSetId", "direction": "children", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Copy the wargear_limit row's fields onto a breakpoint." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "How many choices of the set the unit may take."
+    },
+    "/loadout/limits/*/breakpoints/*/models": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_limit.modelCount"],
+      "joins": [{ "relation": "limited_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice.limitedWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice_wargear_item.limitedWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "limited_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }, { "relation": "wargear_limit.limitedWargearChoiceSetId", "direction": "children", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Copy the wargear_limit row's fields onto a breakpoint." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "The unit size from which the breakpoint applies."
+    },
+    "/loadout/limits/*/breakpoints/*/per_choice": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_limit.duplicateLimit"],
+      "joins": [{ "relation": "limited_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice.limitedWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice_wargear_item.limitedWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "limited_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }, { "relation": "wargear_limit.limitedWargearChoiceSetId", "direction": "children", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Copy the wargear_limit row's fields onto a breakpoint." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "How many times one choice may be taken; absent when the dump gives none."
+    },
+    "/loadout/limits/*/choices": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.limited_wargear_choice_set.datasheetId", "data.limited_wargear_choice.limitedWargearChoiceSetId", "data.limited_wargear_choice_wargear_item.limitedWargearChoiceId", "data.limited_wargear_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "limited_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice.limitedWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice_wargear_item.limitedWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "limited_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Collect the entry's item rows into a multiset sorted by id." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A multiset of the items this limits entry names."
+    },
+    "/loadout/limits/*/choices/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.limited_wargear_choice_set.datasheetId", "data.limited_wargear_choice.limitedWargearChoiceSetId", "data.limited_wargear_choice_wargear_item.limitedWargearChoiceId", "data.limited_wargear_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "limited_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice.limitedWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice_wargear_item.limitedWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "limited_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Collect the entry's item rows into a multiset sorted by id." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A multiset of the items this limits entry names."
+    },
+    "/loadout/limits/*/choices/*/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.limited_wargear_choice_set.datasheetId", "data.limited_wargear_choice.limitedWargearChoiceSetId", "data.limited_wargear_choice_wargear_item.limitedWargearChoiceId", "data.limited_wargear_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "limited_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice.limitedWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice_wargear_item.limitedWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "limited_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Collect the entry's item rows into a multiset sorted by id." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A multiset of the items this limits entry names."
+    },
+    "/loadout/limits/*/choices/*/*/count": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.limited_wargear_choice_wargear_item.count"],
+      "joins": [{ "relation": "limited_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice.limitedWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice_wargear_item.limitedWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "limited_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Sum copies per item id within the entry; a null count is one copy." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Copy counts are the dump's own."
+    },
+    "/loadout/limits/*/choices/*/*/id": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_item.localisations.*.name"],
+      "joins": [{ "relation": "limited_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice.limitedWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice_wargear_item.limitedWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "limited_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Resolve the wargear item's display name to a repository weapon or wargear id with the unit-scoped resolver." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Items are named by repository id so the loadout joins the unit's weapons and wargear."
+    },
+    "/loadout/limits/*/model": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.miniature.localisations.*.name", "data.miniature.displayOrder"],
+      "joins": [{ "relation": "limited_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice.limitedWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "limited_wargear_choice_wargear_item.limitedWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "limited_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }, { "relation": "limited_wargear_choice_set.miniatureId", "direction": "parent", "purpose": "applicability" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Key the miniature by display name, suffixed #k for the k-th of several same-named miniatures in display order." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "The limited_wargear_choice_set row's miniature; absent when the row applies to the unit once."
+    },
+    "/loadout/options": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_option_group.datasheetId", "data.wargear_option.wargearOptionGroupId", "data.wargear_option.wargearItemId"],
+      "joins": [{ "relation": "wargear_option_group.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearOptionGroupId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Emit one entry per option, sorted by serialized content for byte-stable output." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Each options entry is one wargear_option_group row of the datasheet."
+    },
+    "/loadout/options/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_option_group.datasheetId", "data.wargear_option.wargearOptionGroupId", "data.wargear_option.wargearItemId"],
+      "joins": [{ "relation": "wargear_option_group.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearOptionGroupId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Emit one entry per option, sorted by serialized content for byte-stable output." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Each options entry is one wargear_option_group row of the datasheet."
+    },
+    "/loadout/options/*/default": {
+      "provenance": "direct", "coverage": "implemented",
+      "sources": ["data.wargear_option.defaultValue"],
+      "joins": [{ "relation": "wargear_option_group.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearOptionGroupId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Copy the dump value." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "The default unit's copies through this option."
+    },
+    "/loadout/options/*/id": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_item.localisations.*.name"],
+      "joins": [{ "relation": "wargear_option_group.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearOptionGroupId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Resolve the wargear item's display name to a repository weapon or wargear id with the unit-scoped resolver." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Items are named by repository id so the loadout joins the unit's weapons and wargear."
+    },
+    "/loadout/options/*/input": {
+      "provenance": "direct", "coverage": "implemented",
+      "sources": ["data.wargear_option.inputType"],
+      "joins": [{ "relation": "wargear_option_group.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearOptionGroupId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Copy the dump value." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "The app widget: a checkbox is taken at most once, a stepper any number of times."
+    },
+    "/loadout/options/*/model": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.miniature.localisations.*.name", "data.miniature.displayOrder"],
+      "joins": [{ "relation": "wargear_option_group.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearOptionGroupId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }, { "relation": "wargear_option_group.miniatureId", "direction": "parent", "purpose": "applicability" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Key the miniature by display name, suffixed #k for the k-th of several same-named miniatures in display order." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "The wargear_option_group row's miniature; absent when the row applies to the unit once."
+    },
+    "/loadout/slots": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.loadout_choice_set.datasheetId", "data.loadout_choice.loadoutChoiceSetId", "data.loadout_choice_wargear_item.loadoutChoiceId", "data.loadout_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "loadout_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice.loadoutChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice_wargear_item.loadoutChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "loadout_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Emit one entry per slot, sorted by serialized content for byte-stable output." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Each slots entry is one loadout_choice_set row of the datasheet."
+    },
+    "/loadout/slots/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.loadout_choice_set.datasheetId", "data.loadout_choice.loadoutChoiceSetId", "data.loadout_choice_wargear_item.loadoutChoiceId", "data.loadout_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "loadout_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice.loadoutChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice_wargear_item.loadoutChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "loadout_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Emit one entry per slot, sorted by serialized content for byte-stable output." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Each slots entry is one loadout_choice_set row of the datasheet."
+    },
+    "/loadout/slots/*/alternate": {
+      "provenance": "direct", "coverage": "implemented",
+      "sources": ["data.loadout_choice_set.alternate"],
+      "joins": [{ "relation": "loadout_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice.loadoutChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice_wargear_item.loadoutChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "loadout_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Copy the dump value." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "An alternate set replaces every regular set on its row."
+    },
+    "/loadout/slots/*/choices": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.loadout_choice_set.datasheetId", "data.loadout_choice.loadoutChoiceSetId", "data.loadout_choice_wargear_item.loadoutChoiceId", "data.loadout_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "loadout_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice.loadoutChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice_wargear_item.loadoutChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "loadout_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Collect the entry's item rows into a multiset sorted by id." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A multiset of the items this slots entry names."
+    },
+    "/loadout/slots/*/choices/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.loadout_choice_set.datasheetId", "data.loadout_choice.loadoutChoiceSetId", "data.loadout_choice_wargear_item.loadoutChoiceId", "data.loadout_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "loadout_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice.loadoutChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice_wargear_item.loadoutChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "loadout_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Collect the entry's item rows into a multiset sorted by id." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A multiset of the items this slots entry names."
+    },
+    "/loadout/slots/*/choices/*/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.loadout_choice_set.datasheetId", "data.loadout_choice.loadoutChoiceSetId", "data.loadout_choice_wargear_item.loadoutChoiceId", "data.loadout_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "loadout_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice.loadoutChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice_wargear_item.loadoutChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "loadout_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Collect the entry's item rows into a multiset sorted by id." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A multiset of the items this slots entry names."
+    },
+    "/loadout/slots/*/choices/*/*/count": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.loadout_choice_wargear_item.count"],
+      "joins": [{ "relation": "loadout_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice.loadoutChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice_wargear_item.loadoutChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "loadout_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Sum copies per item id within the entry; a null count is one copy." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Copy counts are the dump's own."
+    },
+    "/loadout/slots/*/choices/*/*/id": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_item.localisations.*.name"],
+      "joins": [{ "relation": "loadout_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice.loadoutChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice_wargear_item.loadoutChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "loadout_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Resolve the wargear item's display name to a repository weapon or wargear id with the unit-scoped resolver." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Items are named by repository id so the loadout joins the unit's weapons and wargear."
+    },
+    "/loadout/slots/*/model": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.miniature.localisations.*.name", "data.miniature.displayOrder"],
+      "joins": [{ "relation": "loadout_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice.loadoutChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice_wargear_item.loadoutChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "loadout_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }, { "relation": "loadout_choice_set.miniatureId", "direction": "parent", "purpose": "applicability" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Key the miniature by display name, suffixed #k for the k-th of several same-named miniatures in display order." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "The loadout_choice_set row's miniature; absent when the row applies to the unit once."
+    },
+    "/loadout/slots/*/picks": {
+      "provenance": "direct", "coverage": "implemented",
+      "sources": ["data.loadout_choice_set.limit"],
+      "joins": [{ "relation": "loadout_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice.loadoutChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice_wargear_item.loadoutChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "loadout_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Copy the dump value." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Choices each model makes from the set."
+    },
+    "/loadout/slots/*/repeats": {
+      "provenance": "direct", "coverage": "implemented",
+      "sources": ["data.loadout_choice_set.allowDuplicates"],
+      "joins": [{ "relation": "loadout_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice.loadoutChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "loadout_choice_wargear_item.loadoutChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "loadout_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Copy the dump value." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Whether a choice may be picked more than once."
+    },
+    "/loadout/stock": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_option_group.datasheetId", "data.wargear_option.wargearOptionGroupId", "data.wargear_option.wargearItemId"],
+      "joins": [{ "relation": "wargear_option_group.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearOptionGroupId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Emit one entry per model row, sorted by serialized content for byte-stable output." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Each stock entry is one wargear_option_group row of the datasheet, summed per model row."
+    },
+    "/loadout/stock/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_option_group.datasheetId", "data.wargear_option.wargearOptionGroupId", "data.wargear_option.wargearItemId"],
+      "joins": [{ "relation": "wargear_option_group.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearOptionGroupId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Emit one entry per model row, sorted by serialized content for byte-stable output." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Each stock entry is one wargear_option_group row of the datasheet, summed per model row."
+    },
+    "/loadout/stock/*/items": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_option_group.datasheetId", "data.wargear_option.wargearOptionGroupId", "data.wargear_option.wargearItemId"],
+      "joins": [{ "relation": "wargear_option_group.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearOptionGroupId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Collect the entry's item rows into a multiset sorted by id." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A multiset of the items this stock entry names."
+    },
+    "/loadout/stock/*/items/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_option_group.datasheetId", "data.wargear_option.wargearOptionGroupId", "data.wargear_option.wargearItemId"],
+      "joins": [{ "relation": "wargear_option_group.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearOptionGroupId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Collect the entry's item rows into a multiset sorted by id." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A multiset of the items this stock entry names."
+    },
+    "/loadout/stock/*/items/*/count": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_option.defaultValue"],
+      "joins": [{ "relation": "wargear_option_group.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearOptionGroupId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Sum copies per item id within the entry; a null count is one copy." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Copy counts are the dump's own."
+    },
+    "/loadout/stock/*/items/*/id": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_item.localisations.*.name"],
+      "joins": [{ "relation": "wargear_option_group.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearOptionGroupId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Resolve the wargear item's display name to a repository weapon or wargear id with the unit-scoped resolver." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Items are named by repository id so the loadout joins the unit's weapons and wargear."
+    },
+    "/loadout/stock/*/model": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.miniature.localisations.*.name", "data.miniature.displayOrder"],
+      "joins": [{ "relation": "wargear_option_group.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearOptionGroupId", "direction": "children", "purpose": "ownership" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }, { "relation": "wargear_option_group.miniatureId", "direction": "parent", "purpose": "applicability" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Key the miniature by display name, suffixed #k for the k-th of several same-named miniatures in display order." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "The wargear_option_group row's miniature; absent when the row applies to the unit once."
+    },
+    "/loadout/stock/*/models": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.unit_composition_miniature.min", "data.unit_composition.isDefault"],
+      "joins": [{ "relation": "unit_composition.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "unit_composition_miniature.unitCompositionId", "direction": "children", "purpose": "general" }, { "relation": "unit_composition_miniature.miniatureId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Copy the dump value." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "The default composition's minimum count for the miniature."
+    },
+    "/loadout/templates": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.base_miniature_loadout.datasheetId", "data.base_miniature_loadout_wargear_option.baseMiniatureLoadoutId", "data.base_miniature_loadout_wargear_option.wargearOptionId", "data.wargear_option.wargearItemId"],
+      "joins": [{ "relation": "base_miniature_loadout.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "base_miniature_loadout_wargear_option.baseMiniatureLoadoutId", "direction": "children", "purpose": "eligibility" }, { "relation": "base_miniature_loadout_wargear_option.wargearOptionId", "direction": "parent", "purpose": "eligibility" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Emit one entry per template, sorted by serialized content for byte-stable output." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Each templates entry is one base_miniature_loadout row of the datasheet."
+    },
+    "/loadout/templates/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.base_miniature_loadout.datasheetId", "data.base_miniature_loadout_wargear_option.baseMiniatureLoadoutId", "data.base_miniature_loadout_wargear_option.wargearOptionId", "data.wargear_option.wargearItemId"],
+      "joins": [{ "relation": "base_miniature_loadout.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "base_miniature_loadout_wargear_option.baseMiniatureLoadoutId", "direction": "children", "purpose": "eligibility" }, { "relation": "base_miniature_loadout_wargear_option.wargearOptionId", "direction": "parent", "purpose": "eligibility" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Emit one entry per template, sorted by serialized content for byte-stable output." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Each templates entry is one base_miniature_loadout row of the datasheet."
+    },
+    "/loadout/templates/*/items": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.base_miniature_loadout.datasheetId", "data.base_miniature_loadout_wargear_option.baseMiniatureLoadoutId", "data.base_miniature_loadout_wargear_option.wargearOptionId", "data.wargear_option.wargearItemId"],
+      "joins": [{ "relation": "base_miniature_loadout.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "base_miniature_loadout_wargear_option.baseMiniatureLoadoutId", "direction": "children", "purpose": "eligibility" }, { "relation": "base_miniature_loadout_wargear_option.wargearOptionId", "direction": "parent", "purpose": "eligibility" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Collect the entry's item rows into a multiset sorted by id." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A multiset of the items this templates entry names."
+    },
+    "/loadout/templates/*/items/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.base_miniature_loadout.datasheetId", "data.base_miniature_loadout_wargear_option.baseMiniatureLoadoutId", "data.base_miniature_loadout_wargear_option.wargearOptionId", "data.wargear_option.wargearItemId"],
+      "joins": [{ "relation": "base_miniature_loadout.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "base_miniature_loadout_wargear_option.baseMiniatureLoadoutId", "direction": "children", "purpose": "eligibility" }, { "relation": "base_miniature_loadout_wargear_option.wargearOptionId", "direction": "parent", "purpose": "eligibility" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Collect the entry's item rows into a multiset sorted by id." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A multiset of the items this templates entry names."
+    },
+    "/loadout/templates/*/items/*/count": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.base_miniature_loadout_wargear_option.count"],
+      "joins": [{ "relation": "base_miniature_loadout.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "base_miniature_loadout_wargear_option.baseMiniatureLoadoutId", "direction": "children", "purpose": "eligibility" }, { "relation": "base_miniature_loadout_wargear_option.wargearOptionId", "direction": "parent", "purpose": "eligibility" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Sum copies per item id within the entry; a null count is one copy." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Copy counts are the dump's own."
+    },
+    "/loadout/templates/*/items/*/id": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_item.localisations.*.name"],
+      "joins": [{ "relation": "base_miniature_loadout.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "base_miniature_loadout_wargear_option.baseMiniatureLoadoutId", "direction": "children", "purpose": "eligibility" }, { "relation": "base_miniature_loadout_wargear_option.wargearOptionId", "direction": "parent", "purpose": "eligibility" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Resolve the wargear item's display name to a repository weapon or wargear id with the unit-scoped resolver." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Items are named by repository id so the loadout joins the unit's weapons and wargear."
+    },
+    "/loadout/templates/*/model": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.miniature.localisations.*.name", "data.miniature.displayOrder"],
+      "joins": [{ "relation": "base_miniature_loadout.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "base_miniature_loadout_wargear_option.baseMiniatureLoadoutId", "direction": "children", "purpose": "eligibility" }, { "relation": "base_miniature_loadout_wargear_option.wargearOptionId", "direction": "parent", "purpose": "eligibility" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }, { "relation": "base_miniature_loadout.miniatureId", "direction": "parent", "purpose": "applicability" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Key the miniature by display name, suffixed #k for the k-th of several same-named miniatures in display order." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "The base_miniature_loadout row's miniature; absent when the row applies to the unit once."
+    },
+    "/loadout/uniform": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.all_model_wargear_choice_set.datasheetId", "data.all_model_wargear_choice.allModelWargearChoiceSetId", "data.all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "data.all_model_wargear_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "all_model_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice.allModelWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "all_model_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Emit one entry per uniform, sorted by serialized content for byte-stable output." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Each uniform entry is one all_model_wargear_choice_set row of the datasheet."
+    },
+    "/loadout/uniform/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.all_model_wargear_choice_set.datasheetId", "data.all_model_wargear_choice.allModelWargearChoiceSetId", "data.all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "data.all_model_wargear_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "all_model_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice.allModelWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "all_model_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Emit one entry per uniform, sorted by serialized content for byte-stable output." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Each uniform entry is one all_model_wargear_choice_set row of the datasheet."
+    },
+    "/loadout/uniform/*/choices": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.all_model_wargear_choice_set.datasheetId", "data.all_model_wargear_choice.allModelWargearChoiceSetId", "data.all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "data.all_model_wargear_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "all_model_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice.allModelWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "all_model_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Collect the entry's item rows into a multiset sorted by id." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A multiset of the items this uniform entry names."
+    },
+    "/loadout/uniform/*/choices/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.all_model_wargear_choice_set.datasheetId", "data.all_model_wargear_choice.allModelWargearChoiceSetId", "data.all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "data.all_model_wargear_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "all_model_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice.allModelWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "all_model_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Collect the entry's item rows into a multiset sorted by id." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A multiset of the items this uniform entry names."
+    },
+    "/loadout/uniform/*/choices/*/items": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.all_model_wargear_choice_set.datasheetId", "data.all_model_wargear_choice.allModelWargearChoiceSetId", "data.all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "data.all_model_wargear_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "all_model_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice.allModelWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "all_model_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Collect the entry's item rows into a multiset sorted by id." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A multiset of the items this uniform entry names."
+    },
+    "/loadout/uniform/*/choices/*/items/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.all_model_wargear_choice_set.datasheetId", "data.all_model_wargear_choice.allModelWargearChoiceSetId", "data.all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "data.all_model_wargear_choice_wargear_item.wargearItemId"],
+      "joins": [{ "relation": "all_model_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice.allModelWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "all_model_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Collect the entry's item rows into a multiset sorted by id." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A multiset of the items this uniform entry names."
+    },
+    "/loadout/uniform/*/choices/*/items/*/count": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.all_model_wargear_choice_wargear_item.count"],
+      "joins": [{ "relation": "all_model_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice.allModelWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "all_model_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Sum copies per item id within the entry; a null count is one copy." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Copy counts are the dump's own."
+    },
+    "/loadout/uniform/*/choices/*/items/*/id": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_item.localisations.*.name"],
+      "joins": [{ "relation": "all_model_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice.allModelWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "all_model_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Resolve the wargear item's display name to a repository weapon or wargear id with the unit-scoped resolver." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "Items are named by repository id so the loadout joins the unit's weapons and wargear."
+    },
+    "/loadout/uniform/*/choices/*/substitute": {
+      "provenance": "direct", "coverage": "implemented",
+      "sources": ["data.all_model_wargear_choice.substitute"],
+      "joins": [{ "relation": "all_model_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice.allModelWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "all_model_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Copy the dump value." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "A substitute choice exempts its model from the uniformity rule."
+    },
+    "/loadout/uniform/*/model": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.miniature.localisations.*.name", "data.miniature.displayOrder"],
+      "joins": [{ "relation": "all_model_wargear_choice_set.datasheetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice.allModelWargearChoiceSetId", "direction": "children", "purpose": "ownership" }, { "relation": "all_model_wargear_choice_wargear_item.allModelWargearChoiceId", "direction": "children", "purpose": "eligibility" }, { "relation": "all_model_wargear_choice_wargear_item.wargearItemId", "direction": "parent", "purpose": "eligibility" }, { "relation": "all_model_wargear_choice_set.miniatureId", "direction": "parent", "purpose": "applicability" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Key the miniature by display name, suffixed #k for the k-th of several same-named miniatures in display order." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "The all_model_wargear_choice_set row's miniature; absent when the row applies to the unit once."
     }
   },
   "unmapped_mfm_fields": [

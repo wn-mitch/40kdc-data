@@ -46,6 +46,7 @@
  *   npx tsx tools/src/ingest-mfm.ts coverage
  *   npx tsx tools/src/ingest-mfm.ts coverage --dump /path/to/dump.json
  */
+import { runLoadoutLift } from "./mfm/loadout-lift.js";
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
@@ -1289,6 +1290,25 @@ async function runWargearBudgetsCmd(
     console.log("DRY RUN — no files written. Re-run with --write to apply.");
 }
 
+async function runLoadoutLiftCmd(
+  dump: MfmDump,
+  write: boolean,
+  onlyDir?: string,
+): Promise<void> {
+  const report = runLoadoutLift(dump, onlyDir);
+  const sum = (f: (d: (typeof report.dirs)[number]) => number) =>
+    report.dirs.reduce((a, d) => a + f(d), 0);
+  console.log(`Loadout — matched ${sum((d) => d.matched)}, lifted ${sum((d) => d.lifted)}, skipped ${sum((d) => d.skipped.length)}.`);
+  for (const d of report.dirs) {
+    for (const skip of d.skipped) {
+      console.log(`  skipped ${d.dir}/${skip.unitId}: items [${skip.items.join(", ")}] models [${skip.models.join(", ")}]`);
+    }
+  }
+  await applyWrites(report.staged, { write, label: "loadout" });
+  if (!write)
+    console.log("DRY RUN — no files written. Re-run with --write to apply.");
+}
+
 async function runWargearCostsCmd(
   dump: MfmDump,
   write: boolean,
@@ -1674,6 +1694,7 @@ export const INGEST_MFM_COMMANDS = [
   "wargear",
   "wargear-budgets",
   "wargear-costs",
+  "loadout",
   "composition-names",
   "composition-tiers",
   "attachment-role",
@@ -1746,6 +1767,8 @@ export async function runIngestMfmCommand(
     await runWargearBudgetsCmd(dump, options.write, options.onlyDir);
   else if (command === "wargear-costs")
     await runWargearCostsCmd(dump, options.write, options.onlyDir);
+  else if (command === "loadout")
+    await runLoadoutLiftCmd(dump, options.write, options.onlyDir);
   else if (command === "composition-names")
     await runCompositionNamesCmd(dump, options.write, options.onlyDir);
   else if (command === "composition-tiers")

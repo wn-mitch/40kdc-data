@@ -34,7 +34,178 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Telemon Dreadnought",
+          "models": 1,
+          "items": [
+            {
+              "id": "dual-caestus-fists",
+              "count": 1
+            },
+            {
+              "id": "spiculus-bolt-launcher",
+              "count": 1
+            },
+            {
+              "id": "twin-neutronium-cascade-projectors",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Telemon Dreadnought",
+          "items": [
+            {
+              "id": "dual-caestus-fists",
+              "count": 1
+            },
+            {
+              "id": "spiculus-bolt-launcher",
+              "count": 1
+            },
+            {
+              "id": "twin-neutronium-cascade-projectors",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Telemon Dreadnought",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "adrathic-desolator",
+                "count": 1
+              },
+              {
+                "id": "caestus-fist",
+                "count": 1
+              },
+              {
+                "id": "spiculus-bolt-launcher",
+                "count": 1
+              },
+              {
+                "id": "twin-neutronium-cascade-projectors",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "arachnus-storm-cannon",
+                "count": 1
+              },
+              {
+                "id": "caestus-fist",
+                "count": 1
+              },
+              {
+                "id": "spiculus-bolt-launcher",
+                "count": 1
+              },
+              {
+                "id": "twin-neutronium-cascade-projectors",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "caestus-fist",
+                "count": 1
+              },
+              {
+                "id": "iliastus-accelerator-culverin",
+                "count": 1
+              },
+              {
+                "id": "spiculus-bolt-launcher",
+                "count": 1
+              },
+              {
+                "id": "twin-neutronium-cascade-projectors",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "dual-caestus-fists",
+                "count": 1
+              },
+              {
+                "id": "spiculus-bolt-launcher",
+                "count": 1
+              },
+              {
+                "id": "twin-neutronium-cascade-projectors",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Telemon Dreadnought",
+          "id": "adrathic-desolator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Telemon Dreadnought",
+          "id": "arachnus-storm-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Telemon Dreadnought",
+          "id": "caestus-fist",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Telemon Dreadnought",
+          "id": "dual-caestus-fists",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Telemon Dreadnought",
+          "id": "iliastus-accelerator-culverin",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Telemon Dreadnought",
+          "id": "spiculus-bolt-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Telemon Dreadnought",
+          "id": "twin-neutronium-cascade-projectors",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Telemon Dreadnought",
+          "id": "twin-neutronium-cascade-projectors",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "contemptor-achillus-dreadnought",
@@ -70,7 +241,108 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Contemptor-Achillus Dreadnought",
+          "models": 1,
+          "items": [
+            {
+              "id": "dreadspear",
+              "count": 1
+            },
+            {
+              "id": "lastrum-storm-bolter",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Contemptor-Achillus Dreadnought",
+          "items": [
+            {
+              "id": "dreadspear",
+              "count": 1
+            },
+            {
+              "id": "lastrum-storm-bolter",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Contemptor-Achillus Dreadnought",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "adrathic-combi-destructor",
+                "count": 2
+              },
+              {
+                "id": "dreadspear",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "dreadspear",
+                "count": 1
+              },
+              {
+                "id": "lastrum-storm-bolter",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "dreadspear",
+                "count": 1
+              },
+              {
+                "id": "twin-infernus-incinerator",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Contemptor-Achillus Dreadnought",
+          "id": "adrathic-combi-destructor",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Contemptor-Achillus Dreadnought",
+          "id": "dreadspear",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Contemptor-Achillus Dreadnought",
+          "id": "lastrum-storm-bolter",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Contemptor-Achillus Dreadnought",
+          "id": "twin-infernus-incinerator",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "contemptor-galatus-dreadnought",
@@ -104,7 +376,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Contemptor-Galatus Dreadnought",
+          "models": 1,
+          "items": [
+            {
+              "id": "warblade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Contemptor-Galatus Dreadnought",
+          "items": [
+            {
+              "id": "warblade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Contemptor-Galatus Dreadnought",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "warblade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Contemptor-Galatus Dreadnought",
+          "id": "warblade",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "blade-champion",
@@ -138,7 +461,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Blade Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "vaultswords-blade-champion",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Blade Champion",
+          "items": [
+            {
+              "id": "vaultswords-blade-champion",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Blade Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "vaultswords-blade-champion",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Blade Champion",
+          "id": "vaultswords-blade-champion",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "caladius-grav-tank",
@@ -175,7 +549,114 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Caladius Grav-Tank",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "iliastus-accelerator-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-lastrum-bolt-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Caladius Grav-Tank",
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "iliastus-accelerator-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-lastrum-bolt-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Caladius Grav-Tank",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "iliastus-accelerator-cannon",
+                "count": 1
+              },
+              {
+                "id": "twin-lastrum-bolt-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "iliastus-accelerator-cannon",
+                "count": 1
+              },
+              {
+                "id": "twin-neutronium-cascade-projectors",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Caladius Grav-Tank",
+          "id": "armoured-hull",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Caladius Grav-Tank",
+          "id": "iliastus-accelerator-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Caladius Grav-Tank",
+          "id": "twin-lastrum-bolt-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Caladius Grav-Tank",
+          "id": "twin-neutronium-cascade-projectors",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "allarus-custodians",
@@ -219,7 +700,150 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Allarus Custodians",
+          "models": 2,
+          "items": [
+            {
+              "id": "balistus-grenade-launcher",
+              "count": 2
+            },
+            {
+              "id": "guardian-spear-allarus-custodians",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Allarus Custodians",
+          "items": [
+            {
+              "id": "balistus-grenade-launcher",
+              "count": 1
+            },
+            {
+              "id": "guardian-spear-allarus-custodians",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Allarus Custodians",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "balistus-grenade-launcher",
+                "count": 1
+              },
+              {
+                "id": "castellan-axe",
+                "count": 1
+              },
+              {
+                "id": "vexilla",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "balistus-grenade-launcher",
+                "count": 1
+              },
+              {
+                "id": "castellan-axe",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "balistus-grenade-launcher",
+                "count": 1
+              },
+              {
+                "id": "guardian-spear-allarus-custodians",
+                "count": 1
+              },
+              {
+                "id": "vexilla",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "balistus-grenade-launcher",
+                "count": 1
+              },
+              {
+                "id": "guardian-spear-allarus-custodians",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Allarus Custodians",
+          "id": "balistus-grenade-launcher",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Allarus Custodians",
+          "id": "castellan-axe",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Allarus Custodians",
+          "id": "guardian-spear-allarus-custodians",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Allarus Custodians",
+          "id": "vexilla",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": [
+        {
+          "model": "Allarus Custodians",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "castellan-axe",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "guardian-spear-allarus-custodians",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "shield-captain-on-dawneagle-jetbike",
@@ -255,7 +879,92 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Shield-Captain on Dawneagle Jetbike",
+          "models": 1,
+          "items": [
+            {
+              "id": "interceptor-lance",
+              "count": 1
+            },
+            {
+              "id": "salvo-launcher",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Shield-Captain on Dawneagle Jetbike",
+          "items": [
+            {
+              "id": "interceptor-lance",
+              "count": 1
+            },
+            {
+              "id": "salvo-launcher",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Shield-Captain on Dawneagle Jetbike",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hurricane-bolter",
+                "count": 1
+              },
+              {
+                "id": "interceptor-lance",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "interceptor-lance",
+                "count": 1
+              },
+              {
+                "id": "salvo-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Shield-Captain on Dawneagle Jetbike",
+          "id": "hurricane-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Shield-Captain on Dawneagle Jetbike",
+          "id": "interceptor-lance",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Shield-Captain on Dawneagle Jetbike",
+          "id": "salvo-launcher",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "vigilator-squad",
@@ -316,7 +1025,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Vigilators",
+          "models": 4,
+          "items": [
+            {
+              "id": "executioner-greatblade",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Vigilators",
+          "items": [
+            {
+              "id": "executioner-greatblade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Vigilators",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "executioner-greatblade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Vigilators",
+          "id": "executioner-greatblade",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "witchseeker-squad",
@@ -378,7 +1138,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Witchseekers",
+          "models": 4,
+          "items": [
+            {
+              "id": "flamer",
+              "count": 4
+            },
+            {
+              "id": "gun-stock",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Witchseekers",
+          "items": [
+            {
+              "id": "flamer",
+              "count": 1
+            },
+            {
+              "id": "gun-stock",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Witchseekers",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "flamer",
+                "count": 1
+              },
+              {
+                "id": "gun-stock",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Witchseekers",
+          "id": "flamer",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Witchseekers",
+          "id": "gun-stock",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ares-gunship",
@@ -415,7 +1244,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ares Gunship",
+          "models": 1,
+          "items": [
+            {
+              "id": "arachnus-heavy-blaze-cannon",
+              "count": 2
+            },
+            {
+              "id": "arachnus-magna-blaze-cannon",
+              "count": 1
+            },
+            {
+              "id": "armoured-hull-ares-gunship",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ares Gunship",
+          "items": [
+            {
+              "id": "arachnus-heavy-blaze-cannon",
+              "count": 2
+            },
+            {
+              "id": "arachnus-magna-blaze-cannon",
+              "count": 1
+            },
+            {
+              "id": "armoured-hull-ares-gunship",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ares Gunship",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arachnus-heavy-blaze-cannon",
+                "count": 2
+              },
+              {
+                "id": "arachnus-magna-blaze-cannon",
+                "count": 1
+              },
+              {
+                "id": "armoured-hull-ares-gunship",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Ares Gunship",
+          "id": "arachnus-heavy-blaze-cannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Ares Gunship",
+          "id": "arachnus-magna-blaze-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Ares Gunship",
+          "id": "armoured-hull-ares-gunship",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "custodian-guard-sodality",
@@ -449,7 +1365,97 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Custodian Guard",
+          "models": 3,
+          "items": [
+            {
+              "id": "guardian-spear-custodian-guard-sodality",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Custodian Guard",
+          "items": [
+            {
+              "id": "guardian-spear-custodian-guard-sodality",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Custodian Guard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "vexilla",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Custodian Guard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "guardian-spear-custodian-guard-sodality",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Custodian Guard",
+          "breakpoints": [
+            {
+              "models": 3,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "vexilla",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Custodian Guard",
+          "id": "guardian-spear-custodian-guard-sodality",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Custodian Guard",
+          "id": "vexilla",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "orion-assault-dropship",
@@ -489,7 +1495,112 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Orion Assault Dropship",
+          "models": 1,
+          "items": [
+            {
+              "id": "arachnus-heavy-blaze-cannon",
+              "count": 2
+            },
+            {
+              "id": "armoured-hull-orion-assault-dropship",
+              "count": 1
+            },
+            {
+              "id": "spiculus-heavy-bolt-launcher",
+              "count": 2
+            },
+            {
+              "id": "twin-lastrum-bolt-cannon",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Orion Assault Dropship",
+          "items": [
+            {
+              "id": "arachnus-heavy-blaze-cannon",
+              "count": 2
+            },
+            {
+              "id": "armoured-hull-orion-assault-dropship",
+              "count": 1
+            },
+            {
+              "id": "spiculus-heavy-bolt-launcher",
+              "count": 2
+            },
+            {
+              "id": "twin-lastrum-bolt-cannon",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Orion Assault Dropship",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arachnus-heavy-blaze-cannon",
+                "count": 2
+              },
+              {
+                "id": "armoured-hull-orion-assault-dropship",
+                "count": 1
+              },
+              {
+                "id": "spiculus-heavy-bolt-launcher",
+                "count": 2
+              },
+              {
+                "id": "twin-lastrum-bolt-cannon",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Orion Assault Dropship",
+          "id": "arachnus-heavy-blaze-cannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Orion Assault Dropship",
+          "id": "armoured-hull-orion-assault-dropship",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Orion Assault Dropship",
+          "id": "spiculus-heavy-bolt-launcher",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Orion Assault Dropship",
+          "id": "twin-lastrum-bolt-cannon",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "knight-centura",
@@ -523,7 +1634,96 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Knight-Centura",
+          "models": 1,
+          "items": [
+            {
+              "id": "executioner-greatblade-knight-centura",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Knight-Centura",
+          "items": [
+            {
+              "id": "executioner-greatblade-knight-centura",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Knight-Centura",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "executioner-greatblade-knight-centura",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "gun-stock-knight-centura",
+                "count": 1
+              },
+              {
+                "id": "master-crafted-boltgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "gun-stock-knight-centura",
+                "count": 1
+              },
+              {
+                "id": "master-crafted-flamer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Knight-Centura",
+          "id": "executioner-greatblade-knight-centura",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight-Centura",
+          "id": "gun-stock-knight-centura",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight-Centura",
+          "id": "master-crafted-boltgun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight-Centura",
+          "id": "master-crafted-flamer",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "anathema-psykana-rhino",
@@ -558,7 +1758,97 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Anathema Psykana Rhino",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Anathema Psykana Rhino",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Anathema Psykana Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "hunter-killer-missile",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Anathema Psykana Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Anathema Psykana Rhino",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Anathema Psykana Rhino",
+          "id": "hunter-killer-missile",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Anathema Psykana Rhino",
+          "id": "storm-bolter",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "gyrfalcon-jetbike-sodality",
@@ -594,7 +1884,164 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Agamatus Custodians",
+          "models": 2,
+          "items": [
+            {
+              "id": "lastrum-bolt-cannon",
+              "count": 2
+            },
+            {
+              "id": "solarite-power-lance",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Agamatus Custodians",
+          "items": [
+            {
+              "id": "lastrum-bolt-cannon",
+              "count": 1
+            },
+            {
+              "id": "solarite-power-lance",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Agamatus Custodians",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "adrathic-devastator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "arachnus-volley-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "lastrum-bolt-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-corvae-las-pulser",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Agamatus Custodians",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "solarite-power-lance",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Agamatus Custodians",
+          "id": "adrathic-devastator",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Agamatus Custodians",
+          "id": "arachnus-volley-cannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Agamatus Custodians",
+          "id": "lastrum-bolt-cannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Agamatus Custodians",
+          "id": "solarite-power-lance",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Agamatus Custodians",
+          "id": "twin-corvae-las-pulser",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": [
+        {
+          "model": "Agamatus Custodians",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "adrathic-devastator",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "arachnus-volley-cannon",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "lastrum-bolt-cannon",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "twin-corvae-las-pulser",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "custodian-wardens",
@@ -637,7 +2084,115 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Custodian Wardens",
+          "models": 2,
+          "items": [
+            {
+              "id": "guardian-spear-custodian-wardens",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Custodian Wardens",
+          "items": [
+            {
+              "id": "guardian-spear-custodian-wardens",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Custodian Wardens",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "vexilla",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Custodian Wardens",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "castellan-axe",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "guardian-spear-custodian-wardens",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Custodian Wardens",
+          "id": "castellan-axe",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Custodian Wardens",
+          "id": "guardian-spear-custodian-wardens",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Custodian Wardens",
+          "id": "vexilla",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": [
+        {
+          "model": "Custodian Wardens",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "castellan-axe",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "guardian-spear-custodian-wardens",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "pallas-grav-attack",
@@ -673,7 +2228,92 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Pallas Grav-attack",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull-pallas-grav-attack",
+              "count": 1
+            },
+            {
+              "id": "twin-arachnus-blaze-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Pallas Grav-attack",
+          "items": [
+            {
+              "id": "armoured-hull-pallas-grav-attack",
+              "count": 1
+            },
+            {
+              "id": "twin-arachnus-blaze-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Pallas Grav-attack",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull-pallas-grav-attack",
+                "count": 1
+              },
+              {
+                "id": "twin-arachnus-blaze-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "armoured-hull-pallas-grav-attack",
+                "count": 1
+              },
+              {
+                "id": "twin-iliastus-accelerator-fusil",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Pallas Grav-attack",
+          "id": "armoured-hull-pallas-grav-attack",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Pallas Grav-attack",
+          "id": "twin-arachnus-blaze-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Pallas Grav-attack",
+          "id": "twin-iliastus-accelerator-fusil",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "vertus-praetors",
@@ -718,7 +2358,116 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Vertus Praetors",
+          "models": 2,
+          "items": [
+            {
+              "id": "interceptor-lance-vertus-praetors",
+              "count": 2
+            },
+            {
+              "id": "salvo-launcher",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Vertus Praetors",
+          "items": [
+            {
+              "id": "interceptor-lance-vertus-praetors",
+              "count": 1
+            },
+            {
+              "id": "salvo-launcher",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Vertus Praetors",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hurricane-bolter",
+                "count": 1
+              },
+              {
+                "id": "interceptor-lance-vertus-praetors",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "interceptor-lance-vertus-praetors",
+                "count": 1
+              },
+              {
+                "id": "salvo-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Vertus Praetors",
+          "id": "hurricane-bolter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Vertus Praetors",
+          "id": "interceptor-lance-vertus-praetors",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Vertus Praetors",
+          "id": "salvo-launcher",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": [
+        {
+          "model": "Vertus Praetors",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "hurricane-bolter",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "salvo-launcher",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "venatari-with-verutum-lances",
@@ -752,7 +2501,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Venatari",
+          "models": 3,
+          "items": [
+            {
+              "id": "verutum-lance",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Venatari",
+          "items": [
+            {
+              "id": "verutum-lance",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Venatari",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "verutum-lance",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Venatari",
+          "id": "verutum-lance",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "shield-captain-in-allarus-terminator-armour",
@@ -787,7 +2587,92 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Shield-Captain in Allarus Terminator Armour",
+          "models": 1,
+          "items": [
+            {
+              "id": "balistus-grenade-launcher",
+              "count": 1
+            },
+            {
+              "id": "guardian-spear-shield-captain-in-allarus-terminator-armour",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Shield-Captain in Allarus Terminator Armour",
+          "items": [
+            {
+              "id": "balistus-grenade-launcher",
+              "count": 1
+            },
+            {
+              "id": "guardian-spear-shield-captain-in-allarus-terminator-armour",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Shield-Captain in Allarus Terminator Armour",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "balistus-grenade-launcher",
+                "count": 1
+              },
+              {
+                "id": "castellan-axe-shield-captain-in-allarus-terminator-armour",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "balistus-grenade-launcher",
+                "count": 1
+              },
+              {
+                "id": "guardian-spear-shield-captain-in-allarus-terminator-armour",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Shield-Captain in Allarus Terminator Armour",
+          "id": "balistus-grenade-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Shield-Captain in Allarus Terminator Armour",
+          "id": "castellan-axe-shield-captain-in-allarus-terminator-armour",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Shield-Captain in Allarus Terminator Armour",
+          "id": "guardian-spear-shield-captain-in-allarus-terminator-armour",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "aquilon-terminators-with-solarite-power-gauntlets",
@@ -822,7 +2707,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Aquilon Custodians",
+          "models": 3,
+          "items": [
+            {
+              "id": "adrathic-combi-destructor",
+              "count": 3
+            },
+            {
+              "id": "solerite-power-gauntlet",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Aquilon Custodians",
+          "items": [
+            {
+              "id": "adrathic-combi-destructor",
+              "count": 1
+            },
+            {
+              "id": "solerite-power-gauntlet",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Aquilon Custodians",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "adrathic-combi-destructor",
+                "count": 1
+              },
+              {
+                "id": "solerite-power-gauntlet",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Aquilon Custodians",
+          "id": "adrathic-combi-destructor",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Aquilon Custodians",
+          "id": "solerite-power-gauntlet",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "coronus-grav-carrier",
@@ -859,7 +2813,114 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Coronus Grav-Carrier",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull-coronus-grav-carrier",
+              "count": 1
+            },
+            {
+              "id": "twin-arachnus-blaze-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-lastrum-bolt-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Coronus Grav-Carrier",
+          "items": [
+            {
+              "id": "armoured-hull-coronus-grav-carrier",
+              "count": 1
+            },
+            {
+              "id": "twin-arachnus-blaze-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-lastrum-bolt-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Coronus Grav-Carrier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull-coronus-grav-carrier",
+                "count": 1
+              },
+              {
+                "id": "twin-arachnus-blaze-cannon",
+                "count": 1
+              },
+              {
+                "id": "twin-lastrum-bolt-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "armoured-hull-coronus-grav-carrier",
+                "count": 1
+              },
+              {
+                "id": "twin-arachnus-blaze-cannon",
+                "count": 1
+              },
+              {
+                "id": "twin-neutronium-cascade-projectors",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Coronus Grav-Carrier",
+          "id": "armoured-hull-coronus-grav-carrier",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Coronus Grav-Carrier",
+          "id": "twin-arachnus-blaze-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Coronus Grav-Carrier",
+          "id": "twin-lastrum-bolt-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Coronus Grav-Carrier",
+          "id": "twin-neutronium-cascade-projectors",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "prosecutor-squad",
@@ -921,7 +2982,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Prosecutors",
+          "models": 4,
+          "items": [
+            {
+              "id": "boltgun",
+              "count": 4
+            },
+            {
+              "id": "gun-stock",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Prosecutors",
+          "items": [
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "gun-stock",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Prosecutors",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "boltgun",
+                "count": 1
+              },
+              {
+                "id": "gun-stock",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Prosecutors",
+          "id": "boltgun",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Prosecutors",
+          "id": "gun-stock",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "shield-captain",
@@ -956,7 +3086,116 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Shield-Captain",
+          "models": 1,
+          "items": [
+            {
+              "id": "praesidium-shield",
+              "count": 1
+            },
+            {
+              "id": "pyrithite-spear-shield-captain",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Shield-Captain",
+          "items": [
+            {
+              "id": "praesidium-shield",
+              "count": 1
+            },
+            {
+              "id": "pyrithite-spear-shield-captain",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Shield-Captain",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "castellan-axe-shield-captain",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "eternity-pattern-paragon-blade",
+                "count": 1
+              },
+              {
+                "id": "praesidium-shield",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "guardian-spear-shield-captain",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "praesidium-shield",
+                "count": 1
+              },
+              {
+                "id": "pyrithite-spear-shield-captain",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Shield-Captain",
+          "id": "castellan-axe-shield-captain",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Shield-Captain",
+          "id": "eternity-pattern-paragon-blade",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Shield-Captain",
+          "id": "guardian-spear-shield-captain",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Shield-Captain",
+          "id": "praesidium-shield",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Shield-Captain",
+          "id": "pyrithite-spear-shield-captain",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "trajann-valoris",
@@ -991,7 +3230,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Trajann Valoris",
+          "models": 1,
+          "items": [
+            {
+              "id": "eagles-scream",
+              "count": 1
+            },
+            {
+              "id": "watchers-axe",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Trajann Valoris",
+          "items": [
+            {
+              "id": "eagles-scream",
+              "count": 1
+            },
+            {
+              "id": "watchers-axe",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Trajann Valoris",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "eagles-scream",
+                "count": 1
+              },
+              {
+                "id": "watchers-axe",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Trajann Valoris",
+          "id": "eagles-scream",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Trajann Valoris",
+          "id": "watchers-axe",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "gilded-blades-allarus-custodians",
@@ -1029,7 +3337,62 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Allarus Custodian",
+          "models": 2,
+          "items": [
+            {
+              "id": "balistus-grenade-launcher-gilded-blades-allarus-custodians",
+              "count": 2
+            },
+            {
+              "id": "guardian-spear",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Allarus Custodian",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "balistus-grenade-launcher-gilded-blades-allarus-custodians",
+                "count": 1
+              },
+              {
+                "id": "guardian-spear",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Allarus Custodian",
+          "id": "balistus-grenade-launcher-gilded-blades-allarus-custodians",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Allarus Custodian",
+          "id": "guardian-spear",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "gilded-blades-custodian-guard",
@@ -1067,7 +3430,62 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Custodian Guard",
+          "models": 3,
+          "items": [
+            {
+              "id": "praesidium-shield",
+              "count": 3
+            },
+            {
+              "id": "sentinel-blade",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Custodian Guard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "praesidium-shield",
+                "count": 1
+              },
+              {
+                "id": "sentinel-blade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Custodian Guard",
+          "id": "praesidium-shield",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Custodian Guard",
+          "id": "sentinel-blade",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "gilded-blades-custodian-wardens",
@@ -1122,7 +3540,78 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Custodian Warden with Castellan Axe",
+          "models": 1,
+          "items": [
+            {
+              "id": "castellan-axe-gilded-blades-custodian-wardens",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Custodian Warden with Guardian Spear",
+          "models": 2,
+          "items": [
+            {
+              "id": "guardian-spear",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Custodian Warden with Castellan Axe",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "castellan-axe-gilded-blades-custodian-wardens",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Custodian Warden with Guardian Spear",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "guardian-spear",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Custodian Warden with Castellan Axe",
+          "id": "castellan-axe-gilded-blades-custodian-wardens",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Custodian Warden with Guardian Spear",
+          "id": "guardian-spear",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tristraen-of-the-gilded-blades",
@@ -1159,7 +3648,48 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tristraen",
+          "models": 1,
+          "items": [
+            {
+              "id": "vaultswords",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Tristraen",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "vaultswords",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Tristraen",
+          "id": "vaultswords",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "venatari-with-kinetic-destroyers",
@@ -1194,7 +3724,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Venatari",
+          "models": 3,
+          "items": [
+            {
+              "id": "kinetic-destroyer",
+              "count": 3
+            },
+            {
+              "id": "tarsis-buckler",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Venatari",
+          "items": [
+            {
+              "id": "kinetic-destroyer",
+              "count": 1
+            },
+            {
+              "id": "tarsis-buckler",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Venatari",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kinetic-destroyer",
+                "count": 1
+              },
+              {
+                "id": "tarsis-buckler",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Venatari",
+          "id": "kinetic-destroyer",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Venatari",
+          "id": "tarsis-buckler",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "aquilon-terminators-with-solarite-power-talons",
@@ -1229,7 +3828,116 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Aquilon Custodians",
+          "models": 3,
+          "items": [
+            {
+              "id": "lastrum-storm-bolter",
+              "count": 3
+            },
+            {
+              "id": "solerite-power-talon",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Aquilon Custodians",
+          "items": [
+            {
+              "id": "lastrum-storm-bolter",
+              "count": 1
+            },
+            {
+              "id": "solerite-power-talon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Aquilon Custodians",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "infernus-firepike",
+                "count": 1
+              },
+              {
+                "id": "solerite-power-talon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "lastrum-storm-bolter",
+                "count": 1
+              },
+              {
+                "id": "solerite-power-talon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Aquilon Custodians",
+          "id": "infernus-firepike",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Aquilon Custodians",
+          "id": "lastrum-storm-bolter",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Aquilon Custodians",
+          "id": "solerite-power-talon",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": [
+        {
+          "model": "Aquilon Custodians",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "infernus-firepike",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "lastrum-storm-bolter",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "aquilan-wing-sentinel-guard-sodality",
@@ -1285,7 +3993,115 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sentinel Guard with Vexilla",
+          "models": 1,
+          "items": [
+            {
+              "id": "sentinel-blade-aquilan-wing-sentinel-guard-sodality",
+              "count": 1
+            },
+            {
+              "id": "vexilla",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sentinel Guard",
+          "models": 2,
+          "items": [
+            {
+              "id": "sentinel-blade-aquilan-wing-sentinel-guard-sodality",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sentinel Guard with Vexilla",
+          "items": [
+            {
+              "id": "sentinel-blade-aquilan-wing-sentinel-guard-sodality",
+              "count": 1
+            },
+            {
+              "id": "vexilla",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sentinel Guard",
+          "items": [
+            {
+              "id": "sentinel-blade-aquilan-wing-sentinel-guard-sodality",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sentinel Guard with Vexilla",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "sentinel-blade-aquilan-wing-sentinel-guard-sodality",
+                "count": 1
+              },
+              {
+                "id": "vexilla",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sentinel Guard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "sentinel-blade-aquilan-wing-sentinel-guard-sodality",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sentinel Guard with Vexilla",
+          "id": "sentinel-blade-aquilan-wing-sentinel-guard-sodality",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sentinel Guard with Vexilla",
+          "id": "vexilla",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sentinel Guard",
+          "id": "sentinel-blade-aquilan-wing-sentinel-guard-sodality",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "aquilan-talon-contemptor-achillus-dreadnought",
@@ -1323,7 +4139,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Contemptor-Achillus Dreadnought",
+          "models": 1,
+          "items": [
+            {
+              "id": "dreadspear",
+              "count": 1
+            },
+            {
+              "id": "lastrum-storm-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Contemptor-Achillus Dreadnought",
+          "items": [
+            {
+              "id": "dreadspear",
+              "count": 1
+            },
+            {
+              "id": "lastrum-storm-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Contemptor-Achillus Dreadnought",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dreadspear",
+                "count": 1
+              },
+              {
+                "id": "lastrum-storm-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Contemptor-Achillus Dreadnought",
+          "id": "dreadspear",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Contemptor-Achillus Dreadnought",
+          "id": "lastrum-storm-bolter",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "aquilan-wing-venatari-with-kinetic-destroyers",
@@ -1361,7 +4246,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Venatari",
+          "models": 3,
+          "items": [
+            {
+              "id": "kinetic-destroyer",
+              "count": 3
+            },
+            {
+              "id": "tarsis-buckler",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Venatari",
+          "items": [
+            {
+              "id": "kinetic-destroyer",
+              "count": 1
+            },
+            {
+              "id": "tarsis-buckler",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Venatari",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kinetic-destroyer",
+                "count": 1
+              },
+              {
+                "id": "tarsis-buckler",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Venatari",
+          "id": "kinetic-destroyer",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Venatari",
+          "id": "tarsis-buckler",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "aquilan-talon-sentinel-guard-sodality",
@@ -1398,7 +4352,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sentinel Guard",
+          "models": 3,
+          "items": [
+            {
+              "id": "sentinel-blade-aquilan-talon-sentinel-guard-sodality",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sentinel Guard",
+          "items": [
+            {
+              "id": "sentinel-blade-aquilan-talon-sentinel-guard-sodality",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sentinel Guard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "sentinel-blade-aquilan-talon-sentinel-guard-sodality",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sentinel Guard",
+          "id": "sentinel-blade-aquilan-talon-sentinel-guard-sodality",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "aquilan-talon-shield-captain",
@@ -1435,7 +4440,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Shield-Captain",
+          "models": 1,
+          "items": [
+            {
+              "id": "eternity-pattern-paragon-blade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Shield-Captain",
+          "items": [
+            {
+              "id": "eternity-pattern-paragon-blade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Shield-Captain",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "eternity-pattern-paragon-blade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Shield-Captain",
+          "id": "eternity-pattern-paragon-blade",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "aquilan-wing-shield-captain",
@@ -1469,7 +4525,26 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Shield-Captain",
+          "models": 1,
+          "items": []
+        }
+      ],
+      "templates": [
+        {
+          "model": "Shield-Captain",
+          "items": []
+        }
+      ],
+      "slots": [],
+      "limits": [],
+      "options": [],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sentinel-guard-sodality",
@@ -1504,7 +4579,97 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Custodian Guard",
+          "models": 3,
+          "items": [
+            {
+              "id": "praesidium-shield",
+              "count": 3
+            },
+            {
+              "id": "sentinel-blade-sentinel-guard-sodality",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Custodian Guard",
+          "items": [
+            {
+              "id": "praesidium-shield",
+              "count": 1
+            },
+            {
+              "id": "sentinel-blade-sentinel-guard-sodality",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Custodian Guard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "vexilla",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Custodian Guard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "praesidium-shield",
+                "count": 1
+              },
+              {
+                "id": "sentinel-blade-sentinel-guard-sodality",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Custodian Guard",
+          "id": "praesidium-shield",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Custodian Guard",
+          "id": "sentinel-blade-sentinel-guard-sodality",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Custodian Guard",
+          "id": "vexilla",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "caladius-annihilator-grav-tank",
@@ -1541,6 +4706,113 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Caladius Annihilator Grav Tank",
+          "models": 1,
+          "items": [
+            {
+              "id": "arachnus-blaze-carronade",
+              "count": 1
+            },
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "twin-lastrum-bolt-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Caladius Annihilator Grav Tank",
+          "items": [
+            {
+              "id": "arachnus-blaze-carronade",
+              "count": 1
+            },
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "twin-lastrum-bolt-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Caladius Annihilator Grav Tank",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arachnus-blaze-carronade",
+                "count": 1
+              },
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "twin-lastrum-bolt-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "arachnus-blaze-carronade",
+                "count": 1
+              },
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "twin-neutronium-cascade-projectors",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Caladius Annihilator Grav Tank",
+          "id": "arachnus-blaze-carronade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Caladius Annihilator Grav Tank",
+          "id": "armoured-hull",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Caladius Annihilator Grav Tank",
+          "id": "twin-lastrum-bolt-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Caladius Annihilator Grav Tank",
+          "id": "twin-neutronium-cascade-projectors",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

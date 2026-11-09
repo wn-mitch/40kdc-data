@@ -34,7 +34,148 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Land Raider",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "soulshatter-lascannon",
+              "count": 2
+            },
+            {
+              "id": "twin-heavy-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Land Raider",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "soulshatter-lascannon",
+              "count": 2
+            },
+            {
+              "id": "twin-heavy-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Land Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Land Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Land Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "soulshatter-lascannon",
+                "count": 2
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Land Raider",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "havoc-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "soulshatter-lascannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "twin-heavy-bolter",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chaos-terminators",
@@ -89,7 +230,361 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Terminator",
+          "models": 4,
+          "items": [
+            {
+              "id": "accursed-weapon",
+              "count": 4
+            },
+            {
+              "id": "combi-bolter",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Terminator Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "accursed-weapon",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Terminator",
+          "items": [
+            {
+              "id": "accursed-weapon",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Terminator Champion",
+          "items": [
+            {
+              "id": "accursed-weapon",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Terminator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "accursed-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "chainfist",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-fist",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Terminator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaper-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Terminator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": true,
+          "choices": [
+            [
+              {
+                "id": "paired-accursed-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Terminator Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "accursed-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "chainfist",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-fist",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Terminator Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Terminator Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": true,
+          "choices": [
+            [
+              {
+                "id": "paired-accursed-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "chainfist",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "paired-accursed-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 3
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "power-fist",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Terminator",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaper-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Chaos Terminator",
+          "id": "accursed-weapon",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Chaos Terminator",
+          "id": "chainfist",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Chaos Terminator",
+          "id": "combi-bolter",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Chaos Terminator",
+          "id": "combi-weapon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Chaos Terminator",
+          "id": "heavy-flamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Chaos Terminator",
+          "id": "paired-accursed-weapons",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Chaos Terminator",
+          "id": "power-fist",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Chaos Terminator",
+          "id": "reaper-autocannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Terminator Champion",
+          "id": "accursed-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Terminator Champion",
+          "id": "chainfist",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Terminator Champion",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Terminator Champion",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Terminator Champion",
+          "id": "paired-accursed-weapons",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Terminator Champion",
+          "id": "power-fist",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sorcerer",
@@ -125,7 +620,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sorcerer",
+          "models": 1,
+          "items": [
+            {
+              "id": "agonising-energies",
+              "count": 1
+            },
+            {
+              "id": "bolt-pistol-sorcerer",
+              "count": 1
+            },
+            {
+              "id": "force-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sorcerer",
+          "items": [
+            {
+              "id": "agonising-energies",
+              "count": 1
+            },
+            {
+              "id": "bolt-pistol-sorcerer",
+              "count": 1
+            },
+            {
+              "id": "force-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sorcerer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "agonising-energies",
+                "count": 1
+              },
+              {
+                "id": "bolt-pistol-sorcerer",
+                "count": 1
+              },
+              {
+                "id": "force-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sorcerer",
+          "id": "agonising-energies",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sorcerer",
+          "id": "bolt-pistol-sorcerer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sorcerer",
+          "id": "force-weapon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lord-exultant",
@@ -162,7 +744,180 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lord Exultant",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol-lord-exultant",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "phoenix-power-spear",
+              "count": 1
+            },
+            {
+              "id": "plasma-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lord Exultant",
+          "items": [
+            {
+              "id": "bolt-pistol-lord-exultant",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "phoenix-power-spear",
+              "count": 1
+            },
+            {
+              "id": "plasma-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lord Exultant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-lord-exultant",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Lord Exultant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "master-crafted-power-sword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "phoenix-power-spear",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "screamer-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Lord Exultant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-fist-lord-exultant",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rapture-lash",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lord Exultant",
+          "id": "bolt-pistol-lord-exultant",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lord Exultant",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lord Exultant",
+          "id": "master-crafted-power-sword",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Lord Exultant",
+          "id": "phoenix-power-spear",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lord Exultant",
+          "id": "plasma-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lord Exultant",
+          "id": "power-fist-lord-exultant",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Lord Exultant",
+          "id": "rapture-lash",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Lord Exultant",
+          "id": "screamer-pistol",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lord-kakophonist",
@@ -197,7 +952,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lord Kakophonist",
+          "models": 1,
+          "items": [
+            {
+              "id": "power-sword",
+              "count": 1
+            },
+            {
+              "id": "screamer-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lord Kakophonist",
+          "items": [
+            {
+              "id": "power-sword",
+              "count": 1
+            },
+            {
+              "id": "screamer-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lord Kakophonist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "screamer-pistol",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "power-sword",
+                "count": 1
+              },
+              {
+                "id": "screamer-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lord Kakophonist",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Lord Kakophonist",
+          "id": "power-sword",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lord Kakophonist",
+          "id": "screamer-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Lord Kakophonist",
+          "id": "screamer-pistol",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chaos-spawn",
@@ -231,7 +1077,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Spawn",
+          "models": 2,
+          "items": [
+            {
+              "id": "hideous-mutations",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Spawn",
+          "items": [
+            {
+              "id": "hideous-mutations",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Spawn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hideous-mutations",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Spawn",
+          "id": "hideous-mutations",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "daemon-prince-of-slaanesh",
@@ -266,7 +1163,62 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Daemon Prince of Slaanesh",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellforged-weapons",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Daemon Prince of Slaanesh",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellforged-weapons",
+                "count": 1
+              },
+              {
+                "id": "infernal-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Daemon Prince of Slaanesh",
+          "id": "hellforged-weapons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Daemon Prince of Slaanesh",
+          "id": "infernal-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "noise-marines",
@@ -350,7 +1302,205 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Disharmonist",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-noise-marines",
+              "count": 1
+            },
+            {
+              "id": "sonic-blaster",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Noise Marine",
+          "models": 5,
+          "items": [
+            {
+              "id": "close-combat-weapon-noise-marines",
+              "count": 4
+            },
+            {
+              "id": "sonic-blaster",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Disharmonist",
+          "items": [
+            {
+              "id": "close-combat-weapon-noise-marines",
+              "count": 1
+            },
+            {
+              "id": "sonic-blaster",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Noise Marine",
+          "items": [
+            {
+              "id": "close-combat-weapon-noise-marines",
+              "count": 1
+            },
+            {
+              "id": "sonic-blaster",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Disharmonist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-noise-marines",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Disharmonist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "power-sword-noise-marines",
+                "count": 1
+              },
+              {
+                "id": "screamer-pistol-noise-marines",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "sonic-blaster",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Noise Marine",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blastmaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "sonic-blaster",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Noise Marine",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-noise-marines",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Noise Marine",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "blastmaster",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Disharmonist",
+          "id": "close-combat-weapon-noise-marines",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Disharmonist",
+          "id": "power-sword-noise-marines",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Disharmonist",
+          "id": "screamer-pistol-noise-marines",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Disharmonist",
+          "id": "sonic-blaster",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Noise Marine",
+          "id": "blastmaster",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Noise Marine",
+          "id": "close-combat-weapon-noise-marines",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Noise Marine",
+          "id": "sonic-blaster",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tormentors",
@@ -471,7 +1621,282 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Obsessionist",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol-tormentors",
+              "count": 1
+            },
+            {
+              "id": "power-sword-tormentors",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Tormentor",
+          "models": 4,
+          "items": [
+            {
+              "id": "boltgun",
+              "count": 4
+            },
+            {
+              "id": "close-combat-weapon-tormentors",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Obsessionist",
+          "items": [
+            {
+              "id": "bolt-pistol-tormentors",
+              "count": 1
+            },
+            {
+              "id": "power-sword-tormentors",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Tormentor",
+          "items": [
+            {
+              "id": "boltgun",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-tormentors",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Obsessionist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-tormentors",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-pistol-tormentors",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Obsessionist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "power-sword-tormentors",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rapture-lash-tormentors",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tormentor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "icon-of-excess",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tormentor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "boltgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-gun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tormentor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-tormentors",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Tormentor",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "icon-of-excess",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tormentor",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tormentor",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "plasma-gun",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Obsessionist",
+          "id": "bolt-pistol-tormentors",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Obsessionist",
+          "id": "plasma-pistol-tormentors",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Obsessionist",
+          "id": "power-sword-tormentors",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Obsessionist",
+          "id": "rapture-lash-tormentors",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Tormentor",
+          "id": "boltgun",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Tormentor",
+          "id": "close-combat-weapon-tormentors",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Tormentor",
+          "id": "icon-of-excess",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Tormentor",
+          "id": "meltagun",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Tormentor",
+          "id": "plasma-gun",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chaos-rhino",
@@ -506,7 +1931,170 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Rhino",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks-chaos-rhino",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Rhino",
+          "items": [
+            {
+              "id": "armoured-tracks-chaos-rhino",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks-chaos-rhino",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon",
+                "count": 1
+              },
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 2
+              },
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              },
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Rhino",
+          "id": "armoured-tracks-chaos-rhino",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Rhino",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Rhino",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Rhino",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Rhino",
+          "id": "havoc-launcher",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "daemon-prince-of-slaanesh-with-wings",
@@ -541,7 +2129,62 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Daemon Prince of Slaanesh with Wings",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellforged-weapons",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Daemon Prince of Slaanesh with Wings",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellforged-weapons",
+                "count": 1
+              },
+              {
+                "id": "infernal-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Daemon Prince of Slaanesh with Wings",
+          "id": "hellforged-weapons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Daemon Prince of Slaanesh with Wings",
+          "id": "infernal-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "fulgrim",
@@ -577,7 +2220,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Fulgrim",
+          "models": 1,
+          "items": [
+            {
+              "id": "daemonic-blades",
+              "count": 1
+            },
+            {
+              "id": "malefic-lash",
+              "count": 1
+            },
+            {
+              "id": "serpentine-tail",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Fulgrim",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "daemonic-blades",
+                "count": 1
+              },
+              {
+                "id": "malefic-lash",
+                "count": 1
+              },
+              {
+                "id": "serpentine-tail",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Fulgrim",
+          "id": "daemonic-blades",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Fulgrim",
+          "id": "malefic-lash",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Fulgrim",
+          "id": "serpentine-tail",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lucius-the-eternal",
@@ -612,7 +2324,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lucius the Eternal",
+          "models": 1,
+          "items": [
+            {
+              "id": "blade-of-the-laer",
+              "count": 1
+            },
+            {
+              "id": "lash-of-torment",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lucius the Eternal",
+          "items": [
+            {
+              "id": "blade-of-the-laer",
+              "count": 1
+            },
+            {
+              "id": "lash-of-torment",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lucius the Eternal",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blade-of-the-laer",
+                "count": 1
+              },
+              {
+                "id": "lash-of-torment",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lucius the Eternal",
+          "id": "blade-of-the-laer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lucius the Eternal",
+          "id": "lash-of-torment",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "heldrake",
@@ -648,7 +2429,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Heldrake",
+          "models": 1,
+          "items": [
+            {
+              "id": "hades-autocannon",
+              "count": 1
+            },
+            {
+              "id": "heldrake-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Heldrake",
+          "items": [
+            {
+              "id": "hades-autocannon",
+              "count": 1
+            },
+            {
+              "id": "heldrake-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Heldrake",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "baleflamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Heldrake",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heldrake-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Heldrake",
+          "id": "baleflamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Heldrake",
+          "id": "hades-autocannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Heldrake",
+          "id": "heldrake-claws",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "infractors",
@@ -717,7 +2589,188 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Infractor",
+          "models": 4,
+          "items": [
+            {
+              "id": "bolt-pistol-infractors",
+              "count": 4
+            },
+            {
+              "id": "duelling-sabre-infractors",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Obsessionist",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol-infractors",
+              "count": 1
+            },
+            {
+              "id": "power-sword-infractors",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Infractor",
+          "items": [
+            {
+              "id": "bolt-pistol-infractors",
+              "count": 1
+            },
+            {
+              "id": "duelling-sabre-infractors",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Obsessionist",
+          "items": [
+            {
+              "id": "bolt-pistol-infractors",
+              "count": 1
+            },
+            {
+              "id": "power-sword-infractors",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Infractor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "icon-of-excess",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Infractor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-infractors",
+                "count": 1
+              },
+              {
+                "id": "duelling-sabre-infractors",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Obsessionist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-infractors",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-pistol-infractors",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Obsessionist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "power-sword-infractors",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rapture-lash-infractors",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Infractor",
+          "id": "bolt-pistol-infractors",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Infractor",
+          "id": "duelling-sabre-infractors",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Infractor",
+          "id": "icon-of-excess",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Obsessionist",
+          "id": "bolt-pistol-infractors",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Obsessionist",
+          "id": "plasma-pistol-infractors",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Obsessionist",
+          "id": "power-sword-infractors",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Obsessionist",
+          "id": "rapture-lash-infractors",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "maulerfiend",
@@ -753,7 +2806,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Maulerfiend",
+          "models": 1,
+          "items": [
+            {
+              "id": "lasher-tendrils",
+              "count": 1
+            },
+            {
+              "id": "maulerfiend-fists",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Maulerfiend",
+          "items": [
+            {
+              "id": "lasher-tendrils",
+              "count": 1
+            },
+            {
+              "id": "maulerfiend-fists",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Maulerfiend",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lasher-tendrils",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "magma-cutters",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Maulerfiend",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "maulerfiend-fists",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Maulerfiend",
+          "id": "lasher-tendrils",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Maulerfiend",
+          "id": "magma-cutters",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Maulerfiend",
+          "id": "maulerfiend-fists",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "flawless-blades",
@@ -798,7 +2942,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Flawless Blade",
+          "models": 3,
+          "items": [
+            {
+              "id": "blissblade",
+              "count": 3
+            },
+            {
+              "id": "bolt-pistol-flawless-blades",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Flawless Blade",
+          "items": [
+            {
+              "id": "blissblade",
+              "count": 1
+            },
+            {
+              "id": "bolt-pistol-flawless-blades",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Flawless Blade",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blissblade",
+                "count": 1
+              },
+              {
+                "id": "bolt-pistol-flawless-blades",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Flawless Blade",
+          "id": "blissblade",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Flawless Blade",
+          "id": "bolt-pistol-flawless-blades",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "callous-blades-flawless-blades",
@@ -836,7 +3049,62 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Flawless Blades",
+          "models": 3,
+          "items": [
+            {
+              "id": "blissblade",
+              "count": 3
+            },
+            {
+              "id": "bolt-pistol",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Flawless Blades",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blissblade",
+                "count": 1
+              },
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Flawless Blades",
+          "id": "blissblade",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Flawless Blades",
+          "id": "bolt-pistol",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "callous-blades-infractors",
@@ -893,7 +3161,106 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Infractor",
+          "models": 9,
+          "items": [
+            {
+              "id": "bolt-pistol-callous-blades-infractors",
+              "count": 9
+            },
+            {
+              "id": "duelling-sabre",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Obsessionist",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol-callous-blades-infractors",
+              "count": 1
+            },
+            {
+              "id": "power-sword-callous-blades-infractors",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Infractor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-callous-blades-infractors",
+                "count": 1
+              },
+              {
+                "id": "duelling-sabre",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Obsessionist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-callous-blades-infractors",
+                "count": 1
+              },
+              {
+                "id": "power-sword-callous-blades-infractors",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Infractor",
+          "id": "bolt-pistol-callous-blades-infractors",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Infractor",
+          "id": "duelling-sabre",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Obsessionist",
+          "id": "bolt-pistol-callous-blades-infractors",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Obsessionist",
+          "id": "power-sword-callous-blades-infractors",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lord-kaphrael-of-the-callous-blades",
@@ -931,7 +3298,62 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lord Kaphrael",
+          "models": 1,
+          "items": [
+            {
+              "id": "phoenix-power-spear",
+              "count": 1
+            },
+            {
+              "id": "power-fist-lord-kaphrael-of-the-callous-blades",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Lord Kaphrael",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "phoenix-power-spear",
+                "count": 1
+              },
+              {
+                "id": "power-fist-lord-kaphrael-of-the-callous-blades",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lord Kaphrael",
+          "id": "phoenix-power-spear",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lord Kaphrael",
+          "id": "power-fist-lord-kaphrael-of-the-callous-blades",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "daemonettes",
@@ -981,7 +3403,165 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Alluress",
+          "models": 1,
+          "items": [
+            {
+              "id": "slashing-claws",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Daemonette",
+          "models": 9,
+          "items": [
+            {
+              "id": "slashing-claws",
+              "count": 9
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Alluress",
+          "items": [
+            {
+              "id": "slashing-claws",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Daemonette",
+          "items": [
+            {
+              "id": "slashing-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Alluress",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "slashing-claws",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Daemonette",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Daemonette",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "slashing-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Daemonette",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Daemonette",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Alluress",
+          "id": "slashing-claws",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Daemonette",
+          "id": "daemonic-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Daemonette",
+          "id": "instrument-of-chaos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Daemonette",
+          "id": "slashing-claws",
+          "input": "stepper",
+          "default": 9
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "fiends",
@@ -1047,6 +3627,96 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
+    },
+    "loadout": {
+      "stock": [
+        {
+          "model": "Blissbringer",
+          "models": 1,
+          "items": [
+            {
+              "id": "barbed-tail-and-dissecting-claws",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Fiend",
+          "models": 2,
+          "items": [
+            {
+              "id": "barbed-tail-and-dissecting-claws",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Blissbringer",
+          "items": [
+            {
+              "id": "barbed-tail-and-dissecting-claws",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Fiend",
+          "items": [
+            {
+              "id": "barbed-tail-and-dissecting-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Blissbringer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "barbed-tail-and-dissecting-claws",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Fiend",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "barbed-tail-and-dissecting-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Blissbringer",
+          "id": "barbed-tail-and-dissecting-claws",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Fiend",
+          "id": "barbed-tail-and-dissecting-claws",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
     }
   },
   {
@@ -1115,6 +3785,200 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
+    },
+    "loadout": {
+      "stock": [
+        {
+          "model": "Heartseeker",
+          "models": 1,
+          "items": [
+            {
+              "id": "lashing-tongue",
+              "count": 1
+            },
+            {
+              "id": "slashing-claws",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Seeker",
+          "models": 4,
+          "items": [
+            {
+              "id": "lashing-tongue",
+              "count": 4
+            },
+            {
+              "id": "slashing-claws",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Heartseeker",
+          "items": [
+            {
+              "id": "lashing-tongue",
+              "count": 1
+            },
+            {
+              "id": "slashing-claws",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Seeker",
+          "items": [
+            {
+              "id": "lashing-tongue",
+              "count": 1
+            },
+            {
+              "id": "slashing-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Heartseeker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lashing-tongue",
+                "count": 1
+              },
+              {
+                "id": "slashing-claws",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Seeker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Seeker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lashing-tongue",
+                "count": 1
+              },
+              {
+                "id": "slashing-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Seeker",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Seeker",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Heartseeker",
+          "id": "lashing-tongue",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Heartseeker",
+          "id": "slashing-claws",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Seeker",
+          "id": "daemonic-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Seeker",
+          "id": "instrument-of-chaos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Seeker",
+          "id": "lashing-tongue",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Seeker",
+          "id": "slashing-claws",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
     }
   },
   {
@@ -1151,7 +4015,112 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Shalaxi Helbane",
+          "models": 1,
+          "items": [
+            {
+              "id": "lash-of-slaanesh",
+              "count": 1
+            },
+            {
+              "id": "pavane-of-slaanesh",
+              "count": 1
+            },
+            {
+              "id": "snapping-claws",
+              "count": 1
+            },
+            {
+              "id": "soulpiercer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Shalaxi Helbane",
+          "items": [
+            {
+              "id": "lash-of-slaanesh",
+              "count": 1
+            },
+            {
+              "id": "pavane-of-slaanesh",
+              "count": 1
+            },
+            {
+              "id": "snapping-claws",
+              "count": 1
+            },
+            {
+              "id": "soulpiercer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Shalaxi Helbane",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lash-of-slaanesh",
+                "count": 1
+              },
+              {
+                "id": "pavane-of-slaanesh",
+                "count": 1
+              },
+              {
+                "id": "snapping-claws",
+                "count": 1
+              },
+              {
+                "id": "soulpiercer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Shalaxi Helbane",
+          "id": "lash-of-slaanesh",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Shalaxi Helbane",
+          "id": "pavane-of-slaanesh",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Shalaxi Helbane",
+          "id": "snapping-claws",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Shalaxi Helbane",
+          "id": "soulpiercer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "keeper-of-secrets",
@@ -1186,7 +4155,139 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Keeper of Secrets",
+          "models": 1,
+          "items": [
+            {
+              "id": "phantasmagoria",
+              "count": 1
+            },
+            {
+              "id": "snapping-claws",
+              "count": 1
+            },
+            {
+              "id": "witstealer-sword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Keeper of Secrets",
+          "items": [
+            {
+              "id": "phantasmagoria",
+              "count": 1
+            },
+            {
+              "id": "snapping-claws",
+              "count": 1
+            },
+            {
+              "id": "witstealer-sword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Keeper of Secrets",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "living-whip",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ritual-knife",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shining-aegis",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Keeper of Secrets",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "phantasmagoria",
+                "count": 1
+              },
+              {
+                "id": "snapping-claws",
+                "count": 1
+              },
+              {
+                "id": "witstealer-sword",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Keeper of Secrets",
+          "id": "living-whip",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Keeper of Secrets",
+          "id": "phantasmagoria",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Keeper of Secrets",
+          "id": "ritual-knife",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Keeper of Secrets",
+          "id": "shining-aegis",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Keeper of Secrets",
+          "id": "snapping-claws",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Keeper of Secrets",
+          "id": "witstealer-sword",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "defiler",
@@ -1225,6 +4326,331 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Defiler",
+          "models": 1,
+          "items": [
+            {
+              "id": "excruciator-cannon",
+              "count": 2
+            },
+            {
+              "id": "hades-battle-cannon",
+              "count": 1
+            },
+            {
+              "id": "heavy-baleflamer",
+              "count": 1
+            },
+            {
+              "id": "heavy-missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "shearing-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Defiler",
+          "items": [
+            {
+              "id": "excruciator-cannon",
+              "count": 2
+            },
+            {
+              "id": "hades-battle-cannon",
+              "count": 1
+            },
+            {
+              "id": "heavy-baleflamer",
+              "count": 1
+            },
+            {
+              "id": "heavy-missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "shearing-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Defiler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ectoplasma-destructor",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-battle-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Defiler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "electroscourge",
+                "count": 1
+              },
+              {
+                "id": "hades-lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "electroscourge",
+                "count": 1
+              },
+              {
+                "id": "heavy-baleflamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "electroscourge",
+                "count": 1
+              },
+              {
+                "id": "heavy-missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "electroscourge",
+                "count": 1
+              },
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-lascannon",
+                "count": 1
+              },
+              {
+                "id": "heavy-baleflamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-lascannon",
+                "count": 1
+              },
+              {
+                "id": "heavy-missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-lascannon",
+                "count": 1
+              },
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-lascannon",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "heavy-baleflamer",
+                "count": 1
+              },
+              {
+                "id": "heavy-missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-baleflamer",
+                "count": 1
+              },
+              {
+                "id": "heavy-missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-baleflamer",
+                "count": 1
+              },
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Defiler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "excruciator-cannon",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "magma-cutters-defiler",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Defiler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "shearing-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Defiler",
+          "id": "ectoplasma-destructor",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "electroscourge",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "electroscourge",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "excruciator-cannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Defiler",
+          "id": "hades-battle-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Defiler",
+          "id": "hades-lascannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "hades-lascannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "heavy-baleflamer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Defiler",
+          "id": "heavy-missile-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Defiler",
+          "id": "heavy-reaper-autocannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "heavy-reaper-autocannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "magma-cutters-defiler",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "shearing-claws",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

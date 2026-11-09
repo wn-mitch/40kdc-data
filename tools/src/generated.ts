@@ -1007,6 +1007,16 @@ export type AbilityDSLCondition10 = SimpleCondition | CompoundCondition;
  */
 export type GameModes3 = [GameModeId, ...GameModeId[]];
 /**
+ * A multiset of items: each repo weapon or wargear id with its copy count.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "items".
+ */
+export type Items = {
+  id: EntityId;
+  count: number;
+}[];
+/**
  * Game modes this unit composition is legal or authored for; absent implies matched-play.
  *
  * @minItems 1
@@ -7866,6 +7876,14 @@ export interface TerrainTemplate {
   game_version: GameVersionReference;
 }
 /**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "model-items".
+ */
+export interface ModelItems {
+  model: string;
+  items: Items;
+}
+/**
  * Describes the internal model-type breakdown of a unit.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -8143,6 +8161,115 @@ export interface UnitComposition {
       ];
     }[]
   ];
+  /**
+   * The unit's wargear rules in the structure of GW's Munitorum Field Manual data, keyed by repo item ids and model names; a name several rows of `models` share is written `name#k` for the k-th of them. Each model makes `picks` choices from every slot on its model row (or takes its alternate slot instead of all of them); limits cap the unit's choices; uniform sets make every model on a row carry the same main option. Absent for units the MFM does not cover.
+   */
+  loadout?: {
+    /**
+     * The default unit: for each model row, its model count and the unit-wide copies of each item. A row without `model` holds wargear the unit takes once.
+     */
+    stock: {
+      model?: string;
+      models: number;
+      items: Items;
+    }[];
+    /**
+     * What one model of a row carries when added beyond the default unit.
+     */
+    templates: ModelItems[];
+    /**
+     * Per-model choice menus. A model's wargear is the union of its picks across its row's slots.
+     */
+    slots: {
+      /**
+       * The model row the slot belongs to; absent for a slot the unit fills once.
+       */
+      model?: string;
+      /**
+       * Choices each model makes from this slot.
+       */
+      picks: number;
+      /**
+       * Whether one choice can be picked more than once.
+       */
+      repeats: boolean;
+      /**
+       * A model takes this slot instead of every non-alternate slot on its row.
+       */
+      alternate: boolean;
+      /**
+       * @minItems 1
+       */
+      choices: [Items, ...Items[]];
+    }[];
+    /**
+     * Caps on how many of a set of choices the unit may take, counted on the unit's item copies.
+     */
+    limits: {
+      /**
+       * The model row whose copies count; absent to count the whole unit's.
+       */
+      model?: string;
+      /**
+       * The cap is the `choices` of the breakpoint with the largest `models` at or below the unit's model count, or 0 when none is.
+       *
+       * @minItems 1
+       */
+      breakpoints: [
+        {
+          models: number;
+          choices: number;
+          /**
+           * How many times one choice may be taken; absent for no limit.
+           */
+          per_choice?: number;
+        },
+        ...{
+          models: number;
+          choices: number;
+          /**
+           * How many times one choice may be taken; absent for no limit.
+           */
+          per_choice?: number;
+        }[]
+      ];
+      /**
+       * @minItems 1
+       */
+      choices: [Items, ...Items[]];
+    }[];
+    /**
+     * The app's wargear widgets: one entry per option it shows on a model row (or for the unit, when `model` is absent), with the item the option adds, its input and its default copies. A checkbox is taken at most once, so a row whose every option for an item is a checkbox carries at most that many copies of it (or its stock copies, when more). A row the default unit has at most one model of, whose stock options are all checkboxes, shows its widgets per model, so its caps scale with its model count.
+     */
+    options: {
+      model?: string;
+      id: EntityId;
+      input: "checkbox" | "stepper";
+      /**
+       * Copies of the item the default unit's row takes through this option.
+       */
+      default: number;
+    }[];
+    /**
+     * Every model on the row (or in the unit, when `model` is absent) that takes no substitute carries the same main option.
+     */
+    uniform: {
+      model?: string;
+      /**
+       * @minItems 1
+       */
+      choices: [
+        {
+          items: Items;
+          substitute: boolean;
+        },
+        ...{
+          items: Items;
+          substitute: boolean;
+        }[]
+      ];
+    }[];
+  };
   game_version: GameVersionReference;
   game_modes?: GameModes4;
 }
