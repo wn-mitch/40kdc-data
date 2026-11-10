@@ -73,6 +73,10 @@ export type {
   CompletedLoadout,
 } from "./loadout.js";
 
+// Wargear legality against a unit's MFM loadout rules (unit-composition `loadout`).
+export { checkMfmLoadout, defaultMfmLoadout } from "./mfm-loadout.js";
+export type { MfmItem, MfmLoadoutRules, MfmLoadoutViolation } from "./mfm-loadout.js";
+
 // Unit point-cost maths: ordinal-aware tier selection over `points` bands.
 export {
   baseUnitPoints,

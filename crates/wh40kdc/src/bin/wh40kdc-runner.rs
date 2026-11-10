@@ -458,6 +458,98 @@ fn handle_check_unit_legality(state: &mut RunnerState, args: &Value) -> Value {
     ok_value(Value::Array(encoded))
 }
 
+/// The op's unit, resolved as `check_unit_legality` resolves it, with its MFM
+/// loadout rules (None when the unit has none), or an error response.
+fn mfm_loadout_of(
+    state: &mut RunnerState,
+    op: &str,
+    args: &Value,
+) -> Result<Option<wh40kdc::MfmLoadoutRules>, Value> {
+    let Some(unit_id) = args.get("unitId").and_then(Value::as_str) else {
+        return Err(err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": format!("{op}.unitId required") })),
+        ));
+    };
+    let ds = state.dataset();
+    let unit = match args.get("factionId").and_then(Value::as_str) {
+        Some(fid) => ds.units.get_in_faction(unit_id, fid),
+        None => ds.units.get_any(unit_id),
+    };
+    let Some(unit) = unit else {
+        return Err(err_value(
+            ErrorKind::UnknownEntity,
+            Some(json!({ "kind": "unit", "id": unit_id })),
+        ));
+    };
+    Ok(ds
+        .unit_composition_of(unit)
+        .and_then(|c| c.loadout.as_ref())
+        .map(wh40kdc::MfmLoadoutRules::from_loadout))
+}
+
+/// A wire object of non-negative integer counts, or None when it is not one.
+fn mfm_counts_arg(value: Option<&Value>) -> Option<std::collections::BTreeMap<String, i64>> {
+    let obj = value?.as_object()?;
+    let mut out = std::collections::BTreeMap::new();
+    for (key, n) in obj {
+        let n = match n {
+            Value::Number(n) => n
+                .as_i64()
+                .or_else(|| n.as_f64().filter(|f| f.fract() == 0.0).map(|f| f as i64))?,
+            _ => return None,
+        };
+        if n < 0 {
+            return None;
+        }
+        out.insert(key.clone(), n);
+    }
+    Some(out)
+}
+
+/// Wargear legality against the unit's MFM loadout — mirror of the TS
+/// `check_mfm_loadout` runner op. Returns `[{code, message}]`, or null when the
+/// unit has no loadout.
+fn handle_check_mfm_loadout(state: &mut RunnerState, args: &Value) -> Value {
+    let rules = match mfm_loadout_of(state, "check_mfm_loadout", args) {
+        Ok(rules) => rules,
+        Err(response) => return response,
+    };
+    let (Some(models), Some(counts)) = (
+        mfm_counts_arg(args.get("models")),
+        mfm_counts_arg(args.get("counts")),
+    ) else {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(
+                json!({ "detail": "check_mfm_loadout.models/counts must map ids to non-negative integers" }),
+            ),
+        );
+    };
+    let Some(rules) = rules else {
+        return ok_value(Value::Null);
+    };
+    let violations: Vec<Value> = wh40kdc::check_mfm_loadout(&rules, &models, &counts)
+        .into_iter()
+        .map(|v| json!({ "code": v.code, "message": v.message }))
+        .collect();
+    ok_value(Value::Array(violations))
+}
+
+/// The default unit of the unit's MFM loadout — mirror of the TS
+/// `default_mfm_loadout` runner op. Returns `{models, counts}`, or null.
+fn handle_default_mfm_loadout(state: &mut RunnerState, args: &Value) -> Value {
+    let rules = match mfm_loadout_of(state, "default_mfm_loadout", args) {
+        Ok(rules) => rules,
+        Err(response) => return response,
+    };
+    let Some(rules) = rules else {
+        return ok_value(Value::Null);
+    };
+    let (models, counts) = wh40kdc::default_mfm_loadout(&rules);
+    ok_value(json!({ "models": models, "counts": counts }))
+}
+
 /// Read a count argument that the protocol writes as a decimal string but that
 /// the TS/Python/Go runners also accept as a JSON number (`Number(...)`,
 /// `int(...)`, `asInt(...)`). Accepting both keeps the four runners
@@ -1797,6 +1889,8 @@ fn dispatch(state: &mut RunnerState, op: &str, args: &Value) -> Value {
         "linked_query" => handle_linked_query(state, args),
         "check_unit_legality" => handle_check_unit_legality(state, args),
         "check_roster_legality" => handle_check_roster_legality(state, args),
+        "check_mfm_loadout" => handle_check_mfm_loadout(state, args),
+        "default_mfm_loadout" => handle_default_mfm_loadout(state, args),
         "candidate_affordability" => handle_candidate_affordability(state, args),
         "validate" => handle_validate(args),
         "crunch" => handle_crunch(state, args),

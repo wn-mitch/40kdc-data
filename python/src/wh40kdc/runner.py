@@ -37,6 +37,7 @@ from wh40kdc.data.loadout import (
     maximal_loadout,
     weapon_bounds,
 )
+from wh40kdc.data.mfm_loadout import check_mfm_loadout, default_mfm_loadout
 from wh40kdc.data.normalize import normalize_name
 from wh40kdc.data.roster import validate_roster_core
 from wh40kdc.export import EXPORT_FORMATS, export_roster
@@ -262,6 +263,65 @@ def _handle_check_unit_legality(state: RunnerState, args: Any) -> Response:
         (comp or {}).get("tiers"),
     )
     return _ok(sorted(f"{v['code']}:{v['id']}" for v in violations))
+
+
+def _mfm_loadout_of(state: RunnerState, op: str, args: Any) -> tuple[Any, Response | None]:
+    """The unit's MFM loadout rules (None when uncovered), resolved like ``check_unit_legality``."""
+    if not isinstance(args, dict):
+        return None, _err("INVALID_INPUT", {"detail": f"{op} args must be an object"})
+    unit_id = args.get("unitId")
+    if not isinstance(unit_id, str):
+        return None, _err("INVALID_INPUT", {"detail": f"{op}.unitId required"})
+    faction_id = args.get("factionId")
+    ds = state.dataset()
+    u = (
+        ds.units.get_in_faction(unit_id, faction_id)
+        if isinstance(faction_id, str)
+        else ds.units.get_any(unit_id)
+    )
+    if u is None:
+        return None, _err("UNKNOWN_ENTITY", {"kind": "unit", "id": unit_id})
+    return (ds.unit_composition_of(u.raw) or {}).get("loadout"), None
+
+
+def _counts_arg(value: Any) -> dict[str, int] | None:
+    """A wire object of non-negative integer counts, or None when it is not one."""
+    if not isinstance(value, dict):
+        return None
+    out: dict[str, int] = {}
+    for key, n in value.items():
+        if isinstance(n, bool) or not isinstance(n, (int, float)) or n < 0 or int(n) != n:
+            return None
+        out[key] = int(n)
+    return out
+
+
+def _handle_check_mfm_loadout(state: RunnerState, args: Any) -> Response:
+    """Wargear legality against the unit's MFM loadout — mirror of the TS runner op."""
+    rules, error = _mfm_loadout_of(state, "check_mfm_loadout", args)
+    if error is not None:
+        return error
+    models = _counts_arg(args.get("models"))
+    counts = _counts_arg(args.get("counts"))
+    if models is None or counts is None:
+        return _err(
+            "INVALID_INPUT",
+            {"detail": "check_mfm_loadout.models/counts must map ids to non-negative integers"},
+        )
+    if rules is None:
+        return _ok(None)
+    return _ok(check_mfm_loadout(rules, models, counts))
+
+
+def _handle_default_mfm_loadout(state: RunnerState, args: Any) -> Response:
+    """The default unit of the unit's MFM loadout — mirror of the TS runner op."""
+    rules, error = _mfm_loadout_of(state, "default_mfm_loadout", args)
+    if error is not None:
+        return error
+    if rules is None:
+        return _ok(None)
+    models, counts = default_mfm_loadout(rules)
+    return _ok({"models": dict(sorted(models.items())), "counts": dict(sorted(counts.items()))})
 
 
 def _handle_check_roster_legality(state: RunnerState, args: Any) -> Response:
@@ -1002,6 +1062,10 @@ def dispatch(state: RunnerState, req: dict[str, Any]) -> Response:
         return _handle_check_unit_legality(state, args)
     if op == "check_roster_legality":
         return _handle_check_roster_legality(state, args)
+    if op == "check_mfm_loadout":
+        return _handle_check_mfm_loadout(state, args)
+    if op == "default_mfm_loadout":
+        return _handle_default_mfm_loadout(state, args)
     if op == "candidate_affordability":
         return _handle_candidate_affordability(state, args)
     if op == "validate":

@@ -92,6 +92,10 @@ pub use data::{
     LOADOUT_CANDIDATES_DEFAULT_LIMIT, LOADOUT_CANDIDATES_TRUNCATED,
 };
 
+// Wargear legality against a unit's MFM loadout rules (unit-composition `loadout`).
+#[cfg(feature = "bundled-data")]
+pub use data::{check_mfm_loadout, default_mfm_loadout, MfmLoadoutRules, MfmLoadoutViolation};
+
 // Roster-level legality + affordability primitives (need both the Dataset and
 // the importer's Roster/BattleSize types).
 #[cfg(feature = "import")]

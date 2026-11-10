@@ -78,6 +78,7 @@ import {
 } from "./gen-conformance-game-mode-cases.js";
 import { canonicalMortalSourceCases, canonicalUnitMortalSourceCases } from "./gen-conformance-mortal-cases.js";
 import { canonicalDefensiveLeverCases } from "./gen-conformance-defensive-levers.js";
+import { canonicalMfmLoadoutCases } from "./gen-conformance-mfm-loadout.js";
 import { canonicalDslCases, refreshResolverDslCases, withCanonicalDslCases, type ResolverDslCase } from "./gen-conformance-resolver-dsl.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -4568,6 +4569,16 @@ function genUnitMortalSourceCases(): void {
   console.log(`abilities-resolver/unit-mortal-sources.json: ${cases.length} cases`);
 }
 
+/** The mfm_loadout corpus: every lifted unit's default and checks of it, from the TS runner. */
+function genMfmLoadout(): void {
+  const specVersion = Number.parseInt(readFileSync(join(CONFORMANCE, "SPEC_VERSION"), "utf8").trim(), 10);
+  const { defaults, checks } = canonicalMfmLoadoutCases(Dataset.embedded(), specVersion);
+  mkdirSync(join(CONFORMANCE, "mfm_loadout"), { recursive: true });
+  writeJson(join(CONFORMANCE, "mfm_loadout", "defaults.json"), defaults);
+  writeJson(join(CONFORMANCE, "mfm_loadout", "checks.json"), checks);
+  console.log(`mfm_loadout: ${defaults.length} defaults, ${checks.length} checks`);
+}
+
 /** Append fabricated direct-API cases without duplicating their stable identities on regen. */
 function genCanonicalCruncherCases(): void {
   const appended = canonicalDslCases();
@@ -4603,3 +4614,4 @@ genScoring();
 genTerrainResolver();
 genTerrainKeystones();
 genShare();
+genMfmLoadout();

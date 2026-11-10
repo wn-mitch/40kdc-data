@@ -30,6 +30,7 @@ import {
   loadoutCandidates,
   weaponBounds,
 } from "./data/loadout.js";
+import { checkMfmLoadout, defaultMfmLoadout, type MfmLoadoutRules } from "./data/mfm-loadout.js";
 import { validateRosterCore, type NormRoster } from "./data/roster-resolve.js";
 import {
   candidateAffordability,
@@ -473,6 +474,75 @@ function handleCheckUnitLegality(
     composition?.tiers,
   );
   return ok(violations.map((v) => `${v.code}:${v.id}`).sort());
+}
+
+/** The unit's MFM loadout rules, resolved as `check_unit_legality` resolves its unit. */
+function mfmLoadoutOf(
+  state: RunnerState,
+  op: string,
+  args: unknown,
+): { rules: MfmLoadoutRules | null; args: Record<string, unknown> } | RunnerResponse {
+  if (typeof args !== "object" || args === null) {
+    return err("INVALID_INPUT", { detail: `${op} args must be an object` });
+  }
+  const a = args as Record<string, unknown>;
+  if (typeof a.unitId !== "string") {
+    return err("INVALID_INPUT", { detail: `${op}.unitId required` });
+  }
+  const ds = getDataset(state);
+  const unit =
+    typeof a.factionId === "string"
+      ? ds.units.getInFaction(a.unitId, a.factionId)
+      : ds.units.getAny(a.unitId);
+  if (!unit) return err("UNKNOWN_ENTITY", { kind: "unit", id: a.unitId });
+  const composition = ds.unitCompositionOf(unit.raw) as { loadout?: MfmLoadoutRules } | undefined;
+  return { rules: composition?.loadout ?? null, args: a };
+}
+
+/** A wire object of non-negative integer counts, or null when it is not one. */
+function countsArg(value: unknown): Map<string, number> | null {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return null;
+  const out = new Map<string, number>();
+  for (const [key, n] of Object.entries(value)) {
+    if (typeof n !== "number" || !Number.isInteger(n) || n < 0) return null;
+    out.set(key, n);
+  }
+  return out;
+}
+
+/** A map as a wire object with its keys in code-unit order. */
+const sortedObject = (map: ReadonlyMap<string, number>): Record<string, number> =>
+  Object.fromEntries([...map].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
+
+/**
+ * Wargear legality against the unit's MFM loadout — the cross-impl pin for
+ * {@link checkMfmLoadout}. Args: `{ unitId, factionId?, models, counts }`, where `models` maps
+ * a loadout model row to its model count and `counts` maps item id to copies. Returns the
+ * violations as `{ code, message }` in the checker's order, or null when the unit has no loadout.
+ */
+function handleCheckMfmLoadout(state: RunnerState, args: unknown): RunnerResponse {
+  const resolved = mfmLoadoutOf(state, "check_mfm_loadout", args);
+  if (!("rules" in resolved)) return resolved;
+  const models = countsArg(resolved.args.models);
+  const counts = countsArg(resolved.args.counts);
+  if (!models || !counts) {
+    return err("INVALID_INPUT", { detail: "check_mfm_loadout.models/counts must map ids to non-negative integers" });
+  }
+  if (!resolved.rules) return ok(null);
+  return ok(checkMfmLoadout(resolved.rules, models, counts).map(({ code, message }) => ({ code, message })));
+}
+
+/**
+ * The default unit of the unit's MFM loadout — the cross-impl pin for {@link defaultMfmLoadout}.
+ * Args: `{ unitId, factionId? }`. Returns `{ models, counts }` with keys in code-unit order, or
+ * null when the unit has no loadout.
+ */
+function handleDefaultMfmLoadout(state: RunnerState, args: unknown): RunnerResponse {
+  const resolved = mfmLoadoutOf(state, "default_mfm_loadout", args);
+  if (!("rules" in resolved)) return resolved;
+  if (!resolved.rules) return ok(null);
+  const { models, counts } = defaultMfmLoadout(resolved.rules);
+  return ok({ models: sortedObject(models), counts: sortedObject(counts) });
 }
 
 /**
@@ -1619,6 +1689,10 @@ export function dispatch(
       return handleCheckUnitLegality(state, req.args);
     case "check_roster_legality":
       return handleCheckRosterLegality(state, req.args);
+    case "check_mfm_loadout":
+      return handleCheckMfmLoadout(state, req.args);
+    case "default_mfm_loadout":
+      return handleDefaultMfmLoadout(state, req.args);
     case "candidate_affordability":
       return handleCandidateAffordability(state, req.args);
     case "validate":

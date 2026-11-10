@@ -246,6 +246,20 @@ func (ds *Dataset) unitCompositionOf(unit map[string]any) (models, tiers []any) 
 	return nil, nil
 }
 
+// unitLoadoutOf returns the unit's faction-scoped composition `loadout`
+// object, or nil when the composition (or its loadout) is absent.
+func (ds *Dataset) unitLoadoutOf(unit map[string]any) any {
+	fid := getStr(unit, "faction_id")
+	uid := getStr(unit, "id")
+	for _, cAny := range ds.allUnitCompositions {
+		c, _ := asMap(cAny)
+		if getStr(c, "unit_id") == uid && getStr(c, "faction_id") == fid {
+			return c["loadout"]
+		}
+	}
+	return nil
+}
+
 // alliesFor returns allied-rules offered for an army of factionID running the
 // given detachments.
 func (ds *Dataset) alliesFor(factionID string, detachmentIDs []string) []any {

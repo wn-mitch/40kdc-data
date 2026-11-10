@@ -30,6 +30,7 @@ mod dataset;
 mod defensive;
 pub mod game_mode;
 mod loadout;
+mod mfm_loadout;
 #[cfg(feature = "cruncher")]
 mod mortals;
 mod normalize;
@@ -66,6 +67,11 @@ pub use loadout::{
     validate_loadout, weapon_bounds, CompletedLoadout, Loadout, LoadoutGroup, LoadoutGroupWeapon,
     LoadoutModel, LoadoutTier, Violation, ViolationCode, WeaponBound,
     LOADOUT_CANDIDATES_DEFAULT_LIMIT, LOADOUT_CANDIDATES_TRUNCATED,
+};
+pub use mfm_loadout::{
+    check_mfm_loadout, default_mfm_loadout, MfmBreakpoint, MfmItem, MfmLimit, MfmLoadoutRules,
+    MfmLoadoutViolation, MfmOption, MfmSlot, MfmStockRow, MfmTemplate, MfmUniform,
+    MfmUniformChoice,
 };
 #[cfg(feature = "cruncher")]
 pub use mortals::{AbilityMortalWounds, AbilityUnsupported, MortalWoundSources};

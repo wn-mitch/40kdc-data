@@ -48,6 +48,97 @@ func (s *RunnerState) handleCheckUnitLegality(args any) map[string]any {
 	return okResp(toAnyList(strs))
 }
 
+// mfmLoadoutOf resolves the op's unit as check_unit_legality does and returns
+// its MFM loadout rules (nil when the unit has none), or an error response.
+func (s *RunnerState) mfmLoadoutOf(op string, args any) (map[string]any, *MfmLoadoutRules, map[string]any) {
+	a, ok := asMap(args)
+	if !ok {
+		return nil, nil, errResp("INVALID_INPUT", detail(op+" args must be an object"))
+	}
+	unitID, ok := a["unitId"].(string)
+	if !ok {
+		return nil, nil, errResp("INVALID_INPUT", detail(op+".unitId required"))
+	}
+	ds := s.dataset()
+	var u *UnitView
+	if fid, ok := a["factionId"].(string); ok {
+		if uv, found := ds.Units.GetInFaction(unitID, fid); found {
+			u = uv
+		}
+	} else if uv, found := ds.Units.GetAny(unitID); found {
+		u = uv
+	}
+	if u == nil {
+		return nil, nil, errResp("UNKNOWN_ENTITY", map[string]any{"kind": "unit", "id": unitID})
+	}
+	rules, err := decodeMfmLoadout(ds.unitLoadoutOf(u.Raw))
+	if err != nil {
+		return nil, nil, errResp("INVALID_INPUT", detail(op+": malformed loadout: "+err.Error()))
+	}
+	return a, rules, nil
+}
+
+// mfmCountsArg reads a wire object of non-negative integer counts.
+func mfmCountsArg(v any) (map[string]int, bool) {
+	m, ok := asMap(v)
+	if !ok {
+		return nil, false
+	}
+	out := map[string]int{}
+	for k, raw := range m {
+		n, ok := raw.(float64)
+		if !ok || n < 0 || n != float64(int(n)) {
+			return nil, false
+		}
+		out[k] = int(n)
+	}
+	return out, true
+}
+
+// handleCheckMfmLoadout is wargear legality against the unit's MFM loadout —
+// mirror of the TS runner op. Returns [{code, message}], or null when the unit
+// has no loadout.
+func (s *RunnerState) handleCheckMfmLoadout(args any) map[string]any {
+	a, rules, fail := s.mfmLoadoutOf("check_mfm_loadout", args)
+	if fail != nil {
+		return fail
+	}
+	models, okModels := mfmCountsArg(a["models"])
+	counts, okCounts := mfmCountsArg(a["counts"])
+	if !okModels || !okCounts {
+		return errResp("INVALID_INPUT", detail("check_mfm_loadout.models/counts must map ids to non-negative integers"))
+	}
+	if rules == nil {
+		return okResp(nil)
+	}
+	out := []any{}
+	for _, v := range CheckMfmLoadout(rules, models, counts) {
+		out = append(out, map[string]any{"code": v.Code, "message": v.Message})
+	}
+	return okResp(out)
+}
+
+// handleDefaultMfmLoadout is the default unit of the unit's MFM loadout —
+// mirror of the TS runner op. Returns {models, counts}, or null.
+func (s *RunnerState) handleDefaultMfmLoadout(args any) map[string]any {
+	_, rules, fail := s.mfmLoadoutOf("default_mfm_loadout", args)
+	if fail != nil {
+		return fail
+	}
+	if rules == nil {
+		return okResp(nil)
+	}
+	models, counts := DefaultMfmLoadout(rules)
+	wire := func(m map[string]int) map[string]any {
+		out := map[string]any{}
+		for k, n := range m {
+			out[k] = float64(n)
+		}
+		return out
+	}
+	return okResp(map[string]any{"models": wire(models), "counts": wire(counts)})
+}
+
 // handleCheckRosterLegality is the whole-army legality op — mirror of the TS
 // runner op. Builds a normRoster from the compact spec, runs validateRosterCore,
 // and returns the sorted union of per-unit loadout and army violations as

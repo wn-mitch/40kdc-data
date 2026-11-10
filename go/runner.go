@@ -116,6 +116,10 @@ func (s *RunnerState) Dispatch(req map[string]any) map[string]any {
 		return s.handleCheckUnitLegality(args)
 	case "check_roster_legality":
 		return s.handleCheckRosterLegality(args)
+	case "check_mfm_loadout":
+		return s.handleCheckMfmLoadout(args)
+	case "default_mfm_loadout":
+		return s.handleDefaultMfmLoadout(args)
 	case "candidate_affordability":
 		return s.handleCandidateAffordability(args)
 	case "validate":

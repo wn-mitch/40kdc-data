@@ -1104,6 +1104,35 @@ describe("roster-legality conformance corpus", () => {
   }
 });
 
+// MFM-loadout conformance — pins the default unit and wargear legality under each unit's MFM
+// loadout rules (`default_mfm_loadout`, `check_mfm_loadout`). The Rust/Python/Go ports assert
+// against the same corpus.
+describe("mfm-loadout conformance corpus", () => {
+  const specVersion = Number.parseInt(readFileSync(join(CONFORMANCE, "SPEC_VERSION"), "utf8").trim(), 10);
+  const state = createRunnerState();
+  dispatch(state, { op: "init", args: { spec_version: specVersion, locale: "C", tz: "UTC", seed: 0 } });
+  for (const [file, op] of [["defaults.json", "default_mfm_loadout"], ["checks.json", "check_mfm_loadout"]] as const) {
+    const cases = readJson(join(CONFORMANCE, "mfm_loadout", file)) as RosterLegalityCase[];
+    it(`mfm_loadout/${file} is non-empty`, () => {
+      expect(cases.length).toBeGreaterThan(0);
+    });
+    it(`mfm_loadout/${file} matches the runner`, () => {
+      for (const c of cases) {
+        const res = dispatch(state, { op, args: c.args });
+        expect(res.ok, `${c.name}: ${op} errored: ${JSON.stringify(res)}`).toBe(true);
+        if (res.ok) expect(res.value, c.name).toEqual(c.expected);
+      }
+    });
+  }
+  it("refuses a fractional or negative count rather than truncating it", () => {
+    for (const n of [1.5, -1]) {
+      const args = { unitId: "deff-dread", factionId: "orks", models: {}, counts: { "dread-klaw": n } };
+      const res = dispatch(state, { op: "check_mfm_loadout", args });
+      expect(res.ok ? null : res.error_kind).toBe("INVALID_INPUT");
+    }
+  });
+});
+
 // Roster-validation conformance — pins the whole-army legality check
 // (`check_roster_legality`): the nine army-construction dimensions plus the
 // per-unit loadout codes, output as sorted `"<scope>|<severity>|<code>:<id>"`

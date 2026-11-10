@@ -140,6 +140,22 @@ Ordering semantics for each query are documented per-area in `CONFORMANCE.md`. T
 
 Tier-aware whole-unit loadout legality (the `roster_legality` corpus). `unitId` is resolved in `factionId` when supplied (shared chassis diverge per faction), else first-wins; the unit's faction-scoped composition supplies the `models` envelope and the discrete `tiers`. `counts` maps weapon/wargear id → count. The response `value` is the violation list as **sorted `"code:id"` strings** (codes: `exceeds-max`, `below-min`, `swap-conflict`, `exceeds-allowance`, `invalid-model-count`); an empty array means legal.
 
+### `check_mfm_loadout`
+
+```json
+{"op":"check_mfm_loadout","args":{"unitId":"paladin-squad","factionId":"grey-knights","models":{"Paladin":4,"Paragon":1},"counts":{"nemesis-force-weapon-paladin-squad":5,"storm-bolter-paladin-squad":3,"psycannon":2}}}
+```
+
+Wargear legality against the unit's MFM loadout rules (the `mfm_loadout` corpus). `unitId` resolves as for `check_unit_legality`; the unit's faction-scoped composition supplies `loadout`. `models` maps a loadout model row (a name several rows share is `name#k`) to its model count; `counts` maps item id to copies. Both must map to non-negative integers, else `INVALID_INPUT`. The response `value` is the violation list as `{code, message}` objects in the checker's order (codes: `unknown-item`, `no-assignment`, `too-many-options`); an empty array means legal, and `null` means the unit has no `loadout`.
+
+### `default_mfm_loadout`
+
+```json
+{"op":"default_mfm_loadout","args":{"unitId":"paladin-squad","factionId":"grey-knights"}}
+```
+
+The default unit of the unit's MFM loadout: `{models, counts}`, each an object of non-negative integers, or `null` when the unit has no `loadout`.
+
 ### `check_roster_legality`
 
 ```json
