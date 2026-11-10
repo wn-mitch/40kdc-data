@@ -69,9 +69,13 @@ pub use loadout::{
     LOADOUT_CANDIDATES_DEFAULT_LIMIT, LOADOUT_CANDIDATES_TRUNCATED,
 };
 pub use mfm_loadout::{
-    check_mfm_loadout, default_mfm_loadout, MfmBreakpoint, MfmItem, MfmLimit, MfmLoadoutRules,
-    MfmLoadoutViolation, MfmOption, MfmSlot, MfmStockRow, MfmTemplate, MfmUniform,
-    MfmUniformChoice,
+    check_mfm_loadout, default_mfm_loadout, encode_mfm_configuration, mfm_assignment,
+    mfm_base_loadout, mfm_configurations, mfm_resized_default, mfm_rows, mfm_scaled_default,
+    mfm_unit_assignment, mfm_unit_base_loadout, mfm_unit_bounds, mfm_unit_candidates,
+    mfm_unit_violations, mfm_weapon_bounds, MfmBaseLoadout, MfmBound, MfmBreakpoint,
+    MfmComposition, MfmConfiguration, MfmItem, MfmLimit, MfmLoadoutRules, MfmLoadoutViolation,
+    MfmModelRange, MfmOption, MfmRowBundle, MfmSearchTooLarge, MfmSlot, MfmStockRow, MfmTemplate,
+    MfmUniform, MfmUniformChoice, MAX_SEARCH_BUNDLES, MFM_CANDIDATES_TRUNCATED,
 };
 #[cfg(feature = "cruncher")]
 pub use mortals::{AbilityMortalWounds, AbilityUnsupported, MortalWoundSources};

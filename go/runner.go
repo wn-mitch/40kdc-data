@@ -120,6 +120,12 @@ func (s *RunnerState) Dispatch(req map[string]any) map[string]any {
 		return s.handleCheckMfmLoadout(args)
 	case "default_mfm_loadout":
 		return s.handleDefaultMfmLoadout(args)
+	case "mfm_unit":
+		return s.handleMfmUnit(args)
+	case "mfm_assignment":
+		return s.handleMfmAssignment(args)
+	case "check_mfm_unit":
+		return s.handleCheckMfmUnit(args)
 	case "candidate_affordability":
 		return s.handleCandidateAffordability(args)
 	case "validate":

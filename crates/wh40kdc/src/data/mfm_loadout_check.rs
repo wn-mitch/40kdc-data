@@ -4,7 +4,7 @@ use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 
 use super::{
     add, checkbox_caps, contains, copies_of, get, limit_holds, pick_combinations, row_bundles,
-    slot_choices, Copies, MfmItem, MfmLoadoutRules, MfmLoadoutViolation, MAX_BUNDLES,
+    slot_choices, Copies, MfmItem, MfmLoadoutRules, MfmLoadoutViolation, MfmUniform, MAX_BUNDLES,
 };
 
 fn violation(code: &'static str, message: impl Into<String>) -> Vec<MfmLoadoutViolation> {
@@ -44,7 +44,12 @@ pub fn check_mfm_loadout(
 
     let mut bundles_by_row: HashMap<&str, Vec<Copies>> = HashMap::new();
     for row in &rows {
-        let Some(bundles) = row_bundles(rules, row, counts) else {
+        let fits = |bundle: &Copies| {
+            bundle
+                .iter()
+                .all(|(id, n)| *n <= counts.get(id).copied().unwrap_or(0))
+        };
+        let Some(bundles) = row_bundles(rules, row, &fits, MAX_BUNDLES) else {
             return violation(
                 "too-many-options",
                 format!("{row}: more than {MAX_BUNDLES} wargear combinations to search"),
@@ -57,30 +62,7 @@ pub fn check_mfm_loadout(
         .iter()
         .map(|row| (*row, checkbox_caps(rules, Some(row), model_count(row))))
         .collect();
-    let unit_stock_items: Vec<MfmItem> = rules
-        .stock
-        .iter()
-        .filter(|row| row.model.is_none())
-        .flat_map(|row| row.items.iter().cloned())
-        .collect();
-    let unit_stock = copies_of(&unit_stock_items);
-    let mut unit_picks: Vec<Copies> = vec![Copies::new()];
-    for slot in rules.slots.iter().filter(|slot| slot.model.is_none()) {
-        let picks = pick_combinations(
-            &slot_choices(&slot.choices, &unit_stock),
-            slot.picks,
-            slot.repeats,
-        );
-        let mut next = Vec::new();
-        for acc in &unit_picks {
-            for pick in &picks {
-                let mut merged = acc.clone();
-                add(&mut merged, pick, 1);
-                next.push(merged);
-            }
-        }
-        unit_picks = next;
-    }
+    let unit_picks = unit_picks_of(rules);
 
     let mut reachable: HashSet<&str> = HashSet::new();
     for bundle in bundles_by_row.values().flatten().chain(&unit_picks) {
@@ -154,54 +136,7 @@ pub fn check_mfm_loadout(
         out
     };
 
-    // A uniform set's main option, fixed per attempt: a model in its scope that
-    // takes another main option without a substitute is excluded.
-    let uniform_mains: Vec<Vec<&[MfmItem]>> = rules
-        .uniform
-        .iter()
-        .map(|set| {
-            set.choices
-                .iter()
-                .filter(|choice| !choice.substitute && !choice.items.is_empty())
-                .map(|choice| choice.items.as_slice())
-                .collect()
-        })
-        .collect();
-    let mut attempts: Vec<Vec<usize>> = vec![Vec::new()];
-    for mains in &uniform_mains {
-        attempts = attempts
-            .iter()
-            .flat_map(|attempt| {
-                (0..mains.len().max(1)).map(move |k| {
-                    let mut next = attempt.clone();
-                    next.push(k);
-                    next
-                })
-            })
-            .collect();
-    }
-    let bundle_allowed = |row: &str, bundle: &Copies, attempt: &[usize]| {
-        rules.uniform.iter().enumerate().all(|(s, set)| {
-            if set.model.as_deref().is_some_and(|model| model != row) {
-                return true;
-            }
-            let mains = &uniform_mains[s];
-            if mains.is_empty() {
-                return true;
-            }
-            if set
-                .choices
-                .iter()
-                .any(|choice| choice.substitute && contains(bundle, &choice.items))
-            {
-                return true;
-            }
-            mains
-                .iter()
-                .enumerate()
-                .all(|(k, main)| k == attempt[s] || !contains(bundle, main))
-        })
-    };
+    let attempts = uniform_attempts(rules);
     let row_accepts = |row: &str, totals: &[i64]| -> bool {
         let held = |id: &str| index_of.get(id).map_or(0, |i| totals[*i]);
         if row_caps[row].iter().any(|(id, cap)| held(id) > *cap) {
@@ -218,7 +153,7 @@ pub fn check_mfm_loadout(
                     .filter(|(_, n)| **n > 0)
                     .map(|(i, n)| (ids[i].to_string(), *n))
                     .collect();
-                limit_holds(limit, unit_models, &copies, &baseline_of(Some(row)))
+                limit_holds(limit, unit_models, &copies, &baseline_of(Some(row)), false)
             })
     };
 
@@ -230,7 +165,7 @@ pub fn check_mfm_loadout(
             .map(|row| {
                 let vectors = bundles_by_row[row]
                     .iter()
-                    .filter(|bundle| bundle_allowed(row, bundle, attempt))
+                    .filter(|bundle| uniform_allows(rules, row, bundle, attempt))
                     .map(|bundle| vector(&mut bundle.iter()))
                     .collect();
                 (*row, vectors)
@@ -248,7 +183,7 @@ pub fn check_mfm_loadout(
             // A unit-wide limit counts the unit's copies, which the counts fix.
             let unit_limits_hold = rules.limits.iter().all(|limit| {
                 limit.model.is_some()
-                    || limit_holds(limit, unit_models, &all_counts, &baseline_of(None))
+                    || limit_holds(limit, unit_models, &all_counts, &baseline_of(None), false)
             });
             if !unit_limits_hold {
                 continue;
@@ -262,6 +197,94 @@ pub fn check_mfm_loadout(
         "no-assignment",
         "no assignment of wargear choices to models gives these counts within the unit's limits",
     )
+}
+
+/// The unit's own picks: one pick combination per slot without a row, multiplied out.
+pub(super) fn unit_picks_of(rules: &MfmLoadoutRules) -> Vec<Copies> {
+    let unit_stock_items: Vec<MfmItem> = rules
+        .stock
+        .iter()
+        .filter(|row| row.model.is_none())
+        .flat_map(|row| row.items.iter().cloned())
+        .collect();
+    let unit_stock = copies_of(&unit_stock_items);
+    let mut unit_picks: Vec<Copies> = vec![Copies::new()];
+    for slot in rules.slots.iter().filter(|slot| slot.model.is_none()) {
+        let picks = pick_combinations(
+            &slot_choices(&slot.choices, &unit_stock),
+            slot.picks,
+            slot.repeats,
+        );
+        let mut next = Vec::new();
+        for acc in &unit_picks {
+            for pick in &picks {
+                let mut merged = acc.clone();
+                add(&mut merged, pick, 1);
+                next.push(merged);
+            }
+        }
+        unit_picks = next;
+    }
+    unit_picks
+}
+
+/// A uniform set's main options: its choices that are not substitutes and carry an item.
+fn uniform_mains(set: &MfmUniform) -> Vec<&[MfmItem]> {
+    set.choices
+        .iter()
+        .filter(|choice| !choice.substitute && !choice.items.is_empty())
+        .map(|choice| choice.items.as_slice())
+        .collect()
+}
+
+/// Every way to fix each uniform set's main option: one index per set into its main options.
+pub(super) fn uniform_attempts(rules: &MfmLoadoutRules) -> Vec<Vec<usize>> {
+    let mut attempts: Vec<Vec<usize>> = vec![Vec::new()];
+    for set in &rules.uniform {
+        let mains = uniform_mains(set).len();
+        attempts = attempts
+            .iter()
+            .flat_map(|attempt| {
+                (0..mains.max(1)).map(move |k| {
+                    let mut next = attempt.clone();
+                    next.push(k);
+                    next
+                })
+            })
+            .collect();
+    }
+    attempts
+}
+
+/// Whether a model of `row` may carry `bundle` when each uniform set's main
+/// option is the one `attempt` fixes: a model in a set's scope that takes
+/// another main option without a substitute is excluded.
+pub(super) fn uniform_allows(
+    rules: &MfmLoadoutRules,
+    row: &str,
+    bundle: &Copies,
+    attempt: &[usize],
+) -> bool {
+    rules.uniform.iter().enumerate().all(|(s, set)| {
+        if set.model.as_deref().is_some_and(|model| model != row) {
+            return true;
+        }
+        let mains = uniform_mains(set);
+        if mains.is_empty() {
+            return true;
+        }
+        if set
+            .choices
+            .iter()
+            .any(|choice| choice.substitute && contains(bundle, &choice.items))
+        {
+            return true;
+        }
+        mains
+            .iter()
+            .enumerate()
+            .all(|(k, main)| k == attempt[s] || !contains(bundle, main))
+    })
 }
 
 /// The state of one search for per-row bundle counts.

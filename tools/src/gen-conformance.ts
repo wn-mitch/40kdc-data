@@ -79,6 +79,7 @@ import {
 import { canonicalMortalSourceCases, canonicalUnitMortalSourceCases } from "./gen-conformance-mortal-cases.js";
 import { canonicalDefensiveLeverCases } from "./gen-conformance-defensive-levers.js";
 import { canonicalMfmLoadoutCases } from "./gen-conformance-mfm-loadout.js";
+import { canonicalMfmUnitCases } from "./gen-conformance-mfm-unit.js";
 import { canonicalDslCases, refreshResolverDslCases, withCanonicalDslCases, type ResolverDslCase } from "./gen-conformance-resolver-dsl.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -4576,7 +4577,14 @@ function genMfmLoadout(): void {
   mkdirSync(join(CONFORMANCE, "mfm_loadout"), { recursive: true });
   writeJson(join(CONFORMANCE, "mfm_loadout", "defaults.json"), defaults);
   writeJson(join(CONFORMANCE, "mfm_loadout", "checks.json"), checks);
-  console.log(`mfm_loadout: ${defaults.length} defaults, ${checks.length} checks`);
+  const { units, assignments, unitChecks } = canonicalMfmUnitCases(Dataset.embedded(), specVersion);
+  // One case per line keeps these large corpora small and their diffs per case.
+  const writeLines = (file: string, cases: readonly unknown[]) =>
+    writeText(join(CONFORMANCE, "mfm_loadout", file), `[\n${cases.map((c) => JSON.stringify(c)).join(",\n")}\n]\n`);
+  writeLines("units.json", units);
+  writeLines("assignments.json", assignments);
+  writeLines("unit-checks.json", unitChecks);
+  console.log(`mfm_loadout: ${defaults.length} defaults, ${checks.length} checks, ${units.length} units, ${assignments.length} assignments, ${unitChecks.length} unit checks`);
 }
 
 /** Append fabricated direct-API cases without duplicating their stable identities on regen. */

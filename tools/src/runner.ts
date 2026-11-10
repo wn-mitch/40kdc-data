@@ -30,7 +30,17 @@ import {
   loadoutCandidates,
   weaponBounds,
 } from "./data/loadout.js";
-import { checkMfmLoadout, defaultMfmLoadout, type MfmLoadoutRules } from "./data/mfm-loadout.js";
+import { checkMfmLoadout, defaultMfmLoadout, type MfmItem, type MfmLoadoutRules } from "./data/mfm-loadout.js";
+import { MfmSearchTooLarge, type MfmConfiguration } from "./data/mfm-loadout-search.js";
+import {
+  mfmRows,
+  mfmUnitAssignment,
+  mfmUnitBaseLoadout,
+  mfmUnitBounds,
+  mfmUnitCandidates,
+  mfmUnitViolations,
+  type MfmComposition,
+} from "./data/mfm-loadout-unit.js";
 import { validateRosterCore, type NormRoster } from "./data/roster-resolve.js";
 import {
   candidateAffordability,
@@ -481,11 +491,21 @@ function mfmLoadoutOf(
   state: RunnerState,
   op: string,
   args: unknown,
-): { rules: MfmLoadoutRules | null; args: Record<string, unknown> } | RunnerResponse {
+  inline = false,
+): { rules: MfmLoadoutRules | null; composition: MfmComposition | null; args: Record<string, unknown> } | RunnerResponse {
   if (typeof args !== "object" || args === null) {
     return err("INVALID_INPUT", { detail: `${op} args must be an object` });
   }
   const a = args as Record<string, unknown>;
+  // A fabricated composition (`models`, optional `tiers`, `loadout`) stands in for a unit's own.
+  if (inline && a.composition !== undefined) {
+    const given = a.composition as Partial<MfmComposition> | null;
+    if (typeof given !== "object" || given === null || !Array.isArray(given.models)) {
+      return err("INVALID_INPUT", { detail: `${op}.composition must be an object with models` });
+    }
+    const composition = given as MfmComposition;
+    return { rules: composition.loadout ?? null, composition: composition.loadout ? composition : null, args: a };
+  }
   if (typeof a.unitId !== "string") {
     return err("INVALID_INPUT", { detail: `${op}.unitId required` });
   }
@@ -495,8 +515,8 @@ function mfmLoadoutOf(
       ? ds.units.getInFaction(a.unitId, a.factionId)
       : ds.units.getAny(a.unitId);
   if (!unit) return err("UNKNOWN_ENTITY", { kind: "unit", id: a.unitId });
-  const composition = ds.unitCompositionOf(unit.raw) as { loadout?: MfmLoadoutRules } | undefined;
-  return { rules: composition?.loadout ?? null, args: a };
+  const composition = ds.unitCompositionOf(unit.raw) as (MfmComposition & { loadout?: MfmLoadoutRules }) | undefined;
+  return { rules: composition?.loadout ?? null, composition: composition?.loadout ? composition : null, args: a };
 }
 
 /** A wire object of non-negative integer counts, or null when it is not one. */
@@ -543,6 +563,106 @@ function handleDefaultMfmLoadout(state: RunnerState, args: unknown): RunnerRespo
   if (!resolved.rules) return ok(null);
   const { models, counts } = defaultMfmLoadout(resolved.rules);
   return ok({ models: sortedObject(models), counts: sortedObject(counts) });
+}
+
+/** Runs an MFM search op, answering a search too large to run with `INTERNAL_ERROR`. */
+function tooLargeAsError(op: () => RunnerResponse): RunnerResponse {
+  try {
+    return op();
+  } catch (e) {
+    if (e instanceof MfmSearchTooLarge) return err("INTERNAL_ERROR", { detail: e.message });
+    throw e;
+  }
+}
+
+/** A model-count argument: a non-negative integer. */
+const modelCountArg = (value: unknown): number | null =>
+  typeof value === "number" && Number.isInteger(value) && value >= 0 ? value : null;
+
+/** A configuration on the wire: its groups, the unit's own wargear and its counts. */
+const configurationWire = (configuration: MfmConfiguration) => ({
+  groups: configuration.groups.map((group) => ({ model: group.model, count: group.count, items: group.items.map((item: MfmItem) => ({ ...item })) })),
+  unit: configuration.unit.map((item) => ({ ...item })),
+  counts: sortedObject(configuration.counts),
+});
+
+/**
+ * A unit at a total model count under its MFM loadout — the cross-impl pin for the
+ * `mfm-loadout-unit` functions. Args: `{ unitId, factionId?, modelCount, limit? }` (`limit`
+ * defaults to 4). Returns `{ rows, base, bounds, groups, candidates }`, with the first four null
+ * and `candidates` empty when no tier builds the count, or null when the unit has no loadout.
+ */
+function handleMfmUnit(state: RunnerState, args: unknown): RunnerResponse {
+  return tooLargeAsError(() => handleMfmUnitWithin(state, args));
+}
+
+function handleMfmUnitWithin(state: RunnerState, args: unknown): RunnerResponse {
+  const resolved = mfmLoadoutOf(state, "mfm_unit", args, true);
+  if (!("rules" in resolved)) return resolved;
+  const modelCount = modelCountArg(resolved.args.modelCount);
+  const limit = resolved.args.limit === undefined ? 4 : modelCountArg(resolved.args.limit);
+  if (modelCount === null || limit === null) {
+    return err("INVALID_INPUT", { detail: "mfm_unit.modelCount/limit must be non-negative integers" });
+  }
+  const composition = resolved.composition;
+  if (!composition) return ok(null);
+  const rows = mfmRows(composition, modelCount);
+  const base = mfmUnitBaseLoadout(composition, modelCount);
+  const bounds = mfmUnitBounds(composition, modelCount);
+  const placed = base ? mfmUnitAssignment(composition, modelCount, base.counts) : null;
+  return ok({
+    rows: rows ? sortedObject(rows) : null,
+    base: base ? { counts: sortedObject(base.counts), legal: base.legal } : null,
+    bounds: bounds
+      ? Object.fromEntries([...bounds].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)).map(([id, bound]) => [id, { min: bound.min, max: bound.max }]))
+      : null,
+    groups: placed ? configurationWire(placed).groups : null,
+    candidates: mfmUnitCandidates(composition, modelCount, limit),
+  });
+}
+
+/** The counts and model count shared by `mfm_assignment` and `check_mfm_unit`, or an error. */
+function unitCountsArgs(op: string, args: Record<string, unknown>): { modelCount: number; counts: Map<string, number> } | RunnerResponse {
+  const modelCount = modelCountArg(args.modelCount);
+  const counts = countsArg(args.counts);
+  if (modelCount === null || !counts) {
+    return err("INVALID_INPUT", { detail: `${op}.modelCount/counts must be non-negative integers` });
+  }
+  return { modelCount, counts };
+}
+
+/**
+ * How counts sit on a unit of a total model count — the cross-impl pin for `mfmUnitAssignment`.
+ * Args: `{ unitId, factionId?, modelCount, counts }`. Returns `{ groups, unit, counts }`, or null
+ * when no legal configuration has these counts or the unit has no loadout.
+ */
+function handleMfmAssignment(state: RunnerState, args: unknown): RunnerResponse {
+  return tooLargeAsError(() => handleMfmAssignmentWithin(state, args));
+}
+
+function handleMfmAssignmentWithin(state: RunnerState, args: unknown): RunnerResponse {
+  const resolved = mfmLoadoutOf(state, "mfm_assignment", args, true);
+  if (!("rules" in resolved)) return resolved;
+  const parsed = unitCountsArgs("mfm_assignment", resolved.args);
+  if (!("counts" in parsed)) return parsed;
+  if (!resolved.composition) return ok(null);
+  const placed = mfmUnitAssignment(resolved.composition, parsed.modelCount, parsed.counts);
+  return ok(placed ? configurationWire(placed) : null);
+}
+
+/**
+ * Wargear legality at a total model count — the cross-impl pin for `mfmUnitViolations`. Args:
+ * `{ unitId, factionId?, modelCount, counts }`. Returns `{ code, message }` violations, or null
+ * when the unit has no loadout.
+ */
+function handleCheckMfmUnit(state: RunnerState, args: unknown): RunnerResponse {
+  const resolved = mfmLoadoutOf(state, "check_mfm_unit", args, true);
+  if (!("rules" in resolved)) return resolved;
+  const parsed = unitCountsArgs("check_mfm_unit", resolved.args);
+  if (!("counts" in parsed)) return parsed;
+  if (!resolved.composition) return ok(null);
+  const violations = mfmUnitViolations(resolved.composition, parsed.modelCount, parsed.counts)!;
+  return ok(violations.map(({ code, message }) => ({ code, message })));
 }
 
 /**
@@ -1693,6 +1813,12 @@ export function dispatch(
       return handleCheckMfmLoadout(state, req.args);
     case "default_mfm_loadout":
       return handleDefaultMfmLoadout(state, req.args);
+    case "mfm_unit":
+      return handleMfmUnit(state, req.args);
+    case "mfm_assignment":
+      return handleMfmAssignment(state, req.args);
+    case "check_mfm_unit":
+      return handleCheckMfmUnit(state, req.args);
     case "candidate_affordability":
       return handleCandidateAffordability(state, req.args);
     case "validate":

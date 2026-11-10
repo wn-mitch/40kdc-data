@@ -1111,7 +1111,13 @@ describe("mfm-loadout conformance corpus", () => {
   const specVersion = Number.parseInt(readFileSync(join(CONFORMANCE, "SPEC_VERSION"), "utf8").trim(), 10);
   const state = createRunnerState();
   dispatch(state, { op: "init", args: { spec_version: specVersion, locale: "C", tz: "UTC", seed: 0 } });
-  for (const [file, op] of [["defaults.json", "default_mfm_loadout"], ["checks.json", "check_mfm_loadout"]] as const) {
+  for (const [file, op] of [
+    ["defaults.json", "default_mfm_loadout"],
+    ["checks.json", "check_mfm_loadout"],
+    ["units.json", "mfm_unit"],
+    ["assignments.json", "mfm_assignment"],
+    ["unit-checks.json", "check_mfm_unit"],
+  ] as const) {
     const cases = readJson(join(CONFORMANCE, "mfm_loadout", file)) as RosterLegalityCase[];
     it(`mfm_loadout/${file} is non-empty`, () => {
       expect(cases.length).toBeGreaterThan(0);

@@ -94,17 +94,26 @@ def _bundle_key(bundle: Copies) -> str:
     return json.dumps(sorted([k, n] for k, n in bundle.items() if n > 0))
 
 
-def _row_bundles(
-    rules: Mapping[str, Any], model: str, counts: Mapping[str, int]
+def row_bundles(
+    rules: Mapping[str, Any],
+    model: str,
+    fits_copies: Callable[[Copies], bool],
+    max_bundles: int = MAX_BUNDLES,
 ) -> list[Copies] | None:
-    """The bundles one model of ``model`` can carry within ``counts``, or None past MAX_BUNDLES."""
+    """The bundles one model of ``model`` can carry, or None past ``max_bundles``.
+
+    One pick combination per slot, multiplied out, dropping any partial bundle
+    ``fits_copies`` refuses. A partial bundle only gains copies as slots are
+    added, so ``fits_copies`` must refuse every bundle that grows from one it
+    refuses.
+    """
     slots = [slot for slot in rules["slots"] if slot.get("model") == model]
     if not slots:
         return [_copies_of(_template(rules, model))]
     stock = _model_stock(rules, model)
 
     def fits(bundle: list[Any]) -> bool:
-        return all(n <= counts.get(k, 0) for k, n in _copies_of(bundle).items())
+        return fits_copies(_copies_of(bundle))
 
     def product(group: list[Mapping[str, Any]]) -> list[Copies] | None:
         bundles: list[list[Any]] = [[]]
@@ -113,7 +122,7 @@ def _row_bundles(
             bundles = [
                 b for b in ([*bundle, *pick] for bundle in bundles for pick in picks) if fits(b)
             ]
-            if len(bundles) > MAX_BUNDLES:
+            if len(bundles) > max_bundles:
                 return None
         return [_copies_of(bundle) for bundle in bundles]
 
@@ -198,12 +207,21 @@ def limit_cap(limit: Mapping[str, Any], models: int) -> tuple[int, int | None]:
     return points[-1]["choices"], points[-1].get("per_choice")
 
 
-def _limit_holds(
-    limit: Mapping[str, Any],
-    unit_models: int,
-    copies: Mapping[str, int],
-    baseline: Mapping[str, int],
-) -> bool:
+LimitTest = Callable[[Sequence[int], bool], bool]
+
+
+def compile_limit(
+    limit: Mapping[str, Any], unit_models: int, baseline: Mapping[str, int]
+) -> tuple[list[str], LimitTest]:
+    """A limit's test, fixed to a scope's stock baseline and a unit of ``unit_models`` models.
+
+    Returns the limit's item ids and a test that takes the scope's copies of
+    each id (in that order) and says whether they fit the limit, or with
+    ``at_least``, whether some allowed sum of its choices covers them instead,
+    which holds for every partial count a fitting count can grow from. The
+    copies above the baseline, or all copies when the limit lists the baseline
+    itself as a choice, must be the sum of at most the cap of its choices.
+    """
     cap, per_choice = limit_cap(limit, unit_models)
 
     def is_stock(item_id: str) -> bool:
@@ -221,32 +239,114 @@ def _limit_holds(
         for choice in limit["choices"]
     ]
     ids = list(dict.fromkeys(item["id"] for choice in limit["choices"] for item in choice))
-    target = [max(0, copies.get(i, 0) - (0 if stock_choice else baseline.get(i, 0))) for i in ids]
+    over = [0 if stock_choice else baseline.get(i, 0) for i in ids]
     vectors = [
-        [sum(item["count"] for item in choice if item["id"] == i) for i in ids]
+        tuple(sum(item["count"] for item in choice if item["id"] == i) for i in ids)
         for choice in choices
     ]
-    failed: set[tuple[int, int, tuple[int, ...]]] = set()
+    answers: dict[tuple[bool, tuple[int, ...]], bool] = {}
 
-    def fits(index: int, left: int, rest: list[int]) -> bool:
-        if all(n == 0 for n in rest):
-            return True
-        if index >= len(vectors) or left == 0:
-            return False
-        key = (index, left, tuple(rest))
-        if key in failed:
-            return False
-        most = min(left, per_choice if per_choice is not None else left)
-        for use in range(most, -1, -1):
-            nxt = [n - v * use for n, v in zip(rest, vectors[index], strict=True)]
-            if any(n < 0 for n in nxt):
-                continue
-            if fits(index + 1, left - use, nxt):
+    def holds(copies: Sequence[int], at_least: bool) -> bool:
+        target = tuple(max(0, n - o) for n, o in zip(copies, over, strict=True))
+        answer_key = (at_least, target)
+        known = answers.get(answer_key)
+        if known is not None:
+            return known
+        failed: set[tuple[int, int, tuple[int, ...]]] = set()
+
+        def fits(index: int, left: int, rest: tuple[int, ...]) -> bool:
+            if all(n <= 0 for n in rest):
                 return True
-        failed.add(key)
-        return False
+            if index >= len(vectors) or left == 0:
+                return False
+            key = (index, left, rest)
+            if key in failed:
+                return False
+            most = min(left, per_choice if per_choice is not None else left)
+            vec = vectors[index]
+            for use in range(most, -1, -1):
+                if at_least:
+                    nxt = tuple(max(0, n - v * use) for n, v in zip(rest, vec, strict=True))
+                else:
+                    nxt = tuple(n - v * use for n, v in zip(rest, vec, strict=True))
+                    if any(n < 0 for n in nxt):
+                        continue
+                if fits(index + 1, left - use, nxt):
+                    return True
+            failed.add(key)
+            return False
 
-    return fits(0, cap, target)
+        answer = fits(0, cap, target)
+        answers[answer_key] = answer
+        return answer
+
+    return ids, holds
+
+
+def limit_holds(
+    limit: Mapping[str, Any],
+    unit_models: int,
+    copies: Mapping[str, int],
+    baseline: Mapping[str, int],
+    at_least: bool = False,
+) -> bool:
+    """Whether ``copies`` of a limit's items fit it (see :func:`compile_limit`)."""
+    ids, holds = compile_limit(limit, unit_models, baseline)
+    return holds([copies.get(i, 0) for i in ids], at_least)
+
+
+def unit_picks_of(rules: Mapping[str, Any]) -> list[Copies]:
+    """The unit's own picks: one pick combination per slot without a row, multiplied out."""
+    unit_stock = _copies_of(
+        [item for row in rules["stock"] if row.get("model") is None for item in row["items"]]
+    )
+    unit_picks: list[Copies] = [{}]
+    for slot in (slot for slot in rules["slots"] if slot.get("model") is None):
+        picks = _pick_combinations(_slot_choices(slot, unit_stock), slot["picks"], slot["repeats"])
+        nxt: list[Copies] = []
+        for acc in unit_picks:
+            for pick in picks:
+                merged = dict(acc)
+                _add(merged, pick)
+                nxt.append(merged)
+        unit_picks = nxt
+    return unit_picks
+
+
+def _uniform_mains(uniform_set: Mapping[str, Any]) -> list[Mapping[str, Any]]:
+    """A uniform set's main options: its choices that are not substitutes and carry an item."""
+    return [c for c in uniform_set["choices"] if not c["substitute"] and len(c["items"]) > 0]
+
+
+def uniform_attempts(rules: Mapping[str, Any]) -> list[list[int]]:
+    """Every way to fix each uniform set's main option: one index per set into its mains."""
+    attempts: list[list[int]] = [[]]
+    for uniform_set in rules["uniform"]:
+        mains = _uniform_mains(uniform_set)
+        attempts = [[*a, k] for a in attempts for k in range(max(1, len(mains)))]
+    return attempts
+
+
+def uniform_allows(
+    rules: Mapping[str, Any], row: str, bundle: Mapping[str, int], attempt: Sequence[int]
+) -> bool:
+    """Whether a model of ``row`` may carry ``bundle`` with ``attempt``'s main options fixed.
+
+    A model in a set's scope that takes another main option without a
+    substitute is excluded.
+    """
+    for s, uniform_set in enumerate(rules["uniform"]):
+        model = uniform_set.get("model")
+        if model is not None and model != row:
+            continue
+        mains = _uniform_mains(uniform_set)
+        if not mains:
+            continue
+        if any(c["substitute"] and _contains(bundle, c["items"]) for c in uniform_set["choices"]):
+            continue
+        if any(k != attempt[s] and _contains(bundle, m["items"]) for k, m in enumerate(mains)):
+            return False
+    return True
 
 
 def _held(copies: Mapping[str, int], item_id: str) -> int:
@@ -277,7 +377,9 @@ def check_mfm_loadout(
 
     bundles_by_row: dict[str, list[Copies]] = {}
     for row in rows:
-        bundles = _row_bundles(rules, row, counts)
+        bundles = row_bundles(
+            rules, row, lambda bundle: all(n <= counts.get(k, 0) for k, n in bundle.items())
+        )
         if bundles is None:
             return [
                 _violation(
@@ -288,19 +390,7 @@ def check_mfm_loadout(
         bundles_by_row[row] = bundles
     unit_caps = checkbox_caps(rules, None)
     row_caps = {row: checkbox_caps(rules, row, models.get(row, 0)) for row in rows}
-    unit_stock = _copies_of(
-        [item for row in rules["stock"] if row.get("model") is None for item in row["items"]]
-    )
-    unit_picks: list[Copies] = [{}]
-    for slot in (slot for slot in rules["slots"] if slot.get("model") is None):
-        picks = _pick_combinations(_slot_choices(slot, unit_stock), slot["picks"], slot["repeats"])
-        nxt: list[Copies] = []
-        for acc in unit_picks:
-            for pick in picks:
-                merged = dict(acc)
-                _add(merged, pick)
-                nxt.append(merged)
-        unit_picks = nxt
+    unit_picks = unit_picks_of(rules)
 
     reachable: set[str] = set()
     for bundles in bundles_by_row.values():
@@ -341,31 +431,7 @@ def check_mfm_loadout(
             out[index_of[item_id]] += n
         return out
 
-    uniform = rules["uniform"]
-    uniform_options = [
-        [c for c in s["choices"] if not c["substitute"] and len(c["items"]) > 0] for s in uniform
-    ]
-    attempts: list[list[int]] = [[]]
-    for mains in uniform_options:
-        attempts = [[*a, k] for a in attempts for k in range(max(1, len(mains)))]
-
-    def bundle_allowed(row: str, bundle: Copies, attempt: list[int]) -> bool:
-        for s, uniform_set in enumerate(uniform):
-            model = uniform_set.get("model")
-            if model is not None and model != row:
-                continue
-            mains = uniform_options[s]
-            if not mains:
-                continue
-            if any(
-                c["substitute"] and _contains(bundle, c["items"]) for c in uniform_set["choices"]
-            ):
-                continue
-            if not all(
-                k == attempt[s] or not _contains(bundle, m["items"]) for k, m in enumerate(mains)
-            ):
-                return False
-        return True
+    attempts = uniform_attempts(rules)
 
     def within_caps(copies: Callable[[str], int], caps: Mapping[str, int]) -> bool:
         return all(copies(item_id) <= cap for item_id, cap in caps.items())
@@ -381,14 +447,14 @@ def check_mfm_loadout(
             if limit.get("model") != row:
                 continue
             copies = {ids[i]: n for i, n in enumerate(totals) if n > 0}
-            if not _limit_holds(limit, unit_models, copies, baseline_of(row)):
+            if not limit_holds(limit, unit_models, copies, baseline_of(row)):
                 return False
         return True
 
     total = vector(counts)
     for attempt in attempts:
         allowed = {
-            row: [vector(b) for b in bundles_by_row[row] if bundle_allowed(row, b, attempt)]
+            row: [vector(b) for b in bundles_by_row[row] if uniform_allows(rules, row, b, attempt)]
             for row in rows
         }
         for unit_pick in unit_picks:
@@ -401,7 +467,7 @@ def check_mfm_loadout(
             # A unit-wide limit counts the unit's copies, which the counts fix.
             if not all(
                 limit.get("model") is not None
-                or _limit_holds(limit, unit_models, counts, baseline_of(None))
+                or limit_holds(limit, unit_models, counts, baseline_of(None))
                 for limit in rules["limits"]
             ):
                 continue

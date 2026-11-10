@@ -37,7 +37,14 @@ func CheckMfmLoadout(r *MfmLoadoutRules, models, counts map[string]int) []MfmLoa
 
 	bundlesByRow := map[string][]mfmCopies{}
 	for _, row := range rows {
-		bundles, ok := r.rowBundles(row, counts)
+		bundles, ok := r.rowBundles(row, func(bundle mfmCopies) bool {
+			for id, n := range bundle {
+				if n > counts[id] {
+					return false
+				}
+			}
+			return true
+		}, mfmMaxBundles)
 		if !ok {
 			return []MfmLoadoutViolation{{Code: "too-many-options", Message: fmt.Sprintf("%s: more than %d wargear combinations to search", row, mfmMaxBundles)}}
 		}
@@ -49,31 +56,7 @@ func CheckMfmLoadout(r *MfmLoadoutRules, models, counts map[string]int) []MfmLoa
 		model := row
 		rowCaps[row] = r.checkboxCaps(&model, models[row])
 	}
-	unitStock := mfmCopies{}
-	for _, row := range r.Stock {
-		if row.Model == nil {
-			mfmAdd(unitStock, row.Items, 1)
-		}
-	}
-	unitPicks := []mfmCopies{{}}
-	for _, slot := range r.Slots {
-		if slot.Model != nil {
-			continue
-		}
-		picks := mfmPickCombinations(mfmSlotChoices(slot.Choices, unitStock), slot.Picks, slot.Repeats)
-		var next []mfmCopies
-		for _, acc := range unitPicks {
-			for _, pick := range picks {
-				merged := mfmCopies{}
-				for id, n := range acc {
-					merged[id] = n
-				}
-				mfmAdd(merged, pick, 1)
-				next = append(next, merged)
-			}
-		}
-		unitPicks = next
-	}
+	unitPicks := r.unitPicksOf()
 
 	reachable := map[string]bool{}
 	for _, bundles := range bundlesByRow {
@@ -164,53 +147,8 @@ func CheckMfmLoadout(r *MfmLoadoutRules, models, counts map[string]int) []MfmLoa
 		return out
 	}
 
-	// A uniform set's main option, fixed per attempt: a model in its scope that
-	// takes another main option without a substitute is excluded.
-	uniformMains := make([][][]mfmItem, len(r.Uniform))
-	for s, set := range r.Uniform {
-		for _, choice := range set.Choices {
-			if !choice.Substitute && len(choice.Items) > 0 {
-				uniformMains[s] = append(uniformMains[s], choice.Items)
-			}
-		}
-	}
-	attempts := [][]int{{}}
-	for _, mains := range uniformMains {
-		var next [][]int
-		for _, attempt := range attempts {
-			for k := 0; k < max(1, len(mains)); k++ {
-				next = append(next, append(append([]int{}, attempt...), k))
-			}
-		}
-		attempts = next
-	}
-	bundleAllowed := func(row string, bundle mfmCopies, attempt []int) bool {
-		for s, set := range r.Uniform {
-			if set.Model != nil && *set.Model != row {
-				continue
-			}
-			mains := uniformMains[s]
-			if len(mains) == 0 {
-				continue
-			}
-			substituted := false
-			for _, choice := range set.Choices {
-				if choice.Substitute && mfmContains(bundle, choice.Items) {
-					substituted = true
-					break
-				}
-			}
-			if substituted {
-				continue
-			}
-			for k, main := range mains {
-				if k != attempt[s] && mfmContains(bundle, main) {
-					return false
-				}
-			}
-		}
-		return true
-	}
+	mains := r.uniformMains()
+	attempts := r.uniformAttempts()
 	rowAccepts := func(row string, totals []int) bool {
 		for id, cap := range rowCaps[row] {
 			held := 0
@@ -233,7 +171,7 @@ func CheckMfmLoadout(r *MfmLoadoutRules, models, counts map[string]int) []MfmLoa
 				}
 			}
 			model := row
-			if !limit.limitHolds(unitModels, copies, baselineOf(&model)) {
+			if !limit.limitHolds(unitModels, copies, baselineOf(&model), false) {
 				return false
 			}
 		}
@@ -246,7 +184,7 @@ func CheckMfmLoadout(r *MfmLoadoutRules, models, counts map[string]int) []MfmLoa
 		for _, row := range rows {
 			var vectors [][]int
 			for _, bundle := range bundlesByRow[row] {
-				if bundleAllowed(row, bundle, attempt) {
+				if r.uniformAllows(mains, row, bundle, attempt) {
 					vectors = append(vectors, vector(bundle))
 				}
 			}
@@ -270,7 +208,7 @@ func CheckMfmLoadout(r *MfmLoadoutRules, models, counts map[string]int) []MfmLoa
 			// A unit-wide limit counts the unit's copies, which the counts fix.
 			for i := range r.Limits {
 				limit := &r.Limits[i]
-				if limit.Model == nil && !limit.limitHolds(unitModels, counts, baselineOf(nil)) {
+				if limit.Model == nil && !limit.limitHolds(unitModels, counts, baselineOf(nil), false) {
 					continue picks
 				}
 			}

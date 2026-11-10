@@ -1,7 +1,7 @@
 //! Cross-implementation conformance for wargear legality under each unit's MFM
 //! loadout rules. The Rust runner must reproduce
-//! `conformance/mfm_loadout/{defaults,checks}.json` produced by the TS reference
-//! (`tools/src/data/mfm-loadout.ts`).
+//! `conformance/mfm_loadout/{defaults,checks,units,assignments,unit-checks}.json`
+//! produced by the TS reference (`tools/src/data/mfm-loadout*.ts`).
 //!
 //! Driven through the actual `wh40kdc-runner` binary (the cross-impl differ's
 //! path), so this pins the wire contract. Values compared exactly.
@@ -113,6 +113,21 @@ fn mfm_loadout_defaults_match_reference() {
 #[test]
 fn mfm_loadout_checks_match_reference() {
     run_corpus("checks.json", "check_mfm_loadout");
+}
+
+#[test]
+fn mfm_units_match_reference() {
+    run_corpus("units.json", "mfm_unit");
+}
+
+#[test]
+fn mfm_assignments_match_reference() {
+    run_corpus("assignments.json", "mfm_assignment");
+}
+
+#[test]
+fn mfm_unit_checks_match_reference() {
+    run_corpus("unit-checks.json", "check_mfm_unit");
 }
 
 /// A fractional or negative count is not a configuration, so the op refuses it

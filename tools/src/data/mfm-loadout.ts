@@ -32,27 +32,27 @@ export interface MfmLoadoutViolation {
 }
 
 /** Item copies keyed by id. */
-type Copies = Map<string, number>;
+export type Copies = Map<string, number>;
 
 /** More bundles than this on one row is reported rather than searched. */
-const MAX_BUNDLES = 20_000;
+export const MAX_BUNDLES = 20_000;
 
-const add = (into: Copies, items: readonly MfmItem[], times = 1) => {
+export const add = (into: Copies, items: readonly MfmItem[], times = 1) => {
   for (const item of items) into.set(item.id, (into.get(item.id) ?? 0) + item.count * times);
 };
-const copiesOf = (items: readonly MfmItem[], times = 1): Copies => {
+export const copiesOf = (items: readonly MfmItem[], times = 1): Copies => {
   const out: Copies = new Map();
   add(out, items, times);
   return out;
 };
-const contains = (bundle: Copies, items: readonly MfmItem[]) =>
+export const contains = (bundle: Copies, items: readonly MfmItem[]) =>
   items.length > 0 && items.every((item) => (bundle.get(item.id) ?? 0) >= item.count);
 
 /**
  * Every multiset of `picks` choices from `choices`. A choice repeats only when `repeats`, except the
  * empty choice ("take nothing"), which can fill any number of picks.
  */
-function pickCombinations(choices: readonly MfmItem[][], picks: number, repeats: boolean): MfmItem[][] {
+export function pickCombinations(choices: readonly MfmItem[][], picks: number, repeats: boolean): MfmItem[][] {
   const out: MfmItem[][] = [];
   const hasEmpty = choices.some((choice) => choice.length === 0);
   const walk = (from: number, left: number, acc: MfmItem[]) => {
@@ -73,27 +73,34 @@ function pickCombinations(choices: readonly MfmItem[][], picks: number, repeats:
  * part of `stock`, the wargear its holder starts with. A slot holding a stock choice is a swap,
  * which the holder always fills.
  */
-function slotChoices(slot: MfmLoadoutRules["slots"][number], stock: Copies): MfmItem[][] {
+export function slotChoices(slot: MfmLoadoutRules["slots"][number], stock: Copies): MfmItem[][] {
   const swap = slot.choices.some((choice) => contains(stock, choice) || choice.length === 0);
   return swap ? slot.choices : [...slot.choices, []];
 }
 
 /**
- * The bundles one model of `model` can carry within `counts`: one pick combination per slot,
- * multiplied out, dropping any partial bundle that already holds more copies than the unit has.
+ * The bundles one model of `model` can carry: one pick combination per slot, multiplied out,
+ * dropping any partial bundle `fitsCopies` refuses (the checker refuses one holding more copies
+ * than the unit has). A partial bundle only gains copies as slots are added, so `fitsCopies` must
+ * refuse every bundle that grows from one it refuses. More than `maxBundles` gives null.
  */
-function rowBundles(rules: MfmLoadoutRules, model: string, counts: ReadonlyMap<string, number>): Copies[] | null {
+export function rowBundles(
+  rules: MfmLoadoutRules,
+  model: string,
+  fitsCopies: (bundle: Copies) => boolean,
+  maxBundles = MAX_BUNDLES,
+): Copies[] | null {
   const slots = rules.slots.filter((slot) => slot.model === model);
   const template = rules.templates.find((entry) => entry.model === model)?.items ?? [];
   if (slots.length === 0) return [copiesOf(template)];
   const stock = modelStock(rules, model);
-  const fits = (bundle: MfmItem[]) => [...copiesOf(bundle)].every(([id, n]) => n <= (counts.get(id) ?? 0));
+  const fits = (bundle: MfmItem[]) => fitsCopies(copiesOf(bundle));
   const product = (group: typeof slots): Copies[] | null => {
     let bundles: MfmItem[][] = [[]];
     for (const slot of group) {
       const picks = pickCombinations(slotChoices(slot, stock), slot.picks, slot.repeats);
       bundles = bundles.flatMap((bundle) => picks.map((pick) => [...bundle, ...pick])).filter(fits);
-      if (bundles.length > MAX_BUNDLES) return null;
+      if (bundles.length > maxBundles) return null;
     }
     return bundles.map((bundle) => copiesOf(bundle));
   };
@@ -174,19 +181,68 @@ function perModelRow(rules: MfmLoadoutRules, model: string): boolean {
 const withinCaps = (copies: (id: string) => number, caps: ReadonlyMap<string, number>) =>
   [...caps].every(([id, cap]) => copies(id) <= cap);
 
+/** The unit's own picks: one pick combination per slot without a row, multiplied out. */
+export function unitPicksOf(rules: MfmLoadoutRules): Copies[] {
+  let unitPicks: Copies[] = [new Map()];
+  const unitStock = copiesOf(rules.stock.filter((row) => row.model === undefined).flatMap((row) => row.items));
+  for (const slot of rules.slots.filter((entry) => entry.model === undefined)) {
+    const picks = pickCombinations(slotChoices(slot, unitStock), slot.picks, slot.repeats);
+    unitPicks = unitPicks.flatMap((acc) => picks.map((pick) => {
+      const next = new Map(acc);
+      add(next, pick);
+      return next;
+    }));
+  }
+  return unitPicks;
+}
+
+/** A uniform set's main options: its choices that are not substitutes and carry an item. */
+const uniformMains = (set: MfmLoadoutRules["uniform"][number]) =>
+  set.choices.filter((choice) => !choice.substitute && choice.items.length > 0);
+
+/** Every way to fix each uniform set's main option: one index per set into its main options. */
+export function uniformAttempts(rules: MfmLoadoutRules): number[][] {
+  let attempts: number[][] = [[]];
+  for (const set of rules.uniform) {
+    const mains = uniformMains(set);
+    attempts = attempts.flatMap((attempt) => Array.from({ length: Math.max(1, mains.length) }, (_, k) => [...attempt, k]));
+  }
+  return attempts;
+}
+
+/**
+ * Whether a model of `row` may carry `bundle` when each uniform set's main option is the one
+ * `attempt` fixes: a model in a set's scope that takes another main option without a substitute
+ * is excluded.
+ */
+export function uniformAllows(rules: MfmLoadoutRules, row: string, bundle: Copies, attempt: readonly number[]): boolean {
+  return rules.uniform.every((set, s) => {
+    if (set.model !== undefined && set.model !== row) return true;
+    const mains = uniformMains(set);
+    if (mains.length === 0) return true;
+    if (set.choices.some((choice) => choice.substitute && contains(bundle, choice.items))) return true;
+    return mains.every((main, k) => k === attempt[s] || !contains(bundle, main.items));
+  });
+}
+
 /** The cap a limit's breakpoints give a unit of `models` models. */
 export function limitCap(limit: MfmLoadoutRules["limits"][number], models: number): { cap: number; perChoice: number | undefined } {
   const row = [...limit.breakpoints].sort((a, b) => a.models - b.models).filter((point) => point.models <= models).pop();
   return { cap: row?.choices ?? 0, perChoice: row?.per_choice };
 }
 
-/** Whether `copies` of a limit's items, given the scope's stock baseline, fits the limit. */
-function limitHolds(
+/**
+ * A limit's test, fixed to a scope's stock baseline and a unit of `unitModels` models: given the
+ * scope's copies of each of `ids` (in that order), whether they fit the limit, or with `atLeast`,
+ * whether some allowed sum of its choices covers them instead, which holds for every partial count
+ * a fitting count can grow from. The copies above the baseline, or all copies when the limit lists
+ * the baseline itself as a choice, must be the sum of at most the cap of its choices.
+ */
+export function compileLimit(
   limit: MfmLoadoutRules["limits"][number],
   unitModels: number,
-  copies: Copies,
   baseline: Copies,
-): boolean {
+): { ids: string[]; holds: (copies: readonly number[], atLeast: boolean) => boolean } {
   const { cap, perChoice } = limitCap(limit, unitModels);
   const isStock = (id: string) => (baseline.get(id) ?? 0) > 0;
   const stockChoice = limit.choices.some((choice) =>
@@ -194,24 +250,46 @@ function limitHolds(
   const choices = limit.choices.map((choice) =>
     choice.some((item) => !isStock(item.id)) ? choice.filter((item) => !isStock(item.id)) : choice);
   const ids = [...new Set(limit.choices.flat().map((item) => item.id))];
-  const target = ids.map((id) => Math.max(0, (copies.get(id) ?? 0) - (stockChoice ? 0 : baseline.get(id) ?? 0)));
+  const over = ids.map((id) => (stockChoice ? 0 : baseline.get(id) ?? 0));
   const vectors = choices.map((choice) => ids.map((id) => choice.filter((item) => item.id === id).reduce((n, item) => n + item.count, 0)));
-  const memo = new Set<string>();
-  const fits = (index: number, left: number, rest: number[]): boolean => {
-    if (rest.every((n) => n === 0)) return true;
-    if (index >= vectors.length || left === 0) return false;
-    const key = `${index}|${left}|${rest.join(",")}`;
-    if (memo.has(key)) return false;
-    const most = Math.min(left, perChoice ?? left);
-    for (let use = most; use >= 0; use--) {
-      const next = rest.map((n, i) => n - vectors[index][i] * use);
-      if (next.some((n) => n < 0)) continue;
-      if (fits(index + 1, left - use, next)) return true;
-    }
-    memo.add(key);
-    return false;
+  const answers = new Map<string, boolean>();
+  const holds = (copies: readonly number[], atLeast: boolean): boolean => {
+    const target = ids.map((_, i) => Math.max(0, copies[i] - over[i]));
+    const answerKey = `${atLeast ? 1 : 0}|${target.join(",")}`;
+    const known = answers.get(answerKey);
+    if (known !== undefined) return known;
+    const memo = new Set<string>();
+    const fits = (index: number, left: number, rest: number[]): boolean => {
+      if (rest.every((n) => n <= 0)) return true;
+      if (index >= vectors.length || left === 0) return false;
+      const key = `${index}|${left}|${rest.join(",")}`;
+      if (memo.has(key)) return false;
+      const most = Math.min(left, perChoice ?? left);
+      for (let use = most; use >= 0; use--) {
+        const next = rest.map((n, i) => (atLeast ? Math.max(0, n - vectors[index][i] * use) : n - vectors[index][i] * use));
+        if (next.some((n) => n < 0)) continue;
+        if (fits(index + 1, left - use, next)) return true;
+      }
+      memo.add(key);
+      return false;
+    };
+    const answer = fits(0, cap, target);
+    answers.set(answerKey, answer);
+    return answer;
   };
-  return fits(0, cap, target);
+  return { ids, holds };
+}
+
+/** Whether `copies` of a limit's items fit it, given the scope's stock baseline (see {@link compileLimit}). */
+export function limitHolds(
+  limit: MfmLoadoutRules["limits"][number],
+  unitModels: number,
+  copies: Copies,
+  baseline: Copies,
+  atLeast = false,
+): boolean {
+  const { ids, holds } = compileLimit(limit, unitModels, baseline);
+  return holds(ids.map((id) => copies.get(id) ?? 0), atLeast);
 }
 
 /**
@@ -238,23 +316,13 @@ export function checkMfmLoadout(
 
   const bundlesByRow = new Map<string, Copies[]>();
   for (const row of rows) {
-    const bundles = rowBundles(rules, row, counts);
+    const bundles = rowBundles(rules, row, (bundle) => [...bundle].every(([id, n]) => n <= (counts.get(id) ?? 0)));
     if (bundles === null) return [{ code: "too-many-options", message: `${row}: more than ${MAX_BUNDLES} wargear combinations to search` }];
     bundlesByRow.set(row, bundles);
   }
   const unitCaps = checkboxCaps(rules, undefined);
   const rowCaps = new Map(rows.map((row) => [row, checkboxCaps(rules, row, models.get(row) ?? 0)]));
-  const unitSlots = rules.slots.filter((slot) => slot.model === undefined);
-  let unitPicks: Copies[] = [new Map()];
-  const unitStock = copiesOf(rules.stock.filter((row) => row.model === undefined).flatMap((row) => row.items));
-  for (const slot of unitSlots) {
-    const picks = pickCombinations(slotChoices(slot, unitStock), slot.picks, slot.repeats);
-    unitPicks = unitPicks.flatMap((acc) => picks.map((pick) => {
-      const next = new Map(acc);
-      add(next, pick);
-      return next;
-    }));
-  }
+  const unitPicks = unitPicksOf(rules);
 
   const reachable = new Set<string>();
   for (const bundles of bundlesByRow.values()) for (const bundle of bundles) for (const [id, n] of bundle) if (n > 0) reachable.add(id);
@@ -281,27 +349,13 @@ export function checkMfmLoadout(
     return out;
   };
 
-  // A uniform set's main option, fixed per attempt: a model in its scope that takes another main
-  // option without a substitute is excluded.
-  const uniformOptions = rules.uniform.map((set) => set.choices.filter((choice) => !choice.substitute && choice.items.length > 0));
-  const attempts: number[][] = [[]];
-  for (const mains of uniformOptions) {
-    const next: number[][] = [];
-    for (const attempt of attempts) for (let k = 0; k < Math.max(1, mains.length); k++) next.push([...attempt, k]);
-    attempts.splice(0, attempts.length, ...next);
-  }
+  const attempts = uniformAttempts(rules);
 
   const total = vector(new Map(counts));
   for (const attempt of attempts) {
     const allowed = new Map<string, number[][]>();
     for (const row of rows) {
-      const bundles = bundlesByRow.get(row)!.filter((bundle) => rules.uniform.every((set, s) => {
-        if (set.model !== undefined && set.model !== row) return true;
-        const mains = uniformOptions[s];
-        if (mains.length === 0) return true;
-        if (set.choices.some((choice) => choice.substitute && contains(bundle, choice.items))) return true;
-        return mains.every((main, k) => k === attempt[s] || !contains(bundle, main.items));
-      }));
+      const bundles = bundlesByRow.get(row)!.filter((bundle) => uniformAllows(rules, row, bundle, attempt));
       allowed.set(row, bundles.map(vector));
     }
     for (const unitPick of unitPicks) {

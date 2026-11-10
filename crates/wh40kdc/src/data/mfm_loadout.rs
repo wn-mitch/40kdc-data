@@ -221,11 +221,15 @@ fn bundle_key(bundle: &Copies) -> Vec<(String, i64)> {
     key
 }
 
-/// The bundles one model of `model` can carry within `counts`, or None past MAX_BUNDLES.
+/// The bundles one model of `model` can carry: one pick combination per slot,
+/// multiplied out, dropping any partial bundle `fits_copies` refuses. A partial
+/// bundle only gains copies as slots are added, so `fits_copies` must refuse
+/// every bundle that grows from one it refuses. More than `max_bundles` gives None.
 fn row_bundles(
     rules: &MfmLoadoutRules,
     model: &str,
-    counts: &BTreeMap<String, i64>,
+    fits_copies: &dyn Fn(&Copies) -> bool,
+    max_bundles: usize,
 ) -> Option<Vec<Copies>> {
     let slots: Vec<&MfmSlot> = rules
         .slots
@@ -236,11 +240,7 @@ fn row_bundles(
         return Some(vec![copies_of(rules.template(model))]);
     }
     let stock = model_stock(rules, model);
-    let fits = |bundle: &[MfmItem]| {
-        copies_of(bundle)
-            .iter()
-            .all(|(id, n)| *n <= counts.get(id).copied().unwrap_or(0))
-    };
+    let fits = |bundle: &[MfmItem]| fits_copies(&copies_of(bundle));
     let product = |group: &[&MfmSlot]| -> Option<Vec<Copies>> {
         let mut bundles: Vec<Vec<MfmItem>> = vec![Vec::new()];
         for slot in group {
@@ -260,7 +260,7 @@ fn row_bundles(
                 }
             }
             bundles = next;
-            if bundles.len() > MAX_BUNDLES {
+            if bundles.len() > max_bundles {
                 return None;
             }
         }
@@ -378,101 +378,32 @@ fn checkbox_caps(
     caps
 }
 
-/// The cap and per-choice ceiling a limit's breakpoints give a unit of `models` models.
-fn limit_cap(limit: &MfmLimit, models: i64) -> (i64, Option<i64>) {
-    let mut points: Vec<&MfmBreakpoint> = limit.breakpoints.iter().collect();
-    points.sort_by_key(|point| point.models);
-    points
-        .into_iter()
-        .filter(|point| point.models <= models)
-        .last()
-        .map_or((0, None), |point| (point.choices, point.per_choice))
-}
-
-/// Whether `copies` of a limit's items, over the scope's stock baseline, fit the limit.
-fn limit_holds(limit: &MfmLimit, unit_models: i64, copies: &Copies, baseline: &Copies) -> bool {
-    let (cap, per_choice) = limit_cap(limit, unit_models);
-    let is_stock = |id: &str| get(baseline, id) > 0;
-    let stock_choice = limit.choices.iter().any(|choice| {
-        !choice.is_empty()
-            && choice
-                .iter()
-                .all(|item| baseline.get(&item.id) == Some(&item.count))
-    });
-    let mut ids: Vec<&str> = Vec::new();
-    for item in limit.choices.iter().flatten() {
-        if !ids.contains(&item.id.as_str()) {
-            ids.push(&item.id);
-        }
-    }
-    let vectors: Vec<Vec<i64>> = limit
-        .choices
-        .iter()
-        .map(|choice| {
-            let keep: Vec<&MfmItem> = if choice.iter().any(|item| !is_stock(&item.id)) {
-                choice.iter().filter(|item| !is_stock(&item.id)).collect()
-            } else {
-                choice.iter().collect()
-            };
-            ids.iter()
-                .map(|id| {
-                    keep.iter()
-                        .filter(|item| item.id == *id)
-                        .map(|item| item.count)
-                        .sum()
-                })
-                .collect()
-        })
-        .collect();
-    let target: Vec<i64> = ids
-        .iter()
-        .map(|id| {
-            let over = if stock_choice { 0 } else { get(baseline, id) };
-            (get(copies, id) - over).max(0)
-        })
-        .collect();
-
-    struct Search<'a> {
-        vectors: &'a [Vec<i64>],
-        per_choice: Option<i64>,
-        failed: HashSet<(usize, i64, Vec<i64>)>,
-    }
-    fn fits(search: &mut Search<'_>, index: usize, left: i64, rest: Vec<i64>) -> bool {
-        if rest.iter().all(|n| *n == 0) {
-            return true;
-        }
-        if index >= search.vectors.len() || left == 0 {
-            return false;
-        }
-        let key = (index, left, rest.clone());
-        if search.failed.contains(&key) {
-            return false;
-        }
-        let most = left.min(search.per_choice.unwrap_or(left));
-        for used in (0..=most).rev() {
-            let next: Vec<i64> = rest
-                .iter()
-                .zip(&search.vectors[index])
-                .map(|(n, v)| n - v * used)
-                .collect();
-            if next.iter().any(|n| *n < 0) {
-                continue;
-            }
-            if fits(search, index + 1, left - used, next) {
-                return true;
-            }
-        }
-        search.failed.insert(key);
-        false
-    }
-    let mut search = Search {
-        vectors: &vectors,
-        per_choice,
-        failed: HashSet::new(),
-    };
-    fits(&mut search, 0, cap, target)
-}
+#[path = "mfm_loadout_limit.rs"]
+mod limit;
+use limit::{compile_limit, limit_holds, CompiledLimit};
 
 #[path = "mfm_loadout_check.rs"]
 mod check;
 pub use check::check_mfm_loadout;
+
+#[path = "mfm_loadout_search.rs"]
+mod search;
+pub use search::{
+    mfm_assignment, mfm_configurations, MfmConfiguration, MfmRowBundle, MfmSearchTooLarge,
+    MAX_SEARCH_BUNDLES,
+};
+
+#[path = "mfm_loadout_space.rs"]
+mod space;
+
+#[path = "mfm_loadout_bounds.rs"]
+mod bounds;
+pub use bounds::{mfm_weapon_bounds, MfmBound};
+
+#[path = "mfm_loadout_unit.rs"]
+mod unit;
+pub use unit::{
+    encode_mfm_configuration, mfm_base_loadout, mfm_resized_default, mfm_rows, mfm_scaled_default,
+    mfm_unit_assignment, mfm_unit_base_loadout, mfm_unit_bounds, mfm_unit_candidates,
+    mfm_unit_violations, MfmBaseLoadout, MfmComposition, MfmModelRange, MFM_CANDIDATES_TRUNCATED,
+};

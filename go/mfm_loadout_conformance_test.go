@@ -6,10 +6,11 @@ import (
 	"testing"
 )
 
-// Default units and wargear legality against the mfm_loadout corpus, driven
-// through the runner's default_mfm_loadout and check_mfm_loadout ops and
+// Default units, wargear legality, and units at a total model count against
+// the mfm_loadout corpus, driven through the runner's default_mfm_loadout,
+// check_mfm_loadout, mfm_unit, mfm_assignment and check_mfm_unit ops and
 // compared exactly. Ties out with the TS reference and the Rust/Python ports
-// via conformance/mfm_loadout/{defaults,checks}.json.
+// via conformance/mfm_loadout/*.json; candidates and groups pin search order.
 func TestMfmLoadoutCorpus(t *testing.T) {
 	s := NewRunnerState()
 	init := s.Dispatch(map[string]any{
@@ -22,6 +23,9 @@ func TestMfmLoadoutCorpus(t *testing.T) {
 	for _, file := range []struct{ name, op string }{
 		{"defaults.json", "default_mfm_loadout"},
 		{"checks.json", "check_mfm_loadout"},
+		{"units.json", "mfm_unit"},
+		{"assignments.json", "mfm_assignment"},
+		{"unit-checks.json", "check_mfm_unit"},
 	} {
 		var cases []struct {
 			Name     string         `json:"name"`

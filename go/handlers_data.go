@@ -48,9 +48,9 @@ func (s *RunnerState) handleCheckUnitLegality(args any) map[string]any {
 	return okResp(toAnyList(strs))
 }
 
-// mfmLoadoutOf resolves the op's unit as check_unit_legality does and returns
-// its MFM loadout rules (nil when the unit has none), or an error response.
-func (s *RunnerState) mfmLoadoutOf(op string, args any) (map[string]any, *MfmLoadoutRules, map[string]any) {
+// mfmUnitOf resolves the op's unit as check_unit_legality does, or returns an
+// error response.
+func (s *RunnerState) mfmUnitOf(op string, args any) (map[string]any, *UnitView, map[string]any) {
 	a, ok := asMap(args)
 	if !ok {
 		return nil, nil, errResp("INVALID_INPUT", detail(op+" args must be an object"))
@@ -71,7 +71,17 @@ func (s *RunnerState) mfmLoadoutOf(op string, args any) (map[string]any, *MfmLoa
 	if u == nil {
 		return nil, nil, errResp("UNKNOWN_ENTITY", map[string]any{"kind": "unit", "id": unitID})
 	}
-	rules, err := decodeMfmLoadout(ds.unitLoadoutOf(u.Raw))
+	return a, u, nil
+}
+
+// mfmLoadoutOf resolves the op's unit as check_unit_legality does and returns
+// its MFM loadout rules (nil when the unit has none), or an error response.
+func (s *RunnerState) mfmLoadoutOf(op string, args any) (map[string]any, *MfmLoadoutRules, map[string]any) {
+	a, u, fail := s.mfmUnitOf(op, args)
+	if fail != nil {
+		return nil, nil, fail
+	}
+	rules, err := decodeMfmLoadout(s.dataset().unitLoadoutOf(u.Raw))
 	if err != nil {
 		return nil, nil, errResp("INVALID_INPUT", detail(op+": malformed loadout: "+err.Error()))
 	}

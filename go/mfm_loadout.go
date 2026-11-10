@@ -226,9 +226,12 @@ func mfmBundleKey(bundle mfmCopies) string {
 	return sb.String()
 }
 
-// rowBundles is the bundles one model of `model` can carry within counts, or
-// nil (ok=false) past mfmMaxBundles.
-func (r *MfmLoadoutRules) rowBundles(model string, counts map[string]int) ([]mfmCopies, bool) {
+// rowBundles is the bundles one model of `model` can carry: one pick
+// combination per slot, multiplied out, dropping any partial bundle fitsCopies
+// refuses. A partial bundle only gains copies as slots are added, so fitsCopies
+// must refuse every bundle that grows from one it refuses. More than maxBundles
+// gives ok=false.
+func (r *MfmLoadoutRules) rowBundles(model string, fitsCopies func(mfmCopies) bool, maxBundles int) ([]mfmCopies, bool) {
 	var regular, alternate []int
 	for i, slot := range r.Slots {
 		if slot.Model != nil && *slot.Model == model {
@@ -243,14 +246,7 @@ func (r *MfmLoadoutRules) rowBundles(model string, counts map[string]int) ([]mfm
 		return []mfmCopies{mfmCopiesOf(r.template(model), 1)}, true
 	}
 	stock := r.modelStock(model)
-	fits := func(bundle []mfmItem) bool {
-		for id, n := range mfmCopiesOf(bundle, 1) {
-			if n > counts[id] {
-				return false
-			}
-		}
-		return true
-	}
+	fits := func(bundle []mfmItem) bool { return fitsCopies(mfmCopiesOf(bundle, 1)) }
 	product := func(group []int) ([]mfmCopies, bool) {
 		bundles := [][]mfmItem{{}}
 		for _, s := range group {
@@ -267,7 +263,7 @@ func (r *MfmLoadoutRules) rowBundles(model string, counts map[string]int) ([]mfm
 				}
 			}
 			bundles = next
-			if len(bundles) > mfmMaxBundles {
+			if len(bundles) > maxBundles {
 				return nil, false
 			}
 		}
@@ -380,138 +376,4 @@ func (r *MfmLoadoutRules) checkboxCaps(model *string, models int) map[string]int
 		}
 	}
 	return caps
-}
-
-// limitCap is the cap (and per-choice ceiling, -1 for none) a limit's
-// breakpoints give a unit of `models` models.
-func (l *mfmLimit) limitCap(models int) (int, int) {
-	order := make([]int, len(l.Breakpoints))
-	for i := range order {
-		order[i] = i
-	}
-	sort.SliceStable(order, func(a, b int) bool { return l.Breakpoints[order[a]].Models < l.Breakpoints[order[b]].Models })
-	cap, perChoice := 0, -1
-	for _, i := range order {
-		point := l.Breakpoints[i]
-		if point.Models <= models {
-			cap, perChoice = point.Choices, -1
-			if point.PerChoice != nil {
-				perChoice = *point.PerChoice
-			}
-		}
-	}
-	return cap, perChoice
-}
-
-// limitHolds reports whether copies of a limit's items, over the scope's stock
-// baseline, fit the limit.
-func (l *mfmLimit) limitHolds(unitModels int, copies, baseline mfmCopies) bool {
-	cap, perChoice := l.limitCap(unitModels)
-	isStock := func(id string) bool { return baseline[id] > 0 }
-	stockChoice := false
-	for _, choice := range l.Choices {
-		if len(choice) == 0 {
-			continue
-		}
-		all := true
-		for _, item := range choice {
-			if n, ok := baseline[item.ID]; !ok || n != item.Count {
-				all = false
-				break
-			}
-		}
-		if all {
-			stockChoice = true
-			break
-		}
-	}
-	var ids []string
-	seenID := map[string]bool{}
-	for _, choice := range l.Choices {
-		for _, item := range choice {
-			if !seenID[item.ID] {
-				seenID[item.ID] = true
-				ids = append(ids, item.ID)
-			}
-		}
-	}
-	vectors := make([][]int, len(l.Choices))
-	for c, choice := range l.Choices {
-		keep := choice
-		for _, item := range choice {
-			if !isStock(item.ID) {
-				keep = nil
-				for _, kept := range choice {
-					if !isStock(kept.ID) {
-						keep = append(keep, kept)
-					}
-				}
-				break
-			}
-		}
-		vectors[c] = make([]int, len(ids))
-		for i, id := range ids {
-			for _, item := range keep {
-				if item.ID == id {
-					vectors[c][i] += item.Count
-				}
-			}
-		}
-	}
-	target := make([]int, len(ids))
-	for i, id := range ids {
-		n := copies[id]
-		if !stockChoice {
-			n -= baseline[id]
-		}
-		if n > 0 {
-			target[i] = n
-		}
-	}
-	failed := map[string]bool{}
-	var fits func(index, left int, rest []int) bool
-	fits = func(index, left int, rest []int) bool {
-		if mfmAllZero(rest) {
-			return true
-		}
-		if index >= len(vectors) || left == 0 {
-			return false
-		}
-		key := fmt.Sprint(index, "|", left, "|", rest)
-		if failed[key] {
-			return false
-		}
-		most := left
-		if perChoice >= 0 && perChoice < most {
-			most = perChoice
-		}
-		for use := most; use >= 0; use-- {
-			next := make([]int, len(rest))
-			negative := false
-			for i := range rest {
-				next[i] = rest[i] - vectors[index][i]*use
-				if next[i] < 0 {
-					negative = true
-				}
-			}
-			if negative {
-				continue
-			}
-			if fits(index+1, left-use, next) {
-				return true
-			}
-		}
-		failed[key] = true
-		return false
-	}
-	return fits(0, cap, target)
-}
-
-func mfmAllZero(xs []int) bool {
-	for _, x := range xs {
-		if x != 0 {
-			return false
-		}
-	}
-	return true
 }

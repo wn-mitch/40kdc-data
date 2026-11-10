@@ -94,7 +94,14 @@ pub use data::{
 
 // Wargear legality against a unit's MFM loadout rules (unit-composition `loadout`).
 #[cfg(feature = "bundled-data")]
-pub use data::{check_mfm_loadout, default_mfm_loadout, MfmLoadoutRules, MfmLoadoutViolation};
+pub use data::{
+    check_mfm_loadout, default_mfm_loadout, encode_mfm_configuration, mfm_assignment,
+    mfm_base_loadout, mfm_configurations, mfm_resized_default, mfm_rows, mfm_scaled_default,
+    mfm_unit_assignment, mfm_unit_base_loadout, mfm_unit_bounds, mfm_unit_candidates,
+    mfm_unit_violations, mfm_weapon_bounds, MfmBaseLoadout, MfmBound, MfmComposition,
+    MfmConfiguration, MfmItem, MfmLoadoutRules, MfmLoadoutViolation, MfmModelRange, MfmRowBundle,
+    MfmSearchTooLarge, MAX_SEARCH_BUNDLES, MFM_CANDIDATES_TRUNCATED,
+};
 
 // Roster-level legality + affordability primitives (need both the Dataset and
 // the importer's Roster/BattleSize types).

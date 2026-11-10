@@ -156,6 +156,38 @@ Wargear legality against the unit's MFM loadout rules (the `mfm_loadout` corpus)
 
 The default unit of the unit's MFM loadout: `{models, counts}`, each an object of non-negative integers, or `null` when the unit has no `loadout`.
 
+### `mfm_unit`
+
+```json
+{"op":"mfm_unit","args":{"unitId":"boyz","factionId":"orks","modelCount":20,"limit":4}}
+```
+
+A unit at a total model count under its MFM loadout. `limit` (default 4) caps `candidates`. In place of `unitId`/`factionId`, `mfm_unit`, `mfm_assignment` and `check_mfm_unit` accept `composition`: a fabricated unit composition (`models`, optional `tiers`, `loadout`) read as the unit's own. The response `value` is `null` when the unit has no `loadout`, else `{rows, base, bounds, groups, candidates}`:
+
+- `rows`: each loadout row's model count. The first tier (in declaration order) whose summed range holds `modelCount` fixes each row's range; the default unit's rows are clamped into it, and the difference goes to (or comes from) the row with the most default models that has room, ties to the first in stock order. A row written `name#k`, with `k` a positive decimal integer, takes the range of the k-th composition row of that name; any other name, the sum of all composition rows with exactly that name.
+- `base`: `{counts, legal}`. The default unit's copies plus each row's template once per model it gains (less once per model it loses), when the checker accepts that; else the default copies scaled per model when they split evenly and the checker accepts that; else the template-resized copies with `legal: false`.
+- `bounds`: each item the unit can carry, `{min, max}` over the legal configurations, or `null` when there are none.
+- `groups`: the first assignment of `base.counts` to models (see `mfm_assignment`), or `null`.
+- `candidates`: the first `limit` distinct legal configurations in search order, each `"<witness> => <counts>"`. The witness lists each group as `<row>×<models>[<items>]`, then `unit[<items>]` for the unit's own wargear when it has any, joined by `; `; items and counts are ascending `id:count` pairs joined by `,`. More than `limit` configurations appends `"…truncated"`.
+
+When no tier holds `modelCount`, `rows`, `base`, `bounds` and `groups` are `null` and `candidates` is empty. A row with more than 200,000 bundles is not searched: `mfm_unit` and `mfm_assignment` answer `INTERNAL_ERROR` with the row in `detail`.
+
+### `mfm_assignment`
+
+```json
+{"op":"mfm_assignment","args":{"unitId":"boyz","factionId":"orks","modelCount":10,"counts":{"choppa-boyz":9,"slugga":9,"shoota-boyz":9,"kustom-choppa-boyz":1,"kombi-skorcha-boyz":1}}}
+```
+
+How `counts` sit on the unit's models: `{groups, unit, counts}` for the first legal configuration the search finds with exactly these copies, or `null` (also for an unbuildable size or a unit without `loadout`). `groups` are `{model, count, items}` with rows in code-unit order and, within a row, bundles in bundle order.
+
+### `check_mfm_unit`
+
+```json
+{"op":"check_mfm_unit","args":{"unitId":"boyz","factionId":"orks","modelCount":10,"counts":{"choppa-boyz":9}}}
+```
+
+`check_mfm_loadout` at the rows `mfm_unit` gives `modelCount`, or `[{code: "invalid-model-count", message}]` when no tier holds it; `null` for a unit without `loadout`.
+
 ### `check_roster_legality`
 
 ```json
