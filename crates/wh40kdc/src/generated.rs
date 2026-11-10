@@ -56562,6 +56562,10 @@ pub struct UnitCharacteristic {
 ///              "models"
 ///            ],
 ///            "properties": {
+///              "individual": {
+///                "description": "The app lists this row's models one by one, each with its own widgets, so a checkbox on the row is one per model rather than one for the row.",
+///                "const": true
+///              },
 ///              "items": {
 ///                "$ref": "#/$defs/items"
 ///              },
@@ -56994,6 +56998,10 @@ pub struct UnitComposition {
 ///          "models"
 ///        ],
 ///        "properties": {
+///          "individual": {
+///            "description": "The app lists this row's models one by one, each with its own widgets, so a checkbox on the row is one per model rather than one for the row.",
+///            "const": true
+///          },
 ///          "items": {
 ///            "$ref": "#/$defs/items"
 ///          },
@@ -57600,6 +57608,10 @@ impl<'de> ::serde::Deserialize<'de> for UnitCompositionLoadoutSlotsItemModel {
 ///    "models"
 ///  ],
 ///  "properties": {
+///    "individual": {
+///      "description": "The app lists this row's models one by one, each with its own widgets, so a checkbox on the row is one per model rather than one for the row.",
+///      "const": true
+///    },
 ///    "items": {
 ///      "$ref": "#/$defs/items"
 ///    },
@@ -57619,6 +57631,9 @@ impl<'de> ::serde::Deserialize<'de> for UnitCompositionLoadoutSlotsItemModel {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct UnitCompositionLoadoutStockItem {
+    ///The app lists this row's models one by one, each with its own widgets, so a checkbox on the row is one per model rather than one for the row.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub individual: ::std::option::Option<::serde_json::Value>,
     pub items: Items,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub model: ::std::option::Option<UnitCompositionLoadoutStockItemModel>,

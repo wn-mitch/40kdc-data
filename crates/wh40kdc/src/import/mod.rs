@@ -188,13 +188,35 @@ pub fn import_listforge(input: &str, ds: &Dataset) -> Result<Roster, ImportError
 /// Accepts either a parsed JSON tree (NewRecruit JSON, ListForge) or
 /// [`serde_json::Value::String`] wrapping raw text (the three NewRecruit
 /// text formats). Most callers will use [`import_roster_text`] for the
-/// string case.
+/// string case. A canonical roster (see `is_canonical_roster`) that
+/// deserializes as a [`Roster`] is returned unchanged, as in the TS
+/// `importRoster`; one that does not goes through the adapters.
 #[cfg(feature = "import")]
 pub fn import_roster(decoded: &serde_json::Value, ds: &Dataset) -> Result<Roster, ImportError> {
+    // An already-resolved canonical roster round-trips as it is, without an adapter.
+    if is_canonical_roster(decoded) {
+        if let Ok(roster) = serde_json::from_value::<Roster>(decoded.clone()) {
+            return Ok(roster);
+        }
+    }
     let registry = adapters();
     let adapter = select_adapter(decoded, &registry)?;
     let parsed = adapter.parse(decoded)?;
     Ok(resolve(&parsed, ds, adapter.format()))
+}
+
+/// Whether `decoded` is an already-resolved canonical [`Roster`] (the shape the
+/// roster-json exporter writes): a `source.format` string, a `units` array and
+/// a `diagnostics` field. Mirror of TS `isCanonicalRoster`.
+#[cfg(feature = "import")]
+fn is_canonical_roster(decoded: &serde_json::Value) -> bool {
+    decoded
+        .pointer("/source/format")
+        .is_some_and(serde_json::Value::is_string)
+        && decoded
+            .get("units")
+            .is_some_and(serde_json::Value::is_array)
+        && decoded.get("diagnostics").is_some()
 }
 
 /// Import a raw text NewRecruit export (wtc-compact, wtc-full, or simple).

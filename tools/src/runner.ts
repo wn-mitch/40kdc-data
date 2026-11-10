@@ -23,13 +23,6 @@ import process from "node:process";
 import { Dataset } from "./data/dataset.js";
 import { GAME_MODE_VIEWS, type GameModeView } from "./data/collection.js";
 import { normalizeName } from "./data/normalize.js";
-import {
-  baseLoadout,
-  maximalLoadout,
-  checkUnitLegality,
-  loadoutCandidates,
-  weaponBounds,
-} from "./data/loadout.js";
 import { checkMfmLoadout, defaultMfmLoadout, type MfmItem, type MfmLoadoutRules } from "./data/mfm-loadout.js";
 import { MfmSearchTooLarge, type MfmConfiguration } from "./data/mfm-loadout-search.js";
 import {
@@ -440,8 +433,8 @@ export function encodeBase(
 }
 
 /**
- * Whole-unit loadout legality (tier-aware) — the cross-impl pin for
- * {@link checkUnitLegality}. Args: `{ unitId, factionId?, modelCount, counts }`
+ * Whole-unit loadout legality — the cross-impl pin for `Dataset.loadoutOf(unit).check`.
+ * Args: `{ unitId, factionId?, modelCount, counts }`
  * where `counts` maps weapon/wargear id → count. Returns the violation list as
  * sorted `"code:id"` strings (the maths already sorts deterministically; the
  * extra sort keeps the wire result stable across the small encoding).
@@ -472,17 +465,8 @@ function handleCheckUnitLegality(
       ? ds.units.getInFaction(a.unitId, a.factionId)
       : ds.units.getAny(a.unitId);
   if (!unit) return err("UNKNOWN_ENTITY", { kind: "unit", id: a.unitId });
-  const options = ds.wargearOptionsOf(unit.raw);
-  const composition = ds.unitCompositionOf(unit.raw);
   const counts = new Map<string, number>(Object.entries(a.counts ?? {}));
-  const violations = checkUnitLegality(
-    unit.raw,
-    a.modelCount,
-    options,
-    counts,
-    composition?.models,
-    composition?.tiers,
-  );
+  const violations = ds.loadoutOf(unit.raw).check(a.modelCount, counts);
   return ok(violations.map((v) => `${v.code}:${v.id}`).sort());
 }
 
@@ -849,60 +833,35 @@ function handleLinkedQuery(state: RunnerState, args: unknown): RunnerResponse {
         const u = resolveUnit(input.unitId);
         if (!u)
           return err("UNKNOWN_ENTITY", { kind: "unit", id: input.unitId });
-        const modelCount = Number(input.modelCount);
-        const comp = ds.unitCompositionOf(u.raw);
-        const lo = baseLoadout(
-          u.raw,
-          modelCount,
-          ds.wargearOptionsOf(u.raw),
-          comp?.models,
-        );
-        // Encode the id→count map as sorted "id:count" strings for set compare.
-        return ok([...lo.counts].map(([id, n]) => `${id}:${n}`).sort());
+        const counts = ds.loadoutOf(u.raw).base(Number(input.modelCount));
+        // Encode the id→count map as sorted "id:count" strings for set compare; empty when the
+        // size cannot be built.
+        return ok([...(counts ?? [])].map(([id, n]) => `${id}:${n}`).sort());
       }
       case "weapon_bounds": {
         const u = resolveUnit(input.unitId);
         if (!u)
           return err("UNKNOWN_ENTITY", { kind: "unit", id: input.unitId });
-        const comp = ds.unitCompositionOf(u.raw);
-        const bounds = weaponBounds(
-          u.raw,
-          Number(input.modelCount),
-          ds.wargearOptionsOf(u.raw),
-          comp?.models,
-        );
         // Encode each id's inclusive range as sorted "id:min-max" strings for set compare.
-        return ok([...bounds].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort());
+        return tooLargeAsError(() =>
+          ok([...(ds.loadoutOf(u.raw).bounds(Number(input.modelCount)) ?? [])].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort()),
+        );
       }
       case "maximal_loadout": {
         const u = resolveUnit(input.unitId);
         if (!u)
           return err("UNKNOWN_ENTITY", { kind: "unit", id: input.unitId });
-        const modelCount = Number(input.modelCount);
-        const comp = ds.unitCompositionOf(u.raw);
-        const lo = maximalLoadout(
-          u.raw,
-          modelCount,
-          ds.wargearOptionsOf(u.raw),
-          comp?.models,
-        );
         // Encode the id→count map as sorted "id:count" strings for set compare.
-        return ok([...lo.counts].map(([id, n]) => `${id}:${n}`).sort());
+        return tooLargeAsError(() =>
+          ok([...(ds.loadoutOf(u.raw).maximal(Number(input.modelCount)) ?? [])].map(([id, n]) => `${id}:${n}`).sort()),
+        );
       }
       case "loadout_candidates": {
         const u = resolveUnit(input.unitId);
         if (!u)
           return err("UNKNOWN_ENTITY", { kind: "unit", id: input.unitId });
-        const comp = ds.unitCompositionOf(u.raw);
-        return ok(
-          loadoutCandidates(
-            u.raw,
-            Number(input.modelCount),
-            ds.wargearOptionsOf(u.raw),
-            comp?.models,
-            comp?.tiers,
-            input.limit == null ? undefined : Number(input.limit),
-          ),
+        return tooLargeAsError(() =>
+          ok(ds.loadoutOf(u.raw).candidates(Number(input.modelCount), input.limit == null ? undefined : Number(input.limit))),
         );
       }
       case "phases_of": {
@@ -1806,9 +1765,9 @@ export function dispatch(
     case "linked_query":
       return handleLinkedQuery(state, req.args);
     case "check_unit_legality":
-      return handleCheckUnitLegality(state, req.args);
+      return tooLargeAsError(() => handleCheckUnitLegality(state, req.args));
     case "check_roster_legality":
-      return handleCheckRosterLegality(state, req.args);
+      return tooLargeAsError(() => handleCheckRosterLegality(state, req.args));
     case "check_mfm_loadout":
       return handleCheckMfmLoadout(state, req.args);
     case "default_mfm_loadout":

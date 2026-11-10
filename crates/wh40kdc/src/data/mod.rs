@@ -37,6 +37,7 @@ mod normalize;
 mod pricing;
 #[cfg(feature = "cruncher")]
 mod recipient_snapshots;
+mod unit_loadout;
 
 // Roster-level legality + affordability build on both the Dataset and the
 // importer's `Roster`/`BattleSize` types, so they ride the `import` feature
@@ -77,12 +78,14 @@ pub use mfm_loadout::{
     MfmModelRange, MfmOption, MfmRowBundle, MfmSearchTooLarge, MfmSlot, MfmStockRow, MfmTemplate,
     MfmUniform, MfmUniformChoice, MAX_SEARCH_BUNDLES, MFM_CANDIDATES_TRUNCATED,
 };
+pub use mfm_loadout::{for_each_mfm_configuration, mfm_row_splits};
 #[cfg(feature = "cruncher")]
 pub use mortals::{AbilityMortalWounds, AbilityUnsupported, MortalWoundSources};
 pub use normalize::{normalize_name, strip_leading_the};
 pub use pricing::{base_unit_points, points_tier_missing};
 #[cfg(feature = "cruncher")]
 pub use recipient_snapshots::HistoricalSnapshotAbility;
+pub use unit_loadout::{mfm_group_row_order, mfm_groups, unit_loadout, LoadoutSource, UnitLoadout};
 
 #[cfg(feature = "import")]
 pub use affordability::{

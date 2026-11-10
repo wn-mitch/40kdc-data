@@ -591,6 +591,15 @@
       "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
       "reason": "Each stock entry is one wargear_option_group row of the datasheet, summed per model row."
     },
+    "/loadout/stock/*/individual": {
+      "provenance": "direct", "coverage": "implemented",
+      "sources": ["data.miniature.isIndividualModels"],
+      "joins": [{ "relation": "miniature.datasheetId", "direction": "children", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/loadout-lift.ts#liftLoadout", "operation": "Set on the row of a miniature whose flag is true; absent otherwise." }],
+      "filters": [], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift", "tools/src/data/mfm-loadout.ts#checkMfmLoadout"],
+      "reason": "The app lists such a row's models one by one, so each model has its own checkbox."
+    },
     "/loadout/stock/*/items": {
       "provenance": "derived", "coverage": "implemented",
       "sources": ["data.wargear_option_group.datasheetId", "data.wargear_option.wargearOptionGroupId", "data.wargear_option.wargearItemId"],
@@ -802,7 +811,6 @@
   "unmapped_mfm_fields": [
     { "source": "data.miniature.canBeNonCharacterWarlord", "candidate_pointer": "/models/*/is_leader_model", "reason": "A warlord eligibility flag is not the repository leader-model heuristic." },
     { "source": "data.miniature.cannotBeWarlord", "candidate_pointer": "/models/*/is_leader_model", "reason": "A warlord restriction is not the repository leader-model heuristic." },
-    { "source": "data.miniature.isIndividualModels", "candidate_pointer": null, "reason": "The current composition projection does not model this source classification." },
     { "source": "data.miniature.isSupremeCommander", "candidate_pointer": null, "reason": "The current composition projection does not model this source classification." },
     { "source": "data.miniature.miniatureSlots", "candidate_pointer": null, "reason": "The current composition projection does not model source slot counts." },
     { "source": "data.unit_composition.points", "candidate_pointer": null, "reason": "Composition points belong to unit points projection, not this entity schema." },

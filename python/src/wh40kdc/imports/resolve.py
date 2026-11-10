@@ -21,7 +21,6 @@ from typing import Any
 
 from wh40kdc.data.ability_refs import unit_ability_ids
 from wh40kdc.data.dataset import Dataset
-from wh40kdc.data.loadout import check_unit_legality, complete_loadout, group_loadout
 from wh40kdc.data.normalize import normalize_name, strip_leading_the
 
 #: The dataset edition/dataslate stamped onto an imported roster.
@@ -845,13 +844,7 @@ def _resolve_unit(
             for item in wargear:
                 id_ = item["ref"]["id"]
                 explicit_counts[id_] = explicit_counts.get(id_, 0) + item["count"]
-            completed = complete_loadout(
-                hit.raw,
-                model_count,
-                ds.wargear_options_of(hit.raw),
-                (ds.unit_composition_of(hit.raw) or {}).get("models"),
-                explicit_counts,
-            )
+            completed = ds.loadout_of(hit.raw).complete(model_count, explicit_counts)
             if completed is not None:
 
                 def ref_for_id(id_: str) -> dict[str, Any]:
@@ -901,6 +894,22 @@ def _resolve_unit(
                     else None
                 )
 
+    # Derived groups list wargear in their own order, so the list re-imports from any dialect
+    # the same way: a dialect that prints groups reads its wargear in group order.
+    if explicit_groups is None and loadout_groups:
+        rank: dict[str, int] = {}
+        for group in loadout_groups:
+            for item in group["wargear"]:
+                gid = item["ref"]["id"]
+                if gid and gid not in rank:
+                    rank[gid] = len(rank)
+
+        def at(item: dict[str, Any]) -> int:
+            gid = item["ref"]["id"]
+            return rank.get(gid, len(rank)) if gid else len(rank)
+
+        wargear = sorted(wargear, key=at)
+
     keyword_overrides = list(dict.fromkeys(parsed.get("keyword_overrides") or []))
     if (
         parsed.get("is_character")
@@ -947,14 +956,7 @@ def _resolve_unit(
                 counts[wid] = counts.get(wid, 0) + w["count"]
             violations = [
                 v
-                for v in check_unit_legality(
-                    hit.raw,
-                    model_count,
-                    ds.wargear_options_of(hit.raw),
-                    counts,
-                    comp.get("models"),
-                    comp.get("tiers"),
-                )
+                for v in ds.loadout_of(hit.raw).check(model_count, counts)
                 if v["code"] not in ("invalid-model-count", "below-min")
             ]
             if violations:
@@ -974,7 +976,8 @@ def _build_loadout_groups(
     ds: Dataset,
 ) -> list[dict[str, Any]] | None:
     """Recompute a unit's ``loadout_groups`` from its resolved wargear via
-    :func:`group_loadout` — the same maths the exporter uses, so an import→export
+    the unit's loadout view (``Dataset.loadout_of(...).groups``) — the same maths
+    the exporter uses, so an import→export
     round-trip is stable. ``None`` when the unit is unresolved, any weapon is
     unresolved, or the loadout doesn't decompose exactly. Mirror of the TS
     ``buildLoadoutGroups``.
@@ -989,10 +992,7 @@ def _build_loadout_groups(
             return None
         ref_by_id[wid] = w["ref"]
         counts[wid] = counts.get(wid, 0) + w["count"]
-    options = ds.wargear_options_of(hit.raw)
-    comp = ds.unit_composition_of(hit.raw)
-    models = comp.get("models") if comp else None
-    groups = group_loadout(hit.raw, model_count, options, models, counts)
+    groups = ds.loadout_of(hit.raw).groups(model_count, counts)
     if groups is None:
         return None
     return [

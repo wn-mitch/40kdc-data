@@ -130,7 +130,7 @@
                     {
                       "item": "Weapon§Bolt pistol",
                       "name": "Bolt pistol",
-                      "quantity": 36
+                      "quantity": 6
                     },
                     {
                       "item": "Weapon§Boltgun",
@@ -140,7 +140,7 @@
                     {
                       "item": "Weapon§Stocks and Fists",
                       "name": "Stocks and Fists",
-                      "quantity": 36
+                      "quantity": 6
                     }
                   ]
                 }

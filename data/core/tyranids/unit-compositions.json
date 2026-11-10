@@ -5773,7 +5773,8 @@
               "id": "chitinous-claws-and-teeth-carnifexes",
               "count": 1
             }
-          ]
+          ],
+          "individual": true
         }
       ],
       "templates": [

@@ -18,7 +18,8 @@
 
 export interface MfmItem { id: string; count: number }
 export interface MfmLoadoutRules {
-  stock: { model?: string; models: number; items: MfmItem[] }[];
+  /** `individual`: the app lists the row's models one by one, each with its own widgets. */
+  stock: { model?: string; models: number; items: MfmItem[]; individual?: boolean }[];
   templates: { model: string; items: MfmItem[] }[];
   slots: { model?: string; picks: number; repeats: boolean; alternate: boolean; choices: MfmItem[][] }[];
   limits: { model?: string; breakpoints: { models: number; choices: number; per_choice?: number }[]; choices: MfmItem[][] }[];
@@ -150,9 +151,9 @@ export function defaultMfmLoadout(rules: MfmLoadoutRules): { models: Map<string,
 /**
  * The most copies of each item the app lets `model` (or the unit's own wargear, when undefined)
  * carry with `models` models on the row: items whose every option there is a checkbox, one copy per
- * checkbox, raised to the row's stock copies where the default already holds more. A row the
- * default unit has at most one model of and whose stock options are all checkboxes is shown per
- * model (Carnifexes), so its caps are per model.
+ * checkbox, raised to the row's stock copies where the default already holds more. A row the app
+ * lists model by model (`individual`: Carnifexes, Broadside Shas'ui) gives each model its own
+ * checkboxes, so its caps are per model.
  */
 export function checkboxCaps(rules: MfmLoadoutRules, model: string | undefined, models = 1): Map<string, number> {
   const caps = new Map<string, number>();
@@ -167,15 +168,9 @@ export function checkboxCaps(rules: MfmLoadoutRules, model: string | undefined, 
     if (row.model !== model) continue;
     for (const item of row.items) if (caps.has(item.id)) caps.set(item.id, Math.max(caps.get(item.id)!, item.count));
   }
-  if (model !== undefined && perModelRow(rules, model)) for (const [id, cap] of caps) caps.set(id, cap * models);
+  const individual = model !== undefined && rules.stock.some((row) => row.model === model && row.individual === true);
+  if (individual) for (const [id, cap] of caps) caps.set(id, cap * models);
   return caps;
-}
-
-/** Whether the app shows `model`'s widgets once per model rather than once for the row. */
-function perModelRow(rules: MfmLoadoutRules, model: string): boolean {
-  const defaultModels = rules.stock.find((row) => row.model === model)?.models ?? 0;
-  const stock = rules.options.filter((option) => option.model === model && option.default > 0);
-  return defaultModels <= 1 && stock.length > 0 && stock.every((option) => option.input === "checkbox");
 }
 
 const withinCaps = (copies: (id: string) => number, caps: ReadonlyMap<string, number>) =>

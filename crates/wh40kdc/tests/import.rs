@@ -596,3 +596,22 @@ fn astartes_chainsword_keeps_a_weapon_printed_with_that_name() {
         Some("astartes-chainsword")
     );
 }
+
+/// A canonical roster comes back exactly as given, diagnostics included: it is
+/// not re-resolved (which would recount weapons and re-run the loadout check).
+#[test]
+fn canonical_roster_passes_through_unchanged() {
+    let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../conformance/roster/sororitas-combat-patrol/input.roster-json.json");
+    let mut input: Value =
+        serde_json::from_str(&std::fs::read_to_string(&path).expect("read canonical roster"))
+            .expect("canonical roster is JSON");
+    // Values re-resolution would never reproduce.
+    input["diagnostics"]["resolved_weapons"] = Value::from(999);
+    input["units"][0]["wargear"][0]["count"] = Value::from(77);
+    let roster = import_roster(&input, Dataset::embedded()).expect("canonical roster imports");
+    assert_eq!(
+        serde_json::to_value(&roster).expect("roster serializes"),
+        input
+    );
+}

@@ -30,7 +30,8 @@ export interface LoadoutLimit { model?: string; breakpoints: LoadoutBreakpoint[]
 export interface LoadoutUniform { model?: string; choices: { items: LoadoutItem[]; substitute: boolean }[] }
 /** One app widget: the item an option adds, on its model row, and its input. */
 export interface LoadoutOption { model?: string; id: string; input: "checkbox" | "stepper"; default: number }
-export interface StockRow { model?: string; models: number; items: LoadoutItem[] }
+/** `individual`: the app lists this row's models one by one, each with its own widgets. */
+export interface StockRow { model?: string; models: number; items: LoadoutItem[]; individual?: true }
 export interface MfmLoadout {
   stock: StockRow[];
   templates: ModelItems[];
@@ -92,6 +93,9 @@ export function liftLoadout(
     if (!modelNames.has(name) || (ordinal !== undefined && Number(ordinal) > (modelRows.get(name) ?? 0))) unresolvedModels.add(key);
     return key;
   };
+
+  // Rows whose miniature the app lists model by model (`isIndividualModels`).
+  const individual = new Set(minis.filter((row) => row.isIndividualModels).map((row) => modelName(row.id)!));
 
   for (const set of dump.groupBy("limited_wargear_choice_set", "datasheetId").get(datasheetId) ?? []) {
     if (set.mandatory) throw new Error(`limited set ${set.id} is mandatory; its meaning is unverified`);
@@ -208,6 +212,7 @@ export function liftLoadout(
         ...(model ? { model } : {}),
         models: model ? defaultModels.get(model) ?? 0 : 0,
         items: items(stockRows.get(model) ?? []),
+        ...(model && individual.has(model) ? { individual: true as const } : {}),
       }))),
       templates: sortRows(templates),
       slots: sortRows(slots),

@@ -7123,7 +7123,8 @@
         {
           "model": "Broadside Shas’ui",
           "models": 0,
-          "items": []
+          "items": [],
+          "individual": true
         },
         {
           "model": "Broadside Shas’vre",

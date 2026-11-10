@@ -100,11 +100,6 @@
                       "quantity": 1
                     },
                     {
-                      "item": "Weapon§Semi-automatic grenade launcher",
-                      "name": "Semi-automatic grenade launcher",
-                      "quantity": 1
-                    },
-                    {
                       "item": "Weapon§Shield Drone",
                       "name": "Shield Drone",
                       "quantity": 1
@@ -115,23 +110,23 @@
               {
                 "item": "Model§Pathfinder",
                 "name": "Pathfinder",
-                "quantity": 6,
+                "quantity": 5,
                 "assets": {
                   "included": [
                     {
                       "item": "Weapon§Close combat weapon",
                       "name": "Close combat weapon",
-                      "quantity": 6
+                      "quantity": 5
                     },
                     {
                       "item": "Weapon§Pulse carbine",
                       "name": "Pulse carbine",
-                      "quantity": 6
+                      "quantity": 5
                     },
                     {
                       "item": "Weapon§Pulse pistol",
                       "name": "Pulse pistol",
-                      "quantity": 6
+                      "quantity": 5
                     }
                   ]
                 }
@@ -156,6 +151,35 @@
                       "item": "Weapon§Rail rifle",
                       "name": "Rail rifle",
                       "quantity": 3
+                    }
+                  ]
+                }
+              },
+              {
+                "item": "Model§Pathfinder",
+                "name": "Pathfinder",
+                "quantity": 1,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Close combat weapon",
+                      "name": "Close combat weapon",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Pulse carbine",
+                      "name": "Pulse carbine",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Pulse pistol",
+                      "name": "Pulse pistol",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Semi-automatic grenade launcher",
+                      "name": "Semi-automatic grenade launcher",
+                      "quantity": 1
                     }
                   ]
                 }
@@ -191,11 +215,6 @@
                       "quantity": 2
                     },
                     {
-                      "item": "Weapon§Gun Drone",
-                      "name": "Gun Drone",
-                      "quantity": 1
-                    },
-                    {
                       "item": "Weapon§Marker Drone",
                       "name": "Marker Drone",
                       "quantity": 1
@@ -211,52 +230,28 @@
               {
                 "item": "Model§Crisis Starscythe Shas’ui",
                 "name": "Crisis Starscythe Shas’ui",
-                "quantity": 1,
+                "quantity": 2,
                 "assets": {
                   "included": [
                     {
                       "item": "Weapon§Battlesuit fists",
                       "name": "Battlesuit fists",
-                      "quantity": 1
+                      "quantity": 2
                     },
                     {
                       "item": "Weapon§Burst cannon",
                       "name": "Burst cannon",
-                      "quantity": 2
+                      "quantity": 4
                     },
                     {
                       "item": "Weapon§Gun Drone",
                       "name": "Gun Drone",
-                      "quantity": 1
-                    },
-                    {
-                      "item": "Weapon§Shield Drone",
-                      "name": "Shield Drone",
-                      "quantity": 1
-                    }
-                  ]
-                }
-              },
-              {
-                "item": "Model§Crisis Starscythe Shas’ui",
-                "name": "Crisis Starscythe Shas’ui",
-                "quantity": 1,
-                "assets": {
-                  "included": [
-                    {
-                      "item": "Weapon§Battlesuit fists",
-                      "name": "Battlesuit fists",
-                      "quantity": 1
-                    },
-                    {
-                      "item": "Weapon§Burst cannon",
-                      "name": "Burst cannon",
                       "quantity": 2
                     },
                     {
                       "item": "Weapon§Shield Drone",
                       "name": "Shield Drone",
-                      "quantity": 1
+                      "quantity": 2
                     }
                   ]
                 }

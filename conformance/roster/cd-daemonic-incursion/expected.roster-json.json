@@ -156,8 +156,8 @@
         },
         {
           "ref": {
-            "id": "instrument-of-chaos",
-            "raw_name": "Instrument of Chaos",
+            "id": "daemonic-icon",
+            "raw_name": "Daemonic Icon",
             "resolved": true,
             "candidates": []
           },
@@ -165,8 +165,8 @@
         },
         {
           "ref": {
-            "id": "daemonic-icon",
-            "raw_name": "Daemonic Icon",
+            "id": "instrument-of-chaos",
+            "raw_name": "Instrument of Chaos",
             "resolved": true,
             "candidates": []
           },

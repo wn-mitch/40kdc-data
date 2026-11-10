@@ -4,7 +4,7 @@
 //! Port of `tools/src/data/mfm-loadout-unit.ts`; conformance-pinned through the
 //! `mfm_loadout` corpus.
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, HashSet};
 
 use super::bounds::{mfm_weapon_bounds, MfmBound};
 use super::search::{mfm_assignment, mfm_configurations, MfmConfiguration, MfmSearchTooLarge};
@@ -107,22 +107,9 @@ fn default_rows(rules: &MfmLoadoutRules) -> Vec<(String, i64)> {
 /// most default models that has room, ties to the first in stock order, until
 /// the count is reached.
 pub fn mfm_rows(composition: &MfmComposition, model_count: i64) -> Option<BTreeMap<String, i64>> {
-    let rules = composition.loadout.as_ref()?;
-    let tiers: Vec<&[MfmModelRange]> = if composition.tiers.is_empty() {
-        vec![&composition.models]
-    } else {
-        composition.tiers.iter().map(Vec::as_slice).collect()
-    };
-    let defaults = default_rows(rules);
-    for tier in tiers {
-        // A row the tier does not list keeps its default count.
-        let ranges: Vec<(i64, i64)> = defaults
-            .iter()
-            .map(|(row, n)| row_range(tier, row).unwrap_or((*n, *n)))
-            .collect();
-        let low: i64 = ranges.iter().map(|(min, _)| min).sum();
-        let high: i64 = ranges.iter().map(|(_, max)| max).sum();
-        if model_count < low || model_count > high {
+    let (defaults, tiers) = tier_ranges(composition)?;
+    for ranges in tiers {
+        if !holds(&ranges, model_count) {
             continue;
         }
         let mut rows: Vec<i64> = defaults
@@ -159,6 +146,99 @@ pub fn mfm_rows(composition: &MfmComposition, model_count: i64) -> Option<BTreeM
         );
     }
     None
+}
+
+/// Each tier's model-count range per loadout row, in declaration order, rows in
+/// the default unit's stock order (`defaults`). A row the tier does not list
+/// keeps its default count. None without a loadout.
+#[allow(clippy::type_complexity)]
+fn tier_ranges(composition: &MfmComposition) -> Option<(Vec<(String, i64)>, Vec<Vec<(i64, i64)>>)> {
+    let rules = composition.loadout.as_ref()?;
+    let tiers: Vec<&[MfmModelRange]> = if composition.tiers.is_empty() {
+        vec![&composition.models]
+    } else {
+        composition.tiers.iter().map(Vec::as_slice).collect()
+    };
+    let defaults = default_rows(rules);
+    let ranges = tiers
+        .into_iter()
+        .map(|tier| {
+            defaults
+                .iter()
+                .map(|(row, n)| row_range(tier, row).unwrap_or((*n, *n)))
+                .collect()
+        })
+        .collect();
+    Some((defaults, ranges))
+}
+
+/// Whether a tier's summed row ranges hold `model_count`.
+fn holds(ranges: &[(i64, i64)], model_count: i64) -> bool {
+    let low: i64 = ranges.iter().map(|(min, _)| min).sum();
+    let high: i64 = ranges.iter().map(|(_, max)| max).sum();
+    (low..=high).contains(&model_count)
+}
+
+/// Every way a unit of `model_count` models splits across its loadout rows
+/// under some tier: the [`mfm_rows`] split first, then the rest by tier in
+/// declaration order, each tier's in ascending order of the rows' counts (rows
+/// in stock order). Each split is listed once. Empty when no tier holds the count.
+pub fn mfm_row_splits(
+    composition: &MfmComposition,
+    model_count: i64,
+) -> Vec<BTreeMap<String, i64>> {
+    let (Some(bulk), Some((defaults, tiers))) =
+        (mfm_rows(composition, model_count), tier_ranges(composition))
+    else {
+        return Vec::new();
+    };
+    let key_of = |rows: &BTreeMap<String, i64>| -> Vec<Option<i64>> {
+        defaults
+            .iter()
+            .map(|(row, _)| rows.get(row).copied())
+            .collect()
+    };
+    let mut seen = HashSet::from([key_of(&bulk)]);
+    let mut out = vec![bulk];
+    for ranges in &tiers {
+        let mut counts = Vec::with_capacity(ranges.len());
+        split_walk(ranges, 0, model_count, &mut counts, &mut |counts| {
+            let rows: BTreeMap<String, i64> = defaults
+                .iter()
+                .zip(counts)
+                .map(|((row, _), n)| (row.clone(), *n))
+                .collect();
+            if seen.insert(key_of(&rows)) {
+                out.push(rows);
+            }
+        });
+    }
+    out
+}
+
+/// Visits each assignment of counts within `ranges` from row `i` on that sums to `left`, ascending.
+fn split_walk(
+    ranges: &[(i64, i64)],
+    i: usize,
+    left: i64,
+    counts: &mut Vec<i64>,
+    visit: &mut dyn FnMut(&[i64]),
+) {
+    if i == ranges.len() {
+        if left == 0 {
+            visit(counts);
+        }
+        return;
+    }
+    // The rows after this one must still be able to take what is left.
+    let rest_low: i64 = ranges[i + 1..].iter().map(|(min, _)| min).sum();
+    let rest_high: i64 = ranges[i + 1..].iter().map(|(_, max)| max).sum();
+    let (min, max) = ranges[i];
+    for n in min.max(left - rest_high)..=max.min(left - rest_low) {
+        counts.push(n);
+        split_walk(ranges, i + 1, left - n, counts, visit);
+        counts.pop();
+    }
 }
 
 /// The default wargear of a unit with `rows` models per loadout row: the

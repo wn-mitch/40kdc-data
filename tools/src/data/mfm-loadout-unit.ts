@@ -31,6 +31,25 @@ function rowRange(tier: readonly { name: string; min: number; max: number }[], r
   return entries.reduce((sum, model) => ({ min: sum.min + model.min, max: sum.max + model.max }), { min: 0, max: 0 });
 }
 
+type Range = { min: number; max: number };
+
+/**
+ * Each tier's model-count range per loadout row, in declaration order, rows in stock order. A row
+ * the tier does not list keeps its default count.
+ */
+function tierRanges(composition: MfmComposition): { defaults: Map<string, number>; tiers: Map<string, Range>[] } | null {
+  const rules = composition.loadout;
+  if (!rules) return null;
+  const tiers = composition.tiers && composition.tiers.length > 0 ? composition.tiers.map((tier) => tier.models) : [composition.models];
+  const defaults = defaultMfmLoadout(rules).models;
+  return {
+    defaults,
+    tiers: tiers.map((tier) => new Map([...defaults].map(([row, n]) => [row, rowRange(tier, row) ?? { min: n, max: n }]))),
+  };
+}
+
+const total = (ranges: ReadonlyMap<string, Range>, side: "min" | "max") => [...ranges.values()].reduce((sum, range) => sum + range[side], 0);
+
 /**
  * The loadout rows' model counts for a unit of `modelCount` models, or null when no tier holds that
  * count. The first tier (in declaration order) whose range holds the count fixes each row's range;
@@ -39,22 +58,12 @@ function rowRange(tier: readonly { name: string; min: number; max: number }[], r
  * is reached.
  */
 export function mfmRows(composition: MfmComposition, modelCount: number): Map<string, number> | null {
-  const rules = composition.loadout;
-  if (!rules) return null;
-  const tiers = composition.tiers && composition.tiers.length > 0 ? composition.tiers.map((tier) => tier.models) : [composition.models];
-  const defaults = defaultMfmLoadout(rules).models;
+  const found = tierRanges(composition);
+  if (!found) return null;
+  const { defaults } = found;
   const order = [...defaults.keys()];
-  for (const tier of tiers) {
-    const ranges = new Map<string, { min: number; max: number }>();
-    for (const row of order) {
-      const range = rowRange(tier, row);
-      if (range) ranges.set(row, range);
-    }
-    // A row the tier does not list keeps its default count.
-    for (const row of order) if (!ranges.has(row)) ranges.set(row, { min: defaults.get(row)!, max: defaults.get(row)! });
-    const low = [...ranges.values()].reduce((sum, range) => sum + range.min, 0);
-    const high = [...ranges.values()].reduce((sum, range) => sum + range.max, 0);
-    if (modelCount < low || modelCount > high) continue;
+  for (const ranges of found.tiers) {
+    if (modelCount < total(ranges, "min") || modelCount > total(ranges, "max")) continue;
     const rows = new Map(order.map((row) => {
       const { min, max } = ranges.get(row)!;
       return [row, Math.min(max, Math.max(min, defaults.get(row)!))];
@@ -73,6 +82,49 @@ export function mfmRows(composition: MfmComposition, modelCount: number): Map<st
     return rows;
   }
   return null;
+}
+
+/**
+ * Every way a unit of `modelCount` models splits across its loadout rows under some tier: the
+ * {@link mfmRows} split first, then the rest by tier in declaration order, each tier's in
+ * ascending order of the rows' counts (rows in stock order). Each split is listed once. Empty when
+ * no tier holds the count.
+ */
+export function mfmRowSplits(composition: MfmComposition, modelCount: number): Map<string, number>[] {
+  const bulk = mfmRows(composition, modelCount);
+  const found = tierRanges(composition);
+  if (!bulk || !found) return [];
+  const order = [...found.defaults.keys()];
+  const keyOf = (rows: ReadonlyMap<string, number>) => order.map((row) => rows.get(row)).join(",");
+  const out = [bulk];
+  const seen = new Set([keyOf(bulk)]);
+  for (const ranges of found.tiers) {
+    const lows = order.map((row) => ranges.get(row)!.min);
+    const highs = order.map((row) => ranges.get(row)!.max);
+    const counts: number[] = [];
+    const walk = (i: number, left: number) => {
+      if (i === order.length) {
+        if (left !== 0) return;
+        const rows = new Map(order.map((row, at) => [row, counts[at]]));
+        const key = keyOf(rows);
+        if (!seen.has(key)) {
+          seen.add(key);
+          out.push(rows);
+        }
+        return;
+      }
+      // The rows after this one must still be able to take what is left.
+      const restLow = lows.slice(i + 1).reduce((sum, n) => sum + n, 0);
+      const restHigh = highs.slice(i + 1).reduce((sum, n) => sum + n, 0);
+      for (let n = Math.max(lows[i], left - restHigh); n <= Math.min(highs[i], left - restLow); n++) {
+        counts.push(n);
+        walk(i + 1, left - n);
+        counts.pop();
+      }
+    };
+    walk(0, modelCount);
+  }
+  return out;
 }
 
 /**

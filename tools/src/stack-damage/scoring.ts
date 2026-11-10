@@ -1,6 +1,8 @@
 import type { Buff, EngineContext } from "../cruncher/index.js";
 import type { Dataset, StackableBuff, StackableBuffGroup } from "../data/dataset.js";
-import { baseLoadout, optionCap, type LoadoutModel } from "../data/loadout.js";
+import { optionCap, type LoadoutModel } from "../data/loadout.js";
+import { unitLoadout } from "../data/unit-loadout.js";
+import type { MfmComposition } from "../data/mfm-loadout-unit.js";
 import { fullModelCount } from "./factions.js";
 import { reachesOtherUnits, replacedArmyRuleIds } from "../abilities-resolver/resolver.js";
 import type { EligibilityInput } from "../abilities-resolver/index.js";
@@ -10,7 +12,7 @@ import { DamageCellCache } from "./cache.js";
 import { validateCandidateLoadout, type CandidateLoadoutLegality, type LocalStackMember } from "./legality.js";
 import { isLegalStackLevers } from "./lever-legality.js";
 import { searchLevers, type LeverSpace } from "./lever-search.js";
-import { searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
+import { countsKey, mfmLoadouts, searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
 import type { ProfileDamage } from "./loadout-scoring.js";
 import { attributeSelectedProfile, crunchProfileScorer, profileApplicableBuffs, unitLoadoutDamage, type DamageAttribution, type UnscoreableProfile } from "./unit-damage.js";
 import { translationWarnings } from "./translation-warnings.js";
@@ -112,40 +114,60 @@ export class DamageScoringSession {
     );
   }
 
+  /**
+   * The unit's loadout space at its full model count. Under MFM rules its legal loadouts are listed
+   * up front, and a dump default its own rules refuse is replaced by the first legal loadout so the
+   * search starts legal; per-five sensitivity reads authored options and applies only without them.
+   */
   private scaffold(unit: UnitView): LoadoutScaffold {
     const cached = this.scaffoldCache.get(unit.id);
     if (cached) return cached;
-    const composition = this.dataset.unitCompositionOf(unit.raw) as { models?: LoadoutModel[] } | undefined;
+    const composition = this.dataset.unitCompositionOf(unit.raw) as ({ models?: LoadoutModel[] } & Partial<MfmComposition>) | undefined;
     const models = composition?.models ?? [];
     const modelCount = fullModelCount(this.dataset, unit.raw);
-    const authored = this.dataset.wargearOptionsOf(unit.raw);
-    const options = this.config.perFiveSensitivity
-      ? authored.map((option) => option.replaces && (option.model_constraint as { any_number?: boolean } | undefined)?.any_number
-        ? { ...option, model_constraint: { ...option.model_constraint, any_number: undefined, per_n_models: 5 } }
-        : option)
-      : authored;
-    const scaffold = {
-      models,
-      modelCount,
-      options,
-      caps: options.map((option) => optionCap(option, modelCount, models)),
-      base: baseLoadout(unit.raw, modelCount, options, models).counts,
-    };
+    const view = this.dataset.loadoutOf(unit.raw);
+    let scaffold: LoadoutScaffold;
+    if (view.source === "mfm") {
+      const mfm = mfmLoadouts(composition as MfmComposition, modelCount);
+      const stock = view.base(modelCount) ?? new Map<string, number>();
+      const base = mfm.byKey.has(countsKey(stock)) || mfm.loadouts.length === 0 ? stock : new Map(mfm.loadouts[0].counts);
+      const carriable = new Set<string>();
+      for (const { counts } of mfm.loadouts) for (const id of counts.keys()) carriable.add(id);
+      scaffold = { models, modelCount, options: [], caps: [], base, carriable: [...carriable].sort(), mfm };
+    } else {
+      const authored = this.dataset.wargearOptionsOf(unit.raw);
+      const options = this.config.perFiveSensitivity
+        ? authored.map((option) => option.replaces && (option.model_constraint as { any_number?: boolean } | undefined)?.any_number
+          ? { ...option, model_constraint: { ...option.model_constraint, any_number: undefined, per_n_models: 5 } }
+          : option)
+        : authored;
+      const base = unitLoadout(unit.raw, composition, options).base(modelCount) ?? new Map<string, number>();
+      scaffold = {
+        models,
+        modelCount,
+        options,
+        caps: options.map((option) => optionCap(option, modelCount, models)),
+        base,
+        carriable: [...new Set([...base.keys(), ...options.flatMap((option) => [...(option.replacement ?? []), ...(option.replacement_choice ?? []).flat()])])].sort(),
+      };
+    }
     this.scaffoldCache.set(unit.id, scaffold);
     return scaffold;
   }
 
   private loadoutLegality(unit: UnitView, scaffold: LoadoutScaffold, counts: ReadonlyMap<string, number>) {
-    const key = `${unit.raw.faction_id}|${unit.id}|per-five:${this.config.perFiveSensitivity}|${[...counts].sort(([left], [right]) => left.localeCompare(right)).map(([id, count]) => `${id}:${count}`).join(",")}`;
+    const key = `${unit.raw.faction_id}|${unit.id}|per-five:${this.config.perFiveSensitivity}|${countsKey(counts)}`;
     const cached = this.loadoutLegalityCache.get(key);
     if (cached) return cached;
-    const legality = validateCandidateLoadout({
-      unit: unit.raw,
-      modelCount: scaffold.modelCount,
-      options: scaffold.options,
-      counts,
-      models: scaffold.models,
-    });
+    const listed = scaffold.mfm?.byKey.get(countsKey(counts));
+    const legality = listed !== undefined
+      ? { legal: true, violations: [], groups: scaffold.mfm!.loadouts[listed].groups }
+      : validateCandidateLoadout({
+        unit: unit.raw,
+        modelCount: scaffold.modelCount,
+        counts,
+        loadout: scaffold.mfm ? this.dataset.loadoutOf(unit.raw) : unitLoadout(unit.raw, this.dataset.unitCompositionOf(unit.raw), scaffold.options),
+      });
     this.loadoutLegalityCache.set(key, legality);
     return legality;
   }
@@ -165,11 +187,10 @@ export class DamageScoringSession {
   }
 
   /** What any member can carry, at the stack's model count: the loadouts a stack's `unit-wargear` conditions range over. */
-  private stackScaffold(spec: StackSpec): Pick<LoadoutScaffold, "base" | "options" | "modelCount"> {
+  private stackScaffold(spec: StackSpec): Pick<LoadoutScaffold, "carriable" | "modelCount"> {
     const scaffolds = spec.members.map((member) => this.scaffold(member.unit));
     return {
-      base: this.stackCounts(spec),
-      options: scaffolds.flatMap((scaffold) => scaffold.options),
+      carriable: [...new Set(scaffolds.flatMap((scaffold) => scaffold.carriable))].sort(),
       modelCount: scaffolds.reduce((sum, scaffold) => sum + scaffold.modelCount, 0),
     };
   }

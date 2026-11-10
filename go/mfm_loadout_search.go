@@ -1,7 +1,6 @@
 package wh40kdc
 
 import (
-	"fmt"
 	"sort"
 	"strconv"
 )
@@ -106,7 +105,7 @@ func (r *MfmLoadoutRules) spaceOf(models map[string]int) (*mfmSpace, error) {
 			return true
 		}, mfmMaxSearchBundles)
 		if !ok {
-			return nil, fmt.Errorf("%s: more than %d wargear combinations to search", row, mfmMaxSearchBundles)
+			return nil, &MfmSearchTooLarge{Row: row}
 		}
 		bundles[row] = found
 	}
@@ -432,4 +431,24 @@ func MfmAssignment(r *MfmLoadoutRules, models, counts map[string]int) (*MfmConfi
 		return true
 	})
 	return found, nil
+}
+
+// forEachMfmConfiguration calls visit on each distinct legal configuration at
+// `models` models per row, in search order, until it returns true. With a
+// non-nil ceiling, only configurations carrying no more than its copies of
+// each item are walked; an item it leaves out may not be carried.
+func forEachMfmConfiguration(r *MfmLoadoutRules, models map[string]int, visit func(MfmConfiguration) bool, ceiling map[string]int) error {
+	space, err := r.spaceOf(models)
+	if err != nil {
+		return err
+	}
+	var bound []int
+	if ceiling != nil {
+		bound = make([]int, len(space.ids))
+		for i, id := range space.ids {
+			bound[i] = ceiling[id]
+		}
+	}
+	r.search(models, space, space.ids, bound, func(leaf mfmLeaf) bool { return visit(space.configurationOf(leaf)) })
+	return nil
 }

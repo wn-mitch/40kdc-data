@@ -32,7 +32,6 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Dataset } from "./data/dataset.js";
-import { baseLoadout, loadoutCandidates, weaponBounds } from "./data/loadout.js";
 import { normalizeName } from "./data/normalize.js";
 import {
   describeScoringCard,
@@ -437,6 +436,12 @@ type LinkedApiQuery =
     }
   | {
       name: string;
+      query: "maximal_loadout";
+      args: { unitId: string; modelCount: string };
+      comparison: "set";
+    }
+  | {
+      name: string;
       query: "weapon_bounds";
       args: { unitId: string; modelCount: string };
       comparison: "set";
@@ -809,9 +814,9 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     args: { bodyguardId: "sanctifiers" },
     comparison: "set",
   },
-  // base_loadout(unit, modelCount): the pinned legal default loadout, encoded as a
-  // sorted "weaponId:count" multiset. chaos-terminators is a uniform squad (per-model
-  // scaling); crusader-squad exercises leader+bulk per-figure allocation.
+  // base_loadout(unit, modelCount): the default loadout at that size, encoded as a sorted
+  // "weaponId:count" multiset; empty when the size cannot be built. crusader-squad exercises
+  // leader+bulk per-figure allocation.
   {
     name: "base_loadout chaos-terminators @5 (legal default, no swaps)",
     query: "base_loadout",
@@ -819,9 +824,15 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     comparison: "set",
   },
   {
-    name: "base_loadout chaos-terminators @10 scales per model",
+    name: "base_loadout chaos-terminators @10 is no squad size of the first copy",
     query: "base_loadout",
     args: { unitId: "chaos-terminators", modelCount: "10" },
+    comparison: "set",
+  },
+  {
+    name: "base_loadout khorne-berzerkers @20 grows the bulk row by its template",
+    query: "base_loadout",
+    args: { unitId: "khorne-berzerkers", modelCount: "20" },
     comparison: "set",
   },
   {
@@ -836,6 +847,38 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     args: { unitId: "imperial-navy-breachers", modelCount: "10" },
     comparison: "set",
   },
+  {
+    name: "base_loadout pink-horrors @10 reads authored options without MFM rules",
+    query: "base_loadout",
+    args: { unitId: "pink-horrors", modelCount: "10" },
+    comparison: "set",
+  },
+  // maximal_loadout(unit, modelCount): the legal loadout that adds the most copies over the
+  // base, as a sorted "id:count" multiset; empty when the size cannot be built.
+  {
+    name: "maximal_loadout khorne-berzerkers @10 takes every special the rules allow",
+    query: "maximal_loadout",
+    args: { unitId: "khorne-berzerkers", modelCount: "10" },
+    comparison: "set",
+  },
+  {
+    name: "maximal_loadout khorne-berzerkers @7 cannot be built",
+    query: "maximal_loadout",
+    args: { unitId: "khorne-berzerkers", modelCount: "7" },
+    comparison: "set",
+  },
+  {
+    name: "maximal_loadout sternguard-veteran-squad @5 keeps the first of several tied configurations",
+    query: "maximal_loadout",
+    args: { unitId: "sternguard-veteran-squad", modelCount: "5" },
+    comparison: "set",
+  },
+  {
+    name: "maximal_loadout pink-horrors @10 applies every authored option",
+    query: "maximal_loadout",
+    args: { unitId: "pink-horrors", modelCount: "10" },
+    comparison: "set",
+  },
   // weapon_bounds(unit, modelCount): each id's inclusive count range, encoded as a
   // sorted "id:min-max" set. Breachers' Navis Armsmen are three same-named rows, so
   // each row's swap is capped by the models carrying what it replaces.
@@ -843,6 +886,12 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     name: "weapon_bounds imperial-navy-breachers @10 caps split-row swaps by their carriers",
     query: "weapon_bounds",
     args: { unitId: "imperial-navy-breachers", modelCount: "10" },
+    comparison: "set",
+  },
+  {
+    name: "weapon_bounds corsair-voidscarred @8 widens each range over every row split",
+    query: "weapon_bounds",
+    args: { unitId: "corsair-voidscarred", modelCount: "8" },
     comparison: "set",
   },
   {
@@ -862,19 +911,19 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     comparison: "ordered",
   },
   {
-    name: "loadout_candidates boyz @10 enforces one special model",
+    name: "loadout_candidates boyz @10 allows one of each special",
     query: "loadout_candidates",
     args: { unitId: "boyz", factionId: "orks", modelCount: "10" },
     comparison: "ordered",
   },
   {
-    name: "loadout_candidates boyz @18 scales the shared unit budget",
+    name: "loadout_candidates boyz @18 is no squad size",
     query: "loadout_candidates",
     args: { unitId: "boyz", factionId: "orks", modelCount: "18" },
     comparison: "ordered",
   },
   {
-    name: "loadout_candidates boyz @20 caps shared specials at two",
+    name: "loadout_candidates boyz @20 allows two of each special",
     query: "loadout_candidates",
     args: { unitId: "boyz", factionId: "orks", modelCount: "20" },
     comparison: "ordered",
@@ -995,26 +1044,26 @@ function runLinkedQuery(
     }
     case "weapon_bounds": {
       // Mirrors the runner's weapon_bounds op: each id's inclusive range as a sorted
-      // "id:min-max" set.
+      // "id:min-max" set; empty when the size cannot be built.
       const u = ds.units.getAny(q.args.unitId);
       if (!u) throw new Error(`weapon_bounds: unknown unit ${q.args.unitId}`);
-      const comp = ds.unitCompositionOf(u.raw);
-      const bounds = weaponBounds(u.raw, Number(q.args.modelCount), ds.wargearOptionsOf(u.raw), comp?.models);
-      return [...bounds].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort();
+      const bounds = ds.loadoutOf(u.raw).bounds(Number(q.args.modelCount));
+      return [...(bounds ?? [])].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort();
+    }
+    case "maximal_loadout": {
+      // Mirrors the runner's maximal_loadout op: a sorted "id:count" multiset.
+      const u = ds.units.getAny(q.args.unitId);
+      if (!u) throw new Error(`maximal_loadout: unknown unit ${q.args.unitId}`);
+      const counts = ds.loadoutOf(u.raw).maximal(Number(q.args.modelCount));
+      return [...(counts ?? [])].map(([id, n]) => `${id}:${n}`).sort();
     }
     case "base_loadout": {
-      // Mirrors the runner's base_loadout op: the legal default loadout encoded as
-      // a sorted "id:count" multiset (set-compared).
+      // Mirrors the runner's base_loadout op: the default loadout encoded as a sorted
+      // "id:count" multiset (set-compared); empty when the size cannot be built.
       const u = ds.units.getAny(q.args.unitId);
       if (!u) throw new Error(`base_loadout: unknown unit ${q.args.unitId}`);
-      const comp = ds.unitCompositionOf(u.raw);
-      const lo = baseLoadout(
-        u.raw,
-        Number(q.args.modelCount),
-        ds.wargearOptionsOf(u.raw),
-        comp?.models,
-      );
-      return [...lo.counts].map(([id, n]) => `${id}:${n}`).sort();
+      const counts = ds.loadoutOf(u.raw).base(Number(q.args.modelCount));
+      return [...(counts ?? [])].map(([id, n]) => `${id}:${n}`).sort();
     }
     case "loadout_candidates": {
       const u = q.args.factionId
@@ -1022,13 +1071,8 @@ function runLinkedQuery(
         : ds.units.getAny(q.args.unitId);
       if (!u)
         throw new Error(`loadout_candidates: unknown unit ${q.args.unitId}`);
-      const comp = ds.unitCompositionOf(u.raw);
-      return loadoutCandidates(
-        u.raw,
+      return ds.loadoutOf(u.raw).candidates(
         Number(q.args.modelCount),
-        ds.wargearOptionsOf(u.raw),
-        comp?.models,
-        comp?.tiers,
         q.args.limit == null ? undefined : Number(q.args.limit),
       );
     }

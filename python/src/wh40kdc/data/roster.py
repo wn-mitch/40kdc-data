@@ -26,7 +26,6 @@ from wh40kdc.data.enhancement_eligibility import (
     meets_enhancement_groups,
     missing_required_abilities,
 )
-from wh40kdc.data.loadout import check_unit_legality
 from wh40kdc.data.pricing import host_unit_points, wargear_points
 
 #: Army-construction violation codes (distinct from per-unit loadout codes).
@@ -162,20 +161,14 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
         view = views[idx]
         if view is None:
             continue
-        options = dataset.wargear_options_of(view.raw)
-        composition = dataset.unit_composition_of(view.raw)
+        model_count = su.get("model_count") or 0
         units.append(
             {
                 "unitId": view.id,
                 "unitIndex": idx,
-                "modelCount": su.get("model_count") or 0,
-                "violations": check_unit_legality(
-                    view.raw,
-                    su.get("model_count") or 0,
-                    options,
-                    su.get("counts") or {},
-                    (composition or {}).get("models"),
-                    (composition or {}).get("tiers"),
+                "modelCount": model_count,
+                "violations": dataset.loadout_of(view.raw).check(
+                    model_count, su.get("counts") or {}
                 ),
             }
         )

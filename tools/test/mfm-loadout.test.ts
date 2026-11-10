@@ -93,15 +93,23 @@ describe("checkboxCaps", () => {
     expect(caps.get("shield")).toBe(6);
   });
 
-  it("scales only a one-model row whose stock is all checkboxes", () => {
+  it("scales a row's checkboxes by its models only when the app lists them model by model", () => {
     const options: MfmLoadoutRules["options"] = [
       { model: "A", id: "claws", input: "checkbox", default: 1 },
       { model: "A", id: "extra", input: "checkbox", default: 0 },
     ];
-    expect(checkboxCaps(rules(options, [{ model: "A", models: 1, items: [{ id: "claws", count: 1 }] }]), "A", 3).get("extra")).toBe(3);
-    expect(checkboxCaps(rules(options, [{ model: "A", models: 2, items: [{ id: "claws", count: 2 }] }]), "A", 3).get("extra")).toBe(1);
-    const stepperStock = [{ ...options[0], input: "stepper" as const }, options[1]];
-    expect(checkboxCaps(rules(stepperStock, [{ model: "A", models: 1, items: [{ id: "claws", count: 1 }] }]), "A", 3).get("extra")).toBe(1);
+    const stock = { model: "A", models: 1, items: [{ id: "claws", count: 1 }] };
+    expect(checkboxCaps(rules(options, [{ ...stock, individual: true }]), "A", 3).get("extra")).toBe(3);
+    // A one-model row of checkboxes is still one widget for the row unless the dump marks it.
+    expect(checkboxCaps(rules(options, [stock]), "A", 3).get("extra")).toBe(1);
+    // A row the default unit has none of (Broadside Shas'ui) scales too.
+    expect(checkboxCaps(rules(options, [{ model: "A", models: 0, items: [], individual: true }]), "A", 2).get("extra")).toBe(2);
+  });
+
+  it("lets each of three Broadsides take its own twin smart missile system", () => {
+    const rules = rulesOf("tau-empire", "broadside-battlesuits");
+    expect(rules.stock.find((row) => row.model === "Broadside Shas’ui")?.individual).toBe(true);
+    expect(checkboxCaps(rules, "Broadside Shas’ui", 2).get("twin-smart-missile-system-broadside-battlesuits")).toBe(2);
   });
 });
 

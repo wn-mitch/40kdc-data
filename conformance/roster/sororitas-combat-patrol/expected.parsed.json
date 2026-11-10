@@ -40,7 +40,7 @@
       "wargear": [
         {
           "raw_name": "Bolt pistol",
-          "count": 40
+          "count": 10
         },
         {
           "raw_name": "Boltgun",
@@ -52,7 +52,7 @@
         },
         {
           "raw_name": "Stocks and Fists",
-          "count": 40
+          "count": 10
         },
         {
           "raw_name": "Ministorum flamer",
@@ -118,7 +118,7 @@
           "wargear": [
             {
               "raw_name": "Bolt pistol",
-              "count": 6
+              "count": 1
             },
             {
               "raw_name": "Boltgun",
@@ -126,7 +126,7 @@
             },
             {
               "raw_name": "Stocks and Fists",
-              "count": 6
+              "count": 1
             }
           ]
         },

@@ -15,8 +15,10 @@ import {
 } from "../cruncher/index.js";
 import type { Dataset } from "../data/dataset.js";
 import { isMeleeProfile } from "../data/weapon-profile.js";
-import { completeLoadout, type LoadoutGroup, type LoadoutModel } from "../data/loadout.js";
+import type { LoadoutGroup, LoadoutModel } from "../data/loadout.js";
+import { unitLoadout, type UnitLoadout } from "../data/unit-loadout.js";
 import type { Unit, WargearOption, Weapon } from "../generated.js";
+import { candidateGroups } from "./legality.js";
 import { groupsWithGrantedWeapons, withGrantedWeapons, type WeaponGrant } from "./weapon-grants.js";
 import {
   bigGunsHitModifier,
@@ -40,12 +42,15 @@ export interface UnitLoadoutDamageInput {
   /** Its `phase` picks ranged or melee weapons; `attackerStates` including `engaged` applies the Pistol rule's engaged case. */
   context: EngineContext;
   /**
-   * Which models carry what, for the per-model Pistol choice. Taken from `completeLoadout` when
-   * omitted and the wargear data allows; `null` makes the whole unit choose together.
+   * Which models carry what, for the per-model Pistol choice. Read from `loadout` when omitted
+   * and it has one; `null` makes the whole unit choose together.
    */
   groups?: readonly LoadoutGroup[] | null;
-  /** Wargear data for completing `groups`. */
+  /** The unit's loadout view, for finding `groups`. */
+  loadout?: UnitLoadout;
+  /** @deprecated Pass `loadout`; authored options for finding `groups` when it is absent. */
   options?: readonly WargearOption[];
+  /** @deprecated Pass `loadout`. */
   models?: readonly LoadoutModel[];
   /** Scores one profile; defaults to a crunch with `buffs`. */
   scoreProfile?: ProfileScorer;
@@ -301,12 +306,16 @@ export function profileApplicableBuffs(
  * profile it adds the most to; several such permissions (one Hit and one Wound roll) go to that
  * same profile, which can understate a unit that would spend them on different weapons.
  */
+/** `groups` read from the input's loadout view, else from its deprecated options and models. */
+function loadoutGroupsOf(input: UnitLoadoutDamageInput): LoadoutGroup[] | null {
+  const loadout = input.loadout ?? (input.options && input.models ? unitLoadout(input.unit, { models: input.models }, input.options) : undefined);
+  return loadout ? candidateGroups(loadout, input.modelCount, input.counts) : null;
+}
+
 export function unitLoadoutDamage(input: UnitLoadoutDamageInput): UnitLoadoutDamageResult {
   const groups = input.groups !== undefined
     ? input.groups
-    : input.options && input.models
-      ? completeLoadout(input.unit, input.modelCount, input.options, input.models, new Map(input.counts))?.groups ?? null
-      : null;
+    : loadoutGroupsOf(input);
   const modelWargearBuffs = input.buffs.filter(isModelWargearBuff);
   if (groups && groups.length > 0 && modelWargearBuffs.length > 0) return scoreModelWargearGroups(input, groups);
   if (modelWargearBuffs.length > 0 && input.modelWargearResolved === undefined && input.modelCount !== 1) {
@@ -357,9 +366,7 @@ function scoredLoadout(
   input: UnitLoadoutDamageInput,
   groups = input.groups !== undefined
     ? input.groups
-    : input.options && input.models
-      ? completeLoadout(input.unit, input.modelCount, input.options, input.models, new Map(input.counts))?.groups ?? null
-      : null,
+    : loadoutGroupsOf(input),
 ): LoadoutDamageResult & { groups: readonly LoadoutGroup[] | null } {
   const grants = input.grants ?? [];
   const counts = withGrantedWeapons(input.counts, grants);

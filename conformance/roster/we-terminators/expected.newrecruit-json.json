@@ -164,19 +164,7 @@
                 "selections": [
                   {
                     "id": "w-0",
-                    "name": "Chainfist",
-                    "type": "upgrade",
-                    "number": 1,
-                    "categories": [
-                      {
-                        "name": "Ranged Weapon",
-                        "primary": false
-                      }
-                    ]
-                  },
-                  {
-                    "id": "w-1",
-                    "name": "Combi-weapon",
+                    "name": "Paired accursed weapons",
                     "type": "upgrade",
                     "number": 1,
                     "categories": [
@@ -228,7 +216,19 @@
                 "selections": [
                   {
                     "id": "w-0",
-                    "name": "Paired accursed weapons",
+                    "name": "Chainfist",
+                    "type": "upgrade",
+                    "number": 2,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-1",
+                    "name": "Combi-weapon",
                     "type": "upgrade",
                     "number": 2,
                     "categories": [
@@ -280,19 +280,7 @@
                 "selections": [
                   {
                     "id": "w-0",
-                    "name": "Chainfist",
-                    "type": "upgrade",
-                    "number": 1,
-                    "categories": [
-                      {
-                        "name": "Ranged Weapon",
-                        "primary": false
-                      }
-                    ]
-                  },
-                  {
-                    "id": "w-1",
-                    "name": "Combi-weapon",
+                    "name": "Paired accursed weapons",
                     "type": "upgrade",
                     "number": 1,
                     "categories": [
@@ -333,19 +321,7 @@
                 "selections": [
                   {
                     "id": "w-0",
-                    "name": "Chainfist",
-                    "type": "upgrade",
-                    "number": 1,
-                    "categories": [
-                      {
-                        "name": "Ranged Weapon",
-                        "primary": false
-                      }
-                    ]
-                  },
-                  {
-                    "id": "w-1",
-                    "name": "Combi-weapon",
+                    "name": "Paired accursed weapons",
                     "type": "upgrade",
                     "number": 1,
                     "categories": [
@@ -397,7 +373,19 @@
                 "selections": [
                   {
                     "id": "w-0",
-                    "name": "Paired accursed weapons",
+                    "name": "Chainfist",
+                    "type": "upgrade",
+                    "number": 1,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-1",
+                    "name": "Combi-weapon",
                     "type": "upgrade",
                     "number": 1,
                     "categories": [

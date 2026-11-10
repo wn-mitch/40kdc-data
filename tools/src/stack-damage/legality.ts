@@ -1,11 +1,6 @@
 import type { Dataset } from "../data/dataset.js";
-import {
-  completeLoadout,
-  validateLoadout,
-  type LoadoutGroup,
-  type LoadoutModel,
-  type Violation as LoadoutViolation,
-} from "../data/loadout.js";
+import type { LoadoutGroup, LoadoutModel, Violation as LoadoutViolation } from "../data/loadout.js";
+import { unitLoadout, type UnitLoadout } from "../data/unit-loadout.js";
 import { hostPointsTiers, hostUnitPoints, wargearPoints } from "../data/pricing.js";
 import {
   validateRosterCore,
@@ -87,40 +82,53 @@ function sameCounts(left: ReadonlyMap<string, number>, right: ReadonlyMap<string
 
 /**
  * Authoritative in-loop loadout gate; callers must reject every nonempty result.
- * A candidate is an exact whole-unit loadout, not an importer's sparse selection,
- * so when whole-model completion applies it must reproduce these counts exactly.
- * Completion otherwise tolerates exporter double-counting by dropping the lower
- * bound on items shared by several bundled branches, which would accept any
- * count of such an item.
+ * A candidate is an exact whole-unit loadout, not an importer's sparse selection.
+ * Under MFM rules the legal assignment that carries it gives its groups. Under
+ * authored options, completion must reproduce these counts exactly: it otherwise
+ * tolerates exporter double-counting by dropping the lower bound on items shared
+ * by several bundled branches, which would accept any count of such an item.
  */
 export function validateCandidateLoadout(input: {
   unit: Unit;
   modelCount: number;
-  options: readonly WargearOption[];
   counts: ReadonlyMap<string, number>;
-  models: readonly LoadoutModel[];
+  /** The unit's loadout view (`Dataset.loadoutOf`). */
+  loadout?: UnitLoadout;
+  /**
+   * Authored options and composition rows, checked when `loadout` is absent.
+   * @deprecated Pass `loadout`; these ignore a unit's MFM loadout rules.
+   */
+  options?: readonly WargearOption[];
+  /** @deprecated Pass `loadout`. */
+  models?: readonly LoadoutModel[];
 }): CandidateLoadoutLegality {
-  const violations = validateLoadout(
-    input.unit,
-    input.modelCount,
-    input.options,
-    new Map(input.counts),
-    input.models,
-  );
+  const { modelCount, counts } = input;
+  const loadout = input.loadout ?? unitLoadout(input.unit, input.models ? { models: input.models } : undefined, input.options ?? []);
+  const violations = loadout.check(modelCount, counts);
   let groups: LoadoutGroup[] | null = null;
   if (violations.length === 0) {
-    const completed = completeLoadout(input.unit, input.modelCount, input.options, input.models, new Map(input.counts));
-    if (completed && !sameCounts(completed.counts, input.counts)) {
-      violations.push({
-        id: input.unit.id,
-        code: "swap-conflict",
-        message: `${input.unit.id}: no legal whole-model assignment carries exactly these counts`,
-      });
-    } else {
-      groups = completed?.groups ?? null;
+    groups = candidateGroups(loadout, modelCount, counts);
+    if (loadout.source === "wargear-options") {
+      const completed = loadout.complete(modelCount, counts);
+      if (completed && !sameCounts(completed.counts, counts)) {
+        violations.push({
+          id: input.unit.id,
+          code: "swap-conflict",
+          message: `${input.unit.id}: no legal whole-model assignment carries exactly these counts`,
+        });
+        groups = null;
+      }
     }
   }
   return { legal: violations.length === 0, violations, groups };
+}
+
+/**
+ * Which models carry an exact loadout: its legal assignment under MFM rules, else the authored
+ * options' completion of it. Null for one model, or when neither applies.
+ */
+export function candidateGroups(loadout: UnitLoadout, modelCount: number, counts: ReadonlyMap<string, number>): LoadoutGroup[] | null {
+  return loadout.source === "mfm" ? loadout.groups(modelCount, counts) : loadout.complete(modelCount, counts)?.groups ?? null;
 }
 
 const ENHANCEMENT_CODES: Record<string, true> = {

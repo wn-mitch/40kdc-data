@@ -20,12 +20,6 @@ def _cases() -> list[dict[str, Any]]:
 
 def run_linked_query(ds: Any, query: str, args: dict[str, Any]) -> Any:
     from wh40kdc.data.base import encode_base
-    from wh40kdc.data.loadout import (
-        base_loadout,
-        loadout_candidates,
-        maximal_loadout,
-        weapon_bounds,
-    )
 
     if query == "find_unit":
         u = ds.units.find(args.get("query", ""))
@@ -64,45 +58,23 @@ def run_linked_query(ds: Any, query: str, args: dict[str, Any]) -> Any:
         return [x.id for x in ds.units.get_any(args["unitId"]).weapons]
     if query == "wargear_options_of":
         return [x["id"] for x in ds.units.get_any(args["unitId"]).wargear_options]
-    if query == "base_loadout":
-        unit = ds.units.get_any(args["unitId"])
-        comp = ds.unit_composition_of(unit.raw)
-        lo = base_loadout(
-            unit.raw,
-            int(args["modelCount"]),
-            ds.wargear_options_of(unit.raw),
-            (comp or {}).get("models"),
-        )
-        return sorted(f"{id_}:{n}" for id_, n in lo.items())
-    if query == "weapon_bounds":
-        unit = ds.units.get_any(args["unitId"])
-        comp = ds.unit_composition_of(unit.raw)
-        bounds = weapon_bounds(
-            unit.raw,
-            int(args["modelCount"]),
-            ds.wargear_options_of(unit.raw),
-            (comp or {}).get("models"),
-        )
-        return sorted(f"{id_}:{b['min']}-{b['max']}" for id_, b in bounds.items())
-    if query == "maximal_loadout":
-        unit = ds.units.get_any(args["unitId"])
-        lo = maximal_loadout(unit.raw, int(args["modelCount"]), ds.wargear_options_of(unit.raw))
-        return sorted(f"{id_}:{n}" for id_, n in lo.items())
-    if query == "loadout_candidates":
+    if query in ("base_loadout", "weapon_bounds", "maximal_loadout", "loadout_candidates"):
         unit = (
             ds.units.get_in_faction(args["unitId"], args["factionId"])
             if args.get("factionId")
             else ds.units.get_any(args["unitId"])
         )
-        comp = ds.unit_composition_of(unit.raw)
-        return loadout_candidates(
-            unit.raw,
-            int(args["modelCount"]),
-            ds.wargear_options_of(unit.raw),
-            (comp or {}).get("models"),
-            (comp or {}).get("tiers"),
-            int(args["limit"]) if args.get("limit") is not None else None,
-        )
+        view = ds.loadout_of(unit.raw)
+        model_count = int(args["modelCount"])
+        if query == "base_loadout":
+            return sorted(f"{id_}:{n}" for id_, n in (view.base(model_count) or {}).items())
+        if query == "weapon_bounds":
+            bounds = view.bounds(model_count) or {}
+            return sorted(f"{id_}:{b['min']}-{b['max']}" for id_, b in bounds.items())
+        if query == "maximal_loadout":
+            return sorted(f"{id_}:{n}" for id_, n in (view.maximal(model_count) or {}).items())
+        limit = args.get("limit")
+        return view.candidates(model_count, None if limit is None else int(limit))
     if query == "phases_of":
         return list(ds.abilities.get(args["abilityId"]).phases)
     if query == "faction_of":

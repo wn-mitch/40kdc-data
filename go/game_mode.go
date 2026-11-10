@@ -26,10 +26,13 @@ var gameModeViewIDs = []string{"matched-play", "combat-patrol", "boarding-action
 type gameModeViews struct {
 	mu     sync.Mutex
 	byMode map[string]*Dataset
+	// loadouts is each unit's loadout view by faction::unit (Dataset.loadoutOf),
+	// shared across game-mode views.
+	loadouts map[string]UnitLoadout
 }
 
 func newGameModeViews() *gameModeViews {
-	return &gameModeViews{byMode: map[string]*Dataset{}}
+	return &gameModeViews{byMode: map[string]*Dataset{}, loadouts: map[string]UnitLoadout{}}
 }
 
 // GameMode returns the view's game mode: a game-mode id or "all".

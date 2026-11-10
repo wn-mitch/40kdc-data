@@ -100,8 +100,8 @@
       "wargear": [
         {
           "ref": {
-            "id": "chainfist",
-            "raw_name": "Chainfist",
+            "id": "paired-accursed-weapons",
+            "raw_name": "Paired accursed weapons",
             "resolved": true,
             "candidates": []
           },
@@ -127,8 +127,8 @@
         },
         {
           "ref": {
-            "id": "paired-accursed-weapons",
-            "raw_name": "Paired accursed weapons",
+            "id": "chainfist",
+            "raw_name": "Chainfist",
             "resolved": true,
             "candidates": []
           },
@@ -151,17 +151,8 @@
           "wargear": [
             {
               "ref": {
-                "id": "chainfist",
-                "raw_name": "Chainfist",
-                "resolved": true,
-                "candidates": []
-              },
-              "count": 1
-            },
-            {
-              "ref": {
-                "id": "combi-weapon",
-                "raw_name": "Combi-weapon",
+                "id": "paired-accursed-weapons",
+                "raw_name": "Paired accursed weapons",
                 "resolved": true,
                 "candidates": []
               },
@@ -199,8 +190,17 @@
           "wargear": [
             {
               "ref": {
-                "id": "paired-accursed-weapons",
-                "raw_name": "Paired accursed weapons",
+                "id": "chainfist",
+                "raw_name": "Chainfist",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "combi-weapon",
+                "raw_name": "Combi-weapon",
                 "resolved": true,
                 "candidates": []
               },
@@ -238,17 +238,8 @@
           "wargear": [
             {
               "ref": {
-                "id": "chainfist",
-                "raw_name": "Chainfist",
-                "resolved": true,
-                "candidates": []
-              },
-              "count": 1
-            },
-            {
-              "ref": {
-                "id": "combi-weapon",
-                "raw_name": "Combi-weapon",
+                "id": "paired-accursed-weapons",
+                "raw_name": "Paired accursed weapons",
                 "resolved": true,
                 "candidates": []
               },
@@ -274,8 +265,8 @@
       "wargear": [
         {
           "ref": {
-            "id": "chainfist",
-            "raw_name": "Chainfist",
+            "id": "paired-accursed-weapons",
+            "raw_name": "Paired accursed weapons",
             "resolved": true,
             "candidates": []
           },
@@ -301,8 +292,8 @@
         },
         {
           "ref": {
-            "id": "paired-accursed-weapons",
-            "raw_name": "Paired accursed weapons",
+            "id": "chainfist",
+            "raw_name": "Chainfist",
             "resolved": true,
             "candidates": []
           },
@@ -325,17 +316,8 @@
           "wargear": [
             {
               "ref": {
-                "id": "chainfist",
-                "raw_name": "Chainfist",
-                "resolved": true,
-                "candidates": []
-              },
-              "count": 1
-            },
-            {
-              "ref": {
-                "id": "combi-weapon",
-                "raw_name": "Combi-weapon",
+                "id": "paired-accursed-weapons",
+                "raw_name": "Paired accursed weapons",
                 "resolved": true,
                 "candidates": []
               },
@@ -373,8 +355,17 @@
           "wargear": [
             {
               "ref": {
-                "id": "paired-accursed-weapons",
-                "raw_name": "Paired accursed weapons",
+                "id": "chainfist",
+                "raw_name": "Chainfist",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "combi-weapon",
+                "raw_name": "Combi-weapon",
                 "resolved": true,
                 "candidates": []
               },

@@ -17,7 +17,7 @@ import {
   unitLimitForBattleSize,
 } from "./battle-sizes.js";
 import { meetsEnhancementGroups, missingRequiredAbilities } from "./enhancement-eligibility.js";
-import { checkUnitLegality, type Violation } from "./loadout.js";
+import type { Violation } from "./loadout.js";
 import { hostUnitPoints, wargearPoints } from "./pricing.js";
 
 /**
@@ -111,8 +111,6 @@ export function checkRosterLegality(roster: Roster, dataset: Dataset): UnitLegal
     if (!view) return;
     // Options and composition are faction-scoped off the resolved unit's own
     // faction, so a shared chassis is checked against the right faction's rules.
-    const options = dataset.wargearOptionsOf(view.raw);
-    const composition = dataset.unitCompositionOf(view.raw);
     const counts = new Map<string, number>();
     for (const w of rosterUnit.wargear) {
       const id = w.ref.id;
@@ -123,14 +121,7 @@ export function checkRosterLegality(roster: Roster, dataset: Dataset): UnitLegal
       unitId: view.id,
       unitIndex,
       modelCount: rosterUnit.model_count,
-      violations: checkUnitLegality(
-        view.raw,
-        rosterUnit.model_count,
-        options,
-        counts,
-        composition?.models,
-        composition?.tiers,
-      ),
+      violations: dataset.loadoutOf(view.raw).check(rosterUnit.model_count, counts),
     });
   });
   return out;
@@ -298,20 +289,11 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
   spec.units.forEach((su, idx) => {
     const view = views[idx];
     if (!view) return;
-    const options = dataset.wargearOptionsOf(view.raw);
-    const composition = dataset.unitCompositionOf(view.raw);
     units.push({
       unitId: view.id,
       unitIndex: idx,
       modelCount: su.modelCount,
-      violations: checkUnitLegality(
-        view.raw,
-        su.modelCount,
-        options,
-        su.counts,
-        composition?.models,
-        composition?.tiers,
-      ),
+      violations: dataset.loadoutOf(view.raw).check(su.modelCount, su.counts),
     });
   });
 

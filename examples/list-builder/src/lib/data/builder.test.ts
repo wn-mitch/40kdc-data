@@ -953,7 +953,10 @@ describe('shared Chaos datasheets resolve to the army faction', () => {
 		// Faction-scoped wargear/loadout lookups resolve (and never trip the
 		// units guard) for a shared id.
 		expect(wargearOptionsFor('chaos-terminators', undefined, 'world-eaters')).toBeDefined();
-		expect(loadoutViolations(bu, 'world-eaters')).toEqual([]);
+		// The World Eaters copy's default build is legal, and an empty one is not.
+		const stock = defaultLoadout(unitRaw('chaos-terminators', undefined, 'world-eaters')!, 5);
+		expect(loadoutViolations({ ...bu, loadout: stock }, 'world-eaters')).toEqual([]);
+		expect(loadoutViolations(bu, 'world-eaters')).not.toEqual([]);
 	});
 
 	it('does not flag own World Eaters units when a Chaos Knights ally is present', () => {

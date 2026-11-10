@@ -156,10 +156,9 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		if view == nil {
 			continue
 		}
-		models, tiers := ds.unitCompositionOf(view.Raw)
 		units = append(units, unitLoadoutResult{
 			unitIndex:  idx,
-			violations: checkUnitLegality(view.Raw, su.modelCount, ds.wargearOptionsOf(view.Raw), su.counts, models, tiers),
+			violations: ds.loadoutOf(view.Raw).Check(su.modelCount, su.counts),
 		})
 	}
 

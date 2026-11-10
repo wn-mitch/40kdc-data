@@ -1,6 +1,5 @@
 import type { Dataset } from "../data/dataset.js";
-import { baseLoadout, type LoadoutModel } from "../data/loadout.js";
-import type { Detachment, Unit, UnitComposition } from "../generated.js";
+import type { Detachment, Unit } from "../generated.js";
 import type { EngineContext } from "../cruncher/index.js";
 import type { ResolvedTarget, ComparePhase } from "../compare.js";
 import { assessDetachmentSelection, summarizeSupportCosts, type LegalityIssue } from "./legality.js";
@@ -249,11 +248,8 @@ function winnerReport(dataset: Dataset, faction: FactionContext, session: Damage
   const supportMembers = [...supportAbilityIds].flatMap(([unitId]) => {
     const unit = unitInFaction(faction, unitId);
     if (!unit) return [];
-    const composition = dataset.unitCompositionOf(unit.raw) as UnitComposition | undefined;
-    const models = (composition?.models ?? []) as LoadoutModel[];
     const modelCount = fullModelCount(dataset, unit.raw);
-    const options = dataset.wargearOptionsOf(unit.raw);
-    return [{ unit: unit.raw, modelCount, loadout: baseLoadout(unit.raw, modelCount, options, models).counts }];
+    return [{ unit: unit.raw, modelCount, loadout: dataset.loadoutOf(unit.raw).base(modelCount) ?? new Map<string, number>() }];
   });
   const supportCosts = summarizeSupportCosts({
     members: supportMembers,

@@ -226,7 +226,7 @@
             </selection>
             <selection id="unit1-m2" name="Battle Sister" type="model" number="6">
               <selections>
-                <selection id="unit1-m2-w0" name="Bolt pistol" type="upgrade" number="36">
+                <selection id="unit1-m2-w0" name="Bolt pistol" type="upgrade" number="6">
                   <profiles>
                     <profile name="Bolt pistol" typeName="Ranged Weapons">
                       <characteristics>
@@ -256,7 +256,7 @@
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit1-m2-w2" name="Stocks and Fists" type="upgrade" number="36">
+                <selection id="unit1-m2-w2" name="Stocks and Fists" type="upgrade" number="6">
                   <profiles>
                     <profile name="Stocks and Fists" typeName="Melee Weapons">
                       <characteristics>

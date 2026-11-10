@@ -7,7 +7,7 @@ import { parseMatrixConfig } from "../src/stack-damage/config.js";
 import { exhaustiveLevers, exhaustiveLoadout } from "../src/stack-damage/exhaustive.js";
 import { resolveFactionContext } from "../src/stack-damage/factions.js";
 import { searchLevers, type LeverSpace, type SearchLever } from "../src/stack-damage/lever-search.js";
-import { searchLoadout, type LoadoutSpace } from "../src/stack-damage/loadout-search.js";
+import { countsKey, MFM_EXHAUSTIVE_LOADOUTS, searchLoadout, type LoadoutSpace, type MfmLoadouts } from "../src/stack-damage/loadout-search.js";
 import { damageScoringSession, legalDetachmentSpec } from "../src/stack-damage/search.js";
 
 type Scored = { total: number; selected: string[] };
@@ -89,7 +89,7 @@ describe("loadout search", () => {
       return has("y") && has("v") ? 12 : has("y") || has("v") ? 9 : 10;
     };
     const space: LoadoutSpace<{ total: number }> = {
-      scaffold: { models: [], modelCount: 1, options, caps: [1, 1], base: new Map([["x", 2]]) },
+      scaffold: { models: [], modelCount: 1, options, caps: [1, 1], base: new Map([["x", 2]]), carriable: ["v", "x", "y"] },
       legal: () => true,
       score: (counts) => ({ total: value(counts) }),
     };
@@ -134,5 +134,42 @@ describe("stack-damage search against the exhaustive oracle", () => {
     ];
     const space = session.loadoutSpace(member.member.unit, buffs, session.state.contextFor(best.spec, member.member));
     expect(member.loadout.total).toBeCloseTo(exhaustiveLoadout(space).total, 9);
+  });
+});
+
+/** A fabricated MFM space: the listed loadouts, scored by `value`, starting from the first. */
+function mfmSpace(loadouts: Map<string, number>[], value: (counts: ReadonlyMap<string, number>) => number): LoadoutSpace<{ total: number; counts: Map<string, number> }> {
+  const mfm: MfmLoadouts = { loadouts: loadouts.map((counts) => ({ counts, groups: null })), byKey: new Map(loadouts.map((counts, at) => [countsKey(counts), at])) };
+  return {
+    scaffold: { models: [], modelCount: 10, options: [], caps: [], base: loadouts[0], carriable: [], mfm },
+    legal: (counts) => mfm.byKey.has(countsKey(counts)),
+    score: (counts) => ({ total: value(counts), counts: new Map(counts) }),
+  };
+}
+
+describe("loadout search under MFM rules", () => {
+  // n plasma guns displace n boltguns on ten models; `gun` caps how many specials a loadout takes.
+  const lineOf = (guns: number, extra: Record<string, number> = {}) => new Map(Object.entries({ boltgun: 10 - guns, "plasma-gun": guns, ...extra }).filter(([, n]) => n > 0));
+
+  it("scores a short list whole, keeping the base on a tie", () => {
+    const loadouts = [lineOf(0), lineOf(1), lineOf(2)];
+    const flat = mfmSpace(loadouts, () => 5);
+    expect(searchLoadout(flat).counts).toEqual(lineOf(0));
+    // The best loadout is two swaps away, past a worse one: the whole list finds it.
+    const dip = mfmSpace(loadouts, (counts) => [10, 4, 20][counts.get("plasma-gun") ?? 0]);
+    expect(searchLoadout(dip).counts).toEqual(lineOf(2));
+    expect(exhaustiveLoadout(dip).total).toBe(20);
+  });
+
+  it("climbs a long list through nearer loadouts first, then wider moves", () => {
+    // More loadouts than are scored whole: an unscored tag spreads each gun count over many keys.
+    // Guns come in pairs, so every improving move is L1 4 away: radius 2 alone would stop at the base.
+    const loadouts: Map<string, number>[] = [];
+    for (let guns = 0; guns <= 10; guns += 2) for (let tag = 0; tag < 100; tag++) loadouts.push(lineOf(guns, { tag }));
+    expect(loadouts.length).toBeGreaterThan(MFM_EXHAUSTIVE_LOADOUTS);
+    const space = mfmSpace(loadouts, (counts) => (counts.get("plasma-gun") ?? 0) * 3 - (counts.get("tag") ?? 0) * 0.001);
+    const best = searchLoadout(space);
+    expect(best.counts.get("plasma-gun")).toBe(10);
+    expect(best.total).toBeCloseTo(exhaustiveLoadout(space).total, 9);
   });
 });

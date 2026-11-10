@@ -32,14 +32,13 @@ func (s *RunnerState) handleCheckUnitLegality(args any) map[string]any {
 	if u == nil {
 		return errResp("UNKNOWN_ENTITY", map[string]any{"kind": "unit", "id": unitID})
 	}
-	models, tiers := ds.unitCompositionOf(u.Raw)
 	counts := map[string]int{}
 	if cs, ok := asMap(a["counts"]); ok {
 		for k, v := range cs {
 			counts[k] = asInt(v)
 		}
 	}
-	violations := checkUnitLegality(u.Raw, modelCount, ds.wargearOptionsOf(u.Raw), counts, models, tiers)
+	violations := ds.loadoutOf(u.Raw).Check(modelCount, counts)
 	strs := make([]string, 0, len(violations))
 	for _, v := range violations {
 		strs = append(strs, v["code"]+":"+v["id"])
@@ -299,6 +298,14 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 	unknownUnit := func() map[string]any {
 		return errResp("UNKNOWN_ENTITY", map[string]any{"kind": "unit", "id": in["unitId"]})
 	}
+	// The loadout queries resolve the unit in factionId when given, else
+	// first-wins, as the TS runner's resolveUnit does.
+	resolveLoadoutUnit := func() (*UnitView, bool) {
+		if factionID := getStr(in, "factionId"); factionID != "" {
+			return ds.Units.GetInFaction(unitID, factionID)
+		}
+		return ds.Units.GetAny(unitID)
+	}
 
 	switch query {
 	case "find_unit":
@@ -383,17 +390,17 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 		}
 		return okResp(out)
 	case "base_loadout", "maximal_loadout":
-		u, ok := ds.Units.GetAny(unitID)
+		u, ok := resolveLoadoutUnit()
 		if !ok {
 			return unknownUnit()
 		}
+		// Empty when the size cannot be built.
 		modelCount := asInt(in["modelCount"])
-		models, _ := ds.unitCompositionOf(u.Raw)
 		var lo map[string]int
 		if query == "base_loadout" {
-			lo = baseLoadout(u.Raw, modelCount, ds.wargearOptionsOf(u.Raw), models)
+			lo = ds.loadoutOf(u.Raw).Base(modelCount)
 		} else {
-			lo = maximalLoadout(u.Raw, modelCount, ds.wargearOptionsOf(u.Raw), models)
+			lo = ds.loadoutOf(u.Raw).Maximal(modelCount)
 		}
 		strs := make([]string, 0, len(lo))
 		for id, n := range lo {
@@ -402,12 +409,11 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 		sort.Strings(strs)
 		return okResp(toAnyList(strs))
 	case "weapon_bounds":
-		u, ok := ds.Units.GetAny(unitID)
+		u, ok := resolveLoadoutUnit()
 		if !ok {
 			return unknownUnit()
 		}
-		models, _ := ds.unitCompositionOf(u.Raw)
-		bounds := weaponBounds(u.Raw, asInt(in["modelCount"]), ds.wargearOptionsOf(u.Raw), models)
+		bounds := ds.loadoutOf(u.Raw).Bounds(asInt(in["modelCount"]))
 		strs := make([]string, 0, len(bounds))
 		for id, b := range bounds {
 			strs = append(strs, id+":"+itoa(b.min)+"-"+itoa(b.max))
@@ -415,20 +421,16 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 		sort.Strings(strs)
 		return okResp(toAnyList(strs))
 	case "loadout_candidates":
-		u, ok := ds.Units.GetAny(unitID)
-		if factionID := getStr(in, "factionId"); factionID != "" {
-			u, ok = ds.Units.GetInFaction(unitID, factionID)
-		}
+		u, ok := resolveLoadoutUnit()
 		if !ok {
 			return unknownUnit()
 		}
-		models, tiers := ds.unitCompositionOf(u.Raw)
 		var limit *int
 		if in["limit"] != nil {
 			n := asInt(in["limit"])
 			limit = &n
 		}
-		return okResp(toAnyList(LoadoutCandidates(u.Raw, asInt(in["modelCount"]), ds.wargearOptionsOf(u.Raw), models, tiers, limit)))
+		return okResp(toAnyList(ds.loadoutOf(u.Raw).Candidates(asInt(in["modelCount"]), limit)))
 	case "phases_of":
 		ab, ok := ds.Abilities.GetAny(getStr(in, "abilityId"))
 		if !ok {

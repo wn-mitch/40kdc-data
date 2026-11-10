@@ -31,13 +31,6 @@ from wh40kdc.data.affordability import candidate_affordability
 from wh40kdc.data.base import encode_base
 from wh40kdc.data.collection import GAME_MODE_VIEWS
 from wh40kdc.data.dataset import Dataset
-from wh40kdc.data.loadout import (
-    base_loadout,
-    check_unit_legality,
-    loadout_candidates,
-    maximal_loadout,
-    weapon_bounds,
-)
 from wh40kdc.data.mfm_loadout import check_mfm_loadout, default_mfm_loadout
 from wh40kdc.data.mfm_loadout_search import MfmConfiguration, MfmSearchTooLarge
 from wh40kdc.data.mfm_loadout_unit import (
@@ -262,16 +255,8 @@ def _handle_check_unit_legality(state: RunnerState, args: Any) -> Response:
     )
     if u is None:
         return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": unit_id})
-    comp = ds.unit_composition_of(u.raw)
     counts = {k: int(v) for k, v in (args.get("counts") or {}).items()}
-    violations = check_unit_legality(
-        u.raw,
-        model_count,
-        ds.wargear_options_of(u.raw),
-        counts,
-        (comp or {}).get("models"),
-        (comp or {}).get("tiers"),
-    )
+    violations = ds.loadout_of(u.raw).check(model_count, counts)
     return _ok(sorted(f"{v['code']}:{v['id']}" for v in violations))
 
 
@@ -626,37 +611,7 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
             if u is None:
                 return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
             return _ok([x["id"] for x in u.wargear_options])
-        if query in ("base_loadout", "maximal_loadout"):
-            u = ds.units.get_any(unit_id)
-            if u is None:
-                return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
-            # The corpus always supplies modelCount; missing coerces to 0.
-            model_count = int(input_.get("modelCount") or 0)
-            comp = ds.unit_composition_of(u.raw)
-            fn = base_loadout if query == "base_loadout" else maximal_loadout
-            lo = fn(
-                u.raw,
-                model_count,
-                ds.wargear_options_of(u.raw),
-                (comp or {}).get("models"),
-            )
-            # Encode the id→count map as sorted "id:count" strings for set compare.
-            return _ok(sorted(f"{id_}:{n}" for id_, n in lo.items()))
-        if query == "weapon_bounds":
-            u = ds.units.get_any(unit_id)
-            if u is None:
-                return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
-            model_count = int(input_.get("modelCount") or 0)
-            comp = ds.unit_composition_of(u.raw)
-            bounds = weapon_bounds(
-                u.raw,
-                model_count,
-                ds.wargear_options_of(u.raw),
-                (comp or {}).get("models"),
-            )
-            # Encode each id's inclusive range as sorted "id:min-max" strings for set compare.
-            return _ok(sorted(f"{id_}:{b['min']}-{b['max']}" for id_, b in bounds.items()))
-        if query == "loadout_candidates":
+        if query in ("base_loadout", "weapon_bounds", "maximal_loadout", "loadout_candidates"):
             faction_id = input_.get("factionId")
             u = (
                 ds.units.get_in_faction(unit_id, cast(str, faction_id))
@@ -665,17 +620,26 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
             )
             if u is None:
                 return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
-            comp = ds.unit_composition_of(u.raw)
-            return _ok(
-                loadout_candidates(
-                    u.raw,
-                    int(input_.get("modelCount") or 0),
-                    ds.wargear_options_of(u.raw),
-                    (comp or {}).get("models"),
-                    (comp or {}).get("tiers"),
-                    int(input_["limit"]) if input_.get("limit") is not None else None,
-                )
-            )
+            # The corpus always supplies modelCount; missing coerces to 0.
+            model_count = int(input_.get("modelCount") or 0)
+            view = ds.loadout_of(u.raw)
+            try:
+                if query == "base_loadout":
+                    # Sorted "id:count" strings for set compare; empty when the size cannot
+                    # be built.
+                    base = view.base(model_count) or {}
+                    return _ok(sorted(f"{id_}:{n}" for id_, n in base.items()))
+                if query == "weapon_bounds":
+                    # Each id's inclusive range as sorted "id:min-max" strings.
+                    bounds = view.bounds(model_count) or {}
+                    return _ok(sorted(f"{id_}:{b['min']}-{b['max']}" for id_, b in bounds.items()))
+                if query == "maximal_loadout":
+                    maximal = view.maximal(model_count) or {}
+                    return _ok(sorted(f"{id_}:{n}" for id_, n in maximal.items()))
+                limit = input_.get("limit")
+                return _ok(view.candidates(model_count, None if limit is None else int(limit)))
+            except MfmSearchTooLarge as e:
+                return _err("INTERNAL_ERROR", {"detail": str(e)})
         if query == "phases_of":
             ab = ds.abilities.get_any(input_.get("abilityId") or "")
             if ab is None:

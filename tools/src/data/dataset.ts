@@ -49,6 +49,7 @@ import {
   WeaponView,
 } from "./entities.js";
 import { emptyRawData, type RawData } from "./types.js";
+import { unitLoadout, type UnitLoadout } from "./unit-loadout.js";
 import { collectBuffs, stackableBuffsFor } from "./dataset-buffs.js";
 import * as attachments from "./dataset-attachments.js";
 import { reactiveTriggersOf, triggerIndexOf } from "./dataset-triggers.js";
@@ -162,6 +163,7 @@ export class Dataset {
   private readonly everyUnitComposition: readonly UnitComposition[];
   /** `faction_id::unit_id` → the unit-composition authored for it. */
   private readonly compositionByUnit = new Map<string, UnitComposition>();
+  private readonly loadoutByUnit = new Map<string, UnitLoadout>();
 
   constructor(
     raw: RawData = emptyRawData(),
@@ -474,6 +476,21 @@ export class Dataset {
    */
   unitCompositionOf(unit: Unit): UnitComposition | undefined {
     return this.compositionByUnit.get(`${unit.faction_id}::${unit.id}`);
+  }
+
+  /**
+   * The unit's wargear legality at any model count: its MFM loadout rules where the dump has them,
+   * else its authored wargear options (see {@link UnitLoadout}). Faction-scoped like
+   * {@link unitCompositionOf}; one view per unit, kept for the dataset's life.
+   */
+  loadoutOf(unit: Unit): UnitLoadout {
+    const key = `${unit.faction_id}::${unit.id}`;
+    let view = this.loadoutByUnit.get(key);
+    if (!view) {
+      view = unitLoadout(unit, this.unitCompositionOf(unit), this.wargearOptionsOf(unit));
+      this.loadoutByUnit.set(key, view);
+    }
+    return view;
   }
 
   /**

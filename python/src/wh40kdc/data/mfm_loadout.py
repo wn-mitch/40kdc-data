@@ -16,8 +16,8 @@ picks that produce exactly the unit's item counts:
   substitute carries the same main option;
 - a row (or the unit's own wargear) whose every option for an item is a
   checkbox carries at most one copy per such option, or its stock copies when
-  more. A row the app shows per model (see :func:`checkbox_caps`) gets that cap
-  on each of its models.
+  more. A row the app lists model by model (stock ``individual``) gets that
+  cap on each of its models.
 """
 
 from __future__ import annotations
@@ -165,14 +165,6 @@ def default_mfm_loadout(rules: Mapping[str, Any]) -> tuple[dict[str, int], dict[
     return models, counts
 
 
-def _per_model_row(rules: Mapping[str, Any], model: str) -> bool:
-    """Whether the app shows ``model``'s widgets once per model rather than once for the row."""
-    row = next((entry for entry in rules["stock"] if entry.get("model") == model), None)
-    default_models = row["models"] if row is not None else 0
-    stock = [o for o in rules["options"] if o.get("model") == model and o["default"] > 0]
-    return default_models <= 1 and len(stock) > 0 and all(o["input"] == "checkbox" for o in stock)
-
-
 def checkbox_caps(rules: Mapping[str, Any], model: str | None, models: int = 1) -> dict[str, int]:
     """The most copies of each checkbox-only item ``model`` (or the unit) may carry."""
     caps: dict[str, int] = {}
@@ -192,7 +184,11 @@ def checkbox_caps(rules: Mapping[str, Any], model: str | None, models: int = 1) 
         for item in row["items"]:
             if item["id"] in caps:
                 caps[item["id"]] = max(caps[item["id"]], item["count"])
-    if model is not None and _per_model_row(rules, model):
+    # A row the app lists model by model (``individual``) gives each model its own checkboxes.
+    individual = model is not None and any(
+        row.get("model") == model and row.get("individual") is True for row in rules["stock"]
+    )
+    if individual:
         caps = {item_id: cap * models for item_id, cap in caps.items()}
     return caps
 

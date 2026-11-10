@@ -1,7 +1,7 @@
 """Tier-aware whole-unit loadout legality against the roster_legality corpus.
 
 Mirrors the runner's ``check_unit_legality`` op: resolve the unit (faction-scoped
-when pinned), look up its faction's composition, and compare the sorted
+when pinned), check the counts through its loadout view, and compare the sorted
 ``"code:id"`` violation strings exactly. Ties out with the TS reference and the
 Rust/Go ports via ``conformance/roster_legality/cases.json``.
 """
@@ -14,7 +14,6 @@ import pytest
 
 from wh40kdc.data.bundle import empty_raw_data
 from wh40kdc.data.dataset import Dataset
-from wh40kdc.data.loadout import check_unit_legality
 from wh40kdc.data.roster import validate_roster_core
 
 from ..conftest import load_corpus_json
@@ -32,23 +31,8 @@ def run_case(ds: Any, args: dict[str, Any]) -> list[str]:
         else ds.units.get_any(args["unitId"])
     )
     assert unit is not None, f"unknown unit {args['unitId']}"
-    comp = next(
-        (
-            c
-            for c in ds.unit_compositions
-            if c.get("unit_id") == args["unitId"]
-            and c.get("faction_id") == unit.raw.get("faction_id")
-        ),
-        None,
-    )
-    violations = check_unit_legality(
-        unit.raw,
-        args["modelCount"],
-        ds.wargear_options_of(unit.raw),
-        {k: int(v) for k, v in (args.get("counts") or {}).items()},
-        (comp or {}).get("models"),
-        (comp or {}).get("tiers"),
-    )
+    counts = {k: int(v) for k, v in (args.get("counts") or {}).items()}
+    violations = ds.loadout_of(unit.raw).check(args["modelCount"], counts)
     return sorted(f"{v['code']}:{v['id']}" for v in violations)
 
 

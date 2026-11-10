@@ -17,7 +17,8 @@
 //!   substitute carries the same main option;
 //! - a row (or the unit's own wargear) whose every option for an item is a
 //!   checkbox carries at most one copy per such option, or its stock copies
-//!   when more. A row the app shows per model gets that cap on each model.
+//!   when more. A row the app lists model by model (`individual`) gets that
+//!   cap on each model.
 
 use std::collections::{BTreeMap, HashMap, HashSet};
 
@@ -40,6 +41,15 @@ pub struct MfmStockRow {
     pub model: Option<String>,
     pub models: i64,
     pub items: Vec<MfmItem>,
+    /// The app lists the row's models one by one, each with its own widgets.
+    #[serde(default, deserialize_with = "literal_true")]
+    pub individual: bool,
+}
+
+/// Whether a field holds JSON `true` (anything else, `null` included, reads as false).
+fn literal_true<'de, D: serde::Deserializer<'de>>(deserializer: D) -> Result<bool, D::Error> {
+    Ok(Option::<serde_json::Value>::deserialize(deserializer)?
+        == Some(serde_json::Value::Bool(true)))
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -318,23 +328,6 @@ pub fn default_mfm_loadout(
     (models, counts.into_iter().collect())
 }
 
-/// Whether the app shows `model`'s widgets once per model rather than once for the row.
-fn per_model_row(rules: &MfmLoadoutRules, model: &str) -> bool {
-    let default_models = rules
-        .stock
-        .iter()
-        .find(|row| row.model.as_deref() == Some(model))
-        .map_or(0, |row| row.models);
-    let stock: Vec<&MfmOption> = rules
-        .options
-        .iter()
-        .filter(|option| option.model.as_deref() == Some(model) && option.default > 0)
-        .collect();
-    default_models <= 1
-        && !stock.is_empty()
-        && stock.iter().all(|option| option.input == "checkbox")
-}
-
 /// The most copies of each checkbox-only item `model` (or the unit) may carry.
 fn checkbox_caps(
     rules: &MfmLoadoutRules,
@@ -368,11 +361,17 @@ fn checkbox_caps(
             }
         }
     }
-    if let Some(model) = model {
-        if per_model_row(rules, model) {
-            for cap in caps.values_mut() {
-                *cap *= models;
-            }
+    // A row the app lists model by model (`individual`: Carnifexes, Broadside
+    // Shas'ui) gives each model its own checkboxes, so its caps are per model.
+    let individual = model.is_some_and(|model| {
+        rules
+            .stock
+            .iter()
+            .any(|row| row.model.as_deref() == Some(model) && row.individual)
+    });
+    if individual {
+        for cap in caps.values_mut() {
+            *cap *= models;
         }
     }
     caps
@@ -389,8 +388,8 @@ pub use check::check_mfm_loadout;
 #[path = "mfm_loadout_search.rs"]
 mod search;
 pub use search::{
-    mfm_assignment, mfm_configurations, MfmConfiguration, MfmRowBundle, MfmSearchTooLarge,
-    MAX_SEARCH_BUNDLES,
+    for_each_mfm_configuration, mfm_assignment, mfm_configurations, MfmConfiguration, MfmRowBundle,
+    MfmSearchTooLarge, MAX_SEARCH_BUNDLES,
 };
 
 #[path = "mfm_loadout_space.rs"]
@@ -403,7 +402,8 @@ pub use bounds::{mfm_weapon_bounds, MfmBound};
 #[path = "mfm_loadout_unit.rs"]
 mod unit;
 pub use unit::{
-    encode_mfm_configuration, mfm_base_loadout, mfm_resized_default, mfm_rows, mfm_scaled_default,
-    mfm_unit_assignment, mfm_unit_base_loadout, mfm_unit_bounds, mfm_unit_candidates,
-    mfm_unit_violations, MfmBaseLoadout, MfmComposition, MfmModelRange, MFM_CANDIDATES_TRUNCATED,
+    encode_mfm_configuration, mfm_base_loadout, mfm_resized_default, mfm_row_splits, mfm_rows,
+    mfm_scaled_default, mfm_unit_assignment, mfm_unit_base_loadout, mfm_unit_bounds,
+    mfm_unit_candidates, mfm_unit_violations, MfmBaseLoadout, MfmComposition, MfmModelRange,
+    MFM_CANDIDATES_TRUNCATED,
 };

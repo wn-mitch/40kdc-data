@@ -53,6 +53,37 @@ def _row_range(tier: Sequence[Mapping[str, Any]], row: str) -> tuple[int, int] |
     return sum(model["min"] for model in entries), sum(model["max"] for model in entries)
 
 
+Range = tuple[int, int]
+
+
+def _tier_ranges(
+    composition: Mapping[str, Any],
+) -> tuple[dict[str, int], list[dict[str, Range]]] | None:
+    """The default rows' model counts and each tier's ``(min, max)`` per row.
+
+    Tiers in declaration order, rows in stock order. A row the tier does not
+    list keeps its default count. None without a loadout.
+    """
+    rules = composition.get("loadout")
+    if rules is None:
+        return None
+    declared = composition.get("tiers") or []
+    tiers = [tier["models"] for tier in declared] if declared else [composition["models"]]
+    defaults, _ = default_mfm_loadout(rules)
+    out: list[dict[str, Range]] = []
+    for tier in tiers:
+        ranges: dict[str, Range] = {}
+        for row, n in defaults.items():
+            found = _row_range(tier, row)
+            ranges[row] = found if found is not None else (n, n)
+        out.append(ranges)
+    return defaults, out
+
+
+def _total(ranges: Mapping[str, Range], side: int) -> int:
+    return sum(r[side] for r in ranges.values())
+
+
 def mfm_rows(composition: Mapping[str, Any], model_count: int) -> dict[str, int] | None:
     """The loadout rows' model counts for a unit of ``model_count`` models.
 
@@ -62,22 +93,13 @@ def mfm_rows(composition: Mapping[str, Any], model_count: int) -> dict[str, int]
     the most default models that has room, ties to the first in stock order,
     until the count is reached.
     """
-    rules = composition.get("loadout")
-    if rules is None:
+    found = _tier_ranges(composition)
+    if found is None:
         return None
-    declared = composition.get("tiers") or []
-    tiers = [tier["models"] for tier in declared] if declared else [composition["models"]]
-    defaults, _ = default_mfm_loadout(rules)
+    defaults, tiers = found
     order = list(defaults)
-    for tier in tiers:
-        ranges: dict[str, tuple[int, int]] = {}
-        for row in order:
-            found = _row_range(tier, row)
-            # A row the tier does not list keeps its default count.
-            ranges[row] = found if found is not None else (defaults[row], defaults[row])
-        low = sum(lo for lo, _ in ranges.values())
-        high = sum(hi for _, hi in ranges.values())
-        if model_count < low or model_count > high:
+    for ranges in tiers:
+        if model_count < _total(ranges, 0) or model_count > _total(ranges, 1):
             continue
         rows = {row: min(ranges[row][1], max(ranges[row][0], defaults[row])) for row in order}
         delta = model_count - sum(rows.values())
@@ -99,6 +121,44 @@ def mfm_rows(composition: Mapping[str, Any], model_count: int) -> dict[str, int]
             delta += -step if grow else step
         return rows
     return None
+
+
+def mfm_row_splits(composition: Mapping[str, Any], model_count: int) -> list[dict[str, int]]:
+    """Every way a unit of ``model_count`` models splits across its loadout rows under some tier.
+
+    The :func:`mfm_rows` split first, then the rest by tier in declaration
+    order, each tier's in ascending order of the rows' counts (rows in stock
+    order). Each split is listed once. Empty when no tier holds the count.
+    """
+    bulk = mfm_rows(composition, model_count)
+    found = _tier_ranges(composition)
+    if bulk is None or found is None:
+        return []
+    defaults, tiers = found
+    order = list(defaults)
+    out = [bulk]
+    seen = {tuple(bulk[row] for row in order)}
+
+    def walk(i: int, left: int, lows: list[int], highs: list[int], counts: list[int]) -> None:
+        if i == len(order):
+            key = tuple(counts)
+            if left == 0 and key not in seen:
+                seen.add(key)
+                out.append(dict(zip(order, counts, strict=True)))
+            return
+        # The rows after this one must still be able to take what is left.
+        rest_low = sum(lows[i + 1 :])
+        rest_high = sum(highs[i + 1 :])
+        for n in range(max(lows[i], left - rest_high), min(highs[i], left - rest_low) + 1):
+            counts.append(n)
+            walk(i + 1, left - n, lows, highs, counts)
+            counts.pop()
+
+    for ranges in tiers:
+        lows = [ranges[row][0] for row in order]
+        highs = [ranges[row][1] for row in order]
+        walk(0, model_count, lows, highs, [])
+    return out
 
 
 def mfm_resized_default(rules: Mapping[str, Any], rows: Mapping[str, int]) -> dict[str, int] | None:

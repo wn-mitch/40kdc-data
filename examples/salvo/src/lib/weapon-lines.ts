@@ -6,17 +6,14 @@
  * damage matrix uses.
  */
 import {
-  baseLoadout,
   unitLoadoutDamage,
   validateCandidateLoadout,
-  weaponBounds,
   type Buff,
   type Dataset,
   type EngineContext,
-  type LoadoutModel,
   type PistolChoice,
   type Unit,
-  type WargearOption,
+  type UnitLoadout,
   type Weapon,
   type WeaponBound,
   type WeaponGrant,
@@ -31,8 +28,8 @@ export type MemberLoadout = {
   counts: Map<string, number>;
   bounds: Map<string, WeaponBound>;
   modelCount: number;
-  options: WargearOption[];
-  models: LoadoutModel[];
+  /** The unit's wargear legality, which checks a member's counts and finds its model groups. */
+  rules: UnitLoadout;
 };
 
 export type WeaponLine = {
@@ -61,15 +58,13 @@ export function lineId(memberId: string, weaponId: string, profileIndex: number)
 /** A member's wargear loadout at its minimum model count. */
 export function memberLoadout(ds: Dataset, unit: Unit): MemberLoadout {
   const modelCount = unit.model_count?.min ?? 1;
-  const options = ds.wargearOptionsOf(unit);
-  const models = (ds.unitCompositionOf(unit) as { models?: LoadoutModel[] } | undefined)?.models ?? [];
+  const rules = ds.loadoutOf(unit);
   return {
     unit,
-    counts: baseLoadout(unit, modelCount, options, models).counts,
-    bounds: weaponBounds(unit, modelCount, options, models),
+    counts: rules.base(modelCount) ?? new Map(),
+    bounds: rules.bounds(modelCount) ?? new Map(),
     modelCount,
-    options,
-    models,
+    rules,
   };
 }
 
@@ -151,9 +146,9 @@ export function selectLines(input: {
   const violations = new Map<string, string[]>();
   let total = 0;
   for (const member of input.members) {
-    const { unit, modelCount, options, models } = member.loadout;
+    const { unit, modelCount, rules } = member.loadout;
     // The damage matrix's legality check; its model groups drive the per-model Pistol choice.
-    const legality = validateCandidateLoadout({ unit, modelCount, options, counts: member.counts, models });
+    const legality = validateCandidateLoadout({ unit, modelCount, counts: member.counts, loadout: rules });
     if (!legality.legal) violations.set(member.memberId, legality.violations.map((violation) => violation.message));
     const scored = unitLoadoutDamage({
       dataset: input.ds,

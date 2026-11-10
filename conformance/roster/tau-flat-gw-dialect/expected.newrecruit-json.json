@@ -156,18 +156,6 @@
                   },
                   {
                     "id": "w-5",
-                    "name": "Semi-automatic grenade launcher",
-                    "type": "upgrade",
-                    "number": 1,
-                    "categories": [
-                      {
-                        "name": "Ranged Weapon",
-                        "primary": false
-                      }
-                    ]
-                  },
-                  {
-                    "id": "w-6",
                     "name": "Shield Drone",
                     "type": "upgrade",
                     "number": 1,
@@ -184,13 +172,13 @@
                 "id": "u1-model-1",
                 "name": "Pathfinder",
                 "type": "model",
-                "number": 6,
+                "number": 5,
                 "selections": [
                   {
                     "id": "w-0",
                     "name": "Close combat weapon",
                     "type": "upgrade",
-                    "number": 6,
+                    "number": 5,
                     "categories": [
                       {
                         "name": "Ranged Weapon",
@@ -202,7 +190,7 @@
                     "id": "w-1",
                     "name": "Pulse carbine",
                     "type": "upgrade",
-                    "number": 6,
+                    "number": 5,
                     "categories": [
                       {
                         "name": "Ranged Weapon",
@@ -214,7 +202,7 @@
                     "id": "w-2",
                     "name": "Pulse pistol",
                     "type": "upgrade",
-                    "number": 6,
+                    "number": 5,
                     "categories": [
                       {
                         "name": "Ranged Weapon",
@@ -259,6 +247,62 @@
                     "name": "Rail rifle",
                     "type": "upgrade",
                     "number": 3,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "u1-model-3",
+                "name": "Pathfinder",
+                "type": "model",
+                "number": 1,
+                "selections": [
+                  {
+                    "id": "w-0",
+                    "name": "Close combat weapon",
+                    "type": "upgrade",
+                    "number": 1,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-1",
+                    "name": "Pulse carbine",
+                    "type": "upgrade",
+                    "number": 1,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-2",
+                    "name": "Pulse pistol",
+                    "type": "upgrade",
+                    "number": 1,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-3",
+                    "name": "Semi-automatic grenade launcher",
+                    "type": "upgrade",
+                    "number": 1,
                     "categories": [
                       {
                         "name": "Ranged Weapon",
@@ -321,18 +365,6 @@
                   },
                   {
                     "id": "w-2",
-                    "name": "Gun Drone",
-                    "type": "upgrade",
-                    "number": 1,
-                    "categories": [
-                      {
-                        "name": "Ranged Weapon",
-                        "primary": false
-                      }
-                    ]
-                  },
-                  {
-                    "id": "w-3",
                     "name": "Marker Drone",
                     "type": "upgrade",
                     "number": 1,
@@ -344,7 +376,7 @@
                     ]
                   },
                   {
-                    "id": "w-4",
+                    "id": "w-3",
                     "name": "Shield Drone",
                     "type": "upgrade",
                     "number": 1,
@@ -361,13 +393,13 @@
                 "id": "u2-model-1",
                 "name": "Crisis Starscythe Shas’ui",
                 "type": "model",
-                "number": 1,
+                "number": 2,
                 "selections": [
                   {
                     "id": "w-0",
                     "name": "Battlesuit fists",
                     "type": "upgrade",
-                    "number": 1,
+                    "number": 2,
                     "categories": [
                       {
                         "name": "Ranged Weapon",
@@ -379,7 +411,7 @@
                     "id": "w-1",
                     "name": "Burst cannon",
                     "type": "upgrade",
-                    "number": 2,
+                    "number": 4,
                     "categories": [
                       {
                         "name": "Ranged Weapon",
@@ -391,7 +423,7 @@
                     "id": "w-2",
                     "name": "Gun Drone",
                     "type": "upgrade",
-                    "number": 1,
+                    "number": 2,
                     "categories": [
                       {
                         "name": "Ranged Weapon",
@@ -403,51 +435,7 @@
                     "id": "w-3",
                     "name": "Shield Drone",
                     "type": "upgrade",
-                    "number": 1,
-                    "categories": [
-                      {
-                        "name": "Ranged Weapon",
-                        "primary": false
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "id": "u2-model-2",
-                "name": "Crisis Starscythe Shas’ui",
-                "type": "model",
-                "number": 1,
-                "selections": [
-                  {
-                    "id": "w-0",
-                    "name": "Battlesuit fists",
-                    "type": "upgrade",
-                    "number": 1,
-                    "categories": [
-                      {
-                        "name": "Ranged Weapon",
-                        "primary": false
-                      }
-                    ]
-                  },
-                  {
-                    "id": "w-1",
-                    "name": "Burst cannon",
-                    "type": "upgrade",
                     "number": 2,
-                    "categories": [
-                      {
-                        "name": "Ranged Weapon",
-                        "primary": false
-                      }
-                    ]
-                  },
-                  {
-                    "id": "w-2",
-                    "name": "Shield Drone",
-                    "type": "upgrade",
-                    "number": 1,
                     "categories": [
                       {
                         "name": "Ranged Weapon",

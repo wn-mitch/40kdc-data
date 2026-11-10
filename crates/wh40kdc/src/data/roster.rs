@@ -14,7 +14,7 @@ use crate::data::battle_sizes::{
     detachment_cap_for_battle_size, enhancement_limit_for_battle_size,
     points_limit_for_battle_size, unit_limit_for_battle_size,
 };
-use crate::data::loadout::{check_unit_legality, loadout_models, loadout_tiers, Violation};
+use crate::data::loadout::Violation;
 use crate::data::pricing::{army_unit_points, wargear_points};
 use crate::generated::{Unit, UnitRole};
 use crate::import::{BattleSize, Roster};
@@ -268,18 +268,10 @@ pub fn validate_roster_core_with_keyword_overrides(
     let mut units: Vec<UnitLegality> = Vec::new();
     for (idx, su) in spec.units.iter().enumerate() {
         let Some(view) = views[idx] else { continue };
-        let options = dataset.wargear_options_of(view);
-        let comp = dataset.unit_composition_of(view);
-        let models = comp.map(|c| loadout_models(&c.models));
-        let tiers = comp.map(|c| loadout_tiers(&c.tiers));
-        let violations = check_unit_legality(
-            view,
-            su.model_count,
-            &options,
-            &su.counts,
-            models.as_deref(),
-            tiers.as_deref(),
-        );
+        let violations = dataset
+            .loadout_of(view)
+            .check(su.model_count, &su.counts)
+            .unwrap_or_else(|error| panic!("{}: {error}", view.id.as_str()));
         units.push(UnitLegality {
             unit_id: view.id.as_str().to_string(),
             unit_index: idx,

@@ -17,7 +17,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         }
       ]
     },
@@ -41,7 +44,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         }
       ]
     },
@@ -67,7 +73,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "daemon-prince-of-khorne",
@@ -75,7 +84,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         }
       ]
     },
@@ -101,7 +113,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "daemon-prince-of-khorne",
@@ -109,7 +124,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "daemon-prince-of-khorne",
@@ -117,7 +135,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "daemon-prince-of-khorne",
@@ -125,7 +146,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "daemon-prince-of-khorne",
@@ -133,7 +157,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "daemon-prince-of-khorne",
@@ -141,7 +168,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "daemon-prince-of-khorne",
@@ -149,7 +179,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "daemon-prince-of-khorne",
@@ -157,7 +190,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "daemon-prince-of-khorne",
@@ -165,7 +201,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "daemon-prince-of-khorne",
@@ -173,7 +212,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "daemon-prince-of-khorne",
@@ -181,7 +223,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         }
       ]
     },
@@ -208,7 +253,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "monstrous-bonesword-and-lash-whip": 1,
+            "monstrous-scything-talons": 1
+          }
         }
       ]
     },
@@ -234,7 +282,10 @@
           "isWarlord": true,
           "enhancementId": "helm-of-brazen-ire-berzerker-warband-world-eaters",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         }
       ]
     },
@@ -261,7 +312,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "chaos-spawn",
@@ -269,7 +323,9 @@
           "isWarlord": false,
           "enhancementId": "battle-lust-berzerker-warband-world-eaters",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hideous-mutations": 2
+          }
         }
       ]
     },
@@ -295,7 +351,10 @@
           "isWarlord": true,
           "enhancementId": "helm-of-brazen-ire-berzerker-warband-world-eaters",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "daemon-prince-of-khorne",
@@ -303,7 +362,10 @@
           "isWarlord": false,
           "enhancementId": "helm-of-brazen-ire-berzerker-warband-world-eaters",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         }
       ]
     },
@@ -329,7 +391,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "axe-of-dismemberment": 1,
+            "bolt-pistol-master-of-executions": 1
+          }
         }
       ]
     },
@@ -356,7 +421,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": "khorne-berzerkers",
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         }
       ]
     },
@@ -382,7 +450,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         }
       ]
     },
@@ -408,7 +479,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         }
       ]
     },
@@ -438,7 +512,11 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
         }
       ]
     },
@@ -465,7 +543,9 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hideous-mutations-chaos-spawn": 2
+          }
         }
       ]
     },
@@ -492,7 +572,11 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "daemonbreath-spear": 1,
+            "diabolus-heavy-stubber": 1,
+            "reaper-chaintalon": 1
+          }
         }
       ]
     },
@@ -514,7 +598,11 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-librarian": 1,
+            "force-weapon": 1,
+            "smite": 1
+          }
         }
       ]
     },
@@ -536,7 +624,11 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-librarian": 1,
+            "force-weapon": 1,
+            "smite": 1
+          }
         }
       ]
     },
@@ -556,7 +648,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "ferocity": 1,
+            "sword-of-the-high-marshals": 1
+          }
         },
         {
           "unitId": "repulsor",
@@ -564,7 +659,13 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "armoured-hull-repulsor": 1,
+            "defensive-array": 1,
+            "heavy-onslaught-gatling-cannon-repulsor": 1,
+            "hunter-slayer-missile": 1,
+            "twin-heavy-bolter-repulsor": 1
+          }
         }
       ]
     },
@@ -590,8 +691,8 @@
           "enhancementId": null,
           "leaderBodyguardId": null,
           "counts": {
-            "thunder-hammer-terminator-assault-squad": 6,
             "storm-shield": 6,
+            "thunder-hammer-terminator-assault-squad": 6,
             "twin-lightning-claws-terminator-assault-squad": 4
           }
         },
@@ -602,8 +703,8 @@
           "enhancementId": null,
           "leaderBodyguardId": null,
           "counts": {
-            "thunder-hammer-terminator-assault-squad": 6,
             "storm-shield": 6,
+            "thunder-hammer-terminator-assault-squad": 6,
             "twin-lightning-claws-terminator-assault-squad": 4
           }
         },
@@ -614,8 +715,8 @@
           "enhancementId": null,
           "leaderBodyguardId": null,
           "counts": {
-            "thunder-hammer-terminator-assault-squad": 6,
             "storm-shield": 6,
+            "thunder-hammer-terminator-assault-squad": 6,
             "twin-lightning-claws-terminator-assault-squad": 4
           }
         },
@@ -626,8 +727,8 @@
           "enhancementId": null,
           "leaderBodyguardId": null,
           "counts": {
-            "thunder-hammer-terminator-assault-squad": 6,
             "storm-shield": 6,
+            "thunder-hammer-terminator-assault-squad": 6,
             "twin-lightning-claws-terminator-assault-squad": 4
           }
         },
@@ -638,8 +739,8 @@
           "enhancementId": null,
           "leaderBodyguardId": null,
           "counts": {
-            "thunder-hammer-terminator-assault-squad": 6,
             "storm-shield": 6,
+            "thunder-hammer-terminator-assault-squad": 6,
             "twin-lightning-claws-terminator-assault-squad": 4
           }
         },
@@ -649,7 +750,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
         }
       ]
     },
@@ -677,8 +782,8 @@
           "enhancementId": "gift-of-foresight-liberator-assault-group-blood-angels",
           "leaderBodyguardId": null,
           "counts": {
-            "crozius-arcanum": 1,
-            "absolvor-bolt-pistol": 1
+            "absolvor-bolt-pistol-chaplain": 1,
+            "crozius-arcanum-chaplain": 1
           }
         }
       ]
@@ -704,8 +809,8 @@
           "enhancementId": "angelic-executioner-encarmine-speartip-blood-angels",
           "leaderBodyguardId": null,
           "counts": {
-            "crozius-arcanum": 1,
-            "absolvor-bolt-pistol": 1
+            "absolvor-bolt-pistol-chaplain": 1,
+            "crozius-arcanum-chaplain": 1
           }
         }
       ]
@@ -733,8 +838,8 @@
           "enhancementId": null,
           "leaderBodyguardId": null,
           "counts": {
-            "crozius-arcanum": 1,
-            "absolvor-bolt-pistol": 1
+            "absolvor-bolt-pistol-chaplain": 1,
+            "crozius-arcanum-chaplain": 1
           }
         }
       ]
@@ -760,8 +865,8 @@
           "enhancementId": null,
           "leaderBodyguardId": null,
           "counts": {
-            "crozius-arcanum": 1,
-            "absolvor-bolt-pistol": 1
+            "absolvor-bolt-pistol-chaplain": 1,
+            "crozius-arcanum-chaplain": 1
           }
         }
       ]
@@ -789,7 +894,11 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
         },
         {
           "unitId": "land-raider",
@@ -797,7 +906,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "armoured-tracks": 1,
+            "godhammer-lascannon": 2,
+            "twin-heavy-bolter-land-raider": 1
+          }
         },
         {
           "unitId": "infiltrator-squad",
@@ -805,7 +918,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-infiltrator-squad": 5,
+            "ceramite-fists-infiltrator-squad": 5,
+            "marksman-bolt-carbine": 5
+          }
         },
         {
           "unitId": "incursor-squad",
@@ -813,7 +930,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-incursor-squad": 5,
+            "occulus-bolt-carbine": 5,
+            "paired-combat-blades-incursor-squad": 5
+          }
         },
         {
           "unitId": "chaplain",
@@ -821,7 +942,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "absolvor-bolt-pistol-chaplain": 1,
+            "crozius-arcanum-chaplain": 1
+          }
         },
         {
           "unitId": "vindicare-assassin",
@@ -829,7 +953,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "exitus-pistol": 1,
+            "exitus-rifle": 1,
+            "vindicare-combat-knife": 1
+          }
         },
         {
           "unitId": "eversor-assassin",
@@ -837,7 +965,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "executioner-pistol": 1,
+            "power-sword-and-neuro-gauntlet": 1
+          }
         },
         {
           "unitId": "callidus-assassin",
@@ -845,7 +976,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "neural-shredder": 1,
+            "phase-sword-and-poison-blades": 1
+          }
         },
         {
           "unitId": "culexus-assassin",
@@ -853,7 +987,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "animus-speculum": 1,
+            "life-draining-touch": 1
+          }
         }
       ]
     },
@@ -878,7 +1015,11 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
         },
         {
           "unitId": "land-raider",
@@ -886,7 +1027,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "armoured-tracks": 1,
+            "godhammer-lascannon": 2,
+            "twin-heavy-bolter-land-raider": 1
+          }
         },
         {
           "unitId": "infiltrator-squad",
@@ -894,7 +1039,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-infiltrator-squad": 5,
+            "ceramite-fists-infiltrator-squad": 5,
+            "marksman-bolt-carbine": 5
+          }
         },
         {
           "unitId": "incursor-squad",
@@ -902,7 +1051,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-incursor-squad": 5,
+            "occulus-bolt-carbine": 5,
+            "paired-combat-blades-incursor-squad": 5
+          }
         },
         {
           "unitId": "librarian",
@@ -910,7 +1063,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-librarian": 1,
+            "force-weapon": 1,
+            "smite": 1
+          }
         },
         {
           "unitId": "vindicare-assassin",
@@ -918,7 +1075,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "exitus-pistol": 1,
+            "exitus-rifle": 1,
+            "vindicare-combat-knife": 1
+          }
         },
         {
           "unitId": "eversor-assassin",
@@ -926,7 +1087,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "executioner-pistol": 1,
+            "power-sword-and-neuro-gauntlet": 1
+          }
         },
         {
           "unitId": "callidus-assassin",
@@ -934,7 +1098,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "neural-shredder": 1,
+            "phase-sword-and-poison-blades": 1
+          }
         },
         {
           "unitId": "culexus-assassin",
@@ -942,7 +1109,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "animus-speculum": 1,
+            "life-draining-touch": 1
+          }
         }
       ]
     },
@@ -995,8 +1165,8 @@
           "enhancementId": "predatory-instincts-biosanctic-broodsurge-genestealer-cults",
           "leaderBodyguardId": null,
           "counts": {
-            "force-stave": 1,
-            "autopistol-magus": 1
+            "autopistol-magus": 1,
+            "force-stave": 1
           }
         }
       ]
@@ -1023,7 +1193,10 @@
           "isWarlord": true,
           "enhancementId": "tzagulla-warpstrike-champions-chaos-space-marines",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "daemon-hammer": 1,
+            "plasma-pistol-chaos-lord": 1
+          }
         }
       ]
     },
@@ -1049,7 +1222,10 @@
           "isWarlord": true,
           "enhancementId": "tzagulla-warpstrike-champions-chaos-space-marines",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "combi-bolter-chaos-lord-in-terminator-armour": 1,
+            "exalted-weapon": 1
+          }
         }
       ]
     },
@@ -1073,7 +1249,11 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "eldritch-storm": 1,
+            "shuriken-pistol-farseer": 1,
+            "witchblade-farseer": 1
+          }
         },
         {
           "unitId": "yvraine",
@@ -1081,7 +1261,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "kha-vir-the-sword-of-sorrows": 1,
+            "storm-of-whispers": 1
+          }
         }
       ]
     },
@@ -1107,7 +1290,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "eldritch-storm": 1,
+            "shuriken-pistol-farseer": 1,
+            "witchblade-farseer": 1
+          }
         },
         {
           "unitId": "yvraine",
@@ -1115,7 +1302,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "kha-vir-the-sword-of-sorrows": 1,
+            "storm-of-whispers": 1
+          }
         }
       ]
     },
@@ -1139,7 +1329,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "great-axe-of-khorne": 1,
+            "hellfire-breath": 1
+          }
         },
         {
           "unitId": "skarbrand",
@@ -1147,7 +1340,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bellow-of-endless-fury": 1,
+            "slaughter-and-carnage": 1
+          }
         }
       ]
     },
@@ -1173,7 +1369,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "overlords-blade": 1,
+            "tachyon-arrow": 1
+          }
         },
         {
           "unitId": "ctan-shard-of-the-deceiver",
@@ -1181,7 +1380,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "cosmic-insanity": 1,
+            "golden-fists": 1
+          }
         },
         {
           "unitId": "ctan-shard-of-the-void-dragon",
@@ -1189,7 +1391,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "canoptek-tail-blades": 1,
+            "spear-of-the-void-dragon": 1,
+            "voltaic-storm": 1
+          }
         },
         {
           "unitId": "catacomb-command-barge",
@@ -1197,7 +1403,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "gauss-cannon": 1,
+            "staff-of-light-catacomb-command-barge": 1
+          }
         },
         {
           "unitId": "hexmark-destroyer",
@@ -1205,7 +1414,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "close-combat-weapon-hexmark-destroyer": 1,
+            "enmitic-disintegrator-pistols": 1
+          }
         }
       ]
     },
@@ -1232,7 +1444,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "overlords-blade": 1,
+            "tachyon-arrow": 1
+          }
         },
         {
           "unitId": "ctan-shard-of-the-deceiver",
@@ -1240,7 +1455,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "cosmic-insanity": 1,
+            "golden-fists": 1
+          }
         },
         {
           "unitId": "ctan-shard-of-the-void-dragon",
@@ -1248,7 +1466,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "canoptek-tail-blades": 1,
+            "spear-of-the-void-dragon": 1,
+            "voltaic-storm": 1
+          }
         },
         {
           "unitId": "catacomb-command-barge",
@@ -1256,7 +1478,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "gauss-cannon": 1,
+            "staff-of-light-catacomb-command-barge": 1
+          }
         },
         {
           "unitId": "hexmark-destroyer",
@@ -1264,7 +1489,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "close-combat-weapon-hexmark-destroyer": 1,
+            "enmitic-disintegrator-pistols": 1
+          }
         }
       ]
     },
@@ -1289,7 +1517,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "bloodletters",
@@ -1297,7 +1528,9 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellblade": 10
+          }
         }
       ]
     },
@@ -1323,7 +1556,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "bloodletters",
@@ -1331,7 +1567,9 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellblade": 10
+          }
         }
       ]
     },
@@ -1355,7 +1593,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "bloodthirster",
@@ -1363,7 +1604,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "great-axe-of-khorne": 1,
+            "hellfire-breath": 1
+          }
         },
         {
           "unitId": "bloodthirster",
@@ -1371,7 +1615,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "great-axe-of-khorne": 1,
+            "hellfire-breath": 1
+          }
         },
         {
           "unitId": "skarbrand",
@@ -1379,7 +1626,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bellow-of-endless-fury": 1,
+            "slaughter-and-carnage": 1
+          }
         },
         {
           "unitId": "bloodletters",
@@ -1387,7 +1637,9 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellblade": 10
+          }
         }
       ]
     },
@@ -1414,7 +1666,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "great-axe-of-khorne": 1,
+            "hellfire-breath": 1
+          }
         }
       ]
     },
@@ -1440,7 +1695,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "bloodthirster",
@@ -1448,7 +1706,10 @@
           "isWarlord": false,
           "enhancementId": "blood-forged-armour-khorne-daemonkin-world-eaters",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "great-axe-of-khorne": 1,
+            "hellfire-breath": 1
+          }
         }
       ]
     },
@@ -1473,7 +1734,9 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "patriarchs-claws": 1
+          }
         },
         {
           "unitId": "patriarch",
@@ -1481,7 +1744,9 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "patriarchs-claws": 1
+          }
         }
       ]
     },
@@ -1507,7 +1772,11 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "eldritch-storm": 1,
+            "shuriken-pistol-farseer": 1,
+            "witchblade-farseer": 1
+          }
         },
         {
           "unitId": "troupe-master",
@@ -1515,7 +1784,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "flip-belt": 1,
+            "shuriken-pistol-troupe-master": 1,
+            "troupe-masters-blade": 1
+          }
         },
         {
           "unitId": "troupe-master",
@@ -1523,7 +1796,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "flip-belt": 1,
+            "shuriken-pistol-troupe-master": 1,
+            "troupe-masters-blade": 1
+          }
         }
       ]
     },
@@ -1549,7 +1826,11 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "eldritch-storm": 1,
+            "shuriken-pistol-farseer": 1,
+            "witchblade-farseer": 1
+          }
         },
         {
           "unitId": "troupe-master",
@@ -1557,7 +1838,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "flip-belt": 1,
+            "shuriken-pistol-troupe-master": 1,
+            "troupe-masters-blade": 1
+          }
         },
         {
           "unitId": "troupe-master",
@@ -1565,7 +1850,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "flip-belt": 1,
+            "shuriken-pistol-troupe-master": 1,
+            "troupe-masters-blade": 1
+          }
         }
       ]
     },
@@ -1590,7 +1879,11 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "eldritch-storm": 1,
+            "shuriken-pistol-farseer": 1,
+            "witchblade-farseer": 1
+          }
         },
         {
           "unitId": "troupe-master",
@@ -1598,7 +1891,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "flip-belt": 1,
+            "shuriken-pistol-troupe-master": 1,
+            "troupe-masters-blade": 1
+          }
         },
         {
           "unitId": "troupe-master",
@@ -1606,7 +1903,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "flip-belt": 1,
+            "shuriken-pistol-troupe-master": 1,
+            "troupe-masters-blade": 1
+          }
         },
         {
           "unitId": "troupe-master",
@@ -1614,7 +1915,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "flip-belt": 1,
+            "shuriken-pistol-troupe-master": 1,
+            "troupe-masters-blade": 1
+          }
         },
         {
           "unitId": "troupe-master",
@@ -1622,7 +1927,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "flip-belt": 1,
+            "shuriken-pistol-troupe-master": 1,
+            "troupe-masters-blade": 1
+          }
         }
       ]
     },
@@ -1650,7 +1959,11 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "eldritch-storm": 1,
+            "shuriken-pistol-farseer": 1,
+            "witchblade-farseer": 1
+          }
         },
         {
           "unitId": "yvraine",
@@ -1658,7 +1971,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "kha-vir-the-sword-of-sorrows": 1,
+            "storm-of-whispers": 1
+          }
         }
       ]
     },
@@ -1684,7 +2000,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "dawn-blade": 1,
+            "high-intensity-plasma-rifle": 1
+          }
         },
         {
           "unitId": "ethereal",
@@ -1692,7 +2011,9 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "honour-stave": 1
+          }
         }
       ]
     },
@@ -1719,7 +2040,9 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "honour-stave": 1
+          }
         },
         {
           "unitId": "ethereal",
@@ -1727,7 +2050,9 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "honour-stave": 1
+          }
         }
       ]
     },
@@ -1752,7 +2077,14 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "aquiline-prow": 1,
+            "armoured-hull-commissar-graves": 1,
+            "chiron-gatling-cannon-commissar-graves": 1,
+            "enforcer-crew": 1,
+            "power-sword-and-manus-mortis-commissar-graves": 1,
+            "prefectus-heavy-stubber": 2
+          }
         },
         {
           "unitId": "commissar-graves-on-foot",
@@ -1760,7 +2092,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-commissar-graves-on-foot": 1,
+            "power-sword-and-manus-mortis": 1
+          }
         }
       ]
     },
@@ -1786,7 +2121,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "daemon-prince-of-khorne",
@@ -1794,7 +2132,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "daemon-prince-of-khorne",
@@ -1802,7 +2143,10 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         }
       ]
     },
@@ -1829,7 +2173,11 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
         },
         {
           "unitId": "intercessor-squad",
@@ -1837,7 +2185,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-intercessor-squad": 5,
+            "bolt-rifle-intercessor-squad": 5,
+            "knives-and-fists": 5
+          }
         },
         {
           "unitId": "intercessor-squad",
@@ -1845,7 +2197,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-intercessor-squad": 5,
+            "bolt-rifle-intercessor-squad": 5,
+            "knives-and-fists": 5
+          }
         },
         {
           "unitId": "intercessor-squad",
@@ -1853,7 +2209,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-intercessor-squad": 5,
+            "bolt-rifle-intercessor-squad": 5,
+            "knives-and-fists": 5
+          }
         },
         {
           "unitId": "intercessor-squad",
@@ -1861,7 +2221,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-intercessor-squad": 5,
+            "bolt-rifle-intercessor-squad": 5,
+            "knives-and-fists": 5
+          }
         },
         {
           "unitId": "intercessor-squad",
@@ -1869,7 +2233,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-intercessor-squad": 5,
+            "bolt-rifle-intercessor-squad": 5,
+            "knives-and-fists": 5
+          }
         },
         {
           "unitId": "intercessor-squad",
@@ -1877,7 +2245,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-intercessor-squad": 5,
+            "bolt-rifle-intercessor-squad": 5,
+            "knives-and-fists": 5
+          }
         }
       ]
     },
@@ -1902,7 +2274,11 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
         },
         {
           "unitId": "intercessor-squad",
@@ -1910,7 +2286,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-intercessor-squad": 5,
+            "bolt-rifle-intercessor-squad": 5,
+            "knives-and-fists": 5
+          }
         },
         {
           "unitId": "intercessor-squad",
@@ -1918,7 +2298,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-intercessor-squad": 5,
+            "bolt-rifle-intercessor-squad": 5,
+            "knives-and-fists": 5
+          }
         },
         {
           "unitId": "intercessor-squad",
@@ -1926,7 +2310,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-intercessor-squad": 5,
+            "bolt-rifle-intercessor-squad": 5,
+            "knives-and-fists": 5
+          }
         },
         {
           "unitId": "intercessor-squad",
@@ -1934,7 +2322,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-intercessor-squad": 5,
+            "bolt-rifle-intercessor-squad": 5,
+            "knives-and-fists": 5
+          }
         },
         {
           "unitId": "intercessor-squad",
@@ -1942,7 +2334,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-intercessor-squad": 5,
+            "bolt-rifle-intercessor-squad": 5,
+            "knives-and-fists": 5
+          }
         },
         {
           "unitId": "intercessor-squad",
@@ -1950,7 +2346,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-intercessor-squad": 5,
+            "bolt-rifle-intercessor-squad": 5,
+            "knives-and-fists": 5
+          }
         },
         {
           "unitId": "intercessor-squad",
@@ -1958,7 +2358,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bolt-pistol-intercessor-squad": 5,
+            "bolt-rifle-intercessor-squad": 5,
+            "knives-and-fists": 5
+          }
         }
       ]
     },
@@ -1984,7 +2388,14 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "aquiline-prow": 1,
+            "armoured-hull-commissar-graves": 1,
+            "chiron-gatling-cannon-commissar-graves": 1,
+            "enforcer-crew": 1,
+            "power-sword-and-manus-mortis-commissar-graves": 1,
+            "prefectus-heavy-stubber": 2
+          }
         },
         {
           "unitId": "commissar-graves",
@@ -1992,7 +2403,14 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "aquiline-prow": 1,
+            "armoured-hull-commissar-graves": 1,
+            "chiron-gatling-cannon-commissar-graves": 1,
+            "enforcer-crew": 1,
+            "power-sword-and-manus-mortis-commissar-graves": 1,
+            "prefectus-heavy-stubber": 2
+          }
         }
       ]
     },
@@ -2019,7 +2437,10 @@
           "isWarlord": true,
           "enhancementId": "berzerker-glaive-berzerker-warband-world-eaters",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "master-of-executions",
@@ -2027,7 +2448,10 @@
           "isWarlord": false,
           "enhancementId": "helm-of-brazen-ire-berzerker-warband-world-eaters",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "axe-of-dismemberment": 1,
+            "bolt-pistol": 1
+          }
         },
         {
           "unitId": "lord-on-juggernaut",
@@ -2035,7 +2459,11 @@
           "isWarlord": false,
           "enhancementId": "favoured-of-khorne-berzerker-warband-world-eaters",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bladed-horn": 1,
+            "exalted-chainblade": 1,
+            "plasma-pistol": 1
+          }
         }
       ]
     },
@@ -2062,7 +2490,10 @@
           "isWarlord": true,
           "enhancementId": "berzerker-glaive-berzerker-warband-world-eaters",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "master-of-executions",
@@ -2070,7 +2501,10 @@
           "isWarlord": false,
           "enhancementId": "helm-of-brazen-ire-berzerker-warband-world-eaters",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "axe-of-dismemberment": 1,
+            "bolt-pistol": 1
+          }
         },
         {
           "unitId": "lord-on-juggernaut",
@@ -2078,7 +2512,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "bladed-horn": 1,
+            "exalted-chainblade": 1,
+            "plasma-pistol": 1
+          }
         }
       ]
     },
@@ -2102,7 +2540,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
         },
         {
           "unitId": "kharn-the-betrayer",
@@ -2110,7 +2551,10 @@
           "isWarlord": false,
           "enhancementId": "berzerker-glaive-berzerker-warband-world-eaters",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "gorechild": 1,
+            "plasma-pistol": 1
+          }
         }
       ]
     },
@@ -2137,7 +2581,10 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "chainsword": 1,
+            "laspistol": 1
+          }
         },
         {
           "unitId": "ogryn-bodyguard",
@@ -2145,7 +2592,11 @@
           "isWarlord": false,
           "enhancementId": "survival-gear-recon-element-astra-militarum",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "close-combat-weapon-ogryn-bodyguard": 1,
+            "huge-knife-ogryn-bodyguard": 1,
+            "ripper-gun-ogryn-bodyguard": 1
+          }
         }
       ]
     },
@@ -2172,7 +2623,10 @@
           "isWarlord": true,
           "enhancementId": "survival-gear-recon-element-astra-militarum",
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "chainsword": 1,
+            "laspistol": 1
+          }
         },
         {
           "unitId": "ogryn-bodyguard",
@@ -2180,7 +2634,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "close-combat-weapon-ogryn-bodyguard": 1,
+            "huge-knife-ogryn-bodyguard": 1,
+            "ripper-gun-ogryn-bodyguard": 1
+          }
         }
       ]
     },
@@ -2204,7 +2662,11 @@
           "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
         },
         {
           "unitId": "inquisitor",
@@ -2212,7 +2674,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": "inquisitorial-agents",
-          "counts": {}
+          "counts": {
+            "blessed-wardings": 1,
+            "bolt-pistol": 1,
+            "inquisitorial-melee-weapon": 1
+          }
         },
         {
           "unitId": "inquisitorial-agents",
@@ -2220,7 +2686,11 @@
           "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
-          "counts": {}
+          "counts": {
+            "agent-firearm": 5,
+            "agent-melee-weapon": 6,
+            "heavy-bolter-inquisitorial-agents": 1
+          }
         }
       ]
     },

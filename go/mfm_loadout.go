@@ -39,6 +39,9 @@ type MfmLoadoutRules struct {
 		Model  *string   `json:"model"`
 		Models int       `json:"models"`
 		Items  []mfmItem `json:"items"`
+		// Individual: the app lists the row's models one by one, each with its
+		// own widgets.
+		Individual bool `json:"individual"`
 	} `json:"stock"`
 	Templates []struct {
 		Model string    `json:"model"`
@@ -320,30 +323,11 @@ func DefaultMfmLoadout(r *MfmLoadoutRules) (models, counts map[string]int) {
 	return models, counts
 }
 
-// perModelRow reports whether the app shows model's widgets once per model.
-func (r *MfmLoadoutRules) perModelRow(model string) bool {
-	defaultModels := 0
-	for _, row := range r.Stock {
-		if row.Model != nil && *row.Model == model {
-			defaultModels = row.Models
-			break
-		}
-	}
-	stock := 0
-	for _, option := range r.Options {
-		if option.Model == nil || *option.Model != model || option.Default <= 0 {
-			continue
-		}
-		if option.Input != "checkbox" {
-			return false
-		}
-		stock++
-	}
-	return defaultModels <= 1 && stock > 0
-}
-
 // checkboxCaps is the most copies of each checkbox-only item model (or the
-// unit, when nil) may carry with `models` models on the row.
+// unit, when nil) may carry with `models` models on the row: one copy per
+// checkbox, raised to the row's stock copies where the default holds more. A
+// row the app lists model by model (`individual`) gives each model its own
+// checkboxes, so its caps are per model.
 func (r *MfmLoadoutRules) checkboxCaps(model *string, models int) map[string]int {
 	caps := map[string]int{}
 	steppers := map[string]bool{}
@@ -370,7 +354,13 @@ func (r *MfmLoadoutRules) checkboxCaps(model *string, models int) map[string]int
 			}
 		}
 	}
-	if model != nil && r.perModelRow(*model) {
+	individual := false
+	for _, row := range r.Stock {
+		if model != nil && row.Model != nil && *row.Model == *model && row.Individual {
+			individual = true
+		}
+	}
+	if individual {
 		for id, cap := range caps {
 			caps[id] = cap * models
 		}

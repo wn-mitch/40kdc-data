@@ -426,3 +426,26 @@ def mfm_assignment(
 
     _search(rules, models, space, space.ids, visit, ceiling)
     return found[0] if found else None
+
+
+def for_each_mfm_configuration(
+    rules: Mapping[str, Any],
+    models: Mapping[str, int],
+    visit: Callable[[MfmConfiguration], bool | None],
+    ceiling: Mapping[str, int] | None = None,
+) -> None:
+    """Calls ``visit`` on each distinct legal configuration, in search order, until it returns True.
+
+    With ``ceiling``, only configurations carrying no more than its copies of
+    each item are walked; an item it leaves out may not be carried.
+    """
+    space = space_of(rules, models)
+    bound = None if ceiling is None else tuple(ceiling.get(i, 0) for i in space.ids)
+    _search(
+        rules,
+        models,
+        space,
+        space.ids,
+        lambda leaf: visit(_configuration_of(space, leaf)) is True,
+        bound,
+    )

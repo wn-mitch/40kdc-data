@@ -103,6 +103,13 @@ pub use data::{
     MfmSearchTooLarge, MAX_SEARCH_BUNDLES, MFM_CANDIDATES_TRUNCATED,
 };
 
+// One unit's wargear legality at any model count (Dataset::loadout_of): MFM rules, else wargear options.
+#[cfg(feature = "bundled-data")]
+pub use data::{
+    for_each_mfm_configuration, mfm_group_row_order, mfm_groups, mfm_row_splits, unit_loadout,
+    LoadoutSource, UnitLoadout,
+};
+
 // Roster-level legality + affordability primitives (need both the Dataset and
 // the importer's Roster/BattleSize types).
 #[cfg(feature = "import")]

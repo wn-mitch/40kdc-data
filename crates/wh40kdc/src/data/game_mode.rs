@@ -288,6 +288,7 @@ impl Dataset {
             units_by_keyword: Arc::clone(&self.units_by_keyword),
             wargear_options_by_unit: Arc::clone(&self.wargear_options_by_unit),
             views: ViewCache::default(),
+            loadouts: Arc::clone(&self.loadouts),
         }
     }
 

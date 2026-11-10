@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { dataset } from "../src/data/index.js";
 import type { Detachment, Enhancement, Unit, WargearOption } from "../src/generated.js";
-import type { LoadoutModel } from "../src/data/loadout.js";
+import { unitLoadout } from "../src/data/unit-loadout.js";
 import {
   assessDetachmentSelection,
   assessEnhancementAssignment,
@@ -36,12 +36,11 @@ describe("validateCandidateLoadout", () => {
     const result = validateCandidateLoadout({
       unit: candidateUnit,
       modelCount: 5,
-      options: [] as WargearOption[],
       counts: new Map([
         ["rifle", 1],
         ["cannon", 1],
       ]),
-      models: [],
+      loadout: unitLoadout(candidateUnit, undefined, [] as WargearOption[]),
     });
     expect(result.legal).toBe(false);
     expect(result.violations).toEqual([
@@ -173,19 +172,16 @@ describe("Legionaries heavy melee allowance", () => {
   // The dump lets one ordinary Legionary and the Aspiring Champion take heavy
   // melee weapons; the champion's two-weapon swap carries a pair.
   const legionaries = dataset.units.getInFaction("legionaries", "chaos-space-marines")!.raw;
-  const composition = dataset.unitCompositionOf(legionaries) as { models: LoadoutModel[] };
-  const options = dataset.wargearOptionsOf(legionaries);
   const check = (heavy: number, boltguns: number, pistols: number) => validateCandidateLoadout({
     unit: legionaries,
     modelCount: 10,
-    options,
     counts: new Map([
       ["heavy-melee-weapon", heavy],
       ["boltgun-legionaries", boltguns],
       ["bolt-pistol-legionaries", pistols],
       ["close-combat-weapon-legionaries", 10],
     ]),
-    models: composition.models,
+    loadout: dataset.loadoutOf(legionaries),
   });
 
   it("accepts the champion's pair plus one Legionary", () => {

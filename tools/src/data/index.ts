@@ -73,6 +73,10 @@ export type {
   CompletedLoadout,
 } from "./loadout.js";
 
+// A unit's wargear legality at any model count (Dataset.loadoutOf): MFM rules, else wargear options.
+export { unitLoadout, mfmGroups, mfmGroupRowOrder } from "./unit-loadout.js";
+export type { UnitLoadout } from "./unit-loadout.js";
+
 // Wargear legality against a unit's MFM loadout rules (unit-composition `loadout`).
 export { checkMfmLoadout, defaultMfmLoadout } from "./mfm-loadout.js";
 export type { MfmItem, MfmLoadoutRules, MfmLoadoutViolation } from "./mfm-loadout.js";

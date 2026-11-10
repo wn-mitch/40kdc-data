@@ -131,6 +131,15 @@
       "wargear": [
         {
           "ref": {
+            "id": "nemesis-force-weapon-purifier-squad",
+            "raw_name": "Nemesis force weapon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 10
+        },
+        {
+          "ref": {
             "id": "purifying-flame",
             "raw_name": "Purifying Flame",
             "resolved": true,
@@ -142,15 +151,6 @@
           "ref": {
             "id": "storm-bolter-purifier-squad",
             "raw_name": "Storm bolter",
-            "resolved": true,
-            "candidates": []
-          },
-          "count": 10
-        },
-        {
-          "ref": {
-            "id": "nemesis-force-weapon-purifier-squad",
-            "raw_name": "Nemesis force weapon",
             "resolved": true,
             "candidates": []
           },

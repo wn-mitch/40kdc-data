@@ -431,9 +431,6 @@ fn handle_check_unit_legality(state: &mut RunnerState, args: &Value) -> Value {
             Some(json!({ "kind": "unit", "id": unit_id })),
         );
     };
-    let comp = ds.unit_composition_of(unit);
-    let models = comp.map(|c| wh40kdc::loadout_models(&c.models));
-    let tiers = comp.map(|c| wh40kdc::loadout_tiers(&c.tiers));
     let mut counts: std::collections::HashMap<String, i64> = std::collections::HashMap::new();
     if let Some(obj) = args.get("counts").and_then(Value::as_object) {
         for (k, v) in obj {
@@ -442,14 +439,10 @@ fn handle_check_unit_legality(state: &mut RunnerState, args: &Value) -> Value {
             }
         }
     }
-    let violations = wh40kdc::check_unit_legality(
-        unit,
-        model_count,
-        &ds.wargear_options_of(unit),
-        &counts,
-        models.as_deref(),
-        tiers.as_deref(),
-    );
+    let violations = match ds.loadout_of(unit).check(model_count, &counts) {
+        Ok(violations) => violations,
+        Err(error) => return mfm_search_error(error),
+    };
     let mut encoded: Vec<Value> = violations
         .iter()
         .map(|v| Value::String(format!("{}:{}", v.code.as_str(), v.id)))
@@ -643,6 +636,13 @@ fn mfm_configuration_wire(configuration: &wh40kdc::MfmConfiguration) -> Value {
         .map(|group| json!({ "model": group.model, "count": group.count, "items": items(&group.items) }))
         .collect();
     json!({ "groups": groups, "unit": items(&configuration.unit), "counts": configuration.counts })
+}
+
+/// An id → count map as sorted `"id:count"` strings.
+fn encode_counts(counts: &std::collections::BTreeMap<String, i64>) -> Value {
+    let mut encoded: Vec<String> = counts.iter().map(|(k, v)| format!("{k}:{v}")).collect();
+    encoded.sort();
+    json!(encoded)
 }
 
 /// A search refused as too large, as the runner's error.
@@ -1118,22 +1118,9 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
                 );
             };
             let model_count: u64 = str_arg("modelCount").parse().unwrap_or(0);
-            let models = ds
-                .unit_composition_of(unit)
-                .map(|c| wh40kdc::loadout_models(&c.models));
-            let lo = wh40kdc::base_loadout(
-                unit,
-                model_count,
-                &ds.wargear_options_of(unit),
-                models.as_deref(),
-            );
-            let mut encoded: Vec<Value> = lo
-                .counts
-                .iter()
-                .map(|(k, v)| Value::String(format!("{k}:{v}")))
-                .collect();
-            encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
-            ok_value(Value::Array(encoded))
+            // Empty when the size cannot be built.
+            let counts = ds.loadout_of(unit).base(model_count).unwrap_or_default();
+            ok_value(encode_counts(&counts))
         }
         "weapon_bounds" => {
             let id = str_arg("unitId");
@@ -1144,15 +1131,10 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
                 );
             };
             let model_count: u64 = str_arg("modelCount").parse().unwrap_or(0);
-            let models = ds
-                .unit_composition_of(unit)
-                .map(|c| wh40kdc::loadout_models(&c.models));
-            let bounds = wh40kdc::weapon_bounds(
-                unit,
-                model_count,
-                &ds.wargear_options_of(unit),
-                models.as_deref(),
-            );
+            let bounds = match ds.loadout_of(unit).bounds(model_count) {
+                Ok(bounds) => bounds.unwrap_or_default(),
+                Err(error) => return mfm_search_error(error),
+            };
             let mut encoded: Vec<Value> = bounds
                 .iter()
                 .map(|(k, b)| Value::String(format!("{k}:{}-{}", b.min, b.max)))
@@ -1169,22 +1151,10 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
                 );
             };
             let model_count: u64 = str_arg("modelCount").parse().unwrap_or(0);
-            let models = ds
-                .unit_composition_of(unit)
-                .map(|c| wh40kdc::loadout_models(&c.models));
-            let lo = wh40kdc::maximal_loadout(
-                unit,
-                model_count,
-                &ds.wargear_options_of(unit),
-                models.as_deref(),
-            );
-            let mut encoded: Vec<Value> = lo
-                .counts
-                .iter()
-                .map(|(k, v)| Value::String(format!("{k}:{v}")))
-                .collect();
-            encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
-            ok_value(Value::Array(encoded))
+            match ds.loadout_of(unit).maximal(model_count) {
+                Ok(counts) => ok_value(encode_counts(&counts.unwrap_or_default())),
+                Err(error) => mfm_search_error(error),
+            }
         }
         "loadout_candidates" => {
             let id = str_arg("unitId");
@@ -1199,21 +1169,15 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
                     Some(json!({ "kind": "unit", "id": id })),
                 );
             };
-            let composition = ds.unit_composition_of(unit);
-            let models = composition.map(|c| wh40kdc::loadout_models(&c.models));
-            let tiers = composition.map(|c| wh40kdc::loadout_tiers(&c.tiers));
             let limit = input
                 .get("limit")
                 .and_then(json_u64)
                 .and_then(|n| usize::try_from(n).ok());
-            ok_value(json!(wh40kdc::loadout_candidates(
-                unit,
-                input.get("modelCount").and_then(json_u64).unwrap_or(0),
-                &ds.wargear_options_of(unit),
-                models.as_deref(),
-                tiers.as_deref(),
-                limit
-            )))
+            let model_count = input.get("modelCount").and_then(json_u64).unwrap_or(0);
+            match ds.loadout_of(unit).candidates(model_count, limit) {
+                Ok(candidates) => ok_value(json!(candidates)),
+                Err(error) => mfm_search_error(error),
+            }
         }
         "phases_of" => {
             let id = str_arg("abilityId");

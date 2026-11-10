@@ -129,21 +129,15 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
                 .units
                 .get_any(id)
                 .unwrap_or_else(|| panic!("{query}: unknown unit {id}"));
-            let models = ds
-                .unit_composition_of(u)
-                .map(|c| wh40kdc::loadout_models(&c.models));
-            let lo = if query == "base_loadout" {
-                wh40kdc::base_loadout(u, model_count, &ds.wargear_options_of(u), models.as_deref())
+            let view = ds.loadout_of(u);
+            // Empty when the size cannot be built.
+            let counts = if query == "base_loadout" {
+                view.base(model_count)
             } else {
-                wh40kdc::maximal_loadout(
-                    u,
-                    model_count,
-                    &ds.wargear_options_of(u),
-                    models.as_deref(),
-                )
-            };
-            let mut encoded: Vec<Value> = lo
-                .counts
+                view.maximal(model_count).expect("maximal loadout searches")
+            }
+            .unwrap_or_default();
+            let mut encoded: Vec<Value> = counts
                 .iter()
                 .map(|(k, v)| Value::String(format!("{k}:{v}")))
                 .collect();
@@ -159,15 +153,11 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
                 .units
                 .get_any(id)
                 .unwrap_or_else(|| panic!("{query}: unknown unit {id}"));
-            let models = ds
-                .unit_composition_of(u)
-                .map(|c| wh40kdc::loadout_models(&c.models));
-            let bounds = wh40kdc::weapon_bounds(
-                u,
-                model_count,
-                &ds.wargear_options_of(u),
-                models.as_deref(),
-            );
+            let bounds = ds
+                .loadout_of(u)
+                .bounds(model_count)
+                .expect("weapon bounds search")
+                .unwrap_or_default();
             let mut encoded: Vec<Value> = bounds
                 .iter()
                 .map(|(k, b)| Value::String(format!("{k}:{}-{}", b.min, b.max)))
@@ -183,22 +173,18 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
                 .and_then(|faction| ds.units.get_in_faction(id, faction))
                 .or_else(|| ds.units.get_any(id))
                 .unwrap_or_else(|| panic!("loadout_candidates: unknown unit {id}"));
-            let composition = ds.unit_composition_of(unit);
-            let models = composition.map(|c| wh40kdc::loadout_models(&c.models));
-            let tiers = composition.map(|c| wh40kdc::loadout_tiers(&c.tiers));
-            serde_json::to_value(wh40kdc::loadout_candidates(
-                unit,
-                arg_str("modelCount")
-                    .parse()
-                    .expect("modelCount is an integer"),
-                &ds.wargear_options_of(unit),
-                models.as_deref(),
-                tiers.as_deref(),
-                args.get("limit")
-                    .and_then(Value::as_str)
-                    .and_then(|v| v.parse().ok()),
-            ))
-            .expect("loadout candidates serialize")
+            let candidates = ds
+                .loadout_of(unit)
+                .candidates(
+                    arg_str("modelCount")
+                        .parse()
+                        .expect("modelCount is an integer"),
+                    args.get("limit")
+                        .and_then(Value::as_str)
+                        .and_then(|v| v.parse().ok()),
+                )
+                .expect("loadout candidates search");
+            serde_json::to_value(candidates).expect("loadout candidates serialize")
         }
         "phases_of" => {
             let id = arg_str("abilityId");

@@ -874,6 +874,7 @@ class StockItem(TypedDict):
     model: NotRequired[str]
     models: int
     items: Items
+    individual: NotRequired[Literal[True]]
 
 
 class Slot(TypedDict):

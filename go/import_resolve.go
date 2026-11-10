@@ -1,6 +1,9 @@
 package wh40kdc
 
-import "strings"
+import (
+	"sort"
+	"strings"
+)
 
 // Resolve a ParsedRoster onto 40kdc entity ids, producing a Roster. Lenient:
 // unmatched names yield resolved:false refs with candidate suggestions. Go
@@ -660,8 +663,7 @@ func resolveUnit(parsed map[string]any, factionID string, detachmentIDs []string
 			explicitCounts[id] += asInt(item["count"])
 		}
 		if allResolved {
-			models, _ := ds.unitCompositionOf(hit.Raw)
-			if completed := completeLoadout(hit.Raw, modelCount, ds.wargearOptionsOf(hit.Raw), models, explicitCounts); completed != nil {
+			if completed := ds.loadoutOf(hit.Raw).Complete(modelCount, explicitCounts); completed != nil {
 				if len(completed.counts) != len(explicitCounts) {
 					useParsedGroups = false
 				} else {
@@ -790,8 +792,7 @@ func resolveUnit(parsed map[string]any, factionID string, detachmentIDs []string
 				explicitCounts[id] += asInt(item["count"])
 			}
 			if allResolved {
-				models, _ := ds.unitCompositionOf(hit.Raw)
-				if completed := completeLoadout(hit.Raw, modelCount, ds.wargearOptionsOf(hit.Raw), models, explicitCounts); completed != nil {
+				if completed := ds.loadoutOf(hit.Raw).Complete(modelCount, explicitCounts); completed != nil {
 					refForID := func(id string) map[string]any {
 						if ref := explicitRefs[id]; ref != nil {
 							return ref
@@ -867,6 +868,15 @@ func resolveUnit(parsed map[string]any, factionID string, detachmentIDs []string
 		}
 	}
 
+	// Derived groups list wargear in their own order, so the list re-imports from
+	// any dialect the same way: a dialect that prints groups reads its wargear in
+	// group order. Groups are derived when the source printed none, or when its
+	// printed groups were set aside above (the Go ListForge parser prints groups
+	// the TS one does not, and they are set aside when completion adds copies).
+	if !useParsedGroups && loadoutGroups != nil {
+		wargear = wargearInGroupOrder(wargear, loadoutGroups)
+	}
+
 	result := map[string]any{
 		"ref":                ref,
 		"model_count":        modelCount,
@@ -920,7 +930,7 @@ func resolveUnit(parsed map[string]any, factionID string, detachmentIDs []string
 			counts[id] += asInt(w["count"])
 		}
 		if allResolved {
-			models, tiers := ds.unitCompositionOf(hit.Raw)
+			models, _ := ds.unitCompositionOf(hit.Raw)
 			envMin, envMax := 0, 0
 			for _, mAny := range models {
 				m, _ := asMap(mAny)
@@ -929,7 +939,7 @@ func resolveUnit(parsed map[string]any, factionID string, detachmentIDs []string
 			}
 			if len(models) == 0 || (modelCount >= envMin && modelCount <= envMax) {
 				var violations []map[string]string
-				for _, v := range checkUnitLegality(hit.Raw, modelCount, ds.wargearOptionsOf(hit.Raw), counts, models, tiers) {
+				for _, v := range ds.loadoutOf(hit.Raw).Check(modelCount, counts) {
 					if v["code"] == "invalid-model-count" || v["code"] == "below-min" {
 						continue
 					}
@@ -989,7 +999,7 @@ func splitDetachmentParts(raw string) []string {
 }
 
 // buildLoadoutGroups recomputes a unit's loadout_groups from its resolved wargear
-// via GroupLoadout — the same maths the exporter uses, so an import→export
+// via the unit's loadout view (Dataset.loadoutOf(...).Groups) — the same maths the exporter uses, so an import→export
 // round-trip is stable. nil when the unit is unresolved, any weapon is unresolved,
 // or the loadout doesn't decompose exactly. Mirror of the TS buildLoadoutGroups.
 func buildLoadoutGroups(hit *UnitView, modelCount int, wargear []any, ds *Dataset) []any {
@@ -1008,9 +1018,7 @@ func buildLoadoutGroups(hit *UnitView, modelCount int, wargear []any, ds *Datase
 		refByID[id] = ref
 		counts[id] += asInt(w["count"])
 	}
-	options := ds.wargearOptionsOf(hit.Raw)
-	models, _ := ds.unitCompositionOf(hit.Raw)
-	groups := GroupLoadout(hit.Raw, modelCount, options, models, counts)
+	groups := ds.loadoutOf(hit.Raw).Groups(modelCount, counts)
 	if groups == nil {
 		return nil
 	}
@@ -1199,4 +1207,33 @@ func numEq(a, b any) bool {
 		return af == bf
 	}
 	return a == b
+}
+
+// wargearInGroupOrder orders wargear by each item's first appearance in
+// groups' wargear; items the groups lack, and ties, keep their order.
+func wargearInGroupOrder(wargear, groups []any) []any {
+	rank := map[string]int{}
+	for _, groupAny := range groups {
+		group, _ := asMap(groupAny)
+		for _, itemAny := range getList(group, "wargear") {
+			item, _ := asMap(itemAny)
+			if id, ok := refOf(item)["id"].(string); ok && id != "" {
+				if _, seen := rank[id]; !seen {
+					rank[id] = len(rank)
+				}
+			}
+		}
+	}
+	at := func(itemAny any) int {
+		item, _ := asMap(itemAny)
+		if id, ok := refOf(item)["id"].(string); ok && id != "" {
+			if r, found := rank[id]; found {
+				return r
+			}
+		}
+		return len(rank)
+	}
+	out := append([]any(nil), wargear...)
+	sort.SliceStable(out, func(a, b int) bool { return at(out[a]) < at(out[b]) })
+	return out
 }

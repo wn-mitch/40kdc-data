@@ -79,6 +79,46 @@ func mfmRowRange(tier []mfmCompositionRow, row string) (lo, hi int, ok bool) {
 	return lo, hi, ok
 }
 
+// mfmRange is a loadout row's model-count range in a tier.
+type mfmRange struct{ lo, hi int }
+
+// mfmTierRanges is the composition's default loadout rows in stock order (each
+// once), their default model counts, and each tier's range per row in that
+// order, tiers in declaration order (the composition's models when it has no
+// tiers). A row a tier does not list keeps its default count. ok is false
+// without a loadout.
+func mfmTierRanges(composition *MfmComposition) (order []string, defaults map[string]int, tiers [][]mfmRange, ok bool) {
+	rules := composition.Loadout
+	if rules == nil {
+		return nil, nil, nil, false
+	}
+	tierRows := [][]mfmCompositionRow{composition.Models}
+	if len(composition.Tiers) > 0 {
+		tierRows = tierRows[:0]
+		for _, tier := range composition.Tiers {
+			tierRows = append(tierRows, tier.Models)
+		}
+	}
+	defaults, _ = DefaultMfmLoadout(rules)
+	for _, row := range rules.Stock {
+		if row.Model != nil && !containsString(order, *row.Model) {
+			order = append(order, *row.Model)
+		}
+	}
+	for _, tier := range tierRows {
+		ranges := make([]mfmRange, len(order))
+		for i, row := range order {
+			lo, hi, found := mfmRowRange(tier, row)
+			if !found {
+				lo, hi = defaults[row], defaults[row]
+			}
+			ranges[i] = mfmRange{lo, hi}
+		}
+		tiers = append(tiers, ranges)
+	}
+	return order, defaults, tiers, true
+}
+
 // MfmRows is the loadout rows' model counts for a unit of modelCount models,
 // or nil when no tier holds that count. The first tier (in declaration order)
 // whose range holds the count fixes each row's range; the default unit's rows
@@ -86,36 +126,16 @@ func mfmRowRange(tier []mfmCompositionRow, row string) (lo, hi int, ok bool) {
 // the most default models that has room, ties to the first in stock order,
 // until the count is reached.
 func MfmRows(composition *MfmComposition, modelCount int) map[string]int {
-	rules := composition.Loadout
-	if rules == nil {
+	order, defaults, tiers, ok := mfmTierRanges(composition)
+	if !ok {
 		return nil
 	}
-	tiers := [][]mfmCompositionRow{composition.Models}
-	if len(composition.Tiers) > 0 {
-		tiers = tiers[:0]
-		for _, tier := range composition.Tiers {
-			tiers = append(tiers, tier.Models)
-		}
-	}
-	defaults, _ := DefaultMfmLoadout(rules)
-	// The default rows in stock order, each once.
-	var order []string
-	for _, row := range rules.Stock {
-		if row.Model != nil && !containsString(order, *row.Model) {
-			order = append(order, *row.Model)
-		}
-	}
-	for _, tier := range tiers {
+	for _, ranges := range tiers {
 		mins, maxes := map[string]int{}, map[string]int{}
 		low, high := 0, 0
-		for _, row := range order {
-			lo, hi, ok := mfmRowRange(tier, row)
-			if !ok {
-				// A row the tier does not list keeps its default count.
-				lo, hi = defaults[row], defaults[row]
-			}
-			mins[row], maxes[row] = lo, hi
-			low, high = low+lo, high+hi
+		for i, row := range order {
+			mins[row], maxes[row] = ranges[i].lo, ranges[i].hi
+			low, high = low+ranges[i].lo, high+ranges[i].hi
 		}
 		if modelCount < low || modelCount > high {
 			continue
@@ -163,6 +183,58 @@ func abs(n int) int {
 		return -n
 	}
 	return n
+}
+
+// MfmRowSplits is every way a unit of modelCount models splits across its
+// loadout rows under some tier: the MfmRows split first, then the rest by tier
+// in declaration order, each tier's in ascending order of the rows' counts
+// (rows in stock order). Each split is listed once. Empty when no tier holds
+// the count.
+func MfmRowSplits(composition *MfmComposition, modelCount int) []map[string]int {
+	bulk := MfmRows(composition, modelCount)
+	order, _, tiers, ok := mfmTierRanges(composition)
+	if bulk == nil || !ok {
+		return nil
+	}
+	keyOf := func(counts []int) string { return string(mfmIntsKey(nil, 0, counts)) }
+	bulkCounts := make([]int, len(order))
+	for i, row := range order {
+		bulkCounts[i] = bulk[row]
+	}
+	out := []map[string]int{bulk}
+	seen := map[string]bool{keyOf(bulkCounts): true}
+	for _, ranges := range tiers {
+		counts := make([]int, 0, len(order))
+		var walk func(i, left int)
+		walk = func(i, left int) {
+			if i == len(order) {
+				if left != 0 {
+					return
+				}
+				if key := keyOf(counts); !seen[key] {
+					seen[key] = true
+					rows := make(map[string]int, len(order))
+					for at, row := range order {
+						rows[row] = counts[at]
+					}
+					out = append(out, rows)
+				}
+				return
+			}
+			// The rows after this one must still be able to take what is left.
+			restLow, restHigh := 0, 0
+			for _, r := range ranges[i+1:] {
+				restLow, restHigh = restLow+r.lo, restHigh+r.hi
+			}
+			for n := max(ranges[i].lo, left-restHigh); n <= min(ranges[i].hi, left-restLow); n++ {
+				counts = append(counts, n)
+				walk(i+1, left-n)
+				counts = counts[:len(counts)-1]
+			}
+		}
+		walk(0, modelCount)
+	}
+	return out
 }
 
 // MfmResizedDefault is the default wargear of a unit with rows models per

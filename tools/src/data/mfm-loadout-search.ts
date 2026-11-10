@@ -367,3 +367,19 @@ export function mfmAssignment(
   }, { ceiling });
   return found;
 }
+
+/**
+ * Calls `visit` on each distinct legal configuration at `models` models per row, in search order,
+ * until it returns true. With `ceiling`, only configurations carrying no more than its copies of
+ * each item are walked; an item it leaves out may not be carried.
+ */
+export function forEachMfmConfiguration(
+  rules: MfmLoadoutRules,
+  models: ReadonlyMap<string, number>,
+  visit: (configuration: MfmConfiguration) => boolean | void,
+  ceiling?: ReadonlyMap<string, number>,
+): void {
+  const space = spaceOf(rules, models);
+  const bounds = ceiling ? { ceiling: space.ids.map((id) => ceiling.get(id) ?? 0) } : {};
+  search(rules, models, space, space.ids, (leaf) => visit(configurationOf(space, leaf)) === true, bounds);
+}

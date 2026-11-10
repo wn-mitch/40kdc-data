@@ -20,7 +20,6 @@ import { fileURLToPath } from "node:url";
 import { Dataset } from "../src/data/dataset.js";
 import type { GameModeView } from "../src/data/collection.js";
 import { normalizeName } from "../src/data/normalize.js";
-import { baseLoadout, loadoutCandidates, maximalLoadout, weaponBounds } from "../src/data/loadout.js";
 import { exportRoster, type ExportFormat } from "../src/export/index.js";
 import {
   decodeShareToken,
@@ -633,37 +632,24 @@ function runLinkedApi(base: Dataset, c: LinkedApiCase): string | null | string[]
     case "base_loadout": {
       const u = ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`base_loadout: unknown unit ${c.args.unitId}`);
-      const comp = ds.unitCompositionOf(u.raw);
-      const lo = baseLoadout(u.raw, Number(c.args.modelCount), ds.wargearOptionsOf(u.raw), comp?.models);
-      return [...lo.counts].map(([id, n]) => `${id}:${n}`).sort();
+      return [...(ds.loadoutOf(u.raw).base(Number(c.args.modelCount)) ?? [])].map(([id, n]) => `${id}:${n}`).sort();
     }
     case "weapon_bounds": {
       const u = ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`weapon_bounds: unknown unit ${c.args.unitId}`);
-      const comp = ds.unitCompositionOf(u.raw);
-      const bounds = weaponBounds(u.raw, Number(c.args.modelCount), ds.wargearOptionsOf(u.raw), comp?.models);
-      return [...bounds].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort();
+      return [...(ds.loadoutOf(u.raw).bounds(Number(c.args.modelCount)) ?? [])].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort();
     }
     case "maximal_loadout": {
       const u = ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`maximal_loadout: unknown unit ${c.args.unitId}`);
-      const lo = maximalLoadout(u.raw, Number(c.args.modelCount), ds.wargearOptionsOf(u.raw));
-      return [...lo.counts].map(([id, n]) => `${id}:${n}`).sort();
+      return [...(ds.loadoutOf(u.raw).maximal(Number(c.args.modelCount)) ?? [])].map(([id, n]) => `${id}:${n}`).sort();
     }
     case "loadout_candidates": {
       const u = c.args.factionId
         ? ds.units.getInFaction(c.args.unitId, c.args.factionId)
         : ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`loadout_candidates: unknown unit ${c.args.unitId}`);
-      const comp = ds.unitCompositionOf(u.raw);
-      return loadoutCandidates(
-        u.raw,
-        Number(c.args.modelCount),
-        ds.wargearOptionsOf(u.raw),
-        comp?.models,
-        comp?.tiers,
-        c.args.limit == null ? undefined : Number(c.args.limit),
-      );
+      return ds.loadoutOf(u.raw).candidates(Number(c.args.modelCount), c.args.limit == null ? undefined : Number(c.args.limit));
     }
     case "phases_of": {
       const a = ds.abilities.getAny(c.args.abilityId);

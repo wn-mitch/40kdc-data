@@ -428,3 +428,27 @@ pub fn mfm_assignment(
     });
     Ok(found)
 }
+
+/// Calls `visit` on each distinct legal configuration at `models` models per
+/// row, in search order, until it returns true. With `ceiling`, only
+/// configurations carrying no more than its copies of each item are walked; an
+/// item it leaves out may not be carried.
+pub fn for_each_mfm_configuration(
+    rules: &MfmLoadoutRules,
+    models: &BTreeMap<String, i64>,
+    visit: &mut dyn FnMut(MfmConfiguration) -> bool,
+    ceiling: Option<&BTreeMap<String, i64>>,
+) -> Result<(), MfmSearchTooLarge> {
+    let space = space_of(rules, models)?;
+    let ceiling = ceiling.map(|ceiling| {
+        space
+            .ids
+            .iter()
+            .map(|id| ceiling.get(id).copied().unwrap_or(0))
+            .collect()
+    });
+    search(rules, models, &space, ceiling, &mut |leaf| {
+        visit(configuration_of(&space, leaf))
+    });
+    Ok(())
+}

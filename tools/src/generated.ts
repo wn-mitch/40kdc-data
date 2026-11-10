@@ -8172,6 +8172,10 @@ export interface UnitComposition {
       model?: string;
       models: number;
       items: Items;
+      /**
+       * The app lists this row's models one by one, each with its own widgets, so a checkbox on the row is one per model rather than one for the row.
+       */
+      individual?: true;
     }[];
     /**
      * What one model of a row carries when added beyond the default unit.

@@ -56,7 +56,7 @@ describe("selectLines", () => {
       const { loadout, counts } = member(unitId);
       const context: EngineContext = { phase };
       const selection = selectLines({ ds, members: [{ memberId: unitId, loadout, counts }], target, buffs: [], context });
-      const legality = validateCandidateLoadout({ unit: loadout.unit, modelCount: loadout.modelCount, options: loadout.options, counts, models: loadout.models });
+      const legality = validateCandidateLoadout({ unit: loadout.unit, modelCount: loadout.modelCount, counts, loadout: loadout.rules });
       const shared = unitLoadoutDamage({ dataset: ds, unit: loadout.unit, modelCount: loadout.modelCount, counts, target, buffs: [], context, groups: legality.groups });
       expect(selection.total).toBeCloseTo(shared.total, 9);
       expect(lineTotal(unitId, selection.firing, context)).toBeCloseTo(shared.total, 9);
@@ -68,7 +68,7 @@ describe("selectLines", () => {
     const context: EngineContext = { phase: "shooting", attackerStates: ["engaged"] };
     const buffs: Buff[] = [{ source: { kind: "manual", label: "+1 to hit" }, contribution: { type: "hit-mod", value: 1 } }];
     const selection = selectLines({ ds, members: [{ memberId: "defiler", loadout, counts }], target, buffs, context });
-    const legality = validateCandidateLoadout({ unit: loadout.unit, modelCount: loadout.modelCount, options: loadout.options, counts, models: loadout.models });
+    const legality = validateCandidateLoadout({ unit: loadout.unit, modelCount: loadout.modelCount, counts, loadout: loadout.rules });
     const shared = unitLoadoutDamage({ dataset: ds, unit: loadout.unit, modelCount: loadout.modelCount, counts, target, buffs, context, groups: legality.groups });
     expect(shared.selected.some((weapon) => weapon.hitModifier === -1)).toBe(true);
     expect(lineTotal("defiler", selection.firing, context, buffs)).toBeCloseTo(shared.total, 9);
@@ -126,7 +126,7 @@ describe("default weapon counts", () => {
     for (const unit of ds.units) {
       const loadout = memberLoadout(ds, unit.raw);
       const legal = (counts: Map<string, number>) =>
-        validateCandidateLoadout({ unit: unit.raw, modelCount: loadout.modelCount, options: loadout.options, counts, models: loadout.models }).legal;
+        validateCandidateLoadout({ unit: unit.raw, modelCount: loadout.modelCount, counts, loadout: loadout.rules }).legal;
       if (!legal(loadout.counts)) continue;
       const counts = memberCounts(loadout, unit.weapons.map((w) => w.id), (weaponId) => defaultWeaponCount(loadout, weaponId));
       if (!legal(counts)) illegal.push(`${unit.raw.faction_id}/${unit.id}`);
