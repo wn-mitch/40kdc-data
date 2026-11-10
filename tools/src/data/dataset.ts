@@ -164,6 +164,8 @@ export class Dataset {
   /** `faction_id::unit_id` → the unit-composition authored for it. */
   private readonly compositionByUnit = new Map<string, UnitComposition>();
   private readonly loadoutByUnit = new Map<string, UnitLoadout>();
+  /** {@link eligibleAbilities} results by input and phase; each game-mode view keeps its own, since entries hold its views. */
+  private readonly eligibleByInput = new Map<string, readonly EligibleAbility[]>();
 
   constructor(
     raw: RawData = emptyRawData(),
@@ -312,6 +314,7 @@ export class Dataset {
     Object.assign(view, this);
     const v = view as unknown as Record<string, unknown>;
     v.gameMode = mode;
+    v.eligibleByInput = new Map();
     // Linked views wrap against the view, so `unit.faction.units` lists in it.
     v.units = this.units.withGameMode(mode, (u) => new UnitView(u, view));
     v.weapons = this.weapons.withGameMode(mode, (w) => new WeaponView(w, view));
@@ -536,7 +539,13 @@ export class Dataset {
    * grouped by source. The SPA uses this to render the abilities pane.
    */
   eligibleAbilities(input: EligibilityInput, phase: Phase): EligibleAbility[] {
-    return resolveEligibleAbilities(this, input, phase);
+    const key = eligibilityKey(input, phase);
+    let entries = this.eligibleByInput.get(key);
+    if (!entries) {
+      entries = Object.freeze(resolveEligibleAbilities(this, input, phase).map((entry) => Object.freeze(entry)));
+      this.eligibleByInput.set(key, entries);
+    }
+    return [...entries];
   }
 
   /**
@@ -777,4 +786,14 @@ function push<T>(map: Map<string, T[]>, key: string, value: T): void {
   const existing = map.get(key);
   if (existing) existing.push(value);
   else map.set(key, [value]);
+}
+
+/**
+ * The cache key of an eligibility query. Attached and supporting unit order is kept, since it
+ * orders the resolver's output; attachment roles are keyed by unit id, so their order is not.
+ */
+function eligibilityKey(input: EligibilityInput, phase: Phase): string {
+  const roles = Object.entries(input.attachmentRoles ?? {}).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
+  return JSON.stringify([phase, input.unitId, input.factionId ?? null, input.detachmentId ?? null,
+    input.attachedUnitIds ?? [], roles, input.supportingUnitIds ?? []]);
 }

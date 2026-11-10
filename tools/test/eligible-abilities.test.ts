@@ -248,3 +248,58 @@ describe("actual attachment membership", () => {
     expect(defending.defensiveBuffsFor(input("first-leader"), { phase: "shooting", attackerAttachmentRole: "bodyguard" })).toEqual([]);
   });
 });
+
+describe("Dataset.eligibleAbilities cache", () => {
+  const ids = (entries: readonly { ability: { id: string }; source: { kind: string } }[]) =>
+    entries.map((e) => `${e.source.kind}:${e.ability.id}`);
+
+  it("keys on the attached units, so a leader's rules appear only with the leader", () => {
+    const alone = { unitId: "khorne-berzerkers", factionId: "world-eaters" };
+    const led = { ...alone, attachedUnitIds: ["kharn-the-betrayer"], attachmentRoles: { "kharn-the-betrayer": "leader" as const } };
+    const before = ids(ds.eligibleAbilities(alone, "fight"));
+    const withKharn = ids(ds.eligibleAbilities(led, "fight"));
+    expect(withKharn).toContain("attached:legendary-killer-world-eaters");
+    expect(before).not.toContain("attached:legendary-killer-world-eaters");
+    expect(ids(ds.eligibleAbilities(alone, "fight"))).toEqual(before);
+  });
+
+  it("hands each caller its own list", () => {
+    const input = { unitId: "khorne-berzerkers", factionId: "world-eaters" };
+    const first = ds.eligibleAbilities(input, "fight");
+    const length = first.length;
+    first.length = 0;
+    expect(ds.eligibleAbilities(input, "fight")).toHaveLength(length);
+  });
+
+  it("keeps a game-mode view's entries bound to that view", () => {
+    const view = ds.forGameMode("all");
+    const input = { unitId: "khorne-berzerkers", factionId: "world-eaters" };
+    ds.eligibleAbilities(input, "fight");
+    const entry = view.eligibleAbilities(input, "fight")[0];
+    expect((entry.ability as unknown as { ds: unknown }).ds === view).toBe(true);
+  });
+});
+
+describe("AbilityView.describeBuffs cache", () => {
+  const ability = ds.abilities.getAny("murderous-charge-world-eaters")!;
+  const source = { kind: "ability", abilityId: ability.id, abilityKind: "unit" } as const;
+  const charged = { phase: "fight", attackerMoves: ["charge"] } as const;
+
+  it("translates each context on its own", () => {
+    // Murderous Charge needs a charge move: the cache must not hand one context's answer to the other.
+    expect(ability.describeBuffs(source, { phase: "fight" }).applied).toHaveLength(0);
+    expect(ability.describeBuffs(source, charged).applied).toHaveLength(1);
+    expect(ability.describeBuffs(source, { phase: "fight" }).applied).toHaveLength(0);
+  });
+
+  it("refuses edits to a cached translation", () => {
+    const translation = ability.describeBuffs(source, charged);
+    expect(() => translation.applied.push(translation.applied[0])).toThrow(TypeError);
+    expect(ability.describeBuffs(source, charged).applied).toHaveLength(1);
+  });
+
+  it("leaves the ability record itself unfrozen", () => {
+    ability.describeBuffs(source, { phase: "shooting" });
+    expect(Object.isFrozen(ability.raw.effect)).toBe(false);
+  });
+});
