@@ -6,12 +6,16 @@
  * damage matrix uses.
  */
 import {
+  groupsWithGrantedWeapons,
   unitLoadoutDamage,
   validateCandidateLoadout,
+  withGrantedWeapons,
   type Buff,
+  type CandidateLoadoutLegality,
   type Dataset,
   type EngineContext,
   type PistolChoice,
+  type SelectedWeaponProfile,
   type Unit,
   type UnitLoadout,
   type Weapon,
@@ -41,9 +45,28 @@ export type WeaponLine = {
   ownerMemberId: string;
 };
 
+/**
+ * Models that use one line with the same wargear: the loadout scoring's row for them. Its
+ * `modelWargear` decides which bearer-only wargear rules reach them, and `rerollOne` whether they
+ * spend the unit's re-roll-one permissions.
+ */
+export type LineRow = Pick<SelectedWeaponProfile, "count" | "modelWargear" | "rerollOne">;
+
+/** A member's models as the legality check grouped them, with the weapons their wargear grants. */
+type MemberModels = {
+  modelCount: number;
+  groups: NonNullable<CandidateLoadoutLegality["groups"]> | null;
+  /** Every item the member's models carry, granted weapons included. */
+  carried: string[];
+};
+
 export type LineSelection = {
   /** Models firing each used line, by line id; a line absent here is not used. */
   firing: Map<string, number>;
+  /** The loadout scoring's rows behind each used line, by line id; their counts sum to its `firing`. */
+  rows: Map<string, LineRow[]>;
+  /** Each member's model groups, by member id, for the rows of a line the scoring leaves unused. */
+  models: Map<string, MemberModels>;
   pistolChoice: Map<string, PistolChoice>;
   /** Wargear rules each member's counts break, by member id; a member with none is absent. */
   violations: Map<string, string[]>;
@@ -142,6 +165,8 @@ export function selectLines(input: {
   context: EngineContext;
 }): LineSelection {
   const firing = new Map<string, number>();
+  const rows = new Map<string, LineRow[]>();
+  const models = new Map<string, MemberModels>();
   const pistolChoice = new Map<string, PistolChoice>();
   const violations = new Map<string, string[]>();
   let total = 0;
@@ -164,9 +189,45 @@ export function selectLines(input: {
     for (const selected of scored.selected) {
       const id = lineId(member.memberId, selected.weaponId, selected.profileIndex);
       firing.set(id, (firing.get(id) ?? 0) + selected.count);
+      const row: LineRow = {
+        count: selected.count,
+        ...(selected.modelWargear ? { modelWargear: selected.modelWargear } : {}),
+        ...(selected.rerollOne ? { rerollOne: selected.rerollOne } : {}),
+      };
+      rows.set(id, [...(rows.get(id) ?? []), row]);
     }
+    const grants = member.grants ?? [];
+    models.set(member.memberId, {
+      modelCount,
+      groups: legality.groups ? groupsWithGrantedWeapons(legality.groups, grants) : null,
+      carried: [...withGrantedWeapons(member.counts, grants)].filter(([, n]) => n > 0).map(([id]) => id).sort(),
+    });
     pistolChoice.set(member.memberId, scored.pistolChoice);
     total += scored.total;
   }
-  return { firing, pistolChoice, violations, total };
+  return { firing, rows, models, pistolChoice, violations, total };
+}
+
+/**
+ * The rows `carried` models use a line with. A used line takes the loadout scoring's rows. An
+ * unused line, crunched as if its carriers fired it, splits them by the model groups that carry
+ * it, and its first row spends the re-roll-one permissions. Without groups that account for every
+ * carrier, a lone model is its own bearer group and a larger unit's rows know no bearer, so its
+ * bearer-only rules are left out, as the loadout scoring leaves them out.
+ */
+export function lineRows(selection: LineSelection | null, line: WeaponLine, carried: number): LineRow[] {
+  const used = selection?.rows.get(line.id);
+  if (used) return used;
+  const member = selection?.models.get(line.ownerMemberId);
+  if (!member) return [{ count: carried, rerollOne: true }];
+  const grouped: LineRow[] = (member.groups ?? []).flatMap((group) => {
+    const copies = group.weapons.find((weapon) => weapon.id === line.weaponId)?.count ?? 0;
+    return copies > 0
+      ? [{ count: copies * group.count, modelWargear: group.weapons.filter((weapon) => weapon.count > 0).map((weapon) => weapon.id) }]
+      : [];
+  });
+  const rows: LineRow[] = grouped.length > 0 && grouped.reduce((sum, row) => sum + row.count, 0) === carried
+    ? grouped
+    : [member.modelCount === 1 ? { count: carried, modelWargear: member.carried } : { count: carried }];
+  return rows.map((row, index) => (index === 0 ? { ...row, rerollOne: true } : row));
 }

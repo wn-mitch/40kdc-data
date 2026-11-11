@@ -4,14 +4,11 @@
  * A failure is returned as an `error` for the pane to show, never thrown.
  */
 import {
-  attributeStages,
   resolveBuffs,
   type AbilityMortalWounds,
   baseWargear,
   combinedWargear,
-  loadoutHitModifier,
   loadoutWargearScoring,
-  profileEngineInput,
   resolveUnitWeapon,
   withGrantedWeapons,
   type AbilityNeed,
@@ -30,13 +27,13 @@ import {
 
 import { activeSupport, defenderBuffs, type DefenderBuild } from "./defender.js";
 import type { ManualTarget } from "./store.svelte.js";
-import { memberLoadout, type MemberLoadout, type WeaponLine } from "./weapon-lines.js";
+import { memberLoadout, type MemberLoadout } from "./weapon-lines.js";
+
+export { crunchLine, crunchLines, lineGroupLabel, type LineGroup, type LineResult } from "./line-results.js";
 
 export type LeverSelection = { buffs: StackableBuff[]; groups: StackableBuffGroup[]; needs: AbilityNeed[]; error?: string };
 
 export type MemberUnit = { memberId: string; unit: UnitView; loadout: MemberLoadout };
-
-export type LineResult = WeaponLine & { models: number; attributed: AttributedStage[]; error?: string };
 
 /**
  * What a member's loadout wargear changes about scoring it: the weapons that wargear grants (e.g. a
@@ -258,42 +255,6 @@ export function memberWargear(input: {
 /** How many copies of `weaponId` the member's wargear grants across its models. */
 export function grantedCopies(grants: readonly WeaponGrant[], counts: ReadonlyMap<string, number>, weaponId: string): number {
   return (withGrantedWeapons(counts, grants).get(weaponId) ?? 0) - (counts.get(weaponId) ?? 0);
-}
-
-/**
- * One weapon line crunched with the shared buffs and the models firing it, with the leave-one-out
- * attribution of each stage. The engine input is the one the loadout scoring used, including the
- * owner's Big Guns Never Tire Hit roll modifier.
- */
-export function crunchLine(input: {
-  ds: Dataset;
-  line: WeaponLine;
-  owner: Unit | undefined;
-  models: number;
-  target: { unit: Unit; modelCount: number };
-  buffs: readonly Buff[];
-  context: EngineContext;
-}): LineResult {
-  const { ds, line, owner, models, context } = input;
-  if (models <= 0) return { ...line, models, attributed: [], error: "no models carry this weapon" };
-  try {
-    const profile = line.weaponRaw.profiles[line.profileIndex];
-    const attributed = attributeStages(
-      profileEngineInput({
-        weapon: line.weaponRaw,
-        profileIndex: line.profileIndex,
-        target: input.target,
-        modelsFiring: models,
-        buffs: [...input.buffs],
-        context,
-        hitModifier: owner && profile ? loadoutHitModifier(owner, profile, context) : 0,
-      }),
-      ds,
-    );
-    return { ...line, models, attributed };
-  } catch (err) {
-    return { ...line, models, attributed: [], error: (err as Error).message };
-  }
 }
 
 /** One mortal-wound source as Salvo toggles it, keyed by its id and moment. */
