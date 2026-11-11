@@ -20,12 +20,13 @@ import (
 // is NOT included, so it passes through.)
 var quotesRe = regexp.MustCompile("['’‘`\"“”]")
 
-// spaceHyphenRe collapses any run of whitespace or ASCII hyphen to a single
-// space. \s + \p{Z} + vertical tab covers the Unicode whitespace the corpus
-// and fuzz pool exercise (incl. NBSP U+00A0 and ideographic space U+3000);
-// only the ASCII hyphen-minus is treated as a hyphen (other hyphen variants
-// pass through, matching the reference impls).
-var spaceHyphenRe = regexp.MustCompile(`[\s\p{Z}\x{000b}-]+`)
+// spaceHyphenRe collapses any run of whitespace or dashes to a single space.
+// \s + \p{Z} + vertical tab covers the Unicode whitespace the corpus and fuzz
+// pool exercise (incl. NBSP U+00A0 and ideographic space U+3000). A dash is the
+// ASCII hyphen-minus, the Unicode hyphens and dashes U+2010–U+2015, or the
+// minus sign U+2212: GW's data keeps the non-breaking hyphen (`Grav‑Tank`,
+// U+2011) while roster exports print ASCII `Grav-Tank`.
+var spaceHyphenRe = regexp.MustCompile(`[\s\p{Z}\x{000b}\-\x{2010}-\x{2015}\x{2212}]+`)
 
 // leadingTheRe matches a leading "The " (case-insensitive, after trim) and
 // captures the remainder. Mirror of the TS `stripLeadingThe` regex
@@ -34,7 +35,7 @@ var leadingTheRe = regexp.MustCompile(`(?i)^the\s+(.+)$`)
 
 // NormalizeName reduces a display name to a canonical lookup key. The
 // transform, in order: NFD-decompose → strip combining marks → lowercase →
-// remove quote variants → collapse whitespace/hyphen runs to a single space →
+// remove quote variants → collapse whitespace/dash runs to a single space →
 // trim. The result is for comparison only, not display.
 func NormalizeName(input string) string {
 	decomposed := norm.NFD.String(input)

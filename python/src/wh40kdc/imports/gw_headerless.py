@@ -51,6 +51,7 @@ import re
 from typing import Any
 
 from wh40kdc.imports.adapter import FormatAdapter
+from wh40kdc.imports.gw import is_reference_entry
 from wh40kdc.imports.newrecruit_text import (
     classify_wargear_list,
     infer_battle_size_raw,
@@ -553,6 +554,9 @@ def _parse(decoded: Any) -> dict[str, Any]:
 
     def flush() -> None:
         nonlocal current
+        if current is not None and is_reference_entry(current):
+            current = None
+            return
         if current is not None:
             unit_index = len(units)
             units.append(_finish_unit(current))

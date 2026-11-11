@@ -1,0 +1,46 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ PLAYER NAME: —
++ TEAM NAME: —
++ FACTIONS USED: Adeptus Custodes
++ DISPOSITION: Take And Hold
++ DETACHMENT: Emissaries Imperatus, Honoured Companions, Might Of The Moritoi
++ ARMY POINTS: 2000pts
++
++ WARLORD: Char1: Trajann Valoris
++ ENHANCEMENT: Augury Uplink (on Char2: Telemon Heavy Dreadnought)
++ LEADER/SUPPORT: —
++ NUMBER OF UNITS: 9
++++++++++++++++++++++++++++++++++++++++++++++++
+
+BATTLELINE
+
+Char1: 1x Trajann Valoris (265 pts)
+1 with Eagle's Scream, Watcher's Axe, Warlord
+
+3x Custodian Guard Sodality (240 pts)
+• 2x Custodian Guard: Guardian Spear
+• 1x Custodian Guard: Guardian Spear, Vexilla
+
+3x Allarus Custodians (270 pts)
+• 2x Allarus Custodians: Balistus grenade launcher, Guardian Spear
+• 1x Allarus Custodians: Balistus grenade launcher, Guardian Spear, Vexilla
+
+1x Caladius Annihilator Grav-tank (250 pts)
+1 with Arachnus Blaze Carronade, Armoured hull, Twin Lastrum Bolt Cannon
+
+3x Custodian Wardens (295 pts)
+• 2x Custodian Wardens: Guardian Spear
+• 1x Custodian Wardens: Guardian Spear, Vexilla
+
+4x Prosecutor Squad (45 pts)
+• 4x Prosecutor: Boltgun, Gun Stock
+
+Char2: 1x Telemon Heavy Dreadnought (310 pts)
+1 with Dual Caestus Fists, Spiculus bolt launcher, 2x Twin Neutronium Cascade Projectors
+Enhancement: Augury Uplink
+
+3x Venatari with Verutum Lances (270 pts)
+• 3x Venatari: Verutum Lance
+
+4x Witchseeker Squad (55 pts)
+• 4x Witchseeker: Flamer, Gun Stock

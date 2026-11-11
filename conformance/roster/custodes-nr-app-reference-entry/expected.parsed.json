@@ -1,0 +1,239 @@
+{
+  "name": "Unnamed list",
+  "generated_by": null,
+  "faction_raw_name": "Adeptus Custodes",
+  "detachment_raw_names": [
+    "Emissaries Imperatus, Honoured Companions, and Might of the Moritoi"
+  ],
+  "battle_size_raw": "Strike Force (2,000 Points)",
+  "force_disposition_raw_name": "Take and Hold",
+  "declared_limit": 2000,
+  "total_reported": 2000,
+  "total_computed": 2000,
+  "units": [
+    {
+      "raw_name": "Trajann Valoris",
+      "is_character": true,
+      "model_count": 1,
+      "points": 265,
+      "is_warlord": true,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Eagle's Scream",
+          "count": 1
+        },
+        {
+          "raw_name": "Watcher's Axe",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Custodian Guard Sodality",
+      "is_character": false,
+      "model_count": 3,
+      "points": 240,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Guardian Spear",
+          "count": 3
+        },
+        {
+          "raw_name": "Vexilla",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Allarus Custodians",
+      "is_character": false,
+      "model_count": 3,
+      "points": 270,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Balistus grenade launcher",
+          "count": 3
+        },
+        {
+          "raw_name": "Guardian Spear",
+          "count": 3
+        },
+        {
+          "raw_name": "Vexilla",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Caladius Annihilator Grav-tank",
+      "is_character": false,
+      "model_count": 1,
+      "points": 250,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Arachnus Blaze Carronade",
+          "count": 1
+        },
+        {
+          "raw_name": "Armoured hull",
+          "count": 1
+        },
+        {
+          "raw_name": "Twin Lastrum Bolt Cannon",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Custodian Wardens",
+      "is_character": false,
+      "model_count": 3,
+      "points": 295,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Guardian Spear",
+          "count": 3
+        },
+        {
+          "raw_name": "Vexilla",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Prosecutor Squad",
+      "is_character": false,
+      "model_count": 4,
+      "points": 45,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Boltgun",
+          "count": 4
+        },
+        {
+          "raw_name": "Gun Stock",
+          "count": 4
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Prosecutor",
+          "count": 4,
+          "wargear": [
+            {
+              "raw_name": "Boltgun",
+              "count": 1
+            },
+            {
+              "raw_name": "Gun Stock",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "raw_name": "Telemon Heavy Dreadnought",
+      "is_character": false,
+      "model_count": 1,
+      "points": 310,
+      "is_warlord": false,
+      "enhancement_raw_name": "Augury Uplink",
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Dual Caestus Fists",
+          "count": 1
+        },
+        {
+          "raw_name": "Spiculus bolt launcher",
+          "count": 1
+        },
+        {
+          "raw_name": "Twin Neutronium Cascade Projectors",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "raw_name": "Venatari with Verutum Lances",
+      "is_character": false,
+      "model_count": 3,
+      "points": 270,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Verutum Lance",
+          "count": 3
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Venatari",
+          "count": 3,
+          "wargear": [
+            {
+              "raw_name": "Verutum Lance",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "raw_name": "Witchseeker Squad",
+      "is_character": false,
+      "model_count": 4,
+      "points": 55,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Flamer",
+          "count": 4
+        },
+        {
+          "raw_name": "Gun Stock",
+          "count": 4
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Witchseeker",
+          "count": 4,
+          "wargear": [
+            {
+              "raw_name": "Flamer",
+              "count": 1
+            },
+            {
+              "raw_name": "Gun Stock",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "multi_force": false
+}

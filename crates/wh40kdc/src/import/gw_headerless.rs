@@ -56,6 +56,7 @@ use super::attached_groups::{
     attached_unit_number, is_attached_as_support, is_attached_section, pair_attached_groups,
     AttachedAs, GroupMember,
 };
+use super::gw::is_reference_entry;
 use super::gw_headerless_bullets::{finish_unit, parse_bullet, UnitAcc};
 use super::gw_headerless_preamble::{
     expand_dense_lines, strip_bcp_summary, summary_warlord, Metadata, Preamble,
@@ -193,6 +194,9 @@ impl FormatAdapter for GwHeaderlessAdapter {
         let mut pending_support = false;
         let mut flush = |current: &mut Option<UnitAcc>, units: &mut Vec<ParsedUnit>| {
             if let Some(u) = current.take() {
+                if is_reference_entry(u.displayed_pts, u.bullets.len()) {
+                    return;
+                }
                 if let (Some(group), Some(role)) = (u.attachment_group, u.attachment_role) {
                     attachment_members.push(GroupMember {
                         unit_index: units.len(),

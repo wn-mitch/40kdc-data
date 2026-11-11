@@ -196,6 +196,15 @@ struct UnitAcc {
     bullets: Vec<Bullet>,
 }
 
+/// A zero-point entry with no bullets is a roster-builder reference entry, not
+/// a battlefield unit: it has no models, no wargear and no cost (NewRecruit's
+/// `Martial Ka'tah Reference (0 Points)`). Every real unit costs points or
+/// lists at least one model or weapon, so the GW adapters drop these entries.
+/// Mirror of the TS `isReferenceEntry`.
+pub(super) fn is_reference_entry(displayed_pts: Option<u64>, bullet_count: usize) -> bool {
+    displayed_pts == Some(0) && bullet_count == 0
+}
+
 /// Build the parsed unit plus its `Attached as:` role, if any.
 fn finish_unit(acc: UnitAcc) -> (ParsedUnit, Option<AttachedAs>) {
     let top_indent = acc.bullets.iter().map(|b| b.indent).min().unwrap_or(0);
@@ -339,6 +348,9 @@ fn parse_body(lines: &[&str], body_start: usize) -> (Vec<ParsedUnit>, bool) {
                     units: &mut Vec<ParsedUnit>,
                     group: &mut Vec<(usize, AttachedAs)>| {
         if let Some(acc) = current.take() {
+            if is_reference_entry(acc.displayed_pts, acc.bullets.len()) {
+                return;
+            }
             let (unit, role) = finish_unit(acc);
             if let Some(role) = role {
                 group.push((units.len(), role));

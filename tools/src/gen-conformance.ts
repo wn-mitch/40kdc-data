@@ -101,6 +101,17 @@ const NORMALIZE_INPUTS = [
   "Brôkhyr Iron-master",
   "  the   betrayer  ",
   "space--marines",
+  // Unicode hyphens and dashes (U+2010–U+2015) and the minus sign (U+2212)
+  // collapse like the ASCII hyphen: GW's data keeps the non-breaking hyphen
+  // (`Grav‑Tank`, U+2011) while roster exports print ASCII `Grav-Tank`.
+  "Grav\u2010Tank",
+  "Grav\u2011Tank",
+  "Grav\u2012Tank",
+  "Grav\u2013Tank",
+  "Grav\u2014Tank",
+  "Grav\u2015Tank",
+  "Grav\u2212Tank",
+  "Agents of the Imperium \u2014 Deathwatch",
   // casefold
   "KHÂRN THE BETRAYER",
   // already-normalized (idempotence)

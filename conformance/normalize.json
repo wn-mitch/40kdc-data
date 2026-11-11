@@ -48,6 +48,38 @@
     "expected": "space marines"
   },
   {
+    "input": "Grav‐Tank",
+    "expected": "grav tank"
+  },
+  {
+    "input": "Grav‑Tank",
+    "expected": "grav tank"
+  },
+  {
+    "input": "Grav‒Tank",
+    "expected": "grav tank"
+  },
+  {
+    "input": "Grav–Tank",
+    "expected": "grav tank"
+  },
+  {
+    "input": "Grav—Tank",
+    "expected": "grav tank"
+  },
+  {
+    "input": "Grav―Tank",
+    "expected": "grav tank"
+  },
+  {
+    "input": "Grav−Tank",
+    "expected": "grav tank"
+  },
+  {
+    "input": "Agents of the Imperium — Deathwatch",
+    "expected": "agents of the imperium deathwatch"
+  },
+  {
     "input": "KHÂRN THE BETRAYER",
     "expected": "kharn the betrayer"
   },

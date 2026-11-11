@@ -179,6 +179,16 @@ interface UnitAcc {
   bullets: Bullet[];
 }
 
+/**
+ * A zero-point entry with no bullets is a roster-builder reference entry, not
+ * a battlefield unit: it has no models, no wargear and no cost (NewRecruit's
+ * `Martial Ka'tah Reference (0 Points)`). Every real unit costs points or
+ * lists at least one model or weapon, so the adapter drops these entries.
+ */
+export function isReferenceEntry(acc: { displayed_pts: number | null; bullets: unknown[] }): boolean {
+  return acc.displayed_pts === 0 && acc.bullets.length === 0;
+}
+
 function finishUnit(acc: UnitAcc): { unit: ParsedUnit; attachedRole: "leader" | "support" | "bodyguard" | null } {
   const topIndent = acc.bullets.length
     ? Math.min(...acc.bullets.map((b) => b.indent))
@@ -299,6 +309,10 @@ function parseBody(lines: string[], bodyStart: number): {
   };
 
   const finalize = (): void => {
+    if (current && isReferenceEntry(current)) {
+      current = null;
+      return;
+    }
     if (current) {
       const { unit, attachedRole } = finishUnit(current);
       if (attachedRole) attachedGroupBuffer.push({ unit, role: attachedRole });

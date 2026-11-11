@@ -1,0 +1,597 @@
+{
+  "name": "Unnamed list",
+  "source": {
+    "format": "gw",
+    "generated_by": null
+  },
+  "faction_id": "adeptus-custodes",
+  "detachments": [
+    {
+      "ref": {
+        "id": "emissaries-imperatus",
+        "raw_name": "Emissaries Imperatus",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 1
+    },
+    {
+      "ref": {
+        "id": "honoured-companions",
+        "raw_name": "Honoured Companions",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 1
+    },
+    {
+      "ref": {
+        "id": "might-of-the-moritoi",
+        "raw_name": "Might of the Moritoi",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 1
+    }
+  ],
+  "battle_size": "strike-force",
+  "force_disposition": "take-and-hold",
+  "points": {
+    "declared_limit": 2000,
+    "detachment_cap": 3,
+    "total_reported": 2000,
+    "total_computed": 2000
+  },
+  "units": [
+    {
+      "ref": {
+        "id": "trajann-valoris",
+        "raw_name": "Trajann Valoris",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 265,
+      "is_warlord": true,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "eagles-scream",
+            "raw_name": "Eagle's Scream",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "watchers-axe",
+            "raw_name": "Watcher's Axe",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "custodian-guard-sodality",
+        "raw_name": "Custodian Guard Sodality",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 3,
+      "points": 240,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "guardian-spear-custodian-guard-sodality",
+            "raw_name": "Guardian Spear",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 3
+        },
+        {
+          "ref": {
+            "id": "vexilla",
+            "raw_name": "Vexilla",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Custodian Guard",
+          "count": 2,
+          "wargear": [
+            {
+              "ref": {
+                "id": "guardian-spear-custodian-guard-sodality",
+                "raw_name": "Guardian Spear",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Custodian Guard",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "guardian-spear-custodian-guard-sodality",
+                "raw_name": "Guardian Spear",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "vexilla",
+                "raw_name": "Vexilla",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "allarus-custodians",
+        "raw_name": "Allarus Custodians",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 3,
+      "points": 270,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "balistus-grenade-launcher",
+            "raw_name": "Balistus grenade launcher",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 3
+        },
+        {
+          "ref": {
+            "id": "guardian-spear-allarus-custodians",
+            "raw_name": "Guardian Spear",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 3
+        },
+        {
+          "ref": {
+            "id": "vexilla",
+            "raw_name": "Vexilla",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Allarus Custodians",
+          "count": 2,
+          "wargear": [
+            {
+              "ref": {
+                "id": "balistus-grenade-launcher",
+                "raw_name": "Balistus grenade launcher",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "guardian-spear-allarus-custodians",
+                "raw_name": "Guardian Spear",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Allarus Custodians",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "balistus-grenade-launcher",
+                "raw_name": "Balistus grenade launcher",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "guardian-spear-allarus-custodians",
+                "raw_name": "Guardian Spear",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "vexilla",
+                "raw_name": "Vexilla",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "caladius-annihilator-grav-tank",
+        "raw_name": "Caladius Annihilator Grav-tank",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 250,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "arachnus-blaze-carronade",
+            "raw_name": "Arachnus Blaze Carronade",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "armoured-hull",
+            "raw_name": "Armoured hull",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "twin-lastrum-bolt-cannon",
+            "raw_name": "Twin Lastrum Bolt Cannon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "custodian-wardens",
+        "raw_name": "Custodian Wardens",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 3,
+      "points": 295,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "guardian-spear-custodian-wardens",
+            "raw_name": "Guardian Spear",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 3
+        },
+        {
+          "ref": {
+            "id": "vexilla",
+            "raw_name": "Vexilla",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Custodian Wardens",
+          "count": 2,
+          "wargear": [
+            {
+              "ref": {
+                "id": "guardian-spear-custodian-wardens",
+                "raw_name": "Guardian Spear",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Custodian Wardens",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "guardian-spear-custodian-wardens",
+                "raw_name": "Guardian Spear",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "vexilla",
+                "raw_name": "Vexilla",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "prosecutor-squad",
+        "raw_name": "Prosecutor Squad",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 4,
+      "points": 45,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "boltgun",
+            "raw_name": "Boltgun",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 4
+        },
+        {
+          "ref": {
+            "id": "gun-stock",
+            "raw_name": "Gun Stock",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 4
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Prosecutor",
+          "count": 4,
+          "wargear": [
+            {
+              "ref": {
+                "id": "boltgun",
+                "raw_name": "Boltgun",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "gun-stock",
+                "raw_name": "Gun Stock",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "telemon-heavy-dreadnought",
+        "raw_name": "Telemon Heavy Dreadnought",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 310,
+      "is_warlord": false,
+      "enhancement": {
+        "id": "augury-uplink-one-per-army-upgrade-might-of-the-moritoi-adeptus-custodes",
+        "raw_name": "Augury Uplink",
+        "resolved": true,
+        "candidates": []
+      },
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "dual-caestus-fists",
+            "raw_name": "Dual Caestus Fists",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "spiculus-bolt-launcher",
+            "raw_name": "Spiculus bolt launcher",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "twin-neutronium-cascade-projectors",
+            "raw_name": "Twin Neutronium Cascade Projectors",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 2
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "venatari-with-verutum-lances",
+        "raw_name": "Venatari with Verutum Lances",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 3,
+      "points": 270,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "verutum-lance",
+            "raw_name": "Verutum Lance",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 3
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Venatari",
+          "count": 3,
+          "wargear": [
+            {
+              "ref": {
+                "id": "verutum-lance",
+                "raw_name": "Verutum Lance",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "witchseeker-squad",
+        "raw_name": "Witchseeker Squad",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 4,
+      "points": 55,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "flamer",
+            "raw_name": "Flamer",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 4
+        },
+        {
+          "ref": {
+            "id": "gun-stock",
+            "raw_name": "Gun Stock",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 4
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Witchseeker",
+          "count": 4,
+          "wargear": [
+            {
+              "ref": {
+                "id": "flamer",
+                "raw_name": "Flamer",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "gun-stock",
+                "raw_name": "Gun Stock",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "leader_attachment": null
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "pre-launch-provisional"
+  },
+  "diagnostics": {
+    "resolved_units": 9,
+    "unresolved_units": 0,
+    "resolved_weapons": 20,
+    "unresolved_weapons": 0,
+    "warnings": []
+  }
+}

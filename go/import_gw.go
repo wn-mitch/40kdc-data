@@ -42,6 +42,17 @@ type gwUnit struct {
 	bullets      []lftBulletEntry
 }
 
+// isReferenceEntry reports whether a unit header is a roster-builder
+// reference entry rather than a battlefield unit: zero points and no bullets,
+// so no models, no wargear and no cost (NewRecruit's `Martial Ka'tah Reference
+// (0 Points)`). Every real unit costs points or lists at least one model or
+// weapon, so the GW adapters drop these entries. Mirror of the TS
+// isReferenceEntry.
+func isReferenceEntry(displayedPts any, bulletCount int) bool {
+	pts, ok := displayedPts.(float64)
+	return ok && pts == 0 && bulletCount == 0
+}
+
 func isGwText(decoded any) (string, bool) {
 	s, ok := decoded.(string)
 	if !ok {
@@ -248,6 +259,10 @@ var gwAdapter = formatAdapter{
 			attachedGroup = nil
 		}
 		finalize := func() {
+			if current != nil && isReferenceEntry(current.displayedPts, len(current.bullets)) {
+				current = nil
+				return
+			}
 			if current != nil {
 				unit, role := finishGwUnit(current)
 				if role != "" {
