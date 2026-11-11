@@ -220,7 +220,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "4c27b2b46e22bd7194fd8eb789090cd816639e4e8d7565a54c1a70f92c405379",
     "version": "2025-q3",
@@ -229,16 +229,16 @@
       "steps": [
         {
           "type": "weapon-ability-grant",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "ignores-cover"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
@@ -247,17 +247,14 @@
             "type": "matches",
             "parameters": {
               "filter": {
-                "designated": "RILED UP"
+                "designated": "riled-up"
               }
             }
           },
           "effect": {
             "type": "weapon-ability-grant",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
-              "weapons": {
-                "type": "ranged"
-              },
               "keywords": [
                 {
                   "keyword_id": "sustained-hits",
@@ -265,7 +262,10 @@
                     "value": 1
                   }
                 }
-              ]
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         }
