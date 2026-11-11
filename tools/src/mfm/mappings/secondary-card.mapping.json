@@ -988,32 +988,44 @@
     {
       "source": "data.primary_mission.detachmentId",
       "candidate_pointer": "/card_type",
-      "reason": "Detachment-scoped primary rows are intentionally excluded from generic primary card reconciliation."
+      "reason": "Set on 26 detachment-scoped primary reskins; missions.ts reads it to skip them.",
+      "classification": "consumed-elsewhere",
+      "spread": "51 rows, 51 values (25 null/absent): string, 26 distinct"
     },
     {
       "source": "data.primary_mission_action.localisations.*.startsText",
       "candidate_pointer": "/actions/*/starts",
-      "reason": "Action timing is not extracted from localized MFM prose."
+      "reason": "When a primary action starts, as GW prose (24 distinct texts).",
+      "classification": "prose",
+      "spread": "13 rows, 104 values (0 null/absent): string, 24 distinct"
     },
     {
       "source": "data.secondary_mission_action.localisations.*.startsText",
       "candidate_pointer": "/actions/*/starts",
-      "reason": "Action timing is not extracted from localized MFM prose."
+      "reason": "When a secondary action starts, as GW prose (8 distinct texts).",
+      "classification": "prose",
+      "spread": "2 rows, 16 values (0 null/absent): string, 8 distinct"
     },
     {
       "source": "data.primary_mission_objective_scorable_period.scorablePeriod",
       "candidate_pointer": "/awards/*/trigger",
-      "reason": "MFM primary scoreable-period values are not transformed into authored trigger DSL."
+      "reason": "Six period values state when each primary objective scores; missions.ts should compare authored award triggers to them.",
+      "classification": "needs-consumer",
+      "spread": "455 rows, 455 values (0 null/absent): string, 6 distinct"
     },
     {
       "source": "data.secondary_mission_objective_scoring.inputType",
       "candidate_pointer": "/awards/*",
-      "reason": "The current scoring reconciler does not interpret inputType."
+      "reason": "Two input types state how a secondary objective is scored; missions.ts should compare authored awards to them.",
+      "classification": "needs-consumer",
+      "spread": "31 rows, 31 values (0 null/absent): string, 2 distinct"
     },
     {
       "source": "data.secondary_mission_objective_scoring.localisations.*.scoringCriteria",
       "candidate_pointer": "/awards/*/when",
-      "reason": "Localized scoring criteria remains prose-only; it is not copied into conditions."
+      "reason": "Scoring criteria as GW prose; award conditions are authored.",
+      "classification": "prose",
+      "spread": "31 rows, 248 values (0 null/absent): string, 208 distinct"
     }
   ]
 }

@@ -1309,37 +1309,51 @@
     {
       "source": "data.detachment.bannerImage",
       "candidate_pointer": null,
-      "reason": "Artwork references are excluded from published core entity data."
+      "reason": "Detachment banner artwork URL, distinct per detachment; artwork is never published.",
+      "classification": "presentation",
+      "spread": "282 rows, 282 values (0 null/absent): string, 282 distinct"
     },
     {
       "source": "data.detachment.rowImage",
       "candidate_pointer": null,
-      "reason": "Artwork references are excluded from published core entity data."
+      "reason": "Detachment list-row artwork URL, distinct per detachment; artwork is never published.",
+      "classification": "presentation",
+      "spread": "282 rows, 282 values (0 null/absent): string, 282 distinct"
     },
     {
       "source": "data.detachment.displayOrder",
       "candidate_pointer": null,
-      "reason": "Presentation order has no detachment entity destination."
+      "reason": "App sort position of a detachment within its faction (0..15).",
+      "classification": "presentation",
+      "spread": "282 rows, 282 values (0 null/absent): number, 16 distinct, 0..15"
     },
     {
       "source": "data.detachment.isFreeFromEntitlements",
       "candidate_pointer": null,
-      "reason": "Entitlement state has no current core detachment field."
+      "reason": "App purchase entitlement (90 free detachments); it gates app access, not list legality.",
+      "classification": "presentation",
+      "spread": "282 rows, 282 values (0 null/absent): boolean false×192, true×90"
     },
     {
       "source": "data.detachment.pointsCost",
       "candidate_pointer": "/detachment_points",
-      "reason": "The null-only alternate representation is not used; detachmentPointsCost is authoritative in current tooling."
+      "reason": "Null on every row; detachmentPointsCost carries detachment_points.",
+      "classification": "constant",
+      "spread": "282 rows, 282 values (282 null/absent)"
     },
     {
       "source": "data.detachment_detail.localisations.*.title",
       "candidate_pointer": null,
-      "reason": "Detail section labels are not core detachment fields."
+      "reason": "Headings of detachment detail sections (10 distinct titles), GW text kept in the dump.",
+      "classification": "prose",
+      "spread": "27 rows, 27 values (0 null/absent): string, 10 distinct"
     },
     {
       "source": "data.detachment_detail_bullet_point.localisations.*.text",
       "candidate_pointer": "/restrictions/notes",
-      "reason": "Localized detail prose is not copied into repository restriction notes."
+      "reason": "Detachment restriction bullet text, GW prose kept in the dump; the structured restrictions come from keyword tables.",
+      "classification": "prose",
+      "spread": "34 rows, 34 values (0 null/absent): string, 34 distinct"
     }
   ]
 }

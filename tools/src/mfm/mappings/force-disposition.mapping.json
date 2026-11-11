@@ -103,27 +103,37 @@
     {
       "source": "data.force_disposition.id",
       "candidate_pointer": "/id",
-      "reason": "The dump UUID is a verified relationship key; dispositionIdMap derives the repository identity from the localized name instead of exposing the UUID as the entity id."
+      "reason": "The dump UUID is a verified relationship key; dispositionIdMap derives the repository identity from the localized name instead of exposing the UUID as the entity id.",
+      "classification": "id",
+      "spread": "5 rows, 5 values (0 null/absent): string, 5 distinct"
     },
     {
       "source": "data.force_disposition.localisations",
       "candidate_pointer": null,
-      "reason": "The locale container is structural; only its selected localized name is relevant to the core entity."
+      "reason": "The locale container is structural; only its selected localized name is relevant to the core entity.",
+      "classification": "structural",
+      "spread": "5 rows, 5 values (0 null/absent): object"
     },
     {
       "source": "data.force_disposition.localisations.*",
       "candidate_pointer": null,
-      "reason": "The localized payload wrapper is structural; the core schema has no locale-payload field."
+      "reason": "The localized payload wrapper is structural; the core schema has no locale-payload field.",
+      "classification": "structural",
+      "spread": "5 rows, 40 values (0 null/absent): object"
     },
     {
       "source": "data.detachment_force_disposition.detachmentId",
       "candidate_pointer": null,
-      "reason": "This edge endpoint identifies the detachment destination and is consumed by buildCanon when reconciling detachment force_dispositions, not by the force-disposition entity schema."
+      "reason": "This edge endpoint identifies the detachment destination and is consumed by buildCanon when reconciling detachment force_dispositions, not by the force-disposition entity schema.",
+      "classification": "consumed-elsewhere",
+      "spread": "316 rows, 316 values (0 null/absent): string, 282 distinct"
     },
     {
       "source": "data.detachment_force_disposition.forceDispositionId",
       "candidate_pointer": "/id",
-      "reason": "This edge endpoint is the dump UUID used to reach a disposition; it is translated through dispositionIdMap rather than emitted as the repository force-disposition id."
+      "reason": "This edge endpoint is the dump UUID used to reach a disposition; it is translated through dispositionIdMap rather than emitted as the repository force-disposition id.",
+      "classification": "id",
+      "spread": "316 rows, 316 values (0 null/absent): string, 5 distinct"
     }
   ]
 }

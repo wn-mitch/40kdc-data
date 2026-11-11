@@ -64,7 +64,9 @@
     {
       "source": "metadata.data_version",
       "candidate_pointer": null,
-      "reason": "This numeric value identifies the dump snapshot. tools/src/mfm/dataslate.ts looks it up in a curated table to name the game-versions entry dump-verified records are stamped with; it is never transformed into edition, effective date, label, or supersession, and an unmapped value is an error."
+      "reason": "This numeric value identifies the dump snapshot. tools/src/mfm/dataslate.ts looks it up in a curated table to name the game-versions entry dump-verified records are stamped with; it is never transformed into edition, effective date, label, or supersession, and an unmapped value is an error.",
+      "classification": "consumed-elsewhere",
+      "spread": "1 rows, 1 values (0 null/absent): number 995×1"
     }
   ]
 }

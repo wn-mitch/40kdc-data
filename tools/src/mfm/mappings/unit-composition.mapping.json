@@ -908,9 +908,9 @@
     }
   },
   "unmapped_mfm_fields": [
-    { "source": "data.miniature.miniatureSlots", "candidate_pointer": null, "reason": "The current composition projection does not model source slot counts." },
-    { "source": "data.unit_composition.points", "candidate_pointer": null, "reason": "Composition points belong to unit points projection, not this entity schema." },
-    { "source": "data.unit_composition.referenceGroupingKeywordId", "candidate_pointer": null, "reason": "Reference grouping is applicability context for points, not a unit-composition property." },
-    { "source": "data.wargear_option.points", "candidate_pointer": null, "reason": "Per-option cost is projected by wargear-option handling, not default model loadouts." }
+    { "source": "data.miniature.miniatureSlots", "candidate_pointer": null, "reason": "1 on every miniature.", "classification": "constant", "spread": "1593 rows, 1593 values (0 null/absent): number 1×1593" },
+    { "source": "data.unit_composition.points", "candidate_pointer": null, "reason": "points.ts projects composition points into unit points; this entity has no price.", "classification": "consumed-elsewhere", "spread": "1526 rows, 1526 values (107 null/absent): number, 103 distinct, 0..3500" },
+    { "source": "data.unit_composition.referenceGroupingKeywordId", "candidate_pointer": null, "reason": "Set on 33 compositions; points.ts reads it as points applicability context.", "classification": "consumed-elsewhere", "spread": "1526 rows, 1526 values (1493 null/absent): string, 1 distinct" },
+    { "source": "data.wargear_option.points", "candidate_pointer": null, "reason": "points.ts (pricedWargearItems) prices it into unit wargear_costs; wargear options carry no cost.", "classification": "consumed-elsewhere", "spread": "6334 rows, 6334 values (0 null/absent): number, 7 distinct, 0..25" }
   ]
 }

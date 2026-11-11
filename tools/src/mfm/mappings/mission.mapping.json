@@ -351,7 +351,9 @@
     {
       "source": "data.primary_mission.localisations.*.agendaAchievedText",
       "candidate_pointer": null,
-      "reason": "Agenda-completion prose has no core mission destination and must not be copied from the dump."
+      "reason": "Null in every locale of every primary mission.",
+      "classification": "constant",
+      "spread": "51 rows, 408 values (408 null/absent)"
     }
   ]
 }

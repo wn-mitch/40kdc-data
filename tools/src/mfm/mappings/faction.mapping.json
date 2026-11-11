@@ -733,37 +733,51 @@
     {
       "source": "data.faction_keyword.excludedFromArmyBuilder",
       "candidate_pointer": null,
-      "reason": "This MFM army-builder visibility flag has no faction core-entity destination."
+      "reason": "True on 8 faction keywords the app does not offer as an army faction. faction-fields.ts should lift it and roster-resolve.ts should refuse them.",
+      "classification": "needs-consumer",
+      "spread": "44 rows, 44 values (0 null/absent): boolean false×36, true×8"
     },
     {
       "source": "data.faction_keyword.localisations.*.lore",
       "candidate_pointer": null,
-      "reason": "Localized lore remains outside published core entity data."
+      "reason": "Faction flavour text, GW prose kept in the dump.",
+      "classification": "prose",
+      "spread": "44 rows, 352 values (0 null/absent): string, 297 distinct"
     },
     {
       "source": "data.faction_keyword.mandatoryWarlordId",
       "candidate_pointer": null,
-      "reason": "The candidate mandatory-warlord relation has no faction core-entity destination."
+      "reason": "Null on every faction keyword, so no faction mandates a Warlord.",
+      "classification": "constant",
+      "spread": "44 rows, 44 values (44 null/absent)"
     },
     {
       "source": "data.faction_keyword.armySelectionImage",
       "candidate_pointer": "/logo_url",
-      "reason": "Artwork references are not selected or published as core logo URLs."
+      "reason": "Army-selection screen artwork URL; artwork is never published.",
+      "classification": "presentation",
+      "spread": "44 rows, 44 values (0 null/absent): string, 44 distinct"
     },
     {
       "source": "data.faction_keyword.moreInfoImage",
       "candidate_pointer": "/logo_url",
-      "reason": "Artwork references are not selected or published as core logo URLs."
+      "reason": "Faction info-page artwork URL; artwork is never published.",
+      "classification": "presentation",
+      "spread": "44 rows, 44 values (0 null/absent): string, 44 distinct"
     },
     {
       "source": "data.faction_keyword.rosterFactionImage",
       "candidate_pointer": "/logo_url",
-      "reason": "Artwork references are not selected or published as core logo URLs."
+      "reason": "Roster faction icon URL; artwork is never published.",
+      "classification": "presentation",
+      "spread": "44 rows, 44 values (0 null/absent): string, 44 distinct"
     },
     {
       "source": "data.faction_keyword.rosterHeaderImage",
       "candidate_pointer": "/logo_url",
-      "reason": "Artwork references are not selected or published as core logo URLs."
+      "reason": "Roster header artwork URL; artwork is never published.",
+      "classification": "presentation",
+      "spread": "44 rows, 44 values (0 null/absent): string, 44 distinct"
     }
   ]
 }

@@ -223,14 +223,14 @@
     }
   },
   "unmapped_mfm_fields": [
-    {"source": "data.all_model_wargear_choice_set.datasheetId", "candidate_pointer": "/model_constraint", "reason": "The all-model choice graph is not traversed by current wargear.ts."},
-    {"source": "data.all_model_wargear_choice_set.miniatureId", "candidate_pointer": "/model_constraint/model_name", "reason": "The all-model choice graph is not traversed by current wargear.ts."},
-    {"source": "data.all_model_wargear_choice.substitute", "candidate_pointer": "/replaces", "reason": "Substitution semantics in all-model choices are not projected."},
-    {"source": "data.all_model_wargear_choice_wargear_item.wargearItemId", "candidate_pointer": "/replacement", "reason": "All-model choice items are not projected into option replacements."},
-    {"source": "data.all_model_wargear_choice_wargear_item.count", "candidate_pointer": "/replacement", "reason": "All-model choice item multiplicity is not consumed."},
-    {"source": "data.loadout_choice_set.allowDuplicates", "candidate_pointer": null, "reason": "Current derivation does not represent repeated-selection permission."},
-    {"source": "data.loadout_choice_set.alternate", "candidate_pointer": null, "reason": "Current derivation records alternate sets only as review notes and does not change emitted fields."},
-    {"source": "data.limited_wargear_choice_set.mandatory", "candidate_pointer": null, "reason": "Mandatory limited-choice semantics are not represented by generated options."},
-    {"source": "data.wargear_option.points", "candidate_pointer": null, "reason": "Consumed cross-entity as the unit wargear_costs per-item price (unit.mapping.json /wargear_costs via pricedWargearItems), not projected to any wargear-option field; the interim /additional_cost encoding it would have used is retired (stripped by runWargearCosts)."}
+    {"source": "data.all_model_wargear_choice_set.datasheetId", "candidate_pointer": "/model_constraint", "reason": "loadout-lift.ts reads the all-model choice graph into unit-composition loadout.uniform.", "classification": "consumed-elsewhere", "spread": "29 rows, 29 values (0 null/absent): string, 24 distinct"},
+    {"source": "data.all_model_wargear_choice_set.miniatureId", "candidate_pointer": "/model_constraint/model_name", "reason": "loadout-lift.ts keys loadout.uniform entries by this miniature.", "classification": "consumed-elsewhere", "spread": "29 rows, 29 values (7 null/absent): string, 18 distinct"},
+    {"source": "data.all_model_wargear_choice.substitute", "candidate_pointer": "/replaces", "reason": "loadout-lift.ts copies it to unit-composition loadout.uniform choices; wargear options do not need it.", "classification": "consumed-elsewhere", "spread": "70 rows, 70 values (0 null/absent): boolean false×53, true×17"},
+    {"source": "data.all_model_wargear_choice_wargear_item.wargearItemId", "candidate_pointer": "/replacement", "reason": "loadout-lift.ts resolves these items into loadout.uniform choices.", "classification": "consumed-elsewhere", "spread": "74 rows, 74 values (0 null/absent): string, 68 distinct"},
+    {"source": "data.all_model_wargear_choice_wargear_item.count", "candidate_pointer": "/replacement", "reason": "1 on every row.", "classification": "constant", "spread": "74 rows, 74 values (0 null/absent): number 1×74"},
+    {"source": "data.loadout_choice_set.allowDuplicates", "candidate_pointer": null, "reason": "loadout-lift.ts copies it to unit-composition loadout choice sets, which mfm-loadout.ts checks.", "classification": "consumed-elsewhere", "spread": "2466 rows, 2466 values (0 null/absent): boolean false×2421, true×45"},
+    {"source": "data.loadout_choice_set.alternate", "candidate_pointer": null, "reason": "True on 4 sets; loadout-lift.ts lifts it and mfm-loadout.ts checks it.", "classification": "consumed-elsewhere", "spread": "2466 rows, 2466 values (0 null/absent): boolean false×2462, true×4"},
+    {"source": "data.limited_wargear_choice_set.mandatory", "candidate_pointer": null, "reason": "False on every limited choice set.", "classification": "constant", "spread": "327 rows, 327 values (0 null/absent): boolean false×327"},
+    {"source": "data.wargear_option.points", "candidate_pointer": null, "reason": "points.ts (pricedWargearItems) prices it into unit wargear_costs; wargear options carry no cost.", "classification": "consumed-elsewhere", "spread": "6334 rows, 6334 values (0 null/absent): number, 7 distinct, 0..25"}
   ]
 }

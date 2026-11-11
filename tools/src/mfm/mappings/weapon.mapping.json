@@ -1050,27 +1050,37 @@
     {
       "source": "data.wargear_item.localisations.*.ruleText",
       "candidate_pointer": null,
-      "reason": "Rules prose is intentionally not copied into the core weapon schema."
+      "reason": "Equipment rules text on 348 distinct localized rows, kept in the dump.",
+      "classification": "prose",
+      "spread": "4150 rows, 16259 values (15698 null/absent): string, 348 distinct"
     },
     {
       "source": "data.wargear_item.noMultiProfileIcon",
       "candidate_pointer": null,
-      "reason": "Presentation metadata has no core weapon destination."
+      "reason": "Hides the multi-profile icon on 3 items in the app.",
+      "classification": "presentation",
+      "spread": "4150 rows, 4150 values (0 null/absent): boolean false×4147, true×3"
     },
     {
       "source": "data.wargear_item_profile_wargear_ability.displayOrder",
       "candidate_pointer": "/profiles/*/keywords",
-      "reason": "The current projection preserves table iteration order and does not consume link display order."
+      "reason": "Order of a profile's weapon abilities (0..5).",
+      "classification": "presentation",
+      "spread": "5312 rows, 5312 values (0 null/absent): number 0×1420, 1×2461, 2×1066, 3×304, 4×55, 5×6"
     },
     {
       "source": "data.wargear_ability.localisations.*.lore",
       "candidate_pointer": null,
-      "reason": "Ability lore is prose-store material, not a core weapon field."
+      "reason": "Weapon ability flavour text, GW prose kept in the dump.",
+      "classification": "prose",
+      "spread": "152 rows, 656 values (29 null/absent): string, 169 distinct"
     },
     {
       "source": "data.wargear_ability.localisations.*.rules",
       "candidate_pointer": null,
-      "reason": "Ability rules prose is intentionally not copied into the core weapon schema."
+      "reason": "Weapon ability rules text, GW prose kept in the dump.",
+      "classification": "prose",
+      "spread": "152 rows, 656 values (0 null/absent): string, 216 distinct"
     }
   ]
 }

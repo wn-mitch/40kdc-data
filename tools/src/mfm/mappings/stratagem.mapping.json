@@ -978,42 +978,58 @@
     {
       "source": "data.stratagem.displayOrder",
       "candidate_pointer": null,
-      "reason": "Source presentation order has no stratagem core-schema field and is not consumed."
+      "reason": "App sort position of a stratagem within its detachment (0..72).",
+      "classification": "presentation",
+      "spread": "1292 rows, 1292 values (0 null/absent): number, 73 distinct, 0..72"
     },
     {
       "source": "data.stratagem.localisations",
       "candidate_pointer": null,
-      "reason": "The locale map is structural container metadata, not a core entity property."
+      "reason": "Locale map container; only the localized fields inside carry values.",
+      "classification": "structural",
+      "spread": "1292 rows, 1292 values (0 null/absent): object"
     },
     {
       "source": "data.stratagem.localisations.*",
       "candidate_pointer": null,
-      "reason": "The locale payload container has no core entity destination."
+      "reason": "Per-locale payload object; only its fields carry values.",
+      "classification": "structural",
+      "spread": "1292 rows, 4659 values (0 null/absent): object"
     },
     {
       "source": "data.stratagem.localisations.*.effectRules",
       "candidate_pointer": "/ability_id",
-      "reason": "Effect prose is routed to the separate raw-text store; ability links are not inferred from it here."
+      "reason": "Stratagem effect text; record-prose.ts reads it from the dump on demand.",
+      "classification": "prose",
+      "spread": "1292 rows, 4659 values (0 null/absent): string, 3216 distinct"
     },
     {
       "source": "data.stratagem.localisations.*.lore",
       "candidate_pointer": null,
-      "reason": "Narrative prose has no core stratagem property."
+      "reason": "Stratagem flavour text, GW prose kept in the dump.",
+      "classification": "prose",
+      "spread": "1292 rows, 4659 values (0 null/absent): string, 4540 distinct"
     },
     {
       "source": "data.stratagem.localisations.*.secondaryEffect",
       "candidate_pointer": null,
-      "reason": "Alternate-effect prose is raw-text-store material and has no representable core field."
+      "reason": "Alternate-effect text on 24 localized rows (2 stratagems); record-prose.ts can read it from the dump.",
+      "classification": "prose",
+      "spread": "1292 rows, 4659 values (4635 null/absent): string, 24 distinct"
     },
     {
       "source": "data.stratagem.secondaryEffectAdditionalCPCost",
       "candidate_pointer": "/cp_cost",
-      "reason": "The core schema represents only one CP cost, so alternate-effect additional CP is intentionally not conflated with cp_cost."
+      "reason": "1 extra CP on the 2 stratagems with an alternate effect; cp_cost holds one cost; stratagems.ts should lift it into its own field.",
+      "classification": "needs-consumer",
+      "spread": "1292 rows, 1292 values (1290 null/absent): number 1×2"
     },
     {
       "source": "data.stratagem.secondaryEffectIsMutuallyExclusive",
       "candidate_pointer": null,
-      "reason": "The core schema has no field for standard-versus-alternate effect exclusivity."
+      "reason": "False on every stratagem.",
+      "classification": "constant",
+      "spread": "1292 rows, 1292 values (0 null/absent): boolean false×1292"
     }
   ]
 }

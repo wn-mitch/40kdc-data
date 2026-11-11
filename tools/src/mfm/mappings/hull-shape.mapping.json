@@ -132,7 +132,9 @@
     {
       "source": "data.datasheet.localisations.*.baseSize",
       "candidate_pointer": "/name",
-      "reason": "The categorical base-size text can indicate a Hull presentation, but it cannot identify a reusable outline or supply its vertices or bounds."
+      "reason": "base-sizes.ts parses this text into base_size_mm; it cannot supply a hull outline.",
+      "classification": "consumed-elsewhere",
+      "spread": "1174 rows, 4086 values (137 null/absent): string, 83 distinct"
     }
   ]
 }

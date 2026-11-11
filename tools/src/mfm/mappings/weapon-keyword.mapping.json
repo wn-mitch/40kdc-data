@@ -149,7 +149,9 @@
     {
       "source": "data.wargear_ability.localisations.*.name",
       "candidate_pointer": null,
-      "reason": "Ability names outside mapWeaponKeyword's closed mapping are deliberately retained only as project-loadout warnings and do not mint a weapon-keyword catalog entry."
+      "reason": "project-loadout.ts maps names through mapWeaponKeyword; names outside its closed list only warn.",
+      "classification": "consumed-elsewhere",
+      "spread": "152 rows, 656 values (0 null/absent): string, 637 distinct"
     }
   ]
 }

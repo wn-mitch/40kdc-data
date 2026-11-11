@@ -983,42 +983,58 @@
     {
       "source": "data.allied_faction.isMutuallyExclusiveKeywordLimit",
       "candidate_pointer": "/keyword_limits",
-      "reason": "Structured mutual-exclusivity semantics have no corresponding core field or extractor behavior."
+      "reason": "True on 4 allied factions: their keyword limits are mutually exclusive. allies.ts should read it into keyword_limits.",
+      "classification": "needs-consumer",
+      "spread": "23 rows, 23 values (0 null/absent): boolean false×19, true×4"
     },
     {
       "source": "data.allied_faction.replacesRosterFactionKeyword",
       "candidate_pointer": null,
-      "reason": "Roster faction replacement has no allied-rule destination."
+      "reason": "True on 1 allied faction, which replaces the roster's faction keyword. allies.ts should model it.",
+      "classification": "needs-consumer",
+      "spread": "23 rows, 23 values (0 null/absent): boolean false×22, true×1"
     },
     {
       "source": "data.allied_faction.requiredWarlordMiniatureId",
       "candidate_pointer": "/warlord_datasheet_ids",
-      "reason": "The candidate relation is not verified; current extraction may use the identifier but cannot document it as a verified join."
+      "reason": "Null on every row, so there is no Warlord requirement to read; allies.ts guards it for a future dump.",
+      "classification": "constant",
+      "spread": "23 rows, 23 values (23 null/absent)"
     },
     {
       "source": "data.allied_faction_keyword.requiredWarlordMiniatureId",
       "candidate_pointer": "/warlord_datasheet_ids",
-      "reason": "The candidate relation is not verified and is not projected by the current extractor."
+      "reason": "Null on every row; allies.ts and conditional-keywords.ts guard it for a future dump.",
+      "classification": "constant",
+      "spread": "54 rows, 54 values (54 null/absent)"
     },
     {
       "source": "data.allied_faction_keyword_slotless_keyword_group.id",
       "candidate_pointer": null,
-      "reason": "Slotless keyword-group structure has no core allied-rule representation."
+      "reason": "12 slotless keyword groups exempt allied keywords from slot accounting. allies.ts should read them.",
+      "classification": "needs-consumer",
+      "spread": "12 rows, 12 values (0 null/absent): string, 12 distinct"
     },
     {
       "source": "data.allied_faction_keyword_slotless_keyword_group_donor_keyword.keywordId",
       "candidate_pointer": null,
-      "reason": "Donor keyword-group semantics are not projected by the current extractor."
+      "reason": "The 3 donor keywords of the slotless groups. allies.ts should read them with the groups.",
+      "classification": "needs-consumer",
+      "spread": "18 rows, 18 values (0 null/absent): string, 3 distinct"
     },
     {
       "source": "data.allied_faction_keyword_slotless_keyword_group_receiver_keyword.keywordId",
       "candidate_pointer": null,
-      "reason": "Receiver keyword-group semantics are not projected by the current extractor."
+      "reason": "The 2 receiver keywords of the slotless groups. allies.ts should read them with the groups.",
+      "classification": "needs-consumer",
+      "spread": "12 rows, 12 values (0 null/absent): string, 2 distinct"
     },
     {
       "source": "data.allied_faction_parent_faction_keyword.factionKeywordId",
       "candidate_pointer": "/label",
-      "reason": "Parent factions only supply a fallback label during extraction; no durable core field represents the association."
+      "reason": "allies.ts reads the parent faction only for a fallback rule label; allied-rule records have no parent-faction field.",
+      "classification": "consumed-elsewhere",
+      "spread": "27 rows, 27 values (0 null/absent): string, 23 distinct"
     }
   ]
 }

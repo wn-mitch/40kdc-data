@@ -1,4 +1,4 @@
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import * as path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
@@ -8,6 +8,8 @@ import {
   type DumpCatalog,
 } from "../src/mfm/gen-dump-schema.js";
 import { REPO_ROOT } from "../src/mfm/repo-files.js";
+import { fieldSpread } from "../src/mfm/field-spread.js";
+import { DEFAULT_DUMP_PATH } from "../src/mfm/loader.js";
 
 const MFM_DIR = path.resolve(import.meta.dirname, "../src/mfm");
 const MAPPINGS_DIR = path.join(MFM_DIR, "mappings");
@@ -313,5 +315,73 @@ describe("committed MFM source mappings", () => {
     expect(validateSourceMappings(CATALOG, purposeDirectory).errors).toContain(
       'Mapping "unit" field "/id": join "detachment_faction_keyword.detachmentId" purpose "ownership" differs from catalog meaning "applicability"',
     );
+  });
+});
+
+type Unmapped = { source: string; reason: string; classification: string; spread: string };
+const unmappedOf = (mapping: Record<string, unknown>) => mapping.unmapped_mfm_fields as Unmapped[];
+const errorsMatching = (directory: string, pattern: RegExp) =>
+  validateSourceMappings(CATALOG, directory).errors.filter((error) => pattern.test(error));
+
+describe("unmapped MFM field reasons", () => {
+  it("reject the stock 'does not model this source classification' reason and other stock phrasings", () => {
+    for (const reason of [
+      "The current composition projection does not model this source classification.",
+      "No current core enhancement property represents this bearer restriction; it has no core field.",
+      "Donor keyword-group semantics are not projected by the current extractor.",
+    ]) {
+      const directory = temporaryMappingDirectory();
+      mutateUnitMapping(directory, (mapping) => {
+        unmappedOf(mapping)[0].reason = reason;
+      });
+      expect(errorsMatching(directory, /data\.datasheet\.bannerImage" has a stock reason/), reason).toHaveLength(1);
+    }
+  });
+
+  it("require a needs-consumer reason to name the .ts file that should read the field", () => {
+    const directory = temporaryMappingDirectory();
+    mutateUnitMapping(directory, (mapping) => {
+      Object.assign(unmappedOf(mapping)[0], { classification: "needs-consumer", reason: "Roster validation should read it." });
+    });
+    expect(errorsMatching(directory, /needs a consumer but its reason names no \.ts file/)).toHaveLength(1);
+  });
+
+  it("refuse one reason shared by fields of different tables", () => {
+    const directory = temporaryMappingDirectory();
+    const shared = readMapping("unit") as unknown as Record<string, unknown>;
+    const detachmentBanner = JSON.parse(readFileSync(path.join(MAPPINGS_DIR, "detachment.mapping.json"), "utf8"))
+      .unmapped_mfm_fields.find((entry: Unmapped) => entry.source === "data.detachment.bannerImage") as Unmapped;
+    expect(unmappedOf(shared)[0].source).toBe("data.datasheet.bannerImage");
+    mutateUnitMapping(directory, (mapping) => {
+      unmappedOf(mapping)[0].reason = detachmentBanner.reason;
+    });
+    expect(errorsMatching(directory, /is shared by data\.datasheet, data\.detachment/)).toHaveLength(1);
+  });
+
+  it("require a classification and a spread on every entry", () => {
+    const directory = temporaryMappingDirectory();
+    mutateUnitMapping(directory, (mapping) => {
+      delete (unmappedOf(mapping)[0] as Partial<Unmapped>).classification;
+      delete (unmappedOf(mapping)[0] as Partial<Unmapped>).spread;
+    });
+    const errors = validateSourceMappings(CATALOG, directory).errors.join("\n");
+    expect(errors).toMatch(/classification/);
+    expect(errors).toMatch(/spread/);
+  });
+
+  it.skipIf(!existsSync(DEFAULT_DUMP_PATH))("record each field's value spread in the current dump", () => {
+    const dump = JSON.parse(readFileSync(DEFAULT_DUMP_PATH, "utf8")) as unknown;
+    const stale: string[] = [];
+    for (const file of readdirSync(MAPPINGS_DIR).sort()) {
+      const mapping = JSON.parse(readFileSync(path.join(MAPPINGS_DIR, file), "utf8")) as Record<string, unknown>;
+      for (const entry of unmappedOf(mapping)) {
+        const spread = fieldSpread(dump, entry.source);
+        if (spread !== entry.spread) stale.push(`${file} ${entry.source}: ${spread}`);
+        // A constant field holds one value or none.
+        if (entry.classification === "constant")
+          expect(spread, entry.source).toMatch(/\(\d+ null\/absent\)$|: (boolean|number) [^,]+×\d+$/);
+      }
+    }
+    expect(stale).toEqual([]);
   });
 });
