@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/index.js";
 import { checkboxCaps, checkMfmLoadout, defaultMfmLoadout, type MfmLoadoutRules } from "../src/data/mfm-loadout.js";
 import { liftLoadout, refinedRows } from "../src/mfm/loadout-lift.js";
+import { addedModels } from "../src/mfm/added-models.js";
 import { partialDump } from "./mfm-fixture.js";
 
 const dataset = Dataset.embedded();
@@ -258,5 +259,44 @@ describe("liftLoadout model rows", () => {
     const pistol = "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs";
     expect(legal(rules, unit(rules, {}, [[pistol, "combat-shield", 5]]))).toBe(true);
     expect(legal(rules, unit(rules, {}, [[pistol, "combat-shield", 1]]))).toBe(false);
+  });
+});
+
+describe("addedModels", () => {
+  const dump = partialDump({
+    data: {
+      miniature: [
+        { id: "m1", datasheetId: "ds", displayOrder: 1, localisations: { en: { name: "Shard Kin" } } },
+        { id: "m2", datasheetId: "ds", displayOrder: 2, localisations: { en: { name: "Shard Echo" } } },
+      ],
+      unit_composition: [{ id: "uc", datasheetId: "ds", isDefault: true, displayOrder: 1, points: 10, referenceGroupingKeywordId: null }],
+      unit_composition_miniature: [
+        { id: "u1", min: 5, max: 5, unitCompositionId: "uc", miniatureId: "m1" },
+        { id: "u2", min: 0, max: 0, unitCompositionId: "uc", miniatureId: "m2" },
+      ],
+      keyword: [{ id: "k1", localisations: { en: { name: "Infantry" } } }, { id: "k2", localisations: { en: { name: "Echo" } } }],
+      miniature_keyword: [
+        { id: "mk2", displayOrder: 2, miniatureId: "m2", keywordId: "k2" },
+        { id: "mk1", displayOrder: 1, miniatureId: "m2", keywordId: "k1" },
+      ],
+      wargear_item: [{ id: "w1", wargearType: "weapon", localisations: { en: { name: "Echo Claws" } } }],
+      wargear_option: [{ id: "o1", wargearItemId: "w1", wargearOptionGroupId: "g", inputType: "checkbox", defaultValue: 0, points: 0, displayOrder: 1 }],
+      base_miniature_loadout: [{ id: "b2", datasheetId: "ds", miniatureId: "m2" }],
+      base_miniature_loadout_wargear_option: [{ id: "bo", baseMiniatureLoadoutId: "b2", wargearOptionId: "o1", count: 2 }],
+    },
+  });
+  const resolve = (name: string) => (name === "Echo Claws" ? "echo-claws" : null);
+
+  it("lists each model type every composition caps at 0, with its keywords and base loadout", () => {
+    expect(addedModels(dump, "ds", resolve, new Set(["Shard Kin"]))).toEqual({
+      models: [{ name: "Shard Echo", keywords: ["Infantry", "Echo"], default_weapon_ids: ["echo-claws", "echo-claws"] }],
+    });
+    expect(addedModels(dump, "ds", resolve, new Set(["Shard Echo"]))).toEqual({
+      models: [{ name: "Shard Echo", profile_name: "Shard Echo", keywords: ["Infantry", "Echo"], default_weapon_ids: ["echo-claws", "echo-claws"] }],
+    });
+  });
+
+  it("reports base-loadout items that do not resolve", () => {
+    expect(addedModels(dump, "ds", () => null, new Set())).toEqual({ unresolvedItems: ["Echo Claws"] });
   });
 });

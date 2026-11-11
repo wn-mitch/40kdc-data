@@ -314,7 +314,9 @@ def _add_unit(m: dict[str, Any], ctx: Ctx) -> str:
     # New models that join an existing unit rather than forming their own.
     if m.get("join") is not None:
         size = next((m[k] for k in ("model_count", "count") if m.get(k) is not None), 1)
-        added = amount_of(size, f"{sheet} model", f"{sheet} models")
+        # A model type of the unit itself (model) is already its printed name.
+        kind = jstr(m["model"]) if m.get("model") is not None else sheet
+        added = amount_of(size, f"{kind} model", f"{kind} models")
         return f"add {added} to {effect_subject(m['join'], ctx)}{where}{engage}"
     literal = is_literal(m.get("count"))
     n = num(m.get("count") if m.get("count") is not None else 1) if literal else math.nan

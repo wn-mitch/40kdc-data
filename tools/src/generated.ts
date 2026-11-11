@@ -8185,6 +8185,24 @@ export interface UnitComposition {
     }[]
   ];
   /**
+   * Model types a rule adds to the unit during the battle (Split adds Blue and Brimstone Horrors to Pink Horrors). A list never contains them, so they take no part in models, tiers or loadout; GW's data lists them as model rows capped at 0. Each carries the gear a newly added model of its type has.
+   */
+  added_models?: {
+    name: string;
+    /**
+     * The unit profile holding this model type's characteristics, when the unit has one.
+     */
+    profile_name?: string;
+    /**
+     * The model type's keywords.
+     */
+    keywords: string[];
+    /**
+     * The equipment a newly added model of this type carries.
+     */
+    default_weapon_ids: EntityId[];
+  }[];
+  /**
    * The unit's wargear rules in the structure of GW's Munitorum Field Manual data, keyed by repo item ids and model names; a name several rows of `models` share is written `name#k` for the k-th of them. Each model makes `picks` choices from every slot on its model row (or takes its alternate slot instead of all of them); limits cap the unit's choices; uniform sets make every model on a row carry the same main option. Absent for units the MFM does not cover.
    */
   loadout?: {

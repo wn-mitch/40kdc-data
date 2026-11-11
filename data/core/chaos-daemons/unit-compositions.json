@@ -1366,7 +1366,42 @@
         }
       ],
       "uniform": []
-    }
+    },
+    "added_models": [
+      {
+        "name": "Blue Horror",
+        "keywords": [
+          "Infantry",
+          "Battleline",
+          "Chaos",
+          "Daemon",
+          "Tzeentch",
+          "Horrors",
+          "Blue"
+        ],
+        "default_weapon_ids": [
+          "blue-claws",
+          "coruscating-blue-flames"
+        ]
+      },
+      {
+        "name": "Brimstone Horror",
+        "profile_name": "Brimstone Horror",
+        "keywords": [
+          "Infantry",
+          "Battleline",
+          "Chaos",
+          "Daemon",
+          "Tzeentch",
+          "Horrors",
+          "Brimstone"
+        ],
+        "default_weapon_ids": [
+          "coruscating-yellow-flames",
+          "yellow-claws"
+        ]
+      }
+    ]
   },
   {
     "unit_id": "infernal-enrapturess",
@@ -5942,7 +5977,26 @@
         }
       ],
       "uniform": []
-    }
+    },
+    "added_models": [
+      {
+        "name": "Brimstone Horror",
+        "profile_name": "Brimstone Horror",
+        "keywords": [
+          "Infantry",
+          "Battleline",
+          "Chaos",
+          "Daemon",
+          "Tzeentch",
+          "Horrors",
+          "Brimstone"
+        ],
+        "default_weapon_ids": [
+          "coruscating-yellow-flames",
+          "yellow-claws"
+        ]
+      }
+    ]
   },
   {
     "unit_id": "the-blue-scribes",

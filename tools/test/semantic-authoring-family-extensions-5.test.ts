@@ -192,3 +192,23 @@ describe("Cult Ambush", () => {
     expect(first(reserves.mechanics, "add-unit")!.modifier).toEqual({ copy_of: "event-object", count: 1, placement: "strategic-reserves" });
   });
 });
+
+describe("add-unit model types", () => {
+  it("names a model type the unit adds, which always joins this unit", () => {
+    expect(normalize("add-unit", { source: "model", model: "**SHARD DRONE**", count: "2", join: true }))
+      .toEqual({ source: "model", model: "SHARD DRONE", count: "2", join: true });
+    expect(() => normalize("add-unit", { source: "model", model: "Shard Drone", count: "2" })).toThrow(/join is true/u);
+    expect(() => normalize("add-unit", { source: "model", count: "2", join: true })).toThrow(/add-unit\.model/u);
+    expect(() => normalize("add-unit", { source: "datasheet", datasheet: "shard-drones", model: "Shard Drone", count: "1" })).toThrow(/source model/u);
+    // A version-4 leaf still has no model source.
+    expect(() => normalizeFingerprintParameters("add-unit", { source: "model", model: "Shard Drone", count: "2", join: true }, 4)).toThrow();
+  });
+
+  it("compiles to models of that type joining this unit", () => {
+    const { leaves, text } = placed("add two Shard Drone models to this unit", [
+      ["add two Shard Drone models to this unit", "add-unit", { source: "model", model: "Shard Drone", count: "2", join: true }],
+    ]);
+    const result = compileLeaves(leaves, text, { abilityId: "fabricated" });
+    expect(result.ok && first(result.mechanics, "add-unit")).toEqual({ type: "add-unit", target: "this-unit", modifier: { model: "Shard Drone", model_count: 2, join: "this-unit" } });
+  });
+});

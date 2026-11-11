@@ -1439,7 +1439,7 @@
                 "type": "add-unit",
                 "target": "this-unit",
                 "modifier": {
-                  "datasheet": "blue-horrors",
+                  "model": "Blue Horror",
                   "model_count": 2,
                   "join": "this-unit"
                 }
@@ -1462,7 +1462,7 @@
                 "type": "add-unit",
                 "target": "this-unit",
                 "modifier": {
-                  "datasheet": "brimstone-horrors",
+                  "model": "Brimstone Horror",
                   "model_count": 1,
                   "join": "this-unit"
                 }
@@ -11672,7 +11672,7 @@
           "type": "add-unit",
           "target": "this-unit",
           "modifier": {
-            "datasheet": "brimstone-horrors",
+            "model": "Brimstone Horror",
             "model_count": 1,
             "join": "this-unit"
           }

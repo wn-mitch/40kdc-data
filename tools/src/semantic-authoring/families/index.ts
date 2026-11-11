@@ -20,7 +20,7 @@ import { REGISTRY_ORDER } from "./registry-order.js";
 import { ROLL_EXTENSIONS } from "./rolls.js";
 import { SELECTION_REF_EXTENSIONS } from "./selection-refs.js";
 import { SELECTION_EXTENSIONS } from "./selections.js";
-import { SET_UP_EXTENSIONS } from "./set-up.js";
+import { ADD_UNIT_MODEL_TYPE, SET_UP_EXTENSIONS } from "./set-up.js";
 import { TARGETING_ABILITY_EXTENSIONS } from "./targeting-ability.js";
 import { TARGETING_HISTORY_EXTENSIONS } from "./targeting-history.js";
 import { TURN_START_EXTENSIONS } from "./turn-start.js";
@@ -70,6 +70,7 @@ const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [
   ...TARGETING_ABILITY_EXTENSIONS,
   ...TARGETING_HISTORY_EXTENSIONS,
   ...TURN_START_EXTENSIONS,
+  ADD_UNIT_MODEL_TYPE,
 ];
 
 const extensionVersions = new Map<string, FamilyExtension>();

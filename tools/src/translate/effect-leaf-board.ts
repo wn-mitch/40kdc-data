@@ -129,7 +129,11 @@ function addUnit(m: Record<string, unknown>, ctx: Ctx): string {
   const models = m.model_count != null ? ` containing ${amountOf(m.model_count, "model", "models")}` : "";
   const strength = m.starting_strength != null ? ` with a Starting Strength of ${jstr(m.starting_strength)}` : "";
   // New models that join an existing unit rather than forming their own.
-  if (m.join != null) return `add ${amountOf(m.model_count ?? m.count ?? 1, `${titleCase(jstr(m.datasheet))} model`, `${titleCase(jstr(m.datasheet))} models`)} to ${effectSubject(m.join, ctx)}${where}${engage}`;
+  // A model type of the unit itself (`model`) is already its printed name.
+  if (m.join != null) {
+    const kind = m.model != null ? jstr(m.model) : titleCase(jstr(m.datasheet));
+    return `add ${amountOf(m.model_count ?? m.count ?? 1, `${kind} model`, `${kind} models`)} to ${effectSubject(m.join, ctx)}${where}${engage}`;
+  }
   // A fixed count reads as a number; a dice expression or bound quantity reads through amountOf.
   const count = m.count ?? 1;
   const n = typeof count === "number" ? count : null;

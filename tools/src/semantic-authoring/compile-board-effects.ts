@@ -213,8 +213,11 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     case "add-unit": {
       const source = closed(leaf, "source");
       const count = countValue(closed(leaf, "count"));
-      const base: Node = source === "datasheet" ? { datasheet: closed(leaf, "datasheet") } : { copy_of: "event-object" };
+      const base: Node = source === "datasheet" ? { datasheet: closed(leaf, "datasheet") }
+        : source === "model" ? { model: closed(leaf, "model") }
+          : { copy_of: "event-object" };
       const join = leaf.parameters.join === true;
+      if (source === "model" && !join) throw new CompileError("Models of one of this unit's model types join this unit.");
       // A copy that leaves models out, comes back whole, resets [One Shot] weapons or waits in Reserves.
       const copy: Node = {
         ...(leaf.parameters.copy_excluded_keywords !== undefined ? { excluded_keywords: closed(leaf, "copy_excluded_keywords") } : {}),

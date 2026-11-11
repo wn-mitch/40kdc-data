@@ -11,7 +11,7 @@ import { checkReferentialIntegrity } from "../src/integrity.js";
 describe("equipment a unit names has a catalog record", () => {
   let root = "";
   afterEach(() => root && fs.rmSync(root, { recursive: true, force: true }));
-  const missing = async (extra: { option?: unknown; weaponIds?: string[]; defaults?: string[] }) => {
+  const missing = async (extra: { option?: unknown; weaponIds?: string[]; defaults?: string[]; added?: string[] }) => {
     root = fs.mkdtempSync(path.join(os.tmpdir(), "equipment-records-"));
     const write = (rel: string, value: unknown) => {
       fs.mkdirSync(path.dirname(path.join(root, rel)), { recursive: true });
@@ -26,6 +26,7 @@ describe("equipment a unit names has a catalog record", () => {
       faction_id: "glimmer-host",
       game_version: gv,
       models: [{ name: "Lancer", min: 5, max: 5, default_weapon_ids: extra.defaults ?? ["shard-pistol"] }],
+      ...(extra.added ? { added_models: [{ name: "Shard Echo", keywords: ["Infantry"], default_weapon_ids: extra.added }] } : {}),
     }]);
     write("core/glimmer-host/wargear-options.json", extra.option ? [{ id: "lancer-squad-wgo-1", unit_id: "lancer-squad", ...extra.option }] : []);
     const result = await checkReferentialIntegrity(root);
@@ -41,5 +42,6 @@ describe("equipment a unit names has a catalog record", () => {
       .toEqual(['unit "lancer-squad": equipment "phase-blade" has no record in glimmer-host/weapons.json or wargear.json']);
     expect(await missing({ defaults: ["shard-pistol", "lancer-pod"] })).toEqual([expect.stringContaining('"lancer-pod"')]);
     expect(await missing({ weaponIds: ["shard-pistol", "spare-lance"] })).toEqual([expect.stringContaining('"spare-lance"')]);
+    expect(await missing({ added: ["shard-lance", "echo-claws"] })).toEqual([expect.stringContaining('"echo-claws"')]);
   });
 });

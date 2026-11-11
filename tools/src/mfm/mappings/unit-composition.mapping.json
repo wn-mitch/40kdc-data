@@ -294,6 +294,78 @@
       ],
       "reason": "The miniature flag marks a CHARACTER model that cannot be given an Enhancement."
     },
+    "/added_models": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.unit_composition_miniature.max", "data.miniature.displayOrder"],
+      "joins": [{ "relation": "unit_composition.datasheetId", "direction": "parent", "purpose": "ownership" }, { "relation": "unit_composition_miniature.unitCompositionId", "direction": "children", "purpose": "general" }, { "relation": "unit_composition_miniature.miniatureId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/added-models.ts#addedModels", "operation": "List the datasheet's miniatures that no composition lets a list contain, in display order." }],
+      "filters": ["Only miniatures every unit composition of the datasheet caps at max 0."], "precedence": ["Use miniature displayOrder for output ordering."],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift"],
+      "reason": "Rules such as Split add these model types during the battle; GW's data holds them as zero-capped model rows."
+    },
+    "/added_models/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.unit_composition_miniature.max", "data.miniature.localisations.*.name"],
+      "joins": [{ "relation": "unit_composition.datasheetId", "direction": "parent", "purpose": "ownership" }, { "relation": "unit_composition_miniature.unitCompositionId", "direction": "children", "purpose": "general" }, { "relation": "unit_composition_miniature.miniatureId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/added-models.ts#addedModels", "operation": "One entry per zero-capped miniature." }],
+      "filters": ["Only miniatures every unit composition of the datasheet caps at max 0."], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift"],
+      "reason": "Each entry is one model type a rule can add."
+    },
+    "/added_models/*/name": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.miniature.localisations.*.name"],
+      "joins": [{ "relation": "unit_composition.datasheetId", "direction": "parent", "purpose": "ownership" }, { "relation": "unit_composition_miniature.unitCompositionId", "direction": "children", "purpose": "general" }, { "relation": "unit_composition_miniature.miniatureId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/added-models.ts#addedModels", "operation": "Use the localized miniature display name." }],
+      "filters": ["Only miniatures every unit composition of the datasheet caps at max 0."], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift"],
+      "reason": "The printed model name rules use to add the type."
+    },
+    "/added_models/*/profile_name": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.miniature.localisations.*.name"],
+      "joins": [{ "relation": "unit_composition.datasheetId", "direction": "parent", "purpose": "ownership" }, { "relation": "unit_composition_miniature.unitCompositionId", "direction": "children", "purpose": "general" }, { "relation": "unit_composition_miniature.miniatureId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/added-models.ts#addedModels", "operation": "Set to the name when the unit has a profile of that name." }],
+      "filters": ["Only miniatures every unit composition of the datasheet caps at max 0.", "Only when the repository unit has a profile with the miniature's name."], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift"],
+      "reason": "Links the type to the unit profile carrying its characteristics, when one exists."
+    },
+    "/added_models/*/keywords": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.keyword.localisations.*.name", "data.miniature_keyword.displayOrder"],
+      "joins": [{ "relation": "unit_composition.datasheetId", "direction": "parent", "purpose": "ownership" }, { "relation": "unit_composition_miniature.unitCompositionId", "direction": "children", "purpose": "general" }, { "relation": "unit_composition_miniature.miniatureId", "direction": "parent", "purpose": "general" }, { "relation": "miniature_keyword.miniatureId", "direction": "children", "purpose": "general" }, { "relation": "miniature_keyword.keywordId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/added-models.ts#addedModels", "operation": "Copy the miniature's keywords in display order." }],
+      "filters": ["Only miniatures every unit composition of the datasheet caps at max 0."], "precedence": ["Use miniature_keyword displayOrder for output ordering."],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift"],
+      "reason": "The type's own keywords (BLUE, BRIMSTONE) distinguish it from the unit's listed models."
+    },
+    "/added_models/*/keywords/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.keyword.localisations.*.name"],
+      "joins": [{ "relation": "unit_composition.datasheetId", "direction": "parent", "purpose": "ownership" }, { "relation": "unit_composition_miniature.unitCompositionId", "direction": "children", "purpose": "general" }, { "relation": "unit_composition_miniature.miniatureId", "direction": "parent", "purpose": "general" }, { "relation": "miniature_keyword.miniatureId", "direction": "children", "purpose": "general" }, { "relation": "miniature_keyword.keywordId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/added-models.ts#addedModels", "operation": "Use the localized keyword name." }],
+      "filters": ["Only miniatures every unit composition of the datasheet caps at max 0."], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift"],
+      "reason": "One keyword of the model type."
+    },
+    "/added_models/*/default_weapon_ids": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.base_miniature_loadout_wargear_option.count", "data.wargear_item.localisations.*.name"],
+      "joins": [{ "relation": "unit_composition.datasheetId", "direction": "parent", "purpose": "ownership" }, { "relation": "unit_composition_miniature.unitCompositionId", "direction": "children", "purpose": "general" }, { "relation": "unit_composition_miniature.miniatureId", "direction": "parent", "purpose": "general" }, { "relation": "base_miniature_loadout.miniatureId", "direction": "children", "purpose": "applicability" }, { "relation": "base_miniature_loadout_wargear_option.baseMiniatureLoadoutId", "direction": "children", "purpose": "eligibility" }, { "relation": "base_miniature_loadout_wargear_option.wargearOptionId", "direction": "parent", "purpose": "eligibility" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/added-models.ts#addedModels", "operation": "Expand the miniature's base loadout into repo item ids, one per copy, sorted." }],
+      "filters": ["Only miniatures every unit composition of the datasheet caps at max 0."], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift"],
+      "reason": "The gear a newly added model of the type carries."
+    },
+    "/added_models/*/default_weapon_ids/*": {
+      "provenance": "derived", "coverage": "implemented",
+      "sources": ["data.wargear_item.localisations.*.name"],
+      "joins": [{ "relation": "unit_composition.datasheetId", "direction": "parent", "purpose": "ownership" }, { "relation": "unit_composition_miniature.unitCompositionId", "direction": "children", "purpose": "general" }, { "relation": "unit_composition_miniature.miniatureId", "direction": "parent", "purpose": "general" }, { "relation": "base_miniature_loadout.miniatureId", "direction": "children", "purpose": "applicability" }, { "relation": "base_miniature_loadout_wargear_option.baseMiniatureLoadoutId", "direction": "children", "purpose": "eligibility" }, { "relation": "base_miniature_loadout_wargear_option.wargearOptionId", "direction": "parent", "purpose": "eligibility" }, { "relation": "wargear_option.wargearItemId", "direction": "parent", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/added-models.ts#addedModels", "operation": "Resolve the item name to a repo id with the unit-scoped wargear resolver." }],
+      "filters": ["Only miniatures every unit composition of the datasheet caps at max 0."], "precedence": [],
+      "consumers": ["tools/src/mfm/loadout-lift.ts#runLoadoutLift"],
+      "reason": "One item a newly added model carries."
+    },
     "/loadout": {
       "provenance": "derived", "coverage": "implemented",
       "sources": ["data.wargear_option_group.datasheetId", "data.loadout_choice_set.datasheetId", "data.limited_wargear_choice_set.datasheetId", "data.all_model_wargear_choice_set.datasheetId"],

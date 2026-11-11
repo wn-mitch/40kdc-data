@@ -30939,11 +30939,11 @@
           "models": 1,
           "items": [
             {
-              "id": "heavy-bolt-pistol",
+              "id": "heavy-bolt-pistol-captain-on-bike",
               "count": 1
             },
             {
-              "id": "master-crafted-power-weapon",
+              "id": "master-crafted-power-weapon-captain-on-bike",
               "count": 1
             },
             {
@@ -30958,11 +30958,11 @@
           "model": "Captain on Bike",
           "items": [
             {
-              "id": "heavy-bolt-pistol",
+              "id": "heavy-bolt-pistol-captain-on-bike",
               "count": 1
             },
             {
-              "id": "master-crafted-power-weapon",
+              "id": "master-crafted-power-weapon-captain-on-bike",
               "count": 1
             },
             {
@@ -30981,7 +30981,7 @@
           "choices": [
             [
               {
-                "id": "heavy-bolt-pistol",
+                "id": "heavy-bolt-pistol-captain-on-bike",
                 "count": 1
               }
             ],
@@ -31001,13 +31001,13 @@
           "choices": [
             [
               {
-                "id": "master-crafted-power-weapon",
+                "id": "master-crafted-power-weapon-captain-on-bike",
                 "count": 1
               }
             ],
             [
               {
-                "id": "thunder-hammer",
+                "id": "thunder-hammer-captain-on-bike",
                 "count": 1
               }
             ]
@@ -31032,13 +31032,13 @@
       "options": [
         {
           "model": "Captain on Bike",
-          "id": "heavy-bolt-pistol",
+          "id": "heavy-bolt-pistol-captain-on-bike",
           "input": "checkbox",
           "default": 1
         },
         {
           "model": "Captain on Bike",
-          "id": "master-crafted-power-weapon",
+          "id": "master-crafted-power-weapon-captain-on-bike",
           "input": "checkbox",
           "default": 1
         },
@@ -31050,7 +31050,7 @@
         },
         {
           "model": "Captain on Bike",
-          "id": "thunder-hammer",
+          "id": "thunder-hammer-captain-on-bike",
           "input": "checkbox",
           "default": 0
         },

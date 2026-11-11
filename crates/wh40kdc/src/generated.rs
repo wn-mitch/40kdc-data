@@ -3488,6 +3488,11 @@ impl<'de> ::serde::Deserialize<'de> for ActOnDeathEffectModifierResolution {
 ///    "join": {
 ///      "$ref": "#/$defs/unit-ref"
 ///    },
+///    "model": {
+///      "description": "A model type of the joined unit that only rules add (its unit composition's added_models name), as Split adds Blue Horrors to Pink Horrors.",
+///      "type": "string",
+///      "minLength": 1
+///    },
 ///    "model_count": {
 ///      "oneOf": [
 ///        {
@@ -3597,6 +3602,9 @@ pub struct AddUnitEffectModifier {
     pub in_region: ::std::option::Option<PlacementRegion>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub join: ::std::option::Option<UnitRef>,
+    ///A model type of the joined unit that only rules add (its unit composition's added_models name), as Split adds Blue Horrors to Pink Horrors.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub model: ::std::option::Option<AddUnitEffectModifierModel>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub model_count: ::std::option::Option<AddUnitEffectModifierModelCount>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
@@ -3623,6 +3631,7 @@ impl ::std::default::Default for AddUnitEffectModifier {
             excluded_keywords: Default::default(),
             in_region: Default::default(),
             join: Default::default(),
+            model: Default::default(),
             model_count: Default::default(),
             near: Default::default(),
             placement: Default::default(),
@@ -3762,6 +3771,79 @@ for AddUnitEffectModifierCountString {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for AddUnitEffectModifierCountString {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///A model type of the joined unit that only rules add (its unit composition's added_models name), as Split adds Blue Horrors to Pink Horrors.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "A model type of the joined unit that only rules add (its unit composition's added_models name), as Split adds Blue Horrors to Pink Horrors.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct AddUnitEffectModifierModel(::std::string::String);
+impl ::std::ops::Deref for AddUnitEffectModifierModel {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AddUnitEffectModifierModel> for ::std::string::String {
+    fn from(value: AddUnitEffectModifierModel) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for AddUnitEffectModifierModel {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AddUnitEffectModifierModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for AddUnitEffectModifierModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for AddUnitEffectModifierModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for AddUnitEffectModifierModel {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -56600,6 +56682,45 @@ pub struct UnitCharacteristic {
 ///    "unit_id"
 ///  ],
 ///  "properties": {
+///    "added_models": {
+///      "description": "Model types a rule adds to the unit during the battle (Split adds Blue and Brimstone Horrors to Pink Horrors). A list never contains them, so they take no part in models, tiers or loadout; GW's data lists them as model rows capped at 0. Each carries the gear a newly added model of its type has.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "default_weapon_ids",
+///          "keywords",
+///          "name"
+///        ],
+///        "properties": {
+///          "default_weapon_ids": {
+///            "description": "The equipment a newly added model of this type carries.",
+///            "type": "array",
+///            "items": {
+///              "$ref": "#/$defs/entity-id"
+///            }
+///          },
+///          "keywords": {
+///            "description": "The model type's keywords.",
+///            "type": "array",
+///            "items": {
+///              "type": "string",
+///              "minLength": 1
+///            }
+///          },
+///          "name": {
+///            "type": "string",
+///            "minLength": 1
+///          },
+///          "profile_name": {
+///            "description": "The unit profile holding this model type's characteristics, when the unit has one.",
+///            "type": "string",
+///            "minLength": 1
+///          }
+///        },
+///        "additionalProperties": false
+///      }
+///    },
 ///    "faction_id": {
 ///      "description": "Owning faction. A chassis shared across factions has a distinct composition per faction under the same `unit_id`, so compositions are keyed by (faction_id, unit_id).",
 ///      "$ref": "#/$defs/entity-id"
@@ -57028,6 +57149,9 @@ pub struct UnitCharacteristic {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct UnitComposition {
+    ///Model types a rule adds to the unit during the battle (Split adds Blue and Brimstone Horrors to Pink Horrors). A list never contains them, so they take no part in models, tiers or loadout; GW's data lists them as model rows capped at 0. Each carries the gear a newly added model of its type has.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub added_models: ::std::vec::Vec<UnitCompositionAddedModelsItem>,
     ///Owning faction. A chassis shared across factions has a distinct composition per faction under the same `unit_id`, so compositions are keyed by (faction_id, unit_id).
     pub faction_id: EntityId,
     ///Game modes this unit composition is legal or authored for; absent implies matched-play.
@@ -57041,6 +57165,285 @@ pub struct UnitComposition {
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub tiers: ::std::vec::Vec<UnitCompositionTiersItem>,
     pub unit_id: EntityId,
+}
+///`UnitCompositionAddedModelsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "default_weapon_ids",
+///    "keywords",
+///    "name"
+///  ],
+///  "properties": {
+///    "default_weapon_ids": {
+///      "description": "The equipment a newly added model of this type carries.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      }
+///    },
+///    "keywords": {
+///      "description": "The model type's keywords.",
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      }
+///    },
+///    "name": {
+///      "type": "string",
+///      "minLength": 1
+///    },
+///    "profile_name": {
+///      "description": "The unit profile holding this model type's characteristics, when the unit has one.",
+///      "type": "string",
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitCompositionAddedModelsItem {
+    ///The equipment a newly added model of this type carries.
+    pub default_weapon_ids: ::std::vec::Vec<EntityId>,
+    ///The model type's keywords.
+    pub keywords: ::std::vec::Vec<UnitCompositionAddedModelsItemKeywordsItem>,
+    pub name: UnitCompositionAddedModelsItemName,
+    ///The unit profile holding this model type's characteristics, when the unit has one.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub profile_name: ::std::option::Option<UnitCompositionAddedModelsItemProfileName>,
+}
+///`UnitCompositionAddedModelsItemKeywordsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitCompositionAddedModelsItemKeywordsItem(::std::string::String);
+impl ::std::ops::Deref for UnitCompositionAddedModelsItemKeywordsItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitCompositionAddedModelsItemKeywordsItem>
+for ::std::string::String {
+    fn from(value: UnitCompositionAddedModelsItemKeywordsItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitCompositionAddedModelsItemKeywordsItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitCompositionAddedModelsItemKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitCompositionAddedModelsItemKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitCompositionAddedModelsItemKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitCompositionAddedModelsItemKeywordsItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`UnitCompositionAddedModelsItemName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitCompositionAddedModelsItemName(::std::string::String);
+impl ::std::ops::Deref for UnitCompositionAddedModelsItemName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitCompositionAddedModelsItemName> for ::std::string::String {
+    fn from(value: UnitCompositionAddedModelsItemName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitCompositionAddedModelsItemName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitCompositionAddedModelsItemName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitCompositionAddedModelsItemName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitCompositionAddedModelsItemName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitCompositionAddedModelsItemName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///The unit profile holding this model type's characteristics, when the unit has one.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The unit profile holding this model type's characteristics, when the unit has one.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitCompositionAddedModelsItemProfileName(::std::string::String);
+impl ::std::ops::Deref for UnitCompositionAddedModelsItemProfileName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitCompositionAddedModelsItemProfileName>
+for ::std::string::String {
+    fn from(value: UnitCompositionAddedModelsItemProfileName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitCompositionAddedModelsItemProfileName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitCompositionAddedModelsItemProfileName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitCompositionAddedModelsItemProfileName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitCompositionAddedModelsItemProfileName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitCompositionAddedModelsItemProfileName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
 }
 ///The unit's wargear rules in the structure of GW's Munitorum Field Manual data, keyed by repo item ids and model names; a name several rows of `models` share is written `name#k` for the k-th of them. Each model makes `picks` choices from every slot on its model row (or takes its alternate slot instead of all of them); limits cap the unit's choices; uniform sets make every model on a row carry the same main option. Absent for units the MFM does not cover.
 ///

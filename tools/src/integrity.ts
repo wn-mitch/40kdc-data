@@ -1244,11 +1244,14 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
         new Set(weaponIdsByUnit.get(c.unit_id ?? "") ?? []),
         factionUnitIds,
       );
-      // Every equipment id the unit's defaults, wargear options and weapon_ids name has a record
+      // Every equipment id the unit's defaults (added model types' too), wargear options and weapon_ids name has a record
       // in the faction's weapons.json or wargear.json (a faction with neither is not checked).
       if (factionEquipment.size > 0) {
         const named = new Set<string>();
         for (const m of models) for (const id of m.default_weapon_ids ?? []) named.add(id);
+        for (const m of (c as { added_models?: { default_weapon_ids?: string[] }[] }).added_models ?? []) {
+          for (const id of m.default_weapon_ids ?? []) named.add(id);
+        }
         for (const o of optionsByUnit.get(c.unit_id ?? "") ?? []) {
           for (const id of [...(o.replaces ?? []), ...(o.replacement ?? []), ...(o.replacement_choice ?? []).flat()]) named.add(id);
         }

@@ -353,9 +353,11 @@ fn add_unit(m: &P, ctx: &Ctx) -> String {
         let q = nn(m, "model_count")
             .or_else(|| nn(m, "count"))
             .unwrap_or(&one_value);
+        // A model type of the unit itself (model) is already its printed name.
+        let kind = nn(m, "model").map_or_else(|| name.clone(), |model| jstr(Some(model)));
         return format!(
             "add {} to {}{place}{engage}",
-            amount_of(Some(q), &format!("{name} model"), &format!("{name} models")),
+            amount_of(Some(q), &format!("{kind} model"), &format!("{kind} models")),
             effect_subject(Some(join), ctx)
         );
     }

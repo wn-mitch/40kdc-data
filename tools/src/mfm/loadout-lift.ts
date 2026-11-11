@@ -13,6 +13,7 @@ import type { MfmDump, DatasheetRow } from "./loader.js";
 import { CORE_DIR, readJsonArray } from "./repo-files.js";
 import { repoDirs } from "./faction-map.js";
 import type { StagedWrite } from "./apply.js";
+import { addedModels, type AddedModel } from "./added-models.js";
 import {
   makeResolver,
   unitScopedResolver,
@@ -274,6 +275,7 @@ export interface LoadoutLiftReport {
 interface CompositionRecord {
   unit_id: string;
   models: { name: string }[];
+  added_models?: AddedModel[];
   loadout?: MfmLoadout;
 }
 
@@ -307,8 +309,10 @@ export function runLoadoutLift(dump: MfmDump, onlyDir?: string): LoadoutLiftRepo
     }
     const sharedWargear = path.join(CORE_DIR, "wargear.json");
     if (fs.existsSync(sharedWargear)) for (const record of readJsonArray<{ id?: string }>(sharedWargear)) if (record.id) validIds.add(record.id);
-    for (const unit of readJsonArray<{ weapon_ids?: string[] }>(path.join(CORE_DIR, dir, "units.json"))) {
+    const profileNames = new Map<string, Set<string>>();
+    for (const unit of readJsonArray<{ id: string; weapon_ids?: string[]; profiles?: { name?: string }[] }>(path.join(CORE_DIR, dir, "units.json"))) {
       for (const id of unit.weapon_ids ?? []) validIds.add(id);
+      profileNames.set(unit.id, new Set((unit.profiles ?? []).flatMap((profile) => profile.name ?? [])));
     }
     const audit: AutoResolution[] = [];
     const resolve = makeResolver(validIds, audit, WEAPON_ALIASES[dir] ?? {});
@@ -330,8 +334,12 @@ export function runLoadoutLift(dump: MfmDump, onlyDir?: string): LoadoutLiftRepo
       if (!record || matchedUnits.has(unitId)) continue;
       matchedUnits.add(unitId);
       dirReport.matched++;
-      const before = byKey(record.loadout ?? null);
-      const result = liftLoadout(dump, ds.id!, unitScopedResolver(validIds, audit, dir, unitId, resolve), record.models.reduce((rows, model) => rows.set(model.name, (rows.get(model.name) ?? 0) + 1), new Map<string, number>()));
+      const before = byKey([record.loadout ?? null, record.added_models ?? null]);
+      const unitResolve = unitScopedResolver(validIds, audit, dir, unitId, resolve);
+      const added = addedModels(dump, ds.id!, unitResolve, profileNames.get(unitId) ?? new Set());
+      if ("models" in added && added.models.length > 0) record.added_models = added.models;
+      else delete record.added_models;
+      const result = liftLoadout(dump, ds.id!, unitResolve, record.models.reduce((rows, model) => rows.set(model.name, (rows.get(model.name) ?? 0) + 1), new Map<string, number>()));
       if ("loadout" in result) {
         record.loadout = result.loadout;
         dirReport.lifted++;
@@ -339,7 +347,8 @@ export function runLoadoutLift(dump: MfmDump, onlyDir?: string): LoadoutLiftRepo
         delete record.loadout;
         dirReport.skipped.push({ unitId, items: result.unresolvedItems, models: result.unresolvedModels });
       }
-      if (byKey(record.loadout ?? null) !== before) changed = true;
+      if ("unresolvedItems" in added) dirReport.skipped.push({ unitId, items: added.unresolvedItems, models: [] });
+      if (byKey([record.loadout ?? null, record.added_models ?? null]) !== before) changed = true;
     }
     if (changed) report.staged.push({ path: compositionPath, value: compositions });
     report.dirs.push(dirReport);

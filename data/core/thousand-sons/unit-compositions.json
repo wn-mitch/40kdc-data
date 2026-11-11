@@ -6192,7 +6192,27 @@
         }
       ],
       "uniform": []
-    }
+    },
+    "added_models": [
+      {
+        "name": "Brimstone Horror",
+        "profile_name": "Brimstone Horror",
+        "keywords": [
+          "Infantry",
+          "Battleline",
+          "Chaos",
+          "Daemon",
+          "Tzeentch",
+          "Summoned",
+          "Horrors",
+          "Brimstone"
+        ],
+        "default_weapon_ids": [
+          "coruscating-yellow-flames",
+          "yellow-claws"
+        ]
+      }
+    ]
   },
   {
     "unit_id": "flamers",
@@ -6649,7 +6669,44 @@
         }
       ],
       "uniform": []
-    }
+    },
+    "added_models": [
+      {
+        "name": "Blue Horror",
+        "keywords": [
+          "Infantry",
+          "Battleline",
+          "Chaos",
+          "Daemon",
+          "Tzeentch",
+          "Summoned",
+          "Horrors",
+          "Blue"
+        ],
+        "default_weapon_ids": [
+          "blue-claws",
+          "coruscating-blue-flames"
+        ]
+      },
+      {
+        "name": "Brimstone Horror",
+        "profile_name": "Brimstone Horror",
+        "keywords": [
+          "Infantry",
+          "Battleline",
+          "Chaos",
+          "Daemon",
+          "Tzeentch",
+          "Summoned",
+          "Horrors",
+          "Brimstone"
+        ],
+        "default_weapon_ids": [
+          "coruscating-yellow-flames",
+          "yellow-claws"
+        ]
+      }
+    ]
   },
   {
     "unit_id": "screamers",
