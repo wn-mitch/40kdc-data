@@ -2269,6 +2269,7 @@ EventFilter = TypedDict(
         "transport": NotRequired[Literal["this-unit"] | UnitFilter],
         "through": NotRequired[Literal["terrain", "tall-terrain"]],
         "attack_type": NotRequired[Literal["ranged", "melee", "psychic", "mortal"]],
+        "all_attacks": NotRequired[Literal[True]],
         "weapons": NotRequired[WeaponScope],
         "by": NotRequired[UnitRef],
         "timing": NotRequired[

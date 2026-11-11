@@ -16783,6 +16783,10 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///      "type": "string",
 ///      "minLength": 1
 ///    },
+///    "all_attacks": {
+///      "description": "targets-selected: the subject selected the object as the target of every one of its attacks, not just some (\"does not select your unit as the target of all of its attacks\" is this, negated).",
+///      "const": true
+///    },
 ///    "attack_type": {
 ///      "enum": [
 ///        "ranged",
@@ -17018,6 +17022,9 @@ pub struct EventFilter {
     ///used: any ability whose name carries this keyword in brackets (BONDSMAN for every '(Bondsman)' ability), instead of one `id`.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ability_keyword: ::std::option::Option<EventFilterAbilityKeyword>,
+    ///targets-selected: the subject selected the object as the target of every one of its attacks, not just some ("does not select your unit as the target of all of its attacks" is this, negated).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub all_attacks: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attack_type: ::std::option::Option<EventFilterAttackType>,
     ///Who caused it (the unit or model whose attack destroyed the object).
@@ -17092,6 +17099,7 @@ impl ::std::default::Default for EventFilter {
     fn default() -> Self {
         Self {
             ability_keyword: Default::default(),
+            all_attacks: Default::default(),
             attack_type: Default::default(),
             by: Default::default(),
             caused_by: Default::default(),

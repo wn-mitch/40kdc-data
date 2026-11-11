@@ -496,7 +496,12 @@ pub(crate) fn event_phrase(t: &P) -> String {
                 };
             }
             if nn(t, "object").is_some() {
-                format!("when {who} targets {}", object_phrase(object))
+                let all = if f.get("all_attacks").and_then(Value::as_bool) == Some(true) {
+                    " with all of its attacks"
+                } else {
+                    ""
+                };
+                format!("when {who} targets {}{all}", object_phrase(object))
             } else {
                 format!("when {who} selects its targets")
             }

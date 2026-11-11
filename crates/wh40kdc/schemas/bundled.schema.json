@@ -1376,6 +1376,10 @@
             "mortal"
           ]
         },
+        "all_attacks": {
+          "const": true,
+          "description": "targets-selected: the subject selected the object as the target of every one of its attacks, not just some (\"does not select your unit as the target of all of its attacks\" is this, negated)."
+        },
         "weapons": {
           "$ref": "#/$defs/weapon-scope"
         },

@@ -422,7 +422,11 @@ func triggerEventPhrase(t map[string]any) string {
 			return "when a Charge is declared"
 		}
 		if object != nil {
-			return "when " + who + " targets " + triggerObjectPhrase(object)
+			every := ""
+			if f["all_attacks"] == true {
+				every = " with all of its attacks"
+			}
+			return "when " + who + " targets " + triggerObjectPhrase(object) + every
 		}
 		return "when " + who + " selects its targets"
 	case "move-started":

@@ -3593,6 +3593,25 @@ function genEffectTranslation(): void {
       trigger: destroyedModel,
     },
   ];
+  // A selection of a unit as the target of all of a model's attacks, as a negated history
+  // condition and as a trigger.
+  const enemyTargets = { event: "targets-selected", subject: { owner: "enemy", level: "model" }, filter: { kind: "attack" } };
+  FORCED_EVENT_OBJECT_CASES.push(
+    {
+      id: "targets-selected-all-attacks-negated",
+      effect: {
+        type: "conditional",
+        condition: { operator: "not", operands: [{ type: "happened", parameters: { event: "targets-selected", subject: "event-subject", object: "this-unit", filter: { kind: "attack", all_attacks: true }, window: "event" } }] },
+        effect: { type: "roll-modifier", target: "event-subject", modifier: { roll: "hit", operation: "subtract", value: 1 } },
+      },
+      trigger: enemyTargets,
+    },
+    {
+      id: "targets-selected-all-attacks-trigger",
+      effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
+      trigger: { ...enemyTargets, object: "this-unit", filter: { kind: "attack", all_attacks: true } },
+    },
+  );
   for (const fc of FORCED_EVENT_OBJECT_CASES) {
     const scope = { duration: "permanent" };
     cases.push({

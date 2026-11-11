@@ -2385,6 +2385,10 @@ export interface EventFilter {
   transport?: "this-unit" | UnitFilter;
   through?: "terrain" | "tall-terrain";
   attack_type?: "ranged" | "melee" | "psychic" | "mortal";
+  /**
+   * targets-selected: the subject selected the object as the target of every one of its attacks, not just some ("does not select your unit as the target of all of its attacks" is this, negated).
+   */
+  all_attacks?: true;
   weapons?: WeaponScope;
   /**
    * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.

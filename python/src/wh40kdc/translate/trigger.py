@@ -375,7 +375,8 @@ def _event_phrase(t: AbilityTrigger) -> str:
                 )
             return "when a Charge is declared"
         if obj is not None:
-            return f"when {who} targets {_object_phrase(obj)}"
+            every = " with all of its attacks" if f.get("all_attacks") is True else ""
+            return f"when {who} targets {_object_phrase(obj)}{every}"
         return f"when {who} selects its targets"
     if event == "move-started":
         # "at the start of this unit's move", "just before it Consolidates": the move is about to

@@ -116,7 +116,11 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         atk = _str(f.get("attack_type")) if _truthy(f.get("attack_type")) else ""
         # A charge's targets: "selected the unit as a charge target", apart from an attack's.
         charge = _str(f.get("kind")) == "charge"
-        if p.get("object") is not None:
+        if p.get("object") is not None and f.get("all_attacks") is True:
+            what = f"{unit_ref_phrase(p['object'])} as the target of all of its " + (
+                f"{atk} attacks" if atk else "attacks"
+            )
+        elif p.get("object") is not None:
             noun = "a charge target" if charge else "a target"
             what = f"{unit_ref_phrase(p['object'])} as {noun}" + (
                 f" of its {atk} attacks" if atk else ""

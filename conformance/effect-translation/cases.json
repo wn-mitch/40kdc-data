@@ -28806,7 +28806,86 @@
     }
   },
   {
-    "caseId": "aura-role-filtered-effect#442",
+    "caseId": "targets-selected-all-attacks-negated#442",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "targets-selected",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "kind": "attack",
+                "all_attacks": true
+              },
+              "window": "event"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "event-subject",
+        "modifier": {
+          "roll": "hit",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy",
+        "level": "model"
+      },
+      "filter": {
+        "kind": "attack"
+      }
+    },
+    "expected": {
+      "text": "When an enemy model selects its targets, unless the triggering unit has selected the unit as the target of all of its attacks, the triggering unit gets -1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "targets-selected-all-attacks-trigger#443",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "hit",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy",
+        "level": "model"
+      },
+      "filter": {
+        "kind": "attack",
+        "all_attacks": true
+      },
+      "object": "this-unit"
+    },
+    "expected": {
+      "text": "When an enemy model targets this unit with all of its attacks, the unit gets +1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "aura-role-filtered-effect#444",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",

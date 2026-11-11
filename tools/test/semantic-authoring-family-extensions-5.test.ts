@@ -212,3 +212,30 @@ describe("add-unit model types", () => {
     expect(result.ok && first(result.mechanics, "add-unit")).toEqual({ type: "add-unit", target: "this-unit", modifier: { model: "Shard Drone", model_count: 2, join: "this-unit" } });
   });
 });
+
+describe("target selected for all attacks", () => {
+  it("takes all_attacks and negated only with by and target", () => {
+    expect(normalize("target-is-selected", { by: "event-subject", target: "this-unit", all_attacks: true, negated: true }))
+      .toEqual({ by: "event-subject", target: "this-unit", all_attacks: true, negated: true });
+    // negated false is the default and is left out.
+    expect(normalize("target-is-selected", { by: "event-subject", target: "this-unit", negated: false })).toEqual({ by: "event-subject", target: "this-unit" });
+    expect(() => normalize("target-is-selected", { all_attacks: true })).toThrow(/need by and target/u);
+    expect(() => normalize("target-is-selected", { by: "event-subject", target: "this-unit", all_attacks: false })).toThrow(/true or absent/u);
+    // A version-2 leaf has neither.
+    expect(() => normalizeFingerprintParameters("target-is-selected", { by: "event-subject", target: "this-unit", all_attacks: true }, 2)).toThrow();
+  });
+
+  it("compiles a model that does not put all its attacks into this unit", () => {
+    const { leaves, text } = placed("Each time an enemy model selects targets, if that enemy model does not select your unit as the target of all of its attacks, that enemy model's attacks have: -1 to hit rolls.", [
+      ["enemy model", "unit-filter", { side: "enemy", level: "model" }],
+      ["selects targets", "event", { kind: "targets-selected", owner: "enemy", action_kind: "attack" }],
+      ["if that enemy model does not select your unit as the target of all of its attacks", "target-is-selected", { by: "event-subject", target: "this-unit", all_attacks: true, negated: true }],
+      ["that enemy model's attacks have", "weapon-property-scope", { subject: "event-subject", weapon_type: "all" }],
+      ["-1 to hit rolls", "roll-modifier", { roll: "hit", operation: "subtract", value: 1, subject: "event-subject" }],
+    ]);
+    const result = compileLeaves(leaves, text, { abilityId: "fabricated" });
+    expect(result.ok, result.ok ? "" : result.errors.join("; ")).toBe(true);
+    const selected = { type: "happened", parameters: { event: "targets-selected", subject: "event-subject", object: "this-unit", filter: { kind: "attack", all_attacks: true }, window: "event" } };
+    expect(result.ok && nodes(result.mechanics, (node) => node.operator === "not")).toContainEqual({ operator: "not", operands: [selected] });
+  });
+});

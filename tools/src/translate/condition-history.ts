@@ -68,7 +68,8 @@ function happenedPhrase(p: P, negated: boolean): string {
       const atk = f.attack_type ? str(f.attack_type) : "";
       // A charge's targets: "selected the unit as a charge target", apart from an attack's.
       const noun = f.kind === "charge" ? "a charge target" : "a target";
-      const what = p.object != null ? `${unitRefPhrase(p.object)} as ${noun}${atk ? ` of its ${atk} attacks` : ""}` : `${f.kind === "charge" ? "charge targets" : "targets"}${atk ? ` for its ${atk} attacks` : ""}`;
+      const what = p.object != null && f.all_attacks === true ? `${unitRefPhrase(p.object)} as the target of all of its ${atk ? `${atk} ` : ""}attacks`
+        : p.object != null ? `${unitRefPhrase(p.object)} as ${noun}${atk ? ` of its ${atk} attacks` : ""}` : `${f.kind === "charge" ? "charge targets" : "targets"}${atk ? ` for its ${atk} attacks` : ""}`;
       return withWindow(`${who} ${negated ? "has not" : "has"} selected ${what}`, p.window);
     }
     case "disembarked": {

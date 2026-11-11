@@ -39,6 +39,22 @@ const TARGET_IS_SELECTED_PARTIES: FamilyExtension = {
   },
 };
 
+const TARGET_IS_SELECTED_ALL_ATTACKS: FamilyExtension = {
+  // "if that enemy model does not select your unit as the target of all of its attacks".
+  family: "target-is-selected",
+  version: 3,
+  description: "As the previous version, plus all_attacks and negated, each only with by and target. all_attacks: target was selected as the target of every one of by's attacks, not just some (\"as the target of all of its attacks\"). negated: the selection did not happen (\"does not select your unit as the target of all of its attacks\" = all_attacks and negated).",
+  schema: (previous) => withProperties(previous, { all_attacks: optional({ const: true }), negated: optional({ type: "boolean" }) }),
+  normalize: (input, previous) => {
+    if (input.all_attacks === undefined && input.negated === undefined) return previous(input);
+    const { all_attacks: all, negated, ...rest } = input;
+    if (rest.by === undefined || rest.target === undefined) throw new TypeError("target-is-selected.all_attacks and negated need by and target.");
+    if (all !== undefined && all !== true) throw new TypeError("target-is-selected.all_attacks is true or absent.");
+    if (negated !== undefined && typeof negated !== "boolean") throw new TypeError("target-is-selected.negated is a boolean.");
+    return { ...previous(rest), ...(all === true ? { all_attacks: true } : {}), ...(negated === true ? { negated: true } : {}) };
+  },
+};
+
 const UNIT_FILTER_ALTERNATIVES: FamilyExtension = {
   // "LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit", "PSYKER or Battle-shocked unit": any
   // one of two or more alternatives, each with its own keywords, exclusions and states.
@@ -428,6 +444,7 @@ export const UNIT_FILTER_EXTENSIONS: readonly FamilyExtension[] = [
     },
   },
   TARGET_IS_SELECTED_PARTIES,
+  TARGET_IS_SELECTED_ALL_ATTACKS,
   VISIBLE_TO_FILTER,
   {
     family: "aura-range",

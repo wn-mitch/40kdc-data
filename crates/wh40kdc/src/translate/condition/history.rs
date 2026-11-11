@@ -204,6 +204,17 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                 ("a target", "targets")
             };
             let what = match nn(p, "object") {
+                Some(o) if f.get("all_attacks").and_then(Value::as_bool) == Some(true) => {
+                    let atk = if atk.is_empty() {
+                        String::new()
+                    } else {
+                        format!("{atk} ")
+                    };
+                    format!(
+                        "{} as the target of all of its {atk}attacks",
+                        unit_ref_phrase(Some(o), "the unit")
+                    )
+                }
                 Some(o) if atk.is_empty() => {
                     format!("{} as {noun}", unit_ref_phrase(Some(o), "the unit"))
                 }

@@ -34,7 +34,9 @@ export function targetingCondition(leaf: CompileLeaf): Node {
   if (namesSelection(leaf)) {
     // The selection the ability's moment made ("of that charge"): its kind is the moment's own.
     const by = closed(leaf, "by");
-    return { type: "happened", parameters: { event: "targets-selected", ...(by === "this-unit" ? {} : { subject: by }), object: unitOf(leaf, "target"), window: "event" } };
+    const filter = leaf.parameters.all_attacks === true ? { filter: { kind: "attack", all_attacks: true } } : {};
+    const happened: Node = { type: "happened", parameters: { event: "targets-selected", ...(by === "this-unit" ? {} : { subject: by }), object: unitOf(leaf, "target"), ...filter, window: "event" } };
+    return leaf.parameters.negated === true ? { operator: "not", operands: [happened] } : happened;
   }
   throw new CompileError(`${leaf.family_id} is not a past-targeting condition.`);
 }

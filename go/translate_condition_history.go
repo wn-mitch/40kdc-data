@@ -141,6 +141,13 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 			if atk != "" {
 				what += " of its " + atk + " attacks"
 			}
+			if f["all_attacks"] == true {
+				what = unitRefPhrase(p["object"], "the unit") + " as the target of all of its "
+				if atk != "" {
+					what += atk + " "
+				}
+				what += "attacks"
+			}
 		}
 		return withWindow(who+" "+has+" selected "+what, p["window"])
 	case "disembarked":

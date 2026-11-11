@@ -231,7 +231,8 @@ function eventPhrase(t: AbilityTrigger): string {
         if (t.object != null) return `when ${who} selects ${objectPhrase(t.object)} as a charge target`;
         return typeof t.subject === "object" ? `after ${who} selects targets for its charge but before it makes a Charge move` : "when a Charge is declared";
       }
-      return t.object != null ? `when ${who} targets ${objectPhrase(t.object)}` : `when ${who} selects its targets`;
+      if (t.object != null) return `when ${who} targets ${objectPhrase(t.object)}${f.all_attacks === true ? " with all of its attacks" : ""}`;
+      return `when ${who} selects its targets`;
     }
     case "move-started": {
       // "at the start of this unit's move", "just before it Consolidates": the move is about to be made.
