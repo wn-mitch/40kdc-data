@@ -1128,10 +1128,14 @@ func momentCondition(trigger any, duration ...any) (map[string]any, bool) {
 		if moment == nil {
 			moment = map[string]any{"type": "timing-is", "parameters": map[string]any{"timing": momentKey(t)}}
 		}
+		facts := append([]any{moment}, selectionFacts(t, lifetime)...)
 		if hasOwn {
-			gates = append(gates, map[string]any{"operator": "and", "operands": []any{moment, activationCondition(own, lifetime)}})
-		} else {
+			facts = append(facts, activationCondition(own, lifetime))
+		}
+		if len(facts) == 1 {
 			gates = append(gates, moment)
+		} else {
+			gates = append(gates, map[string]any{"operator": "and", "operands": facts})
 		}
 	}
 	if len(gates) == 0 {
@@ -1141,6 +1145,44 @@ func momentCondition(trigger any, duration ...any) (map[string]any, bool) {
 		return mapOr(gates[0]), true
 	}
 	return map[string]any{"operator": "or", "operands": gates}, true
+}
+
+// selectedPhase maps a "selected" trigger's filter.to to the phase that selection happens in.
+var selectedPhase = map[string]string{"fight": "fight", "shoot": "shooting"}
+
+// selectionFacts is what a "selected to shoot/fight" trigger says about the moment it opens: the
+// phase it happens in, while the effect lasts no longer than that phase (duration absent or
+// "phase"), and the keywords a friendly (or unowned) subject names, which the buffed unit must
+// carry, as a matches on this-unit. Other triggers add nothing.
+func selectionFacts(trigger map[string]any, duration any) []any {
+	if getStr(trigger, "event") != "selected" {
+		return nil
+	}
+	var facts []any
+	if filter, ok := asMap(trigger["filter"]); ok && filter != nil {
+		if to, ok := filter["to"].(string); ok {
+			if phase, known := selectedPhase[to]; known && (duration == nil || duration == "phase") {
+				facts = append(facts, map[string]any{"type": "phase-is", "parameters": map[string]any{"phase": phase}})
+			}
+		}
+	}
+	subject, ok := asMap(trigger["subject"])
+	if !ok || subject == nil {
+		return facts
+	}
+	if owner, present := subject["owner"]; present && owner != "friendly" {
+		return facts
+	}
+	keywordFilter := map[string]any{}
+	for _, key := range []string{"all_of", "any_of", "none_of"} {
+		if list, ok := asList(subject[key]); ok && len(list) > 0 {
+			keywordFilter[key] = subject[key]
+		}
+	}
+	if len(keywordFilter) > 0 {
+		facts = append(facts, map[string]any{"type": "matches", "parameters": map[string]any{"subject": "this-unit", "filter": keywordFilter}})
+	}
+	return facts
 }
 
 // momentGate gates an effect on a trigger while retaining the canonical source

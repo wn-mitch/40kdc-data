@@ -435,7 +435,12 @@ def _gated(ability_id: str, context: dict[str, Any] | None = None) -> tuple[int,
 def test_usage_and_trigger_gating_match_the_reference() -> None:
     assert _gated("fixture-usage") == (0, ["fixture-usage#activate"])
     assert _gated("fixture-stratagem") == (0, ["fixture-stratagem#activate"])
-    assert _gated("fixture-moment") == (0, ["fixture-moment@selected:shoot"])
+    assert _gated("fixture-moment", {"phase": "shooting"}) == (
+        0,
+        ["fixture-moment@selected:shoot"],
+    )
+    # A selected-to-shoot moment opens only in the shooting phase.
+    assert _gated("fixture-moment") == (0, [])
     assert _gated("fixture-attack-step") == (1, [])
     assert _gated("fixture-charge", {"phase": "fight", "attackerCharged": True}) == (1, [])
     assert _gated("fixture-charge", {"phase": "fight", "attackerCharged": False}) == (0, [])

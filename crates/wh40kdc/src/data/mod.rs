@@ -23,11 +23,15 @@
 // translator.
 #[cfg(feature = "cruncher")]
 mod abilities;
+#[cfg(feature = "cruncher")]
+mod ability_gates;
 mod ability_refs;
 mod collection;
 mod dataset;
 #[cfg(feature = "cruncher")]
 mod defensive;
+#[cfg(feature = "cruncher")]
+mod describe_buffs;
 pub mod game_mode;
 mod loadout;
 mod mfm_loadout;
@@ -37,6 +41,8 @@ mod normalize;
 mod pricing;
 #[cfg(feature = "cruncher")]
 mod recipient_snapshots;
+#[cfg(feature = "cruncher")]
+mod stratagem_targets;
 mod unit_loadout;
 
 // Roster-level legality + affordability build on both the Dataset and the
@@ -50,10 +56,7 @@ pub mod battle_sizes;
 pub mod roster;
 
 #[cfg(feature = "cruncher")]
-pub use abilities::{
-    aura_inches, stratagem_can_target, stratagem_can_target_unit, stratagem_target_names,
-    trigger_gated, EligibilityInput, EligibleAbility, EligibleAbilitySource,
-};
+pub use abilities::{EligibilityInput, EligibleAbility, EligibleAbilitySource};
 pub use ability_refs::{
     missing_required_abilities, printed_wargear_ids, rating_of, unit_ability_ids, with_rating,
 };
@@ -61,6 +64,8 @@ pub use collection::Collection;
 pub use dataset::{Dataset, RawData, ReactiveTrigger};
 #[cfg(feature = "cruncher")]
 pub use defensive::{DefensiveLever, DefensiveLevers, LeverGroup};
+#[cfg(feature = "cruncher")]
+pub use describe_buffs::{aura_inches, trigger_gated};
 pub use game_mode::{GameModeView, UnknownGameMode};
 pub use loadout::{
     base_loadout, check_unit_legality, clamp_weapon_count, complete_loadout, group_loadout,
@@ -85,6 +90,10 @@ pub use normalize::{normalize_name, strip_leading_the};
 pub use pricing::{base_unit_points, points_tier_missing};
 #[cfg(feature = "cruncher")]
 pub use recipient_snapshots::HistoricalSnapshotAbility;
+#[cfg(feature = "cruncher")]
+pub use stratagem_targets::{
+    stratagem_can_target, stratagem_can_target_unit, stratagem_target_names,
+};
 pub use unit_loadout::{mfm_group_row_order, mfm_groups, unit_loadout, LoadoutSource, UnitLoadout};
 
 #[cfg(feature = "import")]

@@ -1,0 +1,23 @@
+{
+  "name": "Defiler (death-guard) in Contagion Engines, shooting: a rule gated on a keyword the detachment gives other datasheets does not apply",
+  "input": {
+    "unitId": "defiler",
+    "factionId": "death-guard",
+    "detachmentId": "contagion-engines"
+  },
+  "phase": "shooting",
+  "expected": {
+    "army": [
+      "nurgles-gift-death-guard",
+      "pact-of-decay-death-guard"
+    ],
+    "detachment": [
+      "warped-and-rusted-animus-death-guard"
+    ],
+    "unit": [
+      "barrage-of-filth-death-guard",
+      "damaged",
+      "deadly-demise"
+    ]
+  }
+}

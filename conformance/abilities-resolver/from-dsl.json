@@ -17063,6 +17063,262 @@
       }
     },
     {
+      "caseId": "canonical/trigger-subject/selected-to-fight-outside-fight",
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "selected",
+          "filter": {
+            "to": "fight"
+          }
+        },
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "event-subject",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "abilityId": "trigger-subject-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "trigger-subject-example",
+        "abilityKind": "unit"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/trigger-subject/selected-to-fight-in-fight",
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "selected",
+          "filter": {
+            "to": "fight"
+          }
+        },
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "event-subject",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "abilityId": "trigger-subject-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "trigger-subject-example",
+        "abilityKind": "unit"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "trigger-subject-example@selected:fight",
+            "label": "Sustained Hits 1",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  }
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "extra-keyword",
+                "keywordRef": {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/trigger-subject/subject-keywords-held",
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "selected",
+          "filter": {
+            "to": "fight"
+          },
+          "subject": {
+            "owner": "friendly",
+            "all_of": [
+              "PALADIN SQUAD"
+            ]
+          }
+        },
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "event-subject",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerKeywords": [
+          "Infantry",
+          "Paladin Squad"
+        ]
+      },
+      "abilityId": "trigger-subject-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "trigger-subject-example",
+        "abilityKind": "unit"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "trigger-subject-example@selected:fight",
+            "label": "Sustained Hits 1",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "subject": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "PALADIN SQUAD"
+                    ]
+                  }
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "extra-keyword",
+                "keywordRef": {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/trigger-subject/subject-keywords-missing",
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "selected",
+          "filter": {
+            "to": "fight"
+          },
+          "subject": {
+            "owner": "friendly",
+            "all_of": [
+              "PALADIN SQUAD"
+            ]
+          }
+        },
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "event-subject",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerKeywords": [
+          "Vehicle",
+          "Titanic"
+        ]
+      },
+      "abilityId": "trigger-subject-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "trigger-subject-example",
+        "abilityKind": "unit"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/stratagem-model/multi-model-unit",
       "abilityId": "stratagem-model-example",
       "source": {

@@ -7,9 +7,10 @@ use std::collections::HashSet;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use super::abilities::{stratagem_target_names, EligibilityInput, EligibleAbilitySource};
+use super::abilities::{EligibilityInput, EligibleAbilitySource};
 use super::dataset::Dataset;
 use super::mortals::{combined_keywords_lower, shared_keywords_lower};
+use super::stratagem_targets::stratagem_target_names;
 use crate::cruncher::{
     AbilityKind, ActivatableBuff, Buff, BuffSource, EngineContext, TranslationPerspective,
 };

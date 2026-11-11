@@ -1,0 +1,24 @@
+{
+  "name": "Aberrants (genestealer-cults) in Xenocreed Congregation, fight: a Stratagem whose eligibility names other datasheets' keywords is not offered",
+  "input": {
+    "unitId": "aberrants",
+    "factionId": "genestealer-cults",
+    "detachmentId": "xenocreed-congregation"
+  },
+  "phase": "fight",
+  "expected": {
+    "army": [
+      "cult-ambush-genestealer-cults"
+    ],
+    "detachment": [
+      "unquestioning-fanaticism-genestealer-cults"
+    ],
+    "detachment-stratagem": [
+      "vengeance-for-the-martyr-xenocreed-congregation-genestealer-cults"
+    ],
+    "unit": [
+      "feel-no-pain",
+      "hulking-bodyguards-genestealer-cults"
+    ]
+  }
+}

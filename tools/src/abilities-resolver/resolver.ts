@@ -77,6 +77,24 @@ export function resolveEligibleAbilities(
   input: EligibilityInput,
   phase: Phase,
 ): EligibleAbility[] {
+  const { entries, suppressed } = resolveWithSuppressions(dataset, input, phase);
+  return suppressed.size === 0 ? entries : entries.filter((entry) => !suppressed.has(entry.ability.id));
+}
+
+/**
+ * The ability ids the unit's standing rules suppress for `input` (see
+ * {@link resolveEligibleAbilities}, which already drops them). A caller that pools several
+ * detachments' passes drops each pass's suppressions from all of them.
+ */
+export function suppressedAbilities(dataset: Dataset, input: EligibilityInput, phase: Phase): ReadonlySet<string> {
+  return resolveWithSuppressions(dataset, input, phase).suppressed;
+}
+
+function resolveWithSuppressions(
+  dataset: Dataset,
+  input: EligibilityInput,
+  phase: Phase,
+): { entries: EligibleAbility[]; suppressed: Set<string> } {
   // Resolve units within the faction when one is known. Unit ids are shared
   // across factions (a shared chassis like `chaos-land-raider` lives under
   // several Chaos factions), so a faction-blind `get` can return the wrong
@@ -85,7 +103,7 @@ export function resolveEligibleAbilities(
     (fid ? dataset.units.getInFaction(id, fid) : undefined) ?? dataset.units.getAny(id);
 
   const unit = resolveUnit(input.unitId, input.factionId);
-  if (!unit) return [];
+  if (!unit) return { entries: [], suppressed: new Set() };
   const factionId = input.factionId ?? unit.raw.faction_id;
   const seen = new Set<string>();
   const out: EligibleAbility[] = [];
@@ -95,11 +113,17 @@ export function resolveEligibleAbilities(
   // detachment, and there it replaces each army rule it names with `interactions` `replaces`.
   // A Combat Patrol detachment's `detachment_rule_ids` are its complete army-rule set.
   const replaced = replacedArmyRuleIds(dataset, factionId, [input.detachmentId]);
+  // Each member's keywords (lower-cased); a unit target reads them as one combined unit.
+  const members = [unit, ...(input.attachedUnitIds ?? []).map((id) => resolveUnit(id, factionId))]
+    .map((member) => memberKeywords(member, input.detachmentId));
+  const printed = printedKeyword(dataset);
+  const applies = (ability: AbilityView) => appliesToUnit(ability.raw.applies_to, members, printed);
   for (const ability of dataset.abilities.byFaction(factionId)) {
     if (ability.raw.ability_type !== "faction") continue;
     if (ability.raw.detachment_id != null && ability.raw.detachment_id !== input.detachmentId) continue;
     if (replaced.has(ability.id)) continue;
     if (!phaseMatches(ability, phase)) continue;
+    if (!applies(ability)) continue;
     pushUnique(out, seen, { ability, source: { kind: "army" }, phases: intersect(ability.phases, phase) });
   }
 
@@ -109,6 +133,7 @@ export function resolveEligibleAbilities(
       if (ability.raw.ability_type !== "detachment") continue;
       if (ability.raw.detachment_id !== input.detachmentId) continue;
       if (!phaseMatches(ability, phase)) continue;
+      if (!applies(ability)) continue;
       pushUnique(out, seen, {
         ability,
         source: { kind: "detachment", detachmentId: input.detachmentId },
@@ -124,10 +149,6 @@ export function resolveEligibleAbilities(
       dataset.detachments.getInFaction(input.detachmentId, factionId) ??
       dataset.detachments.getAny(input.detachmentId);
     if (detachment) {
-      // Each member's keywords (lower-cased); a unit target reads them as one combined unit.
-      const members = [unit, ...(input.attachedUnitIds ?? []).map((id) => resolveUnit(id, factionId))]
-        .map((member) => new Set([...(member?.keywords ?? []), ...(member?.factionKeywords ?? [])].map((keyword) => keyword.toLowerCase())));
-      const printed = printedKeyword(dataset);
       for (const stratId of detachment.stratagem_ids ?? []) {
         const stratagem = dataset.stratagems.get(stratId);
         if (!stratagem) continue;
@@ -140,6 +161,8 @@ export function resolveEligibleAbilities(
         if (!ability) continue;
         const trigger = ability.raw.trigger as { subject?: unknown } | null | undefined;
         if (!stratagemCanTargetUnit(stratagem, members, trigger?.subject, printed)) continue;
+        // A Stratagem with no friendly target restriction keeps its unit requirement in its rule's `applies_to`.
+        if (!hasFriendlyTarget(stratagem) && !applies(ability)) continue;
         pushUnique(out, seen, {
           ability,
           source: {
@@ -206,7 +229,7 @@ export function resolveEligibleAbilities(
     }
   }
 
-  return out;
+  return { entries: out, suppressed: suppressedAbilityIds(out, members, printed) };
 }
 
 // ---------------------------------------------------------------------------
@@ -264,6 +287,7 @@ function stratagemPhaseMatches(stratagem: Stratagem, phase: Phase): boolean {
 type TargetRestriction = {
   name?: string; side?: string; selects?: string; bound_to?: string; warlord?: true;
   required_keywords?: string[]; required_keywords_any?: string[]; excluded_keywords?: string[];
+  eligibility?: unknown;
 };
 type TriggerSubject = { owner?: string; all_of?: string[]; any_of?: string[]; none_of?: string[] };
 
@@ -332,6 +356,7 @@ function targetHolds(members: readonly ReadonlySet<string>[], triggerSubject: un
     const gained = (keyword: string) => has(keyword) || !printed(keyword);
     return (target.warlord !== true || has("character"))
       && keywordListsHold(target, has, has)
+      && eligibilityKeywords(target.eligibility, (keyword) => has(keyword) || !printed(keyword), has) !== false
       && (target.bound_to !== "triggering-unit" || subject === null || keywordListsHold(subject, gained, has));
   });
 }
@@ -348,7 +373,8 @@ export function printedKeyword(dataset: Dataset): (keyword: string) => boolean {
     const key = normalizeName(keyword);
     let found = seen.get(key);
     if (found === undefined) {
-      found = [...every.units].some((unit) => [...(unit.keywords ?? []), ...(unit.factionKeywords ?? [])].some((own) => normalizeName(own) === key));
+      found = [...every.units].some((unit) => [...(unit.keywords ?? []), ...(unit.factionKeywords ?? []),
+        ...(unit.raw.conditional_keywords ?? []).map((entry) => entry.keyword)].some((own) => normalizeName(own) === key));
       seen.set(key, found);
     }
     return found;
@@ -368,6 +394,106 @@ function keywordListsHold(target: TargetRestriction, required: (keyword: string)
   return (target.required_keywords ?? []).every(required)
     && ((target.required_keywords_any ?? []).length === 0 || target.required_keywords_any!.some(required))
     && !(target.excluded_keywords ?? []).some(excluded);
+}
+
+/**
+ * A member's keywords, lower-cased: its datasheet and faction keywords, plus each conditional
+ * keyword whose detachment is the one selected.
+ */
+function memberKeywords(member: { keywords?: readonly string[]; factionKeywords?: readonly string[]; raw: { conditional_keywords?: readonly { keyword: string; required_detachment_id?: string | null }[] | null } } | undefined, detachmentId: string | undefined): Set<string> {
+  if (!member) return new Set();
+  const conditional = (member.raw.conditional_keywords ?? [])
+    .filter((entry) => entry.required_detachment_id == null || entry.required_detachment_id === detachmentId)
+    .map((entry) => entry.keyword);
+  return new Set([...(member.keywords ?? []), ...(member.factionKeywords ?? []), ...conditional].map((keyword) => keyword.toLowerCase()));
+}
+
+/**
+ * Whether a rule's `applies_to` admits a unit of `members`, read as one combined unit. An absent
+ * filter admits every unit. A required keyword no datasheet prints is one the army gains in play,
+ * so it is not held against the unit, as for a Stratagem's WHEN.
+ */
+function appliesToUnit(filter: unknown, members: readonly ReadonlySet<string>[], printed: (keyword: string) => boolean): boolean {
+  if (filter === null || typeof filter !== "object" || Array.isArray(filter)) return true;
+  const combined = new Set(members.flatMap((member) => [...member].map(normalizeName)));
+  const has = (keyword: string) => combined.has(normalizeName(keyword));
+  return keywordPredicateHolds(filter as Record<string, unknown>, (keyword) => has(keyword) || !printed(keyword), has) !== false;
+}
+
+/** A static keyword predicate's verdict, or undefined when it names anything but keyword lists. */
+function keywordPredicateHolds(filter: Record<string, unknown>, required: (keyword: string) => boolean, excluded: (keyword: string) => boolean): boolean | undefined {
+  const lists = (key: string) => (Array.isArray(filter[key]) ? (filter[key] as unknown[]).filter((item): item is string => typeof item === "string") : []);
+  if (Object.keys(filter).some((key) => !["all_of", "any_of", "none_of", "not_all_of", "owner"].includes(key))) return undefined;
+  if (filter.owner !== undefined && filter.owner !== "friendly") return undefined;
+  const anyOf = lists("any_of");
+  const notAllOf = lists("not_all_of");
+  return lists("all_of").every(required)
+    && (anyOf.length === 0 || anyOf.some(required))
+    && !lists("none_of").some(excluded)
+    && (notAllOf.length === 0 || !notAllOf.every(excluded));
+}
+
+/**
+ * The verdict of a Stratagem target's `eligibility` on the target's own keywords: each `matches`
+ * on the target unit whose filter is only keyword lists is decided, and/or/not combine them, and
+ * anything else (battlefield state, history) is undefined. Undefined never refuses the target.
+ */
+function eligibilityKeywords(condition: unknown, required: (keyword: string) => boolean, excluded: (keyword: string) => boolean): boolean | undefined {
+  if (condition === null || typeof condition !== "object" || Array.isArray(condition)) return undefined;
+  const node = condition as Record<string, unknown>;
+  if (typeof node.operator === "string" && Array.isArray(node.operands)) {
+    const values = node.operands.map((operand) => eligibilityKeywords(operand, required, excluded));
+    if (node.operator === "and") return values.includes(false) ? false : values.every((value) => value === true) ? true : undefined;
+    if (node.operator === "or") return values.includes(true) ? true : values.every((value) => value === false) ? false : undefined;
+    if (node.operator === "not" && values.length === 1) return values[0] === undefined ? undefined : !values[0];
+    return undefined;
+  }
+  if (node.type !== "matches" || node.parameters === null || typeof node.parameters !== "object") return undefined;
+  const params = node.parameters as Record<string, unknown>;
+  if (params.subject !== undefined && params.subject !== "this-unit") return undefined;
+  if (params.filter === null || typeof params.filter !== "object" || Array.isArray(params.filter)) return undefined;
+  return keywordPredicateHolds(params.filter as Record<string, unknown>, required, excluded);
+}
+
+/** Source kinds whose rules hold for the unit without a player choosing them in play. */
+const STANDING_SOURCES: ReadonlySet<string> = new Set(["army", "detachment", "unit", "attached"]);
+
+/**
+ * The abilities the unit's standing rules suppress: a `rule-state` that suppresses an ability
+ * (named by id) for this unit, or for friendly units whose keywords the unit has, under
+ * conditions that are only keyword checks on the unit that hold. A Stratagem's, a supporting
+ * unit's, or a triggered or battlefield-conditioned suppression is left to play.
+ */
+function suppressedAbilityIds(entries: readonly EligibleAbility[], members: readonly ReadonlySet<string>[], printed: (keyword: string) => boolean): Set<string> {
+  const combined = new Set(members.flatMap((member) => [...member].map(normalizeName)));
+  const has = (keyword: string) => combined.has(normalizeName(keyword));
+  const required = (keyword: string) => has(keyword) || !printed(keyword);
+  const out = new Set<string>();
+  const walk = (node: unknown): void => {
+    if (Array.isArray(node)) { node.forEach(walk); return; }
+    if (node === null || typeof node !== "object") return;
+    const effect = node as Record<string, unknown>;
+    if (effect.type === "conditional") {
+      if (eligibilityKeywords(effect.condition, required, has) === true) walk(effect.effect);
+      return;
+    }
+    if (effect.type === "sequence" || effect.type === "rules-bundle") { walk(effect.steps); return; }
+    if (effect.type !== "rule-state" || effect.modifier === null || typeof effect.modifier !== "object") return;
+    const modifier = effect.modifier as Record<string, unknown>;
+    if (modifier.direction !== "suppressed" || modifier.rule_kind !== "ability" || typeof modifier.rule !== "string") return;
+    const target = effect.target;
+    const reaches = target === "this-unit" || (target !== null && typeof target === "object" && !Array.isArray(target) &&
+      keywordPredicateHolds(target as Record<string, unknown>, required, has) === true);
+    if (reaches) out.add(modifier.rule);
+  };
+  for (const entry of entries) if (STANDING_SOURCES.has(entry.source.kind)) walk(entry.ability.raw.effect);
+  return out;
+}
+
+/** Whether a Stratagem names a friendly target in `target_restrictions`. */
+function hasFriendlyTarget(stratagem: Stratagem): boolean {
+  const raw = stratagem.target_restrictions as TargetRestriction | TargetRestriction[] | null | undefined;
+  return (Array.isArray(raw) ? raw : raw ? [raw] : []).some((target) => target.side !== "enemy");
 }
 
 /** Whether a Stratagem's friendly target is one model rather than a unit. */

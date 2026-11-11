@@ -1,0 +1,17 @@
+{
+  "name": "Kataphron Breachers (adeptus-mechanicus) in Eradication Cohort, shooting: a Stratagem with no printed target keeps its unit keyword in applies_to",
+  "input": {
+    "unitId": "kataphron-breachers",
+    "factionId": "adeptus-mechanicus",
+    "detachmentId": "eradication-cohort"
+  },
+  "phase": "shooting",
+  "expected": {
+    "army": [
+      "doctrina-imperatives-adeptus-mechanicus"
+    ],
+    "unit": [
+      "breaching-command-adeptus-mechanicus"
+    ]
+  }
+}

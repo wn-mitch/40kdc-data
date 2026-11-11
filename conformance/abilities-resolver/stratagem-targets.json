@@ -512,6 +512,189 @@
       ],
       "expected": true,
       "expected_names": {}
+    },
+    {
+      "name": "eligibility keyword filter: a unit with one of the listed keywords qualifies",
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "any_of": [
+                    "NEOPHYTE HYBRIDS",
+                    "ACOLYTE HYBRIDS"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "keywords": [
+        "infantry",
+        "neophyte hybrids"
+      ],
+      "expected": true
+    },
+    {
+      "name": "eligibility keyword filter: a unit with none of the listed keywords does not qualify",
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "any_of": [
+                    "NEOPHYTE HYBRIDS",
+                    "ACOLYTE HYBRIDS"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "keywords": [
+        "infantry",
+        "aberrants"
+      ],
+      "expected": false
+    },
+    {
+      "name": "eligibility keyword filter: an or of keyword filters needs one to hold",
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "or",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "MOUNTED",
+                    "SKITARII"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "PTERAXII"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "keywords": [
+        "infantry",
+        "skitarii"
+      ],
+      "expected": false
+    },
+    {
+      "name": "eligibility keyword filter: a not of an excluded keyword refuses a unit with it",
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "any_of": [
+                    "TITANIC"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "keywords": [
+        "vehicle",
+        "titanic"
+      ],
+      "expected": false
+    },
+    {
+      "name": "eligibility battlefield state stays undecided and does not refuse the target",
+      "target_restrictions": {
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "in-region",
+              "parameters": {
+                "subject": "this-unit",
+                "region": {
+                  "rule_region": {
+                    "region_id": "defensive-line",
+                    "owner_faction": "imperial-knights"
+                  }
+                }
+              }
+            },
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "move-ended",
+                "filter": {
+                  "move_types": [
+                    "remain-stationary"
+                  ]
+                },
+                "window": "turn"
+              }
+            }
+          ]
+        }
+      },
+      "keywords": [
+        "vehicle",
+        "titanic"
+      ],
+      "expected": true
     }
   ]
 }

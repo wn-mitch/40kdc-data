@@ -119,10 +119,14 @@ describe("ability-level gating of buffs", () => {
 
 
   it("gates on the moment when there is one, so a usage limit adds no second lever", () => {
-    expect(buffs("fixture-moment")).toMatchObject({
+    expect(buffs("fixture-moment", { phase: "shooting" })).toMatchObject({
       applied: 0,
       levers: [{ buffs: 1, group: { id: "fixture-moment?usage", maxActivations: 1 } }],
     });
+  });
+
+  it("offers no selected-to-shoot lever outside the shooting phase", () => {
+    expect(buffs("fixture-moment", { phase: "fight" })).toEqual({ applied: 0, levers: [] });
   });
 
   it("applies an attack-step trigger to every attack", () => {

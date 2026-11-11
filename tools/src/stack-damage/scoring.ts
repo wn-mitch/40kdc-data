@@ -4,7 +4,7 @@ import { optionCap, type LoadoutModel } from "../data/loadout.js";
 import { unitLoadout } from "../data/unit-loadout.js";
 import type { MfmComposition } from "../data/mfm-loadout-unit.js";
 import { fullModelCount } from "./factions.js";
-import { reachesOtherUnits, replacedArmyRuleIds } from "../abilities-resolver/resolver.js";
+import { reachesOtherUnits, replacedArmyRuleIds, suppressedAbilities } from "../abilities-resolver/resolver.js";
 import type { EligibilityInput } from "../abilities-resolver/index.js";
 import type { UnitView } from "../data/entities.js";
 import type { MatrixConfig } from "./config.js";
@@ -19,7 +19,8 @@ import { translationWarnings } from "./translation-warnings.js";
 import { loadoutLeverBuffs, namedLoadoutWargear, surfacedByLoadout, wargearRules, wargearTranslation, type WargearRules } from "./wargear-levers.js";
 import { combinedWargear, equippedBuffs, loadoutWargear, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrants } from "./weapon-grants.js";
 import { equippedLevers, othersEquippedBuffs, othersUnequippedKey, settleMemberLoadouts, type MemberLoadouts } from "./member-loadouts.js";
-import { filterStackEligibleAbilities, filterStackableStratagems } from "./stratagem-eligibility.js";
+import { activationPossible, filterStackEligibleAbilities, filterStackableStratagems, unitLookup } from "./stratagem-eligibility.js";
+import { combinedKeywords, issuesOrders, ordersReach } from "./orders.js";
 import type {
   DamageCellState,
   PoolLever,
@@ -63,6 +64,8 @@ function attachmentRoles(members: readonly StackMember[]): Record<string, "leade
 
 export class DamageScoringSession {
   readonly supportUnits: UnitView[];
+  /** The faction's unit ids, each a possible nearby Officer for an Orders lever. */
+  readonly orderIssuerCandidates: readonly string[];
   readonly defensiveBuffs: Buff[];
   readonly defensiveWarnings: StackBuffPool["warnings"];
   readonly scoreCache: DamageCellCache<ProfileDamage | null>;
@@ -78,6 +81,7 @@ export class DamageScoringSession {
   private readonly grantCache = new Map<string, WeaponGrants>();
   private readonly loadoutLegalityCache: Map<string, CandidateLoadoutLegality>;
   private readonly wargearRuleCache = new Map<string, WargearRules>();
+  private readonly suppressedCache = new Map<string, ReadonlySet<string>>();
   private readonly loadoutLeverCache = new Map<string, StackableBuff[] | null>();
 
   constructor(
@@ -92,6 +96,7 @@ export class DamageScoringSession {
     this.loadoutCache = new DamageCellCache(state.factionId, state.target.profileId, state.phase);
     this.poolCache = new DamageCellCache(state.factionId, state.target.profileId, state.phase);
     this.stackCache = new DamageCellCache(state.factionId, state.target.profileId, state.phase);
+    this.orderIssuerCandidates = factionUnits.map((unit) => unit.id).sort();
     this.supportUnits = factionUnits.filter((unit) => unit.abilities.some((ability) =>
       (ability.phases.length === 0 || ability.phases.includes(state.phase)) && reachesOtherUnits(ability.raw.effect),
     ));
@@ -349,13 +354,45 @@ export class DamageScoringSession {
     const broad = this.dataset.eligibleAbilities(input, context.phase);
     const eligible = filterStackEligibleAbilities(this.dataset, input, broad);
     const selection = this.dataset.stackableBuffsFor(input, context);
-    return { ...selection, ...filterStackableStratagems(selection.buffs, selection.groups, broad, eligible) };
+    const ids = [input.unitId, ...(input.attachedUnitIds ?? [])];
+    const units = unitLookup(this.dataset, input.factionId);
+    const present = new Set([...ids, ...this.orderIssuerCandidates]);
+    const receiver = combinedKeywords(ids, units, input.detachmentId);
+    const possible = selection.buffs.filter((lever) => activationPossible(lever.requires, ids, units) && this.ordersReachable(lever, present, receiver));
+    return { ...selection, ...filterStackableStratagems(possible, selection.groups, broad, eligible) };
   }
 
-  /** `levers` without dropped army rules and those another detachment's Combat Patrol rule replaces. */
-  private keptLevers(levers: readonly StackableBuff[], replaced: ReadonlySet<string>): StackableBuff[] {
+  /**
+   * Whether an army rule that issues Orders reaches this unit: an Officer among the stack's
+   * members or the faction's units (assumed nearby, as support units are) whose Orders may
+   * target it (`ordersReach`). Other levers pass.
+   */
+  private ordersReachable(lever: StackableBuff, present: ReadonlySet<string>, receiver: ReadonlySet<string>): boolean {
+    if (lever.source.kind !== "ability" || lever.source.abilityKind !== "army") return true;
+    if (!issuesOrders(this.dataset, lever.source.abilityId)) return true;
+    return ordersReach(this.dataset, lever.source.abilityId, present, receiver);
+  }
+
+  /**
+   * `levers` without dropped army rules, those another detachment's Combat Patrol rule replaces,
+   * and those a standing rule in any detachment pass suppresses (`suppressed`).
+   */
+  private keptLevers(levers: readonly StackableBuff[], replaced: ReadonlySet<string>, suppressed: ReadonlySet<string>): StackableBuff[] {
     return levers.filter((lever) => lever.source.kind !== "ability" || (!this.config.droppedArmyRules.includes(lever.source.abilityId) &&
-      !(lever.source.abilityKind === "army" && replaced.has(lever.source.abilityId))));
+      !(lever.source.abilityKind === "army" && replaced.has(lever.source.abilityId)) && !suppressed.has(lever.source.abilityId)));
+  }
+
+  /** The abilities any detachment pass's standing rules suppress for `member`. */
+  private suppressedFor(spec: StackSpec, member: StackMember, phase: EngineContext["phase"]): Set<string> {
+    const out = new Set<string>();
+    for (const detachmentId of this.detachmentPasses(spec)) {
+      const input = this.eligibilityInput(spec, member, detachmentId);
+      const key = `${phase}|${JSON.stringify(input)}`;
+      let ids = this.suppressedCache.get(key);
+      if (!ids) this.suppressedCache.set(key, (ids = suppressedAbilities(this.dataset, input, phase)));
+      for (const id of ids) out.add(id);
+    }
+    return out;
   }
 
   pool(spec: StackSpec): StackBuffPool {
@@ -368,11 +405,12 @@ export class DamageScoringSession {
     const replaced = this.replacedArmyRules(spec);
     for (const member of spec.members) {
       const context = this.state.contextFor(spec, member);
+      const suppressed = this.suppressedFor(spec, member, context.phase);
       for (const detachmentId of this.detachmentPasses(spec)) {
         const input = this.eligibilityInput(spec, member, detachmentId);
         const selection = this.stackableBuffsFor(input, context);
         for (const group of selection.groups) if (!groups.has(group.id)) groups.set(group.id, group);
-        for (const lever of this.keptLevers(selection.buffs, replaced)) {
+        for (const lever of this.keptLevers(selection.buffs, replaced, suppressed)) {
           const current = levers.get(lever.id) ?? { ...lever, perMember: new Map<string, Buff[]>() };
           current.perMember.set(member.unit.id, lever.buffs);
           levers.set(lever.id, current);
@@ -418,9 +456,10 @@ export class DamageScoringSession {
     let value: StackableBuff[] | null = null;
     if (wargearTranslation(rules.entries, context) !== rules.unloaded) {
       const replaced = this.replacedArmyRules(spec);
+      const suppressed = this.suppressedFor(spec, member, context.phase);
       const levers = new Map<string, StackableBuff>();
       for (const detachmentId of this.detachmentPasses(spec)) {
-        for (const lever of this.keptLevers(this.stackableBuffsFor(this.eligibilityInput(spec, member, detachmentId), context).buffs, replaced)) levers.set(lever.id, lever);
+        for (const lever of this.keptLevers(this.stackableBuffsFor(this.eligibilityInput(spec, member, detachmentId), context).buffs, replaced, suppressed)) levers.set(lever.id, lever);
       }
       value = [...levers.values()];
     }

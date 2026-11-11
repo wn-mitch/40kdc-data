@@ -2154,10 +2154,36 @@ function momentCondition(trigger: unknown, duration?: unknown): Record<string, u
     const own = isObject(item.condition) ? item.condition : null;
     if (isAttackStep(item)) return own;
     const moment = ownMoveFact(item) ?? { type: "timing-is", parameters: { timing: momentKey(item) } };
-    return own ? { operator: "and", operands: [moment, activationCondition(own, duration)] } : moment;
+    const facts = [moment, ...selectionFacts(item, duration), ...(own ? [activationCondition(own, duration)] : [])];
+    return facts.length === 1 ? moment : { operator: "and", operands: facts };
   });
   if (gates.some((gate) => gate === null)) return null;
   return gates.length === 1 ? gates[0]! : { operator: "or", operands: gates };
+}
+
+const SELECTED_PHASE: Readonly<Record<string, string>> = { fight: "fight", shoot: "shooting" };
+
+/**
+ * What a "selected to shoot/fight" trigger says about the moment it opens: the phase it happens
+ * in, while the effect lasts no longer than that phase, and the keywords a friendly subject
+ * names, which the buffed unit must carry. Other triggers add nothing.
+ */
+function selectionFacts(trigger: Record<string, unknown>, duration: unknown): Record<string, unknown>[] {
+  if (trigger.event !== "selected") return [];
+  const facts: Record<string, unknown>[] = [];
+  const to = isObject(trigger.filter) ? trigger.filter.to : undefined;
+  const phase = typeof to === "string" ? SELECTED_PHASE[to] : undefined;
+  if (phase !== undefined && (duration === undefined || duration === "phase")) {
+    facts.push({ type: "phase-is", parameters: { phase } });
+  }
+  const subject = trigger.subject;
+  if (isObject(subject) && (subject.owner === undefined || subject.owner === "friendly")) {
+    const filter = Object.fromEntries(["all_of", "any_of", "none_of"]
+      .filter((key) => Array.isArray(subject[key]) && (subject[key] as unknown[]).length > 0)
+      .map((key) => [key, subject[key]]));
+    if (Object.keys(filter).length > 0) facts.push({ type: "matches", parameters: { subject: "this-unit", filter } });
+  }
+  return facts;
 }
 
 /** Emit one lever per buff-bearing choice, retaining its shared selection cap. */

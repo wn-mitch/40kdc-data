@@ -258,18 +258,65 @@ fn moment_condition(trigger: Option<&Value>, duration: Option<&Value>) -> Option
         let moment = own_move_fact(item).unwrap_or_else(
             || json!({ "type": "timing-is", "parameters": { "timing": moment_key(item) } }),
         );
-        gates.push(own.map_or(moment.clone(), |condition| {
-            json!({
-                "operator": "and",
-                "operands": [moment, activation_condition(condition, duration)],
-            })
-        }));
+        let mut facts = vec![moment];
+        facts.extend(selection_facts(item, duration));
+        facts.extend(own.map(|condition| activation_condition(condition, duration)));
+        gates.push(if facts.len() == 1 {
+            facts.remove(0)
+        } else {
+            json!({ "operator": "and", "operands": facts })
+        });
     }
     Some(if gates.len() == 1 {
         gates.remove(0)
     } else {
         json!({ "operator": "or", "operands": gates })
     })
+}
+
+/// What a "selected to shoot/fight" trigger says about the moment it opens: the phase it
+/// happens in, while the effect lasts no longer than that phase (no duration, or `phase`), and
+/// the keywords a friendly (or unowned) subject names, which the buffed unit must carry. Other
+/// triggers add nothing.
+fn selection_facts(trigger: &Obj, duration: Option<&Value>) -> Vec<Value> {
+    if !is_str(trigger, "event", "selected") {
+        return Vec::new();
+    }
+    let mut facts = Vec::new();
+    let phase = match object(trigger.get("filter"))
+        .and_then(|filter| filter.get("to"))
+        .and_then(Value::as_str)
+    {
+        Some("fight") => Some("fight"),
+        Some("shoot") => Some("shooting"),
+        _ => None,
+    };
+    let within_phase = match duration {
+        None => true,
+        Some(d) => d.as_str() == Some("phase"),
+    };
+    if let (Some(phase), true) = (phase, within_phase) {
+        facts.push(json!({ "type": "phase-is", "parameters": { "phase": phase } }));
+    }
+    if let Some(subject) = object(trigger.get("subject")) {
+        let owner = subject.get("owner");
+        if owner.is_none() || owner.and_then(Value::as_str) == Some("friendly") {
+            let filter: Obj = ["all_of", "any_of", "none_of"]
+                .into_iter()
+                .filter_map(|key| {
+                    let items = subject.get(key)?.as_array()?;
+                    (!items.is_empty()).then(|| (key.to_string(), Value::Array(items.clone())))
+                })
+                .collect();
+            if !filter.is_empty() {
+                facts.push(json!({
+                    "type": "matches",
+                    "parameters": { "subject": "this-unit", "filter": filter },
+                }));
+            }
+        }
+    }
+    facts
 }
 
 /// An effect gated on a trigger (one, or several alternatives) the way a `timing-is` gates it,

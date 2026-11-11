@@ -606,7 +606,9 @@ func TestUsageAndTriggerGatingMatchTheReference(t *testing.T) {
 	}{
 		{"fixture-usage", fight, 0, "fixture-usage#activate"},
 		{"fixture-stratagem", fight, 0, "fixture-stratagem#activate"},
-		{"fixture-moment", fight, 0, "fixture-moment@selected:shoot"},
+		// A selected-to-shoot moment gates on the shooting phase: it offers its lever there only.
+		{"fixture-moment", map[string]any{"phase": "shooting"}, 0, "fixture-moment@selected:shoot"},
+		{"fixture-moment", fight, 0, ""},
 		{"fixture-attack-step", fight, 1, ""},
 		{"fixture-charge", map[string]any{"phase": "fight", "attackerCharged": true}, 1, ""},
 		{"fixture-charge", map[string]any{"phase": "fight", "attackerCharged": false}, 0, ""},
