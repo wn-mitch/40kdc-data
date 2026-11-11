@@ -5,7 +5,7 @@ structural stub — an effect carrying an empty-modifier placeholder node that s
 DSL authored. This is the actionable counterpart to the per-faction `stub*` counts in
 [`CONTRIBUTING.md`](../../CONTRIBUTING.md) and [`summary.md`](summary.md).
 
-Total: 255 stub abilities.
+Total: 241 stub abilities.
 
 | faction | ability | shape | needs |
 |---|---|---|---|
@@ -14,16 +14,7 @@ Total: 255 stub abilities.
 | adepta-sororitas | blessed-believers-adepta-sororitas | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adepta-sororitas | simulacrum-imperialis-sanctuary-guardians-adepta-sororitas | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adepta-sororitas | simulacrum-imperialis-wargear-adepta-sororitas | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | aggressive-disembarkation-gauntlet-task-force-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | captain-of-the-honour-guard-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | combat-embarkation-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | forgefather-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | librarian-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | librarius-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | priority-target-identified-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-astartes | special-issue-optics-and-ammunition-adeptus-astartes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-custodes | fearless-and-unrelenting-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| adeptus-custodes | silent-sisterhood-adeptus-custodes | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-mechanicus | aggressive-impulse-haloscreed-battle-clade-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-mechanicus | auto-divinatory-targeting-cohort-cybernetica-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | adeptus-mechanicus | baleful-halo-rad-zone-corps-adeptus-mechanicus | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -98,7 +89,6 @@ Total: 255 stub abilities.
 | astra-militarum | vox-relay-beacon-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | astra-militarum | vox-relay-mechanised-assault-astra-militarum | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | black-templars | close-range-destruction-black-templars | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| black-templars | combat-embarkation-black-templars | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | blood-angels | oath-of-moment-blood-angels | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-daemons | binding-shadow-shadow-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | chaos-daemons | cankerblight-aura-plague-legion-chaos-daemons | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -239,11 +229,7 @@ Total: 255 stub abilities.
 | necrons | reletavistic-tether-pantheon-of-woe-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | necrons | resurrection-orb-catacomb-command-barge-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | necrons | territorial-imperatives-necrons | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| orks | boss-boomer-upgrade-blitz-brigade-orks | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| orks | unstable-energies-orks | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | space-wolves | oath-of-moment-space-wolves | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| space-wolves | old-greymanes-space-wolves | no-effect | effect type "no-effect" is not modelled by the buff layer |
-| space-wolves | skjalds-foretelling-saga-of-the-great-wolf-space-wolves | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | tau-empire | battlesuit-support-system-tau-empire | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | tau-empire | for-the-greater-good-sudden-dawn-cadre-tau-empire | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | tau-empire | rapid-disembark-tau-empire | no-effect | effect type "no-effect" is not modelled by the buff layer |
