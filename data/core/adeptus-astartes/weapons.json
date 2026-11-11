@@ -32811,5 +32811,99 @@
         "id": "93ec44f2-aec3-4fe2-aa34-dd54a6b34fbf"
       }
     ]
+  },
+  {
+    "id": "heavy-bolt-pistol-captain-on-bike",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "24f6e38e-b0ef-4354-90cd-e1029a8e2ad5"
+      }
+    ],
+    "name": "Heavy Bolt Pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Heavy Bolt Pistol",
+        "range": 18,
+        "stats": {
+          "A": 1,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "master-crafted-power-weapon-captain-on-bike",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e0afbb3f-683d-45e5-b10f-d5cfdb37c3b5"
+      }
+    ],
+    "name": "Master-crafted Power Weapon",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Master-crafted Power Weapon",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 6,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "thunder-hammer-captain-on-bike",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "599440c4-5b8a-4482-8e03-3e9a12797e80"
+      }
+    ],
+    "name": "Thunder Hammer",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Thunder Hammer",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 8,
+          "AP": -2,
+          "D": 3,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
   }
 ]

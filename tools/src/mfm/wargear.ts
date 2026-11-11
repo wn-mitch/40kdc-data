@@ -2087,13 +2087,15 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
               });
             }
           }
-          if (!existingId) {
+          // As for wargear below: an id only option or unit data names still needs its record.
+          if (!existingId || !(weaponEntityIds.has(existingId) || gear.some((record) => record.id === existingId))) {
+            const weaponId = existingId ?? itemId;
             const warnings: string[] = [];
             try {
-              weapons.push(mintWeapon({ dump, gv: { ...confirmed }, warnings }, item, itemId, itemName));
-              validIds.add(itemId);
-              weaponEntityIds.add(itemId);
-              weaponsById.set(itemId, weapons[weapons.length - 1]);
+              weapons.push(mintWeapon({ dump, gv: { ...confirmed }, warnings }, item, weaponId, itemName));
+              validIds.add(weaponId);
+              weaponEntityIds.add(weaponId);
+              weaponsById.set(weaponId, weapons[weapons.length - 1]);
               res.weaponsAdded++;
             } catch (error) {
               res.notes.push({ id, note: `could not mint "${itemName}": ${(error as Error).message}` });

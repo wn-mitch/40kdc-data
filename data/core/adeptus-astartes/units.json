@@ -15389,7 +15389,10 @@
     },
     "weapon_ids": [
       "plasma-pistol",
-      "twin-bolt-rifle-captain-on-bike"
+      "twin-bolt-rifle-captain-on-bike",
+      "heavy-bolt-pistol-captain-on-bike",
+      "master-crafted-power-weapon-captain-on-bike",
+      "thunder-hammer-captain-on-bike"
     ],
     "game_version": {
       "edition": "11th",

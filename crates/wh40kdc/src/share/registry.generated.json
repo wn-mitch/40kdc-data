@@ -1,5 +1,5 @@
 {
-  "version": 37,
+  "version": 38,
   "kinds": {
     "faction": [
       "adepta-sororitas",
@@ -5506,7 +5506,10 @@
       "stormfury-missile-launcher-assault-force-land-speeder",
       "sulphur-breath-purge-corps-serberys-sulphurhounds",
       "twin-bolt-rifle-invader-atvs",
-      "combat-shield"
+      "combat-shield",
+      "heavy-bolt-pistol-captain-on-bike",
+      "master-crafted-power-weapon-captain-on-bike",
+      "thunder-hammer-captain-on-bike"
     ],
     "enhancement": [
       "a-chink-in-their-armour",

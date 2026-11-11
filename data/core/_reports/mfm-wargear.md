@@ -6,7 +6,7 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 | Dir | Matched | Options | Defaults Δ | Weapon ids Δ | Weapon names Δ | Weapons + | Wargear + | Synth | Unresolved | Fuzzy | Notes | New-in-dump | Repo-only (fallback) |
 |---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
 | adepta-sororitas | 37 | 51 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 |
-| adeptus-astartes | 177 | 184 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 6 | 16 | 0 | 0 |
+| adeptus-astartes | 177 | 184 | 0 | 1 | 0 | 3 | 0 | 0 | 0 | 6 | 16 | 0 | 0 |
 | adeptus-custodes | 39 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 1 | 0 | 0 |
 | adeptus-mechanicus | 38 | 37 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
 | aeldari | 80 | 97 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 5 | 0 | 0 |
@@ -28,7 +28,7 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 | thousand-sons | 38 | 43 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
 | tyranids | 57 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | world-eaters | 34 | 42 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
-| **TOTAL** | **1104** | **1237** | **0** | **0** | **0** | **0** | **1** | **0** | **0** | **22** | **101** | **191** | **0** |
+| **TOTAL** | **1104** | **1237** | **0** | **1** | **0** | **3** | **0** | **0** | **0** | **22** | **101** | **191** | **0** |
 
 ## adepta-sororitas
 

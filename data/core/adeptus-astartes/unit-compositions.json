@@ -15888,9 +15888,7 @@
           "shape": "hull",
           "draft": true
         },
-        "default_weapon_ids": [
-          "drop-pod"
-        ]
+        "default_weapon_ids": []
       }
     ],
     "game_version": {
