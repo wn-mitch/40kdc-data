@@ -5,6 +5,7 @@ import { DEFAULT_DUMP_PATH, loadDump, MfmDump } from "../src/mfm/loader.js";
 import { CORE_DIR } from "../src/mfm/repo-files.js";
 import { deriveWargear, limitedSetBudgets, runCompositionNames } from "../src/mfm/wargear.js";
 import { partialDump } from "./mfm-fixture.js";
+import { applyModelFlags } from "../src/mfm/model-flags.js";
 
 /**
  * A Legionaries-shaped dump: the champion and the troopers can each swap their
@@ -191,5 +192,51 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("per-model Enhancement exclus
       "transcendent-ctan/Transcendent C’tan",
     ]);
     expect(runCompositionNames(loadDump()).staged).toEqual([]);
+  });
+});
+
+/** composition-names projects the miniature Warlord flags onto composition model rows. */
+describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("per-model Warlord flags over the real dump", () => {
+  const rowsWith = (field: string): string[] =>
+    fs
+      .readdirSync(CORE_DIR)
+      .flatMap((dir) => {
+        const p = path.join(CORE_DIR, dir, "unit-compositions.json");
+        if (!fs.existsSync(p)) return [];
+        const comps = JSON.parse(fs.readFileSync(p, "utf8")) as { models: Record<string, unknown>[] }[];
+        return comps.flatMap((c) => c.models.filter((m) => m[field] === true).map((m) => String(m.name)));
+      })
+      .sort();
+  const dumpNames = (dump: MfmDump, key: string): string[] =>
+    dump
+      .table("miniature")
+      .filter((m) => (m as unknown as Record<string, unknown>)[key] === true)
+      .map((m) => dump.enName(m) ?? "")
+      .sort();
+
+  it("flags every miniature the dump marks, on the model row of the same name", () => {
+    const dump = loadDump();
+    const cannot = rowsWith("cannot_be_warlord");
+    const supreme = rowsWith("is_supreme_commander");
+    expect(cannot).toEqual(dumpNames(dump, "cannotBeWarlord"));
+    expect(supreme).toEqual(dumpNames(dump, "isSupremeCommander"));
+    expect(cannot.length).toBe(29);
+    expect(supreme).toContain("Szarekh");
+    // Only Titan datasheets carry canBeNonCharacterWarlord, and the repo seeds none.
+    expect(rowsWith("can_be_non_character_warlord")).toEqual([]);
+    expect(runCompositionNames(dump).staged).toEqual([]);
+  });
+});
+
+describe("applyModelFlags", () => {
+  it("sets a flagged row, clears a row the dump no longer flags, and reports change", () => {
+    const flagged = new Map([["cannot_be_warlord", new Set(["A"])]]) as Parameters<typeof applyModelFlags>[1];
+    const a: Record<string, unknown> & { name: string } = { name: "A" };
+    const b: Record<string, unknown> & { name: string } = { name: "B", cannot_be_warlord: true, is_supreme_commander: true };
+    expect(applyModelFlags(a, flagged)).toBe(true);
+    expect(applyModelFlags(b, flagged)).toBe(true);
+    expect(a).toEqual({ name: "A", cannot_be_warlord: true });
+    expect(b).toEqual({ name: "B" });
+    expect(applyModelFlags(a, flagged)).toBe(false);
   });
 });

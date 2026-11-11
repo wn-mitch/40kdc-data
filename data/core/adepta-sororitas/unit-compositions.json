@@ -2877,7 +2877,8 @@
           "lance-of-illumination",
           "fidelis",
           "paragon-missile-launcher"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {

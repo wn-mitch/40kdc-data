@@ -56970,6 +56970,16 @@ pub struct UnitCharacteristic {
 ///            "description": "This model's base. Absent when no base could be resolved for the model.",
 ///            "$ref": "#/$defs/base-size"
 ///          },
+///          "can_be_non_character_warlord": {
+///            "description": "True when this model can be the army's Warlord although it is not a CHARACTER (e.g. a Warlord Titan). Without it, the Warlord must be a CHARACTER.",
+///            "default": false,
+///            "type": "boolean"
+///          },
+///          "cannot_be_warlord": {
+///            "description": "True when this model cannot be the army's Warlord (e.g. the Eversor Assassin, Murderfang). A unit whose every model carries it cannot be the Warlord's unit unless a selected detachment names it for Warlord.",
+///            "default": false,
+///            "type": "boolean"
+///          },
 ///          "default_weapon_ids": {
 ///            "description": "The model's no-choice equipment multiset, used by base_loadout. It must describe a legal default configuration even when whole-model variants are present; it does not implicitly add another selectable variant.",
 ///            "type": "array",
@@ -56994,6 +57004,11 @@ pub struct UnitCharacteristic {
 ///            ]
 ///          },
 ///          "is_leader_model": {
+///            "default": false,
+///            "type": "boolean"
+///          },
+///          "is_supreme_commander": {
+///            "description": "True when this model must be the army's Warlord if its unit is included (Supreme Commander, e.g. Roboute Guilliman). When an army includes several such units, one of them must be the Warlord.",
 ///            "default": false,
 ///            "type": "boolean"
 ///          },
@@ -58492,6 +58507,16 @@ impl<'de> ::serde::Deserialize<'de> for UnitCompositionLoadoutUniformItemModel {
 ///      "description": "This model's base. Absent when no base could be resolved for the model.",
 ///      "$ref": "#/$defs/base-size"
 ///    },
+///    "can_be_non_character_warlord": {
+///      "description": "True when this model can be the army's Warlord although it is not a CHARACTER (e.g. a Warlord Titan). Without it, the Warlord must be a CHARACTER.",
+///      "default": false,
+///      "type": "boolean"
+///    },
+///    "cannot_be_warlord": {
+///      "description": "True when this model cannot be the army's Warlord (e.g. the Eversor Assassin, Murderfang). A unit whose every model carries it cannot be the Warlord's unit unless a selected detachment names it for Warlord.",
+///      "default": false,
+///      "type": "boolean"
+///    },
 ///    "default_weapon_ids": {
 ///      "description": "The model's no-choice equipment multiset, used by base_loadout. It must describe a legal default configuration even when whole-model variants are present; it does not implicitly add another selectable variant.",
 ///      "type": "array",
@@ -58516,6 +58541,11 @@ impl<'de> ::serde::Deserialize<'de> for UnitCompositionLoadoutUniformItemModel {
 ///      ]
 ///    },
 ///    "is_leader_model": {
+///      "default": false,
+///      "type": "boolean"
+///    },
+///    "is_supreme_commander": {
+///      "description": "True when this model must be the army's Warlord if its unit is included (Supreme Commander, e.g. Roboute Guilliman). When an army includes several such units, one of them must be the Warlord.",
 ///      "default": false,
 ///      "type": "boolean"
 ///    },
@@ -58632,6 +58662,12 @@ pub struct UnitCompositionModelsItem {
     ///This model's base. Absent when no base could be resolved for the model.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub base_size_mm: ::std::option::Option<BaseSize>,
+    ///True when this model can be the army's Warlord although it is not a CHARACTER (e.g. a Warlord Titan). Without it, the Warlord must be a CHARACTER.
+    #[serde(default)]
+    pub can_be_non_character_warlord: bool,
+    ///True when this model cannot be the army's Warlord (e.g. the Eversor Assassin, Murderfang). A unit whose every model carries it cannot be the Warlord's unit unless a selected detachment names it for Warlord.
+    #[serde(default)]
+    pub cannot_be_warlord: bool,
     ///The model's no-choice equipment multiset, used by base_loadout. It must describe a legal default configuration even when whole-model variants are present; it does not implicitly add another selectable variant.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub default_weapon_ids: ::std::vec::Vec<EntityId>,
@@ -58643,6 +58679,9 @@ pub struct UnitCompositionModelsItem {
     pub hull_shape_id: ::std::option::Option<EntityId>,
     #[serde(default)]
     pub is_leader_model: bool,
+    ///True when this model must be the army's Warlord if its unit is included (Supreme Commander, e.g. Roboute Guilliman). When an army includes several such units, one of them must be the Warlord.
+    #[serde(default)]
+    pub is_supreme_commander: bool,
     ///Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, `count * floor(scope_model_count / per_models)` when `stepped`, or simply `count` when `per_models` is 0.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub loadout_variant_budgets: ::std::vec::Vec<

@@ -1138,7 +1138,8 @@
           "cawls-omnissian-axe",
           "mechadendrite-hive",
           "solar-atomiser"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {
@@ -1915,7 +1916,8 @@
           "sydonian-feet",
           "mechanicus-pistol",
           "radium-jezzail-sydonian-skatros"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -6252,7 +6254,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 80
-        }
+        },
+        "is_supreme_commander": true
       }
     ],
     "game_version": {

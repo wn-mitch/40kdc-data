@@ -7686,7 +7686,8 @@
         "default_weapon_ids": [
           "arma-luminis",
           "fealty"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {
@@ -15787,7 +15788,8 @@
         "default_weapon_ids": [
           "emperors-sword",
           "hand-of-dominion"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {
@@ -21196,7 +21198,8 @@
         "default_weapon_ids": [
           "combi-weapon-lieutenant-with-combi-weapon",
           "paired-combat-blades-lieutenant-with-combi-weapon"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -29948,7 +29951,8 @@
           "storm-bolter-murderfang",
           "heavy-flamer-murderfang",
           "murderclaws"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {

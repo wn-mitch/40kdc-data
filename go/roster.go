@@ -459,6 +459,33 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 	}
 
+	// --- Warlord eligibility (per-model Warlord flags, CHARACTER, Supreme Commander).
+	detachmentWarlords := map[string]bool{}
+	for _, d := range detachments {
+		for _, id := range getStrList(d, "mandatory_warlord_datasheet_ids") {
+			detachmentWarlords[id] = true
+		}
+		for _, id := range getStrList(d, "granted_warlord_datasheet_ids") {
+			detachmentWarlords[id] = true
+		}
+	}
+	warlordUnits := make([]*warlordUnit, len(spec.units))
+	for idx, su := range spec.units {
+		view := views[idx]
+		if view == nil {
+			continue
+		}
+		_, kwChar := keywordSet(view, su.keywordOverrides)["Character"]
+		rows, _ := ds.unitCompositionOf(view.Raw)
+		warlordUnits[idx] = &warlordUnit{
+			unitID:      getStr(view.Raw, "id"),
+			isWarlord:   su.isWarlord,
+			isCharacter: isCharacter(view) || kwChar,
+			rows:        rows,
+		}
+	}
+	warlordViolations(warlordUnits, detachmentWarlords, errV)
+
 	// --- Detachment datasheet exclusions (e.g. Shadow Legion). ----------------
 	for _, d := range detachments {
 		excluded := map[string]bool{}
@@ -620,15 +647,6 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 	// Mirror of TS: the rule must be offered, and its points cap and
 	// Warlord/Enhancement locks apply; a selected detachment's mandatory or
 	// granted Warlord datasheets lift the Warlord lock.
-	detachmentWarlords := map[string]bool{}
-	for _, d := range detachments {
-		for _, id := range getStrList(d, "mandatory_warlord_datasheet_ids") {
-			detachmentWarlords[id] = true
-		}
-		for _, id := range getStrList(d, "granted_warlord_datasheet_ids") {
-			detachmentWarlords[id] = true
-		}
-	}
 	if spec.factionID != "" {
 		for _, ruleAny := range ds.AlliedRules.All() {
 			rule, ok := asMap(ruleAny)

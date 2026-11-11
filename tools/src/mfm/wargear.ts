@@ -51,6 +51,7 @@ import { type GoldenMode, modeOfPublication, mergeMode } from "./game-mode.js";
 import { repoDirForFactionName, repoDirs, FACTION_ALIASES, SHARED_ROSTERS } from "./faction-map.js";
 import type { StagedWrite } from "./apply.js";
 import { currentGameVersion } from "./dataslate.js";
+import { applyModelFlags, flaggedModelNames } from "./model-flags.js";
 import {
   mintWargear,
   mintWeapon,
@@ -136,6 +137,10 @@ interface CompModel {
   is_leader_model?: boolean;
   /** The dump's miniature.excludedFromEnhancements for this model row. */
   excluded_from_enhancements?: boolean;
+  /** The dump's miniature Warlord flags for this model row (see model-flags.ts). */
+  cannot_be_warlord?: boolean;
+  can_be_non_character_warlord?: boolean;
+  is_supreme_commander?: boolean;
   [k: string]: unknown;
 }
 interface CompRecord {
@@ -2867,27 +2872,13 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
       if (matchedRepoIds.has(id) || (!compsByUnit.has(id) && !unitById.has(id))) continue;
       matchedRepoIds.add(id);
       matched++;
-      // Per-model Enhancement eligibility (miniature.excludedFromEnhancements),
+      // Per-model flags (miniature.excludedFromEnhancements, the Warlord flags),
       // authoritative and matched by model name: set on the matching row, cleared
       // when the dump drops it. Runs before the composition rebuild, which skips
       // datasheets with no composition rows (Sir Hekhtur).
-      const excludedNames = new Set(
-        (dump.groupBy("miniature", "datasheetId").get(ds.id!) ?? [])
-          .filter((m) => m.excludedFromEnhancements)
-          .map((m) => dump.enName(m))
-          .filter((n): n is string => !!n),
-      );
+      const flagged = flaggedModelNames(dump, ds.id!);
       for (const comp of compsByUnit.get(id) ?? []) {
-        for (const row of comp.models) {
-          const excluded = excludedNames.has(row.name);
-          if (excluded && row.excluded_from_enhancements !== true) {
-            row.excluded_from_enhancements = true;
-            changed = true;
-          } else if (!excluded && row.excluded_from_enhancements !== undefined) {
-            delete row.excluded_from_enhancements;
-            changed = true;
-          }
-        }
+        for (const row of comp.models) if (applyModelFlags(row, flagged)) changed = true;
       }
       const agg = aggregateComposition(dump, ds.id!);
       if (agg.skip === "duplicate-names") {
@@ -2919,7 +2910,7 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
           row.is_leader_model = view.length > 1 && d.max === 1 && view.some((x) => x.name !== d.name && x.max > 1);
           const def = withManual(d.name, defaultsByModel.get(d.name));
           if (def?.length) row.default_weapon_ids = def;
-          if (excludedNames.has(d.name)) row.excluded_from_enhancements = true;
+          applyModelFlags(row, flagged);
           return row;
         });
         const modes = (unit as { game_modes?: string[] }).game_modes;

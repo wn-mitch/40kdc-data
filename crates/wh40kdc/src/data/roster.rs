@@ -21,6 +21,8 @@ use crate::generated::{Unit, UnitRole};
 use crate::import::{BattleSize, Roster};
 use crate::Dataset;
 
+use super::roster_warlord::{warlord_violations, WarlordUnit};
+
 /// Army-construction violation codes (distinct from per-unit loadout codes).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum RosterViolationCode {
@@ -45,6 +47,9 @@ pub enum RosterViolationCode {
     NoWarlord,
     MultipleWarlords,
     WarlordNotMandated,
+    CannotBeWarlord,
+    WarlordNotCharacter,
+    WarlordNotSupremeCommander,
     DetachmentExcludedDatasheet,
     KeywordLimitExceeded,
     UnitLimitExceeded,
@@ -80,6 +85,9 @@ impl RosterViolationCode {
             RosterViolationCode::NoWarlord => "no-warlord",
             RosterViolationCode::MultipleWarlords => "multiple-warlords",
             RosterViolationCode::WarlordNotMandated => "warlord-not-mandated",
+            RosterViolationCode::CannotBeWarlord => "cannot-be-warlord",
+            RosterViolationCode::WarlordNotCharacter => "warlord-not-character",
+            RosterViolationCode::WarlordNotSupremeCommander => "warlord-not-supreme-commander",
             RosterViolationCode::DetachmentExcludedDatasheet => "detachment-excluded-datasheet",
             RosterViolationCode::KeywordLimitExceeded => "keyword-limit-exceeded",
             RosterViolationCode::UnitLimitExceeded => "unit-limit-exceeded",
@@ -776,6 +784,40 @@ pub fn validate_roster_core_with_keyword_overrides(
         }
     }
 
+    // --- Warlord eligibility (per-model Warlord flags, CHARACTER, Supreme Commander).
+    let detachment_warlords: HashSet<&str> = detachments
+        .iter()
+        .flat_map(|d| {
+            d.mandatory_warlord_datasheet_ids
+                .iter()
+                .flatten()
+                .chain(d.granted_warlord_datasheet_ids.iter().flatten())
+                .map(|id| id.as_str())
+        })
+        .collect();
+    let warlord_units: Vec<Option<WarlordUnit>> = spec
+        .units
+        .iter()
+        .enumerate()
+        .map(|(idx, su)| {
+            let view = views[idx]?;
+            let overrides = keyword_overrides.get(idx).map(Vec::as_slice).unwrap_or(&[]);
+            let is_character = is_character(view, overrides)
+                || roster_keyword_set(view, &army_keywords, &spec.detachment_ids, overrides)
+                    .contains("Character");
+            Some(WarlordUnit {
+                unit_id: view.id.as_str(),
+                is_warlord: su.is_warlord,
+                is_character,
+                rows: dataset
+                    .unit_composition_of(view)
+                    .map(|c| c.models.as_slice())
+                    .unwrap_or(&[]),
+            })
+        })
+        .collect();
+    army.extend(warlord_violations(&warlord_units, &detachment_warlords));
+
     // --- Detachment datasheet exclusions (e.g. Shadow Legion). ----------------
     // Mirror of TS `detachment-excluded-datasheet`.
     for d in &detachments {
@@ -937,16 +979,6 @@ pub fn validate_roster_core_with_keyword_overrides(
     // Mirror of TS: the rule must be offered, and its points cap and
     // Warlord/Enhancement locks apply; a selected detachment's mandatory or
     // granted Warlord datasheets lift the Warlord lock.
-    let detachment_warlords: HashSet<&str> = detachments
-        .iter()
-        .flat_map(|d| {
-            d.mandatory_warlord_datasheet_ids
-                .iter()
-                .flatten()
-                .chain(d.granted_warlord_datasheet_ids.iter().flatten())
-                .map(|id| id.as_str())
-        })
-        .collect();
     if let Some(army_faction) = faction {
         for rule in dataset.allied_rules.all() {
             if !rule.exclusive

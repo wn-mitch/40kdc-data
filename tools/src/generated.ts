@@ -7940,6 +7940,18 @@ export interface UnitComposition {
        * True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded.
        */
       excluded_from_enhancements?: boolean;
+      /**
+       * True when this model cannot be the army's Warlord (e.g. the Eversor Assassin, Murderfang). A unit whose every model carries it cannot be the Warlord's unit unless a selected detachment names it for Warlord.
+       */
+      cannot_be_warlord?: boolean;
+      /**
+       * True when this model can be the army's Warlord although it is not a CHARACTER (e.g. a Warlord Titan). Without it, the Warlord must be a CHARACTER.
+       */
+      can_be_non_character_warlord?: boolean;
+      /**
+       * True when this model must be the army's Warlord if its unit is included (Supreme Commander, e.g. Roboute Guilliman). When an army includes several such units, one of them must be the Warlord.
+       */
+      is_supreme_commander?: boolean;
       base_size_mm?: BaseSize1;
       /**
        * Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to "hull".
@@ -8048,6 +8060,18 @@ export interface UnitComposition {
        * True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded.
        */
       excluded_from_enhancements?: boolean;
+      /**
+       * True when this model cannot be the army's Warlord (e.g. the Eversor Assassin, Murderfang). A unit whose every model carries it cannot be the Warlord's unit unless a selected detachment names it for Warlord.
+       */
+      cannot_be_warlord?: boolean;
+      /**
+       * True when this model can be the army's Warlord although it is not a CHARACTER (e.g. a Warlord Titan). Without it, the Warlord must be a CHARACTER.
+       */
+      can_be_non_character_warlord?: boolean;
+      /**
+       * True when this model must be the army's Warlord if its unit is included (Supreme Commander, e.g. Roboute Guilliman). When an army includes several such units, one of them must be the Warlord.
+       */
+      is_supreme_commander?: boolean;
       base_size_mm?: BaseSize1;
       /**
        * Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to "hull".

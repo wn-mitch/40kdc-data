@@ -28,6 +28,7 @@ from wh40kdc.data.enhancement_eligibility import (
 )
 from wh40kdc.data.list_keywords import list_building_keyword_changes, with_keyword_changes
 from wh40kdc.data.pricing import host_unit_points, wargear_points
+from wh40kdc.data.roster_warlord import warlord_violations
 
 #: Army-construction violation codes (distinct from per-unit loadout codes).
 ROSTER_VIOLATION_CODES = (
@@ -52,6 +53,9 @@ ROSTER_VIOLATION_CODES = (
     "no-warlord",
     "multiple-warlords",
     "warlord-not-mandated",
+    "cannot-be-warlord",
+    "warlord-not-character",
+    "warlord-not-supreme-commander",
     "detachment-excluded-datasheet",
     "keyword-limit-exceeded",
     "unit-limit-exceeded",
@@ -486,6 +490,32 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                 f"{d['id']} requires the Warlord to be one of: {', '.join(mandated)}",
             )
 
+    # --- Warlord eligibility (per-model Warlord flags, CHARACTER, Supreme Commander).
+    detachment_warlords = {
+        uid
+        for d in detachments
+        for uid in (d.get("mandatory_warlord_datasheet_ids") or [])
+        + (d.get("granted_warlord_datasheet_ids") or [])
+    }
+    warlord_units: list[dict[str, Any] | None] = []
+    for idx, su in enumerate(spec_units):
+        view = views[idx]
+        if view is None:
+            warlord_units.append(None)
+            continue
+        overrides = su.get("keyword_overrides") or []
+        kws = _keyword_set(view.raw, army_keywords, army_keyword_set, detachment_ids, overrides)
+        warlord_units.append(
+            {
+                "unit_id": view.id,
+                "is_warlord": su.get("is_warlord") is True,
+                "is_character": _is_character(view.raw) or "Character" in kws,
+                "rows": (dataset.unit_composition_of(view.raw) or {}).get("models") or [],
+            }
+        )
+    for code, id_, message, unit_index in warlord_violations(warlord_units, detachment_warlords):
+        err(code, id_, message, unit_index)
+
     # --- Detachment datasheet exclusions (e.g. Shadow Legion). ----------------
     for d in detachments:
         excluded = d.get("excluded_datasheet_ids") or []
@@ -593,12 +623,6 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
     # Mirror of TS: the rule must be offered, and its points cap and
     # Warlord/Enhancement locks apply; a selected detachment's mandatory or
     # granted Warlord datasheets lift the Warlord lock.
-    detachment_warlords = {
-        uid
-        for d in detachments
-        for uid in (d.get("mandatory_warlord_datasheet_ids") or [])
-        + (d.get("granted_warlord_datasheet_ids") or [])
-    }
     for rule in dataset.allied_rules.all if faction_id else []:
         if not rule.get("exclusive") or rule.get("source_faction_id") != faction_id:
             continue

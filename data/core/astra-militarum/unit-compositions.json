@@ -912,7 +912,8 @@
         "default_weapon_ids": [
           "ripper-gun",
           "huge-knife"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -1975,7 +1976,8 @@
           "sols-righteous-gaze",
           "conquest",
           "konstantins-hooves"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {
@@ -8160,7 +8162,8 @@
           "ripper-gun-ogryn-bodyguard",
           "close-combat-weapon-ogryn-bodyguard"
         ],
-        "excluded_from_enhancements": true
+        "excluded_from_enhancements": true,
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -13328,7 +13331,8 @@
         "default_weapon_ids": [
           "ripper-pistol",
           "envenomed-blade"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {

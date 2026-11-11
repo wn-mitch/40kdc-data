@@ -20,6 +20,7 @@ import { meetsEnhancementGroups, missingRequiredAbilities } from "./enhancement-
 import { listBuildingKeywordChanges, withKeywordChanges } from "./list-building-keywords.js";
 import type { Violation } from "./loadout.js";
 import { hostUnitPoints, wargearPoints } from "./pricing.js";
+import { warlordViolations, type WarlordViolationCode } from "./roster-warlord.js";
 
 /**
  * Resolve a roster's unit entry against the dataset, returning the linked
@@ -157,6 +158,7 @@ export type RosterViolationCode =
   | "no-warlord"
   | "multiple-warlords"
   | "warlord-not-mandated"
+  | WarlordViolationCode
   | "detachment-excluded-datasheet"
   | "keyword-limit-exceeded"
   | "unit-limit-exceeded"
@@ -487,6 +489,22 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
       err("warlord-not-mandated", d.id, `${d.id} requires the Warlord to be one of: ${mandated.join(", ")}`);
   }
 
+  // --- Warlord eligibility (per-model Warlord flags, CHARACTER, Supreme Commander).
+  const detachmentWarlords = new Set<string>(
+    detachments.flatMap((d) => [...(d.mandatory_warlord_datasheet_ids ?? []), ...(d.granted_warlord_datasheet_ids ?? [])]),
+  );
+  const warlordUnits = spec.units.map((su, idx) => {
+    const view = views[idx];
+    if (!view) return undefined;
+    return {
+      unitId: view.id,
+      isWarlord: su.isWarlord,
+      isCharacter: isCharacter(view) || keywordSet(view, su).has("Character"),
+      rows: dataset.unitCompositionOf(view.raw)?.models ?? [],
+    };
+  });
+  for (const v of warlordViolations(warlordUnits, detachmentWarlords)) err(v.code, v.id, v.message, v.unitIndex);
+
   // --- Detachment datasheet exclusions (e.g. Shadow Legion). ----------------
   for (const d of detachments) {
     const excluded = d.excluded_datasheet_ids ?? [];
@@ -568,9 +586,6 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
   // the rule must be offered (army keyword + detachment gates), and its points cap
   // and Warlord/Enhancement locks apply. A selected detachment that names a unit
   // for Warlord (mandatory or granted) lifts the Warlord lock for it.
-  const detachmentWarlords = new Set<string>(
-    detachments.flatMap((d) => [...(d.mandatory_warlord_datasheet_ids ?? []), ...(d.granted_warlord_datasheet_ids ?? [])]),
-  );
   for (const rule of dataset.alliedRules.all) {
     if (!rule.exclusive || !spec.factionId || rule.source_faction_id !== spec.factionId) continue;
     const pool = new Set(rule.source_datasheet_ids ?? []);

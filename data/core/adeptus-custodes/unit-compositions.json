@@ -3213,7 +3213,8 @@
         "default_weapon_ids": [
           "watchers-axe",
           "eagles-scream"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {

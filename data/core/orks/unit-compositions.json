@@ -1936,7 +1936,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 80
-        }
+        },
+        "is_supreme_commander": true
       }
     ],
     "game_version": {

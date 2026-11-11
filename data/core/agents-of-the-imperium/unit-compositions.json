@@ -928,7 +928,8 @@
         "default_weapon_ids": [
           "neural-shredder",
           "phase-sword-and-poison-blades"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -3228,7 +3229,8 @@
         "default_weapon_ids": [
           "executioner-pistol",
           "power-sword-and-neuro-gauntlet"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -4213,7 +4215,8 @@
           "exitus-pistol",
           "exitus-rifle",
           "vindicare-combat-knife"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -5369,7 +5372,8 @@
         "default_weapon_ids": [
           "life-draining-touch",
           "animus-speculum"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {

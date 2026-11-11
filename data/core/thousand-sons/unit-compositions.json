@@ -3083,7 +3083,8 @@
           "gaze-of-magnus",
           "blade-of-magnus",
           "tzeentchs-firestorm"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {
@@ -6421,7 +6422,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 100
-        }
+        },
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -6812,7 +6814,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 100
-        }
+        },
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {

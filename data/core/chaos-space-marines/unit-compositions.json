@@ -11556,7 +11556,8 @@
         "default_weapon_ids": [
           "talon-of-horus",
           "drachnyen"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {

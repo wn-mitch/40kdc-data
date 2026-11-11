@@ -3978,7 +3978,8 @@
           "flip-belt",
           "shrieker-cannon",
           "jesters-blade"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -4492,7 +4493,8 @@
         "default_weapon_ids": [
           "flip-belt",
           "solitaire-weapons"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -8752,7 +8754,8 @@
           "shuriken-pistol-shadowseer",
           "miststave",
           "flip-belt"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -12630,7 +12633,8 @@
           "shuriken-pistol-troupe-master",
           "troupe-masters-blade",
           "flip-belt"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {

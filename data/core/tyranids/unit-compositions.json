@@ -2166,7 +2166,8 @@
         },
         "default_weapon_ids": [
           "lictor-claws-and-talons"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {

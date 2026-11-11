@@ -3729,7 +3729,8 @@
         "default_weapon_ids": [
           "betraying-shades",
           "the-blade-of-shadows"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {
@@ -4846,7 +4847,8 @@
           "fire-of-tzeentch",
           "flamer-mouths-exalted-flamer"
         ],
-        "excluded_from_enhancements": true
+        "excluded_from_enhancements": true,
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {

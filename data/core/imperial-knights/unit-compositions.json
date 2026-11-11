@@ -2758,7 +2758,8 @@
           "close-combat-weapon",
           "hekhturs-pistol"
         ],
-        "excluded_from_enhancements": true
+        "excluded_from_enhancements": true,
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {

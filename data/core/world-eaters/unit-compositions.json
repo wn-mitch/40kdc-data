@@ -3896,7 +3896,8 @@
         },
         "default_weapon_ids": [
           "samniarius-and-spinegrinder"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {
@@ -6603,7 +6604,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 100
-        }
+        },
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -6707,7 +6709,8 @@
           "shape": "oval",
           "width": 120,
           "length": 92
-        }
+        },
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {

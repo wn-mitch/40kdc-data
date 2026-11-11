@@ -279,7 +279,7 @@
       ],
       "transforms": [
         {
-          "symbol": "tools/src/mfm/wargear.ts#runCompositionNames",
+          "symbol": "tools/src/mfm/model-flags.ts#applyModelFlags",
           "operation": "Set the flag on the model row whose name matches an excluded miniature; clear it otherwise."
         }
       ],
@@ -293,6 +293,33 @@
         "tools/src/mfm/wargear.ts#runCompositionNames"
       ],
       "reason": "The miniature flag marks a CHARACTER model that cannot be given an Enhancement."
+    },
+    "/models/*/cannot_be_warlord": {
+      "provenance": "direct", "coverage": "implemented",
+      "sources": ["data.miniature.cannotBeWarlord", "data.miniature.localisations.*.name"],
+      "joins": [{ "relation": "miniature.datasheetId", "direction": "children", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/model-flags.ts#applyModelFlags", "operation": "Set the flag on the model row whose name matches a flagged miniature; clear it otherwise." }],
+      "filters": ["Emit only when true."], "precedence": ["The current MFM miniature flag is authoritative."],
+      "consumers": ["tools/src/mfm/wargear.ts#runCompositionNames", "tools/src/data/roster-resolve.ts#validateRosterCore"],
+      "reason": "The model cannot be the Warlord (Assassins, Harlequin and Daemon allies, Murderfang); roster validation refuses a Warlord unit made only of such models unless a selected detachment names it."
+    },
+    "/models/*/can_be_non_character_warlord": {
+      "provenance": "direct", "coverage": "implemented",
+      "sources": ["data.miniature.canBeNonCharacterWarlord", "data.miniature.localisations.*.name"],
+      "joins": [{ "relation": "miniature.datasheetId", "direction": "children", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/model-flags.ts#applyModelFlags", "operation": "Set the flag on the model row whose name matches a flagged miniature; clear it otherwise." }],
+      "filters": ["Emit only when true."], "precedence": ["The current MFM miniature flag is authoritative."],
+      "consumers": ["tools/src/mfm/wargear.ts#runCompositionNames", "tools/src/data/roster-resolve.ts#validateRosterCore"],
+      "reason": "The model can be the Warlord without the CHARACTER keyword (Titan datasheets); roster validation otherwise requires a CHARACTER Warlord."
+    },
+    "/models/*/is_supreme_commander": {
+      "provenance": "direct", "coverage": "implemented",
+      "sources": ["data.miniature.isSupremeCommander", "data.miniature.localisations.*.name"],
+      "joins": [{ "relation": "miniature.datasheetId", "direction": "children", "purpose": "general" }],
+      "transforms": [{ "symbol": "tools/src/mfm/model-flags.ts#applyModelFlags", "operation": "Set the flag on the model row whose name matches a flagged miniature; clear it otherwise." }],
+      "filters": ["Emit only when true."], "precedence": ["The current MFM miniature flag is authoritative."],
+      "consumers": ["tools/src/mfm/wargear.ts#runCompositionNames", "tools/src/data/roster-resolve.ts#validateRosterCore"],
+      "reason": "The model carries Supreme Commander; roster validation requires the Warlord to be one of the army's Supreme Commander units when it includes any."
     },
     "/added_models": {
       "provenance": "derived", "coverage": "implemented",
@@ -881,9 +908,6 @@
     }
   },
   "unmapped_mfm_fields": [
-    { "source": "data.miniature.canBeNonCharacterWarlord", "candidate_pointer": "/models/*/is_leader_model", "reason": "A warlord eligibility flag is not the repository leader-model heuristic." },
-    { "source": "data.miniature.cannotBeWarlord", "candidate_pointer": "/models/*/is_leader_model", "reason": "A warlord restriction is not the repository leader-model heuristic." },
-    { "source": "data.miniature.isSupremeCommander", "candidate_pointer": null, "reason": "The current composition projection does not model this source classification." },
     { "source": "data.miniature.miniatureSlots", "candidate_pointer": null, "reason": "The current composition projection does not model source slot counts." },
     { "source": "data.unit_composition.points", "candidate_pointer": null, "reason": "Composition points belong to unit points projection, not this entity schema." },
     { "source": "data.unit_composition.referenceGroupingKeywordId", "candidate_pointer": null, "reason": "Reference grouping is applicability context for points, not a unit-composition property." },

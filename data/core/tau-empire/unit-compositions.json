@@ -5274,7 +5274,8 @@
           "battlesuit-fists-commander-shadowsun",
           "advanced-guardian-drone",
           "command-link-drone-aura"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {

@@ -551,7 +551,8 @@
     },
     "expected": [
       "army|error|detachment-tag-conflict:nightmare",
-      "army|warn|disposition-invalid:priority-assets"
+      "army|warn|disposition-invalid:priority-assets",
+      "u0|error|warlord-not-character:chaos-spawn"
     ]
   },
   {
@@ -581,7 +582,8 @@
       ]
     },
     "expected": [
-      "army|error|unit-minimum-unmet:War Dog"
+      "army|error|unit-minimum-unmet:War Dog",
+      "u0|error|warlord-not-character:war-dog-huntsman"
     ]
   },
   {
@@ -687,7 +689,7 @@
         {
           "unitId": "terminator-assault-squad",
           "modelCount": 10,
-          "isWarlord": true,
+          "isWarlord": false,
           "enhancementId": null,
           "leaderBodyguardId": null,
           "counts": {
@@ -747,7 +749,7 @@
         {
           "unitId": "captain",
           "modelCount": 1,
-          "isWarlord": false,
+          "isWarlord": true,
           "enhancementId": null,
           "leaderBodyguardId": null,
           "counts": {
@@ -1674,7 +1676,8 @@
       ]
     },
     "expected": [
-      "u0|error|ally-cannot-be-warlord:bloodthirster"
+      "u0|error|ally-cannot-be-warlord:bloodthirster",
+      "u0|error|cannot-be-warlord:bloodthirster"
     ]
   },
   {
@@ -2802,6 +2805,286 @@
     },
     "expected": [
       "u0|error|leader-must-attach:painboss"
+    ]
+  },
+  {
+    "name": "cannot-be-warlord",
+    "note": "Every model of the Warlord's unit carries cannot_be_warlord (Eversor Assassin).",
+    "args": {
+      "factionId": "agents-of-the-imperium",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [],
+      "units": [
+        {
+          "unitId": "eversor-assassin",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "executioner-pistol": 1,
+            "power-sword-and-neuro-gauntlet": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|cannot-be-warlord:eversor-assassin"
+    ]
+  },
+  {
+    "name": "cannot-be-warlord-troupe-master",
+    "args": {
+      "factionId": "aeldari",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [],
+      "units": [
+        {
+          "unitId": "troupe-master",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "flip-belt": 1,
+            "shuriken-pistol-troupe-master": 1,
+            "troupe-masters-blade": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|cannot-be-warlord:troupe-master"
+    ]
+  },
+  {
+    "name": "legal-granted-warlord-lifts-cannot-be-warlord",
+    "note": "Ghosts of the Webway names Troupe Master for Warlord, which lifts its cannot_be_warlord flag.",
+    "args": {
+      "factionId": "aeldari",
+      "battleSize": "strike-force",
+      "forceDisposition": "disruption",
+      "detachments": [
+        {
+          "id": "ghosts-of-the-webway"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "troupe-master",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "flip-belt": 1,
+            "shuriken-pistol-troupe-master": 1,
+            "troupe-masters-blade": 1
+          }
+        }
+      ]
+    },
+    "expected": []
+  },
+  {
+    "name": "warlord-not-character",
+    "args": {
+      "factionId": "world-eaters",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "berzerker-warband"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "khorne-berzerkers",
+          "modelCount": 10,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "bolt-pistol-khorne-berzerkers": 10,
+            "chainblade-khorne-berzerkers": 10
+          }
+        },
+        {
+          "unitId": "daemon-prince-of-khorne",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "hellforged-weapons": 1,
+            "infernal-cannon": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|warlord-not-character:khorne-berzerkers"
+    ]
+  },
+  {
+    "name": "warlord-not-supreme-commander",
+    "args": {
+      "factionId": "adeptus-astartes",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [],
+      "units": [
+        {
+          "unitId": "roboute-guilliman",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "emperors-sword": 1,
+            "hand-of-dominion": 1
+          }
+        },
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "army|error|warlord-not-supreme-commander:roboute-guilliman"
+    ]
+  },
+  {
+    "name": "legal-supreme-commander-warlord",
+    "args": {
+      "factionId": "adeptus-astartes",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [],
+      "units": [
+        {
+          "unitId": "roboute-guilliman",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "emperors-sword": 1,
+            "hand-of-dominion": 1
+          }
+        },
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
+        }
+      ]
+    },
+    "expected": []
+  },
+  {
+    "name": "legal-one-of-two-supreme-commanders-warlord",
+    "note": "With several Supreme Commander units, any one of them can be the Warlord.",
+    "args": {
+      "factionId": "adeptus-mechanicus",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [],
+      "units": [
+        {
+          "unitId": "belisarius-cawl",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "arc-scourge": 1,
+            "cawls-omnissian-axe": 1,
+            "mechadendrite-hive": 1,
+            "solar-atomiser": 1
+          }
+        },
+        {
+          "unitId": "thulia-ghuld",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "jericho-class-conversion-resonator": 1,
+            "rod-of-the-war-forge": 1
+          }
+        }
+      ]
+    },
+    "expected": []
+  },
+  {
+    "name": "warlord-not-supreme-commander-of-two",
+    "args": {
+      "factionId": "adeptus-mechanicus",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [],
+      "units": [
+        {
+          "unitId": "belisarius-cawl",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "arc-scourge": 1,
+            "cawls-omnissian-axe": 1,
+            "mechadendrite-hive": 1,
+            "solar-atomiser": 1
+          }
+        },
+        {
+          "unitId": "thulia-ghuld",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "jericho-class-conversion-resonator": 1,
+            "rod-of-the-war-forge": 1
+          }
+        },
+        {
+          "unitId": "tech-priest-dominus",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "macrostubber": 1,
+            "omnissian-axe": 1,
+            "volkite-blaster": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "army|error|warlord-not-supreme-commander:belisarius-cawl+thulia-ghuld"
     ]
   }
 ]

@@ -56,6 +56,7 @@ pub mod battle_sizes;
 mod list_keywords;
 #[cfg(feature = "import")]
 pub mod roster;
+mod roster_warlord;
 
 #[cfg(feature = "cruncher")]
 pub use abilities::{EligibilityInput, EligibleAbility, EligibleAbilitySource};

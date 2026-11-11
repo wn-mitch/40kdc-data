@@ -4331,7 +4331,8 @@
         "default_weapon_ids": [
           "gaze-of-death",
           "scythe-of-the-nightbringer"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -5512,7 +5513,8 @@
           "spear-of-the-void-dragon",
           "voltaic-storm",
           "canoptek-tail-blades"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -5643,7 +5645,8 @@
         "default_weapon_ids": [
           "cosmic-insanity",
           "golden-fists"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -5967,7 +5970,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 100
-        }
+        },
+        "is_supreme_commander": true
       },
       {
         "name": "Triarchal Menhir",
@@ -6251,7 +6255,8 @@
           "seismic-assault",
           "crackling-tendrils"
         ],
-        "excluded_from_enhancements": true
+        "excluded_from_enhancements": true,
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {

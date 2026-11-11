@@ -1329,7 +1329,8 @@
         },
         "default_weapon_ids": [
           "patriarchs-claws"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {
