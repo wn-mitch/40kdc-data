@@ -129,6 +129,37 @@ func TestRosterCorpusInputsImportToGoldens(t *testing.T) {
 	}
 }
 
+// TestCanonicalRosterSeedsPassThrough imports every decoded canonical Roster
+// seed (input.roster-json.json) through importRoster and requires the roster
+// golden exactly, diagnostics included: a canonical roster comes back as given
+// and is not re-resolved. Ties out with the TS/Rust/Python exact comparison of
+// canonical seeds; custodes-canonical-passthrough carries diagnostics that
+// re-resolution would rewrite.
+func TestCanonicalRosterSeedsPassThrough(t *testing.T) {
+	ds := EmbeddedDataset()
+	for _, caseDir := range rosterCaseDirs(t) {
+		caseName := filepath.Base(caseDir)
+		data, err := os.ReadFile(filepath.Join(caseDir, "input.roster-json.json"))
+		if os.IsNotExist(err) {
+			continue
+		}
+		if err != nil {
+			t.Fatalf("roster/%s: read canonical seed: %v", caseName, err)
+		}
+		var decoded any
+		if err := json.Unmarshal(data, &decoded); err != nil {
+			t.Fatalf("roster/%s: parse canonical seed: %v", caseName, err)
+		}
+		got, err := importRoster(decoded, ds)
+		if err != nil {
+			t.Fatalf("roster/%s: canonical seed failed to import: %v", caseName, err)
+		}
+		if g, w := canon(t, got), canon(t, rosterGolden(t, caseDir)); g != w {
+			t.Fatalf("roster/%s: canonical seed diverged from golden\n got: %s\nwant: %s", caseName, g, w)
+		}
+	}
+}
+
 // TestRosterCorpusDatasetFreeExportGoldens byte-compares every present golden
 // for every registered Dataset-free serializer. Dataset-backed Yellowscribe
 // remains covered by TestYellowscribeExportGoldens.
