@@ -195,14 +195,15 @@ describe("Semantic authoring independent sentences", () => {
 
   it("keeps a later sentence that cannot stand alone tied to the one it replaces", () => {
     // "instead" replaces the first sentence's effect, so the moment sentence stays tied to it. The replacement holds
-    // only under the later moment, which no DSL form reads yet (compile-part-instead.ts), so the compile is refused.
-    const text = "This model has the Feel No Pain 5+ ability. At the start of any turn, if this model has lost wounds, until the end of the battle, it has the Feel No Pain 4+ ability instead.";
+    // only under the later moment; a worse Feel No Pain there would leave the better one in force, so that has no
+    // DSL reading (compile-part-instead.ts) and the compile is refused.
+    const text = "This model has the Feel No Pain 4+ ability. At the start of any turn, if this model has lost wounds, until the end of the battle, it has the Feel No Pain 5+ ability instead.";
     const list = placed(text,
-      ["This model has the Feel No Pain 5+ ability", "feel-no-pain", { subject: "this-model", threshold: 5, against: "all" }],
-      ["At the start of any turn", "turn-start", { turn: "player-turn" }],
+      ["This model has the Feel No Pain 4+ ability", "feel-no-pain", { subject: "this-model", threshold: 4, against: "all" }],
+      ["At the start of any turn", "turn-start", { turn: "any-turn" }],
       ["this model has lost wounds", "wounds-state", { subject: "this-model", kind: "lost", negated: false }],
       ["until the end of the battle", "duration", { endpoint: "end-of-battle" }],
-      ["it has the Feel No Pain 4+", "feel-no-pain", { subject: "this-model", threshold: 4, against: "all" }],
+      ["it has the Feel No Pain 5+", "feel-no-pain", { subject: "this-model", threshold: 5, against: "all" }],
       ["instead", "instead", {}]);
     expect(sentenceSegments(list, text)).toHaveLength(2);
     const result = compileLeaves(list, text);

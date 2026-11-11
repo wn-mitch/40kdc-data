@@ -423,7 +423,7 @@ pub(crate) fn event_phrase(t: &P) -> String {
         "deployment-ended" => "after deployment".to_string(),
         "round-started" => "at the start of the battle round".to_string(),
         "round-ended" => "at the end of the battle round".to_string(),
-        "turn-started" => "at the start of the turn".to_string(),
+        "turn-started" => "at the start of each turn".to_string(),
         "turn-ended" => "at the end of the turn".to_string(),
         "step-started" => format!(
             "at the start of the {} step",

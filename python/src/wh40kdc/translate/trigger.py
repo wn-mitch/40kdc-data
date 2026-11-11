@@ -304,7 +304,7 @@ _FIXED_EVENTS: dict[str, str] = {
     "deployment-ended": "after deployment",
     "round-started": "at the start of the battle round",
     "round-ended": "at the end of the battle round",
-    "turn-started": "at the start of the turn",
+    "turn-started": "at the start of each turn",
     "turn-ended": "at the end of the turn",
 }
 

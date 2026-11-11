@@ -7235,7 +7235,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "tyranids",
@@ -7245,37 +7245,16 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "wounds",
-                "parameters": {
-                  "subject": "this-model",
-                  "lost": true
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "feel-no-pain",
-            "target": "this-model",
-            "modifier": {
-              "threshold": 5
-            }
+          "type": "feel-no-pain",
+          "target": "this-model",
+          "modifier": {
+            "threshold": 5
           }
         },
         {
           "type": "ability-part",
           "trigger": {
-            "event": "turn-started",
-            "condition": {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
-              }
-            }
+            "event": "turn-started"
           },
           "effect": {
             "type": "conditional",
@@ -7293,12 +7272,13 @@
                 "threshold": 4
               }
             }
-          }
+          },
+          "duration": "battle"
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "behavior": "reactive",
     "source_digest": "721a40c896affd0c3f43f5385e8c3b29b66a4830bc0cee8582c64bed7c3e984b"

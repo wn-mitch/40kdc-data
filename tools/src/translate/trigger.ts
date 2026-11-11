@@ -205,7 +205,7 @@ function eventPhrase(t: AbilityTrigger): string {
     case "round-ended":
       return "at the end of the battle round";
     case "turn-started":
-      return "at the start of the turn";
+      return "at the start of each turn";
     case "turn-ended":
       return "at the end of the turn";
     case "step-started":

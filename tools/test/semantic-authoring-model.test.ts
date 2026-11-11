@@ -612,9 +612,11 @@ describe("Semantic authoring turn and faction leaves", () => {
     try {
       expect(familyRole("turn-start")).toBe("EVENT");
       expect(familyRole("army-faction")).toBe("CONDITION");
-      for (const turn of ["battle-round", "player-turn", "opponent-turn"]) {
-        expect(validateFingerprint(value.db, "turn-start", { turn }, 1)).toMatch(/^fp_/);
+      for (const turn of ["battle-round", "player-turn", "opponent-turn", "any-turn"]) {
+        expect(validateFingerprint(value.db, "turn-start", { turn }, currentFamilyVersion("turn-start"))).toMatch(/^fp_/);
       }
+      // "Any turn" came with version 2; the retired version 1 never accepted it.
+      expect(() => normalizeFingerprintParameters("turn-start", { turn: "any-turn" }, 1)).toThrow(/turn-start\.turn/);
       expect(validateFingerprint(value.db, "army-faction", { faction: { source: "Example Guard" } }, 3, source)).toMatch(/^fp_/);
       expect(() => validateFingerprint(value.db, "army-faction", { faction: { source: "Other Guard" } }, 3, source)).toThrow(/exact source span/i);
       expect(() => normalizeFingerprintParameters("army-faction", { faction: "Example Guard" })).toThrow(/source-qualified/i);

@@ -32,6 +32,7 @@ const TRIGGERS: Record<string, Node> = {
   "event:army-selected": { event: "army-selected" },
   "turn-start:player-turn": { event: "turn-started", condition: { type: "player-turn-is", parameters: { turn: "your-turn" } } },
   "turn-start:opponent-turn": { event: "turn-started", condition: { type: "player-turn-is", parameters: { turn: "opponent-turn" } } },
+  "turn-start:any-turn": { event: "turn-started" },
   "turn-start:battle-round": { event: "round-started" },
   // Version 7 (batch 6): bare game-clock and history moments with no narrowing of their own.
   "event:battle-started": { event: "battle-started" },

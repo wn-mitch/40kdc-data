@@ -23,6 +23,7 @@ import { SELECTION_EXTENSIONS } from "./selections.js";
 import { SET_UP_EXTENSIONS } from "./set-up.js";
 import { TARGETING_ABILITY_EXTENSIONS } from "./targeting-ability.js";
 import { TARGETING_HISTORY_EXTENSIONS } from "./targeting-history.js";
+import { TURN_START_EXTENSIONS } from "./turn-start.js";
 import { UNIT_ACTIVITY_EXTENSIONS } from "./unit-activity.js";
 import { UNIT_FILTER_EXTENSIONS } from "./unit-filters.js";
 import { UNIT_NAME_EXTENSIONS } from "./unit-names.js";
@@ -68,6 +69,7 @@ const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [
   ...COUNTS_AS_MOVED_EXTENSIONS,
   ...TARGETING_ABILITY_EXTENSIONS,
   ...TARGETING_HISTORY_EXTENSIONS,
+  ...TURN_START_EXTENSIONS,
 ];
 
 const extensionVersions = new Map<string, FamilyExtension>();

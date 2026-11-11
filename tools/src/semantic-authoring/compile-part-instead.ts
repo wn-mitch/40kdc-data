@@ -203,6 +203,12 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
     // later moment holds only while that moment's part lasts, and a negated gate on the standing effect would test that
     // moment's condition when no such moment happened. The DSL has no part-long replacement of a standing effect yet.
     if (triggerIndexes.some((at) => at > replaced.index && at < replacement.index)) {
+      // "The bearer has Feel No Pain 5+. At the start of any turn, if …, it has Feel No Pain 4+ instead": a model uses
+      // only its best Feel No Pain (or invulnerable save), so a no-worse threshold granted alongside is the replacement.
+      if (bestWinsReplacement(replaced.leaf, replacement.leaf)) {
+        replacement.replaces = true;
+        continue;
+      }
       errors.push("\"Instead\" under a later moment replaces a standing effect only while that moment's part lasts; that has no DSL reading yet.");
       continue;
     }
@@ -229,6 +235,21 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
     // ("... attacks that target that enemy unit ... by 1, or by 2 instead"): the target condition sits on the first clause only.
     if (replaced.selected) replacement.selected = true;
   }
+}
+
+/** Effects of which a model uses only the best (lowest) threshold it has, whatever grants them. */
+const BEST_WINS = new Set(["feel-no-pain", "invulnerable-save"]);
+
+/**
+ * Whether `replacement` replaces `replaced` exactly by being granted alongside it: both are the same
+ * best-wins effect on the same subject (and, for Feel No Pain, against the same attacks), and the
+ * replacement's threshold is no worse. A worse threshold would leave the better one in force.
+ */
+function bestWinsReplacement(replaced: CompileLeaf, replacement: CompileLeaf): boolean {
+  if (!BEST_WINS.has(replacement.family_id) || replaced.family_id !== replacement.family_id) return false;
+  const [old, next] = [replaced.parameters, replacement.parameters];
+  if (old.subject !== next.subject || old.against !== next.against) return false;
+  return typeof old.threshold === "number" && typeof next.threshold === "number" && next.threshold <= old.threshold;
 }
 
 /**

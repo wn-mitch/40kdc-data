@@ -2364,37 +2364,16 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "conditional",
-          "condition": {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "wounds",
-                "parameters": {
-                  "subject": "this-model",
-                  "lost": true
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "feel-no-pain",
-            "target": "this-model",
-            "modifier": {
-              "threshold": 5
-            }
+          "type": "feel-no-pain",
+          "target": "this-model",
+          "modifier": {
+            "threshold": 5
           }
         },
         {
           "type": "ability-part",
           "trigger": {
-            "event": "turn-started",
-            "condition": {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
-              }
-            }
+            "event": "turn-started"
           },
           "effect": {
             "type": "conditional",
@@ -2412,15 +2391,16 @@
                 "threshold": 4
               }
             }
-          }
+          },
+          "duration": "battle"
         }
       ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "expected": {
-      "text": "For the rest of the battle:\n  -> Unless the model has lost wounds, this model has the Feel No Pain 5+ ability.\n  -> At the start of your turn: while the model has lost wounds, this model has the Feel No Pain 4+ ability."
+      "text": "This model has the Feel No Pain 5+ ability.\n-> At the start of each turn, for the rest of the battle: while the model has lost wounds, this model has the Feel No Pain 4+ ability."
     }
   },
   {
@@ -45600,7 +45580,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Your opponent's deployment zone is within Fabricated Zone for the rest of the battle. At the start of the turn, if you control more than 25% of the objectives in your territory, your territory is within Fabricated Zone until the end of the turn (evaluated once at that time). The area within 4\" of one or more friendly BEACON units is within Fabricated Zone, continuously as those units move. For each qualifying attack (for ranged attacks): You can, when resolving this use: you can re-roll a Hit roll of 1. If the unit has the ELITE keyword, you can, when resolving this use: you can re-roll a failed Hit roll instead."
+      "text": "Your opponent's deployment zone is within Fabricated Zone for the rest of the battle. At the start of each turn, if you control more than 25% of the objectives in your territory, your territory is within Fabricated Zone until the end of the turn (evaluated once at that time). The area within 4\" of one or more friendly BEACON units is within Fabricated Zone, continuously as those units move. For each qualifying attack (for ranged attacks): You can, when resolving this use: you can re-roll a Hit roll of 1. If the unit has the ELITE keyword, you can, when resolving this use: you can re-roll a failed Hit roll instead."
     }
   },
   {
