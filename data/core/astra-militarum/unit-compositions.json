@@ -12719,6 +12719,597 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
+    },
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lord Commissar",
+          "models": 1,
+          "items": [
+            {
+              "id": "laspistol-krieg-command-squad",
+              "count": 1
+            },
+            {
+              "id": "power-weapon-krieg-command-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Boltgun)",
+          "models": 1,
+          "items": [
+            {
+              "id": "boltgun-krieg-command-squad",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-krieg-command-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Chainsword)",
+          "models": 1,
+          "items": [
+            {
+              "id": "chainsword-krieg-command-squad",
+              "count": 1
+            },
+            {
+              "id": "laspistol-krieg-command-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Master Vox)",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-krieg-command-squad",
+              "count": 1
+            },
+            {
+              "id": "lasgun",
+              "count": 1
+            },
+            {
+              "id": "master-vox",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Regimental Standard)",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-krieg-command-squad",
+              "count": 1
+            },
+            {
+              "id": "lasgun",
+              "count": 1
+            },
+            {
+              "id": "regimental-standard",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Servo-scribes)",
+          "models": 1,
+          "items": [
+            {
+              "id": "alchemyk-counteragents",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-krieg-command-squad",
+              "count": 1
+            },
+            {
+              "id": "laspistol-krieg-command-squad",
+              "count": 1
+            },
+            {
+              "id": "servo-scribes",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lord Commissar",
+          "items": [
+            {
+              "id": "laspistol-krieg-command-squad",
+              "count": 1
+            },
+            {
+              "id": "power-weapon-krieg-command-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Boltgun)",
+          "items": [
+            {
+              "id": "boltgun-krieg-command-squad",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-krieg-command-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Chainsword)",
+          "items": [
+            {
+              "id": "chainsword-krieg-command-squad",
+              "count": 1
+            },
+            {
+              "id": "laspistol-krieg-command-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Master Vox)",
+          "items": [
+            {
+              "id": "close-combat-weapon-krieg-command-squad",
+              "count": 1
+            },
+            {
+              "id": "lasgun",
+              "count": 1
+            },
+            {
+              "id": "master-vox",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Regimental Standard)",
+          "items": [
+            {
+              "id": "close-combat-weapon-krieg-command-squad",
+              "count": 1
+            },
+            {
+              "id": "lasgun",
+              "count": 1
+            },
+            {
+              "id": "regimental-standard",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Servo-scribes)",
+          "items": [
+            {
+              "id": "alchemyk-counteragents",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-krieg-command-squad",
+              "count": 1
+            },
+            {
+              "id": "laspistol-krieg-command-squad",
+              "count": 1
+            },
+            {
+              "id": "servo-scribes",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lord Commissar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "plasma-pistol-krieg-command-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Lord Commissar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "laspistol-krieg-command-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Lord Commissar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "power-fist-krieg-command-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon-krieg-command-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Boltgun)",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "boltgun-krieg-command-squad",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-krieg-command-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon-krieg-command-squad",
+                "count": 1
+              },
+              {
+                "id": "flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon-krieg-command-squad",
+                "count": 1
+              },
+              {
+                "id": "grenade-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon-krieg-command-squad",
+                "count": 1
+              },
+              {
+                "id": "meltagun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon-krieg-command-squad",
+                "count": 1
+              },
+              {
+                "id": "plasma-gun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Chainsword)",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-krieg-command-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "laspistol-krieg-command-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-pistol-krieg-command-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Chainsword)",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chainsword-krieg-command-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon-krieg-command-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "trench-club",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Master Vox)",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-krieg-command-squad",
+                "count": 1
+              },
+              {
+                "id": "lasgun",
+                "count": 1
+              },
+              {
+                "id": "master-vox",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Regimental Standard)",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-krieg-command-squad",
+                "count": 1
+              },
+              {
+                "id": "lasgun",
+                "count": 1
+              },
+              {
+                "id": "regimental-standard",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Veteran Guardsman (Servo-scribes)",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "alchemyk-counteragents",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-krieg-command-squad",
+                "count": 1
+              },
+              {
+                "id": "laspistol-krieg-command-squad",
+                "count": 1
+              },
+              {
+                "id": "servo-scribes",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lord Commissar",
+          "id": "laspistol-krieg-command-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lord Commissar",
+          "id": "plasma-pistol-krieg-command-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Lord Commissar",
+          "id": "power-fist-krieg-command-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Lord Commissar",
+          "id": "power-weapon-krieg-command-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Veteran Guardsman (Boltgun)",
+          "id": "boltgun-krieg-command-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Veteran Guardsman (Boltgun)",
+          "id": "close-combat-weapon-krieg-command-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Veteran Guardsman (Boltgun)",
+          "id": "flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Veteran Guardsman (Boltgun)",
+          "id": "grenade-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Veteran Guardsman (Boltgun)",
+          "id": "meltagun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Veteran Guardsman (Boltgun)",
+          "id": "plasma-gun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Veteran Guardsman (Chainsword)",
+          "id": "bolt-pistol-krieg-command-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Veteran Guardsman (Chainsword)",
+          "id": "chainsword-krieg-command-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Veteran Guardsman (Chainsword)",
+          "id": "laspistol-krieg-command-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Veteran Guardsman (Chainsword)",
+          "id": "plasma-pistol-krieg-command-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Veteran Guardsman (Chainsword)",
+          "id": "power-weapon-krieg-command-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Veteran Guardsman (Chainsword)",
+          "id": "trench-club",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Veteran Guardsman (Master Vox)",
+          "id": "close-combat-weapon-krieg-command-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Veteran Guardsman (Master Vox)",
+          "id": "lasgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Veteran Guardsman (Master Vox)",
+          "id": "master-vox",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Veteran Guardsman (Regimental Standard)",
+          "id": "close-combat-weapon-krieg-command-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Veteran Guardsman (Regimental Standard)",
+          "id": "lasgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Veteran Guardsman (Regimental Standard)",
+          "id": "regimental-standard",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Veteran Guardsman (Servo-scribes)",
+          "id": "alchemyk-counteragents",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Veteran Guardsman (Servo-scribes)",
+          "id": "close-combat-weapon-krieg-command-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Veteran Guardsman (Servo-scribes)",
+          "id": "laspistol-krieg-command-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Veteran Guardsman (Servo-scribes)",
+          "id": "servo-scribes",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
     }
   },
   {

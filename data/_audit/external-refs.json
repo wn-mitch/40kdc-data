@@ -74,13 +74,13 @@
       }
     },
     "wargear": {
-      "entities": 201,
-      "with_external_refs": 149,
+      "entities": 202,
+      "with_external_refs": 150,
       "covered_entities_by_namespace": {
-        "mfm": 149
+        "mfm": 150
       },
       "references_by_namespace": {
-        "mfm": 180
+        "mfm": 181
       }
     }
   },

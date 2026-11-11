@@ -2032,6 +2032,267 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
+    },
+    "loadout": {
+      "stock": [
+        {
+          "model": "Brôkhyr Iron-master",
+          "models": 1,
+          "items": [
+            {
+              "id": "graviton-hammer",
+              "count": 1
+            },
+            {
+              "id": "graviton-rifle",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "E-COG with Autoch-pattern Bolt Pistol",
+          "models": 1,
+          "items": [
+            {
+              "id": "autoch-pattern-bolt-pistol-brokhyr-iron-master",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "E-COG with Manipulator Arms",
+          "models": 1,
+          "items": [
+            {
+              "id": "manipulator-arms",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "E-COG with Plasma Torch",
+          "models": 1,
+          "items": [
+            {
+              "id": "plasma-torch",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Ironkin Assistant",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "las-beam-cutter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Brôkhyr Iron-master",
+          "items": [
+            {
+              "id": "graviton-hammer",
+              "count": 1
+            },
+            {
+              "id": "graviton-rifle",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "E-COG with Autoch-pattern Bolt Pistol",
+          "items": [
+            {
+              "id": "autoch-pattern-bolt-pistol-brokhyr-iron-master",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "E-COG with Manipulator Arms",
+          "items": [
+            {
+              "id": "manipulator-arms",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "E-COG with Plasma Torch",
+          "items": [
+            {
+              "id": "plasma-torch",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Ironkin Assistant",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "las-beam-cutter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Brôkhyr Iron-master",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "graviton-hammer",
+                "count": 1
+              },
+              {
+                "id": "graviton-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "E-COG with Autoch-pattern Bolt Pistol",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autoch-pattern-bolt-pistol-brokhyr-iron-master",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "E-COG with Manipulator Arms",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "manipulator-arms",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "E-COG with Plasma Torch",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "plasma-torch",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Ironkin Assistant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "las-beam-cutter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Brôkhyr Iron-master",
+          "id": "graviton-hammer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Brôkhyr Iron-master",
+          "id": "graviton-rifle",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "E-COG with Autoch-pattern Bolt Pistol",
+          "id": "autoch-pattern-bolt-pistol-brokhyr-iron-master",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "E-COG with Autoch-pattern Bolt Pistol",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "E-COG with Manipulator Arms",
+          "id": "manipulator-arms",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "E-COG with Plasma Torch",
+          "id": "plasma-torch",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Ironkin Assistant",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Ironkin Assistant",
+          "id": "las-beam-cutter",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
     }
   },
   {

@@ -2103,10 +2103,14 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
           continue;
         }
 
-        if (item.wargearType !== "wargear" || existingId) continue;
-        const recorded = recordedGear.get(itemId);
-        gear.push(recorded ? structuredClone(recorded) : mintWargear({ dump, gv: { ...confirmed }, warnings: [] }, item, itemId, itemName));
-        validIds.add(itemId);
+        // An id only option or unit data names (no wargear.json or weapons.json record) still
+        // needs its catalog record, minted under that id.
+        if (item.wargearType !== "wargear") continue;
+        if (existingId && (weaponEntityIds.has(existingId) || gear.some((record) => record.id === existingId))) continue;
+        const gearId = existingId ?? itemId;
+        const recorded = recordedGear.get(gearId);
+        gear.push(recorded ? structuredClone(recorded) : mintWargear({ dump, gv: { ...confirmed }, warnings: [] }, item, gearId, itemName));
+        validIds.add(gearId);
         res.wargearAdded++;
       }
 

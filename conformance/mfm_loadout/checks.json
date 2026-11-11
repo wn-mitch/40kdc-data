@@ -12288,6 +12288,90 @@
     ]
   },
   {
+    "name": "adeptus-astartes/vanguard-veteran-squad-with-jump-packs default",
+    "args": {
+      "unitId": "vanguard-veteran-squad-with-jump-packs",
+      "factionId": "adeptus-astartes",
+      "models": {
+        "Vanguard Veteran": 4,
+        "Vanguard Veteran Sergeant": 1
+      },
+      "counts": {
+        "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs": 5,
+        "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs": 4,
+        "relic-blade-vanguard-veteran-squad-with-jump-packs": 1
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "adeptus-astartes/vanguard-veteran-squad-with-jump-packs heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs+1",
+    "args": {
+      "unitId": "vanguard-veteran-squad-with-jump-packs",
+      "factionId": "adeptus-astartes",
+      "models": {
+        "Vanguard Veteran": 4,
+        "Vanguard Veteran Sergeant": 1
+      },
+      "counts": {
+        "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs": 6,
+        "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs": 4,
+        "relic-blade-vanguard-veteran-squad-with-jump-packs": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "adeptus-astartes/vanguard-veteran-squad-with-jump-packs heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs-1",
+    "args": {
+      "unitId": "vanguard-veteran-squad-with-jump-packs",
+      "factionId": "adeptus-astartes",
+      "models": {
+        "Vanguard Veteran": 4,
+        "Vanguard Veteran Sergeant": 1
+      },
+      "counts": {
+        "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs": 4,
+        "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs": 4,
+        "relic-blade-vanguard-veteran-squad-with-jump-packs": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "adeptus-astartes/vanguard-veteran-squad-with-jump-packs heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs->combat-shield",
+    "args": {
+      "unitId": "vanguard-veteran-squad-with-jump-packs",
+      "factionId": "adeptus-astartes",
+      "models": {
+        "Vanguard Veteran": 4,
+        "Vanguard Veteran Sergeant": 1
+      },
+      "counts": {
+        "combat-shield": 1,
+        "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs": 4,
+        "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs": 4,
+        "relic-blade-vanguard-veteran-squad-with-jump-packs": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
     "name": "adeptus-astartes/venerable-dreadnought default",
     "args": {
       "unitId": "venerable-dreadnought",
@@ -27968,6 +28052,134 @@
     "expected": []
   },
   {
+    "name": "astra-militarum/krieg-command-squad default",
+    "args": {
+      "unitId": "krieg-command-squad",
+      "factionId": "astra-militarum",
+      "models": {
+        "Lord Commissar": 1,
+        "Veteran Guardsman (Boltgun)": 1,
+        "Veteran Guardsman (Chainsword)": 1,
+        "Veteran Guardsman (Master Vox)": 1,
+        "Veteran Guardsman (Regimental Standard)": 1,
+        "Veteran Guardsman (Servo-scribes)": 1
+      },
+      "counts": {
+        "alchemyk-counteragents": 1,
+        "boltgun-krieg-command-squad": 1,
+        "chainsword-krieg-command-squad": 1,
+        "close-combat-weapon-krieg-command-squad": 4,
+        "lasgun": 2,
+        "laspistol-krieg-command-squad": 3,
+        "master-vox": 1,
+        "power-weapon-krieg-command-squad": 1,
+        "regimental-standard": 1,
+        "servo-scribes": 1
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "astra-militarum/krieg-command-squad alchemyk-counteragents+1",
+    "args": {
+      "unitId": "krieg-command-squad",
+      "factionId": "astra-militarum",
+      "models": {
+        "Lord Commissar": 1,
+        "Veteran Guardsman (Boltgun)": 1,
+        "Veteran Guardsman (Chainsword)": 1,
+        "Veteran Guardsman (Master Vox)": 1,
+        "Veteran Guardsman (Regimental Standard)": 1,
+        "Veteran Guardsman (Servo-scribes)": 1
+      },
+      "counts": {
+        "alchemyk-counteragents": 2,
+        "boltgun-krieg-command-squad": 1,
+        "chainsword-krieg-command-squad": 1,
+        "close-combat-weapon-krieg-command-squad": 4,
+        "lasgun": 2,
+        "laspistol-krieg-command-squad": 3,
+        "master-vox": 1,
+        "power-weapon-krieg-command-squad": 1,
+        "regimental-standard": 1,
+        "servo-scribes": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "astra-militarum/krieg-command-squad alchemyk-counteragents-1",
+    "args": {
+      "unitId": "krieg-command-squad",
+      "factionId": "astra-militarum",
+      "models": {
+        "Lord Commissar": 1,
+        "Veteran Guardsman (Boltgun)": 1,
+        "Veteran Guardsman (Chainsword)": 1,
+        "Veteran Guardsman (Master Vox)": 1,
+        "Veteran Guardsman (Regimental Standard)": 1,
+        "Veteran Guardsman (Servo-scribes)": 1
+      },
+      "counts": {
+        "alchemyk-counteragents": 0,
+        "boltgun-krieg-command-squad": 1,
+        "chainsword-krieg-command-squad": 1,
+        "close-combat-weapon-krieg-command-squad": 4,
+        "lasgun": 2,
+        "laspistol-krieg-command-squad": 3,
+        "master-vox": 1,
+        "power-weapon-krieg-command-squad": 1,
+        "regimental-standard": 1,
+        "servo-scribes": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "astra-militarum/krieg-command-squad alchemyk-counteragents->bolt-pistol-krieg-command-squad",
+    "args": {
+      "unitId": "krieg-command-squad",
+      "factionId": "astra-militarum",
+      "models": {
+        "Lord Commissar": 1,
+        "Veteran Guardsman (Boltgun)": 1,
+        "Veteran Guardsman (Chainsword)": 1,
+        "Veteran Guardsman (Master Vox)": 1,
+        "Veteran Guardsman (Regimental Standard)": 1,
+        "Veteran Guardsman (Servo-scribes)": 1
+      },
+      "counts": {
+        "alchemyk-counteragents": 0,
+        "bolt-pistol-krieg-command-squad": 1,
+        "boltgun-krieg-command-squad": 1,
+        "chainsword-krieg-command-squad": 1,
+        "close-combat-weapon-krieg-command-squad": 4,
+        "lasgun": 2,
+        "laspistol-krieg-command-squad": 3,
+        "master-vox": 1,
+        "power-weapon-krieg-command-squad": 1,
+        "regimental-standard": 1,
+        "servo-scribes": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
     "name": "astra-militarum/krieg-heavy-weapons-squad default",
     "args": {
       "unitId": "krieg-heavy-weapons-squad",
@@ -30857,6 +31069,61 @@
     ]
   },
   {
+    "name": "chaos-daemons/blue-horrors default",
+    "args": {
+      "unitId": "blue-horrors",
+      "factionId": "chaos-daemons",
+      "models": {
+        "Blue Horror": 10
+      },
+      "counts": {
+        "blue-claws": 10,
+        "coruscating-blue-flames": 10
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "chaos-daemons/blue-horrors blue-claws+1",
+    "args": {
+      "unitId": "blue-horrors",
+      "factionId": "chaos-daemons",
+      "models": {
+        "Blue Horror": 10
+      },
+      "counts": {
+        "blue-claws": 11,
+        "coruscating-blue-flames": 10
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "chaos-daemons/blue-horrors blue-claws-1",
+    "args": {
+      "unitId": "blue-horrors",
+      "factionId": "chaos-daemons",
+      "models": {
+        "Blue Horror": 10
+      },
+      "counts": {
+        "blue-claws": 9,
+        "coruscating-blue-flames": 10
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
     "name": "chaos-daemons/burning-chariot default",
     "args": {
       "unitId": "burning-chariot",
@@ -32176,6 +32443,82 @@
       },
       "counts": {
         "diseased-claws-and-teeth": 2
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "chaos-daemons/pink-horrors default",
+    "args": {
+      "unitId": "pink-horrors",
+      "factionId": "chaos-daemons",
+      "models": {
+        "Pink Horror": 10
+      },
+      "counts": {
+        "coruscating-pink-flames": 10,
+        "pink-claws": 10
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "chaos-daemons/pink-horrors coruscating-pink-flames+1",
+    "args": {
+      "unitId": "pink-horrors",
+      "factionId": "chaos-daemons",
+      "models": {
+        "Pink Horror": 10
+      },
+      "counts": {
+        "coruscating-pink-flames": 11,
+        "pink-claws": 10
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "chaos-daemons/pink-horrors coruscating-pink-flames-1",
+    "args": {
+      "unitId": "pink-horrors",
+      "factionId": "chaos-daemons",
+      "models": {
+        "Pink Horror": 10
+      },
+      "counts": {
+        "coruscating-pink-flames": 9,
+        "pink-claws": 10
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "chaos-daemons/pink-horrors coruscating-pink-flames->daemonic-icon",
+    "args": {
+      "unitId": "pink-horrors",
+      "factionId": "chaos-daemons",
+      "models": {
+        "Pink Horror": 10
+      },
+      "counts": {
+        "coruscating-pink-flames": 9,
+        "daemonic-icon": 1,
+        "pink-claws": 10
       }
     },
     "expected": [
@@ -49400,6 +49743,88 @@
     ]
   },
   {
+    "name": "leagues-of-votann/brokhyr-iron-master default",
+    "args": {
+      "unitId": "brokhyr-iron-master",
+      "factionId": "leagues-of-votann",
+      "models": {
+        "Brôkhyr Iron-master": 1,
+        "E-COG with Autoch-pattern Bolt Pistol": 1,
+        "E-COG with Manipulator Arms": 1,
+        "E-COG with Plasma Torch": 1,
+        "Ironkin Assistant": 1
+      },
+      "counts": {
+        "autoch-pattern-bolt-pistol-brokhyr-iron-master": 1,
+        "close-combat-weapon": 2,
+        "graviton-hammer": 1,
+        "graviton-rifle": 1,
+        "las-beam-cutter": 1,
+        "manipulator-arms": 1,
+        "plasma-torch": 1
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "leagues-of-votann/brokhyr-iron-master autoch-pattern-bolt-pistol-brokhyr-iron-master+1",
+    "args": {
+      "unitId": "brokhyr-iron-master",
+      "factionId": "leagues-of-votann",
+      "models": {
+        "Brôkhyr Iron-master": 1,
+        "E-COG with Autoch-pattern Bolt Pistol": 1,
+        "E-COG with Manipulator Arms": 1,
+        "E-COG with Plasma Torch": 1,
+        "Ironkin Assistant": 1
+      },
+      "counts": {
+        "autoch-pattern-bolt-pistol-brokhyr-iron-master": 2,
+        "close-combat-weapon": 2,
+        "graviton-hammer": 1,
+        "graviton-rifle": 1,
+        "las-beam-cutter": 1,
+        "manipulator-arms": 1,
+        "plasma-torch": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "leagues-of-votann/brokhyr-iron-master autoch-pattern-bolt-pistol-brokhyr-iron-master-1",
+    "args": {
+      "unitId": "brokhyr-iron-master",
+      "factionId": "leagues-of-votann",
+      "models": {
+        "Brôkhyr Iron-master": 1,
+        "E-COG with Autoch-pattern Bolt Pistol": 1,
+        "E-COG with Manipulator Arms": 1,
+        "E-COG with Plasma Torch": 1,
+        "Ironkin Assistant": 1
+      },
+      "counts": {
+        "autoch-pattern-bolt-pistol-brokhyr-iron-master": 0,
+        "close-combat-weapon": 2,
+        "graviton-hammer": 1,
+        "graviton-rifle": 1,
+        "las-beam-cutter": 1,
+        "manipulator-arms": 1,
+        "plasma-torch": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
     "name": "leagues-of-votann/brokhyr-thunderkyn default",
     "args": {
       "unitId": "brokhyr-thunderkyn",
@@ -60944,6 +61369,61 @@
     ]
   },
   {
+    "name": "thousand-sons/blue-horrors default",
+    "args": {
+      "unitId": "blue-horrors",
+      "factionId": "thousand-sons",
+      "models": {
+        "Blue Horror": 10
+      },
+      "counts": {
+        "blue-claws": 10,
+        "coruscating-blue-flames": 10
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "thousand-sons/blue-horrors blue-claws+1",
+    "args": {
+      "unitId": "blue-horrors",
+      "factionId": "thousand-sons",
+      "models": {
+        "Blue Horror": 10
+      },
+      "counts": {
+        "blue-claws": 11,
+        "coruscating-blue-flames": 10
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "thousand-sons/blue-horrors blue-claws-1",
+    "args": {
+      "unitId": "blue-horrors",
+      "factionId": "thousand-sons",
+      "models": {
+        "Blue Horror": 10
+      },
+      "counts": {
+        "blue-claws": 9,
+        "coruscating-blue-flames": 10
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
     "name": "thousand-sons/chaos-land-raider default",
     "args": {
       "unitId": "chaos-land-raider",
@@ -62406,6 +62886,82 @@
       {
         "code": "no-assignment",
         "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "thousand-sons/pink-horrors default",
+    "args": {
+      "unitId": "pink-horrors",
+      "factionId": "thousand-sons",
+      "models": {
+        "Pink Horror": 10
+      },
+      "counts": {
+        "coruscating-pink-flames": 10,
+        "pink-claws": 10
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "thousand-sons/pink-horrors coruscating-pink-flames+1",
+    "args": {
+      "unitId": "pink-horrors",
+      "factionId": "thousand-sons",
+      "models": {
+        "Pink Horror": 10
+      },
+      "counts": {
+        "coruscating-pink-flames": 11,
+        "pink-claws": 10
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "thousand-sons/pink-horrors coruscating-pink-flames-1",
+    "args": {
+      "unitId": "pink-horrors",
+      "factionId": "thousand-sons",
+      "models": {
+        "Pink Horror": 10
+      },
+      "counts": {
+        "coruscating-pink-flames": 9,
+        "pink-claws": 10
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "thousand-sons/pink-horrors coruscating-pink-flames->daemonic-icon",
+    "args": {
+      "unitId": "pink-horrors",
+      "factionId": "thousand-sons",
+      "models": {
+        "Pink Horror": 10
+      },
+      "counts": {
+        "coruscating-pink-flames": 9,
+        "daemonic-icon": 1,
+        "pink-claws": 10
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
       }
     ]
   },
@@ -68929,6 +69485,6 @@
       "models": {},
       "counts": {}
     },
-    "expected": null
+    "expected": []
   }
 ]

@@ -55,6 +55,23 @@ function items(rows: readonly { id: string; count: number }[]): LoadoutItem[] {
 const byKey = (value: unknown) => JSON.stringify(value);
 
 /**
+ * The composition rows that refine a miniature name the dump repeats: the composition names each
+ * copy apart ("Veteran Guardsman (Master Vox)", "E-COG with Plasma Torch") instead of repeating it.
+ * Copy k maps to the one row starting with `name` that names one of copy k's stock items. `null`
+ * unless every copy finds exactly one row and no two copies share a row.
+ */
+export function refinedRows(name: string, stockByCopy: readonly (readonly string[])[], modelNames: ReadonlySet<string>): string[] | null {
+  const rows = [...modelNames].filter((row) => row.startsWith(`${name} `));
+  const mapped = stockByCopy.map((stock) => {
+    const items = stock.map((item) => item.toLocaleLowerCase());
+    const matches = rows.filter((row) => items.some((item) => row.slice(name.length).toLocaleLowerCase().includes(item)));
+    return matches.length === 1 ? matches[0] : null;
+  });
+  if (mapped.some((row) => row === null) || new Set(mapped).size !== mapped.length) return null;
+  return mapped as string[];
+}
+
+/**
  * The dump's wargear rules for `datasheetId`. `resolve` maps a dump item name to a repo id;
  * `modelRows` counts the unit composition's rows per model name, which the dump's miniatures must match.
  */
@@ -75,16 +92,38 @@ export function liftLoadout(
     if (!id) unresolvedItems.add(name);
     return id ?? "";
   };
-  // A name several of the datasheet's miniatures share is keyed `name#k`, the k-th of them in
-  // display order, matching the k-th same-named row of the composition's models.
+  // A miniature every unit composition caps at 0 (Horrors a split leaves behind) is never in a
+  // list, so its wargear rows are not copied.
+  const capsByMini = new Map<string, number[]>();
+  for (const composition of dump.groupBy("unit_composition", "datasheetId").get(datasheetId) ?? []) {
+    for (const row of dump.groupBy("unit_composition_miniature", "unitCompositionId").get(composition.id) ?? []) {
+      capsByMini.set(row.miniatureId, [...(capsByMini.get(row.miniatureId) ?? []), row.max]);
+    }
+  }
+  const unlisted = (miniatureId: string | null | undefined): boolean =>
+    !!miniatureId && (capsByMini.get(miniatureId)?.every((max) => max === 0) ?? false);
   const minis = [...miniature.values()]
-    .filter((row) => row.datasheetId === datasheetId)
+    .filter((row) => row.datasheetId === datasheetId && !unlisted(row.id))
     .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0) || a.id.localeCompare(b.id));
+  const optionsByGroup = dump.groupBy("wargear_option", "wargearOptionGroupId");
+  const groups = dump.groupBy("wargear_option_group", "datasheetId").get(datasheetId) ?? [];
+  const stockNames = (miniatureId: string): string[] =>
+    groups
+      .filter((group) => group.miniatureId === miniatureId)
+      .flatMap((group) => optionsByGroup.get(group.id) ?? [])
+      .filter((option) => option.defaultValue > 0)
+      .flatMap((option) => dump.enName(itemName.get(option.wargearItemId)) ?? []);
   const rowKey = new Map<string, string>();
   for (const row of minis) {
     const name = dump.enName(row) ?? row.id;
     const same = minis.filter((other) => (dump.enName(other) ?? other.id) === name);
-    rowKey.set(row.id, same.length > 1 ? `${name}#${same.indexOf(row) + 1}` : name);
+    if (same.length === 1) rowKey.set(row.id, name);
+    else if (!rowKey.has(row.id)) {
+      const refined = (modelRows.get(name) ?? 0) >= same.length ? null : refinedRows(name, same.map((mini) => stockNames(mini.id)), modelNames);
+      // Else a name several miniatures share is keyed `name#k`, the k-th of them in display
+      // order, matching the k-th same-named row of the composition's models.
+      same.forEach((mini, k) => rowKey.set(mini.id, refined?.[k] ?? `${name}#${k + 1}`));
+    }
   }
   const modelName = (miniatureId: string | null | undefined): string | undefined => {
     if (!miniatureId) return undefined;
@@ -100,7 +139,6 @@ export function liftLoadout(
   for (const set of dump.groupBy("limited_wargear_choice_set", "datasheetId").get(datasheetId) ?? []) {
     if (set.mandatory) throw new Error(`limited set ${set.id} is mandatory; its meaning is unverified`);
   }
-  const groups = dump.groupBy("wargear_option_group", "datasheetId").get(datasheetId) ?? [];
   for (const group of groups) {
     if (group.isStaticWargear) throw new Error(`option group ${group.id} is static wargear; its meaning is unverified`);
   }
@@ -109,15 +147,16 @@ export function liftLoadout(
   const defaultComposition = (dump.groupBy("unit_composition", "datasheetId").get(datasheetId) ?? []).find((row) => row.isDefault);
   const defaultModels = new Map<string, number>();
   for (const row of dump.groupBy("unit_composition_miniature", "unitCompositionId").get(defaultComposition?.id ?? "") ?? []) {
+    if (unlisted(row.miniatureId)) continue;
     const model = modelName(row.miniatureId);
     if (model) defaultModels.set(model, (defaultModels.get(model) ?? 0) + row.min);
   }
 
   // Stock: every option with a nonzero default is the default unit's copies of that item.
-  const optionsByGroup = dump.groupBy("wargear_option", "wargearOptionGroupId");
   const stockRows = new Map<string, { id: string; count: number }[]>();
   const options: LoadoutOption[] = [];
   for (const group of groups) {
+    if (unlisted(group.miniatureId)) continue;
     for (const option of optionsByGroup.get(group.id) ?? []) {
       if (option.inputType !== "checkbox" && option.inputType !== "stepper") {
         throw new Error(`option ${option.id} has input ${option.inputType}; its meaning is unverified`);
@@ -136,6 +175,7 @@ export function liftLoadout(
   const templateOptions = dump.groupBy("base_miniature_loadout_wargear_option", "baseMiniatureLoadoutId");
   const templates: ModelItems[] = [];
   for (const base of dump.groupBy("base_miniature_loadout", "datasheetId").get(datasheetId) ?? []) {
+    if (unlisted(base.miniatureId)) continue;
     const model = modelName(base.miniatureId);
     if (!model) continue;
     const rows = (templateOptions.get(base.id) ?? []).flatMap((row) => {
@@ -152,6 +192,7 @@ export function liftLoadout(
   const loadoutChoiceItems = dump.groupBy("loadout_choice_wargear_item", "loadoutChoiceId");
   const slots: LoadoutSlot[] = [];
   for (const set of dump.groupBy("loadout_choice_set", "datasheetId").get(datasheetId) ?? []) {
+    if (unlisted(set.miniatureId)) continue;
     const model = modelName(set.miniatureId);
     slots.push({
       ...(model ? { model } : {}),
@@ -167,6 +208,7 @@ export function liftLoadout(
   const limitRows = dump.groupBy("wargear_limit", "limitedWargearChoiceSetId");
   const limits: LoadoutLimit[] = [];
   for (const set of dump.groupBy("limited_wargear_choice_set", "datasheetId").get(datasheetId) ?? []) {
+    if (unlisted(set.miniatureId)) continue;
     const model = modelName(set.miniatureId);
     const breakpoints = (limitRows.get(set.id) ?? [])
       .map((row) => ({
@@ -187,6 +229,7 @@ export function liftLoadout(
   const uniformItems = dump.groupBy("all_model_wargear_choice_wargear_item", "allModelWargearChoiceId");
   const uniform: LoadoutUniform[] = [];
   for (const set of dump.groupBy("all_model_wargear_choice_set", "datasheetId").get(datasheetId) ?? []) {
+    if (unlisted(set.miniatureId)) continue;
     const model = modelName(set.miniatureId);
     uniform.push({
       ...(model ? { model } : {}),

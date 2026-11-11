@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/index.js";
 import { checkboxCaps, checkMfmLoadout, defaultMfmLoadout, type MfmLoadoutRules } from "../src/data/mfm-loadout.js";
-import { liftLoadout } from "../src/mfm/loadout-lift.js";
+import { liftLoadout, refinedRows } from "../src/mfm/loadout-lift.js";
 import { partialDump } from "./mfm-fixture.js";
 
 const dataset = Dataset.embedded();
@@ -200,5 +200,63 @@ describe("liftLoadout options", () => {
 
   it("refuses an input type it has no reading for", () => {
     expect(() => liftLoadout(dump("dropdown"), "ds", resolve, new Map([["Trooper", 1]]))).toThrow(/dropdown/);
+  });
+});
+
+describe("liftLoadout model rows", () => {
+  const EMPTY = Object.fromEntries([
+    "base_miniature_loadout", "base_miniature_loadout_wargear_option", "loadout_choice_set", "loadout_choice",
+    "loadout_choice_wargear_item", "limited_wargear_choice_set", "limited_wargear_choice", "limited_wargear_choice_wargear_item",
+    "wargear_limit", "all_model_wargear_choice_set", "all_model_wargear_choice", "all_model_wargear_choice_wargear_item",
+  ].map((table) => [table, []]));
+  /** One datasheet whose miniatures each carry one default item; `max` per miniature in its one composition. */
+  const dump = (minis: { name: string; item: string; max: number }[]) => partialDump({
+    data: {
+      ...EMPTY,
+      miniature: minis.map((mini, i) => ({ id: `m${i}`, datasheetId: "ds", displayOrder: i + 1, localisations: { en: { name: mini.name } } })),
+      unit_composition: [{ id: "uc", datasheetId: "ds", isDefault: true, displayOrder: 1, points: 10, referenceGroupingKeywordId: null }],
+      unit_composition_miniature: minis.map((mini, i) => ({ id: `ucm${i}`, min: mini.max, max: mini.max, unitCompositionId: "uc", miniatureId: `m${i}` })),
+      wargear_item: minis.map((mini, i) => ({ id: `wi${i}`, wargearType: "wargear", localisations: { en: { name: mini.item } } })),
+      wargear_option_group: minis.map((_, i) => ({ id: `g${i}`, displayOrder: i + 1, datasheetId: "ds", miniatureId: `m${i}`, isStaticWargear: false })),
+      wargear_option: minis.map((_, i) => ({ id: `o${i}`, wargearItemId: `wi${i}`, wargearOptionGroupId: `g${i}`, inputType: "checkbox", defaultValue: 1, points: 0, displayOrder: 1 })),
+    },
+  });
+  const resolve = (name: string) => name.toLowerCase().replace(/ /g, "-");
+  const rows = (...names: string[]) => new Map(names.map((name) => [name, 1]));
+
+  it("drops the rows of a miniature every composition caps at 0", () => {
+    const result = liftLoadout(dump([{ name: "Pink Horror", item: "Coruscating Flames", max: 10 }, { name: "Blue Horror", item: "Blue Flames", max: 0 }]), "ds", resolve, rows("Pink Horror"));
+    expect("loadout" in result && result.loadout.options.map((option) => option.model)).toEqual(["Pink Horror"]);
+  });
+
+  it("maps a repeated miniature name to the composition rows that name its stock", () => {
+    const minis = [{ name: "Veteran", item: "Master Vox", max: 1 }, { name: "Veteran", item: "Regimental Standard", max: 1 }];
+    const result = liftLoadout(dump(minis), "ds", resolve, rows("Veteran (Regimental Standard)", "Veteran (Master Vox)"));
+    expect("loadout" in result && result.loadout.stock.map((row) => [row.model, row.items[0].id])).toEqual([
+      ["Veteran (Master Vox)", "master-vox"],
+      ["Veteran (Regimental Standard)", "regimental-standard"],
+    ]);
+  });
+
+  it("refuses a refinement that is not one row per copy", () => {
+    expect(refinedRows("Veteran", [["Vox"], ["Vox"]], new Set(["Veteran (Vox)", "Veteran (Banner)"]))).toBeNull();
+    expect(refinedRows("Veteran", [["Vox"], ["Flag"]], new Set(["Veteran (Vox)", "Veteran (Banner)"]))).toBeNull();
+    expect(refinedRows("Veteran", [["Vox"]], new Set(["Veteran (Vox)", "Veteran (Vox and Banner)"]))).toBeNull();
+    const result = liftLoadout(dump([{ name: "Veteran", item: "Vox", max: 1 }, { name: "Veteran", item: "Vox", max: 1 }]), "ds", resolve, rows("Veteran (Vox)", "Veteran (Banner)"));
+    expect("unresolvedModels" in result && result.unresolvedModels).toEqual(["Veteran#1", "Veteran#2"]);
+  });
+
+  it("lifts the units whose dump rows the composition names apart or caps at 0", () => {
+    for (const [faction, id] of [
+      ["astra-militarum", "krieg-command-squad"], ["leagues-of-votann", "brokhyr-iron-master"],
+      ["chaos-daemons", "pink-horrors"], ["chaos-daemons", "blue-horrors"],
+      ["thousand-sons", "pink-horrors"], ["thousand-sons", "blue-horrors"],
+      ["adeptus-astartes", "vanguard-veteran-squad-with-jump-packs"],
+    ]) expect(() => rulesOf(faction, id), `${faction}/${id}`).not.toThrow();
+    const rules = rulesOf("adeptus-astartes", "vanguard-veteran-squad-with-jump-packs");
+    // Combat shields are a unit-wide choice: every model's pistol, or none.
+    const pistol = "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs";
+    expect(legal(rules, unit(rules, {}, [[pistol, "combat-shield", 5]]))).toBe(true);
+    expect(legal(rules, unit(rules, {}, [[pistol, "combat-shield", 1]]))).toBe(false);
   });
 });

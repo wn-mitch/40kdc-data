@@ -1,5 +1,5 @@
 {
-  "version": 36,
+  "version": 37,
   "kinds": {
     "faction": [
       "adepta-sororitas",
@@ -5505,7 +5505,8 @@
       "stormfrag-auto-launcher-askars-wolfpack-wulfen",
       "stormfury-missile-launcher-assault-force-land-speeder",
       "sulphur-breath-purge-corps-serberys-sulphurhounds",
-      "twin-bolt-rifle-invader-atvs"
+      "twin-bolt-rifle-invader-atvs",
+      "combat-shield"
     ],
     "enhancement": [
       "a-chink-in-their-armour",

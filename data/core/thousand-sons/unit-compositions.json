@@ -6123,7 +6123,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Blue Horror",
+          "models": 10,
+          "items": [
+            {
+              "id": "blue-claws",
+              "count": 10
+            },
+            {
+              "id": "coruscating-blue-flames",
+              "count": 10
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Blue Horror",
+          "items": [
+            {
+              "id": "blue-claws",
+              "count": 1
+            },
+            {
+              "id": "coruscating-blue-flames",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Blue Horror",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blue-claws",
+                "count": 1
+              },
+              {
+                "id": "coruscating-blue-flames",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Blue Horror",
+          "id": "blue-claws",
+          "input": "stepper",
+          "default": 10
+        },
+        {
+          "model": "Blue Horror",
+          "id": "coruscating-blue-flames",
+          "input": "stepper",
+          "default": 10
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "flamers",
@@ -6443,7 +6512,144 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Pink Horror",
+          "models": 10,
+          "items": [
+            {
+              "id": "coruscating-pink-flames",
+              "count": 10
+            },
+            {
+              "id": "pink-claws",
+              "count": 10
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Pink Horror",
+          "items": [
+            {
+              "id": "coruscating-pink-flames",
+              "count": 1
+            },
+            {
+              "id": "pink-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Pink Horror",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Pink Horror",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "coruscating-pink-flames",
+                "count": 1
+              },
+              {
+                "id": "pink-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Pink Horror",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Pink Horror",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Pink Horror",
+          "id": "coruscating-pink-flames",
+          "input": "stepper",
+          "default": 10
+        },
+        {
+          "model": "Pink Horror",
+          "id": "daemonic-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Pink Horror",
+          "id": "instrument-of-chaos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Pink Horror",
+          "id": "pink-claws",
+          "input": "stepper",
+          "default": 10
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "screamers",

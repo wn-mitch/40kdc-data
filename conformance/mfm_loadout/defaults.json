@@ -3015,6 +3015,24 @@
     }
   },
   {
+    "name": "adeptus-astartes/vanguard-veteran-squad-with-jump-packs",
+    "args": {
+      "unitId": "vanguard-veteran-squad-with-jump-packs",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Vanguard Veteran": 4,
+        "Vanguard Veteran Sergeant": 1
+      },
+      "counts": {
+        "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs": 5,
+        "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs": 4,
+        "relic-blade-vanguard-veteran-squad-with-jump-packs": 1
+      }
+    }
+  },
+  {
     "name": "adeptus-astartes/venerable-dreadnought",
     "args": {
       "unitId": "venerable-dreadnought",
@@ -6801,6 +6819,35 @@
     }
   },
   {
+    "name": "astra-militarum/krieg-command-squad",
+    "args": {
+      "unitId": "krieg-command-squad",
+      "factionId": "astra-militarum"
+    },
+    "expected": {
+      "models": {
+        "Lord Commissar": 1,
+        "Veteran Guardsman (Boltgun)": 1,
+        "Veteran Guardsman (Chainsword)": 1,
+        "Veteran Guardsman (Master Vox)": 1,
+        "Veteran Guardsman (Regimental Standard)": 1,
+        "Veteran Guardsman (Servo-scribes)": 1
+      },
+      "counts": {
+        "alchemyk-counteragents": 1,
+        "boltgun-krieg-command-squad": 1,
+        "chainsword-krieg-command-squad": 1,
+        "close-combat-weapon-krieg-command-squad": 4,
+        "lasgun": 2,
+        "laspistol-krieg-command-squad": 3,
+        "master-vox": 1,
+        "power-weapon-krieg-command-squad": 1,
+        "regimental-standard": 1,
+        "servo-scribes": 1
+      }
+    }
+  },
+  {
     "name": "astra-militarum/krieg-heavy-weapons-squad",
     "args": {
       "unitId": "krieg-heavy-weapons-squad",
@@ -7481,6 +7528,22 @@
     }
   },
   {
+    "name": "chaos-daemons/blue-horrors",
+    "args": {
+      "unitId": "blue-horrors",
+      "factionId": "chaos-daemons"
+    },
+    "expected": {
+      "models": {
+        "Blue Horror": 10
+      },
+      "counts": {
+        "blue-claws": 10,
+        "coruscating-blue-flames": 10
+      }
+    }
+  },
+  {
     "name": "chaos-daemons/burning-chariot",
     "args": {
       "unitId": "burning-chariot",
@@ -7849,6 +7912,22 @@
       },
       "counts": {
         "diseased-claws-and-teeth": 3
+      }
+    }
+  },
+  {
+    "name": "chaos-daemons/pink-horrors",
+    "args": {
+      "unitId": "pink-horrors",
+      "factionId": "chaos-daemons"
+    },
+    "expected": {
+      "models": {
+        "Pink Horror": 10
+      },
+      "counts": {
+        "coruscating-pink-flames": 10,
+        "pink-claws": 10
       }
     }
   },
@@ -12095,6 +12174,31 @@
     }
   },
   {
+    "name": "leagues-of-votann/brokhyr-iron-master",
+    "args": {
+      "unitId": "brokhyr-iron-master",
+      "factionId": "leagues-of-votann"
+    },
+    "expected": {
+      "models": {
+        "Brôkhyr Iron-master": 1,
+        "E-COG with Autoch-pattern Bolt Pistol": 1,
+        "E-COG with Manipulator Arms": 1,
+        "E-COG with Plasma Torch": 1,
+        "Ironkin Assistant": 1
+      },
+      "counts": {
+        "autoch-pattern-bolt-pistol-brokhyr-iron-master": 1,
+        "close-combat-weapon": 2,
+        "graviton-hammer": 1,
+        "graviton-rifle": 1,
+        "las-beam-cutter": 1,
+        "manipulator-arms": 1,
+        "plasma-torch": 1
+      }
+    }
+  },
+  {
     "name": "leagues-of-votann/brokhyr-thunderkyn",
     "args": {
       "unitId": "brokhyr-thunderkyn",
@@ -14950,6 +15054,22 @@
     }
   },
   {
+    "name": "thousand-sons/blue-horrors",
+    "args": {
+      "unitId": "blue-horrors",
+      "factionId": "thousand-sons"
+    },
+    "expected": {
+      "models": {
+        "Blue Horror": 10
+      },
+      "counts": {
+        "blue-claws": 10,
+        "coruscating-blue-flames": 10
+      }
+    }
+  },
+  {
     "name": "thousand-sons/chaos-land-raider",
     "args": {
       "unitId": "chaos-land-raider",
@@ -15294,6 +15414,22 @@
         "betentacled-maw": 1,
         "mutalith-claws": 1,
         "warp-vortex": 1
+      }
+    }
+  },
+  {
+    "name": "thousand-sons/pink-horrors",
+    "args": {
+      "unitId": "pink-horrors",
+      "factionId": "thousand-sons"
+    },
+    "expected": {
+      "models": {
+        "Pink Horror": 10
+      },
+      "counts": {
+        "coruscating-pink-flames": 10,
+        "pink-claws": 10
       }
     }
   },
@@ -16796,6 +16932,16 @@
       "unitId": "vanguard-veteran-squad-with-jump-packs",
       "factionId": "adeptus-astartes"
     },
-    "expected": null
+    "expected": {
+      "models": {
+        "Vanguard Veteran": 4,
+        "Vanguard Veteran Sergeant": 1
+      },
+      "counts": {
+        "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs": 5,
+        "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs": 4,
+        "relic-blade-vanguard-veteran-squad-with-jump-packs": 1
+      }
+    }
   }
 ]

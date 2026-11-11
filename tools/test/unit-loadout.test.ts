@@ -18,8 +18,11 @@ describe("Dataset.loadoutOf", () => {
     expect(view.source).toBe("mfm");
   });
 
-  it("falls back to authored wargear options for a unit the dump gives no rules", () => {
-    const { view } = viewOf("pink-horrors", "chaos-daemons");
+  it("falls back to authored wargear options for a composition without MFM rules", () => {
+    // Every dump-backed composition carries a lifted loadout, so drop Pink Horrors' to reach the fallback.
+    const { unit } = viewOf("pink-horrors", "chaos-daemons");
+    const composition = { ...(dataset.unitCompositionOf(unit) as object), loadout: undefined };
+    const view = unitLoadout(unit, composition, dataset.wargearOptionsOf(unit));
     expect(view.source).toBe("wargear-options");
     expect(view.base(10)?.get("pink-claws")).toBe(10);
   });

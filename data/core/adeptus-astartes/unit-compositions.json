@@ -21978,7 +21978,279 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Vanguard Veteran Sergeant",
+          "models": 1,
+          "items": [
+            {
+              "id": "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs",
+              "count": 1
+            },
+            {
+              "id": "relic-blade-vanguard-veteran-squad-with-jump-packs",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Vanguard Veteran",
+          "models": 4,
+          "items": [
+            {
+              "id": "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs",
+              "count": 4
+            },
+            {
+              "id": "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Vanguard Veteran Sergeant",
+          "items": [
+            {
+              "id": "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs",
+              "count": 1
+            },
+            {
+              "id": "relic-blade-vanguard-veteran-squad-with-jump-packs",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Vanguard Veteran",
+          "items": [
+            {
+              "id": "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs",
+              "count": 1
+            },
+            {
+              "id": "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Vanguard Veteran Sergeant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "combat-shield",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-pistol-vanguard-veteran-squad-with-jump-packs",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Vanguard Veteran Sergeant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "power-fist-vanguard-veteran-squad-with-jump-packs",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "relic-blade-vanguard-veteran-squad-with-jump-packs",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "thunder-hammer-vanguard-veteran-squad-with-jump-packs",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Vanguard Veteran",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "combat-shield",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-pistol-vanguard-veteran-squad-with-jump-packs",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Vanguard Veteran",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Vanguard Veteran",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 2
+            },
+            {
+              "models": 10,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "plasma-pistol-vanguard-veteran-squad-with-jump-packs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Vanguard Veteran Sergeant",
+          "id": "combat-shield",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Vanguard Veteran Sergeant",
+          "id": "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Vanguard Veteran Sergeant",
+          "id": "plasma-pistol-vanguard-veteran-squad-with-jump-packs",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Vanguard Veteran Sergeant",
+          "id": "power-fist-vanguard-veteran-squad-with-jump-packs",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Vanguard Veteran Sergeant",
+          "id": "relic-blade-vanguard-veteran-squad-with-jump-packs",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Vanguard Veteran Sergeant",
+          "id": "thunder-hammer-vanguard-veteran-squad-with-jump-packs",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Vanguard Veteran",
+          "id": "combat-shield",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Vanguard Veteran",
+          "id": "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Vanguard Veteran",
+          "id": "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Vanguard Veteran",
+          "id": "plasma-pistol-vanguard-veteran-squad-with-jump-packs",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": [
+        {
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "combat-shield",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "plasma-pistol-vanguard-veteran-squad-with-jump-packs",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "company-heroes",
