@@ -13,7 +13,7 @@ from typing import Any
 
 from wh40kdc.translate.condition import describe_condition
 from wh40kdc.translate.condition_leadin import condition_lead_in
-from wh40kdc.translate.condition_refs import _objective_phrase, place_ref_phrase
+from wh40kdc.translate.condition_refs import _objective_phrase, is_event_object, place_ref_phrase
 from wh40kdc.translate.effect_leaf_army import (
     army_rule,
     cost_modifier,
@@ -228,7 +228,7 @@ def _destroy_models(e: Leaf, m: dict[str, Any], subj: str) -> str:
 def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     act = "shoot" if m.get("act") == "shoot" else "fight"
     target = e.get("target")
-    if target == "event-object":
+    if is_event_object(target):
         model = "a model in this unit"
     elif subj == "this model":
         model = "this model"
@@ -272,7 +272,7 @@ def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             f"the battlefield; {resolution}{removal}"
         )
     # The destroyed model the trigger names stays, not its unit.
-    held = "that model" if target == "event-object" else subj
+    held = "that model" if is_event_object(target) else subj
     if m.get("resolution") == "when-unit-fights":
         return (
             f"do not remove {held} yet; when its unit is selected to fight, it can {act}; "

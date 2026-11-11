@@ -24,6 +24,7 @@ from wh40kdc.translate.condition_refs import (
     dekebab,
     event_relation_phrase,
     id_label,
+    is_event_object,
     move_kinds,
     named_use_phrase,
     place_ref_phrase,
@@ -206,13 +207,15 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         return f"{neg}{obj} lost one or more wounds from {atk}attacks{tail}"
     if event in ("destroyed", "model-destroyed"):
         noun = "model" if event == "model-destroyed" else "unit"
-        if p.get("object") == "event-object" and window == "event":
+        if is_event_object(p.get("object")) and window == "event":
+            made = (
+                f" made with {weapon_noun({'weapons': f['weapons']})}"
+                if f.get("weapons") is not None
+                else ""
+            )
             if _truthy(f.get("attack_type")):
-                weapons = f.get("weapons")
-                weapon_name = weapons.get("name") if isinstance(weapons, dict) else None
-                made = f" made with {_str(weapon_name)}" if _truthy(weapon_name) else ""
                 return f"{neg}destroyed by a {_str(f['attack_type'])} attack{made}"
-            return f"{neg}destroyed by any attack"
+            return f"{neg}destroyed by any attack{made}"
         # "this model": the destroyed model is this one, not any model of the unit.
         if p.get("object") == "this-model":
             return _with_window(
@@ -324,7 +327,7 @@ def _describe_happened(p: P, negated: bool) -> str:
     if (
         event in ("destroyed", "model-destroyed")
         and filt.get("weapons") is not None
-        and not (p.get("object") == "event-object" and p.get("window") == "event")
+        and not (is_event_object(p.get("object")) and p.get("window") == "event")
     ):
         phrase += f" made with {weapon_noun({'weapons': filt['weapons']})}"
     if (
@@ -332,7 +335,7 @@ def _describe_happened(p: P, negated: bool) -> str:
         and event in ("destroyed", "model-destroyed")
         and (
             p.get("object") == "this-model"
-            or (p.get("object") == "event-object" and p.get("window") == "event")
+            or (is_event_object(p.get("object")) and p.get("window") == "event")
         )
     ):
         phrase += f" ({count_phrase(p['count'])} times)"

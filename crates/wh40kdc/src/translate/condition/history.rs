@@ -52,7 +52,8 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
     if nn(p, "count").is_some()
         && matches!(event.as_str(), "destroyed" | "model-destroyed")
         && (is(p, "object", "this-model")
-            || (is(p, "object", "event-object") && is(p, "window", "event")))
+            || (crate::translate::condition::is_event_object(p.get("object"))
+                && is(p, "window", "event")))
     {
         phrase.push_str(&format!(" ({} times)", count_phrase(p.get("count"))));
     }
@@ -372,7 +373,9 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             } else {
                 "unit"
             };
-            if is(p, "object", "event-object") && window.and_then(Value::as_str) == Some("event") {
+            if crate::translate::condition::is_event_object(p.get("object"))
+                && window.and_then(Value::as_str) == Some("event")
+            {
                 let with = if nn(f, "weapons").is_some() {
                     format!(" made with {}", crate::translate::effect::weapon_noun(f))
                 } else {

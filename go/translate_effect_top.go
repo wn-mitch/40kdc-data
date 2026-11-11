@@ -338,6 +338,21 @@ func renderTopLevel(e, scope map[string]any, usage, trigger any) string {
 	if isList(usage) || mapOr(usage)["frequency"] != nil {
 		lead = usageClause(usage)
 	}
+	// Every trigger's object is a model: the effect's `event-object` reads "that model".
+	modelObjects := false
+	for _, t := range normalizeTriggers(trigger) {
+		if t["event"] == nil {
+			continue
+		}
+		if mapOr(t["object"])["level"] != "model" {
+			modelObjects = false
+			break
+		}
+		modelObjects = true
+	}
+	if modelObjects {
+		e = modelObjectRefs(e).(map[string]any)
+	}
 	var condRange float64
 	hasCondRange := false
 	if e["type"] == "conditional" {

@@ -1,5 +1,5 @@
 /** The `happened` history predicate as English ("the unit charged this turn"). */
-import { countPhrase, dekebab, designationPhrase, eventRelationPhrase, idLabel, moveKinds, namedUsePhrase, objectivePhrase, type P, pastOf, placeRefPhrase, rangePhrase, rollWord, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, usedAbilityPhrase, windowPhrase as baseWindowPhrase } from "./condition-refs.js";
+import { countPhrase, dekebab, isEventObject, designationPhrase, eventRelationPhrase, idLabel, moveKinds, namedUsePhrase, objectivePhrase, type P, pastOf, placeRefPhrase, rangePhrase, rollWord, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, usedAbilityPhrase, windowPhrase as baseWindowPhrase } from "./condition-refs.js";
 import { bracketKeyword, weaponNoun } from "./effect-words.js";
 
 /** A rule of one kind being used now, when the filter names none. */
@@ -14,8 +14,8 @@ const RESOURCE_TERMS: Record<string, string> = { "yp-pool": "YP" };
 export function describeHappened(p: P, negated: boolean): string {
   let phrase = happenedPhrase(p, negated);
   const filter = (p.filter ?? {}) as P;
-  if ((p.event === "destroyed" || p.event === "model-destroyed") && filter.weapons != null && !(p.object === "event-object" && p.window === "event")) phrase += ` made with ${weaponNoun({ weapons: filter.weapons })}`;
-  if (p.count != null && (p.event === "destroyed" || p.event === "model-destroyed") && (p.object === "this-model" || (p.object === "event-object" && p.window === "event"))) phrase += ` (${countPhrase(p.count)} times)`;
+  if ((p.event === "destroyed" || p.event === "model-destroyed") && filter.weapons != null && !(isEventObject(p.object) && p.window === "event")) phrase += ` made with ${weaponNoun({ weapons: filter.weapons })}`;
+  if (p.count != null && (p.event === "destroyed" || p.event === "model-destroyed") && (p.object === "this-model" || (isEventObject(p.object) && p.window === "event"))) phrase += ` (${countPhrase(p.count)} times)`;
   phrase += eventRelationPhrase(filter);
   if (p.proximity != null) {
     const proximity = p.proximity as P;
@@ -107,7 +107,7 @@ function happenedPhrase(p: P, negated: boolean): string {
     case "destroyed":
     case "model-destroyed": {
       const noun = event === "model-destroyed" ? "model" : "unit";
-      if (p.object === "event-object" && p.window === "event") {
+      if (isEventObject(p.object) && p.window === "event") {
         return f.attack_type ? `${neg}destroyed by a ${str(f.attack_type)} attack${f.weapons != null ? ` made with ${weaponNoun({ weapons: f.weapons })}` : ""}` : `${neg}destroyed by any attack${f.weapons != null ? ` made with ${weaponNoun({ weapons: f.weapons })}` : ""}`;
       }
       // "this model": the destroyed model is this one, not any model of the unit.

@@ -237,7 +237,7 @@ func conditionLeadInFor(c map[string]any, defending bool) string {
 		if p["event"] == "used" && p["window"] == "event" && f["ability_keyword"] == nil && f["same_rule_as"] == nil {
 			return "while " + describeHappened(p, false)
 		}
-		if (p["event"] == "destroyed" || p["event"] == "model-destroyed") && p["object"] == "event-object" && p["window"] == "event" {
+		if (p["event"] == "destroyed" || p["event"] == "model-destroyed") && isEventObject(p["object"]) && p["window"] == "event" {
 			return "when " + describeHappened(p, false)
 		}
 		return "if " + describeHappened(p, false)

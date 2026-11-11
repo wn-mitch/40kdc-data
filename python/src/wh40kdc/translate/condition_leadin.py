@@ -26,6 +26,7 @@ from wh40kdc.translate.condition_refs import (
     _str,
     _truthy,
     _window_phrase,
+    is_event_object,
     title_case,
 )
 
@@ -295,7 +296,7 @@ def condition_lead_in(c: Condition, defending: bool = False) -> str:
             return f"while {_describe_happened(p, False)}"
         if (
             p.get("event") in ("destroyed", "model-destroyed")
-            and p.get("object") == "event-object"
+            and is_event_object(p.get("object"))
             and p.get("window") == "event"
         ):
             return f"when {_describe_happened(p, False)}"

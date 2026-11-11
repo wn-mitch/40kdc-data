@@ -3548,6 +3548,61 @@ function genEffectTranslation(): void {
     };
     cases.push(entry);
   }
+  // The trigger's event object as a model: every trigger naming a model object reads
+  // `event-object` as "that model" (a keyword check, an effect on it, a history check on the
+  // destroyed model, a fight-on-death leaf); a unit object, or a model object alongside a unit
+  // one, keeps "that unit".
+  const destroyedModel = { event: "model-destroyed", object: { owner: "friendly", level: "model", member_of: "this-unit" } };
+  const destroyedUnit = { event: "destroyed", object: { owner: "friendly", all_of: ["INFANTRY"] } };
+  const pinkCheck = {
+    type: "conditional",
+    condition: { type: "matches", parameters: { subject: "event-object", filter: { all_of: ["PINK"] } } },
+    effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "stealth" } },
+  };
+  const FORCED_EVENT_OBJECT_CASES: { id: string; effect: Record<string, unknown>; trigger: unknown }[] = [
+    { id: "event-object-model-keyword", effect: pinkCheck, trigger: destroyedModel },
+    { id: "event-object-unit-keyword", effect: pinkCheck, trigger: destroyedUnit },
+    { id: "event-object-mixed-triggers", effect: pinkCheck, trigger: [destroyedModel, destroyedUnit] },
+    {
+      id: "event-object-model-target",
+      effect: { type: "ability-grant", target: "event-object", modifier: { ability: "stealth" } },
+      trigger: { event: "damage-allocated", object: { owner: "friendly", level: "model" } },
+    },
+    {
+      id: "event-object-model-history",
+      effect: {
+        type: "conditional",
+        condition: { type: "happened", parameters: { event: "model-destroyed", object: "event-object", window: "event", filter: { weapons: { type: "melee" } } } },
+        effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "stealth" } },
+      },
+      trigger: destroyedModel,
+    },
+    {
+      id: "event-object-model-act-on-death",
+      effect: {
+        type: "act-on-death",
+        target: "event-object",
+        modifier: {
+          act: "fight",
+          resolution: "after-attacking-unit-finishes",
+          removal: "after-destroyed-model-fights",
+          gate: { dice: "D6", threshold: 2, comparison: "gte", modifiers: [] },
+          eligibility: { operator: "not", operands: [{ type: "happened", parameters: { subject: "event-object", event: "selected", filter: { to: "fight" }, window: "phase" } }] },
+        },
+      },
+      trigger: destroyedModel,
+    },
+  ];
+  for (const fc of FORCED_EVENT_OBJECT_CASES) {
+    const scope = { duration: "permanent" };
+    cases.push({
+      caseId: `${fc.id}#${cases.length}`,
+      effect: fc.effect,
+      scope,
+      trigger: fc.trigger,
+      expected: { text: describeAbility({ effect: fc.effect as Effect, scope, trigger: fc.trigger as AbilityTrigger | AbilityTrigger[] }) },
+    });
+  }
   const filteredAuraEffect: Effect = {
     type: "aura",
     target: "friendly-within-aura",

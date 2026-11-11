@@ -442,6 +442,7 @@ _ROLE_SUBJECTS = {
     "defender": "the target",
     "event-subject": "the triggering unit",
     "event-object": "that unit",
+    "event-object-model": "that model",
     "stratagem-target": "that unit",
     "bearer-transport": "the Transport this unit is embarked within",
     "ability-unit": "this unit",

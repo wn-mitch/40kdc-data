@@ -240,15 +240,15 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 		if event == "model-destroyed" {
 			noun = "model"
 		}
-		if p["object"] == "event-object" && p["window"] == "event" {
-			if jsTruthy(f["attack_type"]) {
-				s := neg + "destroyed by a " + cstr(f["attack_type"]) + " attack"
-				if jsTruthy(f["weapons"]) {
-					s += " made with " + weaponNoun(map[string]any{"weapons": f["weapons"]})
-				}
-				return s
+		if isEventObject(p["object"]) && p["window"] == "event" {
+			made := ""
+			if f["weapons"] != nil {
+				made = " made with " + weaponNoun(map[string]any{"weapons": f["weapons"]})
 			}
-			return neg + "destroyed by any attack"
+			if jsTruthy(f["attack_type"]) {
+				return neg + "destroyed by a " + cstr(f["attack_type"]) + " attack" + made
+			}
+			return neg + "destroyed by any attack" + made
 		}
 		// "this model": the destroyed model is this one, not any model of the unit.
 		if p["object"] == "this-model" {
@@ -438,11 +438,11 @@ func describeHappened(p map[string]any, negated bool) string {
 	filter := mapOr(p["filter"])
 	event := cstr(p["event"])
 	if (event == "destroyed" || event == "model-destroyed") && filter["weapons"] != nil &&
-		!(p["object"] == "event-object" && p["window"] == "event") {
+		!(isEventObject(p["object"]) && p["window"] == "event") {
 		phrase += " made with " + weaponNoun(map[string]any{"weapons": filter["weapons"]})
 	}
 	if p["count"] != nil && (event == "destroyed" || event == "model-destroyed") &&
-		(p["object"] == "this-model" || (p["object"] == "event-object" && p["window"] == "event")) {
+		(p["object"] == "this-model" || (isEventObject(p["object"]) && p["window"] == "event")) {
 		phrase += " (" + controlCountPhrase(p["count"]) + " times)"
 	}
 	phrase += eventRelationPhrase(filter)

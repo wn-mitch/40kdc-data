@@ -222,7 +222,7 @@ fn act_on_death(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String 
     } else {
         "fight"
     };
-    let model = if target.and_then(Value::as_str) == Some("event-object") {
+    let model = if crate::translate::condition::is_event_object(target) {
         "a model in this unit".to_string()
     } else if subj == "this model" {
         "this model".to_string()
@@ -306,7 +306,7 @@ fn act_on_death(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String 
         .map(|s| format!("{s}, "))
         .unwrap_or_default();
     // The destroyed model the trigger names stays, not its unit.
-    let held = if target.and_then(Value::as_str) == Some("event-object") {
+    let held = if crate::translate::condition::is_event_object(target) {
         "that model"
     } else {
         subj

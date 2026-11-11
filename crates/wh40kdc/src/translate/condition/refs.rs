@@ -143,6 +143,32 @@ pub(crate) fn comparison_phrase(value: Option<&Value>) -> String {
 
 // ── Shared references ───────────────────────────────────────────────────────
 
+/// The describer's spelling of `event-object` when every trigger's object is a model ("that model"
+/// rather than "that unit"). `model_object_refs` writes it into the effect before rendering.
+pub(crate) const EVENT_OBJECT_MODEL: &str = "event-object-model";
+
+/// Whether `v` is the trigger's event object, a unit or a model.
+pub(crate) fn is_event_object(v: Option<&Value>) -> bool {
+    matches!(
+        v.and_then(Value::as_str),
+        Some("event-object" | EVENT_OBJECT_MODEL)
+    )
+}
+
+/// `v` with every `event-object` ref spelled `EVENT_OBJECT_MODEL`.
+pub(crate) fn model_object_refs(v: &Value) -> Value {
+    match v {
+        Value::String(s) if s == "event-object" => Value::String(EVENT_OBJECT_MODEL.into()),
+        Value::Array(a) => Value::Array(a.iter().map(model_object_refs).collect()),
+        Value::Object(o) => Value::Object(
+            o.iter()
+                .map(|(k, x)| (k.clone(), model_object_refs(x)))
+                .collect(),
+        ),
+        _ => v.clone(),
+    }
+}
+
 pub(crate) fn role_phrase(role: &str) -> Option<&'static str> {
     Some(match role {
         "this-unit" => "the unit",
@@ -152,6 +178,7 @@ pub(crate) fn role_phrase(role: &str) -> Option<&'static str> {
         "defender" => "the target unit",
         "event-subject" => "the triggering unit",
         "event-object" => "that unit",
+        EVENT_OBJECT_MODEL => "that model",
         "stratagem-target" => "the Stratagem's target",
         "selected-unit" => "the selected unit",
         "recipient" => "the unit",

@@ -28569,7 +28569,244 @@
     }
   },
   {
-    "caseId": "aura-role-filtered-effect#436",
+    "caseId": "event-object-model-keyword#436",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-object",
+          "filter": {
+            "all_of": [
+              "PINK"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "stealth"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "level": "model",
+        "member_of": "this-unit"
+      }
+    },
+    "expected": {
+      "text": "When a friendly model in the unit is destroyed, if that model has the PINK keyword, the unit gains the Stealth ability."
+    }
+  },
+  {
+    "caseId": "event-object-unit-keyword#437",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-object",
+          "filter": {
+            "all_of": [
+              "PINK"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "stealth"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "INFANTRY"
+        ]
+      }
+    },
+    "expected": {
+      "text": "Each time a friendly INFANTRY unit is destroyed, if that unit has the PINK keyword, the unit gains the Stealth ability."
+    }
+  },
+  {
+    "caseId": "event-object-mixed-triggers#438",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-object",
+          "filter": {
+            "all_of": [
+              "PINK"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "stealth"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": [
+      {
+        "event": "model-destroyed",
+        "object": {
+          "owner": "friendly",
+          "level": "model",
+          "member_of": "this-unit"
+        }
+      },
+      {
+        "event": "destroyed",
+        "object": {
+          "owner": "friendly",
+          "all_of": [
+            "INFANTRY"
+          ]
+        }
+      }
+    ],
+    "expected": {
+      "text": "When a friendly model in the unit is destroyed or each time a friendly INFANTRY unit is destroyed, if that unit has the PINK keyword, the unit gains the Stealth ability."
+    }
+  },
+  {
+    "caseId": "event-object-model-target#439",
+    "effect": {
+      "type": "ability-grant",
+      "target": "event-object",
+      "modifier": {
+        "ability": "stealth"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "damage-allocated",
+      "object": {
+        "owner": "friendly",
+        "level": "model"
+      }
+    },
+    "expected": {
+      "text": "When damage is allocated to a friendly model, that model gains the Stealth ability."
+    }
+  },
+  {
+    "caseId": "event-object-model-history#440",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": "event-object",
+          "window": "event",
+          "filter": {
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "stealth"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "level": "model",
+        "member_of": "this-unit"
+      }
+    },
+    "expected": {
+      "text": "When a friendly model in the unit is destroyed, when destroyed by any attack made with melee weapons, the unit gains the Stealth ability."
+    }
+  },
+  {
+    "caseId": "event-object-model-act-on-death#441",
+    "effect": {
+      "type": "act-on-death",
+      "target": "event-object",
+      "modifier": {
+        "act": "fight",
+        "resolution": "after-attacking-unit-finishes",
+        "removal": "after-destroyed-model-fights",
+        "gate": {
+          "dice": "D6",
+          "threshold": 2,
+          "comparison": "gte",
+          "modifiers": []
+        },
+        "eligibility": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "happened",
+              "parameters": {
+                "subject": "event-object",
+                "event": "selected",
+                "filter": {
+                  "to": "fight"
+                },
+                "window": "phase"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "level": "model",
+        "member_of": "this-unit"
+      }
+    },
+    "expected": {
+      "text": "When a friendly model in the unit is destroyed, unless that model has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought."
+    }
+  },
+  {
+    "caseId": "aura-role-filtered-effect#442",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",

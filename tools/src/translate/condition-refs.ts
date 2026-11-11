@@ -118,6 +118,27 @@ export const ord = (n: number): string => ORDINAL[n] ?? `${n}th`;
 
 // ── Shared references ───────────────────────────────────────────────────────
 
+/**
+ * The describer's spelling of `event-object` when every trigger's object is a model ("that model"
+ * rather than "that unit"). `modelObjectRefs` writes it into the effect before rendering.
+ */
+export const EVENT_OBJECT_MODEL = "event-object-model";
+
+/** Whether `ref` is the trigger's event object, a unit or a model. */
+export function isEventObject(ref: unknown): boolean {
+  return ref === "event-object" || ref === EVENT_OBJECT_MODEL;
+}
+
+/** `value` with every `event-object` ref spelled `EVENT_OBJECT_MODEL`. */
+export function modelObjectRefs<T>(value: T): T {
+  if (value === "event-object") return EVENT_OBJECT_MODEL as T;
+  if (Array.isArray(value)) return value.map(modelObjectRefs) as T;
+  if (value != null && typeof value === "object") {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, modelObjectRefs(v)])) as T;
+  }
+  return value;
+}
+
 const ROLE_PHRASES: Record<string, string> = {
   "this-unit": "the unit",
   "this-model": "this model",
@@ -126,6 +147,7 @@ const ROLE_PHRASES: Record<string, string> = {
   defender: "the target unit",
   "event-subject": "the triggering unit",
   "event-object": "that unit",
+  "event-object-model": "that model",
   "stratagem-target": "the Stratagem's target",
   "selected-unit": "the selected unit",
   recipient: "the unit",

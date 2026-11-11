@@ -138,6 +138,39 @@ func jsNumberStr(v any) (float64, string) {
 
 // -- Shared references --------------------------------------------------------
 
+// eventObjectModel is the describer's spelling of `event-object` when every trigger's object is a
+// model ("that model" rather than "that unit"). modelObjectRefs writes it into the effect before
+// rendering.
+const eventObjectModel = "event-object-model"
+
+// isEventObject reports whether ref is the trigger's event object, a unit or a model.
+func isEventObject(ref any) bool {
+	return ref == "event-object" || ref == eventObjectModel
+}
+
+// modelObjectRefs returns v with every `event-object` ref spelled eventObjectModel.
+func modelObjectRefs(v any) any {
+	switch x := v.(type) {
+	case string:
+		if x == "event-object" {
+			return eventObjectModel
+		}
+	case []any:
+		out := make([]any, len(x))
+		for i, item := range x {
+			out[i] = modelObjectRefs(item)
+		}
+		return out
+	case map[string]any:
+		out := make(map[string]any, len(x))
+		for k, item := range x {
+			out[k] = modelObjectRefs(item)
+		}
+		return out
+	}
+	return v
+}
+
 var rolePhrases = map[string]string{
 	"this-unit":          "the unit",
 	"this-model":         "this model",
@@ -146,6 +179,7 @@ var rolePhrases = map[string]string{
 	"defender":           "the target unit",
 	"event-subject":      "the triggering unit",
 	"event-object":       "that unit",
+	eventObjectModel:     "that model",
 	"stratagem-target":   "the Stratagem's target",
 	"selected-unit":      "the selected unit",
 	"recipient":          "the unit",

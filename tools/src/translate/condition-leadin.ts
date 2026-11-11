@@ -4,7 +4,7 @@
  */
 import { describeCondition, describePredicate, stepWindow, type Condition } from "./condition.js";
 import { describeHappened } from "./condition-history.js";
-import { andList, orList, type P, ruleRefPhrase, str, titleCase, windowPhrase } from "./condition-refs.js";
+import { andList, isEventObject, orList, type P, ruleRefPhrase, str, titleCase, windowPhrase } from "./condition-refs.js";
 
 /**
  * Render a condition as a predicate on an already-named candidate unit, so selection
@@ -125,7 +125,7 @@ export function conditionLeadIn(c: Condition, defending = false): string {
       if (p.event === "disembarked" && p.subject == null && f.transport == null && f.phase == null) return `if the unit disembarked from a Transport ${windowPhrase(p.window)}`.trimEnd();
       // "while the unit is performing an Agile Manoeuvre": the use is being resolved now.
       if (p.event === "used" && p.window === "event" && f.ability_keyword == null && f.same_rule_as == null) return `while ${describeHappened(p, false)}`;
-      if ((p.event === "destroyed" || p.event === "model-destroyed") && p.object === "event-object" && p.window === "event")
+      if ((p.event === "destroyed" || p.event === "model-destroyed") && isEventObject(p.object) && p.window === "event")
         return `when ${describeHappened(p, false)}`;
       return `if ${describeHappened(p, false)}`;
     }
