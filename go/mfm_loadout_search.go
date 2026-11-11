@@ -374,7 +374,11 @@ func (space *mfmSpace) configurationOf(leaf mfmLeaf) MfmConfiguration {
 	}
 	groups := make([]mfmRowBundle, 0, len(leaf.picks))
 	for _, p := range leaf.picks {
-		groups = append(groups, mfmRowBundle{Model: p.row, Count: p.take, Items: mfmItemsOf(space.bundles[p.row][p.bundle])})
+		bundle := mfmCopies{}
+		if p.bundle >= 0 {
+			bundle = space.bundles[p.row][p.bundle]
+		}
+		groups = append(groups, mfmRowBundle{Model: p.row, Count: p.take, Items: mfmItemsOf(bundle)})
 	}
 	return MfmConfiguration{Counts: counts, Groups: groups, Unit: mfmItemsOf(space.unitPicks[leaf.unitPick])}
 }

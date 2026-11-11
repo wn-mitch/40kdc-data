@@ -95,7 +95,7 @@ func (r *MfmLoadoutRules) searchAttempt(t *mfmTests, models map[string]int, spac
 			keys[key] = true
 			kept = append(kept, mfmKept{index, projected})
 		}
-		next, stop := iter.Pull(t.rowCopies(row, kept, models[row]))
+		next, stop := iter.Pull(t.rowCopies(row, kept, models[row], r.bareModels(row)))
 		rowResults[i] = &mfmLazy{next: next, stop: stop}
 	}
 	defer func() {
@@ -163,10 +163,11 @@ func (r *MfmLoadoutRules) searchAttempt(t *mfmTests, models map[string]int, spac
 }
 
 // rowCopies yields the distinct copies n models of row can carry within its
-// caps and limits, each with the first picks found for it. The walk picks the
-// next bundle any remaining model carries, from bundle b on, and how many carry
-// it (most first), so it recurses no deeper than the row's models.
-func (t *mfmTests) rowCopies(row string, bundles []mfmKept, n int) iter.Seq[mfmRowResult] {
+// caps and limits, each with the first picks found for it; up to `bare` of the
+// models may carry nothing, picked as bundle -1. The walk picks the next bundle
+// any remaining model carries, from bundle b on, and how many carry it (most
+// first), so it recurses no deeper than the row's models.
+func (t *mfmTests) rowCopies(row string, bundles []mfmKept, n, bare int) iter.Seq[mfmRowResult] {
 	return func(yield func(mfmRowResult) bool) {
 		found := map[mfmKey]bool{}
 		walked := map[mfmKey]bool{}
@@ -174,13 +175,21 @@ func (t *mfmTests) rowCopies(row string, bundles []mfmKept, n int) iter.Seq[mfmR
 		// walk returns false once yield asks to stop.
 		var walk func(b, left int, own []int) bool
 		walk = func(b, left int, own []int) bool {
-			if left == 0 {
+			if left <= bare {
 				key := t.keyOf(own)
 				if !found[key] && t.rowHolds(row, own, false) {
 					found[key] = true
-					return yield(mfmRowResult{own: own, picks: append([]mfmPick(nil), picks...)})
+					given := append([]mfmPick(nil), picks...)
+					if left > 0 {
+						given = append(given, mfmPick{row: row, bundle: -1, take: left})
+					}
+					if !yield(mfmRowResult{own: own, picks: given}) {
+						return false
+					}
 				}
-				return true
+				if left == 0 {
+					return true
+				}
 			}
 			prefix := t.at(t.keyOf(own), t.maxModels+1, left)
 			for j := b; j < len(bundles); j++ {

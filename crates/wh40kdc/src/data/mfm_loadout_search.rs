@@ -17,7 +17,10 @@ use std::rc::Rc;
 
 use super::check::{uniform_allows, uniform_attempts};
 use super::space::{space_of, SearchTests, Space};
-use super::{Copies, MfmItem, MfmLoadoutRules};
+use super::{bare_models, Copies, MfmItem, MfmLoadoutRules};
+
+/// The bundle index a row walk gives the models it leaves bare.
+const BARE: usize = usize::MAX;
 
 /// `count` models of loadout row `model`, each carrying `items` (per model, ascending by id).
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -69,7 +72,7 @@ struct Leaf {
 /// One distinct set of a row's own copies, with the first picks found for it.
 struct RowResult {
     own: Vec<i64>,
-    /// `(bundle index, models)` in walk order.
+    /// `(bundle index, models)` in walk order; [`BARE`] for models that carry nothing.
     picks: Vec<(usize, i64)>,
 }
 
@@ -85,18 +88,22 @@ struct Frame {
 /// The walk over one row's distinct copies, resumable one result at a time.
 /// It picks the next bundle any remaining model carries, from the current
 /// bundle on, and how many carry it (most first), so its stack is no deeper
-/// than the row's models.
+/// than the row's models. Up to `bare` models may carry nothing: a position
+/// with that few models left is a result before the walk goes on from it.
 struct RowWalk {
     stack: Vec<Frame>,
     picks: Vec<(usize, i64)>,
     found: HashSet<Vec<i64>>,
     walked: HashSet<(Vec<i64>, i64, usize)>,
+    bare: i64,
     /// A row of no models has one result, its empty copies, still to give.
     empty_pending: bool,
+    /// A row whose every model may go bare gives that result first.
+    root_pending: bool,
 }
 
 impl RowWalk {
-    fn new(models: i64, width: usize) -> Self {
+    fn new(models: i64, width: usize, bare: i64) -> Self {
         RowWalk {
             stack: if models > 0 {
                 vec![Frame {
@@ -111,8 +118,31 @@ impl RowWalk {
             picks: Vec::new(),
             found: HashSet::new(),
             walked: HashSet::new(),
+            bare,
             empty_pending: models <= 0,
+            root_pending: models > 0 && models <= bare,
         }
+    }
+
+    /// The bare result at a position with `left` models left, unless its copies
+    /// were already given or the row's caps and limits refuse them.
+    fn bare_result(
+        &mut self,
+        tests: &SearchTests,
+        r: usize,
+        own: &[i64],
+        left: i64,
+    ) -> Option<RowResult> {
+        if self.found.contains(own) || !tests.row_holds(r, own, false) {
+            return None;
+        }
+        self.found.insert(own.to_vec());
+        let mut picks = self.picks.clone();
+        picks.push((BARE, left));
+        Some(RowResult {
+            own: own.to_vec(),
+            picks,
+        })
     }
 
     fn pop(&mut self) {
@@ -136,6 +166,13 @@ impl RowWalk {
                 own,
                 picks: Vec::new(),
             });
+        }
+        if self.root_pending {
+            self.root_pending = false;
+            let (own, left) = (self.stack[0].own.clone(), self.stack[0].left);
+            if let Some(result) = self.bare_result(tests, r, &own, left) {
+                return Some(result);
+            }
         }
         loop {
             let top = self.stack.last_mut()?;
@@ -182,11 +219,16 @@ impl RowWalk {
             }
             self.picks.push((*index, take));
             self.stack.push(Frame {
-                own: next,
+                own: next.clone(),
                 left,
                 j: j + 1,
                 take: 0,
             });
+            if left <= self.bare {
+                if let Some(result) = self.bare_result(tests, r, &next, left) {
+                    return Some(result);
+                }
+            }
         }
     }
 }
@@ -312,7 +354,7 @@ fn search(
             .iter()
             .map(|row| RowCache {
                 items: Vec::new(),
-                walk: RowWalk::new(models[row], space.ids.len()),
+                walk: RowWalk::new(models[row], space.ids.len(), bare_models(rules, row)),
                 done: false,
             })
             .collect();
@@ -370,7 +412,11 @@ fn configuration_of(space: &Space, leaf: &Leaf) -> MfmConfiguration {
             .map(|(row, bundle, take)| MfmRowBundle {
                 model: space.rows[*row].clone(),
                 count: *take,
-                items: items_of(&space.bundles[*row][*bundle]),
+                items: if *bundle == BARE {
+                    Vec::new()
+                } else {
+                    items_of(&space.bundles[*row][*bundle])
+                },
             })
             .collect(),
         unit: items_of(&space.unit_picks[leaf.unit_pick]),

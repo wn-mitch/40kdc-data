@@ -126,7 +126,7 @@ export function canonicalMfmUnitCases(
   const units: MfmLoadoutCase[] = [];
   const assignments: MfmLoadoutCase[] = [];
   const unitChecks: MfmLoadoutCase[] = [];
-  const compositions = (dataset.unitCompositions as readonly Composition[])
+  const compositions = (dataset.forGameMode("all").unitCompositions as readonly Composition[])
     .filter((composition) => composition.loadout)
     .sort((a, b) => byCodeUnit(a.faction_id, b.faction_id) || byCodeUnit(a.unit_id, b.unit_id));
   const unitCase = (composition: Composition, modelCount: number, limit: number, suffix = "") => {

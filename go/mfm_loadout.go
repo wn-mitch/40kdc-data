@@ -23,6 +23,10 @@ import (
 //     counted;
 //   - in a uniform set, every model on the row (or in the unit) that takes no
 //     substitute carries the same main option;
+//   - a slot choice holding its model's whole stock plus items the row offers
+//     only as unticked checkboxes may be taken without them;
+//   - up to bareModels models of a row may carry nothing, as the default
+//     unit's do;
 //   - a row (or the unit's own wargear) whose every option for an item is a
 //     checkbox carries at most one copy per such option, or its stock copies
 //     when more. A row the app shows per model gets that cap on each model.
@@ -193,6 +197,121 @@ func mfmSlotChoices(choices [][]mfmItem, stock mfmCopies) [][]mfmItem {
 	return append(append(out, choices...), []mfmItem{})
 }
 
+// rowSlotChoices is a row slot's choices, plus the stock alone for each add-on
+// choice that lacks it: a choice holding the model's whole stock and items the
+// row offers only as checkboxes that start unticked lets the model leave those
+// items off, as the app's default for it does (Purge Corps Sulphurhounds).
+func (r *MfmLoadoutRules) rowSlotChoices(model string, choices [][]mfmItem, stock mfmCopies) [][]mfmItem {
+	choices = mfmSlotChoices(choices, stock)
+	if len(stock) == 0 {
+		return choices
+	}
+	unticked := func(id string) bool {
+		seen := false
+		for _, option := range r.Options {
+			if option.Model == nil || *option.Model != model || option.ID != id {
+				continue
+			}
+			if option.Input != "checkbox" || option.Default != 0 {
+				return false
+			}
+			seen = true
+		}
+		return seen
+	}
+	same := func(a, b []mfmItem) bool {
+		copies := mfmCopiesOf(a, 1)
+		if len(a) != len(b) {
+			return false
+		}
+		for _, item := range b {
+			if n, ok := copies[item.ID]; !ok || n != item.Count {
+				return false
+			}
+		}
+		return true
+	}
+	out := append([][]mfmItem(nil), choices...)
+	for _, choice := range choices {
+		holds := true
+		for id, n := range stock {
+			found := false
+			for _, item := range choice {
+				if item.ID == id && item.Count >= n {
+					found = true
+					break
+				}
+			}
+			if !found {
+				holds = false
+				break
+			}
+		}
+		if !holds {
+			continue
+		}
+		var plain []mfmItem
+		extras, pure := 0, true
+		for _, item := range choice {
+			if item.Count > stock[item.ID] {
+				extras++
+				if stock[item.ID] != 0 || !unticked(item.ID) {
+					pure = false
+				}
+			} else {
+				plain = append(plain, item)
+			}
+		}
+		if extras == 0 || !pure {
+			continue
+		}
+		known := false
+		for _, other := range out {
+			if same(other, plain) {
+				known = true
+				break
+			}
+		}
+		if !known {
+			out = append(out, plain)
+		}
+	}
+	return out
+}
+
+// bareModels is the models of `model` the default unit leaves bare: its
+// default models less the most models any one of its stock items covers, at
+// the template's copies per model (one for an item the template lacks). Noise
+// Marines: five models, four of each template item. The app starts the unit
+// that way, so up to that many models of the row may carry nothing.
+func (r *MfmLoadoutRules) bareModels(model string) int {
+	template := r.template(model)
+	for _, row := range r.Stock {
+		if row.Model == nil || *row.Model != model {
+			continue
+		}
+		if row.Models == 0 || len(row.Items) == 0 || len(template) == 0 {
+			return 0
+		}
+		per := mfmCopiesOf(template, 1)
+		covered := 0
+		for _, item := range row.Items {
+			each, ok := per[item.ID]
+			if !ok || each <= 0 {
+				each = 1
+			}
+			if n := (item.Count + each - 1) / each; n > covered {
+				covered = n
+			}
+		}
+		if row.Models > covered {
+			return row.Models - covered
+		}
+		return 0
+	}
+	return 0
+}
+
 // modelStock is what one model starts with: its template, or its default
 // copies over its model count, rounded up.
 func (r *MfmLoadoutRules) modelStock(model string) mfmCopies {
@@ -254,7 +373,7 @@ func (r *MfmLoadoutRules) rowBundles(model string, fitsCopies func(mfmCopies) bo
 		bundles := [][]mfmItem{{}}
 		for _, s := range group {
 			slot := r.Slots[s]
-			picks := mfmPickCombinations(mfmSlotChoices(slot.Choices, stock), slot.Picks, slot.Repeats)
+			picks := mfmPickCombinations(r.rowSlotChoices(model, slot.Choices, stock), slot.Picks, slot.Repeats)
 			var next [][]mfmItem
 			for _, bundle := range bundles {
 				for _, pick := range picks {

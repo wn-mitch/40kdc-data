@@ -3,8 +3,9 @@
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 
 use super::{
-    add, checkbox_caps, contains, copies_of, get, limit_holds, pick_combinations, row_bundles,
-    slot_choices, Copies, MfmItem, MfmLoadoutRules, MfmLoadoutViolation, MfmUniform, MAX_BUNDLES,
+    add, bare_models, checkbox_caps, contains, copies_of, get, limit_holds, pick_combinations,
+    row_bundles, slot_choices, Copies, MfmItem, MfmLoadoutRules, MfmLoadoutViolation, MfmUniform,
+    MAX_BUNDLES,
 };
 
 fn violation(code: &'static str, message: impl Into<String>) -> Vec<MfmLoadoutViolation> {
@@ -157,6 +158,7 @@ pub fn check_mfm_loadout(
             })
     };
 
+    let bare = |row: &str| bare_models(rules, row);
     let all_counts: Copies = counts.iter().map(|(id, n)| (id.clone(), *n)).collect();
     let total = vector(&mut counts.iter());
     for attempt in &attempts {
@@ -188,7 +190,7 @@ pub fn check_mfm_loadout(
             if !unit_limits_hold {
                 continue;
             }
-            if assign(&rows, &allowed, &model_count, rest, &row_accepts) {
+            if assign(&rows, &allowed, &model_count, &bare, rest, &row_accepts) {
                 return Vec::new();
             }
         }
@@ -292,18 +294,21 @@ struct Assign<'a> {
     rows: &'a [&'a str],
     allowed: &'a HashMap<&'a str, Vec<Vec<i64>>>,
     model_count: &'a dyn Fn(&str) -> i64,
+    bare: &'a dyn Fn(&str) -> i64,
     row_accepts: &'a dyn Fn(&str, &[i64]) -> bool,
     // Failures depend only on the row, the copies left at the row's start and
     // the search position within it, so they are cached on those.
     failed: HashSet<(usize, Vec<i64>, usize, i64, Vec<i64>)>,
 }
 
-/// Whether per-row bundle counts use every model and exactly `rest` copies,
-/// where each row's own copies pass `row_accepts`.
+/// Whether per-row bundle counts use every model, but at most `bare` models of a
+/// row that carry nothing, and exactly `rest` copies, where each row's own
+/// copies pass `row_accepts`.
 fn assign(
     rows: &[&str],
     allowed: &HashMap<&str, Vec<Vec<i64>>>,
     model_count: &dyn Fn(&str) -> i64,
+    bare: &dyn Fn(&str) -> i64,
     rest: Vec<i64>,
     row_accepts: &dyn Fn(&str, &[i64]) -> bool,
 ) -> bool {
@@ -311,6 +316,7 @@ fn assign(
         rows,
         allowed,
         model_count,
+        bare,
         row_accepts,
         failed: HashSet::new(),
     };
@@ -334,12 +340,15 @@ fn walk_bundle(
     current: Vec<i64>,
 ) -> bool {
     let row = search.rows[r];
-    if models_left == 0 {
+    // The models still unassigned go bare when the row allows that many.
+    if models_left <= (search.bare)(row) {
         let used: Vec<i64> = start.iter().zip(&current).map(|(s, c)| s - c).collect();
-        return (search.row_accepts)(row, &used) && walk_row(search, r + 1, current);
+        if (search.row_accepts)(row, &used) && walk_row(search, r + 1, current.clone()) {
+            return true;
+        }
     }
     let bundles = &search.allowed[row];
-    if b >= bundles.len() {
+    if models_left == 0 || b >= bundles.len() {
         return false;
     }
     let key = (r, start.to_vec(), b, models_left, current.clone());

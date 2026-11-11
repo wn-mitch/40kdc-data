@@ -14,6 +14,10 @@ picks that produce exactly the unit's item counts:
   choice is the item that model keeps, and is not counted;
 - in a uniform set, every model on the row (or in the unit) that takes no
   substitute carries the same main option;
+- a slot choice holding its model's whole stock plus items the row offers only
+  as unticked checkboxes may be taken without them;
+- up to ``bare_models`` models of a row may carry nothing, as the default
+  unit's do;
 - a row (or the unit's own wargear) whose every option for an item is a
   checkbox carries at most one copy per such option, or its stock copies when
   more. A row the app lists model by model (stock ``individual``) gets that
@@ -80,6 +84,65 @@ def _slot_choices(slot: Mapping[str, Any], stock: Mapping[str, int]) -> list[Ite
     return list(slot["choices"]) if swap else [*slot["choices"], []]
 
 
+def _row_slot_choices(
+    rules: Mapping[str, Any], slot: Mapping[str, Any], stock: Mapping[str, int]
+) -> list[Items]:
+    """A row slot's choices, plus the stock alone for each add-on choice lacking it.
+
+    A choice holding the model's whole stock and items the row offers only as
+    checkboxes that start unticked lets the model leave those items off, as the
+    app's default for it does (Purge Corps Sulphurhounds).
+    """
+    choices = _slot_choices(slot, stock)
+    model = slot.get("model")
+    if model is None or not stock:
+        return choices
+
+    def unticked(item_id: str) -> bool:
+        options = [o for o in rules["options"] if o.get("model") == model and o["id"] == item_id]
+        return len(options) > 0 and all(
+            o["input"] == "checkbox" and o["default"] == 0 for o in options
+        )
+
+    def same(a: Items, b: Items) -> bool:
+        copies = _copies_of(a)
+        return len(a) == len(b) and all(copies.get(item["id"]) == item["count"] for item in b)
+
+    out = list(choices)
+    for choice in choices:
+        if not all(
+            any(item["id"] == item_id and item["count"] >= n for item in choice)
+            for item_id, n in stock.items()
+        ):
+            continue
+        extras = [item for item in choice if item["count"] > stock.get(item["id"], 0)]
+        if not extras or not all(
+            stock.get(item["id"], 0) == 0 and unticked(item["id"]) for item in extras
+        ):
+            continue
+        plain = [item for item in choice if not any(item is extra for extra in extras)]
+        if not any(same(other, plain) for other in out):
+            out.append(plain)
+    return out
+
+
+def bare_models(rules: Mapping[str, Any], model: str) -> int:
+    """The models of ``model`` the default unit leaves bare.
+
+    Its default models less the most models any one of its stock items covers,
+    at the template's copies per model (one for an item the template lacks).
+    Noise Marines: five models, four of each template item. The app starts the
+    unit that way, so up to that many models of the row may carry nothing.
+    """
+    row = next((entry for entry in rules["stock"] if entry.get("model") == model), None)
+    template = _template(rules, model)
+    if row is None or row["models"] == 0 or not row["items"] or not template:
+        return 0
+    per = _copies_of(template)
+    covered = max(0, *(math.ceil(item["count"] / per.get(item["id"], 1)) for item in row["items"]))
+    return max(0, row["models"] - covered)
+
+
 def _model_stock(rules: Mapping[str, Any], model: str) -> Copies:
     """One model's start: its template, or its default copies over its model count."""
     out = _copies_of(_template(rules, model))
@@ -118,7 +181,9 @@ def row_bundles(
     def product(group: list[Mapping[str, Any]]) -> list[Copies] | None:
         bundles: list[list[Any]] = [[]]
         for slot in group:
-            picks = _pick_combinations(_slot_choices(slot, stock), slot["picks"], slot["repeats"])
+            picks = _pick_combinations(
+                _row_slot_choices(rules, slot, stock), slot["picks"], slot["repeats"]
+            )
             bundles = [
                 b for b in ([*bundle, *pick] for bundle in bundles for pick in picks) if fits(b)
             ]
@@ -447,6 +512,7 @@ def check_mfm_loadout(
                 return False
         return True
 
+    bare = {row: bare_models(rules, row) for row in rows}
     total = vector(counts)
     for attempt in attempts:
         allowed = {
@@ -467,7 +533,7 @@ def check_mfm_loadout(
                 for limit in rules["limits"]
             ):
                 continue
-            if _assign(rows, allowed, models, rest, row_limits):
+            if _assign(rows, allowed, models, bare, rest, row_limits):
                 return []
     return [
         _violation(
@@ -482,10 +548,14 @@ def _assign(
     rows: Sequence[str],
     allowed: Mapping[str, list[list[int]]],
     models: Mapping[str, int],
+    bare: Mapping[str, int],
     rest: list[int],
     row_accepts: Callable[[str, list[int]], bool],
 ) -> bool:
-    """Whether per-row bundle counts use every model and exactly ``rest`` copies."""
+    """Whether per-row bundle counts use every model and exactly ``rest`` copies.
+
+    At most ``bare`` models of a row may carry nothing.
+    """
     # Failures depend only on the row, the copies left at the row's start and the
     # search position within it, so they are cached on those.
     failed: set[tuple[Any, ...]] = set()
@@ -497,12 +567,15 @@ def _assign(
         bundles = allowed[row]
         start = left
         start_key = tuple(start)
+        bare_left = bare.get(row, 0)
 
         def walk_bundle(b: int, models_left: int, current: list[int]) -> bool:
-            if models_left == 0:
+            # The models still unassigned go bare when the row allows that many.
+            if models_left <= bare_left:
                 used = [s - c for s, c in zip(start, current, strict=True)]
-                return row_accepts(row, used) and walk_row(r + 1, current)
-            if b >= len(bundles):
+                if row_accepts(row, used) and walk_row(r + 1, current):
+                    return True
+            if models_left == 0 or b >= len(bundles):
                 return False
             key = (r, start_key, b, models_left, tuple(current))
             if key in failed:

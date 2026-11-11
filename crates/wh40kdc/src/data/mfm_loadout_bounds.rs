@@ -13,7 +13,7 @@ use std::collections::{BTreeMap, HashMap};
 use super::check::{uniform_allows, uniform_attempts};
 use super::search::MfmSearchTooLarge;
 use super::space::{space_of, SearchTests};
-use super::{get, Copies, MfmLoadoutRules};
+use super::{bare_models, get, Copies, MfmLoadoutRules};
 
 /// Counted copies with the fewest (`lo`) and most (`hi`) copies of every other item.
 #[derive(Clone)]
@@ -131,8 +131,10 @@ pub fn mfm_weapon_bounds(
                     layer = next;
                 }
                 let mut results: HashMap<Vec<i64>, State> = HashMap::new();
+                // Models left over go bare, up to the row's bare models.
+                let bare = bare_models(rules, row);
                 for ((own, left), state) in layer {
-                    if left == 0 && tests.row_holds(r, &own, false) {
+                    if left <= bare && tests.row_holds(r, &own, false) {
                         merge(&mut results, own, state);
                     }
                 }

@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/index.js";
-import { checkboxCaps, checkMfmLoadout, defaultMfmLoadout, type MfmLoadoutRules } from "../src/data/mfm-loadout.js";
+import { bareModels, checkboxCaps, checkMfmLoadout, defaultMfmLoadout, type MfmLoadoutRules } from "../src/data/mfm-loadout.js";
 import { liftLoadout, refinedRows } from "../src/mfm/loadout-lift.js";
 import { addedModels } from "../src/mfm/added-models.js";
 import { partialDump } from "./mfm-fixture.js";
 
-const dataset = Dataset.embedded();
+// Every game mode's units: the Purge Corps Sulphurhounds are not matched-play units.
+const dataset = Dataset.embedded().forGameMode("all");
 const compositions: readonly { unit_id: string; faction_id: string; loadout?: MfmLoadoutRules }[] = dataset.unitCompositions;
 const rulesOf = (factionId: string, unitId: string): MfmLoadoutRules => {
   const composition = compositions
@@ -157,15 +158,85 @@ describe("the lifted loadouts", () => {
     expect(checkMfmLoadout(rules, models, foreign).map((v) => v.code)).toEqual(["unknown-item"]);
   });
 
-  it("accepts every default unit but the Noise Marines, whose dump rows contradict each other", () => {
-    const failing = compositions
-      .filter((row) => row.loadout)
+  it("accepts every default unit", () => {
+    const checked = compositions.filter((row) => row.loadout && [...defaultMfmLoadout(row.loadout).models.values()].some((n) => n > 0));
+    expect(checked.some((row) => row.unit_id === "purge-corps-serberys-sulphurhounds")).toBe(true);
+    const failing = checked
       .filter((row) => {
         const { models, counts } = defaultMfmLoadout(row.loadout!);
-        return [...models.values()].some((n) => n > 0) && checkMfmLoadout(row.loadout!, models, counts).length > 0;
+        return checkMfmLoadout(row.loadout!, models, counts).length > 0;
       })
       .map((row) => `${row.faction_id}/${row.unit_id}`);
-    expect(failing).toEqual(["emperors-children/noise-marines"]);
+    expect(failing).toEqual([]);
+  });
+});
+
+describe("the app's default unit", () => {
+  it("lets a Purge Corps Sulphurhound leave off the phosphor pistol its default leaves unticked", () => {
+    const rules = rulesOf("adeptus-mechanicus", "purge-corps-serberys-sulphurhounds");
+    const pistol = "phosphor-pistol-purge-corps-serberys-sulphurhounds";
+    const carbine = "phosphor-blast-carbine-purge-corps-serberys-sulphurhounds";
+    expect(legal(rules, unit(rules, {}))).toBe(true);
+    expect(legal(rules, unit(rules, {}, [[null, pistol, 1]]))).toBe(true);
+    // One pistol for the carbine model, two on the pistol model: no third source.
+    expect(legal(rules, unit(rules, {}, [[null, pistol, 2]]))).toBe(false);
+    // Leaving the pistol off keeps the rest of the stock: the carbine cannot go with it.
+    expect(legal(rules, unit(rules, {}, [[carbine, pistol, 1]]))).toBe(false);
+    expect(legal(rules, unit(rules, {}, [["clawed-limbs", pistol, 1]]))).toBe(false);
+  });
+
+  it("keeps add-on items a plain stock choice already covers as they were", () => {
+    const rules = rulesOf("adepta-sororitas", "celestian-insidiants");
+    const pistol = "condemnor-bolt-pistol";
+    expect(legal(rules, unit(rules, {}, [[null, "simulacrum-imperialis", 1]]))).toBe(true);
+    expect(legal(rules, unit(rules, {}, [[null, "simulacrum-imperialis", 2]]))).toBe(false);
+    expect(legal(rules, unit(rules, {}, [[pistol, "simulacrum-imperialis", 1]]))).toBe(false);
+  });
+
+  it("counts a model bare only when no stock copy can sit on it", () => {
+    const rules = (stock: MfmLoadoutRules["stock"], template: { id: string; count: number }[]): MfmLoadoutRules =>
+      ({ stock, templates: [{ model: "A", items: template }], slots: [], limits: [], uniform: [], options: [] });
+    expect(bareModels(rules([{ model: "A", models: 5, items: [{ id: "gun", count: 4 }, { id: "blade", count: 4 }] }], [{ id: "gun", count: 1 }, { id: "blade", count: 1 }]), "A")).toBe(1);
+    // Stock the template does not list still sits on models: one copy each.
+    expect(bareModels(rules([{ model: "A", models: 2, items: [{ id: "old-gun", count: 2 }] }], [{ id: "new-gun", count: 1 }]), "A")).toBe(0);
+    // Swaps away from a template item leave no model bare while another item covers them all.
+    expect(bareModels(rules([{ model: "A", models: 4, items: [{ id: "gun", count: 2 }, { id: "pistol", count: 4 }] }], [{ id: "gun", count: 1 }, { id: "pistol", count: 1 }]), "A")).toBe(0);
+    expect(bareModels(rulesOf("chaos-space-marines", "havocs"), "Havoc")).toBe(0);
+  });
+
+  it("lets one Noise Marine go bare, as the default's four-of-each on five models does, but not two", () => {
+    const rules = rulesOf("emperors-children", "noise-marines");
+    const ccw = "close-combat-weapon-noise-marines";
+    expect(legal(rules, unit(rules, {}))).toBe(true);
+    expect(legal(rules, unit(rules, {}, [[null, "sonic-blaster", 1], [null, ccw, 1]]))).toBe(true);
+    expect(legal(rules, unit(rules, {}, [["sonic-blaster", "blastmaster", 2]]))).toBe(true);
+    expect(legal(rules, unit(rules, {}, [["sonic-blaster", "blastmaster", 3]]))).toBe(false);
+    // Two bare Noise Marines.
+    const { models } = defaultMfmLoadout(rules);
+    expect(checkMfmLoadout(rules, models, new Map([["sonic-blaster", 4], [ccw, 4]])).map((v) => v.code)).toEqual(["no-assignment"]);
+    // A model with a sonic blaster but no close combat weapon is not bare.
+    expect(legal(rules, unit(rules, {}, [[null, "sonic-blaster", 1]]))).toBe(false);
+  });
+});
+
+describe("app-exported lists", () => {
+  it("accepts three Broadsides with a twin smart missile system and a weapon support system each", () => {
+    const rules = rulesOf("tau-empire", "broadside-battlesuits");
+    const tsms = "twin-smart-missile-system-broadside-battlesuits";
+    const models = new Map([["Broadside Shas’ui", 2], ["Broadside Shas’vre", 1]]);
+    const counts = new Map([["crushing-bulk", 3], ["heavy-rail-rifle", 3], [tsms, 3], ["weapon-support-system", 3]]);
+    expect(checkMfmLoadout(rules, models, counts)).toEqual([]);
+    expect(checkMfmLoadout(rules, models, new Map([...counts, [tsms, 4]])).length).toBeGreaterThan(0);
+  });
+
+  it("keeps the one-per-unit swaps the app shows as one checkbox for a whole row", () => {
+    const gore = rulesOf("world-eaters", "goremongers");
+    expect(legal(gore, unit(gore, {}, [["chainblade-goremongers", "blood-harpoon", 1]]))).toBe(true);
+    expect(legal(gore, unit(gore, {}, [["chainblade-goremongers", "blood-harpoon", 2]]))).toBe(false);
+    const legionaries = rulesOf("chaos-space-marines", "legionaries");
+    expect(legal(legionaries, unit(legionaries, { Legionary: 9 }, [["boltgun-legionaries", "plasma-gun", 1], ["boltgun-legionaries", "meltagun", 1]]))).toBe(true);
+    // "Duplicates are not allowed": the limit's two picks at ten models cannot both be plasma guns.
+    expect(legal(legionaries, unit(legionaries, { Legionary: 9 }, [["boltgun-legionaries", "plasma-gun", 2]]))).toBe(false);
   });
 });
 

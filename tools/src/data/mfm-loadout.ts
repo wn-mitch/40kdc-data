@@ -11,6 +11,9 @@
  *   non-stock item in a choice is the item that model keeps, and is not counted;
  * - in a uniform set, every model on the row (or in the unit) that takes no substitute carries the
  *   same main option;
+ * - a slot choice holding its model's whole stock plus items the row offers only as unticked
+ *   checkboxes may be taken without them (see {@link rowSlotChoices});
+ * - up to {@link bareModels} models of a row may carry nothing, as the default unit's do;
  * - a row (or the unit's own wargear) whose every option for an item is a checkbox carries at most
  *   one copy per such option, or its stock copies when more: the app takes a checkbox once. A row
  *   the app shows per model (see {@link checkboxCaps}) gets that cap on each of its models.
@@ -80,6 +83,48 @@ export function slotChoices(slot: MfmLoadoutRules["slots"][number], stock: Copie
 }
 
 /**
+ * A row slot's choices, plus the stock alone for each add-on choice that lacks it: a choice holding
+ * the model's whole stock and items the row offers only as checkboxes that start unticked lets the
+ * model leave those items off, as the app's default for it does (Purge Corps Sulphurhounds).
+ */
+export function rowSlotChoices(rules: MfmLoadoutRules, slot: MfmLoadoutRules["slots"][number], stock: Copies): MfmItem[][] {
+  const choices = slotChoices(slot, stock);
+  if (slot.model === undefined || stock.size === 0) return choices;
+  const unticked = (id: string) => {
+    const options = rules.options.filter((option) => option.model === slot.model && option.id === id);
+    return options.length > 0 && options.every((option) => option.input === "checkbox" && option.default === 0);
+  };
+  const same = (a: readonly MfmItem[], b: readonly MfmItem[]) => {
+    const copies = copiesOf(a);
+    return a.length === b.length && b.every((item) => copies.get(item.id) === item.count);
+  };
+  const out = [...choices];
+  for (const choice of choices) {
+    if (![...stock].every(([id, n]) => choice.some((item) => item.id === id && item.count >= n))) continue;
+    const extras = choice.filter((item) => item.count > (stock.get(item.id) ?? 0));
+    if (extras.length === 0 || !extras.every((item) => (stock.get(item.id) ?? 0) === 0 && unticked(item.id))) continue;
+    const plain = choice.filter((item) => !extras.includes(item));
+    if (!out.some((other) => same(other, plain))) out.push(plain);
+  }
+  return out;
+}
+
+/**
+ * The models of `model` the default unit leaves bare: its default models less the most models any
+ * one of its stock items covers, at the template's copies per model (one for an item the template
+ * lacks). Noise Marines: five models, four of each template item. The app starts the unit that
+ * way, so up to that many models of the row may carry nothing.
+ */
+export function bareModels(rules: MfmLoadoutRules, model: string): number {
+  const row = rules.stock.find((entry) => entry.model === model);
+  const template = rules.templates.find((entry) => entry.model === model)?.items ?? [];
+  if (!row || row.models === 0 || row.items.length === 0 || template.length === 0) return 0;
+  const per = copiesOf(template);
+  const covered = row.items.reduce((most, item) => Math.max(most, Math.ceil(item.count / (per.get(item.id) ?? 1))), 0);
+  return Math.max(0, row.models - covered);
+}
+
+/**
  * The bundles one model of `model` can carry: one pick combination per slot, multiplied out,
  * dropping any partial bundle `fitsCopies` refuses (the checker refuses one holding more copies
  * than the unit has). A partial bundle only gains copies as slots are added, so `fitsCopies` must
@@ -99,7 +144,7 @@ export function rowBundles(
   const product = (group: typeof slots): Copies[] | null => {
     let bundles: MfmItem[][] = [[]];
     for (const slot of group) {
-      const picks = pickCombinations(slotChoices(slot, stock), slot.picks, slot.repeats);
+      const picks = pickCombinations(rowSlotChoices(rules, slot, stock), slot.picks, slot.repeats);
       bundles = bundles.flatMap((bundle) => picks.map((pick) => [...bundle, ...pick])).filter(fits);
       if (bundles.length > maxBundles) return null;
     }
@@ -318,6 +363,7 @@ export function checkMfmLoadout(
   const unitCaps = checkboxCaps(rules, undefined);
   const rowCaps = new Map(rows.map((row) => [row, checkboxCaps(rules, row, models.get(row) ?? 0)]));
   const unitPicks = unitPicksOf(rules);
+  const bare = new Map(rows.map((row) => [row, bareModels(rules, row)]));
 
   const reachable = new Set<string>();
   for (const bundles of bundlesByRow.values()) for (const bundle of bundles) for (const [id, n] of bundle) if (n > 0) reachable.add(id);
@@ -366,20 +412,21 @@ export function checkMfmLoadout(
         totals.forEach((n, i) => { if (n > 0) copies.set(ids[i], n); });
         return limitHolds(limit, unitModels, copies, baselineOf(row));
       });
-      if (assign(rows, allowed, models, rest, rowLimits)) return [];
+      if (assign(rows, allowed, models, bare, rest, rowLimits)) return [];
     }
   }
   return [{ code: "no-assignment", message: "no assignment of wargear choices to models gives these counts within the unit's limits" }];
 }
 
 /**
- * Searches for per-row bundle counts that use every model and exactly `rest` copies, where each
- * row's own copies pass `rowAccepts`.
+ * Searches for per-row bundle counts that use every model, but at most `bare` models of a row that
+ * carry nothing, and exactly `rest` copies, where each row's own copies pass `rowAccepts`.
  */
 function assign(
   rows: readonly string[],
   allowed: ReadonlyMap<string, number[][]>,
   models: ReadonlyMap<string, number>,
+  bare: ReadonlyMap<string, number>,
   rest: number[],
   rowAccepts: (row: string, totals: number[]) => boolean,
 ): boolean {
@@ -392,11 +439,11 @@ function assign(
     const bundles = allowed.get(row)!;
     const start = left;
     const startKey = start.join(",");
+    const bareLeft = bare.get(row) ?? 0;
     const walkBundle = (b: number, modelsLeft: number, current: number[]): boolean => {
-      if (modelsLeft === 0) {
-        return rowAccepts(row, start.map((n, i) => n - current[i])) && walkRow(r + 1, current);
-      }
-      if (b >= bundles.length) return false;
+      // The models still unassigned go bare when the row allows that many.
+      if (modelsLeft <= bareLeft && rowAccepts(row, start.map((n, i) => n - current[i])) && walkRow(r + 1, current)) return true;
+      if (modelsLeft === 0 || b >= bundles.length) return false;
       const key = `${r}|${startKey}|${b}|${modelsLeft}|${current.join(",")}`;
       if (failed.has(key)) return false;
       const bundle = bundles[b];

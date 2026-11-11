@@ -57,6 +57,10 @@ func CheckMfmLoadout(r *MfmLoadoutRules, models, counts map[string]int) []MfmLoa
 		rowCaps[row] = r.checkboxCaps(&model, models[row])
 	}
 	unitPicks := r.unitPicksOf()
+	bare := map[string]int{}
+	for _, row := range rows {
+		bare[row] = r.bareModels(row)
+	}
 
 	reachable := map[string]bool{}
 	for _, bundles := range bundlesByRow {
@@ -212,7 +216,7 @@ func CheckMfmLoadout(r *MfmLoadoutRules, models, counts map[string]int) []MfmLoa
 					continue picks
 				}
 			}
-			if mfmAssign(rows, allowed, models, rest, rowAccepts) {
+			if mfmAssign(rows, allowed, models, bare, rest, rowAccepts) {
 				return []MfmLoadoutViolation{}
 			}
 		}
@@ -220,9 +224,10 @@ func CheckMfmLoadout(r *MfmLoadoutRules, models, counts map[string]int) []MfmLoa
 	return []MfmLoadoutViolation{{Code: "no-assignment", Message: "no assignment of wargear choices to models gives these counts within the unit's limits"}}
 }
 
-// mfmAssign searches for per-row bundle counts that use every model and
-// exactly `rest` copies, where each row's own copies pass rowAccepts.
-func mfmAssign(rows []string, allowed map[string][][]int, models map[string]int, rest []int, rowAccepts func(string, []int) bool) bool {
+// mfmAssign searches for per-row bundle counts that use every model, but at
+// most `bare` models of a row that carry nothing, and exactly `rest` copies,
+// where each row's own copies pass rowAccepts.
+func mfmAssign(rows []string, allowed map[string][][]int, models, bare map[string]int, rest []int, rowAccepts func(string, []int) bool) bool {
 	// Failures depend only on the row, the copies left at the row's start and
 	// the search position within it, so they are cached on those.
 	failed := map[string]bool{}
@@ -237,14 +242,17 @@ func mfmAssign(rows []string, allowed map[string][][]int, models map[string]int,
 		startKey := fmt.Sprint(start)
 		var walkBundle func(b, modelsLeft int, current []int) bool
 		walkBundle = func(b, modelsLeft int, current []int) bool {
-			if modelsLeft == 0 {
+			// The models still unassigned go bare when the row allows that many.
+			if modelsLeft <= bare[row] {
 				used := make([]int, len(start))
 				for i := range start {
 					used[i] = start[i] - current[i]
 				}
-				return rowAccepts(row, used) && walkRow(r+1, current)
+				if rowAccepts(row, used) && walkRow(r+1, current) {
+					return true
+				}
 			}
-			if b >= len(bundles) {
+			if modelsLeft == 0 || b >= len(bundles) {
 				return false
 			}
 			key := fmt.Sprint(r, "|", startKey, "|", b, "|", modelsLeft, "|", current)

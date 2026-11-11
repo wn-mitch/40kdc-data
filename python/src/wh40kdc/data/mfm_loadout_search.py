@@ -24,6 +24,7 @@ from wh40kdc.data.mfm_loadout import (
     Copies,
     _add,
     _template,
+    bare_models,
     checkbox_caps,
     compile_limit,
     row_bundles,
@@ -36,7 +37,8 @@ from wh40kdc.data.mfm_loadout import (
 MAX_SEARCH_BUNDLES = 200_000
 
 Vector = tuple[int, ...]
-# One row pick of a leaf: (row, bundle index into the row's bundles, models taking it).
+# One row pick of a leaf: (row, bundle index into the row's bundles, models taking it);
+# bundle index -1 is models that carry nothing.
 Pick = tuple[str, int, int]
 
 
@@ -243,11 +245,12 @@ def _search(
     zero: Vector = (0,) * len(tracked)
 
     def row_copies(
-        row: str, bundles: list[tuple[int, Vector]], n: int
+        row: str, bundles: list[tuple[int, Vector]], n: int, bare: int
     ) -> Iterator[tuple[Vector, list[Pick]]]:
         """The distinct copies ``n`` models of ``row`` can carry within its caps and limits.
 
-        Each comes with the first picks found for it. The walk picks the next
+        Each comes with the first picks found for it; up to ``bare`` of the
+        models may carry nothing, picked as bundle -1. The walk picks the next
         bundle any remaining model carries, from bundle ``b`` on, and how many
         carry it (most first), so it recurses no deeper than the row's models.
         """
@@ -256,11 +259,12 @@ def _search(
         picks: list[Pick] = []
 
         def walk(b: int, left: int, own: Vector) -> Iterator[tuple[Vector, list[Pick]]]:
-            if left == 0:
+            if left <= bare:
                 if own not in found and row_holds(row, own, False):
                     found.add(own)
-                    yield own, list(picks)
-                return
+                    yield own, list(picks) if left == 0 else [*picks, (row, -1, left)]
+                if left == 0:
+                    return
             for j in range(b, len(bundles)):
                 # Walking on from bundle j with these copies covers every later bundle too,
                 # so a position already walked ends the loop.
@@ -341,7 +345,8 @@ def _search(
         # Each row's distinct own copies, found once: a row's copies are part of the unit's, so
         # a row the unit's limits or the ceiling already refuse is cut here too.
         row_results = [
-            _Lazy(row_copies(row, allowed[row], models.get(row, 0))) for row in space.rows
+            _Lazy(row_copies(row, allowed[row], models.get(row, 0), bare_models(rules, row)))
+            for row in space.rows
         ]
         for u, unit_pick in enumerate(space.unit_picks):
             if any(unit_pick.get(i, 0) > cap for i, cap in tests.unit_caps.items()):
@@ -373,7 +378,11 @@ def _configuration_of(space: Space, leaf: _Leaf) -> MfmConfiguration:
     return MfmConfiguration(
         counts={space.ids[i]: n for i, n in enumerate(leaf.totals) if n > 0},
         groups=[
-            {"model": row, "count": take, "items": _items_of(space.bundles[row][bundle])}
+            {
+                "model": row,
+                "count": take,
+                "items": [] if bundle < 0 else _items_of(space.bundles[row][bundle]),
+            }
             for row, bundle, take in leaf.picks
         ],
         unit=_items_of(space.unit_picks[leaf.unit_pick]),

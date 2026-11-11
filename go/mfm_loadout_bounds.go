@@ -134,8 +134,10 @@ func MfmWeaponBounds(r *MfmLoadoutRules, models map[string]int) (map[string]MfmB
 				layer = next
 			})
 			results := newMfmBoundStates()
+			// Models left over go bare, up to the row's bare models.
+			bare := r.bareModels(row)
 			layer.each(func(state *mfmBoundState) {
-				if state.left == 0 && t.rowHolds(row, state.own, false) {
+				if state.left <= bare && t.rowHolds(row, state.own, false) {
 					results.merge(t.keyOf(state.own), mfmBoundState{own: state.own, lo: append([]int(nil), state.lo...), hi: append([]int(nil), state.hi...)})
 				}
 			})

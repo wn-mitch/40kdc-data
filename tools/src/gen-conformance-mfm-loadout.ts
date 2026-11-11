@@ -2,7 +2,7 @@
  * The `mfm_loadout` corpus: the default unit and wargear legality under each unit's MFM loadout
  * rules, pinned through the runner's `default_mfm_loadout` and `check_mfm_loadout` ops.
  *
- * Every unit with a lifted loadout contributes its default unit and four checks of it: as is, one
+ * Every unit with a lifted loadout, in any game mode, contributes its default unit and four checks of it: as is, one
  * copy of its first item more, one fewer, and one copy of that item traded for the first item it
  * can carry but does not by default. Hand-picked cases cover resized rows, checkbox caps, limits,
  * uniform sets and the violation codes.
@@ -119,12 +119,33 @@ const CURATED: [string, string, string, Counts, Swap[]][] = [
   ["voidsmen second rotor cannon", "agents-of-the-imperium", "voidsmen-at-arms", {}, [["lasgun", "voidsman-rotor-cannon", 1]]],
   ["voidsmen drop the rotor cannon", "agents-of-the-imperium", "voidsmen-at-arms", {}, [["voidsman-rotor-cannon", null, 1], ["close-combat-weapon-voidsmen-at-arms", null, 1], ["laspistol", null, 1]]],
   ["battleclade gun servitor drops its gun", "adeptus-mechanicus", "servitor-battleclade", {}, [["heavy-bolter", null, 1], ["servo-claw", null, 1]]],
+  // An add-on choice with no plain stock sibling: the unticked pistol may stay off, nothing else.
+  ["purge corps sulphurhound ticks the pistol", "adeptus-mechanicus", "purge-corps-serberys-sulphurhounds", {}, [[null, "phosphor-pistol-purge-corps-serberys-sulphurhounds", 1]]],
+  ["purge corps sulphurhound third extra pistol", "adeptus-mechanicus", "purge-corps-serberys-sulphurhounds", {}, [[null, "phosphor-pistol-purge-corps-serberys-sulphurhounds", 2]]],
+  ["purge corps sulphurhound pistol for carbine", "adeptus-mechanicus", "purge-corps-serberys-sulphurhounds", {}, [["phosphor-blast-carbine-purge-corps-serberys-sulphurhounds", "phosphor-pistol-purge-corps-serberys-sulphurhounds", 1]]],
+  ["insidiants two simulacrums", "adepta-sororitas", "celestian-insidiants", {}, [[null, "simulacrum-imperialis", 2]]],
+  // The default leaves one Noise Marine bare: one may stay bare, two may not.
+  ["noise marines blastmasters beside the bare model", "emperors-children", "noise-marines", {}, [["sonic-blaster", "blastmaster", 2]]],
+  ["noise marines equip the bare model", "emperors-children", "noise-marines", {}, [[null, "sonic-blaster", 1], [null, "close-combat-weapon-noise-marines", 1]]],
+  ["noise marines two bare models", "emperors-children", "noise-marines", {}, [["sonic-blaster", null, 1], ["close-combat-weapon-noise-marines", null, 1]]],
+  ["noise marines blaster without a weapon", "emperors-children", "noise-marines", {}, [[null, "sonic-blaster", 1]]],
+  // One checkbox for a whole row: one copy, matching "1 Goremonger" and "duplicates are not allowed".
+  ["goremongers two blood harpoons", "world-eaters", "goremongers", {}, [["chainblade-goremongers", "blood-harpoon", 2]]],
+  ["legionaries plasma gun and meltagun at 10 models", "chaos-space-marines", "legionaries", { Legionary: 9 }, [["boltgun-legionaries", "plasma-gun", 1], ["boltgun-legionaries", "meltagun", 1]]],
+  ["legionaries two plasma guns at 10 models", "chaos-space-marines", "legionaries", { Legionary: 9 }, [["boltgun-legionaries", "plasma-gun", 2]]],
 ];
 
-/** Checks whose counts are written out: the violation codes no built unit reaches. */
-const RAW: [string, string, string, Counts][] = [
+/**
+ * Checks whose counts are written out: the violation codes no built unit reaches, and rows the
+ * default unit has no stock for. Rows not given keep their default models.
+ */
+const RAW: [string, string, string, Counts, Counts?][] = [
   ["deff dread counts no assignment fits", "orks", "deff-dread", { "dread-klaw": 1, "extra-klaw": 1 }],
   ["deff dread foreign lascannon", "orks", "deff-dread", { "big-shoota": 1, "dread-klaw": 1, lascannon: 1, skorcha: 1 }],
+  ["three broadsides with missiles and support", "tau-empire", "broadside-battlesuits",
+    { "crushing-bulk": 3, "heavy-rail-rifle": 3, "twin-smart-missile-system-broadside-battlesuits": 3, "weapon-support-system": 3 }, { "Broadside Shas’ui": 2 }],
+  ["three broadsides with four missile systems", "tau-empire", "broadside-battlesuits",
+    { "crushing-bulk": 3, "heavy-rail-rifle": 3, "twin-smart-missile-system-broadside-battlesuits": 4, "weapon-support-system": 2 }, { "Broadside Shas’ui": 2 }],
 ];
 
 /** Units the MFM does not cover: both ops answer null. */
@@ -136,7 +157,7 @@ export function canonicalMfmLoadoutCases(dataset: Dataset, specVersion: number):
   run(state, "init", { spec_version: specVersion, locale: "C", tz: "UTC", seed: 0 });
   const defaults: MfmLoadoutCase[] = [];
   const checks: MfmLoadoutCase[] = [];
-  const compositions = (dataset.unitCompositions as readonly Composition[])
+  const compositions = (dataset.forGameMode("all").unitCompositions as readonly Composition[])
     .filter((composition) => composition.loadout)
     .sort((a, b) => byCodeUnit(a.faction_id, b.faction_id) || byCodeUnit(a.unit_id, b.unit_id));
   for (const composition of compositions) {
@@ -157,8 +178,9 @@ export function canonicalMfmLoadoutCases(dataset: Dataset, specVersion: number):
     const args = { unitId, factionId, ...built(rulesOf(factionId, unitId), rows, swaps) };
     checks.push({ name, args, expected: run(state, "check_mfm_loadout", args) });
   }
-  for (const [name, factionId, unitId, counts] of RAW) {
+  for (const [name, factionId, unitId, counts, rows] of RAW) {
     const { models } = defaultMfmLoadout(rulesOf(factionId, unitId));
+    for (const [model, n] of Object.entries(rows ?? {})) models.set(model, n);
     const args = { unitId, factionId, models: sorted(models), counts };
     checks.push({ name, args, expected: run(state, "check_mfm_loadout", args) });
   }

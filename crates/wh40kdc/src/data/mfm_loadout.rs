@@ -15,6 +15,10 @@
 //!   counted;
 //! - in a uniform set, every model on the row (or in the unit) that takes no
 //!   substitute carries the same main option;
+//! - a slot choice holding its model's whole stock plus items the row offers
+//!   only as unticked checkboxes may be taken without them;
+//! - up to `bare_models` models of a row may carry nothing, as the default
+//!   unit's do;
 //! - a row (or the unit's own wargear) whose every option for an item is a
 //!   checkbox carries at most one copy per such option, or its stock copies
 //!   when more. A row the app lists model by model (`individual`) gets that
@@ -204,6 +208,95 @@ fn slot_choices(choices: &[Vec<MfmItem>], stock: &Copies) -> Vec<Vec<MfmItem>> {
     out
 }
 
+/// A row slot's choices, plus the stock alone for each add-on choice that lacks
+/// it: a choice holding the model's whole stock and items the row offers only as
+/// checkboxes that start unticked lets the model leave those items off, as the
+/// app's default for it does (Purge Corps Sulphurhounds).
+fn row_slot_choices(
+    rules: &MfmLoadoutRules,
+    model: &str,
+    choices: &[Vec<MfmItem>],
+    stock: &Copies,
+) -> Vec<Vec<MfmItem>> {
+    let choices = slot_choices(choices, stock);
+    if stock.is_empty() {
+        return choices;
+    }
+    let unticked = |id: &str| {
+        let mut options = rules
+            .options
+            .iter()
+            .filter(|option| option.model.as_deref() == Some(model) && option.id == id)
+            .peekable();
+        options.peek().is_some()
+            && options.all(|option| option.input == "checkbox" && option.default == 0)
+    };
+    let same = |a: &[MfmItem], b: &[MfmItem]| {
+        let copies = copies_of(a);
+        a.len() == b.len() && b.iter().all(|item| get(&copies, &item.id) == item.count)
+    };
+    let mut out = choices.clone();
+    for choice in &choices {
+        let holds_stock = stock
+            .iter()
+            .all(|(id, n)| choice.iter().any(|item| &item.id == id && item.count >= *n));
+        if !holds_stock {
+            continue;
+        }
+        let extras: Vec<&MfmItem> = choice
+            .iter()
+            .filter(|item| item.count > get(stock, &item.id))
+            .collect();
+        if extras.is_empty()
+            || !extras
+                .iter()
+                .all(|item| get(stock, &item.id) == 0 && unticked(&item.id))
+        {
+            continue;
+        }
+        let plain: Vec<MfmItem> = choice
+            .iter()
+            .filter(|item| !extras.contains(item))
+            .cloned()
+            .collect();
+        if !out.iter().any(|other| same(other, &plain)) {
+            out.push(plain);
+        }
+    }
+    out
+}
+
+/// The models of `model` the default unit leaves bare: its default models less
+/// the most models any one of its stock items covers, at the template's copies
+/// per model (one for an item the template lacks). Noise Marines: five models,
+/// four of each template item. The app starts the unit that way, so up to that
+/// many models of the row may carry nothing.
+pub(super) fn bare_models(rules: &MfmLoadoutRules, model: &str) -> i64 {
+    let template = rules.template(model);
+    let Some(row) = rules
+        .stock
+        .iter()
+        .find(|row| row.model.as_deref() == Some(model))
+    else {
+        return 0;
+    };
+    if row.models == 0 || row.items.is_empty() || template.is_empty() {
+        return 0;
+    }
+    let per = copies_of(template);
+    let covered = row
+        .items
+        .iter()
+        .map(|item| {
+            let each = per.get(&item.id).copied().unwrap_or(1);
+            (item.count + each - 1) / each
+        })
+        .max()
+        .unwrap_or(0)
+        .max(0);
+    (row.models - covered).max(0)
+}
+
 /// One model's start: its template, or its default copies over its model count, rounded up.
 fn model_stock(rules: &MfmLoadoutRules, model: &str) -> Copies {
     let mut out = copies_of(rules.template(model));
@@ -255,7 +348,7 @@ fn row_bundles(
         let mut bundles: Vec<Vec<MfmItem>> = vec![Vec::new()];
         for slot in group {
             let picks = pick_combinations(
-                &slot_choices(&slot.choices, &stock),
+                &row_slot_choices(rules, model, &slot.choices, &stock),
                 slot.picks,
                 slot.repeats,
             );

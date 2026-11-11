@@ -14,7 +14,7 @@ from collections.abc import Hashable, Mapping
 from dataclasses import dataclass
 from typing import Any
 
-from wh40kdc.data.mfm_loadout import uniform_allows, uniform_attempts
+from wh40kdc.data.mfm_loadout import bare_models, uniform_allows, uniform_attempts
 from wh40kdc.data.mfm_loadout_search import Vector, search_tests, space_of
 
 
@@ -109,8 +109,10 @@ def mfm_weapon_bounds(
                         _merge(nxt, (own, left), _State(own, lo, hi, left))
                 layer = nxt
             results: dict[Hashable, _State] = {}
+            # Models left over go bare, up to the row's bare models.
+            bare = bare_models(rules, row)
             for state in layer.values():
-                if state.left == 0 and tests.row_holds(row, state.own, False):
+                if state.left <= bare and tests.row_holds(row, state.own, False):
                     _merge(results, state.own, state)
             row_results.append(list(results.values()))
 

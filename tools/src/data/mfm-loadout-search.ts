@@ -12,6 +12,7 @@
  */
 import {
   add,
+  bareModels,
   checkboxCaps,
   compileLimit,
   limitHolds,
@@ -234,7 +235,7 @@ function search(
     }));
     // Each row's distinct own copies, found once: a row's copies are part of the unit's, so a row
     // the unit's limits or the ceiling already refuse is cut here too.
-    const rowResults = space.rows.map((row) => lazy(rowCopies(row, allowed.get(row)!, models.get(row) ?? 0)));
+    const rowResults = space.rows.map((row) => lazy(rowCopies(row, allowed.get(row)!, models.get(row) ?? 0, bareModels(rules, row))));
     for (let u = 0; u < space.unitPicks.length; u++) {
       const unitPick = space.unitPicks[u];
       if (![...unitCaps].every(([id, cap]) => (unitPick.get(id) ?? 0) <= cap)) continue;
@@ -272,22 +273,22 @@ function search(
 
   /**
    * The distinct copies `n` models of `row` can carry within its caps and limits, each with the
-   * first picks found for it. The walk picks the next bundle any remaining model carries, from
-   * bundle `b` on, and how many carry it (most first), so it recurses no deeper than the row's
-   * models.
+   * first picks found for it; up to `bare` of the models may carry nothing, picked as bundle -1.
+   * The walk picks the next bundle any remaining model carries, from bundle `b` on, and how many
+   * carry it (most first), so it recurses no deeper than the row's models.
    */
-  function* rowCopies(row: string, bundles: readonly { index: number; vector: number[] }[], n: number): Generator<RowResult> {
+  function* rowCopies(row: string, bundles: readonly { index: number; vector: number[] }[], n: number, bare: number): Generator<RowResult> {
     const found = new Set<number | string>();
     const walked = new Set<number | string>();
     const picks: Leaf["picks"] = [];
     function* walk(b: number, left: number, own: number[]): Generator<RowResult> {
-      if (left === 0) {
+      if (left <= bare) {
         const key = keyOf(own);
         if (!found.has(key) && rowHolds(row, own, false)) {
           found.add(key);
-          yield { own, picks: [...picks] };
+          yield { own, picks: left === 0 ? [...picks] : [...picks, { row, bundle: -1, take: left }] };
         }
-        return;
+        if (left === 0) return;
       }
       const prefix = at(keyOf(own), maxModels + 1, left);
       for (let j = b; j < bundles.length; j++) {
@@ -318,7 +319,7 @@ function configurationOf(space: Space, leaf: Leaf): MfmConfiguration {
   leaf.totals.forEach((n, i) => { if (n > 0) counts.set(space.ids[i], n); });
   return {
     counts,
-    groups: leaf.picks.map(({ row, bundle, take }) => ({ model: row, count: take, items: itemsOf(space.bundles.get(row)![bundle]) })),
+    groups: leaf.picks.map(({ row, bundle, take }) => ({ model: row, count: take, items: bundle < 0 ? [] : itemsOf(space.bundles.get(row)![bundle]) })),
     unit: itemsOf(space.unitPicks[leaf.unitPick]),
   };
 }

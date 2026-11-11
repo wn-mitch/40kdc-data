@@ -7,7 +7,7 @@
  * holds. Rows are independent once their counted copies are fixed, so a unit's interval for an
  * item is the sum of its rows' intervals, and the bounds are exact.
  */
-import { uniformAllows, uniformAttempts, type Copies, type MfmLoadoutRules } from "./mfm-loadout.js";
+import { bareModels, uniformAllows, uniformAttempts, type Copies, type MfmLoadoutRules } from "./mfm-loadout.js";
 import { searchTests, spaceOf } from "./mfm-loadout-search.js";
 
 /** Counted copies with the fewest (`lo`) and most (`hi`) copies of every other item. */
@@ -83,8 +83,10 @@ export function mfmWeaponBounds(
         layer = next;
       }
       const results = new Map<number | string, State>();
+      // Models left over go bare, up to the row's bare models.
+      const bare = bareModels(rules, row);
       for (const state of layer.values()) {
-        if (state.left === 0 && tests.rowHolds(row, state.own, false)) merge(results, tests.keyOf(state.own), state);
+        if (state.left <= bare && tests.rowHolds(row, state.own, false)) merge(results, tests.keyOf(state.own), state);
       }
       return [...results.values()];
     });

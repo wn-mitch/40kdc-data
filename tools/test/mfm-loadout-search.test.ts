@@ -16,7 +16,8 @@ import {
   type MfmComposition,
 } from "../src/data/mfm-loadout-unit.js";
 
-const dataset = Dataset.embedded();
+// Every game mode's units, as the conformance corpus pins them.
+const dataset = Dataset.embedded().forGameMode("all");
 type Composition = MfmComposition & { unit_id: string; faction_id: string };
 const compositions = (dataset.unitCompositions as readonly Composition[]).filter((row) => row.loadout);
 const compositionOf = (factionId: string, unitId: string): Composition & { loadout: MfmLoadoutRules } => {
@@ -101,8 +102,10 @@ describe("mfmBaseLoadout", () => {
     expect(base.counts.get("voidsman-rotor-cannon")).toBe(1);
   });
 
-  it("reports a default the dump contradicts as illegal rather than inventing one", () => {
-    expect(mfmUnitBaseLoadout(compositionOf("emperors-children", "noise-marines"), 6)?.legal).toBe(false);
+  it("reports the Noise Marines' default, one model bare, as legal", () => {
+    const base = mfmUnitBaseLoadout(compositionOf("emperors-children", "noise-marines"), 6)!;
+    expect(base.legal).toBe(true);
+    expect(base.counts.get("sonic-blaster")).toBe(5);
   });
 });
 

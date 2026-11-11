@@ -484,6 +484,80 @@
     }
   },
   {
+    "name": "adepta-sororitas/sanctuary-canoness-adalya",
+    "args": {
+      "unitId": "sanctuary-canoness-adalya",
+      "factionId": "adepta-sororitas"
+    },
+    "expected": {
+      "models": {
+        "Canoness Adalya": 1
+      },
+      "counts": {
+        "condemnor-boltgun-sanctuary-canoness-adalya": 1,
+        "hallowed-chainsword": 1
+      }
+    }
+  },
+  {
+    "name": "adepta-sororitas/sanctuary-guardians-arco-flagellants",
+    "args": {
+      "unitId": "sanctuary-guardians-arco-flagellants",
+      "factionId": "adepta-sororitas"
+    },
+    "expected": {
+      "models": {
+        "Arco-Flagellents": 10
+      },
+      "counts": {
+        "arco-flails": 10
+      }
+    }
+  },
+  {
+    "name": "adepta-sororitas/sanctuary-guardians-battle-sisters-squad",
+    "args": {
+      "unitId": "sanctuary-guardians-battle-sisters-squad",
+      "factionId": "adepta-sororitas"
+    },
+    "expected": {
+      "models": {
+        "Battle Sister": 6,
+        "Battle Sister with Ministorum Flamer": 1,
+        "Battle Sister with Ministorum Heavy Flamer": 1,
+        "Battle Sister with Simulacrum Imperialis": 1,
+        "Sister Superior": 1
+      },
+      "counts": {
+        "bolt-pistol": 10,
+        "boltgun": 7,
+        "combi-weapon": 1,
+        "ministorum-flamer": 1,
+        "ministorum-heavy-flamer": 1,
+        "power-weapon-sanctuary-guardians-battle-sisters-squad": 1,
+        "simulacrum-imperialis": 1,
+        "stocks-and-fists": 10
+      }
+    }
+  },
+  {
+    "name": "adepta-sororitas/sanctuary-guardians-celestian-sacresants",
+    "args": {
+      "unitId": "sanctuary-guardians-celestian-sacresants",
+      "factionId": "adepta-sororitas"
+    },
+    "expected": {
+      "models": {
+        "Celestian Sacresants": 4,
+        "Sacresant Superior": 1
+      },
+      "counts": {
+        "bolt-pistol-sanctuary-guardians-celestian-sacresants": 5,
+        "hallowed-mace": 5
+      }
+    }
+  },
+  {
     "name": "adepta-sororitas/seraphim-squad",
     "args": {
       "unitId": "seraphim-squad",
@@ -700,6 +774,63 @@
     }
   },
   {
+    "name": "adeptus-astartes/askars-wolfpack-blood-claws",
+    "args": {
+      "unitId": "askars-wolfpack-blood-claws",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Blood Claw": 9,
+        "Blood Claw Pack Leader": 1
+      },
+      "counts": {
+        "bolt-pistol-askars-wolfpack-blood-claws": 9,
+        "chainsword-askars-wolfpack-blood-claws": 9,
+        "plasma-pistol-askars-wolfpack-blood-claws": 1,
+        "power-weapon": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/askars-wolfpack-wolf-guard-terminators",
+    "args": {
+      "unitId": "askars-wolfpack-wolf-guard-terminators",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Wolf Guard Terminator Pack Leader": 1,
+        "Wolf Guard Terminator with Assault Cannon and Power Fist": 1,
+        "Wolf Guard Terminator with Storm Bolter and Master-crafted Power Weapon": 3
+      },
+      "counts": {
+        "assault-cannon-askars-wolfpack-wolf-guard-terminators": 1,
+        "master-crafted-power-weapon-askars-wolfpack-wolf-guard-terminators": 3,
+        "power-fist": 1,
+        "relic-greataxe-askars-wolfpack-wolf-guard-terminators": 1,
+        "storm-bolter-askars-wolfpack-wolf-guard-terminators": 3
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/askars-wolfpack-wulfen",
+    "args": {
+      "unitId": "askars-wolfpack-wulfen",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Wulfen": 3,
+        "Wulfen with Stormfrag Auto-launcher": 2
+      },
+      "counts": {
+        "frost-blades-and-feral-claws": 5,
+        "stormfrag-auto-launcher-askars-wolfpack-wulfen": 2
+      }
+    }
+  },
+  {
     "name": "adeptus-astartes/asmodai",
     "args": {
       "unitId": "asmodai",
@@ -712,6 +843,97 @@
       "counts": {
         "crozius-arcanum-and-power-weapon": 1,
         "heavy-bolt-pistol-asmodai": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/assault-force-captain",
+    "args": {
+      "unitId": "assault-force-captain",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Captain": 1
+      },
+      "counts": {
+        "heavy-bolt-pistol-assault-force-captain": 1,
+        "master-crafted-power-weapon-assault-force-captain": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/assault-force-intercessor-squad",
+    "args": {
+      "unitId": "assault-force-intercessor-squad",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Intercessor": 3,
+        "Intercessor Sergeant": 1,
+        "Intercessor with Grenade Launcher": 1
+      },
+      "counts": {
+        "bolt-pistol-assault-force-intercessor-squad": 5,
+        "bolt-rifle-assault-force-intercessor-squad": 5,
+        "chainsword-assault-force-intercessor-squad": 1,
+        "grenade-launcher-assault-force-intercessor-squad": 1,
+        "knives-and-fists-assault-force-intercessor-squad": 5
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/assault-force-land-speeder",
+    "args": {
+      "unitId": "assault-force-land-speeder",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Land Speeder": 1
+      },
+      "counts": {
+        "armoured-impact-assault-force-land-speeder": 1,
+        "heavy-flamer": 1,
+        "multi-melta-assault-force-land-speeder": 1,
+        "stormfury-missile-launcher-assault-force-land-speeder": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/assault-force-librarian",
+    "args": {
+      "unitId": "assault-force-librarian",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Librarian": 1
+      },
+      "counts": {
+        "bolt-pistol-assault-force-librarian": 1,
+        "force-weapon-assault-force-librarian": 1,
+        "fulmination": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/assault-force-vanguard-veteran-squad-with-jump-packs",
+    "args": {
+      "unitId": "assault-force-vanguard-veteran-squad-with-jump-packs",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Vanguard Veteran": 3,
+        "Vanguard Veteran Sergeant": 1,
+        "Vanguard Veteran with Plasma Pistol": 1
+      },
+      "counts": {
+        "heavy-bolt-pistol-assault-force-vanguard-veteran-squad-with-jump-packs": 4,
+        "master-crafted-power-weapon-assault-force-vanguard-veteran-squad-with-jump-packs": 5,
+        "plasma-pistol-assault-force-vanguard-veteran-squad-with-jump-packs": 1
       }
     }
   },
@@ -1048,6 +1270,22 @@
         "heavy-bolt-pistol-captain-on-bike": 1,
         "master-crafted-power-weapon-captain-on-bike": 1,
         "twin-bolt-rifle-captain-on-bike": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/captain-raldeo",
+    "args": {
+      "unitId": "captain-raldeo",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Captain Raldeo": 1
+      },
+      "counts": {
+        "inferno-pistol-captain-raldeo": 1,
+        "master-crafted-chainsword-captain-raldeo": 1
       }
     }
   },
@@ -1587,6 +1825,22 @@
     }
   },
   {
+    "name": "adeptus-astartes/emperors-champion-vedrenn",
+    "args": {
+      "unitId": "emperors-champion-vedrenn",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Emperor's Champion Vedrenn": 1
+      },
+      "counts": {
+        "black-sword-emperors-champion-vedrenn": 1,
+        "bolt-pistol-emperors-champion-vedrenn": 1
+      }
+    }
+  },
+  {
     "name": "adeptus-astartes/eradicator-squad-with-heavy-bolters",
     "args": {
       "unitId": "eradicator-squad-with-heavy-bolters",
@@ -1711,6 +1965,21 @@
         "plasma-incinerator": 2,
         "pyreblaster": 2,
         "superfrag-rocket-launcher": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/fyrri-askar",
+    "args": {
+      "unitId": "fyrri-askar",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Fyrri Askar": 1
+      },
+      "counts": {
+        "master-crafted-power-weapon-fyrri-askar": 1
       }
     }
   },
@@ -2398,6 +2667,23 @@
     }
   },
   {
+    "name": "adeptus-astartes/master-zacharial",
+    "args": {
+      "unitId": "master-zacharial",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Master Zacharial": 1
+      },
+      "counts": {
+        "boltstorm-gauntlet-master-zacharial": 1,
+        "power-fist-master-zacharial": 1,
+        "relic-chainsword-master-zacharial": 1
+      }
+    }
+  },
+  {
     "name": "adeptus-astartes/murderfang",
     "args": {
       "unitId": "murderfang",
@@ -2707,6 +2993,42 @@
       "counts": {
         "absolvor-bolt-pistol": 1,
         "chainsword-sanguinary-priest": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/sanguinary-spearhead-assault-intercessor-squad",
+    "args": {
+      "unitId": "sanguinary-spearhead-assault-intercessor-squad",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Assault Intercessor": 9,
+        "Assault Intercessor Sergeant": 1
+      },
+      "counts": {
+        "chainsword-sanguinary-spearhead-assault-intercessor-squad": 10,
+        "heavy-bolt-pistol-sanguinary-spearhead-assault-intercessor-squad": 9,
+        "plasma-pistol-sanguinary-spearhead-assault-intercessor-squad": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/sanguinary-spearhead-sanguinary-guard",
+    "args": {
+      "unitId": "sanguinary-spearhead-sanguinary-guard",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Sanguinary Guard with Encarmine Blade": 1,
+        "Sanguinary Guard with Encarmine Spear": 2
+      },
+      "counts": {
+        "angelus-boltgun": 3,
+        "encarmine-blade": 1,
+        "encarmine-spear": 2
       }
     }
   },
@@ -3050,6 +3372,59 @@
     }
   },
   {
+    "name": "adeptus-astartes/vengeful-brethren-bladeguard-veteran-squad",
+    "args": {
+      "unitId": "vengeful-brethren-bladeguard-veteran-squad",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Bladeguard Veteran": 2,
+        "Bladeguard Veteran Sergeant": 1
+      },
+      "counts": {
+        "heavy-bolt-pistol-vengeful-brethren-bladeguard-veteran-squad": 3,
+        "master-crafted-power-weapon-vengeful-brethren-bladeguard-veteran-squad": 3
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/vengeful-brethren-hellblaster-squad",
+    "args": {
+      "unitId": "vengeful-brethren-hellblaster-squad",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Hellblaster": 4,
+        "Hellblaster Sergeant": 1
+      },
+      "counts": {
+        "bolt-pistol-vengeful-brethren-hellblaster-squad": 5,
+        "knives-and-fists-vengeful-brethren-hellblaster-squad": 5,
+        "plasma-incinerator-vengeful-brethren-hellblaster-squad": 5
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/vengeful-brethren-intercessor-squad",
+    "args": {
+      "unitId": "vengeful-brethren-intercessor-squad",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Intercessor": 9,
+        "Intercessor Sergeant": 1
+      },
+      "counts": {
+        "bolt-pistol-vengeful-brethren-intercessor-squad": 10,
+        "bolt-rifle-vengeful-brethren-intercessor-squad": 10,
+        "knives-and-fists-vengeful-brethren-intercessor-squad": 10
+      }
+    }
+  },
+  {
     "name": "adeptus-astartes/victrix-honour-guard",
     "args": {
       "unitId": "victrix-honour-guard",
@@ -3065,6 +3440,76 @@
         "blades-of-honour": 1,
         "master-crafted-bolt-carbine": 2,
         "master-crafted-power-weapon-victrix-honour-guard": 2
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/vow-sworn-bladeguard-veteran-squad",
+    "args": {
+      "unitId": "vow-sworn-bladeguard-veteran-squad",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Bladeguard Veteran": 2,
+        "Bladeguard Veteran Sergeant": 1
+      },
+      "counts": {
+        "heavy-bolt-pistol-vow-sworn-bladeguard-veteran-squad": 2,
+        "master-crafted-power-weapon-vow-sworn-bladeguard-veteran-squad": 3,
+        "neo-volkite-pistol": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/vow-sworn-crusader-squad",
+    "args": {
+      "unitId": "vow-sworn-crusader-squad",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Initiate with Bolt Pistol, Bolt Rifle and Knives and Fists": 2,
+        "Initiate with Heavy Bolt Pistol and Chainsword": 2,
+        "Initiate with Pyreblaster, Bolt Pistol and Knives and Fists": 1,
+        "Neophyte with Bolt Pistol and Chainsword": 2,
+        "Neophyte with Neophyte Firearm and Knives and Fists": 2,
+        "Sword Brother": 1
+      },
+      "counts": {
+        "bolt-pistol-vow-sworn-crusader-squad": 5,
+        "bolt-rifle-vow-sworn-crusader-squad": 2,
+        "chainsword-vow-sworn-crusader-squad": 4,
+        "heavy-bolt-pistol-vow-sworn-crusader-squad": 3,
+        "knives-and-fists-vow-sworn-crusader-squad": 5,
+        "master-crafted-power-weapon-vow-sworn-crusader-squad": 1,
+        "neophyte-firearm": 2,
+        "pyreblaster-vow-sworn-crusader-squad": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-astartes/vow-sworn-sword-brethren-squad",
+    "args": {
+      "unitId": "vow-sworn-sword-brethren-squad",
+      "factionId": "adeptus-astartes"
+    },
+    "expected": {
+      "models": {
+        "Sword Brother Castellan": 1,
+        "Sword Brother with Heavy Bolt Pistol and Chainsword": 1,
+        "Sword Brother with Plasma Pistol and Master-crafted Power Weapon": 1,
+        "Sword Brother with Pyre Pistol and Master-crafted Power Weapon": 1,
+        "Sword Brother with Twin Lightning Claws": 1
+      },
+      "counts": {
+        "chainsword-vow-sworn-sword-brethren-squad": 1,
+        "combi-weapon-vow-sworn-sword-brethren-squad": 1,
+        "heavy-bolt-pistol-vow-sworn-sword-brethren-squad": 1,
+        "master-crafted-power-weapon-vow-sworn-sword-brethren-squad": 3,
+        "plasma-pistol-vow-sworn-sword-brethren-squad": 1,
+        "pyre-pistol": 1,
+        "twin-lightning-claws": 1
       }
     }
   },
@@ -3312,6 +3757,98 @@
     }
   },
   {
+    "name": "adeptus-custodes/aquilan-talon-contemptor-achillus-dreadnought",
+    "args": {
+      "unitId": "aquilan-talon-contemptor-achillus-dreadnought",
+      "factionId": "adeptus-custodes"
+    },
+    "expected": {
+      "models": {
+        "Contemptor-Achillus Dreadnought": 1
+      },
+      "counts": {
+        "dreadspear": 1,
+        "lastrum-storm-bolter": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-custodes/aquilan-talon-sentinel-guard-sodality",
+    "args": {
+      "unitId": "aquilan-talon-sentinel-guard-sodality",
+      "factionId": "adeptus-custodes"
+    },
+    "expected": {
+      "models": {
+        "Sentinel Guard": 3
+      },
+      "counts": {
+        "sentinel-blade-aquilan-talon-sentinel-guard-sodality": 3
+      }
+    }
+  },
+  {
+    "name": "adeptus-custodes/aquilan-talon-shield-captain",
+    "args": {
+      "unitId": "aquilan-talon-shield-captain",
+      "factionId": "adeptus-custodes"
+    },
+    "expected": {
+      "models": {
+        "Shield-Captain": 1
+      },
+      "counts": {
+        "eternity-pattern-paragon-blade": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-custodes/aquilan-wing-sentinel-guard-sodality",
+    "args": {
+      "unitId": "aquilan-wing-sentinel-guard-sodality",
+      "factionId": "adeptus-custodes"
+    },
+    "expected": {
+      "models": {
+        "Sentinel Guard": 2,
+        "Sentinel Guard with Vexilla": 1
+      },
+      "counts": {
+        "sentinel-blade-aquilan-wing-sentinel-guard-sodality": 3,
+        "vexilla": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-custodes/aquilan-wing-shield-captain",
+    "args": {
+      "unitId": "aquilan-wing-shield-captain",
+      "factionId": "adeptus-custodes"
+    },
+    "expected": {
+      "models": {
+        "Shield-Captain": 1
+      },
+      "counts": {}
+    }
+  },
+  {
+    "name": "adeptus-custodes/aquilan-wing-venatari-with-kinetic-destroyers",
+    "args": {
+      "unitId": "aquilan-wing-venatari-with-kinetic-destroyers",
+      "factionId": "adeptus-custodes"
+    },
+    "expected": {
+      "models": {
+        "Venatari": 3
+      },
+      "counts": {
+        "kinetic-destroyer": 3,
+        "tarsis-buckler": 3
+      }
+    }
+  },
+  {
     "name": "adeptus-custodes/aquilon-terminators-with-solarite-power-gauntlets",
     "args": {
       "unitId": "aquilon-terminators-with-solarite-power-gauntlets",
@@ -3484,6 +4021,55 @@
       },
       "counts": {
         "guardian-spear-custodian-wardens": 2
+      }
+    }
+  },
+  {
+    "name": "adeptus-custodes/gilded-blades-allarus-custodians",
+    "args": {
+      "unitId": "gilded-blades-allarus-custodians",
+      "factionId": "adeptus-custodes"
+    },
+    "expected": {
+      "models": {
+        "Allarus Custodian": 2
+      },
+      "counts": {
+        "balistus-grenade-launcher-gilded-blades-allarus-custodians": 2,
+        "guardian-spear": 2
+      }
+    }
+  },
+  {
+    "name": "adeptus-custodes/gilded-blades-custodian-guard",
+    "args": {
+      "unitId": "gilded-blades-custodian-guard",
+      "factionId": "adeptus-custodes"
+    },
+    "expected": {
+      "models": {
+        "Custodian Guard": 3
+      },
+      "counts": {
+        "praesidium-shield": 3,
+        "sentinel-blade": 3
+      }
+    }
+  },
+  {
+    "name": "adeptus-custodes/gilded-blades-custodian-wardens",
+    "args": {
+      "unitId": "gilded-blades-custodian-wardens",
+      "factionId": "adeptus-custodes"
+    },
+    "expected": {
+      "models": {
+        "Custodian Warden with Castellan Axe": 1,
+        "Custodian Warden with Guardian Spear": 2
+      },
+      "counts": {
+        "castellan-axe-gilded-blades-custodian-wardens": 1,
+        "guardian-spear": 2
       }
     }
   },
@@ -3662,6 +4248,21 @@
       "counts": {
         "eagles-scream": 1,
         "watchers-axe": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-custodes/tristraen-of-the-gilded-blades",
+    "args": {
+      "unitId": "tristraen-of-the-gilded-blades",
+      "factionId": "adeptus-custodes"
+    },
+    "expected": {
+      "models": {
+        "Tristraen": 1
+      },
+      "counts": {
+        "vaultswords": 1
       }
     }
   },
@@ -3964,6 +4565,22 @@
     }
   },
   {
+    "name": "adeptus-mechanicus/manipulus-skand",
+    "args": {
+      "unitId": "manipulus-skand",
+      "factionId": "adeptus-mechanicus"
+    },
+    "expected": {
+      "models": {
+        "Manipulus Skand": 1
+      },
+      "counts": {
+        "omnissian-staff": 1,
+        "transonic-cannon-manipulus-skand": 1
+      }
+    }
+  },
+  {
     "name": "adeptus-mechanicus/onager-dunecrawler",
     "args": {
       "unitId": "onager-dunecrawler",
@@ -4014,6 +4631,70 @@
         "phosphor-torch": 4,
         "pteraxii-talons": 5,
         "taser-goad-pteraxii-sterylizors": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-mechanicus/purge-corps-pteraxii-sterylizors",
+    "args": {
+      "unitId": "purge-corps-pteraxii-sterylizors",
+      "factionId": "adeptus-mechanicus"
+    },
+    "expected": {
+      "models": {
+        "Pteraxii Sterylizor": 4,
+        "Pteraxii Sterylizor Alpha": 1
+      },
+      "counts": {
+        "flechette-blaster-purge-corps-pteraxii-sterylizors": 1,
+        "phosphor-torch": 4,
+        "talons": 4,
+        "taser-goad-purge-corps-pteraxii-sterylizors": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-mechanicus/purge-corps-serberys-sulphurhounds",
+    "args": {
+      "unitId": "purge-corps-serberys-sulphurhounds",
+      "factionId": "adeptus-mechanicus"
+    },
+    "expected": {
+      "models": {
+        "Serberys Sulphurhound": 1,
+        "Serberys Sulphurhound Alpha": 1,
+        "Serberys Sulphurhound with Phosphor Pistols": 1
+      },
+      "counts": {
+        "cavalry-arc-maul": 1,
+        "clawed-limbs": 3,
+        "mechanicus-pistol-purge-corps-serberys-sulphurhounds": 1,
+        "phosphor-blast-carbine-purge-corps-serberys-sulphurhounds": 1,
+        "phosphor-pistol-purge-corps-serberys-sulphurhounds": 2,
+        "sulphur-breath-purge-corps-serberys-sulphurhounds": 3
+      }
+    }
+  },
+  {
+    "name": "adeptus-mechanicus/purge-corps-skitarii-vanguard",
+    "args": {
+      "unitId": "purge-corps-skitarii-vanguard",
+      "factionId": "adeptus-mechanicus"
+    },
+    "expected": {
+      "models": {
+        "Skitarii Vanguard": 7,
+        "Skitarii Vanguard Alpha": 1,
+        "Skitarii Vanguard with Arc Rifle": 1,
+        "Skitarii Vanguard with Plasma Caliver": 1
+      },
+      "counts": {
+        "alphas-combat-artefact": 1,
+        "arc-rifle": 1,
+        "gun-stocks": 9,
+        "mechanicus-pistol-purge-corps-skitarii-vanguard": 1,
+        "plasma-caliver": 1,
+        "radium-carbine": 7
       }
     }
   },
@@ -4786,6 +5467,58 @@
     }
   },
   {
+    "name": "aeldari/kygharils-protectors-dire-avengers",
+    "args": {
+      "unitId": "kygharils-protectors-dire-avengers",
+      "factionId": "aeldari"
+    },
+    "expected": {
+      "models": {
+        "Dire Avenger": 4,
+        "Dire Avengers Exarch": 1
+      },
+      "counts": {
+        "avenger-shuriken-catapult": 4,
+        "power-glaive": 1,
+        "weapon-strike": 4
+      }
+    }
+  },
+  {
+    "name": "aeldari/kygharils-protectors-warp-spiders",
+    "args": {
+      "unitId": "kygharils-protectors-warp-spiders",
+      "factionId": "aeldari"
+    },
+    "expected": {
+      "models": {
+        "Warp Spider": 4,
+        "Warp Spider Exarch": 1
+      },
+      "counts": {
+        "death-spinner": 4,
+        "death-weavers": 1,
+        "powerblades": 1,
+        "weapon-strike": 4
+      }
+    }
+  },
+  {
+    "name": "aeldari/kygharils-protectors-wraithblades",
+    "args": {
+      "unitId": "kygharils-protectors-wraithblades",
+      "factionId": "aeldari"
+    },
+    "expected": {
+      "models": {
+        "Wraithblade": 5
+      },
+      "counts": {
+        "ghostaxe": 5
+      }
+    }
+  },
+  {
     "name": "aeldari/leystalker",
     "args": {
       "unitId": "leystalker",
@@ -5037,6 +5770,22 @@
       },
       "counts": {
         "shuriken-pistol-spiritseer": 1,
+        "witch-staff": 1
+      }
+    }
+  },
+  {
+    "name": "aeldari/spiritseer-kygharil",
+    "args": {
+      "unitId": "spiritseer-kygharil",
+      "factionId": "aeldari"
+    },
+    "expected": {
+      "models": {
+        "Spiritseer Kygharil": 1
+      },
+      "counts": {
+        "shuriken-pistol-spiritseer-kygharil": 1,
         "witch-staff": 1
       }
     }
@@ -5920,6 +6669,68 @@
     }
   },
   {
+    "name": "agents-of-the-imperium/inquisitors-hand-eversor-assassin",
+    "args": {
+      "unitId": "inquisitors-hand-eversor-assassin",
+      "factionId": "agents-of-the-imperium"
+    },
+    "expected": {
+      "models": {
+        "Eversor Assassin": 1
+      },
+      "counts": {
+        "executioner-pistol-inquisitors-hand-eversor-assassin": 1,
+        "power-sword-and-neuro-gauntlet": 1
+      }
+    }
+  },
+  {
+    "name": "agents-of-the-imperium/inquisitors-hand-inquisitorial-agents",
+    "args": {
+      "unitId": "inquisitors-hand-inquisitorial-agents",
+      "factionId": "agents-of-the-imperium"
+    },
+    "expected": {
+      "models": {
+        "Gun Servitor": 1,
+        "Inquisitorial Agent with Agent’s Firearm and Agent’s Implement": 3,
+        "Inquisitorial Agent with Agent’s Firearm, Agent’s Implement and Mystic Stave": 1,
+        "Inquisitorial Agent with Agent’s Firearm, Plasma Pistol and Agent’s Implement": 1
+      },
+      "counts": {
+        "agent-firearm-inquisitors-hand-inquisitorial-agents": 5,
+        "agents-implement": 6,
+        "heavy-bolter-inquisitors-hand-inquisitorial-agents": 1,
+        "mystic-stave": 1,
+        "plasma-pistol-inquisitors-hand-inquisitorial-agents": 1
+      }
+    }
+  },
+  {
+    "name": "agents-of-the-imperium/inquisitors-hand-vigilant-squad",
+    "args": {
+      "unitId": "inquisitors-hand-vigilant-squad",
+      "factionId": "agents-of-the-imperium"
+    },
+    "expected": {
+      "models": {
+        "Cyber-Mastiff": 1,
+        "Proctor-Vigilant": 1,
+        "Vigilant with Combat Shotgun, Shotpistol and Gun Stocks": 6,
+        "Vigilant with Grenade Launcher, Shotpistol and Gun Stocks": 1,
+        "Vigilant with Shotpistol, Webber and Gun Stocks": 1
+      },
+      "counts": {
+        "combat-shotgun": 7,
+        "grenade-launcher": 1,
+        "gun-stocks": 9,
+        "mechanical-bite": 1,
+        "shotpistol": 9,
+        "webber": 1
+      }
+    }
+  },
+  {
     "name": "agents-of-the-imperium/ministorum-priest",
     "args": {
       "unitId": "ministorum-priest",
@@ -5947,6 +6758,21 @@
       "counts": {
         "force-orb-cane": 1,
         "laspistol": 1
+      }
+    }
+  },
+  {
+    "name": "agents-of-the-imperium/preacher-teguen",
+    "args": {
+      "unitId": "preacher-teguen",
+      "factionId": "agents-of-the-imperium"
+    },
+    "expected": {
+      "models": {
+        "Preacher Teguen": 1
+      },
+      "counts": {
+        "zealots-vindictor": 1
       }
     }
   },
@@ -6660,6 +7486,82 @@
         "magma-cannon": 1,
         "twin-heavy-bolter": 1,
         "twin-heavy-flamer-doomhammer": 2
+      }
+    }
+  },
+  {
+    "name": "astra-militarum/draydens-lance-attilan-rough-riders",
+    "args": {
+      "unitId": "draydens-lance-attilan-rough-riders",
+      "factionId": "astra-militarum"
+    },
+    "expected": {
+      "models": {
+        "Rough Rider Sergeant": 1,
+        "Rough Rider with Goad Lance": 1,
+        "Rough Rider with Hunting Lance": 3
+      },
+      "counts": {
+        "goad-lance": 1,
+        "hunting-lance": 4,
+        "lasgun": 4,
+        "laspistol": 5,
+        "power-sabre": 1,
+        "steeds-hooves": 5
+      }
+    }
+  },
+  {
+    "name": "astra-militarum/draydens-lance-command-squad",
+    "args": {
+      "unitId": "draydens-lance-command-squad",
+      "factionId": "astra-militarum"
+    },
+    "expected": {
+      "models": {
+        "Cadian Veteran Guardsman": 1,
+        "Cadian Veteran Guardsman with Powerfist": 1,
+        "Cadian Veteran Guardsmen with Medi-pack": 1,
+        "Major Drayden": 1
+      },
+      "counts": {
+        "bolt-pistol-draydens-lance-command-squad": 1,
+        "gun-stocks": 2,
+        "lasgun": 2,
+        "plasma-pistol-draydens-lance-command-squad": 1,
+        "power-fist-draydens-lance-command-squad": 1,
+        "power-weapon-draydens-lance-command-squad": 1
+      }
+    }
+  },
+  {
+    "name": "astra-militarum/draydens-lance-kasrkin",
+    "args": {
+      "unitId": "draydens-lance-kasrkin",
+      "factionId": "astra-militarum"
+    },
+    "expected": {
+      "models": {
+        "Kasrkin Sergeant": 1,
+        "Kasrkin Trooper": 3,
+        "Kasrkin Trooper with Flamer": 1,
+        "Kasrkin Trooper with Grenade Launcher": 1,
+        "Kasrkin Trooper with Hot-shot Marksman Rifle": 1,
+        "Kasrkin Trooper with Hot-shot Volley Gun": 1,
+        "Kasrkin Trooper with Melta Mine": 1,
+        "Kasrkin Trooper with Plasma Gun": 1
+      },
+      "counts": {
+        "chainsword-draydens-lance-kasrkin": 1,
+        "flamer": 1,
+        "grenade-launcher-draydens-lance-kasrkin": 1,
+        "gun-stocks": 9,
+        "hot-shot-lasgun": 3,
+        "hot-shot-laspistol-draydens-lance-kasrkin": 1,
+        "hot-shot-marksman-rifle": 1,
+        "hot-shot-volley-gun": 1,
+        "plasma-gun-draydens-lance-kasrkin": 1,
+        "plasma-pistol-draydens-lance-kasrkin": 1
       }
     }
   },
@@ -8660,6 +9562,23 @@
     }
   },
   {
+    "name": "chaos-space-marines/aranis-zarkan",
+    "args": {
+      "unitId": "aranis-zarkan",
+      "factionId": "chaos-space-marines"
+    },
+    "expected": {
+      "models": {
+        "Aranis Zarkan": 1
+      },
+      "counts": {
+        "bolt-pistol-aranis-zarkan": 1,
+        "rite-of-possession-aranis-zarkan": 1,
+        "staff-of-possession": 1
+      }
+    }
+  },
+  {
     "name": "chaos-space-marines/chaos-bikers",
     "args": {
       "unitId": "chaos-bikers",
@@ -9554,6 +10473,64 @@
     }
   },
   {
+    "name": "chaos-space-marines/zarkans-daemonkin-cultist-mob",
+    "args": {
+      "unitId": "zarkans-daemonkin-cultist-mob",
+      "factionId": "chaos-space-marines"
+    },
+    "expected": {
+      "models": {
+        "Chaos Cultist": 9,
+        "Cultist Champion": 1
+      },
+      "counts": {
+        "autopistol-zarkans-daemonkin-cultist-mob": 9,
+        "blades-and-cudgels": 10,
+        "bolt-pistol-zarkans-daemonkin-cultist-mob": 1
+      }
+    }
+  },
+  {
+    "name": "chaos-space-marines/zarkans-daemonkin-legionaries",
+    "args": {
+      "unitId": "zarkans-daemonkin-legionaries",
+      "factionId": "chaos-space-marines"
+    },
+    "expected": {
+      "models": {
+        "Aspiring Champion": 1,
+        "Legionary": 7,
+        "Legionary with Heavy Bolter": 1,
+        "Legionary with Meltagun": 1
+      },
+      "counts": {
+        "accursed-weapon": 1,
+        "bolt-pistol-zarkans-daemonkin-legionaries": 9,
+        "boltgun": 7,
+        "fists-and-knives": 9,
+        "heavy-bolter": 1,
+        "meltagun": 1,
+        "plasma-pistol-zarkans-daemonkin-legionaries": 1
+      }
+    }
+  },
+  {
+    "name": "chaos-space-marines/zarkans-daemonkin-possessed",
+    "args": {
+      "unitId": "zarkans-daemonkin-possessed",
+      "factionId": "chaos-space-marines"
+    },
+    "expected": {
+      "models": {
+        "Possessed": 4,
+        "Possessed Champion": 1
+      },
+      "counts": {
+        "hideous-mutations": 5
+      }
+    }
+  },
+  {
     "name": "death-guard/beasts-of-nurgle",
     "args": {
       "unitId": "beasts-of-nurgle",
@@ -9896,6 +10873,62 @@
     }
   },
   {
+    "name": "death-guard/maggot-lords-chaos-rhino",
+    "args": {
+      "unitId": "maggot-lords-chaos-rhino",
+      "factionId": "death-guard"
+    },
+    "expected": {
+      "models": {
+        "Chaos Rhino": 1
+      },
+      "counts": {
+        "armoured-tracks": 1,
+        "havoc-launcher-maggot-lords-chaos-rhino": 1
+      }
+    }
+  },
+  {
+    "name": "death-guard/maggot-lords-deathshroud-terminators",
+    "args": {
+      "unitId": "maggot-lords-deathshroud-terminators",
+      "factionId": "death-guard"
+    },
+    "expected": {
+      "models": {
+        "Deathshroud Champion": 1,
+        "Deathshroud Terminator": 2
+      },
+      "counts": {
+        "manreaper-maggot-lords-deathshroud-terminators": 3,
+        "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators": 3
+      }
+    }
+  },
+  {
+    "name": "death-guard/maggot-lords-plague-marines",
+    "args": {
+      "unitId": "maggot-lords-plague-marines",
+      "factionId": "death-guard"
+    },
+    "expected": {
+      "models": {
+        "Plague Champion": 1,
+        "Plague Marine": 4,
+        "Plague Marine with Blight Launcher": 1,
+        "Plague Marine with Plague Spewer": 1
+      },
+      "counts": {
+        "blight-launcher-maggot-lords-plague-marines": 1,
+        "boltgun": 4,
+        "plague-knives-maggot-lords-plague-marines": 6,
+        "plague-spewer": 1,
+        "plasma-pistol-maggot-lords-plague-marines": 1,
+        "power-fist": 1
+      }
+    }
+  },
+  {
     "name": "death-guard/malignant-plaguecaster",
     "args": {
       "unitId": "malignant-plaguecaster",
@@ -10110,6 +11143,38 @@
     }
   },
   {
+    "name": "death-guard/septimol-fulg-maggot-lords-tallyman",
+    "args": {
+      "unitId": "septimol-fulg-maggot-lords-tallyman",
+      "factionId": "death-guard"
+    },
+    "expected": {
+      "models": {
+        "Septimol Fulg": 1
+      },
+      "counts": {
+        "numerological-artefacts": 1,
+        "plasma-pistol-septimol-fulg-maggot-lords-tallyman": 1
+      }
+    }
+  },
+  {
+    "name": "death-guard/sholgor-the-putrid",
+    "args": {
+      "unitId": "sholgor-the-putrid",
+      "factionId": "death-guard"
+    },
+    "expected": {
+      "models": {
+        "Sholgor the Putrid": 1
+      },
+      "counts": {
+        "power-fist-sholgor-the-putrid": 1,
+        "twin-plague-spewer": 1
+      }
+    }
+  },
+  {
     "name": "death-guard/tallyman",
     "args": {
       "unitId": "tallyman",
@@ -10154,6 +11219,60 @@
         "huskblade": 1,
         "shadowfield": 1,
         "splinter-pistol-archon": 1
+      }
+    }
+  },
+  {
+    "name": "drukhari/coven-of-agonies-cronos",
+    "args": {
+      "unitId": "coven-of-agonies-cronos",
+      "factionId": "drukhari"
+    },
+    "expected": {
+      "models": {
+        "Cronos": 1
+      },
+      "counts": {
+        "spirit-leech-tentacles": 1,
+        "spirit-syphon": 1,
+        "spirit-vortex-coven-of-agonies-cronos": 1
+      }
+    }
+  },
+  {
+    "name": "drukhari/coven-of-agonies-talos",
+    "args": {
+      "unitId": "coven-of-agonies-talos",
+      "factionId": "drukhari"
+    },
+    "expected": {
+      "models": {
+        "Talos": 1
+      },
+      "counts": {
+        "chain-flails": 1,
+        "twin-liquifier-gun": 1,
+        "twin-splinter-cannon": 1
+      }
+    }
+  },
+  {
+    "name": "drukhari/coven-of-agonies-wracks",
+    "args": {
+      "unitId": "coven-of-agonies-wracks",
+      "factionId": "drukhari"
+    },
+    "expected": {
+      "models": {
+        "Acothyst": 1,
+        "Wrack": 3,
+        "Wrack with Ossefactor": 1
+      },
+      "counts": {
+        "hexrifle": 1,
+        "ossefactor": 1,
+        "torturers-tool": 2,
+        "twin-torturers-tools": 3
       }
     }
   },
@@ -10520,6 +11639,56 @@
     }
   },
   {
+    "name": "drukhari/xatrophos-nuul",
+    "args": {
+      "unitId": "xatrophos-nuul",
+      "factionId": "drukhari"
+    },
+    "expected": {
+      "models": {
+        "Xatrophos Nuul": 1
+      },
+      "counts": {
+        "haemonculus-tools-and-scissorhands": 1,
+        "stinger-pistol-xatrophos-nuul": 1
+      }
+    }
+  },
+  {
+    "name": "emperors-children/callous-blades-flawless-blades",
+    "args": {
+      "unitId": "callous-blades-flawless-blades",
+      "factionId": "emperors-children"
+    },
+    "expected": {
+      "models": {
+        "Flawless Blades": 3
+      },
+      "counts": {
+        "blissblade": 3,
+        "bolt-pistol": 3
+      }
+    }
+  },
+  {
+    "name": "emperors-children/callous-blades-infractors",
+    "args": {
+      "unitId": "callous-blades-infractors",
+      "factionId": "emperors-children"
+    },
+    "expected": {
+      "models": {
+        "Infractor": 9,
+        "Obsessionist": 1
+      },
+      "counts": {
+        "bolt-pistol-callous-blades-infractors": 10,
+        "duelling-sabre": 9,
+        "power-sword-callous-blades-infractors": 1
+      }
+    }
+  },
+  {
     "name": "emperors-children/chaos-land-raider",
     "args": {
       "unitId": "chaos-land-raider",
@@ -10782,6 +11951,22 @@
       "counts": {
         "power-sword": 1,
         "screamer-pistol": 1
+      }
+    }
+  },
+  {
+    "name": "emperors-children/lord-kaphrael-of-the-callous-blades",
+    "args": {
+      "unitId": "lord-kaphrael-of-the-callous-blades",
+      "factionId": "emperors-children"
+    },
+    "expected": {
+      "models": {
+        "Lord Kaphrael": 1
+      },
+      "counts": {
+        "phoenix-power-spear": 1,
+        "power-fist-lord-kaphrael-of-the-callous-blades": 1
       }
     }
   },
@@ -11073,6 +12258,63 @@
     }
   },
   {
+    "name": "genestealer-cults/claw-of-ascension-achilles-ridgerunner",
+    "args": {
+      "unitId": "claw-of-ascension-achilles-ridgerunner",
+      "factionId": "genestealer-cults"
+    },
+    "expected": {
+      "models": {
+        "Achilles Ridgerunner": 1
+      },
+      "counts": {
+        "armoured-hull-claw-of-ascension-achilles-ridgerunner": 1,
+        "missile-launcher": 1,
+        "twin-heavy-stubber": 1
+      }
+    }
+  },
+  {
+    "name": "genestealer-cults/claw-of-ascension-atalan-jackals",
+    "args": {
+      "unitId": "claw-of-ascension-atalan-jackals",
+      "factionId": "genestealer-cults"
+    },
+    "expected": {
+      "models": {
+        "Atalan Jackal": 3,
+        "Atalan Jackal with Power Weapon": 1,
+        "Atalan Wolfquad": 1
+      },
+      "counts": {
+        "mining-laser": 1,
+        "power-weapon-claw-of-ascension-atalan-jackals": 1,
+        "stolen-blade-claw-of-ascension-atalan-jackals": 4,
+        "stolen-firearms": 5
+      }
+    }
+  },
+  {
+    "name": "genestealer-cults/claw-of-ascension-hybrid-metamorphs",
+    "args": {
+      "unitId": "claw-of-ascension-hybrid-metamorphs",
+      "factionId": "genestealer-cults"
+    },
+    "expected": {
+      "models": {
+        "Metamorph": 1,
+        "Metamorph Leader": 1,
+        "Metamorph with Hand Flamer": 3
+      },
+      "counts": {
+        "autopistol": 1,
+        "hand-flamer": 3,
+        "leaders-weapon-symbiote": 1,
+        "metamorph-mutations": 4
+      }
+    }
+  },
+  {
     "name": "genestealer-cults/goliath-rockgrinder",
     "args": {
       "unitId": "goliath-rockgrinder",
@@ -11305,6 +12547,23 @@
     }
   },
   {
+    "name": "genestealer-cults/shanus-daskovian",
+    "args": {
+      "unitId": "shanus-daskovian",
+      "factionId": "genestealer-cults"
+    },
+    "expected": {
+      "models": {
+        "Shanus Daskovian": 1
+      },
+      "counts": {
+        "autopistol-shanus-daskovian": 1,
+        "cult-sniper-rifle-shanus-daskovian": 1,
+        "stolen-blade": 1
+      }
+    }
+  },
+  {
     "name": "grey-knights/brother-captain",
     "args": {
       "unitId": "brother-captain",
@@ -11418,6 +12677,64 @@
         "black-blade-of-antwyr": 1,
         "purifying-flame-castellan-crowe": 1,
         "storm-bolter-castellan-crowe": 1
+      }
+    }
+  },
+  {
+    "name": "grey-knights/crowes-sanctifiers-brotherhood-terminator-squad",
+    "args": {
+      "unitId": "crowes-sanctifiers-brotherhood-terminator-squad",
+      "factionId": "grey-knights"
+    },
+    "expected": {
+      "models": {
+        "Brotherhood Terminator Justicar": 1,
+        "Brotherhood Terminator with Psycannon and Nemesis Force Weapon": 1,
+        "Brotherhood Terminator with Storm Bolter and Nemesis Force Weapon": 3
+      },
+      "counts": {
+        "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad": 5,
+        "psycannon-crowes-sanctifiers-brotherhood-terminator-squad": 1,
+        "storm-bolter": 4
+      }
+    }
+  },
+  {
+    "name": "grey-knights/crowes-sanctifiers-strike-squad",
+    "args": {
+      "unitId": "crowes-sanctifiers-strike-squad",
+      "factionId": "grey-knights"
+    },
+    "expected": {
+      "models": {
+        "Grey Knight with Incinerator and Ceramite Fists": 1,
+        "Grey Knight with Psycannon and Ceramite Fists": 1,
+        "Grey Knight with Storm Bolter and Nemesis Force Weapon": 7,
+        "Justicar": 1
+      },
+      "counts": {
+        "ceramite-fists": 2,
+        "incinerator": 1,
+        "nemesis-force-weapon-crowes-sanctifiers-strike-squad": 8,
+        "psycannon-crowes-sanctifiers-strike-squad": 1,
+        "storm-bolter": 8
+      }
+    }
+  },
+  {
+    "name": "grey-knights/crowes-sanctifiers-venerable-dreadnought",
+    "args": {
+      "unitId": "crowes-sanctifiers-venerable-dreadnought",
+      "factionId": "grey-knights"
+    },
+    "expected": {
+      "models": {
+        "Venerable Dreadnought": 1
+      },
+      "counts": {
+        "dreadnought-fist": 1,
+        "storm-bolter": 1,
+        "twin-lascannon": 1
       }
     }
   },
@@ -11653,6 +12970,23 @@
       "counts": {
         "armoured-tracks-rhino": 1,
         "storm-bolter-rhino": 1
+      }
+    }
+  },
+  {
+    "name": "grey-knights/sanctifiers-castellan-crowe",
+    "args": {
+      "unitId": "sanctifiers-castellan-crowe",
+      "factionId": "grey-knights"
+    },
+    "expected": {
+      "models": {
+        "Castellan Crowe": 1
+      },
+      "counts": {
+        "black-blade-of-antwyr": 1,
+        "purifying-flame-sanctifiers-castellan-crowe": 1,
+        "storm-bolter-sanctifiers-castellan-crowe": 1
       }
     }
   },
@@ -12158,6 +13492,67 @@
     }
   },
   {
+    "name": "leagues-of-votann/bane-slayers-bulwark-brokhyr-thunderkyn",
+    "args": {
+      "unitId": "bane-slayers-bulwark-brokhyr-thunderkyn",
+      "factionId": "leagues-of-votann"
+    },
+    "expected": {
+      "models": {
+        "Brokhyr Thunderkyn": 3
+      },
+      "counts": {
+        "powered-strikes": 3,
+        "sp-conversion-beamer": 3
+      }
+    }
+  },
+  {
+    "name": "leagues-of-votann/bane-slayers-bulwark-einhyr-hearthguard",
+    "args": {
+      "unitId": "bane-slayers-bulwark-einhyr-hearthguard",
+      "factionId": "leagues-of-votann"
+    },
+    "expected": {
+      "models": {
+        "Einhyr Hearthguard": 4,
+        "Hesyr": 1
+      },
+      "counts": {
+        "exoarmour-grenade-launcher-bane-slayers-bulwark-einhyr-hearthguard": 5,
+        "graviton-hammer": 1,
+        "plasma-blade-gauntlet": 4,
+        "volkanite-disintegrator": 5
+      }
+    }
+  },
+  {
+    "name": "leagues-of-votann/bane-slayers-bulwark-hearthkyn-warriors",
+    "args": {
+      "unitId": "bane-slayers-bulwark-hearthkyn-warriors",
+      "factionId": "leagues-of-votann"
+    },
+    "expected": {
+      "models": {
+        "Hearthkyn Warrior with Autoch-pattern Bolt Pistol and Plasma Knife": 1,
+        "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, HYLas Auto Rifle and Armoured Fists": 1,
+        "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Ion Blaster and Armoured Fists": 6,
+        "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Magna-Rail Rifle and Armoured Fists": 1,
+        "Theyn": 1
+      },
+      "counts": {
+        "armoured-fists": 8,
+        "autoch-pattern-bolt-pistol-bane-slayers-bulwark-hearthkyn-warriors": 10,
+        "hylas-auto-rifle": 1,
+        "ion-blaster": 6,
+        "magna-rail-rifle": 1,
+        "plasma-knife": 1,
+        "theyns-armaments": 1,
+        "theyns-pistol-bane-slayers-bulwark-hearthkyn-warriors": 1
+      }
+    }
+  },
+  {
     "name": "leagues-of-votann/berehk-stornbrow",
     "args": {
       "unitId": "berehk-stornbrow",
@@ -12524,6 +13919,88 @@
         "blade-of-the-ancestors": 1,
         "rampart-crest": 1,
         "volkanite-disintegrator-uthar-the-destined": 1
+      }
+    }
+  },
+  {
+    "name": "leagues-of-votann/vynn-bane-slayer",
+    "args": {
+      "unitId": "vynn-bane-slayer",
+      "factionId": "leagues-of-votann"
+    },
+    "expected": {
+      "models": {
+        "Vynn Bane-Slayer": 1
+      },
+      "counts": {
+        "autoch-pattern-combi-bolter": 1,
+        "mass-hammer": 1
+      }
+    }
+  },
+  {
+    "name": "necrons/amonhotekhs-guard-canoptek-doomstalker",
+    "args": {
+      "unitId": "amonhotekhs-guard-canoptek-doomstalker",
+      "factionId": "necrons"
+    },
+    "expected": {
+      "models": {
+        "Canoptek Doomstalker": 1
+      },
+      "counts": {
+        "doomsday-blaster-amonhotekhs-guard-canoptek-doomstalker": 1,
+        "doomstalker-limbs": 1,
+        "twin-gauss-flayer": 1
+      }
+    }
+  },
+  {
+    "name": "necrons/amonhotekhs-guard-canoptek-scarab-swarms",
+    "args": {
+      "unitId": "amonhotekhs-guard-canoptek-scarab-swarms",
+      "factionId": "necrons"
+    },
+    "expected": {
+      "models": {
+        "Canoptek Scarab Swarm": 3
+      },
+      "counts": {
+        "feeder-mandibles": 3
+      }
+    }
+  },
+  {
+    "name": "necrons/amonhotekhs-guard-necron-warriors",
+    "args": {
+      "unitId": "amonhotekhs-guard-necron-warriors",
+      "factionId": "necrons"
+    },
+    "expected": {
+      "models": {
+        "Necron Warrior with Gauss Flayer and Combat Attachments": 5,
+        "Necron Warrior with Gauss Reaper and Combat Attachments": 5
+      },
+      "counts": {
+        "combat-attachments": 10,
+        "gauss-flayer": 5,
+        "gauss-reaper": 5
+      }
+    }
+  },
+  {
+    "name": "necrons/amonhotekhs-guard-skorpekh-destroyers",
+    "args": {
+      "unitId": "amonhotekhs-guard-skorpekh-destroyers",
+      "factionId": "necrons"
+    },
+    "expected": {
+      "models": {
+        "Skorpekh Destroyer": 2,
+        "Skorpekh Destroyer with Plasmacyte": 1
+      },
+      "counts": {
+        "hyperphase-blades": 3
       }
     }
   },
@@ -13117,6 +14594,22 @@
     }
   },
   {
+    "name": "necrons/overlord-amonhotekh",
+    "args": {
+      "unitId": "overlord-amonhotekh",
+      "factionId": "necrons"
+    },
+    "expected": {
+      "models": {
+        "Overlord Amonhotekh": 1
+      },
+      "counts": {
+        "overlords-blade": 1,
+        "tachyon-arrow": 1
+      }
+    }
+  },
+  {
     "name": "necrons/overlord-with-translocation-shroud",
     "args": {
       "unitId": "overlord-with-translocation-shroud",
@@ -13355,6 +14848,92 @@
       "counts": {
         "heat-ray": 1,
         "stalkers-forelimbs": 1
+      }
+    }
+  },
+  {
+    "name": "orks/ardmob-boyz",
+    "args": {
+      "unitId": "ardmob-boyz",
+      "factionId": "orks"
+    },
+    "expected": {
+      "models": {
+        "Boss Nob": 1,
+        "Boyz": 9
+      },
+      "counts": {
+        "big-choppa": 1,
+        "choppa": 9,
+        "kustom-shoota": 1,
+        "shoota": 9,
+        "slugga": 10
+      }
+    }
+  },
+  {
+    "name": "orks/ardmob-gretchin",
+    "args": {
+      "unitId": "ardmob-gretchin",
+      "factionId": "orks"
+    },
+    "expected": {
+      "models": {
+        "Gretchin": 10
+      },
+      "counts": {
+        "blasta": 10,
+        "lobbin-bombs": 10,
+        "scavenged-shivs": 10
+      }
+    }
+  },
+  {
+    "name": "orks/ardmob-warboss",
+    "args": {
+      "unitId": "ardmob-warboss",
+      "factionId": "orks"
+    },
+    "expected": {
+      "models": {
+        "Warboss": 1
+      },
+      "counts": {
+        "kustom-choppa": 1,
+        "kustom-shoota": 1
+      }
+    }
+  },
+  {
+    "name": "orks/ardmob-wartrakk",
+    "args": {
+      "unitId": "ardmob-wartrakk",
+      "factionId": "orks"
+    },
+    "expected": {
+      "models": {
+        "Wartrakk": 1
+      },
+      "counts": {
+        "choppa-ardmob-wartrakk": 1,
+        "kustom-shoota": 1,
+        "rokkit-launcha": 1
+      }
+    }
+  },
+  {
+    "name": "orks/ardmob-weirdboy",
+    "args": {
+      "unitId": "ardmob-weirdboy",
+      "factionId": "orks"
+    },
+    "expected": {
+      "models": {
+        "'Ardmob Weirdboy": 1
+      },
+      "counts": {
+        "psychic-powers": 1,
+        "waaagh-staff": 1
       }
     }
   },
@@ -14361,6 +15940,23 @@
     }
   },
   {
+    "name": "tau-empire/commander-cloudspear",
+    "args": {
+      "unitId": "commander-cloudspear",
+      "factionId": "tau-empire"
+    },
+    "expected": {
+      "models": {
+        "Commander Cloudspear": 1
+      },
+      "counts": {
+        "airbursting-fragmentation-projector-commander-cloudspear": 1,
+        "battlesuit-fists-commander-cloudspear": 1,
+        "plasma-rifle-commander-cloudspear": 1
+      }
+    }
+  },
+  {
     "name": "tau-empire/commander-farsight",
     "args": {
       "unitId": "commander-farsight",
@@ -14899,6 +16495,61 @@
     }
   },
   {
+    "name": "tau-empire/sudden-dawn-cadre-breacher-team",
+    "args": {
+      "unitId": "sudden-dawn-cadre-breacher-team",
+      "factionId": "tau-empire"
+    },
+    "expected": {
+      "models": {
+        "Breacher Team": 9,
+        "Sha'sui": 1
+      },
+      "counts": {
+        "gun-stocks": 10,
+        "pulse-blaster": 10,
+        "pulse-pistol-sudden-dawn-cadre-breacher-team": 10
+      }
+    }
+  },
+  {
+    "name": "tau-empire/sudden-dawn-cadre-devilfish",
+    "args": {
+      "unitId": "sudden-dawn-cadre-devilfish",
+      "factionId": "tau-empire"
+    },
+    "expected": {
+      "models": {
+        "Devilfish": 1
+      },
+      "counts": {
+        "accelerator-burst-cannon": 1,
+        "armoured-hull-sudden-dawn-cadre-devilfish": 1,
+        "twin-pulse-carbine": 1
+      }
+    }
+  },
+  {
+    "name": "tau-empire/sudden-dawn-cadre-pathfinder-team",
+    "args": {
+      "unitId": "sudden-dawn-cadre-pathfinder-team",
+      "factionId": "tau-empire"
+    },
+    "expected": {
+      "models": {
+        "Pathfinder Shas'ui": 1,
+        "Pathfinder with Pulse Carbine, Pulse Pistol and Close Combat Weapon": 6,
+        "Pathfinder with Pulse Pistol, Rail Rifle and Close Combat Weapon": 3
+      },
+      "counts": {
+        "gun-stocks": 10,
+        "pulse-carbine": 7,
+        "pulse-pistol-sudden-dawn-cadre-pathfinder-team": 10,
+        "rail-rifle": 3
+      }
+    }
+  },
+  {
     "name": "tau-empire/sun-shark-bomber",
     "args": {
       "unitId": "sun-shark-bomber",
@@ -15336,6 +16987,22 @@
     }
   },
   {
+    "name": "thousand-sons/kaaskrek",
+    "args": {
+      "unitId": "kaaskrek",
+      "factionId": "thousand-sons"
+    },
+    "expected": {
+      "models": {
+        "Kaa'skrek": 1
+      },
+      "counts": {
+        "baleful-devolution-kaaskrek": 1,
+        "force-stave": 1
+      }
+    }
+  },
+  {
     "name": "thousand-sons/kairos-fateweaver",
     "args": {
       "unitId": "kairos-fateweaver",
@@ -15430,6 +17097,45 @@
       "counts": {
         "coruscating-pink-flames": 10,
         "pink-claws": 10
+      }
+    }
+  },
+  {
+    "name": "thousand-sons/prism-of-zadophon-rubric-marines",
+    "args": {
+      "unitId": "prism-of-zadophon-rubric-marines",
+      "factionId": "thousand-sons"
+    },
+    "expected": {
+      "models": {
+        "Aspiring Sorcerer": 1,
+        "Rubric Marine with Inferno Boltgun and Stocks and Fists": 3,
+        "Rubric Marine with Soulreaper Cannon and Stocks and Fists": 1,
+        "Rubric Marine with Warpflamer and Stocks and Fists": 5
+      },
+      "counts": {
+        "force-weapon-prism-of-zadophon-rubric-marines": 1,
+        "inferno-bolt-pistol-prism-of-zadophon-rubric-marines": 1,
+        "inferno-boltgun": 3,
+        "malefic-curse": 1,
+        "soulreaper-cannon": 1,
+        "stocks-and-fists": 9,
+        "warpflamer-prism-of-zadophon-rubric-marines": 5
+      }
+    }
+  },
+  {
+    "name": "thousand-sons/prism-of-zadophon-tzaangor-enlightened",
+    "args": {
+      "unitId": "prism-of-zadophon-tzaangor-enlightened",
+      "factionId": "thousand-sons"
+    },
+    "expected": {
+      "models": {
+        "Tzaangor Enlightened": 3
+      },
+      "counts": {
+        "divining-spear": 3
       }
     }
   },
@@ -15601,6 +17307,22 @@
       },
       "counts": {
         "tzaangor-blades": 10
+      }
+    }
+  },
+  {
+    "name": "thousand-sons/zadophon-the-soul-eater",
+    "args": {
+      "unitId": "zadophon-the-soul-eater",
+      "factionId": "thousand-sons"
+    },
+    "expected": {
+      "models": {
+        "Zadophon the Soul Eater": 1
+      },
+      "counts": {
+        "hellforged-weapons": 1,
+        "infernal-cannon": 1
       }
     }
   },
@@ -16177,6 +17899,21 @@
     }
   },
   {
+    "name": "tyranids/terror-of-vardenghast",
+    "args": {
+      "unitId": "terror-of-vardenghast",
+      "factionId": "tyranids"
+    },
+    "expected": {
+      "models": {
+        "Terror of Vardenghast": 1
+      },
+      "counts": {
+        "prime-talons": 1
+      }
+    }
+  },
+  {
     "name": "tyranids/tervigon",
     "args": {
       "unitId": "tervigon",
@@ -16350,6 +18087,69 @@
       },
       "counts": {
         "scything-talons-and-rending-claws": 3
+      }
+    }
+  },
+  {
+    "name": "tyranids/vardenghast-swarm-barbgaunts",
+    "args": {
+      "unitId": "vardenghast-swarm-barbgaunts",
+      "factionId": "tyranids"
+    },
+    "expected": {
+      "models": {
+        "Barbgaunt": 5
+      },
+      "counts": {
+        "barblauncher-vardenghast-swarm-barbgaunts": 5,
+        "chitinous-claws-and-teeth-vardenghast-swarm-barbgaunts": 5
+      }
+    }
+  },
+  {
+    "name": "tyranids/vardenghast-swarm-psychophage",
+    "args": {
+      "unitId": "vardenghast-swarm-psychophage",
+      "factionId": "tyranids"
+    },
+    "expected": {
+      "models": {
+        "Psychophage": 1
+      },
+      "counts": {
+        "psychoclastic-torrent-vardenghast-swarm-psychophage": 1,
+        "talons-and-betentacled-maw": 1
+      }
+    }
+  },
+  {
+    "name": "tyranids/vardenghast-swarm-termagants",
+    "args": {
+      "unitId": "vardenghast-swarm-termagants",
+      "factionId": "tyranids"
+    },
+    "expected": {
+      "models": {
+        "Termagant": 10
+      },
+      "counts": {
+        "chitinous-claws-and-teeth": 10,
+        "fleshborer": 10
+      }
+    }
+  },
+  {
+    "name": "tyranids/vardenghast-swarm-von-ryans-leapers",
+    "args": {
+      "unitId": "vardenghast-swarm-von-ryans-leapers",
+      "factionId": "tyranids"
+    },
+    "expected": {
+      "models": {
+        "Von Ryan's Leaper": 3
+      },
+      "counts": {
+        "chitinous-talons": 3
       }
     }
   },
@@ -16710,6 +18510,64 @@
     }
   },
   {
+    "name": "world-eaters/frenzied-reavers-jakhals",
+    "args": {
+      "unitId": "frenzied-reavers-jakhals",
+      "factionId": "world-eaters"
+    },
+    "expected": {
+      "models": {
+        "Dishonoured": 1,
+        "Jakhal Pack Leader": 1,
+        "Jakhal with Autopistol and Chainblade": 7,
+        "Jakhal with Autopistol and Mauler Chainblade": 1
+      },
+      "counts": {
+        "autopistol-frenzied-reavers-jakhals": 9,
+        "chainblade-frenzied-reavers-jakhals": 8,
+        "mauler-chainblade": 1,
+        "skullsmasher-and-mangler": 1
+      }
+    }
+  },
+  {
+    "name": "world-eaters/frenzied-reavers-khorne-berzerkers",
+    "args": {
+      "unitId": "frenzied-reavers-khorne-berzerkers",
+      "factionId": "world-eaters"
+    },
+    "expected": {
+      "models": {
+        "Khorne Berzerker Champion": 1,
+        "Khorne Berzerker with Bolt Pistol and Chainblade": 5,
+        "Khorne Berzerker with Bolt Pistol and Khornate Eviscerator": 2,
+        "Khorne Berzerker with Plasma Pistol and Chainblade": 2
+      },
+      "counts": {
+        "bolt-pistol-frenzied-reavers-khorne-berzerkers": 7,
+        "chainblade": 8,
+        "khornate-eviscerator": 2,
+        "plasma-pistol-frenzied-reavers-khorne-berzerkers": 3
+      }
+    }
+  },
+  {
+    "name": "world-eaters/frenzied-reavers-master-of-executions",
+    "args": {
+      "unitId": "frenzied-reavers-master-of-executions",
+      "factionId": "world-eaters"
+    },
+    "expected": {
+      "models": {
+        "Master of Executions": 1
+      },
+      "counts": {
+        "axe-of-dismemberment": 1,
+        "bolt-pistol-frenzied-reavers-master-of-executions": 1
+      }
+    }
+  },
+  {
     "name": "world-eaters/goremongers",
     "args": {
       "unitId": "goremongers",
@@ -16923,6 +18781,22 @@
       },
       "counts": {
         "lacerator-and-daemonic-claw": 1
+      }
+    }
+  },
+  {
+    "name": "world-eaters/vorrakh-lord-of-the-frenzied-reavers",
+    "args": {
+      "unitId": "vorrakh-lord-of-the-frenzied-reavers",
+      "factionId": "world-eaters"
+    },
+    "expected": {
+      "models": {
+        "Vorrakh": 1
+      },
+      "counts": {
+        "hellforged-weapons-vorrakh-lord-of-the-frenzied-reavers": 1,
+        "infernal-cannon": 1
       }
     }
   },
