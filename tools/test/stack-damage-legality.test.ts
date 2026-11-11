@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import { dataset } from "../src/data/index.js";
+import { resolveTarget } from "../src/compare.js";
+import { parseMatrixConfig } from "../src/stack-damage/config.js";
+import { resolveFactionContext } from "../src/stack-damage/factions.js";
+import { damageScoringSession, emptySpec } from "../src/stack-damage/search.js";
 import type { Detachment, Enhancement, Unit, WargearOption } from "../src/generated.js";
 import { unitLoadout } from "../src/data/unit-loadout.js";
 import {
@@ -201,5 +205,33 @@ describe("Legionaries heavy melee allowance", () => {
 
   it("rejects the squad-wide heavy melee loadout the matrix used to pick", () => {
     expect(check(10, 1, 10).legal).toBe(false);
+  });
+});
+
+describe("optimizer enhancement levers on a support character", () => {
+  // Runnin' Wiv da Herd: a Painboss supporting Squighog Boyz (MOUNTED) loses INFANTRY at list
+  // building, so the search must not select Ferocious Show-off (Orks Infantry only) for it.
+  const config = parseMatrixConfig(
+    { HC_FACTIONS: "orks", HC_TARGETS: "meq-intercessors", HC_PHASES: "fight", HC_OUTPUT: "stack-damage.json" },
+    { factionIds: new Set(["orks"]), targetIds: ["meq-intercessors"] },
+  );
+  const target = resolveTarget(dataset, dataset.targetProfiles.get("meq-intercessors")!)!;
+  const session = damageScoringSession({ dataset, config, faction: resolveFactionContext(dataset, "orks"), target, phase: "fight" });
+  const lever = "enhancement:ferocious-show-off-green-tide-orks@painboss";
+  const legalOn = (bodyguardId: string): boolean => {
+    const spec = emptySpec("orks", [
+      { unit: dataset.units.getInFaction(bodyguardId, "orks")!, role: "bodyguard" },
+      { unit: dataset.units.getInFaction("painboss", "orks")!, role: "support" },
+    ], ["green-tide"]);
+    expect(session.pool(spec).levers.map((l) => l.id)).toContain(lever);
+    return session.legalLeverSelection(spec, [lever]);
+  };
+
+  it("rejects the Infantry-only enhancement on a Painboss supporting Squighog Boyz", () => {
+    expect(legalOn("squighog-boyz")).toBe(false);
+  });
+
+  it("keeps it on a Painboss supporting Beast Snagga Boyz", () => {
+    expect(legalOn("beast-snagga-boyz")).toBe(true);
   });
 });

@@ -14,6 +14,7 @@ use crate::data::battle_sizes::{
     detachment_cap_for_battle_size, enhancement_limit_for_battle_size,
     points_limit_for_battle_size, unit_limit_for_battle_size,
 };
+use crate::data::list_keywords::{list_building_keyword_changes, ListKeywords};
 use crate::data::loadout::Violation;
 use crate::data::pricing::{army_unit_points, wargear_points};
 use crate::generated::{Unit, UnitRole};
@@ -264,6 +265,26 @@ pub fn validate_roster_core_with_keyword_overrides(
         .map(|u| resolve_unit(&u.unit_id))
         .collect();
 
+    // The roster keywords of the unit `su` attaches to as a leader or support character.
+    let attached_to_keywords = |su: &NormUnit| -> Option<HashSet<String>> {
+        let bodyguard_id = su.leader_bodyguard_id.as_deref()?;
+        let idx = spec.units.iter().position(|u| u.unit_id == bodyguard_id);
+        let bodyguard = match idx {
+            Some(i) => views[i],
+            None => resolve_unit(bodyguard_id),
+        }?;
+        let overrides = idx
+            .and_then(|i| keyword_overrides.get(i))
+            .map(Vec::as_slice)
+            .unwrap_or(&[]);
+        Some(roster_keyword_set(
+            bodyguard,
+            &army_keywords,
+            &spec.detachment_ids,
+            overrides,
+        ))
+    };
+
     // --- Per-unit loadout (reuse the tier/bounds checker). --------------------
     let mut units: Vec<UnitLegality> = Vec::new();
     for (idx, su) in spec.units.iter().enumerate() {
@@ -363,24 +384,31 @@ pub fn validate_roster_core_with_keyword_overrides(
                 severity: Severity::Error,
             });
         }
+        // Attachment is decided at list building, so keywords the bearer's own abilities change
+        // while attached (a Painboss with Squighog Boyz loses INFANTRY) decide eligibility.
+        let changes = list_building_keyword_changes(
+            &dataset.abilities_of(view),
+            attached_to_keywords(su).as_ref(),
+        );
+        let list_kws = ListKeywords::new(&kws, &changes);
         // Keyword groups or datasheet groups (mirror of TS `meetsEnhancementGroups`).
         let keyword_eligible = if let Some(groups) = &enh.keyword_restriction_groups {
             Some(
                 groups
                     .iter()
-                    .any(|group| group.iter().all(|k| kws.contains(k.as_str()))),
+                    .any(|group| group.iter().all(|k| list_kws.has(k.as_str()))),
             )
         } else {
             enh.keyword_restrictions
                 .as_ref()
-                .map(|req| req.0.iter().all(|k| kws.contains(k.as_str())))
+                .map(|req| req.0.iter().all(|k| list_kws.has(k.as_str())))
         };
         let datasheet_eligible = enh.datasheet_restriction_groups.iter().any(|group| {
             group.unit_id.as_str() == view.id.as_str()
                 && group
                     .keywords
                     .as_ref()
-                    .is_none_or(|ks| ks.iter().all(|k| kws.contains(k.as_str())))
+                    .is_none_or(|ks| ks.iter().all(|k| list_kws.has(k.as_str())))
         });
         let eligible = match keyword_eligible {
             Some(ok) => ok || datasheet_eligible,
@@ -415,7 +443,7 @@ pub fn validate_roster_core_with_keyword_overrides(
             });
         }
         if let Some(excl) = &enh.exclusion_keywords {
-            if excl.0.iter().any(|k| kws.contains(k.as_str())) {
+            if excl.0.iter().any(|k| list_kws.has(k.as_str())) {
                 army.push(RosterViolation {
                     code: RosterViolationCode::EnhancementExcludedKeyword,
                     id: enh.id.as_str().to_string(),

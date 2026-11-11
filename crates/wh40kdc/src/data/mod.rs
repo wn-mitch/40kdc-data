@@ -53,6 +53,8 @@ pub mod affordability;
 #[cfg(feature = "import")]
 pub mod battle_sizes;
 #[cfg(feature = "import")]
+mod list_keywords;
+#[cfg(feature = "import")]
 pub mod roster;
 
 #[cfg(feature = "cruncher")]

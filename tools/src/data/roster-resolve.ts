@@ -17,6 +17,7 @@ import {
   unitLimitForBattleSize,
 } from "./battle-sizes.js";
 import { meetsEnhancementGroups, missingRequiredAbilities } from "./enhancement-eligibility.js";
+import { listBuildingKeywordChanges, withKeywordChanges } from "./list-building-keywords.js";
 import type { Violation } from "./loadout.js";
 import { hostUnitPoints, wargearPoints } from "./pricing.js";
 
@@ -283,6 +284,13 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
   };
 
   const views = spec.units.map((u) => resolveUnit(u.unitId));
+  /** The roster keywords of the unit `su` attaches to as a leader or support character. */
+  const attachedToKeywords = (su: NormUnit): Set<string> | undefined => {
+    if (!su.leaderBodyguardId) return undefined;
+    const idx = spec.units.findIndex((u) => u.unitId === su.leaderBodyguardId);
+    const bodyguard = idx >= 0 ? views[idx] : resolveUnit(su.leaderBodyguardId);
+    return bodyguard ? keywordSet(bodyguard, idx >= 0 ? spec.units[idx] : undefined) : undefined;
+  };
 
   // --- Per-unit loadout (reuse the tier/bounds checker). --------------------
   const units: UnitLegality[] = [];
@@ -331,14 +339,19 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     const rows = dataset.unitCompositionOf(view.raw)?.models ?? [];
     if (rows.length > 0 && rows.every((m) => m.excluded_from_enhancements === true))
       err("enhancement-on-excluded-model", enh.id, `${enh.id} cannot be given to ${view.id}: no model in it can take Enhancements`, idx);
-    const kws = keywordSet(view, su);
-    const eligible = meetsEnhancementGroups(enh, view.id, (keyword) => kws.has(keyword));
+    // Attachment is decided at list building, so keywords the bearer's own abilities change
+    // while attached (a Painboss with Squighog Boyz loses INFANTRY) decide eligibility.
+    const has = withKeywordChanges(keywordSet(view, su), listBuildingKeywordChanges(
+      view.abilities.map((ability) => ability.raw as unknown as Record<string, unknown>),
+      attachedToKeywords(su),
+    ));
+    const eligible = meetsEnhancementGroups(enh, view.id, has);
     if (!eligible)
       err("enhancement-keyword-mismatch", enh.id, `${view.id} lacks an eligible keyword group for ${enh.id}`, idx);
     const missing = missingRequiredAbilities(enh, view.raw.ability_ids);
     if (missing.length)
       err("enhancement-missing-ability", enh.id, `${view.id} lacks the ${missing.join(", ")} ability ${enh.id} requires`, idx);
-    if ((enh.exclusion_keywords ?? []).some((k) => kws.has(k)))
+    if ((enh.exclusion_keywords ?? []).some(has))
       err("enhancement-excluded-keyword", enh.id, `${view.id} carries a keyword excluded by ${enh.id}`, idx);
   });
   for (const [enhId, uses] of enhUses) {

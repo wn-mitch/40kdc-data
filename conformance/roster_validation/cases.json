@@ -2695,5 +2695,113 @@
       ]
     },
     "expected": []
+  },
+  {
+    "name": "enhancement-keyword-lost-on-support-attachment",
+    "args": {
+      "factionId": "orks",
+      "battleSize": "strike-force",
+      "forceDisposition": "take-and-hold",
+      "detachments": [
+        {
+          "id": "green-tide"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "painboss",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "ferocious-show-off-green-tide-orks",
+          "leaderBodyguardId": "squighog-boyz",
+          "counts": {
+            "beast-snagga-klaw": 1
+          }
+        },
+        {
+          "unitId": "squighog-boyz",
+          "modelCount": 4,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "big-choppa-squighog-boyz": 1,
+            "saddlegits-shiv": 3,
+            "slugga": 1,
+            "squig-jaws": 4,
+            "stikka": 3
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|enhancement-keyword-mismatch:ferocious-show-off-green-tide-orks"
+    ]
+  },
+  {
+    "name": "legal-enhancement-keyword-kept-on-support-attachment",
+    "args": {
+      "factionId": "orks",
+      "battleSize": "strike-force",
+      "forceDisposition": "take-and-hold",
+      "detachments": [
+        {
+          "id": "green-tide"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "painboss",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "ferocious-show-off-green-tide-orks",
+          "leaderBodyguardId": "beast-snagga-boyz",
+          "counts": {
+            "beast-snagga-klaw": 1
+          }
+        },
+        {
+          "unitId": "beast-snagga-boyz",
+          "modelCount": 10,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "choppa-beast-snagga-boyz": 9,
+            "power-snappa": 1,
+            "slugga": 10
+          }
+        }
+      ]
+    },
+    "expected": []
+  },
+  {
+    "name": "enhancement-keyword-kept-unattached-support",
+    "args": {
+      "factionId": "orks",
+      "battleSize": "strike-force",
+      "forceDisposition": "take-and-hold",
+      "detachments": [
+        {
+          "id": "green-tide"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "painboss",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "ferocious-show-off-green-tide-orks",
+          "leaderBodyguardId": null,
+          "counts": {
+            "beast-snagga-klaw": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|leader-must-attach:painboss"
+    ]
   }
 ]

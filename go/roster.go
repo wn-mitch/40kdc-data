@@ -142,6 +142,26 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		views[i] = resolveUnit(u.unitID)
 	}
 
+	// attachedToKeywords is the roster keyword set of the unit su attaches to as
+	// a leader or support character; nil when su is unattached.
+	attachedToKeywords := func(su normUnit) map[string]struct{} {
+		if su.leaderBodyguardID == "" {
+			return nil
+		}
+		for i, u := range spec.units {
+			if u.unitID == su.leaderBodyguardID {
+				if views[i] == nil {
+					return nil
+				}
+				return keywordSet(views[i], u.keywordOverrides)
+			}
+		}
+		if bodyguard := resolveUnit(su.leaderBodyguardID); bodyguard != nil {
+			return keywordSet(bodyguard, nil)
+		}
+		return nil
+	}
+
 	presentUnitIDs := map[string]struct{}{}
 	for _, su := range spec.units {
 		if su.unitID != "" {
@@ -212,11 +232,12 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 				errV("enhancement-on-excluded-model", enhID, idx)
 			}
 		}
+		// Attachment is decided at list building, so keywords the bearer's own
+		// abilities change while attached (a Painboss with Squighog Boyz loses
+		// INFANTRY) decide eligibility.
+		has := withKeywordChanges(kws, listBuildingKeywordChanges(view, attachedToKeywords(su)))
 		// Keyword groups or datasheet groups (mirror of TS meetsEnhancementGroups).
-		eligible := meetsEnhancementGroups(enh, view.ID(), func(keyword string) bool {
-			_, held := kws[keyword]
-			return held
-		})
+		eligible := meetsEnhancementGroups(enh, view.ID(), has)
 		if !eligible {
 			errV("enhancement-keyword-mismatch", enhID, idx)
 		}
@@ -224,7 +245,7 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 			errV("enhancement-missing-ability", enhID, idx)
 		}
 		for _, k := range getStrList(enh, "exclusion_keywords") {
-			if _, has := kws[k]; has {
+			if has(k) {
 				errV("enhancement-excluded-keyword", enhID, idx)
 				break
 			}
