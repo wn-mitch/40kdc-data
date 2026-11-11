@@ -2939,7 +2939,8 @@ impl ::std::convert::From<::std::vec::Vec<AbilityUsageLimit>> for AbilityUsage {
 ///        "once-per-opponent-turn",
 ///        "n-per-battle",
 ///        "first-this-battle",
-///        "first-time-this-phase"
+///        "first-time-this-phase",
+///        "first-time-this-turn"
 ///      ]
 ///    },
 ///    "per": {
@@ -2979,7 +2980,8 @@ pub struct AbilityUsageLimit {
 ///    "once-per-opponent-turn",
 ///    "n-per-battle",
 ///    "first-this-battle",
-///    "first-time-this-phase"
+///    "first-time-this-phase",
+///    "first-time-this-turn"
 ///  ]
 ///}
 /// ```
@@ -3013,6 +3015,8 @@ pub enum AbilityUsageLimitFrequency {
     FirstThisBattle,
     #[serde(rename = "first-time-this-phase")]
     FirstTimeThisPhase,
+    #[serde(rename = "first-time-this-turn")]
+    FirstTimeThisTurn,
 }
 impl ::std::fmt::Display for AbilityUsageLimitFrequency {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -3025,6 +3029,7 @@ impl ::std::fmt::Display for AbilityUsageLimitFrequency {
             Self::NPerBattle => f.write_str("n-per-battle"),
             Self::FirstThisBattle => f.write_str("first-this-battle"),
             Self::FirstTimeThisPhase => f.write_str("first-time-this-phase"),
+            Self::FirstTimeThisTurn => f.write_str("first-time-this-turn"),
         }
     }
 }
@@ -3042,6 +3047,7 @@ impl ::std::str::FromStr for AbilityUsageLimitFrequency {
             "n-per-battle" => Ok(Self::NPerBattle),
             "first-this-battle" => Ok(Self::FirstThisBattle),
             "first-time-this-phase" => Ok(Self::FirstTimeThisPhase),
+            "first-time-this-turn" => Ok(Self::FirstTimeThisTurn),
             _ => Err("invalid value".into()),
         }
     }
@@ -16828,6 +16834,13 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///        "reinforcements"
 ///      ]
 ///    },
+///    "strength": {
+///      "description": "state-changed: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting), in place of a state.",
+///      "enum": [
+///        "below-half",
+///        "below-starting"
+///      ]
+///    },
 ///    "tag": {
 ///      "$ref": "#/$defs/designation-id"
 ///    },
@@ -16970,6 +16983,9 @@ pub struct EventFilter {
     pub state: ::std::option::Option<UnitState>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub step: ::std::option::Option<EventFilterStep>,
+    ///state-changed: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting), in place of a state.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub strength: ::std::option::Option<EventFilterStrength>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tag: ::std::option::Option<DesignationId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -17013,6 +17029,7 @@ impl ::std::default::Default for EventFilter {
             source: Default::default(),
             state: Default::default(),
             step: Default::default(),
+            strength: Default::default(),
             tag: Default::default(),
             through: Default::default(),
             timing: Default::default(),
@@ -17913,6 +17930,82 @@ impl ::std::convert::TryFrom<&::std::string::String> for EventFilterStep {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String> for EventFilterStep {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///state-changed: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting), in place of a state.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "state-changed: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting), in place of a state.",
+///  "enum": [
+///    "below-half",
+///    "below-starting"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum EventFilterStrength {
+    #[serde(rename = "below-half")]
+    BelowHalf,
+    #[serde(rename = "below-starting")]
+    BelowStarting,
+}
+impl ::std::fmt::Display for EventFilterStrength {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::BelowHalf => f.write_str("below-half"),
+            Self::BelowStarting => f.write_str("below-starting"),
+        }
+    }
+}
+impl ::std::str::FromStr for EventFilterStrength {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "below-half" => Ok(Self::BelowHalf),
+            "below-starting" => Ok(Self::BelowStarting),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for EventFilterStrength {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for EventFilterStrength {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for EventFilterStrength {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -29352,6 +29445,16 @@ pub struct OathStateConditionParameters {
 ///      "description": "A mission-specific named objective.",
 ///      "$ref": "#/$defs/entity-id"
 ///    },
+///    "outside_territory": {
+///      "description": "The objective is not in this territory (\"not in your opponent's deployment zone\").",
+///      "enum": [
+///        "your-territory",
+///        "enemy-territory",
+///        "no-mans-land",
+///        "your-deployment-zone",
+///        "enemy-deployment-zone"
+///      ]
+///    },
 ///    "role": {
 ///      "enum": [
 ///        "central",
@@ -29417,6 +29520,9 @@ pub struct ObjectiveFilter {
     ///A mission-specific named objective.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<EntityId>,
+    ///The objective is not in this territory ("not in your opponent's deployment zone").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub outside_territory: ::std::option::Option<ObjectiveFilterOutsideTerritory>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub role: ::std::option::Option<ObjectiveFilterRole>,
     ///The objective marker a select-objective step bound.
@@ -29437,6 +29543,7 @@ impl ::std::default::Default for ObjectiveFilter {
             designated: Default::default(),
             home_of: Default::default(),
             name: Default::default(),
+            outside_territory: Default::default(),
             role: Default::default(),
             selection_var: Default::default(),
             territory: Default::default(),
@@ -29513,6 +29620,98 @@ impl ::std::convert::TryFrom<&::std::string::String> for ObjectiveFilterHomeOf {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String> for ObjectiveFilterHomeOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///The objective is not in this territory ("not in your opponent's deployment zone").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The objective is not in this territory (\"not in your opponent's deployment zone\").",
+///  "enum": [
+///    "your-territory",
+///    "enemy-territory",
+///    "no-mans-land",
+///    "your-deployment-zone",
+///    "enemy-deployment-zone"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ObjectiveFilterOutsideTerritory {
+    #[serde(rename = "your-territory")]
+    YourTerritory,
+    #[serde(rename = "enemy-territory")]
+    EnemyTerritory,
+    #[serde(rename = "no-mans-land")]
+    NoMansLand,
+    #[serde(rename = "your-deployment-zone")]
+    YourDeploymentZone,
+    #[serde(rename = "enemy-deployment-zone")]
+    EnemyDeploymentZone,
+}
+impl ::std::fmt::Display for ObjectiveFilterOutsideTerritory {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::YourTerritory => f.write_str("your-territory"),
+            Self::EnemyTerritory => f.write_str("enemy-territory"),
+            Self::NoMansLand => f.write_str("no-mans-land"),
+            Self::YourDeploymentZone => f.write_str("your-deployment-zone"),
+            Self::EnemyDeploymentZone => f.write_str("enemy-deployment-zone"),
+        }
+    }
+}
+impl ::std::str::FromStr for ObjectiveFilterOutsideTerritory {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "your-territory" => Ok(Self::YourTerritory),
+            "enemy-territory" => Ok(Self::EnemyTerritory),
+            "no-mans-land" => Ok(Self::NoMansLand),
+            "your-deployment-zone" => Ok(Self::YourDeploymentZone),
+            "enemy-deployment-zone" => Ok(Self::EnemyDeploymentZone),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ObjectiveFilterOutsideTerritory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ObjectiveFilterOutsideTerritory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ObjectiveFilterOutsideTerritory {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,

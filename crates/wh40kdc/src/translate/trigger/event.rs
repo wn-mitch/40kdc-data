@@ -604,6 +604,8 @@ pub(crate) fn event_phrase(t: &P) -> String {
                     "after {who} {}",
                     if is(f, "kind", "fight") {
                         "fights"
+                    } else if is(f, "kind", "attack") {
+                        "resolves its attacks"
                     } else {
                         "shoots"
                     }
@@ -773,7 +775,11 @@ pub(crate) fn event_phrase(t: &P) -> String {
             }
             format!("each time {who} {}", used_phrase(&st(f.get("kind"))))
         }
-        "state-changed" => format!("when {who} becomes {}", cap_word(&st(f.get("state")))),
+        "state-changed" => match f.get("strength").and_then(Value::as_str) {
+            Some("below-half") => format!("when {who} becomes Below Half-strength"),
+            Some("below-starting") => format!("when {who} falls below its Starting Strength"),
+            _ => format!("when {who} becomes {}", cap_word(&st(f.get("state")))),
+        },
         "designation-changed" => {
             if is(f, "tag", "EMPOWERED") {
                 format!("each time {who} is Empowered")

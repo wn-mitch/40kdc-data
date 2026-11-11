@@ -3965,7 +3965,12 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "applies_to": {
+      "all_of": [
+        "EMPEROR'S CHILDREN"
+      ]
+    }
   },
   {
     "ability_id": "master-of-the-pageant-emperors-children",
@@ -9496,7 +9501,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "behavior": "reactive",
     "source_digest": "b0637941512eb142efa577d4ebf5694d59c2d99b33b8ee8a90e5df26f55e48a1"

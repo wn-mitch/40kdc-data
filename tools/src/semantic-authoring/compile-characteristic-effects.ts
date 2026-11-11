@@ -7,6 +7,14 @@ import { CompileError } from "./compile-error.js";
 import { attackOwner, closed, type CompileLeaf, effect, type EffectContext, models, type TargetOf } from "./compile-fragments.js";
 import { weaponScope } from "./compile-weapon-effects.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
+import { ARMY_MODELS } from "./families/characteristics.js";
+
+/** The models from your army a change reaches (subject army-models), narrowed by its model keywords. */
+function armyModels(leaf: CompileLeaf): Record<string, unknown> {
+  const keywords = leaf.parameters.model_keywords as string[] | undefined;
+  const excluded = leaf.parameters.excluded_model_keywords as string[] | undefined;
+  return { owner: "friendly", level: "model", ...(keywords ? { all_of: keywords } : {}), ...(excluded ? { none_of: excluded } : {}) };
+}
 
 type Node = Record<string, unknown>;
 
@@ -33,7 +41,7 @@ export function characteristicEffect(leaf: CompileLeaf, context: EffectContext, 
         throw new CompileError("A weapon characteristic setter needs a reviewed weapon scope.");
       }
       // The attack being made belongs to whoever attacks, as for characteristic-modifier below.
-      const owner = subject === "attack" && leaf.family_version >= 7 ? attackOwner(context) : target(subject);
+      const owner = subject === "attack" && leaf.family_version >= 7 ? attackOwner(context) : models(leaf, target(subject));
       // AP is printed negative ("an Armour Penetration characteristic of -2"); the DSL stores its magnitude.
       const value = closed(leaf, "value");
       return {
@@ -61,7 +69,9 @@ export function characteristicEffect(leaf: CompileLeaf, context: EffectContext, 
       // "that unit" bound to the bearer (compile-antecedent.ts) is the led unit's models, so only an authored "this model" qualifies.
       const authoredBearer = !(leaf.antecedent_keys ?? []).includes("subject");
       const bearerWeapons = leaf.parameters.subject === "this-model" && authoredBearer && (leaf.parameters.characteristics as string[]).some((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat));
-      const owner = leaf.parameters.subject === "attack" ? attackOwner(context) : models(leaf, bearerWeapons ? "this-model" : target(leaf.parameters.subject));
+      const owner = leaf.parameters.subject === "attack" ? attackOwner(context)
+        : leaf.parameters.subject === ARMY_MODELS ? armyModels(leaf)
+        : models(leaf, bearerWeapons ? "this-model" : target(leaf.parameters.subject));
       // Subtracting a fixed amount from the Damage of the attack currently being allocated is a
       // defender-side reduction, not an offensive change to the attacker's weapon profile. Keep the
       // distinction narrow: other operations, moments, recipients, and non-fixed amounts remain

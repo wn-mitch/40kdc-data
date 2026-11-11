@@ -3194,7 +3194,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "trigger": {
       "event": "selected",
@@ -5828,7 +5828,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "behavior": "reactive",
     "trigger": {
@@ -6059,22 +6059,34 @@
             "filter": {
               "roll": "wound",
               "result": "success"
-            }
+            },
+            "subject": "this-model"
           },
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "in-region",
-              "parameters": {
-                "subject": "this-model",
-                "region": {
-                  "rule_region": {
-                    "region_id": "hallowed-ground",
-                    "owner_faction": "grey-knights"
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "in-region",
+                  "parameters": {
+                    "subject": "this-model",
+                    "region": {
+                      "rule_region": {
+                        "region_id": "hallowed-ground",
+                        "owner_faction": "grey-knights"
+                      }
+                    },
+                    "wholly": true
                   }
                 },
-                "wholly": true
-              }
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "melee"
+                  }
+                }
+              ]
             },
             "effect": {
               "type": "mortal-wounds",

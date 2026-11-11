@@ -117,6 +117,30 @@ describe("a keyword or a stat adjustment as a choice", () => {
     expect(json).toContain('"AP"');
   });
 
+  it("makes the choice the player's option when the scope says they can take it, and keeps the scope's bearers", () => {
+    const selected = "When a friendly ALPHA unit is selected to fight, that unit's CHARACTER models' melee attacks can have: [CLEAVE 1].\nOr: +1 AP.";
+    const leaves = (option: boolean) => placed(selected,
+      ["friendly ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+      ["is selected to fight", "event", { kind: "selected", to: "fight" }],
+      ["that unit's CHARACTER models'", "unit-filter", { side: "friendly", keywords: ["CHARACTER"], level: "model", member_of: "antecedent" }],
+      ["melee attacks", "weapon-property-scope", { subject: "antecedent", weapon_type: "melee" }],
+      ...(option ? [["can have", "optional-use", { who: "you" }] as [string, string, Record<string, unknown>]] : []),
+      ["CLEAVE 1", "weapon-ability-keyword", { keyword: "Cleave 1" }],
+      ["Or:", "instead", { choice: true }],
+      ["+1 AP", "characteristic-modifier", { characteristics: ["AP"], operation: "improve", value: 1 }]);
+    const mechanics = (option: boolean) => {
+      const result = compileLeaves(leaves(option), selected);
+      if (!result.ok) throw new Error(result.errors.join("; "));
+      return result.mechanics as Record<string, any>;
+    };
+    const offered = mechanics(true);
+    expect(offered.trigger).toMatchObject({ event: "selected", optional: true });
+    // The option does not change what is chosen between, or whose attacks get it.
+    expect(offered.effect).toEqual(mechanics(false).effect);
+    expect(offered.effect.options[0].target).toEqual({ owner: "friendly", all_of: ["CHARACTER"], level: "model", member_of: "event-subject" });
+    expect(mechanics(false).trigger.optional).toBeUndefined();
+  });
+
   it("refuses a choice whose keyword run has two keywords", () => {
     const two = "Your unit's melee attacks can have: [CLEAVE 1] and [PRECISION].\nOr: +1 AP.";
     const result = compileLeaves(placed(two,

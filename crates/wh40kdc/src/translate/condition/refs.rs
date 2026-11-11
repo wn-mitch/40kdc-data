@@ -488,6 +488,9 @@ pub(crate) fn objective_phrase(f: &P, plural: bool, noun: &str) -> String {
     if let Some(t) = nn(f, "territory") {
         s.push_str(&format!(" in {}", territory_phrase(&st(Some(t)))));
     }
+    if let Some(t) = nn(f, "outside_territory") {
+        s.push_str(&format!(" not in {}", territory_phrase(&st(Some(t)))));
+    }
     if is(f, "role", "non-home") {
         s.push_str(" (excluding home)");
     }

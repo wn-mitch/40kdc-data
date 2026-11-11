@@ -200,6 +200,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "throne-tyrannicus",
   "titanic-duel-target",
   "transport-support-target",
+  "trap",
   "trapped",
   "triangulated",
   "trivarg-yp-spent",

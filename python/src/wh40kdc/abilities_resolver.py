@@ -307,8 +307,18 @@ def reaches_other_units(effect: Any) -> bool:
     if effect.get("type") in ("aura", "select-units"):
         return True
     target = effect.get("target")
-    if isinstance(target, dict) and target.get("owner") in ("friendly", "enemy"):
-        return True
+    if isinstance(target, dict):
+        owner = target.get("owner")
+        # A friendly filter bounded to the holder's own unit stays on it.
+        own_unit = owner == "friendly" and target.get("member_of") in ("this-unit", "this-model")
+        if (owner == "friendly" and not own_unit) or owner == "enemy":
+            return True
+    # A model-only grant's definition cannot become an aura from the whole unit.
+    if effect.get("type") == "ability-grant" and (
+        target in ("this-model", "model-in-this-unit")
+        or (isinstance(target, dict) and target.get("level") == "model")
+    ):
+        return False
     return any(reaches_other_units(child) for child in effect.values())
 
 

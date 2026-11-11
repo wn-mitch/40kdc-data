@@ -1623,6 +1623,15 @@ export interface ObjectiveFilter {
    */
   home_of?: "friendly" | "enemy";
   territory?: "your-territory" | "enemy-territory" | "no-mans-land" | "your-deployment-zone" | "enemy-deployment-zone";
+  /**
+   * The objective is not in this territory ("not in your opponent's deployment zone").
+   */
+  outside_territory?:
+    | "your-territory"
+    | "enemy-territory"
+    | "no-mans-land"
+    | "your-deployment-zone"
+    | "enemy-deployment-zone";
   controlled_by?: Owner;
   designated?: DesignationId;
   /**
@@ -2423,6 +2432,10 @@ export interface EventFilter {
   first?: true;
   step?: "battle-shock" | "reinforcements";
   state?: UnitState;
+  /**
+   * state-changed: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting), in place of a state.
+   */
+  strength?: "below-half" | "below-starting";
   tag?: DesignationId;
   pool?: string;
   marker?: string;
@@ -5209,7 +5222,8 @@ export interface AbilityUsageLimit {
     | "once-per-opponent-turn"
     | "n-per-battle"
     | "first-this-battle"
-    | "first-time-this-phase";
+    | "first-time-this-phase"
+    | "first-time-this-turn";
   count?: number;
   per?: "army" | "unit" | "model";
 }
@@ -6414,6 +6428,15 @@ export interface ObjectiveFilter1 {
    */
   home_of?: "friendly" | "enemy";
   territory?: "your-territory" | "enemy-territory" | "no-mans-land" | "your-deployment-zone" | "enemy-deployment-zone";
+  /**
+   * The objective is not in this territory ("not in your opponent's deployment zone").
+   */
+  outside_territory?:
+    | "your-territory"
+    | "enemy-territory"
+    | "no-mans-land"
+    | "your-deployment-zone"
+    | "enemy-deployment-zone";
   controlled_by?: Owner;
   designated?: DesignationId;
   /**

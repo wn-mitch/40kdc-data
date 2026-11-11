@@ -168,7 +168,8 @@ const V7_FILTERED_KINDS: Record<string, (leaf: CompileLeaf) => Node> = {
   "turn-ended": turnEndedTrigger,
   "step-started": (leaf) => withTurn({ event: "step-started", filter: { step: closed(leaf, "step") } }, leaf),
   used: usedTrigger,
-  "state-changed": (leaf) => ({ event: "state-changed", filter: { state: closed(leaf, "state") } }),
+  // Version 39: a strength threshold in place of a state ("become Below Half-strength").
+  "state-changed": (leaf) => ({ event: "state-changed", filter: leaf.parameters.strength !== undefined ? { strength: closed(leaf, "strength") } : { state: closed(leaf, "state") } }),
   "designation-changed": (leaf) => ({ event: "designation-changed", filter: { tag: closed(leaf, "tag") } }),
   "designation-resolved": (leaf) => ({ event: "designation-resolved", filter: { tag: closed(leaf, "tag") } }),
   "before-roll": (leaf) => ({ event: "before-roll", filter: { roll: triggerRoll(leaf) } }),
@@ -264,6 +265,21 @@ export function trigger(leaf: CompileLeaf): Node {
   if (Array.isArray(leaf.parameters.ids)) throw new CompileError("A moment that names several rules lowers to one trigger per rule; it cannot be one trigger.");
   if (leaf.parameters.object === "filtered-units") throw new CompileError("A used moment aimed at a unit-filter's units needs that unit-filter right before it, in its sentence.");
   const node = eventTrigger(leaf);
+  // "… makes a melee attack that destroys an enemy model, after all its attacks have been resolved"
+  // (compile-weapon-qualified.ts): those attacks destroyed it, so the destruction is a happened
+  // condition on the attacks-resolved moment, looking back over that event.
+  if (leaf.parameters.destroyed_during !== undefined) {
+    // "… that destroy a unit or cause it to become Below Half-strength": either happening during those attacks.
+    const during = leaf.parameters.destroyed_during as CompileLeaf;
+    const happenings = [during, ...((during.parameters.or_during as CompileLeaf[] | undefined) ?? [])].map((moment): Node => {
+      const { event, subject, object, filter } = trigger(moment);
+      return { type: "happened", parameters: {
+        event, ...(subject !== undefined ? { subject } : {}), ...(object !== undefined ? { object } : {}), ...(filter !== undefined ? { filter } : {}), window: "event",
+      } };
+    });
+    const happened: Node = happenings.length === 1 ? happenings[0]! : { operator: "or", operands: happenings };
+    node.condition = node.condition === undefined ? happened : { operator: "and", operands: [node.condition, happened] };
+  }
   // Attack classifications which describe the event itself stay on its event filter. A mortal
   // damage allocation and Psychic attacks are not inferred from a concurrent attack predicate.
   if (leaf.family_id === "event" && leaf.parameters.attack_type !== undefined && leaf.parameters.attack_type !== "any") {
@@ -415,7 +431,8 @@ function eventTrigger(leaf: CompileLeaf): Node {
     ...(node.event === "model-destroyed" ? { level: "model" } : {}),
   };
   // "An attack made with this model's quake cannon destroys": the attacks that destroy (compile-weapon-qualified.ts).
-  if (leaf.parameters.destroy_filter !== undefined) {
+  // "makes attacks that destroy a unit": attacks of any type narrow nothing.
+  if (leaf.parameters.destroy_filter !== undefined && Object.keys(leaf.parameters.destroy_filter as Node).length > 0) {
     if (node.filter !== undefined) throw new CompileError("A destruction already has a filter; it cannot also name its attacks.");
     node.filter = structuredClone(leaf.parameters.destroy_filter as Node);
   }

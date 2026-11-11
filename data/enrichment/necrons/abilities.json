@@ -6423,6 +6423,7 @@
               ]
             }
           },
+          "duration": "phase",
           "effect": {
             "type": "conditional",
             "condition": {
@@ -7591,7 +7592,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "bf9e594b2112b433969fc1bddb4b9a2d10ddfaa48959c89335761706a9b1b672",
     "version": "2025-q3",
@@ -7600,16 +7601,19 @@
     "faction_id": "necrons",
     "detachment_id": "cursed-legion",
     "ability_type": "detachment",
-    "behavior": "passive",
-    "usage": {
-      "frequency": "once-per-turn"
-    },
+    "behavior": "reactive",
     "effect": {
       "type": "sequence",
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "this-unit",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "DESTROYER CULT"
+            ],
+            "level": "model"
+          },
           "modifier": {
             "stat": "S",
             "operation": "add",
@@ -7617,13 +7621,66 @@
           }
         },
         {
-          "type": "stat-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "stat": "S",
-            "operation": "add",
-            "value": 2
-          }
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "filter": {
+              "kind": "attack"
+            },
+            "condition": {
+              "operator": "or",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "destroyed",
+                    "subject": "event-subject",
+                    "window": "event"
+                  }
+                },
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "state-changed",
+                    "filter": {
+                      "strength": "below-half"
+                    },
+                    "window": "event"
+                  }
+                }
+              ]
+            },
+            "subject": {
+              "owner": "friendly",
+              "all_of": [
+                "DESTROYER CULT"
+              ]
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "NECRONS"
+              ],
+              "none_of": [
+                "DESTROYER CULT",
+                "MONSTER",
+                "TITANIC"
+              ],
+              "level": "model"
+            },
+            "modifier": {
+              "stat": "S",
+              "operation": "add",
+              "value": 2
+            }
+          },
+          "usage": {
+            "frequency": "first-time-this-turn"
+          },
+          "duration": "turn"
         }
       ]
     },
@@ -8173,7 +8230,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "faction_id": "necrons",
     "source_digest": "4f1c9a602052ad38cd420551508469334b6232abd01f7ffc5706f3acdaeb8590"

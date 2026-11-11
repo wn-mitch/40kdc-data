@@ -10,6 +10,8 @@ import { bareFilter, hasAntecedent } from "./compile-antecedent.js";
 import { currentFamilyVersion } from "./contracts.js";
 
 const DESTROY_KINDS = new Set(["unit-destroyed", "model-destroyed"]);
+/** The unit whose moment it is: the attacker a unit-filter named for an attacks-resolved moment. */
+const EVENT_SUBJECT_REF = "event-subject";
 
 function touching(bytes: Buffer, before: CompileLeaf, after: CompileLeaf): boolean {
   return /^[\s*]*$/u.test(bytes.subarray(before.end_byte, after.start_byte).toString("utf8"));
@@ -19,6 +21,11 @@ function touching(bytes: Buffer, before: CompileLeaf, after: CompileLeaf): boole
 export function isSameAttackResolved(leaf: CompileLeaf): boolean {
   return leaf.family_id === "event" && leaf.parameters.kind === "attacks-resolved"
     && leaf.parameters.subject === undefined && leaf.parameters.owner === undefined;
+}
+
+/** "cause it to become Below Half-strength": a unit's strength falling past a threshold (event@39). */
+function isStrengthChange(leaf: CompileLeaf): boolean {
+  return leaf.family_id === "event" && leaf.parameters.kind === "state-changed" && leaf.parameters.strength !== undefined;
 }
 
 function isDestroy(leaf: CompileLeaf): boolean {
@@ -48,12 +55,6 @@ export function foldDestroyFilters(leaves: readonly CompileLeaf[], sourceText?: 
     const attackLeaf = before.family_id === "attack" && before.parameters.direction === "makes" && before.parameters.refers === undefined
       && before.parameters.attack_type !== undefined && before.parameters.unit !== undefined;
     if (!attackFilter && !attackLeaf) { out.push(leaf); continue; }
-    // "after all of that attack's attacks have been resolved" times the bonus by an attacks-resolved
-    // moment that names only the attack just made (no subject, no owner). That event cannot say the
-    // attack destroyed a model, so a destruction folded here would fire mid-attack instead.
-    if (leaves.some(isSameAttackResolved)) {
-      throw new CompileError("DSL gap: a destruction made by an attack cannot share a record with an \"after the attack's attacks are resolved\" moment; that event cannot say the attack destroyed a model.");
-    }
     if (leaf.parameters.destroy_filter !== undefined) throw new CompileError("A destruction takes one attack qualifier, and this one already has one.");
     if (attackFilter) {
       const keys = Object.keys(before.parameters);
@@ -64,9 +65,51 @@ export function foldDestroyFilters(leaves: readonly CompileLeaf[], sourceText?: 
       out[out.length - 1] = { ...leaf, start_byte: before.start_byte, parameters: { ...leaf.parameters, destroy_filter: { ...before.parameters } } };
       continue;
     }
-    if (!HIT_ATTACK_TYPES.has(String(before.parameters.attack_type))) throw new CompileError(`A destruction's attacks are melee, ranged or psychic, not ${String(before.parameters.attack_type)}.`);
+    // "makes attacks that destroy a unit": attacks of any type, which narrow nothing.
+    const anyAttack = before.parameters.attack_type === "any";
+    if (!anyAttack && !HIT_ATTACK_TYPES.has(String(before.parameters.attack_type))) throw new CompileError(`A destruction's attacks are melee, ranged or psychic, not ${String(before.parameters.attack_type)}.`);
     if (leaf.parameters.by !== undefined && leaf.parameters.by !== before.parameters.unit) throw new CompileError("A destruction names a destroyer other than the attack's unit.");
-    out[out.length - 1] = { ...leaf, start_byte: before.start_byte, parameters: { ...leaf.parameters, by: before.parameters.unit, destroy_filter: { attack_type: before.parameters.attack_type } } };
+    out[out.length - 1] = { ...leaf, start_byte: before.start_byte, parameters: { ...leaf.parameters, by: before.parameters.unit, destroy_filter: anyAttack ? {} : { attack_type: before.parameters.attack_type } } };
+  }
+  return foldDestructionsBeforeResolve(out, bytes);
+}
+
+/**
+ * "The first time the bearer makes a melee attack that destroys an enemy model, after all the
+ * bearer's attacks have been resolved, …": the attacks-resolved moment that names only the attack
+ * just made is when the effect happens, and the destruction is what must have happened during those
+ * attacks. A destruction folded with its attacks, followed by that moment with only a comma or spaces
+ * between them, becomes the moment's `destroyed_during`: the destroyer's attacks resolved, with the
+ * destruction as a happened condition on them (compile-triggers.ts). Any other destruction stays a
+ * moment of its own, and a destruction made by an attack beside such a moment is refused, since it
+ * would fire mid-attack.
+ */
+function foldDestructionsBeforeResolve(leaves: CompileLeaf[], bytes: Buffer): CompileLeaf[] {
+  const out: CompileLeaf[] = [];
+  for (const leaf of leaves) {
+    const before = out.at(-1);
+    // "attacks that destroy a unit or cause it to become Below Half-strength": a strength change joined
+    // to an attack's destruction by "or" is the other thing those attacks can do.
+    if (before !== undefined && isDestroy(before) && before.parameters.destroy_filter !== undefined && isStrengthChange(leaf)
+      && before.fragment === leaf.fragment && /^[\s*]*or[\s*]*$/u.test(bytes.subarray(before.end_byte, leaf.start_byte).toString("utf8"))) {
+      const alternatives = (before.parameters.or_during as CompileLeaf[] | undefined) ?? [];
+      out[out.length - 1] = { ...before, end_byte: leaf.end_byte, parameters: { ...before.parameters, or_during: [...alternatives, leaf] } };
+      continue;
+    }
+    const folds = before !== undefined && isSameAttackResolved(leaf) && isDestroy(before) && before.parameters.destroy_filter !== undefined
+      && typeof before.parameters.by === "string" && before.fragment === leaf.fragment
+      && /^[\s,*]*$/u.test(bytes.subarray(before.end_byte, leaf.start_byte).toString("utf8"));
+    if (!folds) { out.push(leaf); continue; }
+    // "an X unit from your army makes attacks that destroy …": the unit-filter before the attack names the
+    // attacker, so the moment takes it as its subject, and the destruction is that moment's unit's.
+    if (before!.parameters.by === "friendly-unit") {
+      out[out.length - 1] = { ...leaf, start_byte: before!.start_byte, parameters: { ...leaf.parameters, destroyed_during: { ...before!, parameters: { ...before!.parameters, by: EVENT_SUBJECT_REF } } } };
+      continue;
+    }
+    out[out.length - 1] = { ...leaf, start_byte: before!.start_byte, parameters: { ...leaf.parameters, subject: before!.parameters.by, destroyed_during: before! } };
+  }
+  if (out.some(isSameAttackResolved) && out.some((leaf) => isDestroy(leaf) && leaf.parameters.destroy_filter !== undefined)) {
+    throw new CompileError("A destruction made by an attack shares a record with an \"after the attack's attacks are resolved\" moment it does not lead into; it would fire mid-attack.");
   }
   return out;
 }

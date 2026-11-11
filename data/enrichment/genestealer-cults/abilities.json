@@ -6570,7 +6570,13 @@
           "steps": [
             {
               "type": "stat-modifier",
-              "target": "this-unit",
+              "target": {
+                "level": "model",
+                "member_of": "this-unit",
+                "none_of": [
+                  "CHARACTER"
+                ]
+              },
               "modifier": {
                 "stat": "A",
                 "operation": "improve",
@@ -6582,7 +6588,13 @@
             },
             {
               "type": "stat-modifier",
-              "target": "this-unit",
+              "target": {
+                "level": "model",
+                "member_of": "this-unit",
+                "none_of": [
+                  "CHARACTER"
+                ]
+              },
               "modifier": {
                 "stat": "WS",
                 "operation": "improve",

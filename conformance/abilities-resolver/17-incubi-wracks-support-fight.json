@@ -1,0 +1,34 @@
+{
+  "name": "Incubi (drukhari) with Wracks supporting, fight: a friendly filter bounded to the Wracks' own unit is not a support ability",
+  "input": {
+    "unitId": "incubi",
+    "factionId": "drukhari",
+    "detachmentId": "realspace-raiders",
+    "supportingUnitIds": [
+      "wracks"
+    ]
+  },
+  "phase": "fight",
+  "expected": {
+    "army": [
+      "corsairs-and-travelling-players-drukhari",
+      "power-from-pain-drukhari"
+    ],
+    "detachment": [
+      "alliance-of-agony-drukhari"
+    ],
+    "detachment-stratagem": [
+      "dark-harvest-realspace-raiders-drukhari",
+      "fighting-shadows-realspace-raiders-drukhari",
+      "instinctive-spite-realspace-raiders-drukhari"
+    ],
+    "support": [
+      "torturers-craft-drukhari"
+    ],
+    "unit": [
+      "decapitating-strikes-drukhari",
+      "incubi-shrine-token-drukhari",
+      "tormentors-drukhari"
+    ]
+  }
+}

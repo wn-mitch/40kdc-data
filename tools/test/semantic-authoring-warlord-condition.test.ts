@@ -276,10 +276,12 @@ describe("A trigger sentence after a Warlord-gated list (7163 shape)", () => {
       condition: { type: "army-includes", parameters: { filter: { all_of: ["ALPHA", "OFFICER"], level: "model", designated: "warlord" } } },
       effect: { type: "sequence", steps: [{ type: "keyword-grant", target: { owner: "friendly", all_of: ["BETA"] } }, { type: "stat-modifier" }] },
     });
-    // The moment after the list names its own units: no Warlord gate, no Beta filter.
+    // The moment after the list names its own units: no Warlord gate, no Beta filter. Being
+    // selected to shoot happens in the Shooting phase, so the bonus lasts that phase.
     expect(part).toEqual({
       type: "ability-part",
       trigger: { event: "selected", filter: { to: "shoot" }, subject: { owner: "friendly", all_of: ["ALPHA"] } },
+      duration: "phase",
       effect: { type: "roll-modifier", target: "event-subject", modifier: { roll: "hit", operation: "add", value: 1 } },
     });
   });

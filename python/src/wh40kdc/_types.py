@@ -1112,6 +1112,7 @@ class AbilityUsageLimit(TypedDict):
         "n-per-battle",
         "first-this-battle",
         "first-time-this-phase",
+        "first-time-this-turn",
     ]
     count: NotRequired[int]
     per: NotRequired[Literal["army", "unit", "model"]]
@@ -2186,6 +2187,15 @@ class ObjectiveFilter(TypedDict):
             "enemy-deployment-zone",
         ]
     ]
+    outside_territory: NotRequired[
+        Literal[
+            "your-territory",
+            "enemy-territory",
+            "no-mans-land",
+            "your-deployment-zone",
+            "enemy-deployment-zone",
+        ]
+    ]
     controlled_by: NotRequired[Owner]
     designated: NotRequired[DesignationId]
     name: NotRequired[EntityId]
@@ -2260,6 +2270,7 @@ EventFilter = TypedDict(
         "first": NotRequired[Literal[True]],
         "step": NotRequired[Literal["battle-shock", "reinforcements"]],
         "state": NotRequired[UnitState],
+        "strength": NotRequired[Literal["below-half", "below-starting"]],
         "tag": NotRequired[DesignationId],
         "pool": NotRequired[str],
         "marker": NotRequired[str],

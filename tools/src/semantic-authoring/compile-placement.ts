@@ -1,6 +1,7 @@
 import { exactSpan } from "./contracts.js";
 import { ATTACK_EVENTS } from "./compile-conditions.js";
 import type { CompileLeaf } from "./compile-fragments.js";
+import { subjectlessRoll } from "./compile-attack-frame.js";
 import { kindKey } from "./compile-triggers.js";
 
 /**
@@ -200,7 +201,13 @@ export function placements(leaves: readonly CompileLeaf[], sourceText: string | 
       const sentence = sentenceOf[index];
       const left = leaves.slice(clauseStart, index);
       const right = leaves.slice(index).filter((_, offset) => sentenceOf[index + offset] === sentence);
-      if (left.some((leaf) => leaf.role === "EFFECT") && right.some((leaf) => leaf.role === "EFFECT")) {
+      // "each time a model … makes an attack with a Psychic weapon, you can re-roll the Hit roll and you can
+      // re-roll the Wound roll": rolls with no subject of their own after an "and" stay in the attack's clause,
+      // under its conditions, as they do when the attack opens the sentence. A combinator after them ("… and you
+      // can re-roll the Wound roll instead") composes each roll's own clause, so those still split.
+      const attackRolls = leaves[clauseStart]!.family_id === "attack" && right.every((leaf) => leaf.role !== "EFFECT" || subjectlessRoll(leaf))
+        && right.every((leaf) => leaf.family_id !== "attack" && leaf.role !== "CONDITION" && leaf.role !== "COMBINATOR");
+      if (!attackRolls && left.some((leaf) => leaf.role === "EFFECT") && right.some((leaf) => leaf.role === "EFFECT")) {
         clause += 1;
         clauseStart = index;
       }

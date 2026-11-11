@@ -240,9 +240,32 @@ function refuseUnnamedBearers(list: readonly CompileLeaf[], scope: CompileLeaf, 
   if (!named) throw new CompileError("A weapon scope names its bearers (\"equipped by …\") with no unit or model filter for them; it is not compiled.");
 }
 
-export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: string): readonly CompileLeaf[] {
-  if (!list.some((leaf) => leaf.family_id === SCOPE)) return list;
+/**
+ * The player's option to take a scope's properties ("melee attacks can have [CLEAVE 1]. Or: +1 AP")
+ * sits between the scope and the properties it offers. It is the whole ability's option, so it moves
+ * after the run of properties (and choice markers) it offers, in the same sentence, and the scope
+ * folds its properties as it would without the option.
+ */
+function deferScopeOptions(list: readonly CompileLeaf[], source: Buffer | undefined): readonly CompileLeaf[] {
+  const out = [...list];
+  for (let at = 0; at + 1 < out.length; at += 1) {
+    const scope = out[at]!;
+    const option = out[at + 1]!;
+    if (scope.family_id !== SCOPE || option.family_id !== "optional-use" || option.fragment !== scope.fragment) continue;
+    if (/[.;]/u.test(between(source, scope, option))) continue;
+    let end = at + 2;
+    while (end < out.length && out[end]!.fragment === scope.fragment && (isProperty(out[end]!) || isChoiceMarker(out[end]!))) end += 1;
+    if (end === at + 2) continue;
+    out.splice(at + 1, 1);
+    out.splice(end - 1, 0, option);
+  }
+  return out;
+}
+
+export function foldWeaponScopes(leaves: readonly CompileLeaf[], sourceText?: string): readonly CompileLeaf[] {
+  if (!leaves.some((leaf) => leaf.family_id === SCOPE)) return leaves;
   const source = sourceText === undefined ? undefined : Buffer.from(sourceText, "utf8");
+  const list = deferScopeOptions(leaves, source);
   const result: CompileLeaf[] = [];
   for (let index = 0; index < list.length; index += 1) {
     const scope = list[index]!;

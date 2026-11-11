@@ -421,7 +421,9 @@ def _event_phrase(t: AbilityTrigger) -> str:
         if subject_obj:
             if obj is not None:
                 return f"after {who} has shot and targeted {_object_phrase(obj)}"
-            return f"after {who} {'fights' if f.get('kind') == 'fight' else 'shoots'}"
+            verbs = {"fight": "fights", "attack": "resolves its attacks"}
+            verb = verbs.get(_str(f.get("kind")), "shoots")
+            return f"after {who} {verb}"
         if f.get("kind") == "fight":
             return f"after {who} resolves its attacks in a fight"
         return f"after {who} resolves its attacks"
@@ -506,6 +508,10 @@ def _event_phrase(t: AbilityTrigger) -> str:
             return "each time you complete a Contract"
         return f"each time {who} {_USED.get(_str(kind), f'uses {dekebab(_str(kind))}')}"
     if event == "state-changed":
+        if f.get("strength") == "below-half":
+            return f"when {who} becomes Below Half-strength"
+        if f.get("strength") == "below-starting":
+            return f"when {who} falls below its Starting Strength"
         return f"when {who} becomes {_cap_word(_str(f.get('state')))}"
     if event == "designation-changed":
         if f.get("tag") == "EMPOWERED":

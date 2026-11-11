@@ -4438,7 +4438,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "288d7ca9e129c98b714144ddc3094b5488d129e778b2296edf33306e6332a275",
     "version": "2025-q3",
@@ -4449,53 +4449,75 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
+      "type": "designate-target",
+      "designation": "titanic-duel-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
           },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
+          "count": {
+            "min": 1,
+            "max": 1
           }
-        ]
+        }
       },
-      "effect": {
-        "type": "designate-target",
-        "designation": "titanic-duel-target",
-        "select": {
-          "kind": "unit",
-          "selector": {
-            "filter": {
-              "owner": "enemy"
-            },
-            "count": {
-              "min": 1,
-              "max": 1
-            }
-          }
-        },
-        "applies": {
-          "to": "attackers-of-target",
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "all_of": [
+                          "TITANIC"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
                 "type": "re-roll",
                 "target": "this-unit",
                 "modifier": {
                   "roll": "hit",
                   "subset": "ones"
                 }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "all_of": [
+                          "TITANIC"
+                        ]
+                      }
+                    }
+                  }
+                ]
               },
-              {
+              "effect": {
                 "type": "re-roll",
                 "target": "this-unit",
                 "modifier": {
@@ -4503,11 +4525,55 @@
                   "subset": "ones"
                 }
               }
-            ]
-          }
-        },
-        "duration": "phase"
-      }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "all_of": [
+                      "TITANIC"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "result_scope": "any-result"
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "all_of": [
+                      "TITANIC"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "wound",
+                  "result_scope": "any-result"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
       "duration": "phase"

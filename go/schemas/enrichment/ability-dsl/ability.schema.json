@@ -402,7 +402,8 @@
             "once-per-opponent-turn",
             "n-per-battle",
             "first-this-battle",
-            "first-time-this-phase"
+            "first-time-this-phase",
+            "first-time-this-turn"
           ]
         },
         "count": {

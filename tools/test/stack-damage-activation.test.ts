@@ -125,3 +125,22 @@ describe("stack damage eligibility disclosure", () => {
     expect(assumedEligibility(dataset, "dispense-justice-ordo-hereticus-purgation-force-agents-of-the-imperium")).toEqual([]);
   });
 });
+
+describe("stack damage model-keyword gates on detachment rules", () => {
+  it("offers Combat Drugs only to a unit with WYCH CULT models", () => {
+    const drugs = "combat-drugs-drukhari";
+    expect(offered("drukhari", "spectacle-of-spite", ["wyches"], "fight").has(drugs)).toBe(true);
+    expect(offered("drukhari", "spectacle-of-spite", ["kabalite-warriors"], "fight").has(drugs)).toBe(false);
+  });
+
+  it("offers Experimental Augmentations only to HERETIC ASTARTES INFANTRY models", () => {
+    const augmentations = "experimental-augmentations-chaos-space-marines";
+    expect(offered("chaos-space-marines", "creations-of-bile", ["legionaries"], "fight").has(augmentations)).toBe(true);
+    expect(offered("chaos-space-marines", "creations-of-bile", ["chaos-predator-annihilator"], "fight").has(augmentations)).toBe(false);
+    expect(offered("chaos-space-marines", "creations-of-bile", ["helbrute"], "fight").has(augmentations)).toBe(false);
+  });
+
+  it("gives a Transport's own weapons no Firing Deck hit bonus", () => {
+    expect(offered("orks", "wreckas", ["battlewagon"], "shooting").has("drive-by-bustin-wreckas-orks")).toBe(false);
+  });
+});

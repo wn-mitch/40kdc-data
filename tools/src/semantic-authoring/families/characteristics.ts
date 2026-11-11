@@ -44,6 +44,25 @@ function modelKeywordsExtension(family: string, version: number, what: string): 
   };
 }
 
+/**
+ * Excluded model keywords on an effect family: the effect skips the subject's models with any listed
+ * keyword ("models (excluding **CHARACTERS**) in your unit"). Lowered as the model-level filter's none_of.
+ */
+function excludedModelKeywordsExtension(family: string, version: number, what: string): FamilyExtension {
+  return {
+    family,
+    version,
+    description: `As the previous version, plus excluded_model_keywords: ${what} the subject's models with any listed keyword ("models (excluding CHARACTERS) in your unit").`,
+    schema: (previous) => withProperties(previous, { excluded_model_keywords: optional(MODEL_KEYWORDS) }),
+    normalize: (input, previous) => {
+      if (!("excluded_model_keywords" in input)) return previous(input);
+      const { excluded_model_keywords: keywords, ...rest } = input;
+      if (rest.subject === "this-model" || rest.subject === "attack") throw new TypeError(`${family}.excluded_model_keywords picks models of a unit; its subject cannot be ${String(rest.subject)}.`);
+      return { ...previous(rest), excluded_model_keywords: keywordList(keywords, `${family}.excluded_model_keywords`, 1) };
+    },
+  };
+}
+
 /** Characteristic operations that scale a value instead of adding to it. */
 const SCALING = ["halve", "multiply"] as const;
 
@@ -122,6 +141,9 @@ const targetSubject = (family: string, version: number, description: string): Fa
  * versions keep their subject enum.
  */
 const ATTACK = "attack";
+
+/** Every model from the controlling player's army (characteristic-modifier@21). */
+export const ARMY_MODELS = "army-models";
 
 /** Characteristics whose value a dice string can stand for ("has D3+3 A"). */
 const DICE_CHARACTERISTICS: readonly string[] = ["A", "S", "D"];
@@ -498,5 +520,17 @@ export const CHARACTERISTIC_EXTENSIONS: readonly FamilyExtension[] = [
       if (!DICE.test(input.value)) throw new TypeError("core-ability-grant.value for Deadly Demise is a whole number, {rating}, or a dice rating such as D6 or D3+1.");
       return standIn(input, "value", 1, previous);
     },
+  },
+  // "melee weapons equipped by models (excluding **CHARACTERS**) in your unit".
+  excludedModelKeywordsExtension("characteristic-modifier", 20, "the change skips"),
+  // "This unit's melee attacks (excluding Character models' attacks) have 3 A".
+  excludedModelKeywordsExtension("characteristic-set", 10, "the set value skips"),
+  {
+    // "Improve the Weapon Skill characteristic of melee weapons equipped by WYCH CULT models from your army by 1".
+    family: "characteristic-modifier",
+    version: 21,
+    description: "As the previous version, and subject can be army-models: every model from your army, narrowed by model_keywords and excluded_model_keywords (\"equipped by WYCH CULT models from your army by 1\"), in one leaf that spans the whole change.",
+    schema: (previous) => withProperties(previous, { subject: widenedEnum(previous, "subject", [ARMY_MODELS]) }),
+    normalize: (input, previous) => input.subject === ARMY_MODELS ? standIn(input, "subject", "this-unit", previous) : previous(input),
   },
 ];

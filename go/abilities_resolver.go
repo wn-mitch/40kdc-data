@@ -258,8 +258,21 @@ func reachesOtherUnits(effect any) bool {
 		if node["type"] == "aura" || node["type"] == "select-units" {
 			return true
 		}
-		if target, ok := node["target"].(map[string]any); ok && (target["owner"] == "friendly" || target["owner"] == "enemy") {
-			return true
+		if target, ok := node["target"].(map[string]any); ok {
+			// A friendly filter bounded to the holder's own unit stays on it.
+			ownUnit := target["owner"] == "friendly" && (target["member_of"] == "this-unit" || target["member_of"] == "this-model")
+			if (target["owner"] == "friendly" && !ownUnit) || target["owner"] == "enemy" {
+				return true
+			}
+		}
+		// A model-only grant's definition cannot become an aura from the whole unit.
+		if node["type"] == "ability-grant" {
+			if target, ok := node["target"].(string); ok && (target == "this-model" || target == "model-in-this-unit") {
+				return false
+			}
+			if target, ok := node["target"].(map[string]any); ok && target["level"] == "model" {
+				return false
+			}
 		}
 		for _, child := range node {
 			if reachesOtherUnits(child) {

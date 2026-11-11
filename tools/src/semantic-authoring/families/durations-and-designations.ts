@@ -174,6 +174,15 @@ export const DURATION_AND_DESIGNATION_EXTENSIONS: readonly FamilyExtension[] = [
    */
   USAGE_PER_SELECTED_UNIT,
   {
+    // "The first time each turn that a … unit … makes attacks that destroy a unit": the turn-long
+    // counterpart of first-time-this-phase.
+    family: "usage-limit",
+    version: 6,
+    description: "As the previous version, plus frequency first-time-this-turn (\"the first time each turn\").",
+    schema: (previous) => withProperties(previous, { frequency: widenedEnum(previous, "frequency", ["first-time-this-turn"]) }),
+    normalize: (input, previous) => input.frequency === "first-time-this-turn" ? { ...previous({ ...input, frequency: "first-time-this-phase" }), frequency: "first-time-this-turn" } : previous(input),
+  },
+  {
     // "That unit is wracked with agonies": any designation in the live registry, not only the ones
     // registered when apply-mark was first reviewed.
     family: "apply-mark",

@@ -98,6 +98,7 @@ _USAGE = {
     "once-per-opponent-turn": "once per opponent's turn",
     "first-this-battle": "the first time this battle",
     "first-time-this-phase": "the first time this phase",
+    "first-time-this-turn": "the first time each turn",
 }
 
 

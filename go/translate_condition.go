@@ -472,6 +472,9 @@ func objectivePhrase(f map[string]any, plural bool, noun string) string {
 	if f["territory"] != nil {
 		s += " in " + territoryPhrase(cstr(f["territory"]))
 	}
+	if f["outside_territory"] != nil {
+		s += " not in " + territoryPhrase(cstr(f["outside_territory"]))
+	}
 	if f["role"] == "non-home" {
 		s += " (excluding home)"
 	}

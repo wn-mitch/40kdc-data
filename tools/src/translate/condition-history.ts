@@ -159,6 +159,14 @@ function happenedPhrase(p: P, negated: boolean): string {
       if (which != null) return `${neg}${withWindow(`${who} used ${which}`, p.window)}`;
       return `${neg}${withWindow(`${who} used ${f.id != null ? `the ${idLabel(f.id)} ` : "a "}${dekebab(str(f.kind ?? "ability"))}`, p.window)}`;
     }
+    case "state-changed": {
+      // "cause it to become Below Half-strength": the unit's strength fell past a threshold.
+      // With no subject, any unit: "a unit became Below Half-strength".
+      const unit = p.subject == null ? "a unit" : who;
+      if (f.strength === "below-half") return withWindow(`${unit} ${negated ? "did not become" : "became"} Below Half-strength`, p.window);
+      if (f.strength === "below-starting") return withWindow(`${unit} ${negated ? "did not fall" : "fell"} below its Starting Strength`, p.window);
+      return `${neg}${withWindow("state changed happened", p.window)}`;
+    }
     case "objective-gained":
       return `${neg}you newly control ${amount} objectives ${windowPhrase(p.window)}`.trimEnd();
     case "designation-changed":

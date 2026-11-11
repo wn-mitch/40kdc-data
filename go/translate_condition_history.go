@@ -404,6 +404,27 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 			kind = "ability"
 		}
 		return neg + withWindow(who+" used "+what+dekebab(cstr(kind)), p["window"])
+	case "state-changed":
+		// "cause it to become Below Half-strength": the unit's strength fell past a threshold.
+		// With no subject, any unit: "a unit became Below Half-strength".
+		unit := who
+		if p["subject"] == nil {
+			unit = "a unit"
+		}
+		switch f["strength"] {
+		case "below-half":
+			became := "became"
+			if negated {
+				became = "did not become"
+			}
+			return withWindow(unit+" "+became+" Below Half-strength", p["window"])
+		case "below-starting":
+			fell := "fell"
+			if negated {
+				fell = "did not fall"
+			}
+			return withWindow(unit+" "+fell+" below its Starting Strength", p["window"])
+		}
 	case "objective-gained":
 		return trimEnd(neg + "you newly control " + amount + " objectives " + windowPhrase(p["window"]))
 	case "designation-changed":

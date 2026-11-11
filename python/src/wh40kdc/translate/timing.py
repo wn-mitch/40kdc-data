@@ -49,6 +49,7 @@ _TIMING_ONLY_PHRASES: dict[str, str] = {
     "once-per-opponent-turn": "once per opponent's turn",
     "first-this-battle": "the first time this battle",
     "first-time-this-phase": "the first time this phase",
+    "first-time-this-turn": "the first time each turn",
     "in-reserves": "while it is in Reserves",
     "command-phase": "during the Command phase",
     "shooting-phase": "in the Shooting phase",

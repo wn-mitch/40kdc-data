@@ -98,6 +98,26 @@ describe("Semantic authoring batch-7a usage-limit@2 frequencies", () => {
   });
 });
 
+describe("usage-limit@6 first-time-this-turn", () => {
+  it("passes the turn frequency through, and earlier versions refuse it", () => {
+    const result = compiled([
+      leaf("RESTRICTION", "usage-limit", { frequency: "first-time-this-turn", per: "any" }, 6),
+      leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" }),
+    ]);
+    expect(result.mechanics.usage).toEqual({ frequency: "first-time-this-turn" });
+    expect(() => normalizeFingerprintParameters("usage-limit", { frequency: "first-time-this-turn", per: "any" }, 5)).toThrow();
+  });
+
+  it("renders the turn frequency as its own phrase, not the phase one", () => {
+    const text = rendered(base(), [
+      leaf("RESTRICTION", "usage-limit", { frequency: "first-time-this-turn", per: "any" }, 6),
+      leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" }),
+    ]);
+    expect(text).toMatch(/first time each turn/u);
+    expect(text).not.toMatch(/each phase/u);
+  });
+});
+
 describe("Semantic authoring batch-7a mission/composition predicates", () => {
   const effect = () => leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" });
   function conditionCase(familyId: string, parameters: Record<string, unknown>, expected: Record<string, unknown>): void {

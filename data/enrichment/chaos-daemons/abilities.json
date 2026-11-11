@@ -8829,7 +8829,13 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "applies_to": {
+      "all_of": [
+        "LEGIONES DAEMONICA",
+        "SLAANESH"
+      ]
+    }
   },
   {
     "ability_id": "shroud-of-flies-chaos-daemons",

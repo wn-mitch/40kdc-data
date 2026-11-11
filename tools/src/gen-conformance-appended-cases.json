@@ -4087,5 +4087,219 @@
     "scope": {
       "duration": "phase"
     }
+  },
+  {
+    "caseId": "fidelity/select-objective-outside-territory-first-use",
+    "effect": {
+      "type": "ability-part",
+      "usage": {
+        "frequency": "first-this-battle",
+        "per": "army"
+      },
+      "effect": {
+        "type": "select-objective",
+        "selector": {
+          "filter": {
+            "outside_territory": "enemy-deployment-zone"
+          },
+          "bind_as": "trap-objective",
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "ability-part",
+          "effect": {
+            "type": "designate",
+            "target": "this-unit",
+            "modifier": {
+              "tag": "trap",
+              "clears_on": "battle",
+              "subject": {
+                "objective": {
+                  "selection_var": "trap-objective"
+                }
+              }
+            }
+          },
+          "duration": "battle"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "fidelity/usage-first-time-this-turn",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "OC",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "usage": {
+      "frequency": "first-time-this-turn"
+    },
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": "this-unit",
+      "filter": {
+        "kind": "attack"
+      }
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-state-changed-below-half",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "OC",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "trigger": {
+      "event": "state-changed",
+      "subject": "this-unit",
+      "filter": {
+        "strength": "below-half"
+      }
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-state-changed-below-starting",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "OC",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "trigger": {
+      "event": "state-changed",
+      "subject": "this-unit",
+      "filter": {
+        "strength": "below-starting"
+      }
+    }
+  },
+  {
+    "caseId": "fidelity/attacks-resolved-destroyed-or-below-half",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "filter": {
+          "kind": "attack"
+        },
+        "condition": {
+          "operator": "or",
+          "operands": [
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "destroyed",
+                "subject": "event-subject",
+                "window": "event"
+              }
+            },
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "state-changed",
+                "filter": {
+                  "strength": "below-half"
+                },
+                "window": "event"
+              }
+            }
+          ]
+        },
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "BETA"
+          ],
+          "none_of": [
+            "ALPHA",
+            "MONSTER",
+            "TITANIC"
+          ],
+          "level": "model"
+        },
+        "modifier": {
+          "stat": "S",
+          "operation": "add",
+          "value": 2
+        }
+      },
+      "usage": {
+        "frequency": "first-time-this-turn"
+      },
+      "duration": "turn"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "fidelity/happened-not-below-starting",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "state-changed",
+              "subject": "this-unit",
+              "filter": {
+                "strength": "below-starting"
+              },
+              "window": "turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "stat": "OC",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

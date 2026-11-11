@@ -270,7 +270,7 @@ function eventPhrase(t: AbilityTrigger): string {
       return t.object != null && t.object !== "this-unit" ? `${allocated} to ${objectPhrase(t.object)}` : allocated;
     }
     case "attacks-resolved":
-      if (typeof t.subject === "object") return t.object != null ? `after ${who} has shot and targeted ${objectPhrase(t.object)}` : `after ${who} ${f.kind === "fight" ? "fights" : "shoots"}`;
+      if (typeof t.subject === "object") return t.object != null ? `after ${who} has shot and targeted ${objectPhrase(t.object)}` : `after ${who} ${f.kind === "fight" ? "fights" : f.kind === "attack" ? "resolves its attacks" : "shoots"}`;
       return f.kind === "fight" ? `after ${who} resolves its attacks in a fight` : `after ${who} resolves its attacks`;
     case "destroyed": {
       const obj = t.object;
@@ -327,6 +327,8 @@ function eventPhrase(t: AbilityTrigger): string {
       return `each time ${who} ${USED[str(f.kind)] ?? `uses ${dekebab(str(f.kind))}`}`;
     }
     case "state-changed":
+      if (f.strength === "below-half") return `when ${who} becomes Below Half-strength`;
+      if (f.strength === "below-starting") return `when ${who} falls below its Starting Strength`;
       return `when ${who} becomes ${capWord(str(f.state))}`;
     case "designation-changed":
       return f.tag === "EMPOWERED" ? `each time ${who} is Empowered` : `each time ${who} becomes ${str(f.tag)}`;

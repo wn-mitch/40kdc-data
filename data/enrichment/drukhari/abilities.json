@@ -3592,27 +3592,102 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "32341fba5a712e6fdc435437d3707ad592c98204124ce03fb66f8329f1db5f23",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "A",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-model",
+              "modifier": {
+                "stat": "S",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "subject": "this-model",
+            "filter": {
+              "kind": "attack"
+            },
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "event": "model-destroyed",
+                "subject": "this-model",
+                "object": {
+                  "owner": "enemy",
+                  "level": "model"
+                },
+                "filter": {
+                  "attack_type": "melee"
+                },
+                "window": "event"
+              }
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "A",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "this-model",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              }
+            ]
+          },
+          "usage": {
+            "frequency": "first-this-battle",
+            "per": "model"
+          },
+          "duration": "battle"
         }
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "stat": "S",
-          "operation": "add",
-          "value": 1
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -3621,7 +3696,7 @@
       "archon"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "faction_id": "drukhari"
   },
   {
@@ -6376,7 +6451,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "da4716820256fceaa0364049c3e308f87ee4e394f5987f4513e93b316a94d836",
     "version": "2025-q3",
@@ -6385,144 +6460,197 @@
     "faction_id": "drukhari",
     "detachment_id": "spectacle-of-spite",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "phase-started",
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "command"
-              }
+      "type": "stance-select",
+      "mode": "consumable",
+      "options": [
+        {
+          "id": "adrenalight",
+          "name": "Adrenalight",
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "WYCH CULT"
+              ],
+              "level": "model"
             },
-            {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
+            "modifier": {
+              "stat": "A",
+              "operation": "add",
+              "value": 1,
+              "weapons": {
+                "type": "melee"
               }
             }
-          ]
-        }
-      },
-      "effect": {
-        "type": "stance-select",
-        "mode": "re-selectable",
-        "options": [
-          {
-            "name": "Adrenalight",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "A",
-                "operation": "add",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
-                }
-              }
+          }
+        },
+        {
+          "id": "hypex",
+          "name": "Hypex",
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "WYCH CULT"
+              ],
+              "level": "model"
             },
-            "id": "adrenalight"
-          },
-          {
-            "name": "Hypex",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "M",
-                "operation": "add",
-                "value": 2
-              }
-            },
-            "id": "hypex"
-          },
-          {
-            "name": "Serpentin",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "WS",
-                "operation": "subtract",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
-                }
-              }
-            },
-            "id": "serpentin"
-          },
-          {
-            "name": "Painbringer",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "T",
-                "operation": "add",
-                "value": 1
-              }
-            },
-            "id": "painbringer"
-          },
-          {
-            "name": "Grave Lotus",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "S",
-                "operation": "add",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
-                }
-              }
-            },
-            "id": "grave-lotus"
-          },
-          {
-            "name": "Splintermind",
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "roll-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "roll": "battle-shock",
-                    "operation": "subtract",
-                    "value": 1
-                  }
-                },
-                {
-                  "type": "stat-modifier",
-                  "target": "this-unit",
-                  "modifier": {
-                    "stat": "BS",
-                    "operation": "subtract",
-                    "value": 1,
-                    "weapons": {
-                      "type": "ranged"
-                    }
-                  }
-                }
+            "modifier": {
+              "stat": "M",
+              "operation": "add",
+              "value": 2
+            }
+          }
+        },
+        {
+          "id": "serpentin",
+          "name": "Serpentin",
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly",
+              "level": "model",
+              "all_of": [
+                "WYCH CULT"
               ]
             },
-            "id": "splintermind"
+            "modifier": {
+              "stat": "WS",
+              "operation": "improve",
+              "value": 1,
+              "weapons": {
+                "type": "melee"
+              }
+            }
           }
+        },
+        {
+          "id": "painbringer",
+          "name": "Painbringer",
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "WYCH CULT"
+              ],
+              "level": "model"
+            },
+            "modifier": {
+              "stat": "T",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        },
+        {
+          "id": "grave-lotus",
+          "name": "Grave Lotus",
+          "effect": {
+            "type": "stat-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "WYCH CULT"
+              ],
+              "level": "model"
+            },
+            "modifier": {
+              "stat": "S",
+              "operation": "add",
+              "value": 1,
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          }
+        },
+        {
+          "id": "splintermind",
+          "name": "Splintermind",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": {
+                  "owner": "friendly",
+                  "level": "model",
+                  "all_of": [
+                    "WYCH CULT"
+                  ]
+                },
+                "modifier": {
+                  "stat": "Ld",
+                  "operation": "improve",
+                  "value": 1
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": {
+                  "owner": "friendly",
+                  "level": "model",
+                  "all_of": [
+                    "WYCH CULT"
+                  ]
+                },
+                "modifier": {
+                  "stat": "BS",
+                  "operation": "improve",
+                  "value": 1,
+                  "weapons": {
+                    "type": "ranged"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "or_random": {
+        "dice": "D6",
+        "count": 2,
+        "faces": [
+          "adrenalight",
+          "hypex",
+          "serpentin",
+          "painbringer",
+          "grave-lotus",
+          "splintermind"
         ]
-      }
+      },
+      "min_choices": 1,
+      "max_choices": 1
     },
     "scope": {
       "duration": "until-next-command-phase"
     },
-    "community_notes": "[APPROX] At the start of your Command phase you either deliberately select one drug (cannot pick the same one twice per battle) or randomly select two by rolling 2D6; the once-per-battle-per-drug limit and the random-two alternative are not modeled (stance-select mode re-selectable). All options buff WYCH CULT models/weapons; 'improve' for Weapon Skill, Ballistic Skill and Leadership is modeled as a subtraction from the characteristic. Full rule in raw-text store."
+    "community_notes": "[APPROX] At the start of your Command phase you either deliberately select one drug (cannot pick the same one twice per battle) or randomly select two by rolling 2D6; the once-per-battle-per-drug limit and the random-two alternative are not modeled (stance-select mode re-selectable). All options buff WYCH CULT models/weapons; 'improve' for Weapon Skill, Ballistic Skill and Leadership is modeled as a subtraction from the characteristic. Full rule in raw-text store.",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "murderous-agenda-drukhari",
@@ -8335,42 +8463,64 @@
             }
           },
           {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "A",
-              "operation": "set",
-              "value": 3,
-              "weapons": {
-                "type": "melee"
-              }
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "A",
-              "operation": "set",
-              "value": 4,
-              "weapons": {
-                "type": "melee"
-              }
-            }
-          },
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "hazardous"
+            "type": "choice",
+            "options": [
+              {
+                "type": "stat-modifier",
+                "target": {
+                  "level": "model",
+                  "member_of": "this-unit",
+                  "none_of": [
+                    "CHARACTER"
+                  ]
+                },
+                "modifier": {
+                  "stat": "A",
+                  "operation": "set",
+                  "value": 3,
+                  "weapons": {
+                    "type": "melee"
+                  }
                 }
-              ],
-              "weapons": {
-                "type": "melee"
+              },
+              {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "stat-modifier",
+                    "target": {
+                      "level": "model",
+                      "member_of": "this-unit",
+                      "none_of": [
+                        "CHARACTER"
+                      ]
+                    },
+                    "modifier": {
+                      "stat": "A",
+                      "operation": "set",
+                      "value": 4,
+                      "weapons": {
+                        "type": "melee"
+                      }
+                    }
+                  },
+                  {
+                    "type": "weapon-ability-grant",
+                    "target": "this-unit",
+                    "modifier": {
+                      "keywords": [
+                        {
+                          "keyword_id": "hazardous"
+                        }
+                      ],
+                      "weapons": {
+                        "type": "melee"
+                      }
+                    }
+                  }
+                ]
               }
-            }
+            ]
           }
         ]
       }

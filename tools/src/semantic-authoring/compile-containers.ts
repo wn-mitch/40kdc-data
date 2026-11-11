@@ -12,6 +12,7 @@ import { duration } from "./compile-duration-scope.js";
 import { gatedMoment } from "./compile-usability-gate.js";
 import { buildRitualMenu, isRitualTestLeaf } from "./compile-ritual-menu.js";
 import { RITUAL_MENU_OPEN } from "./psychic-families.js";
+import { usageFor } from "./restriction-families.js";
 import { buildMoveType, MOVE_TYPE_OPEN } from "./compile-move-type.js";
 
 /**
@@ -399,6 +400,9 @@ function buildSelectObjective(head: CompileLeaf, groups: CompileLeaf[][]): Node 
   if (head.parameters.controlled_by_unit !== undefined) filter.controlled_by_unit = head.parameters.controlled_by_unit;
   if (head.parameters.controlled_at !== undefined) filter.controlled_at = head.parameters.controlled_at;
   if (head.parameters.clear_of !== undefined) filter.clear_of = head.parameters.clear_of;
+  // Folded from a territory in-region right after the selection (compile-objective-criteria.ts).
+  if (head.parameters.territory !== undefined) filter.territory = head.parameters.territory;
+  if (head.parameters.outside_territory !== undefined) filter.outside_territory = head.parameters.outside_territory;
   const selector: Node = { filter, bind_as: closed(head, "bind_as") };
   if (head.parameters.each !== true) {
     const count = head.parameters.count !== undefined ? closed(head, "count") : 1;
@@ -501,7 +505,11 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     // A choice-open inside a named option ("Unnatural Fortitude: … select one of the following: ■ … ■ …")
     // is that option's own: it and its options run on to the next named-option marker.
     const nestedChoice = (cursor: number) => byMarker && !menu && current[0]?.family_id === optionMarker && list[cursor]!.family_id === "choice-open";
+    // A Stratagem's TARGET that selects an objective and says what it becomes ("…; this becomes your Trap
+    // objective marker") holds the whole body: the EFFECT text after it is the Stratagem's own effect.
+    const ownFragmentBody = leaf.family_id === "select-objective-open" && list.slice(index + 1).some((item) => item.fragment === leaf.fragment && item.role === "EFFECT");
     for (let cursor = index + 1; cursor < list.length && (replacement !== undefined || byBullet || !LEADING_CONTAINERS.has(list[cursor]!.family_id) || nestedChoice(cursor)); cursor += 1) {
+      if (ownFragmentBody && list[cursor]!.fragment !== leaf.fragment) break;
       const sentence = sentenceOf[cursor]!;
       const bulletStarts = leaf.family_id === "choice-open" && bullets[cursor] === true;
       // A bulleted choice ends at a later choice of its own kind, or at a line after the last bullet;
@@ -598,7 +606,16 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     // Under named-option markers, a leading group that grants "your chosen" option ("Until the end of
     // the battle, …, and that unit has the effect of your chosen Plague") is about the options, not
     // one of them, whatever effects it has of its own.
-    const aboutTheOptions = (group: readonly CompileLeaf[]) => byMarker && group.some((item) => item.family_id === "chosen-option-grant");
+    const aboutTheOptions = (group: readonly CompileLeaf[]) => byMarker && group.some((item) => item.family_id === "chosen-option-grant")
+      || aboutTheRoll(group);
+    // "If X is your WARLORD, when randomly determining your augmentations, you can re-roll one or both of the
+    // dice": with a pick that can be rolled, a leading sentence whose only effects re-roll an ability's own dice
+    // is about that roll, not a step of every option.
+    function aboutTheRoll(group: readonly CompileLeaf[]): boolean {
+      const effects = group.filter((item) => item.role === "EFFECT");
+      return leaf.parameters.or_random !== undefined && effects.length > 0
+        && effects.every((item) => item.family_id === "reroll" && typeof item.parameters.roll === "object" && item.parameters.roll !== null);
+    }
     // issue-orders keeps its own timing: those sentences say when an Order is issued and how long it lasts.
     let orderTiming: ReturnType<typeof issueOrdersTiming> = null;
     if (leaf.family_id === "issue-orders-open") {
@@ -655,6 +672,14 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
       // "you can select up to one …" establishes the designation only if the controlling player chooses to.
       if (leaf.family_id === "persistent-designation-open" && designationChoices(list, sentenceOf, index).length > 0) {
         node = node.type === "ability-part" ? { ...node, optional: true } : { type: "ability-part", optional: true, effect: node };
+      }
+      // "The first time you use this Stratagem, you must also select one objective marker …": the usage
+      // printed right before the selection, in its sentence, limits the selection, not the whole record.
+      const usage = list[index - 1];
+      if (leaf.family_id === "select-objective-open" && usage?.family_id === "usage-limit" && usage.parameters.per !== undefined
+        && usage.fragment === leaf.fragment && sentenceOf[index - 1] === sentenceOf[index]) {
+        consumed.add(index - 1);
+        node = { type: "ability-part", usage: usageFor(usage.parameters), effect: node };
       }
       if (orderTiming !== null) {
         const part: Node = { type: "ability-part" };

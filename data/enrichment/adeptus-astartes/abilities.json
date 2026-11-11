@@ -1675,6 +1675,7 @@
             "count": 1,
             "per": "army"
           },
+          "duration": "phase",
           "effect": {
             "type": "sequence",
             "steps": [
@@ -7349,49 +7350,41 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "56a6ea4868f0515215be80b0156b8dccf9229fa1a7326947d5a39f5a6b086f45",
+    "source_digest": "ac77cb887488ab0d95c7c38a328aedd3b58837c741eecde1557b2f16c565007f",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
     "detachment_id": "tacticus-attack-force",
-    "ability_type": "stratagem",
-    "behavior": "activated",
+    "ability_type": "enhancement",
+    "behavior": "passive",
     "effect": {
-      "type": "choice",
-      "choice_label": "Weapon ability",
-      "options": [
+      "type": "sequence",
+      "steps": [
         {
-          "type": "weapon-ability-grant",
+          "type": "re-roll",
           "target": "this-unit",
           "modifier": {
-            "keywords": [
-              {
-                "keyword_id": "lethal-hits"
-              }
-            ]
+            "roll": "hit",
+            "result_scope": "any-result",
+            "count": 1
           }
         },
         {
-          "type": "weapon-ability-grant",
+          "type": "re-roll",
           "target": "this-unit",
           "modifier": {
-            "keywords": [
-              {
-                "keyword_id": "sustained-hits",
-                "parameters": {
-                  "value": 1
-                }
-              }
-            ]
+            "roll": "wound",
+            "result_scope": "any-result",
+            "count": 1
           }
         }
       ]
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "Used when a Character unit is selected to shoot or fight"
   },

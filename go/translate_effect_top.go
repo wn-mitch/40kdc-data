@@ -162,6 +162,8 @@ func usageClause(usage any) string {
 		base = "the first time this battle"
 	case "first-time-this-phase":
 		base = "the first time this phase"
+	case "first-time-this-turn":
+		base = "the first time each turn"
 	case "n-per-battle":
 		switch n {
 		case 1:

@@ -472,6 +472,8 @@ def _objective_phrase(f: Any, plural: bool = False, noun: str = "objective") -> 
         s += f" ({dekebab(_str(f['name']))})"
     if f.get("territory") is not None:
         s += f" in {territory_phrase(_str(f['territory']))}"
+    if f.get("outside_territory") is not None:
+        s += f" not in {territory_phrase(_str(f['outside_territory']))}"
     if role_v == "non-home":
         s += " (excluding home)"
     within = _obj(f.get("within"))

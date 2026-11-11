@@ -252,6 +252,7 @@ export function objectivePhrase(f: P, plural = false, noun = "objective"): strin
   if (f.home_of === "friendly") s += " (your home)";
   if (f.name != null) s += ` (${dekebab(str(f.name))})`;
   if (f.territory != null) s += ` in ${territoryPhrase(str(f.territory))}`;
+  if (f.outside_territory != null) s += ` not in ${territoryPhrase(str(f.outside_territory))}`;
   if (f.role === "non-home") s += " (excluding home)";
   const within = f.within as P | undefined;
   // Your control, within this unit's own range of it: the unit itself is controlling it.
@@ -340,6 +341,7 @@ export function usageClause(u: AbilityUsage | AbilityUsage[]): string {
     case "once-per-opponent-turn": base = "once per opponent's turn"; break;
     case "first-this-battle": base = "the first time this battle"; break;
     case "first-time-this-phase": base = "the first time this phase"; break;
+    case "first-time-this-turn": base = "the first time each turn"; break;
     case "n-per-battle": base = n === 1 ? "once per battle" : n === 2 ? "twice per battle" : `${str(n)} times per battle`; break;
     default: base = dekebab(str(u.frequency));
   }

@@ -510,6 +510,8 @@ function intersect(phases: Phase[], phase: Phase): Phase[] {
  * Whether an effect can reach a unit other than its own: an aura, a unit-filter target (friendly
  * or enemy), or a unit selection. The translator decides what of it reaches the input unit.
  */
+const OWN_UNIT_REFS = new Set<unknown>(["this-unit", "this-model"]);
+
 export function reachesOtherUnits(effect: unknown): boolean {
   if (Array.isArray(effect)) return effect.some(reachesOtherUnits);
   if (effect === null || typeof effect !== "object") return false;
@@ -517,7 +519,9 @@ export function reachesOtherUnits(effect: unknown): boolean {
   if (node.type === "aura" || node.type === "select-units") return true;
   const target = node.target;
   if (target !== null && typeof target === "object" && !Array.isArray(target) && "owner" in target) {
-    if (target.owner === "friendly" || target.owner === "enemy") return true;
+    // A friendly filter bounded to the holder's own unit (`member_of: this-unit`) stays on it.
+    const ownUnit = target.owner === "friendly" && "member_of" in target && OWN_UNIT_REFS.has(target.member_of);
+    if ((target.owner === "friendly" && !ownUnit) || target.owner === "enemy") return true;
   }
   // A model-only grant's definition cannot become an aura from the whole unit.
   if (node.type === "ability-grant" && (target === "this-model" || target === "model-in-this-unit"

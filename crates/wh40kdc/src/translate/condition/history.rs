@@ -556,6 +556,29 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                 with_window(&format!("{who} used {which}{}", dekebab(&kind)), window)
             )
         }
+        // "cause it to become Below Half-strength": the unit's strength fell past a threshold.
+        // With no subject, any unit: "a unit became Below Half-strength".
+        "state-changed" if is(f, "strength", "below-half") => {
+            let unit = if nn(p, "subject").is_none() {
+                "a unit".to_string()
+            } else {
+                who.clone()
+            };
+            let became = if negated { "did not become" } else { "became" };
+            with_window(&format!("{unit} {became} Below Half-strength"), window)
+        }
+        "state-changed" if is(f, "strength", "below-starting") => {
+            let unit = if nn(p, "subject").is_none() {
+                "a unit".to_string()
+            } else {
+                who.clone()
+            };
+            let fell = if negated { "did not fall" } else { "fell" };
+            with_window(
+                &format!("{unit} {fell} below its Starting Strength"),
+                window,
+            )
+        }
         "objective-gained" => format!(
             "{neg}you newly control {amount} objectives {}",
             window_phrase(window)

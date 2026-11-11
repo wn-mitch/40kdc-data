@@ -26,6 +26,8 @@ const RETURN_MODELS_WOUNDS: FamilyExtension = {
 
 /** Rolled counts of returned models beyond return-models@5's. */
 const RETURN_COUNTS_ADDED = ["D3+2"] as const;
+/** Core abilities that select weapons another rule can name (Firing Deck: one ranged weapon of each embarked model). */
+const WEAPON_SELECTING_ABILITIES = ["firing-deck"];
 
 const RETURN_MODELS_COUNTS: FamilyExtension = {
   // "return up to D3+2 destroyed Bodyguard models to this unit".
@@ -215,6 +217,24 @@ export const ATTACK_EXTENSIONS: readonly FamilyExtension[] = [
       const extra = Object.keys(rest).filter((key) => key !== "attack_type" && key !== "negated");
       if (extra.length) throw new TypeError(`attack-filter target that-unit takes attack_type and negated only, not ${extra.join(", ")}.`);
       return { ...(Object.keys(rest).length ? previous(rest) : {}), target: "that-unit" };
+    },
+  },
+  /**
+   * "ranged attacks with weapons selected for the Firing Deck ability": the attacks made with the
+   * weapons a core ability selected, not the unit's own weapons.
+   */
+  {
+    family: "attack-filter",
+    version: 5,
+    description: "As the previous version, plus weapon_selected_for: the attacks are made with the weapons that core ability selected (firing-deck: \"weapons selected for the Firing Deck ability\"). It takes attack_type and negated beside it.",
+    schema: (previous) => withProperties(previous, { weapon_selected_for: optional({ enum: WEAPON_SELECTING_ABILITIES }) }),
+    normalize: (input, previous) => {
+      if (!("weapon_selected_for" in input)) return previous(input);
+      const { weapon_selected_for: ability, ...rest } = input;
+      enumValue(ability, WEAPON_SELECTING_ABILITIES, "attack-filter.weapon_selected_for");
+      const extra = Object.keys(rest).filter((key) => key !== "attack_type" && key !== "negated");
+      if (extra.length) throw new TypeError(`attack-filter weapon_selected_for takes attack_type and negated only, not ${extra.join(", ")}.`);
+      return { ...(Object.keys(rest).length ? previous(rest) : {}), weapon_selected_for: ability };
     },
   },
   HIT_THIS_PHASE,

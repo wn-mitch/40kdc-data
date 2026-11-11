@@ -97,6 +97,7 @@ import { refuseStratagemTargetActivity } from "./compile-triggering-destruction.
 import { planConditionOf, type ConditionOfPlan } from "./compile-connective-plan.js";
 import { lowerHistoryMoments } from "./compile-connective-history.js";
 import { checkOptionalCosts } from "./compile-optional-cost.js";
+import { foldSelectionHolders } from "./compile-selection-holders.js";
 import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
 import { bindMatchedPools } from "./compile-matched-set.js";
 import { foldWeaponAlreadyHas } from "./compile-weapon-already-has.js";
@@ -234,7 +235,28 @@ function compileChecked(leaves: readonly CompileLeaf[], sourceText: string | und
   if (result.ok && !enclosed && hasUnboundSelectedUnit(result.mechanics.effect)) return { ok: false, signature: result.signature, errors: ["An effect names the selected unit outside the selection that picks it."] };
   // A rolled distance or a start-of-move position that a lowering path read as plain inches would be lost, not refused.
   const lost = result.ok ? lostDistance(leaves, result.mechanics) : null;
-  return lost === null ? result : { ok: false, signature: result.signature, errors: [lost] };
+  if (lost !== null) return { ok: false, signature: result.signature, errors: [lost] };
+  return result.ok && !enclosed ? withSelfGrantHolders(result, options.abilityId) : result;
+}
+
+/**
+ * "X units from your army have the following ability: …": a record that grants itself to a keyword
+ * filter holds for those units only, so the filter's keyword lists become its `applies_to`.
+ */
+function withSelfGrantHolders<T extends Extract<Compiled, { ok: true }>>(compiled: T, abilityId: string | undefined): T {
+  if (abilityId === undefined || compiled.mechanics.applies_to !== undefined) return compiled;
+  const effect = compiled.mechanics.effect as { type?: unknown; steps?: unknown };
+  const steps = effect.type === "sequence" && Array.isArray(effect.steps) ? effect.steps : [effect];
+  const grant = steps.find((step): step is { target: Record<string, unknown> } => {
+    const node = step as { type?: unknown; modifier?: { ability?: unknown }; target?: unknown };
+    return node.type === "ability-grant" && node.modifier?.ability === abilityId && node.target !== null && typeof node.target === "object"
+      && !Array.isArray(node.target) && (node.target as { owner?: unknown }).owner === "friendly";
+  });
+  if (grant === undefined) return compiled;
+  const holders = Object.fromEntries(["all_of", "any_of", "none_of"].flatMap((key) => grant.target[key] === undefined ? [] : [[key, grant.target[key]]]));
+  // A filter with anything beyond keyword lists (a range, a designation) is not a roster restriction.
+  if (Object.keys(holders).length === 0 || Object.keys(grant.target).some((key) => !["owner", "all_of", "any_of", "none_of"].includes(key))) return compiled;
+  return { ...compiled, mechanics: { ...compiled.mechanics, applies_to: holders } };
 }
 
 /** Whether any range in the mechanics lost its distance, or a leaf's rolled or start-of-move distance is missing from them. */
@@ -426,6 +448,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     leaves = foldRollCaps(leaves);
     // "… suffers 1 mortal wound after that enemy unit has shot": the effect waits for that moment (compile-delayed-moment.ts).
     leaves = foldDelayedMoments(leaves, sourceText);
+    // "select which X are active for Y models … 1 - …: … this model": the options' model is one of Y (compile-selection-holders.ts).
+    leaves = foldSelectionHolders(leaves, sourceText);
     refuseBlastRating(leaves, sourceText);
     refuseStratagemTargetActivity(leaves);
     refuseUnboundIfItDoes(leaves, sourceText);

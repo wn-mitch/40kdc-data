@@ -160,10 +160,14 @@ pub(crate) fn reaches_other_units(effect: &Value) -> bool {
                 return false;
             }
             if let Some(Value::Object(target)) = node.get("target") {
-                if matches!(
-                    target.get("owner").and_then(Value::as_str),
-                    Some("friendly" | "enemy")
-                ) {
+                let owner = target.get("owner").and_then(Value::as_str);
+                // A friendly filter bounded to the holder's own unit stays on it.
+                let own_unit = owner == Some("friendly")
+                    && matches!(
+                        target.get("member_of").and_then(Value::as_str),
+                        Some("this-unit" | "this-model")
+                    );
+                if (owner == Some("friendly") && !own_unit) || owner == Some("enemy") {
                     return true;
                 }
                 if node.get("type").and_then(Value::as_str) == Some("ability-grant")

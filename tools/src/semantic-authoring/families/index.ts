@@ -9,6 +9,7 @@ import { CHOICE_AND_DICE_EXTENSIONS } from "./choices-and-dice.js";
 import { COUNTS_AS_MOVED_EXTENSIONS } from "./counts-as-moved-own.js";
 import { DURATION_AND_DESIGNATION_EXTENSIONS } from "./durations-and-designations.js";
 import { ELIGIBILITY_EXTENSIONS } from "./eligibility.js";
+import { EVENT_STRENGTH_EXTENSIONS } from "./event-strength.js";
 import { EVENT_USED_OBJECT_EXTENSIONS } from "./event-used-object.js";
 import { EVENT_EXTENSIONS } from "./events.js";
 import { LEAF_STRUCTURE_EXTENSIONS } from "./leaf-structure.js";
@@ -63,6 +64,7 @@ const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [
   ...LEAF_STRUCTURE_EXTENSIONS,
   ...APOSTROPHE_KEYWORD_EXTENSIONS,
   ...EVENT_USED_OBJECT_EXTENSIONS,
+  ...EVENT_STRENGTH_EXTENSIONS,
   ...COUNTS_AS_MOVED_EXTENSIONS,
   ...TARGETING_ABILITY_EXTENSIONS,
   ...TARGETING_HISTORY_EXTENSIONS,

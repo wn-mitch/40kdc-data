@@ -87,3 +87,39 @@ describe("a later moment a duration opens after the selection", () => {
     expect(refused.errors.join(" ")).toMatch(/waits on the use an earlier moment offers/u);
   });
 });
+
+// "When … is selected to fight/shoot, …" with no printed duration: the activation happens in that
+// phase, so the effect lasts the phase rather than the battle. Wording is fabricated.
+describe("a selected-to-fight or selected-to-shoot moment with no printed duration", () => {
+  const momentText = (to: string, tail = "") => `When a friendly **FIXTURE** unit is selected to ${to}, that unit's attacks have +1 to hit rolls${tail}.`;
+  const momentItems = (to: string) => [
+    ["friendly **FIXTURE** unit", "unit-filter", { side: "friendly", keywords: ["FIXTURE"] }],
+    [`is selected to ${to}`, "event", { kind: "selected", to }],
+    ["+1 to hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1, subject: "antecedent" }],
+  ] as const;
+
+  it.each(["fight", "shoot"])("lasts the phase when selected to %s", (to) => {
+    const text = momentText(to);
+    const result = compileLeaves(placed(text, ...momentItems(to)), text);
+    expectCompiled(result);
+    expect(result.mechanics.trigger).toMatchObject({ event: "selected", filter: { to } });
+    expect(result.mechanics.scope).toEqual({ duration: "phase" });
+  });
+
+  it("keeps a printed duration over the phase", () => {
+    const text = momentText("fight", " until the end of the turn");
+    const result = compileLeaves(placed(text, ...momentItems("fight"), ["until the end of the turn", "duration", { endpoint: "end-of-turn" }]), text);
+    expectCompiled(result);
+    expect(result.mechanics.scope).toEqual({ duration: "turn" });
+  });
+
+  it("gives no phase to a selected-to-move moment", () => {
+    const text = "When a friendly **FIXTURE** unit is selected to move, that unit's attacks have +1 to hit rolls.";
+    const result = compileLeaves(placed(text,
+      ["friendly **FIXTURE** unit", "unit-filter", { side: "friendly", keywords: ["FIXTURE"] }],
+      ["is selected to move", "event", { kind: "selected", to: "move" }],
+      ["+1 to hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1, subject: "antecedent" }]), text);
+    expectCompiled(result);
+    expect(result.mechanics.scope).not.toEqual({ duration: "phase" });
+  });
+});

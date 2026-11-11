@@ -297,6 +297,17 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         what = f"the {id_label(f['id'])} " if f.get("id") is not None else "a "
         used_kind = _str(f["kind"]) if f.get("kind") is not None else "ability"
         return f"{neg}{_with_window(f'{who} used {what}{dekebab(used_kind)}', window)}"
+    if event == "state-changed":
+        # "cause it to become Below Half-strength": the unit's strength fell past a threshold.
+        # With no subject, any unit: "a unit became Below Half-strength".
+        unit = "a unit" if p.get("subject") is None else who
+        if f.get("strength") == "below-half":
+            became = "did not become" if negated else "became"
+            return _with_window(f"{unit} {became} Below Half-strength", window)
+        if f.get("strength") == "below-starting":
+            fell = "did not fall" if negated else "fell"
+            return _with_window(f"{unit} {fell} below its Starting Strength", window)
+        return f"{neg}{_with_window('state changed happened', window)}"
     if event == "objective-gained":
         return f"{neg}you newly control {_str(n)}+ objectives {_window_phrase(window)}".rstrip()
     if event == "designation-changed":
