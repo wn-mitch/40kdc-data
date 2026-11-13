@@ -36,8 +36,10 @@ func TestLoadoutIllegalWarningOnImport(t *testing.T) {
 			t.Fatalf("loadout-illegal raw_name = %v, want Necron Warriors", w["raw_name"])
 		}
 		msg, _ := w["message"].(string)
-		if !strings.Contains(msg, "swap-conflict:gauss-flayer") {
-			t.Fatalf("loadout-illegal message %q missing swap-conflict:gauss-flayer", msg)
+		// Under MFM rules a count no whole-model assignment carries, within every
+		// item's bounds, is a swap conflict on the unit itself.
+		if !strings.Contains(msg, "swap-conflict:necron-warriors") {
+			t.Fatalf("loadout-illegal message %q missing swap-conflict:necron-warriors", msg)
 		}
 	}
 	if !found {

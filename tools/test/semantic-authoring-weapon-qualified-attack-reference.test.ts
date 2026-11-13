@@ -191,7 +191,7 @@ describe("Semantic authoring weapon-qualified attack reference (wave 10)", () =>
     expect(JSON.parse(out).trigger).toEqual({ event: "model-destroyed", subject: "this-model", object: { owner: "enemy", level: "model" }, filter: { weapon_name: "quake cannon" } });
   });
 
-  it("refuses destruction qualifiers the DSL cannot hold, and the Soul Trap timing gap", () => {
+  it("refuses destruction qualifiers the DSL cannot hold", () => {
     const text = "Each time an attack made with this model's quake cannon destroys an enemy model, add 1 to the Wound roll.";
     const destroy = (filter: Record<string, unknown>) => compileLeaves(placed(text,
       ["Each time an attack made with this model's quake cannon", "attack-filter", filter],
@@ -221,16 +221,25 @@ describe("Semantic authoring weapon-qualified attack reference (wave 10)", () =>
     ), subjectText);
     expect(subjectTiming.ok ? "" : subjectTiming.errors.join(" ")).not.toMatch(/DSL gap/u);
 
-    // Soul Trap shape: a melee attack that destroys, timed by "after all of that attack's attacks have been resolved".
+  });
+
+  it("times a destruction by an attack to that attacker's attacks resolving (Soul Trap shape)", () => {
     const soul = "The first time the bearer makes a melee attack that destroys an enemy model, after all of that attack's attacks have been resolved, add 1 to the Wound roll.";
-    const gap = compileLeaves(placed(soul,
+    const leaves = (between: string) => placed(soul.replace(", after", `${between}after`),
       ["The first time the bearer makes a melee attack that", "attack", { direction: "makes", unit: "this-model", attack_type: "melee" }],
       ["destroys an enemy model", "event", { kind: "model-destroyed", object_owner: "enemy" }],
       ["after all of that attack's attacks have been resolved", "event", { kind: "attacks-resolved", action_kind: "attack" }],
-      ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
-    ), soul);
-    expectRefused(gap);
-    expect(gap.errors.join(" ")).toMatch(/DSL gap/u);
+      ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }]);
+    // The effect waits for the bearer's attacks to resolve, and only when those melee attacks destroyed an enemy model.
+    expect(JSON.parse(compiled(leaves(", "), soul)).trigger).toEqual({
+      event: "attacks-resolved", subject: "this-model", filter: { kind: "attack" },
+      condition: { type: "happened", parameters: { event: "model-destroyed", subject: "this-model", object: { owner: "enemy", level: "model" }, filter: { attack_type: "melee" }, window: "event" } },
+    });
+    // Wording between the two moments says they are not one timing, so the mid-attack destruction is refused.
+    const apart = soul.replace(", after", ". Then, after");
+    const separate = compileLeaves(leaves(". Then, "), apart);
+    expectRefused(separate);
+    expect(separate.errors.join(" ")).toMatch(/would fire mid-attack/u);
   });
 
   it("describes a destruction by the attacks its filter names", () => {
@@ -322,5 +331,39 @@ describe("Semantic authoring weapon-qualified attack reference (wave 10)", () =>
     const folded = foldLeadingHitFilters(leaves.slice(2, 5), text);
     expect(folded).toHaveLength(2);
     expect(folded[0]!.parameters).toEqual({ object: "following-filter", hit_filter: { weapon_keyword: "Indirect Fire" } });
+  });
+});
+
+describe("attacks by a filtered unit that destroy or weaken, after those attacks resolve (Cold Fervour shape)", () => {
+  const text = "The first time each turn that an ALPHA unit from your army makes attacks that destroy a unit or cause it to become Below Half-strength, after that unit has finished resolving its attacks, add 1 to the Hit roll.";
+  const leaves = (withStrength: boolean) => placed(withStrength ? text : text.replace(" or cause it to become Below Half-strength", ""),
+    ["The first time each turn that an", "usage-limit", { frequency: "first-time-this-turn", per: "any" }],
+    ["ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+    ["from your army", "unit-owner", { owner: "friendly" }],
+    ["makes attacks that", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "any" }],
+    ["destroy a unit", "event", { kind: "unit-destroyed" }],
+    ...(withStrength ? [["cause it to become Below Half-strength", "event", { kind: "state-changed", strength: "below-half" }] as [string, string, Record<string, unknown>]] : []),
+    ["after that unit has finished resolving its attacks", "event", { kind: "attacks-resolved", action_kind: "attack" }],
+    ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
+  const destroyed = { type: "happened", parameters: { event: "destroyed", subject: "event-subject", window: "event" } };
+
+  it("fires when the filtered unit's attacks resolve, if they destroyed a unit or left one Below Half-strength", () => {
+    const mechanics = JSON.parse(compiled(leaves(true), text));
+    expect(mechanics.trigger).toEqual({
+      event: "attacks-resolved", filter: { kind: "attack" }, subject: { owner: "friendly", all_of: ["ALPHA"] },
+      condition: { operator: "or", operands: [destroyed, { type: "happened", parameters: { event: "state-changed", filter: { strength: "below-half" }, window: "event" } }] },
+    });
+    expect(mechanics.usage).toEqual({ frequency: "first-time-this-turn" });
+  });
+
+  it("keeps the single destruction a plain condition when no alternative is printed", () => {
+    const single = text.replace(" or cause it to become Below Half-strength", "");
+    expect(JSON.parse(compiled(leaves(false), single)).trigger.condition).toEqual(destroyed);
+  });
+
+  it("refuses a strength moment that names a state too, or that is not a state change", () => {
+    expect(() => normalize("event", { kind: "state-changed", strength: "below-half", state: "engaged" })).toThrow();
+    expect(() => normalize("event", { kind: "unit-destroyed", strength: "below-half" })).toThrow();
+    expect(normalize("event", { kind: "state-changed", strength: "below-starting" })).toEqual({ kind: "state-changed", strength: "below-starting" });
   });
 });

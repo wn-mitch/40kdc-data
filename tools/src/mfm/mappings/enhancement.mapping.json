@@ -725,87 +725,121 @@
     {
       "source": "data.enhancement.cannotBeWarlord",
       "candidate_pointer": null,
-      "reason": "No current core enhancement property represents this bearer restriction."
+      "reason": "True on 1 enhancement whose bearer cannot be Warlord. roster-resolve.ts and its ports should read it.",
+      "classification": "needs-consumer",
+      "spread": "869 rows, 869 values (0 null/absent): boolean false×868, true×1"
     },
     {
       "source": "data.enhancement.displayOrder",
       "candidate_pointer": null,
-      "reason": "Presentation ordering is not part of the core enhancement entity."
+      "reason": "App sort position of an enhancement within its detachment (0..56).",
+      "classification": "presentation",
+      "spread": "869 rows, 869 values (0 null/absent): number, 57 distinct, 0..56"
     },
     {
       "source": "data.enhancement.isCombatPatrolDefault",
       "candidate_pointer": null,
-      "reason": "Combat Patrol availability maps to game_modes, but default selection semantics are not projected."
+      "reason": "Marks the enhancement the app preselects for 26 Combat Patrol detachments; the player may still choose another, so it does not change legality.",
+      "classification": "presentation",
+      "spread": "869 rows, 869 values (0 null/absent): boolean false×843, true×26"
     },
     {
       "source": "data.enhancement.isEquipableByEpicHero",
       "candidate_pointer": null,
-      "reason": "An eligibility relaxation (an Epic Hero may take this enhancement), not a keyword the bearer must have; it has no faithful home in the keyword_restrictions list."
+      "reason": "True on 9 enhancements an Epic Hero may take; roster validation refuses every Epic Hero. roster-resolve.ts and its ports should read it.",
+      "classification": "needs-consumer",
+      "spread": "869 rows, 869 values (0 null/absent): boolean false×860, true×9"
     },
     {
       "source": "data.enhancement.isEquipableByNonCharacterUnit",
       "candidate_pointer": null,
-      "reason": "An eligibility relaxation (a non-Character may take this enhancement), not a keyword restriction; folding it into keyword_restrictions would misencode a relaxation as a requirement."
+      "reason": "True on 118 enhancements; 7 are not Upgrades, which roster validation refuses on non-Characters because it reads upgrade_tag. semantic-authoring/core-checks.ts reads it; roster-resolve.ts and its ports should too.",
+      "classification": "needs-consumer",
+      "spread": "869 rows, 869 values (0 null/absent): boolean false×751, true×118"
     },
     {
       "source": "data.enhancement.isIncludedInEnhancementLimit",
       "candidate_pointer": null,
-      "reason": "The core entity has no established field for this enhancement-limit accounting flag."
+      "reason": "False on 8 enhancements that do not count toward the Enhancement limit. roster-resolve.ts (enhancement-limit-exceeded) and its ports should skip them.",
+      "classification": "needs-consumer",
+      "spread": "869 rows, 869 values (0 null/absent): boolean false×8, true×861"
     },
     {
       "source": "data.enhancement.localisations.*.lore",
       "candidate_pointer": null,
-      "reason": "Localized lore remains outside the core entity data."
+      "reason": "Enhancement flavour text, GW prose kept in the dump.",
+      "classification": "prose",
+      "spread": "869 rows, 3158 values (0 null/absent): string, 3145 distinct"
     },
     {
       "source": "data.enhancement.localisations.*.rules",
       "candidate_pointer": null,
-      "reason": "Localized rules prose stays in the private MFM dump rather than being copied into core data."
+      "reason": "Enhancement rules text; record-prose.ts reads it from the dump on demand and it is never copied into data.",
+      "classification": "prose",
+      "spread": "869 rows, 3158 values (0 null/absent): string, 3114 distinct"
     },
     {
       "source": "data.enhancement.publicationId",
       "candidate_pointer": null,
-      "reason": "Publication ownership is not represented by a separate core enhancement property."
+      "reason": "game-mode.ts reads the publication's isCombatPatrol through the detachment; the enhancement's own copy adds no field.",
+      "classification": "consumed-elsewhere",
+      "spread": "869 rows, 869 values (0 null/absent): string, 60 distinct"
     },
     {
       "source": "data.enhancement_bodyguard_group.enhancementId",
       "candidate_pointer": null,
-      "reason": "Bodyguard-based eligibility is a distinct condition from the bearer keyword restriction and has no faithful home in keyword_restrictions."
+      "reason": "enhancements.ts groups bodyguard rows by this key to build attachment_bodyguard_ids.",
+      "classification": "consumed-elsewhere",
+      "spread": "21 rows, 21 values (0 null/absent): string, 13 distinct"
     },
     {
       "source": "data.enhancement_bodyguard_group.factionKeywordId",
       "candidate_pointer": null,
-      "reason": "The null-only faction scope is part of bodyguard eligibility, not a bearer keyword restriction."
+      "reason": "Null on every row, so no bodyguard group is faction-scoped.",
+      "classification": "constant",
+      "spread": "21 rows, 21 values (21 null/absent)"
     },
     {
       "source": "data.enhancement_bodyguard_group_datasheet.datasheetId",
       "candidate_pointer": null,
-      "reason": "Bodyguard-to-datasheet eligibility is a distinct condition, not a bearer keyword restriction."
+      "reason": "enhancements.ts resolves these 18 datasheets into attachment_bodyguard_ids.",
+      "classification": "consumed-elsewhere",
+      "spread": "21 rows, 21 values (0 null/absent): string, 18 distinct"
     },
     {
       "source": "data.enhancement_bodyguard_group_datasheet.enhancementBodyguardGroupId",
       "candidate_pointer": null,
-      "reason": "Bodyguard-to-datasheet eligibility is a distinct condition, not a bearer keyword restriction."
+      "reason": "Join key from a bodyguard datasheet row to its group; enhancements.ts follows it.",
+      "classification": "id",
+      "spread": "21 rows, 21 values (0 null/absent): string, 21 distinct"
     },
     {
       "source": "data.enhancement_required_wargear_item.enhancementId",
       "candidate_pointer": null,
-      "reason": "Required wargear eligibility is not represented in the core enhancement schema."
+      "reason": "One enhancement requires its bearer to carry a wargear item. roster-resolve.ts and its ports should read it.",
+      "classification": "needs-consumer",
+      "spread": "1 rows, 1 values (0 null/absent): string, 1 distinct"
     },
     {
       "source": "data.enhancement_required_wargear_item.wargearItemId",
       "candidate_pointer": null,
-      "reason": "Required wargear eligibility is not represented in the core enhancement schema."
+      "reason": "The wargear item the one gated enhancement requires. roster-resolve.ts and its ports should read it.",
+      "classification": "needs-consumer",
+      "spread": "1 rows, 1 values (0 null/absent): string, 1 distinct"
     },
     {
       "source": "data.enhancement_wargear_item_profile.enhancementId",
       "candidate_pointer": null,
-      "reason": "Wargear-profile eligibility is not represented in the core enhancement schema."
+      "reason": "enhancement-weapons.ts reads the 8 rows to mint the weapon profiles these enhancements grant.",
+      "classification": "consumed-elsewhere",
+      "spread": "8 rows, 8 values (0 null/absent): string, 8 distinct"
     },
     {
       "source": "data.enhancement_wargear_item_profile.wargearItemProfileId",
       "candidate_pointer": null,
-      "reason": "Wargear-profile eligibility is not represented in the core enhancement schema."
+      "reason": "enhancement-weapons.ts resolves these 8 profiles into granted weapons.",
+      "classification": "consumed-elsewhere",
+      "spread": "8 rows, 8 values (0 null/absent): string, 8 distinct"
     }
   ]
 }

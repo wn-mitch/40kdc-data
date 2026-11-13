@@ -13,6 +13,7 @@
     type AttributedStage,
     type Buff,
     type BuffSource,
+    type StackableBuff,
     type EngineContext,
     type EngineInput,
     clampWeaponCount,
@@ -34,12 +35,15 @@
     memberMortalSources,
     mortalSourceLine,
     mortalSourceStages,
-    crunchLine,
+    crunchLines,
+    lineGroupLabel,
+    type LineGroup,
     enabledLeverBuffs,
     grantedCopies,
     memberUnits as resolveMembers,
     memberWargear,
     unionLevers,
+    coveringLever,
     synthTarget,
     targetDefences,
   } from "./output-model.js";
@@ -101,7 +105,10 @@
   /** The buffs one member attacks with: its enabled levers, the manual toggles and the target's defences. */
   function buffsOf(memberId: string): Buff[] {
     const levers = perMember.find((member) => member.memberId === memberId)?.levers.buffs ?? [];
-    return [...enabledLeverBuffs(levers, (b) => salvo.isBuffEnabled(b.id, b.enabled)), ...manualBuffs, ...defensive.buffs];
+    const isEnabled = (b: StackableBuff) => salvo.isBuffEnabled(b.id, b.enabled);
+    // A manual toggle an enabled lever already grants would count the same effect twice.
+    const manual = manualBuffs.filter((buff) => !coveringLever(buff, levers, isEnabled));
+    return [...enabledLeverBuffs(levers, isEnabled), ...manual, ...defensive.buffs];
   }
   const contextOf = (memberId: string) => perMember.find((member) => member.memberId === memberId)?.context ?? context;
   // The selected unit's buffs, for the single-weapon projection and the debug snapshot.
@@ -209,20 +216,20 @@
     inclusion.set(id, !included(id));
   }
 
-  // Crunch every line with the shared (weapon-agnostic) buff stack and the
-  // models firing it: the scored count when the line is used, else every model
-  // carrying it. attributeStages runs the leave-one-out decomposition so each
-  // cell can show which toggleable buffs lifted it.
+  // Crunch every line with the member's buff stack and the models firing it
+  // (see crunchLines). attributeStages runs the leave-one-out decomposition so
+  // each cell can show which toggleable buffs lifted it.
   const lineResults = $derived(selectionValid
-    ? weaponLines.map((line) => crunchLine({
+    ? crunchLines({
         ds,
-        line,
-        owner: memberUnits.find((member) => member.memberId === line.ownerMemberId)?.unit.raw,
-        models: selection.value?.firing.get(line.id) ?? carried(line),
+        lines: weaponLines,
+        members: memberUnits,
+        selection: selection.value,
+        carried,
         target: { unit: target, modelCount: salvo.manualTarget.modelCount },
-        buffs: wargearOf(line.ownerMemberId)?.wargear.buffs ?? buffsOf(line.ownerMemberId),
-        context: contextOf(line.ownerMemberId),
-      }))
+        buffsOf: (memberId) => wargearOf(memberId)?.wargear.buffs ?? buffsOf(memberId),
+        contextOf,
+      })
     : []);
 
   /** Human label for a buff source, bound to this app's dataset. */
@@ -328,11 +335,16 @@
   </td>
 {/snippet}
 
-{#snippet usage(r: { id: string; models: number; ownerMemberId: string; weaponId: string })}
+{#snippet usage(r: { id: string; models: number; ownerMemberId: string; weaponId: string; groups?: LineGroup[] })}
   {#if !selection.value?.firing.has(r.id)}
     <span class="usage dim" title="The loadout scoring uses another profile or weapon for these models">not used</span>
   {:else if r.models !== shownCount(r.ownerMemberId, r.weaponId)}
     <span class="usage dim" title="Models that use this line; the rest use another weapon">{r.models} fire</span>
+  {/if}
+  {#if r.groups}
+    <span class="usage dim" title="Models whose wargear rules or re-rolls differ, each scored with its own buffs">
+      {r.groups.map((group) => `${group.models} ${lineGroupLabel(ds, group)}`).join(" · ")}
+    </span>
   {/if}
 {/snippet}
 

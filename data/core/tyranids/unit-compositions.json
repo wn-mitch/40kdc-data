@@ -33,7 +33,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Trygon",
+          "models": 1,
+          "items": [
+            {
+              "id": "bio-electric-pulse",
+              "count": 1
+            },
+            {
+              "id": "trygon-scything-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Trygon",
+          "items": [
+            {
+              "id": "bio-electric-pulse",
+              "count": 1
+            },
+            {
+              "id": "trygon-scything-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Trygon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bio-electric-pulse",
+                "count": 1
+              },
+              {
+                "id": "trygon-scything-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Trygon",
+          "id": "bio-electric-pulse",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Trygon",
+          "id": "trygon-scything-talons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "mawloc",
@@ -69,7 +138,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Mawloc",
+          "models": 1,
+          "items": [
+            {
+              "id": "distensible-jaw",
+              "count": 1
+            },
+            {
+              "id": "mawloc-scything-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Mawloc",
+          "items": [
+            {
+              "id": "distensible-jaw",
+              "count": 1
+            },
+            {
+              "id": "mawloc-scything-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Mawloc",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "distensible-jaw",
+                "count": 1
+              },
+              {
+                "id": "mawloc-scything-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Mawloc",
+          "id": "distensible-jaw",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Mawloc",
+          "id": "mawloc-scything-talons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tyranid-warriors-with-ranged-bio-weapons",
@@ -138,7 +276,290 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tyranid Prime",
+          "models": 1,
+          "items": [
+            {
+              "id": "devourer",
+              "count": 1
+            },
+            {
+              "id": "tyranid-warrior-claws-and-talons",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Tyranid Warrior",
+          "models": 2,
+          "items": [
+            {
+              "id": "devourer",
+              "count": 2
+            },
+            {
+              "id": "tyranid-warrior-claws-and-talons",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Tyranid Prime",
+          "items": [
+            {
+              "id": "devourer",
+              "count": 1
+            },
+            {
+              "id": "tyranid-warrior-claws-and-talons",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Tyranid Warrior",
+          "items": [
+            {
+              "id": "devourer",
+              "count": 1
+            },
+            {
+              "id": "tyranid-warrior-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Tyranid Prime",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "barbed-strangler",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "deathspitter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "devourer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "spinefists",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "venom-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tyranid Prime",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "tyranid-warrior-claws-and-talons",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tyranid Warrior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "barbed-strangler",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "deathspitter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "devourer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "spinefists",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "venom-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tyranid Warrior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "tyranid-warrior-claws-and-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            },
+            {
+              "models": 6,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "barbed-strangler",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "breakpoints": [
+            {
+              "models": 3,
+              "choices": 1
+            },
+            {
+              "models": 6,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "venom-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Tyranid Prime",
+          "id": "barbed-strangler",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Tyranid Prime",
+          "id": "deathspitter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Tyranid Prime",
+          "id": "devourer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tyranid Prime",
+          "id": "spinefists",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Tyranid Prime",
+          "id": "tyranid-warrior-claws-and-talons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tyranid Prime",
+          "id": "venom-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Tyranid Warrior",
+          "id": "barbed-strangler",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Tyranid Warrior",
+          "id": "deathspitter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Tyranid Warrior",
+          "id": "devourer",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Tyranid Warrior",
+          "id": "spinefists",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Tyranid Warrior",
+          "id": "tyranid-warrior-claws-and-talons",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Tyranid Warrior",
+          "id": "venom-cannon",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "winged-hive-tyrant",
@@ -173,7 +594,122 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Winged Hive Tyrant",
+          "models": 1,
+          "items": [
+            {
+              "id": "monstrous-bonesword-and-lash-whip",
+              "count": 1
+            },
+            {
+              "id": "tyrant-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Winged Hive Tyrant",
+          "items": [
+            {
+              "id": "monstrous-bonesword-and-lash-whip",
+              "count": 1
+            },
+            {
+              "id": "tyrant-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Winged Hive Tyrant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-venom-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "monstrous-bonesword-and-lash-whip",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "monstrous-scything-talons",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "stranglethorn-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Winged Hive Tyrant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "tyrant-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Winged Hive Tyrant",
+          "id": "heavy-venom-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Winged Hive Tyrant",
+          "id": "monstrous-bonesword-and-lash-whip",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Winged Hive Tyrant",
+          "id": "monstrous-scything-talons",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Winged Hive Tyrant",
+          "id": "stranglethorn-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Winged Hive Tyrant",
+          "id": "tyrant-talons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "harridan",
@@ -209,7 +745,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Harridan",
+          "models": 1,
+          "items": [
+            {
+              "id": "dire-bio-cannon",
+              "count": 2
+            },
+            {
+              "id": "gargantuan-scything-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Harridan",
+          "items": [
+            {
+              "id": "dire-bio-cannon",
+              "count": 2
+            },
+            {
+              "id": "gargantuan-scything-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Harridan",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dire-bio-cannon",
+                "count": 2
+              },
+              {
+                "id": "gargantuan-scything-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Harridan",
+          "id": "dire-bio-cannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Harridan",
+          "id": "gargantuan-scything-talons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "norn-emissary",
@@ -245,7 +850,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Norn Emissary",
+          "models": 1,
+          "items": [
+            {
+              "id": "monstrous-rending-claws",
+              "count": 1
+            },
+            {
+              "id": "monstrous-scything-talons-norn-emissary",
+              "count": 1
+            },
+            {
+              "id": "psychic-tendril",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Norn Emissary",
+          "items": [
+            {
+              "id": "monstrous-rending-claws",
+              "count": 1
+            },
+            {
+              "id": "monstrous-scything-talons-norn-emissary",
+              "count": 1
+            },
+            {
+              "id": "psychic-tendril",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Norn Emissary",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "monstrous-rending-claws",
+                "count": 1
+              },
+              {
+                "id": "monstrous-scything-talons-norn-emissary",
+                "count": 1
+              },
+              {
+                "id": "psychic-tendril",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Norn Emissary",
+          "id": "monstrous-rending-claws",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Norn Emissary",
+          "id": "monstrous-scything-talons-norn-emissary",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Norn Emissary",
+          "id": "psychic-tendril",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "winged-tyranid-prime",
@@ -279,7 +971,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Winged Tyranid Prime",
+          "models": 1,
+          "items": [
+            {
+              "id": "prime-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Winged Tyranid Prime",
+          "items": [
+            {
+              "id": "prime-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Winged Tyranid Prime",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "prime-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Winged Tyranid Prime",
+          "id": "prime-talons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "von-ryans-leapers",
@@ -322,7 +1065,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Von Ryan’s Leaper",
+          "models": 3,
+          "items": [
+            {
+              "id": "leapers-talons",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Von Ryan’s Leaper",
+          "items": [
+            {
+              "id": "leapers-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Von Ryan’s Leaper",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "leapers-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Von Ryan’s Leaper",
+          "id": "leapers-talons",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hierophant",
@@ -360,7 +1154,112 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hierophant",
+          "models": 1,
+          "items": [
+            {
+              "id": "bio-plasma-torrent",
+              "count": 1
+            },
+            {
+              "id": "dire-bio-cannon",
+              "count": 2
+            },
+            {
+              "id": "lashwhip-pods",
+              "count": 1
+            },
+            {
+              "id": "titanic-scything-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hierophant",
+          "items": [
+            {
+              "id": "bio-plasma-torrent",
+              "count": 1
+            },
+            {
+              "id": "dire-bio-cannon",
+              "count": 2
+            },
+            {
+              "id": "lashwhip-pods",
+              "count": 1
+            },
+            {
+              "id": "titanic-scything-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hierophant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bio-plasma-torrent",
+                "count": 1
+              },
+              {
+                "id": "dire-bio-cannon",
+                "count": 2
+              },
+              {
+                "id": "lashwhip-pods",
+                "count": 1
+              },
+              {
+                "id": "titanic-scything-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Hierophant",
+          "id": "bio-plasma-torrent",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hierophant",
+          "id": "dire-bio-cannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Hierophant",
+          "id": "lashwhip-pods",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hierophant",
+          "id": "titanic-scything-talons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "the-swarmlord",
@@ -395,7 +1294,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "The Swarmlord",
+          "models": 1,
+          "items": [
+            {
+              "id": "bone-sabres",
+              "count": 1
+            },
+            {
+              "id": "synaptic-pulse",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "The Swarmlord",
+          "items": [
+            {
+              "id": "bone-sabres",
+              "count": 1
+            },
+            {
+              "id": "synaptic-pulse",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "The Swarmlord",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bone-sabres",
+                "count": 1
+              },
+              {
+                "id": "synaptic-pulse",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "The Swarmlord",
+          "id": "bone-sabres",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "The Swarmlord",
+          "id": "synaptic-pulse",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "exocrine",
@@ -431,7 +1399,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Exocrine",
+          "models": 1,
+          "items": [
+            {
+              "id": "bio-plasmic-cannon",
+              "count": 1
+            },
+            {
+              "id": "powerful-limbs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Exocrine",
+          "items": [
+            {
+              "id": "bio-plasmic-cannon",
+              "count": 1
+            },
+            {
+              "id": "powerful-limbs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Exocrine",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bio-plasmic-cannon",
+                "count": 1
+              },
+              {
+                "id": "powerful-limbs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Exocrine",
+          "id": "bio-plasmic-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Exocrine",
+          "id": "powerful-limbs",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "venomthropes",
@@ -474,7 +1511,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Venomthrope",
+          "models": 3,
+          "items": [
+            {
+              "id": "toxic-lashes",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Venomthrope",
+          "items": [
+            {
+              "id": "toxic-lashes",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Venomthrope",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "toxic-lashes",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Venomthrope",
+          "id": "toxic-lashes",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tyranid-warriors-with-melee-bio-weapons",
@@ -541,7 +1629,97 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tyranid Prime",
+          "models": 1,
+          "items": [
+            {
+              "id": "tyranid-warrior-claws-and-talons-tyranid-warriors-with-melee-bio-weapons",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Tyranid Warrior",
+          "models": 2,
+          "items": [
+            {
+              "id": "tyranid-warrior-claws-and-talons-tyranid-warriors-with-melee-bio-weapons",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Tyranid Prime",
+          "items": [
+            {
+              "id": "tyranid-warrior-claws-and-talons-tyranid-warriors-with-melee-bio-weapons",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Tyranid Warrior",
+          "items": [
+            {
+              "id": "tyranid-warrior-claws-and-talons-tyranid-warriors-with-melee-bio-weapons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Tyranid Prime",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "tyranid-warrior-claws-and-talons-tyranid-warriors-with-melee-bio-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tyranid Warrior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "tyranid-warrior-claws-and-talons-tyranid-warriors-with-melee-bio-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Tyranid Prime",
+          "id": "tyranid-warrior-claws-and-talons-tyranid-warriors-with-melee-bio-weapons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tyranid Warrior",
+          "id": "tyranid-warrior-claws-and-talons-tyranid-warriors-with-melee-bio-weapons",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "spore-mines",
@@ -582,7 +1760,31 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Spore Mine",
+          "models": 3,
+          "items": []
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Spore Mine",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            []
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tyrannocyte",
@@ -617,7 +1819,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tyrannocyte",
+          "models": 1,
+          "items": [
+            {
+              "id": "flensing-whips",
+              "count": 1
+            },
+            {
+              "id": "tyrannocyte-bio-weapons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Tyrannocyte",
+          "items": [
+            {
+              "id": "flensing-whips",
+              "count": 1
+            },
+            {
+              "id": "tyrannocyte-bio-weapons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Tyrannocyte",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "flensing-whips",
+                "count": 1
+              },
+              {
+                "id": "tyrannocyte-bio-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Tyrannocyte",
+          "id": "flensing-whips",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tyrannocyte",
+          "id": "tyrannocyte-bio-weapons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ripper-swarms",
@@ -669,7 +1940,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ripper Swarm",
+          "models": 1,
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ripper Swarm",
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ripper Swarm",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "spinemaws",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Ripper Swarm",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chitinous-claws-and-teeth",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Ripper Swarm",
+          "id": "chitinous-claws-and-teeth",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Ripper Swarm",
+          "id": "spinemaws",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": [
+        {
+          "model": "Ripper Swarm",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "spinemaws",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "biovores",
@@ -722,7 +2080,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Biovore",
+          "models": 1,
+          "items": [
+            {
+              "id": "chitin-barbed-limbs",
+              "count": 1
+            },
+            {
+              "id": "spore-mine-launcher",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Biovore",
+          "items": [
+            {
+              "id": "chitin-barbed-limbs",
+              "count": 1
+            },
+            {
+              "id": "spore-mine-launcher",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Biovore",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chitin-barbed-limbs",
+                "count": 1
+              },
+              {
+                "id": "spore-mine-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Biovore",
+          "id": "chitin-barbed-limbs",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Biovore",
+          "id": "spore-mine-launcher",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "deathleaper",
@@ -739,7 +2166,8 @@
         },
         "default_weapon_ids": [
           "lictor-claws-and-talons"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -756,7 +2184,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Deathleaper",
+          "models": 1,
+          "items": [
+            {
+              "id": "lictor-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Deathleaper",
+          "items": [
+            {
+              "id": "lictor-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Deathleaper",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lictor-claws-and-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Deathleaper",
+          "id": "lictor-claws-and-talons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hyperadapted-raveners",
@@ -809,7 +2288,134 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ravener Prime",
+          "models": 1,
+          "items": [
+            {
+              "id": "prime-claws-and-talons",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Raveners",
+          "models": 4,
+          "items": [
+            {
+              "id": "ravener-heavy-claws-and-talons",
+              "count": 4
+            },
+            {
+              "id": "venom-bolt",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ravener Prime",
+          "items": [
+            {
+              "id": "prime-claws-and-talons",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Raveners",
+          "items": [
+            {
+              "id": "ravener-heavy-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ravener Prime",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "prime-claws-and-talons",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Raveners",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ravener-heavy-claws-and-talons",
+                "count": 1
+              },
+              {
+                "id": "venom-bolt",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ravener-heavy-claws-and-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "venom-bolt",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Ravener Prime",
+          "id": "prime-claws-and-talons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Raveners",
+          "id": "ravener-heavy-claws-and-talons",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Raveners",
+          "id": "venom-bolt",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "norn-assimilator",
@@ -844,7 +2450,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Norn Assimilator",
+          "models": 1,
+          "items": [
+            {
+              "id": "monstrous-scything-talons-norn-assimilator",
+              "count": 1
+            },
+            {
+              "id": "toxinjector-harpoon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Norn Assimilator",
+          "items": [
+            {
+              "id": "monstrous-scything-talons-norn-assimilator",
+              "count": 1
+            },
+            {
+              "id": "toxinjector-harpoon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Norn Assimilator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "monstrous-scything-talons-norn-assimilator",
+                "count": 1
+              },
+              {
+                "id": "toxinjector-harpoon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Norn Assimilator",
+          "id": "monstrous-scything-talons-norn-assimilator",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Norn Assimilator",
+          "id": "toxinjector-harpoon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sporocyst",
@@ -879,7 +2554,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sporocyst",
+          "models": 1,
+          "items": [
+            {
+              "id": "flensing-whips",
+              "count": 1
+            },
+            {
+              "id": "sporocyst-bio-weapons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sporocyst",
+          "items": [
+            {
+              "id": "flensing-whips",
+              "count": 1
+            },
+            {
+              "id": "sporocyst-bio-weapons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sporocyst",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "flensing-whips",
+                "count": 1
+              },
+              {
+                "id": "sporocyst-bio-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sporocyst",
+          "id": "flensing-whips",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sporocyst",
+          "id": "sporocyst-bio-weapons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tyrannofex",
@@ -916,7 +2660,128 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tyrannofex",
+          "models": 1,
+          "items": [
+            {
+              "id": "fleshborer-hive",
+              "count": 1
+            },
+            {
+              "id": "powerful-limbs-tyrannofex",
+              "count": 1
+            },
+            {
+              "id": "stinger-salvoes",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Tyrannofex",
+          "items": [
+            {
+              "id": "fleshborer-hive",
+              "count": 1
+            },
+            {
+              "id": "powerful-limbs-tyrannofex",
+              "count": 1
+            },
+            {
+              "id": "stinger-salvoes",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Tyrannofex",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "acid-spray",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "fleshborer-hive",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rupture-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tyrannofex",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "powerful-limbs-tyrannofex",
+                "count": 1
+              },
+              {
+                "id": "stinger-salvoes",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Tyrannofex",
+          "id": "acid-spray",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Tyrannofex",
+          "id": "fleshborer-hive",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tyrannofex",
+          "id": "powerful-limbs-tyrannofex",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tyrannofex",
+          "id": "rupture-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Tyrannofex",
+          "id": "stinger-salvoes",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "neurolictor",
@@ -950,7 +2815,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Neurolictor",
+          "models": 1,
+          "items": [
+            {
+              "id": "piercing-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Neurolictor",
+          "items": [
+            {
+              "id": "piercing-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Neurolictor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "piercing-claws-and-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Neurolictor",
+          "id": "piercing-claws-and-talons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "psychophage",
@@ -986,7 +2902,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Psychophage",
+          "models": 1,
+          "items": [
+            {
+              "id": "psychoclastic-torrent",
+              "count": 1
+            },
+            {
+              "id": "talons-and-betentacled-maw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Psychophage",
+          "items": [
+            {
+              "id": "psychoclastic-torrent",
+              "count": 1
+            },
+            {
+              "id": "talons-and-betentacled-maw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Psychophage",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "psychoclastic-torrent",
+                "count": 1
+              },
+              {
+                "id": "talons-and-betentacled-maw",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Psychophage",
+          "id": "psychoclastic-torrent",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Psychophage",
+          "id": "talons-and-betentacled-maw",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "zoanthropes",
@@ -1054,7 +3039,133 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Neurothrope",
+          "models": 1,
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth-zoanthropes",
+              "count": 1
+            },
+            {
+              "id": "warp-blast",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Zoanthrope",
+          "models": 2,
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth-zoanthropes",
+              "count": 2
+            },
+            {
+              "id": "warp-blast",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Neurothrope",
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth-zoanthropes",
+              "count": 1
+            },
+            {
+              "id": "warp-blast",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Zoanthrope",
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth-zoanthropes",
+              "count": 1
+            },
+            {
+              "id": "warp-blast",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Neurothrope",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chitinous-claws-and-teeth-zoanthropes",
+                "count": 1
+              },
+              {
+                "id": "warp-blast",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Zoanthrope",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chitinous-claws-and-teeth-zoanthropes",
+                "count": 1
+              },
+              {
+                "id": "warp-blast",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Neurothrope",
+          "id": "chitinous-claws-and-teeth-zoanthropes",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Neurothrope",
+          "id": "warp-blast",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Zoanthrope",
+          "id": "chitinous-claws-and-teeth-zoanthropes",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Zoanthrope",
+          "id": "warp-blast",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "broodlord",
@@ -1089,7 +3200,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Broodlord",
+          "models": 1,
+          "items": [
+            {
+              "id": "broodlord-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Broodlord",
+          "items": [
+            {
+              "id": "broodlord-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Broodlord",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "broodlord-claws-and-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Broodlord",
+          "id": "broodlord-claws-and-talons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "harpy",
@@ -1126,7 +3288,116 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Harpy",
+          "models": 1,
+          "items": [
+            {
+              "id": "scything-wings",
+              "count": 1
+            },
+            {
+              "id": "stinger-salvoes",
+              "count": 1
+            },
+            {
+              "id": "twin-stranglethorn-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Harpy",
+          "items": [
+            {
+              "id": "scything-wings",
+              "count": 1
+            },
+            {
+              "id": "stinger-salvoes",
+              "count": 1
+            },
+            {
+              "id": "twin-stranglethorn-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Harpy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "scything-wings",
+                "count": 1
+              },
+              {
+                "id": "stinger-salvoes",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Harpy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "twin-heavy-venom-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-stranglethorn-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Harpy",
+          "id": "scything-wings",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Harpy",
+          "id": "stinger-salvoes",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Harpy",
+          "id": "twin-heavy-venom-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Harpy",
+          "id": "twin-stranglethorn-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "parasite-of-mortrex",
@@ -1161,7 +3432,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Parasite of Mortrex",
+          "models": 1,
+          "items": [
+            {
+              "id": "barbed-ovipositor",
+              "count": 1
+            },
+            {
+              "id": "clawed-limbs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Parasite of Mortrex",
+          "items": [
+            {
+              "id": "barbed-ovipositor",
+              "count": 1
+            },
+            {
+              "id": "clawed-limbs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Parasite of Mortrex",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "barbed-ovipositor",
+                "count": 1
+              },
+              {
+                "id": "clawed-limbs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Parasite of Mortrex",
+          "id": "barbed-ovipositor",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Parasite of Mortrex",
+          "id": "clawed-limbs",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tyrant-guard",
@@ -1204,7 +3544,82 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tyrant Guard",
+          "models": 3,
+          "items": [
+            {
+              "id": "scything-talons-and-rending-claws",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Tyrant Guard",
+          "items": [
+            {
+              "id": "scything-talons-and-rending-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Tyrant Guard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bone-cleaver-lash-whip-and-rending-claws",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "crushing-claws-and-rending-claws",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "scything-talons-and-rending-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Tyrant Guard",
+          "id": "bone-cleaver-lash-whip-and-rending-claws",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Tyrant Guard",
+          "id": "crushing-claws-and-rending-claws",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Tyrant Guard",
+          "id": "scything-talons-and-rending-claws",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "screamer-killer",
@@ -1239,7 +3654,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Screamer-Killer",
+          "models": 1,
+          "items": [
+            {
+              "id": "bio-plasmic-scream",
+              "count": 1
+            },
+            {
+              "id": "scream-killer-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Screamer-Killer",
+          "items": [
+            {
+              "id": "bio-plasmic-scream",
+              "count": 1
+            },
+            {
+              "id": "scream-killer-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Screamer-Killer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bio-plasmic-scream",
+                "count": 1
+              },
+              {
+                "id": "scream-killer-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Screamer-Killer",
+          "id": "bio-plasmic-scream",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Screamer-Killer",
+          "id": "scream-killer-talons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "mucolid-spores",
@@ -1280,7 +3764,31 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Mucolid Spore",
+          "models": 1,
+          "items": []
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Mucolid Spore",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            []
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hormagaunts",
@@ -1323,7 +3831,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hormagaunt",
+          "models": 10,
+          "items": [
+            {
+              "id": "hormagaunt-talons",
+              "count": 10
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hormagaunt",
+          "items": [
+            {
+              "id": "hormagaunt-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hormagaunt",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hormagaunt-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Hormagaunt",
+          "id": "hormagaunt-talons",
+          "input": "stepper",
+          "default": 10
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "genestealers",
@@ -1366,7 +3925,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Genestealer",
+          "models": 5,
+          "items": [
+            {
+              "id": "genestealers-claws-and-talons",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Genestealer",
+          "items": [
+            {
+              "id": "genestealers-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Genestealer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "genestealers-claws-and-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Genestealer",
+          "id": "genestealers-claws-and-talons",
+          "input": "stepper",
+          "default": 5
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "toxicrene",
@@ -1401,7 +4011,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Toxicrene",
+          "models": 1,
+          "items": [
+            {
+              "id": "massive-toxic-lashes",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Toxicrene",
+          "items": [
+            {
+              "id": "massive-toxic-lashes",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Toxicrene",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "massive-toxic-lashes",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Toxicrene",
+          "id": "massive-toxic-lashes",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "pyrovores",
@@ -1454,7 +4115,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Pyrovore",
+          "models": 1,
+          "items": [
+            {
+              "id": "chitin-barbed-limbs",
+              "count": 1
+            },
+            {
+              "id": "flamespurt",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Pyrovore",
+          "items": [
+            {
+              "id": "chitin-barbed-limbs",
+              "count": 1
+            },
+            {
+              "id": "flamespurt",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Pyrovore",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chitin-barbed-limbs",
+                "count": 1
+              },
+              {
+                "id": "flamespurt",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Pyrovore",
+          "id": "chitin-barbed-limbs",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Pyrovore",
+          "id": "flamespurt",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "neurotyrant",
@@ -1489,7 +4219,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Neurotyrant",
+          "models": 1,
+          "items": [
+            {
+              "id": "neurotyrant-claws-and-lashes",
+              "count": 1
+            },
+            {
+              "id": "psychic-scream",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Neurotyrant",
+          "items": [
+            {
+              "id": "neurotyrant-claws-and-lashes",
+              "count": 1
+            },
+            {
+              "id": "psychic-scream",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Neurotyrant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "neurotyrant-claws-and-lashes",
+                "count": 1
+              },
+              {
+                "id": "psychic-scream",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Neurotyrant",
+          "id": "neurotyrant-claws-and-lashes",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Neurotyrant",
+          "id": "psychic-scream",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "termagants",
@@ -1533,7 +4332,334 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Termagant",
+          "models": 10,
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth-termagants",
+              "count": 10
+            },
+            {
+              "id": "fleshborer",
+              "count": 10
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Termagant",
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth-termagants",
+              "count": 1
+            },
+            {
+              "id": "fleshborer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Termagant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chitinous-claws-and-teeth-termagants",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Termagant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "fleshborer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shardlauncher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "spike-rifle",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "strangleweb",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "termagant-devourer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "termagant-spinefists",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Termagant",
+          "breakpoints": [
+            {
+              "models": 10,
+              "choices": 1
+            },
+            {
+              "models": 20,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "shardlauncher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Termagant",
+          "breakpoints": [
+            {
+              "models": 10,
+              "choices": 1
+            },
+            {
+              "models": 20,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "spike-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Termagant",
+          "breakpoints": [
+            {
+              "models": 10,
+              "choices": 1
+            },
+            {
+              "models": 20,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "strangleweb",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Termagant",
+          "id": "chitinous-claws-and-teeth-termagants",
+          "input": "stepper",
+          "default": 10
+        },
+        {
+          "model": "Termagant",
+          "id": "fleshborer",
+          "input": "stepper",
+          "default": 10
+        },
+        {
+          "model": "Termagant",
+          "id": "shardlauncher",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Termagant",
+          "id": "spike-rifle",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Termagant",
+          "id": "strangleweb",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Termagant",
+          "id": "termagant-devourer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Termagant",
+          "id": "termagant-spinefists",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": [
+        {
+          "model": "Termagant",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "fleshborer",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            },
+            {
+              "items": [
+                {
+                  "id": "shardlauncher",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            },
+            {
+              "items": [
+                {
+                  "id": "spike-rifle",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            },
+            {
+              "items": [
+                {
+                  "id": "strangleweb",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            }
+          ]
+        },
+        {
+          "model": "Termagant",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "shardlauncher",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            },
+            {
+              "items": [
+                {
+                  "id": "spike-rifle",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            },
+            {
+              "items": [
+                {
+                  "id": "strangleweb",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            },
+            {
+              "items": [
+                {
+                  "id": "termagant-devourer",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        },
+        {
+          "model": "Termagant",
+          "choices": [
+            {
+              "items": [
+                {
+                  "id": "shardlauncher",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            },
+            {
+              "items": [
+                {
+                  "id": "spike-rifle",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            },
+            {
+              "items": [
+                {
+                  "id": "strangleweb",
+                  "count": 1
+                }
+              ],
+              "substitute": true
+            },
+            {
+              "items": [
+                {
+                  "id": "termagant-spinefists",
+                  "count": 1
+                }
+              ],
+              "substitute": false
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "unit_id": "tyranid-prime-with-lash-whip",
@@ -1569,7 +4695,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tyranid Prime with Lash Whip",
+          "models": 1,
+          "items": [
+            {
+              "id": "lash-whip",
+              "count": 1
+            },
+            {
+              "id": "rending-claw",
+              "count": 1
+            },
+            {
+              "id": "scything-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Tyranid Prime with Lash Whip",
+          "items": [
+            {
+              "id": "lash-whip",
+              "count": 1
+            },
+            {
+              "id": "rending-claw",
+              "count": 1
+            },
+            {
+              "id": "scything-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Tyranid Prime with Lash Whip",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lash-whip",
+                "count": 1
+              },
+              {
+                "id": "rending-claw",
+                "count": 1
+              },
+              {
+                "id": "scything-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Tyranid Prime with Lash Whip",
+          "id": "lash-whip",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tyranid Prime with Lash Whip",
+          "id": "rending-claw",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tyranid Prime with Lash Whip",
+          "id": "scything-talons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hive-guard",
@@ -1642,7 +4855,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hive Guard",
+          "models": 3,
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth-hive-guard",
+              "count": 3
+            },
+            {
+              "id": "shockcannon",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hive Guard",
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth-hive-guard",
+              "count": 1
+            },
+            {
+              "id": "shockcannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hive Guard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chitinous-claws-and-teeth-hive-guard",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hive Guard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "impaler-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shockcannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Hive Guard",
+          "id": "chitinous-claws-and-teeth-hive-guard",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Hive Guard",
+          "id": "impaler-cannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Hive Guard",
+          "id": "shockcannon",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "barbgaunts",
@@ -1686,7 +4990,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Barbgaunt",
+          "models": 5,
+          "items": [
+            {
+              "id": "barblauncher",
+              "count": 5
+            },
+            {
+              "id": "chitinous-claws-and-teeth-barbgaunts",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Barbgaunt",
+          "items": [
+            {
+              "id": "barblauncher",
+              "count": 1
+            },
+            {
+              "id": "chitinous-claws-and-teeth-barbgaunts",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Barbgaunt",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "barblauncher",
+                "count": 1
+              },
+              {
+                "id": "chitinous-claws-and-teeth-barbgaunts",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Barbgaunt",
+          "id": "barblauncher",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Barbgaunt",
+          "id": "chitinous-claws-and-teeth-barbgaunts",
+          "input": "stepper",
+          "default": 5
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "neurogaunts",
@@ -1766,7 +5139,97 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Neurogaunt Nodebeast",
+          "models": 1,
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth-neurogaunts",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Neurogaunt",
+          "models": 10,
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth-neurogaunts",
+              "count": 10
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Neurogaunt Nodebeast",
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth-neurogaunts",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Neurogaunt",
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth-neurogaunts",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Neurogaunt Nodebeast",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chitinous-claws-and-teeth-neurogaunts",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Neurogaunt",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chitinous-claws-and-teeth-neurogaunts",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Neurogaunt Nodebeast",
+          "id": "chitinous-claws-and-teeth-neurogaunts",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Neurogaunt",
+          "id": "chitinous-claws-and-teeth-neurogaunts",
+          "input": "stepper",
+          "default": 10
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hive-crone",
@@ -1805,7 +5268,130 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hive Crone",
+          "models": 1,
+          "items": [
+            {
+              "id": "drool-cannon",
+              "count": 1
+            },
+            {
+              "id": "scything-wings",
+              "count": 1
+            },
+            {
+              "id": "stinger-salvoes",
+              "count": 1
+            },
+            {
+              "id": "tentaclids",
+              "count": 1
+            },
+            {
+              "id": "thorax-spur",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hive Crone",
+          "items": [
+            {
+              "id": "drool-cannon",
+              "count": 1
+            },
+            {
+              "id": "scything-wings",
+              "count": 1
+            },
+            {
+              "id": "stinger-salvoes",
+              "count": 1
+            },
+            {
+              "id": "tentaclids",
+              "count": 1
+            },
+            {
+              "id": "thorax-spur",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hive Crone",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "drool-cannon",
+                "count": 1
+              },
+              {
+                "id": "scything-wings",
+                "count": 1
+              },
+              {
+                "id": "stinger-salvoes",
+                "count": 1
+              },
+              {
+                "id": "tentaclids",
+                "count": 1
+              },
+              {
+                "id": "thorax-spur",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Hive Crone",
+          "id": "drool-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hive Crone",
+          "id": "scything-wings",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hive Crone",
+          "id": "stinger-salvoes",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hive Crone",
+          "id": "tentaclids",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hive Crone",
+          "id": "thorax-spur",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tervigon",
@@ -1841,7 +5427,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tervigon",
+          "models": 1,
+          "items": [
+            {
+              "id": "massive-scything-talons",
+              "count": 1
+            },
+            {
+              "id": "stinger-salvoes",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Tervigon",
+          "items": [
+            {
+              "id": "massive-scything-talons",
+              "count": 1
+            },
+            {
+              "id": "stinger-salvoes",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Tervigon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "massive-crushing-claws",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "massive-scything-talons",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tervigon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "stinger-salvoes",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Tervigon",
+          "id": "massive-crushing-claws",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Tervigon",
+          "id": "massive-scything-talons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tervigon",
+          "id": "stinger-salvoes",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "old-one-eye",
@@ -1876,7 +5553,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Old One Eye",
+          "models": 1,
+          "items": [
+            {
+              "id": "old-one-eyes-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Old One Eye",
+          "items": [
+            {
+              "id": "old-one-eyes-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Old One Eye",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "old-one-eyes-claws-and-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Old One Eye",
+          "id": "old-one-eyes-claws-and-talons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "maleceptor",
@@ -1912,7 +5640,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Maleceptor",
+          "models": 1,
+          "items": [
+            {
+              "id": "massive-scything-talons-maleceptor",
+              "count": 1
+            },
+            {
+              "id": "psychic-overload",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Maleceptor",
+          "items": [
+            {
+              "id": "massive-scything-talons-maleceptor",
+              "count": 1
+            },
+            {
+              "id": "psychic-overload",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Maleceptor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "massive-scything-talons-maleceptor",
+                "count": 1
+              },
+              {
+                "id": "psychic-overload",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Maleceptor",
+          "id": "massive-scything-talons-maleceptor",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Maleceptor",
+          "id": "psychic-overload",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "carnifexes",
@@ -1958,7 +5755,403 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Carnifex",
+          "models": 1,
+          "items": [
+            {
+              "id": "carnifex-extra-scything-talons",
+              "count": 1
+            },
+            {
+              "id": "carnifex-scything-talons",
+              "count": 1
+            },
+            {
+              "id": "chitinous-claws-and-teeth-carnifexes",
+              "count": 1
+            }
+          ],
+          "individual": true
+        }
+      ],
+      "templates": [
+        {
+          "model": "Carnifex",
+          "items": [
+            {
+              "id": "carnifex-extra-scything-talons",
+              "count": 1
+            },
+            {
+              "id": "carnifex-scything-talons",
+              "count": 1
+            },
+            {
+              "id": "chitinous-claws-and-teeth-carnifexes",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Carnifex",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "bio-plasma",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Carnifex",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "spine-banks",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Carnifex",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "carnifex-crushing-claws",
+                "count": 1
+              },
+              {
+                "id": "carnifex-extra-scything-talons",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "carnifex-crushing-claws",
+                "count": 1
+              },
+              {
+                "id": "carnifex-scything-talons",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "carnifex-crushing-claws",
+                "count": 1
+              },
+              {
+                "id": "deathspitters-with-slimer-maggots",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "carnifex-crushing-claws",
+                "count": 1
+              },
+              {
+                "id": "deathspitters-with-slimer-maggots",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "carnifex-crushing-claws",
+                "count": 1
+              },
+              {
+                "id": "devourers-with-brainleech-worms",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "carnifex-crushing-claws",
+                "count": 1
+              },
+              {
+                "id": "devourers-with-brainleech-worms",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "carnifex-crushing-claws",
+                "count": 1
+              },
+              {
+                "id": "heavy-venom-cannon-carnifexes",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "carnifex-crushing-claws",
+                "count": 1
+              },
+              {
+                "id": "stranglethorn-cannon-carnifexes",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "carnifex-crushing-claws",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "carnifex-extra-scything-talons",
+                "count": 1
+              },
+              {
+                "id": "carnifex-scything-talons",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "carnifex-extra-scything-talons",
+                "count": 1
+              },
+              {
+                "id": "deathspitters-with-slimer-maggots",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "carnifex-extra-scything-talons",
+                "count": 1
+              },
+              {
+                "id": "devourers-with-brainleech-worms",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "carnifex-scything-talons",
+                "count": 1
+              },
+              {
+                "id": "deathspitters-with-slimer-maggots",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "carnifex-scything-talons",
+                "count": 1
+              },
+              {
+                "id": "devourers-with-brainleech-worms",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "carnifex-scything-talons",
+                "count": 1
+              },
+              {
+                "id": "heavy-venom-cannon-carnifexes",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "carnifex-scything-talons",
+                "count": 1
+              },
+              {
+                "id": "stranglethorn-cannon-carnifexes",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "deathspitters-with-slimer-maggots",
+                "count": 1
+              },
+              {
+                "id": "devourers-with-brainleech-worms",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "deathspitters-with-slimer-maggots",
+                "count": 1
+              },
+              {
+                "id": "heavy-venom-cannon-carnifexes",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "deathspitters-with-slimer-maggots",
+                "count": 1
+              },
+              {
+                "id": "stranglethorn-cannon-carnifexes",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "deathspitters-with-slimer-maggots",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "devourers-with-brainleech-worms",
+                "count": 1
+              },
+              {
+                "id": "heavy-venom-cannon-carnifexes",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "devourers-with-brainleech-worms",
+                "count": 1
+              },
+              {
+                "id": "stranglethorn-cannon-carnifexes",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "devourers-with-brainleech-worms",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Carnifex",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chitinous-claws-and-teeth-carnifexes",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Carnifex",
+          "id": "bio-plasma",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Carnifex",
+          "id": "carnifex-crushing-claws",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Carnifex",
+          "id": "carnifex-crushing-claws",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Carnifex",
+          "id": "carnifex-extra-scything-talons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Carnifex",
+          "id": "carnifex-scything-talons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Carnifex",
+          "id": "chitinous-claws-and-teeth-carnifexes",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Carnifex",
+          "id": "deathspitters-with-slimer-maggots",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Carnifex",
+          "id": "deathspitters-with-slimer-maggots",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Carnifex",
+          "id": "devourers-with-brainleech-worms",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Carnifex",
+          "id": "devourers-with-brainleech-worms",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Carnifex",
+          "id": "heavy-venom-cannon-carnifexes",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Carnifex",
+          "id": "spine-banks",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Carnifex",
+          "id": "stranglethorn-cannon-carnifexes",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hive-tyrant",
@@ -1993,7 +6186,152 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hive Tyrant",
+          "models": 1,
+          "items": [
+            {
+              "id": "monstrous-bonesword-and-lash-whip",
+              "count": 1
+            },
+            {
+              "id": "monstrous-scything-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hive Tyrant",
+          "items": [
+            {
+              "id": "monstrous-bonesword-and-lash-whip",
+              "count": 1
+            },
+            {
+              "id": "monstrous-scything-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hive Tyrant",
+          "picks": 1,
+          "repeats": true,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-venom-cannon",
+                "count": 1
+              },
+              {
+                "id": "monstrous-bonesword-and-lash-whip",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-venom-cannon",
+                "count": 1
+              },
+              {
+                "id": "monstrous-scything-talons",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "monstrous-bonesword-and-lash-whip",
+                "count": 1
+              },
+              {
+                "id": "monstrous-scything-talons",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "monstrous-bonesword-and-lash-whip",
+                "count": 1
+              },
+              {
+                "id": "stranglethorn-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "monstrous-scything-talons",
+                "count": 1
+              },
+              {
+                "id": "stranglethorn-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "monstrous-scything-talons",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Hive Tyrant",
+          "id": "heavy-venom-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hive Tyrant",
+          "id": "heavy-venom-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hive Tyrant",
+          "id": "monstrous-bonesword-and-lash-whip",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hive Tyrant",
+          "id": "monstrous-scything-talons",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hive Tyrant",
+          "id": "monstrous-scything-talons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hive Tyrant",
+          "id": "stranglethorn-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hive Tyrant",
+          "id": "stranglethorn-cannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "gargoyles",
@@ -2038,7 +6376,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Gargoyle",
+          "models": 10,
+          "items": [
+            {
+              "id": "blinding-venom",
+              "count": 10
+            },
+            {
+              "id": "fleshborer",
+              "count": 10
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Gargoyle",
+          "items": [
+            {
+              "id": "blinding-venom",
+              "count": 1
+            },
+            {
+              "id": "fleshborer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Gargoyle",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blinding-venom",
+                "count": 1
+              },
+              {
+                "id": "fleshborer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Gargoyle",
+          "id": "blinding-venom",
+          "input": "stepper",
+          "default": 10
+        },
+        {
+          "model": "Gargoyle",
+          "id": "fleshborer",
+          "input": "stepper",
+          "default": 10
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "haruspex",
@@ -2075,7 +6482,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Haruspex",
+          "models": 1,
+          "items": [
+            {
+              "id": "grasping-tongue",
+              "count": 1
+            },
+            {
+              "id": "ravenous-maw",
+              "count": 1
+            },
+            {
+              "id": "shovelling-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Haruspex",
+          "items": [
+            {
+              "id": "grasping-tongue",
+              "count": 1
+            },
+            {
+              "id": "ravenous-maw",
+              "count": 1
+            },
+            {
+              "id": "shovelling-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Haruspex",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "grasping-tongue",
+                "count": 1
+              },
+              {
+                "id": "ravenous-maw",
+                "count": 1
+              },
+              {
+                "id": "shovelling-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Haruspex",
+          "id": "grasping-tongue",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Haruspex",
+          "id": "ravenous-maw",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Haruspex",
+          "id": "shovelling-claws",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lictor",
@@ -2109,7 +6603,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lictor",
+          "models": 1,
+          "items": [
+            {
+              "id": "lictor-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lictor",
+          "items": [
+            {
+              "id": "lictor-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lictor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lictor-claws-and-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lictor",
+          "id": "lictor-claws-and-talons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "raveners",
@@ -2143,7 +6688,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ravener",
+          "models": 5,
+          "items": [
+            {
+              "id": "ravener-claws-and-talons",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ravener",
+          "items": [
+            {
+              "id": "ravener-claws-and-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ravener",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ravener-claws-and-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Ravener",
+          "id": "ravener-claws-and-talons",
+          "input": "stepper",
+          "default": 5
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "the-red-terror",
@@ -2177,7 +6773,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "The Red Terror",
+          "models": 1,
+          "items": [
+            {
+              "id": "gaping-maw",
+              "count": 1
+            },
+            {
+              "id": "scything-talons-the-red-terror",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "The Red Terror",
+          "items": [
+            {
+              "id": "gaping-maw",
+              "count": 1
+            },
+            {
+              "id": "scything-talons-the-red-terror",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "The Red Terror",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gaping-maw",
+                "count": 1
+              },
+              {
+                "id": "scything-talons-the-red-terror",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "The Red Terror",
+          "id": "gaping-maw",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "The Red Terror",
+          "id": "scything-talons-the-red-terror",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "terror-of-vardenghast",
@@ -2214,7 +6879,48 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Terror of Vardenghast",
+          "models": 1,
+          "items": [
+            {
+              "id": "prime-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Terror of Vardenghast",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "prime-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Terror of Vardenghast",
+          "id": "prime-talons",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "vardenghast-swarm-barbgaunts",
@@ -2252,7 +6958,62 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Barbgaunt",
+          "models": 5,
+          "items": [
+            {
+              "id": "barblauncher-vardenghast-swarm-barbgaunts",
+              "count": 5
+            },
+            {
+              "id": "chitinous-claws-and-teeth-vardenghast-swarm-barbgaunts",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Barbgaunt",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "barblauncher-vardenghast-swarm-barbgaunts",
+                "count": 1
+              },
+              {
+                "id": "chitinous-claws-and-teeth-vardenghast-swarm-barbgaunts",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Barbgaunt",
+          "id": "barblauncher-vardenghast-swarm-barbgaunts",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Barbgaunt",
+          "id": "chitinous-claws-and-teeth-vardenghast-swarm-barbgaunts",
+          "input": "stepper",
+          "default": 5
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "vardenghast-swarm-psychophage",
@@ -2291,7 +7052,62 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Psychophage",
+          "models": 1,
+          "items": [
+            {
+              "id": "psychoclastic-torrent-vardenghast-swarm-psychophage",
+              "count": 1
+            },
+            {
+              "id": "talons-and-betentacled-maw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Psychophage",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "psychoclastic-torrent-vardenghast-swarm-psychophage",
+                "count": 1
+              },
+              {
+                "id": "talons-and-betentacled-maw",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Psychophage",
+          "id": "psychoclastic-torrent-vardenghast-swarm-psychophage",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Psychophage",
+          "id": "talons-and-betentacled-maw",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "vardenghast-swarm-termagants",
@@ -2329,7 +7145,62 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Termagant",
+          "models": 10,
+          "items": [
+            {
+              "id": "chitinous-claws-and-teeth",
+              "count": 10
+            },
+            {
+              "id": "fleshborer",
+              "count": 10
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Termagant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chitinous-claws-and-teeth",
+                "count": 1
+              },
+              {
+                "id": "fleshborer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Termagant",
+          "id": "chitinous-claws-and-teeth",
+          "input": "stepper",
+          "default": 10
+        },
+        {
+          "model": "Termagant",
+          "id": "fleshborer",
+          "input": "stepper",
+          "default": 10
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "vardenghast-swarm-von-ryans-leapers",
@@ -2366,6 +7237,47 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Von Ryan's Leaper",
+          "models": 3,
+          "items": [
+            {
+              "id": "chitinous-talons",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Von Ryan's Leaper",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chitinous-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Von Ryan's Leaper",
+          "id": "chitinous-talons",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

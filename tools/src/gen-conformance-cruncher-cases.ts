@@ -96,6 +96,16 @@ export function canonicalTriggerSubjectCases() {
     { caseId: `${TRIGGER_SUBJECT_CASE_PREFIX}condition-subject-holds-own-ability`, effect: { type: "ability-part", trigger: { event: "selected", filter: { to: "shoot" } }, effect: holderGated(source.abilityId) } },
     { caseId: `${TRIGGER_SUBJECT_CASE_PREFIX}condition-subject-other-ability-unknown`, effect: { type: "ability-part", trigger: { event: "selected", filter: { to: "shoot" } }, effect: holderGated("another-ability") } },
   ].map((row) => ({ ...row, abilityId: source.abilityId, source, context: { phase: "shooting" }, perspective: "attacker" as const }));
+  // "When a friendly PALADIN SQUAD unit is selected to fight": only in the Fight phase, and only for a unit with those keywords.
+  const fightSelection = (subject?: Record<string, unknown>) => ({ type: "ability-part", trigger: { event: "selected", filter: { to: "fight" }, ...(subject ? { subject } : {}) }, effect: grant });
+  const paladins = { owner: "friendly", all_of: ["PALADIN SQUAD"] };
+  const selection: Array<{ id: string; effect: unknown; context: EngineContext }> = [
+    { id: "selected-to-fight-outside-fight", effect: fightSelection(), context: { phase: "shooting" } },
+    { id: "selected-to-fight-in-fight", effect: fightSelection(), context: { phase: "fight" } },
+    { id: "subject-keywords-held", effect: fightSelection(paladins), context: { phase: "fight", attackerKeywords: ["Infantry", "Paladin Squad"] } },
+    { id: "subject-keywords-missing", effect: fightSelection(paladins), context: { phase: "fight", attackerKeywords: ["Vehicle", "Titanic"] } },
+  ];
+  cases.push(...selection.map(({ id, ...row }) => ({ caseId: `${TRIGGER_SUBJECT_CASE_PREFIX}${id}`, ...row, abilityId: source.abilityId, source, perspective: "attacker" as const })));
   return cases.map((row) => {
     const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
     return { ...row, expected: dslProjection(result) };

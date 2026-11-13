@@ -26,8 +26,9 @@ from wh40kdc.data.enhancement_eligibility import (
     meets_enhancement_groups,
     missing_required_abilities,
 )
-from wh40kdc.data.loadout import check_unit_legality
+from wh40kdc.data.list_keywords import list_building_keyword_changes, with_keyword_changes
 from wh40kdc.data.pricing import host_unit_points, wargear_points
+from wh40kdc.data.roster_warlord import warlord_violations
 
 #: Army-construction violation codes (distinct from per-unit loadout codes).
 ROSTER_VIOLATION_CODES = (
@@ -52,6 +53,9 @@ ROSTER_VIOLATION_CODES = (
     "no-warlord",
     "multiple-warlords",
     "warlord-not-mandated",
+    "cannot-be-warlord",
+    "warlord-not-character",
+    "warlord-not-supreme-commander",
     "detachment-excluded-datasheet",
     "keyword-limit-exceeded",
     "unit-limit-exceeded",
@@ -156,26 +160,34 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
 
     views = [resolve_unit(u.get("unit_id") or "") for u in spec_units]
 
+    def attached_to_keywords(su: dict[str, Any]) -> set[str] | None:
+        """The roster keywords of the unit ``su`` attaches to as a leader or support character."""
+        bodyguard_id = su.get("leader_bodyguard_id")
+        if not bodyguard_id:
+            return None
+        idx = next((i for i, u in enumerate(spec_units) if u.get("unit_id") == bodyguard_id), -1)
+        bodyguard = views[idx] if idx >= 0 else resolve_unit(bodyguard_id)
+        if bodyguard is None:
+            return None
+        overrides = (spec_units[idx].get("keyword_overrides") or []) if idx >= 0 else []
+        return _keyword_set(
+            bodyguard.raw, army_keywords, army_keyword_set, detachment_ids, overrides
+        )
+
     # --- Per-unit loadout (reuse the tier/bounds checker). --------------------
     units: list[dict[str, Any]] = []
     for idx, su in enumerate(spec_units):
         view = views[idx]
         if view is None:
             continue
-        options = dataset.wargear_options_of(view.raw)
-        composition = dataset.unit_composition_of(view.raw)
+        model_count = su.get("model_count") or 0
         units.append(
             {
                 "unitId": view.id,
                 "unitIndex": idx,
-                "modelCount": su.get("model_count") or 0,
-                "violations": check_unit_legality(
-                    view.raw,
-                    su.get("model_count") or 0,
-                    options,
-                    su.get("counts") or {},
-                    (composition or {}).get("models"),
-                    (composition or {}).get("tiers"),
+                "modelCount": model_count,
+                "violations": dataset.loadout_of(view.raw).check(
+                    model_count, su.get("counts") or {}
                 ),
             }
         )
@@ -247,7 +259,15 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                 f"{enh['id']} cannot be given to {view.id}: no model in it can take Enhancements",
                 idx,
             )
-        eligible = meets_enhancement_groups(enh, view.id, kws.__contains__)
+        # Attachment is decided at list building, so keywords the bearer's own abilities change
+        # while attached (a Painboss with Squighog Boyz loses INFANTRY) decide eligibility.
+        has = with_keyword_changes(
+            kws,
+            list_building_keyword_changes(
+                (ability.raw for ability in view.abilities), attached_to_keywords(su)
+            ),
+        )
+        eligible = meets_enhancement_groups(enh, view.id, has)
         if not eligible:
             err(
                 "enhancement-keyword-mismatch",
@@ -263,7 +283,7 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                 f"{view.id} lacks the {', '.join(missing)} ability {enh['id']} requires",
                 idx,
             )
-        if any(k in kws for k in (enh.get("exclusion_keywords") or [])):
+        if any(has(k) for k in (enh.get("exclusion_keywords") or [])):
             err(
                 "enhancement-excluded-keyword",
                 enh["id"],
@@ -470,6 +490,32 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                 f"{d['id']} requires the Warlord to be one of: {', '.join(mandated)}",
             )
 
+    # --- Warlord eligibility (per-model Warlord flags, CHARACTER, Supreme Commander).
+    detachment_warlords = {
+        uid
+        for d in detachments
+        for uid in (d.get("mandatory_warlord_datasheet_ids") or [])
+        + (d.get("granted_warlord_datasheet_ids") or [])
+    }
+    warlord_units: list[dict[str, Any] | None] = []
+    for idx, su in enumerate(spec_units):
+        view = views[idx]
+        if view is None:
+            warlord_units.append(None)
+            continue
+        overrides = su.get("keyword_overrides") or []
+        kws = _keyword_set(view.raw, army_keywords, army_keyword_set, detachment_ids, overrides)
+        warlord_units.append(
+            {
+                "unit_id": view.id,
+                "is_warlord": su.get("is_warlord") is True,
+                "is_character": _is_character(view.raw) or "Character" in kws,
+                "rows": (dataset.unit_composition_of(view.raw) or {}).get("models") or [],
+            }
+        )
+    for code, id_, message, unit_index in warlord_violations(warlord_units, detachment_warlords):
+        err(code, id_, message, unit_index)
+
     # --- Detachment datasheet exclusions (e.g. Shadow Legion). ----------------
     for d in detachments:
         excluded = d.get("excluded_datasheet_ids") or []
@@ -577,12 +623,6 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
     # Mirror of TS: the rule must be offered, and its points cap and
     # Warlord/Enhancement locks apply; a selected detachment's mandatory or
     # granted Warlord datasheets lift the Warlord lock.
-    detachment_warlords = {
-        uid
-        for d in detachments
-        for uid in (d.get("mandatory_warlord_datasheet_ids") or [])
-        + (d.get("granted_warlord_datasheet_ids") or [])
-    }
     for rule in dataset.allied_rules.all if faction_id else []:
         if not rule.get("exclusive") or rule.get("source_faction_id") != faction_id:
             continue

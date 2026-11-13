@@ -15,7 +15,7 @@
   } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
   import { scenarioContext } from "./scenario.js";
-  import { memberLevers, memberMortalSources, unionLevers } from "./output-model.js";
+  import { coveringLever, leverRows, memberLevers, memberMortalSources, unionLevers, type LeverRow } from "./output-model.js";
   import { defenderNeeds } from "./defender.js";
   import { needToggles, unansweredContext } from "./scenario.js";
   import NeedsList from "./needs-list.svelte";
@@ -62,7 +62,10 @@
   // does the DSL walk once and hands back (buff, enabled) pairs plus the
   // activation groups (dice-pool / choice) that cap how many fire at once.
   const leversIn = (context: EngineContext) => unionLevers(memberLevers(ds, member, context, weapons));
-  const stackable = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[]; needs: AbilityNeed[]; error?: string }>(() => leversIn(engineContext));
+  const perMember = $derived(memberLevers(ds, member, engineContext, weapons));
+  const stackable = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[]; needs: AbilityNeed[]; error?: string }>(() => unionLevers(perMember));
+  // One row per ability across the combined unit's members, switched on and off together.
+  const rows = $derived(leverRows(perMember));
 
   // The defending unit's undecided conditions, read with the same build the projection uses.
   function targetNeedsIn(context: EngineContext): AbilityNeed[] {
@@ -96,16 +99,16 @@
   });
 
   // Free-standing levers (always-on abilities, stratagems, weapon keywords).
-  const ungrouped = $derived(stackable.buffs.filter((b) => !b.group));
+  const ungrouped = $derived(rows.filter((row) => !row.lever.group));
 
   // Levers that belong to a capped activation pool (e.g. Blessings of Khorne).
   const pools = $derived.by(() => {
-    const byGroup = new Map<string, StackableBuff[]>();
-    for (const b of stackable.buffs) {
-      if (!b.group) continue;
-      const list = byGroup.get(b.group) ?? [];
-      list.push(b);
-      byGroup.set(b.group, list);
+    const byGroup = new Map<string, LeverRow[]>();
+    for (const row of rows) {
+      if (!row.lever.group) continue;
+      const list = byGroup.get(row.lever.group) ?? [];
+      list.push(row);
+      byGroup.set(row.lever.group, list);
     }
     return stackable.groups
       .map((g) => ({ group: g, levers: byGroup.get(g.id) ?? [] }))
@@ -122,16 +125,33 @@
     ).length;
   }
 
-  function canToggle(b: StackableBuff): boolean {
+  const byId = $derived(new Map(stackable.buffs.map((lever) => [lever.id, lever])));
+
+  /** A row is on when any member's copy is on. */
+  function rowEnabled(row: LeverRow): boolean {
+    return row.ids.some((id) => {
+      const lever = byId.get(id);
+      return lever !== undefined && enabled(lever);
+    });
+  }
+
+  function canToggle(row: LeverRow): boolean {
     // Removing a selection is always available, including recovery from stale state.
-    if (enabled(b)) return true;
+    if (rowEnabled(row)) return true;
     const selected = new Set(stackable.buffs.filter(enabled).map((lever) => lever.id));
-    selected.add(b.id);
+    for (const id of row.ids) selected.add(id);
     return isLegalLeverSelection(stackable.buffs, stackable.groups, selected);
   }
 
-  function toggle(b: StackableBuff) {
-    if (canToggle(b)) salvo.setBuffEnabled(b.id, !enabled(b));
+  function toggle(row: LeverRow) {
+    if (!canToggle(row)) return;
+    const next = !rowEnabled(row);
+    for (const id of row.ids) salvo.setBuffEnabled(id, next);
+  }
+
+  /** The enabled lever that already grants a manual toggle's effect, which disables the toggle. */
+  function coveredBy(t: (typeof MANUAL_BUFF_TOGGLES)[number]): StackableBuff | undefined {
+    return coveringLever(t.build(), stackable.buffs, enabled);
   }
 
   function toggleManual(id: string) {
@@ -183,14 +203,14 @@
   <EmptyState>No buffs available in the {salvo.phase} phase.</EmptyState>
 {:else}
   <div class="ability-list">
-    {#each ungrouped as b (b.id)}
-      <label class="ability-row" class:active={enabled(b)}>
-        <input type="checkbox" checked={enabled(b)} disabled={!canToggle(b)} onchange={() => toggle(b)} />
+    {#each ungrouped as row (row.key)}
+      <label class="ability-row" class:active={rowEnabled(row)}>
+        <input type="checkbox" checked={rowEnabled(row)} disabled={!canToggle(row)} onchange={() => toggle(row)} />
         <span class="name">
-          {b.label}
-          <small>· {summary(b)}</small>
+          {row.lever.label}
+          <small>· {summary(row.lever)}</small>
         </span>
-        <span class="chip {sourceChip(b)}">{sourceChip(b)}</span>
+        <span class="chip {sourceChip(row.lever)}">{sourceChip(row.lever)}</span>
       </label>
     {/each}
 
@@ -199,18 +219,18 @@
         {p.group.label} · base allowance {p.group.maxActivations}
         ({activeInGroup(p.group.id)} selected)
       </div>
-      {#each p.levers as b (b.id)}
-        {@const atCap = !canToggle(b)}
-        <label class="ability-row" class:active={enabled(b)} class:dim={atCap}>
+      {#each p.levers as row (row.key)}
+        {@const atCap = !canToggle(row)}
+        <label class="ability-row" class:active={rowEnabled(row)} class:dim={atCap}>
           <input
             type="checkbox"
-            checked={enabled(b)}
+            checked={rowEnabled(row)}
             disabled={atCap}
-            onchange={() => toggle(b)}
+            onchange={() => toggle(row)}
           />
           <span class="name">
-            {b.label}
-            <small>· {summary(b)}</small>
+            {row.lever.label}
+            <small>· {summary(row.lever)}</small>
           </span>
           <span class="chip activation">activation</span>
         </label>
@@ -228,13 +248,18 @@
 <div class="section-label">Manual toggles</div>
 <div class="ability-list">
   {#each MANUAL_BUFF_TOGGLES as t (t.id)}
-    <label class="ability-row" class:active={salvo.manualBuffsActive.has(t.id)}>
+    {@const cover = coveredBy(t)}
+    <label class="ability-row" class:active={!cover && salvo.manualBuffsActive.has(t.id)} class:dim={cover !== undefined}>
       <input
         type="checkbox"
-        checked={salvo.manualBuffsActive.has(t.id)}
+        checked={!cover && salvo.manualBuffsActive.has(t.id)}
+        disabled={cover !== undefined}
         onchange={() => toggleManual(t.id)}
       />
-      <span class="name">{t.label}</span>
+      <span class="name">
+        {t.label}
+        {#if cover}<small>· already from {cover.label}</small>{/if}
+      </span>
       <span class="chip manual">manual</span>
     </label>
   {/each}

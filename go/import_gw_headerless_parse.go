@@ -151,6 +151,10 @@ var gwHeaderlessAdapter = formatAdapter{
 		attachmentGroup := 0
 		pendingSupport := false
 		flush := func() {
+			if current != nil && isReferenceEntry(current.displayedPts, len(current.bullets)) {
+				current = nil
+				return
+			}
 			if current != nil {
 				if current.attachmentGroup != 0 && current.attachmentRole != "" {
 					attachmentMembers = append(attachmentMembers, attachedGroupMember{

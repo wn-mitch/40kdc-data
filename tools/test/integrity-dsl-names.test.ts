@@ -98,6 +98,28 @@ describe("DSL model_names resolve to a composition model", () => {
   });
 });
 
+describe("an add-unit model type is one of the unit's added models", () => {
+  const files = (unitIds: string[], model: string) => ({
+    "core/tau-empire/unit-compositions.json": [
+      { ...composition("drone-squad", "Drone"), added_models: [{ name: "Shard Drone", keywords: ["Fly"], default_weapon_ids: [] }] },
+      composition("other-squad", "Other Leader"),
+    ],
+    "enrichment/tau-empire/abilities.json": [
+      ability("a", { type: "add-unit", target: "this-unit", modifier: { model, model_count: 1, join: "this-unit" } }, unitIds),
+    ],
+  });
+
+  it("passes a type every unit carrying the ability adds", async () => {
+    expect(await errorsFor(files(["drone-squad"], "Shard Drone"))).toEqual([]);
+  });
+
+  it("fails a type a unit carrying the ability lacks, or a record with no unit", async () => {
+    expect(await errorsFor(files(["drone-squad"], "Shard Drones"))).toEqual([expect.stringContaining('"Shard Drones"')]);
+    expect(await errorsFor(files(["drone-squad", "other-squad"], "Shard Drone"))).toEqual([expect.stringContaining("other-squad")]);
+    expect(await errorsFor(files([], "Shard Drone"))).toEqual([expect.stringContaining("any unit it lists")]);
+  });
+});
+
 const grant = (weaponId: string) => ({ type: "weapon-grant", target: "this-model", modifier: { weapon_id: weaponId } });
 
 describe("weapon-grant ids resolve in the ability's faction", () => {

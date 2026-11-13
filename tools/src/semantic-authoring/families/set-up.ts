@@ -60,6 +60,33 @@ const ADD_UNIT_MODELS: FamilyExtension = {
   },
 };
 
+/**
+ * "add two BLUE HORROR models to this unit": models of a type the unit holds only for rules that
+ * add them (its composition's added_models), named by model. They always join this unit.
+ */
+export const ADD_UNIT_MODEL_TYPE: FamilyExtension = {
+  family: "add-unit",
+  version: 5,
+  description: "As the previous version, plus source model: models of a model type the unit's rules add (its composition's added_models, as Split adds Blue Horrors to Pink Horrors), named by model in its printed form (Blue Horror). They join this unit, so join is true.",
+  schema: (previous) => withProperties(previous, {
+    source: widenedEnum(previous, "source", ["model"]),
+    model: optional({ type: "string", minLength: 1, "x-only-when": { source: ["model"] } }),
+  }),
+  normalize: (input, previous) => {
+    if (input.source !== "model") {
+      if ("model" in input) throw new TypeError("add-unit.model names the model type of source model.");
+      return previous(input);
+    }
+    const { model, ...rest } = input;
+    const name = typeof model === "string" ? model.replaceAll("*", "").replace(/\s+/gu, " ").trim() : "";
+    if (!name) throw new TypeError("add-unit.model names the model type the models are, as printed (Blue Horror).");
+    if (rest.join !== true) throw new TypeError("add-unit source model adds models to this unit, so join is true.");
+    // The previous versions check count, join and the rest against a stand-in datasheet.
+    const { datasheet: _standIn, ...normalized } = previous({ ...rest, source: "datasheet", datasheet: "stand-in" });
+    return { ...normalized, source: "model", model: name };
+  },
+};
+
 /** `deployment-window`: "during deployment", the window before the battle starts. */
 export const SET_UP_RESTRICTION_FAMILIES: readonly SemanticFamilyDefinition[] = [{
   id: "deployment-window",

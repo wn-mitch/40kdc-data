@@ -18,8 +18,11 @@
  * 1. Unicode NFD-decompose, then strip combining marks — `Khârn` → `Kharn`.
  * 2. Casefold to lower case.
  * 3. Remove apostrophe and quote variants (`' ’ ‘ \` " “ ”`) — `T'au` → `Tau`.
- * 4. Collapse any run of whitespace or hyphens to a single space, then trim —
- *    `Be'lakor` → `belakor`, `the   betrayer` → `the betrayer`.
+ * 4. Collapse any run of whitespace or dashes to a single space, then trim —
+ *    `Be'lakor` → `belakor`, `the   betrayer` → `the betrayer`. A dash is the
+ *    ASCII hyphen-minus, the Unicode hyphens and dashes U+2010–U+2015, or the
+ *    minus sign U+2212, so GW's non-breaking hyphen in `Grav‑Tank` (U+2011)
+ *    matches the ASCII `Grav-Tank` a roster export prints.
  *
  * The result is intended only for comparison; it is not a display value.
  *
@@ -40,7 +43,7 @@ export function normalizeName(input: string): string {
     .replace(/\p{M}/gu, "")
     .toLowerCase()
     .replace(/['’‘`"“”]/g, "")
-    .replace(/[\s-]+/g, " ")
+    .replace(/[\s\-\u2010-\u2015\u2212]+/g, " ")
     .trim();
 }
 

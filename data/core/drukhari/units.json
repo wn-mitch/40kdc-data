@@ -2352,10 +2352,10 @@
       "max": 5
     },
     "weapon_ids": [
-      "hexrifle",
-      "ossefactor",
-      "torturers-tool",
-      "twin-torturers-tools"
+      "hexrifle-coven-of-agonies-wracks",
+      "ossefactor-coven-of-agonies-wracks",
+      "torturers-tool-coven-of-agonies-wracks",
+      "twin-torturers-tools-coven-of-agonies-wracks"
     ],
     "game_version": {
       "edition": "11th",

@@ -34,7 +34,157 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Land Raider Redeemer",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "flamestorm-cannon",
+              "count": 2
+            },
+            {
+              "id": "twin-assault-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Land Raider Redeemer",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "flamestorm-cannon",
+              "count": 2
+            },
+            {
+              "id": "twin-assault-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Land Raider Redeemer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "hunter-killer-missile",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Land Raider Redeemer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Land Raider Redeemer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "storm-bolter-land-raider-redeemer",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Land Raider Redeemer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "flamestorm-cannon",
+                "count": 2
+              },
+              {
+                "id": "twin-assault-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Land Raider Redeemer",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Land Raider Redeemer",
+          "id": "flamestorm-cannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Land Raider Redeemer",
+          "id": "hunter-killer-missile",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Land Raider Redeemer",
+          "id": "multi-melta",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Land Raider Redeemer",
+          "id": "storm-bolter-land-raider-redeemer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Land Raider Redeemer",
+          "id": "twin-assault-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "grand-master-in-nemesis-dreadknight",
@@ -69,7 +219,244 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "models": 1,
+          "items": [
+            {
+              "id": "dreadfists",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "items": [
+            {
+              "id": "dreadfists",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "fragstorm-grenade-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "gatling-psilencer",
+                "count": 1
+              },
+              {
+                "id": "heavy-incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "gatling-psilencer",
+                "count": 1
+              },
+              {
+                "id": "heavy-psycannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "gatling-psilencer",
+                "count": 1
+              },
+              {
+                "id": "sublimator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "gatling-psilencer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-incinerator",
+                "count": 1
+              },
+              {
+                "id": "heavy-psycannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-incinerator",
+                "count": 1
+              },
+              {
+                "id": "sublimator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-psycannon",
+                "count": 1
+              },
+              {
+                "id": "sublimator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-psycannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "sublimator",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dreadfists",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-daemon-greathammer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-flail",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-greatsword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-mace",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "id": "dreadfists",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "id": "fragstorm-grenade-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "id": "gatling-psilencer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "id": "heavy-incinerator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "id": "heavy-psycannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "id": "nemesis-daemon-greathammer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "id": "nemesis-flail",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "id": "nemesis-greatsword",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "id": "nemesis-mace",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grand Master in Nemesis Dreadknight",
+          "id": "sublimator",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "land-raider-crusader",
@@ -106,7 +493,157 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Land Raider Crusader",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "hurricane-bolter",
+              "count": 2
+            },
+            {
+              "id": "twin-assault-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Land Raider Crusader",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "hurricane-bolter",
+              "count": 2
+            },
+            {
+              "id": "twin-assault-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Land Raider Crusader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "hunter-killer-missile",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Land Raider Crusader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Land Raider Crusader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "storm-bolter-land-raider-crusader",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Land Raider Crusader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "hurricane-bolter",
+                "count": 2
+              },
+              {
+                "id": "twin-assault-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Land Raider Crusader",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Land Raider Crusader",
+          "id": "hunter-killer-missile",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Land Raider Crusader",
+          "id": "hurricane-bolter",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Land Raider Crusader",
+          "id": "multi-melta",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Land Raider Crusader",
+          "id": "storm-bolter-land-raider-crusader",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Land Raider Crusader",
+          "id": "twin-assault-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "grand-master",
@@ -141,7 +678,122 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Grand Master",
+          "models": 1,
+          "items": [
+            {
+              "id": "nemesis-force-weapon",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-grand-master",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Grand Master",
+          "items": [
+            {
+              "id": "nemesis-force-weapon",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-grand-master",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Grand Master",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "psilencer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "psycannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "storm-bolter-grand-master",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Grand Master",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Grand Master",
+          "id": "incinerator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grand Master",
+          "id": "nemesis-force-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Grand Master",
+          "id": "psilencer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grand Master",
+          "id": "psycannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grand Master",
+          "id": "storm-bolter-grand-master",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "razorback",
@@ -176,7 +828,140 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Razorback",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks-razorback",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Razorback",
+          "items": [
+            {
+              "id": "armoured-tracks-razorback",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Razorback",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "hunter-killer-missile",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Razorback",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "storm-bolter-razorback",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Razorback",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks-razorback",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Razorback",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Razorback",
+          "id": "armoured-tracks-razorback",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Razorback",
+          "id": "hunter-killer-missile",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Razorback",
+          "id": "storm-bolter-razorback",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Razorback",
+          "id": "twin-heavy-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Razorback",
+          "id": "twin-lascannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "purifier-squad",
@@ -298,7 +1083,271 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Knight of the Flame",
+          "models": 1,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-purifier-squad",
+              "count": 1
+            },
+            {
+              "id": "purifying-flame",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-purifier-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Purifier",
+          "models": 4,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-purifier-squad",
+              "count": 4
+            },
+            {
+              "id": "purifying-flame",
+              "count": 4
+            },
+            {
+              "id": "storm-bolter-purifier-squad",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Knight of the Flame",
+          "items": [
+            {
+              "id": "purifying-flame",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-purifier-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Purifier",
+          "items": [
+            {
+              "id": "purifying-flame",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-purifier-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Knight of the Flame",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-purifier-squad",
+                "count": 1
+              },
+              {
+                "id": "purifying-flame",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-purifier-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Purifier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psilencer-purifier-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psycannon-purifier-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-force-weapon-purifier-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-purifier-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Purifier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "purifying-flame",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Purifier",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 2
+            },
+            {
+              "models": 10,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psilencer-purifier-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psycannon-purifier-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Knight of the Flame",
+          "id": "nemesis-force-weapon-purifier-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight of the Flame",
+          "id": "purifying-flame",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight of the Flame",
+          "id": "storm-bolter-purifier-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Purifier",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Purifier",
+          "id": "incinerator",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Purifier",
+          "id": "nemesis-force-weapon-purifier-squad",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Purifier",
+          "id": "psilencer-purifier-squad",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Purifier",
+          "id": "psycannon-purifier-squad",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Purifier",
+          "id": "purifying-flame",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Purifier",
+          "id": "storm-bolter-purifier-squad",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "nemesis-dreadknight",
@@ -333,7 +1382,127 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Nemesis Dreadknight",
+          "models": 1,
+          "items": [
+            {
+              "id": "dreadfists",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Nemesis Dreadknight",
+          "items": [
+            {
+              "id": "dreadfists",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Nemesis Dreadknight",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dreadfists",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-daemon-greathammer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-greatsword",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Nemesis Dreadknight",
+          "picks": 2,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "gatling-psilencer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-psycannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Nemesis Dreadknight",
+          "id": "dreadfists",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Nemesis Dreadknight",
+          "id": "gatling-psilencer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Nemesis Dreadknight",
+          "id": "heavy-incinerator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Nemesis Dreadknight",
+          "id": "heavy-psycannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Nemesis Dreadknight",
+          "id": "nemesis-daemon-greathammer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Nemesis Dreadknight",
+          "id": "nemesis-greatsword",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "grey-knights-thunderhawk-gunship",
@@ -375,7 +1544,174 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Grey Knights Thunderhawk Gunship",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "lascannon",
+              "count": 2
+            },
+            {
+              "id": "thunderhawk-cluster-bombs",
+              "count": 1
+            },
+            {
+              "id": "thunderhawk-heavy-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-bolter",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Grey Knights Thunderhawk Gunship",
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "lascannon",
+              "count": 2
+            },
+            {
+              "id": "thunderhawk-cluster-bombs",
+              "count": 1
+            },
+            {
+              "id": "thunderhawk-heavy-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-bolter",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Grey Knights Thunderhawk Gunship",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "lascannon",
+                "count": 2
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 4
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Grey Knights Thunderhawk Gunship",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellstrike-missile-battery",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "thunderhawk-cluster-bombs",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Grey Knights Thunderhawk Gunship",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "thunderhawk-heavy-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "turbo-laser-destructor",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Grey Knights Thunderhawk Gunship",
+          "id": "armoured-hull",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Grey Knights Thunderhawk Gunship",
+          "id": "hellstrike-missile-battery",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grey Knights Thunderhawk Gunship",
+          "id": "lascannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Grey Knights Thunderhawk Gunship",
+          "id": "thunderhawk-cluster-bombs",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Grey Knights Thunderhawk Gunship",
+          "id": "thunderhawk-heavy-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Grey Knights Thunderhawk Gunship",
+          "id": "turbo-laser-destructor",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grey Knights Thunderhawk Gunship",
+          "id": "twin-heavy-bolter",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "rhino",
@@ -410,7 +1746,118 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Rhino",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks-rhino",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-rhino",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Rhino",
+          "items": [
+            {
+              "id": "armoured-tracks-rhino",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-rhino",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "hunter-killer-missile",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "storm-bolter-rhino",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks-rhino",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-rhino",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Rhino",
+          "id": "armoured-tracks-rhino",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Rhino",
+          "id": "hunter-killer-missile",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Rhino",
+          "id": "storm-bolter-rhino",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Rhino",
+          "id": "storm-bolter-rhino",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "brother-captain",
@@ -445,7 +1892,122 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Brother-Captain",
+          "models": 1,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-brother-captain",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-brother-captain",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Brother-Captain",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-brother-captain",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-brother-captain",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Brother-Captain",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "psilencer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "psycannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "storm-bolter-brother-captain",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Brother-Captain",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-brother-captain",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Brother-Captain",
+          "id": "incinerator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Brother-Captain",
+          "id": "nemesis-force-weapon-brother-captain",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Brother-Captain",
+          "id": "psilencer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Brother-Captain",
+          "id": "psycannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Brother-Captain",
+          "id": "storm-bolter-brother-captain",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "venerable-dreadnought",
@@ -481,7 +2043,144 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Venerable Dreadnought",
+          "models": 1,
+          "items": [
+            {
+              "id": "assault-cannon",
+              "count": 1
+            },
+            {
+              "id": "dreadnought-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-venerable-dreadnought",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Venerable Dreadnought",
+          "items": [
+            {
+              "id": "assault-cannon",
+              "count": 1
+            },
+            {
+              "id": "dreadnought-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-venerable-dreadnought",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Venerable Dreadnought",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "assault-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-plasma-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Venerable Dreadnought",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dreadnought-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "dreadnought-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-venerable-dreadnought",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Venerable Dreadnought",
+          "id": "assault-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Venerable Dreadnought",
+          "id": "dreadnought-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Venerable Dreadnought",
+          "id": "heavy-flamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Venerable Dreadnought",
+          "id": "heavy-plasma-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Venerable Dreadnought",
+          "id": "storm-bolter-venerable-dreadnought",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Venerable Dreadnought",
+          "id": "twin-lascannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "castellan-crowe",
@@ -517,7 +2216,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Castellan Crowe",
+          "models": 1,
+          "items": [
+            {
+              "id": "black-blade-of-antwyr",
+              "count": 1
+            },
+            {
+              "id": "purifying-flame-castellan-crowe",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-castellan-crowe",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Castellan Crowe",
+          "items": [
+            {
+              "id": "black-blade-of-antwyr",
+              "count": 1
+            },
+            {
+              "id": "purifying-flame-castellan-crowe",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-castellan-crowe",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Castellan Crowe",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "black-blade-of-antwyr",
+                "count": 1
+              },
+              {
+                "id": "purifying-flame-castellan-crowe",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-castellan-crowe",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Castellan Crowe",
+          "id": "black-blade-of-antwyr",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Castellan Crowe",
+          "id": "purifying-flame-castellan-crowe",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Castellan Crowe",
+          "id": "storm-bolter-castellan-crowe",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "strike-squad",
@@ -639,7 +2425,233 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Grey Knight",
+          "models": 4,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-strike-squad",
+              "count": 4
+            },
+            {
+              "id": "storm-bolter-strike-squad",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Justicar",
+          "models": 1,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-strike-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-strike-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Grey Knight",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-strike-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-strike-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Justicar",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-strike-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-strike-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Grey Knight",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psilencer-strike-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psycannon-strike-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-force-weapon-strike-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-strike-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Justicar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-strike-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-strike-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Grey Knight",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psilencer-strike-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psycannon-strike-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Grey Knight",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Grey Knight",
+          "id": "incinerator",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Grey Knight",
+          "id": "nemesis-force-weapon-strike-squad",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Grey Knight",
+          "id": "psilencer-strike-squad",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Grey Knight",
+          "id": "psycannon-strike-squad",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Grey Knight",
+          "id": "storm-bolter-strike-squad",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Justicar",
+          "id": "nemesis-force-weapon-strike-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Justicar",
+          "id": "storm-bolter-strike-squad",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "brotherhood-techmarine",
@@ -676,7 +2688,112 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Brotherhood Techmarine",
+          "models": 1,
+          "items": [
+            {
+              "id": "forge-bolter",
+              "count": 1
+            },
+            {
+              "id": "grav-pistol",
+              "count": 1
+            },
+            {
+              "id": "omnissiah-power-axe",
+              "count": 1
+            },
+            {
+              "id": "servo-arm",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Brotherhood Techmarine",
+          "items": [
+            {
+              "id": "forge-bolter",
+              "count": 1
+            },
+            {
+              "id": "grav-pistol",
+              "count": 1
+            },
+            {
+              "id": "omnissiah-power-axe",
+              "count": 1
+            },
+            {
+              "id": "servo-arm",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Brotherhood Techmarine",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "forge-bolter",
+                "count": 1
+              },
+              {
+                "id": "grav-pistol",
+                "count": 1
+              },
+              {
+                "id": "omnissiah-power-axe",
+                "count": 1
+              },
+              {
+                "id": "servo-arm",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Brotherhood Techmarine",
+          "id": "forge-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Brotherhood Techmarine",
+          "id": "grav-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Brotherhood Techmarine",
+          "id": "omnissiah-power-axe",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Brotherhood Techmarine",
+          "id": "servo-arm",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "brotherhood-librarian",
@@ -711,7 +2828,109 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Brotherhood Librarian",
+          "models": 1,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-brotherhood-librarian",
+              "count": 1
+            },
+            {
+              "id": "vortex-of-doom",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Brotherhood Librarian",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-brotherhood-librarian",
+              "count": 1
+            },
+            {
+              "id": "vortex-of-doom",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Brotherhood Librarian",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "storm-bolter-brotherhood-librarian",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Brotherhood Librarian",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-brotherhood-librarian",
+                "count": 1
+              },
+              {
+                "id": "vortex-of-doom",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Brotherhood Librarian",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Brotherhood Librarian",
+          "id": "nemesis-force-weapon-brotherhood-librarian",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Brotherhood Librarian",
+          "id": "storm-bolter-brotherhood-librarian",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Brotherhood Librarian",
+          "id": "vortex-of-doom",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "brotherhood-champion",
@@ -746,7 +2965,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Brotherhood Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-brotherhood-champion",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-brotherhood-champion",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Brotherhood Champion",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-brotherhood-champion",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-brotherhood-champion",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Brotherhood Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-brotherhood-champion",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-brotherhood-champion",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Brotherhood Champion",
+          "id": "nemesis-force-weapon-brotherhood-champion",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Brotherhood Champion",
+          "id": "storm-bolter-brotherhood-champion",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "purgation-squad",
@@ -860,7 +3148,229 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Purgator Justicar",
+          "models": 1,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-purgation-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-purgation-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Purgator",
+          "models": 4,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-purgation-squad",
+              "count": 4
+            },
+            {
+              "id": "storm-bolter-purgation-squad",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Purgator Justicar",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-purgation-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-purgation-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Purgator",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-purgation-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-purgation-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Purgator Justicar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-purgation-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-purgation-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Purgator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psilencer-purgation-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psycannon-purgation-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-force-weapon-purgation-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-purgation-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Purgator",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psilencer-purgation-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psycannon-purgation-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Purgator Justicar",
+          "id": "nemesis-force-weapon-purgation-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Purgator Justicar",
+          "id": "storm-bolter-purgation-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Purgator",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Purgator",
+          "id": "incinerator",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Purgator",
+          "id": "nemesis-force-weapon-purgation-squad",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Purgator",
+          "id": "psilencer-purgation-squad",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Purgator",
+          "id": "psycannon-purgation-squad",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Purgator",
+          "id": "storm-bolter-purgation-squad",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "stormtalon-gunship",
@@ -897,7 +3407,140 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Stormtalon Gunship",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull-stormtalon-gunship",
+              "count": 1
+            },
+            {
+              "id": "skyhammer-missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "twin-assault-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Stormtalon Gunship",
+          "items": [
+            {
+              "id": "armoured-hull-stormtalon-gunship",
+              "count": 1
+            },
+            {
+              "id": "skyhammer-missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "twin-assault-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Stormtalon Gunship",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull-stormtalon-gunship",
+                "count": 1
+              },
+              {
+                "id": "twin-assault-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Stormtalon Gunship",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "skyhammer-missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "typhoon-missile-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Stormtalon Gunship",
+          "id": "armoured-hull-stormtalon-gunship",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Stormtalon Gunship",
+          "id": "skyhammer-missile-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Stormtalon Gunship",
+          "id": "twin-assault-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Stormtalon Gunship",
+          "id": "twin-heavy-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Stormtalon Gunship",
+          "id": "twin-lascannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Stormtalon Gunship",
+          "id": "typhoon-missile-launcher",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "interceptor-squad",
@@ -1011,7 +3654,233 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Interceptor Justicar",
+          "models": 1,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-interceptor-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-interceptor-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Interceptor",
+          "models": 4,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-interceptor-squad",
+              "count": 4
+            },
+            {
+              "id": "storm-bolter-interceptor-squad",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Interceptor Justicar",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-interceptor-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-interceptor-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Interceptor",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-interceptor-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-interceptor-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Interceptor Justicar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-interceptor-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-interceptor-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Interceptor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psilencer-interceptor-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psycannon-interceptor-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-force-weapon-interceptor-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-interceptor-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Interceptor",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psilencer-interceptor-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "psycannon-interceptor-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Interceptor Justicar",
+          "id": "nemesis-force-weapon-interceptor-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Interceptor Justicar",
+          "id": "storm-bolter-interceptor-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Interceptor",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Interceptor",
+          "id": "incinerator",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Interceptor",
+          "id": "nemesis-force-weapon-interceptor-squad",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Interceptor",
+          "id": "psilencer-interceptor-squad",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Interceptor",
+          "id": "psycannon-interceptor-squad",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Interceptor",
+          "id": "storm-bolter-interceptor-squad",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "brotherhood-chaplain",
@@ -1046,7 +3915,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Brotherhood Chaplain",
+          "models": 1,
+          "items": [
+            {
+              "id": "crozius-arcanum",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-brotherhood-chaplain",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Brotherhood Chaplain",
+          "items": [
+            {
+              "id": "crozius-arcanum",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-brotherhood-chaplain",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Brotherhood Chaplain",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "crozius-arcanum",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-brotherhood-chaplain",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Brotherhood Chaplain",
+          "id": "crozius-arcanum",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Brotherhood Chaplain",
+          "id": "storm-bolter-brotherhood-chaplain",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "paladin-squad",
@@ -1307,7 +4245,377 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Paladin Ancient",
+          "models": 0,
+          "items": []
+        },
+        {
+          "model": "Paladin",
+          "models": 3,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-paladin-squad",
+              "count": 3
+            },
+            {
+              "id": "storm-bolter-paladin-squad",
+              "count": 3
+            }
+          ]
+        },
+        {
+          "model": "Paragon",
+          "models": 1,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-paladin-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-paladin-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Paladin Ancient",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-paladin-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-paladin-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Paladin",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-paladin-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-paladin-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Paragon",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-paladin-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-paladin-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Paladin Ancient",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ancients-banner",
+                "count": 1
+              },
+              {
+                "id": "incinerator",
+                "count": 1
+              },
+              {
+                "id": "nemesis-force-weapon-paladin-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ancients-banner",
+                "count": 1
+              },
+              {
+                "id": "nemesis-force-weapon-paladin-squad",
+                "count": 1
+              },
+              {
+                "id": "psilencer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ancients-banner",
+                "count": 1
+              },
+              {
+                "id": "nemesis-force-weapon-paladin-squad",
+                "count": 1
+              },
+              {
+                "id": "psycannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ancients-banner",
+                "count": 1
+              },
+              {
+                "id": "nemesis-force-weapon-paladin-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-paladin-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-force-weapon-paladin-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-paladin-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Paladin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "apothecarys-narthecium",
+                "count": 1
+              },
+              {
+                "id": "nemesis-force-weapon-paladin-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "incinerator",
+                "count": 1
+              },
+              {
+                "id": "nemesis-force-weapon-paladin-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-force-weapon-paladin-squad",
+                "count": 1
+              },
+              {
+                "id": "psilencer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-force-weapon-paladin-squad",
+                "count": 1
+              },
+              {
+                "id": "psycannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-force-weapon-paladin-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-paladin-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Paragon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-paladin-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-paladin-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Paladin",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 2
+            },
+            {
+              "models": 10,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "incinerator",
+                "count": 1
+              },
+              {
+                "id": "nemesis-force-weapon-paladin-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-force-weapon-paladin-squad",
+                "count": 1
+              },
+              {
+                "id": "psilencer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-force-weapon-paladin-squad",
+                "count": 1
+              },
+              {
+                "id": "psycannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Paladin Ancient",
+          "id": "ancients-banner",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Paladin Ancient",
+          "id": "incinerator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Paladin Ancient",
+          "id": "nemesis-force-weapon-paladin-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Paladin Ancient",
+          "id": "psilencer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Paladin Ancient",
+          "id": "psycannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Paladin Ancient",
+          "id": "storm-bolter-paladin-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Paladin Ancient",
+          "id": "storm-bolter-paladin-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Paladin",
+          "id": "apothecarys-narthecium",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Paladin",
+          "id": "incinerator",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Paladin",
+          "id": "nemesis-force-weapon-paladin-squad",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Paladin",
+          "id": "psilencer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Paladin",
+          "id": "psycannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Paladin",
+          "id": "storm-bolter-paladin-squad",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Paragon",
+          "id": "nemesis-force-weapon-paladin-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Paragon",
+          "id": "storm-bolter-paladin-squad",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "land-raider",
@@ -1344,7 +4652,157 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Land Raider",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "godhammer-lascannon",
+              "count": 2
+            },
+            {
+              "id": "twin-heavy-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Land Raider",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "godhammer-lascannon",
+              "count": 2
+            },
+            {
+              "id": "twin-heavy-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Land Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "hunter-killer-missile",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Land Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Land Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "storm-bolter-land-raider",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Land Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "godhammer-lascannon",
+                "count": 2
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Land Raider",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Land Raider",
+          "id": "godhammer-lascannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Land Raider",
+          "id": "hunter-killer-missile",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Land Raider",
+          "id": "multi-melta",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Land Raider",
+          "id": "storm-bolter-land-raider",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Land Raider",
+          "id": "twin-heavy-bolter",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "grand-master-voldus",
@@ -1380,7 +4838,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Grand Master Voldus",
+          "models": 1,
+          "items": [
+            {
+              "id": "malleus-argyrum",
+              "count": 1
+            },
+            {
+              "id": "searing-purity",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-grand-master-voldus",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Grand Master Voldus",
+          "items": [
+            {
+              "id": "malleus-argyrum",
+              "count": 1
+            },
+            {
+              "id": "searing-purity",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-grand-master-voldus",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Grand Master Voldus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "malleus-argyrum",
+                "count": 1
+              },
+              {
+                "id": "searing-purity",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-grand-master-voldus",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Grand Master Voldus",
+          "id": "malleus-argyrum",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Grand Master Voldus",
+          "id": "searing-purity",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Grand Master Voldus",
+          "id": "storm-bolter-grand-master-voldus",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "brotherhood-terminator-squad",
@@ -1640,7 +5185,353 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ancient",
+          "models": 0,
+          "items": []
+        },
+        {
+          "model": "Justicar",
+          "models": 1,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-brotherhood-terminator-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-brotherhood-terminator-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Terminator",
+          "models": 3,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-brotherhood-terminator-squad",
+              "count": 3
+            },
+            {
+              "id": "storm-bolter-brotherhood-terminator-squad",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ancient",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-brotherhood-terminator-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-brotherhood-terminator-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Justicar",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-brotherhood-terminator-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-brotherhood-terminator-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Terminator",
+          "items": [
+            {
+              "id": "nemesis-force-weapon-brotherhood-terminator-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-brotherhood-terminator-squad",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ancient",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ancients-banner",
+                "count": 1
+              },
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ancients-banner",
+                "count": 1
+              },
+              {
+                "id": "psilencer-brotherhood-terminator-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ancients-banner",
+                "count": 1
+              },
+              {
+                "id": "psycannon-brotherhood-terminator-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ancients-banner",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-brotherhood-terminator-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "storm-bolter-brotherhood-terminator-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Ancient",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-brotherhood-terminator-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Justicar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-brotherhood-terminator-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-brotherhood-terminator-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Terminator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "apothecarys-narthecium",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "psilencer-brotherhood-terminator-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "psycannon-brotherhood-terminator-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "storm-bolter-brotherhood-terminator-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Terminator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-brotherhood-terminator-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Terminator",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "psilencer-brotherhood-terminator-squad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "psycannon-brotherhood-terminator-squad",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Ancient",
+          "id": "ancients-banner",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Ancient",
+          "id": "incinerator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Ancient",
+          "id": "nemesis-force-weapon-brotherhood-terminator-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Ancient",
+          "id": "psilencer-brotherhood-terminator-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Ancient",
+          "id": "psycannon-brotherhood-terminator-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Ancient",
+          "id": "storm-bolter-brotherhood-terminator-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Ancient",
+          "id": "storm-bolter-brotherhood-terminator-squad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Justicar",
+          "id": "nemesis-force-weapon-brotherhood-terminator-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Justicar",
+          "id": "storm-bolter-brotherhood-terminator-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Terminator",
+          "id": "apothecarys-narthecium",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Terminator",
+          "id": "incinerator",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Terminator",
+          "id": "nemesis-force-weapon-brotherhood-terminator-squad",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Terminator",
+          "id": "psilencer-brotherhood-terminator-squad",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Terminator",
+          "id": "psycannon-brotherhood-terminator-squad",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Terminator",
+          "id": "storm-bolter-brotherhood-terminator-squad",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "stormhawk-interceptor",
@@ -1678,7 +5569,168 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Stormhawk Interceptor",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull-stormhawk-interceptor",
+              "count": 1
+            },
+            {
+              "id": "las-talon",
+              "count": 1
+            },
+            {
+              "id": "skyhammer-missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "twin-assault-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Stormhawk Interceptor",
+          "items": [
+            {
+              "id": "armoured-hull-stormhawk-interceptor",
+              "count": 1
+            },
+            {
+              "id": "las-talon",
+              "count": 1
+            },
+            {
+              "id": "skyhammer-missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "twin-assault-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Stormhawk Interceptor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull-stormhawk-interceptor",
+                "count": 1
+              },
+              {
+                "id": "twin-assault-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Stormhawk Interceptor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "icarus-stormcannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "las-talon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Stormhawk Interceptor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "skyhammer-missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "typhoon-missile-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Stormhawk Interceptor",
+          "id": "armoured-hull-stormhawk-interceptor",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Stormhawk Interceptor",
+          "id": "icarus-stormcannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Stormhawk Interceptor",
+          "id": "las-talon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Stormhawk Interceptor",
+          "id": "skyhammer-missile-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Stormhawk Interceptor",
+          "id": "twin-assault-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Stormhawk Interceptor",
+          "id": "twin-heavy-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Stormhawk Interceptor",
+          "id": "typhoon-missile-launcher",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "stormraven-gunship",
@@ -1717,7 +5769,201 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "stormstrike-missile-launcher",
+              "count": 2
+            },
+            {
+              "id": "twin-assault-cannon",
+              "count": 1
+            },
+            {
+              "id": "typhoon-missile-launcher",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "stormstrike-missile-launcher",
+              "count": 2
+            },
+            {
+              "id": "twin-assault-cannon",
+              "count": 1
+            },
+            {
+              "id": "typhoon-missile-launcher",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "hurricane-bolter",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "stormstrike-missile-launcher",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "twin-assault-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-heavy-plasma-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "typhoon-missile-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "id": "armoured-hull",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "id": "hurricane-bolter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "id": "stormstrike-missile-launcher",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "id": "twin-assault-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "id": "twin-heavy-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "id": "twin-heavy-plasma-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "id": "twin-lascannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "id": "twin-multi-melta",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Grey Knights Stormraven Gunship",
+          "id": "typhoon-missile-launcher",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "crowes-sanctifiers-brotherhood-terminator-squad",
@@ -1793,7 +6039,150 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Brotherhood Terminator Justicar",
+          "models": 1,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Brotherhood Terminator with Psycannon and Nemesis Force Weapon",
+          "models": 1,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
+              "count": 1
+            },
+            {
+              "id": "psycannon-crowes-sanctifiers-brotherhood-terminator-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Brotherhood Terminator with Storm Bolter and Nemesis Force Weapon",
+          "models": 3,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
+              "count": 3
+            },
+            {
+              "id": "storm-bolter",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Brotherhood Terminator Justicar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Brotherhood Terminator with Psycannon and Nemesis Force Weapon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
+                "count": 1
+              },
+              {
+                "id": "psycannon-crowes-sanctifiers-brotherhood-terminator-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Brotherhood Terminator with Storm Bolter and Nemesis Force Weapon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Brotherhood Terminator Justicar",
+          "id": "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Brotherhood Terminator Justicar",
+          "id": "storm-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Brotherhood Terminator with Psycannon and Nemesis Force Weapon",
+          "id": "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Brotherhood Terminator with Psycannon and Nemesis Force Weapon",
+          "id": "psycannon-crowes-sanctifiers-brotherhood-terminator-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Brotherhood Terminator with Storm Bolter and Nemesis Force Weapon",
+          "id": "nemesis-force-weapon-crowes-sanctifiers-brotherhood-terminator-squad",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Brotherhood Terminator with Storm Bolter and Nemesis Force Weapon",
+          "id": "storm-bolter",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "crowes-sanctifiers-strike-squad",
@@ -1888,7 +6277,194 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Grey Knight with Incinerator and Ceramite Fists",
+          "models": 1,
+          "items": [
+            {
+              "id": "ceramite-fists",
+              "count": 1
+            },
+            {
+              "id": "incinerator",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Grey Knight with Psycannon and Ceramite Fists",
+          "models": 1,
+          "items": [
+            {
+              "id": "ceramite-fists",
+              "count": 1
+            },
+            {
+              "id": "psycannon-crowes-sanctifiers-strike-squad",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Grey Knight with Storm Bolter and Nemesis Force Weapon",
+          "models": 7,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-crowes-sanctifiers-strike-squad",
+              "count": 7
+            },
+            {
+              "id": "storm-bolter",
+              "count": 7
+            }
+          ]
+        },
+        {
+          "model": "Justicar",
+          "models": 1,
+          "items": [
+            {
+              "id": "nemesis-force-weapon-crowes-sanctifiers-strike-squad",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Grey Knight with Incinerator and Ceramite Fists",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ceramite-fists",
+                "count": 1
+              },
+              {
+                "id": "incinerator",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Grey Knight with Psycannon and Ceramite Fists",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ceramite-fists",
+                "count": 1
+              },
+              {
+                "id": "psycannon-crowes-sanctifiers-strike-squad",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Grey Knight with Storm Bolter and Nemesis Force Weapon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-crowes-sanctifiers-strike-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Justicar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-force-weapon-crowes-sanctifiers-strike-squad",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Grey Knight with Incinerator and Ceramite Fists",
+          "id": "ceramite-fists",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Grey Knight with Incinerator and Ceramite Fists",
+          "id": "incinerator",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Grey Knight with Psycannon and Ceramite Fists",
+          "id": "ceramite-fists",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Grey Knight with Psycannon and Ceramite Fists",
+          "id": "psycannon-crowes-sanctifiers-strike-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Grey Knight with Storm Bolter and Nemesis Force Weapon",
+          "id": "nemesis-force-weapon-crowes-sanctifiers-strike-squad",
+          "input": "stepper",
+          "default": 7
+        },
+        {
+          "model": "Grey Knight with Storm Bolter and Nemesis Force Weapon",
+          "id": "storm-bolter",
+          "input": "stepper",
+          "default": 7
+        },
+        {
+          "model": "Justicar",
+          "id": "nemesis-force-weapon-crowes-sanctifiers-strike-squad",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Justicar",
+          "id": "storm-bolter",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "crowes-sanctifiers-venerable-dreadnought",
@@ -1927,7 +6503,76 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Venerable Dreadnought",
+          "models": 1,
+          "items": [
+            {
+              "id": "dreadnought-fist",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter",
+              "count": 1
+            },
+            {
+              "id": "twin-lascannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Venerable Dreadnought",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dreadnought-fist",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter",
+                "count": 1
+              },
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Venerable Dreadnought",
+          "id": "dreadnought-fist",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Venerable Dreadnought",
+          "id": "storm-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Venerable Dreadnought",
+          "id": "twin-lascannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sanctifiers-castellan-crowe",
@@ -1966,6 +6611,75 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Castellan Crowe",
+          "models": 1,
+          "items": [
+            {
+              "id": "black-blade-of-antwyr",
+              "count": 1
+            },
+            {
+              "id": "purifying-flame-sanctifiers-castellan-crowe",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-sanctifiers-castellan-crowe",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Castellan Crowe",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "black-blade-of-antwyr",
+                "count": 1
+              },
+              {
+                "id": "purifying-flame-sanctifiers-castellan-crowe",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-sanctifiers-castellan-crowe",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Castellan Crowe",
+          "id": "black-blade-of-antwyr",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Castellan Crowe",
+          "id": "purifying-flame-sanctifiers-castellan-crowe",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Castellan Crowe",
+          "id": "storm-bolter-sanctifiers-castellan-crowe",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

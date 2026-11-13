@@ -79,7 +79,7 @@
       ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "heretic-astartes-daemon-prince"
@@ -8172,7 +8172,7 @@
             "target": "this-unit",
             "modifier": {
               "amount": "D3",
-              "per": "model"
+              "per": "one-model"
             }
           }
         },
@@ -8193,7 +8193,7 @@
             "target": "this-unit",
             "modifier": {
               "amount": 3,
-              "per": "model"
+              "per": "one-model"
             }
           }
         }
@@ -9696,7 +9696,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "e5ffb27dac4f61dcf904f4f7a887783673ab093a9fcfe805cfb30fcc0783acaa",
     "version": "2025-q3",
@@ -9705,108 +9705,228 @@
     "faction_id": "chaos-space-marines",
     "detachment_id": "creations-of-bile",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "battle-started"
-      },
-      "effect": {
-        "type": "stance-select",
-        "mode": "consumable",
-        "options": [
-          {
-            "name": "Cholinergic Accelerants",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "A",
-                "operation": "add",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "battle-started"
+          },
+          "effect": {
+            "type": "stance-select",
+            "mode": "re-selectable",
+            "options": [
+              {
+                "id": "cholinergic-accelerants",
+                "name": "Cholinergic Accelerants",
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "level": "model",
+                    "all_of": [
+                      "HERETIC ASTARTES",
+                      "INFANTRY"
+                    ],
+                    "none_of": [
+                      "DAMNED"
+                    ]
+                  },
+                  "modifier": {
+                    "stat": "A",
+                    "operation": "add",
+                    "value": 1,
+                    "weapons": {
+                      "type": "melee"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "hyperadrenal-infusion",
+                "name": "Hyperadrenal Infusion",
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "level": "model",
+                    "all_of": [
+                      "HERETIC ASTARTES",
+                      "INFANTRY"
+                    ],
+                    "none_of": [
+                      "DAMNED"
+                    ]
+                  },
+                  "modifier": {
+                    "stat": "M",
+                    "operation": "add",
+                    "value": 2
+                  }
+                }
+              },
+              {
+                "id": "paraneural-reactions",
+                "name": "Paraneural Reactions",
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "level": "model",
+                    "all_of": [
+                      "HERETIC ASTARTES",
+                      "INFANTRY"
+                    ],
+                    "none_of": [
+                      "DAMNED"
+                    ]
+                  },
+                  "modifier": {
+                    "stat": "WS",
+                    "operation": "improve",
+                    "value": 1,
+                    "weapons": {
+                      "type": "melee"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "supracutaneous-chitination",
+                "name": "Supracutaneous Chitination",
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "level": "model",
+                    "all_of": [
+                      "HERETIC ASTARTES",
+                      "INFANTRY"
+                    ],
+                    "none_of": [
+                      "DAMNED"
+                    ]
+                  },
+                  "modifier": {
+                    "stat": "T",
+                    "operation": "improve",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "id": "macrotensile-sinews",
+                "name": "Macrotensile Sinews",
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "level": "model",
+                    "all_of": [
+                      "HERETIC ASTARTES",
+                      "INFANTRY"
+                    ],
+                    "none_of": [
+                      "DAMNED"
+                    ]
+                  },
+                  "modifier": {
+                    "stat": "S",
+                    "operation": "add",
+                    "value": 1,
+                    "weapons": {
+                      "type": "melee"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "ophthalmic-enhancement",
+                "name": "Ophthalmic Enhancement",
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "level": "model",
+                    "all_of": [
+                      "HERETIC ASTARTES",
+                      "INFANTRY"
+                    ],
+                    "none_of": [
+                      "DAMNED"
+                    ]
+                  },
+                  "modifier": {
+                    "stat": "BS",
+                    "operation": "improve",
+                    "value": 1,
+                    "weapons": {
+                      "type": "ranged"
+                    }
+                  }
+                }
+              }
+            ],
+            "or_random": {
+              "dice": "D6",
+              "count": 2,
+              "faces": [
+                "cholinergic-accelerants",
+                "hyperadrenal-infusion",
+                "paraneural-reactions",
+                "supracutaneous-chitination",
+                "macrotensile-sinews",
+                "ophthalmic-enhancement"
+              ]
+            },
+            "min_choices": 1,
+            "max_choices": 1
+          },
+          "duration": "battle"
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "used",
+            "filter": {
+              "kind": "ability",
+              "id": "experimental-augmentations-chaos-space-marines"
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "army-includes",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "FABIUS BILE"
+                  ],
+                  "level": "model",
+                  "designated": "warlord"
                 }
               }
             },
-            "id": "cholinergic-accelerants"
-          },
-          {
-            "name": "Hyperadrenal Infusion",
             "effect": {
-              "type": "stat-modifier",
+              "type": "re-roll",
               "target": "this-unit",
               "modifier": {
-                "stat": "M",
-                "operation": "add",
-                "value": 2
+                "roll": {
+                  "of_ability": "experimental-augmentations-chaos-space-marines"
+                },
+                "result_scope": "any-result"
               }
-            },
-            "id": "hyperadrenal-infusion"
-          },
-          {
-            "name": "Paraneural Reactions",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "WS",
-                "operation": "improve",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
-                }
-              }
-            },
-            "id": "paraneural-reactions"
-          },
-          {
-            "name": "Supracutaneous Chitination",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "T",
-                "operation": "add",
-                "value": 1
-              }
-            },
-            "id": "supracutaneous-chitination"
-          },
-          {
-            "name": "Macrotensile Sinews",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "S",
-                "operation": "add",
-                "value": 1,
-                "weapons": {
-                  "type": "melee"
-                }
-              }
-            },
-            "id": "macrotensile-sinews"
-          },
-          {
-            "name": "Ophthalmic Enhancement",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "BS",
-                "operation": "improve",
-                "value": 1
-              }
-            },
-            "id": "ophthalmic-enhancement"
+            }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "community_notes": "[APPROX] Models the six augmentation options as a battle-long selectable menu for HERETIC ASTARTES INFANTRY. Not modeled: the pick-one-or-roll-two-D6 selection method, the DAMNED exclusion, the duplicate-has-no-effect clause, and Fabius Bile's re-roll of the augmentation dice. Full rule in raw-text store."
   },
@@ -15598,7 +15718,7 @@
           "target": "this-unit",
           "modifier": {
             "amount": 3,
-            "per": "model"
+            "per": "one-model"
           }
         },
         {

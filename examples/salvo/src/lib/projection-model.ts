@@ -72,7 +72,7 @@ const EPS = 1e-6;
  * crunch error). `W` and `modelCount` describe the target.
  */
 export function aggregateStages(
-  included: { attributed: AttributedStage[] }[],
+  included: readonly { attributed: AttributedStage[] }[],
   W: number,
   modelCount: number,
 ): AttributedStage[] {

@@ -17,8 +17,10 @@ import {
   unitLimitForBattleSize,
 } from "./battle-sizes.js";
 import { meetsEnhancementGroups, missingRequiredAbilities } from "./enhancement-eligibility.js";
-import { checkUnitLegality, type Violation } from "./loadout.js";
+import { listBuildingKeywordChanges, withKeywordChanges } from "./list-building-keywords.js";
+import type { Violation } from "./loadout.js";
 import { hostUnitPoints, wargearPoints } from "./pricing.js";
+import { warlordViolations, type WarlordViolationCode } from "./roster-warlord.js";
 
 /**
  * Resolve a roster's unit entry against the dataset, returning the linked
@@ -111,8 +113,6 @@ export function checkRosterLegality(roster: Roster, dataset: Dataset): UnitLegal
     if (!view) return;
     // Options and composition are faction-scoped off the resolved unit's own
     // faction, so a shared chassis is checked against the right faction's rules.
-    const options = dataset.wargearOptionsOf(view.raw);
-    const composition = dataset.unitCompositionOf(view.raw);
     const counts = new Map<string, number>();
     for (const w of rosterUnit.wargear) {
       const id = w.ref.id;
@@ -123,14 +123,7 @@ export function checkRosterLegality(roster: Roster, dataset: Dataset): UnitLegal
       unitId: view.id,
       unitIndex,
       modelCount: rosterUnit.model_count,
-      violations: checkUnitLegality(
-        view.raw,
-        rosterUnit.model_count,
-        options,
-        counts,
-        composition?.models,
-        composition?.tiers,
-      ),
+      violations: dataset.loadoutOf(view.raw).check(rosterUnit.model_count, counts),
     });
   });
   return out;
@@ -165,6 +158,7 @@ export type RosterViolationCode =
   | "no-warlord"
   | "multiple-warlords"
   | "warlord-not-mandated"
+  | WarlordViolationCode
   | "detachment-excluded-datasheet"
   | "keyword-limit-exceeded"
   | "unit-limit-exceeded"
@@ -292,26 +286,24 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
   };
 
   const views = spec.units.map((u) => resolveUnit(u.unitId));
+  /** The roster keywords of the unit `su` attaches to as a leader or support character. */
+  const attachedToKeywords = (su: NormUnit): Set<string> | undefined => {
+    if (!su.leaderBodyguardId) return undefined;
+    const idx = spec.units.findIndex((u) => u.unitId === su.leaderBodyguardId);
+    const bodyguard = idx >= 0 ? views[idx] : resolveUnit(su.leaderBodyguardId);
+    return bodyguard ? keywordSet(bodyguard, idx >= 0 ? spec.units[idx] : undefined) : undefined;
+  };
 
   // --- Per-unit loadout (reuse the tier/bounds checker). --------------------
   const units: UnitLegality[] = [];
   spec.units.forEach((su, idx) => {
     const view = views[idx];
     if (!view) return;
-    const options = dataset.wargearOptionsOf(view.raw);
-    const composition = dataset.unitCompositionOf(view.raw);
     units.push({
       unitId: view.id,
       unitIndex: idx,
       modelCount: su.modelCount,
-      violations: checkUnitLegality(
-        view.raw,
-        su.modelCount,
-        options,
-        su.counts,
-        composition?.models,
-        composition?.tiers,
-      ),
+      violations: dataset.loadoutOf(view.raw).check(su.modelCount, su.counts),
     });
   });
 
@@ -349,14 +341,19 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     const rows = dataset.unitCompositionOf(view.raw)?.models ?? [];
     if (rows.length > 0 && rows.every((m) => m.excluded_from_enhancements === true))
       err("enhancement-on-excluded-model", enh.id, `${enh.id} cannot be given to ${view.id}: no model in it can take Enhancements`, idx);
-    const kws = keywordSet(view, su);
-    const eligible = meetsEnhancementGroups(enh, view.id, (keyword) => kws.has(keyword));
+    // Attachment is decided at list building, so keywords the bearer's own abilities change
+    // while attached (a Painboss with Squighog Boyz loses INFANTRY) decide eligibility.
+    const has = withKeywordChanges(keywordSet(view, su), listBuildingKeywordChanges(
+      view.abilities.map((ability) => ability.raw as unknown as Record<string, unknown>),
+      attachedToKeywords(su),
+    ));
+    const eligible = meetsEnhancementGroups(enh, view.id, has);
     if (!eligible)
       err("enhancement-keyword-mismatch", enh.id, `${view.id} lacks an eligible keyword group for ${enh.id}`, idx);
     const missing = missingRequiredAbilities(enh, view.raw.ability_ids);
     if (missing.length)
       err("enhancement-missing-ability", enh.id, `${view.id} lacks the ${missing.join(", ")} ability ${enh.id} requires`, idx);
-    if ((enh.exclusion_keywords ?? []).some((k) => kws.has(k)))
+    if ((enh.exclusion_keywords ?? []).some(has))
       err("enhancement-excluded-keyword", enh.id, `${view.id} carries a keyword excluded by ${enh.id}`, idx);
   });
   for (const [enhId, uses] of enhUses) {
@@ -492,6 +489,22 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
       err("warlord-not-mandated", d.id, `${d.id} requires the Warlord to be one of: ${mandated.join(", ")}`);
   }
 
+  // --- Warlord eligibility (per-model Warlord flags, CHARACTER, Supreme Commander).
+  const detachmentWarlords = new Set<string>(
+    detachments.flatMap((d) => [...(d.mandatory_warlord_datasheet_ids ?? []), ...(d.granted_warlord_datasheet_ids ?? [])]),
+  );
+  const warlordUnits = spec.units.map((su, idx) => {
+    const view = views[idx];
+    if (!view) return undefined;
+    return {
+      unitId: view.id,
+      isWarlord: su.isWarlord,
+      isCharacter: isCharacter(view) || keywordSet(view, su).has("Character"),
+      rows: dataset.unitCompositionOf(view.raw)?.models ?? [],
+    };
+  });
+  for (const v of warlordViolations(warlordUnits, detachmentWarlords)) err(v.code, v.id, v.message, v.unitIndex);
+
   // --- Detachment datasheet exclusions (e.g. Shadow Legion). ----------------
   for (const d of detachments) {
     const excluded = d.excluded_datasheet_ids ?? [];
@@ -573,9 +586,6 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
   // the rule must be offered (army keyword + detachment gates), and its points cap
   // and Warlord/Enhancement locks apply. A selected detachment that names a unit
   // for Warlord (mandatory or granted) lifts the Warlord lock for it.
-  const detachmentWarlords = new Set<string>(
-    detachments.flatMap((d) => [...(d.mandatory_warlord_datasheet_ids ?? []), ...(d.granted_warlord_datasheet_ids ?? [])]),
-  );
   for (const rule of dataset.alliedRules.all) {
     if (!rule.exclusive || !spec.factionId || rule.source_faction_id !== spec.factionId) continue;
     const pool = new Set(rule.source_datasheet_ids ?? []);

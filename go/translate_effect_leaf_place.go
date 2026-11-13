@@ -99,7 +99,12 @@ func addUnitLeaf(m map[string]any, ctx effCtx) string {
 		if q == nil {
 			q = 1.0
 		}
-		return "add " + amountOf(q, sheet+" model", sheet+" models") + " to " + effectSubject(m["join"], ctx) + where + engage
+		// A model type of the unit itself (model) is already its printed name.
+		kind := sheet
+		if m["model"] != nil {
+			kind = ejstr(m["model"])
+		}
+		return "add " + amountOf(q, kind+" model", kind+" models") + " to " + effectSubject(m["join"], ctx) + where + engage
 	}
 	literal := isLiteral(m["count"])
 	c := m["count"]

@@ -120,7 +120,7 @@
       },
       {
         "code": "loadout-illegal",
-        "message": "Loadout is not buildable from the datasheet's wargear options: swap-conflict:gauss-flayer",
+        "message": "Loadout is not buildable from the datasheet's wargear options: swap-conflict:necron-warriors",
         "raw_name": "Necron Warriors"
       }
     ]

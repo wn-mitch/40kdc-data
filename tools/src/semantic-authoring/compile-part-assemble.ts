@@ -92,7 +92,9 @@ function windowPeriod(list: readonly CompileLeaf[]): "phase" | "turn" | null {
   if (windows.some((leaf) => leaf.family_id !== "phase-window" || leaf.parameters.phase !== undefined)) return "phase";
   if (windows.length) return "turn";
   // "At the start of the Fight phase, …" names the phase it happens in, as a window does (core rule 01.02.02).
-  return flat.some((leaf) => leaf.family_id === "event" && leaf.parameters.kind === "phase-start" && leaf.parameters.phase !== undefined && leaf.parameters.phase !== "any") ? "phase" : null;
+  // So does "when … is selected to fight" or "to shoot": that activation happens in its phase.
+  return flat.some((leaf) => leaf.family_id === "event" && ((leaf.parameters.kind === "phase-start" && leaf.parameters.phase !== undefined && leaf.parameters.phase !== "any")
+    || (leaf.parameters.kind === "selected" && (leaf.parameters.to === "fight" || leaf.parameters.to === "shoot")))) ? "phase" : null;
 }
 
 

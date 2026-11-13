@@ -10,6 +10,7 @@ export {
   printedKeyword,
   replacedArmyRuleIds,
   resolveEligibleAbilities,
+  suppressedAbilities,
   stratagemCanTarget,
   stratagemCanTargetUnit,
   stratagemTargetNames,

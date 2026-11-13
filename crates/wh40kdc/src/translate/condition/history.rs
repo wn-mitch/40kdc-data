@@ -52,7 +52,8 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
     if nn(p, "count").is_some()
         && matches!(event.as_str(), "destroyed" | "model-destroyed")
         && (is(p, "object", "this-model")
-            || (is(p, "object", "event-object") && is(p, "window", "event")))
+            || (crate::translate::condition::is_event_object(p.get("object"))
+                && is(p, "window", "event")))
     {
         phrase.push_str(&format!(" ({} times)", count_phrase(p.get("count"))));
     }
@@ -203,6 +204,17 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                 ("a target", "targets")
             };
             let what = match nn(p, "object") {
+                Some(o) if f.get("all_attacks").and_then(Value::as_bool) == Some(true) => {
+                    let atk = if atk.is_empty() {
+                        String::new()
+                    } else {
+                        format!("{atk} ")
+                    };
+                    format!(
+                        "{} as the target of all of its {atk}attacks",
+                        unit_ref_phrase(Some(o), "the unit")
+                    )
+                }
                 Some(o) if atk.is_empty() => {
                     format!("{} as {noun}", unit_ref_phrase(Some(o), "the unit"))
                 }
@@ -372,7 +384,9 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             } else {
                 "unit"
             };
-            if is(p, "object", "event-object") && window.and_then(Value::as_str) == Some("event") {
+            if crate::translate::condition::is_event_object(p.get("object"))
+                && window.and_then(Value::as_str) == Some("event")
+            {
                 let with = if nn(f, "weapons").is_some() {
                     format!(" made with {}", crate::translate::effect::weapon_noun(f))
                 } else {
@@ -554,6 +568,29 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             format!(
                 "{neg}{}",
                 with_window(&format!("{who} used {which}{}", dekebab(&kind)), window)
+            )
+        }
+        // "cause it to become Below Half-strength": the unit's strength fell past a threshold.
+        // With no subject, any unit: "a unit became Below Half-strength".
+        "state-changed" if is(f, "strength", "below-half") => {
+            let unit = if nn(p, "subject").is_none() {
+                "a unit".to_string()
+            } else {
+                who.clone()
+            };
+            let became = if negated { "did not become" } else { "became" };
+            with_window(&format!("{unit} {became} Below Half-strength"), window)
+        }
+        "state-changed" if is(f, "strength", "below-starting") => {
+            let unit = if nn(p, "subject").is_none() {
+                "a unit".to_string()
+            } else {
+                who.clone()
+            };
+            let fell = if negated { "did not fall" } else { "fell" };
+            with_window(
+                &format!("{unit} {fell} below its Starting Strength"),
+                window,
             )
         }
         "objective-gained" => format!(

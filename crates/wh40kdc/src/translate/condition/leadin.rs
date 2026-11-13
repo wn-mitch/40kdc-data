@@ -212,7 +212,7 @@ pub fn condition_lead_in_for(c: &Value, defending: bool) -> String {
                 return format!("while {}", describe_happened(p, false));
             }
             if (is(p, "event", "destroyed") || is(p, "event", "model-destroyed"))
-                && is(p, "object", "event-object")
+                && crate::translate::condition::is_event_object(p.get("object"))
                 && is(p, "window", "event")
             {
                 return format!("when {}", describe_happened(p, false));

@@ -21,8 +21,22 @@ export function exhaustiveLevers<Result extends { total: number }>(space: LeverS
   return best;
 }
 
-/** The highest-scoring legal option plan; ties keep the first plan in enumeration order. */
+/**
+ * The highest-scoring legal loadout: every MFM loadout, else every option plan; ties keep the first
+ * in enumeration order.
+ */
 export function exhaustiveLoadout<Result extends { total: number }>(space: LoadoutSpace<Result>, maxPlans = 100_000): Result {
+  if (space.scaffold.mfm) {
+    const { loadouts } = space.scaffold.mfm;
+    if (loadouts.length > maxPlans) throw new Error(`exhaustive loadout: ${loadouts.length} loadouts exceeds the bound of ${maxPlans}`);
+    let best: Result | null = null;
+    for (const { counts } of loadouts) {
+      const result = space.score(counts);
+      if (!best || result.total > best.total) best = result;
+    }
+    if (!best) throw new Error("exhaustive loadout: no legal loadout");
+    return best;
+  }
   const settings = space.scaffold.options.map((_, index) => optionSettings(space.scaffold, index));
   const size = settings.reduce((product, choices) => product * choices.length, 1);
   if (size > maxPlans) throw new Error(`exhaustive loadout: ${size} plans exceeds the bound of ${maxPlans}`);

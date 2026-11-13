@@ -490,6 +490,7 @@ var roleSubjects = map[string]string{
 	"defender":           "the target",
 	"event-subject":      "the triggering unit",
 	"event-object":       "that unit",
+	eventObjectModel:     "that model",
 	"stratagem-target":   "that unit",
 	"bearer-transport":   "the Transport this unit is embarked within",
 	"ability-unit":       "this unit",

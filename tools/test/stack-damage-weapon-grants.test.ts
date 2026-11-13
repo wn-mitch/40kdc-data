@@ -100,3 +100,26 @@ describe("printed wargear rules in scoring", () => {
     expect(buffed.score(withSystem).total).toBeGreaterThan(plain.score(withSystem).total);
   });
 });
+
+describe("a leader's unit-wide weapon grant", () => {
+  it("gives an attached Big Mek's More Dakka to the unit it leads", () => {
+    const orks = resolveFactionContext(dataset, "orks");
+    const config = parseMatrixConfig(
+      { HC_FACTIONS: "orks", HC_TARGETS: "geq-guardsmen", HC_PHASES: "shooting", HC_OUTPUT: "grants.json" },
+      { factionIds: new Set(["orks"]), targetIds: ["geq-guardsmen"] },
+    );
+    const session = damageScoringSession({ dataset, config, faction: orks, target: guardsmen, phase: "shooting" });
+    const unit = (id: string) => orks.units.find((candidate) => candidate.id === id)!;
+    const unled = emptySpec("orks", [
+      { unit: unit("flash-gitz"), role: "bodyguard" },
+      { unit: unit("big-mek"), role: "leader" },
+    ]);
+    const levers = session.pool(unled).levers.filter((lever) => lever.source.kind === "ability" && lever.source.abilityId === "more-dakka-orks");
+    expect(levers.length).toBeGreaterThan(0);
+    const spec = { ...unled, selectedLeverIds: levers.map((lever) => lever.id) };
+    const moreDakka = (buffs: readonly Buff[]) => buffs.some(({ source }) => source.kind === "ability" && source.abilityId === "more-dakka-orks");
+    // The Flash Gitz shoot with the Big Mek's Ignores Cover, not only the Big Mek.
+    expect(moreDakka(session.memberBuffs(spec, spec.members[0]!))).toBe(true);
+    expect(moreDakka(session.memberBuffs(spec, spec.members[1]!))).toBe(true);
+  });
+});

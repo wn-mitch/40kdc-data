@@ -13,6 +13,7 @@ import {
   validateRosterCore,
   type NormRoster,
 } from "../src/data/roster-resolve.js";
+import { attachmentKeywordChanges } from "../src/data/list-building-keywords.js";
 import type {
   Roster,
   RosterDetachment,
@@ -432,5 +433,47 @@ describe("roster-conditional leader attachments", () => {
     });
     expect(overlapping.conditionalAttachmentRole("example-leader", new Set(["example-gate"])))
       .toBe("leader");
+  });
+});
+
+// --- validateRosterCore: keywords an attachment changes at list building ---
+describe("validateRosterCore — list-building attachment keywords", () => {
+  // Runnin' Wiv da Herd: a Painboss attached to a MOUNTED unit loses INFANTRY and gains MOUNTED,
+  // so it cannot take Ferocious Show-off (Orks Infantry model only).
+  const SHOW_OFF = "ferocious-show-off-green-tide-orks";
+  const enhancementCodes = (bodyguardId: string | null): string[] => {
+    const unit = (unitId: string, modelCount: number, enhancementId: string | null = null, leaderBodyguardId: string | null = null) => ({
+      unitId, modelCount, isWarlord: false, enhancementId, leaderBodyguardId, counts: new Map<string, number>(),
+    });
+    const { army } = validateRosterCore({
+      factionId: "orks", battleSize: null, forceDisposition: "take-and-hold", detachmentIds: ["green-tide"],
+      units: [
+        unit("painboss", 1, SHOW_OFF, bodyguardId),
+        ...(bodyguardId ? [unit(bodyguardId, bodyguardId === "squighog-boyz" ? 4 : 10)] : []),
+      ],
+    }, ds);
+    return army.filter((v) => v.unitIndex === 0 && v.code.startsWith("enhancement-")).map((v) => v.code);
+  };
+
+  it("rejects an Infantry-only enhancement on a Painboss supporting Squighog Boyz", () => {
+    expect(enhancementCodes("squighog-boyz")).toEqual(["enhancement-keyword-mismatch"]);
+  });
+
+  it("allows it on a Painboss supporting Beast Snagga Boyz, who are not Mounted", () => {
+    expect(enhancementCodes("beast-snagga-boyz")).toEqual([]);
+  });
+
+  it("allows it on an unattached Painboss", () => {
+    expect(enhancementCodes(null)).toEqual([]);
+  });
+
+  it("reads only abilities gated by attachment alone", () => {
+    const record = (id: string) => ds.abilities.get(id)!.raw as unknown as Record<string, unknown>;
+    expect(attachmentKeywordChanges(record("runnin-wiv-da-herd-orks"))).toEqual({
+      predicate: { all_of: ["MOUNTED"] },
+      changes: [{ add: false, key: "INFANTRY" }, { add: true, key: "MOBILE" }, { add: true, key: "MOUNTED" }],
+    });
+    // Gated on the first battle round as well as on attachment: not decided at list building.
+    expect(attachmentKeywordChanges(record("vinghs-wafers-of-dynamism-lords-of-the-forge-adeptus-mechanicus"))).toBeUndefined();
   });
 });

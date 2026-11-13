@@ -1,0 +1,26 @@
+{
+  "name": "Helbrute (death-guard) in Contagion Engines, shooting: the detachment's conditional keyword admits its rules",
+  "input": {
+    "unitId": "helbrute",
+    "factionId": "death-guard",
+    "detachmentId": "contagion-engines"
+  },
+  "phase": "shooting",
+  "expected": {
+    "army": [
+      "nurgles-gift-death-guard",
+      "pact-of-decay-death-guard"
+    ],
+    "detachment": [
+      "warped-and-rusted-animus-death-guard"
+    ],
+    "detachment-stratagem": [
+      "bloodrust-deluge-contagion-engines-death-guard",
+      "fresh-vectors-contagion-engines-death-guard"
+    ],
+    "unit": [
+      "deadly-demise",
+      "diseased-malice-death-guard"
+    ]
+  }
+}

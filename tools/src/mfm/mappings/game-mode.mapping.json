@@ -86,7 +86,9 @@
     {
       "source": "data.publication.isCombatPatrol",
       "candidate_pointer": null,
-      "reason": "This publication flag only derives game_modes references on other entities; it does not establish a game-mode entity identity or name."
+      "reason": "This publication flag only derives game_modes references on other entities; it does not establish a game-mode entity identity or name.",
+      "classification": "consumed-elsewhere",
+      "spread": "80 rows, 80 values (0 null/absent): boolean false×54, true×26"
     }
   ]
 }

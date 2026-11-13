@@ -20,6 +20,7 @@ from __future__ import annotations
 import json
 import math
 import sys
+from collections.abc import Callable
 from typing import Any, TypeGuard, cast
 
 from wh40kdc._spec import SPEC_VERSION
@@ -30,12 +31,15 @@ from wh40kdc.data.affordability import candidate_affordability
 from wh40kdc.data.base import encode_base
 from wh40kdc.data.collection import GAME_MODE_VIEWS
 from wh40kdc.data.dataset import Dataset
-from wh40kdc.data.loadout import (
-    base_loadout,
-    check_unit_legality,
-    loadout_candidates,
-    maximal_loadout,
-    weapon_bounds,
+from wh40kdc.data.mfm_loadout import check_mfm_loadout, default_mfm_loadout
+from wh40kdc.data.mfm_loadout_search import MfmConfiguration, MfmSearchTooLarge
+from wh40kdc.data.mfm_loadout_unit import (
+    mfm_rows,
+    mfm_unit_assignment,
+    mfm_unit_base_loadout,
+    mfm_unit_bounds,
+    mfm_unit_candidates,
+    mfm_unit_violations,
 )
 from wh40kdc.data.normalize import normalize_name
 from wh40kdc.data.roster import validate_roster_core
@@ -251,17 +255,199 @@ def _handle_check_unit_legality(state: RunnerState, args: Any) -> Response:
     )
     if u is None:
         return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": unit_id})
-    comp = ds.unit_composition_of(u.raw)
     counts = {k: int(v) for k, v in (args.get("counts") or {}).items()}
-    violations = check_unit_legality(
-        u.raw,
-        model_count,
-        ds.wargear_options_of(u.raw),
-        counts,
-        (comp or {}).get("models"),
-        (comp or {}).get("tiers"),
-    )
+    violations = ds.loadout_of(u.raw).check(model_count, counts)
     return _ok(sorted(f"{v['code']}:{v['id']}" for v in violations))
+
+
+def _mfm_loadout_of(state: RunnerState, op: str, args: Any) -> tuple[Any, Response | None]:
+    """The unit's MFM loadout rules (None when uncovered), resolved like ``check_unit_legality``."""
+    composition, error = _mfm_composition_of(state, op, args)
+    return (None if composition is None else composition["loadout"]), error
+
+
+def _mfm_composition_of(
+    state: RunnerState, op: str, args: Any, inline: bool = False
+) -> tuple[Any, Response | None]:
+    """The unit's composition when it carries an MFM loadout (else None), resolved likewise.
+
+    With ``inline``, a fabricated ``composition`` arg (``models``, optional
+    ``tiers``, ``loadout``) stands in for a unit's own.
+    """
+    if not isinstance(args, dict):
+        return None, _err("INVALID_INPUT", {"detail": f"{op} args must be an object"})
+    if inline and "composition" in args:
+        given = args["composition"]
+        if not isinstance(given, dict) or not isinstance(given.get("models"), list):
+            return None, _err(
+                "INVALID_INPUT", {"detail": f"{op}.composition must be an object with models"}
+            )
+        return (given if given.get("loadout") is not None else None), None
+    unit_id = args.get("unitId")
+    if not isinstance(unit_id, str):
+        return None, _err("INVALID_INPUT", {"detail": f"{op}.unitId required"})
+    faction_id = args.get("factionId")
+    ds = state.dataset()
+    u = (
+        ds.units.get_in_faction(unit_id, faction_id)
+        if isinstance(faction_id, str)
+        else ds.units.get_any(unit_id)
+    )
+    if u is None:
+        return None, _err("UNKNOWN_ENTITY", {"kind": "unit", "id": unit_id})
+    composition = ds.unit_composition_of(u.raw)
+    if composition is None or composition.get("loadout") is None:
+        return None, None
+    return composition, None
+
+
+def _counts_arg(value: Any) -> dict[str, int] | None:
+    """A wire object of non-negative integer counts, or None when it is not one."""
+    if not isinstance(value, dict):
+        return None
+    out: dict[str, int] = {}
+    for key, n in value.items():
+        if isinstance(n, bool) or not isinstance(n, (int, float)) or n < 0 or int(n) != n:
+            return None
+        out[key] = int(n)
+    return out
+
+
+def _handle_check_mfm_loadout(state: RunnerState, args: Any) -> Response:
+    """Wargear legality against the unit's MFM loadout — mirror of the TS runner op."""
+    rules, error = _mfm_loadout_of(state, "check_mfm_loadout", args)
+    if error is not None:
+        return error
+    models = _counts_arg(args.get("models"))
+    counts = _counts_arg(args.get("counts"))
+    if models is None or counts is None:
+        return _err(
+            "INVALID_INPUT",
+            {"detail": "check_mfm_loadout.models/counts must map ids to non-negative integers"},
+        )
+    if rules is None:
+        return _ok(None)
+    return _ok(check_mfm_loadout(rules, models, counts))
+
+
+def _handle_default_mfm_loadout(state: RunnerState, args: Any) -> Response:
+    """The default unit of the unit's MFM loadout — mirror of the TS runner op."""
+    rules, error = _mfm_loadout_of(state, "default_mfm_loadout", args)
+    if error is not None:
+        return error
+    if rules is None:
+        return _ok(None)
+    models, counts = default_mfm_loadout(rules)
+    return _ok({"models": dict(sorted(models.items())), "counts": dict(sorted(counts.items()))})
+
+
+def _model_count_arg(value: Any) -> int | None:
+    """A model-count argument: a non-negative integer, or None when it is not one."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or value < 0:
+        return None
+    return int(value) if int(value) == value else None
+
+
+def _configuration_wire(configuration: MfmConfiguration) -> dict[str, Any]:
+    """A configuration on the wire: its groups, the unit's own wargear and its counts."""
+    return {
+        "groups": [
+            {
+                "model": group["model"],
+                "count": group["count"],
+                "items": [dict(item) for item in group["items"]],
+            }
+            for group in configuration.groups
+        ],
+        "unit": [dict(item) for item in configuration.unit],
+        "counts": dict(sorted(configuration.counts.items())),
+    }
+
+
+def _too_large_as_error(handler: Callable[[], Response]) -> Response:
+    """Runs an MFM search op, answering a search too large to run with ``INTERNAL_ERROR``."""
+    try:
+        return handler()
+    except MfmSearchTooLarge as e:
+        return _err("INTERNAL_ERROR", {"detail": str(e)})
+
+
+def _handle_mfm_unit(state: RunnerState, args: Any) -> Response:
+    """A unit at a total model count under its MFM loadout — mirror of the TS runner op."""
+    return _too_large_as_error(lambda: _handle_mfm_unit_within(state, args))
+
+
+def _handle_mfm_unit_within(state: RunnerState, args: Any) -> Response:
+    composition, error = _mfm_composition_of(state, "mfm_unit", args, inline=True)
+    if error is not None:
+        return error
+    model_count = _model_count_arg(args.get("modelCount"))
+    limit = 4 if "limit" not in args else _model_count_arg(args["limit"])
+    if model_count is None or limit is None:
+        return _err(
+            "INVALID_INPUT", {"detail": "mfm_unit.modelCount/limit must be non-negative integers"}
+        )
+    if composition is None:
+        return _ok(None)
+    rows = mfm_rows(composition, model_count)
+    base = mfm_unit_base_loadout(composition, model_count)
+    bounds = mfm_unit_bounds(composition, model_count)
+    placed = mfm_unit_assignment(composition, model_count, base[0]) if base else None
+    return _ok(
+        {
+            "rows": dict(sorted(rows.items())) if rows is not None else None,
+            "base": ({"counts": dict(sorted(base[0].items())), "legal": base[1]} if base else None),
+            "bounds": (
+                {k: {"min": b["min"], "max": b["max"]} for k, b in sorted(bounds.items())}
+                if bounds is not None
+                else None
+            ),
+            "groups": _configuration_wire(placed)["groups"] if placed is not None else None,
+            "candidates": mfm_unit_candidates(composition, model_count, limit),
+        }
+    )
+
+
+def _unit_counts_args(op: str, args: dict[str, Any]) -> tuple[int, dict[str, int]] | Response:
+    """The model count and counts shared by ``mfm_assignment`` and ``check_mfm_unit``."""
+    model_count = _model_count_arg(args.get("modelCount"))
+    counts = _counts_arg(args.get("counts"))
+    if model_count is None or counts is None:
+        return _err(
+            "INVALID_INPUT", {"detail": f"{op}.modelCount/counts must be non-negative integers"}
+        )
+    return model_count, counts
+
+
+def _handle_mfm_assignment(state: RunnerState, args: Any) -> Response:
+    """How counts sit on a unit of a total model count — mirror of the TS runner op."""
+    return _too_large_as_error(lambda: _handle_mfm_assignment_within(state, args))
+
+
+def _handle_mfm_assignment_within(state: RunnerState, args: Any) -> Response:
+    composition, error = _mfm_composition_of(state, "mfm_assignment", args, inline=True)
+    if error is not None:
+        return error
+    parsed = _unit_counts_args("mfm_assignment", args)
+    if not isinstance(parsed, tuple):
+        return parsed
+    if composition is None:
+        return _ok(None)
+    placed = mfm_unit_assignment(composition, *parsed)
+    return _ok(_configuration_wire(placed) if placed is not None else None)
+
+
+def _handle_check_mfm_unit(state: RunnerState, args: Any) -> Response:
+    """Wargear legality at a total model count — mirror of the TS runner op."""
+    composition, error = _mfm_composition_of(state, "check_mfm_unit", args, inline=True)
+    if error is not None:
+        return error
+    parsed = _unit_counts_args("check_mfm_unit", args)
+    if not isinstance(parsed, tuple):
+        return parsed
+    if composition is None:
+        return _ok(None)
+    return _ok(mfm_unit_violations(composition, *parsed))
 
 
 def _handle_check_roster_legality(state: RunnerState, args: Any) -> Response:
@@ -425,37 +611,7 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
             if u is None:
                 return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
             return _ok([x["id"] for x in u.wargear_options])
-        if query in ("base_loadout", "maximal_loadout"):
-            u = ds.units.get_any(unit_id)
-            if u is None:
-                return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
-            # The corpus always supplies modelCount; missing coerces to 0.
-            model_count = int(input_.get("modelCount") or 0)
-            comp = ds.unit_composition_of(u.raw)
-            fn = base_loadout if query == "base_loadout" else maximal_loadout
-            lo = fn(
-                u.raw,
-                model_count,
-                ds.wargear_options_of(u.raw),
-                (comp or {}).get("models"),
-            )
-            # Encode the id→count map as sorted "id:count" strings for set compare.
-            return _ok(sorted(f"{id_}:{n}" for id_, n in lo.items()))
-        if query == "weapon_bounds":
-            u = ds.units.get_any(unit_id)
-            if u is None:
-                return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
-            model_count = int(input_.get("modelCount") or 0)
-            comp = ds.unit_composition_of(u.raw)
-            bounds = weapon_bounds(
-                u.raw,
-                model_count,
-                ds.wargear_options_of(u.raw),
-                (comp or {}).get("models"),
-            )
-            # Encode each id's inclusive range as sorted "id:min-max" strings for set compare.
-            return _ok(sorted(f"{id_}:{b['min']}-{b['max']}" for id_, b in bounds.items()))
-        if query == "loadout_candidates":
+        if query in ("base_loadout", "weapon_bounds", "maximal_loadout", "loadout_candidates"):
             faction_id = input_.get("factionId")
             u = (
                 ds.units.get_in_faction(unit_id, cast(str, faction_id))
@@ -464,17 +620,26 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
             )
             if u is None:
                 return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
-            comp = ds.unit_composition_of(u.raw)
-            return _ok(
-                loadout_candidates(
-                    u.raw,
-                    int(input_.get("modelCount") or 0),
-                    ds.wargear_options_of(u.raw),
-                    (comp or {}).get("models"),
-                    (comp or {}).get("tiers"),
-                    int(input_["limit"]) if input_.get("limit") is not None else None,
-                )
-            )
+            # The corpus always supplies modelCount; missing coerces to 0.
+            model_count = int(input_.get("modelCount") or 0)
+            view = ds.loadout_of(u.raw)
+            try:
+                if query == "base_loadout":
+                    # Sorted "id:count" strings for set compare; empty when the size cannot
+                    # be built.
+                    base = view.base(model_count) or {}
+                    return _ok(sorted(f"{id_}:{n}" for id_, n in base.items()))
+                if query == "weapon_bounds":
+                    # Each id's inclusive range as sorted "id:min-max" strings.
+                    bounds = view.bounds(model_count) or {}
+                    return _ok(sorted(f"{id_}:{b['min']}-{b['max']}" for id_, b in bounds.items()))
+                if query == "maximal_loadout":
+                    maximal = view.maximal(model_count) or {}
+                    return _ok(sorted(f"{id_}:{n}" for id_, n in maximal.items()))
+                limit = input_.get("limit")
+                return _ok(view.candidates(model_count, None if limit is None else int(limit)))
+            except MfmSearchTooLarge as e:
+                return _err("INTERNAL_ERROR", {"detail": str(e)})
         if query == "phases_of":
             ab = ds.abilities.get_any(input_.get("abilityId") or "")
             if ab is None:
@@ -1002,6 +1167,16 @@ def dispatch(state: RunnerState, req: dict[str, Any]) -> Response:
         return _handle_check_unit_legality(state, args)
     if op == "check_roster_legality":
         return _handle_check_roster_legality(state, args)
+    if op == "check_mfm_loadout":
+        return _handle_check_mfm_loadout(state, args)
+    if op == "default_mfm_loadout":
+        return _handle_default_mfm_loadout(state, args)
+    if op == "mfm_unit":
+        return _handle_mfm_unit(state, args)
+    if op == "mfm_assignment":
+        return _handle_mfm_assignment(state, args)
+    if op == "check_mfm_unit":
+        return _handle_check_mfm_unit(state, args)
     if op == "candidate_affordability":
         return _handle_candidate_affordability(state, args)
     if op == "validate":

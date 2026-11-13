@@ -55,6 +55,8 @@ export function decodeShareToken(token: string): DecodeResult {
  * {@link encodeShareToken} (inside a try/catch) to turn a parsed list into a
  * share link; see {@link rosterToShareListImpl} for the partial-mapping contract.
  */
+export { shareListToRoster } from "./to-roster.js";
+
 export function rosterToShareList(roster: Roster): ShareList {
   return rosterToShareListImpl(roster, embeddedIndex);
 }

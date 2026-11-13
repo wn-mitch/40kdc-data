@@ -20,7 +20,7 @@
 import * as path from "path";
 import { MfmDump } from "./loader.js";
 import { readJsonArray, CORE_DIR } from "./repo-files.js";
-import { findDatasheet } from "./project-loadout.js";
+import { findDatasheet, mfmRefsOf } from "./project-loadout.js";
 import { mintWeapon, type WeaponProfile, type WeaponRecord } from "./gear-projection.js";
 import { wargearItemsForDatasheet } from "./wargear.js";
 import { rewireComp, rewireOption, rewireUnit, weaponFp, type CoreWeapon } from "./weapon-variants.js";
@@ -275,7 +275,7 @@ export interface WeaponStatsReport {
 function dumpWeaponsFor(dump: MfmDump, dir: string, units: readonly UnitRow[], warnings: string[]): Map<string, WeaponRecord[]> {
   const out = new Map<string, WeaponRecord[]>();
   for (const unit of units) {
-    const datasheet = findDatasheet(dump, unit.id, dir);
+    const datasheet = findDatasheet(dump, unit.id, dir, mfmRefsOf(unit));
     if (!datasheet) continue;
     const ctx = { dump, gv: (unit.game_version as WeaponRecord["game_version"] | undefined) ?? currentGameVersion(dump), warnings: [] as string[] };
     const minted: WeaponRecord[] = [];

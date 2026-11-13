@@ -57,7 +57,7 @@ import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
 import { MfmDump } from "./loader.js";
 import { CORE_DIR, ENRICHMENT_DIR, readJsonArray } from "./repo-files.js";
-import { CODEX_CHAPTERS, repoDirForFactionName, repoDirs } from "./faction-map.js";
+import { CODEX_CHAPTERS, repoDirForFactionName, repoDirs, SHARED_ROSTERS } from "./faction-map.js";
 import { keywordLabel, factionKeywordLabel } from "./keywords.js";
 import type { StagedWrite } from "./apply.js";
 
@@ -447,8 +447,12 @@ export function runDetachmentFields(dump: MfmDump): DetFieldsReport {
     };
     let changed = false;
 
+    // A shared-roster faction (a Space Marine chapter, a Chaos legion) carries
+    // copies of its parent roster's detachments; they reconcile against the
+    // parent's dump detachment.
+    const parentMaps = (SHARED_ROSTERS[dir] ?? []).map((parent) => detIdByRepoId.get(parent));
     for (const det of dets) {
-      const detId = idMap?.get(det.id);
+      const detId = idMap?.get(det.id) ?? parentMaps.map((m) => m?.get(det.id)).find((id) => id !== undefined);
       if (!detId) continue;
       res.matched++;
       const unresolved: string[] = [];

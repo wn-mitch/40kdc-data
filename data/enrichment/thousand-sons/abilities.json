@@ -590,7 +590,7 @@
       "target": "this-unit",
       "modifier": {
         "amount": 3,
-        "per": "model"
+        "per": "one-model"
       }
     },
     "scope": {
@@ -6509,7 +6509,7 @@
       ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "community_notes": "[APPROX] \"Re-roll one Hit/Wound/Damage roll\" is a single-die re-roll of choice, approximated here as re-rolling all failures. The clause improving a nearby VEHICLE's Deadly Demise to trigger on a 5+ is not encoded. Full rule in raw-text store."
   },
@@ -7914,11 +7914,20 @@
           }
         },
         {
-          "type": "re-roll",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "wound",
-            "result_scope": "any-result"
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "psychic"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
+            }
           }
         }
       ]
@@ -12107,7 +12116,7 @@
                 "type": "add-unit",
                 "target": "this-unit",
                 "modifier": {
-                  "datasheet": "blue-horrors",
+                  "model": "Blue Horror",
                   "model_count": 2,
                   "join": "this-unit"
                 }
@@ -12130,7 +12139,7 @@
                 "type": "add-unit",
                 "target": "this-unit",
                 "modifier": {
-                  "datasheet": "brimstone-horrors",
+                  "model": "Brimstone Horror",
                   "model_count": 1,
                   "join": "this-unit"
                 }
@@ -12195,7 +12204,7 @@
           "type": "add-unit",
           "target": "this-unit",
           "modifier": {
-            "datasheet": "brimstone-horrors",
+            "model": "Brimstone Horror",
             "model_count": 1,
             "join": "this-unit"
           }

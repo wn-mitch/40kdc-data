@@ -1,0 +1,16 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ PLAYER NAME: —
++ TEAM NAME: —
++ FACTIONS USED: Adeptus Custodes
++ DISPOSITION: Reconnaissance
++ DETACHMENT: Grav Assault Force
++ ARMY POINTS: 1000pts
++
++ WARLORD: —
++ ENHANCEMENT: —
++ LEADER/SUPPORT: —
++ NUMBER OF UNITS: 2
++++++++++++++++++++++++++++++++++++++++++++++++
+
+1x Caladius Annihilator Grav-tank (230 pts): Armoured hull, Twin neutronium cascade projectors, Twin lastrum bolt cannon
+1x Prosecutors (50 pts): 4x Boltgun, 4x Close combat weapon

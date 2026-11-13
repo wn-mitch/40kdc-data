@@ -30,7 +30,10 @@ _QUOTES_RE = re.compile(r"['’‘`\"“”]")
 # (White_Space property) disagree on a few exotic chars (U+FEFF, U+0085,
 # U+001C–001F) that no corpus case or fuzz-pool char exercises; like the Rust
 # mirror, this uses the host language's Unicode whitespace class.
-_SPACE_HYPHEN_RE = re.compile(r"[\s-]+")
+# Dashes are the ASCII hyphen-minus, the Unicode hyphens and dashes
+# U+2010–U+2015, and the minus sign U+2212: GW's data keeps the non-breaking
+# hyphen (`Grav‑Tank`, U+2011) while roster exports print ASCII `Grav-Tank`.
+_SPACE_HYPHEN_RE = re.compile(r"[\s\-\u2010-\u2015\u2212]+")
 
 # Leading "The " (case-insensitive, after trim), capturing the remainder. Mirror
 # of the TS `stripLeadingThe` regex `/^the\s+(.+)$/i`.
@@ -52,8 +55,9 @@ def normalize_name(input: str) -> str:
     1. Unicode NFD-decompose, then strip combining marks — ``Khârn`` → ``Kharn``.
     2. Casefold to lower case.
     3. Remove apostrophe and quote variants (``' ’ ‘ ` " “ ”``) — ``T'au`` → ``Tau``.
-    4. Collapse any run of whitespace or hyphens to a single space, then trim —
-       ``Be'lakor`` → ``belakor``, ``the   betrayer`` → ``the betrayer``.
+    4. Collapse any run of whitespace or dashes (ASCII ``-``, U+2010–U+2015,
+       U+2212) to a single space, then trim — ``Be'lakor`` → ``belakor``,
+       ``the   betrayer`` → ``the betrayer``, ``Grav‑Tank`` → ``grav tank``.
 
     The result is intended only for comparison; it is not a display value.
 

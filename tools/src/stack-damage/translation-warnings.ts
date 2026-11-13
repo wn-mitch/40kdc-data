@@ -4,6 +4,7 @@ import type { Dataset } from "../data/dataset.js";
 import type { MatrixConfig } from "./config.js";
 import type { StackBuffPool } from "./model.js";
 import { WEAPON_GRANT_REASON } from "./weapon-grants.js";
+import { stackEligibleAbilities } from "./stratagem-eligibility.js";
 
 /** The buff source of an eligible rule. */
 export function sourceFor(entry: EligibleAbility): BuffSource {
@@ -38,7 +39,7 @@ export function translationWarnings(
   replaced: ReadonlySet<string>,
 ): StackBuffPool["warnings"] {
   const warnings: StackBuffPool["warnings"] = [];
-  for (const entry of dataset.eligibleAbilities(input, context.phase)) {
+  for (const entry of stackEligibleAbilities(dataset, input, context.phase)) {
     if (config.droppedArmyRules.includes(entry.ability.id)) continue;
     if (entry.source.kind === "army" && replaced.has(entry.ability.id)) continue;
     const translated = entry.ability.describeBuffs(sourceFor(entry), context, perspective, entry.rating);

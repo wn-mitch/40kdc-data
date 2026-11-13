@@ -143,7 +143,7 @@ func actOnDeathLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		act = "shoot"
 	}
 	model := "a model in " + subj
-	if e["target"] == "event-object" {
+	if isEventObject(e["target"]) {
 		model = "a model in this unit"
 	} else if subj == "this model" {
 		model = "this model"
@@ -204,7 +204,7 @@ func actOnDeathLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	}
 	// The destroyed model the trigger names stays, not its unit.
 	held := subj
-	if e["target"] == "event-object" {
+	if isEventObject(e["target"]) {
 		held = "that model"
 	}
 	switch m["resolution"] {
@@ -722,8 +722,11 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		return subj + " " + ev(subj, "has") + " a " + ejstr(m["invuln_sv"]) + "+ invulnerable save" + vs
 	case "heal":
 		who := subj
-		if m["per"] == "model" {
+		switch m["per"] {
+		case "model":
 			who = "each model in " + subj
+		case "one-model":
+			who = "one model in " + subj
 		}
 		if m["amount"] == "full" {
 			return who + " " + ev(who, "regains") + " all " + pronoun(who) + " lost wounds"

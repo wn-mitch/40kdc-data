@@ -45,10 +45,10 @@ function namedWargear(node: unknown, out: Set<string>): Set<string> {
 /**
  * The rules among `eligible` that read `unit-wargear`, with what they give under `context`. They
  * are loadout-dependent when carrying none, one or every model's worth of any named wargear the
- * unit's base loadout or options can hold changes what they give.
+ * unit can carry changes what they give.
  */
-export function wargearRules(eligible: readonly EligibleAbility[], context: EngineContext, scaffold: Pick<LoadoutScaffold, "base" | "options" | "modelCount">): WargearRules {
-  const carriable = new Set([...scaffold.base.keys(), ...scaffold.options.flatMap((option) => [...(option.replacement ?? []), ...(option.replacement_choice ?? []).flat()])]);
+export function wargearRules(eligible: readonly EligibleAbility[], context: EngineContext, scaffold: Pick<LoadoutScaffold, "carriable" | "modelCount">): WargearRules {
+  const carriable = new Set(scaffold.carriable);
   const entries = eligible.filter((entry) => readsUnitWargear(entry.ability.raw.effect));
   const wargearIds = [...entries.reduce((ids, entry) => namedWargear(entry.ability.raw.effect, ids), new Set<string>())].sort();
   const unloaded = wargearTranslation(entries, context);

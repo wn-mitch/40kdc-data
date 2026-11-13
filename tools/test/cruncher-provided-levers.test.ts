@@ -301,12 +301,27 @@ describe("canonical identities and activation boundaries", () => {
     expect(result.activatable[0].requires?.[1]).toMatchObject({ cost });
   });
 
-  it("retains both the option group and its parent usage group", () => {
+  it("caps a stance's options by the stance pool, not each by the parent usage limit", () => {
     const result = effectToBuffs({ type: "stance-select", mode: "re-selectable", options: [
       { id: "first", name: "First", effect: hit }, { id: "second", name: "Second", effect: wound },
     ] }, own, shooting, "attacker", { usage: { frequency: "once-per-battle-round", per: "army" } });
     expect(result.activatable[0].group).toEqual({ id: "fabricated?stance", maxActivations: 1 });
-    expect(result.activatable[0].groups).toEqual([{ id: "fabricated?usage", maxActivations: 1 }]);
+    expect(result.activatable[0].groups).toBeUndefined();
+    expect(result.activatable[0].requires?.[0]).toEqual({ usage: { frequency: "once-per-battle-round", per: "army" } });
+  });
+
+  it("lets one once-per-round dice-pool activation pick up to its max_activations options", () => {
+    const usage = { frequency: "once-per-battle-round", per: "army" };
+    const result = effectToBuffs({ type: "dice-pool-allocation", pool: { count: 8, die: "D6" }, max_activations: 2, options: [
+      { id: "a", name: "A", requirement: { type: "pair", min_value: 1 }, effect: hit },
+      { id: "b", name: "B", requirement: { type: "pair", min_value: 2 }, effect: wound },
+      { id: "c", name: "C", requirement: { type: "pair", min_value: 3 }, effect: hit },
+    ] }, own, shooting, "attacker", { usage });
+    expect(result.activatable.map((lever) => [lever.id, lever.group, lever.groups])).toEqual([
+      ["fabricated#A", { id: "fabricated", maxActivations: 2 }, undefined],
+      ["fabricated#B", { id: "fabricated", maxActivations: 2 }, undefined],
+      ["fabricated#C", { id: "fabricated", maxActivations: 2 }, undefined],
+    ]);
   });
 
   it("uses actual bodyguard membership rather than CHARACTER or Leader capability", () => {

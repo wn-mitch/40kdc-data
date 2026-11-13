@@ -1,8 +1,10 @@
 use serde_json::{json, Value};
 
+use super::super::describe_buffs::{aura_inches, aura_inches_for_round, trigger_gated};
 use super::*;
-use crate::cruncher::buffs::{AbilityKind, BuffContribution};
+use crate::cruncher::buffs::{AbilityKind, BuffContribution, BuffSource, EngineContext};
 use crate::cruncher::effect_to_buffs;
+use crate::cruncher::from_dsl::{EffectTranslation, TranslationPerspective};
 use crate::data::RawData;
 
 fn source(id: &str, kind: AbilityKind) -> BuffSource {

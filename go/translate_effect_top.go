@@ -162,6 +162,8 @@ func usageClause(usage any) string {
 		base = "the first time this battle"
 	case "first-time-this-phase":
 		base = "the first time this phase"
+	case "first-time-this-turn":
+		base = "the first time each turn"
 	case "n-per-battle":
 		switch n {
 		case 1:
@@ -335,6 +337,21 @@ func renderTopLevel(e, scope map[string]any, usage, trigger any) string {
 	// An explicit usage limit (or a list of them) supersedes the duration's coarse "once per battle" lead.
 	if isList(usage) || mapOr(usage)["frequency"] != nil {
 		lead = usageClause(usage)
+	}
+	// Every trigger's object is a model: the effect's `event-object` reads "that model".
+	modelObjects := false
+	for _, t := range normalizeTriggers(trigger) {
+		if t["event"] == nil {
+			continue
+		}
+		if mapOr(t["object"])["level"] != "model" {
+			modelObjects = false
+			break
+		}
+		modelObjects = true
+	}
+	if modelObjects {
+		e = modelObjectRefs(e).(map[string]any)
 	}
 	var condRange float64
 	hasCondRange := false

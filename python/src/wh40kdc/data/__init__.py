@@ -28,6 +28,12 @@ from wh40kdc.data.loadout import (
 )
 from wh40kdc.data.normalize import normalize_name
 from wh40kdc.data.pricing import base_unit_points, points_tier_missing
+from wh40kdc.data.unit_loadout import (
+    UnitLoadout,
+    mfm_group_row_order,
+    mfm_groups,
+    unit_loadout,
+)
 
 __all__ = [
     "COLLECTION_KEYS",
@@ -39,6 +45,7 @@ __all__ = [
     "FactionView",
     "GameModeView",
     "RawData",
+    "UnitLoadout",
     "UnitView",
     "WeaponKeywordView",
     "WeaponView",
@@ -50,10 +57,13 @@ __all__ = [
     "in_game_mode",
     "loadout_candidates",
     "maximal_loadout",
+    "mfm_group_row_order",
+    "mfm_groups",
     "normalize_name",
     "option_cap",
     "points_tier_missing",
     "raw_data",
+    "unit_loadout",
     "validate_loadout",
     "weapon_bounds",
 ]

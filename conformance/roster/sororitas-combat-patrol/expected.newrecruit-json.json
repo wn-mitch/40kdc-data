@@ -218,7 +218,7 @@
                     "id": "w-0",
                     "name": "Bolt pistol",
                     "type": "upgrade",
-                    "number": 36,
+                    "number": 6,
                     "categories": [
                       {
                         "name": "Ranged Weapon",
@@ -242,7 +242,7 @@
                     "id": "w-2",
                     "name": "Stocks and Fists",
                     "type": "upgrade",
-                    "number": 36,
+                    "number": 6,
                     "categories": [
                       {
                         "name": "Ranged Weapon",

@@ -94,8 +94,8 @@ expected value, then add a properly-named case under `conformance/<area>/`.
 The differ probes both runners at startup. Rust's unsupported `compare` and
 `loadout` operations are expected skips; any other `UNKNOWN_OP` fails the report
 and identifies the area, operation, and runner.
-`abilities-resolver`, `affordability`, `roster_legality`, `roster_validation`
-and `weapon-keywords` are not in the differ; the per-language conformance
+`abilities-resolver`, `affordability`, `mfm_loadout`, `roster_legality`,
+`roster_validation` and `weapon-keywords` are not in the differ; the per-language conformance
 tests cover them.
 
 ## CI

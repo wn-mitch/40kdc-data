@@ -310,7 +310,9 @@ function translateEffect(
     const group = counts.length > 0 ? { id: `${abilityId}?usage`, maxActivations: Math.min(...counts) } : undefined;
     if (out.applied.length > 0) out.activatable.push({ id: `${abilityId}#activate`, label: labelForBuffs(out.applied), buffs: out.applied.splice(0), group });
     for (const lever of out.activatable) {
-      if (group && lever.group?.id !== group.id) {
+      // The usage limit counts activations of the ability. Options picked within one activation
+      // (a dice pool, choice, stance or order) are capped by their own pool, not each by the limit.
+      if (group && lever.group?.id !== group.id && !isActivationPool(lever.group?.id, abilityId)) {
         if (lever.group) lever.groups = [...(lever.groups ?? []), group];
         else lever.group = group;
       }
@@ -318,6 +320,14 @@ function translateEffect(
     }
   }
   return out;
+}
+
+/** Suffixes of the pools whose options are picked together in one activation of the ability. */
+const ACTIVATION_POOL_SUFFIXES = ["", "?choice", "?stance", "?order"];
+
+/** Whether `groupId` is a pool of `abilityId` whose options one activation picks together. */
+function isActivationPool(groupId: string | undefined, abilityId: string): boolean {
+  return groupId !== undefined && ACTIVATION_POOL_SUFFIXES.some((suffix) => groupId === `${abilityId}${suffix}`);
 }
 
 type WalkOpts = {
@@ -834,7 +844,10 @@ function translateReroll(
   const damagePath = roll === "hit" || roll === "wound" || roll === "save" || roll === "damage";
   // Re-rolling a random Attacks characteristic: the engine re-rolls each model's dice below the mean.
   if (roll === "attacks" && modifier.count === undefined && (subset === "ones" || subset === "ones-and-twos" || subset === "all-failures")) {
-    if (opts.perspective === "attacker") out.applied.push(withApplicability({ source, contribution: { type: "reroll", roll, subset } }, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))));
+    if (opts.perspective === "attacker") out.applied.push(withApplicability(
+      { source, contribution: { type: "reroll", roll, subset } },
+      withModelWargearApplicability(node, source, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))),
+    ));
     return;
   }
   // "Re-roll one Hit roll": one die across the pool, which the engine prices (engine.ts oneRerollDice).
@@ -842,7 +855,10 @@ function translateReroll(
   // uncapped reroll would silently overstate the effect.
   if (modifier.count !== undefined && damagePath) {
     if (modifier.count === 1 && subset === "all-failures") {
-      out.applied.push(withApplicability({ source, contribution: { type: "reroll-one", roll } }, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))));
+      out.applied.push(withApplicability(
+        { source, contribution: { type: "reroll-one", roll } },
+        withModelWargearApplicability(node, source, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))),
+      ));
       return;
     }
     out.unsupported.push({
@@ -852,7 +868,10 @@ function translateReroll(
     return;
   }
   if (damagePath && (subset === "ones" || subset === "ones-and-twos" || subset === "all-failures")) {
-    out.applied.push(withApplicability({ source, contribution: { type: "reroll", roll, subset } }, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))));
+    out.applied.push(withApplicability(
+      { source, contribution: { type: "reroll", roll, subset } },
+      withModelWargearApplicability(node, source, combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))),
+    ));
     return;
   }
   out.unsupported.push({
@@ -1324,6 +1343,21 @@ function combineOptional(a: BuffApplicability | undefined, b: BuffApplicability 
 
 function withApplicability(buff: Buff, applicability: BuffApplicability | undefined): Buff {
   return applicability ? { ...buff, applicableWhen: applicability } : buff;
+}
+
+/**
+ * A model recipient only narrows scoring when the ability itself is printed by
+ * a wargear item. Other model targets remain subject to the existing
+ * recipient-resolution rules.
+ */
+function withModelWargearApplicability(
+  node: Record<string, unknown>,
+  source: BuffSource,
+  applicability: BuffApplicability | undefined,
+): BuffApplicability | undefined {
+  return source.kind === "ability" && source.wargearId !== undefined && node.target === "this-model"
+    ? combineOptional(applicability, { modelScoped: true })
+    : applicability;
 }
 
 /**
@@ -2120,10 +2154,36 @@ function momentCondition(trigger: unknown, duration?: unknown): Record<string, u
     const own = isObject(item.condition) ? item.condition : null;
     if (isAttackStep(item)) return own;
     const moment = ownMoveFact(item) ?? { type: "timing-is", parameters: { timing: momentKey(item) } };
-    return own ? { operator: "and", operands: [moment, activationCondition(own, duration)] } : moment;
+    const facts = [moment, ...selectionFacts(item, duration), ...(own ? [activationCondition(own, duration)] : [])];
+    return facts.length === 1 ? moment : { operator: "and", operands: facts };
   });
   if (gates.some((gate) => gate === null)) return null;
   return gates.length === 1 ? gates[0]! : { operator: "or", operands: gates };
+}
+
+const SELECTED_PHASE: Readonly<Record<string, string>> = { fight: "fight", shoot: "shooting" };
+
+/**
+ * What a "selected to shoot/fight" trigger says about the moment it opens: the phase it happens
+ * in, while the effect lasts no longer than that phase, and the keywords a friendly subject
+ * names, which the buffed unit must carry. Other triggers add nothing.
+ */
+function selectionFacts(trigger: Record<string, unknown>, duration: unknown): Record<string, unknown>[] {
+  if (trigger.event !== "selected") return [];
+  const facts: Record<string, unknown>[] = [];
+  const to = isObject(trigger.filter) ? trigger.filter.to : undefined;
+  const phase = typeof to === "string" ? SELECTED_PHASE[to] : undefined;
+  if (phase !== undefined && (duration === undefined || duration === "phase")) {
+    facts.push({ type: "phase-is", parameters: { phase } });
+  }
+  const subject = trigger.subject;
+  if (isObject(subject) && (subject.owner === undefined || subject.owner === "friendly")) {
+    const filter = Object.fromEntries(["all_of", "any_of", "none_of"]
+      .filter((key) => Array.isArray(subject[key]) && (subject[key] as unknown[]).length > 0)
+      .map((key) => [key, subject[key]]));
+    if (Object.keys(filter).length > 0) facts.push({ type: "matches", parameters: { subject: "this-unit", filter } });
+  }
+  return facts;
 }
 
 /** Emit one lever per buff-bearing choice, retaining its shared selection cap. */

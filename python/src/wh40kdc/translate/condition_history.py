@@ -24,6 +24,7 @@ from wh40kdc.translate.condition_refs import (
     dekebab,
     event_relation_phrase,
     id_label,
+    is_event_object,
     move_kinds,
     named_use_phrase,
     place_ref_phrase,
@@ -115,7 +116,11 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         atk = _str(f.get("attack_type")) if _truthy(f.get("attack_type")) else ""
         # A charge's targets: "selected the unit as a charge target", apart from an attack's.
         charge = _str(f.get("kind")) == "charge"
-        if p.get("object") is not None:
+        if p.get("object") is not None and f.get("all_attacks") is True:
+            what = f"{unit_ref_phrase(p['object'])} as the target of all of its " + (
+                f"{atk} attacks" if atk else "attacks"
+            )
+        elif p.get("object") is not None:
             noun = "a charge target" if charge else "a target"
             what = f"{unit_ref_phrase(p['object'])} as {noun}" + (
                 f" of its {atk} attacks" if atk else ""
@@ -206,13 +211,15 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         return f"{neg}{obj} lost one or more wounds from {atk}attacks{tail}"
     if event in ("destroyed", "model-destroyed"):
         noun = "model" if event == "model-destroyed" else "unit"
-        if p.get("object") == "event-object" and window == "event":
+        if is_event_object(p.get("object")) and window == "event":
+            made = (
+                f" made with {weapon_noun({'weapons': f['weapons']})}"
+                if f.get("weapons") is not None
+                else ""
+            )
             if _truthy(f.get("attack_type")):
-                weapons = f.get("weapons")
-                weapon_name = weapons.get("name") if isinstance(weapons, dict) else None
-                made = f" made with {_str(weapon_name)}" if _truthy(weapon_name) else ""
                 return f"{neg}destroyed by a {_str(f['attack_type'])} attack{made}"
-            return f"{neg}destroyed by any attack"
+            return f"{neg}destroyed by any attack{made}"
         # "this model": the destroyed model is this one, not any model of the unit.
         if p.get("object") == "this-model":
             return _with_window(
@@ -297,6 +304,17 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         what = f"the {id_label(f['id'])} " if f.get("id") is not None else "a "
         used_kind = _str(f["kind"]) if f.get("kind") is not None else "ability"
         return f"{neg}{_with_window(f'{who} used {what}{dekebab(used_kind)}', window)}"
+    if event == "state-changed":
+        # "cause it to become Below Half-strength": the unit's strength fell past a threshold.
+        # With no subject, any unit: "a unit became Below Half-strength".
+        unit = "a unit" if p.get("subject") is None else who
+        if f.get("strength") == "below-half":
+            became = "did not become" if negated else "became"
+            return _with_window(f"{unit} {became} Below Half-strength", window)
+        if f.get("strength") == "below-starting":
+            fell = "did not fall" if negated else "fell"
+            return _with_window(f"{unit} {fell} below its Starting Strength", window)
+        return f"{neg}{_with_window('state changed happened', window)}"
     if event == "objective-gained":
         return f"{neg}you newly control {_str(n)}+ objectives {_window_phrase(window)}".rstrip()
     if event == "designation-changed":
@@ -313,7 +331,7 @@ def _describe_happened(p: P, negated: bool) -> str:
     if (
         event in ("destroyed", "model-destroyed")
         and filt.get("weapons") is not None
-        and not (p.get("object") == "event-object" and p.get("window") == "event")
+        and not (is_event_object(p.get("object")) and p.get("window") == "event")
     ):
         phrase += f" made with {weapon_noun({'weapons': filt['weapons']})}"
     if (
@@ -321,7 +339,7 @@ def _describe_happened(p: P, negated: bool) -> str:
         and event in ("destroyed", "model-destroyed")
         and (
             p.get("object") == "this-model"
-            or (p.get("object") == "event-object" and p.get("window") == "event")
+            or (is_event_object(p.get("object")) and p.get("window") == "event")
         )
     ):
         phrase += f" ({count_phrase(p['count'])} times)"

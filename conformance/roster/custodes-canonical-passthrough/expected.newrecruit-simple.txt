@@ -1,0 +1,13 @@
+Adeptus Custodes - Canonical pass-through - [1000 pts]
+
+# ++ Army Roster ++ [280 pts]
+## Configuration
+List Name: Canonical pass-through
+Faction: Adeptus Custodes
+Battle Size: Incursion (1000 Point limit)
+Detachment: Grav-Assault Force
+Force Disposition: Reconnaissance
+
+## Battleline [280 pts]
+Caladius Annihilator Grav-tank [230 pts]: Armoured hull, Iliastus accelerator cannon, Twin neutronium cascade projectors, Twin lastrum bolt cannon
+Prosecutors [50 pts]: 4x Boltgun, 4x Close combat weapon

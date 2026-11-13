@@ -1,0 +1,25 @@
+{
+  "name": "Defiler (chaos-space-marines) in Renegade Warband, shooting: a detachment rule that suppresses an army rule for Heretic Astartes units removes it",
+  "input": {
+    "unitId": "defiler",
+    "factionId": "chaos-space-marines",
+    "detachmentId": "renegade-warband"
+  },
+  "phase": "shooting",
+  "expected": {
+    "army": [
+      "cults-of-the-dark-gods-chaos-space-marines"
+    ],
+    "detachment": [
+      "slaves-to-none-chaos-space-marines"
+    ],
+    "detachment-stratagem": [
+      "corrupted-munitions-renegade-warband-chaos-space-marines",
+      "never-outgunned-renegade-warband-chaos-space-marines"
+    ],
+    "unit": [
+      "damaged",
+      "deadly-demise"
+    ]
+  }
+}

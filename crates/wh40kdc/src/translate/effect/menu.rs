@@ -37,6 +37,7 @@ pub(crate) fn usage_clause(u: &Value) -> String {
         Some("once-per-opponent-turn") => "once per opponent's turn".to_string(),
         Some("first-this-battle") => "the first time this battle".to_string(),
         Some("first-time-this-phase") => "the first time this phase".to_string(),
+        Some("first-time-this-turn") => "the first time each turn".to_string(),
         Some("n-per-battle") => {
             if n == 1.0 {
                 "once per battle".to_string()

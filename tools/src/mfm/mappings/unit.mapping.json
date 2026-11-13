@@ -2835,27 +2835,37 @@
     {
       "source": "data.datasheet.bannerImage",
       "candidate_pointer": null,
-      "reason": "Artwork references are excluded from published core entity data."
+      "reason": "Datasheet banner artwork URL; artwork is never published.",
+      "classification": "presentation",
+      "spread": "1174 rows, 1174 values (0 null/absent): string, 1170 distinct"
     },
     {
       "source": "data.datasheet.rowImage",
       "candidate_pointer": null,
-      "reason": "Artwork references are excluded from published core entity data."
+      "reason": "Datasheet list-row artwork URL; artwork is never published.",
+      "classification": "presentation",
+      "spread": "1174 rows, 1174 values (0 null/absent): string, 1166 distinct"
     },
     {
       "source": "data.datasheet.localisations.*.lore",
       "candidate_pointer": null,
-      "reason": "Localized lore remains outside the core entity dataset."
+      "reason": "Datasheet flavour text, GW prose kept in the dump.",
+      "classification": "prose",
+      "spread": "1174 rows, 4086 values (3250 null/absent): string, 818 distinct"
     },
     {
       "source": "data.datasheet.localisations.*.unitComposition",
       "candidate_pointer": "/model_count",
-      "reason": "Prose composition text is not used when structured composition tables are available."
+      "reason": "Unit composition text, GW prose; unit_composition tables carry the counts.",
+      "classification": "prose",
+      "spread": "1174 rows, 4086 values (0 null/absent): string, 3933 distinct"
     },
     {
       "source": "data.invulnerable_save.localisations.*.rules",
       "candidate_pointer": "/profiles/*/invuln_sv",
-      "reason": "Unstructured caveats remain warnings unless they match the narrow reviewed attack-scope normalization."
+      "reason": "Invulnerable-save caveats on 56 rows (11 distinct texts); gear-projection.ts only normalizes a reviewed attack-scope form.",
+      "classification": "prose",
+      "spread": "664 rows, 664 values (608 null/absent): string, 11 distinct"
     }
   ]
 }

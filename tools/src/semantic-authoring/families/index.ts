@@ -9,6 +9,7 @@ import { CHOICE_AND_DICE_EXTENSIONS } from "./choices-and-dice.js";
 import { COUNTS_AS_MOVED_EXTENSIONS } from "./counts-as-moved-own.js";
 import { DURATION_AND_DESIGNATION_EXTENSIONS } from "./durations-and-designations.js";
 import { ELIGIBILITY_EXTENSIONS } from "./eligibility.js";
+import { EVENT_STRENGTH_EXTENSIONS } from "./event-strength.js";
 import { EVENT_USED_OBJECT_EXTENSIONS } from "./event-used-object.js";
 import { EVENT_EXTENSIONS } from "./events.js";
 import { LEAF_STRUCTURE_EXTENSIONS } from "./leaf-structure.js";
@@ -19,9 +20,10 @@ import { REGISTRY_ORDER } from "./registry-order.js";
 import { ROLL_EXTENSIONS } from "./rolls.js";
 import { SELECTION_REF_EXTENSIONS } from "./selection-refs.js";
 import { SELECTION_EXTENSIONS } from "./selections.js";
-import { SET_UP_EXTENSIONS } from "./set-up.js";
+import { ADD_UNIT_MODEL_TYPE, SET_UP_EXTENSIONS } from "./set-up.js";
 import { TARGETING_ABILITY_EXTENSIONS } from "./targeting-ability.js";
 import { TARGETING_HISTORY_EXTENSIONS } from "./targeting-history.js";
+import { TURN_START_EXTENSIONS } from "./turn-start.js";
 import { UNIT_ACTIVITY_EXTENSIONS } from "./unit-activity.js";
 import { UNIT_FILTER_EXTENSIONS } from "./unit-filters.js";
 import { UNIT_NAME_EXTENSIONS } from "./unit-names.js";
@@ -63,9 +65,12 @@ const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [
   ...LEAF_STRUCTURE_EXTENSIONS,
   ...APOSTROPHE_KEYWORD_EXTENSIONS,
   ...EVENT_USED_OBJECT_EXTENSIONS,
+  ...EVENT_STRENGTH_EXTENSIONS,
   ...COUNTS_AS_MOVED_EXTENSIONS,
   ...TARGETING_ABILITY_EXTENSIONS,
   ...TARGETING_HISTORY_EXTENSIONS,
+  ...TURN_START_EXTENSIONS,
+  ADD_UNIT_MODEL_TYPE,
 ];
 
 const extensionVersions = new Map<string, FamilyExtension>();

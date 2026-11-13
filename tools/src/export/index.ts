@@ -34,6 +34,15 @@ export { rosterJsonSerializer } from "./roster-json.js";
 export { rosterizerSerializer } from "./rosterizer.js";
 export { atc2026CompactSerializer, atc2026FullSerializer } from "./atc-2026.js";
 export { yellowscribeSerializer } from "./yellowscribe.js";
+export { yellowscribeArmy } from "./yellowscribe-army.js";
+export type {
+  YellowscribeAbility,
+  YellowscribeArmy,
+  YellowscribeModel,
+  YellowscribeProfile,
+  YellowscribeUnit,
+  YellowscribeWeapon,
+} from "./yellowscribe-army.js";
 
 /** Dataset-free serializers, keyed by their {@link ExportFormat} id. */
 const SERIALIZERS: readonly RosterSerializer[] = [

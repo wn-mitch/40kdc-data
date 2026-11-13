@@ -141,6 +141,13 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 			if atk != "" {
 				what += " of its " + atk + " attacks"
 			}
+			if f["all_attacks"] == true {
+				what = unitRefPhrase(p["object"], "the unit") + " as the target of all of its "
+				if atk != "" {
+					what += atk + " "
+				}
+				what += "attacks"
+			}
 		}
 		return withWindow(who+" "+has+" selected "+what, p["window"])
 	case "disembarked":
@@ -240,15 +247,15 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 		if event == "model-destroyed" {
 			noun = "model"
 		}
-		if p["object"] == "event-object" && p["window"] == "event" {
-			if jsTruthy(f["attack_type"]) {
-				s := neg + "destroyed by a " + cstr(f["attack_type"]) + " attack"
-				if jsTruthy(f["weapons"]) {
-					s += " made with " + weaponNoun(map[string]any{"weapons": f["weapons"]})
-				}
-				return s
+		if isEventObject(p["object"]) && p["window"] == "event" {
+			made := ""
+			if f["weapons"] != nil {
+				made = " made with " + weaponNoun(map[string]any{"weapons": f["weapons"]})
 			}
-			return neg + "destroyed by any attack"
+			if jsTruthy(f["attack_type"]) {
+				return neg + "destroyed by a " + cstr(f["attack_type"]) + " attack" + made
+			}
+			return neg + "destroyed by any attack" + made
 		}
 		// "this model": the destroyed model is this one, not any model of the unit.
 		if p["object"] == "this-model" {
@@ -404,6 +411,27 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 			kind = "ability"
 		}
 		return neg + withWindow(who+" used "+what+dekebab(cstr(kind)), p["window"])
+	case "state-changed":
+		// "cause it to become Below Half-strength": the unit's strength fell past a threshold.
+		// With no subject, any unit: "a unit became Below Half-strength".
+		unit := who
+		if p["subject"] == nil {
+			unit = "a unit"
+		}
+		switch f["strength"] {
+		case "below-half":
+			became := "became"
+			if negated {
+				became = "did not become"
+			}
+			return withWindow(unit+" "+became+" Below Half-strength", p["window"])
+		case "below-starting":
+			fell := "fell"
+			if negated {
+				fell = "did not fall"
+			}
+			return withWindow(unit+" "+fell+" below its Starting Strength", p["window"])
+		}
 	case "objective-gained":
 		return trimEnd(neg + "you newly control " + amount + " objectives " + windowPhrase(p["window"]))
 	case "designation-changed":
@@ -417,11 +445,11 @@ func describeHappened(p map[string]any, negated bool) string {
 	filter := mapOr(p["filter"])
 	event := cstr(p["event"])
 	if (event == "destroyed" || event == "model-destroyed") && filter["weapons"] != nil &&
-		!(p["object"] == "event-object" && p["window"] == "event") {
+		!(isEventObject(p["object"]) && p["window"] == "event") {
 		phrase += " made with " + weaponNoun(map[string]any{"weapons": filter["weapons"]})
 	}
 	if p["count"] != nil && (event == "destroyed" || event == "model-destroyed") &&
-		(p["object"] == "this-model" || (p["object"] == "event-object" && p["window"] == "event")) {
+		(p["object"] == "this-model" || (isEventObject(p["object"]) && p["window"] == "event")) {
 		phrase += " (" + controlCountPhrase(p["count"]) + " times)"
 	}
 	phrase += eventRelationPhrase(filter)

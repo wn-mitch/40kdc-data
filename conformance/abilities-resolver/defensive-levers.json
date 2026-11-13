@@ -307,9 +307,7 @@
               "abilityKind": "unit"
             },
             "group": "moment-shackle-adeptus-custodes?choice",
-            "groups": [
-              "moment-shackle-adeptus-custodes?usage"
-            ],
+            "groups": null,
             "requires": [
               {
                 "usage": {
@@ -349,12 +347,6 @@
           },
           {
             "id": "moment-shackle-adeptus-custodes?choice",
-            "abilityId": "moment-shackle-adeptus-custodes",
-            "label": "Moment Shackle",
-            "maxActivations": 1
-          },
-          {
-            "id": "moment-shackle-adeptus-custodes?usage",
             "abilityId": "moment-shackle-adeptus-custodes",
             "label": "Moment Shackle",
             "maxActivations": 1

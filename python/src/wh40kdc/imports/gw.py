@@ -147,6 +147,15 @@ def _parse_header(lines: list[str]) -> tuple[dict[str, Any], int] | None:
     return header, body_start
 
 
+def is_reference_entry(acc: dict[str, Any]) -> bool:
+    """A zero-point entry with no bullets is a roster-builder reference entry,
+    not a battlefield unit: it has no models, no wargear and no cost
+    (NewRecruit's ``Martial Ka'tah Reference (0 Points)``). Every real unit
+    costs points or lists at least one model or weapon, so the GW adapters drop
+    these entries. Mirror of the TS ``isReferenceEntry``."""
+    return acc["displayed_pts"] == 0 and not acc["bullets"]
+
+
 def _finish_unit(acc: dict[str, Any]) -> tuple[dict[str, Any], str | None]:
     """Build the parsed unit, plus its `Attached as:` role (or None)."""
     bullets: list[dict[str, Any]] = acc["bullets"]
@@ -247,6 +256,9 @@ def _parse_body(lines: list[str], body_start: int) -> tuple[list[dict[str, Any]]
 
     def finalize() -> None:
         nonlocal current
+        if current is not None and is_reference_entry(current):
+            current = None
+            return
         if current is not None:
             unit, attached_role = _finish_unit(current)
             if attached_role:

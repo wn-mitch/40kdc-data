@@ -1,0 +1,31 @@
+Adeptus Custodes - Unnamed list - [2000 pts]
+
+# ++ Army Roster ++ [2000 pts]
+## Configuration
+List Name: Unnamed list
+Faction: Adeptus Custodes
+Battle Size: Strike Force (2000 Point limit)
+Detachment: Emissaries Imperatus
+Detachment: Honoured Companions
+Detachment: Might of the Moritoi
+Force Disposition: Take And Hold
+
+## Battleline [2000 pts]
+Trajann Valoris [265 pts]: Warlord, Eagle's Scream, Watcher's Axe
+Custodian Guard Sodality [240 pts]:
+• 2x Custodian Guard: Guardian Spear
+• 1x Custodian Guard: Guardian Spear, Vexilla
+Allarus Custodians [270 pts]:
+• 2x Allarus Custodians: Balistus grenade launcher, Guardian Spear
+• 1x Allarus Custodians: Balistus grenade launcher, Guardian Spear, Vexilla
+Caladius Annihilator Grav-tank [250 pts]: Arachnus Blaze Carronade, Armoured hull, Twin Lastrum Bolt Cannon
+Custodian Wardens [295 pts]:
+• 2x Custodian Wardens: Guardian Spear
+• 1x Custodian Wardens: Guardian Spear, Vexilla
+Prosecutor Squad [45 pts]:
+• 4x Prosecutor: Boltgun, Gun Stock
+Telemon Heavy Dreadnought [310 pts]: Enhancement: Augury Uplink, Dual Caestus Fists, Spiculus bolt launcher, 2x Twin Neutronium Cascade Projectors
+Venatari with Verutum Lances [270 pts]:
+• 3x Venatari: Verutum Lance
+Witchseeker Squad [55 pts]:
+• 4x Witchseeker: Flamer, Gun Stock

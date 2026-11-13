@@ -79,7 +79,7 @@
             "resolved": true,
             "candidates": []
           },
-          "count": 40
+          "count": 10
         },
         {
           "ref": {
@@ -106,7 +106,7 @@
             "resolved": true,
             "candidates": []
           },
-          "count": 40
+          "count": 10
         },
         {
           "ref": {
@@ -232,7 +232,7 @@
                 "resolved": true,
                 "candidates": []
               },
-              "count": 6
+              "count": 1
             },
             {
               "ref": {
@@ -250,7 +250,7 @@
                 "resolved": true,
                 "candidates": []
               },
-              "count": 6
+              "count": 1
             }
           ]
         },

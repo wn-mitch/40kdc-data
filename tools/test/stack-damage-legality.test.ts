@@ -1,8 +1,12 @@
 import { describe, expect, it } from "vitest";
 
 import { dataset } from "../src/data/index.js";
+import { resolveTarget } from "../src/compare.js";
+import { parseMatrixConfig } from "../src/stack-damage/config.js";
+import { resolveFactionContext } from "../src/stack-damage/factions.js";
+import { damageScoringSession, emptySpec } from "../src/stack-damage/search.js";
 import type { Detachment, Enhancement, Unit, WargearOption } from "../src/generated.js";
-import type { LoadoutModel } from "../src/data/loadout.js";
+import { unitLoadout } from "../src/data/unit-loadout.js";
 import {
   assessDetachmentSelection,
   assessEnhancementAssignment,
@@ -36,12 +40,11 @@ describe("validateCandidateLoadout", () => {
     const result = validateCandidateLoadout({
       unit: candidateUnit,
       modelCount: 5,
-      options: [] as WargearOption[],
       counts: new Map([
         ["rifle", 1],
         ["cannon", 1],
       ]),
-      models: [],
+      loadout: unitLoadout(candidateUnit, undefined, [] as WargearOption[]),
     });
     expect(result.legal).toBe(false);
     expect(result.violations).toEqual([
@@ -173,19 +176,16 @@ describe("Legionaries heavy melee allowance", () => {
   // The dump lets one ordinary Legionary and the Aspiring Champion take heavy
   // melee weapons; the champion's two-weapon swap carries a pair.
   const legionaries = dataset.units.getInFaction("legionaries", "chaos-space-marines")!.raw;
-  const composition = dataset.unitCompositionOf(legionaries) as { models: LoadoutModel[] };
-  const options = dataset.wargearOptionsOf(legionaries);
   const check = (heavy: number, boltguns: number, pistols: number) => validateCandidateLoadout({
     unit: legionaries,
     modelCount: 10,
-    options,
     counts: new Map([
       ["heavy-melee-weapon", heavy],
       ["boltgun-legionaries", boltguns],
       ["bolt-pistol-legionaries", pistols],
       ["close-combat-weapon-legionaries", 10],
     ]),
-    models: composition.models,
+    loadout: dataset.loadoutOf(legionaries),
   });
 
   it("accepts the champion's pair plus one Legionary", () => {
@@ -205,5 +205,33 @@ describe("Legionaries heavy melee allowance", () => {
 
   it("rejects the squad-wide heavy melee loadout the matrix used to pick", () => {
     expect(check(10, 1, 10).legal).toBe(false);
+  });
+});
+
+describe("optimizer enhancement levers on a support character", () => {
+  // Runnin' Wiv da Herd: a Painboss supporting Squighog Boyz (MOUNTED) loses INFANTRY at list
+  // building, so the search must not select Ferocious Show-off (Orks Infantry only) for it.
+  const config = parseMatrixConfig(
+    { HC_FACTIONS: "orks", HC_TARGETS: "meq-intercessors", HC_PHASES: "fight", HC_OUTPUT: "stack-damage.json" },
+    { factionIds: new Set(["orks"]), targetIds: ["meq-intercessors"] },
+  );
+  const target = resolveTarget(dataset, dataset.targetProfiles.get("meq-intercessors")!)!;
+  const session = damageScoringSession({ dataset, config, faction: resolveFactionContext(dataset, "orks"), target, phase: "fight" });
+  const lever = "enhancement:ferocious-show-off-green-tide-orks@painboss";
+  const legalOn = (bodyguardId: string): boolean => {
+    const spec = emptySpec("orks", [
+      { unit: dataset.units.getInFaction(bodyguardId, "orks")!, role: "bodyguard" },
+      { unit: dataset.units.getInFaction("painboss", "orks")!, role: "support" },
+    ], ["green-tide"]);
+    expect(session.pool(spec).levers.map((l) => l.id)).toContain(lever);
+    return session.legalLeverSelection(spec, [lever]);
+  };
+
+  it("rejects the Infantry-only enhancement on a Painboss supporting Squighog Boyz", () => {
+    expect(legalOn("squighog-boyz")).toBe(false);
+  });
+
+  it("keeps it on a Painboss supporting Beast Snagga Boyz", () => {
+    expect(legalOn("beast-snagga-boyz")).toBe(true);
   });
 });

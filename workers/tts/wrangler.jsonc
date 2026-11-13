@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "40kdc-tts",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-09-01",
+  // Required by @cloudflare/vitest-pool-workers (and harmless in production).
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "routes": [{ "pattern": "tts.alpacasoft.dev", "custom_domain": true }],
+  // One Durable Object per army code: strongly consistent (the mod may fetch
+  // the code seconds after it is minted) and needs no pre-created KV/D1.
+  "durable_objects": { "bindings": [{ "name": "ARMIES", "class_name": "ArmyStore" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["ArmyStore"] }],
+  // The vendored Yellowscribe Lua is served and embedded as text.
+  "rules": [{ "type": "Text", "globs": ["**/*.lua"], "fallthrough": true }],
+  "vars": {
+    // Minutes a code stays readable, as Yellowscribe's ten.
+    "CODE_TTL_MINUTES": "10",
+    "MAX_UPLOAD_BYTES": "1048576",
+    // Mints codes the stock Yellowscribe TTS mod reads (POST /yellowscribeArmyCode).
+    "YELLOWSCRIBE_ORIGIN": "https://yellowscribe.link"
+  }
+}

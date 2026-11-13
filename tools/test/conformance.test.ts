@@ -20,7 +20,6 @@ import { fileURLToPath } from "node:url";
 import { Dataset } from "../src/data/dataset.js";
 import type { GameModeView } from "../src/data/collection.js";
 import { normalizeName } from "../src/data/normalize.js";
-import { baseLoadout, loadoutCandidates, maximalLoadout, weaponBounds } from "../src/data/loadout.js";
 import { exportRoster, type ExportFormat } from "../src/export/index.js";
 import {
   decodeShareToken,
@@ -631,39 +630,26 @@ function runLinkedApi(base: Dataset, c: LinkedApiCase): string | null | string[]
       return u.wargearOptions.map((o) => o.id);
     }
     case "base_loadout": {
-      const u = ds.units.getAny(c.args.unitId);
+      const u = c.args.factionId ? ds.units.getInFaction(c.args.unitId, c.args.factionId) : ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`base_loadout: unknown unit ${c.args.unitId}`);
-      const comp = ds.unitCompositionOf(u.raw);
-      const lo = baseLoadout(u.raw, Number(c.args.modelCount), ds.wargearOptionsOf(u.raw), comp?.models);
-      return [...lo.counts].map(([id, n]) => `${id}:${n}`).sort();
+      return [...(ds.loadoutOf(u.raw).base(Number(c.args.modelCount)) ?? [])].map(([id, n]) => `${id}:${n}`).sort();
     }
     case "weapon_bounds": {
-      const u = ds.units.getAny(c.args.unitId);
+      const u = c.args.factionId ? ds.units.getInFaction(c.args.unitId, c.args.factionId) : ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`weapon_bounds: unknown unit ${c.args.unitId}`);
-      const comp = ds.unitCompositionOf(u.raw);
-      const bounds = weaponBounds(u.raw, Number(c.args.modelCount), ds.wargearOptionsOf(u.raw), comp?.models);
-      return [...bounds].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort();
+      return [...(ds.loadoutOf(u.raw).bounds(Number(c.args.modelCount)) ?? [])].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort();
     }
     case "maximal_loadout": {
-      const u = ds.units.getAny(c.args.unitId);
+      const u = c.args.factionId ? ds.units.getInFaction(c.args.unitId, c.args.factionId) : ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`maximal_loadout: unknown unit ${c.args.unitId}`);
-      const lo = maximalLoadout(u.raw, Number(c.args.modelCount), ds.wargearOptionsOf(u.raw));
-      return [...lo.counts].map(([id, n]) => `${id}:${n}`).sort();
+      return [...(ds.loadoutOf(u.raw).maximal(Number(c.args.modelCount)) ?? [])].map(([id, n]) => `${id}:${n}`).sort();
     }
     case "loadout_candidates": {
       const u = c.args.factionId
         ? ds.units.getInFaction(c.args.unitId, c.args.factionId)
         : ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`loadout_candidates: unknown unit ${c.args.unitId}`);
-      const comp = ds.unitCompositionOf(u.raw);
-      return loadoutCandidates(
-        u.raw,
-        Number(c.args.modelCount),
-        ds.wargearOptionsOf(u.raw),
-        comp?.models,
-        comp?.tiers,
-        c.args.limit == null ? undefined : Number(c.args.limit),
-      );
+      return ds.loadoutOf(u.raw).candidates(Number(c.args.modelCount), c.args.limit == null ? undefined : Number(c.args.limit));
     }
     case "phases_of": {
       const a = ds.abilities.getAny(c.args.abilityId);
@@ -1102,6 +1088,41 @@ describe("roster-legality conformance corpus", () => {
       if (res.ok) expect(res.value).toEqual(c.expected);
     });
   }
+});
+
+// MFM-loadout conformance — pins the default unit and wargear legality under each unit's MFM
+// loadout rules (`default_mfm_loadout`, `check_mfm_loadout`). The Rust/Python/Go ports assert
+// against the same corpus.
+describe("mfm-loadout conformance corpus", () => {
+  const specVersion = Number.parseInt(readFileSync(join(CONFORMANCE, "SPEC_VERSION"), "utf8").trim(), 10);
+  const state = createRunnerState();
+  dispatch(state, { op: "init", args: { spec_version: specVersion, locale: "C", tz: "UTC", seed: 0 } });
+  for (const [file, op] of [
+    ["defaults.json", "default_mfm_loadout"],
+    ["checks.json", "check_mfm_loadout"],
+    ["units.json", "mfm_unit"],
+    ["assignments.json", "mfm_assignment"],
+    ["unit-checks.json", "check_mfm_unit"],
+  ] as const) {
+    const cases = readJson(join(CONFORMANCE, "mfm_loadout", file)) as RosterLegalityCase[];
+    it(`mfm_loadout/${file} is non-empty`, () => {
+      expect(cases.length).toBeGreaterThan(0);
+    });
+    it(`mfm_loadout/${file} matches the runner`, () => {
+      for (const c of cases) {
+        const res = dispatch(state, { op, args: c.args });
+        expect(res.ok, `${c.name}: ${op} errored: ${JSON.stringify(res)}`).toBe(true);
+        if (res.ok) expect(res.value, c.name).toEqual(c.expected);
+      }
+    });
+  }
+  it("refuses a fractional or negative count rather than truncating it", () => {
+    for (const n of [1.5, -1]) {
+      const args = { unitId: "deff-dread", factionId: "orks", models: {}, counts: { "dread-klaw": n } };
+      const res = dispatch(state, { op: "check_mfm_loadout", args });
+      expect(res.ok ? null : res.error_kind).toBe("INVALID_INPUT");
+    }
+  });
 });
 
 // Roster-validation conformance — pins the whole-army legality check

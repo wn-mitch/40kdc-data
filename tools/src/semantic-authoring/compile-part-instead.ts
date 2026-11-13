@@ -8,6 +8,7 @@ import { crossFamilyCandidates, inheritBand, replaceAcrossFamilies, tradesSuppre
 import { inheritAttackFrame, namesBearer, replacingConditions } from "./compile-instead-scope.js";
 import type { PartFrame } from "./compile-part-classify.js";
 import type { PlannedEffect } from "./compile-part-plan.js";
+import type { Placement } from "./compile-placement.js";
 
 type Node = Record<string, unknown>;
 
@@ -55,7 +56,8 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
   for (const combinator of combinators) {
     if (choices.has(combinator)) {
       if (handledChoices.has(combinator)) continue;
-      const lower = Math.max(-1, ...choiceLimits.filter((index) => index < combinator));
+      const leadIn = colonLeadIn(list, places, sourceText, combinator);
+      const lower = Math.max(-1, ...choiceLimits.filter((index) => index < combinator), leadIn);
       const upper = Math.min(Number.POSITIVE_INFINITY, ...choiceLimits.filter((index) => index > combinator));
       const markers = combinators.filter((index) => choices.has(index) && index > lower && index < upper);
       for (const index of markers) handledChoices.add(index);
@@ -69,7 +71,7 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
       const sharedAt = inline ? -1 : list.findIndex((leaf, at) => at > last && at < upper && places[at]!.sentence !== places[last]!.sentence
         && places[at - 1]!.sentence !== places[at]!.sentence && opensDoingSo(sourceText, list[at - 1]!, leaf));
       const end = sentenceEnd > last && sentenceEnd < upper ? sentenceEnd : sharedAt > last ? sharedAt : upper;
-      const limits = end < upper ? [...choiceLimits, end] : choiceLimits;
+      const limits = [...choiceLimits, ...(end < upper ? [end] : []), ...(leadIn > -1 ? [leadIn] : [])];
       // A bound duration would sit inside the choice's options, which the choice does not carry (no split form yet).
       if (planned.some((item) => item.index > lower && item.index < end && boundDuration.has(item.index))) errors.push(CONFLICTING_DURATIONS);
       else {
@@ -201,6 +203,12 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
     // later moment holds only while that moment's part lasts, and a negated gate on the standing effect would test that
     // moment's condition when no such moment happened. The DSL has no part-long replacement of a standing effect yet.
     if (triggerIndexes.some((at) => at > replaced.index && at < replacement.index)) {
+      // "The bearer has Feel No Pain 5+. At the start of any turn, if …, it has Feel No Pain 4+ instead": a model uses
+      // only its best Feel No Pain (or invulnerable save), so a no-worse threshold granted alongside is the replacement.
+      if (bestWinsReplacement(replaced.leaf, replacement.leaf)) {
+        replacement.replaces = true;
+        continue;
+      }
       errors.push("\"Instead\" under a later moment replaces a standing effect only while that moment's part lasts; that has no DSL reading yet.");
       continue;
     }
@@ -227,4 +235,36 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
     // ("... attacks that target that enemy unit ... by 1, or by 2 instead"): the target condition sits on the first clause only.
     if (replaced.selected) replacement.selected = true;
   }
+}
+
+/** Effects of which a model uses only the best (lowest) threshold it has, whatever grants them. */
+const BEST_WINS = new Set(["feel-no-pain", "invulnerable-save"]);
+
+/**
+ * Whether `replacement` replaces `replaced` exactly by being granted alongside it: both are the same
+ * best-wins effect on the same subject (and, for Feel No Pain, against the same attacks), and the
+ * replacement's threshold is no worse. A worse threshold would leave the better one in force.
+ */
+function bestWinsReplacement(replaced: CompileLeaf, replacement: CompileLeaf): boolean {
+  if (!BEST_WINS.has(replacement.family_id) || replaced.family_id !== replacement.family_id) return false;
+  const [old, next] = [replaced.parameters, replacement.parameters];
+  if (old.subject !== next.subject || old.against !== next.against) return false;
+  return typeof old.threshold === "number" && typeof next.threshold === "number" && next.threshold <= old.threshold;
+}
+
+/**
+ * "…, you can spend 1 Pain token to Empower this unit. If you do: A. Or: B.": the options follow a
+ * colon, so the first option starts at the sentence the colon opens and what comes before it applies
+ * whichever option is picked. The index of the last leaf before that sentence, or -1 when the first
+ * option's sentence does not follow a colon.
+ */
+function colonLeadIn(list: readonly CompileLeaf[], places: readonly Placement[], sourceText: string | undefined, marker: number): number {
+  if (sourceText === undefined || marker === 0) return -1;
+  const sentence = places[marker - 1]!.sentence;
+  const first = list.findIndex((_, at) => places[at]!.sentence === sentence);
+  if (first <= 0) return -1;
+  const previous = list[first - 1]!;
+  if (previous.fragment !== list[first]!.fragment || previous.end_byte === undefined) return -1;
+  const gap = Buffer.from(sourceText, "utf8").subarray(previous.end_byte, list[first]!.start_byte).toString("utf8");
+  return /:\s*$/u.test(gap.replace(/\*/gu, "")) ? first - 1 : -1;
 }

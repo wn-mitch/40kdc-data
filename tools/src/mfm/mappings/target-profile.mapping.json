@@ -118,7 +118,9 @@
     {
       "source": "data.datasheet.maxModelCount",
       "candidate_pointer": "/model_count_override",
-      "reason": "Datasheet maximum model count is not equivalent to a target profile's optional comparison override, which may intentionally be absent or choose another size."
+      "reason": "Set on 8 datasheets (10 or 6), possibly a cap across mixed composition rows; loadout-lift.ts should lift it if composition tiers do not already enforce it.",
+      "classification": "needs-consumer",
+      "spread": "1174 rows, 1174 values (1166 null/absent): number 6×1, 10×7"
     }
   ]
 }

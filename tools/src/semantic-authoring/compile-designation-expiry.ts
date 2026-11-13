@@ -57,9 +57,11 @@ export function withDesignationExpiry(list: readonly CompileLeaf[]): CompileLeaf
  * affected by this ability. Each time this unit is selected to shoot, until the end of the phase, …": a moment
  * printed between the mark and a later duration starts another part, whose duration it is. A duration printed
  * before the mark leads the moments after it ("Until the end of the turn, when …, select …"), unless an effect
- * of its own comes between it and a moment before the mark.
+ * of its own comes between it and a moment before the mark. Only a duration in the mark's own fragment counts.
  */
 function sameMoment(list: readonly CompileLeaf[], mark: CompileLeaf, end: CompileLeaf): boolean {
+  // A Stratagem's TARGET and EFFECT are separate texts: a duration in one does not bound a mark in the other.
+  if (end.fragment !== undefined && mark.fragment !== undefined && end.fragment !== mark.fragment) return false;
   if (end.start_byte > mark.start_byte) return !list.some((leaf) => leaf.role === "EVENT" && leaf.start_byte > mark.start_byte && leaf.start_byte < end.start_byte);
   const between = list.filter((leaf) => leaf.start_byte > end.start_byte && leaf.start_byte < mark.start_byte);
   const firstEffect = between.findIndex((leaf) => leaf.role === "EFFECT");

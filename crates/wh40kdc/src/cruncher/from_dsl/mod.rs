@@ -561,10 +561,17 @@ pub fn apply_activation(result: &mut EffectTranslation, ability_id: &str, activa
     }
     for lever in &mut result.activatable {
         if let Some(group) = &group {
-            if lever
+            // The usage limit counts activations of the ability. Options picked within one
+            // activation (a dice pool, choice, stance or order) are capped by their own pool.
+            let pooled = lever
                 .group
                 .as_ref()
-                .is_none_or(|current| current.id != group.id)
+                .is_some_and(|current| is_activation_pool(&current.id, ability_id));
+            if !pooled
+                && lever
+                    .group
+                    .as_ref()
+                    .is_none_or(|current| current.id != group.id)
             {
                 if lever.group.is_some() {
                     lever
@@ -581,6 +588,13 @@ pub fn apply_activation(result: &mut EffectTranslation, ability_id: &str, activa
             .get_or_insert_with(Vec::new)
             .insert(0, requirement.clone());
     }
+}
+
+/// Whether `group_id` is a pool of `ability_id` whose options one activation picks together.
+fn is_activation_pool(group_id: &str, ability_id: &str) -> bool {
+    ["", "?choice", "?stance", "?order"]
+        .iter()
+        .any(|suffix| group_id == format!("{ability_id}{suffix}"))
 }
 
 /// Unit-refs that name a unit the buff layer cannot identify with the buffed unit.

@@ -1439,7 +1439,7 @@
                 "type": "add-unit",
                 "target": "this-unit",
                 "modifier": {
-                  "datasheet": "blue-horrors",
+                  "model": "Blue Horror",
                   "model_count": 2,
                   "join": "this-unit"
                 }
@@ -1462,7 +1462,7 @@
                 "type": "add-unit",
                 "target": "this-unit",
                 "modifier": {
-                  "datasheet": "brimstone-horrors",
+                  "model": "Brimstone Horror",
                   "model_count": 1,
                   "join": "this-unit"
                 }
@@ -6395,7 +6395,7 @@
                     "target": "event-subject",
                     "modifier": {
                       "amount": "D3",
-                      "per": "unit"
+                      "per": "one-model"
                     }
                   }
                 },
@@ -8829,7 +8829,13 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "applies_to": {
+      "all_of": [
+        "LEGIONES DAEMONICA",
+        "SLAANESH"
+      ]
+    }
   },
   {
     "ability_id": "shroud-of-flies-chaos-daemons",
@@ -9520,7 +9526,7 @@
           "target": "this-unit",
           "modifier": {
             "amount": 3,
-            "per": "unit"
+            "per": "one-model"
           }
         },
         {
@@ -10256,7 +10262,7 @@
             "target": "this-unit",
             "modifier": {
               "amount": "D3+1",
-              "per": "model"
+              "per": "one-model"
             }
           }
         }
@@ -11666,7 +11672,7 @@
           "type": "add-unit",
           "target": "this-unit",
           "modifier": {
-            "datasheet": "brimstone-horrors",
+            "model": "Brimstone Horror",
             "model_count": 1,
             "join": "this-unit"
           }

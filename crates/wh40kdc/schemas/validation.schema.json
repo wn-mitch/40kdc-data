@@ -1182,6 +1182,16 @@
             "enemy-deployment-zone"
           ]
         },
+        "outside_territory": {
+          "enum": [
+            "your-territory",
+            "enemy-territory",
+            "no-mans-land",
+            "your-deployment-zone",
+            "enemy-deployment-zone"
+          ],
+          "description": "The objective is not in this territory (\"not in your opponent's deployment zone\")."
+        },
         "controlled_by": {
           "$ref": "#/$defs/owner"
         },
@@ -1454,6 +1464,10 @@
             "mortal"
           ]
         },
+        "all_attacks": {
+          "const": true,
+          "description": "targets-selected: the subject selected the object as the target of every one of its attacks, not just some (\"does not select your unit as the target of all of its attacks\" is this, negated)."
+        },
         "weapons": {
           "$ref": "#/$defs/weapon-scope"
         },
@@ -1486,6 +1500,13 @@
         },
         "state": {
           "$ref": "#/$defs/unit-state"
+        },
+        "strength": {
+          "enum": [
+            "below-half",
+            "below-starting"
+          ],
+          "description": "state-changed: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting), in place of a state."
         },
         "tag": {
           "$ref": "#/$defs/designation-id"
@@ -4377,6 +4398,44 @@
       ],
       "additionalProperties": false
     },
+    "items": {
+      "description": "A multiset of items: each repo weapon or wargear id with its copy count.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/entity-id"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "id",
+          "count"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "model-items": {
+      "type": "object",
+      "properties": {
+        "model": {
+          "type": "string",
+          "minLength": 1
+        },
+        "items": {
+          "$ref": "#/$defs/items"
+        }
+      },
+      "required": [
+        "model",
+        "items"
+      ],
+      "additionalProperties": false
+    },
     "unit-composition": {
       "title": "Unit Composition",
       "description": "Describes the internal model-type breakdown of a unit.",
@@ -4432,6 +4491,21 @@
                 "type": "boolean",
                 "default": false,
                 "description": "True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded."
+              },
+              "cannot_be_warlord": {
+                "type": "boolean",
+                "default": false,
+                "description": "True when this model cannot be the army's Warlord (e.g. the Eversor Assassin, Murderfang). A unit whose every model carries it cannot be the Warlord's unit unless a selected detachment names it for Warlord."
+              },
+              "can_be_non_character_warlord": {
+                "type": "boolean",
+                "default": false,
+                "description": "True when this model can be the army's Warlord although it is not a CHARACTER (e.g. a Warlord Titan). Without it, the Warlord must be a CHARACTER."
+              },
+              "is_supreme_commander": {
+                "type": "boolean",
+                "default": false,
+                "description": "True when this model must be the army's Warlord if its unit is included (Supreme Commander, e.g. Roboute Guilliman). When an army includes several such units, one of them must be the Warlord."
               },
               "base_size_mm": {
                 "description": "This model's base. Absent when no base could be resolved for the model.",
@@ -4578,6 +4652,261 @@
             ],
             "additionalProperties": false
           }
+        },
+        "added_models": {
+          "description": "Model types a rule adds to the unit during the battle (Split adds Blue and Brimstone Horrors to Pink Horrors). A list never contains them, so they take no part in models, tiers or loadout; GW's data lists them as model rows capped at 0. Each carries the gear a newly added model of its type has.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "profile_name": {
+                "description": "The unit profile holding this model type's characteristics, when the unit has one.",
+                "type": "string",
+                "minLength": 1
+              },
+              "keywords": {
+                "description": "The model type's keywords.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "default_weapon_ids": {
+                "description": "The equipment a newly added model of this type carries.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/entity-id"
+                }
+              }
+            },
+            "required": [
+              "name",
+              "keywords",
+              "default_weapon_ids"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "loadout": {
+          "description": "The unit's wargear rules in the structure of GW's Munitorum Field Manual data, keyed by repo item ids and model names; a name several rows of `models` share is written `name#k` for the k-th of them. Each model makes `picks` choices from every slot on its model row (or takes its alternate slot instead of all of them); limits cap the unit's choices; uniform sets make every model on a row carry the same main option. Absent for units the MFM does not cover.",
+          "type": "object",
+          "properties": {
+            "stock": {
+              "description": "The default unit: for each model row, its model count and the unit-wide copies of each item. A row without `model` holds wargear the unit takes once.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "model": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "models": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "items": {
+                    "$ref": "#/$defs/items"
+                  },
+                  "individual": {
+                    "description": "The app lists this row's models one by one, each with its own widgets, so a checkbox on the row is one per model rather than one for the row.",
+                    "const": true
+                  }
+                },
+                "required": [
+                  "models",
+                  "items"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "templates": {
+              "description": "What one model of a row carries when added beyond the default unit.",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/model-items"
+              }
+            },
+            "slots": {
+              "description": "Per-model choice menus. A model's wargear is the union of its picks across its row's slots.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "model": {
+                    "description": "The model row the slot belongs to; absent for a slot the unit fills once.",
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "picks": {
+                    "description": "Choices each model makes from this slot.",
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "repeats": {
+                    "description": "Whether one choice can be picked more than once.",
+                    "type": "boolean"
+                  },
+                  "alternate": {
+                    "description": "A model takes this slot instead of every non-alternate slot on its row.",
+                    "type": "boolean"
+                  },
+                  "choices": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "$ref": "#/$defs/items"
+                    }
+                  }
+                },
+                "required": [
+                  "picks",
+                  "repeats",
+                  "alternate",
+                  "choices"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "limits": {
+              "description": "Caps on how many of a set of choices the unit may take, counted on the unit's item copies.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "model": {
+                    "description": "The model row whose copies count; absent to count the whole unit's.",
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "breakpoints": {
+                    "description": "The cap is the `choices` of the breakpoint with the largest `models` at or below the unit's model count, or 0 when none is.",
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "models": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "choices": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "per_choice": {
+                          "description": "How many times one choice may be taken; absent for no limit.",
+                          "type": "integer",
+                          "minimum": 1
+                        }
+                      },
+                      "required": [
+                        "models",
+                        "choices"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "choices": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "$ref": "#/$defs/items"
+                    }
+                  }
+                },
+                "required": [
+                  "breakpoints",
+                  "choices"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "options": {
+              "description": "The app's wargear widgets: one entry per option it shows on a model row (or for the unit, when `model` is absent), with the item the option adds, its input and its default copies. A checkbox is taken at most once, so a row whose every option for an item is a checkbox carries at most that many copies of it (or its stock copies, when more). A row the default unit has at most one model of, whose stock options are all checkboxes, shows its widgets per model, so its caps scale with its model count.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "model": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "id": {
+                    "$ref": "#/$defs/entity-id"
+                  },
+                  "input": {
+                    "enum": [
+                      "checkbox",
+                      "stepper"
+                    ]
+                  },
+                  "default": {
+                    "description": "Copies of the item the default unit's row takes through this option.",
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "id",
+                  "input",
+                  "default"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "uniform": {
+              "description": "Every model on the row (or in the unit, when `model` is absent) that takes no substitute carries the same main option.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "model": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "choices": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "items": {
+                          "$ref": "#/$defs/items"
+                        },
+                        "substitute": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "items",
+                        "substitute"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "choices"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "stock",
+            "templates",
+            "slots",
+            "limits",
+            "options",
+            "uniform"
+          ],
+          "additionalProperties": false
         },
         "game_version": {
           "$ref": "#/$defs/game-version-ref"
@@ -5802,7 +6131,8 @@
             "once-per-opponent-turn",
             "n-per-battle",
             "first-this-battle",
-            "first-time-this-phase"
+            "first-time-this-phase",
+            "first-time-this-turn"
           ]
         },
         "count": {
@@ -10859,8 +11189,10 @@
                 "per": {
                   "enum": [
                     "model",
-                    "unit"
-                  ]
+                    "unit",
+                    "one-model"
+                  ],
+                  "description": "model: each model in the target regains the amount; one-model: one model in the target does; unit (or absent): the target unit does."
                 }
               },
               "required": [
@@ -11227,6 +11559,11 @@
                 "datasheet": {
                   "$ref": "#/$defs/entity-id"
                 },
+                "model": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "A model type of the joined unit that only rules add (its unit composition's added_models name), as Split adds Blue Horrors to Pink Horrors."
+                },
                 "count": {
                   "oneOf": [
                     {
@@ -11363,6 +11700,12 @@
                 {
                   "required": [
                     "datasheet"
+                  ]
+                },
+                {
+                  "required": [
+                    "model",
+                    "join"
                   ]
                 }
               ]

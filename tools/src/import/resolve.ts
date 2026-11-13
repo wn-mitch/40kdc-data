@@ -19,7 +19,6 @@ import { unitAbilityIds } from "../data/ability-refs.js";
 import type { Dataset } from "../data/dataset.js";
 import type { UnitView } from "../data/entities.js";
 import { detachmentCapForBattleSize } from "../data/battle-sizes.js";
-import { checkUnitLegality, completeLoadout, groupLoadout } from "../data/loadout.js";
 import { normalizeName, stripLeadingThe } from "../data/normalize.js";
 import type {
   BattleSize,
@@ -941,13 +940,7 @@ function resolveUnit(
         (explicitCounts.get(item.ref.id!) ?? 0) + item.count,
       );
     }
-    const completed = completeLoadout(
-      hit.raw,
-      model_count,
-      ds.wargearOptionsOf(hit.raw),
-      ds.unitCompositionOf(hit.raw)?.models,
-      explicitCounts,
-    );
+    const completed = ds.loadoutOf(hit.raw).complete(model_count, explicitCounts);
     if (completed) {
       const refForId = (id: string): ResolvedRef => {
         const existing = explicitRefs.get(id);
@@ -988,6 +981,14 @@ function resolveUnit(
         })) ?? undefined;
     }
   }
+  // Derived groups list wargear in their own order, so the list re-imports from any dialect the
+  // same way: a dialect that prints groups reads its wargear in group order.
+  if (!parsed.loadout_groups && loadout_groups) {
+    const rank = new Map<string, number>();
+    for (const group of loadout_groups) for (const item of group.wargear) if (item.ref.id && !rank.has(item.ref.id)) rank.set(item.ref.id, rank.size);
+    const at = (item: RosterWargear) => (item.ref.id ? rank.get(item.ref.id) ?? rank.size : rank.size);
+    wargear = wargear.map((item, index) => ({ item, index })).sort((a, b) => at(a.item) - at(b.item) || a.index - b.index).map(({ item }) => item);
+  }
 
   // Loadout legality — the conservative checker over the fully-resolved counts.
   // Gated exactly like grouping (an unresolved unit has no datasheet to check;
@@ -1011,14 +1012,7 @@ function resolveUnit(
     if (plausibleCount) {
       const counts = new Map<string, number>();
       for (const w of wargear) counts.set(w.ref.id!, (counts.get(w.ref.id!) ?? 0) + w.count);
-      const violations = checkUnitLegality(
-        hit.raw,
-        model_count,
-        ds.wargearOptionsOf(hit.raw),
-        counts,
-        comp?.models,
-        comp?.tiers,
-      ).filter((v) => v.code !== "invalid-model-count" && v.code !== "below-min");
+      const violations = ds.loadoutOf(hit.raw).check(model_count, counts).filter((v) => v.code !== "invalid-model-count" && v.code !== "below-min");
       if (violations.length > 0) {
         diag.warn(
           "loadout-illegal",
@@ -1058,7 +1052,7 @@ function resolveUnit(
 
 /**
  * Recompute a unit's {@link RosterUnit.loadout_groups} from its resolved wargear via
- * {@link groupLoadout} — the same maths the exporter uses, so an import→export
+ * the unit's loadout view (`Dataset.loadoutOf(...).groups`) — the same maths the exporter uses, so an import→export
  * round-trip is stable. Returns `undefined` when the unit is unresolved, any weapon
  * is unresolved (the aggregate would be incomplete), or the loadout doesn't
  * decompose exactly.
@@ -1077,13 +1071,7 @@ function buildLoadoutGroups(
     refById.set(w.ref.id, w.ref);
     counts.set(w.ref.id, (counts.get(w.ref.id) ?? 0) + w.count);
   }
-  const groups = groupLoadout(
-    hit.raw,
-    modelCount,
-    ds.wargearOptionsOf(hit.raw),
-    ds.unitCompositionOf(hit.raw)?.models,
-    counts,
-  );
+  const groups = ds.loadoutOf(hit.raw).groups(modelCount, counts);
   if (!groups) return undefined;
   return groups.map((g) => ({
     model_name: g.model_name,

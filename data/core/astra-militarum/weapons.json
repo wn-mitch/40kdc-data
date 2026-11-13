@@ -392,10 +392,6 @@
         "namespace": "mfm",
         "id": "ef1c88af-0c22-4fb6-8a6a-fab337c30c4b"
       }
-    ],
-    "game_modes": [
-      "matched-play",
-      "combat-patrol"
     ]
   },
   {
@@ -3514,10 +3510,6 @@
         "namespace": "mfm",
         "id": "b526157a-2607-4cea-a7df-b174634d38a3"
       }
-    ],
-    "game_modes": [
-      "matched-play",
-      "combat-patrol"
     ]
   },
   {
@@ -4263,10 +4255,6 @@
         "namespace": "mfm",
         "id": "d4c21ec3-4925-4440-84f2-34128cfceb6d"
       }
-    ],
-    "game_modes": [
-      "matched-play",
-      "combat-patrol"
     ]
   },
   {
@@ -11485,6 +11473,130 @@
       {
         "namespace": "mfm",
         "id": "2c781823-45ca-4d21-b3a3-850edb5d414f"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "goad-lance-draydens-lance-attilan-rough-riders",
+    "name": "Goad lance",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Goad Lance",
+        "range": "Melee",
+        "stats": {
+          "A": 2,
+          "S": 6,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "9254-fb44-df-bd0d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8081f328-2b20-46f8-9e84-bc784627f2bc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d4c21ec3-4925-4440-84f2-34128cfceb6d"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "laspistol-draydens-lance-attilan-rough-riders",
+    "name": "Laspistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Laspistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5837-1692-df16-8061"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c643ccfb-75f5-4376-a6ef-8cb61a7f1fa2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ef1c88af-0c22-4fb6-8a6a-fab337c30c4b"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "power-sabre-draydens-lance-attilan-rough-riders",
+    "name": "Power sabre",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Power Sabre",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 4,
+          "AP": -2,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "8894-e331-1f86-5712"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9c7a58a8-259e-4a94-b5a2-d92d6f88a257"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b526157a-2607-4cea-a7df-b174634d38a3"
       }
     ],
     "game_modes": [

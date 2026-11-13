@@ -1911,6 +1911,14 @@
     "wargear_budgets": [
       {
         "items": [
+          "busta-rokkit-launcha",
+          "pulsa-rokkit-once-per-battle-per-unit"
+        ],
+        "count": 6,
+        "per_models": 0
+      },
+      {
+        "items": [
           "pulsa-rokkit-once-per-battle-per-unit"
         ],
         "count": 2,

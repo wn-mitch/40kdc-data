@@ -213,8 +213,11 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     case "add-unit": {
       const source = closed(leaf, "source");
       const count = countValue(closed(leaf, "count"));
-      const base: Node = source === "datasheet" ? { datasheet: closed(leaf, "datasheet") } : { copy_of: "event-object" };
+      const base: Node = source === "datasheet" ? { datasheet: closed(leaf, "datasheet") }
+        : source === "model" ? { model: closed(leaf, "model") }
+          : { copy_of: "event-object" };
       const join = leaf.parameters.join === true;
+      if (source === "model" && !join) throw new CompileError("Models of one of this unit's model types join this unit.");
       // A copy that leaves models out, comes back whole, resets [One Shot] weapons or waits in Reserves.
       const copy: Node = {
         ...(leaf.parameters.copy_excluded_keywords !== undefined ? { excluded_keywords: closed(leaf, "copy_excluded_keywords") } : {}),
@@ -246,13 +249,14 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
 /** Returned/destroyed model restrictions apply to members, not their containing unit. */
 function affectedModels(leaf: CompileLeaf, recipient: Node | string): Node | string {
   const p = leaf.parameters;
-  if (p.model_keyword === undefined && p.exclude_model_keyword === undefined && p.bodyguard_only !== true && p.exclude_leader !== true) return recipient;
+  if (p.model_keyword === undefined && p.exclude_model_keyword === undefined && p.bodyguard_only !== true && p.exclude_leader !== true && p.model_name === undefined) return recipient;
   const keywords = (value: unknown): unknown[] => Array.isArray(value) ? value : [value];
   return {
     level: "model", member_of: recipient,
     ...(p.model_keyword === undefined ? {} : { all_of: keywords(closed(leaf, "model_keyword")) }),
     ...(p.exclude_model_keyword === undefined ? {} : { none_of: keywords(closed(leaf, "exclude_model_keyword")) }),
     ...(p.bodyguard_only === true || p.exclude_leader === true ? { attachment_role: "bodyguard" } : {}),
+    ...(p.model_name === undefined ? {} : { model_names: [String(p.model_name)] }),
   };
 }
 

@@ -55,6 +55,10 @@ function attackFilter(leaf: CompileLeaf, source: Node): Node {
   for (const key of ["attack_type", "shooting_type", "fight_type", "all_target_same_unit"]) {
     if (source[key] !== undefined) parameters[key] = source[key];
   }
+  // Version 5: the weapons a core ability selected (Firing Deck).
+  if (source.weapon_selected_for !== undefined) {
+    parameters.weapons = { ...(parameters.weapons as Node | undefined), ref: { selected_by: { ability: String(source.weapon_selected_for) } } };
+  }
   return parameters;
 }
 

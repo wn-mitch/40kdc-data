@@ -14,11 +14,14 @@ use crate::data::battle_sizes::{
     detachment_cap_for_battle_size, enhancement_limit_for_battle_size,
     points_limit_for_battle_size, unit_limit_for_battle_size,
 };
-use crate::data::loadout::{check_unit_legality, loadout_models, loadout_tiers, Violation};
+use crate::data::list_keywords::{list_building_keyword_changes, ListKeywords};
+use crate::data::loadout::Violation;
 use crate::data::pricing::{army_unit_points, wargear_points};
 use crate::generated::{Unit, UnitRole};
 use crate::import::{BattleSize, Roster};
 use crate::Dataset;
+
+use super::roster_warlord::{warlord_violations, WarlordUnit};
 
 /// Army-construction violation codes (distinct from per-unit loadout codes).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -44,6 +47,9 @@ pub enum RosterViolationCode {
     NoWarlord,
     MultipleWarlords,
     WarlordNotMandated,
+    CannotBeWarlord,
+    WarlordNotCharacter,
+    WarlordNotSupremeCommander,
     DetachmentExcludedDatasheet,
     KeywordLimitExceeded,
     UnitLimitExceeded,
@@ -79,6 +85,9 @@ impl RosterViolationCode {
             RosterViolationCode::NoWarlord => "no-warlord",
             RosterViolationCode::MultipleWarlords => "multiple-warlords",
             RosterViolationCode::WarlordNotMandated => "warlord-not-mandated",
+            RosterViolationCode::CannotBeWarlord => "cannot-be-warlord",
+            RosterViolationCode::WarlordNotCharacter => "warlord-not-character",
+            RosterViolationCode::WarlordNotSupremeCommander => "warlord-not-supreme-commander",
             RosterViolationCode::DetachmentExcludedDatasheet => "detachment-excluded-datasheet",
             RosterViolationCode::KeywordLimitExceeded => "keyword-limit-exceeded",
             RosterViolationCode::UnitLimitExceeded => "unit-limit-exceeded",
@@ -264,22 +273,34 @@ pub fn validate_roster_core_with_keyword_overrides(
         .map(|u| resolve_unit(&u.unit_id))
         .collect();
 
+    // The roster keywords of the unit `su` attaches to as a leader or support character.
+    let attached_to_keywords = |su: &NormUnit| -> Option<HashSet<String>> {
+        let bodyguard_id = su.leader_bodyguard_id.as_deref()?;
+        let idx = spec.units.iter().position(|u| u.unit_id == bodyguard_id);
+        let bodyguard = match idx {
+            Some(i) => views[i],
+            None => resolve_unit(bodyguard_id),
+        }?;
+        let overrides = idx
+            .and_then(|i| keyword_overrides.get(i))
+            .map(Vec::as_slice)
+            .unwrap_or(&[]);
+        Some(roster_keyword_set(
+            bodyguard,
+            &army_keywords,
+            &spec.detachment_ids,
+            overrides,
+        ))
+    };
+
     // --- Per-unit loadout (reuse the tier/bounds checker). --------------------
     let mut units: Vec<UnitLegality> = Vec::new();
     for (idx, su) in spec.units.iter().enumerate() {
         let Some(view) = views[idx] else { continue };
-        let options = dataset.wargear_options_of(view);
-        let comp = dataset.unit_composition_of(view);
-        let models = comp.map(|c| loadout_models(&c.models));
-        let tiers = comp.map(|c| loadout_tiers(&c.tiers));
-        let violations = check_unit_legality(
-            view,
-            su.model_count,
-            &options,
-            &su.counts,
-            models.as_deref(),
-            tiers.as_deref(),
-        );
+        let violations = dataset
+            .loadout_of(view)
+            .check(su.model_count, &su.counts)
+            .unwrap_or_else(|error| panic!("{}: {error}", view.id.as_str()));
         units.push(UnitLegality {
             unit_id: view.id.as_str().to_string(),
             unit_index: idx,
@@ -371,24 +392,31 @@ pub fn validate_roster_core_with_keyword_overrides(
                 severity: Severity::Error,
             });
         }
+        // Attachment is decided at list building, so keywords the bearer's own abilities change
+        // while attached (a Painboss with Squighog Boyz loses INFANTRY) decide eligibility.
+        let changes = list_building_keyword_changes(
+            &dataset.abilities_of(view),
+            attached_to_keywords(su).as_ref(),
+        );
+        let list_kws = ListKeywords::new(&kws, &changes);
         // Keyword groups or datasheet groups (mirror of TS `meetsEnhancementGroups`).
         let keyword_eligible = if let Some(groups) = &enh.keyword_restriction_groups {
             Some(
                 groups
                     .iter()
-                    .any(|group| group.iter().all(|k| kws.contains(k.as_str()))),
+                    .any(|group| group.iter().all(|k| list_kws.has(k.as_str()))),
             )
         } else {
             enh.keyword_restrictions
                 .as_ref()
-                .map(|req| req.0.iter().all(|k| kws.contains(k.as_str())))
+                .map(|req| req.0.iter().all(|k| list_kws.has(k.as_str())))
         };
         let datasheet_eligible = enh.datasheet_restriction_groups.iter().any(|group| {
             group.unit_id.as_str() == view.id.as_str()
                 && group
                     .keywords
                     .as_ref()
-                    .is_none_or(|ks| ks.iter().all(|k| kws.contains(k.as_str())))
+                    .is_none_or(|ks| ks.iter().all(|k| list_kws.has(k.as_str())))
         });
         let eligible = match keyword_eligible {
             Some(ok) => ok || datasheet_eligible,
@@ -423,7 +451,7 @@ pub fn validate_roster_core_with_keyword_overrides(
             });
         }
         if let Some(excl) = &enh.exclusion_keywords {
-            if excl.0.iter().any(|k| kws.contains(k.as_str())) {
+            if excl.0.iter().any(|k| list_kws.has(k.as_str())) {
                 army.push(RosterViolation {
                     code: RosterViolationCode::EnhancementExcludedKeyword,
                     id: enh.id.as_str().to_string(),
@@ -756,6 +784,40 @@ pub fn validate_roster_core_with_keyword_overrides(
         }
     }
 
+    // --- Warlord eligibility (per-model Warlord flags, CHARACTER, Supreme Commander).
+    let detachment_warlords: HashSet<&str> = detachments
+        .iter()
+        .flat_map(|d| {
+            d.mandatory_warlord_datasheet_ids
+                .iter()
+                .flatten()
+                .chain(d.granted_warlord_datasheet_ids.iter().flatten())
+                .map(|id| id.as_str())
+        })
+        .collect();
+    let warlord_units: Vec<Option<WarlordUnit>> = spec
+        .units
+        .iter()
+        .enumerate()
+        .map(|(idx, su)| {
+            let view = views[idx]?;
+            let overrides = keyword_overrides.get(idx).map(Vec::as_slice).unwrap_or(&[]);
+            let is_character = is_character(view, overrides)
+                || roster_keyword_set(view, &army_keywords, &spec.detachment_ids, overrides)
+                    .contains("Character");
+            Some(WarlordUnit {
+                unit_id: view.id.as_str(),
+                is_warlord: su.is_warlord,
+                is_character,
+                rows: dataset
+                    .unit_composition_of(view)
+                    .map(|c| c.models.as_slice())
+                    .unwrap_or(&[]),
+            })
+        })
+        .collect();
+    army.extend(warlord_violations(&warlord_units, &detachment_warlords));
+
     // --- Detachment datasheet exclusions (e.g. Shadow Legion). ----------------
     // Mirror of TS `detachment-excluded-datasheet`.
     for d in &detachments {
@@ -917,16 +979,6 @@ pub fn validate_roster_core_with_keyword_overrides(
     // Mirror of TS: the rule must be offered, and its points cap and
     // Warlord/Enhancement locks apply; a selected detachment's mandatory or
     // granted Warlord datasheets lift the Warlord lock.
-    let detachment_warlords: HashSet<&str> = detachments
-        .iter()
-        .flat_map(|d| {
-            d.mandatory_warlord_datasheet_ids
-                .iter()
-                .flatten()
-                .chain(d.granted_warlord_datasheet_ids.iter().flatten())
-                .map(|id| id.as_str())
-        })
-        .collect();
     if let Some(army_faction) = faction {
         for rule in dataset.allied_rules.all() {
             if !rule.exclusive

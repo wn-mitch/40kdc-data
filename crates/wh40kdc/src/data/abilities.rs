@@ -1,23 +1,16 @@
-//! Abilities as buffs: which abilities could apply to a chosen unit in a phase (the
-//! abilities resolver) and the buff translation of one ability record (rules-bundle
-//! expansion, trigger and usage gates, aura range). Mirrors
-//! `tools/src/abilities-resolver/resolver.ts` and `AbilityView.describeBuffs` /
-//! canonical trigger and activation handling; the
-//! `conformance/abilities-resolver` corpus pins the shared contract.
+//! The abilities resolver: which abilities could apply to a chosen unit in a phase. Mirrors
+//! `tools/src/abilities-resolver/resolver.ts`; the `conformance/abilities-resolver` corpus pins
+//! the shared contract. The buff translation of one ability record lives in `describe_buffs`.
 
 use std::collections::HashSet;
 
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::Value;
 
-use super::ability_refs::{rating_of, with_rating};
+use super::ability_gates::{applies_to_unit, member_keywords, suppressed_ability_ids};
+use super::ability_refs::rating_of;
 use super::dataset::Dataset;
-use super::normalize::normalize_name;
-use crate::cruncher::buffs::{Buff, BuffSource, EngineContext};
-use crate::cruncher::from_dsl::{
-    effect_to_buffs_with_duration, moment_gate, strip_nulls, EffectTranslation,
-    TranslationPerspective,
-};
+use super::stratagem_targets::{has_friendly_target, stratagem_can_target_unit};
 use crate::{Ability, GameModeId, Phase, Unit};
 
 /// Where an eligible ability comes from.
@@ -167,10 +160,14 @@ pub(crate) fn reaches_other_units(effect: &Value) -> bool {
                 return false;
             }
             if let Some(Value::Object(target)) = node.get("target") {
-                if matches!(
-                    target.get("owner").and_then(Value::as_str),
-                    Some("friendly" | "enemy")
-                ) {
+                let owner = target.get("owner").and_then(Value::as_str);
+                // A friendly filter bounded to the holder's own unit stays on it.
+                let own_unit = owner == Some("friendly")
+                    && matches!(
+                        target.get("member_of").and_then(Value::as_str),
+                        Some("this-unit" | "this-model")
+                    );
+                if (owner == Some("friendly") && !own_unit) || owner == Some("enemy") {
                     return true;
                 }
                 if node.get("type").and_then(Value::as_str) == Some("ability-grant")
@@ -199,13 +196,37 @@ impl Dataset {
     /// Every ability that could apply to the input unit in `phase`, in a stable source order:
     /// army, detachment, detachment stratagems, the unit's own, attached members', then
     /// supporting units' auras. Mirrors TS `resolveEligibleAbilities`.
+    ///
+    /// Abilities the unit's standing rules suppress ([`Dataset::suppressed_abilities`]) are
+    /// dropped.
     pub fn eligible_abilities(
         &self,
         input: &EligibilityInput,
         phase: Phase,
     ) -> Vec<EligibleAbility<'_>> {
+        let (mut entries, suppressed) = self.resolve_with_suppressions(input, phase);
+        if !suppressed.is_empty() {
+            entries.retain(|entry| !suppressed.contains(entry.ability.ability_id.as_str()));
+        }
+        entries
+    }
+
+    /// The ability ids the unit's standing rules suppress for `input` (see
+    /// [`Dataset::eligible_abilities`], which already drops them). A caller that pools several
+    /// detachments' passes drops each pass's suppressions from all of them. Mirrors TS
+    /// `suppressedAbilities`.
+    pub fn suppressed_abilities(&self, input: &EligibilityInput, phase: Phase) -> HashSet<String> {
+        self.resolve_with_suppressions(input, phase).1
+    }
+
+    /// The eligible abilities before suppression, and the ids standing rules suppress.
+    fn resolve_with_suppressions(
+        &self,
+        input: &EligibilityInput,
+        phase: Phase,
+    ) -> (Vec<EligibleAbility<'_>>, HashSet<String>) {
         let Some(unit) = self.resolve_unit(&input.unit_id, input.faction_id.as_deref()) else {
-            return Vec::new();
+            return (Vec::new(), HashSet::new());
         };
         let faction_id = input
             .faction_id
@@ -216,6 +237,24 @@ impl Dataset {
             phase,
             seen: HashSet::new(),
             out: Vec::new(),
+        };
+        // Each member's keywords; a unit target and `applies_to` read them as one combined unit.
+        let members: Vec<HashSet<String>> = std::iter::once(Some(unit))
+            .chain(
+                input
+                    .attached_unit_ids
+                    .iter()
+                    .map(|id| self.resolve_unit(id, Some(&faction_id))),
+            )
+            .map(|member| member_keywords(member, input.detachment_id.as_deref()))
+            .collect();
+        let printed = self.printed_keyword();
+        let applies = |ability: &Ability| {
+            let filter = ability
+                .applies_to
+                .as_ref()
+                .and_then(|f| serde_json::to_value(f).ok());
+            applies_to_unit(filter.as_ref(), &members, &printed)
         };
         // 1. Army: faction-typed abilities of the faction. One with a `detachment_id` (a Combat
         // Patrol box's own army rule) applies only in that detachment, and there it replaces each
@@ -265,7 +304,7 @@ impl Dataset {
             }
         }
         for ability in army {
-            if !replaced.contains(ability.ability_id.as_str()) {
+            if !replaced.contains(ability.ability_id.as_str()) && applies(ability) {
                 c.push_phased(ability, EligibleAbilitySource::Army, None);
             }
         }
@@ -273,7 +312,7 @@ impl Dataset {
             // 2. Detachment abilities.
             for ability in self.abilities.all() {
                 let own = ability.detachment_id.as_ref().map(|d| d.as_str()) == Some(detachment_id);
-                if json_str(&ability.ability_type) == "detachment" && own {
+                if json_str(&ability.ability_type) == "detachment" && own && applies(ability) {
                     let source = EligibleAbilitySource::Detachment {
                         detachment_id: detachment_id.to_string(),
                     };
@@ -281,25 +320,7 @@ impl Dataset {
                 }
             }
             // 3. Detachment stratagems, each yielding the ability it references, when the unit can
-            // be the stratagem's friendly target. Each member's keywords; a unit target reads them
-            // as one combined unit.
-            let members: Vec<HashSet<String>> = std::iter::once(Some(unit))
-                .chain(
-                    input
-                        .attached_unit_ids
-                        .iter()
-                        .map(|id| self.resolve_unit(id, Some(&faction_id))),
-                )
-                .map(|member| {
-                    member
-                        .into_iter()
-                        .flat_map(|m| [&m.keywords, &m.faction_keywords])
-                        .flatten()
-                        .flat_map(|list| list.0.iter().map(|k| k.to_lowercase()))
-                        .collect()
-                })
-                .collect();
-            let printed = self.printed_keyword();
+            // be the stratagem's friendly target.
             let detachment = self
                 .detachments
                 .get_in_faction(detachment_id, &faction_id)
@@ -329,6 +350,11 @@ impl Dataset {
                     .and_then(|t| serde_json::to_value(t).ok())
                     .and_then(|t| t.get("subject").cloned());
                 if !stratagem_can_target_unit(stratagem, &members, subject.as_ref(), &printed) {
+                    continue;
+                }
+                // A Stratagem with no friendly target keeps its unit requirement in its rule's
+                // `applies_to`.
+                if !has_friendly_target(stratagem) && !applies(ability) {
                     continue;
                 }
                 let source = EligibleAbilitySource::DetachmentStratagem {
@@ -396,452 +422,11 @@ impl Dataset {
                 c.push_phased(ability, source, rating);
             }
         }
-        c.out
-    }
-
-    /// Expand rules bundles and resolve triggers before attaching parent usage requirements.
-    /// Independent child groups and costs survive; an aura's inch range remains a gate. A rated
-    /// rule (`{rating: true}`) reads `rating`, the rating the owning unit prints
-    /// ([`EligibleAbility::rating`]). Mirrors TS `AbilityView.describeBuffs`; `context`
-    /// defaults to the shooting phase.
-    pub fn describe_buffs(
-        &self,
-        ability: &Ability,
-        source: &BuffSource,
-        context: Option<&EngineContext>,
-        perspective: TranslationPerspective,
-        rating: Option<&Value>,
-    ) -> EffectTranslation {
-        let default_ctx;
-        let ctx = match context {
-            Some(c) => c,
-            None => {
-                default_ctx = EngineContext::new(Phase::Shooting);
-                &default_ctx
-            }
-        };
-        let raw = strip_nulls(&serde_json::to_value(ability).expect("an ability serializes"));
-        let effect = raw.get("effect").cloned().unwrap_or(Value::Null);
-        let mut seen = vec![ability.ability_id.to_string()];
-        let resolved = with_rating(&self.resolve_rules_bundles(&effect, &mut seen), rating);
-        let mut scoped = Vec::new();
-        let triggered = if crate::cruncher::from_dsl::recipient_snapshot_reason(
-            raw.get("trigger"),
-            &resolved,
-        )
-        .is_some()
-        {
-            let result = if !matches!(source, BuffSource::Ability { ability_id, .. } if ability_id == ability.ability_id.as_str())
-            {
-                Err("recipient snapshot source does not own this ability")
-            } else {
-                crate::cruncher::recipient_snapshots::resolve_recipient_snapshots(
-                    raw.get("trigger"),
-                    &resolved,
-                    source,
-                    ctx,
-                    perspective,
-                )
-            };
-            match result {
-                Ok((effect, refused)) => {
-                    scoped = refused;
-                    effect
-                }
-                Err(reason) => {
-                    return EffectTranslation {
-                        unsupported: vec![crate::cruncher::from_dsl::UnsupportedFragment {
-                            reason: reason.into(),
-                            effect_fragment: resolved,
-                            needs: None,
-                            scope: None,
-                        }],
-                        ..Default::default()
-                    }
-                }
-            }
-        } else {
-            let bound = crate::cruncher::from_dsl::bind_event_subject(
-                raw.get("trigger"),
-                &resolved,
-                ctx,
-                perspective,
-            )
-            .unwrap_or_else(|| resolved.clone());
-            trigger_gated(raw.get("behavior"), raw.get("trigger"), &bound).unwrap_or(bound)
-        };
-        let mut translated = effect_to_buffs_with_duration(
-            &triggered,
-            source,
-            ctx,
-            perspective,
-            raw.pointer("/scope/duration"),
-            raw.get("usage"),
-            raw.get("trigger"),
-        );
-        // A menu option whose pool the snapshots cannot resolve is refused alone, ahead of the rest.
-        if !scoped.is_empty() {
-            let refused = scoped.into_iter().map(|(reason, effect_fragment)| {
-                crate::cruncher::from_dsl::UnsupportedFragment {
-                    reason: reason.into(),
-                    effect_fragment,
-                    needs: None,
-                    scope: None,
-                }
-            });
-            translated.unsupported.splice(0..0, refused);
-        }
-        if let Some(usage) = raw.get("usage") {
-            crate::cruncher::from_dsl::apply_activation(
-                &mut translated,
-                ability.ability_id.as_str(),
-                json!({"usage": usage}),
-            );
-        }
-        // An aura gates on distance to the target; only a single inch range gates.
-        if let Some(range) = aura_inches_for_round(&resolved, ctx.battle_round) {
-            let gate = |b: &mut Buff| {
-                b.applicable_when
-                    .get_or_insert_with(Default::default)
-                    .max_range_inches = Some(range);
-            };
-            translated.applied.iter_mut().for_each(gate);
-            for lever in &mut translated.activatable {
-                lever.buffs.iter_mut().for_each(gate);
-            }
-        }
-        translated
-    }
-
-    /// Only the buffs of [`Dataset::describe_buffs`] (its diagnostics dropped).
-    pub fn ability_buffs(
-        &self,
-        ability: &Ability,
-        source: &BuffSource,
-        context: Option<&EngineContext>,
-        perspective: TranslationPerspective,
-        rating: Option<&Value>,
-    ) -> Vec<Buff> {
-        self.describe_buffs(ability, source, context, perspective, rating)
-            .applied
-    }
-
-    /// Expand entity-backed ability grants (`ability-grant` with `rules_bundle: true`) into
-    /// the referenced rules bundle. Unresolved, malformed and cyclic references stay as they
-    /// are so the translator reports them.
-    fn resolve_rules_bundles(&self, effect: &Value, seen: &mut Vec<String>) -> Value {
-        match effect {
-            Value::Array(items) => Value::Array(
-                items
-                    .iter()
-                    .map(|x| self.resolve_rules_bundles(x, seen))
-                    .collect(),
-            ),
-            Value::Object(node) => {
-                if let Some(target) = self.rules_bundle_target(node, seen) {
-                    let id = node["modifier"]["ability"]
-                        .as_str()
-                        .unwrap_or("")
-                        .to_string();
-                    let mut next = seen.clone();
-                    next.push(id);
-                    return self.resolve_rules_bundles(&target, &mut next);
-                }
-                Value::Object(
-                    node.iter()
-                        .map(|(k, v)| (k.clone(), self.resolve_rules_bundles(v, seen)))
-                        .collect(),
-                )
-            }
-            other => other.clone(),
-        }
-    }
-
-    /// The rules-bundle effect a bundle grant names, when it resolves and is not a cycle.
-    fn rules_bundle_target(
-        &self,
-        node: &serde_json::Map<String, Value>,
-        seen: &[String],
-    ) -> Option<Value> {
-        if node.get("type").and_then(Value::as_str) != Some("ability-grant") {
-            return None;
-        }
-        let holder = node.get("target")?;
-        if matches!(holder.as_str(), Some("this-model" | "model-in-this-unit"))
-            || holder.get("level").and_then(Value::as_str) == Some("model")
-        {
-            // Keep model grants intact: expansion must not promote their
-            // nested self references to the entire combined unit.
-            return None;
-        }
-        let modifier = node.get("modifier")?.as_object()?;
-        let id = modifier.get("ability")?.as_str()?;
-        if modifier.get("rules_bundle") != Some(&Value::Bool(true)) || seen.iter().any(|s| s == id)
-        {
-            return None;
-        }
-        let target = self.abilities.get(id)?;
-        let mut effect = strip_nulls(&serde_json::to_value(&target.effect).ok()?);
-        if effect.get("type").and_then(Value::as_str) != Some("rules-bundle") {
-            return None;
-        }
-        // Retain the holder on the expanded bundle so attached model grants
-        // cannot escape the walker's model-isolation guard.
-        if let Some(holder) = node.get("target") {
-            effect
-                .as_object_mut()?
-                .insert("target".into(), holder.clone());
-        }
-        Some(effect)
-    }
-}
-
-/// A reactive ability's effect gated on its trigger, so the moment is an opt-in lever. `None`
-/// when nothing gates it: not reactive, or a trigger on an attack step (met by every attack).
-pub fn trigger_gated(
-    behavior: Option<&Value>,
-    trigger: Option<&Value>,
-    effect: &Value,
-) -> Option<Value> {
-    if behavior.and_then(Value::as_str) != Some("reactive") {
-        return None;
-    }
-    moment_gate(trigger, effect)
-}
-
-/// The one inch range every aura-filtered effect target in `effect` reaches, if exactly one.
-/// This compatibility wrapper keeps the helper useful to callers that do not have a battle
-/// round; tiered ranges are intentionally ignored without that observation context.
-pub fn aura_inches(effect: &Value) -> Option<f64> {
-    aura_inches_for_round(effect, None)
-}
-
-fn aura_inches_for_round(effect: &Value, battle_round: Option<u32>) -> Option<f64> {
-    fn walk(node: &Value, found: &mut Vec<f64>, battle_round: Option<u32>) {
-        match node {
-            Value::Array(a) => a.iter().for_each(|x| walk(x, found, battle_round)),
-            Value::Object(o) => {
-                let model_grant = o.get("type").and_then(Value::as_str) == Some("ability-grant")
-                    && (matches!(
-                        o.get("target").and_then(Value::as_str),
-                        Some("this-model" | "model-in-this-unit")
-                    ) || o
-                        .get("target")
-                        .and_then(|t| t.get("level"))
-                        .and_then(Value::as_str)
-                        == Some("model"));
-                if model_grant {
-                    return;
-                }
-                // A range from a Stratagem's named target is not one from this ability's unit.
-                let from_named_target = o
-                    .get("target")
-                    .and_then(|t| t.pointer("/within/of/stratagem_target"))
-                    .is_some();
-                let mut range = o
-                    .get("target")
-                    .and_then(|t| t.pointer("/within/range"))
-                    .filter(|_| !from_named_target);
-                if let Some(tiers) = range
-                    .and_then(|r| r.get("per_battle_round"))
-                    .and_then(Value::as_array)
-                {
-                    range = (battle_round.filter(|round| *round > 0))
-                        .filter(|_| !tiers.is_empty())
-                        .and_then(|round| tiers.get((round as usize).min(tiers.len()) - 1));
-                }
-                let inches = range.and_then(|r| r.get("inches")).and_then(Value::as_f64);
-                if let (Some(Value::String(_)), Some(i)) = (o.get("type"), inches) {
-                    if !found.contains(&i) {
-                        found.push(i);
-                    }
-                }
-                o.values().for_each(|x| walk(x, found, battle_round));
-            }
-            _ => {}
-        }
-    }
-    let mut found = Vec::new();
-    walk(effect, &mut found, battle_round);
-    match found.as_slice() {
-        [only] => Some(*only),
-        _ => None,
+        let suppressed = suppressed_ability_ids(&c.out, &members, &printed);
+        (c.out, suppressed)
     }
 }
 
 #[cfg(test)]
 #[path = "abilities_tests.rs"]
 mod tests;
-
-/// Whether a unit with `keywords` (lower-cased) can be a stratagem's friendly target. A stratagem
-/// with no friendly target (none printed, or only enemy targets) does not restrict its user here;
-/// with several friendly targets, matching any one is enough. The resolver does not know which
-/// model is the Warlord, so a Warlord target only needs a unit that could contain it: one with
-/// CHARACTER, the keyword every Warlord carries. Mirrors TS `stratagemCanTarget`.
-pub fn stratagem_can_target(stratagem: &crate::Stratagem, keywords: &HashSet<String>) -> bool {
-    stratagem_can_target_unit(stratagem, std::slice::from_ref(keywords), None, &|_| true)
-}
-
-/// Whether a unit of `members` (each member's keywords: a unit and the units attached to it) can
-/// be a stratagem's friendly target, as [`stratagem_can_target`]. A target that selects a model
-/// needs one member that meets it alone; a unit target reads every member as one combined unit. A
-/// target bound to the triggering unit is also held to the keyword lists of `trigger_subject` (its
-/// ability's `trigger.subject`). A keyword that subject requires and no datasheet prints (`printed`
-/// says which do) is gained in play, so it is not held against a unit. Keywords compare by
-/// [`normalize_name`]. Mirrors TS `stratagemCanTargetUnit`.
-pub fn stratagem_can_target_unit(
-    stratagem: &crate::Stratagem,
-    members: &[HashSet<String>],
-    trigger_subject: Option<&Value>,
-    printed: &dyn Fn(&str) -> bool,
-) -> bool {
-    let Some(raw) = stratagem
-        .target_restrictions
-        .as_ref()
-        .and_then(|t| serde_json::to_value(t).ok())
-    else {
-        return true;
-    };
-    let targets: Vec<&Value> = match &raw {
-        Value::Array(items) => items.iter().collect(),
-        Value::Null => return true,
-        other => vec![other],
-    };
-    let friendly: Vec<&Value> = targets
-        .into_iter()
-        .filter(|target| target.get("side").and_then(Value::as_str) != Some("enemy"))
-        .collect();
-    if friendly.is_empty() {
-        return true;
-    }
-    let holds = target_holds(members, trigger_subject, printed);
-    friendly.into_iter().any(holds)
-}
-
-/// For a Stratagem with several targets (an array `target_restrictions`), whether a unit of
-/// `members` can be each named friendly target, read as [`stratagem_can_target_unit`] reads each
-/// target: what `{stratagem_target: name}` resolves to when the Stratagem is used on that unit.
-/// Enemy targets are not listed. Mirrors TS `stratagemTargetNames`.
-pub fn stratagem_target_names(
-    stratagem: &crate::Stratagem,
-    members: &[HashSet<String>],
-    trigger_subject: Option<&Value>,
-    printed: &dyn Fn(&str) -> bool,
-) -> std::collections::BTreeMap<String, bool> {
-    let raw = stratagem
-        .target_restrictions
-        .as_ref()
-        .and_then(|t| serde_json::to_value(t).ok());
-    let Some(Value::Array(targets)) = raw else {
-        return Default::default();
-    };
-    let holds = target_holds(members, trigger_subject, printed);
-    targets
-        .iter()
-        .filter(|target| target.get("side").and_then(Value::as_str) != Some("enemy"))
-        .filter_map(|target| {
-            let name = target.get("name").and_then(Value::as_str)?;
-            Some((name.to_string(), holds(target)))
-        })
-        .collect()
-}
-
-/// Whether a unit of `members` meets one friendly Stratagem target.
-fn target_holds<'a>(
-    members: &[HashSet<String>],
-    trigger_subject: Option<&Value>,
-    printed: &'a dyn Fn(&str) -> bool,
-) -> impl Fn(&Value) -> bool + 'a {
-    let normalized: Vec<HashSet<String>> = members
-        .iter()
-        .map(|member| member.iter().map(|k| normalize_name(k)).collect())
-        .collect();
-    let combined: HashSet<String> = normalized.iter().flatten().cloned().collect();
-    let subject = friendly_subject(trigger_subject);
-    move |target: &Value| {
-        let candidates: Vec<&HashSet<String>> =
-            if target.get("selects").and_then(Value::as_str) == Some("model") {
-                normalized.iter().collect()
-            } else {
-                vec![&combined]
-            };
-        candidates.into_iter().any(|keywords| {
-            let has = |keyword: &str| keywords.contains(&normalize_name(keyword));
-            let gained = |keyword: &str| has(keyword) || !printed(keyword);
-            let warlord = target.get("warlord").and_then(Value::as_bool) == Some(true);
-            let bound = target.get("bound_to").and_then(Value::as_str) == Some("triggering-unit");
-            (!warlord || has("character"))
-                && keyword_lists_hold(target, &has, &has)
-                && (!bound
-                    || subject
-                        .as_ref()
-                        .is_none_or(|subject| keyword_lists_hold(subject, &gained, &has)))
-        })
-    }
-}
-
-/// A trigger subject's keyword lists, as a target restriction, when it names a friendly unit.
-fn friendly_subject(subject: Option<&Value>) -> Option<Value> {
-    let subject = subject?.as_object()?;
-    if subject
-        .get("owner")
-        .is_some_and(|owner| owner.as_str() != Some("friendly"))
-    {
-        return None;
-    }
-    let list = |key: &str| {
-        subject
-            .get(key)
-            .cloned()
-            .unwrap_or(Value::Array(Vec::new()))
-    };
-    Some(json!({
-        "required_keywords": list("all_of"),
-        "required_keywords_any": list("any_of"),
-        "excluded_keywords": list("none_of"),
-    }))
-}
-
-/// Whether a target's required lists hold by `required` and none of its excluded keywords holds
-/// by `excluded`.
-fn keyword_lists_hold(
-    target: &Value,
-    required: &dyn Fn(&str) -> bool,
-    excluded: &dyn Fn(&str) -> bool,
-) -> bool {
-    let list = |key: &str| -> Vec<&str> {
-        target
-            .get(key)
-            .and_then(Value::as_array)
-            .map(|items| items.iter().filter_map(Value::as_str).collect())
-            .unwrap_or_default()
-    };
-    let any = list("required_keywords_any");
-    list("required_keywords").into_iter().all(required)
-        && (any.is_empty() || any.into_iter().any(required))
-        && !list("excluded_keywords").into_iter().any(excluded)
-}
-
-impl Dataset {
-    /// Whether some datasheet prints a keyword (unit or faction keyword), memoised per lookup.
-    /// Scans the "all" game-mode view: a keyword printed only on a Combat Patrol datasheet is
-    /// still a printed keyword, whatever mode this dataset lists.
-    pub(super) fn printed_keyword(&self) -> impl Fn(&str) -> bool + '_ {
-        let seen = std::cell::RefCell::new(std::collections::HashMap::<String, bool>::new());
-        let units = self.units.with_game_mode(crate::data::GameModeView::All);
-        move |keyword: &str| {
-            let key = normalize_name(keyword);
-            if let Some(found) = seen.borrow().get(&key) {
-                return *found;
-            }
-            let found = units.iter().any(|unit| {
-                [&unit.keywords, &unit.faction_keywords]
-                    .into_iter()
-                    .flatten()
-                    .any(|list| list.0.iter().any(|own| normalize_name(own) == key))
-            });
-            seen.borrow_mut().insert(key, found);
-            found
-        }
-    }
-}

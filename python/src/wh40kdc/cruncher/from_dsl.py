@@ -214,7 +214,10 @@ def _translate_effect(
             out["activatable"].append(lever)
             out["applied"] = []
         for lever in out["activatable"]:
-            if group and lever.get("group", {}).get("id") != group["id"]:
+            # The usage limit counts activations of the ability. Options picked within one
+            # activation (a dice pool, choice, stance or order) are capped by their own pool.
+            pooled = _is_activation_pool((lever.get("group") or {}).get("id"), ability_id)
+            if group and not pooled and lever.get("group", {}).get("id") != group["id"]:
                 if lever.get("group"):
                     lever["groups"] = [*(lever.get("groups") or []), group]
                 else:
@@ -226,6 +229,13 @@ def _translate_effect(
             }
             lever["requires"] = [requirement, *(lever.get("requires") or [])]
     return out
+
+
+def _is_activation_pool(group_id: Any, ability_id: str) -> bool:
+    """Whether ``group_id`` is a pool of ``ability_id`` picked together in one activation."""
+    return isinstance(group_id, str) and any(
+        group_id == f"{ability_id}{suffix}" for suffix in ("", "?choice", "?stance", "?order")
+    )
 
 
 def _is_object(value: Any) -> TypeGuard[dict[str, Any]]:
@@ -2073,7 +2083,7 @@ def _translate_conditional(
             return
     evaluated = condition
     if node.get("_activation_source") is not None:
-        evaluated = _elide_historical_clocks(condition, opts.get("duration"))
+        evaluated = _activation_condition(node, opts.get("duration"))
     verdict = _evaluate_condition(
         evaluated,
         opts["context"],
@@ -2248,7 +2258,7 @@ def _translate_named_effect(
     gated = moment_gate(node.get("trigger"), node.get("effect"), node)
     body = gated
     if _is_object(gated) and _is_object(gated.get("condition")):
-        condition = _elide_historical_clocks(gated["condition"], opts.get("duration"))
+        condition = _activation_condition(gated, opts.get("duration"))
         verdict = _evaluate_condition(
             condition,
             opts["context"],
@@ -2535,18 +2545,7 @@ def moment_gate(trigger: Any, effect: Any, source_fragment: Any = None) -> Any:
     ]
     if not triggers or any(is_attack_step(item) for item in triggers):
         return effect
-    gates: list[dict[str, Any]] = []
-    for item in triggers:
-        own_move = _own_move_fact(item)
-        moment = own_move or {
-            "type": "timing-is",
-            "parameters": {"timing": moment_key(item)},
-        }
-        parts: list[dict[str, Any]] = [moment]
-        if _is_object(item.get("condition")):
-            parts.append(item["condition"])
-        gates.append(parts[0] if len(parts) == 1 else {"operator": "and", "operands": parts})
-    condition = gates[0] if len(gates) == 1 else {"operator": "or", "operands": gates}
+    condition = _moment_condition(triggers, None)
     source_value = source_fragment or {
         "type": "ability-part",
         "trigger": trigger,
@@ -2559,6 +2558,69 @@ def moment_gate(trigger: Any, effect: Any, source_fragment: Any = None) -> Any:
         "_activation_source": source_value,
         "_activation_trigger": trigger,
     }
+
+
+def _moment_condition(triggers: list[dict[str, Any]], duration: Any) -> dict[str, Any]:
+    """The activation condition of non-attack ``triggers``: per trigger, its moment (an own-move
+    fact or a ``timing-is`` leaf), its selection facts and its own condition, joined by ``and``;
+    several triggers are alternatives joined by ``or``. ``duration`` is the effect's lifetime
+    (``None`` when unknown)."""
+    gates: list[dict[str, Any]] = []
+    for item in triggers:
+        moment = _own_move_fact(item) or {
+            "type": "timing-is",
+            "parameters": {"timing": moment_key(item)},
+        }
+        parts: list[dict[str, Any]] = [moment, *_selection_facts(item, duration)]
+        if _is_object(item.get("condition")):
+            parts.append(item["condition"])
+        gates.append(parts[0] if len(parts) == 1 else {"operator": "and", "operands": parts})
+    return gates[0] if len(gates) == 1 else {"operator": "or", "operands": gates}
+
+
+def _activation_condition(node: dict[str, Any], duration: Any) -> dict[str, Any]:
+    """A moment-gated node's condition for an effect lasting ``duration``: its moment condition
+    rebuilt for that lifetime, with each trigger clock the lifetime outlasts made historical."""
+    condition: dict[str, Any] = node["condition"]
+    if duration is not None:
+        trigger = node.get("_activation_trigger")
+        values = trigger if isinstance(trigger, list) else [trigger]
+        triggers = [
+            value for value in values if _is_object(value) and isinstance(value.get("event"), str)
+        ]
+        if triggers:
+            condition = _moment_condition(triggers, duration)
+    return _elide_historical_clocks(condition, duration)
+
+
+_SELECTED_PHASE = {"fight": "fight", "shoot": "shooting"}
+
+
+def _selection_facts(trigger: dict[str, Any], duration: Any) -> list[dict[str, Any]]:
+    """What a "selected to shoot/fight" trigger says about the moment it opens: the phase it
+    happens in, while the effect lasts no longer than that phase (``duration`` ``None`` or
+    ``"phase"``), and the keywords a friendly subject names, which the buffed unit must carry.
+    Other triggers add nothing."""
+    if trigger.get("event") != "selected":
+        return []
+    facts: list[dict[str, Any]] = []
+    filter_ = trigger.get("filter")
+    to = filter_.get("to") if _is_object(filter_) else None
+    phase = _SELECTED_PHASE.get(to) if isinstance(to, str) else None
+    if phase is not None and duration in (None, "phase"):
+        facts.append({"type": "phase-is", "parameters": {"phase": phase}})
+    subject = trigger.get("subject")
+    if _is_object(subject) and subject.get("owner") in (None, "friendly"):
+        lists = {
+            key: subject[key]
+            for key in ("all_of", "any_of", "none_of")
+            if isinstance(subject.get(key), list) and subject[key]
+        }
+        if lists:
+            facts.append(
+                {"type": "matches", "parameters": {"subject": "this-unit", "filter": lists}}
+            )
+    return facts
 
 
 def same_snapshot_value(left: Any, right: Any) -> bool:

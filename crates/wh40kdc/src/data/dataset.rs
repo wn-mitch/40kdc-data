@@ -9,7 +9,7 @@
 //! self-referential. The join graph is identical.
 
 use std::collections::{BTreeMap, HashMap, HashSet};
-use std::sync::{Arc, OnceLock};
+use std::sync::{Arc, Mutex, OnceLock};
 
 use crate::generated::{
     Ability, AbilityTrigger, AlliedRule, DeploymentPattern, Detachment, Enhancement, Faction,
@@ -22,6 +22,7 @@ use crate::generated::{
 
 use super::collection::Collection;
 use super::game_mode::{self as gm, GameModeView, ViewCache};
+use super::unit_loadout::UnitLoadout;
 
 /// The shape of the embedded data bundle: one array per entity collection.
 ///
@@ -205,6 +206,9 @@ pub struct Dataset {
     pub(super) units_by_keyword: Arc<HashMap<String, Vec<usize>>>,
     /// unit id → indices of wargear options for it (into `wargear_options.every()`).
     pub(super) wargear_options_by_unit: Arc<HashMap<String, Vec<usize>>>,
+    /// `faction_id::unit_id` → the unit's loadout view, built on first use and
+    /// shared with every game-mode view (backs `loadout_of`).
+    pub(super) loadouts: Arc<Mutex<HashMap<String, Arc<UnitLoadout>>>>,
 }
 
 /// The embedded dataset bundle, inlined at build time and parsed once.
@@ -501,6 +505,7 @@ impl Dataset {
             phase_mappings: raw.phase_mappings,
             every_unit_composition,
             views: ViewCache::default(),
+            loadouts: Arc::default(),
             phase_index: Arc::new(phase_index),
             units_by_ability: Arc::new(units_by_ability),
             units_by_weapon: Arc::new(units_by_weapon),

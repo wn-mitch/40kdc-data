@@ -98,6 +98,9 @@
     ],
     "detachment_rule_ids": [
       "ironstorm-auto-targeters-adeptus-astartes"
+    ],
+    "tags": [
+      "ironstorm"
     ]
   },
   {
@@ -129,6 +132,9 @@
       "gene-wrought-might-assault-brethren-adeptus-astartes",
       "armour-of-contempt-assault-brethren-adeptus-astartes",
       "duty-in-death-assault-brethren-adeptus-astartes"
+    ],
+    "tags": [
+      "doctrines"
     ]
   },
   {
@@ -192,6 +198,9 @@
       "armour-of-contempt-devastator-brethren-adeptus-astartes",
       "storm-of-fire-devastator-brethren-adeptus-astartes",
       "hail-of-vengeance-devastator-brethren-adeptus-astartes"
+    ],
+    "tags": [
+      "doctrines"
     ]
   },
   {
@@ -254,6 +263,9 @@
       "purgation-push-gravis-linebreaker-force-adeptus-astartes",
       "armoured-impact-gravis-linebreaker-force-adeptus-astartes",
       "annihilating-force-gravis-linebreaker-force-adeptus-astartes"
+    ],
+    "tags": [
+      "gravis"
     ]
   },
   {
@@ -285,6 +297,9 @@
       "annihilating-force-gravis-siege-force-adeptus-astartes",
       "suppression-volleys-gravis-siege-force-adeptus-astartes",
       "stand-unyielding-gravis-siege-force-adeptus-astartes"
+    ],
+    "tags": [
+      "gravis"
     ]
   },
   {
@@ -391,6 +406,9 @@
       "mortis-snares-phobos-shadow-force-adeptus-astartes",
       "tactical-withdrawal-phobos-shadow-force-adeptus-astartes",
       "strike-from-the-shadows-phobos-shadow-force-adeptus-astartes"
+    ],
+    "tags": [
+      "phobos"
     ]
   },
   {
@@ -422,6 +440,9 @@
       "umbral-evasion-phobos-shock-force-adeptus-astartes",
       "strike-from-the-shadows-phobos-shock-force-adeptus-astartes",
       "transhuman-reactions-phobos-shock-force-adeptus-astartes"
+    ],
+    "tags": [
+      "phobos"
     ]
   },
   {
@@ -453,6 +474,9 @@
       "armour-of-contempt-tactical-brethren-adeptus-astartes",
       "masterful-tactics-tactical-brethren-adeptus-astartes",
       "domination-fire-tactical-brethren-adeptus-astartes"
+    ],
+    "tags": [
+      "doctrines"
     ]
   },
   {
@@ -484,6 +508,9 @@
       "transhuman-swiftness-tacticus-attack-force-adeptus-astartes",
       "tactical-focus-tacticus-attack-force-adeptus-astartes",
       "relentless-assault-tacticus-attack-force-adeptus-astartes"
+    ],
+    "tags": [
+      "tacticus"
     ]
   },
   {
@@ -515,6 +542,9 @@
       "point-blank-brutality-tacticus-firestorm-force-adeptus-astartes",
       "for-the-emperor-tacticus-firestorm-force-adeptus-astartes",
       "relentless-assault-tacticus-firestorm-force-adeptus-astartes"
+    ],
+    "tags": [
+      "tacticus"
     ]
   },
   {
@@ -546,6 +576,9 @@
       "tactical-dreadnought-fortitude-terminator-storm-force-adeptus-astartes",
       "gunship-extraction-terminator-storm-force-adeptus-astartes",
       "merciless-veterans-terminator-storm-force-adeptus-astartes"
+    ],
+    "tags": [
+      "terminator"
     ]
   }
 ]

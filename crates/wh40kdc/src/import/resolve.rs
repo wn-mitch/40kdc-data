@@ -15,10 +15,7 @@
 
 use std::collections::{BTreeMap, HashMap, HashSet};
 
-use crate::data::{
-    check_unit_legality, complete_loadout, group_loadout, loadout_models, loadout_tiers,
-    normalize_name, Dataset, GameModeView, ViolationCode,
-};
+use crate::data::{loadout_models, normalize_name, Dataset, GameModeView, ViolationCode};
 use crate::GameModeId;
 
 use super::source_names::{
@@ -687,6 +684,14 @@ fn resolve_unit(
             loadout_groups = complete_implicit_defaults(hit, model_count, &mut wargear, ds, diag);
         }
     }
+    // Derived groups list wargear in their own order, so the list re-imports from
+    // any dialect the same way: a dialect that prints groups reads its wargear in
+    // group order.
+    if parsed.loadout_groups.is_none() {
+        if let Some(groups) = loadout_groups.as_ref() {
+            order_by_groups(&mut wargear, groups);
+        }
+    }
 
     let mut keyword_overrides = Vec::new();
     let mut seen_keyword_overrides = HashSet::new();
@@ -736,21 +741,16 @@ fn resolve_unit(
                         *counts.entry(id.clone()).or_insert(0) += w.count as i64;
                     }
                 }
-                let options = ds.wargear_options_of(unit);
-                let tiers = comp.map(|c| loadout_tiers(&c.tiers));
-                let violations: Vec<_> = check_unit_legality(
-                    unit,
-                    model_count,
-                    &options,
-                    &counts,
-                    models.as_deref(),
-                    tiers.as_deref(),
-                )
-                .into_iter()
-                .filter(|v| {
-                    v.code != ViolationCode::InvalidModelCount && v.code != ViolationCode::BelowMin
-                })
-                .collect();
+                let violations: Vec<_> = ds
+                    .loadout_of(unit)
+                    .check(model_count, &counts)
+                    .unwrap_or_else(|error| panic!("{}: {error}", unit.id.as_str()))
+                    .into_iter()
+                    .filter(|v| {
+                        v.code != ViolationCode::InvalidModelCount
+                            && v.code != ViolationCode::BelowMin
+                    })
+                    .collect();
                 if !violations.is_empty() {
                     let detail = violations
                         .iter()
@@ -783,6 +783,27 @@ fn resolve_unit(
         leader_attachment: None,
     }
 }
+/// Reorders `wargear` by each id's first appearance in `groups`; ids the groups
+/// lack (and unresolved items) keep their order after the rest.
+fn order_by_groups(wargear: &mut [RosterWargear], groups: &[RosterLoadoutGroup]) {
+    let mut rank: HashMap<&str, usize> = HashMap::new();
+    for item in groups.iter().flat_map(|group| &group.wargear) {
+        if let Some(id) = item.ref_.id.as_deref() {
+            let next = rank.len();
+            rank.entry(id).or_insert(next);
+        }
+    }
+    let unranked = rank.len();
+    // A stable sort keeps source order among ties.
+    wargear.sort_by_key(|item| {
+        item.ref_
+            .id
+            .as_deref()
+            .and_then(|id| rank.get(id).copied())
+            .unwrap_or(unranked)
+    });
+}
+
 /// Complete omitted implicit default weapons for aggregate-only source formats.
 ///
 /// On a successful bounded completion, first source occurrences retain their raw
@@ -799,9 +820,6 @@ fn complete_implicit_defaults(
     if wargear.iter().any(|item| item.ref_.id.is_none()) {
         return None;
     }
-    let models = ds
-        .unit_composition_of(unit)
-        .map(|composition| loadout_models(&composition.models));
     let mut explicit_refs = HashMap::new();
     let mut explicit_counts = BTreeMap::new();
     for item in wargear.iter() {
@@ -811,13 +829,10 @@ fn complete_implicit_defaults(
             .or_insert_with(|| item.ref_.clone());
         *explicit_counts.entry(id.clone()).or_insert(0) += item.count as i64;
     }
-    let completed = complete_loadout(
-        unit,
-        model_count,
-        &ds.wargear_options_of(unit),
-        models.as_deref(),
-        &explicit_counts,
-    )?;
+    let completed = ds
+        .loadout_of(unit)
+        .complete(model_count, &explicit_counts)
+        .unwrap_or_else(|error| panic!("{}: {error}", unit.id.as_str()))?;
     let ref_for_id = |id: &str| {
         explicit_refs.get(id).cloned().unwrap_or_else(|| {
             // The unit's own faction copy names it (copies of a shared id may spell it
@@ -1022,13 +1037,10 @@ fn build_loadout_groups(
         ref_by_id.insert(id.clone(), w.ref_.clone());
         *counts.entry(id.clone()).or_insert(0) += w.count as i64;
     }
-    let options = ds.wargear_options_of(unit);
-    let comp = ds.unit_composition_of(unit);
-    if model_count <= 1 {
-        return None;
-    }
-    let models = comp.map(|c| loadout_models(&c.models));
-    let groups = group_loadout(unit, model_count, &options, models.as_deref(), &counts)?;
+    let groups = ds
+        .loadout_of(unit)
+        .groups(model_count, &counts)
+        .unwrap_or_else(|error| panic!("{}: {error}", unit.id.as_str()))?;
     Some(
         groups
             .into_iter()

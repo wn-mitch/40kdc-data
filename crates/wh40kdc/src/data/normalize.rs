@@ -20,8 +20,9 @@ use unicode_normalization::{char::is_combining_mark, UnicodeNormalization};
 /// 2. Casefold to lower case.
 /// 3. Remove apostrophe and quote variants (`'`, `’`, `‘`, `` ` ``, `"`, `“`,
 ///    `”`) — `T'au` → `Tau`.
-/// 4. Collapse any run of whitespace or hyphens to a single space, then trim —
-///    `Be'lakor` → `belakor`, `the   betrayer` → `the betrayer`.
+/// 4. Collapse any run of whitespace or dashes (ASCII `-`, U+2010–U+2015,
+///    U+2212) to a single space, then trim — `Be'lakor` → `belakor`,
+///    `the   betrayer` → `the betrayer`, `Grav‑Tank` → `grav tank`.
 ///
 /// The result is intended only for comparison; it is not a display value.
 ///
@@ -47,10 +48,10 @@ pub fn normalize_name(input: &str) -> String {
             // Apostrophe / quote variants are removed outright (not spaced),
             // so `T'au` → `tau` rather than `t au`.
             '\'' | '\u{2019}' | '\u{2018}' | '`' | '"' | '\u{201C}' | '\u{201D}' => {}
-            // Whitespace and hyphens collapse to a single separating space; a
+            // Whitespace and dashes collapse to a single separating space; a
             // leading run is suppressed (out is still empty) and a trailing run
             // is dropped because the space is only flushed before the next char.
-            _ if c.is_whitespace() || c == '-' => {
+            _ if c.is_whitespace() || is_dash(c) => {
                 if !out.is_empty() {
                     pending_space = true;
                 }
@@ -65,6 +66,13 @@ pub fn normalize_name(input: &str) -> String {
         }
     }
     out
+}
+
+/// The ASCII hyphen-minus, the Unicode hyphens and dashes U+2010–U+2015, and
+/// the minus sign U+2212. GW's data keeps the non-breaking hyphen (`Grav‑Tank`,
+/// U+2011) while roster exports print the ASCII `Grav-Tank`.
+fn is_dash(c: char) -> bool {
+    matches!(c, '-' | '\u{2010}'..='\u{2015}' | '\u{2212}')
 }
 
 /// Strip a leading "The " (case-insensitive, after trimming) from a display

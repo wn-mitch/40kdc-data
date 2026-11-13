@@ -6085,7 +6085,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "05a4471911fe9989b2350421ce2ac9668900582c585e07a62c6b15e5a599e101",
     "version": "2025-q3",
@@ -6094,17 +6094,14 @@
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "data-psalm-conclave",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "round-started",
-        "condition": {
-          "type": "battle-round",
-          "parameters": {
-            "min": 1,
-            "max": 1
-          }
+      "type": "conditional",
+      "condition": {
+        "type": "battle-round",
+        "parameters": {
+          "min": 1,
+          "max": 1
         }
       },
       "effect": {
@@ -6112,85 +6109,144 @@
         "mode": "consumable",
         "options": [
           {
+            "id": "panegyric-procession",
             "name": "Panegyric Procession",
             "effect": {
               "type": "conditional",
               "condition": {
-                "type": "attack-is",
-                "parameters": {
-                  "attack_type": "ranged"
-                }
-              },
-              "effect": {
-                "type": "stat-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "stat": "AP",
-                  "operation": "improve",
-                  "value": 1,
-                  "weapons": {
-                    "type": "ranged"
-                  }
-                }
-              }
-            },
-            "id": "panegyric-procession"
-          },
-          {
-            "name": "Citation in Savagery",
-            "effect": {
-              "type": "conditional",
-              "condition": {
-                "type": "happened",
-                "parameters": {
-                  "event": "move-ended",
-                  "filter": {
-                    "move_types": [
-                      "charge"
+                "operator": "and",
+                "operands": [
+                  {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "attack-is",
+                        "parameters": {
+                          "attack_type": "ranged"
+                        }
+                      },
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "filter": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "CULT MECHANICUS"
+                            ]
+                          },
+                          "subject": "attacker"
+                        }
+                      }
                     ]
                   },
-                  "window": "turn"
-                }
-              },
-              "effect": {
-                "type": "sequence",
-                "steps": [
                   {
-                    "type": "stat-modifier",
-                    "target": "this-unit",
-                    "modifier": {
-                      "stat": "S",
-                      "operation": "add",
-                      "value": 1,
-                      "weapons": {
-                        "type": "melee"
-                      }
-                    }
-                  },
-                  {
-                    "type": "stat-modifier",
-                    "target": "this-unit",
-                    "modifier": {
-                      "stat": "A",
-                      "operation": "add",
-                      "value": 1,
-                      "weapons": {
-                        "type": "melee"
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "defender",
+                      "filter": {
+                        "within": {
+                          "of": "attacker",
+                          "range": "half-weapon"
+                        }
                       }
                     }
                   }
                 ]
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "CULT MECHANICUS"
+                  ],
+                  "level": "model"
+                },
+                "modifier": {
+                  "stat": "AP",
+                  "operation": "improve",
+                  "value": 1
+                }
               }
-            },
-            "id": "citation-in-savagery"
+            }
+          },
+          {
+            "id": "citation-in-savagery",
+            "name": "Citation in Savagery",
+            "effect": {
+              "type": "ability-part",
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "type": "happened",
+                  "parameters": {
+                    "subject": "event-subject",
+                    "event": "move-ended",
+                    "filter": {
+                      "move_types": [
+                        "charge"
+                      ]
+                    },
+                    "window": "turn"
+                  }
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "stat-modifier",
+                      "target": "event-subject",
+                      "modifier": {
+                        "stat": "A",
+                        "operation": "add",
+                        "value": 1,
+                        "weapons": {
+                          "type": "melee"
+                        }
+                      }
+                    },
+                    {
+                      "type": "stat-modifier",
+                      "target": "event-subject",
+                      "modifier": {
+                        "stat": "S",
+                        "operation": "add",
+                        "value": 1,
+                        "weapons": {
+                          "type": "melee"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "trigger": {
+                "event": "selected",
+                "filter": {
+                  "to": "fight"
+                },
+                "subject": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "CULT MECHANICUS"
+                  ]
+                }
+              },
+              "duration": "phase"
+            }
           }
-        ]
+        ],
+        "min_choices": 1,
+        "max_choices": 1
       }
     },
     "scope": {
       "duration": "battle"
     },
-    "community_notes": "[APPROX] One Benediction is chosen at the start of the first battle round and stays active for CULT MECHANICUS units all battle; Panegyric Procession's +1 AP applies only within half range, a gate not encoded here. Full rule in raw-text store."
+    "community_notes": "[APPROX] One Benediction is chosen at the start of the first battle round and stays active for CULT MECHANICUS units all battle; Panegyric Procession's +1 AP applies only within half range, a gate not encoded here. Full rule in raw-text store.",
+    "trigger": {
+      "event": "round-started"
+    }
   },
   {
     "ability_id": "acquisition-at-any-cost-adeptus-mechanicus",

@@ -3229,9 +3229,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "ef43ce5ad914c8eaa5d4d4e7644fa304934d1e5eccbef108312446104cc61af2",
+    "source_digest": "0aead6fb5f782696fee3325c0111d5e4b3ba270b7a438748f4a1b1dd0ea17de1",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3240,65 +3240,86 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "targeting",
-      "target": "attacker",
-      "modifier": {
-        "may": "must-target",
-        "target": {
-          "owner": "friendly",
-          "all_of": [
-            "ADEPTUS CUSTODES",
-            "INFANTRY"
-          ],
-          "none_of": [
-            "ANATHEMA PSYKANA"
-          ],
-          "within": {
-            "range": {
-              "inches": 6
-            },
-            "of": "this-unit"
-          }
+      "type": "ability-part",
+      "trigger": {
+        "event": "targets-selected",
+        "subject": {
+          "owner": "enemy",
+          "level": "model"
         },
-        "kind": "attack"
+        "filter": {
+          "kind": "attack"
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-subject",
+                "filter": {
+                  "engaged_with": "this-unit"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "event": "targets-selected",
+                    "subject": "event-subject",
+                    "object": "this-unit",
+                    "filter": {
+                      "kind": "attack",
+                      "all_attacks": true
+                    },
+                    "window": "event"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "roll-modifier",
+              "target": "event-subject",
+              "modifier": {
+                "roll": "hit",
+                "operation": "subtract",
+                "value": 1
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": "event-subject",
+              "modifier": {
+                "roll": "wound",
+                "operation": "subtract",
+                "value": 1
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "applies_to": {
-      "all_of": [
-        "ANATHEMA PSYKANA",
-        "INFANTRY"
-      ]
-    },
-    "community_notes": "Targets one Anathema Psykana Infantry unit that was selected as a target and one other friendly Adeptus Custodes Infantry unit (excluding Anathema Psykana) within 6\": until the end of the phase, attacks that target the Anathema Psykana unit must instead target the other unit, unless it is not an eligible target.",
     "trigger": {
-      "event": "targets-selected",
-      "filter": {
-        "kind": "attack"
-      },
-      "subject": {
-        "owner": "enemy"
-      },
-      "object": "this-unit",
-      "optional": true,
+      "event": "phase-started",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
-        ]
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
       }
     }
   },

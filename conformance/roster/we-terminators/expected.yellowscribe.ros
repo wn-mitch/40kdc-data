@@ -166,32 +166,17 @@
           <selections>
             <selection id="unit1-m0" name="World Eaters Terminator Champion" type="model" number="1">
               <selections>
-                <selection id="unit1-m0-w0" name="Chainfist" type="upgrade" number="1">
+                <selection id="unit1-m0-w0" name="Paired accursed weapons" type="upgrade" number="1">
                   <profiles>
-                    <profile name="Chainfist" typeName="Melee Weapons">
+                    <profile name="Paired accursed weapons" typeName="Melee Weapons">
                       <characteristics>
                         <characteristic name="Range">Melee</characteristic>
-                        <characteristic name="A">3</characteristic>
-                        <characteristic name="WS">4+</characteristic>
-                        <characteristic name="S">8</characteristic>
-                        <characteristic name="AP">-3</characteristic>
-                        <characteristic name="D">2</characteristic>
-                        <characteristic name="Keywords">Anti-Vehicle 3+</characteristic>
-                      </characteristics>
-                    </profile>
-                  </profiles>
-                </selection>
-                <selection id="unit1-m0-w1" name="Combi-weapon" type="upgrade" number="1">
-                  <profiles>
-                    <profile name="Combi-weapon" typeName="Ranged Weapons">
-                      <characteristics>
-                        <characteristic name="Range">24"</characteristic>
-                        <characteristic name="A">1</characteristic>
-                        <characteristic name="BS">4+</characteristic>
+                        <characteristic name="A">5</characteristic>
+                        <characteristic name="WS">3+</characteristic>
                         <characteristic name="S">5</characteristic>
-                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="AP">-2</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Anti-Infantry 4+, Devastating Wounds, Rapid Fire 1</characteristic>
+                        <characteristic name="Keywords">Twin-linked</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>
@@ -234,17 +219,32 @@
             </selection>
             <selection id="unit1-m2" name="World Eaters Terminator" type="model" number="2">
               <selections>
-                <selection id="unit1-m2-w0" name="Paired accursed weapons" type="upgrade" number="2">
+                <selection id="unit1-m2-w0" name="Chainfist" type="upgrade" number="2">
                   <profiles>
-                    <profile name="Paired accursed weapons" typeName="Melee Weapons">
+                    <profile name="Chainfist" typeName="Melee Weapons">
                       <characteristics>
                         <characteristic name="Range">Melee</characteristic>
-                        <characteristic name="A">5</characteristic>
-                        <characteristic name="WS">3+</characteristic>
+                        <characteristic name="A">3</characteristic>
+                        <characteristic name="WS">4+</characteristic>
+                        <characteristic name="S">8</characteristic>
+                        <characteristic name="AP">-3</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Anti-Vehicle 3+</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m2-w1" name="Combi-weapon" type="upgrade" number="2">
+                  <profiles>
+                    <profile name="Combi-weapon" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">4+</characteristic>
                         <characteristic name="S">5</characteristic>
-                        <characteristic name="AP">-2</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Twin-linked</characteristic>
+                        <characteristic name="Keywords">Anti-Infantry 4+, Devastating Wounds, Rapid Fire 1</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>
@@ -287,32 +287,17 @@
             </selection>
             <selection id="unit1-m4" name="World Eaters Terminator" type="model" number="1">
               <selections>
-                <selection id="unit1-m4-w0" name="Chainfist" type="upgrade" number="1">
+                <selection id="unit1-m4-w0" name="Paired accursed weapons" type="upgrade" number="1">
                   <profiles>
-                    <profile name="Chainfist" typeName="Melee Weapons">
+                    <profile name="Paired accursed weapons" typeName="Melee Weapons">
                       <characteristics>
                         <characteristic name="Range">Melee</characteristic>
-                        <characteristic name="A">3</characteristic>
-                        <characteristic name="WS">4+</characteristic>
-                        <characteristic name="S">8</characteristic>
-                        <characteristic name="AP">-3</characteristic>
-                        <characteristic name="D">2</characteristic>
-                        <characteristic name="Keywords">Anti-Vehicle 3+</characteristic>
-                      </characteristics>
-                    </profile>
-                  </profiles>
-                </selection>
-                <selection id="unit1-m4-w1" name="Combi-weapon" type="upgrade" number="1">
-                  <profiles>
-                    <profile name="Combi-weapon" typeName="Ranged Weapons">
-                      <characteristics>
-                        <characteristic name="Range">24"</characteristic>
-                        <characteristic name="A">1</characteristic>
-                        <characteristic name="BS">4+</characteristic>
+                        <characteristic name="A">5</characteristic>
+                        <characteristic name="WS">3+</characteristic>
                         <characteristic name="S">5</characteristic>
-                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="AP">-2</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Anti-Infantry 4+, Devastating Wounds, Rapid Fire 1</characteristic>
+                        <characteristic name="Keywords">Twin-linked</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>
@@ -375,32 +360,17 @@
           <selections>
             <selection id="unit2-m0" name="World Eaters Terminator Champion" type="model" number="1">
               <selections>
-                <selection id="unit2-m0-w0" name="Chainfist" type="upgrade" number="1">
+                <selection id="unit2-m0-w0" name="Paired accursed weapons" type="upgrade" number="1">
                   <profiles>
-                    <profile name="Chainfist" typeName="Melee Weapons">
+                    <profile name="Paired accursed weapons" typeName="Melee Weapons">
                       <characteristics>
                         <characteristic name="Range">Melee</characteristic>
-                        <characteristic name="A">3</characteristic>
-                        <characteristic name="WS">4+</characteristic>
-                        <characteristic name="S">8</characteristic>
-                        <characteristic name="AP">-3</characteristic>
-                        <characteristic name="D">2</characteristic>
-                        <characteristic name="Keywords">Anti-Vehicle 3+</characteristic>
-                      </characteristics>
-                    </profile>
-                  </profiles>
-                </selection>
-                <selection id="unit2-m0-w1" name="Combi-weapon" type="upgrade" number="1">
-                  <profiles>
-                    <profile name="Combi-weapon" typeName="Ranged Weapons">
-                      <characteristics>
-                        <characteristic name="Range">24"</characteristic>
-                        <characteristic name="A">1</characteristic>
-                        <characteristic name="BS">4+</characteristic>
+                        <characteristic name="A">5</characteristic>
+                        <characteristic name="WS">3+</characteristic>
                         <characteristic name="S">5</characteristic>
-                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="AP">-2</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Anti-Infantry 4+, Devastating Wounds, Rapid Fire 1</characteristic>
+                        <characteristic name="Keywords">Twin-linked</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>
@@ -443,17 +413,32 @@
             </selection>
             <selection id="unit2-m2" name="World Eaters Terminator" type="model" number="1">
               <selections>
-                <selection id="unit2-m2-w0" name="Paired accursed weapons" type="upgrade" number="1">
+                <selection id="unit2-m2-w0" name="Chainfist" type="upgrade" number="1">
                   <profiles>
-                    <profile name="Paired accursed weapons" typeName="Melee Weapons">
+                    <profile name="Chainfist" typeName="Melee Weapons">
                       <characteristics>
                         <characteristic name="Range">Melee</characteristic>
-                        <characteristic name="A">5</characteristic>
-                        <characteristic name="WS">3+</characteristic>
+                        <characteristic name="A">3</characteristic>
+                        <characteristic name="WS">4+</characteristic>
+                        <characteristic name="S">8</characteristic>
+                        <characteristic name="AP">-3</characteristic>
+                        <characteristic name="D">2</characteristic>
+                        <characteristic name="Keywords">Anti-Vehicle 3+</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit2-m2-w1" name="Combi-weapon" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Combi-weapon" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">4+</characteristic>
                         <characteristic name="S">5</characteristic>
-                        <characteristic name="AP">-2</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Twin-linked</characteristic>
+                        <characteristic name="Keywords">Anti-Infantry 4+, Devastating Wounds, Rapid Fire 1</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>

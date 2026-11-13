@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://www.battlescribe.net/schema/catalogueSchema"
+           targetNamespace="http://www.battlescribe.net/schema/catalogueSchema">
+
+  <!--schema for BattleScribe [version 2.03, (c) Jon Taylor] datafiles (catalogues and game systems)-->
+  <!--schema file author: Amadeusz Sadowski-->
+  <!--for game system, replace 'xmlns:tns' and 'targetNamespace' values with http://www.battlescribe.net/schema/gameSystemSchema -->
+  <!--for catalogue,   replace 'xmlns:tns' and 'targetNamespace' values with http://www.battlescribe.net/schema/catalogueSchema -->
+  <!--for roster,      replace 'xmlns:tns' and 'targetNamespace' values with http://www.battlescribe.net/schema/rosterSchema -->
+
+  <xs:simpleType name="idtype">
+    <xs:restriction base="xs:string" />
+  </xs:simpleType>
+
+  <xs:complexType name="Commentable">
+    <xs:sequence>
+      <xs:element name="comment" type="xs:string" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--publication-->
+  <xs:complexType name="Publication">
+    <xs:complexContent>
+      <xs:extension base="tns:Commentable">
+        <xs:attribute name="id" type="tns:idtype" use="required" />
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="shortName" type="xs:string" />
+        <xs:attribute name="publisher" type="xs:string" />
+        <xs:attribute name="publicationDate" type="xs:string" />
+        <xs:attribute name="publisherUrl" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="PublicationList">
+    <xs:sequence>
+      <xs:element name="publication" type="tns:Publication" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:attributeGroup name="PublicationRefAttGroup">
+    <xs:attribute name="publicationId" type="tns:idtype" />
+    <xs:attribute name="page" type="xs:string" />
+  </xs:attributeGroup>
+
+  <!--characteristic type-->
+  <xs:complexType name="CharacteristicType">
+    <xs:complexContent>
+      <xs:extension base="tns:Commentable">
+        <xs:attribute name="id" type="tns:idtype" use="required" />
+        <xs:attribute name="name" type="xs:string" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="CharacteristicTypeList">
+    <xs:sequence>
+      <xs:element name="characteristicType" type="tns:CharacteristicType" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--profile type-->
+  <xs:complexType name="ProfileType">
+    <xs:complexContent>
+      <xs:extension base="tns:Commentable">
+        <xs:sequence>
+          <xs:element name="characteristicTypes" type="tns:CharacteristicTypeList" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="id" type="tns:idtype" use="required" />
+        <xs:attribute name="name" type="xs:string" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ProfileTypeList">
+    <xs:sequence>
+      <xs:element name="profileType" type="tns:ProfileType" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--cost type-->
+  <xs:complexType name="CostType">
+    <xs:complexContent>
+      <xs:extension base="tns:Commentable">
+        <xs:attribute name="id" type="tns:idtype" use="required" />
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="defaultCostLimit" type="xs:decimal" default="-1" />
+        <xs:attribute name="hidden" type="xs:boolean" default="false" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="CostTypeList">
+    <xs:sequence>
+      <xs:element name="costType" type="tns:CostType" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--entry base-->
+  <xs:complexType name="EntryBase">
+    <xs:complexContent>
+      <xs:extension base="tns:Commentable">
+        <xs:sequence>
+          <xs:element name="modifiers" type="tns:ModifierList" minOccurs="0" />
+          <xs:element name="modifierGroups" type="tns:ModifierGroupList" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="id" type="tns:idtype" use="required" />
+        <xs:attribute name="name" type="xs:string" />
+        <xs:attributeGroup ref="tns:PublicationRefAttGroup" />
+        <xs:attribute name="hidden" type="xs:boolean" default="false" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!--info node group-->
+  <xs:group name="InfoNodeGroup">
+    <xs:sequence>
+      <xs:element name="profiles" type="tns:ProfileList" minOccurs="0" />
+      <xs:element name="rules" type="tns:RuleList" minOccurs="0" />
+      <xs:element name="infoGroups" type="tns:InfoGroupList" minOccurs="0" />
+      <xs:element name="infoLinks" type="tns:InfoLinkList" minOccurs="0" />
+    </xs:sequence>
+  </xs:group>
+
+  <!--characteristic-->
+  <xs:complexType name="Characteristic">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="typeId" type="tns:idtype" use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="CharacteristicList">
+    <xs:sequence>
+      <xs:element name="characteristic" type="tns:Characteristic" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--profile-->
+  <xs:complexType name="Profile">
+    <xs:complexContent>
+      <xs:extension base="tns:EntryBase">
+        <xs:sequence>
+          <xs:element name="characteristics" type="tns:CharacteristicList" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="typeId" type="tns:idtype" use="required" />
+        <xs:attribute name="typeName" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ProfileList">
+    <xs:sequence>
+      <xs:element name="profile" type="tns:Profile" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--rule-->
+  <xs:complexType name="Rule">
+    <xs:complexContent>
+      <xs:extension base="tns:EntryBase">
+        <xs:sequence>
+          <xs:element name="description" type="xs:string" minOccurs="0" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="RuleList">
+    <xs:sequence>
+      <xs:element name="rule" type="tns:Rule" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--container entry base-->
+  <xs:complexType name="ContainerEntryBase">
+    <xs:complexContent>
+      <xs:extension base="tns:EntryBase">
+        <xs:sequence>
+          <xs:element name="constraints" type="tns:ConstraintList" minOccurs="0" />
+          <xs:group ref="tns:InfoNodeGroup" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!--info group-->
+  <xs:complexType name="InfoGroup">
+    <xs:complexContent>
+      <xs:extension base="tns:EntryBase">
+        <xs:sequence>
+          <xs:group ref="tns:InfoNodeGroup" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="InfoGroupList">
+    <xs:sequence>
+      <xs:element name="infoGroup" type="tns:InfoGroup" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--category entry-->
+  <xs:complexType name="CategoryEntry">
+    <xs:complexContent>
+      <xs:extension base="tns:ContainerEntryBase" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="CategoryEntryList">
+    <xs:sequence>
+      <xs:element name="categoryEntry" type="tns:CategoryEntry" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--force entry-->
+  <xs:complexType name="ForceEntry">
+    <xs:complexContent>
+      <xs:extension base="tns:ContainerEntryBase">
+        <xs:sequence>
+          <xs:element name="forceEntries" type="tns:ForceEntryList" minOccurs="0" />
+          <xs:element name="categoryLinks" type="tns:CategoryLinkList" minOccurs="0" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ForceEntryList">
+    <xs:sequence>
+      <xs:element name="forceEntry" type="tns:ForceEntry" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--cost base-->
+  <xs:complexType name="CostBase">
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="typeId" type="tns:idtype" use="required" />
+    <xs:attribute name="value" type="xs:decimal" use="required" />
+  </xs:complexType>
+
+  <!--cost-->
+  <xs:complexType name="Cost">
+    <xs:complexContent>
+      <xs:extension base="tns:CostBase" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="CostList">
+    <xs:sequence>
+      <xs:element name="cost" type="tns:Cost" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--cost limit-->
+  <xs:complexType name="CostLimit">
+    <xs:complexContent>
+      <xs:extension base="tns:CostBase" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="CostLimitList">
+    <xs:sequence>
+      <xs:element name="costLimit" type="tns:CostLimit" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+
+  <!--selection entry base-->
+  <xs:complexType name="SelectionEntryBase">
+    <xs:complexContent>
+      <xs:extension base="tns:ContainerEntryBase">
+        <xs:sequence>
+          <xs:element name="categoryLinks" type="tns:CategoryLinkList" minOccurs="0" />
+          <xs:element name="selectionEntries" type="tns:SelectionEntryList" minOccurs="0" />
+          <xs:element name="selectionEntryGroups" type="tns:SelectionEntryGroupList" minOccurs="0" />
+          <xs:element name="entryLinks" type="tns:EntryLinkList" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="collective" type="xs:boolean" default="false" />
+        <xs:attribute name="import" type="xs:boolean" default="false" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!--selection entry-->
+  <xs:complexType name="SelectionEntry">
+    <xs:complexContent>
+      <xs:extension base="tns:SelectionEntryBase">
+        <xs:sequence>
+          <xs:element name="costs" type="tns:CostList" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="type" type="tns:SelectionEntryKind" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="SelectionEntryList">
+    <xs:sequence>
+      <xs:element name="selectionEntry" type="tns:SelectionEntry" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="SelectionEntryKind">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="upgrade"/>
+      <xs:enumeration value="model"/>
+      <xs:enumeration value="unit"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!--selection entry group-->
+  <xs:complexType name="SelectionEntryGroup">
+    <xs:complexContent>
+      <xs:extension base="tns:SelectionEntryBase">
+        <xs:attribute name="defaultSelectionEntryId" type="tns:idtype" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="SelectionEntryGroupList">
+    <xs:sequence>
+      <xs:element name="selectionEntryGroup" type="tns:SelectionEntryGroup" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--info link-->
+  <xs:complexType name="InfoLink">
+    <xs:complexContent>
+      <xs:extension base="tns:EntryBase">
+        <xs:attribute name="targetId" type="tns:idtype" use="required" />
+        <xs:attribute name="type" type="tns:InfoLinkKind" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="InfoLinkList">
+    <xs:sequence>
+      <xs:element name="infoLink" type="tns:InfoLink" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="InfoLinkKind">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="infoGroup" />
+      <xs:enumeration value="profile" />
+      <xs:enumeration value="rule" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!--catalogue link-->
+  <xs:complexType name="CatalogueLink">
+    <xs:complexContent>
+      <xs:extension base="tns:Commentable">
+        <xs:attribute name="id" type="tns:idtype" use="required" />
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="targetId" type="tns:idtype" use="required" />
+        <xs:attribute name="type" type="tns:CatalogueLinkKind" use="required" />
+        <xs:attribute name="importRootEntries" type="xs:boolean" default="false" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="CatalogueLinkList">
+    <xs:sequence>
+      <xs:element name="catalogueLink" type="tns:CatalogueLink" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="CatalogueLinkKind">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="catalogue" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!--category link-->
+  <xs:complexType name="CategoryLink">
+    <xs:complexContent>
+      <xs:extension base="tns:ContainerEntryBase">
+        <xs:attribute name="targetId" type="tns:idtype" use="required" />
+        <xs:attribute name="primary" type="xs:boolean" default="false" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="CategoryLinkList">
+    <xs:sequence>
+      <xs:element name="categoryLink" type="tns:CategoryLink" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--entry link-->
+  <xs:complexType name="EntryLink">
+    <xs:complexContent>
+      <xs:extension base="tns:SelectionEntryBase">
+        <xs:sequence>
+          <xs:element name="costs" type="tns:CostList" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="targetId" type="tns:idtype" use="required" />
+        <xs:attribute name="type" type="tns:EntryLinkKind" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="EntryLinkList">
+    <xs:sequence>
+      <xs:element name="entryLink" type="tns:EntryLink" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="EntryLinkKind">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="selectionEntry"/>
+      <xs:enumeration value="selectionEntryGroup"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!--query base-->
+  <xs:complexType name="QueryBase">
+    <xs:complexContent>
+      <xs:extension base="tns:Commentable">
+        <xs:attribute name="field" type="xs:string" />
+        <xs:attribute name="scope" type="xs:string" use="required" />
+        <xs:attribute name="value" type="xs:decimal" use="required" />
+        <xs:attribute name="percentValue" type="xs:boolean" default="false" />
+        <xs:attribute name="shared" type="xs:boolean" default="true" />
+        <xs:attribute name="includeChildSelections" type="xs:boolean" default="false" />
+        <xs:attribute name="includeChildForces" type="xs:boolean" default="false" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  
+  <!--query filtered base-->
+  <xs:complexType name="QueryFilteredBase">
+    <xs:complexContent>
+      <xs:extension base="tns:QueryBase">
+        <xs:attribute name="childId" type="tns:idtype" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!--constraint-->
+  <xs:complexType name="Constraint">
+    <xs:complexContent>
+      <xs:extension base="tns:QueryBase">
+        <xs:attribute name="id" type="tns:idtype" use="required" />
+        <xs:attribute name="type" type="tns:ConstraintKind" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ConstraintList">
+    <xs:sequence>
+      <xs:element name="constraint" type="tns:Constraint" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="ConstraintKind">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="min" />
+      <xs:enumeration value="max" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!--modifier base-->
+  <xs:complexType name="ModifierBase">
+    <xs:complexContent>
+      <xs:extension base="tns:Commentable">
+        <xs:sequence>
+          <xs:element name="repeats" type="tns:RepeatList" minOccurs="0" />
+          <xs:element name="conditions" type="tns:ConditionList" minOccurs="0" />
+          <xs:element name="conditionGroups" type="tns:ConditionGroupList" minOccurs="0" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!--modifier-->
+  <xs:complexType name="Modifier">
+    <xs:complexContent>
+      <xs:extension base="tns:ModifierBase">
+        <xs:attribute name="type" type="tns:ModifierKind" use="required" />
+        <xs:attribute name="field" type="xs:string" use="required" />
+        <xs:attribute name="value" type="xs:string" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ModifierList">
+    <xs:sequence>
+      <xs:element name="modifier" type="tns:Modifier" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="ModifierKind">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="set" />
+      <xs:enumeration value="increment" />
+      <xs:enumeration value="decrement" />
+      <xs:enumeration value="append" />
+      <xs:enumeration value="add" />
+      <xs:enumeration value="remove" />
+      <xs:enumeration value="set-primary" />
+      <xs:enumeration value="unset-primary" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!--modifier group-->
+  <xs:complexType name="ModifierGroup">
+    <xs:complexContent>
+      <xs:extension base="tns:ModifierBase">
+        <xs:sequence>
+          <xs:element name="modifiers" type="tns:ModifierList" minOccurs="0" />
+          <xs:element name="modifierGroups" type="tns:ModifierGroupList" minOccurs="0" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ModifierGroupList">
+    <xs:sequence>
+      <xs:element name="modifierGroup" type="tns:ModifierGroup" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--repeat-->
+  <xs:complexType name="Repeat">
+    <xs:complexContent>
+      <xs:extension base="tns:QueryFilteredBase">
+        <xs:attribute name="repeats" type="xs:positiveInteger" use="required" />
+        <xs:attribute name="roundUp" type="xs:boolean" default="false" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="RepeatList">
+    <xs:sequence>
+      <xs:element name="repeat" type="tns:Repeat" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--condition-->
+  <xs:complexType name="Condition">
+    <xs:complexContent>
+      <xs:extension base="tns:QueryFilteredBase">
+        <xs:attribute name="type" type="tns:ConditionKind" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ConditionList">
+    <xs:sequence>
+      <xs:element name="condition" type="tns:Condition" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="ConditionKind">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="lessThan" />
+      <xs:enumeration value="greaterThan" />
+      <xs:enumeration value="equalTo" />
+      <xs:enumeration value="notEqualTo" />
+      <xs:enumeration value="atLeast" />
+      <xs:enumeration value="atMost" />
+      <xs:enumeration value="instanceOf" />
+      <xs:enumeration value="notInstanceOf" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!--condition group-->
+  <xs:complexType name="ConditionGroup">
+    <xs:complexContent>
+      <xs:extension base="tns:Commentable">
+        <xs:sequence>
+          <xs:element name="conditions" type="tns:ConditionList" minOccurs="0" />
+          <xs:element name="conditionGroups" type="tns:ConditionGroupList" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="type" type="tns:ConditionGroupKind" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ConditionGroupList">
+    <xs:sequence>
+      <xs:element name="conditionGroup" type="tns:ConditionGroup" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="ConditionGroupKind">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="and" />
+      <xs:enumeration value="or" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!--roster element base-->
+  <xs:complexType name="RosterElementBase">
+    <xs:sequence>
+      <xs:element name="customNotes" type="xs:string" minOccurs="0" />
+      <xs:element name="rules" type="tns:RuleList" minOccurs="0" />
+      <xs:element name="profiles" type="tns:ProfileList" minOccurs="0" />
+    </xs:sequence>
+    <xs:attribute name="id" type="tns:idtype" use="required" />
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="entryId" type="tns:idtype" use="required" />
+    <xs:attribute name="entryGroupId" type="tns:idtype" />
+    <xs:attribute name="customName" type="xs:string" />
+    <xs:attributeGroup ref="tns:PublicationRefAttGroup" />
+  </xs:complexType>
+  
+  <!--selection parent base-->
+  <xs:complexType name="SelectionParentBase">
+    <xs:complexContent>
+      <xs:extension base="tns:RosterElementBase">
+        <xs:sequence>
+          <xs:element name="selections" type="tns:SelectionList" minOccurs="0" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!--force-->
+  <xs:complexType name="Force">
+    <xs:complexContent>
+      <xs:extension base="tns:SelectionParentBase">
+        <xs:sequence>
+          <xs:element name="publications" type="tns:PublicationList" minOccurs="0" />
+          <xs:element name="categories" type="tns:CategoryList" minOccurs="0" />
+          <xs:element name="forces" type="tns:ForceList" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="catalogueId" type="tns:idtype" use="required" />
+        <xs:attribute name="catalogueRevision" type="xs:nonNegativeInteger" />
+        <xs:attribute name="catalogueName" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ForceList">
+    <xs:sequence>
+      <xs:element name="force" type="tns:Force" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--category-->
+  <xs:complexType name="Category">
+    <xs:complexContent>
+      <xs:extension base="tns:RosterElementBase">
+        <xs:attribute name="primary" type="xs:boolean" default="false" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="CategoryList">
+    <xs:sequence>
+      <xs:element name="category" type="tns:Category" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--selection-->
+  <xs:complexType name="Selection">
+    <xs:complexContent>
+      <xs:extension base="tns:SelectionParentBase">
+        <xs:sequence>
+          <xs:element name="costs" type="tns:CostList" minOccurs="0" />
+          <xs:element name="categories" type="tns:CategoryList" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="number" type="xs:nonNegativeInteger" use="required" />
+        <xs:attribute name="type" type="tns:SelectionEntryKind" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="SelectionList">
+    <xs:sequence>
+      <xs:element name="selection" type="tns:Selection" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <!--roster tag-->
+  <xs:complexType name="RosterTag">
+    <xs:attribute name="id" type="tns:idtype" use="required" />
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="RosterTagList">
+    <xs:sequence>
+      <xs:element name="tag" type="tns:RosterTag" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--catalogue base-->
+  <xs:complexType name="CatalogueBase">
+    <xs:complexContent>
+      <xs:extension base="tns:Commentable">
+        <xs:sequence>
+          <xs:element name="readme" type="xs:string" minOccurs="0" />
+          <xs:element name="publications" type="tns:PublicationList" minOccurs="0" />
+          <xs:element name="costTypes" type="tns:CostTypeList" minOccurs="0" />
+          <xs:element name="profileTypes" type="tns:ProfileTypeList" minOccurs="0" />
+          <xs:element name="categoryEntries" type="tns:CategoryEntryList" minOccurs="0" />
+          <xs:element name="forceEntries" type="tns:ForceEntryList" minOccurs="0" />
+          <xs:element name="selectionEntries" type="tns:SelectionEntryList" minOccurs="0" />
+          <xs:element name="entryLinks" type="tns:EntryLinkList" minOccurs="0" />
+          <xs:element name="rules" type="tns:RuleList" minOccurs="0" />
+          <xs:element name="infoLinks" type="tns:InfoLinkList" minOccurs="0" />
+          <xs:element name="sharedSelectionEntries" type="tns:SelectionEntryList" minOccurs="0" />
+          <xs:element name="sharedSelectionEntryGroups" type="tns:SelectionEntryGroupList" minOccurs="0" />
+          <xs:element name="sharedRules" type="tns:RuleList" minOccurs="0" />
+          <xs:element name="sharedProfiles" type="tns:ProfileList" minOccurs="0" />
+          <xs:element name="sharedInfoGroups" type="tns:InfoGroupList" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="id" type="tns:idtype" use="required" />
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="revision" type="xs:nonNegativeInteger" />
+        <xs:attribute name="battleScribeVersion" type="xs:string" />
+        <xs:attribute name="authorName" type="xs:string" />
+        <xs:attribute name="authorContact" type="xs:string" />
+        <xs:attribute name="authorUrl" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!--roster-->
+  <xs:complexType name="Roster">
+    <xs:sequence>
+      <xs:element name="costs" type="tns:CostList" minOccurs="0" />
+      <xs:element name="costLimits" type="tns:CostLimitList" minOccurs="0" />
+      <xs:element name="forces" type="tns:ForceList" minOccurs="0" />
+      <xs:element name="customNotes" type="xs:string" minOccurs="0" />
+      <xs:element name="tags" type="tns:RosterTagList" minOccurs="0" />
+    </xs:sequence>
+    <xs:attribute name="id" type="tns:idtype" use="required" />
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="battleScribeVersion" type="xs:string" />
+    <xs:attribute name="gameSystemId" type="tns:idtype" use="required" />
+    <xs:attribute name="gameSystemName" type="xs:string" />
+    <xs:attribute name="gameSystemRevision" type="xs:nonNegativeInteger" />
+  </xs:complexType>
+
+  <!--catalogue-->
+  <xs:complexType name="Catalogue">
+    <xs:complexContent>
+      <xs:extension base="tns:CatalogueBase">
+        <xs:sequence>
+          <xs:element name="catalogueLinks" type="tns:CatalogueLinkList" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="library" type="xs:boolean" default="false" />
+        <xs:attribute name="gameSystemId" type="tns:idtype" use="required" />
+        <xs:attribute name="gameSystemRevision" type="xs:nonNegativeInteger" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!--gamesystem-->
+  <xs:complexType name="GameSystem">
+    <xs:complexContent>
+      <xs:extension base="tns:CatalogueBase" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!--root elements-->
+  <xs:element name="roster" type="tns:Roster" />
+  <xs:element name="catalogue" type="tns:Catalogue" />
+  <xs:element name="gameSystem" type="tns:GameSystem" />
+</xs:schema>

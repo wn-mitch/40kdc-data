@@ -1,21 +1,77 @@
 /**
- * Wargear choice for one unit as a coordinate search over option plans.
+ * Wargear choice for one unit as a coordinate search.
  *
- * A plan sets, for every wargear option, which replacement branch is taken and how many times.
- * Single-option moves change one option's setting. When none improves, pairwise moves change two
- * options that replace a weapon in common together, which reaches combinations whose parts only
- * pay off jointly (one option giving up the weapon another needs). The search alternates the two
- * until neither improves the total.
+ * A unit with MFM loadout rules has its distinct legal loadouts listed up front
+ * ({@link mfmLoadouts}). A short list is scored whole; a longer one is searched from the base
+ * loadout, each move taking the first loadout that scores higher among those within L1 distance 2
+ * of the current one (one copy swapped, added or dropped), then within 4, then within 8.
+ *
+ * A unit without them searches over option plans. A plan sets, for every wargear option, which
+ * replacement branch is taken and how many times. Single-option moves change one option's setting.
+ * When none improves, pairwise moves change two options that replace a weapon in common together,
+ * which reaches combinations whose parts only pay off jointly (one option giving up the weapon
+ * another needs). The search alternates the two until neither improves the total.
  */
-import type { LoadoutModel } from "../data/loadout.js";
+import type { LoadoutGroup, LoadoutModel } from "../data/loadout.js";
+import { forEachMfmConfiguration } from "../data/mfm-loadout-search.js";
+import { mfmRowSplits, type MfmComposition } from "../data/mfm-loadout-unit.js";
+import { mfmGroupRowOrder, mfmGroups } from "../data/unit-loadout.js";
 import type { WargearOption } from "../generated.js";
+
+/** A unit's distinct legal loadouts under its MFM rules, in search order, each with its models. */
+export interface MfmLoadouts {
+  loadouts: { counts: Map<string, number>; groups: LoadoutGroup[] | null }[];
+  /** Position in `loadouts` by {@link countsKey}. */
+  byKey: Map<string, number>;
+}
 
 export interface LoadoutScaffold {
   models: LoadoutModel[];
   modelCount: number;
+  /** Authored wargear options; empty for a unit with MFM rules. */
   options: WargearOption[];
   caps: number[];
   base: Map<string, number>;
+  /** Every item some legal loadout can carry. */
+  carriable: string[];
+  /** Present when the unit's MFM loadout rules decide its loadouts. */
+  mfm?: MfmLoadouts;
+}
+
+/** A loadout's copies as ascending `id:count` pairs, zero counts left out. */
+export function countsKey(counts: ReadonlyMap<string, number>): string {
+  return [...counts].filter(([, n]) => n !== 0).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)).map(([id, n]) => `${id}:${n}`).join(",");
+}
+
+/**
+ * The distinct legal loadouts of a unit of `modelCount` models under `composition`'s MFM rules: each
+ * row split in {@link mfmRowSplits} order, each split's configurations in search order, a loadout
+ * listed at its first configuration.
+ */
+export function mfmLoadouts(composition: MfmComposition, modelCount: number): MfmLoadouts {
+  const out: MfmLoadouts = { loadouts: [], byKey: new Map() };
+  const rowOrder = mfmGroupRowOrder(composition);
+  for (const rows of mfmRowSplits(composition, modelCount)) {
+    forEachMfmConfiguration(composition.loadout!, rows, (configuration) => {
+      const key = countsKey(configuration.counts);
+      if (out.byKey.has(key)) return;
+      out.byKey.set(key, out.loadouts.length);
+      out.loadouts.push({ counts: configuration.counts, groups: modelCount > 1 ? mfmGroups(configuration, rowOrder) : null });
+    });
+  }
+  return out;
+}
+
+/** MFM loadout lists up to this long are scored whole. */
+export const MFM_EXHAUSTIVE_LOADOUTS = 512;
+/** The L1 distances an MFM move widens through when no nearer loadout scores higher. */
+const MFM_RADII = [2, 4, 8];
+
+function distance(left: ReadonlyMap<string, number>, right: ReadonlyMap<string, number>): number {
+  let out = 0;
+  for (const [id, n] of left) out += Math.abs(n - (right.get(id) ?? 0));
+  for (const [id, n] of right) if (!left.has(id)) out += Math.abs(n);
+  return out;
 }
 
 export interface OptionPlan {
@@ -121,6 +177,7 @@ function* moves(scaffold: LoadoutScaffold, plan: readonly OptionPlan[], pairs: b
  * through `rejected`.
  */
 export function searchLoadout<Result extends { total: number }>(space: LoadoutSpace<Result>, rejected: () => void = () => {}): Result {
+  if (space.scaffold.mfm) return searchMfmLoadout(space, space.scaffold.mfm);
   let plan: OptionPlan[] = space.scaffold.options.map(() => ({ branch: 0, count: 0 }));
   let best = space.score(space.scaffold.base);
   for (let accepted = 0; accepted < MAX_MOVES; accepted++) {
@@ -142,6 +199,40 @@ export function searchLoadout<Result extends { total: number }>(space: LoadoutSp
         }
       }
       if (improved) break;
+    }
+    if (!improved) return best;
+  }
+  throw new Error(`loadout search: no fixed point after ${MAX_MOVES} improving moves`);
+}
+
+/** The MFM search described above; the base loadout is the start, and ties keep the earlier loadout. */
+function searchMfmLoadout<Result extends { total: number }>(space: LoadoutSpace<Result>, mfm: MfmLoadouts): Result {
+  let best = space.score(space.scaffold.base);
+  if (mfm.loadouts.length <= MFM_EXHAUSTIVE_LOADOUTS) {
+    for (const { counts } of mfm.loadouts) {
+      const trial = space.score(counts);
+      if (trial.total > best.total + EPSILON) best = trial;
+    }
+    return best;
+  }
+  let current: ReadonlyMap<string, number> = space.scaffold.base;
+  for (let accepted = 0; accepted < MAX_MOVES; accepted++) {
+    let improved = false;
+    let nearer = 0;
+    for (const radius of MFM_RADII) {
+      for (const { counts } of mfm.loadouts) {
+        const d = distance(counts, current);
+        if (d <= nearer || d > radius) continue;
+        const trial = space.score(counts);
+        if (trial.total > best.total + EPSILON) {
+          current = counts;
+          best = trial;
+          improved = true;
+          break;
+        }
+      }
+      if (improved) break;
+      nearer = radius;
     }
     if (!improved) return best;
   }

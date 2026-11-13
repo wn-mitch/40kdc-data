@@ -220,7 +220,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "4c27b2b46e22bd7194fd8eb789090cd816639e4e8d7565a54c1a70f92c405379",
     "version": "2025-q3",
@@ -229,16 +229,16 @@
       "steps": [
         {
           "type": "weapon-ability-grant",
-          "target": "this-model",
+          "target": "this-unit",
           "modifier": {
-            "weapons": {
-              "type": "ranged"
-            },
             "keywords": [
               {
                 "keyword_id": "ignores-cover"
               }
-            ]
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
@@ -247,17 +247,14 @@
             "type": "matches",
             "parameters": {
               "filter": {
-                "designated": "RILED UP"
+                "designated": "riled-up"
               }
             }
           },
           "effect": {
             "type": "weapon-ability-grant",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
-              "weapons": {
-                "type": "ranged"
-              },
               "keywords": [
                 {
                   "keyword_id": "sustained-hits",
@@ -265,7 +262,10 @@
                     "value": 1
                   }
                 }
-              ]
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         }
@@ -5319,7 +5319,7 @@
         "steps": [
           {
             "type": "re-roll",
-            "target": "this-unit",
+            "target": "this-model",
             "modifier": {
               "roll": "hit",
               "result_scope": "any-result"
@@ -5327,7 +5327,7 @@
           },
           {
             "type": "re-roll",
-            "target": "this-unit",
+            "target": "this-model",
             "modifier": {
               "roll": "wound",
               "result_scope": "any-result"
@@ -5722,7 +5722,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "stormboyz"
@@ -7543,9 +7543,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "5f9b4abcf77afae838dac6b9e6cb84b7e3669df77d0dc0499eb5ab9c7408278c",
+    "source_digest": "2a27e25a238d6234f0533a5c45cf2a5479c231eee68f973ae993a1a488d2418e",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -7553,30 +7553,20 @@
         "operator": "and",
         "operands": [
           {
-            "type": "matches",
+            "type": "attack-is",
             "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
+              "attack_type": "ranged"
             }
           },
           {
-            "type": "matches",
+            "type": "attack-is",
             "parameters": {
-              "filter": {
-                "all_of": [
-                  "ORKS"
-                ]
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "all_of": [
-                  "TRANSPORT"
-                ]
+              "weapons": {
+                "ref": {
+                  "selected_by": {
+                    "ability": "firing-deck"
+                  }
+                }
               }
             }
           }
@@ -7588,10 +7578,7 @@
         "modifier": {
           "roll": "hit",
           "operation": "add",
-          "value": 1,
-          "weapons": {
-            "type": "ranged"
-          }
+          "value": 1
         }
       }
     },
@@ -7609,21 +7596,11 @@
       "filter": {
         "to": "shoot"
       },
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ORKS",
+          "TRANSPORT"
         ]
       }
     }

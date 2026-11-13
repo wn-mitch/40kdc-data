@@ -428,13 +428,19 @@ export function bufferSourceFromEligible(entry: EligibleAbility): BuffSource {
         ...(entry.source.selectsModel ? { selectsModel: true } : {}),
       };
     case "unit":
-      return { kind: "ability", abilityId, abilityKind: "unit" };
+      return {
+        kind: "ability",
+        abilityId,
+        abilityKind: "unit",
+        ...(entry.source.wargearId ? { wargearId: entry.source.wargearId } : {}),
+      };
     case "attached":
       return {
         kind: "ability",
         abilityId,
         abilityKind: "attached",
         sourceUnitId: entry.source.unitId,
+        ...(entry.source.wargearId ? { wargearId: entry.source.wargearId } : {}),
       };
     case "support":
       return { kind: "ability", abilityId, abilityKind: "support", sourceUnitId: entry.source.sourceUnitId };

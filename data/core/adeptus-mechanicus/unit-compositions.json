@@ -38,7 +38,152 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Archaeopter Stratoraptor",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "cognis-heavy-stubber",
+              "count": 2
+            },
+            {
+              "id": "command-uplink",
+              "count": 1
+            },
+            {
+              "id": "heavy-phosphor-blaster",
+              "count": 2
+            },
+            {
+              "id": "twin-cognis-lascannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Archaeopter Stratoraptor",
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "cognis-heavy-stubber",
+              "count": 2
+            },
+            {
+              "id": "command-uplink",
+              "count": 1
+            },
+            {
+              "id": "heavy-phosphor-blaster",
+              "count": 2
+            },
+            {
+              "id": "twin-cognis-lascannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Archaeopter Stratoraptor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "cognis-heavy-stubber",
+                "count": 2
+              },
+              {
+                "id": "heavy-phosphor-blaster",
+                "count": 2
+              },
+              {
+                "id": "twin-cognis-lascannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Archaeopter Stratoraptor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chaff-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "command-uplink",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Archaeopter Stratoraptor",
+          "id": "armoured-hull",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Archaeopter Stratoraptor",
+          "id": "chaff-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Archaeopter Stratoraptor",
+          "id": "cognis-heavy-stubber",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Archaeopter Stratoraptor",
+          "id": "command-uplink",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Archaeopter Stratoraptor",
+          "id": "heavy-phosphor-blaster",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Archaeopter Stratoraptor",
+          "id": "twin-cognis-lascannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "onager-dunecrawler",
@@ -73,7 +218,213 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Onager Dunecrawler",
+          "models": 1,
+          "items": [
+            {
+              "id": "dunecrawler-legs",
+              "count": 1
+            },
+            {
+              "id": "eradication-beamer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Onager Dunecrawler",
+          "items": [
+            {
+              "id": "dunecrawler-legs",
+              "count": 1
+            },
+            {
+              "id": "eradication-beamer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Onager Dunecrawler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "broad-spectrum-data-tether",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Onager Dunecrawler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cognis-heavy-stubber",
+                "count": 1
+              },
+              {
+                "id": "daedalus-missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "icarus-array",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "cognis-heavy-stubber",
+                "count": 1
+              },
+              {
+                "id": "eradication-beamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "cognis-heavy-stubber",
+                "count": 1
+              },
+              {
+                "id": "neutron-laser",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "cognis-heavy-stubber",
+                "count": 1
+              },
+              {
+                "id": "twin-onager-heavy-phosphor-blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "cognis-heavy-stubber",
+                "count": 2
+              },
+              {
+                "id": "neutron-laser",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "daedalus-missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "icarus-array",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "eradication-beamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-onager-heavy-phosphor-blaster",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Onager Dunecrawler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dunecrawler-legs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Onager Dunecrawler",
+          "id": "broad-spectrum-data-tether",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Onager Dunecrawler",
+          "id": "cognis-heavy-stubber",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Onager Dunecrawler",
+          "id": "cognis-heavy-stubber",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Onager Dunecrawler",
+          "id": "daedalus-missile-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Onager Dunecrawler",
+          "id": "dunecrawler-legs",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Onager Dunecrawler",
+          "id": "eradication-beamer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Onager Dunecrawler",
+          "id": "icarus-array",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Onager Dunecrawler",
+          "id": "neutron-laser",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Onager Dunecrawler",
+          "id": "twin-onager-heavy-phosphor-blaster",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "kataphron-destroyers",
@@ -118,7 +469,138 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Kataphron Destroyer",
+          "models": 3,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 3
+            },
+            {
+              "id": "heavy-grav-cannon",
+              "count": 3
+            },
+            {
+              "id": "phosphor-blaster",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Kataphron Destroyer",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "heavy-grav-cannon",
+              "count": 1
+            },
+            {
+              "id": "phosphor-blaster",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Kataphron Destroyer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kataphron Destroyer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cognis-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "phosphor-blaster",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kataphron Destroyer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-grav-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kataphron-plasma-culverin",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Kataphron Destroyer",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Kataphron Destroyer",
+          "id": "cognis-flamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Kataphron Destroyer",
+          "id": "heavy-grav-cannon",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Kataphron Destroyer",
+          "id": "kataphron-plasma-culverin",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Kataphron Destroyer",
+          "id": "phosphor-blaster",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "cybernetica-datasmith",
@@ -153,7 +635,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Cybernetica Datasmith",
+          "models": 1,
+          "items": [
+            {
+              "id": "mechanicus-pistol",
+              "count": 1
+            },
+            {
+              "id": "power-fist",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Cybernetica Datasmith",
+          "items": [
+            {
+              "id": "mechanicus-pistol",
+              "count": 1
+            },
+            {
+              "id": "power-fist",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Cybernetica Datasmith",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "mechanicus-pistol",
+                "count": 1
+              },
+              {
+                "id": "power-fist",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Cybernetica Datasmith",
+          "id": "mechanicus-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Cybernetica Datasmith",
+          "id": "power-fist",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ironstrider-ballistarii",
@@ -207,7 +758,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ironstrider Ballistarii",
+          "models": 1,
+          "items": [
+            {
+              "id": "ironstrider-feet",
+              "count": 1
+            },
+            {
+              "id": "twin-cognis-autocannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ironstrider Ballistarii",
+          "items": [
+            {
+              "id": "ironstrider-feet",
+              "count": 1
+            },
+            {
+              "id": "twin-cognis-autocannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ironstrider Ballistarii",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ironstrider-feet",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Ironstrider Ballistarii",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "twin-cognis-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-cognis-lascannon-ironstrider-ballistarii",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Ironstrider Ballistarii",
+          "id": "ironstrider-feet",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Ironstrider Ballistarii",
+          "id": "twin-cognis-autocannon",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Ironstrider Ballistarii",
+          "id": "twin-cognis-lascannon-ironstrider-ballistarii",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tech-priest-manipulus",
@@ -242,7 +884,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tech-Priest Manipulus",
+          "models": 1,
+          "items": [
+            {
+              "id": "magnarail-lance",
+              "count": 1
+            },
+            {
+              "id": "omnissian-staff",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Tech-Priest Manipulus",
+          "items": [
+            {
+              "id": "magnarail-lance",
+              "count": 1
+            },
+            {
+              "id": "omnissian-staff",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Tech-Priest Manipulus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "magnarail-lance",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "transonic-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tech-Priest Manipulus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "omnissian-staff",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Tech-Priest Manipulus",
+          "id": "magnarail-lance",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tech-Priest Manipulus",
+          "id": "omnissian-staff",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tech-Priest Manipulus",
+          "id": "transonic-cannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sydonian-dragoons-with-radium-jezzails",
@@ -297,7 +1030,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sydonian Dragoon",
+          "models": 1,
+          "items": [
+            {
+              "id": "ironstrider-feet",
+              "count": 1
+            },
+            {
+              "id": "phosphor-serpenta",
+              "count": 1
+            },
+            {
+              "id": "radium-jezzail",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sydonian Dragoon",
+          "items": [
+            {
+              "id": "ironstrider-feet",
+              "count": 1
+            },
+            {
+              "id": "phosphor-serpenta",
+              "count": 1
+            },
+            {
+              "id": "radium-jezzail",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sydonian Dragoon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ironstrider-feet",
+                "count": 1
+              },
+              {
+                "id": "phosphor-serpenta",
+                "count": 1
+              },
+              {
+                "id": "radium-jezzail",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sydonian Dragoon",
+          "id": "ironstrider-feet",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Sydonian Dragoon",
+          "id": "phosphor-serpenta",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Sydonian Dragoon",
+          "id": "radium-jezzail",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "belisarius-cawl",
@@ -318,7 +1138,8 @@
           "cawls-omnissian-axe",
           "mechadendrite-hive",
           "solar-atomiser"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {
@@ -335,7 +1156,112 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Belisarius Cawl",
+          "models": 1,
+          "items": [
+            {
+              "id": "arc-scourge",
+              "count": 1
+            },
+            {
+              "id": "cawls-omnissian-axe",
+              "count": 1
+            },
+            {
+              "id": "mechadendrite-hive",
+              "count": 1
+            },
+            {
+              "id": "solar-atomiser",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Belisarius Cawl",
+          "items": [
+            {
+              "id": "arc-scourge",
+              "count": 1
+            },
+            {
+              "id": "cawls-omnissian-axe",
+              "count": 1
+            },
+            {
+              "id": "mechadendrite-hive",
+              "count": 1
+            },
+            {
+              "id": "solar-atomiser",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Belisarius Cawl",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arc-scourge",
+                "count": 1
+              },
+              {
+                "id": "cawls-omnissian-axe",
+                "count": 1
+              },
+              {
+                "id": "mechadendrite-hive",
+                "count": 1
+              },
+              {
+                "id": "solar-atomiser",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Belisarius Cawl",
+          "id": "arc-scourge",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Belisarius Cawl",
+          "id": "cawls-omnissian-axe",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Belisarius Cawl",
+          "id": "mechadendrite-hive",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Belisarius Cawl",
+          "id": "solar-atomiser",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "servitor-battleclade",
@@ -447,7 +1373,271 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Combat Servitor",
+          "models": 6,
+          "items": [
+            {
+              "id": "phosphor-blaster-servitor-battleclade",
+              "count": 6
+            },
+            {
+              "id": "servo-claw",
+              "count": 6
+            }
+          ]
+        },
+        {
+          "model": "Gun Servitor",
+          "models": 2,
+          "items": [
+            {
+              "id": "heavy-arc-rifle",
+              "count": 1
+            },
+            {
+              "id": "heavy-bolter",
+              "count": 1
+            },
+            {
+              "id": "servo-claw",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "model": "Servitor Underseer",
+          "models": 1,
+          "items": [
+            {
+              "id": "dataspikes",
+              "count": 1
+            },
+            {
+              "id": "mechanicus-pistol-servitor-battleclade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Combat Servitor",
+          "items": [
+            {
+              "id": "phosphor-blaster-servitor-battleclade",
+              "count": 1
+            },
+            {
+              "id": "servo-claw",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Gun Servitor",
+          "items": [
+            {
+              "id": "servo-claw",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Servitor Underseer",
+          "items": [
+            {
+              "id": "dataspikes",
+              "count": 1
+            },
+            {
+              "id": "mechanicus-pistol-servitor-battleclade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Combat Servitor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "incendine-igniter",
+                "count": 1
+              },
+              {
+                "id": "servo-claw",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              },
+              {
+                "id": "servo-claw",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "phosphor-blaster-servitor-battleclade",
+                "count": 1
+              },
+              {
+                "id": "servo-claw",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Gun Servitor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-arc-rifle",
+                "count": 1
+              },
+              {
+                "id": "servo-claw",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 1
+              },
+              {
+                "id": "servo-claw",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Servitor Underseer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dataspikes",
+                "count": 1
+              },
+              {
+                "id": "mechanicus-pistol-servitor-battleclade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 3
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "incendine-igniter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Combat Servitor",
+          "id": "incendine-igniter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Combat Servitor",
+          "id": "meltagun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Combat Servitor",
+          "id": "phosphor-blaster-servitor-battleclade",
+          "input": "stepper",
+          "default": 6
+        },
+        {
+          "model": "Combat Servitor",
+          "id": "servo-claw",
+          "input": "stepper",
+          "default": 6
+        },
+        {
+          "model": "Gun Servitor",
+          "id": "heavy-arc-rifle",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gun Servitor",
+          "id": "heavy-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gun Servitor",
+          "id": "servo-claw",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Servitor Underseer",
+          "id": "dataspikes",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Servitor Underseer",
+          "id": "mechanicus-pistol-servitor-battleclade",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "fulgurite-electro-priests",
@@ -490,7 +1680,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Fulgurite Electro-Priest",
+          "models": 5,
+          "items": [
+            {
+              "id": "electroleech-stave",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Fulgurite Electro-Priest",
+          "items": [
+            {
+              "id": "electroleech-stave",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Fulgurite Electro-Priest",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "electroleech-stave",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Fulgurite Electro-Priest",
+          "id": "electroleech-stave",
+          "input": "stepper",
+          "default": 5
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "skorpius-disintegrator",
@@ -529,7 +1770,134 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skorpius Disintegrator",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "belleros-energy-cannon",
+              "count": 1
+            },
+            {
+              "id": "cognis-heavy-stubber",
+              "count": 3
+            },
+            {
+              "id": "disruptor-missile-launcher",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Skorpius Disintegrator",
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "belleros-energy-cannon",
+              "count": 1
+            },
+            {
+              "id": "cognis-heavy-stubber",
+              "count": 3
+            },
+            {
+              "id": "disruptor-missile-launcher",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Skorpius Disintegrator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "cognis-heavy-stubber",
+                "count": 3
+              },
+              {
+                "id": "disruptor-missile-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skorpius Disintegrator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "belleros-energy-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ferrumite-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Skorpius Disintegrator",
+          "id": "armoured-hull",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skorpius Disintegrator",
+          "id": "belleros-energy-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skorpius Disintegrator",
+          "id": "cognis-heavy-stubber",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Skorpius Disintegrator",
+          "id": "disruptor-missile-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skorpius Disintegrator",
+          "id": "ferrumite-cannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sydonian-skatros",
@@ -548,7 +1916,8 @@
           "sydonian-feet",
           "mechanicus-pistol",
           "radium-jezzail-sydonian-skatros"
-        ]
+        ],
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -565,7 +1934,116 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sydonian Skatros",
+          "models": 1,
+          "items": [
+            {
+              "id": "mechanicus-pistol",
+              "count": 1
+            },
+            {
+              "id": "radium-jezzail-sydonian-skatros",
+              "count": 1
+            },
+            {
+              "id": "sydonian-feet",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sydonian Skatros",
+          "items": [
+            {
+              "id": "mechanicus-pistol",
+              "count": 1
+            },
+            {
+              "id": "radium-jezzail-sydonian-skatros",
+              "count": 1
+            },
+            {
+              "id": "sydonian-feet",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sydonian Skatros",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "mechanicus-pistol",
+                "count": 1
+              },
+              {
+                "id": "sydonian-feet",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sydonian Skatros",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "radium-jezzail-sydonian-skatros",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "skatros-transuranic-arquebus",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sydonian Skatros",
+          "id": "mechanicus-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sydonian Skatros",
+          "id": "radium-jezzail-sydonian-skatros",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sydonian Skatros",
+          "id": "skatros-transuranic-arquebus",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sydonian Skatros",
+          "id": "sydonian-feet",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sicarian-infiltrators",
@@ -633,7 +2111,177 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sicarian Infiltrator Princeps",
+          "models": 1,
+          "items": [
+            {
+              "id": "power-weapon",
+              "count": 1
+            },
+            {
+              "id": "stubcarbine",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sicarian Infiltrator",
+          "models": 4,
+          "items": [
+            {
+              "id": "power-weapon",
+              "count": 4
+            },
+            {
+              "id": "stubcarbine",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sicarian Infiltrator Princeps",
+          "items": [
+            {
+              "id": "power-weapon",
+              "count": 1
+            },
+            {
+              "id": "stubcarbine",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sicarian Infiltrator",
+          "items": [
+            {
+              "id": "power-weapon",
+              "count": 1
+            },
+            {
+              "id": "stubcarbine",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sicarian Infiltrator Princeps",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "flechette-blaster",
+                "count": 1
+              },
+              {
+                "id": "taser-goad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon",
+                "count": 1
+              },
+              {
+                "id": "stubcarbine",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sicarian Infiltrator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "flechette-blaster",
+                "count": 1
+              },
+              {
+                "id": "taser-goad",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon",
+                "count": 1
+              },
+              {
+                "id": "stubcarbine",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sicarian Infiltrator Princeps",
+          "id": "flechette-blaster",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sicarian Infiltrator Princeps",
+          "id": "power-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sicarian Infiltrator Princeps",
+          "id": "stubcarbine",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sicarian Infiltrator Princeps",
+          "id": "taser-goad",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sicarian Infiltrator",
+          "id": "flechette-blaster",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Sicarian Infiltrator",
+          "id": "power-weapon",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Sicarian Infiltrator",
+          "id": "stubcarbine",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Sicarian Infiltrator",
+          "id": "taser-goad",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "archaeopter-transvector",
@@ -670,7 +2318,116 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Archaeopter Transvector",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "cognis-heavy-stubber-array",
+              "count": 1
+            },
+            {
+              "id": "command-uplink",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Archaeopter Transvector",
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "cognis-heavy-stubber-array",
+              "count": 1
+            },
+            {
+              "id": "command-uplink",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Archaeopter Transvector",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "cognis-heavy-stubber-array",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Archaeopter Transvector",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chaff-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "command-uplink",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Archaeopter Transvector",
+          "id": "armoured-hull",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Archaeopter Transvector",
+          "id": "chaff-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Archaeopter Transvector",
+          "id": "cognis-heavy-stubber-array",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Archaeopter Transvector",
+          "id": "command-uplink",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "skitarii-vanguard",
@@ -792,7 +2549,337 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skitarii Vanguard Alpha",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-skitarii-vanguard",
+              "count": 1
+            },
+            {
+              "id": "radium-carbine",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "models": 9,
+          "items": [
+            {
+              "id": "close-combat-weapon-skitarii-vanguard",
+              "count": 9
+            },
+            {
+              "id": "radium-carbine",
+              "count": 9
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Skitarii Vanguard Alpha",
+          "items": [
+            {
+              "id": "close-combat-weapon-skitarii-vanguard",
+              "count": 1
+            },
+            {
+              "id": "radium-carbine",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "items": [
+            {
+              "id": "close-combat-weapon-skitarii-vanguard",
+              "count": 1
+            },
+            {
+              "id": "radium-carbine",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Skitarii Vanguard Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "alpha-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-skitarii-vanguard",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "mechanicus-pistol-skitarii-vanguard",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "radium-carbine",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arc-rifle",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "enhanced-data-tether",
+                "count": 1
+              },
+              {
+                "id": "radium-carbine",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "omnispex",
+                "count": 1
+              },
+              {
+                "id": "radium-carbine",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-caliver",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "radium-carbine",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "transuranic-arquebus",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-skitarii-vanguard",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Skitarii Vanguard",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "arc-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "enhanced-data-tether",
+                "count": 1
+              },
+              {
+                "id": "radium-carbine",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "omnispex",
+                "count": 1
+              },
+              {
+                "id": "radium-carbine",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "plasma-caliver",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "transuranic-arquebus",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Skitarii Vanguard Alpha",
+          "id": "alpha-combat-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Skitarii Vanguard Alpha",
+          "id": "close-combat-weapon-skitarii-vanguard",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skitarii Vanguard Alpha",
+          "id": "mechanicus-pistol-skitarii-vanguard",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Skitarii Vanguard Alpha",
+          "id": "radium-carbine",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "id": "arc-rifle",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "id": "close-combat-weapon-skitarii-vanguard",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "id": "enhanced-data-tether",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "id": "omnispex",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "id": "plasma-caliver",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "id": "radium-carbine",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "id": "transuranic-arquebus",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tech-priest-dominus",
@@ -828,7 +2915,138 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tech-Priest Dominus",
+          "models": 1,
+          "items": [
+            {
+              "id": "macrostubber",
+              "count": 1
+            },
+            {
+              "id": "omnissian-axe",
+              "count": 1
+            },
+            {
+              "id": "volkite-blaster",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Tech-Priest Dominus",
+          "items": [
+            {
+              "id": "macrostubber",
+              "count": 1
+            },
+            {
+              "id": "omnissian-axe",
+              "count": 1
+            },
+            {
+              "id": "volkite-blaster",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Tech-Priest Dominus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "eradication-ray",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "volkite-blaster",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tech-Priest Dominus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "macrostubber",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "phosphor-serpenta-tech-priest-dominus",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tech-Priest Dominus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "omnissian-axe",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Tech-Priest Dominus",
+          "id": "eradication-ray",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Tech-Priest Dominus",
+          "id": "macrostubber",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tech-Priest Dominus",
+          "id": "omnissian-axe",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tech-Priest Dominus",
+          "id": "phosphor-serpenta-tech-priest-dominus",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Tech-Priest Dominus",
+          "id": "volkite-blaster",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "pteraxii-skystalkers",
@@ -896,7 +3114,133 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Pteraxii Skystalker Alpha",
+          "models": 1,
+          "items": [
+            {
+              "id": "flechette-blaster",
+              "count": 1
+            },
+            {
+              "id": "taser-goad-pteraxii-skystalkers",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Pteraxii Skystalker",
+          "models": 4,
+          "items": [
+            {
+              "id": "close-combat-weapon-pteraxii-skystalkers",
+              "count": 4
+            },
+            {
+              "id": "flechette-carbine",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Pteraxii Skystalker Alpha",
+          "items": [
+            {
+              "id": "flechette-blaster",
+              "count": 1
+            },
+            {
+              "id": "taser-goad-pteraxii-skystalkers",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Pteraxii Skystalker",
+          "items": [
+            {
+              "id": "close-combat-weapon-pteraxii-skystalkers",
+              "count": 1
+            },
+            {
+              "id": "flechette-carbine",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Pteraxii Skystalker Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "flechette-blaster",
+                "count": 1
+              },
+              {
+                "id": "taser-goad-pteraxii-skystalkers",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Pteraxii Skystalker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-pteraxii-skystalkers",
+                "count": 1
+              },
+              {
+                "id": "flechette-carbine",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Pteraxii Skystalker Alpha",
+          "id": "flechette-blaster",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Pteraxii Skystalker Alpha",
+          "id": "taser-goad-pteraxii-skystalkers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Pteraxii Skystalker",
+          "id": "close-combat-weapon-pteraxii-skystalkers",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Pteraxii Skystalker",
+          "id": "flechette-carbine",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "kataphron-breachers",
@@ -940,7 +3284,110 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Kataphron Breacher",
+          "models": 3,
+          "items": [
+            {
+              "id": "arc-claw",
+              "count": 3
+            },
+            {
+              "id": "heavy-arc-rifle-kataphron-breachers",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Kataphron Breacher",
+          "items": [
+            {
+              "id": "arc-claw",
+              "count": 1
+            },
+            {
+              "id": "heavy-arc-rifle-kataphron-breachers",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Kataphron Breacher",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arc-claw",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hydraulic-claw",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kataphron Breacher",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-arc-rifle-kataphron-breachers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "torsion-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Kataphron Breacher",
+          "id": "arc-claw",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Kataphron Breacher",
+          "id": "heavy-arc-rifle-kataphron-breachers",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Kataphron Breacher",
+          "id": "hydraulic-claw",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Kataphron Breacher",
+          "id": "torsion-cannon",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sicarian-ruststalkers",
@@ -1006,7 +3453,121 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sicarian Ruststalker Princeps",
+          "models": 1,
+          "items": [
+            {
+              "id": "transonic-razor-and-chordclaw",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sicarian Ruststalker",
+          "models": 4,
+          "items": [
+            {
+              "id": "transonic-razor-and-chordclaw",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sicarian Ruststalker Princeps",
+          "items": [
+            {
+              "id": "transonic-razor-and-chordclaw",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sicarian Ruststalker",
+          "items": [
+            {
+              "id": "transonic-razor-and-chordclaw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sicarian Ruststalker Princeps",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "transonic-blades-and-chordclaw",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "transonic-razor-and-chordclaw",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sicarian Ruststalker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "transonic-blades",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "transonic-razor-and-chordclaw",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sicarian Ruststalker Princeps",
+          "id": "transonic-blades-and-chordclaw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sicarian Ruststalker Princeps",
+          "id": "transonic-razor-and-chordclaw",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sicarian Ruststalker",
+          "id": "transonic-blades",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Sicarian Ruststalker",
+          "id": "transonic-razor-and-chordclaw",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "technoarcheologist",
@@ -1041,7 +3602,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Technoarcheologist",
+          "models": 1,
+          "items": [
+            {
+              "id": "mechanicus-pistol",
+              "count": 1
+            },
+            {
+              "id": "servo-arc-claw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Technoarcheologist",
+          "items": [
+            {
+              "id": "mechanicus-pistol",
+              "count": 1
+            },
+            {
+              "id": "servo-arc-claw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Technoarcheologist",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "mechanicus-pistol",
+                "count": 1
+              },
+              {
+                "id": "servo-arc-claw",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Technoarcheologist",
+          "id": "mechanicus-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Technoarcheologist",
+          "id": "servo-arc-claw",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "corpuscarii-electro-priests",
@@ -1084,7 +3714,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Corpuscarii Electro-Priest",
+          "models": 5,
+          "items": [
+            {
+              "id": "electrostatic-gauntlets",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Corpuscarii Electro-Priest",
+          "items": [
+            {
+              "id": "electrostatic-gauntlets",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Corpuscarii Electro-Priest",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "electrostatic-gauntlets",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Corpuscarii Electro-Priest",
+          "id": "electrostatic-gauntlets",
+          "input": "stepper",
+          "default": 5
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "serberys-raiders",
@@ -1185,7 +3866,190 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Serberys Raider Alpha",
+          "models": 1,
+          "items": [
+            {
+              "id": "cavalry-sabre-and-clawed-limbs",
+              "count": 1
+            },
+            {
+              "id": "galvanic-carbine",
+              "count": 1
+            },
+            {
+              "id": "mechanicus-pistol-serberys-raiders",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Serberys Raider",
+          "models": 2,
+          "items": [
+            {
+              "id": "cavalry-sabre-and-clawed-limbs",
+              "count": 2
+            },
+            {
+              "id": "galvanic-carbine",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Serberys Raider Alpha",
+          "items": [
+            {
+              "id": "cavalry-sabre-and-clawed-limbs",
+              "count": 1
+            },
+            {
+              "id": "galvanic-carbine",
+              "count": 1
+            },
+            {
+              "id": "mechanicus-pistol-serberys-raiders",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Serberys Raider",
+          "items": [
+            {
+              "id": "cavalry-sabre-and-clawed-limbs",
+              "count": 1
+            },
+            {
+              "id": "galvanic-carbine",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Serberys Raider Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cavalry-sabre-and-clawed-limbs",
+                "count": 1
+              },
+              {
+                "id": "galvanic-carbine",
+                "count": 1
+              },
+              {
+                "id": "mechanicus-pistol-serberys-raiders",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Serberys Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "enhanced-data-tether",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Serberys Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cavalry-sabre-and-clawed-limbs",
+                "count": 1
+              },
+              {
+                "id": "galvanic-carbine",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Serberys Raider",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "enhanced-data-tether",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Serberys Raider Alpha",
+          "id": "cavalry-sabre-and-clawed-limbs",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Raider Alpha",
+          "id": "galvanic-carbine",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Raider Alpha",
+          "id": "mechanicus-pistol-serberys-raiders",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Raider",
+          "id": "cavalry-sabre-and-clawed-limbs",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Serberys Raider",
+          "id": "enhanced-data-tether",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Serberys Raider",
+          "id": "galvanic-carbine",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sydonian-dragoons-with-taser-lances",
@@ -1239,7 +4103,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sydonian Dragoon",
+          "models": 1,
+          "items": [
+            {
+              "id": "phosphor-serpenta",
+              "count": 1
+            },
+            {
+              "id": "taser-lance",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sydonian Dragoon",
+          "items": [
+            {
+              "id": "phosphor-serpenta",
+              "count": 1
+            },
+            {
+              "id": "taser-lance",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sydonian Dragoon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "phosphor-serpenta",
+                "count": 1
+              },
+              {
+                "id": "taser-lance",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sydonian Dragoon",
+          "id": "phosphor-serpenta",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Sydonian Dragoon",
+          "id": "taser-lance",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "serberys-sulphurhounds",
@@ -1313,7 +4246,245 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Serberys Sulphurhound Alpha",
+          "models": 1,
+          "items": [
+            {
+              "id": "cavalry-arc-maul",
+              "count": 1
+            },
+            {
+              "id": "clawed-limbs",
+              "count": 1
+            },
+            {
+              "id": "mechanicus-pistol-serberys-sulphurhounds",
+              "count": 1
+            },
+            {
+              "id": "sulphur-breath",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "models": 2,
+          "items": [
+            {
+              "id": "clawed-limbs",
+              "count": 2
+            },
+            {
+              "id": "phosphor-pistol",
+              "count": 4
+            },
+            {
+              "id": "sulphur-breath",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Serberys Sulphurhound Alpha",
+          "items": [
+            {
+              "id": "cavalry-arc-maul",
+              "count": 1
+            },
+            {
+              "id": "clawed-limbs",
+              "count": 1
+            },
+            {
+              "id": "mechanicus-pistol-serberys-sulphurhounds",
+              "count": 1
+            },
+            {
+              "id": "sulphur-breath",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "items": [
+            {
+              "id": "clawed-limbs",
+              "count": 1
+            },
+            {
+              "id": "phosphor-pistol",
+              "count": 2
+            },
+            {
+              "id": "sulphur-breath",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Serberys Sulphurhound Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cavalry-arc-maul",
+                "count": 1
+              },
+              {
+                "id": "clawed-limbs",
+                "count": 1
+              },
+              {
+                "id": "mechanicus-pistol-serberys-sulphurhounds",
+                "count": 1
+              },
+              {
+                "id": "sulphur-breath",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "clawed-limbs",
+                "count": 1
+              },
+              {
+                "id": "sulphur-breath",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "phosphor-blast-carbine",
+                "count": 1
+              },
+              {
+                "id": "phosphor-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "phosphor-pistol",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Serberys Sulphurhound",
+          "breakpoints": [
+            {
+              "models": 3,
+              "choices": 1
+            },
+            {
+              "models": 6,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "phosphor-blast-carbine",
+                "count": 1
+              },
+              {
+                "id": "phosphor-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Serberys Sulphurhound Alpha",
+          "id": "cavalry-arc-maul",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Sulphurhound Alpha",
+          "id": "clawed-limbs",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Sulphurhound Alpha",
+          "id": "mechanicus-pistol-serberys-sulphurhounds",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Sulphurhound Alpha",
+          "id": "sulphur-breath",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "id": "clawed-limbs",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "id": "phosphor-blast-carbine",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "id": "phosphor-pistol",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "id": "phosphor-pistol",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "id": "sulphur-breath",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tech-priest-enginseer",
@@ -1349,7 +4520,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tech-Priest Enginseer",
+          "models": 1,
+          "items": [
+            {
+              "id": "mechanicus-pistol",
+              "count": 1
+            },
+            {
+              "id": "omnissian-axe-tech-priest-enginseer",
+              "count": 1
+            },
+            {
+              "id": "servo-arm",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Tech-Priest Enginseer",
+          "items": [
+            {
+              "id": "mechanicus-pistol",
+              "count": 1
+            },
+            {
+              "id": "omnissian-axe-tech-priest-enginseer",
+              "count": 1
+            },
+            {
+              "id": "servo-arm",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Tech-Priest Enginseer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "mechanicus-pistol",
+                "count": 1
+              },
+              {
+                "id": "omnissian-axe-tech-priest-enginseer",
+                "count": 1
+              },
+              {
+                "id": "servo-arm",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Tech-Priest Enginseer",
+          "id": "mechanicus-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tech-Priest Enginseer",
+          "id": "omnissian-axe-tech-priest-enginseer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tech-Priest Enginseer",
+          "id": "servo-arm",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "skitarii-marshal",
@@ -1384,7 +4642,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skitarii Marshal",
+          "models": 1,
+          "items": [
+            {
+              "id": "control-stave",
+              "count": 1
+            },
+            {
+              "id": "mechanicus-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Skitarii Marshal",
+          "items": [
+            {
+              "id": "control-stave",
+              "count": 1
+            },
+            {
+              "id": "mechanicus-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Skitarii Marshal",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "control-stave",
+                "count": 1
+              },
+              {
+                "id": "mechanicus-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Skitarii Marshal",
+          "id": "control-stave",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skitarii Marshal",
+          "id": "mechanicus-pistol",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "skorpius-dunerider",
@@ -1419,7 +4746,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skorpius Dunerider",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "cognis-heavy-stubber-array",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Skorpius Dunerider",
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "cognis-heavy-stubber-array",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Skorpius Dunerider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "cognis-heavy-stubber-array",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Skorpius Dunerider",
+          "id": "armoured-hull",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skorpius Dunerider",
+          "id": "cognis-heavy-stubber-array",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "kastelan-robots",
@@ -1463,7 +4859,142 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Kastelan Robot",
+          "models": 2,
+          "items": [
+            {
+              "id": "incendine-combustor",
+              "count": 2
+            },
+            {
+              "id": "twin-kastelan-fist",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Kastelan Robot",
+          "items": [
+            {
+              "id": "incendine-combustor",
+              "count": 1
+            },
+            {
+              "id": "twin-kastelan-fist",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Kastelan Robot",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-kastelan-robots",
+                "count": 1
+              },
+              {
+                "id": "twin-kastelan-phosphor-blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kastelan-fist",
+                "count": 1
+              },
+              {
+                "id": "kastelan-phosphor-blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-kastelan-fist",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kastelan Robot",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-phosphor-blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "incendine-combustor",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Kastelan Robot",
+          "id": "close-combat-weapon-kastelan-robots",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Kastelan Robot",
+          "id": "heavy-phosphor-blaster",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Kastelan Robot",
+          "id": "incendine-combustor",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Kastelan Robot",
+          "id": "kastelan-fist",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Kastelan Robot",
+          "id": "kastelan-phosphor-blaster",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Kastelan Robot",
+          "id": "twin-kastelan-fist",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Kastelan Robot",
+          "id": "twin-kastelan-phosphor-blaster",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "pteraxii-sterylizors",
@@ -1532,7 +5063,151 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Pteraxii Sterylizor Alpha",
+          "models": 1,
+          "items": [
+            {
+              "id": "flechette-blaster",
+              "count": 1
+            },
+            {
+              "id": "pteraxii-talons",
+              "count": 1
+            },
+            {
+              "id": "taser-goad-pteraxii-sterylizors",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Pteraxii Sterylizor",
+          "models": 4,
+          "items": [
+            {
+              "id": "phosphor-torch",
+              "count": 4
+            },
+            {
+              "id": "pteraxii-talons",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Pteraxii Sterylizor Alpha",
+          "items": [
+            {
+              "id": "flechette-blaster",
+              "count": 1
+            },
+            {
+              "id": "pteraxii-talons",
+              "count": 1
+            },
+            {
+              "id": "taser-goad-pteraxii-sterylizors",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Pteraxii Sterylizor",
+          "items": [
+            {
+              "id": "phosphor-torch",
+              "count": 1
+            },
+            {
+              "id": "pteraxii-talons",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Pteraxii Sterylizor Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "flechette-blaster",
+                "count": 1
+              },
+              {
+                "id": "pteraxii-talons",
+                "count": 1
+              },
+              {
+                "id": "taser-goad-pteraxii-sterylizors",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Pteraxii Sterylizor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "phosphor-torch",
+                "count": 1
+              },
+              {
+                "id": "pteraxii-talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Pteraxii Sterylizor Alpha",
+          "id": "flechette-blaster",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Pteraxii Sterylizor Alpha",
+          "id": "pteraxii-talons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Pteraxii Sterylizor Alpha",
+          "id": "taser-goad-pteraxii-sterylizors",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Pteraxii Sterylizor",
+          "id": "phosphor-torch",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Pteraxii Sterylizor",
+          "id": "pteraxii-talons",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "archaeopter-fusilave",
@@ -1569,7 +5244,116 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Archaeopter Fusilave",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "cognis-heavy-stubber-array",
+              "count": 1
+            },
+            {
+              "id": "command-uplink",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Archaeopter Fusilave",
+          "items": [
+            {
+              "id": "armoured-hull",
+              "count": 1
+            },
+            {
+              "id": "cognis-heavy-stubber-array",
+              "count": 1
+            },
+            {
+              "id": "command-uplink",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Archaeopter Fusilave",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull",
+                "count": 1
+              },
+              {
+                "id": "cognis-heavy-stubber-array",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Archaeopter Fusilave",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chaff-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "command-uplink",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Archaeopter Fusilave",
+          "id": "armoured-hull",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Archaeopter Fusilave",
+          "id": "chaff-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Archaeopter Fusilave",
+          "id": "cognis-heavy-stubber-array",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Archaeopter Fusilave",
+          "id": "command-uplink",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "skitarii-rangers",
@@ -1691,7 +5475,337 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skitarii Ranger Alpha",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-skitarii-rangers",
+              "count": 1
+            },
+            {
+              "id": "galvanic-rifle",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Skitarii Ranger",
+          "models": 9,
+          "items": [
+            {
+              "id": "close-combat-weapon-skitarii-rangers",
+              "count": 9
+            },
+            {
+              "id": "galvanic-rifle",
+              "count": 9
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Skitarii Ranger Alpha",
+          "items": [
+            {
+              "id": "close-combat-weapon-skitarii-rangers",
+              "count": 1
+            },
+            {
+              "id": "galvanic-rifle",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Skitarii Ranger",
+          "items": [
+            {
+              "id": "close-combat-weapon-skitarii-rangers",
+              "count": 1
+            },
+            {
+              "id": "galvanic-rifle",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Skitarii Ranger Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "alpha-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Ranger Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-skitarii-rangers",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Ranger Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "galvanic-rifle",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "mechanicus-pistol-skitarii-rangers",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Ranger",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arc-rifle",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "enhanced-data-tether",
+                "count": 1
+              },
+              {
+                "id": "galvanic-rifle",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "galvanic-rifle",
+                "count": 1
+              },
+              {
+                "id": "omnispex",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "galvanic-rifle",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-caliver",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "transuranic-arquebus",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Ranger",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-skitarii-rangers",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Skitarii Ranger",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "arc-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Ranger",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "enhanced-data-tether",
+                "count": 1
+              },
+              {
+                "id": "galvanic-rifle",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "galvanic-rifle",
+                "count": 1
+              },
+              {
+                "id": "omnispex",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Ranger",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "plasma-caliver",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Ranger",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "transuranic-arquebus",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Skitarii Ranger Alpha",
+          "id": "alpha-combat-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Skitarii Ranger Alpha",
+          "id": "close-combat-weapon-skitarii-rangers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skitarii Ranger Alpha",
+          "id": "galvanic-rifle",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skitarii Ranger Alpha",
+          "id": "mechanicus-pistol-skitarii-rangers",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Skitarii Ranger",
+          "id": "arc-rifle",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Skitarii Ranger",
+          "id": "close-combat-weapon-skitarii-rangers",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Skitarii Ranger",
+          "id": "enhanced-data-tether",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Skitarii Ranger",
+          "id": "galvanic-rifle",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Skitarii Ranger",
+          "id": "omnispex",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Skitarii Ranger",
+          "id": "plasma-caliver",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Skitarii Ranger",
+          "id": "transuranic-arquebus",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hastarii-exterminators",
@@ -1745,7 +5859,169 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hastarii Exterminator Alpha",
+          "models": 1,
+          "items": [
+            {
+              "id": "eradication-caster",
+              "count": 1
+            },
+            {
+              "id": "hastarii-arc-blaster",
+              "count": 1
+            },
+            {
+              "id": "power-weapon-hastarii-exterminators",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Hastarii Exterminator",
+          "models": 4,
+          "items": [
+            {
+              "id": "close-combat-weapon-hastarii-exterminators",
+              "count": 4
+            },
+            {
+              "id": "eradication-caster",
+              "count": 4
+            },
+            {
+              "id": "hastarii-arc-blaster",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hastarii Exterminator Alpha",
+          "items": [
+            {
+              "id": "eradication-caster",
+              "count": 1
+            },
+            {
+              "id": "hastarii-arc-blaster",
+              "count": 1
+            },
+            {
+              "id": "power-weapon-hastarii-exterminators",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Hastarii Exterminator",
+          "items": [
+            {
+              "id": "close-combat-weapon-hastarii-exterminators",
+              "count": 1
+            },
+            {
+              "id": "eradication-caster",
+              "count": 1
+            },
+            {
+              "id": "hastarii-arc-blaster",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hastarii Exterminator Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "eradication-caster",
+                "count": 1
+              },
+              {
+                "id": "hastarii-arc-blaster",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-hastarii-exterminators",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hastarii Exterminator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-hastarii-exterminators",
+                "count": 1
+              },
+              {
+                "id": "eradication-caster",
+                "count": 1
+              },
+              {
+                "id": "hastarii-arc-blaster",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Hastarii Exterminator Alpha",
+          "id": "eradication-caster",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hastarii Exterminator Alpha",
+          "id": "hastarii-arc-blaster",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hastarii Exterminator Alpha",
+          "id": "power-weapon-hastarii-exterminators",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hastarii Exterminator",
+          "id": "close-combat-weapon-hastarii-exterminators",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Hastarii Exterminator",
+          "id": "eradication-caster",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Hastarii Exterminator",
+          "id": "hastarii-arc-blaster",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hastarii-fusiliers",
@@ -1799,7 +6075,169 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hastarii Fusilier Alpha",
+          "models": 1,
+          "items": [
+            {
+              "id": "hastarii-phosphor-blaster",
+              "count": 1
+            },
+            {
+              "id": "neutron-fusil",
+              "count": 1
+            },
+            {
+              "id": "power-weapon-hastarii-fusiliers",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Hastarii Fusilier",
+          "models": 4,
+          "items": [
+            {
+              "id": "close-combat-weapon-hastarii-fusiliers",
+              "count": 4
+            },
+            {
+              "id": "hastarii-phosphor-blaster",
+              "count": 4
+            },
+            {
+              "id": "neutron-fusil",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hastarii Fusilier Alpha",
+          "items": [
+            {
+              "id": "hastarii-phosphor-blaster",
+              "count": 1
+            },
+            {
+              "id": "neutron-fusil",
+              "count": 1
+            },
+            {
+              "id": "power-weapon-hastarii-fusiliers",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Hastarii Fusilier",
+          "items": [
+            {
+              "id": "close-combat-weapon-hastarii-fusiliers",
+              "count": 1
+            },
+            {
+              "id": "hastarii-phosphor-blaster",
+              "count": 1
+            },
+            {
+              "id": "neutron-fusil",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hastarii Fusilier Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hastarii-phosphor-blaster",
+                "count": 1
+              },
+              {
+                "id": "neutron-fusil",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-hastarii-fusiliers",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hastarii Fusilier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-hastarii-fusiliers",
+                "count": 1
+              },
+              {
+                "id": "hastarii-phosphor-blaster",
+                "count": 1
+              },
+              {
+                "id": "neutron-fusil",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Hastarii Fusilier Alpha",
+          "id": "hastarii-phosphor-blaster",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hastarii Fusilier Alpha",
+          "id": "neutron-fusil",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hastarii Fusilier Alpha",
+          "id": "power-weapon-hastarii-fusiliers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hastarii Fusilier",
+          "id": "close-combat-weapon-hastarii-fusiliers",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Hastarii Fusilier",
+          "id": "hastarii-phosphor-blaster",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Hastarii Fusilier",
+          "id": "neutron-fusil",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "thulia-ghuld",
@@ -1816,7 +6254,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 80
-        }
+        },
+        "is_supreme_commander": true
       }
     ],
     "game_version": {
@@ -1833,7 +6272,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Thulia Ghuld",
+          "models": 1,
+          "items": [
+            {
+              "id": "jericho-class-conversion-resonator",
+              "count": 1
+            },
+            {
+              "id": "rod-of-the-war-forge",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Thulia Ghuld",
+          "items": [
+            {
+              "id": "jericho-class-conversion-resonator",
+              "count": 1
+            },
+            {
+              "id": "rod-of-the-war-forge",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Thulia Ghuld",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "jericho-class-conversion-resonator",
+                "count": 1
+              },
+              {
+                "id": "rod-of-the-war-forge",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Thulia Ghuld",
+          "id": "jericho-class-conversion-resonator",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Thulia Ghuld",
+          "id": "rod-of-the-war-forge",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "manipulus-skand",
@@ -1870,7 +6378,62 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Manipulus Skand",
+          "models": 1,
+          "items": [
+            {
+              "id": "omnissian-staff",
+              "count": 1
+            },
+            {
+              "id": "transonic-cannon-manipulus-skand",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Manipulus Skand",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "omnissian-staff",
+                "count": 1
+              },
+              {
+                "id": "transonic-cannon-manipulus-skand",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Manipulus Skand",
+          "id": "omnissian-staff",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Manipulus Skand",
+          "id": "transonic-cannon-manipulus-skand",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "purge-corps-pteraxii-sterylizors",
@@ -1926,7 +6489,106 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Pteraxii Sterylizor Alpha",
+          "models": 1,
+          "items": [
+            {
+              "id": "flechette-blaster-purge-corps-pteraxii-sterylizors",
+              "count": 1
+            },
+            {
+              "id": "taser-goad-purge-corps-pteraxii-sterylizors",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Pteraxii Sterylizor",
+          "models": 4,
+          "items": [
+            {
+              "id": "phosphor-torch",
+              "count": 4
+            },
+            {
+              "id": "talons",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Pteraxii Sterylizor Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "flechette-blaster-purge-corps-pteraxii-sterylizors",
+                "count": 1
+              },
+              {
+                "id": "taser-goad-purge-corps-pteraxii-sterylizors",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Pteraxii Sterylizor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "phosphor-torch",
+                "count": 1
+              },
+              {
+                "id": "talons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Pteraxii Sterylizor Alpha",
+          "id": "flechette-blaster-purge-corps-pteraxii-sterylizors",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Pteraxii Sterylizor Alpha",
+          "id": "taser-goad-purge-corps-pteraxii-sterylizors",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Pteraxii Sterylizor",
+          "id": "phosphor-torch",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Pteraxii Sterylizor",
+          "id": "talons",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "purge-corps-skitarii-vanguard",
@@ -2019,7 +6681,194 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skitarii Vanguard Alpha",
+          "models": 1,
+          "items": [
+            {
+              "id": "alphas-combat-artefact",
+              "count": 1
+            },
+            {
+              "id": "mechanicus-pistol-purge-corps-skitarii-vanguard",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard with Arc Rifle",
+          "models": 1,
+          "items": [
+            {
+              "id": "arc-rifle",
+              "count": 1
+            },
+            {
+              "id": "gun-stocks",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard with Plasma Caliver",
+          "models": 1,
+          "items": [
+            {
+              "id": "gun-stocks",
+              "count": 1
+            },
+            {
+              "id": "plasma-caliver",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "models": 7,
+          "items": [
+            {
+              "id": "gun-stocks",
+              "count": 7
+            },
+            {
+              "id": "radium-carbine",
+              "count": 7
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Skitarii Vanguard Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "alphas-combat-artefact",
+                "count": 1
+              },
+              {
+                "id": "mechanicus-pistol-purge-corps-skitarii-vanguard",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard with Arc Rifle",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arc-rifle",
+                "count": 1
+              },
+              {
+                "id": "gun-stocks",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard with Plasma Caliver",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gun-stocks",
+                "count": 1
+              },
+              {
+                "id": "plasma-caliver",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gun-stocks",
+                "count": 1
+              },
+              {
+                "id": "radium-carbine",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Skitarii Vanguard Alpha",
+          "id": "alphas-combat-artefact",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skitarii Vanguard Alpha",
+          "id": "mechanicus-pistol-purge-corps-skitarii-vanguard",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skitarii Vanguard with Arc Rifle",
+          "id": "arc-rifle",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skitarii Vanguard with Arc Rifle",
+          "id": "gun-stocks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skitarii Vanguard with Plasma Caliver",
+          "id": "gun-stocks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skitarii Vanguard with Plasma Caliver",
+          "id": "plasma-caliver",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "id": "gun-stocks",
+          "input": "stepper",
+          "default": 7
+        },
+        {
+          "model": "Skitarii Vanguard",
+          "id": "radium-carbine",
+          "input": "stepper",
+          "default": 7
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "purge-corps-serberys-sulphurhounds",
@@ -2103,6 +6952,215 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Serberys Sulphurhound Alpha",
+          "models": 1,
+          "items": [
+            {
+              "id": "cavalry-arc-maul",
+              "count": 1
+            },
+            {
+              "id": "clawed-limbs",
+              "count": 1
+            },
+            {
+              "id": "mechanicus-pistol-purge-corps-serberys-sulphurhounds",
+              "count": 1
+            },
+            {
+              "id": "sulphur-breath-purge-corps-serberys-sulphurhounds",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Serberys Sulphurhound with Phosphor Pistols",
+          "models": 1,
+          "items": [
+            {
+              "id": "clawed-limbs",
+              "count": 1
+            },
+            {
+              "id": "phosphor-pistol-purge-corps-serberys-sulphurhounds",
+              "count": 2
+            },
+            {
+              "id": "sulphur-breath-purge-corps-serberys-sulphurhounds",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "models": 1,
+          "items": [
+            {
+              "id": "clawed-limbs",
+              "count": 1
+            },
+            {
+              "id": "phosphor-blast-carbine-purge-corps-serberys-sulphurhounds",
+              "count": 1
+            },
+            {
+              "id": "sulphur-breath-purge-corps-serberys-sulphurhounds",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Serberys Sulphurhound Alpha",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cavalry-arc-maul",
+                "count": 1
+              },
+              {
+                "id": "clawed-limbs",
+                "count": 1
+              },
+              {
+                "id": "mechanicus-pistol-purge-corps-serberys-sulphurhounds",
+                "count": 1
+              },
+              {
+                "id": "sulphur-breath-purge-corps-serberys-sulphurhounds",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Serberys Sulphurhound with Phosphor Pistols",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "clawed-limbs",
+                "count": 1
+              },
+              {
+                "id": "phosphor-pistol-purge-corps-serberys-sulphurhounds",
+                "count": 2
+              },
+              {
+                "id": "sulphur-breath-purge-corps-serberys-sulphurhounds",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "clawed-limbs",
+                "count": 1
+              },
+              {
+                "id": "phosphor-blast-carbine-purge-corps-serberys-sulphurhounds",
+                "count": 1
+              },
+              {
+                "id": "phosphor-pistol-purge-corps-serberys-sulphurhounds",
+                "count": 1
+              },
+              {
+                "id": "sulphur-breath-purge-corps-serberys-sulphurhounds",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Serberys Sulphurhound Alpha",
+          "id": "cavalry-arc-maul",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Sulphurhound Alpha",
+          "id": "clawed-limbs",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Sulphurhound Alpha",
+          "id": "mechanicus-pistol-purge-corps-serberys-sulphurhounds",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Sulphurhound Alpha",
+          "id": "sulphur-breath-purge-corps-serberys-sulphurhounds",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Sulphurhound with Phosphor Pistols",
+          "id": "clawed-limbs",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Sulphurhound with Phosphor Pistols",
+          "id": "phosphor-pistol-purge-corps-serberys-sulphurhounds",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Serberys Sulphurhound with Phosphor Pistols",
+          "id": "sulphur-breath-purge-corps-serberys-sulphurhounds",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "id": "clawed-limbs",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "id": "phosphor-blast-carbine-purge-corps-serberys-sulphurhounds",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "id": "phosphor-pistol-purge-corps-serberys-sulphurhounds",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Serberys Sulphurhound",
+          "id": "sulphur-breath-purge-corps-serberys-sulphurhounds",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

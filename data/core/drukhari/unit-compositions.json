@@ -134,7 +134,356 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Arena Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "bladevanes",
+              "count": 1
+            },
+            {
+              "id": "splinter-pistol",
+              "count": 1
+            },
+            {
+              "id": "splinter-rifle",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Reaver",
+          "models": 2,
+          "items": [
+            {
+              "id": "bladevanes",
+              "count": 2
+            },
+            {
+              "id": "splinter-pistol",
+              "count": 2
+            },
+            {
+              "id": "splinter-rifle",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Arena Champion",
+          "items": [
+            {
+              "id": "bladevanes",
+              "count": 1
+            },
+            {
+              "id": "splinter-pistol",
+              "count": 1
+            },
+            {
+              "id": "splinter-rifle",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Reaver",
+          "items": [
+            {
+              "id": "bladevanes",
+              "count": 1
+            },
+            {
+              "id": "splinter-pistol",
+              "count": 1
+            },
+            {
+              "id": "splinter-rifle",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Arena Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "cluster-caltrops",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "grav-talon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Arena Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bladevanes",
+                "count": 1
+              },
+              {
+                "id": "splinter-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Arena Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heat-lance",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Reaver",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "cluster-caltrops",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "grav-talon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Reaver",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bladevanes",
+                "count": 1
+              },
+              {
+                "id": "splinter-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Reaver",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heat-lance",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "breakpoints": [
+            {
+              "models": 3,
+              "choices": 1
+            },
+            {
+              "models": 6,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heat-lance",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "breakpoints": [
+            {
+              "models": 3,
+              "choices": 1
+            },
+            {
+              "models": 6,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "cluster-caltrops",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "grav-talon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Arena Champion",
+          "id": "bladevanes",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Arena Champion",
+          "id": "blaster",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Arena Champion",
+          "id": "cluster-caltrops",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Arena Champion",
+          "id": "grav-talon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Arena Champion",
+          "id": "heat-lance",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Arena Champion",
+          "id": "splinter-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Arena Champion",
+          "id": "splinter-rifle",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Reaver",
+          "id": "bladevanes",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Reaver",
+          "id": "blaster",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Reaver",
+          "id": "cluster-caltrops",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Reaver",
+          "id": "grav-talon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Reaver",
+          "id": "heat-lance",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Reaver",
+          "id": "splinter-pistol",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Reaver",
+          "id": "splinter-rifle",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "cronos",
@@ -181,7 +530,97 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Cronos",
+          "models": 1,
+          "items": [
+            {
+              "id": "spirit-leech-tentacles",
+              "count": 1
+            },
+            {
+              "id": "spirit-syphon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Cronos",
+          "items": [
+            {
+              "id": "spirit-leech-tentacles",
+              "count": 1
+            },
+            {
+              "id": "spirit-syphon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Cronos",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "spirit-vortex",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Cronos",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "spirit-leech-tentacles",
+                "count": 1
+              },
+              {
+                "id": "spirit-syphon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Cronos",
+          "id": "spirit-leech-tentacles",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Cronos",
+          "id": "spirit-syphon",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Cronos",
+          "id": "spirit-vortex",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "succubus",
@@ -215,7 +654,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Succubus",
+          "models": 1,
+          "items": [
+            {
+              "id": "archite-glaive-and-agoniser",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Succubus",
+          "items": [
+            {
+              "id": "archite-glaive-and-agoniser",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Succubus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "archite-glaive-and-agoniser",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Succubus",
+          "id": "archite-glaive-and-agoniser",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hellions",
@@ -286,7 +776,236 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Helliarch",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellglaive",
+              "count": 1
+            },
+            {
+              "id": "splinter-pods",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Hellion",
+          "models": 4,
+          "items": [
+            {
+              "id": "hellglaive",
+              "count": 4
+            },
+            {
+              "id": "splinter-pods",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Helliarch",
+          "items": [
+            {
+              "id": "hellglaive",
+              "count": 1
+            },
+            {
+              "id": "splinter-pods",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Hellion",
+          "items": [
+            {
+              "id": "hellglaive",
+              "count": 1
+            },
+            {
+              "id": "splinter-pods",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Helliarch",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "phantasm-grenade-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Helliarch",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellglaive",
+                "count": 1
+              },
+              {
+                "id": "power-weapon",
+                "count": 1
+              },
+              {
+                "id": "splinter-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hellglaive",
+                "count": 1
+              },
+              {
+                "id": "splinter-pistol",
+                "count": 1
+              },
+              {
+                "id": "stunclaw",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hellglaive",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon",
+                "count": 1
+              },
+              {
+                "id": "splinter-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-pistol",
+                "count": 1
+              },
+              {
+                "id": "stunclaw",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Helliarch",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "splinter-pods",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hellion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellglaive",
+                "count": 1
+              },
+              {
+                "id": "splinter-pods",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Helliarch",
+          "id": "hellglaive",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Helliarch",
+          "id": "hellglaive",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Helliarch",
+          "id": "phantasm-grenade-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Helliarch",
+          "id": "power-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Helliarch",
+          "id": "splinter-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Helliarch",
+          "id": "splinter-pods",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Helliarch",
+          "id": "stunclaw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hellion",
+          "id": "hellglaive",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Hellion",
+          "id": "splinter-pods",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "venom",
@@ -325,7 +1044,110 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Venom",
+          "models": 1,
+          "items": [
+            {
+              "id": "bladevanes-venom",
+              "count": 1
+            },
+            {
+              "id": "splinter-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-splinter-rifle",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Venom",
+          "items": [
+            {
+              "id": "bladevanes-venom",
+              "count": 1
+            },
+            {
+              "id": "splinter-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-splinter-rifle",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Venom",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bladevanes-venom",
+                "count": 1
+              },
+              {
+                "id": "splinter-cannon",
+                "count": 1
+              },
+              {
+                "id": "twin-splinter-rifle",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bladevanes-venom",
+                "count": 1
+              },
+              {
+                "id": "splinter-cannon",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Venom",
+          "id": "bladevanes-venom",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Venom",
+          "id": "splinter-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Venom",
+          "id": "splinter-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Venom",
+          "id": "twin-splinter-rifle",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "scourges-with-shardcarbines",
@@ -409,7 +1231,239 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Scourge",
+          "models": 4,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 4
+            },
+            {
+              "id": "shardcarbine",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Solarite",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "shardcarbine",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Scourge",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "shardcarbine",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Solarite",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "shardcarbine",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Scourge",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shardcarbine",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shredder",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Scourge",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Solarite",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blast-pistol",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-scourges-with-shardcarbines",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon-scourges-with-shardcarbines",
+                "count": 1
+              },
+              {
+                "id": "splinter-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shardcarbine",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Solarite",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Scourge",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shredder",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Scourge",
+          "id": "blaster",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Scourge",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Scourge",
+          "id": "shardcarbine",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Scourge",
+          "id": "shredder",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Solarite",
+          "id": "blast-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Solarite",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Solarite",
+          "id": "power-weapon-scourges-with-shardcarbines",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Solarite",
+          "id": "shardcarbine",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Solarite",
+          "id": "splinter-pistol",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "kabalite-warriors",
@@ -520,7 +1574,339 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Kabalite Warrior",
+          "models": 9,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 9
+            },
+            {
+              "id": "splinter-rifle",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Sybarite",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "splinter-rifle",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Kabalite Warrior",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "splinter-rifle",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Sybarite",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "splinter-rifle",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Kabalite Warrior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "dark-lance",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shredder",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-cannon-kabalite-warriors",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kabalite Warrior",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sybarite",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "kabalite-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "phantasm-grenade-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sybarite",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blast-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Sybarite",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon-kabalite-warriors",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Kabalite Warrior",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "blaster",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kabalite Warrior",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "dark-lance",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kabalite Warrior",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "shredder",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kabalite Warrior",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "splinter-cannon-kabalite-warriors",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Kabalite Warrior",
+          "id": "blaster",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Warrior",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Kabalite Warrior",
+          "id": "dark-lance",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Warrior",
+          "id": "shredder",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Warrior",
+          "id": "splinter-cannon-kabalite-warriors",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Warrior",
+          "id": "splinter-rifle",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Sybarite",
+          "id": "blast-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sybarite",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sybarite",
+          "id": "kabalite-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sybarite",
+          "id": "phantasm-grenade-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sybarite",
+          "id": "power-weapon-kabalite-warriors",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sybarite",
+          "id": "splinter-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Sybarite",
+          "id": "splinter-rifle",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "raider",
@@ -558,7 +1944,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Raider",
+          "models": 1,
+          "items": [
+            {
+              "id": "bladevanes-and-chainsnares",
+              "count": 1
+            },
+            {
+              "id": "dark-lance-raider",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Raider",
+          "items": [
+            {
+              "id": "bladevanes-and-chainsnares",
+              "count": 1
+            },
+            {
+              "id": "dark-lance-raider",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bladevanes-and-chainsnares",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dark-lance-raider",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "disintegrator-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Raider",
+          "id": "bladevanes-and-chainsnares",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Raider",
+          "id": "dark-lance-raider",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Raider",
+          "id": "disintegrator-cannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lelith-hesperax",
@@ -592,7 +2069,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lelith Hesperax",
+          "models": 1,
+          "items": [
+            {
+              "id": "leliths-blades",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lelith Hesperax",
+          "items": [
+            {
+              "id": "leliths-blades",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lelith Hesperax",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "leliths-blades",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lelith Hesperax",
+          "id": "leliths-blades",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "razorwing-jetfighter",
@@ -631,7 +2159,156 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Razorwing Jetfighter",
+          "models": 1,
+          "items": [
+            {
+              "id": "bladed-wings",
+              "count": 1
+            },
+            {
+              "id": "dark-lance-razorwing-jetfighter",
+              "count": 2
+            },
+            {
+              "id": "razorwing-missiles",
+              "count": 1
+            },
+            {
+              "id": "twin-splinter-rifle",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Razorwing Jetfighter",
+          "items": [
+            {
+              "id": "bladed-wings",
+              "count": 1
+            },
+            {
+              "id": "dark-lance-razorwing-jetfighter",
+              "count": 2
+            },
+            {
+              "id": "razorwing-missiles",
+              "count": 1
+            },
+            {
+              "id": "twin-splinter-rifle",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Razorwing Jetfighter",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bladed-wings",
+                "count": 1
+              },
+              {
+                "id": "razorwing-missiles",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Razorwing Jetfighter",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dark-lance-razorwing-jetfighter",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "disintegrator-cannon",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Razorwing Jetfighter",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "splinter-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-splinter-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Razorwing Jetfighter",
+          "id": "bladed-wings",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Razorwing Jetfighter",
+          "id": "dark-lance-razorwing-jetfighter",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Razorwing Jetfighter",
+          "id": "disintegrator-cannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Razorwing Jetfighter",
+          "id": "razorwing-missiles",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Razorwing Jetfighter",
+          "id": "splinter-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Razorwing Jetfighter",
+          "id": "twin-splinter-rifle",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "scourges-with-heavy-weapons",
@@ -686,7 +2363,251 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Scourge",
+          "models": 4,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 4
+            },
+            {
+              "id": "splinter-cannon-scourges-with-heavy-weapons",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Solarite",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "shardcarbine",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Scourge",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "splinter-cannon-scourges-with-heavy-weapons",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Solarite",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "shardcarbine",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Scourge",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "dark-lance",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "haywire-blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heat-lance-scourges-with-heavy-weapons",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shredder",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-cannon-scourges-with-heavy-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Scourge",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Solarite",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blast-pistol",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-scourges-with-heavy-weapons",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon-scourges-with-heavy-weapons",
+                "count": 1
+              },
+              {
+                "id": "splinter-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shardcarbine",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Solarite",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Scourge",
+          "id": "blaster",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Scourge",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Scourge",
+          "id": "dark-lance",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Scourge",
+          "id": "haywire-blaster",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Scourge",
+          "id": "heat-lance-scourges-with-heavy-weapons",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Scourge",
+          "id": "shredder",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Scourge",
+          "id": "splinter-cannon-scourges-with-heavy-weapons",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Solarite",
+          "id": "blast-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Solarite",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Solarite",
+          "id": "power-weapon-scourges-with-heavy-weapons",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Solarite",
+          "id": "shardcarbine",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Solarite",
+          "id": "splinter-pistol",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "talos",
@@ -734,7 +2655,226 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Talos",
+          "models": 1,
+          "items": [
+            {
+              "id": "maco-scalpel",
+              "count": 2
+            },
+            {
+              "id": "twin-splinter-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Talos",
+          "items": [
+            {
+              "id": "maco-scalpel",
+              "count": 2
+            },
+            {
+              "id": "twin-splinter-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Talos",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chain-flails",
+                "count": 1
+              },
+              {
+                "id": "maco-scalpel",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "chain-flails",
+                "count": 1
+              },
+              {
+                "id": "talos-ichor-injector",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "chain-flails",
+                "count": 1
+              },
+              {
+                "id": "twin-liquifier-gun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "maco-scalpel",
+                "count": 1
+              },
+              {
+                "id": "talos-gauntlet",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "maco-scalpel",
+                "count": 1
+              },
+              {
+                "id": "talos-ichor-injector",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "maco-scalpel",
+                "count": 1
+              },
+              {
+                "id": "twin-liquifier-gun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "maco-scalpel",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "talos-gauntlet",
+                "count": 1
+              },
+              {
+                "id": "talos-ichor-injector",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "talos-gauntlet",
+                "count": 1
+              },
+              {
+                "id": "twin-liquifier-gun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Talos",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "stinger-pod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-haywire-blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-heat-lance",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-splinter-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Talos",
+          "id": "chain-flails",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Talos",
+          "id": "maco-scalpel",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Talos",
+          "id": "stinger-pod",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Talos",
+          "id": "talos-gauntlet",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Talos",
+          "id": "talos-ichor-injector",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Talos",
+          "id": "twin-haywire-blaster",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Talos",
+          "id": "twin-heat-lance",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Talos",
+          "id": "twin-liquifier-gun",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Talos",
+          "id": "twin-splinter-cannon",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "wracks",
@@ -902,7 +3042,386 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Acothyst",
+          "models": 1,
+          "items": [
+            {
+              "id": "twin-torturers-tools",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Wrack",
+          "models": 4,
+          "items": [
+            {
+              "id": "twin-torturers-tools",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Acothyst",
+          "items": [
+            {
+              "id": "twin-torturers-tools",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Wrack",
+          "items": [
+            {
+              "id": "twin-torturers-tools",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Acothyst",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hexrifle",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-wracks",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hexrifle",
+                "count": 1
+              },
+              {
+                "id": "torturers-tool",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "liquifier-gun",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-wracks",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "liquifier-gun",
+                "count": 1
+              },
+              {
+                "id": "torturers-tool",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ossefactor",
+                "count": 1
+              },
+              {
+                "id": "power-weapon-wracks",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ossefactor",
+                "count": 1
+              },
+              {
+                "id": "torturers-tool",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon-wracks",
+                "count": 1
+              },
+              {
+                "id": "stinger-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon-wracks",
+                "count": 1
+              },
+              {
+                "id": "torturers-tool",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "stinger-pistol",
+                "count": 1
+              },
+              {
+                "id": "torturers-tool",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-torturers-tools",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Wrack",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hexrifle",
+                "count": 1
+              },
+              {
+                "id": "torturers-tool",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "liquifier-gun",
+                "count": 1
+              },
+              {
+                "id": "torturers-tool",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ossefactor",
+                "count": 1
+              },
+              {
+                "id": "torturers-tool",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "stinger-pistol",
+                "count": 1
+              },
+              {
+                "id": "torturers-tool",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-torturers-tools",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "hexrifle",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "liquifier-gun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "ossefactor",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "stinger-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Acothyst",
+          "id": "hexrifle",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Acothyst",
+          "id": "liquifier-gun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Acothyst",
+          "id": "ossefactor",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Acothyst",
+          "id": "power-weapon-wracks",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Acothyst",
+          "id": "power-weapon-wracks",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Acothyst",
+          "id": "stinger-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Acothyst",
+          "id": "torturers-tool",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Acothyst",
+          "id": "torturers-tool",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Acothyst",
+          "id": "twin-torturers-tools",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wrack",
+          "id": "hexrifle",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Wrack",
+          "id": "liquifier-gun",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Wrack",
+          "id": "ossefactor",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Wrack",
+          "id": "stinger-pistol",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Wrack",
+          "id": "torturers-tool",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Wrack",
+          "id": "twin-torturers-tools",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "haemonculus",
@@ -937,7 +3456,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Haemonculus",
+          "models": 1,
+          "items": [
+            {
+              "id": "haemonculus-tools-and-scissorhands",
+              "count": 1
+            },
+            {
+              "id": "stinger-pistol-haemonculus",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Haemonculus",
+          "items": [
+            {
+              "id": "haemonculus-tools-and-scissorhands",
+              "count": 1
+            },
+            {
+              "id": "stinger-pistol-haemonculus",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Haemonculus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "haemonculus-tools-and-scissorhands",
+                "count": 1
+              },
+              {
+                "id": "stinger-pistol-haemonculus",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Haemonculus",
+          "id": "haemonculus-tools-and-scissorhands",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Haemonculus",
+          "id": "stinger-pistol-haemonculus",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "archon",
@@ -973,7 +3561,158 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Archon",
+          "models": 1,
+          "items": [
+            {
+              "id": "huskblade",
+              "count": 1
+            },
+            {
+              "id": "shadowfield",
+              "count": 1
+            },
+            {
+              "id": "splinter-pistol-archon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Archon",
+          "items": [
+            {
+              "id": "huskblade",
+              "count": 1
+            },
+            {
+              "id": "splinter-pistol-archon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Archon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "agoniser",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "huskblade",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "master-crafted-power-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Archon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blast-pistol-archon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "soul-trap",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-pistol-archon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Archon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "shadowfield",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Archon",
+          "id": "agoniser",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Archon",
+          "id": "blast-pistol-archon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Archon",
+          "id": "huskblade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Archon",
+          "id": "master-crafted-power-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Archon",
+          "id": "shadowfield",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Archon",
+          "id": "soul-trap",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Archon",
+          "id": "splinter-pistol-archon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lady-malys",
@@ -1008,7 +3747,62 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lady Malys",
+          "models": 1,
+          "items": [
+            {
+              "id": "ladys-blade",
+              "count": 1
+            },
+            {
+              "id": "razor-fan",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Lady Malys",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ladys-blade",
+                "count": 1
+              },
+              {
+                "id": "razor-fan",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lady Malys",
+          "id": "ladys-blade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lady Malys",
+          "id": "razor-fan",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ravager",
@@ -1048,7 +3842,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ravager",
+          "models": 1,
+          "items": [
+            {
+              "id": "bladevanes-ravager",
+              "count": 1
+            },
+            {
+              "id": "dark-lance-ravager",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ravager",
+          "items": [
+            {
+              "id": "bladevanes-ravager",
+              "count": 1
+            },
+            {
+              "id": "dark-lance-ravager",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ravager",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bladevanes-ravager",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Ravager",
+          "picks": 3,
+          "repeats": true,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dark-lance-ravager",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "disintegrator-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Ravager",
+          "id": "bladevanes-ravager",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Ravager",
+          "id": "dark-lance-ravager",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Ravager",
+          "id": "disintegrator-cannon",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "wyches",
@@ -1131,7 +4016,197 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hekatrix",
+          "models": 1,
+          "items": [
+            {
+              "id": "hekatarii-blade",
+              "count": 1
+            },
+            {
+              "id": "splinter-pistol",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Wych",
+          "models": 9,
+          "items": [
+            {
+              "id": "hekatarii-blade",
+              "count": 9
+            },
+            {
+              "id": "splinter-pistol",
+              "count": 9
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hekatrix",
+          "items": [
+            {
+              "id": "hekatarii-blade",
+              "count": 1
+            },
+            {
+              "id": "splinter-pistol",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Wych",
+          "items": [
+            {
+              "id": "hekatarii-blade",
+              "count": 1
+            },
+            {
+              "id": "splinter-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hekatrix",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blast-pistol-wyches",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Hekatrix",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hekatarii-blade",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon-wyches",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Wych",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gladiatorial-weapons",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hekatarii-blade",
+                "count": 1
+              },
+              {
+                "id": "splinter-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Wych",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 3
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "gladiatorial-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Hekatrix",
+          "id": "blast-pistol-wyches",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hekatrix",
+          "id": "hekatarii-blade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hekatrix",
+          "id": "power-weapon-wyches",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Hekatrix",
+          "id": "splinter-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wych",
+          "id": "gladiatorial-weapons",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Wych",
+          "id": "hekatarii-blade",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Wych",
+          "id": "splinter-pistol",
+          "input": "stepper",
+          "default": 9
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hand-of-the-archon",
@@ -1185,7 +4260,391 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Kabalite Agents",
+          "models": 9,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 9
+            },
+            {
+              "id": "splinter-rifle",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Kabalite Archsybarite",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "splinter-rifle",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Kabalite Agents",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "splinter-rifle",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Kabalite Archsybarite",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "splinter-rifle",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Kabalite Agents",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "dark-lance",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "pain-sculptors",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "razorflail",
+                "count": 1
+              },
+              {
+                "id": "splinter-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shardcarbine",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shredder",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-cannon-hand-of-the-archon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-rifle",
+                "count": 1
+              },
+              {
+                "id": "stimm-needler",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-rifle",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "stinger-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kabalite Agents",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kabalite Archsybarite",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "kabalite-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "phantasm-grenade-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kabalite Archsybarite",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blast-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-rifle",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kabalite Archsybarite",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-weapon-hand-of-the-archon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Kabalite Agents",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shredder",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kabalite Agents",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "dark-lance",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "splinter-cannon-hand-of-the-archon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Kabalite Agents",
+          "id": "blaster",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Agents",
+          "id": "close-combat-weapon",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Kabalite Agents",
+          "id": "dark-lance",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Agents",
+          "id": "pain-sculptors",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Agents",
+          "id": "razorflail",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Agents",
+          "id": "shardcarbine",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Agents",
+          "id": "shredder",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Agents",
+          "id": "splinter-cannon-hand-of-the-archon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Agents",
+          "id": "splinter-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Agents",
+          "id": "splinter-rifle",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Kabalite Agents",
+          "id": "stimm-needler",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Agents",
+          "id": "stinger-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Archsybarite",
+          "id": "blast-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Archsybarite",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kabalite Archsybarite",
+          "id": "kabalite-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Archsybarite",
+          "id": "phantasm-grenade-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Archsybarite",
+          "id": "power-weapon-hand-of-the-archon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Archsybarite",
+          "id": "splinter-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kabalite Archsybarite",
+          "id": "splinter-rifle",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "voidraven-bomber",
@@ -1222,7 +4681,119 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Voidraven Bomber",
+          "models": 1,
+          "items": [
+            {
+              "id": "bladed-wings",
+              "count": 1
+            },
+            {
+              "id": "void-lance",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Voidraven Bomber",
+          "items": [
+            {
+              "id": "bladed-wings",
+              "count": 1
+            },
+            {
+              "id": "void-lance",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Voidraven Bomber",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "voidraven-missiles",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Voidraven Bomber",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bladed-wings",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Voidraven Bomber",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dark-scythe",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "void-lance",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Voidraven Bomber",
+          "id": "bladed-wings",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Voidraven Bomber",
+          "id": "dark-scythe",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Voidraven Bomber",
+          "id": "void-lance",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Voidraven Bomber",
+          "id": "voidraven-missiles",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "drazhar",
@@ -1256,7 +4827,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Drazhar",
+          "models": 1,
+          "items": [
+            {
+              "id": "executioners-demiklaives",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Drazhar",
+          "items": [
+            {
+              "id": "executioners-demiklaives",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Drazhar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "executioners-demiklaives",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Drazhar",
+          "id": "executioners-demiklaives",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "incubi",
@@ -1322,7 +4944,155 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Incubi",
+          "models": 4,
+          "items": [
+            {
+              "id": "klaive",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Klaivex",
+          "models": 1,
+          "items": [
+            {
+              "id": "klaive",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Incubi",
+          "items": [
+            {
+              "id": "klaive",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Klaivex",
+          "items": [
+            {
+              "id": "klaive",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Incubi",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "klaive",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Klaivex",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "demiklaives",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "klaive",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "incubi-shrine-token",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "incubi-shrine-token",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "incubi-shrine-token",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "id": "incubi-shrine-token",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Incubi",
+          "id": "klaive",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Klaivex",
+          "id": "demiklaives",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Klaivex",
+          "id": "klaive",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "mandrakes",
@@ -1391,7 +5161,133 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Mandrake",
+          "models": 4,
+          "items": [
+            {
+              "id": "baleblast",
+              "count": 4
+            },
+            {
+              "id": "glimmersteel-blade",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Nightfiend",
+          "models": 1,
+          "items": [
+            {
+              "id": "baleblast",
+              "count": 1
+            },
+            {
+              "id": "glimmersteel-blade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Mandrake",
+          "items": [
+            {
+              "id": "baleblast",
+              "count": 1
+            },
+            {
+              "id": "glimmersteel-blade",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Nightfiend",
+          "items": [
+            {
+              "id": "baleblast",
+              "count": 1
+            },
+            {
+              "id": "glimmersteel-blade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Mandrake",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "baleblast",
+                "count": 1
+              },
+              {
+                "id": "glimmersteel-blade",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Nightfiend",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "baleblast",
+                "count": 1
+              },
+              {
+                "id": "glimmersteel-blade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Mandrake",
+          "id": "baleblast",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Mandrake",
+          "id": "glimmersteel-blade",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Nightfiend",
+          "id": "baleblast",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Nightfiend",
+          "id": "glimmersteel-blade",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "coven-of-agonies-cronos",
@@ -1433,7 +5329,76 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Cronos",
+          "models": 1,
+          "items": [
+            {
+              "id": "spirit-leech-tentacles",
+              "count": 1
+            },
+            {
+              "id": "spirit-syphon",
+              "count": 1
+            },
+            {
+              "id": "spirit-vortex-coven-of-agonies-cronos",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Cronos",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "spirit-leech-tentacles",
+                "count": 1
+              },
+              {
+                "id": "spirit-syphon",
+                "count": 1
+              },
+              {
+                "id": "spirit-vortex-coven-of-agonies-cronos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Cronos",
+          "id": "spirit-leech-tentacles",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Cronos",
+          "id": "spirit-syphon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Cronos",
+          "id": "spirit-vortex-coven-of-agonies-cronos",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "coven-of-agonies-talos",
@@ -1475,7 +5440,76 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Talos",
+          "models": 1,
+          "items": [
+            {
+              "id": "chain-flails",
+              "count": 1
+            },
+            {
+              "id": "twin-liquifier-gun",
+              "count": 1
+            },
+            {
+              "id": "twin-splinter-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Talos",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chain-flails",
+                "count": 1
+              },
+              {
+                "id": "twin-liquifier-gun",
+                "count": 1
+              },
+              {
+                "id": "twin-splinter-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Talos",
+          "id": "chain-flails",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Talos",
+          "id": "twin-liquifier-gun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Talos",
+          "id": "twin-splinter-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "coven-of-agonies-wracks",
@@ -1492,8 +5526,8 @@
           "diameter": 25
         },
         "default_weapon_ids": [
-          "hexrifle",
-          "torturers-tool"
+          "hexrifle-coven-of-agonies-wracks",
+          "torturers-tool-coven-of-agonies-wracks"
         ]
       },
       {
@@ -1507,8 +5541,8 @@
           "diameter": 25
         },
         "default_weapon_ids": [
-          "ossefactor",
-          "torturers-tool"
+          "ossefactor-coven-of-agonies-wracks",
+          "torturers-tool-coven-of-agonies-wracks"
         ]
       },
       {
@@ -1521,7 +5555,7 @@
           "diameter": 25
         },
         "default_weapon_ids": [
-          "twin-torturers-tools"
+          "twin-torturers-tools-coven-of-agonies-wracks"
         ]
       }
     ],
@@ -1552,7 +5586,136 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Acothyst",
+          "models": 1,
+          "items": [
+            {
+              "id": "hexrifle-coven-of-agonies-wracks",
+              "count": 1
+            },
+            {
+              "id": "torturers-tool-coven-of-agonies-wracks",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Wrack with Ossefactor",
+          "models": 1,
+          "items": [
+            {
+              "id": "ossefactor-coven-of-agonies-wracks",
+              "count": 1
+            },
+            {
+              "id": "torturers-tool-coven-of-agonies-wracks",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Wrack",
+          "models": 3,
+          "items": [
+            {
+              "id": "twin-torturers-tools-coven-of-agonies-wracks",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Acothyst",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hexrifle-coven-of-agonies-wracks",
+                "count": 1
+              },
+              {
+                "id": "torturers-tool-coven-of-agonies-wracks",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Wrack with Ossefactor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ossefactor-coven-of-agonies-wracks",
+                "count": 1
+              },
+              {
+                "id": "torturers-tool-coven-of-agonies-wracks",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Wrack",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "twin-torturers-tools-coven-of-agonies-wracks",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Acothyst",
+          "id": "hexrifle-coven-of-agonies-wracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Acothyst",
+          "id": "torturers-tool-coven-of-agonies-wracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wrack with Ossefactor",
+          "id": "ossefactor-coven-of-agonies-wracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wrack with Ossefactor",
+          "id": "torturers-tool-coven-of-agonies-wracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wrack",
+          "id": "twin-torturers-tools-coven-of-agonies-wracks",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "xatrophos-nuul",
@@ -1590,6 +5753,61 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Xatrophos Nuul",
+          "models": 1,
+          "items": [
+            {
+              "id": "haemonculus-tools-and-scissorhands",
+              "count": 1
+            },
+            {
+              "id": "stinger-pistol-xatrophos-nuul",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Xatrophos Nuul",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "haemonculus-tools-and-scissorhands",
+                "count": 1
+              },
+              {
+                "id": "stinger-pistol-xatrophos-nuul",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Xatrophos Nuul",
+          "id": "haemonculus-tools-and-scissorhands",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Xatrophos Nuul",
+          "id": "stinger-pistol-xatrophos-nuul",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

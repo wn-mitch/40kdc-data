@@ -423,7 +423,7 @@ pub(crate) fn event_phrase(t: &P) -> String {
         "deployment-ended" => "after deployment".to_string(),
         "round-started" => "at the start of the battle round".to_string(),
         "round-ended" => "at the end of the battle round".to_string(),
-        "turn-started" => "at the start of the turn".to_string(),
+        "turn-started" => "at the start of each turn".to_string(),
         "turn-ended" => "at the end of the turn".to_string(),
         "step-started" => format!(
             "at the start of the {} step",
@@ -496,7 +496,12 @@ pub(crate) fn event_phrase(t: &P) -> String {
                 };
             }
             if nn(t, "object").is_some() {
-                format!("when {who} targets {}", object_phrase(object))
+                let all = if f.get("all_attacks").and_then(Value::as_bool) == Some(true) {
+                    " with all of its attacks"
+                } else {
+                    ""
+                };
+                format!("when {who} targets {}{all}", object_phrase(object))
             } else {
                 format!("when {who} selects its targets")
             }
@@ -604,6 +609,8 @@ pub(crate) fn event_phrase(t: &P) -> String {
                     "after {who} {}",
                     if is(f, "kind", "fight") {
                         "fights"
+                    } else if is(f, "kind", "attack") {
+                        "resolves its attacks"
                     } else {
                         "shoots"
                     }
@@ -773,7 +780,11 @@ pub(crate) fn event_phrase(t: &P) -> String {
             }
             format!("each time {who} {}", used_phrase(&st(f.get("kind"))))
         }
-        "state-changed" => format!("when {who} becomes {}", cap_word(&st(f.get("state")))),
+        "state-changed" => match f.get("strength").and_then(Value::as_str) {
+            Some("below-half") => format!("when {who} becomes Below Half-strength"),
+            Some("below-starting") => format!("when {who} falls below its Starting Strength"),
+            _ => format!("when {who} becomes {}", cap_word(&st(f.get("state")))),
+        },
         "designation-changed" => {
             if is(f, "tag", "EMPOWERED") {
                 format!("each time {who} is Empowered")

@@ -13,7 +13,7 @@ from typing import Any
 
 from wh40kdc.translate.condition import describe_condition
 from wh40kdc.translate.condition_leadin import condition_lead_in
-from wh40kdc.translate.condition_refs import _objective_phrase, place_ref_phrase
+from wh40kdc.translate.condition_refs import _objective_phrase, is_event_object, place_ref_phrase
 from wh40kdc.translate.effect_leaf_army import (
     army_rule,
     cost_modifier,
@@ -228,7 +228,7 @@ def _destroy_models(e: Leaf, m: dict[str, Any], subj: str) -> str:
 def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     act = "shoot" if m.get("act") == "shoot" else "fight"
     target = e.get("target")
-    if target == "event-object":
+    if is_event_object(target):
         model = "a model in this unit"
     elif subj == "this model":
         model = "this model"
@@ -272,7 +272,7 @@ def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             f"the battlefield; {resolution}{removal}"
         )
     # The destroyed model the trigger names stays, not its unit.
-    held = "that model" if target == "event-object" else subj
+    held = "that model" if is_event_object(target) else subj
     if m.get("resolution") == "when-unit-fights":
         return (
             f"do not remove {held} yet; when its unit is selected to fight, it can {act}; "
@@ -314,7 +314,9 @@ def _add_unit(m: dict[str, Any], ctx: Ctx) -> str:
     # New models that join an existing unit rather than forming their own.
     if m.get("join") is not None:
         size = next((m[k] for k in ("model_count", "count") if m.get(k) is not None), 1)
-        added = amount_of(size, f"{sheet} model", f"{sheet} models")
+        # A model type of the unit itself (model) is already its printed name.
+        kind = jstr(m["model"]) if m.get("model") is not None else sheet
+        added = amount_of(size, f"{kind} model", f"{kind} models")
         return f"add {added} to {effect_subject(m['join'], ctx)}{where}{engage}"
     literal = is_literal(m.get("count"))
     n = num(m.get("count") if m.get("count") is not None else 1) if literal else math.nan
@@ -807,7 +809,13 @@ def _damage_reduction(m: dict[str, Any], subj: str) -> str:
 
 
 def _heal(m: dict[str, Any], subj: str) -> str:
-    who = f"each model in {subj}" if m.get("per") == "model" else subj
+    per = m.get("per")
+    if per == "model":
+        who = f"each model in {subj}"
+    elif per == "one-model":
+        who = f"one model in {subj}"
+    else:
+        who = subj
     if m.get("amount") == "full":
         return f"{who} {v(who, 'regains')} all {pronoun(who)} lost wounds"
     if not is_literal(m.get("amount")):

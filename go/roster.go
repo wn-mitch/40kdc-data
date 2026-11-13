@@ -142,6 +142,26 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		views[i] = resolveUnit(u.unitID)
 	}
 
+	// attachedToKeywords is the roster keyword set of the unit su attaches to as
+	// a leader or support character; nil when su is unattached.
+	attachedToKeywords := func(su normUnit) map[string]struct{} {
+		if su.leaderBodyguardID == "" {
+			return nil
+		}
+		for i, u := range spec.units {
+			if u.unitID == su.leaderBodyguardID {
+				if views[i] == nil {
+					return nil
+				}
+				return keywordSet(views[i], u.keywordOverrides)
+			}
+		}
+		if bodyguard := resolveUnit(su.leaderBodyguardID); bodyguard != nil {
+			return keywordSet(bodyguard, nil)
+		}
+		return nil
+	}
+
 	presentUnitIDs := map[string]struct{}{}
 	for _, su := range spec.units {
 		if su.unitID != "" {
@@ -156,10 +176,9 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		if view == nil {
 			continue
 		}
-		models, tiers := ds.unitCompositionOf(view.Raw)
 		units = append(units, unitLoadoutResult{
 			unitIndex:  idx,
-			violations: checkUnitLegality(view.Raw, su.modelCount, ds.wargearOptionsOf(view.Raw), su.counts, models, tiers),
+			violations: ds.loadoutOf(view.Raw).Check(su.modelCount, su.counts),
 		})
 	}
 
@@ -213,11 +232,12 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 				errV("enhancement-on-excluded-model", enhID, idx)
 			}
 		}
+		// Attachment is decided at list building, so keywords the bearer's own
+		// abilities change while attached (a Painboss with Squighog Boyz loses
+		// INFANTRY) decide eligibility.
+		has := withKeywordChanges(kws, listBuildingKeywordChanges(view, attachedToKeywords(su)))
 		// Keyword groups or datasheet groups (mirror of TS meetsEnhancementGroups).
-		eligible := meetsEnhancementGroups(enh, view.ID(), func(keyword string) bool {
-			_, held := kws[keyword]
-			return held
-		})
+		eligible := meetsEnhancementGroups(enh, view.ID(), has)
 		if !eligible {
 			errV("enhancement-keyword-mismatch", enhID, idx)
 		}
@@ -225,7 +245,7 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 			errV("enhancement-missing-ability", enhID, idx)
 		}
 		for _, k := range getStrList(enh, "exclusion_keywords") {
-			if _, has := kws[k]; has {
+			if has(k) {
 				errV("enhancement-excluded-keyword", enhID, idx)
 				break
 			}
@@ -439,6 +459,33 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 	}
 
+	// --- Warlord eligibility (per-model Warlord flags, CHARACTER, Supreme Commander).
+	detachmentWarlords := map[string]bool{}
+	for _, d := range detachments {
+		for _, id := range getStrList(d, "mandatory_warlord_datasheet_ids") {
+			detachmentWarlords[id] = true
+		}
+		for _, id := range getStrList(d, "granted_warlord_datasheet_ids") {
+			detachmentWarlords[id] = true
+		}
+	}
+	warlordUnits := make([]*warlordUnit, len(spec.units))
+	for idx, su := range spec.units {
+		view := views[idx]
+		if view == nil {
+			continue
+		}
+		_, kwChar := keywordSet(view, su.keywordOverrides)["Character"]
+		rows, _ := ds.unitCompositionOf(view.Raw)
+		warlordUnits[idx] = &warlordUnit{
+			unitID:      getStr(view.Raw, "id"),
+			isWarlord:   su.isWarlord,
+			isCharacter: isCharacter(view) || kwChar,
+			rows:        rows,
+		}
+	}
+	warlordViolations(warlordUnits, detachmentWarlords, errV)
+
 	// --- Detachment datasheet exclusions (e.g. Shadow Legion). ----------------
 	for _, d := range detachments {
 		excluded := map[string]bool{}
@@ -600,15 +647,6 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 	// Mirror of TS: the rule must be offered, and its points cap and
 	// Warlord/Enhancement locks apply; a selected detachment's mandatory or
 	// granted Warlord datasheets lift the Warlord lock.
-	detachmentWarlords := map[string]bool{}
-	for _, d := range detachments {
-		for _, id := range getStrList(d, "mandatory_warlord_datasheet_ids") {
-			detachmentWarlords[id] = true
-		}
-		for _, id := range getStrList(d, "granted_warlord_datasheet_ids") {
-			detachmentWarlords[id] = true
-		}
-	}
 	if spec.factionID != "" {
 		for _, ruleAny := range ds.AlliedRules.All() {
 			rule, ok := asMap(ruleAny)

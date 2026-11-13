@@ -1717,7 +1717,7 @@
       "twin-assault-cannon"
     ],
     "replacement": [
-      "twin-lascannon"
+      "twin-lascannon-corvus-blackstar"
     ],
     "model_constraint": {
       "any_number": true
@@ -3724,30 +3724,12 @@
     },
     "is_free": true,
     "replaces": [
-      "assault-cannon"
+      "assault-cannon",
+      "dreadnought-combat-weapon"
     ],
-    "replacement_choice": [
-      [
-        "twin-autocannon"
-      ],
-      [
-        "dreadnought-inferno-cannon"
-      ],
-      [
-        "heavy-plasma-cannon"
-      ],
-      [
-        "multi-melta"
-      ],
-      [
-        "twin-heavy-flamer"
-      ],
-      [
-        "twin-lascannon"
-      ],
-      [
-        "twin-heavy-bolter"
-      ]
+    "replacement": [
+      "blizzard-shield",
+      "fenrisian-great-axe"
     ],
     "model_constraint": {
       "any_number": true
@@ -3763,66 +3745,14 @@
     },
     "is_free": true,
     "replaces": [
-      "assault-cannon",
-      "dreadnought-fist",
-      "storm-bolter"
+      "assault-cannon"
     ],
     "replacement_choice": [
       [
-        "twin-autocannon",
-        "twin-lascannon"
+        "helfrost-cannon-venerable-dreadnought"
       ],
       [
-        "missile-launcher",
-        "twin-lascannon"
-      ],
-      [
-        "missile-launcher",
-        "twin-autocannon"
-      ],
-      [
-        "missile-launcher",
-        "dreadnought-inferno-cannon"
-      ],
-      [
-        "missile-launcher",
-        "heavy-plasma-cannon"
-      ],
-      [
-        "missile-launcher",
-        "twin-heavy-flamer"
-      ],
-      [
-        "missile-launcher",
-        "twin-heavy-bolter"
-      ],
-      [
-        "twin-autocannon",
         "multi-melta"
-      ],
-      [
-        "twin-autocannon",
-        "twin-heavy-flamer"
-      ],
-      [
-        "twin-autocannon",
-        "twin-autocannon"
-      ],
-      [
-        "twin-autocannon",
-        "heavy-plasma-cannon"
-      ],
-      [
-        "twin-autocannon",
-        "dreadnought-inferno-cannon"
-      ],
-      [
-        "missile-launcher",
-        "multi-melta"
-      ],
-      [
-        "twin-autocannon",
-        "twin-heavy-bolter"
       ]
     ],
     "model_constraint": {
@@ -3839,82 +3769,10 @@
     },
     "is_free": true,
     "replaces": [
-      "assault-cannon",
-      "storm-bolter"
-    ],
-    "replacement_choice": [
-      [
-        "heavy-flamer",
-        "multi-melta"
-      ],
-      [
-        "heavy-flamer",
-        "twin-heavy-flamer"
-      ],
-      [
-        "heavy-flamer",
-        "dreadnought-inferno-cannon"
-      ],
-      [
-        "heavy-flamer",
-        "twin-autocannon"
-      ],
-      [
-        "heavy-flamer",
-        "heavy-plasma-cannon"
-      ],
-      [
-        "heavy-flamer",
-        "twin-lascannon"
-      ],
-      [
-        "heavy-flamer",
-        "twin-heavy-bolter"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "venerable-dreadnought-wgo-mfm-4",
-    "unit_id": "venerable-dreadnought",
-    "faction_id": "adeptus-astartes",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "2026-10-14"
-    },
-    "is_free": true,
-    "replaces": [
-      "dreadnought-fist",
-      "storm-bolter"
-    ],
-    "replacement_choice": [
-      [
-        "twin-autocannon"
-      ],
-      [
-        "missile-launcher"
-      ]
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "venerable-dreadnought-wgo-mfm-5",
-    "unit_id": "venerable-dreadnought",
-    "faction_id": "adeptus-astartes",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "2026-10-14"
-    },
-    "is_free": true,
-    "replaces": [
       "storm-bolter"
     ],
     "replacement": [
-      "heavy-flamer"
+      "heavy-flamer-venerable-dreadnought"
     ],
     "model_constraint": {
       "any_number": true

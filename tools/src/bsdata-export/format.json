@@ -1,0 +1,892 @@
+{
+  "association": {
+    "count": 481,
+    "required": [
+      "childId",
+      "id",
+      "max",
+      "min",
+      "name",
+      "scope"
+    ],
+    "optional": [
+      "action",
+      "childName",
+      "comment",
+      "conditionGroups",
+      "conditions",
+      "defaultSelectionEntryId",
+      "includeChildSelections",
+      "label",
+      "sortIndex"
+    ],
+    "types": {
+      "action": "string",
+      "childId": "string",
+      "childName": "string",
+      "comment": "string",
+      "conditionGroups": "array<conditionGroup>",
+      "conditions": "array<condition>",
+      "defaultSelectionEntryId": "string",
+      "id": "string",
+      "includeChildSelections": "boolean",
+      "label": "string",
+      "max": "number",
+      "min": "number",
+      "name": "string",
+      "scope": "string",
+      "sortIndex": "number"
+    }
+  },
+  "associationLink": {
+    "count": 5,
+    "required": [
+      "hidden",
+      "id",
+      "import",
+      "name",
+      "targetId",
+      "type"
+    ],
+    "optional": [],
+    "types": {
+      "hidden": "boolean",
+      "id": "string",
+      "import": "boolean",
+      "name": "string",
+      "targetId": "string",
+      "type": "string"
+    }
+  },
+  "catalogue": {
+    "count": 45,
+    "required": [
+      "battleScribeVersion",
+      "gameSystemId",
+      "gameSystemRevision",
+      "id",
+      "library",
+      "name",
+      "revision",
+      "type",
+      "xmlns"
+    ],
+    "optional": [
+      "authorContact",
+      "authorName",
+      "catalogueLinks",
+      "categoryEntries",
+      "costTypes",
+      "entryLinks",
+      "infoLinks",
+      "profileTypes",
+      "publications",
+      "readme",
+      "rules",
+      "selectionEntries",
+      "sharedAssociations",
+      "sharedInfoGroups",
+      "sharedProfiles",
+      "sharedRules",
+      "sharedSelectionEntries",
+      "sharedSelectionEntryGroups"
+    ],
+    "types": {
+      "authorContact": "string",
+      "authorName": "string",
+      "battleScribeVersion": "number",
+      "catalogueLinks": "array<catalogueLink>",
+      "categoryEntries": "array<categoryEntry>",
+      "costTypes": "array<costType>",
+      "entryLinks": "array<entryLink>",
+      "gameSystemId": "string",
+      "gameSystemRevision": "number",
+      "id": "string",
+      "infoLinks": "array<infoLink>",
+      "library": "boolean",
+      "name": "string",
+      "profileTypes": "array<profileType>",
+      "publications": "array<publication>",
+      "readme": "string",
+      "revision": "number",
+      "rules": "array<rule>",
+      "selectionEntries": "array<selectionEntry>",
+      "sharedAssociations": "array<association>",
+      "sharedInfoGroups": "array<infoGroup>",
+      "sharedProfiles": "array<profile>",
+      "sharedRules": "array<rule>",
+      "sharedSelectionEntries": "array<selectionEntry>",
+      "sharedSelectionEntryGroups": "array<selectionEntryGroup>",
+      "type": "string",
+      "xmlns": "string"
+    }
+  },
+  "catalogueLink": {
+    "count": 109,
+    "required": [
+      "id",
+      "name",
+      "targetId",
+      "type"
+    ],
+    "optional": [
+      "importRootEntries"
+    ],
+    "types": {
+      "id": "string",
+      "importRootEntries": "boolean",
+      "name": "string",
+      "targetId": "string",
+      "type": "string"
+    }
+  },
+  "categoryEntry": {
+    "count": 1796,
+    "required": [
+      "id",
+      "name"
+    ],
+    "optional": [
+      "comment",
+      "constraints",
+      "hidden",
+      "infoLinks",
+      "modifiers",
+      "page",
+      "profiles",
+      "publicationId",
+      "rules"
+    ],
+    "types": {
+      "comment": "string",
+      "constraints": "array<constraint>",
+      "hidden": "boolean",
+      "id": "string",
+      "infoLinks": "array<infoLink>",
+      "modifiers": "array<modifier>",
+      "name": "string",
+      "page": "number|string",
+      "profiles": "array<profile>",
+      "publicationId": "string",
+      "rules": "array<rule>"
+    }
+  },
+  "categoryLink": {
+    "count": 14486,
+    "required": [
+      "id",
+      "name",
+      "targetId"
+    ],
+    "optional": [
+      "constraints",
+      "hidden",
+      "modifiers",
+      "primary"
+    ],
+    "types": {
+      "constraints": "array<constraint>",
+      "hidden": "boolean",
+      "id": "string",
+      "modifiers": "array<modifier>",
+      "name": "string",
+      "primary": "boolean",
+      "targetId": "string"
+    }
+  },
+  "characteristic": {
+    "count": 58939,
+    "required": [
+      "name",
+      "typeId"
+    ],
+    "optional": [
+      "$text",
+      "hidden",
+      "id"
+    ],
+    "types": {
+      "$text": "string",
+      "hidden": "boolean",
+      "id": "string",
+      "name": "string",
+      "typeId": "string"
+    }
+  },
+  "characteristicType": {
+    "count": 69,
+    "required": [
+      "id",
+      "name"
+    ],
+    "optional": [
+      "defaultValue",
+      "kind"
+    ],
+    "types": {
+      "defaultValue": "string",
+      "id": "string",
+      "kind": "string",
+      "name": "string"
+    }
+  },
+  "condition": {
+    "count": 31904,
+    "required": [
+      "childId",
+      "field",
+      "scope",
+      "type"
+    ],
+    "optional": [
+      "childName",
+      "comment",
+      "id",
+      "includeChildForces",
+      "includeChildSelections",
+      "percentValue",
+      "queryFromSelf",
+      "shared",
+      "sortIndex",
+      "traverseAssociationGroup",
+      "value"
+    ],
+    "types": {
+      "childId": "string",
+      "childName": "string",
+      "comment": "string",
+      "field": "string",
+      "id": "string",
+      "includeChildForces": "boolean",
+      "includeChildSelections": "boolean",
+      "percentValue": "boolean",
+      "queryFromSelf": "boolean",
+      "scope": "string",
+      "shared": "boolean",
+      "sortIndex": "number",
+      "traverseAssociationGroup": "boolean",
+      "type": "string",
+      "value": "number"
+    }
+  },
+  "conditionGroup": {
+    "count": 10395,
+    "required": [
+      "type"
+    ],
+    "optional": [
+      "comment",
+      "conditionGroups",
+      "conditions",
+      "localConditionGroups",
+      "min"
+    ],
+    "types": {
+      "comment": "string",
+      "conditionGroups": "array<conditionGroup>",
+      "conditions": "array<condition>",
+      "localConditionGroups": "array<localConditionGroup>",
+      "min": "number",
+      "type": "string"
+    }
+  },
+  "constraint": {
+    "count": 26160,
+    "required": [
+      "field",
+      "id",
+      "scope",
+      "shared",
+      "type",
+      "value"
+    ],
+    "optional": [
+      "automatic",
+      "childId",
+      "childName",
+      "comment",
+      "includeChildForces",
+      "includeChildSelections",
+      "message",
+      "negative",
+      "percentValue",
+      "traverseAssociationGroup"
+    ],
+    "types": {
+      "automatic": "boolean",
+      "childId": "string",
+      "childName": "string",
+      "comment": "string",
+      "field": "string",
+      "id": "string",
+      "includeChildForces": "boolean",
+      "includeChildSelections": "boolean",
+      "message": "string",
+      "negative": "boolean",
+      "percentValue": "boolean",
+      "scope": "string",
+      "shared": "boolean",
+      "traverseAssociationGroup": "boolean",
+      "type": "string",
+      "value": "number"
+    }
+  },
+  "cost": {
+    "count": 27239,
+    "required": [
+      "name",
+      "typeId",
+      "value"
+    ],
+    "optional": [],
+    "types": {
+      "name": "string",
+      "typeId": "string",
+      "value": "number"
+    }
+  },
+  "costType": {
+    "count": 15,
+    "required": [
+      "defaultCostLimit",
+      "hidden",
+      "id",
+      "name"
+    ],
+    "optional": [
+      "comment",
+      "modifiers"
+    ],
+    "types": {
+      "comment": "string",
+      "defaultCostLimit": "number|string",
+      "hidden": "boolean",
+      "id": "string",
+      "modifiers": "array<modifier>",
+      "name": "string"
+    }
+  },
+  "entryLink": {
+    "count": 17869,
+    "required": [
+      "id",
+      "name",
+      "targetId",
+      "type"
+    ],
+    "optional": [
+      "associations",
+      "categoryLinks",
+      "collapsible",
+      "collective",
+      "comment",
+      "constraints",
+      "costs",
+      "defaultAmount",
+      "entryLinks",
+      "exportable",
+      "flatten",
+      "hidden",
+      "import",
+      "infoLinks",
+      "modifierGroups",
+      "modifiers",
+      "page",
+      "profiles",
+      "selectionEntries",
+      "selectionEntryGroups",
+      "sortIndex"
+    ],
+    "types": {
+      "associations": "array<association>",
+      "categoryLinks": "array<categoryLink>",
+      "collapsible": "boolean",
+      "collective": "boolean",
+      "comment": "string",
+      "constraints": "array<constraint>",
+      "costs": "array<cost>",
+      "defaultAmount": "number|string",
+      "entryLinks": "array<entryLink>",
+      "exportable": "boolean",
+      "flatten": "boolean",
+      "hidden": "boolean",
+      "id": "string",
+      "import": "boolean",
+      "infoLinks": "array<infoLink>",
+      "modifierGroups": "array<modifierGroup>",
+      "modifiers": "array<modifier>",
+      "name": "string",
+      "page": "number",
+      "profiles": "array<profile>",
+      "selectionEntries": "array<selectionEntry>",
+      "selectionEntryGroups": "array<selectionEntryGroup>",
+      "sortIndex": "number",
+      "targetId": "string",
+      "type": "string"
+    }
+  },
+  "forceEntry": {
+    "count": 4,
+    "required": [
+      "categoryLinks",
+      "hidden",
+      "id",
+      "name"
+    ],
+    "optional": [
+      "constraints",
+      "exportable",
+      "forceEntries",
+      "modifiers",
+      "readme"
+    ],
+    "types": {
+      "categoryLinks": "array<categoryLink>",
+      "constraints": "array<constraint>",
+      "exportable": "boolean",
+      "forceEntries": "array<forceEntry>",
+      "hidden": "boolean",
+      "id": "string",
+      "modifiers": "array<modifier>",
+      "name": "string",
+      "readme": "string"
+    }
+  },
+  "gameSystem": {
+    "count": 1,
+    "required": [
+      "battleScribeVersion",
+      "categoryEntries",
+      "costTypes",
+      "entryLinks",
+      "forceEntries",
+      "id",
+      "name",
+      "profileTypes",
+      "publications",
+      "readme",
+      "revision",
+      "sharedProfiles",
+      "sharedRules",
+      "sharedSelectionEntries",
+      "sharedSelectionEntryGroups",
+      "type",
+      "xmlns"
+    ],
+    "optional": [],
+    "types": {
+      "battleScribeVersion": "number",
+      "categoryEntries": "array<categoryEntry>",
+      "costTypes": "array<costType>",
+      "entryLinks": "array<entryLink>",
+      "forceEntries": "array<forceEntry>",
+      "id": "string",
+      "name": "string",
+      "profileTypes": "array<profileType>",
+      "publications": "array<publication>",
+      "readme": "string",
+      "revision": "number",
+      "sharedProfiles": "array<profile>",
+      "sharedRules": "array<rule>",
+      "sharedSelectionEntries": "array<selectionEntry>",
+      "sharedSelectionEntryGroups": "array<selectionEntryGroup>",
+      "type": "string",
+      "xmlns": "string"
+    }
+  },
+  "infoGroup": {
+    "count": 32,
+    "required": [
+      "id",
+      "name"
+    ],
+    "optional": [
+      "hidden",
+      "infoLinks",
+      "modifiers",
+      "profiles"
+    ],
+    "types": {
+      "hidden": "boolean",
+      "id": "string",
+      "infoLinks": "array<infoLink>",
+      "modifiers": "array<modifier>",
+      "name": "string",
+      "profiles": "array<profile>"
+    }
+  },
+  "infoLink": {
+    "count": 11317,
+    "required": [
+      "id",
+      "name",
+      "targetId",
+      "type"
+    ],
+    "optional": [
+      "comment",
+      "exportable",
+      "hidden",
+      "modifierGroups",
+      "modifiers",
+      "publicationId"
+    ],
+    "types": {
+      "comment": "string",
+      "exportable": "boolean",
+      "hidden": "boolean",
+      "id": "string",
+      "modifierGroups": "array<modifierGroup>",
+      "modifiers": "array<modifier>",
+      "name": "string",
+      "publicationId": "string",
+      "targetId": "string",
+      "type": "string"
+    }
+  },
+  "localConditionGroup": {
+    "count": 413,
+    "required": [
+      "conditions",
+      "field",
+      "includeChildForces",
+      "includeChildSelections",
+      "repeats",
+      "scope",
+      "type",
+      "value"
+    ],
+    "optional": [],
+    "types": {
+      "conditions": "array<condition>",
+      "field": "string",
+      "includeChildForces": "boolean",
+      "includeChildSelections": "boolean",
+      "repeats": "number",
+      "scope": "string",
+      "type": "string",
+      "value": "number"
+    }
+  },
+  "modifier": {
+    "count": 24870,
+    "required": [
+      "field",
+      "type"
+    ],
+    "optional": [
+      "affects",
+      "arg",
+      "comment",
+      "conditionGroups",
+      "conditions",
+      "id",
+      "join",
+      "position",
+      "repeats",
+      "scope",
+      "skipIfPresent",
+      "value"
+    ],
+    "types": {
+      "affects": "string",
+      "arg": "string",
+      "comment": "string",
+      "conditionGroups": "array<conditionGroup>",
+      "conditions": "array<condition>",
+      "field": "string",
+      "id": "string",
+      "join": "string",
+      "position": "number|string",
+      "repeats": "array<repeat>",
+      "scope": "string",
+      "skipIfPresent": "string",
+      "type": "string",
+      "value": "boolean|number|string"
+    }
+  },
+  "modifierGroup": {
+    "count": 2542,
+    "required": [
+      "modifiers"
+    ],
+    "optional": [
+      "comment",
+      "conditionGroups",
+      "conditions",
+      "modifierGroups",
+      "repeats",
+      "type"
+    ],
+    "types": {
+      "comment": "string",
+      "conditionGroups": "array<conditionGroup>",
+      "conditions": "array<condition>",
+      "modifierGroups": "array<modifierGroup>",
+      "modifiers": "array<modifier>",
+      "repeats": "array<repeat>",
+      "type": "string"
+    }
+  },
+  "profile": {
+    "count": 13162,
+    "required": [
+      "characteristics",
+      "hidden",
+      "id",
+      "name",
+      "typeId",
+      "typeName"
+    ],
+    "optional": [
+      "alias",
+      "comment",
+      "modifierGroups",
+      "modifiers",
+      "noindex",
+      "page",
+      "publicationId"
+    ],
+    "types": {
+      "alias": "array<string>",
+      "characteristics": "array<characteristic>",
+      "comment": "string",
+      "hidden": "boolean",
+      "id": "string",
+      "modifierGroups": "array<modifierGroup>",
+      "modifiers": "array<modifier>",
+      "name": "string",
+      "noindex": "boolean",
+      "page": "number|string",
+      "publicationId": "string",
+      "typeId": "string",
+      "typeName": "string"
+    }
+  },
+  "profileType": {
+    "count": 34,
+    "required": [
+      "id",
+      "name"
+    ],
+    "optional": [
+      "characteristicTypes",
+      "comment",
+      "hidden",
+      "sortIndex"
+    ],
+    "types": {
+      "characteristicTypes": "array<characteristicType>",
+      "comment": "string",
+      "hidden": "boolean",
+      "id": "string",
+      "name": "string",
+      "sortIndex": "number"
+    }
+  },
+  "publication": {
+    "count": 9,
+    "required": [
+      "id",
+      "name"
+    ],
+    "optional": [
+      "hidden",
+      "publicationDate",
+      "publisher",
+      "publisherUrl",
+      "shortName"
+    ],
+    "types": {
+      "hidden": "boolean",
+      "id": "string",
+      "name": "string",
+      "publicationDate": "string",
+      "publisher": "string",
+      "publisherUrl": "string",
+      "shortName": "string"
+    }
+  },
+  "repeat": {
+    "count": 2813,
+    "required": [
+      "childId",
+      "field",
+      "repeats",
+      "roundUp",
+      "scope",
+      "shared",
+      "value"
+    ],
+    "optional": [
+      "childName",
+      "id",
+      "includeChildForces",
+      "includeChildSelections",
+      "percentValue",
+      "traverseAssociationGroup"
+    ],
+    "types": {
+      "childId": "string",
+      "childName": "string",
+      "field": "string",
+      "id": "string",
+      "includeChildForces": "boolean",
+      "includeChildSelections": "boolean",
+      "percentValue": "boolean",
+      "repeats": "number",
+      "roundUp": "boolean",
+      "scope": "string",
+      "shared": "boolean",
+      "traverseAssociationGroup": "boolean",
+      "value": "number"
+    }
+  },
+  "rule": {
+    "count": 457,
+    "required": [
+      "description",
+      "id",
+      "name"
+    ],
+    "optional": [
+      "alias",
+      "comment",
+      "hidden",
+      "modifiers",
+      "page",
+      "publicationId"
+    ],
+    "types": {
+      "alias": "array<string>",
+      "comment": "string",
+      "description": "string",
+      "hidden": "boolean",
+      "id": "string",
+      "modifiers": "array<modifier>",
+      "name": "string",
+      "page": "number",
+      "publicationId": "string"
+    }
+  },
+  "selectionEntry": {
+    "count": 12039,
+    "required": [
+      "id",
+      "import",
+      "name",
+      "type"
+    ],
+    "optional": [
+      "associationLinks",
+      "associations",
+      "categoryLinks",
+      "collapsible",
+      "collective",
+      "comment",
+      "constraints",
+      "costs",
+      "defaultAmount",
+      "displayCosts",
+      "entryLinks",
+      "flatten",
+      "hidden",
+      "infoGroups",
+      "infoLinks",
+      "modifierGroups",
+      "modifiers",
+      "page",
+      "profiles",
+      "publicationId",
+      "rules",
+      "selectionEntries",
+      "selectionEntryGroups",
+      "sortIndex",
+      "step",
+      "subType"
+    ],
+    "types": {
+      "associationLinks": "array<associationLink>",
+      "associations": "array<association>",
+      "categoryLinks": "array<categoryLink>",
+      "collapsible": "boolean",
+      "collective": "boolean",
+      "comment": "string",
+      "constraints": "array<constraint>",
+      "costs": "array<cost>",
+      "defaultAmount": "number|string",
+      "displayCosts": "array<cost>",
+      "entryLinks": "array<entryLink>",
+      "flatten": "boolean",
+      "hidden": "boolean",
+      "id": "string",
+      "import": "boolean",
+      "infoGroups": "array<infoGroup>",
+      "infoLinks": "array<infoLink>",
+      "modifierGroups": "array<modifierGroup>",
+      "modifiers": "array<modifier>",
+      "name": "string",
+      "page": "number|string",
+      "profiles": "array<profile>",
+      "publicationId": "string",
+      "rules": "array<rule>",
+      "selectionEntries": "array<selectionEntry>",
+      "selectionEntryGroups": "array<selectionEntryGroup>",
+      "sortIndex": "number",
+      "step": "string",
+      "subType": "string",
+      "type": "string"
+    }
+  },
+  "selectionEntryGroup": {
+    "count": 4521,
+    "required": [
+      "id",
+      "name"
+    ],
+    "optional": [
+      "categoryLinks",
+      "collapsible",
+      "collective",
+      "comment",
+      "constraints",
+      "defaultSelectionEntryId",
+      "entryLinks",
+      "flatten",
+      "hidden",
+      "import",
+      "infoLinks",
+      "modifierGroups",
+      "modifiers",
+      "page",
+      "profiles",
+      "publicationId",
+      "selectionEntries",
+      "selectionEntryGroups",
+      "sortIndex"
+    ],
+    "types": {
+      "categoryLinks": "array<categoryLink>",
+      "collapsible": "boolean",
+      "collective": "boolean",
+      "comment": "string",
+      "constraints": "array<constraint>",
+      "defaultSelectionEntryId": "string",
+      "entryLinks": "array<entryLink>",
+      "flatten": "boolean",
+      "hidden": "boolean",
+      "id": "string",
+      "import": "boolean",
+      "infoLinks": "array<infoLink>",
+      "modifierGroups": "array<modifierGroup>",
+      "modifiers": "array<modifier>",
+      "name": "string",
+      "page": "number",
+      "profiles": "array<profile>",
+      "publicationId": "string",
+      "selectionEntries": "array<selectionEntry>",
+      "selectionEntryGroups": "array<selectionEntryGroup>",
+      "sortIndex": "number"
+    }
+  }
+}

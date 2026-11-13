@@ -36,7 +36,112 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Acastus Knight Asterius",
+          "models": 1,
+          "items": [
+            {
+              "id": "asterius-volkite-culverin",
+              "count": 2
+            },
+            {
+              "id": "karacnos-mortar-battery",
+              "count": 1
+            },
+            {
+              "id": "titanic-feet",
+              "count": 1
+            },
+            {
+              "id": "twin-conversion-beam-cannon",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Acastus Knight Asterius",
+          "items": [
+            {
+              "id": "asterius-volkite-culverin",
+              "count": 2
+            },
+            {
+              "id": "karacnos-mortar-battery",
+              "count": 1
+            },
+            {
+              "id": "titanic-feet",
+              "count": 1
+            },
+            {
+              "id": "twin-conversion-beam-cannon",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Acastus Knight Asterius",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "asterius-volkite-culverin",
+                "count": 2
+              },
+              {
+                "id": "karacnos-mortar-battery",
+                "count": 1
+              },
+              {
+                "id": "titanic-feet",
+                "count": 1
+              },
+              {
+                "id": "twin-conversion-beam-cannon",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Acastus Knight Asterius",
+          "id": "asterius-volkite-culverin",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Acastus Knight Asterius",
+          "id": "karacnos-mortar-battery",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Acastus Knight Asterius",
+          "id": "titanic-feet",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Acastus Knight Asterius",
+          "id": "twin-conversion-beam-cannon",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "knight-defender",
@@ -75,7 +180,104 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Knight Defender",
+          "models": 1,
+          "items": [
+            {
+              "id": "conversion-beam-obliterator",
+              "count": 1
+            },
+            {
+              "id": "phosphor-blaster",
+              "count": 1
+            },
+            {
+              "id": "plasma-executor",
+              "count": 1
+            },
+            {
+              "id": "titanic-feet-knight-defender",
+              "count": 1
+            },
+            {
+              "id": "twin-incendine-combustor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Knight Defender",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "conversion-beam-obliterator",
+                "count": 1
+              },
+              {
+                "id": "phosphor-blaster",
+                "count": 1
+              },
+              {
+                "id": "plasma-executor",
+                "count": 1
+              },
+              {
+                "id": "titanic-feet-knight-defender",
+                "count": 1
+              },
+              {
+                "id": "twin-incendine-combustor",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Knight Defender",
+          "id": "conversion-beam-obliterator",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Defender",
+          "id": "phosphor-blaster",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Defender",
+          "id": "plasma-executor",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Defender",
+          "id": "titanic-feet-knight-defender",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Defender",
+          "id": "twin-incendine-combustor",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "cerastus-knight-acheron",
@@ -112,7 +314,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Cerastus Knight Acheron",
+          "models": 1,
+          "items": [
+            {
+              "id": "acheron-flame-cannon",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainfist",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Cerastus Knight Acheron",
+          "items": [
+            {
+              "id": "acheron-flame-cannon",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainfist",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Cerastus Knight Acheron",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "acheron-flame-cannon",
+                "count": 1
+              },
+              {
+                "id": "reaper-chainfist",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Cerastus Knight Acheron",
+          "id": "acheron-flame-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Cerastus Knight Acheron",
+          "id": "reaper-chainfist",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Cerastus Knight Acheron",
+          "id": "twin-heavy-bolter",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "acastus-knight-porphyrion",
@@ -151,7 +440,172 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Acastus Knight Porphyrion",
+          "models": 1,
+          "items": [
+            {
+              "id": "acastus-autocannon",
+              "count": 2
+            },
+            {
+              "id": "acastus-ironstorm-missile-pod",
+              "count": 1
+            },
+            {
+              "id": "titanic-feet",
+              "count": 1
+            },
+            {
+              "id": "twin-magna-lascannon",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Acastus Knight Porphyrion",
+          "items": [
+            {
+              "id": "acastus-autocannon",
+              "count": 2
+            },
+            {
+              "id": "acastus-ironstorm-missile-pod",
+              "count": 1
+            },
+            {
+              "id": "titanic-feet",
+              "count": 1
+            },
+            {
+              "id": "twin-magna-lascannon",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Acastus Knight Porphyrion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "acastus-autocannon",
+                "count": 1
+              },
+              {
+                "id": "lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "acastus-autocannon",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "lascannon",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Acastus Knight Porphyrion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "acastus-ironstorm-missile-pod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helios-defence-missiles",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Acastus Knight Porphyrion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "titanic-feet",
+                "count": 1
+              },
+              {
+                "id": "twin-magna-lascannon",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Acastus Knight Porphyrion",
+          "id": "acastus-autocannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Acastus Knight Porphyrion",
+          "id": "acastus-autocannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Acastus Knight Porphyrion",
+          "id": "acastus-ironstorm-missile-pod",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Acastus Knight Porphyrion",
+          "id": "helios-defence-missiles",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Acastus Knight Porphyrion",
+          "id": "lascannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Acastus Knight Porphyrion",
+          "id": "titanic-feet",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Acastus Knight Porphyrion",
+          "id": "twin-magna-lascannon",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "cerastus-knight-castigator",
@@ -187,7 +641,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Cerastus Knight Castigator",
+          "models": 1,
+          "items": [
+            {
+              "id": "castigator-bolt-cannon",
+              "count": 1
+            },
+            {
+              "id": "tempest-warblade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Cerastus Knight Castigator",
+          "items": [
+            {
+              "id": "castigator-bolt-cannon",
+              "count": 1
+            },
+            {
+              "id": "tempest-warblade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Cerastus Knight Castigator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "castigator-bolt-cannon",
+                "count": 1
+              },
+              {
+                "id": "tempest-warblade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Cerastus Knight Castigator",
+          "id": "castigator-bolt-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Cerastus Knight Castigator",
+          "id": "tempest-warblade",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "knight-paladin",
@@ -225,7 +748,201 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Knight Paladin",
+          "models": 1,
+          "items": [
+            {
+              "id": "meltagun",
+              "count": 1
+            },
+            {
+              "id": "questoris-heavy-stubber",
+              "count": 1
+            },
+            {
+              "id": "rapid-fire-battle-cannon",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainsword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Knight Paladin",
+          "items": [
+            {
+              "id": "meltagun",
+              "count": 1
+            },
+            {
+              "id": "questoris-heavy-stubber",
+              "count": 1
+            },
+            {
+              "id": "rapid-fire-battle-cannon",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainsword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Knight Paladin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "ironstorm-missile-pod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "stormspear-rocket-pod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-icarus-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Paladin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              },
+              {
+                "id": "questoris-heavy-stubber",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "questoris-heavy-stubber",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Paladin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "rapid-fire-battle-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Paladin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "reaper-chainsword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "thunderstrike-gauntlet",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Knight Paladin",
+          "id": "ironstorm-missile-pod",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Paladin",
+          "id": "meltagun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Paladin",
+          "id": "questoris-heavy-stubber",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Paladin",
+          "id": "questoris-heavy-stubber",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Paladin",
+          "id": "rapid-fire-battle-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Paladin",
+          "id": "reaper-chainsword",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Paladin",
+          "id": "stormspear-rocket-pod",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Paladin",
+          "id": "thunderstrike-gauntlet",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Paladin",
+          "id": "twin-icarus-autocannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "knight-errant",
@@ -262,7 +979,183 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Knight Errant",
+          "models": 1,
+          "items": [
+            {
+              "id": "meltagun",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainsword",
+              "count": 1
+            },
+            {
+              "id": "thermal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Knight Errant",
+          "items": [
+            {
+              "id": "meltagun",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainsword",
+              "count": 1
+            },
+            {
+              "id": "thermal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Knight Errant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "ironstorm-missile-pod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "stormspear-rocket-pod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-icarus-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Errant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "questoris-heavy-stubber",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Errant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "reaper-chainsword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "thunderstrike-gauntlet",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Errant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "thermal-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Knight Errant",
+          "id": "ironstorm-missile-pod",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Errant",
+          "id": "meltagun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Errant",
+          "id": "questoris-heavy-stubber",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Errant",
+          "id": "reaper-chainsword",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Errant",
+          "id": "stormspear-rocket-pod",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Errant",
+          "id": "thermal-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Errant",
+          "id": "thunderstrike-gauntlet",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Errant",
+          "id": "twin-icarus-autocannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "knight-crusader",
@@ -301,7 +1194,237 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Knight Crusader",
+          "models": 1,
+          "items": [
+            {
+              "id": "avenger-gatling-cannon",
+              "count": 1
+            },
+            {
+              "id": "heavy-flamer",
+              "count": 1
+            },
+            {
+              "id": "meltagun",
+              "count": 1
+            },
+            {
+              "id": "thermal-cannon",
+              "count": 1
+            },
+            {
+              "id": "titanic-feet-knight-crusader",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Knight Crusader",
+          "items": [
+            {
+              "id": "avenger-gatling-cannon",
+              "count": 1
+            },
+            {
+              "id": "heavy-flamer",
+              "count": 1
+            },
+            {
+              "id": "meltagun",
+              "count": 1
+            },
+            {
+              "id": "thermal-cannon",
+              "count": 1
+            },
+            {
+              "id": "titanic-feet-knight-crusader",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Knight Crusader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "ironstorm-missile-pod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "stormspear-rocket-pod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-icarus-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Crusader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "avenger-gatling-cannon",
+                "count": 1
+              },
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "titanic-feet-knight-crusader",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Crusader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              },
+              {
+                "id": "questoris-heavy-stubber",
+                "count": 1
+              },
+              {
+                "id": "rapid-fire-battle-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              },
+              {
+                "id": "thermal-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "questoris-heavy-stubber",
+                "count": 1
+              },
+              {
+                "id": "thermal-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "questoris-heavy-stubber",
+                "count": 2
+              },
+              {
+                "id": "rapid-fire-battle-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Knight Crusader",
+          "id": "avenger-gatling-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Crusader",
+          "id": "heavy-flamer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Crusader",
+          "id": "ironstorm-missile-pod",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Crusader",
+          "id": "meltagun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Crusader",
+          "id": "questoris-heavy-stubber",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Crusader",
+          "id": "questoris-heavy-stubber",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Crusader",
+          "id": "rapid-fire-battle-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Crusader",
+          "id": "stormspear-rocket-pod",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Crusader",
+          "id": "thermal-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Crusader",
+          "id": "titanic-feet-knight-crusader",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Crusader",
+          "id": "twin-icarus-autocannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "knight-warden",
@@ -339,7 +1462,201 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Knight Warden",
+          "models": 1,
+          "items": [
+            {
+              "id": "avenger-gatling-cannon",
+              "count": 1
+            },
+            {
+              "id": "heavy-flamer",
+              "count": 1
+            },
+            {
+              "id": "meltagun",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainsword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Knight Warden",
+          "items": [
+            {
+              "id": "avenger-gatling-cannon",
+              "count": 1
+            },
+            {
+              "id": "heavy-flamer",
+              "count": 1
+            },
+            {
+              "id": "meltagun",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainsword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Knight Warden",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "ironstorm-missile-pod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "stormspear-rocket-pod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-icarus-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Warden",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "avenger-gatling-cannon",
+                "count": 1
+              },
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Warden",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "questoris-heavy-stubber",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Warden",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "reaper-chainsword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "thunderstrike-gauntlet",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Knight Warden",
+          "id": "avenger-gatling-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Warden",
+          "id": "heavy-flamer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Warden",
+          "id": "ironstorm-missile-pod",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Warden",
+          "id": "meltagun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Warden",
+          "id": "questoris-heavy-stubber",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Warden",
+          "id": "reaper-chainsword",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Warden",
+          "id": "stormspear-rocket-pod",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Warden",
+          "id": "thunderstrike-gauntlet",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Warden",
+          "id": "twin-icarus-autocannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "knight-preceptor",
@@ -376,7 +1693,195 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Knight Preceptor",
+          "models": 1,
+          "items": [
+            {
+              "id": "las-impulsor",
+              "count": 1
+            },
+            {
+              "id": "questoris-multi-laser",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainsword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Knight Preceptor",
+          "items": [
+            {
+              "id": "las-impulsor",
+              "count": 1
+            },
+            {
+              "id": "questoris-multi-laser",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainsword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Knight Preceptor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "ironstorm-missile-pod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "stormspear-rocket-pod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-icarus-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Preceptor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "las-impulsor",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Preceptor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "questoris-heavy-stubber",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "questoris-multi-laser",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Preceptor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "reaper-chainsword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "thunderstrike-gauntlet",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Knight Preceptor",
+          "id": "ironstorm-missile-pod",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Preceptor",
+          "id": "las-impulsor",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Preceptor",
+          "id": "meltagun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Preceptor",
+          "id": "questoris-heavy-stubber",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Preceptor",
+          "id": "questoris-multi-laser",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Preceptor",
+          "id": "reaper-chainsword",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Preceptor",
+          "id": "stormspear-rocket-pod",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Preceptor",
+          "id": "thunderstrike-gauntlet",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Preceptor",
+          "id": "twin-icarus-autocannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "cerastus-knight-lancer",
@@ -411,7 +1916,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Cerastus Knight Lancer",
+          "models": 1,
+          "items": [
+            {
+              "id": "cerastus-shock-lance",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Cerastus Knight Lancer",
+          "items": [
+            {
+              "id": "cerastus-shock-lance",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Cerastus Knight Lancer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cerastus-shock-lance",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Cerastus Knight Lancer",
+          "id": "cerastus-shock-lance",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "armiger-moirax",
@@ -447,7 +2003,188 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Armiger Moirax",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-feet",
+              "count": 1
+            },
+            {
+              "id": "graviton-pulsar",
+              "count": 1
+            },
+            {
+              "id": "volkite-veuglaire",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Armiger Moirax",
+          "items": [
+            {
+              "id": "armoured-feet",
+              "count": 1
+            },
+            {
+              "id": "graviton-pulsar",
+              "count": 1
+            },
+            {
+              "id": "volkite-veuglaire",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Armiger Moirax",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-feet",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Armiger Moirax",
+          "picks": 2,
+          "repeats": true,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "conversion-beam-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "graviton-pulsar",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "lightning-lock",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rad-cleanser",
+                "count": 1
+              },
+              {
+                "id": "siege-claw",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "volkite-veuglaire",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Armiger Moirax",
+          "id": "armoured-feet",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Armiger Moirax",
+          "id": "conversion-beam-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Armiger Moirax",
+          "id": "conversion-beam-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Armiger Moirax",
+          "id": "graviton-pulsar",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Armiger Moirax",
+          "id": "graviton-pulsar",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Armiger Moirax",
+          "id": "lightning-lock",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Armiger Moirax",
+          "id": "lightning-lock",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Armiger Moirax",
+          "id": "rad-cleanser",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Armiger Moirax",
+          "id": "rad-cleanser",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Armiger Moirax",
+          "id": "siege-claw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Armiger Moirax",
+          "id": "siege-claw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Armiger Moirax",
+          "id": "volkite-veuglaire",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Armiger Moirax",
+          "id": "volkite-veuglaire",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "knight-gallant",
@@ -484,7 +2221,161 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Knight Gallant",
+          "models": 1,
+          "items": [
+            {
+              "id": "meltagun",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainsword-knight-gallant",
+              "count": 1
+            },
+            {
+              "id": "thunderstrike-gauntlet-knight-gallant",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Knight Gallant",
+          "items": [
+            {
+              "id": "meltagun",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainsword-knight-gallant",
+              "count": 1
+            },
+            {
+              "id": "thunderstrike-gauntlet-knight-gallant",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Knight Gallant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "ironstorm-missile-pod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "stormspear-rocket-pod",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-icarus-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Gallant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "questoris-heavy-stubber",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Gallant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "reaper-chainsword-knight-gallant",
+                "count": 1
+              },
+              {
+                "id": "thunderstrike-gauntlet-knight-gallant",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Knight Gallant",
+          "id": "ironstorm-missile-pod",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Gallant",
+          "id": "meltagun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Gallant",
+          "id": "questoris-heavy-stubber",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Gallant",
+          "id": "reaper-chainsword-knight-gallant",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Gallant",
+          "id": "stormspear-rocket-pod",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Gallant",
+          "id": "thunderstrike-gauntlet-knight-gallant",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Gallant",
+          "id": "twin-icarus-autocannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "armiger-warglaive",
@@ -520,7 +2411,114 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Armiger Warglaive",
+          "models": 1,
+          "items": [
+            {
+              "id": "questoris-heavy-stubber",
+              "count": 1
+            },
+            {
+              "id": "reaper-chain-cleaver",
+              "count": 1
+            },
+            {
+              "id": "thermal-spear",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Armiger Warglaive",
+          "items": [
+            {
+              "id": "questoris-heavy-stubber",
+              "count": 1
+            },
+            {
+              "id": "reaper-chain-cleaver",
+              "count": 1
+            },
+            {
+              "id": "thermal-spear",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Armiger Warglaive",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              },
+              {
+                "id": "reaper-chain-cleaver",
+                "count": 1
+              },
+              {
+                "id": "thermal-spear",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "questoris-heavy-stubber",
+                "count": 1
+              },
+              {
+                "id": "reaper-chain-cleaver",
+                "count": 1
+              },
+              {
+                "id": "thermal-spear",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Armiger Warglaive",
+          "id": "meltagun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Armiger Warglaive",
+          "id": "questoris-heavy-stubber",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Armiger Warglaive",
+          "id": "reaper-chain-cleaver",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Armiger Warglaive",
+          "id": "thermal-spear",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "knight-valiant",
@@ -562,7 +2560,186 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Knight Valiant",
+          "models": 1,
+          "items": [
+            {
+              "id": "conflagration-cannon",
+              "count": 1
+            },
+            {
+              "id": "shieldbreaker-missile-launcher",
+              "count": 2
+            },
+            {
+              "id": "thundercoil-harpoon",
+              "count": 1
+            },
+            {
+              "id": "titanic-feet-knight-valiant",
+              "count": 1
+            },
+            {
+              "id": "twin-meltagun",
+              "count": 2
+            },
+            {
+              "id": "twin-siegebreaker-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Knight Valiant",
+          "items": [
+            {
+              "id": "conflagration-cannon",
+              "count": 1
+            },
+            {
+              "id": "shieldbreaker-missile-launcher",
+              "count": 2
+            },
+            {
+              "id": "thundercoil-harpoon",
+              "count": 1
+            },
+            {
+              "id": "titanic-feet-knight-valiant",
+              "count": 1
+            },
+            {
+              "id": "twin-meltagun",
+              "count": 2
+            },
+            {
+              "id": "twin-siegebreaker-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Knight Valiant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "conflagration-cannon",
+                "count": 1
+              },
+              {
+                "id": "shieldbreaker-missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "thundercoil-harpoon",
+                "count": 1
+              },
+              {
+                "id": "titanic-feet-knight-valiant",
+                "count": 1
+              },
+              {
+                "id": "twin-meltagun",
+                "count": 2
+              },
+              {
+                "id": "twin-siegebreaker-cannon",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "conflagration-cannon",
+                "count": 1
+              },
+              {
+                "id": "shieldbreaker-missile-launcher",
+                "count": 2
+              },
+              {
+                "id": "thundercoil-harpoon",
+                "count": 1
+              },
+              {
+                "id": "titanic-feet-knight-valiant",
+                "count": 1
+              },
+              {
+                "id": "twin-meltagun",
+                "count": 2
+              },
+              {
+                "id": "twin-siegebreaker-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Knight Valiant",
+          "id": "conflagration-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Valiant",
+          "id": "shieldbreaker-missile-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Valiant",
+          "id": "shieldbreaker-missile-launcher",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Knight Valiant",
+          "id": "thundercoil-harpoon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Valiant",
+          "id": "titanic-feet-knight-valiant",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Valiant",
+          "id": "twin-meltagun",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Knight Valiant",
+          "id": "twin-siegebreaker-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Valiant",
+          "id": "twin-siegebreaker-cannon",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sir-hekhtur",
@@ -581,12 +2758,82 @@
           "close-combat-weapon",
           "hekhturs-pistol"
         ],
-        "excluded_from_enhancements": true
+        "excluded_from_enhancements": true,
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
+    },
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sir Hekhtur",
+          "models": 0,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "hekhturs-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sir Hekhtur",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "hekhturs-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sir Hekhtur",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "hekhturs-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sir Hekhtur",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sir Hekhtur",
+          "id": "hekhturs-pistol",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
     }
   },
   {
@@ -624,7 +2871,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Canis Rex",
+          "models": 1,
+          "items": [
+            {
+              "id": "chainbreaker-multi-laser",
+              "count": 1
+            },
+            {
+              "id": "freedoms-hand",
+              "count": 1
+            },
+            {
+              "id": "las-impulsor-canis-rex",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Canis Rex",
+          "items": [
+            {
+              "id": "chainbreaker-multi-laser",
+              "count": 1
+            },
+            {
+              "id": "freedoms-hand",
+              "count": 1
+            },
+            {
+              "id": "las-impulsor-canis-rex",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Canis Rex",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chainbreaker-multi-laser",
+                "count": 1
+              },
+              {
+                "id": "freedoms-hand",
+                "count": 1
+              },
+              {
+                "id": "las-impulsor-canis-rex",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Canis Rex",
+          "id": "chainbreaker-multi-laser",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Canis Rex",
+          "id": "freedoms-hand",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Canis Rex",
+          "id": "las-impulsor-canis-rex",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "knight-castellan",
@@ -666,7 +3000,186 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Knight Castellan",
+          "models": 1,
+          "items": [
+            {
+              "id": "plasma-decimator",
+              "count": 1
+            },
+            {
+              "id": "shieldbreaker-missile-launcher",
+              "count": 2
+            },
+            {
+              "id": "titanic-feet-knight-castellan",
+              "count": 1
+            },
+            {
+              "id": "twin-meltagun",
+              "count": 2
+            },
+            {
+              "id": "twin-siegebreaker-cannon",
+              "count": 1
+            },
+            {
+              "id": "volcano-lance",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Knight Castellan",
+          "items": [
+            {
+              "id": "plasma-decimator",
+              "count": 1
+            },
+            {
+              "id": "shieldbreaker-missile-launcher",
+              "count": 2
+            },
+            {
+              "id": "titanic-feet-knight-castellan",
+              "count": 1
+            },
+            {
+              "id": "twin-meltagun",
+              "count": 2
+            },
+            {
+              "id": "twin-siegebreaker-cannon",
+              "count": 1
+            },
+            {
+              "id": "volcano-lance",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Knight Castellan",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "plasma-decimator",
+                "count": 1
+              },
+              {
+                "id": "shieldbreaker-missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "titanic-feet-knight-castellan",
+                "count": 1
+              },
+              {
+                "id": "twin-meltagun",
+                "count": 2
+              },
+              {
+                "id": "twin-siegebreaker-cannon",
+                "count": 2
+              },
+              {
+                "id": "volcano-lance",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-decimator",
+                "count": 1
+              },
+              {
+                "id": "shieldbreaker-missile-launcher",
+                "count": 2
+              },
+              {
+                "id": "titanic-feet-knight-castellan",
+                "count": 1
+              },
+              {
+                "id": "twin-meltagun",
+                "count": 2
+              },
+              {
+                "id": "twin-siegebreaker-cannon",
+                "count": 1
+              },
+              {
+                "id": "volcano-lance",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Knight Castellan",
+          "id": "plasma-decimator",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Castellan",
+          "id": "shieldbreaker-missile-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Castellan",
+          "id": "shieldbreaker-missile-launcher",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Knight Castellan",
+          "id": "titanic-feet-knight-castellan",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Castellan",
+          "id": "twin-meltagun",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Knight Castellan",
+          "id": "twin-siegebreaker-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Castellan",
+          "id": "twin-siegebreaker-cannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Knight Castellan",
+          "id": "volcano-lance",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "armiger-helverin",
@@ -703,7 +3216,114 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Armiger Helverin",
+          "models": 1,
+          "items": [
+            {
+              "id": "armiger-autocannon",
+              "count": 2
+            },
+            {
+              "id": "armoured-feet",
+              "count": 1
+            },
+            {
+              "id": "questoris-heavy-stubber",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Armiger Helverin",
+          "items": [
+            {
+              "id": "armiger-autocannon",
+              "count": 2
+            },
+            {
+              "id": "armoured-feet",
+              "count": 1
+            },
+            {
+              "id": "questoris-heavy-stubber",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Armiger Helverin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armiger-autocannon",
+                "count": 2
+              },
+              {
+                "id": "armoured-feet",
+                "count": 1
+              },
+              {
+                "id": "meltagun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "armiger-autocannon",
+                "count": 2
+              },
+              {
+                "id": "armoured-feet",
+                "count": 1
+              },
+              {
+                "id": "questoris-heavy-stubber",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Armiger Helverin",
+          "id": "armiger-autocannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Armiger Helverin",
+          "id": "armoured-feet",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Armiger Helverin",
+          "id": "meltagun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Armiger Helverin",
+          "id": "questoris-heavy-stubber",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "questoris-knight-magaera",
@@ -740,7 +3360,126 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Questoris Knight Magaera",
+          "models": 1,
+          "items": [
+            {
+              "id": "lightning-cannon",
+              "count": 1
+            },
+            {
+              "id": "phased-plasma-fusil",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainsword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Questoris Knight Magaera",
+          "items": [
+            {
+              "id": "lightning-cannon",
+              "count": 1
+            },
+            {
+              "id": "phased-plasma-fusil",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainsword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Questoris Knight Magaera",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hekaton-siege-claw",
+                "count": 1
+              },
+              {
+                "id": "twin-rad-cleanser",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaper-chainsword",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Questoris Knight Magaera",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lightning-cannon",
+                "count": 1
+              },
+              {
+                "id": "phased-plasma-fusil",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Questoris Knight Magaera",
+          "id": "hekaton-siege-claw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Questoris Knight Magaera",
+          "id": "lightning-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Questoris Knight Magaera",
+          "id": "phased-plasma-fusil",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Questoris Knight Magaera",
+          "id": "reaper-chainsword",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Questoris Knight Magaera",
+          "id": "twin-rad-cleanser",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "questoris-knight-styrix",
@@ -777,7 +3516,126 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Questoris Knight Styrix",
+          "models": 1,
+          "items": [
+            {
+              "id": "graviton-crusher",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainsword",
+              "count": 1
+            },
+            {
+              "id": "volkite-chierovile",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Questoris Knight Styrix",
+          "items": [
+            {
+              "id": "graviton-crusher",
+              "count": 1
+            },
+            {
+              "id": "reaper-chainsword",
+              "count": 1
+            },
+            {
+              "id": "volkite-chierovile",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Questoris Knight Styrix",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "graviton-crusher",
+                "count": 1
+              },
+              {
+                "id": "volkite-chierovile",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Questoris Knight Styrix",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hekaton-siege-claw",
+                "count": 1
+              },
+              {
+                "id": "twin-rad-cleanser",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaper-chainsword",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Questoris Knight Styrix",
+          "id": "graviton-crusher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Questoris Knight Styrix",
+          "id": "hekaton-siege-claw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Questoris Knight Styrix",
+          "id": "reaper-chainsword",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Questoris Knight Styrix",
+          "id": "twin-rad-cleanser",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Questoris Knight Styrix",
+          "id": "volkite-chierovile",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "cerastus-knight-atrapos",
@@ -813,7 +3671,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Cerastus Knight Atrapos",
+          "models": 1,
+          "items": [
+            {
+              "id": "atrapos-lascutter",
+              "count": 1
+            },
+            {
+              "id": "graviton-singularity-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Cerastus Knight Atrapos",
+          "items": [
+            {
+              "id": "atrapos-lascutter",
+              "count": 1
+            },
+            {
+              "id": "graviton-singularity-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Cerastus Knight Atrapos",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "atrapos-lascutter",
+                "count": 1
+              },
+              {
+                "id": "graviton-singularity-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Cerastus Knight Atrapos",
+          "id": "atrapos-lascutter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Cerastus Knight Atrapos",
+          "id": "graviton-singularity-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "knight-destrier",
@@ -851,6 +3778,195 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Knight Destrier",
+          "models": 1,
+          "items": [
+            {
+              "id": "chastiser-gatling-cannon",
+              "count": 1
+            },
+            {
+              "id": "frag-bombard",
+              "count": 1
+            },
+            {
+              "id": "questoris-heavy-stubber-knight-destrier",
+              "count": 1
+            },
+            {
+              "id": "titanic-feet-knight-destrier",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Knight Destrier",
+          "items": [
+            {
+              "id": "chastiser-gatling-cannon",
+              "count": 1
+            },
+            {
+              "id": "frag-bombard",
+              "count": 1
+            },
+            {
+              "id": "questoris-heavy-stubber-knight-destrier",
+              "count": 1
+            },
+            {
+              "id": "titanic-feet-knight-destrier",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Knight Destrier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bellatus-reaper-chainsword",
+                "count": 1
+              },
+              {
+                "id": "chastiser-gatling-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bellatus-reaper-chainsword",
+                "count": 1
+              },
+              {
+                "id": "frag-bombard",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bellatus-reaper-chainsword",
+                "count": 1
+              },
+              {
+                "id": "thundershock-spear",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "chastiser-gatling-cannon",
+                "count": 1
+              },
+              {
+                "id": "frag-bombard",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "chastiser-gatling-cannon",
+                "count": 1
+              },
+              {
+                "id": "thundershock-spear",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "frag-bombard",
+                "count": 1
+              },
+              {
+                "id": "thundershock-spear",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Knight Destrier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "questoris-heavy-stubber-knight-destrier",
+                "count": 1
+              },
+              {
+                "id": "titanic-feet-knight-destrier",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Knight Destrier",
+          "id": "bellatus-reaper-chainsword",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Destrier",
+          "id": "bellatus-reaper-chainsword",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Destrier",
+          "id": "chastiser-gatling-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Destrier",
+          "id": "frag-bombard",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Destrier",
+          "id": "questoris-heavy-stubber-knight-destrier",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Knight Destrier",
+          "id": "thundershock-spear",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Destrier",
+          "id": "thundershock-spear",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Knight Destrier",
+          "id": "titanic-feet-knight-destrier",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

@@ -63,8 +63,8 @@
     "/variant": { "provenance": "repo-authored", "coverage": "implemented", "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": ["tools/src/validate.ts#validateFiles"], "reason": "Layout-card variant numbering is repository-authored metadata." }
   },
   "unmapped_mfm_fields": [
-    { "source": "data.mission_layout.missionPackId", "candidate_pointer": null, "reason": "Mission-pack ownership has no terrain-layout destination property." },
-    { "source": "data.mission_layout_linked_deployment.missionLayoutId", "candidate_pointer": "/deployment_pattern_id", "reason": "The edge endpoint supports only a future identity-resolution review, not a current layout-to-deployment mapping." },
-    { "source": "data.mission_deployment.localisations.*.name", "candidate_pointer": "/deployment_pattern_id", "reason": "Deployment labels cannot be equated with repository deployment-pattern ids without an implemented identity transform." }
+    { "source": "data.mission_layout.missionPackId", "candidate_pointer": null, "reason": "missions.ts reads the 2 mission packs to scope layouts; terrain-layout records have no pack field.", "classification": "consumed-elsewhere", "spread": "48 rows, 48 values (0 null/absent): string, 2 distinct" },
+    { "source": "data.mission_layout_linked_deployment.missionLayoutId", "candidate_pointer": "/deployment_pattern_id", "reason": "Join key, one per MFM mission layout (48); it names an MFM layout, not a repository terrain layout.", "classification": "id", "spread": "48 rows, 48 values (0 null/absent): string, 48 distinct" },
+    { "source": "data.mission_deployment.localisations.*.name", "candidate_pointer": "/deployment_pattern_id", "reason": "Localized deployment names (51 across locales); no identity transform maps them to deployment-pattern ids.", "classification": "prose", "spread": "9 rows, 51 values (0 null/absent): string, 51 distinct" }
   ]
 }

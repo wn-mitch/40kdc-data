@@ -23,6 +23,7 @@ export type {
   AdapterTrial,
 } from "./import-roster.js";
 export { decodeListForge } from "./decode.js";
+export { importBattleScribe, rosToJson, unzipRosz } from "./battlescribe-ros.js";
 export { resolve } from "./resolve.js";
 export { listForgeAdapter } from "./listforge.js";
 export { listForgeTextAdapter } from "./listforge-text.js";

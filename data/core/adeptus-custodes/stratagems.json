@@ -1326,11 +1326,42 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "ADEPTUS CUSTODES",
+                  "INFANTRY"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "ADEPTUS CUSTODES",
+                  "MOUNTED"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "shield-of-honour-guardians-of-the-throne-adeptus-custodes",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     }
   },
   {

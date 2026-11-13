@@ -32,7 +32,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Gargantuan Squiggoth",
+          "models": 1,
+          "items": [
+            {
+              "id": "huge-tusks",
+              "count": 1
+            },
+            {
+              "id": "kannon-gargantuan-squiggoth",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Gargantuan Squiggoth",
+          "items": [
+            {
+              "id": "huge-tusks",
+              "count": 1
+            },
+            {
+              "id": "kannon-gargantuan-squiggoth",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Gargantuan Squiggoth",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "huge-tusks",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Gargantuan Squiggoth",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kannon-gargantuan-squiggoth",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "supa-kannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Gargantuan Squiggoth",
+          "id": "huge-tusks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gargantuan Squiggoth",
+          "id": "kannon-gargantuan-squiggoth",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gargantuan Squiggoth",
+          "id": "supa-kannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "weirdboy",
@@ -67,7 +158,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Weirdboy",
+          "models": 1,
+          "items": [
+            {
+              "id": "copper-staff",
+              "count": 1
+            },
+            {
+              "id": "power-vomit",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Weirdboy",
+          "items": [
+            {
+              "id": "copper-staff",
+              "count": 1
+            },
+            {
+              "id": "power-vomit",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Weirdboy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "copper-staff",
+                "count": 1
+              },
+              {
+                "id": "power-vomit",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Weirdboy",
+          "id": "copper-staff",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Weirdboy",
+          "id": "power-vomit",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "warbikers",
@@ -137,7 +297,133 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Biker Nob",
+          "models": 1,
+          "items": [
+            {
+              "id": "dual-kombi-rokkit",
+              "count": 1
+            },
+            {
+              "id": "kustom-choppa-warbikers",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Warbiker",
+          "models": 2,
+          "items": [
+            {
+              "id": "choppa-warbikers",
+              "count": 2
+            },
+            {
+              "id": "dual-dakkagun",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Biker Nob",
+          "items": [
+            {
+              "id": "dual-kombi-rokkit",
+              "count": 1
+            },
+            {
+              "id": "kustom-choppa-warbikers",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Warbiker",
+          "items": [
+            {
+              "id": "choppa-warbikers",
+              "count": 1
+            },
+            {
+              "id": "dual-dakkagun",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Biker Nob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dual-kombi-rokkit",
+                "count": 1
+              },
+              {
+                "id": "kustom-choppa-warbikers",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Warbiker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "choppa-warbikers",
+                "count": 1
+              },
+              {
+                "id": "dual-dakkagun",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Biker Nob",
+          "id": "dual-kombi-rokkit",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Biker Nob",
+          "id": "kustom-choppa-warbikers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Warbiker",
+          "id": "choppa-warbikers",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Warbiker",
+          "id": "dual-dakkagun",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "deffkoptas",
@@ -183,7 +469,158 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Deffkopta",
+          "models": 3,
+          "items": [
+            {
+              "id": "choppa-deffkoptas",
+              "count": 3
+            },
+            {
+              "id": "rokkit-launcha-deffkoptas",
+              "count": 3
+            },
+            {
+              "id": "slugga",
+              "count": 3
+            },
+            {
+              "id": "spinnin-blades",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Deffkopta",
+          "items": [
+            {
+              "id": "choppa-deffkoptas",
+              "count": 1
+            },
+            {
+              "id": "rokkit-launcha-deffkoptas",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            },
+            {
+              "id": "spinnin-blades",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Deffkopta",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "choppa-deffkoptas",
+                "count": 1
+              },
+              {
+                "id": "kustom-mega-blasta-deffkoptas",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              },
+              {
+                "id": "spinnin-blades",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "choppa-deffkoptas",
+                "count": 1
+              },
+              {
+                "id": "rokkit-launcha-deffkoptas",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              },
+              {
+                "id": "spinnin-blades",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Deffkopta",
+          "breakpoints": [
+            {
+              "models": 3,
+              "choices": 1
+            },
+            {
+              "models": 6,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "kustom-mega-blasta-deffkoptas",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Deffkopta",
+          "id": "choppa-deffkoptas",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Deffkopta",
+          "id": "kustom-mega-blasta-deffkoptas",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Deffkopta",
+          "id": "rokkit-launcha-deffkoptas",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Deffkopta",
+          "id": "slugga",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Deffkopta",
+          "id": "spinnin-blades",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "painboy",
@@ -218,7 +655,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Painboy",
+          "models": 1,
+          "items": [
+            {
+              "id": "doks-toolz",
+              "count": 1
+            },
+            {
+              "id": "urty-syringe",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Painboy",
+          "items": [
+            {
+              "id": "doks-toolz",
+              "count": 1
+            },
+            {
+              "id": "urty-syringe",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Painboy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "doks-toolz",
+                "count": 1
+              },
+              {
+                "id": "urty-syringe",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Painboy",
+          "id": "doks-toolz",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Painboy",
+          "id": "urty-syringe",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "killa-kans",
@@ -262,7 +768,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Killa Kan",
+          "models": 3,
+          "items": [
+            {
+              "id": "kan-blasta",
+              "count": 3
+            },
+            {
+              "id": "kan-klaw",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Killa Kan",
+          "items": [
+            {
+              "id": "kan-blasta",
+              "count": 1
+            },
+            {
+              "id": "kan-klaw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Killa Kan",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kan-blasta",
+                "count": 1
+              },
+              {
+                "id": "kan-klaw",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Killa Kan",
+          "id": "kan-blasta",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Killa Kan",
+          "id": "kan-klaw",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "big-mek",
@@ -297,7 +872,110 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Big Mek",
+          "models": 1,
+          "items": [
+            {
+              "id": "kustom-mega-blasta",
+              "count": 1
+            },
+            {
+              "id": "power-klaw-big-mek",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Big Mek",
+          "items": [
+            {
+              "id": "kustom-mega-blasta",
+              "count": 1
+            },
+            {
+              "id": "power-klaw-big-mek",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Big Mek",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "drilla",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-klaw-big-mek",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Big Mek",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kustom-mega-blasta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "traktor-blasta",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Big Mek",
+          "id": "drilla",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Big Mek",
+          "id": "kustom-mega-blasta",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Big Mek",
+          "id": "power-klaw-big-mek",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Big Mek",
+          "id": "traktor-blasta",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "squighog-boyz",
@@ -369,7 +1047,169 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Nob on Smasha Squig",
+          "models": 1,
+          "items": [
+            {
+              "id": "big-choppa-squighog-boyz",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            },
+            {
+              "id": "squig-jaws",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Squighog Boy",
+          "models": 3,
+          "items": [
+            {
+              "id": "saddlegits-shiv",
+              "count": 3
+            },
+            {
+              "id": "squig-jaws",
+              "count": 3
+            },
+            {
+              "id": "stikka",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Nob on Smasha Squig",
+          "items": [
+            {
+              "id": "big-choppa-squighog-boyz",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            },
+            {
+              "id": "squig-jaws",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Squighog Boy",
+          "items": [
+            {
+              "id": "saddlegits-shiv",
+              "count": 1
+            },
+            {
+              "id": "squig-jaws",
+              "count": 1
+            },
+            {
+              "id": "stikka",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Nob on Smasha Squig",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-choppa-squighog-boyz",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              },
+              {
+                "id": "squig-jaws",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Squighog Boy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "saddlegits-shiv",
+                "count": 1
+              },
+              {
+                "id": "squig-jaws",
+                "count": 1
+              },
+              {
+                "id": "stikka",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Nob on Smasha Squig",
+          "id": "big-choppa-squighog-boyz",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Nob on Smasha Squig",
+          "id": "slugga",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Nob on Smasha Squig",
+          "id": "squig-jaws",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Squighog Boy",
+          "id": "saddlegits-shiv",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Squighog Boy",
+          "id": "squig-jaws",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Squighog Boy",
+          "id": "stikka",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "warboss-in-mega-armour",
@@ -404,7 +1244,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Warboss in Mega Armour",
+          "models": 1,
+          "items": [
+            {
+              "id": "big-shoota-warboss-in-mega-armour",
+              "count": 1
+            },
+            {
+              "id": "uge-choppa",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Warboss in Mega Armour",
+          "items": [
+            {
+              "id": "big-shoota-warboss-in-mega-armour",
+              "count": 1
+            },
+            {
+              "id": "uge-choppa",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Warboss in Mega Armour",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-shoota-warboss-in-mega-armour",
+                "count": 1
+              },
+              {
+                "id": "uge-choppa",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Warboss in Mega Armour",
+          "id": "big-shoota-warboss-in-mega-armour",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Warboss in Mega Armour",
+          "id": "uge-choppa",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "wazbom-blastajet",
@@ -441,7 +1350,158 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Wazbom Blastajet",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-impact",
+              "count": 1
+            },
+            {
+              "id": "dual-wazbom-mega-kannon",
+              "count": 1
+            },
+            {
+              "id": "smasha-gun",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Wazbom Blastajet",
+          "items": [
+            {
+              "id": "armoured-impact",
+              "count": 1
+            },
+            {
+              "id": "dual-wazbom-mega-kannon",
+              "count": 1
+            },
+            {
+              "id": "smasha-gun",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Wazbom Blastajet",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "blastajet-force-field",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Wazbom Blastajet",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "dual-supa-shoota-wazbom-blastajet",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Wazbom Blastajet",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-impact",
+                "count": 1
+              },
+              {
+                "id": "smasha-gun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Wazbom Blastajet",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dual-tellyport-mega-blasta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "dual-wazbom-mega-kannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Wazbom Blastajet",
+          "id": "armoured-impact",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wazbom Blastajet",
+          "id": "blastajet-force-field",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Wazbom Blastajet",
+          "id": "dual-supa-shoota-wazbom-blastajet",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Wazbom Blastajet",
+          "id": "dual-tellyport-mega-blasta",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Wazbom Blastajet",
+          "id": "dual-wazbom-mega-kannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wazbom Blastajet",
+          "id": "smasha-gun",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "battlewagon",
@@ -475,7 +1535,121 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Battlewagon",
+          "models": 1,
+          "items": [
+            {
+              "id": "crushin-bulk",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Battlewagon",
+          "items": [
+            {
+              "id": "crushin-bulk",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Battlewagon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "grabbin-klaw",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Battlewagon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "wreckin-ball",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Battlewagon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "crushin-bulk",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Battlewagon",
+          "picks": 4,
+          "repeats": true,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "big-shoota",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Battlewagon",
+          "id": "big-shoota",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Battlewagon",
+          "id": "crushin-bulk",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Battlewagon",
+          "id": "grabbin-klaw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Battlewagon",
+          "id": "wreckin-ball",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "boss-snikrot",
@@ -510,7 +1684,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Boss Snikrot",
+          "models": 1,
+          "items": [
+            {
+              "id": "morks-teef",
+              "count": 1
+            },
+            {
+              "id": "slugga-boss-snikrot",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Boss Snikrot",
+          "items": [
+            {
+              "id": "morks-teef",
+              "count": 1
+            },
+            {
+              "id": "slugga-boss-snikrot",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Boss Snikrot",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "morks-teef",
+                "count": 1
+              },
+              {
+                "id": "slugga-boss-snikrot",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Boss Snikrot",
+          "id": "morks-teef",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Boss Snikrot",
+          "id": "slugga-boss-snikrot",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "morkanaut",
@@ -551,7 +1794,130 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Morkanaut",
+          "models": 1,
+          "items": [
+            {
+              "id": "dual-big-shoota-morkanaut",
+              "count": 2
+            },
+            {
+              "id": "klaw-of-mork",
+              "count": 1
+            },
+            {
+              "id": "kustom-mega-blasta",
+              "count": 1
+            },
+            {
+              "id": "kustom-mega-zappa",
+              "count": 1
+            },
+            {
+              "id": "rokkit-launcha-morkanaut",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Morkanaut",
+          "items": [
+            {
+              "id": "dual-big-shoota-morkanaut",
+              "count": 2
+            },
+            {
+              "id": "klaw-of-mork",
+              "count": 1
+            },
+            {
+              "id": "kustom-mega-blasta",
+              "count": 1
+            },
+            {
+              "id": "kustom-mega-zappa",
+              "count": 1
+            },
+            {
+              "id": "rokkit-launcha-morkanaut",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Morkanaut",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dual-big-shoota-morkanaut",
+                "count": 2
+              },
+              {
+                "id": "klaw-of-mork",
+                "count": 1
+              },
+              {
+                "id": "kustom-mega-blasta",
+                "count": 1
+              },
+              {
+                "id": "kustom-mega-zappa",
+                "count": 1
+              },
+              {
+                "id": "rokkit-launcha-morkanaut",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Morkanaut",
+          "id": "dual-big-shoota-morkanaut",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Morkanaut",
+          "id": "klaw-of-mork",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Morkanaut",
+          "id": "kustom-mega-blasta",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Morkanaut",
+          "id": "kustom-mega-zappa",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Morkanaut",
+          "id": "rokkit-launcha-morkanaut",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ghazghkull-thraka",
@@ -570,7 +1936,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 80
-        }
+        },
+        "is_supreme_commander": true
       }
     ],
     "game_version": {
@@ -587,7 +1954,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Ghazghkull Thraka",
+          "models": 1,
+          "items": [
+            {
+              "id": "adamantine-eadbutt",
+              "count": 1
+            },
+            {
+              "id": "gorks-klaw",
+              "count": 1
+            },
+            {
+              "id": "morks-roar",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Ghazghkull Thraka",
+          "items": [
+            {
+              "id": "adamantine-eadbutt",
+              "count": 1
+            },
+            {
+              "id": "gorks-klaw",
+              "count": 1
+            },
+            {
+              "id": "morks-roar",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Ghazghkull Thraka",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "adamantine-eadbutt",
+                "count": 1
+              },
+              {
+                "id": "gorks-klaw",
+                "count": 1
+              },
+              {
+                "id": "morks-roar",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Ghazghkull Thraka",
+          "id": "adamantine-eadbutt",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Ghazghkull Thraka",
+          "id": "gorks-klaw",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Ghazghkull Thraka",
+          "id": "morks-roar",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "breaka-boyz",
@@ -676,7 +2130,179 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Breaka Boy",
+          "models": 5,
+          "items": [
+            {
+              "id": "smash-hammer",
+              "count": 5
+            }
+          ]
+        },
+        {
+          "model": "Nob",
+          "models": 1,
+          "items": [
+            {
+              "id": "choppa-breaka-boyz",
+              "count": 1
+            },
+            {
+              "id": "rokkit-pistol",
+              "count": 1
+            },
+            {
+              "id": "smash-hammer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Breaka Boy",
+          "items": [
+            {
+              "id": "smash-hammer",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Nob",
+          "items": [
+            {
+              "id": "choppa-breaka-boyz",
+              "count": 1
+            },
+            {
+              "id": "rokkit-pistol",
+              "count": 1
+            },
+            {
+              "id": "smash-hammer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Breaka Boy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "knucklebustas",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "smash-hammer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "tankhammer",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Nob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "choppa-breaka-boyz",
+                "count": 1
+              },
+              {
+                "id": "rokkit-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Nob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "rokkit-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "smash-hammer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Breaka Boy",
+          "id": "knucklebustas",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Breaka Boy",
+          "id": "smash-hammer",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Breaka Boy",
+          "id": "tankhammer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "choppa-breaka-boyz",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Nob",
+          "id": "rokkit-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "rokkit-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Nob",
+          "id": "smash-hammer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "stompa",
@@ -718,7 +2344,130 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Stompa",
+          "models": 1,
+          "items": [
+            {
+              "id": "big-shoota",
+              "count": 5
+            },
+            {
+              "id": "deffkannon-and-supa-rokkits",
+              "count": 1
+            },
+            {
+              "id": "mega-choppa",
+              "count": 1
+            },
+            {
+              "id": "skorcha-stompa",
+              "count": 1
+            },
+            {
+              "id": "supa-gatler",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Stompa",
+          "items": [
+            {
+              "id": "big-shoota",
+              "count": 5
+            },
+            {
+              "id": "deffkannon-and-supa-rokkits",
+              "count": 1
+            },
+            {
+              "id": "mega-choppa",
+              "count": 1
+            },
+            {
+              "id": "skorcha-stompa",
+              "count": 1
+            },
+            {
+              "id": "supa-gatler",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Stompa",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-shoota",
+                "count": 5
+              },
+              {
+                "id": "deffkannon-and-supa-rokkits",
+                "count": 1
+              },
+              {
+                "id": "mega-choppa",
+                "count": 1
+              },
+              {
+                "id": "skorcha-stompa",
+                "count": 1
+              },
+              {
+                "id": "supa-gatler",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Stompa",
+          "id": "big-shoota",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Stompa",
+          "id": "deffkannon-and-supa-rokkits",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Stompa",
+          "id": "mega-choppa",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Stompa",
+          "id": "skorcha-stompa",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Stompa",
+          "id": "supa-gatler",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "biged-bossbunka",
@@ -753,7 +2502,110 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Big 'Ed Bossbunka",
+          "models": 1,
+          "items": [
+            {
+              "id": "big-shoota",
+              "count": 1
+            },
+            {
+              "id": "gaze-of-gork",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Big 'Ed Bossbunka",
+          "items": [
+            {
+              "id": "big-shoota",
+              "count": 1
+            },
+            {
+              "id": "gaze-of-gork",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Big 'Ed Bossbunka",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-shoota",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "big-shoota",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "big-shoota",
+                "count": 3
+              }
+            ],
+            [
+              {
+                "id": "big-shoota",
+                "count": 4
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Big 'Ed Bossbunka",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gaze-of-gork",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Big 'Ed Bossbunka",
+          "id": "big-shoota",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Big 'Ed Bossbunka",
+          "id": "big-shoota",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Big 'Ed Bossbunka",
+          "id": "gaze-of-gork",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tankbustas",
@@ -808,7 +2660,226 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Nob",
+          "models": 1,
+          "items": [
+            {
+              "id": "choppa-tankbustas",
+              "count": 1
+            },
+            {
+              "id": "rokkit-pistol-tankbustas",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "model": "Tankbusta",
+          "models": 5,
+          "items": [
+            {
+              "id": "busta-rokkit-launcha",
+              "count": 5
+            },
+            {
+              "id": "gitstikka",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Nob",
+          "items": [
+            {
+              "id": "choppa-tankbustas",
+              "count": 1
+            },
+            {
+              "id": "rokkit-pistol-tankbustas",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "model": "Tankbusta",
+          "items": [
+            {
+              "id": "busta-rokkit-launcha",
+              "count": 1
+            },
+            {
+              "id": "gitstikka",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Nob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "choppa-tankbustas",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Nob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "rokkit-pistol-tankbustas",
+                "count": 1
+              },
+              {
+                "id": "smash-hammer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rokkit-pistol-tankbustas",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Tankbusta",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "busta-rokkit-launcha",
+                "count": 1
+              },
+              {
+                "id": "gitstikka",
+                "count": 1
+              },
+              {
+                "id": "pulsa-rokkit-once-per-battle-per-unit",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "busta-rokkit-launcha",
+                "count": 1
+              },
+              {
+                "id": "gitstikka",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "busta-rokkit-launcha",
+                "count": 2
+              },
+              {
+                "id": "gitstikka",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Tankbusta",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 2,
+              "per_choice": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "busta-rokkit-launcha",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "busta-rokkit-launcha",
+                "count": 5
+              }
+            ],
+            [
+              {
+                "id": "pulsa-rokkit-once-per-battle-per-unit",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Nob",
+          "id": "choppa-tankbustas",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Nob",
+          "id": "rokkit-pistol-tankbustas",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Nob",
+          "id": "smash-hammer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Tankbusta",
+          "id": "busta-rokkit-launcha",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Tankbusta",
+          "id": "busta-rokkit-launcha",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Tankbusta",
+          "id": "gitstikka",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Tankbusta",
+          "id": "pulsa-rokkit-once-per-battle-per-unit",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "kommandos",
@@ -862,7 +2933,244 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Kommando",
+          "models": 9,
+          "items": [
+            {
+              "id": "choppa-kommandos",
+              "count": 9
+            },
+            {
+              "id": "slugga",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Nob",
+          "models": 1,
+          "items": [
+            {
+              "id": "choppa-kommandos",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Kommando",
+          "items": [
+            {
+              "id": "choppa-kommandos",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Nob",
+          "items": [
+            {
+              "id": "choppa-kommandos",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Kommando",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "burna-kommandos",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kustom-shoota-kommandos",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rokkit-launcha-kommandos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kommando",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "breacha-ram",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "choppa-kommandos",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Nob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-choppa-kommandos",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "choppa-kommandos",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-klaw",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Kommando",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "kustom-shoota-kommandos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Kommando",
+          "id": "breacha-ram",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kommando",
+          "id": "burna-kommandos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kommando",
+          "id": "choppa-kommandos",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Kommando",
+          "id": "kustom-shoota-kommandos",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Kommando",
+          "id": "rokkit-launcha-kommandos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Kommando",
+          "id": "slugga",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Nob",
+          "id": "big-choppa-kommandos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "choppa-kommandos",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Nob",
+          "id": "power-klaw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "slugga",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "boyz",
@@ -923,7 +3231,341 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Boy",
+          "models": 9,
+          "items": [
+            {
+              "id": "choppa-boyz",
+              "count": 9
+            },
+            {
+              "id": "shoota-boyz",
+              "count": 9
+            },
+            {
+              "id": "slugga",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Nob",
+          "models": 1,
+          "items": [
+            {
+              "id": "kombi-skorcha-boyz",
+              "count": 1
+            },
+            {
+              "id": "kustom-choppa-boyz",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Boy",
+          "items": [
+            {
+              "id": "choppa-boyz",
+              "count": 1
+            },
+            {
+              "id": "shoota-boyz",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Nob",
+          "items": [
+            {
+              "id": "kombi-skorcha-boyz",
+              "count": 1
+            },
+            {
+              "id": "kustom-choppa-boyz",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Boy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-shoota-boyz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "burna",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rokkit-launcha-boyz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shoota-boyz",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Boy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "choppa-boyz",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Nob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-choppa-boyz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kombi-rokkit-boyz",
+                "count": 1
+              },
+              {
+                "id": "kustom-choppa-boyz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kombi-rokkit-boyz",
+                "count": 1
+              },
+              {
+                "id": "power-klaw-boyz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kombi-skorcha-boyz",
+                "count": 1
+              },
+              {
+                "id": "kustom-choppa-boyz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kombi-skorcha-boyz",
+                "count": 1
+              },
+              {
+                "id": "power-klaw-boyz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kustom-choppa-boyz",
+                "count": 1
+              },
+              {
+                "id": "kustom-shoota-boyz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kustom-shoota-boyz",
+                "count": 1
+              },
+              {
+                "id": "power-klaw-boyz",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Boy",
+          "breakpoints": [
+            {
+              "models": 10,
+              "choices": 1
+            },
+            {
+              "models": 20,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "big-shoota-boyz",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Boy",
+          "breakpoints": [
+            {
+              "models": 10,
+              "choices": 1
+            },
+            {
+              "models": 20,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "burna",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Boy",
+          "breakpoints": [
+            {
+              "models": 10,
+              "choices": 1
+            },
+            {
+              "models": 20,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "rokkit-launcha-boyz",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Boy",
+          "id": "big-shoota-boyz",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Boy",
+          "id": "burna",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Boy",
+          "id": "choppa-boyz",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Boy",
+          "id": "rokkit-launcha-boyz",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Boy",
+          "id": "shoota-boyz",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Boy",
+          "id": "slugga",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Nob",
+          "id": "big-choppa-boyz",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "kombi-rokkit-boyz",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "kombi-skorcha-boyz",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Nob",
+          "id": "kustom-choppa-boyz",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Nob",
+          "id": "kustom-shoota-boyz",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "power-klaw-boyz",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "trukk",
@@ -958,7 +3600,131 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Trukk",
+          "models": 1,
+          "items": [
+            {
+              "id": "dual-big-shoota",
+              "count": 1
+            },
+            {
+              "id": "spiked-ram",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Trukk",
+          "items": [
+            {
+              "id": "dual-big-shoota",
+              "count": 1
+            },
+            {
+              "id": "spiked-ram",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Trukk",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "buzzsaw",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "grabbin-klaw",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Trukk",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dual-big-shoota",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rokkit-launcha-trukk",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Trukk",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "spiked-ram",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Trukk",
+          "id": "buzzsaw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Trukk",
+          "id": "dual-big-shoota",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Trukk",
+          "id": "grabbin-klaw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Trukk",
+          "id": "rokkit-launcha-trukk",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Trukk",
+          "id": "spiked-ram",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "painboss",
@@ -992,7 +3758,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Painboss",
+          "models": 1,
+          "items": [
+            {
+              "id": "beast-snagga-klaw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Painboss",
+          "items": [
+            {
+              "id": "beast-snagga-klaw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Painboss",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "beast-snagga-klaw",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Painboss",
+          "id": "beast-snagga-klaw",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "gorkanaut",
@@ -1033,7 +3850,130 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Gorkanaut",
+          "models": 1,
+          "items": [
+            {
+              "id": "deffstorm-mega-shoota",
+              "count": 1
+            },
+            {
+              "id": "dual-big-shoota",
+              "count": 2
+            },
+            {
+              "id": "klaw-of-gork",
+              "count": 1
+            },
+            {
+              "id": "rokkit-launcha-gorkanaut",
+              "count": 2
+            },
+            {
+              "id": "skorcha",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Gorkanaut",
+          "items": [
+            {
+              "id": "deffstorm-mega-shoota",
+              "count": 1
+            },
+            {
+              "id": "dual-big-shoota",
+              "count": 2
+            },
+            {
+              "id": "klaw-of-gork",
+              "count": 1
+            },
+            {
+              "id": "rokkit-launcha-gorkanaut",
+              "count": 2
+            },
+            {
+              "id": "skorcha",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Gorkanaut",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "deffstorm-mega-shoota",
+                "count": 1
+              },
+              {
+                "id": "dual-big-shoota",
+                "count": 2
+              },
+              {
+                "id": "klaw-of-gork",
+                "count": 1
+              },
+              {
+                "id": "rokkit-launcha-gorkanaut",
+                "count": 2
+              },
+              {
+                "id": "skorcha",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Gorkanaut",
+          "id": "deffstorm-mega-shoota",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gorkanaut",
+          "id": "dual-big-shoota",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Gorkanaut",
+          "id": "klaw-of-gork",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gorkanaut",
+          "id": "rokkit-launcha-gorkanaut",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Gorkanaut",
+          "id": "skorcha",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "mek-gunz",
@@ -1086,7 +4026,122 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Mek Gunz",
+          "models": 1,
+          "items": [
+            {
+              "id": "scavenged-shivs-mek-gunz",
+              "count": 1
+            },
+            {
+              "id": "smasha-gun-mek-gunz",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Mek Gunz",
+          "items": [
+            {
+              "id": "scavenged-shivs-mek-gunz",
+              "count": 1
+            },
+            {
+              "id": "smasha-gun-mek-gunz",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Mek Gunz",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bubblechukka",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kustom-mega-kannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "smasha-gun-mek-gunz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "traktor-kannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Mek Gunz",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "scavenged-shivs-mek-gunz",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Mek Gunz",
+          "id": "bubblechukka",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Mek Gunz",
+          "id": "kustom-mega-kannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Mek Gunz",
+          "id": "scavenged-shivs-mek-gunz",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Mek Gunz",
+          "id": "smasha-gun-mek-gunz",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Mek Gunz",
+          "id": "traktor-kannon",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "stormboyz",
@@ -1154,7 +4209,161 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Nob",
+          "models": 1,
+          "items": [
+            {
+              "id": "kustom-choppa-stormboyz",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Stormboy",
+          "models": 4,
+          "items": [
+            {
+              "id": "choppa-stormboyz",
+              "count": 4
+            },
+            {
+              "id": "slugga",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Nob",
+          "items": [
+            {
+              "id": "kustom-choppa-stormboyz",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Stormboy",
+          "items": [
+            {
+              "id": "choppa-stormboyz",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Nob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kustom-choppa-stormboyz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-klaw",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Nob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "slugga",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Stormboy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "choppa-stormboyz",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Nob",
+          "id": "kustom-choppa-stormboyz",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Nob",
+          "id": "kustom-choppa-stormboyz",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "power-klaw",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "slugga",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Stormboy",
+          "id": "choppa-stormboyz",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Stormboy",
+          "id": "slugga",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "flash-gitz",
@@ -1223,7 +4432,133 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Flash Git",
+          "models": 4,
+          "items": [
+            {
+              "id": "choppa-flash-gitz",
+              "count": 4
+            },
+            {
+              "id": "snazzgun",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Kaptin",
+          "models": 1,
+          "items": [
+            {
+              "id": "choppa-flash-gitz",
+              "count": 1
+            },
+            {
+              "id": "snazzgun",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Flash Git",
+          "items": [
+            {
+              "id": "choppa-flash-gitz",
+              "count": 1
+            },
+            {
+              "id": "snazzgun",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Kaptin",
+          "items": [
+            {
+              "id": "choppa-flash-gitz",
+              "count": 1
+            },
+            {
+              "id": "snazzgun",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Flash Git",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "choppa-flash-gitz",
+                "count": 1
+              },
+              {
+                "id": "snazzgun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Kaptin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "choppa-flash-gitz",
+                "count": 1
+              },
+              {
+                "id": "snazzgun",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Flash Git",
+          "id": "choppa-flash-gitz",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Flash Git",
+          "id": "snazzgun",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Kaptin",
+          "id": "choppa-flash-gitz",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kaptin",
+          "id": "snazzgun",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "blitza-bommer",
@@ -1259,7 +4594,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Blitza-bommer",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-impact",
+              "count": 1
+            },
+            {
+              "id": "big-shoota",
+              "count": 1
+            },
+            {
+              "id": "dual-supa-shoota",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Blitza-bommer",
+          "items": [
+            {
+              "id": "armoured-impact",
+              "count": 1
+            },
+            {
+              "id": "big-shoota",
+              "count": 1
+            },
+            {
+              "id": "dual-supa-shoota",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Blitza-bommer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-impact",
+                "count": 1
+              },
+              {
+                "id": "big-shoota",
+                "count": 1
+              },
+              {
+                "id": "dual-supa-shoota",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Blitza-bommer",
+          "id": "armoured-impact",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Blitza-bommer",
+          "id": "big-shoota",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Blitza-bommer",
+          "id": "dual-supa-shoota",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "deff-dread",
@@ -1295,7 +4717,198 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Deff Dread",
+          "models": 1,
+          "items": [
+            {
+              "id": "big-shoota",
+              "count": 1
+            },
+            {
+              "id": "dread-klaw",
+              "count": 1
+            },
+            {
+              "id": "skorcha",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Deff Dread",
+          "items": [
+            {
+              "id": "big-shoota",
+              "count": 1
+            },
+            {
+              "id": "dread-klaw",
+              "count": 1
+            },
+            {
+              "id": "skorcha",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Deff Dread",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-shoota",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "extra-klaw",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kustom-mega-blasta-deff-dread",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rokkit-launcha-deff-dread",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "skorcha",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Deff Dread",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-shoota",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "extra-klaw",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kustom-mega-blasta-deff-dread",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rokkit-launcha-deff-dread",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Deff Dread",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "dread-klaw",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Deff Dread",
+          "id": "big-shoota",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Deff Dread",
+          "id": "big-shoota",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Deff Dread",
+          "id": "dread-klaw",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Deff Dread",
+          "id": "extra-klaw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Deff Dread",
+          "id": "extra-klaw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Deff Dread",
+          "id": "kustom-mega-blasta-deff-dread",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Deff Dread",
+          "id": "kustom-mega-blasta-deff-dread",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Deff Dread",
+          "id": "rokkit-launcha-deff-dread",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Deff Dread",
+          "id": "rokkit-launcha-deff-dread",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Deff Dread",
+          "id": "skorcha",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "beastboss",
@@ -1330,7 +4943,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Beastboss",
+          "models": 1,
+          "items": [
+            {
+              "id": "beast-snagga-klaw-and-beastchoppa",
+              "count": 1
+            },
+            {
+              "id": "shoota-beastboss",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Beastboss",
+          "items": [
+            {
+              "id": "beast-snagga-klaw-and-beastchoppa",
+              "count": 1
+            },
+            {
+              "id": "shoota-beastboss",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Beastboss",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "beast-snagga-klaw-and-beastchoppa",
+                "count": 1
+              },
+              {
+                "id": "shoota-beastboss",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Beastboss",
+          "id": "beast-snagga-klaw-and-beastchoppa",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Beastboss",
+          "id": "shoota-beastboss",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "dakkajet",
@@ -1366,7 +5048,92 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Dakkajet",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-impact",
+              "count": 1
+            },
+            {
+              "id": "dual-supa-shoota",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Dakkajet",
+          "items": [
+            {
+              "id": "armoured-impact",
+              "count": 1
+            },
+            {
+              "id": "dual-supa-shoota",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Dakkajet",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-impact",
+                "count": 1
+              },
+              {
+                "id": "dual-supa-shoota",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "armoured-impact",
+                "count": 1
+              },
+              {
+                "id": "dual-supa-shoota",
+                "count": 3
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Dakkajet",
+          "id": "armoured-impact",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Dakkajet",
+          "id": "dual-supa-shoota",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Dakkajet",
+          "id": "dual-supa-shoota",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "big-mek-in-mega-armour",
@@ -1401,7 +5168,155 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Big Mek in Mega Armour",
+          "models": 1,
+          "items": [
+            {
+              "id": "kustom-shoota-big-mek-in-mega-armour",
+              "count": 1
+            },
+            {
+              "id": "power-klaw-big-mek-in-mega-armour",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Big Mek in Mega Armour",
+          "items": [
+            {
+              "id": "kustom-shoota-big-mek-in-mega-armour",
+              "count": 1
+            },
+            {
+              "id": "power-klaw-big-mek-in-mega-armour",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Big Mek in Mega Armour",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "kustom-force-field",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "tellyport-blasta",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Big Mek in Mega Armour",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "killsaw",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kombi-weapon-big-mek-in-mega-armour",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kustom-mega-blasta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kustom-shoota-big-mek-in-mega-armour",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Big Mek in Mega Armour",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "power-klaw-big-mek-in-mega-armour",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Big Mek in Mega Armour",
+          "id": "killsaw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Big Mek in Mega Armour",
+          "id": "kombi-weapon-big-mek-in-mega-armour",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Big Mek in Mega Armour",
+          "id": "kustom-force-field",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Big Mek in Mega Armour",
+          "id": "kustom-mega-blasta",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Big Mek in Mega Armour",
+          "id": "kustom-shoota-big-mek-in-mega-armour",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Big Mek in Mega Armour",
+          "id": "power-klaw-big-mek-in-mega-armour",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Big Mek in Mega Armour",
+          "id": "tellyport-blasta",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "beast-snagga-boyz",
@@ -1469,7 +5384,176 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Beast Snagga Boy",
+          "models": 9,
+          "items": [
+            {
+              "id": "choppa-beast-snagga-boyz",
+              "count": 9
+            },
+            {
+              "id": "slugga",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Nob",
+          "models": 1,
+          "items": [
+            {
+              "id": "power-snappa",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Beast Snagga Boy",
+          "items": [
+            {
+              "id": "choppa-beast-snagga-boyz",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Nob",
+          "items": [
+            {
+              "id": "power-snappa",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Beast Snagga Boy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "thump-gun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Beast Snagga Boy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "choppa-beast-snagga-boyz",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Nob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "power-snappa",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Beast Snagga Boy",
+          "breakpoints": [
+            {
+              "models": 10,
+              "choices": 1
+            },
+            {
+              "models": 20,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "thump-gun",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Beast Snagga Boy",
+          "id": "choppa-beast-snagga-boyz",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Beast Snagga Boy",
+          "id": "slugga",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Beast Snagga Boy",
+          "id": "thump-gun",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "power-snappa",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Nob",
+          "id": "slugga",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "deffkilla-wartrike",
@@ -1506,7 +5590,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Deffkilla Wartrike",
+          "models": 1,
+          "items": [
+            {
+              "id": "boomstikks",
+              "count": 1
+            },
+            {
+              "id": "killa-jet",
+              "count": 1
+            },
+            {
+              "id": "snagga-klaw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Deffkilla Wartrike",
+          "items": [
+            {
+              "id": "boomstikks",
+              "count": 1
+            },
+            {
+              "id": "killa-jet",
+              "count": 1
+            },
+            {
+              "id": "snagga-klaw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Deffkilla Wartrike",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "boomstikks",
+                "count": 1
+              },
+              {
+                "id": "killa-jet",
+                "count": 1
+              },
+              {
+                "id": "snagga-klaw",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Deffkilla Wartrike",
+          "id": "boomstikks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Deffkilla Wartrike",
+          "id": "killa-jet",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Deffkilla Wartrike",
+          "id": "snagga-klaw",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "mek",
@@ -1541,7 +5712,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Mek",
+          "models": 1,
+          "items": [
+            {
+              "id": "kustom-mega-slugga",
+              "count": 1
+            },
+            {
+              "id": "meks-toolz",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Mek",
+          "items": [
+            {
+              "id": "kustom-mega-slugga",
+              "count": 1
+            },
+            {
+              "id": "meks-toolz",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Mek",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kustom-mega-slugga",
+                "count": 1
+              },
+              {
+                "id": "meks-toolz",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Mek",
+          "id": "kustom-mega-slugga",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Mek",
+          "id": "meks-toolz",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "mozrog-skragbad",
@@ -1577,7 +5817,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Mozrog Skragbad",
+          "models": 1,
+          "items": [
+            {
+              "id": "big-chompas-jaws",
+              "count": 1
+            },
+            {
+              "id": "gutrippa",
+              "count": 1
+            },
+            {
+              "id": "thump-gun",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Mozrog Skragbad",
+          "items": [
+            {
+              "id": "big-chompas-jaws",
+              "count": 1
+            },
+            {
+              "id": "gutrippa",
+              "count": 1
+            },
+            {
+              "id": "thump-gun",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Mozrog Skragbad",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-chompas-jaws",
+                "count": 1
+              },
+              {
+                "id": "gutrippa",
+                "count": 1
+              },
+              {
+                "id": "thump-gun",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Mozrog Skragbad",
+          "id": "big-chompas-jaws",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Mozrog Skragbad",
+          "id": "gutrippa",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Mozrog Skragbad",
+          "id": "thump-gun",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "zodgrod-wortsnagga",
@@ -1612,7 +5939,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Zodgrod Wortsnagga",
+          "models": 1,
+          "items": [
+            {
+              "id": "da-grabzappa",
+              "count": 1
+            },
+            {
+              "id": "squigstoppa",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Zodgrod Wortsnagga",
+          "items": [
+            {
+              "id": "da-grabzappa",
+              "count": 1
+            },
+            {
+              "id": "squigstoppa",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Zodgrod Wortsnagga",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "da-grabzappa",
+                "count": 1
+              },
+              {
+                "id": "squigstoppa",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Zodgrod Wortsnagga",
+          "id": "da-grabzappa",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Zodgrod Wortsnagga",
+          "id": "squigstoppa",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "gretchin",
@@ -1656,7 +6052,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Gretchin",
+          "models": 10,
+          "items": [
+            {
+              "id": "grot-blasta",
+              "count": 10
+            },
+            {
+              "id": "scavenged-shivs",
+              "count": 10
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Gretchin",
+          "items": [
+            {
+              "id": "grot-blasta",
+              "count": 1
+            },
+            {
+              "id": "scavenged-shivs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Gretchin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "grot-blasta",
+                "count": 1
+              },
+              {
+                "id": "scavenged-shivs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Gretchin",
+          "id": "grot-blasta",
+          "input": "stepper",
+          "default": 10
+        },
+        {
+          "model": "Gretchin",
+          "id": "scavenged-shivs",
+          "input": "stepper",
+          "default": 10
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "big-mek-with-shokk-attack-gun",
@@ -1691,7 +6156,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Big Mek with Shokk Attack Gun",
+          "models": 1,
+          "items": [
+            {
+              "id": "big-meks-toolz",
+              "count": 1
+            },
+            {
+              "id": "shokk-attack-gun",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Big Mek with Shokk Attack Gun",
+          "items": [
+            {
+              "id": "big-meks-toolz",
+              "count": 1
+            },
+            {
+              "id": "shokk-attack-gun",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Big Mek with Shokk Attack Gun",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-meks-toolz",
+                "count": 1
+              },
+              {
+                "id": "shokk-attack-gun",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Big Mek with Shokk Attack Gun",
+          "id": "big-meks-toolz",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Big Mek with Shokk Attack Gun",
+          "id": "shokk-attack-gun",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "kill-rig",
@@ -1731,7 +6265,148 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Kill Rig",
+          "models": 1,
+          "items": [
+            {
+              "id": "butcha-boyz",
+              "count": 1
+            },
+            {
+              "id": "eavy-lobba",
+              "count": 1
+            },
+            {
+              "id": "savage-horns-and-hooves",
+              "count": 1
+            },
+            {
+              "id": "saw-blades-kill-rig",
+              "count": 1
+            },
+            {
+              "id": "stikka-kannon",
+              "count": 1
+            },
+            {
+              "id": "wurrtower",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Kill Rig",
+          "items": [
+            {
+              "id": "butcha-boyz",
+              "count": 1
+            },
+            {
+              "id": "eavy-lobba",
+              "count": 1
+            },
+            {
+              "id": "savage-horns-and-hooves",
+              "count": 1
+            },
+            {
+              "id": "saw-blades-kill-rig",
+              "count": 1
+            },
+            {
+              "id": "stikka-kannon",
+              "count": 1
+            },
+            {
+              "id": "wurrtower",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Kill Rig",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "butcha-boyz",
+                "count": 1
+              },
+              {
+                "id": "eavy-lobba",
+                "count": 1
+              },
+              {
+                "id": "savage-horns-and-hooves",
+                "count": 1
+              },
+              {
+                "id": "saw-blades-kill-rig",
+                "count": 1
+              },
+              {
+                "id": "stikka-kannon",
+                "count": 1
+              },
+              {
+                "id": "wurrtower",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Kill Rig",
+          "id": "butcha-boyz",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kill Rig",
+          "id": "eavy-lobba",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kill Rig",
+          "id": "savage-horns-and-hooves",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kill Rig",
+          "id": "saw-blades-kill-rig",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kill Rig",
+          "id": "stikka-kannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kill Rig",
+          "id": "wurrtower",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "nobz",
@@ -1774,7 +6449,249 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Nob",
+          "models": 5,
+          "items": [
+            {
+              "id": "kustom-krumpa",
+              "count": 5
+            },
+            {
+              "id": "kustom-shoota-nobz",
+              "count": 5
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Nob",
+          "items": [
+            {
+              "id": "kustom-krumpa",
+              "count": 1
+            },
+            {
+              "id": "kustom-shoota-nobz",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Nob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-choppa-nobz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "big-skorcha-nobz",
+                "count": 1
+              },
+              {
+                "id": "kustom-choppa-nobz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kombi-rokkit-nobz",
+                "count": 1
+              },
+              {
+                "id": "kustom-krumpa",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kustom-big-shoota",
+                "count": 1
+              },
+              {
+                "id": "kustom-choppa-nobz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kustom-krumpa",
+                "count": 1
+              },
+              {
+                "id": "kustom-shoota-nobz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kustom-krumpa",
+                "count": 1
+              },
+              {
+                "id": "paired-krumpas",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Nob",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "big-choppa-nobz",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Nob",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "big-skorcha-nobz",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Nob",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "kustom-big-shoota",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Nob",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "paired-krumpas",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Nob",
+          "id": "big-choppa-nobz",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "big-skorcha-nobz",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "kombi-rokkit-nobz",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "kustom-big-shoota",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "kustom-choppa-nobz",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "kustom-choppa-nobz",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Nob",
+          "id": "kustom-krumpa",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Nob",
+          "id": "kustom-shoota-nobz",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Nob",
+          "id": "paired-krumpas",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "beastboss-on-squigosaur",
@@ -1810,7 +6727,115 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Beastboss on Squigosaur",
+          "models": 1,
+          "items": [
+            {
+              "id": "beastchoppa",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            },
+            {
+              "id": "squigosaurs-jaws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Beastboss on Squigosaur",
+          "items": [
+            {
+              "id": "beastchoppa",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            },
+            {
+              "id": "squigosaurs-jaws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Beastboss on Squigosaur",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "thump-gun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Beastboss on Squigosaur",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "beastchoppa",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              },
+              {
+                "id": "squigosaurs-jaws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Beastboss on Squigosaur",
+          "id": "beastchoppa",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Beastboss on Squigosaur",
+          "id": "slugga",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Beastboss on Squigosaur",
+          "id": "squigosaurs-jaws",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Beastboss on Squigosaur",
+          "id": "thump-gun",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "meganobz",
@@ -1936,7 +6961,130 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Meganob",
+          "models": 2,
+          "items": [
+            {
+              "id": "kustom-shoota-meganobz",
+              "count": 2
+            },
+            {
+              "id": "power-klaw-meganobz",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Meganob",
+          "items": [
+            {
+              "id": "kustom-shoota-meganobz",
+              "count": 1
+            },
+            {
+              "id": "power-klaw-meganobz",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Meganob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "killsaw-meganobz",
+                "count": 1
+              },
+              {
+                "id": "kombi-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "killsaw-meganobz",
+                "count": 1
+              },
+              {
+                "id": "kustom-shoota-meganobz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kombi-weapon",
+                "count": 1
+              },
+              {
+                "id": "power-klaw-meganobz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kustom-shoota-meganobz",
+                "count": 1
+              },
+              {
+                "id": "power-klaw-meganobz",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-killsaw",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Meganob",
+          "id": "killsaw-meganobz",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Meganob",
+          "id": "kombi-weapon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Meganob",
+          "id": "kustom-shoota-meganobz",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Meganob",
+          "id": "power-klaw-meganobz",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Meganob",
+          "id": "twin-killsaw",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "burna-bommer",
@@ -1972,7 +7120,115 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Burna-bommer",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-impact",
+              "count": 1
+            },
+            {
+              "id": "dual-big-shoota",
+              "count": 1
+            },
+            {
+              "id": "dual-supa-shoota-burna-bommer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Burna-bommer",
+          "items": [
+            {
+              "id": "armoured-impact",
+              "count": 1
+            },
+            {
+              "id": "dual-big-shoota",
+              "count": 1
+            },
+            {
+              "id": "dual-supa-shoota-burna-bommer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Burna-bommer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "skorcha-missile-rack",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Burna-bommer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-impact",
+                "count": 1
+              },
+              {
+                "id": "dual-big-shoota",
+                "count": 1
+              },
+              {
+                "id": "dual-supa-shoota-burna-bommer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Burna-bommer",
+          "id": "armoured-impact",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Burna-bommer",
+          "id": "dual-big-shoota",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Burna-bommer",
+          "id": "dual-supa-shoota-burna-bommer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Burna-bommer",
+          "id": "skorcha-missile-rack",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hunta-rig",
@@ -2011,7 +7267,130 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hunta Rig",
+          "models": 1,
+          "items": [
+            {
+              "id": "butcha-boyz-hunta-rig",
+              "count": 1
+            },
+            {
+              "id": "eavy-lobba",
+              "count": 1
+            },
+            {
+              "id": "savage-horns-and-hooves",
+              "count": 1
+            },
+            {
+              "id": "saw-blades-hunta-rig",
+              "count": 1
+            },
+            {
+              "id": "stikka-kannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hunta Rig",
+          "items": [
+            {
+              "id": "butcha-boyz-hunta-rig",
+              "count": 1
+            },
+            {
+              "id": "eavy-lobba",
+              "count": 1
+            },
+            {
+              "id": "savage-horns-and-hooves",
+              "count": 1
+            },
+            {
+              "id": "saw-blades-hunta-rig",
+              "count": 1
+            },
+            {
+              "id": "stikka-kannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hunta Rig",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "butcha-boyz-hunta-rig",
+                "count": 1
+              },
+              {
+                "id": "eavy-lobba",
+                "count": 1
+              },
+              {
+                "id": "savage-horns-and-hooves",
+                "count": 1
+              },
+              {
+                "id": "saw-blades-hunta-rig",
+                "count": 1
+              },
+              {
+                "id": "stikka-kannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Hunta Rig",
+          "id": "butcha-boyz-hunta-rig",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hunta Rig",
+          "id": "eavy-lobba",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hunta Rig",
+          "id": "savage-horns-and-hooves",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hunta Rig",
+          "id": "saw-blades-hunta-rig",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Hunta Rig",
+          "id": "stikka-kannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "warboss",
@@ -2046,7 +7425,122 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Warboss",
+          "models": 1,
+          "items": [
+            {
+              "id": "kustom-choppa-warboss",
+              "count": 1
+            },
+            {
+              "id": "kustom-shoota-warboss",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Warboss",
+          "items": [
+            {
+              "id": "kustom-choppa-warboss",
+              "count": 1
+            },
+            {
+              "id": "kustom-shoota-warboss",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Warboss",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kombi-rokkit",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kombi-skorcha",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "kustom-shoota-warboss",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Warboss",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kustom-choppa-warboss",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-klaw-warboss",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Warboss",
+          "id": "kombi-rokkit",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Warboss",
+          "id": "kombi-skorcha",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Warboss",
+          "id": "kustom-choppa-warboss",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Warboss",
+          "id": "kustom-shoota-warboss",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Warboss",
+          "id": "power-klaw-warboss",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "bannernob",
@@ -2080,7 +7574,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Bannernob",
+          "models": 1,
+          "items": [
+            {
+              "id": "kustom-choppa-bannernob",
+              "count": 1
+            },
+            {
+              "id": "shoota-bannernob",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Bannernob",
+          "items": [
+            {
+              "id": "kustom-choppa-bannernob",
+              "count": 1
+            },
+            {
+              "id": "shoota-bannernob",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Bannernob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kustom-choppa-bannernob",
+                "count": 1
+              },
+              {
+                "id": "shoota-bannernob",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Bannernob",
+          "id": "kustom-choppa-bannernob",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Bannernob",
+          "id": "shoota-bannernob",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "big-mek-dakkarig",
@@ -2111,7 +7674,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Big Mek Dakkarig",
+          "models": 1,
+          "items": [
+            {
+              "id": "blitzkannon",
+              "count": 1
+            },
+            {
+              "id": "multi-busta-launcha",
+              "count": 1
+            },
+            {
+              "id": "stompy-feet-big-mek-dakkarig",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Big Mek Dakkarig",
+          "items": [
+            {
+              "id": "blitzkannon",
+              "count": 1
+            },
+            {
+              "id": "multi-busta-launcha",
+              "count": 1
+            },
+            {
+              "id": "stompy-feet-big-mek-dakkarig",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Big Mek Dakkarig",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blitzkannon",
+                "count": 1
+              },
+              {
+                "id": "multi-busta-launcha",
+                "count": 1
+              },
+              {
+                "id": "stompy-feet-big-mek-dakkarig",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Big Mek Dakkarig",
+          "id": "blitzkannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Big Mek Dakkarig",
+          "id": "multi-busta-launcha",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Big Mek Dakkarig",
+          "id": "stompy-feet-big-mek-dakkarig",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "bigboss",
@@ -2141,7 +7791,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Bigboss",
+          "models": 1,
+          "items": [
+            {
+              "id": "big-choppa-bigboss",
+              "count": 1
+            },
+            {
+              "id": "slugga-bigboss",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Bigboss",
+          "items": [
+            {
+              "id": "big-choppa-bigboss",
+              "count": 1
+            },
+            {
+              "id": "slugga-bigboss",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Bigboss",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-choppa-bigboss",
+                "count": 1
+              },
+              {
+                "id": "slugga-bigboss",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Bigboss",
+          "id": "big-choppa-bigboss",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Bigboss",
+          "id": "slugga-bigboss",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "wazdakka-gutsmek",
@@ -2173,7 +7892,112 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Wazdakka Gutsmek",
+          "models": 1,
+          "items": [
+            {
+              "id": "fixits-wrench",
+              "count": 1
+            },
+            {
+              "id": "grabba-dragga",
+              "count": 1
+            },
+            {
+              "id": "psyko-gatler",
+              "count": 1
+            },
+            {
+              "id": "speeding-bulk-and-flaming-exhaust",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Wazdakka Gutsmek",
+          "items": [
+            {
+              "id": "fixits-wrench",
+              "count": 1
+            },
+            {
+              "id": "grabba-dragga",
+              "count": 1
+            },
+            {
+              "id": "psyko-gatler",
+              "count": 1
+            },
+            {
+              "id": "speeding-bulk-and-flaming-exhaust",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Wazdakka Gutsmek",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "fixits-wrench",
+                "count": 1
+              },
+              {
+                "id": "grabba-dragga",
+                "count": 1
+              },
+              {
+                "id": "psyko-gatler",
+                "count": 1
+              },
+              {
+                "id": "speeding-bulk-and-flaming-exhaust",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Wazdakka Gutsmek",
+          "id": "fixits-wrench",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wazdakka Gutsmek",
+          "id": "grabba-dragga",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wazdakka Gutsmek",
+          "id": "psyko-gatler",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wazdakka Gutsmek",
+          "id": "speeding-bulk-and-flaming-exhaust",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "nazdreg",
@@ -2208,7 +8032,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Nazdreg",
+          "models": 1,
+          "items": [
+            {
+              "id": "kustom-blasta-x",
+              "count": 1
+            },
+            {
+              "id": "moonchewa",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Nazdreg",
+          "items": [
+            {
+              "id": "kustom-blasta-x",
+              "count": 1
+            },
+            {
+              "id": "moonchewa",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Nazdreg",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kustom-blasta-x",
+                "count": 1
+              },
+              {
+                "id": "moonchewa",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Nazdreg",
+          "id": "kustom-blasta-x",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Nazdreg",
+          "id": "moonchewa",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "runtherd",
@@ -2243,7 +8136,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Runtherd",
+          "models": 1,
+          "items": [
+            {
+              "id": "runtherds-toolz",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Runtherd",
+          "items": [
+            {
+              "id": "runtherds-toolz",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Runtherd",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "runtherds-toolz",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Runtherd",
+          "id": "runtherds-toolz",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Runtherd",
+          "id": "slugga",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ardmob-boyz",
@@ -2294,7 +8256,134 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Boss Nob",
+          "models": 1,
+          "items": [
+            {
+              "id": "big-choppa",
+              "count": 1
+            },
+            {
+              "id": "kustom-shoota",
+              "count": 1
+            },
+            {
+              "id": "slugga",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Boyz",
+          "models": 9,
+          "items": [
+            {
+              "id": "choppa",
+              "count": 9
+            },
+            {
+              "id": "shoota",
+              "count": 9
+            },
+            {
+              "id": "slugga",
+              "count": 9
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Boss Nob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-choppa",
+                "count": 1
+              },
+              {
+                "id": "kustom-shoota",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Boyz",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "choppa",
+                "count": 1
+              },
+              {
+                "id": "shoota",
+                "count": 1
+              },
+              {
+                "id": "slugga",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Boss Nob",
+          "id": "big-choppa",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Boss Nob",
+          "id": "kustom-shoota",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Boss Nob",
+          "id": "slugga",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Boyz",
+          "id": "choppa",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Boyz",
+          "id": "shoota",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Boyz",
+          "id": "slugga",
+          "input": "stepper",
+          "default": 9
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ardmob-gretchin",
@@ -2333,7 +8422,76 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Gretchin",
+          "models": 10,
+          "items": [
+            {
+              "id": "blasta",
+              "count": 10
+            },
+            {
+              "id": "lobbin-bombs",
+              "count": 10
+            },
+            {
+              "id": "scavenged-shivs",
+              "count": 10
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Gretchin",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blasta",
+                "count": 1
+              },
+              {
+                "id": "lobbin-bombs",
+                "count": 1
+              },
+              {
+                "id": "scavenged-shivs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Gretchin",
+          "id": "blasta",
+          "input": "stepper",
+          "default": 10
+        },
+        {
+          "model": "Gretchin",
+          "id": "lobbin-bombs",
+          "input": "stepper",
+          "default": 10
+        },
+        {
+          "model": "Gretchin",
+          "id": "scavenged-shivs",
+          "input": "stepper",
+          "default": 10
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ardmob-warboss",
@@ -2371,7 +8529,62 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Warboss",
+          "models": 1,
+          "items": [
+            {
+              "id": "kustom-choppa",
+              "count": 1
+            },
+            {
+              "id": "kustom-shoota",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Warboss",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kustom-choppa",
+                "count": 1
+              },
+              {
+                "id": "kustom-shoota",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Warboss",
+          "id": "kustom-choppa",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Warboss",
+          "id": "kustom-shoota",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ardmob-wartrakk",
@@ -2411,7 +8624,76 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Wartrakk",
+          "models": 1,
+          "items": [
+            {
+              "id": "choppa-ardmob-wartrakk",
+              "count": 1
+            },
+            {
+              "id": "kustom-shoota",
+              "count": 1
+            },
+            {
+              "id": "rokkit-launcha",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Wartrakk",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "choppa-ardmob-wartrakk",
+                "count": 1
+              },
+              {
+                "id": "kustom-shoota",
+                "count": 1
+              },
+              {
+                "id": "rokkit-launcha",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Wartrakk",
+          "id": "choppa-ardmob-wartrakk",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wartrakk",
+          "id": "kustom-shoota",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wartrakk",
+          "id": "rokkit-launcha",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "ardmob-weirdboy",
@@ -2449,7 +8731,62 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "'Ardmob Weirdboy",
+          "models": 1,
+          "items": [
+            {
+              "id": "psychic-powers",
+              "count": 1
+            },
+            {
+              "id": "waaagh-staff",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "'Ardmob Weirdboy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "psychic-powers",
+                "count": 1
+              },
+              {
+                "id": "waaagh-staff",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "'Ardmob Weirdboy",
+          "id": "psychic-powers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "'Ardmob Weirdboy",
+          "id": "waaagh-staff",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "rukkatrukk-squigbuggies",
@@ -2494,7 +8831,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Rukkatrukk Squigbuggy",
+          "models": 1,
+          "items": [
+            {
+              "id": "saw-blades",
+              "count": 1
+            },
+            {
+              "id": "sawn-off-shotgun",
+              "count": 1
+            },
+            {
+              "id": "squig-launchas",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Rukkatrukk Squigbuggy",
+          "items": [
+            {
+              "id": "saw-blades",
+              "count": 1
+            },
+            {
+              "id": "sawn-off-shotgun",
+              "count": 1
+            },
+            {
+              "id": "squig-launchas",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Rukkatrukk Squigbuggy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "saw-blades",
+                "count": 1
+              },
+              {
+                "id": "sawn-off-shotgun",
+                "count": 1
+              },
+              {
+                "id": "squig-launchas",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Rukkatrukk Squigbuggy",
+          "id": "saw-blades",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Rukkatrukk Squigbuggy",
+          "id": "sawn-off-shotgun",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Rukkatrukk Squigbuggy",
+          "id": "squig-launchas",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "wartrakks",
@@ -2535,7 +8959,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Wartrakk",
+          "models": 1,
+          "items": [
+            {
+              "id": "kustom-choppa-wartrakks",
+              "count": 1
+            },
+            {
+              "id": "kustom-shoota-wartrakks",
+              "count": 1
+            },
+            {
+              "id": "multi-busta-launcha-wartrakks",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Wartrakk",
+          "items": [
+            {
+              "id": "kustom-choppa-wartrakks",
+              "count": 1
+            },
+            {
+              "id": "kustom-shoota-wartrakks",
+              "count": 1
+            },
+            {
+              "id": "multi-busta-launcha-wartrakks",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Wartrakk",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kustom-choppa-wartrakks",
+                "count": 1
+              },
+              {
+                "id": "kustom-shoota-wartrakks",
+                "count": 1
+              },
+              {
+                "id": "multi-busta-launcha-wartrakks",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Wartrakk",
+          "id": "kustom-choppa-wartrakks",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Wartrakk",
+          "id": "kustom-shoota-wartrakks",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Wartrakk",
+          "id": "multi-busta-launcha-wartrakks",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "warbuggies",
@@ -2580,7 +9091,116 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Warbuggy",
+          "models": 1,
+          "items": [
+            {
+              "id": "extra-dakka",
+              "count": 1
+            },
+            {
+              "id": "mek-speshul",
+              "count": 1
+            },
+            {
+              "id": "spiked-ram-warbuggies",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Warbuggy",
+          "items": [
+            {
+              "id": "extra-dakka",
+              "count": 1
+            },
+            {
+              "id": "mek-speshul",
+              "count": 1
+            },
+            {
+              "id": "spiked-ram-warbuggies",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Warbuggy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "extra-dakka",
+                "count": 1
+              },
+              {
+                "id": "spiked-ram-warbuggies",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Warbuggy",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "mek-speshul",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rivet-kannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Warbuggy",
+          "id": "extra-dakka",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Warbuggy",
+          "id": "mek-speshul",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Warbuggy",
+          "id": "rivet-kannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Warbuggy",
+          "id": "spiked-ram-warbuggies",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "gunwagon",
@@ -2611,6 +9231,193 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Gunwagon",
+          "models": 1,
+          "items": [
+            {
+              "id": "crushin-bulk-gunwagon",
+              "count": 1
+            },
+            {
+              "id": "kannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Gunwagon",
+          "items": [
+            {
+              "id": "crushin-bulk-gunwagon",
+              "count": 1
+            },
+            {
+              "id": "kannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Gunwagon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "grabbin-klaw",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Gunwagon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "lobba",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Gunwagon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "wreckin-ball",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Gunwagon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "crushin-bulk-gunwagon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Gunwagon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "kannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "killkannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "zzap-gun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Gunwagon",
+          "picks": 4,
+          "repeats": true,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "big-shoota",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Gunwagon",
+          "id": "big-shoota",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Gunwagon",
+          "id": "crushin-bulk-gunwagon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gunwagon",
+          "id": "grabbin-klaw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Gunwagon",
+          "id": "kannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gunwagon",
+          "id": "killkannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Gunwagon",
+          "id": "lobba",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Gunwagon",
+          "id": "wreckin-ball",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Gunwagon",
+          "id": "zzap-gun",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

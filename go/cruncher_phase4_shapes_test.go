@@ -2,6 +2,7 @@ package wh40kdc
 
 import (
 	"encoding/json"
+	"fmt"
 	"regexp"
 	"strings"
 	"testing"
@@ -143,5 +144,28 @@ func TestPhase4ShapeDiagnostics(t *testing.T) {
 	obj := effectToBuffs(j(t, `{"type":"select-objective","selector":{"count":1,"bind_as":"o"},"effect":{"type":"roll-modifier","target":"this-unit","modifier":{"roll":"hit","operation":"add","value":1}}}`), bokSource, fightCtx(nil), "attacker")
 	if len(obj.applied) != 0 || !strings.HasPrefix(reasons(obj), "select-objective:") {
 		t.Errorf("select-objective: applied %d, reasons %q", len(obj.applied), reasons(obj))
+	}
+}
+
+func TestOncePerRoundDicePoolIsCappedByItsMaxActivations(t *testing.T) {
+	option := func(name string, min int) string {
+		return fmt.Sprintf(`{"id":%q,"name":%q,"requirement":{"type":"pair","min_value":%d},"effect":{"type":"roll-modifier","target":"this-unit","modifier":{"roll":"hit","operation":"add","value":1}}}`, name, name, min)
+	}
+	effect := j(t, `{"type":"dice-pool-allocation","pool":{"count":8,"die":"D6"},"max_activations":2,"options":[`+option("A", 1)+`,`+option("B", 2)+`,`+option("C", 3)+`]}`)
+	usage := map[string]any{"usage": map[string]any{"frequency": "once-per-battle-round", "per": "army"}}
+	out := effectToBuffs(effect, bokSource, fightCtx(nil), "attacker", usage)
+	if len(out.activatable) != 3 {
+		t.Fatalf("activatable = %d, want 3", len(out.activatable))
+	}
+	abilityID := getStr(bokSource, "abilityId")
+	for _, raw := range out.activatable {
+		lever, _ := asMap(raw)
+		group, _ := getMap(lever, "group")
+		if getStr(group, "id") != abilityID || fmt.Sprint(group["maxActivations"]) != "2" {
+			t.Errorf("%s: group = %v, want the pool %s capped at 2", getStr(lever, "id"), group, abilityID)
+		}
+		if groups := getList(lever, "groups"); len(groups) != 0 {
+			t.Errorf("%s: groups = %v, want none", getStr(lever, "id"), groups)
+		}
 	}
 }

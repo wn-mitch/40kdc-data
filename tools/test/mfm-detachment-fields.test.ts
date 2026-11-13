@@ -15,6 +15,7 @@ import {
   type DirDetFieldResult,
 } from "../src/mfm/detachment-fields.js";
 import { partialDump } from "./mfm-fixture.js";
+import { SHARED_ROSTERS } from "../src/mfm/faction-map.js";
 
 /**
  * WS2 detachment-field reconcile. The derivation helpers are unit-tested with
@@ -263,5 +264,31 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("detachment-fields over the r
     // `mfm:mirror` stubs every rule the dump prints, so the unauthored worklist is empty; an
     // entry here means a detachment the mirror did not see (seeded after it, never re-mirrored).
     expect(report.dirs.flatMap((d) => d.ruleUnauthored)).toEqual([]);
+  });
+});
+
+describe("shared-roster detachment copies", () => {
+  // A chapter or legion carries copies of its parent roster's detachments; the
+  // reconcile maps them to the parent's dump row, so their dump-derived fields
+  // match the parent record. Holds without the dump.
+  it("give each copy its parent record's tags", () => {
+    const read = (dir: string): { id: string; tags?: string[] | null }[] => {
+      const p = path.join(CORE_DIR, dir, "detachments.json");
+      return fs.existsSync(p) ? (JSON.parse(fs.readFileSync(p, "utf8")) as { id: string; tags?: string[] | null }[]) : [];
+    };
+    const mismatches: string[] = [];
+    let copies = 0;
+    for (const [dir, parents] of Object.entries(SHARED_ROSTERS)) {
+      const parentTags = new Map(parents.flatMap((parent) => read(parent).map((d) => [d.id, [...(d.tags ?? [])].sort().join(",")] as const)));
+      for (const det of read(dir)) {
+        const expected = parentTags.get(det.id);
+        if (expected === undefined) continue;
+        copies += 1;
+        const actual = [...(det.tags ?? [])].sort().join(",");
+        if (actual !== expected) mismatches.push(`${dir}/${det.id}: [${actual}] vs [${expected}]`);
+      }
+    }
+    expect(copies).toBeGreaterThan(50);
+    expect(mismatches).toEqual([]);
   });
 });

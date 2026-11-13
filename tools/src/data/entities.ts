@@ -143,6 +143,36 @@ export class UnitView {
  * units.find("Kharn")!.abilities
  *   .filter(a => a.phases.includes("shooting"));
  */
+/**
+ * {@link AbilityView.describeBuffs} results by ability record. A translation reads only the
+ * record, the rules bundles it names (shared by every game-mode view) and its arguments, so one
+ * entry serves every view. Each ability keeps at most {@link TRANSLATIONS_PER_ABILITY} entries.
+ */
+const TRANSLATIONS = new WeakMap<object, Map<string, EffectTranslation>>();
+const TRANSLATIONS_PER_ABILITY = 4096;
+
+/** The cache key of a translation, or undefined when an argument holds a value JSON cannot key. */
+function translationKey(source: BuffSource, context: EngineContext | undefined, perspective: string, rating: unknown): string | undefined {
+  let keyable = true;
+  const key = JSON.stringify([source, context ?? null, perspective, rating ?? null], (_name, value: unknown) => {
+    if (value instanceof Map || value instanceof Set || typeof value === "function") keyable = false;
+    return value;
+  });
+  return keyable ? key : undefined;
+}
+
+/**
+ * Freezes a cached translation, its lists and their entries, so a caller that edits one fails
+ * instead of corrupting the cache. It stops there: an entry can point into the ability record.
+ */
+function freezeTranslation(translation: EffectTranslation): EffectTranslation {
+  for (const list of [translation.applied, translation.activatable, translation.unsupported]) {
+    for (const entry of list) Object.freeze(entry);
+    Object.freeze(list);
+  }
+  return Object.freeze(translation);
+}
+
 export class AbilityView {
   constructor(
     /** The full generated ability record. */
@@ -289,6 +319,26 @@ export class AbilityView {
     context?: EngineContext,
     perspective: TranslationPerspective = "attacker",
     rating?: string | number,
+  ): EffectTranslation {
+    const key = translationKey(source, context, perspective, rating);
+    if (key === undefined) return this.translate(source, context, perspective, rating);
+    let byKey = TRANSLATIONS.get(this.raw);
+    if (!byKey) TRANSLATIONS.set(this.raw, (byKey = new Map()));
+    let translation = byKey.get(key);
+    if (!translation) {
+      if (byKey.size >= TRANSLATIONS_PER_ABILITY) byKey.clear();
+      translation = freezeTranslation(this.translate(source, context, perspective, rating));
+      byKey.set(key, translation);
+    }
+    return translation;
+  }
+
+  /** {@link describeBuffs} without the cache. */
+  private translate(
+    source: BuffSource,
+    context: EngineContext | undefined,
+    perspective: TranslationPerspective,
+    rating: string | number | undefined,
   ): EffectTranslation {
     const ctx: EngineContext = context ?? { phase: "shooting" };
     // A rated rule ({rating: true}) reads the rating the owning unit prints.

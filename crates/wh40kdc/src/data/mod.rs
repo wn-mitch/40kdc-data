@@ -23,19 +23,27 @@
 // translator.
 #[cfg(feature = "cruncher")]
 mod abilities;
+#[cfg(feature = "cruncher")]
+mod ability_gates;
 mod ability_refs;
 mod collection;
 mod dataset;
 #[cfg(feature = "cruncher")]
 mod defensive;
+#[cfg(feature = "cruncher")]
+mod describe_buffs;
 pub mod game_mode;
 mod loadout;
+mod mfm_loadout;
 #[cfg(feature = "cruncher")]
 mod mortals;
 mod normalize;
 mod pricing;
 #[cfg(feature = "cruncher")]
 mod recipient_snapshots;
+#[cfg(feature = "cruncher")]
+mod stratagem_targets;
+mod unit_loadout;
 
 // Roster-level legality + affordability build on both the Dataset and the
 // importer's `Roster`/`BattleSize` types, so they ride the `import` feature
@@ -45,13 +53,13 @@ pub mod affordability;
 #[cfg(feature = "import")]
 pub mod battle_sizes;
 #[cfg(feature = "import")]
+mod list_keywords;
+#[cfg(feature = "import")]
 pub mod roster;
+mod roster_warlord;
 
 #[cfg(feature = "cruncher")]
-pub use abilities::{
-    aura_inches, stratagem_can_target, stratagem_can_target_unit, stratagem_target_names,
-    trigger_gated, EligibilityInput, EligibleAbility, EligibleAbilitySource,
-};
+pub use abilities::{EligibilityInput, EligibleAbility, EligibleAbilitySource};
 pub use ability_refs::{
     missing_required_abilities, printed_wargear_ids, rating_of, unit_ability_ids, with_rating,
 };
@@ -59,6 +67,8 @@ pub use collection::Collection;
 pub use dataset::{Dataset, RawData, ReactiveTrigger};
 #[cfg(feature = "cruncher")]
 pub use defensive::{DefensiveLever, DefensiveLevers, LeverGroup};
+#[cfg(feature = "cruncher")]
+pub use describe_buffs::{aura_inches, trigger_gated};
 pub use game_mode::{GameModeView, UnknownGameMode};
 pub use loadout::{
     base_loadout, check_unit_legality, clamp_weapon_count, complete_loadout, group_loadout,
@@ -67,12 +77,27 @@ pub use loadout::{
     LoadoutModel, LoadoutTier, Violation, ViolationCode, WeaponBound,
     LOADOUT_CANDIDATES_DEFAULT_LIMIT, LOADOUT_CANDIDATES_TRUNCATED,
 };
+pub use mfm_loadout::{
+    check_mfm_loadout, default_mfm_loadout, encode_mfm_configuration, mfm_assignment,
+    mfm_base_loadout, mfm_configurations, mfm_resized_default, mfm_rows, mfm_scaled_default,
+    mfm_unit_assignment, mfm_unit_base_loadout, mfm_unit_bounds, mfm_unit_candidates,
+    mfm_unit_violations, mfm_weapon_bounds, MfmBaseLoadout, MfmBound, MfmBreakpoint,
+    MfmComposition, MfmConfiguration, MfmItem, MfmLimit, MfmLoadoutRules, MfmLoadoutViolation,
+    MfmModelRange, MfmOption, MfmRowBundle, MfmSearchTooLarge, MfmSlot, MfmStockRow, MfmTemplate,
+    MfmUniform, MfmUniformChoice, MAX_SEARCH_BUNDLES, MFM_CANDIDATES_TRUNCATED,
+};
+pub use mfm_loadout::{for_each_mfm_configuration, mfm_row_splits};
 #[cfg(feature = "cruncher")]
 pub use mortals::{AbilityMortalWounds, AbilityUnsupported, MortalWoundSources};
 pub use normalize::{normalize_name, strip_leading_the};
 pub use pricing::{base_unit_points, points_tier_missing};
 #[cfg(feature = "cruncher")]
 pub use recipient_snapshots::HistoricalSnapshotAbility;
+#[cfg(feature = "cruncher")]
+pub use stratagem_targets::{
+    stratagem_can_target, stratagem_can_target_unit, stratagem_target_names,
+};
+pub use unit_loadout::{mfm_group_row_order, mfm_groups, unit_loadout, LoadoutSource, UnitLoadout};
 
 #[cfg(feature = "import")]
 pub use affordability::{

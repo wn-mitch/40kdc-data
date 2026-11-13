@@ -2749,8 +2749,10 @@
                 "per": {
                   "enum": [
                     "model",
-                    "unit"
-                  ]
+                    "unit",
+                    "one-model"
+                  ],
+                  "description": "model: each model in the target regains the amount; one-model: one model in the target does; unit (or absent): the target unit does."
                 }
               },
               "required": [
@@ -3117,6 +3119,11 @@
                 "datasheet": {
                   "$ref": "../../defs/common.schema.json#/$defs/entity-id"
                 },
+                "model": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "A model type of the joined unit that only rules add (its unit composition's added_models name), as Split adds Blue Horrors to Pink Horrors."
+                },
                 "count": {
                   "oneOf": [
                     {
@@ -3253,6 +3260,12 @@
                 {
                   "required": [
                     "datasheet"
+                  ]
+                },
+                {
+                  "required": [
+                    "model",
+                    "join"
                   ]
                 }
               ]

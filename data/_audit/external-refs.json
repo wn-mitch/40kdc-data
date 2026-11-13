@@ -62,25 +62,25 @@
       }
     },
     "weapon": {
-      "entities": 3615,
-      "with_external_refs": 3529,
+      "entities": 3628,
+      "with_external_refs": 3542,
       "covered_entities_by_namespace": {
-        "bsdata": 2904,
-        "mfm": 3516
+        "bsdata": 2910,
+        "mfm": 3529
       },
       "references_by_namespace": {
-        "bsdata": 3747,
-        "mfm": 5178
+        "bsdata": 3758,
+        "mfm": 5217
       }
     },
     "wargear": {
-      "entities": 201,
-      "with_external_refs": 149,
+      "entities": 202,
+      "with_external_refs": 150,
       "covered_entities_by_namespace": {
-        "mfm": 149
+        "mfm": 150
       },
       "references_by_namespace": {
-        "mfm": 180
+        "mfm": 181
       }
     }
   },
@@ -2641,6 +2641,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "heavy-flamer-venerable-dreadnought",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "heavy-flamer-wulfen-dreadnought",
           "faction_id": "adeptus-astartes"
         }
@@ -2770,6 +2775,22 @@
           "entity_type": "weapon",
           "id": "purifying-flame-sanctifiers-castellan-crowe",
           "faction_id": "grey-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "5837-1692-df16-8061",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "laspistol",
+          "faction_id": "astra-militarum"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "laspistol-draydens-lance-attilan-rough-riders",
+          "faction_id": "astra-militarum"
         }
       ]
     },
@@ -4390,6 +4411,22 @@
     },
     {
       "namespace": "bsdata",
+      "id": "8894-e331-1f86-5712",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-sabre",
+          "faction_id": "astra-militarum"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-sabre-draydens-lance-attilan-rough-riders",
+          "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "8a20-8c22-9f1a-bfdc",
       "targets": [
         {
@@ -4736,6 +4773,22 @@
           "entity_type": "weapon",
           "id": "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators",
           "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "9254-fb44-df-bd0d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "goad-lance",
+          "faction_id": "astra-militarum"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "goad-lance-draydens-lance-attilan-rough-riders",
+          "faction_id": "astra-militarum"
         }
       ]
     },
@@ -5955,6 +6008,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "heavy-flamer-venerable-dreadnought",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "heavy-flamer-wulfen-dreadnought",
           "faction_id": "adeptus-astartes"
         }
@@ -6074,6 +6132,22 @@
           "entity_type": "weapon",
           "id": "melta-cannon-hippogriff-afv",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "ba38-62d3-698a-3f35",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "helfrost-cannon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "helfrost-cannon-venerable-dreadnought",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -6428,6 +6502,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "twin-lascannon-corvus-blackstar",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "twin-lascannon-repulsor",
           "faction_id": "adeptus-astartes"
         }
@@ -6744,6 +6823,11 @@
         {
           "entity_type": "weapon",
           "id": "twin-lascannon-astraeus",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "twin-lascannon-corvus-blackstar",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -7194,6 +7278,11 @@
         {
           "entity_type": "weapon",
           "id": "twin-lascannon-astraeus",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "twin-lascannon-corvus-blackstar",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -7696,6 +7785,22 @@
     },
     {
       "namespace": "bsdata",
+      "id": "ece7-7c5e-28d7-9a0d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "helfrost-cannon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "helfrost-cannon-venerable-dreadnought",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "ed99-c797-e408-1bfa",
       "targets": [
         {
@@ -7982,6 +8087,11 @@
         {
           "entity_type": "weapon",
           "id": "heavy-flamer-murderfang",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "heavy-flamer-venerable-dreadnought",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -9101,6 +9211,22 @@
           "entity_type": "weapon",
           "id": "close-combat-weapon-shroud-runners",
           "faction_id": "aeldari"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "044f7f88-1f00-4509-81c5-725ba8af59e4",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "hexrifle",
+          "faction_id": "drukhari"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "hexrifle-coven-of-agonies-wracks",
+          "faction_id": "drukhari"
         }
       ]
     },
@@ -11516,6 +11642,22 @@
           "entity_type": "weapon",
           "id": "acastus-ironstorm-missile-pod",
           "faction_id": "imperial-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "206636ca-bfc4-48fb-b171-854985c6d698",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "hellfire-extremis",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "hellfire-extremis",
+          "faction_id": "agents-of-the-imperium"
         }
       ]
     },
@@ -14123,6 +14265,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "heavy-flamer-venerable-dreadnought",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "heavy-flamer-wulfen-dreadnought",
           "faction_id": "adeptus-astartes"
         }
@@ -15556,6 +15703,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "52bc6733-4131-4089-a7c5-3b20505b688b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "vigil-spear",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "vigil-spear",
+          "faction_id": "agents-of-the-imperium"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "52e10068-476d-42d2-8934-95c22bbdafc9",
       "targets": [
         {
@@ -16092,6 +16255,11 @@
         {
           "entity_type": "weapon",
           "id": "twin-lascannon-astraeus",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "twin-lascannon-corvus-blackstar",
           "faction_id": "adeptus-astartes"
         },
         {
@@ -17198,6 +17366,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "71ca3b65-754b-4fc4-a285-09938b07765f",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "helfrost-cannon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "helfrost-cannon-venerable-dreadnought",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "7279cb98-c1f0-414d-93ce-ab15955408ad",
       "targets": [
         {
@@ -18247,6 +18431,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "heavy-flamer-venerable-dreadnought",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
           "id": "heavy-flamer-wulfen-dreadnought",
           "faction_id": "adeptus-astartes"
         }
@@ -18281,6 +18470,22 @@
           "entity_type": "weapon",
           "id": "blast-pistol-ynnari-kabalite-warriors",
           "faction_id": "aeldari"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "8515a505-ffba-4f2a-b1e6-89c974a2a110",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "twin-assault-cannon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "twin-assault-cannon",
+          "faction_id": "agents-of-the-imperium"
         }
       ]
     },
@@ -19413,6 +19618,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "99b4a56c-8933-4a2e-9b72-012051c7e4a2",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "twin-torturers-tools",
+          "faction_id": "drukhari"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "twin-torturers-tools-coven-of-agonies-wracks",
+          "faction_id": "drukhari"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "9a1d5aad-539a-4013-8a06-3af5b6839e08",
       "targets": [
         {
@@ -19681,6 +19902,22 @@
           "entity_type": "weapon",
           "id": "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators",
           "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "a037c131-356e-430f-9b4f-99f418e8aa5e",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "helfrost-cannon",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "helfrost-cannon-venerable-dreadnought",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -20712,6 +20949,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "b1de4907-cf00-4368-b71a-2aa98bba33c3",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon",
+          "faction_id": "agents-of-the-imperium"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "master-crafted-power-weapon-watch-captain-artemis",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "b1fcf701-d3b4-4d6e-8623-ebad7b66656d",
       "targets": [
         {
@@ -20967,6 +21220,22 @@
           "entity_type": "weapon",
           "id": "acastus-autocannon",
           "faction_id": "imperial-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "b526157a-2607-4cea-a7df-b174634d38a3",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-sabre",
+          "faction_id": "astra-militarum"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-sabre-draydens-lance-attilan-rough-riders",
+          "faction_id": "astra-militarum"
         }
       ]
     },
@@ -21627,6 +21896,22 @@
           "entity_type": "weapon",
           "id": "pavane-of-slaanesh",
           "faction_id": "emperors-children"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "c0e01bbc-5d7b-42b8-b18f-92bed0e618d3",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "torturers-tool",
+          "faction_id": "drukhari"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "torturers-tool-coven-of-agonies-wracks",
+          "faction_id": "drukhari"
         }
       ]
     },
@@ -22990,6 +23275,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "d4c21ec3-4925-4440-84f2-34128cfceb6d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "goad-lance",
+          "faction_id": "astra-militarum"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "goad-lance-draydens-lance-attilan-rough-riders",
+          "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "d51b8666-d4fe-464b-951e-326a3735c3de",
       "targets": [
         {
@@ -24133,6 +24434,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "e582d3a8-ab0b-49b0-9884-5a3dee83c3e2",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "ossefactor",
+          "faction_id": "drukhari"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "ossefactor-coven-of-agonies-wracks",
+          "faction_id": "drukhari"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "e5e26961-72b0-4a63-98e4-17ec24e98393",
       "targets": [
         {
@@ -24676,6 +24993,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "ef1c88af-0c22-4fb6-8a6a-fab337c30c4b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "laspistol",
+          "faction_id": "astra-militarum"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "laspistol-draydens-lance-attilan-rough-riders",
+          "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "ef57f6a8-975c-468b-8cfa-3841a16ebf55",
       "targets": [
         {
@@ -25088,6 +25421,22 @@
           "entity_type": "weapon",
           "id": "rokkit-launcha-trukk",
           "faction_id": "orks"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "f749d44e-8d0b-4eb8-9870-fe5cc52a8840",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "blackstar-rocket-launcher",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "blackstar-rocket-launcher",
+          "faction_id": "agents-of-the-imperium"
         }
       ]
     },

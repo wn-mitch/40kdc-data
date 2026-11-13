@@ -1,8 +1,10 @@
 import type { Buff, EngineContext } from "../cruncher/index.js";
 import type { Dataset, StackableBuff, StackableBuffGroup } from "../data/dataset.js";
-import { baseLoadout, optionCap, type LoadoutModel } from "../data/loadout.js";
+import { optionCap, type LoadoutModel } from "../data/loadout.js";
+import { unitLoadout } from "../data/unit-loadout.js";
+import type { MfmComposition } from "../data/mfm-loadout-unit.js";
 import { fullModelCount } from "./factions.js";
-import { reachesOtherUnits, replacedArmyRuleIds } from "../abilities-resolver/resolver.js";
+import { reachesOtherUnits, replacedArmyRuleIds, suppressedAbilities } from "../abilities-resolver/resolver.js";
 import type { EligibilityInput } from "../abilities-resolver/index.js";
 import type { UnitView } from "../data/entities.js";
 import type { MatrixConfig } from "./config.js";
@@ -10,13 +12,15 @@ import { DamageCellCache } from "./cache.js";
 import { validateCandidateLoadout, type CandidateLoadoutLegality, type LocalStackMember } from "./legality.js";
 import { isLegalStackLevers } from "./lever-legality.js";
 import { searchLevers, type LeverSpace } from "./lever-search.js";
-import { searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
+import { countsKey, mfmLoadouts, searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
 import type { ProfileDamage } from "./loadout-scoring.js";
-import { attributeSelectedProfile, crunchProfileScorer, unitLoadoutDamage, type DamageAttribution, type UnscoreableProfile } from "./unit-damage.js";
+import { attributeSelectedProfile, crunchProfileScorer, profileApplicableBuffs, unitLoadoutDamage, type DamageAttribution, type UnscoreableProfile } from "./unit-damage.js";
 import { translationWarnings } from "./translation-warnings.js";
 import { loadoutLeverBuffs, namedLoadoutWargear, surfacedByLoadout, wargearRules, wargearTranslation, type WargearRules } from "./wargear-levers.js";
 import { combinedWargear, equippedBuffs, loadoutWargear, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrants } from "./weapon-grants.js";
 import { equippedLevers, othersEquippedBuffs, othersUnequippedKey, settleMemberLoadouts, type MemberLoadouts } from "./member-loadouts.js";
+import { activationPossible, filterStackEligibleAbilities, filterStackableStratagems, unitLookup } from "./stratagem-eligibility.js";
+import { combinedKeywords, issuesOrders, ordersReach } from "./orders.js";
 import type {
   DamageCellState,
   PoolLever,
@@ -60,6 +64,8 @@ function attachmentRoles(members: readonly StackMember[]): Record<string, "leade
 
 export class DamageScoringSession {
   readonly supportUnits: UnitView[];
+  /** The faction's unit ids, each a possible nearby Officer for an Orders lever. */
+  readonly orderIssuerCandidates: readonly string[];
   readonly defensiveBuffs: Buff[];
   readonly defensiveWarnings: StackBuffPool["warnings"];
   readonly scoreCache: DamageCellCache<ProfileDamage | null>;
@@ -75,6 +81,7 @@ export class DamageScoringSession {
   private readonly grantCache = new Map<string, WeaponGrants>();
   private readonly loadoutLegalityCache: Map<string, CandidateLoadoutLegality>;
   private readonly wargearRuleCache = new Map<string, WargearRules>();
+  private readonly suppressedCache = new Map<string, ReadonlySet<string>>();
   private readonly loadoutLeverCache = new Map<string, StackableBuff[] | null>();
 
   constructor(
@@ -89,6 +96,7 @@ export class DamageScoringSession {
     this.loadoutCache = new DamageCellCache(state.factionId, state.target.profileId, state.phase);
     this.poolCache = new DamageCellCache(state.factionId, state.target.profileId, state.phase);
     this.stackCache = new DamageCellCache(state.factionId, state.target.profileId, state.phase);
+    this.orderIssuerCandidates = factionUnits.map((unit) => unit.id).sort();
     this.supportUnits = factionUnits.filter((unit) => unit.abilities.some((ability) =>
       (ability.phases.length === 0 || ability.phases.includes(state.phase)) && reachesOtherUnits(ability.raw.effect),
     ));
@@ -111,40 +119,60 @@ export class DamageScoringSession {
     );
   }
 
+  /**
+   * The unit's loadout space at its full model count. Under MFM rules its legal loadouts are listed
+   * up front, and a dump default its own rules refuse is replaced by the first legal loadout so the
+   * search starts legal; per-five sensitivity reads authored options and applies only without them.
+   */
   private scaffold(unit: UnitView): LoadoutScaffold {
     const cached = this.scaffoldCache.get(unit.id);
     if (cached) return cached;
-    const composition = this.dataset.unitCompositionOf(unit.raw) as { models?: LoadoutModel[] } | undefined;
+    const composition = this.dataset.unitCompositionOf(unit.raw) as ({ models?: LoadoutModel[] } & Partial<MfmComposition>) | undefined;
     const models = composition?.models ?? [];
     const modelCount = fullModelCount(this.dataset, unit.raw);
-    const authored = this.dataset.wargearOptionsOf(unit.raw);
-    const options = this.config.perFiveSensitivity
-      ? authored.map((option) => option.replaces && (option.model_constraint as { any_number?: boolean } | undefined)?.any_number
-        ? { ...option, model_constraint: { ...option.model_constraint, any_number: undefined, per_n_models: 5 } }
-        : option)
-      : authored;
-    const scaffold = {
-      models,
-      modelCount,
-      options,
-      caps: options.map((option) => optionCap(option, modelCount, models)),
-      base: baseLoadout(unit.raw, modelCount, options, models).counts,
-    };
+    const view = this.dataset.loadoutOf(unit.raw);
+    let scaffold: LoadoutScaffold;
+    if (view.source === "mfm") {
+      const mfm = mfmLoadouts(composition as MfmComposition, modelCount);
+      const stock = view.base(modelCount) ?? new Map<string, number>();
+      const base = mfm.byKey.has(countsKey(stock)) || mfm.loadouts.length === 0 ? stock : new Map(mfm.loadouts[0].counts);
+      const carriable = new Set<string>();
+      for (const { counts } of mfm.loadouts) for (const id of counts.keys()) carriable.add(id);
+      scaffold = { models, modelCount, options: [], caps: [], base, carriable: [...carriable].sort(), mfm };
+    } else {
+      const authored = this.dataset.wargearOptionsOf(unit.raw);
+      const options = this.config.perFiveSensitivity
+        ? authored.map((option) => option.replaces && (option.model_constraint as { any_number?: boolean } | undefined)?.any_number
+          ? { ...option, model_constraint: { ...option.model_constraint, any_number: undefined, per_n_models: 5 } }
+          : option)
+        : authored;
+      const base = unitLoadout(unit.raw, composition, options).base(modelCount) ?? new Map<string, number>();
+      scaffold = {
+        models,
+        modelCount,
+        options,
+        caps: options.map((option) => optionCap(option, modelCount, models)),
+        base,
+        carriable: [...new Set([...base.keys(), ...options.flatMap((option) => [...(option.replacement ?? []), ...(option.replacement_choice ?? []).flat()])])].sort(),
+      };
+    }
     this.scaffoldCache.set(unit.id, scaffold);
     return scaffold;
   }
 
   private loadoutLegality(unit: UnitView, scaffold: LoadoutScaffold, counts: ReadonlyMap<string, number>) {
-    const key = `${unit.raw.faction_id}|${unit.id}|per-five:${this.config.perFiveSensitivity}|${[...counts].sort(([left], [right]) => left.localeCompare(right)).map(([id, count]) => `${id}:${count}`).join(",")}`;
+    const key = `${unit.raw.faction_id}|${unit.id}|per-five:${this.config.perFiveSensitivity}|${countsKey(counts)}`;
     const cached = this.loadoutLegalityCache.get(key);
     if (cached) return cached;
-    const legality = validateCandidateLoadout({
-      unit: unit.raw,
-      modelCount: scaffold.modelCount,
-      options: scaffold.options,
-      counts,
-      models: scaffold.models,
-    });
+    const listed = scaffold.mfm?.byKey.get(countsKey(counts));
+    const legality = listed !== undefined
+      ? { legal: true, violations: [], groups: scaffold.mfm!.loadouts[listed].groups }
+      : validateCandidateLoadout({
+        unit: unit.raw,
+        modelCount: scaffold.modelCount,
+        counts,
+        loadout: scaffold.mfm ? this.dataset.loadoutOf(unit.raw) : unitLoadout(unit.raw, this.dataset.unitCompositionOf(unit.raw), scaffold.options),
+      });
     this.loadoutLegalityCache.set(key, legality);
     return legality;
   }
@@ -164,11 +192,10 @@ export class DamageScoringSession {
   }
 
   /** What any member can carry, at the stack's model count: the loadouts a stack's `unit-wargear` conditions range over. */
-  private stackScaffold(spec: StackSpec): Pick<LoadoutScaffold, "base" | "options" | "modelCount"> {
+  private stackScaffold(spec: StackSpec): Pick<LoadoutScaffold, "carriable" | "modelCount"> {
     const scaffolds = spec.members.map((member) => this.scaffold(member.unit));
     return {
-      base: this.stackCounts(spec),
-      options: scaffolds.flatMap((scaffold) => scaffold.options),
+      carriable: [...new Set(scaffolds.flatMap((scaffold) => scaffold.carriable))].sort(),
       modelCount: scaffolds.reduce((sum, scaffold) => sum + scaffold.modelCount, 0),
     };
   }
@@ -211,7 +238,23 @@ export class DamageScoringSession {
     const buffs = equippedBuffs(unit.raw, counts, allBuffs);
     const scaffold = this.scaffold(unit);
     const target = { unit: this.state.target.unitRaw, modelCount: this.state.target.modelCount };
-    const crunchProfile = crunchProfileScorer(this.dataset, target, buffs, (profile) => this.unscoreable.set(`${unit.id}|${profile.weapon.id}|${profile.profileIndex}`, { ...profile, unitId: unit.id }));
+    const scoreProfileForBuffs = (profileBuffs: readonly Buff[]) => {
+      const crunchProfile = crunchProfileScorer(
+        this.dataset,
+        target,
+        profileBuffs,
+        (profile) => this.unscoreable.set(`${unit.id}|${profile.weapon.id}|${profile.profileIndex}`, { ...profile, unitId: unit.id }),
+      );
+      return (request: Parameters<typeof crunchProfile>[0]) => {
+        const key = `${unit.id}|${request.weapon.id}|${request.profileIndex}|${request.modelsFiring}|${buffKey(profileBuffs)}|${request.hitModifier ?? 0}|${JSON.stringify(request.context)}`;
+        const cached = this.scoreCache.get(key);
+        if (cached !== undefined) return cached;
+        this.crunchCount += 1;
+        const value = crunchProfile(request);
+        this.scoreCache.set(key, value);
+        return value;
+      };
+    };
     const scored = unitLoadoutDamage({
       dataset: this.dataset,
       unit: unit.raw,
@@ -222,15 +265,8 @@ export class DamageScoringSession {
       context,
       groups: this.loadoutLegality(unit, scaffold, counts).groups,
       grants: this.weaponGrants(unit, counts, context).grants,
-      scoreProfile: (request) => {
-        const key = `${unit.id}|${request.weapon.id}|${request.profileIndex}|${buffKey(buffs)}|${request.hitModifier ?? 0}|${JSON.stringify(request.context)}`;
-        const cached = this.scoreCache.get(key);
-        if (cached !== undefined) return cached;
-        this.crunchCount += 1;
-        const value = crunchProfile(request);
-        this.scoreCache.set(key, value);
-        return value;
-      },
+      scoreProfile: scoreProfileForBuffs(buffs),
+      scoreProfileForBuffs,
     });
     return {
       counts: new Map(counts),
@@ -238,7 +274,9 @@ export class DamageScoringSession {
       total: scored.total,
       selectedWeapons: scored.selected,
       pistolChoice: scored.pistolChoice,
-      legalityErrors: [],
+      legalityErrors: scored.modelScopedWargearUnresolved?.map(
+        (wargearId) => `cannot score model-scoped rule from ${wargearId} without per-model loadout groups`,
+      ) ?? [],
     };
   }
 
@@ -311,10 +349,50 @@ export class DamageScoringSession {
     return spec.detachmentIds.length > 0 ? spec.detachmentIds : [undefined];
   }
 
-  /** `levers` without dropped army rules and those another detachment's Combat Patrol rule replaces. */
-  private keptLevers(levers: readonly StackableBuff[], replaced: ReadonlySet<string>): StackableBuff[] {
+  /** The package's broad resolver result narrowed by stack damage's known target identities. */
+  private stackableBuffsFor(input: StackEligibilityInput, context: EngineContext) {
+    const broad = this.dataset.eligibleAbilities(input, context.phase);
+    const eligible = filterStackEligibleAbilities(this.dataset, input, broad);
+    const selection = this.dataset.stackableBuffsFor(input, context);
+    const ids = [input.unitId, ...(input.attachedUnitIds ?? [])];
+    const units = unitLookup(this.dataset, input.factionId);
+    const present = new Set([...ids, ...this.orderIssuerCandidates]);
+    const receiver = combinedKeywords(ids, units, input.detachmentId);
+    const possible = selection.buffs.filter((lever) => activationPossible(lever.requires, ids, units) && this.ordersReachable(lever, present, receiver));
+    return { ...selection, ...filterStackableStratagems(possible, selection.groups, broad, eligible) };
+  }
+
+  /**
+   * Whether an army rule that issues Orders reaches this unit: an Officer among the stack's
+   * members or the faction's units (assumed nearby, as support units are) whose Orders may
+   * target it (`ordersReach`). Other levers pass.
+   */
+  private ordersReachable(lever: StackableBuff, present: ReadonlySet<string>, receiver: ReadonlySet<string>): boolean {
+    if (lever.source.kind !== "ability" || lever.source.abilityKind !== "army") return true;
+    if (!issuesOrders(this.dataset, lever.source.abilityId)) return true;
+    return ordersReach(this.dataset, lever.source.abilityId, present, receiver);
+  }
+
+  /**
+   * `levers` without dropped army rules, those another detachment's Combat Patrol rule replaces,
+   * and those a standing rule in any detachment pass suppresses (`suppressed`).
+   */
+  private keptLevers(levers: readonly StackableBuff[], replaced: ReadonlySet<string>, suppressed: ReadonlySet<string>): StackableBuff[] {
     return levers.filter((lever) => lever.source.kind !== "ability" || (!this.config.droppedArmyRules.includes(lever.source.abilityId) &&
-      !(lever.source.abilityKind === "army" && replaced.has(lever.source.abilityId))));
+      !(lever.source.abilityKind === "army" && replaced.has(lever.source.abilityId)) && !suppressed.has(lever.source.abilityId)));
+  }
+
+  /** The abilities any detachment pass's standing rules suppress for `member`. */
+  private suppressedFor(spec: StackSpec, member: StackMember, phase: EngineContext["phase"]): Set<string> {
+    const out = new Set<string>();
+    for (const detachmentId of this.detachmentPasses(spec)) {
+      const input = this.eligibilityInput(spec, member, detachmentId);
+      const key = `${phase}|${JSON.stringify(input)}`;
+      let ids = this.suppressedCache.get(key);
+      if (!ids) this.suppressedCache.set(key, (ids = suppressedAbilities(this.dataset, input, phase)));
+      for (const id of ids) out.add(id);
+    }
+    return out;
   }
 
   pool(spec: StackSpec): StackBuffPool {
@@ -327,11 +405,12 @@ export class DamageScoringSession {
     const replaced = this.replacedArmyRules(spec);
     for (const member of spec.members) {
       const context = this.state.contextFor(spec, member);
+      const suppressed = this.suppressedFor(spec, member, context.phase);
       for (const detachmentId of this.detachmentPasses(spec)) {
         const input = this.eligibilityInput(spec, member, detachmentId);
-        const selection = this.dataset.stackableBuffsFor(input, context);
+        const selection = this.stackableBuffsFor(input, context);
         for (const group of selection.groups) if (!groups.has(group.id)) groups.set(group.id, group);
-        for (const lever of this.keptLevers(selection.buffs, replaced)) {
+        for (const lever of this.keptLevers(selection.buffs, replaced, suppressed)) {
           const current = levers.get(lever.id) ?? { ...lever, perMember: new Map<string, Buff[]>() };
           current.perMember.set(member.unit.id, lever.buffs);
           levers.set(lever.id, current);
@@ -351,7 +430,10 @@ export class DamageScoringSession {
     let rules = this.wargearRuleCache.get(key);
     if (!rules) {
       const context = this.state.contextFor(spec, member);
-      const eligible = this.detachmentPasses(spec).flatMap((detachmentId) => this.dataset.eligibleAbilities(this.eligibilityInput(spec, member, detachmentId), context.phase));
+      const eligible = this.detachmentPasses(spec).flatMap((detachmentId) => {
+        const input = this.eligibilityInput(spec, member, detachmentId);
+        return filterStackEligibleAbilities(this.dataset, input, this.dataset.eligibleAbilities(input, context.phase));
+      });
       rules = wargearRules(eligible, context, this.stackScaffold(spec));
       this.wargearRuleCache.set(key, rules);
     }
@@ -374,9 +456,10 @@ export class DamageScoringSession {
     let value: StackableBuff[] | null = null;
     if (wargearTranslation(rules.entries, context) !== rules.unloaded) {
       const replaced = this.replacedArmyRules(spec);
+      const suppressed = this.suppressedFor(spec, member, context.phase);
       const levers = new Map<string, StackableBuff>();
       for (const detachmentId of this.detachmentPasses(spec)) {
-        for (const lever of this.keptLevers(this.dataset.stackableBuffsFor(this.eligibilityInput(spec, member, detachmentId), context).buffs, replaced)) levers.set(lever.id, lever);
+        for (const lever of this.keptLevers(this.stackableBuffsFor(this.eligibilityInput(spec, member, detachmentId), context).buffs, replaced, suppressed)) levers.set(lever.id, lever);
       }
       value = [...levers.values()];
     }
@@ -443,12 +526,17 @@ export class DamageScoringSession {
 
   /** Leave-one-out attribution of one of a member's selected profiles in a scored stack with `counts` and the members' `chosen` loadouts. */
   attributeWeapon(spec: StackSpec, member: StackMember, weapon: SelectedWeaponResult, counts: ReadonlyMap<string, number>, chosen?: MemberLoadouts): DamageAttribution | null {
+    // The loadout spends re-roll-one permissions on one row; the others score without them.
+    const buffs = profileApplicableBuffs(
+      this.memberBuffs(spec, member, counts, chosen),
+      weapon,
+    ).filter((buff) => buff.contribution.type !== "reroll-one" || weapon.rerollOne === true);
     return attributeSelectedProfile({
       dataset: this.dataset,
       unit: member.unit.raw,
       selected: weapon,
       target: { unit: this.state.target.unitRaw, modelCount: this.state.target.modelCount },
-      buffs: this.memberBuffs(spec, member, counts, chosen),
+      buffs,
       context: this.state.contextFor(spec, member),
     });
   }

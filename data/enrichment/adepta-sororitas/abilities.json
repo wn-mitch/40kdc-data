@@ -360,16 +360,25 @@
             "filter": {
               "roll": "wound",
               "result": "success"
-            }
+            },
+            "subject": "this-model"
           },
           "effect": {
-            "type": "mortal-wounds",
-            "target": "defender",
-            "modifier": {
-              "count": 1
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "melee"
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "defender",
+              "modifier": {
+                "count": 1
+              }
             }
-          },
-          "duration": "phase"
+          }
         }
       ]
     },
@@ -3590,7 +3599,13 @@
       },
       "effect": {
         "type": "return-models",
-        "target": "this-unit",
+        "target": {
+          "level": "model",
+          "member_of": "this-unit",
+          "model_names": [
+            "Geminae Superia"
+          ]
+        },
         "modifier": {
           "count": 1
         }
@@ -10038,7 +10053,7 @@
       ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "behavior": "reactive",
     "trigger": {

@@ -16,7 +16,11 @@ Resolution order — stable for snapshot tests:
 6. **support** — abilities on supporting units that can reach another unit (an aura scope, or
    an effect naming an aura, a unit selection or a friendly/enemy unit filter).
 
-Each step phase-filters via the ``Dataset.phases_for`` index.
+Each step phase-filters via the ``Dataset.phases_for`` index. Army and detachment rules, and
+a Stratagem with no friendly target, also need their ``applies_to`` keyword filter to admit the
+combined unit. A unit's keywords include each conditional keyword whose detachment is unset or
+the selected one. Abilities that a standing rule (army, detachment, unit or attached) suppresses
+for the unit are dropped from the result (``suppressed_abilities`` lists them).
 
 Python mirror of ``tools/src/abilities-resolver/resolver.ts``. Entries are
 dicts ``{"ability": AbilityView, "source": {...}, "phases": [...]}``; the
@@ -28,6 +32,13 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import Any
 
+from wh40kdc.abilities_keywords import (
+    applies_to_unit,
+    eligibility_keywords,
+    has_friendly_target,
+    member_keywords,
+    suppressed_ability_ids,
+)
 from wh40kdc.data.dataset import Dataset
 from wh40kdc.data.entities import AbilityView, UnitView
 from wh40kdc.data.normalize import normalize_name
@@ -36,7 +47,25 @@ from wh40kdc.data.normalize import normalize_name
 def resolve_eligible_abilities(
     dataset: Dataset, input: dict[str, Any], phase: str
 ) -> list[dict[str, Any]]:
-    """Compute the eligible-ability list for one (unit, phase)."""
+    """Compute the eligible-ability list for one (unit, phase), without the abilities the
+    unit's standing rules suppress (``suppressed_abilities``)."""
+    entries, suppressed = _resolve_with_suppressions(dataset, input, phase)
+    if not suppressed:
+        return entries
+    return [entry for entry in entries if entry["ability"].id not in suppressed]
+
+
+def suppressed_abilities(dataset: Dataset, input: dict[str, Any], phase: str) -> set[str]:
+    """The ability ids the unit's standing rules suppress for ``input`` (which
+    ``resolve_eligible_abilities`` already drops). A caller that pools several detachments'
+    passes drops each pass's suppressions from all of them. Mirrors TS ``suppressedAbilities``."""
+    return _resolve_with_suppressions(dataset, input, phase)[1]
+
+
+def _resolve_with_suppressions(
+    dataset: Dataset, input: dict[str, Any], phase: str
+) -> tuple[list[dict[str, Any]], set[str]]:
+    """Every eligible entry for one (unit, phase), and the ability ids suppressed among them."""
 
     # Resolve units within the faction when one is known. Unit ids are shared
     # across factions, so a faction-blind `get` can return the wrong faction's
@@ -47,10 +76,10 @@ def resolve_eligible_abilities(
 
     unit_id = input.get("unitId")
     if not isinstance(unit_id, str):
-        return []
+        return [], set()
     unit = resolve_unit(unit_id, input.get("factionId"))
     if unit is None:
-        return []
+        return [], set()
     faction_id = input.get("factionId") or unit.raw.get("faction_id")
     seen: set[str] = set()
     out: list[dict[str, Any]] = []
@@ -86,10 +115,26 @@ def resolve_eligible_abilities(
     if patrol is not None:
         listed = set(patrol.get("detachment_rule_ids") or [])
         replaced |= {ability.id for ability in army if ability.id not in listed}
+    # Each member's keywords (lower-cased); a unit target reads them as one combined unit.
+    members = [
+        member_keywords(member, input.get("detachmentId"))
+        for member in [unit]
+        + [
+            resolve_unit(member_id, faction_id)
+            for member_id in input.get("attachedUnitIds") or []
+        ]
+    ]
+    printed = _printed_keyword(dataset)
+
+    def applies(ability: AbilityView) -> bool:
+        return applies_to_unit(ability.raw.get("applies_to"), members, printed)
+
     for ability in army:
         if ability.id in replaced:
             continue
         if not phase_matches(ability):
+            continue
+        if not applies(ability):
             continue
         push_unique(
             {"ability": ability, "source": {"kind": "army"}, "phases": intersect(ability.phases)}
@@ -104,6 +149,8 @@ def resolve_eligible_abilities(
             if ability.raw.get("detachment_id") != detachment_id:
                 continue
             if not phase_matches(ability):
+                continue
+            if not applies(ability):
                 continue
             push_unique(
                 {
@@ -120,22 +167,6 @@ def resolve_eligible_abilities(
             detachment_id, faction_id or ""
         ) or dataset.detachments.get_any(detachment_id)
         if detachment is not None:
-            # Each member's keywords; a unit target reads them as one combined unit.
-            members = [unit] + [
-                resolve_unit(member_id, faction_id)
-                for member_id in input.get("attachedUnitIds") or []
-            ]
-            member_keywords = [
-                {
-                    keyword.lower()
-                    for keyword in (member.raw.get("keywords") or [])
-                    + (member.raw.get("faction_keywords") or [])
-                }
-                if member is not None
-                else set()
-                for member in members
-            ]
-            printed = _printed_keyword(dataset)
             for strat_id in detachment.get("stratagem_ids") or []:
                 stratagem = dataset.stratagems.get(strat_id)
                 if stratagem is None:
@@ -153,7 +184,11 @@ def resolve_eligible_abilities(
                     continue
                 trigger = strat_ability.raw.get("trigger")
                 subject = trigger.get("subject") if isinstance(trigger, dict) else None
-                if not stratagem_can_target_unit(stratagem, member_keywords, subject, printed):
+                if not stratagem_can_target_unit(stratagem, members, subject, printed):
+                    continue
+                # A Stratagem with no friendly target restriction keeps its unit requirement in
+                # its rule's `applies_to`.
+                if not has_friendly_target(stratagem) and not applies(strat_ability):
                     continue
                 push_unique(
                     {
@@ -230,7 +265,7 @@ def resolve_eligible_abilities(
                 }
             )
 
-    return out
+    return out, suppressed_ability_ids(out, members, printed)
 
 
 def _combat_patrol_detachment(
@@ -272,8 +307,18 @@ def reaches_other_units(effect: Any) -> bool:
     if effect.get("type") in ("aura", "select-units"):
         return True
     target = effect.get("target")
-    if isinstance(target, dict) and target.get("owner") in ("friendly", "enemy"):
-        return True
+    if isinstance(target, dict):
+        owner = target.get("owner")
+        # A friendly filter bounded to the holder's own unit stays on it.
+        own_unit = owner == "friendly" and target.get("member_of") in ("this-unit", "this-model")
+        if (owner == "friendly" and not own_unit) or owner == "enemy":
+            return True
+    # A model-only grant's definition cannot become an aura from the whole unit.
+    if effect.get("type") == "ability-grant" and (
+        target in ("this-model", "model-in-this-unit")
+        or (isinstance(target, dict) and target.get("level") == "model")
+    ):
+        return False
     return any(reaches_other_units(child) for child in effect.values())
 
 
@@ -378,6 +423,7 @@ def _target_holds(
         return (
             (target.get("warlord") is not True or has("character"))
             and _keyword_lists_hold(target, has, has)
+            and eligibility_keywords(target.get("eligibility"), gained, has) is not False
             and (
                 target.get("bound_to") != "triggering-unit"
                 or subject is None
@@ -418,7 +464,8 @@ def _keyword_lists_hold(
 
 
 def _printed_keyword(dataset: Dataset) -> Callable[[str], bool]:
-    """Whether some datasheet prints a keyword (unit or faction keyword), memoised per lookup.
+    """Whether some datasheet prints a keyword (unit, faction or conditional keyword), memoised
+    per lookup.
 
     Scans every game mode: a keyword printed only on a combat-patrol datasheet is
     still printed, whatever mode ``dataset`` lists.
@@ -434,6 +481,7 @@ def _printed_keyword(dataset: Dataset) -> Callable[[str], bool]:
                 for unit in units
                 for own in (unit.raw.get("keywords") or [])
                 + (unit.raw.get("faction_keywords") or [])
+                + [entry["keyword"] for entry in unit.raw.get("conditional_keywords") or []]
             )
         return seen[key]
 

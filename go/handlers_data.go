@@ -32,20 +32,120 @@ func (s *RunnerState) handleCheckUnitLegality(args any) map[string]any {
 	if u == nil {
 		return errResp("UNKNOWN_ENTITY", map[string]any{"kind": "unit", "id": unitID})
 	}
-	models, tiers := ds.unitCompositionOf(u.Raw)
 	counts := map[string]int{}
 	if cs, ok := asMap(a["counts"]); ok {
 		for k, v := range cs {
 			counts[k] = asInt(v)
 		}
 	}
-	violations := checkUnitLegality(u.Raw, modelCount, ds.wargearOptionsOf(u.Raw), counts, models, tiers)
+	violations := ds.loadoutOf(u.Raw).Check(modelCount, counts)
 	strs := make([]string, 0, len(violations))
 	for _, v := range violations {
 		strs = append(strs, v["code"]+":"+v["id"])
 	}
 	sort.Strings(strs)
 	return okResp(toAnyList(strs))
+}
+
+// mfmUnitOf resolves the op's unit as check_unit_legality does, or returns an
+// error response.
+func (s *RunnerState) mfmUnitOf(op string, args any) (map[string]any, *UnitView, map[string]any) {
+	a, ok := asMap(args)
+	if !ok {
+		return nil, nil, errResp("INVALID_INPUT", detail(op+" args must be an object"))
+	}
+	unitID, ok := a["unitId"].(string)
+	if !ok {
+		return nil, nil, errResp("INVALID_INPUT", detail(op+".unitId required"))
+	}
+	ds := s.dataset()
+	var u *UnitView
+	if fid, ok := a["factionId"].(string); ok {
+		if uv, found := ds.Units.GetInFaction(unitID, fid); found {
+			u = uv
+		}
+	} else if uv, found := ds.Units.GetAny(unitID); found {
+		u = uv
+	}
+	if u == nil {
+		return nil, nil, errResp("UNKNOWN_ENTITY", map[string]any{"kind": "unit", "id": unitID})
+	}
+	return a, u, nil
+}
+
+// mfmLoadoutOf resolves the op's unit as check_unit_legality does and returns
+// its MFM loadout rules (nil when the unit has none), or an error response.
+func (s *RunnerState) mfmLoadoutOf(op string, args any) (map[string]any, *MfmLoadoutRules, map[string]any) {
+	a, u, fail := s.mfmUnitOf(op, args)
+	if fail != nil {
+		return nil, nil, fail
+	}
+	rules, err := decodeMfmLoadout(s.dataset().unitLoadoutOf(u.Raw))
+	if err != nil {
+		return nil, nil, errResp("INVALID_INPUT", detail(op+": malformed loadout: "+err.Error()))
+	}
+	return a, rules, nil
+}
+
+// mfmCountsArg reads a wire object of non-negative integer counts.
+func mfmCountsArg(v any) (map[string]int, bool) {
+	m, ok := asMap(v)
+	if !ok {
+		return nil, false
+	}
+	out := map[string]int{}
+	for k, raw := range m {
+		n, ok := raw.(float64)
+		if !ok || n < 0 || n != float64(int(n)) {
+			return nil, false
+		}
+		out[k] = int(n)
+	}
+	return out, true
+}
+
+// handleCheckMfmLoadout is wargear legality against the unit's MFM loadout —
+// mirror of the TS runner op. Returns [{code, message}], or null when the unit
+// has no loadout.
+func (s *RunnerState) handleCheckMfmLoadout(args any) map[string]any {
+	a, rules, fail := s.mfmLoadoutOf("check_mfm_loadout", args)
+	if fail != nil {
+		return fail
+	}
+	models, okModels := mfmCountsArg(a["models"])
+	counts, okCounts := mfmCountsArg(a["counts"])
+	if !okModels || !okCounts {
+		return errResp("INVALID_INPUT", detail("check_mfm_loadout.models/counts must map ids to non-negative integers"))
+	}
+	if rules == nil {
+		return okResp(nil)
+	}
+	out := []any{}
+	for _, v := range CheckMfmLoadout(rules, models, counts) {
+		out = append(out, map[string]any{"code": v.Code, "message": v.Message})
+	}
+	return okResp(out)
+}
+
+// handleDefaultMfmLoadout is the default unit of the unit's MFM loadout —
+// mirror of the TS runner op. Returns {models, counts}, or null.
+func (s *RunnerState) handleDefaultMfmLoadout(args any) map[string]any {
+	_, rules, fail := s.mfmLoadoutOf("default_mfm_loadout", args)
+	if fail != nil {
+		return fail
+	}
+	if rules == nil {
+		return okResp(nil)
+	}
+	models, counts := DefaultMfmLoadout(rules)
+	wire := func(m map[string]int) map[string]any {
+		out := map[string]any{}
+		for k, n := range m {
+			out[k] = float64(n)
+		}
+		return out
+	}
+	return okResp(map[string]any{"models": wire(models), "counts": wire(counts)})
 }
 
 // handleCheckRosterLegality is the whole-army legality op — mirror of the TS
@@ -198,6 +298,14 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 	unknownUnit := func() map[string]any {
 		return errResp("UNKNOWN_ENTITY", map[string]any{"kind": "unit", "id": in["unitId"]})
 	}
+	// The loadout queries resolve the unit in factionId when given, else
+	// first-wins, as the TS runner's resolveUnit does.
+	resolveLoadoutUnit := func() (*UnitView, bool) {
+		if factionID := getStr(in, "factionId"); factionID != "" {
+			return ds.Units.GetInFaction(unitID, factionID)
+		}
+		return ds.Units.GetAny(unitID)
+	}
 
 	switch query {
 	case "find_unit":
@@ -282,17 +390,17 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 		}
 		return okResp(out)
 	case "base_loadout", "maximal_loadout":
-		u, ok := ds.Units.GetAny(unitID)
+		u, ok := resolveLoadoutUnit()
 		if !ok {
 			return unknownUnit()
 		}
+		// Empty when the size cannot be built.
 		modelCount := asInt(in["modelCount"])
-		models, _ := ds.unitCompositionOf(u.Raw)
 		var lo map[string]int
 		if query == "base_loadout" {
-			lo = baseLoadout(u.Raw, modelCount, ds.wargearOptionsOf(u.Raw), models)
+			lo = ds.loadoutOf(u.Raw).Base(modelCount)
 		} else {
-			lo = maximalLoadout(u.Raw, modelCount, ds.wargearOptionsOf(u.Raw), models)
+			lo = ds.loadoutOf(u.Raw).Maximal(modelCount)
 		}
 		strs := make([]string, 0, len(lo))
 		for id, n := range lo {
@@ -301,12 +409,11 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 		sort.Strings(strs)
 		return okResp(toAnyList(strs))
 	case "weapon_bounds":
-		u, ok := ds.Units.GetAny(unitID)
+		u, ok := resolveLoadoutUnit()
 		if !ok {
 			return unknownUnit()
 		}
-		models, _ := ds.unitCompositionOf(u.Raw)
-		bounds := weaponBounds(u.Raw, asInt(in["modelCount"]), ds.wargearOptionsOf(u.Raw), models)
+		bounds := ds.loadoutOf(u.Raw).Bounds(asInt(in["modelCount"]))
 		strs := make([]string, 0, len(bounds))
 		for id, b := range bounds {
 			strs = append(strs, id+":"+itoa(b.min)+"-"+itoa(b.max))
@@ -314,20 +421,16 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 		sort.Strings(strs)
 		return okResp(toAnyList(strs))
 	case "loadout_candidates":
-		u, ok := ds.Units.GetAny(unitID)
-		if factionID := getStr(in, "factionId"); factionID != "" {
-			u, ok = ds.Units.GetInFaction(unitID, factionID)
-		}
+		u, ok := resolveLoadoutUnit()
 		if !ok {
 			return unknownUnit()
 		}
-		models, tiers := ds.unitCompositionOf(u.Raw)
 		var limit *int
 		if in["limit"] != nil {
 			n := asInt(in["limit"])
 			limit = &n
 		}
-		return okResp(toAnyList(LoadoutCandidates(u.Raw, asInt(in["modelCount"]), ds.wargearOptionsOf(u.Raw), models, tiers, limit)))
+		return okResp(toAnyList(ds.loadoutOf(u.Raw).Candidates(asInt(in["modelCount"]), limit)))
 	case "phases_of":
 		ab, ok := ds.Abilities.GetAny(getStr(in, "abilityId"))
 		if !ok {

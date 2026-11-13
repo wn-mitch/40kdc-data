@@ -32,7 +32,6 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Dataset } from "./data/dataset.js";
-import { baseLoadout, loadoutCandidates, weaponBounds } from "./data/loadout.js";
 import { normalizeName } from "./data/normalize.js";
 import {
   describeScoringCard,
@@ -78,6 +77,8 @@ import {
 } from "./gen-conformance-game-mode-cases.js";
 import { canonicalMortalSourceCases, canonicalUnitMortalSourceCases } from "./gen-conformance-mortal-cases.js";
 import { canonicalDefensiveLeverCases } from "./gen-conformance-defensive-levers.js";
+import { canonicalMfmLoadoutCases } from "./gen-conformance-mfm-loadout.js";
+import { canonicalMfmUnitCases } from "./gen-conformance-mfm-unit.js";
 import { canonicalDslCases, refreshResolverDslCases, withCanonicalDslCases, type ResolverDslCase } from "./gen-conformance-resolver-dsl.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -100,6 +101,17 @@ const NORMALIZE_INPUTS = [
   "Brôkhyr Iron-master",
   "  the   betrayer  ",
   "space--marines",
+  // Unicode hyphens and dashes (U+2010–U+2015) and the minus sign (U+2212)
+  // collapse like the ASCII hyphen: GW's data keeps the non-breaking hyphen
+  // (`Grav‑Tank`, U+2011) while roster exports print ASCII `Grav-Tank`.
+  "Grav\u2010Tank",
+  "Grav\u2011Tank",
+  "Grav\u2012Tank",
+  "Grav\u2013Tank",
+  "Grav\u2014Tank",
+  "Grav\u2015Tank",
+  "Grav\u2212Tank",
+  "Agents of the Imperium \u2014 Deathwatch",
   // casefold
   "KHÂRN THE BETRAYER",
   // already-normalized (idempotence)
@@ -430,13 +442,19 @@ type LinkedApiQuery =
   | {
       name: string;
       query: "base_loadout";
-      args: { unitId: string; modelCount: string };
+      args: { unitId: string; factionId?: string; modelCount: string };
+      comparison: "set";
+    }
+  | {
+      name: string;
+      query: "maximal_loadout";
+      args: { unitId: string; factionId?: string; modelCount: string };
       comparison: "set";
     }
   | {
       name: string;
       query: "weapon_bounds";
-      args: { unitId: string; modelCount: string };
+      args: { unitId: string; factionId?: string; modelCount: string };
       comparison: "set";
     }
   | {
@@ -807,9 +825,9 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     args: { bodyguardId: "sanctifiers" },
     comparison: "set",
   },
-  // base_loadout(unit, modelCount): the pinned legal default loadout, encoded as a
-  // sorted "weaponId:count" multiset. chaos-terminators is a uniform squad (per-model
-  // scaling); crusader-squad exercises leader+bulk per-figure allocation.
+  // base_loadout(unit, modelCount): the default loadout at that size, encoded as a sorted
+  // "weaponId:count" multiset; empty when the size cannot be built. crusader-squad exercises
+  // leader+bulk per-figure allocation.
   {
     name: "base_loadout chaos-terminators @5 (legal default, no swaps)",
     query: "base_loadout",
@@ -817,9 +835,35 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     comparison: "set",
   },
   {
-    name: "base_loadout chaos-terminators @10 scales per model",
+    name: "base_loadout chaos-terminators @10 is no squad size of the first copy",
     query: "base_loadout",
     args: { unitId: "chaos-terminators", modelCount: "10" },
+    comparison: "set",
+  },
+  // A shared chassis resolves in the requested faction: the World Eaters copy fields ten
+  // models, the first-wins (Emperor's Children) copy does not.
+  {
+    name: "base_loadout chaos-terminators @10 in world-eaters resolves that faction's copy",
+    query: "base_loadout",
+    args: { unitId: "chaos-terminators", factionId: "world-eaters", modelCount: "10" },
+    comparison: "set",
+  },
+  {
+    name: "weapon_bounds chaos-terminators @10 in world-eaters resolves that faction's copy",
+    query: "weapon_bounds",
+    args: { unitId: "chaos-terminators", factionId: "world-eaters", modelCount: "10" },
+    comparison: "set",
+  },
+  {
+    name: "maximal_loadout chaos-terminators @10 in world-eaters resolves that faction's copy",
+    query: "maximal_loadout",
+    args: { unitId: "chaos-terminators", factionId: "world-eaters", modelCount: "10" },
+    comparison: "set",
+  },
+  {
+    name: "base_loadout khorne-berzerkers @20 grows the bulk row by its template",
+    query: "base_loadout",
+    args: { unitId: "khorne-berzerkers", modelCount: "20" },
     comparison: "set",
   },
   {
@@ -834,6 +878,38 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     args: { unitId: "imperial-navy-breachers", modelCount: "10" },
     comparison: "set",
   },
+  {
+    name: "base_loadout pink-horrors @10 reads authored options without MFM rules",
+    query: "base_loadout",
+    args: { unitId: "pink-horrors", modelCount: "10" },
+    comparison: "set",
+  },
+  // maximal_loadout(unit, modelCount): the legal loadout that adds the most copies over the
+  // base, as a sorted "id:count" multiset; empty when the size cannot be built.
+  {
+    name: "maximal_loadout khorne-berzerkers @10 takes every special the rules allow",
+    query: "maximal_loadout",
+    args: { unitId: "khorne-berzerkers", modelCount: "10" },
+    comparison: "set",
+  },
+  {
+    name: "maximal_loadout khorne-berzerkers @7 cannot be built",
+    query: "maximal_loadout",
+    args: { unitId: "khorne-berzerkers", modelCount: "7" },
+    comparison: "set",
+  },
+  {
+    name: "maximal_loadout sternguard-veteran-squad @5 keeps the first of several tied configurations",
+    query: "maximal_loadout",
+    args: { unitId: "sternguard-veteran-squad", modelCount: "5" },
+    comparison: "set",
+  },
+  {
+    name: "maximal_loadout pink-horrors @10 applies every authored option",
+    query: "maximal_loadout",
+    args: { unitId: "pink-horrors", modelCount: "10" },
+    comparison: "set",
+  },
   // weapon_bounds(unit, modelCount): each id's inclusive count range, encoded as a
   // sorted "id:min-max" set. Breachers' Navis Armsmen are three same-named rows, so
   // each row's swap is capped by the models carrying what it replaces.
@@ -841,6 +917,12 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     name: "weapon_bounds imperial-navy-breachers @10 caps split-row swaps by their carriers",
     query: "weapon_bounds",
     args: { unitId: "imperial-navy-breachers", modelCount: "10" },
+    comparison: "set",
+  },
+  {
+    name: "weapon_bounds corsair-voidscarred @8 widens each range over every row split",
+    query: "weapon_bounds",
+    args: { unitId: "corsair-voidscarred", modelCount: "8" },
     comparison: "set",
   },
   {
@@ -860,19 +942,19 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     comparison: "ordered",
   },
   {
-    name: "loadout_candidates boyz @10 enforces one special model",
+    name: "loadout_candidates boyz @10 allows one of each special",
     query: "loadout_candidates",
     args: { unitId: "boyz", factionId: "orks", modelCount: "10" },
     comparison: "ordered",
   },
   {
-    name: "loadout_candidates boyz @18 scales the shared unit budget",
+    name: "loadout_candidates boyz @18 is no squad size",
     query: "loadout_candidates",
     args: { unitId: "boyz", factionId: "orks", modelCount: "18" },
     comparison: "ordered",
   },
   {
-    name: "loadout_candidates boyz @20 caps shared specials at two",
+    name: "loadout_candidates boyz @20 allows two of each special",
     query: "loadout_candidates",
     args: { unitId: "boyz", factionId: "orks", modelCount: "20" },
     comparison: "ordered",
@@ -993,26 +1075,26 @@ function runLinkedQuery(
     }
     case "weapon_bounds": {
       // Mirrors the runner's weapon_bounds op: each id's inclusive range as a sorted
-      // "id:min-max" set.
-      const u = ds.units.getAny(q.args.unitId);
+      // "id:min-max" set; empty when the size cannot be built.
+      const u = q.args.factionId ? ds.units.getInFaction(q.args.unitId, q.args.factionId) : ds.units.getAny(q.args.unitId);
       if (!u) throw new Error(`weapon_bounds: unknown unit ${q.args.unitId}`);
-      const comp = ds.unitCompositionOf(u.raw);
-      const bounds = weaponBounds(u.raw, Number(q.args.modelCount), ds.wargearOptionsOf(u.raw), comp?.models);
-      return [...bounds].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort();
+      const bounds = ds.loadoutOf(u.raw).bounds(Number(q.args.modelCount));
+      return [...(bounds ?? [])].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort();
+    }
+    case "maximal_loadout": {
+      // Mirrors the runner's maximal_loadout op: a sorted "id:count" multiset.
+      const u = q.args.factionId ? ds.units.getInFaction(q.args.unitId, q.args.factionId) : ds.units.getAny(q.args.unitId);
+      if (!u) throw new Error(`maximal_loadout: unknown unit ${q.args.unitId}`);
+      const counts = ds.loadoutOf(u.raw).maximal(Number(q.args.modelCount));
+      return [...(counts ?? [])].map(([id, n]) => `${id}:${n}`).sort();
     }
     case "base_loadout": {
-      // Mirrors the runner's base_loadout op: the legal default loadout encoded as
-      // a sorted "id:count" multiset (set-compared).
-      const u = ds.units.getAny(q.args.unitId);
+      // Mirrors the runner's base_loadout op: the default loadout encoded as a sorted
+      // "id:count" multiset (set-compared); empty when the size cannot be built.
+      const u = q.args.factionId ? ds.units.getInFaction(q.args.unitId, q.args.factionId) : ds.units.getAny(q.args.unitId);
       if (!u) throw new Error(`base_loadout: unknown unit ${q.args.unitId}`);
-      const comp = ds.unitCompositionOf(u.raw);
-      const lo = baseLoadout(
-        u.raw,
-        Number(q.args.modelCount),
-        ds.wargearOptionsOf(u.raw),
-        comp?.models,
-      );
-      return [...lo.counts].map(([id, n]) => `${id}:${n}`).sort();
+      const counts = ds.loadoutOf(u.raw).base(Number(q.args.modelCount));
+      return [...(counts ?? [])].map(([id, n]) => `${id}:${n}`).sort();
     }
     case "loadout_candidates": {
       const u = q.args.factionId
@@ -1020,13 +1102,8 @@ function runLinkedQuery(
         : ds.units.getAny(q.args.unitId);
       if (!u)
         throw new Error(`loadout_candidates: unknown unit ${q.args.unitId}`);
-      const comp = ds.unitCompositionOf(u.raw);
-      return loadoutCandidates(
-        u.raw,
+      return ds.loadoutOf(u.raw).candidates(
         Number(q.args.modelCount),
-        ds.wargearOptionsOf(u.raw),
-        comp?.models,
-        comp?.tiers,
         q.args.limit == null ? undefined : Number(q.args.limit),
       );
     }
@@ -3502,6 +3579,80 @@ function genEffectTranslation(): void {
     };
     cases.push(entry);
   }
+  // The trigger's event object as a model: every trigger naming a model object reads
+  // `event-object` as "that model" (a keyword check, an effect on it, a history check on the
+  // destroyed model, a fight-on-death leaf); a unit object, or a model object alongside a unit
+  // one, keeps "that unit".
+  const destroyedModel = { event: "model-destroyed", object: { owner: "friendly", level: "model", member_of: "this-unit" } };
+  const destroyedUnit = { event: "destroyed", object: { owner: "friendly", all_of: ["INFANTRY"] } };
+  const pinkCheck = {
+    type: "conditional",
+    condition: { type: "matches", parameters: { subject: "event-object", filter: { all_of: ["PINK"] } } },
+    effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "stealth" } },
+  };
+  const FORCED_EVENT_OBJECT_CASES: { id: string; effect: Record<string, unknown>; trigger: unknown }[] = [
+    { id: "event-object-model-keyword", effect: pinkCheck, trigger: destroyedModel },
+    { id: "event-object-unit-keyword", effect: pinkCheck, trigger: destroyedUnit },
+    { id: "event-object-mixed-triggers", effect: pinkCheck, trigger: [destroyedModel, destroyedUnit] },
+    {
+      id: "event-object-model-target",
+      effect: { type: "ability-grant", target: "event-object", modifier: { ability: "stealth" } },
+      trigger: { event: "damage-allocated", object: { owner: "friendly", level: "model" } },
+    },
+    {
+      id: "event-object-model-history",
+      effect: {
+        type: "conditional",
+        condition: { type: "happened", parameters: { event: "model-destroyed", object: "event-object", window: "event", filter: { weapons: { type: "melee" } } } },
+        effect: { type: "ability-grant", target: "this-unit", modifier: { ability: "stealth" } },
+      },
+      trigger: destroyedModel,
+    },
+    {
+      id: "event-object-model-act-on-death",
+      effect: {
+        type: "act-on-death",
+        target: "event-object",
+        modifier: {
+          act: "fight",
+          resolution: "after-attacking-unit-finishes",
+          removal: "after-destroyed-model-fights",
+          gate: { dice: "D6", threshold: 2, comparison: "gte", modifiers: [] },
+          eligibility: { operator: "not", operands: [{ type: "happened", parameters: { subject: "event-object", event: "selected", filter: { to: "fight" }, window: "phase" } }] },
+        },
+      },
+      trigger: destroyedModel,
+    },
+  ];
+  // A selection of a unit as the target of all of a model's attacks, as a negated history
+  // condition and as a trigger.
+  const enemyTargets = { event: "targets-selected", subject: { owner: "enemy", level: "model" }, filter: { kind: "attack" } };
+  FORCED_EVENT_OBJECT_CASES.push(
+    {
+      id: "targets-selected-all-attacks-negated",
+      effect: {
+        type: "conditional",
+        condition: { operator: "not", operands: [{ type: "happened", parameters: { event: "targets-selected", subject: "event-subject", object: "this-unit", filter: { kind: "attack", all_attacks: true }, window: "event" } }] },
+        effect: { type: "roll-modifier", target: "event-subject", modifier: { roll: "hit", operation: "subtract", value: 1 } },
+      },
+      trigger: enemyTargets,
+    },
+    {
+      id: "targets-selected-all-attacks-trigger",
+      effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
+      trigger: { ...enemyTargets, object: "this-unit", filter: { kind: "attack", all_attacks: true } },
+    },
+  );
+  for (const fc of FORCED_EVENT_OBJECT_CASES) {
+    const scope = { duration: "permanent" };
+    cases.push({
+      caseId: `${fc.id}#${cases.length}`,
+      effect: fc.effect,
+      scope,
+      trigger: fc.trigger,
+      expected: { text: describeAbility({ effect: fc.effect as Effect, scope, trigger: fc.trigger as AbilityTrigger | AbilityTrigger[] }) },
+    });
+  }
   const filteredAuraEffect: Effect = {
     type: "aura",
     target: "friendly-within-aura",
@@ -4214,6 +4365,11 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/resource-gain-characteristic", effect: { type: "resource-gain", target: "this-unit", modifier: { pool: "fury", amount: { characteristic: "W" } } } },
     // A heal of a two-dice amount.
     { caseId: "fidelity/heal-two-d3", effect: { type: "heal", target: "this-model", modifier: { amount: "2D3" } } },
+    // A heal of every model in the unit, against a heal of one model the player picks.
+    { caseId: "fidelity/heal-per-model", effect: { type: "heal", target: "this-unit", modifier: { amount: 3, per: "model" } } },
+    { caseId: "fidelity/heal-per-one-model", effect: { type: "heal", target: "this-unit", modifier: { amount: 3, per: "one-model" } } },
+    // A return of a destroyed model named by its datasheet entry, not any model of the unit.
+    { caseId: "fidelity/return-models-named", effect: { type: "return-models", target: { level: "model", member_of: "this-unit", model_names: ["Healer Twin"] }, modifier: { count: 1 } } },
     // A cap on a roll after modifiers: "if the result is greater than 6, change it to 6".
     { caseId: "fidelity/roll-result-at-most", effect: { type: "roll-result", target: "this-unit", modifier: { roll: "charge", at_most: 6 } } },
     // An embark under the core rules with a longer distance to the Transport than 3".
@@ -4568,6 +4724,23 @@ function genUnitMortalSourceCases(): void {
   console.log(`abilities-resolver/unit-mortal-sources.json: ${cases.length} cases`);
 }
 
+/** The mfm_loadout corpus: every lifted unit's default and checks of it, from the TS runner. */
+function genMfmLoadout(): void {
+  const specVersion = Number.parseInt(readFileSync(join(CONFORMANCE, "SPEC_VERSION"), "utf8").trim(), 10);
+  const { defaults, checks } = canonicalMfmLoadoutCases(Dataset.embedded(), specVersion);
+  mkdirSync(join(CONFORMANCE, "mfm_loadout"), { recursive: true });
+  writeJson(join(CONFORMANCE, "mfm_loadout", "defaults.json"), defaults);
+  writeJson(join(CONFORMANCE, "mfm_loadout", "checks.json"), checks);
+  const { units, assignments, unitChecks } = canonicalMfmUnitCases(Dataset.embedded(), specVersion);
+  // One case per line keeps these large corpora small and their diffs per case.
+  const writeLines = (file: string, cases: readonly unknown[]) =>
+    writeText(join(CONFORMANCE, "mfm_loadout", file), `[\n${cases.map((c) => JSON.stringify(c)).join(",\n")}\n]\n`);
+  writeLines("units.json", units);
+  writeLines("assignments.json", assignments);
+  writeLines("unit-checks.json", unitChecks);
+  console.log(`mfm_loadout: ${defaults.length} defaults, ${checks.length} checks, ${units.length} units, ${assignments.length} assignments, ${unitChecks.length} unit checks`);
+}
+
 /** Append fabricated direct-API cases without duplicating their stable identities on regen. */
 function genCanonicalCruncherCases(): void {
   const appended = canonicalDslCases();
@@ -4603,3 +4776,4 @@ genScoring();
 genTerrainResolver();
 genTerrainKeystones();
 genShare();
+genMfmLoadout();

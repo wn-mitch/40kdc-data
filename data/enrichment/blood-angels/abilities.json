@@ -1083,7 +1083,7 @@
       ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [
@@ -1133,7 +1133,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [

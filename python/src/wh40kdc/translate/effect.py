@@ -18,7 +18,7 @@ from typing import Any
 
 from wh40kdc.translate.condition import Condition, dekebab
 from wh40kdc.translate.condition_leadin import condition_lead_in, is_defensive_effect
-from wh40kdc.translate.condition_refs import range_phrase
+from wh40kdc.translate.condition_refs import model_object_refs, range_phrase
 from wh40kdc.translate.effect_aura import with_aura_recipient
 from wh40kdc.translate.effect_bind import roll_head, select_objective_block
 from wh40kdc.translate.effect_inline import (
@@ -469,6 +469,9 @@ def _render_top_level(e: Effect, scope: Any, usage: Any = None, trigger: Any = N
     triggers = [t for t in normalize_triggers(trigger) if t.get("event") is not None]
     if any(t.get("event") in ("destroyed", "model-destroyed") for t in triggers):
         ctx["destroyed_trigger"] = True
+    # Every trigger's object is a model: the effect's `event-object` reads "that model".
+    if triggers and all(_obj(t.get("object")).get("level") == "model" for t in triggers):
+        e = model_object_refs(e)
     cond_range = _condition_within_range(
         e.get("condition") if e.get("type") == "conditional" else None
     )

@@ -364,7 +364,7 @@
       ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "community_notes": "[APPROX] Once per phase, each ADEPTUS ASTARTES unit may re-roll one Hit, Wound, or Damage roll (see 'usage'). The single-roll re-roll is modeled with subset 'all-failures' per the sibling convention. Full rule in raw-text store.",
     "trigger": [

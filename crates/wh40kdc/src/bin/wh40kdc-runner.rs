@@ -431,9 +431,6 @@ fn handle_check_unit_legality(state: &mut RunnerState, args: &Value) -> Value {
             Some(json!({ "kind": "unit", "id": unit_id })),
         );
     };
-    let comp = ds.unit_composition_of(unit);
-    let models = comp.map(|c| wh40kdc::loadout_models(&c.models));
-    let tiers = comp.map(|c| wh40kdc::loadout_tiers(&c.tiers));
     let mut counts: std::collections::HashMap<String, i64> = std::collections::HashMap::new();
     if let Some(obj) = args.get("counts").and_then(Value::as_object) {
         for (k, v) in obj {
@@ -442,20 +439,332 @@ fn handle_check_unit_legality(state: &mut RunnerState, args: &Value) -> Value {
             }
         }
     }
-    let violations = wh40kdc::check_unit_legality(
-        unit,
-        model_count,
-        &ds.wargear_options_of(unit),
-        &counts,
-        models.as_deref(),
-        tiers.as_deref(),
-    );
+    let violations = match ds.loadout_of(unit).check(model_count, &counts) {
+        Ok(violations) => violations,
+        Err(error) => return mfm_search_error(error),
+    };
     let mut encoded: Vec<Value> = violations
         .iter()
         .map(|v| Value::String(format!("{}:{}", v.code.as_str(), v.id)))
         .collect();
     encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
     ok_value(Value::Array(encoded))
+}
+
+/// A fabricated composition on the wire: `models`, optional `tiers`, `loadout`.
+#[derive(serde::Deserialize)]
+struct MfmWireComposition {
+    models: Vec<MfmWireRange>,
+    #[serde(default)]
+    tiers: Option<Vec<MfmWireTier>>,
+    #[serde(default)]
+    loadout: Option<wh40kdc::MfmLoadoutRules>,
+}
+
+#[derive(serde::Deserialize)]
+struct MfmWireTier {
+    models: Vec<MfmWireRange>,
+}
+
+#[derive(serde::Deserialize)]
+struct MfmWireRange {
+    name: String,
+    min: i64,
+    max: i64,
+}
+
+impl MfmWireRange {
+    fn range(self) -> wh40kdc::MfmModelRange {
+        wh40kdc::MfmModelRange {
+            name: self.name,
+            min: self.min,
+            max: self.max,
+        }
+    }
+}
+
+/// The op's unit, resolved as `check_unit_legality` resolves it (or, when
+/// `inline`, a fabricated `composition` arg standing in for one), with its
+/// composition when that has an MFM loadout (None otherwise), or an error response.
+fn mfm_composition_of(
+    state: &mut RunnerState,
+    op: &str,
+    args: &Value,
+    inline: bool,
+) -> Result<Option<wh40kdc::MfmComposition>, Value> {
+    if let Some(given) = args.get("composition").filter(|_| inline) {
+        let invalid = || {
+            err_value(
+                ErrorKind::InvalidInput,
+                Some(
+                    json!({ "detail": format!("{op}.composition must be an object with models") }),
+                ),
+            )
+        };
+        if !given.get("models").is_some_and(Value::is_array) {
+            return Err(invalid());
+        }
+        let wire: MfmWireComposition =
+            serde_json::from_value(given.clone()).map_err(|_| invalid())?;
+        let Some(loadout) = wire.loadout else {
+            return Ok(None);
+        };
+        return Ok(Some(wh40kdc::MfmComposition {
+            models: wire.models.into_iter().map(MfmWireRange::range).collect(),
+            tiers: wire
+                .tiers
+                .unwrap_or_default()
+                .into_iter()
+                .map(|tier| tier.models.into_iter().map(MfmWireRange::range).collect())
+                .collect(),
+            loadout: Some(loadout),
+        }));
+    }
+    let Some(unit_id) = args.get("unitId").and_then(Value::as_str) else {
+        return Err(err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": format!("{op}.unitId required") })),
+        ));
+    };
+    let ds = state.dataset();
+    let unit = match args.get("factionId").and_then(Value::as_str) {
+        Some(fid) => ds.units.get_in_faction(unit_id, fid),
+        None => ds.units.get_any(unit_id),
+    };
+    let Some(unit) = unit else {
+        return Err(err_value(
+            ErrorKind::UnknownEntity,
+            Some(json!({ "kind": "unit", "id": unit_id })),
+        ));
+    };
+    Ok(ds
+        .unit_composition_of(unit)
+        .filter(|c| c.loadout.is_some())
+        .map(wh40kdc::MfmComposition::from_composition))
+}
+
+/// The op's unit's MFM loadout rules (None when the unit has none), or an error response.
+fn mfm_loadout_of(
+    state: &mut RunnerState,
+    op: &str,
+    args: &Value,
+) -> Result<Option<wh40kdc::MfmLoadoutRules>, Value> {
+    Ok(mfm_composition_of(state, op, args, false)?.and_then(|c| c.loadout))
+}
+
+/// A wire object of non-negative integer counts, or None when it is not one.
+fn mfm_counts_arg(value: Option<&Value>) -> Option<std::collections::BTreeMap<String, i64>> {
+    let obj = value?.as_object()?;
+    let mut out = std::collections::BTreeMap::new();
+    for (key, n) in obj {
+        let n = match n {
+            Value::Number(n) => n
+                .as_i64()
+                .or_else(|| n.as_f64().filter(|f| f.fract() == 0.0).map(|f| f as i64))?,
+            _ => return None,
+        };
+        if n < 0 {
+            return None;
+        }
+        out.insert(key.clone(), n);
+    }
+    Some(out)
+}
+
+/// Wargear legality against the unit's MFM loadout — mirror of the TS
+/// `check_mfm_loadout` runner op. Returns `[{code, message}]`, or null when the
+/// unit has no loadout.
+fn handle_check_mfm_loadout(state: &mut RunnerState, args: &Value) -> Value {
+    let rules = match mfm_loadout_of(state, "check_mfm_loadout", args) {
+        Ok(rules) => rules,
+        Err(response) => return response,
+    };
+    let (Some(models), Some(counts)) = (
+        mfm_counts_arg(args.get("models")),
+        mfm_counts_arg(args.get("counts")),
+    ) else {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(
+                json!({ "detail": "check_mfm_loadout.models/counts must map ids to non-negative integers" }),
+            ),
+        );
+    };
+    let Some(rules) = rules else {
+        return ok_value(Value::Null);
+    };
+    let violations: Vec<Value> = wh40kdc::check_mfm_loadout(&rules, &models, &counts)
+        .into_iter()
+        .map(|v| json!({ "code": v.code, "message": v.message }))
+        .collect();
+    ok_value(Value::Array(violations))
+}
+
+/// The default unit of the unit's MFM loadout — mirror of the TS
+/// `default_mfm_loadout` runner op. Returns `{models, counts}`, or null.
+fn handle_default_mfm_loadout(state: &mut RunnerState, args: &Value) -> Value {
+    let rules = match mfm_loadout_of(state, "default_mfm_loadout", args) {
+        Ok(rules) => rules,
+        Err(response) => return response,
+    };
+    let Some(rules) = rules else {
+        return ok_value(Value::Null);
+    };
+    let (models, counts) = wh40kdc::default_mfm_loadout(&rules);
+    ok_value(json!({ "models": models, "counts": counts }))
+}
+
+/// A model-count argument: a non-negative integer (a whole JSON number).
+fn mfm_model_count_arg(value: Option<&Value>) -> Option<i64> {
+    let n = value?.as_number()?;
+    n.as_i64()
+        .or_else(|| n.as_f64().filter(|f| f.fract() == 0.0).map(|f| f as i64))
+        .filter(|n| *n >= 0)
+}
+
+/// A configuration on the wire: its groups, the unit's own wargear and its counts.
+fn mfm_configuration_wire(configuration: &wh40kdc::MfmConfiguration) -> Value {
+    let items = |items: &[wh40kdc::MfmItem]| -> Vec<Value> {
+        items
+            .iter()
+            .map(|item| json!({ "id": item.id, "count": item.count }))
+            .collect()
+    };
+    let groups: Vec<Value> = configuration
+        .groups
+        .iter()
+        .map(|group| json!({ "model": group.model, "count": group.count, "items": items(&group.items) }))
+        .collect();
+    json!({ "groups": groups, "unit": items(&configuration.unit), "counts": configuration.counts })
+}
+
+/// An id → count map as sorted `"id:count"` strings.
+fn encode_counts(counts: &std::collections::BTreeMap<String, i64>) -> Value {
+    let mut encoded: Vec<String> = counts.iter().map(|(k, v)| format!("{k}:{v}")).collect();
+    encoded.sort();
+    json!(encoded)
+}
+
+/// A search refused as too large, as the runner's error.
+fn mfm_search_error(error: wh40kdc::MfmSearchTooLarge) -> Value {
+    err_value(
+        ErrorKind::InternalError,
+        Some(json!({ "detail": error.to_string() })),
+    )
+}
+
+/// A unit at a total model count under its MFM loadout — mirror of the TS
+/// `mfm_unit` runner op. Returns `{rows, base, bounds, groups, candidates}`, or
+/// null when the unit has no loadout.
+fn handle_mfm_unit(state: &mut RunnerState, args: &Value) -> Value {
+    let composition = match mfm_composition_of(state, "mfm_unit", args, true) {
+        Ok(composition) => composition,
+        Err(response) => return response,
+    };
+    let model_count = mfm_model_count_arg(args.get("modelCount"));
+    let limit = match args.get("limit") {
+        None => Some(4),
+        limit => mfm_model_count_arg(limit),
+    };
+    let (Some(model_count), Some(limit)) = (model_count, limit) else {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": "mfm_unit.modelCount/limit must be non-negative integers" })),
+        );
+    };
+    let Some(composition) = composition else {
+        return ok_value(Value::Null);
+    };
+    let rows = wh40kdc::mfm_rows(&composition, model_count);
+    let base = wh40kdc::mfm_unit_base_loadout(&composition, model_count);
+    let result = (|| -> Result<Value, wh40kdc::MfmSearchTooLarge> {
+        let bounds = wh40kdc::mfm_unit_bounds(&composition, model_count)?;
+        let placed = match &base {
+            Some(base) => wh40kdc::mfm_unit_assignment(&composition, model_count, &base.counts)?,
+            None => None,
+        };
+        let candidates = wh40kdc::mfm_unit_candidates(&composition, model_count, limit as usize)?;
+        Ok(json!({
+            "rows": rows,
+            "base": base.as_ref().map(|base| json!({ "counts": base.counts, "legal": base.legal })),
+            "bounds": bounds.map(|bounds| {
+                bounds
+                    .into_iter()
+                    .map(|(id, bound)| (id, json!({ "min": bound.min, "max": bound.max })))
+                    .collect::<serde_json::Map<String, Value>>()
+            }),
+            "groups": placed.map(|placed| mfm_configuration_wire(&placed)["groups"].clone()),
+            "candidates": candidates,
+        }))
+    })();
+    match result {
+        Ok(value) => ok_value(value),
+        Err(error) => mfm_search_error(error),
+    }
+}
+
+/// The model count and counts shared by `mfm_assignment` and `check_mfm_unit`, or an error.
+fn mfm_unit_counts_args(
+    op: &str,
+    args: &Value,
+) -> Result<(i64, std::collections::BTreeMap<String, i64>), Value> {
+    match (
+        mfm_model_count_arg(args.get("modelCount")),
+        mfm_counts_arg(args.get("counts")),
+    ) {
+        (Some(model_count), Some(counts)) => Ok((model_count, counts)),
+        _ => Err(err_value(
+            ErrorKind::InvalidInput,
+            Some(
+                json!({ "detail": format!("{op}.modelCount/counts must be non-negative integers") }),
+            ),
+        )),
+    }
+}
+
+/// How counts sit on a unit of a total model count — mirror of the TS
+/// `mfm_assignment` runner op. Returns `{groups, unit, counts}`, or null.
+fn handle_mfm_assignment(state: &mut RunnerState, args: &Value) -> Value {
+    let composition = match mfm_composition_of(state, "mfm_assignment", args, true) {
+        Ok(composition) => composition,
+        Err(response) => return response,
+    };
+    let (model_count, counts) = match mfm_unit_counts_args("mfm_assignment", args) {
+        Ok(parsed) => parsed,
+        Err(response) => return response,
+    };
+    let Some(composition) = composition else {
+        return ok_value(Value::Null);
+    };
+    match wh40kdc::mfm_unit_assignment(&composition, model_count, &counts) {
+        Ok(placed) => {
+            ok_value(placed.map_or(Value::Null, |placed| mfm_configuration_wire(&placed)))
+        }
+        Err(error) => mfm_search_error(error),
+    }
+}
+
+/// Wargear legality at a total model count — mirror of the TS `check_mfm_unit`
+/// runner op. Returns `[{code, message}]`, or null when the unit has no loadout.
+fn handle_check_mfm_unit(state: &mut RunnerState, args: &Value) -> Value {
+    let composition = match mfm_composition_of(state, "check_mfm_unit", args, true) {
+        Ok(composition) => composition,
+        Err(response) => return response,
+    };
+    let (model_count, counts) = match mfm_unit_counts_args("check_mfm_unit", args) {
+        Ok(parsed) => parsed,
+        Err(response) => return response,
+    };
+    let Some(violations) = composition
+        .and_then(|composition| wh40kdc::mfm_unit_violations(&composition, model_count, &counts))
+    else {
+        return ok_value(Value::Null);
+    };
+    let violations: Vec<Value> = violations
+        .into_iter()
+        .map(|v| json!({ "code": v.code, "message": v.message }))
+        .collect();
+    ok_value(Value::Array(violations))
 }
 
 /// Read a count argument that the protocol writes as a decimal string but that
@@ -802,48 +1111,40 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
         }
         "base_loadout" => {
             let id = str_arg("unitId");
-            let Some(unit) = ds.units.get_any(id) else {
+            let unit = if str_arg("factionId").is_empty() {
+                ds.units.get_any(id)
+            } else {
+                ds.units.get_in_faction(id, str_arg("factionId"))
+            };
+            let Some(unit) = unit else {
                 return err_value(
                     ErrorKind::UnknownEntity,
                     Some(json!({ "kind": "unit", "id": id })),
                 );
             };
             let model_count: u64 = str_arg("modelCount").parse().unwrap_or(0);
-            let models = ds
-                .unit_composition_of(unit)
-                .map(|c| wh40kdc::loadout_models(&c.models));
-            let lo = wh40kdc::base_loadout(
-                unit,
-                model_count,
-                &ds.wargear_options_of(unit),
-                models.as_deref(),
-            );
-            let mut encoded: Vec<Value> = lo
-                .counts
-                .iter()
-                .map(|(k, v)| Value::String(format!("{k}:{v}")))
-                .collect();
-            encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
-            ok_value(Value::Array(encoded))
+            // Empty when the size cannot be built.
+            let counts = ds.loadout_of(unit).base(model_count).unwrap_or_default();
+            ok_value(encode_counts(&counts))
         }
         "weapon_bounds" => {
             let id = str_arg("unitId");
-            let Some(unit) = ds.units.get_any(id) else {
+            let unit = if str_arg("factionId").is_empty() {
+                ds.units.get_any(id)
+            } else {
+                ds.units.get_in_faction(id, str_arg("factionId"))
+            };
+            let Some(unit) = unit else {
                 return err_value(
                     ErrorKind::UnknownEntity,
                     Some(json!({ "kind": "unit", "id": id })),
                 );
             };
             let model_count: u64 = str_arg("modelCount").parse().unwrap_or(0);
-            let models = ds
-                .unit_composition_of(unit)
-                .map(|c| wh40kdc::loadout_models(&c.models));
-            let bounds = wh40kdc::weapon_bounds(
-                unit,
-                model_count,
-                &ds.wargear_options_of(unit),
-                models.as_deref(),
-            );
+            let bounds = match ds.loadout_of(unit).bounds(model_count) {
+                Ok(bounds) => bounds.unwrap_or_default(),
+                Err(error) => return mfm_search_error(error),
+            };
             let mut encoded: Vec<Value> = bounds
                 .iter()
                 .map(|(k, b)| Value::String(format!("{k}:{}-{}", b.min, b.max)))
@@ -853,29 +1154,22 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
         }
         "maximal_loadout" => {
             let id = str_arg("unitId");
-            let Some(unit) = ds.units.get_any(id) else {
+            let unit = if str_arg("factionId").is_empty() {
+                ds.units.get_any(id)
+            } else {
+                ds.units.get_in_faction(id, str_arg("factionId"))
+            };
+            let Some(unit) = unit else {
                 return err_value(
                     ErrorKind::UnknownEntity,
                     Some(json!({ "kind": "unit", "id": id })),
                 );
             };
             let model_count: u64 = str_arg("modelCount").parse().unwrap_or(0);
-            let models = ds
-                .unit_composition_of(unit)
-                .map(|c| wh40kdc::loadout_models(&c.models));
-            let lo = wh40kdc::maximal_loadout(
-                unit,
-                model_count,
-                &ds.wargear_options_of(unit),
-                models.as_deref(),
-            );
-            let mut encoded: Vec<Value> = lo
-                .counts
-                .iter()
-                .map(|(k, v)| Value::String(format!("{k}:{v}")))
-                .collect();
-            encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
-            ok_value(Value::Array(encoded))
+            match ds.loadout_of(unit).maximal(model_count) {
+                Ok(counts) => ok_value(encode_counts(&counts.unwrap_or_default())),
+                Err(error) => mfm_search_error(error),
+            }
         }
         "loadout_candidates" => {
             let id = str_arg("unitId");
@@ -890,21 +1184,15 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
                     Some(json!({ "kind": "unit", "id": id })),
                 );
             };
-            let composition = ds.unit_composition_of(unit);
-            let models = composition.map(|c| wh40kdc::loadout_models(&c.models));
-            let tiers = composition.map(|c| wh40kdc::loadout_tiers(&c.tiers));
             let limit = input
                 .get("limit")
                 .and_then(json_u64)
                 .and_then(|n| usize::try_from(n).ok());
-            ok_value(json!(wh40kdc::loadout_candidates(
-                unit,
-                input.get("modelCount").and_then(json_u64).unwrap_or(0),
-                &ds.wargear_options_of(unit),
-                models.as_deref(),
-                tiers.as_deref(),
-                limit
-            )))
+            let model_count = input.get("modelCount").and_then(json_u64).unwrap_or(0);
+            match ds.loadout_of(unit).candidates(model_count, limit) {
+                Ok(candidates) => ok_value(json!(candidates)),
+                Err(error) => mfm_search_error(error),
+            }
         }
         "phases_of" => {
             let id = str_arg("abilityId");
@@ -1797,6 +2085,11 @@ fn dispatch(state: &mut RunnerState, op: &str, args: &Value) -> Value {
         "linked_query" => handle_linked_query(state, args),
         "check_unit_legality" => handle_check_unit_legality(state, args),
         "check_roster_legality" => handle_check_roster_legality(state, args),
+        "check_mfm_loadout" => handle_check_mfm_loadout(state, args),
+        "default_mfm_loadout" => handle_default_mfm_loadout(state, args),
+        "mfm_unit" => handle_mfm_unit(state, args),
+        "mfm_assignment" => handle_mfm_assignment(state, args),
+        "check_mfm_unit" => handle_check_mfm_unit(state, args),
         "candidate_affordability" => handle_candidate_affordability(state, args),
         "validate" => handle_validate(args),
         "crunch" => handle_crunch(state, args),

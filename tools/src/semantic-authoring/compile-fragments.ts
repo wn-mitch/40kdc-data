@@ -137,13 +137,15 @@ export function unitOf(leaf: CompileLeaf, name: string): Node | string {
 
 /**
  * "**CHARACTER** models in this unit": the subject's own models with every listed keyword, as a
- * model-level DSL unit-filter; without model_keywords, the subject itself.
+ * model-level DSL unit-filter (excluded_model_keywords become its none_of); without either, the subject itself.
  */
 export function models(leaf: CompileLeaf, subject: Node | string): Node | string {
   const keywords = leaf.parameters.model_keywords as string[] | undefined;
-  if (keywords === undefined) return subject;
+  const excluded = leaf.parameters.excluded_model_keywords as string[] | undefined;
+  if (keywords === undefined && excluded === undefined) return subject;
   if (subject === "this-model") throw new CompileError(`${leaf.family_id} limits this model to its models with keywords; name its unit instead.`);
-  return { level: "model", member_of: subject, all_of: keywords };
+  // "models (excluding CHARACTERS) in your unit": the subject's own models without any excluded keyword.
+  return { level: "model", member_of: subject, ...(keywords ? { all_of: keywords } : {}), ...(excluded ? { none_of: excluded } : {}) };
 }
 
 /**

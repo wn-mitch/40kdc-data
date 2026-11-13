@@ -91,7 +91,10 @@ func (s *RunnerState) handleInit(args any) map[string]any {
 
 // Dispatch applies one decoded request to the runner state and returns the
 // response. Used directly by tests; the CLI loop wraps it with line parsing.
-func (s *RunnerState) Dispatch(req map[string]any) map[string]any {
+func (s *RunnerState) Dispatch(req map[string]any) (resp map[string]any) {
+	// A loadout search too large to run answers INTERNAL_ERROR, as the TS
+	// runner's last-ditch catch does.
+	defer recoverMfmSearchTooLarge(&resp)
 	op, _ := req["op"].(string)
 	args := req["args"]
 	if !s.initialized && op != "init" {
@@ -116,6 +119,16 @@ func (s *RunnerState) Dispatch(req map[string]any) map[string]any {
 		return s.handleCheckUnitLegality(args)
 	case "check_roster_legality":
 		return s.handleCheckRosterLegality(args)
+	case "check_mfm_loadout":
+		return s.handleCheckMfmLoadout(args)
+	case "default_mfm_loadout":
+		return s.handleDefaultMfmLoadout(args)
+	case "mfm_unit":
+		return s.handleMfmUnit(args)
+	case "mfm_assignment":
+		return s.handleMfmAssignment(args)
+	case "check_mfm_unit":
+		return s.handleCheckMfmUnit(args)
 	case "candidate_affordability":
 		return s.handleCandidateAffordability(args)
 	case "validate":

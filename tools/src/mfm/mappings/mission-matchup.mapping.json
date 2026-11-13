@@ -184,32 +184,44 @@
     {
       "source": "data.force_disposition_mission_recommended_preset.forceDispositionMissionId",
       "candidate_pointer": null,
-      "reason": "This verified recommendation edge starts a preset/layout/deployment chain, but mission-matchup has no property for that recommendation."
+      "reason": "Join key from a disposition matchup (25) to its recommended presets; recommendations do not change legality.",
+      "classification": "id",
+      "spread": "75 rows, 75 values (0 null/absent): string, 25 distinct"
     },
     {
       "source": "data.force_disposition_mission_recommended_preset.missionPresetId",
       "candidate_pointer": null,
-      "reason": "The recommended preset may inform a future layout or deployment link, but no mission-matchup destination property represents it."
+      "reason": "Join key to one of 45 recommended presets; recommendations do not change legality.",
+      "classification": "id",
+      "spread": "75 rows, 75 values (0 null/absent): string, 45 distinct"
     },
     {
       "source": "data.mission_preset.missionLayoutId",
       "candidate_pointer": null,
-      "reason": "The preset-to-layout relation is a candidate chain for layout selection, not a current mission-matchup field."
+      "reason": "Join key from a mission preset to one of 48 MFM layouts; presets are app recommendations with no repository entity.",
+      "classification": "id",
+      "spread": "48 rows, 48 values (0 null/absent): string, 48 distinct"
     },
     {
       "source": "data.mission_preset.missionDeploymentId",
       "candidate_pointer": null,
-      "reason": "The preset-to-deployment relation is a candidate chain for deployment selection, not a current mission-matchup field."
+      "reason": "Join key from a mission preset to one of 9 deployments; presets are app recommendations with no repository entity.",
+      "classification": "id",
+      "spread": "48 rows, 48 values (0 null/absent): string, 9 distinct"
     },
     {
       "source": "data.mission_layout_linked_deployment.missionLayoutId",
       "candidate_pointer": null,
-      "reason": "The layout/deployment applicability edge is recorded for a future mapping but has no mission-matchup destination property."
+      "reason": "Join key, one per MFM mission layout (48); it names an MFM layout, not a repository terrain layout.",
+      "classification": "id",
+      "spread": "48 rows, 48 values (0 null/absent): string, 48 distinct"
     },
     {
       "source": "data.mission_layout_linked_deployment.missionDeploymentId",
       "candidate_pointer": null,
-      "reason": "The layout/deployment applicability edge is recorded for a future mapping but has no mission-matchup destination property."
+      "reason": "Join key naming which of the 9 deployments a layout pairs with; repository layouts are authored from Battlemaster, not this table.",
+      "classification": "id",
+      "spread": "48 rows, 48 values (0 null/absent): string, 9 distinct"
     }
   ]
 }

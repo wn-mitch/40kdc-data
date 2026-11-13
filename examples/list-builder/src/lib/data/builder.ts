@@ -6,23 +6,19 @@
  * `Roster` and `exportRoster(…, "roster-json")` produces the text the app
  * imports through its normal pipeline (wh40kdc ≥ 0.5.6 round-trips roster-json).
  *
- * Annotation-first: points and `validateLoadout` violations are *reported*,
+ * Annotation-first: points and loadout violations are *reported*,
  * never enforced — the caller shows them as chips and keeps Save enabled.
  */
 
 import {
-	baseLoadout,
 	baseUnitPoints,
 	hostUnitPoints,
 	clampWeaponCount,
 	meetsEnhancementGroups,
 	exportRoster,
-	groupLoadout,
 	pointsTierMissing,
 	tryImportRoster,
-	validateLoadout,
 	wargearPoints,
-	weaponBounds,
 	type AlliedRule,
 	type Detachment,
 	type Enhancement,
@@ -499,7 +495,7 @@ export function reconcileLoadout(
 ): Map<string, number> {
 	const unit = unitRaw(datasheetId, factionId);
 	if (!unit) return new Map(loadout);
-	const bounds = weaponBounds(unit, modelCount, ds.wargearOptionsOf(unit), unitModels(unit));
+	const bounds = ds.loadoutOf(unit).bounds(modelCount) ?? new Map<string, WeaponBound>();
 	const next = new Map(loadout);
 	for (const [id, b] of bounds) {
 		if (b.min === b.max) {
@@ -658,18 +654,6 @@ export function effectiveBattleSize(state: BuilderState): BattleSize {
 // ── Loadout ───────────────────────────────────────────────────────────────────
 
 /**
- * The composition model rows for a unit (count ranges + recorded
- * `default_weapon_ids`), passed to the loadout maths so the authoritative base
- * loadout is used when present. Matched by `unit_id`; the recorded defaults are
- * the same across a shared chassis's faction views.
- */
-function unitModels(unit: Unit) {
-	// Every game mode: a lookup for a unit already in the list, which a saved roster
-	// or share link may hold even when the default view does not list it.
-	return ds.forGameMode('all').unitCompositions.find((c) => c.unit_id === unit.id)?.models;
-}
-
-/**
  * Default loadout for a freshly-added unit: the base (legal, no-swap) set — each
  * model carries its base weapons, no options applied. The take-every-swap
  * maximal set is illegal as a default (it stacks every swap at once), so the
@@ -677,8 +661,7 @@ function unitModels(unit: Unit) {
  * swaps.
  */
 export function defaultLoadout(unit: Unit, modelCount: number): Map<string, number> {
-	const options = ds.wargearOptionsOf(unit);
-	return baseLoadout(unit, modelCount, options, unitModels(unit)).counts;
+	return ds.loadoutOf(unit).base(modelCount) ?? new Map();
 }
 
 /**
@@ -699,7 +682,7 @@ export function wargearOptionsFor(
 export function loadoutBounds(bu: BuilderUnit, armyFactionId?: string): Map<string, WeaponBound> {
 	const unit = buRaw(bu, armyFactionId);
 	if (!unit) return new Map();
-	return weaponBounds(unit, bu.modelCount, ds.wargearOptionsOf(unit), unitModels(unit));
+	return ds.loadoutOf(unit).bounds(bu.modelCount) ?? new Map();
 }
 
 /**
@@ -710,7 +693,7 @@ export function loadoutBounds(bu: BuilderUnit, armyFactionId?: string): Map<stri
 export function loadoutGroups(bu: BuilderUnit, armyFactionId?: string): LoadoutGroup[] | null {
 	const unit = buRaw(bu, armyFactionId);
 	if (!unit) return null;
-	return groupLoadout(unit, bu.modelCount, ds.wargearOptionsOf(unit), unitModels(unit), bu.loadout);
+	return ds.loadoutOf(unit).groups(bu.modelCount, bu.loadout);
 }
 
 /** Clamp a requested count for one weapon id into its valid range. */
@@ -736,7 +719,7 @@ export function enhancementName(id: string): string {
 export function loadoutViolations(bu: BuilderUnit, armyFactionId?: string) {
 	const unit = buRaw(bu, armyFactionId);
 	if (!unit) return [];
-	return validateLoadout(unit, bu.modelCount, ds.wargearOptionsOf(unit), bu.loadout, unitModels(unit));
+	return ds.loadoutOf(unit).check(bu.modelCount, bu.loadout);
 }
 
 // ── Allies ("soup") ────────────────────────────────────────────────────────────

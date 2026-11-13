@@ -5196,7 +5196,7 @@
       "hurricane-bolter",
       "stormstrike-missile-launcher",
       "twin-assault-cannon",
-      "twin-lascannon"
+      "twin-lascannon-corvus-blackstar"
     ],
     "ability_ids": [
       {
@@ -11918,18 +11918,12 @@
     },
     "weapon_ids": [
       "assault-cannon",
-      "heavy-flamer",
+      "heavy-flamer-venerable-dreadnought",
       "multi-melta",
       "storm-bolter",
-      "armoured-feet",
-      "dreadnought-fist",
-      "twin-autocannon",
-      "dreadnought-inferno-cannon",
-      "heavy-plasma-cannon",
-      "twin-heavy-flamer",
-      "twin-lascannon",
-      "twin-heavy-bolter",
-      "missile-launcher"
+      "dreadnought-combat-weapon",
+      "fenrisian-great-axe",
+      "helfrost-cannon-venerable-dreadnought"
     ],
     "ability_ids": [
       {
@@ -15389,7 +15383,10 @@
     },
     "weapon_ids": [
       "plasma-pistol",
-      "twin-bolt-rifle-captain-on-bike"
+      "twin-bolt-rifle-captain-on-bike",
+      "heavy-bolt-pistol-captain-on-bike",
+      "master-crafted-power-weapon-captain-on-bike",
+      "thunder-hammer-captain-on-bike"
     ],
     "game_version": {
       "edition": "11th",

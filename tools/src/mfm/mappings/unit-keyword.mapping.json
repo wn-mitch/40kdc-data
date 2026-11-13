@@ -138,52 +138,72 @@
     {
       "source": "data.keyword.id",
       "candidate_pointer": "/id",
-      "reason": "The MFM keyword identifier is an internal source key, not a verified stable unit-keyword catalog slug."
+      "reason": "Primary key of 1173 keywords; the catalog keys on keyword names.",
+      "classification": "id",
+      "spread": "1173 rows, 1173 values (0 null/absent): string, 1173 distinct"
     },
     {
       "source": "data.keyword.allyRestrictingFactionKeywordId",
       "candidate_pointer": null,
-      "reason": "Allied-use restriction metadata has no universal unit-keyword catalog destination."
+      "reason": "Set on 1 keyword that restricts allied use by faction. allies.ts should read it.",
+      "classification": "needs-consumer",
+      "spread": "1173 rows, 1173 values (1172 null/absent): string, 1 distinct"
     },
     {
       "source": "data.keyword.allyRestrictingKeywordId",
       "candidate_pointer": null,
-      "reason": "Allied-use restriction metadata has no universal unit-keyword catalog destination."
+      "reason": "Set on 1 keyword that restricts allied use by keyword. allies.ts should read it.",
+      "classification": "needs-consumer",
+      "spread": "1173 rows, 1173 values (1172 null/absent): string, 1 distinct"
     },
     {
       "source": "data.miniature_keyword.id",
       "candidate_pointer": null,
-      "reason": "The association-row identity is traversal bookkeeping, not a catalog property."
+      "reason": "Primary key of the miniature-to-keyword link row.",
+      "classification": "id",
+      "spread": "8568 rows, 8568 values (0 null/absent): string, 8568 distinct"
     },
     {
       "source": "data.miniature_keyword.displayOrder",
       "candidate_pointer": null,
-      "reason": "Presentation order is consumed while building a unit keyword list, but the universal catalog has no ordering field."
+      "reason": "seed-units.ts and added-models.ts order a model's keywords by it; the catalog has no order.",
+      "classification": "consumed-elsewhere",
+      "spread": "8568 rows, 8568 values (0 null/absent): number, 43 distinct, 0..42"
     },
     {
       "source": "data.datasheet_faction_keyword.id",
       "candidate_pointer": null,
-      "reason": "The association-row identity belongs to faction-keyword applicability on a datasheet, not to the universal keyword catalog."
+      "reason": "Primary key of the datasheet-to-faction-keyword link row.",
+      "classification": "id",
+      "spread": "1283 rows, 1283 values (0 null/absent): string, 1283 distinct"
     },
     {
       "source": "data.datasheet_faction_keyword.datasheetId",
       "candidate_pointer": null,
-      "reason": "This relation scopes a faction keyword to a datasheet for applicability; it is not universal keyword ownership."
+      "reason": "seed-units.ts (buildFactionKeywords) joins it to give a datasheet its faction keywords.",
+      "classification": "consumed-elsewhere",
+      "spread": "1283 rows, 1283 values (0 null/absent): string, 1173 distinct"
     },
     {
       "source": "data.datasheet_faction_keyword.factionKeywordId",
       "candidate_pointer": null,
-      "reason": "Faction-keyword assignment is applicability evidence consumed by tools/src/mfm/seed-units.ts#buildFactionKeywords, not a universal unit-keyword catalog value."
+      "reason": "seed-units.ts (buildFactionKeywords) resolves the 43 faction keywords a datasheet carries.",
+      "classification": "consumed-elsewhere",
+      "spread": "1283 rows, 1283 values (0 null/absent): string, 43 distinct"
     },
     {
       "source": "data.datasheet_faction_keyword.displayOrder",
       "candidate_pointer": null,
-      "reason": "Faction-keyword display order applies to a unit's faction keyword list, which is separate from this catalog."
+      "reason": "Order of a datasheet's faction keywords (1 or 2).",
+      "classification": "presentation",
+      "spread": "1283 rows, 1283 values (0 null/absent): number 1×1170, 2×113"
     },
     {
       "source": "data.faction_keyword.localisations.*.name",
       "candidate_pointer": null,
-      "reason": "tools/src/mfm/seed-units.ts#buildFactionKeywords resolves these names only for a datasheet's applicable faction keywords; they do not define universal unit keywords."
+      "reason": "seed-units.ts resolves these names for a datasheet's faction keywords; the unit-keyword catalog holds unit keywords only.",
+      "classification": "consumed-elsewhere",
+      "spread": "44 rows, 352 values (0 null/absent): string, 250 distinct"
     }
   ]
 }

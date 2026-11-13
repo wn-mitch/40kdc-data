@@ -205,7 +205,7 @@ function eventPhrase(t: AbilityTrigger): string {
     case "round-ended":
       return "at the end of the battle round";
     case "turn-started":
-      return "at the start of the turn";
+      return "at the start of each turn";
     case "turn-ended":
       return "at the end of the turn";
     case "step-started":
@@ -231,7 +231,8 @@ function eventPhrase(t: AbilityTrigger): string {
         if (t.object != null) return `when ${who} selects ${objectPhrase(t.object)} as a charge target`;
         return typeof t.subject === "object" ? `after ${who} selects targets for its charge but before it makes a Charge move` : "when a Charge is declared";
       }
-      return t.object != null ? `when ${who} targets ${objectPhrase(t.object)}` : `when ${who} selects its targets`;
+      if (t.object != null) return `when ${who} targets ${objectPhrase(t.object)}${f.all_attacks === true ? " with all of its attacks" : ""}`;
+      return `when ${who} selects its targets`;
     }
     case "move-started": {
       // "at the start of this unit's move", "just before it Consolidates": the move is about to be made.
@@ -270,7 +271,7 @@ function eventPhrase(t: AbilityTrigger): string {
       return t.object != null && t.object !== "this-unit" ? `${allocated} to ${objectPhrase(t.object)}` : allocated;
     }
     case "attacks-resolved":
-      if (typeof t.subject === "object") return t.object != null ? `after ${who} has shot and targeted ${objectPhrase(t.object)}` : `after ${who} ${f.kind === "fight" ? "fights" : "shoots"}`;
+      if (typeof t.subject === "object") return t.object != null ? `after ${who} has shot and targeted ${objectPhrase(t.object)}` : `after ${who} ${f.kind === "fight" ? "fights" : f.kind === "attack" ? "resolves its attacks" : "shoots"}`;
       return f.kind === "fight" ? `after ${who} resolves its attacks in a fight` : `after ${who} resolves its attacks`;
     case "destroyed": {
       const obj = t.object;
@@ -327,6 +328,8 @@ function eventPhrase(t: AbilityTrigger): string {
       return `each time ${who} ${USED[str(f.kind)] ?? `uses ${dekebab(str(f.kind))}`}`;
     }
     case "state-changed":
+      if (f.strength === "below-half") return `when ${who} becomes Below Half-strength`;
+      if (f.strength === "below-starting") return `when ${who} falls below its Starting Strength`;
       return `when ${who} becomes ${capWord(str(f.state))}`;
     case "designation-changed":
       return f.tag === "EMPOWERED" ? `each time ${who} is Empowered` : `each time ${who} becomes ${str(f.tag)}`;

@@ -134,7 +134,7 @@ describe("Dataset.stackableBuffsFor: costs and providers", () => {
     expect([...byId({ ...mob, attachedUnitIds: ["fix-hero"] }).levers.keys()].some((id) => id.startsWith("enhancement:"))).toBe(false);
   });
 
-  it("preserves intersecting usage pools when an ability record is granted", () => {
+  it("keeps a granted record's usage limit on its stance options without capping each pick by it", () => {
     const raw = armyRaw();
     raw.abilities = raw.abilities.map((record) => record.ability_id === "fix-granted"
       ? { ...record, usage: { frequency: "n-per-battle" as const, count: 1 } }
@@ -142,10 +142,9 @@ describe("Dataset.stackableBuffsFor: costs and providers", () => {
     const result = new Dataset(raw).stackableBuffsFor(mob, { phase: "fight" });
     const lever = result.buffs.find((candidate) => candidate.id === "fix-grant-rule>fix-granted#stable-lethal")!;
     expect(lever.group).toBe("fix-grant-rule>fix-granted?stance");
-    expect(lever.groups).toContain("fix-grant-rule>fix-granted?usage");
-    expect(result.groups).toContainEqual({
-      id: "fix-grant-rule>fix-granted?usage", abilityId: "fix-granted", label: "Fix Granted", maxActivations: 1,
-    });
+    expect(lever.groups).toBeUndefined();
+    expect(lever.requires?.[0]).toMatchObject({ usage: { frequency: "n-per-battle", count: 1 } });
+    expect(result.groups.some((group) => group.id.endsWith("?usage"))).toBe(false);
   });
 
   it("resolves renamed stance pools by stable ids and retains fixed-option allocation", () => {
@@ -284,5 +283,20 @@ describe("a choice between granted records", () => {
     expect(legal(["fix-grant-choice?0", "fix-grant-choice>fix-a"])).toBe(true);
     expect(legal(["fix-grant-choice>fix-a"])).toBe(false);
     expect(legal(["fix-grant-choice?0", "fix-grant-choice>fix-a", "fix-grant-choice?1", "fix-grant-choice>fix-b"])).toBe(false);
+  });
+});
+
+describe("a once-per-round dice-pool allocation", () => {
+  it("lets the Blessings of Khorne roll activate two blessings, not a third", async () => {
+    const { isLegalLeverSelection } = await import("../src/data/index.js");
+    const { buffs, groups } = Dataset.embedded().stackableBuffsFor(
+      { unitId: "khorne-berzerkers", factionId: "world-eaters", detachmentId: "berzerker-warband", attachedUnitIds: ["kharn-the-betrayer"] },
+      { phase: "fight" },
+    );
+    const blessings = buffs.filter((lever) => lever.source.kind === "ability" && lever.source.abilityId === "blessings-of-khorne-world-eaters").map((lever) => lever.id);
+    expect(blessings.length).toBeGreaterThanOrEqual(3);
+    const legal = (ids: string[]) => isLegalLeverSelection(buffs, groups, new Set(ids));
+    expect(legal(blessings.slice(0, 2))).toBe(true);
+    expect(legal(blessings.slice(0, 3))).toBe(false);
   });
 });

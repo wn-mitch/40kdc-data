@@ -387,17 +387,23 @@
     {
       "source": "data.datasheet_bodyguard_group.excludedDetachmentId",
       "candidate_pointer": null,
-      "reason": "An excluded-detachment eligibility restriction has no destination in leader-attachment.schema.json and is not projected."
+      "reason": "Set on 60 bodyguard groups that are barred under one detachment. attachment.ts should read it.",
+      "classification": "needs-consumer",
+      "spread": "1291 rows, 1291 values (1231 null/absent): string, 1 distinct"
     },
     {
       "source": "data.datasheet_bodyguard_group.requiredDetachmentId",
       "candidate_pointer": null,
-      "reason": "A required-detachment eligibility restriction has no destination in leader-attachment.schema.json and is not projected."
+      "reason": "Set on 300 bodyguard groups valid only under one detachment; conditional-keywords.ts reads it; attachment.ts should too.",
+      "classification": "needs-consumer",
+      "spread": "1291 rows, 1291 values (991 null/absent): string, 1 distinct"
     },
     {
       "source": "data.datasheet_bodyguard_group.requiresAllUnitsHaveKeywordId",
       "candidate_pointer": "/eligible_bodyguard_keywords",
-      "reason": "A distinct per-group form: a single keyword every already-listed bodyguard must additionally carry, not the 'any unit with these keywords qualifies' edge that eligible_bodyguard_keywords models (that is datasheet_bodyguard_group_keyword, now consumed). Its combination semantics with the explicit ids are unresolved, so it is not folded in."
+      "reason": "Set on 300 bodyguard groups with 5 distinct keywords every unit in the group must also carry. attachment.ts should read it.",
+      "classification": "needs-consumer",
+      "spread": "1291 rows, 1291 values (991 null/absent): string, 5 distinct"
     }
   ]
 }

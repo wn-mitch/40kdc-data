@@ -232,6 +232,27 @@ def _list(v: Any) -> list[Any]:
 
 # -- Shared references --------------------------------------------------------
 
+# The describer's spelling of `event-object` when every trigger's object is a model ("that model"
+# rather than "that unit"). `model_object_refs` writes it into the effect before rendering.
+EVENT_OBJECT_MODEL = "event-object-model"
+
+
+def is_event_object(ref: Any) -> bool:
+    """Whether `ref` is the trigger's event object, a unit or a model."""
+    return ref in ("event-object", EVENT_OBJECT_MODEL)
+
+
+def model_object_refs(value: Any) -> Any:
+    """`value` with every `event-object` ref spelled `EVENT_OBJECT_MODEL`."""
+    if value == "event-object":
+        return EVENT_OBJECT_MODEL
+    if isinstance(value, list):
+        return [model_object_refs(v) for v in value]
+    if isinstance(value, dict):
+        return {k: model_object_refs(v) for k, v in value.items()}
+    return value
+
+
 _ROLE_PHRASES: dict[str, str] = {
     "this-unit": "the unit",
     "this-model": "this model",
@@ -240,6 +261,7 @@ _ROLE_PHRASES: dict[str, str] = {
     "defender": "the target unit",
     "event-subject": "the triggering unit",
     "event-object": "that unit",
+    "event-object-model": "that model",
     "stratagem-target": "the Stratagem's target",
     "selected-unit": "the selected unit",
     "recipient": "the unit",
@@ -472,6 +494,8 @@ def _objective_phrase(f: Any, plural: bool = False, noun: str = "objective") -> 
         s += f" ({dekebab(_str(f['name']))})"
     if f.get("territory") is not None:
         s += f" in {territory_phrase(_str(f['territory']))}"
+    if f.get("outside_territory") is not None:
+        s += f" not in {territory_phrase(_str(f['outside_territory']))}"
     if role_v == "non-home":
         s += " (excluding home)"
     within = _obj(f.get("within"))

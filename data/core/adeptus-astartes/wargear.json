@@ -248,5 +248,19 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     }
+  },
+  {
+    "id": "combat-shield",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5dea1994-20a5-4814-8596-c8f0c1ce4274"
+      }
+    ],
+    "name": "Combat Shield",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
   }
 ]

@@ -16,6 +16,7 @@ import { runEnhancements } from "../src/mfm/enhancements.js";
 import { runMfmExternalRefs } from "../src/mfm/external-refs.js";
 import { runFactionFields } from "../src/mfm/faction-fields.js";
 import { runCull } from "../src/mfm/legends-cull.js";
+import { runLoadoutLift } from "../src/mfm/loadout-lift.js";
 import { runMissionMatchups } from "../src/mfm/mission-matchups.js";
 import { runMissions } from "../src/mfm/missions.js";
 import { runPoints } from "../src/mfm/points.js";
@@ -66,6 +67,7 @@ const PASSES: [string, (dump: MfmDump) => { staged: StagedWrite[] }][] = [
   ["chapter-scope", (dump) => runChapterScope(dump, false)],
   ["wargear", (dump) => runWargear(dump, false)],
   ["wargear-budgets", (dump) => runWargearBudgets(dump)],
+  ["loadout", (dump) => runLoadoutLift(dump)],
   ["wargear-costs", (dump) => runWargearCosts(dump)],
   ["composition-names", runCompositionNames],
   ["composition-tiers", (dump) => runCompositionTiers(dump)],

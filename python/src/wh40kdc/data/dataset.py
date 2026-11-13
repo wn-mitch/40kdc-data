@@ -35,6 +35,7 @@ from wh40kdc.data.entities import (
     WeaponKeywordView,
     WeaponView,
 )
+from wh40kdc.data.unit_loadout import UnitLoadout, unit_loadout
 from wh40kdc.share import embedded_registry_aliases
 
 _MORTAL_PHASES = ("command", "movement", "shooting", "charge", "fight")
@@ -303,6 +304,8 @@ class Dataset:
         # (unit id, faction id) → its composition row; first-wins on duplicates, as
         # the linear search it replaces returned the first hit.
         self._composition_by_unit: dict[tuple[Any, Any], dict[str, Any]] = {}
+        # `faction_id::unit_id` → its loadout view, shared across game-mode views.
+        self._loadout_by_unit: dict[str, UnitLoadout] = {}
         for c in self._all_unit_compositions:
             self._composition_by_unit.setdefault((c.get("unit_id"), c.get("faction_id")), c)
 
@@ -574,6 +577,21 @@ class Dataset:
         recorded composition. Mirror of TS ``unitCompositionOf``.
         """
         return self._composition_by_unit.get((unit["id"], unit.get("faction_id")))
+
+    def loadout_of(self, unit: dict[str, Any]) -> UnitLoadout:
+        """The unit's wargear legality at any model count.
+
+        Its MFM loadout rules where the dump has them, else its authored wargear
+        options (see :class:`~wh40kdc.data.unit_loadout.UnitLoadout`). Faction-scoped
+        like :meth:`unit_composition_of`; one view per unit, kept for the dataset's
+        life. Mirror of TS ``loadoutOf``.
+        """
+        key = f"{unit['faction_id']}::{unit['id']}"
+        view = self._loadout_by_unit.get(key)
+        if view is None:
+            view = unit_loadout(unit, self.unit_composition_of(unit), self.wargear_options_of(unit))
+            self._loadout_by_unit[key] = view
+        return view
 
     def leaders_attachable_to(
         self, bodyguard_unit_id: str, roster_unit_ids: set[str] | None = None
@@ -913,6 +931,9 @@ class Dataset:
         # translator so attachment-role conditions and keyword filters evaluate.
         # Clone — never mutate the caller's context. An explicitly-set value wins.
         ctx = self._with_rule_copies(self._derived_context(input, context), faction_id)
+        # The input's faction is the army whose rules the resolver walks, so it is the Army Faction.
+        if ctx.get("armyFaction") is None:
+            ctx["armyFaction"] = faction_id
         if ctx.get("attackerKeywords") is None and combined:
             ctx["attackerKeywords"] = combined_keywords_lower(combined)
         if ctx.get("attackerModelKeywords") is None and combined:

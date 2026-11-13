@@ -35,6 +35,12 @@ export type BuffSource =
        * for `"support"`, the other unit that provides it. Absent for other kinds.
        */
       sourceUnitId?: string;
+      /**
+       * The wargear item that prints this ability on its source unit. Scorers
+       * use it to restrict a model-borne ability to loadout groups carrying
+       * that item.
+       */
+      wargearId?: string;
       /** For `abilityKind: "detachment-stratagem"`, set when the Stratagem targets one model of the unit. */
       selectsModel?: true;
     }
@@ -182,6 +188,12 @@ export type BuffApplicability = {
    * target's Toughness). A comparison whose characteristic the context lacks does not hold.
    */
   attackComparisons?: AttackComparison[];
+  /**
+   * This effect applies to the individual model carrying its source wargear,
+   * rather than to every model in the unit. The source must identify that
+   * wargear item before a loadout scorer may use this flag.
+   */
+  modelScoped?: true;
 };
 
 /** One side of an {@link AttackComparison}: a characteristic of the attacking or the defending unit. */

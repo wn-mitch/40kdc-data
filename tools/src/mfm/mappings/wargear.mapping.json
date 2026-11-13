@@ -176,17 +176,23 @@
     {
       "source": "data.wargear_item.id",
       "candidate_pointer": "/id",
-      "reason": "The dump primary key identifies the source item, but project-loadout currently emits an identifier derived from its resolved name instead."
+      "reason": "Primary key of 4150 items; project-loadout.ts mints repo ids from resolved names instead.",
+      "classification": "id",
+      "spread": "4150 rows, 4150 values (0 null/absent): string, 4150 distinct"
     },
     {
       "source": "data.wargear_item.localisations.*.ruleText",
       "candidate_pointer": null,
-      "reason": "Equipment rules text is prose-store-only and is not copied into the core wargear entity."
+      "reason": "Equipment rules text on 348 distinct localized rows, kept in the dump.",
+      "classification": "prose",
+      "spread": "4150 rows, 16259 values (15698 null/absent): string, 348 distinct"
     },
     {
       "source": "data.wargear_item.noMultiProfileIcon",
       "candidate_pointer": null,
-      "reason": "Presentation metadata has no core wargear destination and is not consumed by the non-weapon mint."
+      "reason": "Hides the multi-profile icon on 3 items in the app.",
+      "classification": "presentation",
+      "spread": "4150 rows, 4150 values (0 null/absent): boolean false×4147, true×3"
     }
   ]
 }

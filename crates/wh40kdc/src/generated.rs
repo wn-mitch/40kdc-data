@@ -2939,7 +2939,8 @@ impl ::std::convert::From<::std::vec::Vec<AbilityUsageLimit>> for AbilityUsage {
 ///        "once-per-opponent-turn",
 ///        "n-per-battle",
 ///        "first-this-battle",
-///        "first-time-this-phase"
+///        "first-time-this-phase",
+///        "first-time-this-turn"
 ///      ]
 ///    },
 ///    "per": {
@@ -2979,7 +2980,8 @@ pub struct AbilityUsageLimit {
 ///    "once-per-opponent-turn",
 ///    "n-per-battle",
 ///    "first-this-battle",
-///    "first-time-this-phase"
+///    "first-time-this-phase",
+///    "first-time-this-turn"
 ///  ]
 ///}
 /// ```
@@ -3013,6 +3015,8 @@ pub enum AbilityUsageLimitFrequency {
     FirstThisBattle,
     #[serde(rename = "first-time-this-phase")]
     FirstTimeThisPhase,
+    #[serde(rename = "first-time-this-turn")]
+    FirstTimeThisTurn,
 }
 impl ::std::fmt::Display for AbilityUsageLimitFrequency {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -3025,6 +3029,7 @@ impl ::std::fmt::Display for AbilityUsageLimitFrequency {
             Self::NPerBattle => f.write_str("n-per-battle"),
             Self::FirstThisBattle => f.write_str("first-this-battle"),
             Self::FirstTimeThisPhase => f.write_str("first-time-this-phase"),
+            Self::FirstTimeThisTurn => f.write_str("first-time-this-turn"),
         }
     }
 }
@@ -3042,6 +3047,7 @@ impl ::std::str::FromStr for AbilityUsageLimitFrequency {
             "n-per-battle" => Ok(Self::NPerBattle),
             "first-this-battle" => Ok(Self::FirstThisBattle),
             "first-time-this-phase" => Ok(Self::FirstTimeThisPhase),
+            "first-time-this-turn" => Ok(Self::FirstTimeThisTurn),
             _ => Err("invalid value".into()),
         }
     }
@@ -3482,6 +3488,11 @@ impl<'de> ::serde::Deserialize<'de> for ActOnDeathEffectModifierResolution {
 ///    "join": {
 ///      "$ref": "#/$defs/unit-ref"
 ///    },
+///    "model": {
+///      "description": "A model type of the joined unit that only rules add (its unit composition's added_models name), as Split adds Blue Horrors to Pink Horrors.",
+///      "type": "string",
+///      "minLength": 1
+///    },
 ///    "model_count": {
 ///      "oneOf": [
 ///        {
@@ -3591,6 +3602,9 @@ pub struct AddUnitEffectModifier {
     pub in_region: ::std::option::Option<PlacementRegion>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub join: ::std::option::Option<UnitRef>,
+    ///A model type of the joined unit that only rules add (its unit composition's added_models name), as Split adds Blue Horrors to Pink Horrors.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub model: ::std::option::Option<AddUnitEffectModifierModel>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub model_count: ::std::option::Option<AddUnitEffectModifierModelCount>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
@@ -3617,6 +3631,7 @@ impl ::std::default::Default for AddUnitEffectModifier {
             excluded_keywords: Default::default(),
             in_region: Default::default(),
             join: Default::default(),
+            model: Default::default(),
             model_count: Default::default(),
             near: Default::default(),
             placement: Default::default(),
@@ -3756,6 +3771,79 @@ for AddUnitEffectModifierCountString {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for AddUnitEffectModifierCountString {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///A model type of the joined unit that only rules add (its unit composition's added_models name), as Split adds Blue Horrors to Pink Horrors.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "A model type of the joined unit that only rules add (its unit composition's added_models name), as Split adds Blue Horrors to Pink Horrors.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct AddUnitEffectModifierModel(::std::string::String);
+impl ::std::ops::Deref for AddUnitEffectModifierModel {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AddUnitEffectModifierModel> for ::std::string::String {
+    fn from(value: AddUnitEffectModifierModel) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for AddUnitEffectModifierModel {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AddUnitEffectModifierModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for AddUnitEffectModifierModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for AddUnitEffectModifierModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for AddUnitEffectModifierModel {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -16695,6 +16783,10 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///      "type": "string",
 ///      "minLength": 1
 ///    },
+///    "all_attacks": {
+///      "description": "targets-selected: the subject selected the object as the target of every one of its attacks, not just some (\"does not select your unit as the target of all of its attacks\" is this, negated).",
+///      "const": true
+///    },
 ///    "attack_type": {
 ///      "enum": [
 ///        "ranged",
@@ -16828,6 +16920,13 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///        "reinforcements"
 ///      ]
 ///    },
+///    "strength": {
+///      "description": "state-changed: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting), in place of a state.",
+///      "enum": [
+///        "below-half",
+///        "below-starting"
+///      ]
+///    },
 ///    "tag": {
 ///      "$ref": "#/$defs/designation-id"
 ///    },
@@ -16923,6 +17022,9 @@ pub struct EventFilter {
     ///used: any ability whose name carries this keyword in brackets (BONDSMAN for every '(Bondsman)' ability), instead of one `id`.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ability_keyword: ::std::option::Option<EventFilterAbilityKeyword>,
+    ///targets-selected: the subject selected the object as the target of every one of its attacks, not just some ("does not select your unit as the target of all of its attacks" is this, negated).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub all_attacks: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attack_type: ::std::option::Option<EventFilterAttackType>,
     ///Who caused it (the unit or model whose attack destroyed the object).
@@ -16970,6 +17072,9 @@ pub struct EventFilter {
     pub state: ::std::option::Option<UnitState>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub step: ::std::option::Option<EventFilterStep>,
+    ///state-changed: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting), in place of a state.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub strength: ::std::option::Option<EventFilterStrength>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tag: ::std::option::Option<DesignationId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -16994,6 +17099,7 @@ impl ::std::default::Default for EventFilter {
     fn default() -> Self {
         Self {
             ability_keyword: Default::default(),
+            all_attacks: Default::default(),
             attack_type: Default::default(),
             by: Default::default(),
             caused_by: Default::default(),
@@ -17013,6 +17119,7 @@ impl ::std::default::Default for EventFilter {
             source: Default::default(),
             state: Default::default(),
             step: Default::default(),
+            strength: Default::default(),
             tag: Default::default(),
             through: Default::default(),
             timing: Default::default(),
@@ -17913,6 +18020,82 @@ impl ::std::convert::TryFrom<&::std::string::String> for EventFilterStep {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String> for EventFilterStep {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///state-changed: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting), in place of a state.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "state-changed: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting), in place of a state.",
+///  "enum": [
+///    "below-half",
+///    "below-starting"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum EventFilterStrength {
+    #[serde(rename = "below-half")]
+    BelowHalf,
+    #[serde(rename = "below-starting")]
+    BelowStarting,
+}
+impl ::std::fmt::Display for EventFilterStrength {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::BelowHalf => f.write_str("below-half"),
+            Self::BelowStarting => f.write_str("below-starting"),
+        }
+    }
+}
+impl ::std::str::FromStr for EventFilterStrength {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "below-half" => Ok(Self::BelowHalf),
+            "below-starting" => Ok(Self::BelowStarting),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for EventFilterStrength {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for EventFilterStrength {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for EventFilterStrength {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -21092,9 +21275,11 @@ pub struct HasKeywordConditionParameters {
 ///      ]
 ///    },
 ///    "per": {
+///      "description": "model: each model in the target regains the amount; one-model: one model in the target does; unit (or absent): the target unit does.",
 ///      "enum": [
 ///        "model",
-///        "unit"
+///        "unit",
+///        "one-model"
 ///      ]
 ///    }
 ///  },
@@ -21106,6 +21291,7 @@ pub struct HasKeywordConditionParameters {
 #[serde(deny_unknown_fields)]
 pub struct HealEffectModifier {
     pub amount: HealEffectModifierAmount,
+    ///model: each model in the target regains the amount; one-model: one model in the target does; unit (or absent): the target unit does.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub per: ::std::option::Option<HealEffectModifierPer>,
 }
@@ -21142,15 +21328,17 @@ impl ::std::convert::From<::serde_json::Value> for HealEffectModifierAmount {
         Self::Variant1(value)
     }
 }
-///`HealEffectModifierPer`
+///model: each model in the target regains the amount; one-model: one model in the target does; unit (or absent): the target unit does.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
+///  "description": "model: each model in the target regains the amount; one-model: one model in the target does; unit (or absent): the target unit does.",
 ///  "enum": [
 ///    "model",
-///    "unit"
+///    "unit",
+///    "one-model"
 ///  ]
 ///}
 /// ```
@@ -21172,12 +21360,15 @@ pub enum HealEffectModifierPer {
     Model,
     #[serde(rename = "unit")]
     Unit,
+    #[serde(rename = "one-model")]
+    OneModel,
 }
 impl ::std::fmt::Display for HealEffectModifierPer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Model => f.write_str("model"),
             Self::Unit => f.write_str("unit"),
+            Self::OneModel => f.write_str("one-model"),
         }
     }
 }
@@ -21189,6 +21380,7 @@ impl ::std::str::FromStr for HealEffectModifierPer {
         match value {
             "model" => Ok(Self::Model),
             "unit" => Ok(Self::Unit),
+            "one-model" => Ok(Self::OneModel),
             _ => Err("invalid value".into()),
         }
     }
@@ -22557,6 +22749,83 @@ impl ::std::convert::TryFrom<::std::string::String> for IssueOrdersEffectType {
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///A multiset of items: each repo weapon or wargear id with its copy count.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "A multiset of items: each repo weapon or wargear id with its copy count.",
+///  "type": "array",
+///  "items": {
+///    "type": "object",
+///    "required": [
+///      "count",
+///      "id"
+///    ],
+///    "properties": {
+///      "count": {
+///        "type": "integer",
+///        "minimum": 1.0
+///      },
+///      "id": {
+///        "$ref": "#/$defs/entity-id"
+///      }
+///    },
+///    "additionalProperties": false
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(transparent)]
+pub struct Items(pub ::std::vec::Vec<ItemsItem>);
+impl ::std::ops::Deref for Items {
+    type Target = ::std::vec::Vec<ItemsItem>;
+    fn deref(&self) -> &::std::vec::Vec<ItemsItem> {
+        &self.0
+    }
+}
+impl ::std::convert::From<Items> for ::std::vec::Vec<ItemsItem> {
+    fn from(value: Items) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<ItemsItem>> for Items {
+    fn from(value: ::std::vec::Vec<ItemsItem>) -> Self {
+        Self(value)
+    }
+}
+///`ItemsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "count",
+///    "id"
+///  ],
+///  "properties": {
+///    "count": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "id": {
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ItemsItem {
+    pub count: ::std::num::NonZeroU64,
+    pub id: EntityId,
 }
 ///`Keyword`
 ///
@@ -24034,6 +24303,108 @@ impl ::std::default::Default for ModelCountConditionParameters {
             min: Default::default(),
             subject: Default::default(),
         }
+    }
+}
+///`ModelItems`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "items",
+///    "model"
+///  ],
+///  "properties": {
+///    "items": {
+///      "$ref": "#/$defs/items"
+///    },
+///    "model": {
+///      "type": "string",
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ModelItems {
+    pub items: Items,
+    pub model: ModelItemsModel,
+}
+///`ModelItemsModel`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct ModelItemsModel(::std::string::String);
+impl ::std::ops::Deref for ModelItemsModel {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<ModelItemsModel> for ::std::string::String {
+    fn from(value: ModelItemsModel) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for ModelItemsModel {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for ModelItemsModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for ModelItemsModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ModelItemsModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for ModelItemsModel {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`ModelProfileConditionParameters`
@@ -29173,6 +29544,16 @@ pub struct OathStateConditionParameters {
 ///      "description": "A mission-specific named objective.",
 ///      "$ref": "#/$defs/entity-id"
 ///    },
+///    "outside_territory": {
+///      "description": "The objective is not in this territory (\"not in your opponent's deployment zone\").",
+///      "enum": [
+///        "your-territory",
+///        "enemy-territory",
+///        "no-mans-land",
+///        "your-deployment-zone",
+///        "enemy-deployment-zone"
+///      ]
+///    },
 ///    "role": {
 ///      "enum": [
 ///        "central",
@@ -29238,6 +29619,9 @@ pub struct ObjectiveFilter {
     ///A mission-specific named objective.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<EntityId>,
+    ///The objective is not in this territory ("not in your opponent's deployment zone").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub outside_territory: ::std::option::Option<ObjectiveFilterOutsideTerritory>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub role: ::std::option::Option<ObjectiveFilterRole>,
     ///The objective marker a select-objective step bound.
@@ -29258,6 +29642,7 @@ impl ::std::default::Default for ObjectiveFilter {
             designated: Default::default(),
             home_of: Default::default(),
             name: Default::default(),
+            outside_territory: Default::default(),
             role: Default::default(),
             selection_var: Default::default(),
             territory: Default::default(),
@@ -29334,6 +29719,98 @@ impl ::std::convert::TryFrom<&::std::string::String> for ObjectiveFilterHomeOf {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String> for ObjectiveFilterHomeOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///The objective is not in this territory ("not in your opponent's deployment zone").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The objective is not in this territory (\"not in your opponent's deployment zone\").",
+///  "enum": [
+///    "your-territory",
+///    "enemy-territory",
+///    "no-mans-land",
+///    "your-deployment-zone",
+///    "enemy-deployment-zone"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ObjectiveFilterOutsideTerritory {
+    #[serde(rename = "your-territory")]
+    YourTerritory,
+    #[serde(rename = "enemy-territory")]
+    EnemyTerritory,
+    #[serde(rename = "no-mans-land")]
+    NoMansLand,
+    #[serde(rename = "your-deployment-zone")]
+    YourDeploymentZone,
+    #[serde(rename = "enemy-deployment-zone")]
+    EnemyDeploymentZone,
+}
+impl ::std::fmt::Display for ObjectiveFilterOutsideTerritory {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::YourTerritory => f.write_str("your-territory"),
+            Self::EnemyTerritory => f.write_str("enemy-territory"),
+            Self::NoMansLand => f.write_str("no-mans-land"),
+            Self::YourDeploymentZone => f.write_str("your-deployment-zone"),
+            Self::EnemyDeploymentZone => f.write_str("enemy-deployment-zone"),
+        }
+    }
+}
+impl ::std::str::FromStr for ObjectiveFilterOutsideTerritory {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "your-territory" => Ok(Self::YourTerritory),
+            "enemy-territory" => Ok(Self::EnemyTerritory),
+            "no-mans-land" => Ok(Self::NoMansLand),
+            "your-deployment-zone" => Ok(Self::YourDeploymentZone),
+            "enemy-deployment-zone" => Ok(Self::EnemyDeploymentZone),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ObjectiveFilterOutsideTerritory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ObjectiveFilterOutsideTerritory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ObjectiveFilterOutsideTerritory {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -56222,6 +56699,45 @@ pub struct UnitCharacteristic {
 ///    "unit_id"
 ///  ],
 ///  "properties": {
+///    "added_models": {
+///      "description": "Model types a rule adds to the unit during the battle (Split adds Blue and Brimstone Horrors to Pink Horrors). A list never contains them, so they take no part in models, tiers or loadout; GW's data lists them as model rows capped at 0. Each carries the gear a newly added model of its type has.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "default_weapon_ids",
+///          "keywords",
+///          "name"
+///        ],
+///        "properties": {
+///          "default_weapon_ids": {
+///            "description": "The equipment a newly added model of this type carries.",
+///            "type": "array",
+///            "items": {
+///              "$ref": "#/$defs/entity-id"
+///            }
+///          },
+///          "keywords": {
+///            "description": "The model type's keywords.",
+///            "type": "array",
+///            "items": {
+///              "type": "string",
+///              "minLength": 1
+///            }
+///          },
+///          "name": {
+///            "type": "string",
+///            "minLength": 1
+///          },
+///          "profile_name": {
+///            "description": "The unit profile holding this model type's characteristics, when the unit has one.",
+///            "type": "string",
+///            "minLength": 1
+///          }
+///        },
+///        "additionalProperties": false
+///      }
+///    },
 ///    "faction_id": {
 ///      "description": "Owning faction. A chassis shared across factions has a distinct composition per faction under the same `unit_id`, so compositions are keyed by (faction_id, unit_id).",
 ///      "$ref": "#/$defs/entity-id"
@@ -56232,6 +56748,222 @@ pub struct UnitCharacteristic {
 ///    },
 ///    "game_version": {
 ///      "$ref": "#/$defs/game-version-ref"
+///    },
+///    "loadout": {
+///      "description": "The unit's wargear rules in the structure of GW's Munitorum Field Manual data, keyed by repo item ids and model names; a name several rows of `models` share is written `name#k` for the k-th of them. Each model makes `picks` choices from every slot on its model row (or takes its alternate slot instead of all of them); limits cap the unit's choices; uniform sets make every model on a row carry the same main option. Absent for units the MFM does not cover.",
+///      "type": "object",
+///      "required": [
+///        "limits",
+///        "options",
+///        "slots",
+///        "stock",
+///        "templates",
+///        "uniform"
+///      ],
+///      "properties": {
+///        "limits": {
+///          "description": "Caps on how many of a set of choices the unit may take, counted on the unit's item copies.",
+///          "type": "array",
+///          "items": {
+///            "type": "object",
+///            "required": [
+///              "breakpoints",
+///              "choices"
+///            ],
+///            "properties": {
+///              "breakpoints": {
+///                "description": "The cap is the `choices` of the breakpoint with the largest `models` at or below the unit's model count, or 0 when none is.",
+///                "type": "array",
+///                "items": {
+///                  "type": "object",
+///                  "required": [
+///                    "choices",
+///                    "models"
+///                  ],
+///                  "properties": {
+///                    "choices": {
+///                      "type": "integer",
+///                      "minimum": 0.0
+///                    },
+///                    "models": {
+///                      "type": "integer",
+///                      "minimum": 0.0
+///                    },
+///                    "per_choice": {
+///                      "description": "How many times one choice may be taken; absent for no limit.",
+///                      "type": "integer",
+///                      "minimum": 1.0
+///                    }
+///                  },
+///                  "additionalProperties": false
+///                },
+///                "minItems": 1
+///              },
+///              "choices": {
+///                "type": "array",
+///                "items": {
+///                  "$ref": "#/$defs/items"
+///                },
+///                "minItems": 1
+///              },
+///              "model": {
+///                "description": "The model row whose copies count; absent to count the whole unit's.",
+///                "type": "string",
+///                "minLength": 1
+///              }
+///            },
+///            "additionalProperties": false
+///          }
+///        },
+///        "options": {
+///          "description": "The app's wargear widgets: one entry per option it shows on a model row (or for the unit, when `model` is absent), with the item the option adds, its input and its default copies. A checkbox is taken at most once, so a row whose every option for an item is a checkbox carries at most that many copies of it (or its stock copies, when more). A row the default unit has at most one model of, whose stock options are all checkboxes, shows its widgets per model, so its caps scale with its model count.",
+///          "type": "array",
+///          "items": {
+///            "type": "object",
+///            "required": [
+///              "default",
+///              "id",
+///              "input"
+///            ],
+///            "properties": {
+///              "default": {
+///                "description": "Copies of the item the default unit's row takes through this option.",
+///                "type": "integer",
+///                "minimum": 0.0
+///              },
+///              "id": {
+///                "$ref": "#/$defs/entity-id"
+///              },
+///              "input": {
+///                "enum": [
+///                  "checkbox",
+///                  "stepper"
+///                ]
+///              },
+///              "model": {
+///                "type": "string",
+///                "minLength": 1
+///              }
+///            },
+///            "additionalProperties": false
+///          }
+///        },
+///        "slots": {
+///          "description": "Per-model choice menus. A model's wargear is the union of its picks across its row's slots.",
+///          "type": "array",
+///          "items": {
+///            "type": "object",
+///            "required": [
+///              "alternate",
+///              "choices",
+///              "picks",
+///              "repeats"
+///            ],
+///            "properties": {
+///              "alternate": {
+///                "description": "A model takes this slot instead of every non-alternate slot on its row.",
+///                "type": "boolean"
+///              },
+///              "choices": {
+///                "type": "array",
+///                "items": {
+///                  "$ref": "#/$defs/items"
+///                },
+///                "minItems": 1
+///              },
+///              "model": {
+///                "description": "The model row the slot belongs to; absent for a slot the unit fills once.",
+///                "type": "string",
+///                "minLength": 1
+///              },
+///              "picks": {
+///                "description": "Choices each model makes from this slot.",
+///                "type": "integer",
+///                "minimum": 1.0
+///              },
+///              "repeats": {
+///                "description": "Whether one choice can be picked more than once.",
+///                "type": "boolean"
+///              }
+///            },
+///            "additionalProperties": false
+///          }
+///        },
+///        "stock": {
+///          "description": "The default unit: for each model row, its model count and the unit-wide copies of each item. A row without `model` holds wargear the unit takes once.",
+///          "type": "array",
+///          "items": {
+///            "type": "object",
+///            "required": [
+///              "items",
+///              "models"
+///            ],
+///            "properties": {
+///              "individual": {
+///                "description": "The app lists this row's models one by one, each with its own widgets, so a checkbox on the row is one per model rather than one for the row.",
+///                "const": true
+///              },
+///              "items": {
+///                "$ref": "#/$defs/items"
+///              },
+///              "model": {
+///                "type": "string",
+///                "minLength": 1
+///              },
+///              "models": {
+///                "type": "integer",
+///                "minimum": 0.0
+///              }
+///            },
+///            "additionalProperties": false
+///          }
+///        },
+///        "templates": {
+///          "description": "What one model of a row carries when added beyond the default unit.",
+///          "type": "array",
+///          "items": {
+///            "$ref": "#/$defs/model-items"
+///          }
+///        },
+///        "uniform": {
+///          "description": "Every model on the row (or in the unit, when `model` is absent) that takes no substitute carries the same main option.",
+///          "type": "array",
+///          "items": {
+///            "type": "object",
+///            "required": [
+///              "choices"
+///            ],
+///            "properties": {
+///              "choices": {
+///                "type": "array",
+///                "items": {
+///                  "type": "object",
+///                  "required": [
+///                    "items",
+///                    "substitute"
+///                  ],
+///                  "properties": {
+///                    "items": {
+///                      "$ref": "#/$defs/items"
+///                    },
+///                    "substitute": {
+///                      "type": "boolean"
+///                    }
+///                  },
+///                  "additionalProperties": false
+///                },
+///                "minItems": 1
+///              },
+///              "model": {
+///                "type": "string",
+///                "minLength": 1
+///              }
+///            },
+///            "additionalProperties": false
+///          }
+///        }
+///      },
+///      "additionalProperties": false
 ///    },
 ///    "models": {
 ///      "type": "array",
@@ -56246,6 +56978,16 @@ pub struct UnitCharacteristic {
 ///          "base_size_mm": {
 ///            "description": "This model's base. Absent when no base could be resolved for the model.",
 ///            "$ref": "#/$defs/base-size"
+///          },
+///          "can_be_non_character_warlord": {
+///            "description": "True when this model can be the army's Warlord although it is not a CHARACTER (e.g. a Warlord Titan). Without it, the Warlord must be a CHARACTER.",
+///            "default": false,
+///            "type": "boolean"
+///          },
+///          "cannot_be_warlord": {
+///            "description": "True when this model cannot be the army's Warlord (e.g. the Eversor Assassin, Murderfang). A unit whose every model carries it cannot be the Warlord's unit unless a selected detachment names it for Warlord.",
+///            "default": false,
+///            "type": "boolean"
 ///          },
 ///          "default_weapon_ids": {
 ///            "description": "The model's no-choice equipment multiset, used by base_loadout. It must describe a legal default configuration even when whole-model variants are present; it does not implicitly add another selectable variant.",
@@ -56271,6 +57013,11 @@ pub struct UnitCharacteristic {
 ///            ]
 ///          },
 ///          "is_leader_model": {
+///            "default": false,
+///            "type": "boolean"
+///          },
+///          "is_supreme_commander": {
+///            "description": "True when this model must be the army's Warlord if its unit is included (Supreme Commander, e.g. Roboute Guilliman). When an army includes several such units, one of them must be the Warlord.",
 ///            "default": false,
 ///            "type": "boolean"
 ///          },
@@ -56434,17 +57181,1323 @@ pub struct UnitCharacteristic {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct UnitComposition {
+    ///Model types a rule adds to the unit during the battle (Split adds Blue and Brimstone Horrors to Pink Horrors). A list never contains them, so they take no part in models, tiers or loadout; GW's data lists them as model rows capped at 0. Each carries the gear a newly added model of its type has.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub added_models: ::std::vec::Vec<UnitCompositionAddedModelsItem>,
     ///Owning faction. A chassis shared across factions has a distinct composition per faction under the same `unit_id`, so compositions are keyed by (faction_id, unit_id).
     pub faction_id: EntityId,
     ///Game modes this unit composition is legal or authored for; absent implies matched-play.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub game_modes: ::std::option::Option<GameModes>,
     pub game_version: GameVersionRef,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub loadout: ::std::option::Option<UnitCompositionLoadout>,
     pub models: ::std::vec::Vec<UnitCompositionModelsItem>,
     ///The discrete buildable squad sizes (GW's per-datasheet unit-composition rows). Each tier gives a per-model count range; a legal squad must match exactly one tier. When absent, the squad is treated as a single implicit tier equal to `models[]`. The top-level `models[]` min/max are the aggregate envelope (min-of-mins / max-of-maxes) across the tiers, so consumers that read only `models[]` still see the full range.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub tiers: ::std::vec::Vec<UnitCompositionTiersItem>,
     pub unit_id: EntityId,
+}
+///`UnitCompositionAddedModelsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "default_weapon_ids",
+///    "keywords",
+///    "name"
+///  ],
+///  "properties": {
+///    "default_weapon_ids": {
+///      "description": "The equipment a newly added model of this type carries.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      }
+///    },
+///    "keywords": {
+///      "description": "The model type's keywords.",
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      }
+///    },
+///    "name": {
+///      "type": "string",
+///      "minLength": 1
+///    },
+///    "profile_name": {
+///      "description": "The unit profile holding this model type's characteristics, when the unit has one.",
+///      "type": "string",
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitCompositionAddedModelsItem {
+    ///The equipment a newly added model of this type carries.
+    pub default_weapon_ids: ::std::vec::Vec<EntityId>,
+    ///The model type's keywords.
+    pub keywords: ::std::vec::Vec<UnitCompositionAddedModelsItemKeywordsItem>,
+    pub name: UnitCompositionAddedModelsItemName,
+    ///The unit profile holding this model type's characteristics, when the unit has one.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub profile_name: ::std::option::Option<UnitCompositionAddedModelsItemProfileName>,
+}
+///`UnitCompositionAddedModelsItemKeywordsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitCompositionAddedModelsItemKeywordsItem(::std::string::String);
+impl ::std::ops::Deref for UnitCompositionAddedModelsItemKeywordsItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitCompositionAddedModelsItemKeywordsItem>
+for ::std::string::String {
+    fn from(value: UnitCompositionAddedModelsItemKeywordsItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitCompositionAddedModelsItemKeywordsItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitCompositionAddedModelsItemKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitCompositionAddedModelsItemKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitCompositionAddedModelsItemKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitCompositionAddedModelsItemKeywordsItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`UnitCompositionAddedModelsItemName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitCompositionAddedModelsItemName(::std::string::String);
+impl ::std::ops::Deref for UnitCompositionAddedModelsItemName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitCompositionAddedModelsItemName> for ::std::string::String {
+    fn from(value: UnitCompositionAddedModelsItemName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitCompositionAddedModelsItemName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitCompositionAddedModelsItemName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitCompositionAddedModelsItemName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitCompositionAddedModelsItemName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitCompositionAddedModelsItemName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///The unit profile holding this model type's characteristics, when the unit has one.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The unit profile holding this model type's characteristics, when the unit has one.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitCompositionAddedModelsItemProfileName(::std::string::String);
+impl ::std::ops::Deref for UnitCompositionAddedModelsItemProfileName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitCompositionAddedModelsItemProfileName>
+for ::std::string::String {
+    fn from(value: UnitCompositionAddedModelsItemProfileName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitCompositionAddedModelsItemProfileName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitCompositionAddedModelsItemProfileName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitCompositionAddedModelsItemProfileName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitCompositionAddedModelsItemProfileName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitCompositionAddedModelsItemProfileName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///The unit's wargear rules in the structure of GW's Munitorum Field Manual data, keyed by repo item ids and model names; a name several rows of `models` share is written `name#k` for the k-th of them. Each model makes `picks` choices from every slot on its model row (or takes its alternate slot instead of all of them); limits cap the unit's choices; uniform sets make every model on a row carry the same main option. Absent for units the MFM does not cover.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The unit's wargear rules in the structure of GW's Munitorum Field Manual data, keyed by repo item ids and model names; a name several rows of `models` share is written `name#k` for the k-th of them. Each model makes `picks` choices from every slot on its model row (or takes its alternate slot instead of all of them); limits cap the unit's choices; uniform sets make every model on a row carry the same main option. Absent for units the MFM does not cover.",
+///  "type": "object",
+///  "required": [
+///    "limits",
+///    "options",
+///    "slots",
+///    "stock",
+///    "templates",
+///    "uniform"
+///  ],
+///  "properties": {
+///    "limits": {
+///      "description": "Caps on how many of a set of choices the unit may take, counted on the unit's item copies.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "breakpoints",
+///          "choices"
+///        ],
+///        "properties": {
+///          "breakpoints": {
+///            "description": "The cap is the `choices` of the breakpoint with the largest `models` at or below the unit's model count, or 0 when none is.",
+///            "type": "array",
+///            "items": {
+///              "type": "object",
+///              "required": [
+///                "choices",
+///                "models"
+///              ],
+///              "properties": {
+///                "choices": {
+///                  "type": "integer",
+///                  "minimum": 0.0
+///                },
+///                "models": {
+///                  "type": "integer",
+///                  "minimum": 0.0
+///                },
+///                "per_choice": {
+///                  "description": "How many times one choice may be taken; absent for no limit.",
+///                  "type": "integer",
+///                  "minimum": 1.0
+///                }
+///              },
+///              "additionalProperties": false
+///            },
+///            "minItems": 1
+///          },
+///          "choices": {
+///            "type": "array",
+///            "items": {
+///              "$ref": "#/$defs/items"
+///            },
+///            "minItems": 1
+///          },
+///          "model": {
+///            "description": "The model row whose copies count; absent to count the whole unit's.",
+///            "type": "string",
+///            "minLength": 1
+///          }
+///        },
+///        "additionalProperties": false
+///      }
+///    },
+///    "options": {
+///      "description": "The app's wargear widgets: one entry per option it shows on a model row (or for the unit, when `model` is absent), with the item the option adds, its input and its default copies. A checkbox is taken at most once, so a row whose every option for an item is a checkbox carries at most that many copies of it (or its stock copies, when more). A row the default unit has at most one model of, whose stock options are all checkboxes, shows its widgets per model, so its caps scale with its model count.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "default",
+///          "id",
+///          "input"
+///        ],
+///        "properties": {
+///          "default": {
+///            "description": "Copies of the item the default unit's row takes through this option.",
+///            "type": "integer",
+///            "minimum": 0.0
+///          },
+///          "id": {
+///            "$ref": "#/$defs/entity-id"
+///          },
+///          "input": {
+///            "enum": [
+///              "checkbox",
+///              "stepper"
+///            ]
+///          },
+///          "model": {
+///            "type": "string",
+///            "minLength": 1
+///          }
+///        },
+///        "additionalProperties": false
+///      }
+///    },
+///    "slots": {
+///      "description": "Per-model choice menus. A model's wargear is the union of its picks across its row's slots.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "alternate",
+///          "choices",
+///          "picks",
+///          "repeats"
+///        ],
+///        "properties": {
+///          "alternate": {
+///            "description": "A model takes this slot instead of every non-alternate slot on its row.",
+///            "type": "boolean"
+///          },
+///          "choices": {
+///            "type": "array",
+///            "items": {
+///              "$ref": "#/$defs/items"
+///            },
+///            "minItems": 1
+///          },
+///          "model": {
+///            "description": "The model row the slot belongs to; absent for a slot the unit fills once.",
+///            "type": "string",
+///            "minLength": 1
+///          },
+///          "picks": {
+///            "description": "Choices each model makes from this slot.",
+///            "type": "integer",
+///            "minimum": 1.0
+///          },
+///          "repeats": {
+///            "description": "Whether one choice can be picked more than once.",
+///            "type": "boolean"
+///          }
+///        },
+///        "additionalProperties": false
+///      }
+///    },
+///    "stock": {
+///      "description": "The default unit: for each model row, its model count and the unit-wide copies of each item. A row without `model` holds wargear the unit takes once.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "items",
+///          "models"
+///        ],
+///        "properties": {
+///          "individual": {
+///            "description": "The app lists this row's models one by one, each with its own widgets, so a checkbox on the row is one per model rather than one for the row.",
+///            "const": true
+///          },
+///          "items": {
+///            "$ref": "#/$defs/items"
+///          },
+///          "model": {
+///            "type": "string",
+///            "minLength": 1
+///          },
+///          "models": {
+///            "type": "integer",
+///            "minimum": 0.0
+///          }
+///        },
+///        "additionalProperties": false
+///      }
+///    },
+///    "templates": {
+///      "description": "What one model of a row carries when added beyond the default unit.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/model-items"
+///      }
+///    },
+///    "uniform": {
+///      "description": "Every model on the row (or in the unit, when `model` is absent) that takes no substitute carries the same main option.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "choices"
+///        ],
+///        "properties": {
+///          "choices": {
+///            "type": "array",
+///            "items": {
+///              "type": "object",
+///              "required": [
+///                "items",
+///                "substitute"
+///              ],
+///              "properties": {
+///                "items": {
+///                  "$ref": "#/$defs/items"
+///                },
+///                "substitute": {
+///                  "type": "boolean"
+///                }
+///              },
+///              "additionalProperties": false
+///            },
+///            "minItems": 1
+///          },
+///          "model": {
+///            "type": "string",
+///            "minLength": 1
+///          }
+///        },
+///        "additionalProperties": false
+///      }
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitCompositionLoadout {
+    ///Caps on how many of a set of choices the unit may take, counted on the unit's item copies.
+    pub limits: ::std::vec::Vec<UnitCompositionLoadoutLimitsItem>,
+    ///The app's wargear widgets: one entry per option it shows on a model row (or for the unit, when `model` is absent), with the item the option adds, its input and its default copies. A checkbox is taken at most once, so a row whose every option for an item is a checkbox carries at most that many copies of it (or its stock copies, when more). A row the default unit has at most one model of, whose stock options are all checkboxes, shows its widgets per model, so its caps scale with its model count.
+    pub options: ::std::vec::Vec<UnitCompositionLoadoutOptionsItem>,
+    ///Per-model choice menus. A model's wargear is the union of its picks across its row's slots.
+    pub slots: ::std::vec::Vec<UnitCompositionLoadoutSlotsItem>,
+    ///The default unit: for each model row, its model count and the unit-wide copies of each item. A row without `model` holds wargear the unit takes once.
+    pub stock: ::std::vec::Vec<UnitCompositionLoadoutStockItem>,
+    ///What one model of a row carries when added beyond the default unit.
+    pub templates: ::std::vec::Vec<ModelItems>,
+    ///Every model on the row (or in the unit, when `model` is absent) that takes no substitute carries the same main option.
+    pub uniform: ::std::vec::Vec<UnitCompositionLoadoutUniformItem>,
+}
+///`UnitCompositionLoadoutLimitsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "breakpoints",
+///    "choices"
+///  ],
+///  "properties": {
+///    "breakpoints": {
+///      "description": "The cap is the `choices` of the breakpoint with the largest `models` at or below the unit's model count, or 0 when none is.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "choices",
+///          "models"
+///        ],
+///        "properties": {
+///          "choices": {
+///            "type": "integer",
+///            "minimum": 0.0
+///          },
+///          "models": {
+///            "type": "integer",
+///            "minimum": 0.0
+///          },
+///          "per_choice": {
+///            "description": "How many times one choice may be taken; absent for no limit.",
+///            "type": "integer",
+///            "minimum": 1.0
+///          }
+///        },
+///        "additionalProperties": false
+///      },
+///      "minItems": 1
+///    },
+///    "choices": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/items"
+///      },
+///      "minItems": 1
+///    },
+///    "model": {
+///      "description": "The model row whose copies count; absent to count the whole unit's.",
+///      "type": "string",
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitCompositionLoadoutLimitsItem {
+    ///The cap is the `choices` of the breakpoint with the largest `models` at or below the unit's model count, or 0 when none is.
+    pub breakpoints: ::std::vec::Vec<UnitCompositionLoadoutLimitsItemBreakpointsItem>,
+    pub choices: ::std::vec::Vec<Items>,
+    ///The model row whose copies count; absent to count the whole unit's.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub model: ::std::option::Option<UnitCompositionLoadoutLimitsItemModel>,
+}
+///`UnitCompositionLoadoutLimitsItemBreakpointsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "choices",
+///    "models"
+///  ],
+///  "properties": {
+///    "choices": {
+///      "type": "integer",
+///      "minimum": 0.0
+///    },
+///    "models": {
+///      "type": "integer",
+///      "minimum": 0.0
+///    },
+///    "per_choice": {
+///      "description": "How many times one choice may be taken; absent for no limit.",
+///      "type": "integer",
+///      "minimum": 1.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitCompositionLoadoutLimitsItemBreakpointsItem {
+    pub choices: u64,
+    pub models: u64,
+    ///How many times one choice may be taken; absent for no limit.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub per_choice: ::std::option::Option<::std::num::NonZeroU64>,
+}
+///The model row whose copies count; absent to count the whole unit's.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The model row whose copies count; absent to count the whole unit's.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitCompositionLoadoutLimitsItemModel(::std::string::String);
+impl ::std::ops::Deref for UnitCompositionLoadoutLimitsItemModel {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitCompositionLoadoutLimitsItemModel>
+for ::std::string::String {
+    fn from(value: UnitCompositionLoadoutLimitsItemModel) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitCompositionLoadoutLimitsItemModel {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitCompositionLoadoutLimitsItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitCompositionLoadoutLimitsItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitCompositionLoadoutLimitsItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitCompositionLoadoutLimitsItemModel {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`UnitCompositionLoadoutOptionsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "default",
+///    "id",
+///    "input"
+///  ],
+///  "properties": {
+///    "default": {
+///      "description": "Copies of the item the default unit's row takes through this option.",
+///      "type": "integer",
+///      "minimum": 0.0
+///    },
+///    "id": {
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    "input": {
+///      "enum": [
+///        "checkbox",
+///        "stepper"
+///      ]
+///    },
+///    "model": {
+///      "type": "string",
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitCompositionLoadoutOptionsItem {
+    ///Copies of the item the default unit's row takes through this option.
+    pub default: u64,
+    pub id: EntityId,
+    pub input: UnitCompositionLoadoutOptionsItemInput,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub model: ::std::option::Option<UnitCompositionLoadoutOptionsItemModel>,
+}
+///`UnitCompositionLoadoutOptionsItemInput`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "checkbox",
+///    "stepper"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitCompositionLoadoutOptionsItemInput {
+    #[serde(rename = "checkbox")]
+    Checkbox,
+    #[serde(rename = "stepper")]
+    Stepper,
+}
+impl ::std::fmt::Display for UnitCompositionLoadoutOptionsItemInput {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Checkbox => f.write_str("checkbox"),
+            Self::Stepper => f.write_str("stepper"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitCompositionLoadoutOptionsItemInput {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "checkbox" => Ok(Self::Checkbox),
+            "stepper" => Ok(Self::Stepper),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitCompositionLoadoutOptionsItemInput {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitCompositionLoadoutOptionsItemInput {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitCompositionLoadoutOptionsItemInput {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`UnitCompositionLoadoutOptionsItemModel`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitCompositionLoadoutOptionsItemModel(::std::string::String);
+impl ::std::ops::Deref for UnitCompositionLoadoutOptionsItemModel {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitCompositionLoadoutOptionsItemModel>
+for ::std::string::String {
+    fn from(value: UnitCompositionLoadoutOptionsItemModel) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitCompositionLoadoutOptionsItemModel {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitCompositionLoadoutOptionsItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitCompositionLoadoutOptionsItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitCompositionLoadoutOptionsItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitCompositionLoadoutOptionsItemModel {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`UnitCompositionLoadoutSlotsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "alternate",
+///    "choices",
+///    "picks",
+///    "repeats"
+///  ],
+///  "properties": {
+///    "alternate": {
+///      "description": "A model takes this slot instead of every non-alternate slot on its row.",
+///      "type": "boolean"
+///    },
+///    "choices": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/items"
+///      },
+///      "minItems": 1
+///    },
+///    "model": {
+///      "description": "The model row the slot belongs to; absent for a slot the unit fills once.",
+///      "type": "string",
+///      "minLength": 1
+///    },
+///    "picks": {
+///      "description": "Choices each model makes from this slot.",
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "repeats": {
+///      "description": "Whether one choice can be picked more than once.",
+///      "type": "boolean"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitCompositionLoadoutSlotsItem {
+    ///A model takes this slot instead of every non-alternate slot on its row.
+    pub alternate: bool,
+    pub choices: ::std::vec::Vec<Items>,
+    ///The model row the slot belongs to; absent for a slot the unit fills once.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub model: ::std::option::Option<UnitCompositionLoadoutSlotsItemModel>,
+    ///Choices each model makes from this slot.
+    pub picks: ::std::num::NonZeroU64,
+    ///Whether one choice can be picked more than once.
+    pub repeats: bool,
+}
+///The model row the slot belongs to; absent for a slot the unit fills once.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The model row the slot belongs to; absent for a slot the unit fills once.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitCompositionLoadoutSlotsItemModel(::std::string::String);
+impl ::std::ops::Deref for UnitCompositionLoadoutSlotsItemModel {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitCompositionLoadoutSlotsItemModel>
+for ::std::string::String {
+    fn from(value: UnitCompositionLoadoutSlotsItemModel) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitCompositionLoadoutSlotsItemModel {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitCompositionLoadoutSlotsItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitCompositionLoadoutSlotsItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitCompositionLoadoutSlotsItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitCompositionLoadoutSlotsItemModel {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`UnitCompositionLoadoutStockItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "items",
+///    "models"
+///  ],
+///  "properties": {
+///    "individual": {
+///      "description": "The app lists this row's models one by one, each with its own widgets, so a checkbox on the row is one per model rather than one for the row.",
+///      "const": true
+///    },
+///    "items": {
+///      "$ref": "#/$defs/items"
+///    },
+///    "model": {
+///      "type": "string",
+///      "minLength": 1
+///    },
+///    "models": {
+///      "type": "integer",
+///      "minimum": 0.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitCompositionLoadoutStockItem {
+    ///The app lists this row's models one by one, each with its own widgets, so a checkbox on the row is one per model rather than one for the row.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub individual: ::std::option::Option<::serde_json::Value>,
+    pub items: Items,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub model: ::std::option::Option<UnitCompositionLoadoutStockItemModel>,
+    pub models: u64,
+}
+///`UnitCompositionLoadoutStockItemModel`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitCompositionLoadoutStockItemModel(::std::string::String);
+impl ::std::ops::Deref for UnitCompositionLoadoutStockItemModel {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitCompositionLoadoutStockItemModel>
+for ::std::string::String {
+    fn from(value: UnitCompositionLoadoutStockItemModel) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitCompositionLoadoutStockItemModel {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitCompositionLoadoutStockItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitCompositionLoadoutStockItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitCompositionLoadoutStockItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitCompositionLoadoutStockItemModel {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`UnitCompositionLoadoutUniformItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "choices"
+///  ],
+///  "properties": {
+///    "choices": {
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "items",
+///          "substitute"
+///        ],
+///        "properties": {
+///          "items": {
+///            "$ref": "#/$defs/items"
+///          },
+///          "substitute": {
+///            "type": "boolean"
+///          }
+///        },
+///        "additionalProperties": false
+///      },
+///      "minItems": 1
+///    },
+///    "model": {
+///      "type": "string",
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitCompositionLoadoutUniformItem {
+    pub choices: ::std::vec::Vec<UnitCompositionLoadoutUniformItemChoicesItem>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub model: ::std::option::Option<UnitCompositionLoadoutUniformItemModel>,
+}
+///`UnitCompositionLoadoutUniformItemChoicesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "items",
+///    "substitute"
+///  ],
+///  "properties": {
+///    "items": {
+///      "$ref": "#/$defs/items"
+///    },
+///    "substitute": {
+///      "type": "boolean"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitCompositionLoadoutUniformItemChoicesItem {
+    pub items: Items,
+    pub substitute: bool,
+}
+///`UnitCompositionLoadoutUniformItemModel`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitCompositionLoadoutUniformItemModel(::std::string::String);
+impl ::std::ops::Deref for UnitCompositionLoadoutUniformItemModel {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitCompositionLoadoutUniformItemModel>
+for ::std::string::String {
+    fn from(value: UnitCompositionLoadoutUniformItemModel) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitCompositionLoadoutUniformItemModel {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitCompositionLoadoutUniformItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitCompositionLoadoutUniformItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitCompositionLoadoutUniformItemModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitCompositionLoadoutUniformItemModel {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
 }
 ///`UnitCompositionModelsItem`
 ///
@@ -56462,6 +58515,16 @@ pub struct UnitComposition {
 ///    "base_size_mm": {
 ///      "description": "This model's base. Absent when no base could be resolved for the model.",
 ///      "$ref": "#/$defs/base-size"
+///    },
+///    "can_be_non_character_warlord": {
+///      "description": "True when this model can be the army's Warlord although it is not a CHARACTER (e.g. a Warlord Titan). Without it, the Warlord must be a CHARACTER.",
+///      "default": false,
+///      "type": "boolean"
+///    },
+///    "cannot_be_warlord": {
+///      "description": "True when this model cannot be the army's Warlord (e.g. the Eversor Assassin, Murderfang). A unit whose every model carries it cannot be the Warlord's unit unless a selected detachment names it for Warlord.",
+///      "default": false,
+///      "type": "boolean"
 ///    },
 ///    "default_weapon_ids": {
 ///      "description": "The model's no-choice equipment multiset, used by base_loadout. It must describe a legal default configuration even when whole-model variants are present; it does not implicitly add another selectable variant.",
@@ -56487,6 +58550,11 @@ pub struct UnitComposition {
 ///      ]
 ///    },
 ///    "is_leader_model": {
+///      "default": false,
+///      "type": "boolean"
+///    },
+///    "is_supreme_commander": {
+///      "description": "True when this model must be the army's Warlord if its unit is included (Supreme Commander, e.g. Roboute Guilliman). When an army includes several such units, one of them must be the Warlord.",
 ///      "default": false,
 ///      "type": "boolean"
 ///    },
@@ -56603,6 +58671,12 @@ pub struct UnitCompositionModelsItem {
     ///This model's base. Absent when no base could be resolved for the model.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub base_size_mm: ::std::option::Option<BaseSize>,
+    ///True when this model can be the army's Warlord although it is not a CHARACTER (e.g. a Warlord Titan). Without it, the Warlord must be a CHARACTER.
+    #[serde(default)]
+    pub can_be_non_character_warlord: bool,
+    ///True when this model cannot be the army's Warlord (e.g. the Eversor Assassin, Murderfang). A unit whose every model carries it cannot be the Warlord's unit unless a selected detachment names it for Warlord.
+    #[serde(default)]
+    pub cannot_be_warlord: bool,
     ///The model's no-choice equipment multiset, used by base_loadout. It must describe a legal default configuration even when whole-model variants are present; it does not implicitly add another selectable variant.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub default_weapon_ids: ::std::vec::Vec<EntityId>,
@@ -56614,6 +58688,9 @@ pub struct UnitCompositionModelsItem {
     pub hull_shape_id: ::std::option::Option<EntityId>,
     #[serde(default)]
     pub is_leader_model: bool,
+    ///True when this model must be the army's Warlord if its unit is included (Supreme Commander, e.g. Roboute Guilliman). When an army includes several such units, one of them must be the Warlord.
+    #[serde(default)]
+    pub is_supreme_commander: bool,
     ///Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, `count * floor(scope_model_count / per_models)` when `stepped`, or simply `count` when `per_models` is 0.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub loadout_variant_budgets: ::std::vec::Vec<

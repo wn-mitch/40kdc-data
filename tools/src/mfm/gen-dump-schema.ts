@@ -89,13 +89,42 @@ interface SourceMappingField {
   reason: string;
 }
 
+/** Why an MFM field has no projection; see mfm-source-map.schema.json. */
+export type UnmappedClassification =
+  | "constant"
+  | "prose"
+  | "id"
+  | "presentation"
+  | "structural"
+  | "consumed-elsewhere"
+  | "needs-consumer";
+
+/**
+ * Reasons that fit any field and so explain none. An unmapped field's reason
+ * must say what its values are or who reads them.
+ */
+export const STOCK_UNMAPPED_REASONS: readonly RegExp[] = [
+  /does not model (this )?source/i,
+  /(is|are) not projected by the current extractor/i,
+  /has no (current )?core([- ]entity)? (destination|field|property)/i,
+  /not represented (in|by) the core/i,
+  /no corresponding core field/i,
+  /(remains|kept|excluded) (outside|from) (the )?(published )?core entity/i,
+];
+
 interface SourceMapping {
   $schema: string;
   entity_schema: string;
   mapping_version: number;
   root_tables: string[];
   fields: Record<string, SourceMappingField>;
-  unmapped_mfm_fields: Array<{ source: string; candidate_pointer: string | null; reason: string }>;
+  unmapped_mfm_fields: Array<{
+    source: string;
+    candidate_pointer: string | null;
+    reason: string;
+    classification: UnmappedClassification;
+    spread: string;
+  }>;
 }
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
@@ -793,6 +822,8 @@ export function validateSourceMappings(catalog: DumpCatalog, mappingsDir: string
     }
   }
 
+  // Reason text → the source tables it explains; one reason may serve one table only.
+  const reasonTables = new Map<string, Set<string>>();
   for (const schemaFile of schemaFiles) {
     const basename = schemaFile.slice(0, -".schema.json".length);
     const mappingPath = path.join(mappingsDir, `${basename}.mapping.json`);
@@ -868,7 +899,20 @@ export function validateSourceMappings(catalog: DumpCatalog, mappingsDir: string
       if (entry.candidate_pointer !== null && !expectedPointers.includes(entry.candidate_pointer)) {
         errors.push(`Mapping "${basename}" unmapped source "${entry.source}" has unknown candidate pointer "${entry.candidate_pointer}"`);
       }
+      if (STOCK_UNMAPPED_REASONS.some((pattern) => pattern.test(entry.reason))) {
+        errors.push(`Mapping "${basename}" unmapped source "${entry.source}" has a stock reason; say what its values are or who reads it`);
+      }
+      if (entry.classification === "needs-consumer" && !/\b[\w-]+\.ts\b/.test(entry.reason)) {
+        errors.push(`Mapping "${basename}" unmapped source "${entry.source}" needs a consumer but its reason names no .ts file`);
+      }
+      const table = entry.source.split(".").slice(0, 2).join(".");
+      const tables = reasonTables.get(entry.reason) ?? new Set<string>();
+      tables.add(table);
+      reasonTables.set(entry.reason, tables);
     }
+  }
+  for (const [reason, tables] of reasonTables) {
+    if (tables.size > 1) errors.push(`Unmapped reason "${reason}" is shared by ${[...tables].sort().join(", ")}; give each field its own reason`);
   }
   return { errors, present, total: schemaFiles.length, coverage };
 }

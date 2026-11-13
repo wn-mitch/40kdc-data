@@ -1,0 +1,105 @@
+{
+  "slug": "",
+  "key": "",
+  "visible": "hidden",
+  "locked": false,
+  "rulebook": {
+    "name": "40kdc",
+    "game": "Warhammer 40,000",
+    "publisher": "Alpaca Software",
+    "url": "https://40kdc.dev",
+    "genre": "wargame"
+  },
+  "snapshot": {
+    "item": "Roster§Roster",
+    "name": "Canonical pass-through",
+    "quantity": 1,
+    "stats": {
+      "Points": {
+        "value": 280
+      }
+    },
+    "assets": {
+      "included": [
+        {
+          "item": "Faction§Adeptus Custodes",
+          "name": "Adeptus Custodes",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Grav-Assault Force",
+          "name": "Grav-Assault Force",
+          "quantity": 1
+        },
+        {
+          "item": "Force Disposition§Reconnaissance",
+          "name": "Reconnaissance",
+          "quantity": 1
+        },
+        {
+          "item": "Battle Size§Incursion (1000 Point limit)",
+          "name": "Incursion (1000 Point limit)",
+          "quantity": 1
+        },
+        {
+          "item": "Unit§Caladius Annihilator Grav-tank",
+          "name": "Caladius Annihilator Grav-tank",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 230
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Armoured hull",
+                "name": "Armoured hull",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Iliastus accelerator cannon",
+                "name": "Iliastus accelerator cannon",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Twin neutronium cascade projectors",
+                "name": "Twin neutronium cascade projectors",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Twin lastrum bolt cannon",
+                "name": "Twin lastrum bolt cannon",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Prosecutors",
+          "name": "Prosecutors",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 50
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Boltgun",
+                "name": "Boltgun",
+                "quantity": 4
+              },
+              {
+                "item": "Weapon§Close combat weapon",
+                "name": "Close combat weapon",
+                "quantity": 4
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

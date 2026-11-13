@@ -32,7 +32,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lord of Poxes",
+          "models": 1,
+          "items": [
+            {
+              "id": "great-plague-blade",
+              "count": 1
+            },
+            {
+              "id": "plasma-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lord of Poxes",
+          "items": [
+            {
+              "id": "great-plague-blade",
+              "count": 1
+            },
+            {
+              "id": "plasma-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lord of Poxes",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "great-plague-blade",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lord of Poxes",
+          "id": "great-plague-blade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lord of Poxes",
+          "id": "plasma-pistol",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chaos-spawn",
@@ -66,7 +135,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Spawn",
+          "models": 2,
+          "items": [
+            {
+              "id": "hideous-mutations",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Spawn",
+          "items": [
+            {
+              "id": "hideous-mutations",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Spawn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hideous-mutations",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Spawn",
+          "id": "hideous-mutations",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tallyman",
@@ -101,7 +221,67 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tallyman",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "plasma-pistol-tallyman",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Tallyman",
+          "items": []
+        }
+      ],
+      "slots": [
+        {
+          "model": "Tallyman",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol-tallyman",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Tallyman",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tallyman",
+          "id": "plasma-pistol-tallyman",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "poxwalkers",
@@ -144,7 +324,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Poxwalker",
+          "models": 10,
+          "items": [
+            {
+              "id": "improvised-weapon",
+              "count": 10
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Poxwalker",
+          "items": [
+            {
+              "id": "improvised-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Poxwalker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "improvised-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Poxwalker",
+          "id": "improvised-weapon",
+          "input": "stepper",
+          "default": 10
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lord-of-contagion",
@@ -178,7 +409,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lord of Contagion",
+          "models": 1,
+          "items": [
+            {
+              "id": "manreaper",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lord of Contagion",
+          "items": [
+            {
+              "id": "manreaper",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lord of Contagion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "manreaper",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lord of Contagion",
+          "id": "manreaper",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chaos-predator-annihilator",
@@ -213,7 +495,163 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Predator Annihilator",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "predator-twin-lascannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Predator Annihilator",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "predator-twin-lascannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Predator Annihilator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon-chaos-predator-annihilator",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "lascannon",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "predator-twin-lascannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Predator Annihilator",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "id": "combi-weapon-chaos-predator-annihilator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "id": "havoc-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "id": "heavy-bolter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "id": "lascannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "id": "predator-twin-lascannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chaos-predator-destructor",
@@ -248,7 +686,163 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Predator Destructor",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "predator-autocannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Predator Destructor",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "predator-autocannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Predator Destructor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon-chaos-predator-destructor",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "lascannon",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "predator-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Predator Destructor",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "id": "combi-weapon-chaos-predator-destructor",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "id": "havoc-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "id": "heavy-bolter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "id": "lascannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "id": "predator-autocannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "foetid-bloat-drone-with-heavy-blight-launcher",
@@ -283,7 +877,86 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Foetid Bloat-drone",
+          "models": 1,
+          "items": [
+            {
+              "id": "heavy-blight-launcher",
+              "count": 1
+            },
+            {
+              "id": "plague-probe",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Foetid Bloat-drone",
+          "items": [
+            {
+              "id": "heavy-blight-launcher",
+              "count": 1
+            },
+            {
+              "id": "plague-probe",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Foetid Bloat-drone",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-blight-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Foetid Bloat-drone",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "plague-probe",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Foetid Bloat-drone",
+          "id": "heavy-blight-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Foetid Bloat-drone",
+          "id": "plague-probe",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "plagueburst-crawler",
@@ -321,7 +994,156 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Plagueburst Crawler",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "entropy-cannon",
+              "count": 2
+            },
+            {
+              "id": "heavy-slugger",
+              "count": 1
+            },
+            {
+              "id": "plagueburst-mortar",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Plagueburst Crawler",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "entropy-cannon",
+              "count": 2
+            },
+            {
+              "id": "heavy-slugger",
+              "count": 1
+            },
+            {
+              "id": "plagueburst-mortar",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Plagueburst Crawler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "plagueburst-mortar",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plagueburst Crawler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "entropy-cannon",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "plaguespitter",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plagueburst Crawler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-slugger",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rothail-volley-gun",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Plagueburst Crawler",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plagueburst Crawler",
+          "id": "entropy-cannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Plagueburst Crawler",
+          "id": "heavy-slugger",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plagueburst Crawler",
+          "id": "plagueburst-mortar",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plagueburst Crawler",
+          "id": "plaguespitter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Plagueburst Crawler",
+          "id": "rothail-volley-gun",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "biologus-putrifier",
@@ -357,7 +1179,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Biologus Putrifier",
+          "models": 1,
+          "items": [
+            {
+              "id": "hyper-blight-grenades",
+              "count": 1
+            },
+            {
+              "id": "injector-pistol",
+              "count": 1
+            },
+            {
+              "id": "plague-knives",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Biologus Putrifier",
+          "items": [
+            {
+              "id": "hyper-blight-grenades",
+              "count": 1
+            },
+            {
+              "id": "injector-pistol",
+              "count": 1
+            },
+            {
+              "id": "plague-knives",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Biologus Putrifier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hyper-blight-grenades",
+                "count": 1
+              },
+              {
+                "id": "injector-pistol",
+                "count": 1
+              },
+              {
+                "id": "plague-knives",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Biologus Putrifier",
+          "id": "hyper-blight-grenades",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Biologus Putrifier",
+          "id": "injector-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Biologus Putrifier",
+          "id": "plague-knives",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "plague-marines",
@@ -570,7 +1479,448 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Plague Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "boltgun-plague-marines",
+              "count": 1
+            },
+            {
+              "id": "plague-knives-plague-marines",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Plague Marine",
+          "models": 4,
+          "items": [
+            {
+              "id": "boltgun-plague-marines",
+              "count": 4
+            },
+            {
+              "id": "plague-knives-plague-marines",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Plague Champion",
+          "items": [
+            {
+              "id": "boltgun-plague-marines",
+              "count": 1
+            },
+            {
+              "id": "plague-knives-plague-marines",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Plague Marine",
+          "items": [
+            {
+              "id": "boltgun-plague-marines",
+              "count": 1
+            },
+            {
+              "id": "plague-knives-plague-marines",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Plague Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "boltgun-plague-marines",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-gun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-pistol-plague-marines",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bubotic-weapons",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plague-knives-plague-marines",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-fist",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Marine",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blight-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "boltgun-plague-marines",
+                "count": 1
+              },
+              {
+                "id": "icon-of-despair-aura",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "boltgun-plague-marines",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bubotic-weapons",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-plague-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plague-belcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plague-spewer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-gun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Marine",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "plague-knives-plague-marines",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Plague Marine",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "icon-of-despair-aura",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Marine",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "blight-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Marine",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "meltagun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plague-belcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-gun",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Marine",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "plague-spewer",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Marine",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 2
+            },
+            {
+              "models": 10,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "bubotic-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Marine",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 2
+            },
+            {
+              "models": 10,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "heavy-plague-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Plague Champion",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Plague Champion",
+          "id": "boltgun-plague-marines",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plague Champion",
+          "id": "bubotic-weapons",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Plague Champion",
+          "id": "plague-knives-plague-marines",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plague Champion",
+          "id": "plasma-gun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Plague Champion",
+          "id": "plasma-pistol-plague-marines",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Plague Champion",
+          "id": "power-fist",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Plague Marine",
+          "id": "blight-launcher",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Plague Marine",
+          "id": "boltgun-plague-marines",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Plague Marine",
+          "id": "bubotic-weapons",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Plague Marine",
+          "id": "heavy-plague-weapon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Plague Marine",
+          "id": "icon-of-despair-aura",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Plague Marine",
+          "id": "meltagun",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Plague Marine",
+          "id": "plague-belcher",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Plague Marine",
+          "id": "plague-knives-plague-marines",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Plague Marine",
+          "id": "plague-spewer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Plague Marine",
+          "id": "plasma-gun",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "plague-surgeon",
@@ -605,7 +1955,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Plague Surgeon",
+          "models": 1,
+          "items": [
+            {
+              "id": "balesword",
+              "count": 1
+            },
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Plague Surgeon",
+          "items": [
+            {
+              "id": "balesword",
+              "count": 1
+            },
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Plague Surgeon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "balesword",
+                "count": 1
+              },
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Plague Surgeon",
+          "id": "balesword",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plague Surgeon",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "daemon-prince-of-nurgle",
@@ -640,7 +2059,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Daemon Prince of Nurgle",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellforged-weapons",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Daemon Prince of Nurgle",
+          "items": [
+            {
+              "id": "hellforged-weapons",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Daemon Prince of Nurgle",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellforged-weapons",
+                "count": 1
+              },
+              {
+                "id": "infernal-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Daemon Prince of Nurgle",
+          "id": "hellforged-weapons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Daemon Prince of Nurgle",
+          "id": "infernal-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "deathshroud-terminators",
@@ -709,7 +2197,170 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Deathshroud Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "manreaper-deathshroud-terminators",
+              "count": 1
+            },
+            {
+              "id": "plaguespurt-gauntlet",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Deathshroud Terminator",
+          "models": 2,
+          "items": [
+            {
+              "id": "manreaper-deathshroud-terminators",
+              "count": 2
+            },
+            {
+              "id": "plaguespurt-gauntlet",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Deathshroud Champion",
+          "items": [
+            {
+              "id": "manreaper-deathshroud-terminators",
+              "count": 1
+            },
+            {
+              "id": "plaguespurt-gauntlet",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Deathshroud Terminator",
+          "items": [
+            {
+              "id": "manreaper-deathshroud-terminators",
+              "count": 1
+            },
+            {
+              "id": "plaguespurt-gauntlet",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Deathshroud Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "icon-of-despair-aura",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Deathshroud Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "manreaper-deathshroud-terminators",
+                "count": 1
+              },
+              {
+                "id": "plaguespurt-gauntlet",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "manreaper-deathshroud-terminators",
+                "count": 1
+              },
+              {
+                "id": "plaguespurt-gauntlet",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Deathshroud Terminator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "manreaper-deathshroud-terminators",
+                "count": 1
+              },
+              {
+                "id": "plaguespurt-gauntlet",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Deathshroud Champion",
+          "id": "icon-of-despair-aura",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Deathshroud Champion",
+          "id": "manreaper-deathshroud-terminators",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Deathshroud Champion",
+          "id": "plaguespurt-gauntlet",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Deathshroud Champion",
+          "id": "plaguespurt-gauntlet",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Deathshroud Terminator",
+          "id": "manreaper-deathshroud-terminators",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Deathshroud Terminator",
+          "id": "plaguespurt-gauntlet",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lord-of-virulence",
@@ -744,7 +2395,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lord of Virulence",
+          "models": 1,
+          "items": [
+            {
+              "id": "power-fist-lord-of-virulence",
+              "count": 1
+            },
+            {
+              "id": "twin-plague-spewer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lord of Virulence",
+          "items": [
+            {
+              "id": "power-fist-lord-of-virulence",
+              "count": 1
+            },
+            {
+              "id": "twin-plague-spewer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lord of Virulence",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "power-fist-lord-of-virulence",
+                "count": 1
+              },
+              {
+                "id": "twin-plague-spewer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lord of Virulence",
+          "id": "power-fist-lord-of-virulence",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lord of Virulence",
+          "id": "twin-plague-spewer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "foetid-bloat-drone",
@@ -779,7 +2499,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Foetid Bloat-drone",
+          "models": 1,
+          "items": [
+            {
+              "id": "fleshmower",
+              "count": 1
+            },
+            {
+              "id": "plague-probe",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Foetid Bloat-drone",
+          "items": [
+            {
+              "id": "fleshmower",
+              "count": 1
+            },
+            {
+              "id": "plague-probe",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Foetid Bloat-drone",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "fleshmower",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plaguespitter",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Foetid Bloat-drone",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "plague-probe",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Foetid Bloat-drone",
+          "id": "fleshmower",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Foetid Bloat-drone",
+          "id": "plague-probe",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Foetid Bloat-drone",
+          "id": "plaguespitter",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "noxious-blightbringer",
@@ -814,7 +2625,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Noxious Blightbringer",
+          "models": 1,
+          "items": [
+            {
+              "id": "cursed-plague-bell",
+              "count": 1
+            },
+            {
+              "id": "plasma-pistol-noxious-blightbringer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Noxious Blightbringer",
+          "items": [
+            {
+              "id": "cursed-plague-bell",
+              "count": 1
+            },
+            {
+              "id": "plasma-pistol-noxious-blightbringer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Noxious Blightbringer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "cursed-plague-bell",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol-noxious-blightbringer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Noxious Blightbringer",
+          "id": "cursed-plague-bell",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Noxious Blightbringer",
+          "id": "plasma-pistol-noxious-blightbringer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "daemon-prince-of-nurgle-with-wings",
@@ -849,7 +2729,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Daemon Prince of Nurgle with Wings",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellforged-weapons",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon-daemon-prince-of-nurgle-with-wings",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Daemon Prince of Nurgle with Wings",
+          "items": [
+            {
+              "id": "hellforged-weapons",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon-daemon-prince-of-nurgle-with-wings",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Daemon Prince of Nurgle with Wings",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellforged-weapons",
+                "count": 1
+              },
+              {
+                "id": "infernal-cannon-daemon-prince-of-nurgle-with-wings",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Daemon Prince of Nurgle with Wings",
+          "id": "hellforged-weapons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Daemon Prince of Nurgle with Wings",
+          "id": "infernal-cannon-daemon-prince-of-nurgle-with-wings",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "miasmic-malignifier",
@@ -883,7 +2832,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Miasmic Malignifier",
+          "models": 1,
+          "items": [
+            {
+              "id": "miasmic-gouts",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Miasmic Malignifier",
+          "items": [
+            {
+              "id": "miasmic-gouts",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Miasmic Malignifier",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "miasmic-gouts",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Miasmic Malignifier",
+          "id": "miasmic-gouts",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "helbrute",
@@ -919,7 +2919,688 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Death Guard Helbrute",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon-helbrute",
+              "count": 1
+            },
+            {
+              "id": "helbrute-fist",
+              "count": 1
+            },
+            {
+              "id": "multi-melta",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Death Guard Helbrute",
+          "items": [
+            {
+              "id": "close-combat-weapon-helbrute",
+              "count": 1
+            },
+            {
+              "id": "helbrute-fist",
+              "count": 1
+            },
+            {
+              "id": "multi-melta",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Death Guard Helbrute",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-helbrute",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Death Guard Helbrute",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "plasma-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "power-scourge",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 2
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "plasma-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "power-scourge",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 2
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "plasma-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "power-scourge",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              },
+              {
+                "id": "missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              },
+              {
+                "id": "plasma-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              },
+              {
+                "id": "twin-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              },
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "plasma-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "power-scourge",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "twin-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              },
+              {
+                "id": "power-scourge",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-cannon",
+                "count": 1
+              },
+              {
+                "id": "power-scourge",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-scourge",
+                "count": 1
+              },
+              {
+                "id": "twin-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-scourge",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-scourge",
+                "count": 1
+              },
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Death Guard Helbrute",
+          "id": "close-combat-weapon-helbrute",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Death Guard Helbrute",
+          "id": "combi-bolter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Death Guard Helbrute",
+          "id": "heavy-flamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Death Guard Helbrute",
+          "id": "helbrute-fist",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Death Guard Helbrute",
+          "id": "helbrute-fist",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Death Guard Helbrute",
+          "id": "helbrute-hammer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Death Guard Helbrute",
+          "id": "missile-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Death Guard Helbrute",
+          "id": "multi-melta",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Death Guard Helbrute",
+          "id": "plasma-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Death Guard Helbrute",
+          "id": "power-scourge",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Death Guard Helbrute",
+          "id": "twin-autocannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Death Guard Helbrute",
+          "id": "twin-heavy-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Death Guard Helbrute",
+          "id": "twin-lascannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "myphitic-blight-haulers",
@@ -965,7 +3646,112 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Myphitic Blight-hauler",
+          "models": 1,
+          "items": [
+            {
+              "id": "bile-spurt",
+              "count": 1
+            },
+            {
+              "id": "gnashing-maw",
+              "count": 1
+            },
+            {
+              "id": "missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "multi-melta",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Myphitic Blight-hauler",
+          "items": [
+            {
+              "id": "bile-spurt",
+              "count": 1
+            },
+            {
+              "id": "gnashing-maw",
+              "count": 1
+            },
+            {
+              "id": "missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "multi-melta",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Myphitic Blight-hauler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bile-spurt",
+                "count": 1
+              },
+              {
+                "id": "gnashing-maw",
+                "count": 1
+              },
+              {
+                "id": "missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Myphitic Blight-hauler",
+          "id": "bile-spurt",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Myphitic Blight-hauler",
+          "id": "gnashing-maw",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Myphitic Blight-hauler",
+          "id": "missile-launcher",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Myphitic Blight-hauler",
+          "id": "multi-melta",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "mortarion",
@@ -984,7 +3770,8 @@
           "rotwind",
           "lantern",
           "silence"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {
@@ -1001,7 +3788,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Mortarion",
+          "models": 1,
+          "items": [
+            {
+              "id": "lantern",
+              "count": 1
+            },
+            {
+              "id": "rotwind",
+              "count": 1
+            },
+            {
+              "id": "silence",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Mortarion",
+          "items": [
+            {
+              "id": "lantern",
+              "count": 1
+            },
+            {
+              "id": "rotwind",
+              "count": 1
+            },
+            {
+              "id": "silence",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Mortarion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lantern",
+                "count": 1
+              },
+              {
+                "id": "rotwind",
+                "count": 1
+              },
+              {
+                "id": "silence",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Mortarion",
+          "id": "lantern",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Mortarion",
+          "id": "rotwind",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Mortarion",
+          "id": "silence",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "malignant-plaguecaster",
@@ -1037,7 +3911,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Malignant Plaguecaster",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "corrupted-staff",
+              "count": 1
+            },
+            {
+              "id": "plague-wind",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Malignant Plaguecaster",
+          "items": [
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "corrupted-staff",
+              "count": 1
+            },
+            {
+              "id": "plague-wind",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Malignant Plaguecaster",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "corrupted-staff",
+                "count": 1
+              },
+              {
+                "id": "plague-wind",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Malignant Plaguecaster",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Malignant Plaguecaster",
+          "id": "corrupted-staff",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Malignant Plaguecaster",
+          "id": "plague-wind",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chaos-rhino",
@@ -1072,7 +4033,170 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Rhino",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Rhino",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon-chaos-rhino",
+                "count": 1
+              },
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon-chaos-rhino",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 2
+              },
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon-chaos-rhino",
+                "count": 1
+              },
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Rhino",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Rhino",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Rhino",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Rhino",
+          "id": "combi-weapon-chaos-rhino",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Rhino",
+          "id": "havoc-launcher",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chaos-land-raider",
@@ -1109,7 +4233,148 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Land Raider",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks-chaos-land-raider",
+              "count": 1
+            },
+            {
+              "id": "soulshatter-lascannon",
+              "count": 2
+            },
+            {
+              "id": "twin-heavy-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Land Raider",
+          "items": [
+            {
+              "id": "armoured-tracks-chaos-land-raider",
+              "count": 1
+            },
+            {
+              "id": "soulshatter-lascannon",
+              "count": 2
+            },
+            {
+              "id": "twin-heavy-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Land Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon-chaos-land-raider",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Land Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Land Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks-chaos-land-raider",
+                "count": 1
+              },
+              {
+                "id": "soulshatter-lascannon",
+                "count": 2
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Land Raider",
+          "id": "armoured-tracks-chaos-land-raider",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "combi-weapon-chaos-land-raider",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "havoc-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "soulshatter-lascannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "twin-heavy-bolter",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "foul-blightspawn",
@@ -1144,7 +4409,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Foul Blightspawn",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "plague-sprayer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Foul Blightspawn",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "plague-sprayer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Foul Blightspawn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "plague-sprayer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Foul Blightspawn",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Foul Blightspawn",
+          "id": "plague-sprayer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "icon-bearer",
@@ -1179,7 +4513,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Icon Bearer",
+          "models": 1,
+          "items": [
+            {
+              "id": "boltgun-icon-bearer",
+              "count": 1
+            },
+            {
+              "id": "plague-knife",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Icon Bearer",
+          "items": [
+            {
+              "id": "boltgun-icon-bearer",
+              "count": 1
+            },
+            {
+              "id": "plague-knife",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Icon Bearer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "boltgun-icon-bearer",
+                "count": 1
+              },
+              {
+                "id": "plague-knife",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Icon Bearer",
+          "id": "boltgun-icon-bearer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Icon Bearer",
+          "id": "plague-knife",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "typhus",
@@ -1213,7 +4616,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Typhus",
+          "models": 1,
+          "items": [
+            {
+              "id": "lakrimae",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Typhus",
+          "items": [
+            {
+              "id": "lakrimae",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Typhus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lakrimae",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Typhus",
+          "id": "lakrimae",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "blightlord-terminators",
@@ -1406,7 +4860,387 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Blightlord Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "bubotic-blade",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Blightlord Terminator",
+          "models": 2,
+          "items": [
+            {
+              "id": "bubotic-blade",
+              "count": 2
+            },
+            {
+              "id": "combi-bolter",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Blightlord Champion",
+          "items": [
+            {
+              "id": "bubotic-blade",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Blightlord Terminator",
+          "items": [
+            {
+              "id": "bubotic-blade",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Blightlord Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bubotic-blade",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Blightlord Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Blightlord Terminator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blight-launcher",
+                "count": 1
+              },
+              {
+                "id": "bubotic-blade",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bubotic-blade",
+                "count": 1
+              },
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bubotic-blade",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bubotic-blade",
+                "count": 1
+              },
+              {
+                "id": "plague-spewer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "bubotic-blade",
+                "count": 1
+              },
+              {
+                "id": "reaper-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "close-combat-weapon-blightlord-terminators",
+                "count": 1
+              },
+              {
+                "id": "plague-spewer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "flail-of-corruption",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 3
+            },
+            {
+              "models": 10,
+              "choices": 6
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Blightlord Terminator",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 0
+            },
+            {
+              "models": 3,
+              "choices": 1
+            },
+            {
+              "models": 4,
+              "choices": 0
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon-blightlord-terminators",
+                "count": 1
+              },
+              {
+                "id": "plague-spewer",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Blightlord Terminator",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "blight-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Blightlord Terminator",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "flail-of-corruption",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Blightlord Terminator",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "plague-spewer",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Blightlord Terminator",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "reaper-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Blightlord Champion",
+          "id": "bubotic-blade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Blightlord Champion",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Blightlord Champion",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Blightlord Terminator",
+          "id": "blight-launcher",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Blightlord Terminator",
+          "id": "bubotic-blade",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Blightlord Terminator",
+          "id": "close-combat-weapon-blightlord-terminators",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Blightlord Terminator",
+          "id": "combi-bolter",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Blightlord Terminator",
+          "id": "combi-weapon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Blightlord Terminator",
+          "id": "flail-of-corruption",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Blightlord Terminator",
+          "id": "plague-spewer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Blightlord Terminator",
+          "id": "plague-spewer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Blightlord Terminator",
+          "id": "reaper-autocannon",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "defiler",
@@ -1444,7 +5278,322 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Defiler",
+          "models": 1,
+          "items": [
+            {
+              "id": "excruciator-cannon",
+              "count": 2
+            },
+            {
+              "id": "hades-battle-cannon",
+              "count": 1
+            },
+            {
+              "id": "heavy-baleflamer",
+              "count": 1
+            },
+            {
+              "id": "heavy-missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "shearing-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Defiler",
+          "items": [
+            {
+              "id": "excruciator-cannon",
+              "count": 2
+            },
+            {
+              "id": "hades-battle-cannon",
+              "count": 1
+            },
+            {
+              "id": "heavy-baleflamer",
+              "count": 1
+            },
+            {
+              "id": "heavy-missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "shearing-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Defiler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ectoplasma-destructor",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-battle-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Defiler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "electroscourge",
+                "count": 1
+              },
+              {
+                "id": "hades-lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "electroscourge",
+                "count": 1
+              },
+              {
+                "id": "heavy-baleflamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "electroscourge",
+                "count": 1
+              },
+              {
+                "id": "heavy-missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "electroscourge",
+                "count": 1
+              },
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-lascannon",
+                "count": 1
+              },
+              {
+                "id": "heavy-baleflamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-lascannon",
+                "count": 1
+              },
+              {
+                "id": "heavy-missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-lascannon",
+                "count": 1
+              },
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-lascannon",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "heavy-baleflamer",
+                "count": 1
+              },
+              {
+                "id": "heavy-missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-baleflamer",
+                "count": 1
+              },
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Defiler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "excruciator-cannon",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "magma-cutters",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Defiler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "shearing-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Defiler",
+          "id": "ectoplasma-destructor",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "electroscourge",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "electroscourge",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "excruciator-cannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Defiler",
+          "id": "hades-battle-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Defiler",
+          "id": "hades-lascannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "hades-lascannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "heavy-baleflamer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Defiler",
+          "id": "heavy-missile-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Defiler",
+          "id": "heavy-reaper-autocannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "heavy-reaper-autocannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "magma-cutters",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "shearing-claws",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "maggot-lords-chaos-rhino",
@@ -1477,7 +5626,62 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Rhino",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "havoc-launcher-maggot-lords-chaos-rhino",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Chaos Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "havoc-launcher-maggot-lords-chaos-rhino",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Rhino",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Rhino",
+          "id": "havoc-launcher-maggot-lords-chaos-rhino",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "maggot-lords-deathshroud-terminators",
@@ -1534,7 +5738,106 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Deathshroud Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "manreaper-maggot-lords-deathshroud-terminators",
+              "count": 1
+            },
+            {
+              "id": "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Deathshroud Terminator",
+          "models": 2,
+          "items": [
+            {
+              "id": "manreaper-maggot-lords-deathshroud-terminators",
+              "count": 2
+            },
+            {
+              "id": "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Deathshroud Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "manreaper-maggot-lords-deathshroud-terminators",
+                "count": 1
+              },
+              {
+                "id": "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Deathshroud Terminator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "manreaper-maggot-lords-deathshroud-terminators",
+                "count": 1
+              },
+              {
+                "id": "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Deathshroud Champion",
+          "id": "manreaper-maggot-lords-deathshroud-terminators",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Deathshroud Champion",
+          "id": "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Deathshroud Terminator",
+          "id": "manreaper-maggot-lords-deathshroud-terminators",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Deathshroud Terminator",
+          "id": "plaguespurt-gauntlet-maggot-lords-deathshroud-terminators",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "maggot-lords-plague-marines",
@@ -1630,7 +5933,194 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Plague Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "plasma-pistol-maggot-lords-plague-marines",
+              "count": 1
+            },
+            {
+              "id": "power-fist",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Plague Marine with Blight Launcher",
+          "models": 1,
+          "items": [
+            {
+              "id": "blight-launcher-maggot-lords-plague-marines",
+              "count": 1
+            },
+            {
+              "id": "plague-knives-maggot-lords-plague-marines",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Plague Marine with Plague Spewer",
+          "models": 1,
+          "items": [
+            {
+              "id": "plague-knives-maggot-lords-plague-marines",
+              "count": 1
+            },
+            {
+              "id": "plague-spewer",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Plague Marine",
+          "models": 4,
+          "items": [
+            {
+              "id": "boltgun",
+              "count": 4
+            },
+            {
+              "id": "plague-knives-maggot-lords-plague-marines",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Plague Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "plasma-pistol-maggot-lords-plague-marines",
+                "count": 1
+              },
+              {
+                "id": "power-fist",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Marine with Blight Launcher",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blight-launcher-maggot-lords-plague-marines",
+                "count": 1
+              },
+              {
+                "id": "plague-knives-maggot-lords-plague-marines",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Marine with Plague Spewer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "plague-knives-maggot-lords-plague-marines",
+                "count": 1
+              },
+              {
+                "id": "plague-spewer",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Marine",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "boltgun",
+                "count": 1
+              },
+              {
+                "id": "plague-knives-maggot-lords-plague-marines",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Plague Champion",
+          "id": "plasma-pistol-maggot-lords-plague-marines",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plague Champion",
+          "id": "power-fist",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plague Marine with Blight Launcher",
+          "id": "blight-launcher-maggot-lords-plague-marines",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plague Marine with Blight Launcher",
+          "id": "plague-knives-maggot-lords-plague-marines",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plague Marine with Plague Spewer",
+          "id": "plague-knives-maggot-lords-plague-marines",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plague Marine with Plague Spewer",
+          "id": "plague-spewer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plague Marine",
+          "id": "boltgun",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Plague Marine",
+          "id": "plague-knives-maggot-lords-plague-marines",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "septimol-fulg-maggot-lords-tallyman",
@@ -1667,7 +6157,62 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Septimol Fulg",
+          "models": 1,
+          "items": [
+            {
+              "id": "numerological-artefacts",
+              "count": 1
+            },
+            {
+              "id": "plasma-pistol-septimol-fulg-maggot-lords-tallyman",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Septimol Fulg",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "numerological-artefacts",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol-septimol-fulg-maggot-lords-tallyman",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Septimol Fulg",
+          "id": "numerological-artefacts",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Septimol Fulg",
+          "id": "plasma-pistol-septimol-fulg-maggot-lords-tallyman",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sholgor-the-putrid",
@@ -1704,7 +6249,62 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sholgor the Putrid",
+          "models": 1,
+          "items": [
+            {
+              "id": "power-fist-sholgor-the-putrid",
+              "count": 1
+            },
+            {
+              "id": "twin-plague-spewer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Sholgor the Putrid",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "power-fist-sholgor-the-putrid",
+                "count": 1
+              },
+              {
+                "id": "twin-plague-spewer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sholgor the Putrid",
+          "id": "power-fist-sholgor-the-putrid",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Sholgor the Putrid",
+          "id": "twin-plague-spewer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "beasts-of-nurgle",
@@ -1746,6 +6346,57 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
+    },
+    "loadout": {
+      "stock": [
+        {
+          "model": "Beast of Nurgle",
+          "models": 1,
+          "items": [
+            {
+              "id": "putrid-appendages",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Beast of Nurgle",
+          "items": [
+            {
+              "id": "putrid-appendages",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Beast of Nurgle",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "putrid-appendages",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Beast of Nurgle",
+          "id": "putrid-appendages",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
     }
   },
   {
@@ -1788,6 +6439,57 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
+    },
+    "loadout": {
+      "stock": [
+        {
+          "model": "Nurgling Swarm",
+          "models": 3,
+          "items": [
+            {
+              "id": "diseased-claws-and-teeth",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Nurgling Swarm",
+          "items": [
+            {
+              "id": "diseased-claws-and-teeth",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Nurgling Swarm",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "diseased-claws-and-teeth",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Nurgling Swarm",
+          "id": "diseased-claws-and-teeth",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
     }
   },
   {
@@ -1848,6 +6550,236 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
+    },
+    "loadout": {
+      "stock": [
+        {
+          "model": "Plague Drone",
+          "models": 2,
+          "items": [
+            {
+              "id": "deaths-heads",
+              "count": 2
+            },
+            {
+              "id": "foul-mouthparts",
+              "count": 2
+            },
+            {
+              "id": "plaguesword",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "model": "Plaguebringer",
+          "models": 1,
+          "items": [
+            {
+              "id": "deaths-heads",
+              "count": 1
+            },
+            {
+              "id": "foul-mouthparts",
+              "count": 1
+            },
+            {
+              "id": "plaguesword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Plague Drone",
+          "items": [
+            {
+              "id": "deaths-heads",
+              "count": 1
+            },
+            {
+              "id": "foul-mouthparts",
+              "count": 1
+            },
+            {
+              "id": "plaguesword",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Plaguebringer",
+          "items": [
+            {
+              "id": "deaths-heads",
+              "count": 1
+            },
+            {
+              "id": "foul-mouthparts",
+              "count": 1
+            },
+            {
+              "id": "plaguesword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Plague Drone",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Drone",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "deaths-heads",
+                "count": 1
+              },
+              {
+                "id": "foul-mouthparts",
+                "count": 1
+              },
+              {
+                "id": "plaguesword",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plaguebringer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "deaths-heads",
+                "count": 1
+              },
+              {
+                "id": "foul-mouthparts",
+                "count": 1
+              },
+              {
+                "id": "plaguesword",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Plague Drone",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Drone",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Plague Drone",
+          "id": "daemonic-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Plague Drone",
+          "id": "deaths-heads",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Plague Drone",
+          "id": "foul-mouthparts",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Plague Drone",
+          "id": "instrument-of-chaos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Plague Drone",
+          "id": "plaguesword",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Plaguebringer",
+          "id": "deaths-heads",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plaguebringer",
+          "id": "foul-mouthparts",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plaguebringer",
+          "id": "plaguesword",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
     }
   },
   {
@@ -1898,7 +6830,165 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Plaguebearer",
+          "models": 9,
+          "items": [
+            {
+              "id": "plaguesword",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Plagueridden",
+          "models": 1,
+          "items": [
+            {
+              "id": "plaguesword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Plaguebearer",
+          "items": [
+            {
+              "id": "plaguesword",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Plagueridden",
+          "items": [
+            {
+              "id": "plaguesword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Plaguebearer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plaguebearer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "plaguesword",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plagueridden",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "plaguesword",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Plaguebearer",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plaguebearer",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Plaguebearer",
+          "id": "daemonic-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Plaguebearer",
+          "id": "instrument-of-chaos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Plaguebearer",
+          "id": "plaguesword",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Plagueridden",
+          "id": "plaguesword",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "rotigus",
@@ -1915,7 +7005,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 130
-        }
+        },
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -1932,7 +7023,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Rotigus",
+          "models": 1,
+          "items": [
+            {
+              "id": "gnarlrod",
+              "count": 1
+            },
+            {
+              "id": "streams-of-brackish-filth",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Rotigus",
+          "items": [
+            {
+              "id": "gnarlrod",
+              "count": 1
+            },
+            {
+              "id": "streams-of-brackish-filth",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Rotigus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gnarlrod",
+                "count": 1
+              },
+              {
+                "id": "streams-of-brackish-filth",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Rotigus",
+          "id": "gnarlrod",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Rotigus",
+          "id": "streams-of-brackish-filth",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "great-unclean-one",
@@ -1950,7 +7110,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 130
-        }
+        },
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -1967,6 +7128,137 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Great Unclean One",
+          "models": 1,
+          "items": [
+            {
+              "id": "bilesword",
+              "count": 1
+            },
+            {
+              "id": "plague-flail",
+              "count": 1
+            },
+            {
+              "id": "putrid-vomit",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Great Unclean One",
+          "items": [
+            {
+              "id": "bilesword",
+              "count": 1
+            },
+            {
+              "id": "plague-flail",
+              "count": 1
+            },
+            {
+              "id": "putrid-vomit",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Great Unclean One",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bileblade",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plague-flail",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Great Unclean One",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bilesword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "doomsday-bell",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Great Unclean One",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "putrid-vomit",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Great Unclean One",
+          "id": "bileblade",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Great Unclean One",
+          "id": "bilesword",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Great Unclean One",
+          "id": "doomsday-bell",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Great Unclean One",
+          "id": "plague-flail",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Great Unclean One",
+          "id": "putrid-vomit",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

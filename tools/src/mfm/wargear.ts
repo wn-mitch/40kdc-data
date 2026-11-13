@@ -51,6 +51,7 @@ import { type GoldenMode, modeOfPublication, mergeMode } from "./game-mode.js";
 import { repoDirForFactionName, repoDirs, FACTION_ALIASES, SHARED_ROSTERS } from "./faction-map.js";
 import type { StagedWrite } from "./apply.js";
 import { currentGameVersion } from "./dataslate.js";
+import { applyModelFlags, flaggedModelNames } from "./model-flags.js";
 import {
   mintWargear,
   mintWeapon,
@@ -136,6 +137,10 @@ interface CompModel {
   is_leader_model?: boolean;
   /** The dump's miniature.excludedFromEnhancements for this model row. */
   excluded_from_enhancements?: boolean;
+  /** The dump's miniature Warlord flags for this model row (see model-flags.ts). */
+  cannot_be_warlord?: boolean;
+  can_be_non_character_warlord?: boolean;
+  is_supreme_commander?: boolean;
   [k: string]: unknown;
 }
 interface CompRecord {
@@ -918,9 +923,10 @@ function sourcedLimitedSetBudgets(
   // The default composition lets us detect offset progressions such as
   // Death Company jump packs: 2 picks at 5 models, 3 at 10.
   let defaultModelCount = 0;
+  let modelCounts = new Map<string, number>();
   try {
-    defaultModelCount = [...modelCountByMiniId(dump, datasheetId).values()]
-      .reduce((sum, count) => sum + count, 0);
+    modelCounts = modelCountByMiniId(dump, datasheetId);
+    defaultModelCount = [...modelCounts.values()].reduce((sum, count) => sum + count, 0);
   } catch {
     /* focused fixture without composition tables */
   }
@@ -929,9 +935,11 @@ function sourcedLimitedSetBudgets(
   // a focused fixture may omit the default-loadout tables (the real dump never
   // does); it then simply contributes no default exclusions.
   const defaultIds = new Set<string>();
+  const defaultsByMini = new Map<string, readonly string[]>();
   try {
     const defaults = deriveDefaults(dump, datasheetId, resolve, [], []);
-    for (const ids of defaults.byMiniId.values()) {
+    for (const [miniId, ids] of defaults.byMiniId) {
+      defaultsByMini.set(miniId, ids);
       for (const id of ids) defaultIds.add(id);
     }
     for (const rows of defaults.splitByMiniId.values()) for (const row of rows) for (const id of row.ids) defaultIds.add(id);
@@ -1007,6 +1015,14 @@ function sourcedLimitedSetBudgets(
     const setMini = s.miniatureId ? miniNameOf(s.miniatureId) : null;
     const emit = (budget: WargearBudget) =>
       out.push({ budget, miniatureId: s.miniatureId ?? null });
+
+    const stock = stockChoiceBudget(
+      choicesOfSet.get(s.id) ?? [],
+      limitsBySet.get(s.id) ?? [],
+      s.miniatureId ? defaultsByMini.get(s.miniatureId) : undefined,
+      s.miniatureId ? modelCounts.get(s.miniatureId) : undefined,
+    );
+    if (stock) emit(stock);
 
     // Uncapped-branch leakage: a branch that grants some of this set's items
     // WITHOUT realizing one of the set's choices is an ungoverned path (the
@@ -1134,6 +1150,48 @@ function sourcedLimitedSetBudgets(
     }
   }
   return out;
+}
+
+/**
+ * The budget of a flat limited set that lists its miniature's stock loadout as one of its choices
+ * (Tankbustas: `5 busta rokkit launchas` / `1 pulsa rokkit` / `1 busta rokkit launcha`, pick 2).
+ * The stock choice spends a pick, so the extra copies the remaining picks add are the cap. Stock
+ * items are derived defaults, which the ordinary budget excludes, so without this the extra copy of
+ * a stock item is uncapped. The budget sums the stock copies with the most the remaining picks can
+ * add. Returns undefined for any other shape.
+ */
+function stockChoiceBudget(
+  choices: readonly (readonly { id: string; copies: number }[])[],
+  limits: readonly { modelCount: number; choiceLimit: number; duplicateLimit?: number | null }[],
+  miniDefaults: readonly string[] | undefined,
+  modelCount: number | undefined,
+): WargearBudget | undefined {
+  if (!miniDefaults || modelCount === undefined || modelCount < 2) return undefined;
+  if (limits.length === 0 || limits.some((limit) => limit.modelCount !== 0)) return undefined;
+  const binding = limits
+    .filter((limit) => limit.choiceLimit > 0)
+    .sort((a, b) => a.choiceLimit - b.choiceLimit)[0];
+  if (!binding) return undefined;
+  // A stock item appears once in each model's default loadout, so the stock choice lists it once per model.
+  const isStock = (choice: readonly { id: string; copies: number }[]) =>
+    choice.length > 0 &&
+    choice.every((item) => item.copies === modelCount && miniDefaults.filter((id) => id === item.id).length === 1);
+  const stock = choices.filter(isStock);
+  if (stock.length === 0) return undefined;
+  const extras = choices.filter((choice) => choice.length > 0 && !isStock(choice));
+  if (extras.length === 0) return undefined;
+  const picks = Math.max(0, binding.choiceLimit - stock.length);
+  const repeats = Math.min(binding.duplicateLimit ?? picks, picks);
+  const takes = extras
+    .flatMap((choice) => Array<number>(repeats).fill(choice.reduce((sum, item) => sum + item.copies, 0)))
+    .sort((a, b) => b - a)
+    .slice(0, picks);
+  const items = new Set([...stock, ...extras].flat().map((item) => item.id));
+  return {
+    items: [...items].sort(),
+    count: stock.flat().reduce((sum, item) => sum + item.copies, 0) + takes.reduce((sum, take) => sum + take, 0),
+    per_models: 0,
+  };
 }
 
 /**
@@ -1854,6 +1912,15 @@ export function homeScore(dump: MfmDump, ds: DatasheetRow, dir: string): number 
   return name && repoDirForFactionName(name) === dir ? 0 : 1;
 }
 
+/**
+ * The order in which `dir`'s wargear pass tries datasheets; the first to claim a unit wins. A
+ * current datasheet comes before a Legends one a unit also cites (the Space Wolves Venerable
+ * Dreadnought before the Legends Space Marines one), then the dir's own before a shared import.
+ */
+export function datasheetPreference(dump: MfmDump, dir: string): (a: DatasheetRow, b: DatasheetRow) => number {
+  return (a, b) => Number(!!a.isLegends) - Number(!!b.isLegends) || homeScore(dump, a, dir) - homeScore(dump, b, dir);
+}
+
 export interface DirWargearResult {
   dir: string;
   matched: number;
@@ -1975,7 +2042,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
           ...dump.table("datasheet").filter((ds) => !!ds.id && byMfmId.has(ds.id)),
         ].map((ds) => [ds.id!, ds] as const),
       ).values(),
-    ].sort((a, b) => homeScore(dump, a, dir) - homeScore(dump, b, dir));
+    ].sort(datasheetPreference(dump, dir));
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
@@ -2034,13 +2101,15 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
               });
             }
           }
-          if (!existingId) {
+          // As for wargear below: an id only option or unit data names still needs its record.
+          if (!existingId || !(weaponEntityIds.has(existingId) || gear.some((record) => record.id === existingId))) {
+            const weaponId = existingId ?? itemId;
             const warnings: string[] = [];
             try {
-              weapons.push(mintWeapon({ dump, gv: { ...confirmed }, warnings }, item, itemId, itemName));
-              validIds.add(itemId);
-              weaponEntityIds.add(itemId);
-              weaponsById.set(itemId, weapons[weapons.length - 1]);
+              weapons.push(mintWeapon({ dump, gv: { ...confirmed }, warnings }, item, weaponId, itemName));
+              validIds.add(weaponId);
+              weaponEntityIds.add(weaponId);
+              weaponsById.set(weaponId, weapons[weapons.length - 1]);
               res.weaponsAdded++;
             } catch (error) {
               res.notes.push({ id, note: `could not mint "${itemName}": ${(error as Error).message}` });
@@ -2050,10 +2119,14 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
           continue;
         }
 
-        if (item.wargearType !== "wargear" || existingId) continue;
-        const recorded = recordedGear.get(itemId);
-        gear.push(recorded ? structuredClone(recorded) : mintWargear({ dump, gv: { ...confirmed }, warnings: [] }, item, itemId, itemName));
-        validIds.add(itemId);
+        // An id only option or unit data names (no wargear.json or weapons.json record) still
+        // needs its catalog record, minted under that id.
+        if (item.wargearType !== "wargear") continue;
+        if (existingId && (weaponEntityIds.has(existingId) || gear.some((record) => record.id === existingId))) continue;
+        const gearId = existingId ?? itemId;
+        const recorded = recordedGear.get(gearId);
+        gear.push(recorded ? structuredClone(recorded) : mintWargear({ dump, gv: { ...confirmed }, warnings: [] }, item, gearId, itemName));
+        validIds.add(gearId);
         res.wargearAdded++;
       }
 
@@ -2808,27 +2881,13 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
       if (matchedRepoIds.has(id) || (!compsByUnit.has(id) && !unitById.has(id))) continue;
       matchedRepoIds.add(id);
       matched++;
-      // Per-model Enhancement eligibility (miniature.excludedFromEnhancements),
+      // Per-model flags (miniature.excludedFromEnhancements, the Warlord flags),
       // authoritative and matched by model name: set on the matching row, cleared
       // when the dump drops it. Runs before the composition rebuild, which skips
       // datasheets with no composition rows (Sir Hekhtur).
-      const excludedNames = new Set(
-        (dump.groupBy("miniature", "datasheetId").get(ds.id!) ?? [])
-          .filter((m) => m.excludedFromEnhancements)
-          .map((m) => dump.enName(m))
-          .filter((n): n is string => !!n),
-      );
+      const flagged = flaggedModelNames(dump, ds.id!);
       for (const comp of compsByUnit.get(id) ?? []) {
-        for (const row of comp.models) {
-          const excluded = excludedNames.has(row.name);
-          if (excluded && row.excluded_from_enhancements !== true) {
-            row.excluded_from_enhancements = true;
-            changed = true;
-          } else if (!excluded && row.excluded_from_enhancements !== undefined) {
-            delete row.excluded_from_enhancements;
-            changed = true;
-          }
-        }
+        for (const row of comp.models) if (applyModelFlags(row, flagged)) changed = true;
       }
       const agg = aggregateComposition(dump, ds.id!);
       if (agg.skip === "duplicate-names") {
@@ -2860,7 +2919,7 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
           row.is_leader_model = view.length > 1 && d.max === 1 && view.some((x) => x.name !== d.name && x.max > 1);
           const def = withManual(d.name, defaultsByModel.get(d.name));
           if (def?.length) row.default_weapon_ids = def;
-          if (excludedNames.has(d.name)) row.excluded_from_enhancements = true;
+          applyModelFlags(row, flagged);
           return row;
         });
         const modes = (unit as { game_modes?: string[] }).game_modes;
@@ -3150,7 +3209,7 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
           ...dump.table("datasheet").filter((ds) => !!ds.id && byMfmId.has(ds.id)),
         ].map((ds) => [ds.id!, ds] as const),
       ).values(),
-    ].sort((a, b) => homeScore(dump, a, dir) - homeScore(dump, b, dir));
+    ].sort(datasheetPreference(dump, dir));
     const matchedRepoIds = new Set<string>();
     let matched = 0;
     let unitsTiered = 0;

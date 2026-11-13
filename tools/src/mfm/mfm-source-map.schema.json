@@ -293,7 +293,9 @@
       "required": [
         "source",
         "candidate_pointer",
-        "reason"
+        "reason",
+        "classification",
+        "spread"
       ],
       "properties": {
         "source": {
@@ -307,6 +309,15 @@
           ]
         },
         "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classification": {
+          "description": "Why nothing projects the field: constant (one value or null-only), prose, id (a join or primary key), presentation (artwork, ordering, app-only state), structural (a container), consumed-elsewhere (another projection reads it; the reason names it), or needs-consumer (it affects legality or rules and is unread; the reason names the .ts file that should read it).",
+          "enum": ["constant", "prose", "id", "presentation", "structural", "consumed-elsewhere", "needs-consumer"]
+        },
+        "spread": {
+          "description": "The field's value spread in the current dump, as tools/src/mfm/field-spread.ts#fieldSpread renders it.",
           "type": "string",
           "minLength": 1
         }

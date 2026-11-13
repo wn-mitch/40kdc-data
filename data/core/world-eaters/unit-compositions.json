@@ -34,7 +34,128 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Forgefiend",
+          "models": 1,
+          "items": [
+            {
+              "id": "forgefiend-jaws",
+              "count": 1
+            },
+            {
+              "id": "hades-autocannon",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Forgefiend",
+          "items": [
+            {
+              "id": "forgefiend-jaws",
+              "count": 1
+            },
+            {
+              "id": "hades-autocannon",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Forgefiend",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ectoplasma-cannon",
+                "count": 1
+              },
+              {
+                "id": "forgefiend-claws",
+                "count": 1
+              },
+              {
+                "id": "hades-autocannon",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "ectoplasma-cannon",
+                "count": 2
+              },
+              {
+                "id": "forgefiend-jaws",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ectoplasma-cannon",
+                "count": 3
+              },
+              {
+                "id": "forgefiend-claws",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "forgefiend-jaws",
+                "count": 1
+              },
+              {
+                "id": "hades-autocannon",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Forgefiend",
+          "id": "ectoplasma-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Forgefiend",
+          "id": "ectoplasma-cannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Forgefiend",
+          "id": "forgefiend-claws",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Forgefiend",
+          "id": "forgefiend-jaws",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Forgefiend",
+          "id": "hades-autocannon",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "kharn-the-betrayer",
@@ -69,7 +190,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Khârn the Betrayer",
+          "models": 1,
+          "items": [
+            {
+              "id": "gorechild",
+              "count": 1
+            },
+            {
+              "id": "plasma-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Khârn the Betrayer",
+          "items": [
+            {
+              "id": "gorechild",
+              "count": 1
+            },
+            {
+              "id": "plasma-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Khârn the Betrayer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gorechild",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Khârn the Betrayer",
+          "id": "gorechild",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Khârn the Betrayer",
+          "id": "plasma-pistol",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "master-of-executions",
@@ -104,7 +294,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Master of Executions",
+          "models": 1,
+          "items": [
+            {
+              "id": "axe-of-dismemberment",
+              "count": 1
+            },
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Master of Executions",
+          "items": [
+            {
+              "id": "axe-of-dismemberment",
+              "count": 1
+            },
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Master of Executions",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "axe-of-dismemberment",
+                "count": 1
+              },
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Master of Executions",
+          "id": "axe-of-dismemberment",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Master of Executions",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "khorne-berzerkers",
@@ -226,7 +485,306 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Khorne Berzerker Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-pistol-khorne-berzerkers",
+              "count": 1
+            },
+            {
+              "id": "chainblade-khorne-berzerkers",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Khorne Berzerker",
+          "models": 9,
+          "items": [
+            {
+              "id": "bolt-pistol-khorne-berzerkers",
+              "count": 9
+            },
+            {
+              "id": "chainblade-khorne-berzerkers",
+              "count": 9
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Khorne Berzerker Champion",
+          "items": [
+            {
+              "id": "bolt-pistol-khorne-berzerkers",
+              "count": 1
+            },
+            {
+              "id": "chainblade-khorne-berzerkers",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Khorne Berzerker",
+          "items": [
+            {
+              "id": "bolt-pistol-khorne-berzerkers",
+              "count": 1
+            },
+            {
+              "id": "chainblade-khorne-berzerkers",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Khorne Berzerker Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "icon-of-khorne",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Khorne Berzerker Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-khorne-berzerkers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-pistol-khorne-berzerkers",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Khorne Berzerker Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chainblade-khorne-berzerkers",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Khorne Berzerker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "icon-of-khorne",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Khorne Berzerker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-khorne-berzerkers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-pistol-khorne-berzerkers",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Khorne Berzerker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chainblade-khorne-berzerkers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "khornate-eviscerator",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "icon-of-khorne",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Khorne Berzerker",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            },
+            {
+              "models": 15,
+              "choices": 3
+            },
+            {
+              "models": 20,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "khornate-eviscerator",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Khorne Berzerker",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            },
+            {
+              "models": 15,
+              "choices": 3
+            },
+            {
+              "models": 20,
+              "choices": 4
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "plasma-pistol-khorne-berzerkers",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Khorne Berzerker Champion",
+          "id": "bolt-pistol-khorne-berzerkers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Khorne Berzerker Champion",
+          "id": "chainblade-khorne-berzerkers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Khorne Berzerker Champion",
+          "id": "icon-of-khorne",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Khorne Berzerker Champion",
+          "id": "plasma-pistol-khorne-berzerkers",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Khorne Berzerker",
+          "id": "bolt-pistol-khorne-berzerkers",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Khorne Berzerker",
+          "id": "chainblade-khorne-berzerkers",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Khorne Berzerker",
+          "id": "icon-of-khorne",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Khorne Berzerker",
+          "id": "khornate-eviscerator",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Khorne Berzerker",
+          "id": "plasma-pistol-khorne-berzerkers",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "jakhals",
@@ -335,7 +893,270 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Dishonoured",
+          "models": 1,
+          "items": [
+            {
+              "id": "paired-manglers",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Jakhal Pack Leader",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "chainblades",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Jakhal",
+          "models": 8,
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 8
+            },
+            {
+              "id": "chainblades",
+              "count": 8
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Dishonoured",
+          "items": [
+            {
+              "id": "paired-manglers",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Jakhal Pack Leader",
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "chainblades",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Jakhal",
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "chainblades",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Dishonoured",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "paired-manglers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "skullsmasher-and-mangler",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Jakhal Pack Leader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "chainblades",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Jakhal",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "icon-of-khorne",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Jakhal",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Jakhal",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chainblades",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "mauler-chainblade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Jakhal",
+          "breakpoints": [
+            {
+              "models": 10,
+              "choices": 1
+            },
+            {
+              "models": 20,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "icon-of-khorne",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Jakhal",
+          "breakpoints": [
+            {
+              "models": 10,
+              "choices": 1
+            },
+            {
+              "models": 20,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "mauler-chainblade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Dishonoured",
+          "id": "paired-manglers",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Dishonoured",
+          "id": "skullsmasher-and-mangler",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Jakhal Pack Leader",
+          "id": "autopistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Jakhal Pack Leader",
+          "id": "chainblades",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Jakhal",
+          "id": "autopistol",
+          "input": "stepper",
+          "default": 8
+        },
+        {
+          "model": "Jakhal",
+          "id": "chainblades",
+          "input": "stepper",
+          "default": 8
+        },
+        {
+          "model": "Jakhal",
+          "id": "icon-of-khorne",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Jakhal",
+          "id": "mauler-chainblade",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lord-on-juggernaut",
@@ -372,7 +1193,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "World Eaters Lord on Juggernaut",
+          "models": 1,
+          "items": [
+            {
+              "id": "bladed-horn",
+              "count": 1
+            },
+            {
+              "id": "exalted-chainblade",
+              "count": 1
+            },
+            {
+              "id": "plasma-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "World Eaters Lord on Juggernaut",
+          "items": [
+            {
+              "id": "bladed-horn",
+              "count": 1
+            },
+            {
+              "id": "exalted-chainblade",
+              "count": 1
+            },
+            {
+              "id": "plasma-pistol",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "World Eaters Lord on Juggernaut",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bladed-horn",
+                "count": 1
+              },
+              {
+                "id": "exalted-chainblade",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "World Eaters Lord on Juggernaut",
+          "id": "bladed-horn",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "World Eaters Lord on Juggernaut",
+          "id": "exalted-chainblade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "World Eaters Lord on Juggernaut",
+          "id": "plasma-pistol",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "daemon-prince-of-khorne-with-wings",
@@ -407,7 +1315,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Daemon Prince of Khorne with Wings",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellforged-weapons",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Daemon Prince of Khorne with Wings",
+          "items": [
+            {
+              "id": "hellforged-weapons",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Daemon Prince of Khorne with Wings",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellforged-weapons",
+                "count": 1
+              },
+              {
+                "id": "infernal-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Daemon Prince of Khorne with Wings",
+          "id": "hellforged-weapons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Daemon Prince of Khorne with Wings",
+          "id": "infernal-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chaos-land-raider",
@@ -444,7 +1421,148 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Land Raider",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "soulshatter-lascannon",
+              "count": 2
+            },
+            {
+              "id": "twin-heavy-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Land Raider",
+          "items": [
+            {
+              "id": "armoured-tracks",
+              "count": 1
+            },
+            {
+              "id": "soulshatter-lascannon",
+              "count": 2
+            },
+            {
+              "id": "twin-heavy-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Land Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Land Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Land Raider",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks",
+                "count": 1
+              },
+              {
+                "id": "soulshatter-lascannon",
+                "count": 2
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Land Raider",
+          "id": "armoured-tracks",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "havoc-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "soulshatter-lascannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Chaos Land Raider",
+          "id": "twin-heavy-bolter",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "maulerfiend",
@@ -480,7 +1598,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Maulerfiend",
+          "models": 1,
+          "items": [
+            {
+              "id": "lasher-tendrils",
+              "count": 1
+            },
+            {
+              "id": "maulerfiend-fists",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Maulerfiend",
+          "items": [
+            {
+              "id": "lasher-tendrils",
+              "count": 1
+            },
+            {
+              "id": "maulerfiend-fists",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Maulerfiend",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lasher-tendrils",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "magma-cutter",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Maulerfiend",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "maulerfiend-fists",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Maulerfiend",
+          "id": "lasher-tendrils",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Maulerfiend",
+          "id": "magma-cutter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Maulerfiend",
+          "id": "maulerfiend-fists",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "defiler",
@@ -519,7 +1728,322 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Defiler",
+          "models": 1,
+          "items": [
+            {
+              "id": "excruciator-cannon",
+              "count": 2
+            },
+            {
+              "id": "hades-battle-cannon",
+              "count": 1
+            },
+            {
+              "id": "heavy-baleflamer",
+              "count": 1
+            },
+            {
+              "id": "heavy-missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "shearing-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Defiler",
+          "items": [
+            {
+              "id": "excruciator-cannon",
+              "count": 1
+            },
+            {
+              "id": "hades-battle-cannon",
+              "count": 1
+            },
+            {
+              "id": "heavy-baleflamer",
+              "count": 1
+            },
+            {
+              "id": "heavy-missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "shearing-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Defiler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ectoplasma-destructor",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-battle-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Defiler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "electroscourge",
+                "count": 1
+              },
+              {
+                "id": "hades-lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "electroscourge",
+                "count": 1
+              },
+              {
+                "id": "heavy-baleflamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "electroscourge",
+                "count": 1
+              },
+              {
+                "id": "heavy-missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "electroscourge",
+                "count": 1
+              },
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-lascannon",
+                "count": 1
+              },
+              {
+                "id": "heavy-baleflamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-lascannon",
+                "count": 1
+              },
+              {
+                "id": "heavy-missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-lascannon",
+                "count": 1
+              },
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-lascannon",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "heavy-baleflamer",
+                "count": 1
+              },
+              {
+                "id": "heavy-missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-baleflamer",
+                "count": 1
+              },
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-reaper-autocannon",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Defiler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "excruciator-cannon",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "magma-cutters",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Defiler",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "shearing-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Defiler",
+          "id": "ectoplasma-destructor",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "electroscourge",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "electroscourge",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "excruciator-cannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Defiler",
+          "id": "hades-battle-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Defiler",
+          "id": "hades-lascannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "hades-lascannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "heavy-baleflamer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Defiler",
+          "id": "heavy-missile-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Defiler",
+          "id": "heavy-reaper-autocannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "heavy-reaper-autocannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "magma-cutters",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Defiler",
+          "id": "shearing-claws",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "heldrake",
@@ -555,7 +2079,98 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Heldrake",
+          "models": 1,
+          "items": [
+            {
+              "id": "hades-autocannon",
+              "count": 1
+            },
+            {
+              "id": "heldrake-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Heldrake",
+          "items": [
+            {
+              "id": "hades-autocannon",
+              "count": 1
+            },
+            {
+              "id": "heldrake-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Heldrake",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "baleflamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "hades-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Heldrake",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heldrake-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Heldrake",
+          "id": "baleflamer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Heldrake",
+          "id": "hades-autocannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Heldrake",
+          "id": "heldrake-claws",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "daemon-prince-of-khorne",
@@ -590,7 +2205,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Daemon Prince of Khorne",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellforged-weapons",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Daemon Prince of Khorne",
+          "items": [
+            {
+              "id": "hellforged-weapons",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Daemon Prince of Khorne",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellforged-weapons",
+                "count": 1
+              },
+              {
+                "id": "infernal-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Daemon Prince of Khorne",
+          "id": "hellforged-weapons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Daemon Prince of Khorne",
+          "id": "infernal-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "eightbound",
@@ -657,7 +2341,97 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Eightbound Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "chainblades-eightbound",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Eightbound",
+          "models": 2,
+          "items": [
+            {
+              "id": "chainblades-eightbound",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Eightbound Champion",
+          "items": [
+            {
+              "id": "chainblades-eightbound",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Eightbound",
+          "items": [
+            {
+              "id": "chainblades-eightbound",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Eightbound Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chainblades-eightbound",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Eightbound",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chainblades-eightbound",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Eightbound Champion",
+          "id": "chainblades-eightbound",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Eightbound",
+          "id": "chainblades-eightbound",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "slaughterbound",
@@ -691,7 +2465,48 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Slaughterbound",
+          "models": 1,
+          "items": [
+            {
+              "id": "lacerator-and-daemonic-claw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Slaughterbound",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lacerator-and-daemonic-claw",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Slaughterbound",
+          "id": "lacerator-and-daemonic-claw",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "exalted-eightbound",
@@ -758,7 +2573,97 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Exalted Eightbound Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "chainblades-exalted-eightbound",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Exalted Eightbound",
+          "models": 2,
+          "items": [
+            {
+              "id": "chainblades-exalted-eightbound",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Exalted Eightbound Champion",
+          "items": [
+            {
+              "id": "chainblades-exalted-eightbound",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Exalted Eightbound",
+          "items": [
+            {
+              "id": "chainblades-exalted-eightbound",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Exalted Eightbound Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chainblades-exalted-eightbound",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Exalted Eightbound",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chainblades-exalted-eightbound",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Exalted Eightbound Champion",
+          "id": "chainblades-exalted-eightbound",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Exalted Eightbound",
+          "id": "chainblades-exalted-eightbound",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lord-invocatus",
@@ -795,7 +2700,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lord Invocatus",
+          "models": 1,
+          "items": [
+            {
+              "id": "bladed-horn",
+              "count": 1
+            },
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "cowards-bane",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lord Invocatus",
+          "items": [
+            {
+              "id": "bladed-horn",
+              "count": 1
+            },
+            {
+              "id": "bolt-pistol",
+              "count": 1
+            },
+            {
+              "id": "cowards-bane",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lord Invocatus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bladed-horn",
+                "count": 1
+              },
+              {
+                "id": "bolt-pistol",
+                "count": 1
+              },
+              {
+                "id": "cowards-bane",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lord Invocatus",
+          "id": "bladed-horn",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lord Invocatus",
+          "id": "bolt-pistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lord Invocatus",
+          "id": "cowards-bane",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chaos-rhino",
@@ -830,7 +2822,176 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "World Eaters Rhino",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks-chaos-rhino",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "World Eaters Rhino",
+          "items": [
+            {
+              "id": "armoured-tracks-chaos-rhino",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "World Eaters Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks-chaos-rhino",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "World Eaters Rhino",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon",
+                "count": 1
+              },
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 2
+              },
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              },
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "World Eaters Rhino",
+          "id": "armoured-tracks-chaos-rhino",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "World Eaters Rhino",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "World Eaters Rhino",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "World Eaters Rhino",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "World Eaters Rhino",
+          "id": "havoc-launcher",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "helbrute",
@@ -866,7 +3027,668 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Helbrute",
+          "models": 1,
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "multi-melta",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Helbrute",
+          "items": [
+            {
+              "id": "close-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "missile-launcher",
+              "count": 1
+            },
+            {
+              "id": "multi-melta",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Helbrute",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "close-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Helbrute",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "plasma-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "power-scourge",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 2
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "plasma-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "power-scourge",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 2
+              },
+              {
+                "id": "helbrute-fist",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "missile-launcher",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "plasma-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "power-scourge",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 1
+              },
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-fist",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              },
+              {
+                "id": "plasma-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              },
+              {
+                "id": "twin-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "helbrute-hammer",
+                "count": 1
+              },
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "plasma-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "twin-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "missile-launcher",
+                "count": 1
+              },
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              },
+              {
+                "id": "power-scourge",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plasma-cannon",
+                "count": 1
+              },
+              {
+                "id": "power-scourge",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-scourge",
+                "count": 1
+              },
+              {
+                "id": "twin-autocannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-scourge",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-scourge",
+                "count": 1
+              },
+              {
+                "id": "twin-lascannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Helbrute",
+          "id": "close-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Helbrute",
+          "id": "combi-bolter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Helbrute",
+          "id": "heavy-flamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Helbrute",
+          "id": "helbrute-fist",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Helbrute",
+          "id": "helbrute-fist",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Helbrute",
+          "id": "helbrute-hammer",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Helbrute",
+          "id": "missile-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Helbrute",
+          "id": "multi-melta",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Helbrute",
+          "id": "plasma-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Helbrute",
+          "id": "power-scourge",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Helbrute",
+          "id": "twin-autocannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Helbrute",
+          "id": "twin-heavy-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Helbrute",
+          "id": "twin-lascannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chaos-predator-destructor",
@@ -901,7 +3723,163 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Predator Destructor",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks-chaos-predator-destructor",
+              "count": 1
+            },
+            {
+              "id": "predator-autocannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Predator Destructor",
+          "items": [
+            {
+              "id": "armoured-tracks-chaos-predator-destructor",
+              "count": 1
+            },
+            {
+              "id": "predator-autocannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Predator Destructor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "lascannon",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks-chaos-predator-destructor",
+                "count": 1
+              },
+              {
+                "id": "predator-autocannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Predator Destructor",
+          "id": "armoured-tracks-chaos-predator-destructor",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "id": "havoc-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "id": "heavy-bolter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "id": "lascannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Destructor",
+          "id": "predator-autocannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "angron",
@@ -918,7 +3896,8 @@
         },
         "default_weapon_ids": [
           "samniarius-and-spinegrinder"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {
@@ -935,7 +3914,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Angron",
+          "models": 1,
+          "items": [
+            {
+              "id": "samniarius-and-spinegrinder",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Angron",
+          "items": [
+            {
+              "id": "samniarius-and-spinegrinder",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Angron",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "samniarius-and-spinegrinder",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Angron",
+          "id": "samniarius-and-spinegrinder",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chaos-predator-annihilator",
@@ -970,7 +4000,163 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Predator Annihilator",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-tracks-chaos-predator-annihilator",
+              "count": 1
+            },
+            {
+              "id": "predator-twin-lascannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Predator Annihilator",
+          "items": [
+            {
+              "id": "armoured-tracks-chaos-predator-annihilator",
+              "count": 1
+            },
+            {
+              "id": "predator-twin-lascannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Predator Annihilator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "havoc-launcher",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "heavy-bolter",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "lascannon",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-tracks-chaos-predator-annihilator",
+                "count": 1
+              },
+              {
+                "id": "predator-twin-lascannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Predator Annihilator",
+          "id": "armoured-tracks-chaos-predator-annihilator",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "id": "havoc-launcher",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "id": "heavy-bolter",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "id": "lascannon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Chaos Predator Annihilator",
+          "id": "predator-twin-lascannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chaos-terminators",
@@ -1040,7 +4226,453 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "World Eaters Terminator Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "accursed-weapon",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "World Eaters Terminator",
+          "models": 4,
+          "items": [
+            {
+              "id": "accursed-weapon",
+              "count": 4
+            },
+            {
+              "id": "combi-bolter",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "World Eaters Terminator Champion",
+          "items": [
+            {
+              "id": "accursed-weapon",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "World Eaters Terminator",
+          "items": [
+            {
+              "id": "accursed-weapon",
+              "count": 1
+            },
+            {
+              "id": "combi-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "World Eaters Terminator Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "accursed-weapon",
+                "count": 1
+              },
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "accursed-weapon",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "chainfist",
+                "count": 1
+              },
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "chainfist",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "power-fist",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              },
+              {
+                "id": "power-fist",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "paired-accursed-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "World Eaters Terminator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "accursed-weapon",
+                "count": 1
+              },
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "accursed-weapon",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "accursed-weapon",
+                "count": 1
+              },
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "accursed-weapon",
+                "count": 1
+              },
+              {
+                "id": "reaper-autocannon-chaos-terminators",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "chainfist",
+                "count": 1
+              },
+              {
+                "id": "combi-bolter",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "chainfist",
+                "count": 1
+              },
+              {
+                "id": "combi-weapon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "chainfist",
+                "count": 1
+              },
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "chainfist",
+                "count": 1
+              },
+              {
+                "id": "reaper-autocannon-chaos-terminators",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-bolter",
+                "count": 1
+              },
+              {
+                "id": "power-fist",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "combi-weapon",
+                "count": 1
+              },
+              {
+                "id": "power-fist",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              },
+              {
+                "id": "power-fist",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "paired-accursed-weapons",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "power-fist",
+                "count": 1
+              },
+              {
+                "id": "reaper-autocannon-chaos-terminators",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "chainfist",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "paired-accursed-weapons",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 3
+            },
+            {
+              "models": 10,
+              "choices": 6
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "power-fist",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "World Eaters Terminator",
+          "breakpoints": [
+            {
+              "models": 5,
+              "choices": 1
+            },
+            {
+              "models": 10,
+              "choices": 2
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "heavy-flamer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaper-autocannon-chaos-terminators",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "World Eaters Terminator Champion",
+          "id": "accursed-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "World Eaters Terminator Champion",
+          "id": "chainfist",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "World Eaters Terminator Champion",
+          "id": "combi-bolter",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "World Eaters Terminator Champion",
+          "id": "combi-weapon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "World Eaters Terminator Champion",
+          "id": "paired-accursed-weapons",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "World Eaters Terminator Champion",
+          "id": "power-fist",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "World Eaters Terminator",
+          "id": "accursed-weapon",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "World Eaters Terminator",
+          "id": "chainfist",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "World Eaters Terminator",
+          "id": "combi-bolter",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "World Eaters Terminator",
+          "id": "combi-weapon",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "World Eaters Terminator",
+          "id": "heavy-flamer",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "World Eaters Terminator",
+          "id": "paired-accursed-weapons",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "World Eaters Terminator",
+          "id": "power-fist",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "World Eaters Terminator",
+          "id": "reaper-autocannon-chaos-terminators",
+          "input": "stepper",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "khorne-lord-of-skulls",
@@ -1076,7 +4708,150 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Khorne Lord of Skulls",
+          "models": 1,
+          "items": [
+            {
+              "id": "gorestorm-cannon",
+              "count": 1
+            },
+            {
+              "id": "great-cleaver-of-khorne",
+              "count": 1
+            },
+            {
+              "id": "hades-gatling-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Khorne Lord of Skulls",
+          "items": [
+            {
+              "id": "gorestorm-cannon",
+              "count": 1
+            },
+            {
+              "id": "great-cleaver-of-khorne",
+              "count": 1
+            },
+            {
+              "id": "hades-gatling-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Khorne Lord of Skulls",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "daemongore-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "gorestorm-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ichor-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Khorne Lord of Skulls",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "great-cleaver-of-khorne",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Khorne Lord of Skulls",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hades-gatling-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "skullhurler",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Khorne Lord of Skulls",
+          "id": "daemongore-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Khorne Lord of Skulls",
+          "id": "gorestorm-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Khorne Lord of Skulls",
+          "id": "great-cleaver-of-khorne",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Khorne Lord of Skulls",
+          "id": "hades-gatling-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Khorne Lord of Skulls",
+          "id": "ichor-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Khorne Lord of Skulls",
+          "id": "skullhurler",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "chaos-spawn",
@@ -1110,7 +4885,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Spawn",
+          "models": 2,
+          "items": [
+            {
+              "id": "hideous-mutations",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Spawn",
+          "items": [
+            {
+              "id": "hideous-mutations",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Spawn",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hideous-mutations",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Spawn",
+          "id": "hideous-mutations",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "goremongers",
@@ -1168,7 +4994,205 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Blood Herald",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "chainblade-goremongers",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-goremongers",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Goremongers",
+          "models": 7,
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 7
+            },
+            {
+              "id": "chainblade-goremongers",
+              "count": 7
+            },
+            {
+              "id": "close-combat-weapon-goremongers",
+              "count": 7
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Blood Herald",
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "chainblade-goremongers",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-goremongers",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Goremongers",
+          "items": [
+            {
+              "id": "autopistol",
+              "count": 1
+            },
+            {
+              "id": "chainblade-goremongers",
+              "count": 1
+            },
+            {
+              "id": "close-combat-weapon-goremongers",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Blood Herald",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "chainblade-goremongers",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-goremongers",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Goremongers",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "blood-harpoon",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-goremongers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "autopistol",
+                "count": 1
+              },
+              {
+                "id": "chainblade-goremongers",
+                "count": 1
+              },
+              {
+                "id": "close-combat-weapon-goremongers",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "autopistol",
+                "count": 2
+              },
+              {
+                "id": "close-combat-weapon-goremongers",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Blood Herald",
+          "id": "autopistol",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Blood Herald",
+          "id": "chainblade-goremongers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Blood Herald",
+          "id": "close-combat-weapon-goremongers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Goremongers",
+          "id": "autopistol",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Goremongers",
+          "id": "autopistol",
+          "input": "stepper",
+          "default": 7
+        },
+        {
+          "model": "Goremongers",
+          "id": "blood-harpoon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Goremongers",
+          "id": "chainblade-goremongers",
+          "input": "stepper",
+          "default": 7
+        },
+        {
+          "model": "Goremongers",
+          "id": "close-combat-weapon-goremongers",
+          "input": "stepper",
+          "default": 7
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "frenzied-reavers-jakhals",
@@ -1243,7 +5267,180 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Dishonoured",
+          "models": 1,
+          "items": [
+            {
+              "id": "skullsmasher-and-mangler",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Jakhal Pack Leader",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol-frenzied-reavers-jakhals",
+              "count": 1
+            },
+            {
+              "id": "chainblade-frenzied-reavers-jakhals",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Jakhal with Autopistol and Chainblade",
+          "models": 7,
+          "items": [
+            {
+              "id": "autopistol-frenzied-reavers-jakhals",
+              "count": 7
+            },
+            {
+              "id": "chainblade-frenzied-reavers-jakhals",
+              "count": 7
+            }
+          ]
+        },
+        {
+          "model": "Jakhal with Autopistol and Mauler Chainblade",
+          "models": 1,
+          "items": [
+            {
+              "id": "autopistol-frenzied-reavers-jakhals",
+              "count": 1
+            },
+            {
+              "id": "mauler-chainblade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Dishonoured",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "skullsmasher-and-mangler",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Jakhal Pack Leader",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol-frenzied-reavers-jakhals",
+                "count": 1
+              },
+              {
+                "id": "chainblade-frenzied-reavers-jakhals",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Jakhal with Autopistol and Chainblade",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol-frenzied-reavers-jakhals",
+                "count": 1
+              },
+              {
+                "id": "chainblade-frenzied-reavers-jakhals",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Jakhal with Autopistol and Mauler Chainblade",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "autopistol-frenzied-reavers-jakhals",
+                "count": 1
+              },
+              {
+                "id": "mauler-chainblade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Dishonoured",
+          "id": "skullsmasher-and-mangler",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Jakhal Pack Leader",
+          "id": "autopistol-frenzied-reavers-jakhals",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Jakhal Pack Leader",
+          "id": "chainblade-frenzied-reavers-jakhals",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Jakhal with Autopistol and Chainblade",
+          "id": "autopistol-frenzied-reavers-jakhals",
+          "input": "stepper",
+          "default": 7
+        },
+        {
+          "model": "Jakhal with Autopistol and Chainblade",
+          "id": "chainblade-frenzied-reavers-jakhals",
+          "input": "stepper",
+          "default": 7
+        },
+        {
+          "model": "Jakhal with Autopistol and Mauler Chainblade",
+          "id": "autopistol-frenzied-reavers-jakhals",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Jakhal with Autopistol and Mauler Chainblade",
+          "id": "mauler-chainblade",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "frenzied-reavers-khorne-berzerkers",
@@ -1335,7 +5532,194 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Khorne Berzerker Champion",
+          "models": 1,
+          "items": [
+            {
+              "id": "chainblade",
+              "count": 1
+            },
+            {
+              "id": "plasma-pistol-frenzied-reavers-khorne-berzerkers",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Khorne Berzerker with Bolt Pistol and Chainblade",
+          "models": 5,
+          "items": [
+            {
+              "id": "bolt-pistol-frenzied-reavers-khorne-berzerkers",
+              "count": 5
+            },
+            {
+              "id": "chainblade",
+              "count": 5
+            }
+          ]
+        },
+        {
+          "model": "Khorne Berzerker with Bolt Pistol and Khornate Eviscerator",
+          "models": 2,
+          "items": [
+            {
+              "id": "bolt-pistol-frenzied-reavers-khorne-berzerkers",
+              "count": 2
+            },
+            {
+              "id": "khornate-eviscerator",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "model": "Khorne Berzerker with Plasma Pistol and Chainblade",
+          "models": 2,
+          "items": [
+            {
+              "id": "chainblade",
+              "count": 2
+            },
+            {
+              "id": "plasma-pistol-frenzied-reavers-khorne-berzerkers",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Khorne Berzerker Champion",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chainblade",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol-frenzied-reavers-khorne-berzerkers",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Khorne Berzerker with Bolt Pistol and Chainblade",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-frenzied-reavers-khorne-berzerkers",
+                "count": 1
+              },
+              {
+                "id": "chainblade",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Khorne Berzerker with Bolt Pistol and Khornate Eviscerator",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-pistol-frenzied-reavers-khorne-berzerkers",
+                "count": 1
+              },
+              {
+                "id": "khornate-eviscerator",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Khorne Berzerker with Plasma Pistol and Chainblade",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "chainblade",
+                "count": 1
+              },
+              {
+                "id": "plasma-pistol-frenzied-reavers-khorne-berzerkers",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Khorne Berzerker Champion",
+          "id": "chainblade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Khorne Berzerker Champion",
+          "id": "plasma-pistol-frenzied-reavers-khorne-berzerkers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Khorne Berzerker with Bolt Pistol and Chainblade",
+          "id": "bolt-pistol-frenzied-reavers-khorne-berzerkers",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Khorne Berzerker with Bolt Pistol and Chainblade",
+          "id": "chainblade",
+          "input": "stepper",
+          "default": 5
+        },
+        {
+          "model": "Khorne Berzerker with Bolt Pistol and Khornate Eviscerator",
+          "id": "bolt-pistol-frenzied-reavers-khorne-berzerkers",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Khorne Berzerker with Bolt Pistol and Khornate Eviscerator",
+          "id": "khornate-eviscerator",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Khorne Berzerker with Plasma Pistol and Chainblade",
+          "id": "chainblade",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Khorne Berzerker with Plasma Pistol and Chainblade",
+          "id": "plasma-pistol-frenzied-reavers-khorne-berzerkers",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "frenzied-reavers-master-of-executions",
@@ -1373,7 +5757,62 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Master of Executions",
+          "models": 1,
+          "items": [
+            {
+              "id": "axe-of-dismemberment",
+              "count": 1
+            },
+            {
+              "id": "bolt-pistol-frenzied-reavers-master-of-executions",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Master of Executions",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "axe-of-dismemberment",
+                "count": 1
+              },
+              {
+                "id": "bolt-pistol-frenzied-reavers-master-of-executions",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Master of Executions",
+          "id": "axe-of-dismemberment",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Master of Executions",
+          "id": "bolt-pistol-frenzied-reavers-master-of-executions",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "vorrakh-lord-of-the-frenzied-reavers",
@@ -1410,7 +5849,62 @@
     ],
     "game_modes": [
       "combat-patrol"
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Vorrakh",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellforged-weapons-vorrakh-lord-of-the-frenzied-reavers",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Vorrakh",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellforged-weapons-vorrakh-lord-of-the-frenzied-reavers",
+                "count": 1
+              },
+              {
+                "id": "infernal-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Vorrakh",
+          "id": "hellforged-weapons-vorrakh-lord-of-the-frenzied-reavers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Vorrakh",
+          "id": "infernal-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "bloodcrushers",
@@ -1478,6 +5972,200 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
+    },
+    "loadout": {
+      "stock": [
+        {
+          "model": "Bloodcrusher",
+          "models": 2,
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 2
+            },
+            {
+              "id": "juggernauts-bladed-horn",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "model": "Bloodhunter",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 1
+            },
+            {
+              "id": "juggernauts-bladed-horn",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Bloodcrusher",
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 1
+            },
+            {
+              "id": "juggernauts-bladed-horn",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Bloodhunter",
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 1
+            },
+            {
+              "id": "juggernauts-bladed-horn",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Bloodcrusher",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Bloodcrusher",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellblade",
+                "count": 1
+              },
+              {
+                "id": "juggernauts-bladed-horn",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Bloodhunter",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellblade",
+                "count": 1
+              },
+              {
+                "id": "juggernauts-bladed-horn",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Bloodcrusher",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Bloodcrusher",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Bloodcrusher",
+          "id": "daemonic-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Bloodcrusher",
+          "id": "hellblade",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Bloodcrusher",
+          "id": "instrument-of-chaos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Bloodcrusher",
+          "id": "juggernauts-bladed-horn",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Bloodhunter",
+          "id": "hellblade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Bloodhunter",
+          "id": "juggernauts-bladed-horn",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
     }
   },
   {
@@ -1528,7 +6216,165 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Bloodletter",
+          "models": 9,
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Bloodreaper",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Bloodletter",
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Bloodreaper",
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Bloodletter",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Bloodletter",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellblade",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Bloodreaper",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellblade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Bloodletter",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Bloodletter",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Bloodletter",
+          "id": "daemonic-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Bloodletter",
+          "id": "hellblade",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Bloodletter",
+          "id": "instrument-of-chaos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Bloodreaper",
+          "id": "hellblade",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "flesh-hounds",
@@ -1597,6 +6443,150 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
+    },
+    "loadout": {
+      "stock": [
+        {
+          "model": "Flesh Hound",
+          "models": 4,
+          "items": [
+            {
+              "id": "collar-of-khorne",
+              "count": 4
+            },
+            {
+              "id": "gore-drenched-fangs",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Gore Hound",
+          "models": 1,
+          "items": [
+            {
+              "id": "burning-roar",
+              "count": 1
+            },
+            {
+              "id": "collar-of-khorne",
+              "count": 1
+            },
+            {
+              "id": "gore-drenched-fangs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Flesh Hound",
+          "items": [
+            {
+              "id": "collar-of-khorne",
+              "count": 1
+            },
+            {
+              "id": "gore-drenched-fangs",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Gore Hound",
+          "items": [
+            {
+              "id": "burning-roar",
+              "count": 1
+            },
+            {
+              "id": "collar-of-khorne",
+              "count": 1
+            },
+            {
+              "id": "gore-drenched-fangs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Flesh Hound",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "collar-of-khorne",
+                "count": 1
+              },
+              {
+                "id": "gore-drenched-fangs",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Gore Hound",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "burning-roar",
+                "count": 1
+              },
+              {
+                "id": "collar-of-khorne",
+                "count": 1
+              },
+              {
+                "id": "gore-drenched-fangs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Flesh Hound",
+          "id": "collar-of-khorne",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Flesh Hound",
+          "id": "gore-drenched-fangs",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Gore Hound",
+          "id": "burning-roar",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gore Hound",
+          "id": "collar-of-khorne",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gore Hound",
+          "id": "gore-drenched-fangs",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
     }
   },
   {
@@ -1614,7 +6604,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 100
-        }
+        },
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -1631,7 +6622,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skarbrand",
+          "models": 1,
+          "items": [
+            {
+              "id": "bellow-of-endless-fury",
+              "count": 1
+            },
+            {
+              "id": "slaughter-and-carnage",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Skarbrand",
+          "items": [
+            {
+              "id": "bellow-of-endless-fury",
+              "count": 1
+            },
+            {
+              "id": "slaughter-and-carnage",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Skarbrand",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bellow-of-endless-fury",
+                "count": 1
+              },
+              {
+                "id": "slaughter-and-carnage",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Skarbrand",
+          "id": "bellow-of-endless-fury",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skarbrand",
+          "id": "slaughter-and-carnage",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "bloodthirster",
@@ -1649,7 +6709,8 @@
           "shape": "oval",
           "width": 120,
           "length": 92
-        }
+        },
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -1666,6 +6727,123 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Bloodthirster",
+          "models": 1,
+          "items": [
+            {
+              "id": "great-axe-of-khorne",
+              "count": 1
+            },
+            {
+              "id": "hellfire-breath",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Bloodthirster",
+          "items": [
+            {
+              "id": "great-axe-of-khorne",
+              "count": 1
+            },
+            {
+              "id": "hellfire-breath",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Bloodthirster",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "axe-of-khorne",
+                "count": 1
+              },
+              {
+                "id": "bloodflail",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "axe-of-khorne",
+                "count": 1
+              },
+              {
+                "id": "lash-of-khorne",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "great-axe-of-khorne",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Bloodthirster",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellfire-breath",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Bloodthirster",
+          "id": "axe-of-khorne",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Bloodthirster",
+          "id": "bloodflail",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Bloodthirster",
+          "id": "great-axe-of-khorne",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Bloodthirster",
+          "id": "hellfire-breath",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Bloodthirster",
+          "id": "lash-of-khorne",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

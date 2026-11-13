@@ -1,0 +1,20 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Imperium - Adeptus Custodes
++ DETACHMENT: Grav-Assault Force
++ TOTAL ARMY POINTS: 1000pts
++
++ NUMBER OF UNITS: 3
++++++++++++++++++++++++++++++++++++++++++++++++
+
+OTHER DATASHEETS
+
+Caladius Annihilator Grav-tank (230 pts)
+• 1x Armoured hull
+• 1x Twin neutronium cascade projectors
+• 1x Twin lastrum bolt cannon
+
+Martial Ka'tah Reference (0 pts)
+
+Prosecutors (50 pts)
+• 4x Boltgun
+• 4x Close combat weapon

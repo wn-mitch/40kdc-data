@@ -5,6 +5,9 @@
  * units the record lists in unit_ids; for a friendly or unowned filter, a unit of the ability's
  * faction or its shared-roster parents; for an enemy filter, a unit of any faction. Run as part of
  * `checkReferentialIntegrity`, so a typo or a renamed model fails validation.
+ *
+ * An add-unit's `model` names a model type a rule adds (Split's Blue Horrors): it must be an
+ * `added_models` name of every unit the record lists in unit_ids.
  */
 
 import { readFileSync } from "node:fs";
@@ -13,13 +16,13 @@ import { basename, dirname } from "node:path";
 import type { ValidationResult } from "./validate.js";
 import { SHARED_ROSTERS } from "./mfm/faction-map.js";
 
-type Composition = { unit_id?: unknown; models?: Array<{ name?: unknown }> };
+type Composition = { unit_id?: unknown; models?: Array<{ name?: unknown }>; added_models?: Array<{ name?: unknown }> };
 
 /** The roles that name the unit carrying the ability. */
 const OWN_UNIT = new Set(["this-unit", "ability-unit"]);
 
 /** Model names by faction directory and unit id. */
-async function compositionModels(root: string): Promise<Map<string, Map<string, Set<string>>>> {
+async function compositionModels(root: string, field: "models" | "added_models" = "models"): Promise<Map<string, Map<string, Set<string>>>> {
   const byFaction = new Map<string, Map<string, Set<string>>>();
   for (const file of await glob("core/*/unit-compositions.json", { cwd: root, absolute: true })) {
     const faction = basename(dirname(file));
@@ -29,7 +32,7 @@ async function compositionModels(root: string): Promise<Map<string, Map<string, 
       for (const record of JSON.parse(readFileSync(file, "utf8")) as Composition[]) {
         if (typeof record.unit_id !== "string") continue;
         const names = units.get(record.unit_id) ?? new Set<string>();
-        for (const model of record.models ?? []) if (typeof model.name === "string") names.add(model.name);
+        for (const model of record[field] ?? []) if (typeof model.name === "string") names.add(model.name);
         units.set(record.unit_id, names);
       }
     } catch {
@@ -52,8 +55,22 @@ export function modelNameFilters(value: unknown, found: Array<Record<string, unk
   return found;
 }
 
+/** Every add-unit modifier that names a model type, at any depth of a record. */
+export function addedModelTypes(value: unknown, found: string[] = []): string[] {
+  if (Array.isArray(value)) {
+    for (const item of value) addedModelTypes(item, found);
+  } else if (value !== null && typeof value === "object") {
+    const record = value as Record<string, unknown>;
+    const modifier = record.modifier as Record<string, unknown> | undefined;
+    if (record.type === "add-unit" && typeof modifier?.model === "string") found.push(modifier.model);
+    for (const child of Object.values(record)) addedModelTypes(child, found);
+  }
+  return found;
+}
+
 export async function checkModelNames(root: string, result: ValidationResult): Promise<void> {
   const models = await compositionModels(root);
+  const added = await compositionModels(root, "added_models");
   const union = (units: Iterable<Set<string>>): Set<string> => new Set([...units].flatMap((names) => [...names]));
   const anyFaction = union([...models.values()].flatMap((units) => [...units.values()]));
   const files = await glob("enrichment/*/abilities.json", { cwd: root, absolute: true });
@@ -71,8 +88,9 @@ export async function checkModelNames(root: string, result: ValidationResult): P
     let fileCounted = false;
     records.forEach((record, index) => {
       const filters = modelNameFilters(record);
+      const addedTypes = addedModelTypes(record);
       // Only records that name models are counted, so unrelated records leave the totals unchanged.
-      if (filters.length === 0) return;
+      if (filters.length === 0 && addedTypes.length === 0) return;
       if (!fileCounted) {
         result.totalFiles++;
         fileCounted = true;
@@ -89,6 +107,15 @@ export async function checkModelNames(root: string, result: ValidationResult): P
           if (typeof name !== "string" || known.has(name)) continue;
           errors.push({ path: `/${index}`, message: `ability "${String(record.ability_id)}" names model "${name}", which is not a model of ${where} in unit-compositions.json` });
         }
+      }
+      const factionAdded = [faction, ...(SHARED_ROSTERS[faction] ?? [])].map((dir) => added.get(dir) ?? new Map<string, Set<string>>());
+      for (const name of addedTypes) {
+        const lacking = unitIds.filter((id) => !factionAdded.some((units) => units.get(id)?.has(name)));
+        if (unitIds.length > 0 && lacking.length === 0) continue;
+        errors.push({
+          path: `/${index}`,
+          message: `ability "${String(record.ability_id)}" adds "${name}" models, which is not an added_models type of ${lacking.length ? lacking.join(", ") : "any unit it lists"} in unit-compositions.json`,
+        });
       }
       if (errors.length === 0) {
         result.passed++;

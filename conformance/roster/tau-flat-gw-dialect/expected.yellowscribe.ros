@@ -212,37 +212,11 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit1-m0-w5" name="Semi-automatic grenade launcher" type="upgrade" number="1">
-                  <profiles>
-                    <profile name="Fusion" typeName="Ranged Weapons">
-                      <characteristics>
-                        <characteristic name="Range">18"</characteristic>
-                        <characteristic name="A">1</characteristic>
-                        <characteristic name="BS">4+</characteristic>
-                        <characteristic name="S">6</characteristic>
-                        <characteristic name="AP">-1</characteristic>
-                        <characteristic name="D">3</characteristic>
-                        <characteristic name="Keywords"></characteristic>
-                      </characteristics>
-                    </profile>
-                    <profile name="EMP" typeName="Ranged Weapons">
-                      <characteristics>
-                        <characteristic name="Range">18"</characteristic>
-                        <characteristic name="A">1</characteristic>
-                        <characteristic name="BS">4+</characteristic>
-                        <characteristic name="S">3</characteristic>
-                        <characteristic name="AP">0</characteristic>
-                        <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Anti-Vehicle 4+, Devastating Wounds</characteristic>
-                      </characteristics>
-                    </profile>
-                  </profiles>
-                </selection>
               </selections>
             </selection>
-            <selection id="unit1-m1" name="Pathfinder" type="model" number="6">
+            <selection id="unit1-m1" name="Pathfinder" type="model" number="5">
               <selections>
-                <selection id="unit1-m1-w0" name="Close combat weapon" type="upgrade" number="6">
+                <selection id="unit1-m1-w0" name="Close combat weapon" type="upgrade" number="5">
                   <profiles>
                     <profile name="Close combat weapon" typeName="Melee Weapons">
                       <characteristics>
@@ -257,7 +231,7 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit1-m1-w1" name="Pulse carbine" type="upgrade" number="6">
+                <selection id="unit1-m1-w1" name="Pulse carbine" type="upgrade" number="5">
                   <profiles>
                     <profile name="Pulse carbine" typeName="Ranged Weapons">
                       <characteristics>
@@ -272,7 +246,7 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit1-m1-w2" name="Pulse pistol" type="upgrade" number="6">
+                <selection id="unit1-m1-w2" name="Pulse pistol" type="upgrade" number="5">
                   <profiles>
                     <profile name="Pulse pistol" typeName="Ranged Weapons">
                       <characteristics>
@@ -332,6 +306,81 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
                         <characteristic name="AP">-4</characteristic>
                         <characteristic name="D">3</characteristic>
                         <characteristic name="Keywords">Devastating Wounds, Heavy</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+              </selections>
+            </selection>
+            <selection id="unit1-m3" name="Pathfinder" type="model" number="1">
+              <selections>
+                <selection id="unit1-m3-w0" name="Close combat weapon" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Close combat weapon" typeName="Melee Weapons">
+                      <characteristics>
+                        <characteristic name="Range">Melee</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="WS">5+</characteristic>
+                        <characteristic name="S">3</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m3-w1" name="Pulse carbine" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Pulse carbine" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">20"</characteristic>
+                        <characteristic name="A">2</characteristic>
+                        <characteristic name="BS">4+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m3-w2" name="Pulse pistol" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Pulse pistol" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">4+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Pistol</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m3-w3" name="Semi-automatic grenade launcher" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Fusion" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">18"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">4+</characteristic>
+                        <characteristic name="S">6</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">3</characteristic>
+                        <characteristic name="Keywords"></characteristic>
+                      </characteristics>
+                    </profile>
+                    <profile name="EMP" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">18"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">4+</characteristic>
+                        <characteristic name="S">3</characteristic>
+                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Anti-Vehicle 4+, Devastating Wounds</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>
@@ -436,9 +485,9 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
                 </selection>
               </selections>
             </selection>
-            <selection id="unit2-m1" name="Crisis Starscythe Shas’ui" type="model" number="1">
+            <selection id="unit2-m1" name="Crisis Starscythe Shas’ui" type="model" number="2">
               <selections>
-                <selection id="unit2-m1-w0" name="Battlesuit fists" type="upgrade" number="1">
+                <selection id="unit2-m1-w0" name="Battlesuit fists" type="upgrade" number="2">
                   <profiles>
                     <profile name="Battlesuit fists" typeName="Melee Weapons">
                       <characteristics>
@@ -453,41 +502,7 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit2-m1-w1" name="Burst cannon" type="upgrade" number="2">
-                  <profiles>
-                    <profile name="Burst cannon" typeName="Ranged Weapons">
-                      <characteristics>
-                        <characteristic name="Range">18"</characteristic>
-                        <characteristic name="A">4</characteristic>
-                        <characteristic name="BS">4+</characteristic>
-                        <characteristic name="S">5</characteristic>
-                        <characteristic name="AP">0</characteristic>
-                        <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords"></characteristic>
-                      </characteristics>
-                    </profile>
-                  </profiles>
-                </selection>
-              </selections>
-            </selection>
-            <selection id="unit2-m2" name="Crisis Starscythe Shas’ui" type="model" number="1">
-              <selections>
-                <selection id="unit2-m2-w0" name="Battlesuit fists" type="upgrade" number="1">
-                  <profiles>
-                    <profile name="Battlesuit fists" typeName="Melee Weapons">
-                      <characteristics>
-                        <characteristic name="Range">Melee</characteristic>
-                        <characteristic name="A">3</characteristic>
-                        <characteristic name="WS">5+</characteristic>
-                        <characteristic name="S">5</characteristic>
-                        <characteristic name="AP">0</characteristic>
-                        <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords"></characteristic>
-                      </characteristics>
-                    </profile>
-                  </profiles>
-                </selection>
-                <selection id="unit2-m2-w1" name="Burst cannon" type="upgrade" number="2">
+                <selection id="unit2-m1-w1" name="Burst cannon" type="upgrade" number="4">
                   <profiles>
                     <profile name="Burst cannon" typeName="Ranged Weapons">
                       <characteristics>

@@ -1,6 +1,5 @@
 import type { Dataset } from "../data/dataset.js";
-import { baseLoadout, type LoadoutModel } from "../data/loadout.js";
-import type { Detachment, Unit, UnitComposition } from "../generated.js";
+import type { Detachment, Unit } from "../generated.js";
 import type { EngineContext } from "../cruncher/index.js";
 import type { ResolvedTarget, ComparePhase } from "../compare.js";
 import { assessDetachmentSelection, summarizeSupportCosts, type LegalityIssue } from "./legality.js";
@@ -10,7 +9,10 @@ import { DamageScoringSession, type DamageScoringInvariants } from "./scoring.js
 import { isCombatPatrolDetachment } from "../abilities-resolver/resolver.js";
 import { buildLedger, unscoreableEntries } from "./ledger.js";
 import { baseWargear } from "./weapon-grants.js";
+import { assumedEligibility, unitLookup } from "./stratagem-eligibility.js";
+import { combinedKeywords, issuesOrders, orderIssuingUnits } from "./orders.js";
 import type { DamageCellState, StackMember, StackResult, StackSpec } from "./model.js";
+import type { StackableBuff } from "../data/dataset.js";
 import { damageCellKey, type DamageCellReport, type LeverReport, type WinnerReport } from "./report.js";
 
 interface SearchCounts {
@@ -228,6 +230,36 @@ function parseEnhancementLever(id: string): { id: string; bearerUnitId: string }
   return at < 0 ? null : { id: id.slice("enhancement:".length, at), bearerUnitId: id.slice(at + 1) };
 }
 
+/**
+ * Records, for each selected Orders lever no stack member can issue, the supporting Officer that
+ * issues it: one already supporting the stack if it can, else the first by id. The Officer is
+ * costed like any other supporting unit.
+ */
+export function addOrderIssuers(
+  dataset: Dataset,
+  faction: FactionContext,
+  session: DamageScoringSession,
+  result: StackResult,
+  selected: readonly StackableBuff[],
+  supportAbilityIds: Map<string, Set<string>>,
+): void {
+  const memberIds = result.spec.members.map((member) => member.unit.id);
+  const units = unitLookup(dataset, faction.id);
+  const passes = result.spec.detachmentIds.length > 0 ? result.spec.detachmentIds : [undefined];
+  const receiver = new Set(passes.flatMap((detachmentId) => [...combinedKeywords(memberIds, units, detachmentId)]));
+  for (const ruleId of new Set(selected.flatMap((lever) =>
+    lever.source.kind === "ability" && lever.source.abilityKind === "army" && issuesOrders(dataset, lever.source.abilityId) ? [lever.source.abilityId] : []))) {
+    if (orderIssuingUnits(dataset, ruleId, memberIds, receiver).length > 0) continue;
+    const candidates = session.orderIssuerCandidates.filter((id) => !memberIds.includes(id));
+    const issuers = orderIssuingUnits(dataset, ruleId, candidates, receiver);
+    const issuer = issuers.find((id) => supportAbilityIds.has(id)) ?? issuers[0];
+    if (!issuer) continue;
+    const abilities = supportAbilityIds.get(issuer) ?? new Set<string>();
+    abilities.add(ruleId);
+    supportAbilityIds.set(issuer, abilities);
+  }
+}
+
 function winnerReport(dataset: Dataset, faction: FactionContext, session: DamageScoringSession, result: StackResult): WinnerReport {
   const selected = session.selectedPoolLevers(result);
   const enhancements = selected.flatMap((lever) => {
@@ -246,14 +278,12 @@ function winnerReport(dataset: Dataset, faction: FactionContext, session: Damage
     abilities.add(lever.source.abilityId);
     supportAbilityIds.set(lever.source.sourceUnitId, abilities);
   }
+  addOrderIssuers(dataset, faction, session, result, selected, supportAbilityIds);
   const supportMembers = [...supportAbilityIds].flatMap(([unitId]) => {
     const unit = unitInFaction(faction, unitId);
     if (!unit) return [];
-    const composition = dataset.unitCompositionOf(unit.raw) as UnitComposition | undefined;
-    const models = (composition?.models ?? []) as LoadoutModel[];
     const modelCount = fullModelCount(dataset, unit.raw);
-    const options = dataset.wargearOptionsOf(unit.raw);
-    return [{ unit: unit.raw, modelCount, loadout: baseLoadout(unit.raw, modelCount, options, models).counts }];
+    return [{ unit: unit.raw, modelCount, loadout: dataset.loadoutOf(unit.raw).base(modelCount) ?? new Map<string, number>() }];
   });
   const supportCosts = summarizeSupportCosts({
     members: supportMembers,
@@ -313,6 +343,9 @@ function winnerReport(dataset: Dataset, faction: FactionContext, session: Damage
       "Each selected support ability is assumed in range and otherwise activatable; support units are costed but are not an army roster.",
       "At most one Stratagem is selected; CP across a full game is not simulated.",
       "Loadouts and levers use coordinate ascent; outer bodyguard, attachment, finalist and detachment pools are exhaustive when their limits are Infinity.",
+      ...(result.spec.members.some((member) => member.role === "support")
+        ? ["Support-attached characters count as leading their unit for rules that apply while a model is leading."] : []),
+      ...(stratagem ? assumedEligibility(dataset, stratagem.id).map((condition) => `Stratagem ${stratagem.id} target condition assumed met: ${condition}.`) : []),
       ...result.spec.detachmentIssues.map((issue) => `Unproven local-stack detachment condition: ${issue.code} (${issue.id}).`),
       ...selected.flatMap((lever) => (lever.requires ?? []).map(() => `Selected lever ${lever.id} requires caller-attested activation context recorded in selectedLevers.requires.`)),
       ...(supportCosts.status === "incomplete" ? supportCosts.issues.map((issue) => `Support cost incomplete: ${issue.code} (${issue.id}).`) : []),

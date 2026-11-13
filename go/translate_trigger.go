@@ -373,7 +373,7 @@ func triggerEventPhrase(t map[string]any) string {
 	case "round-ended":
 		return "at the end of the battle round"
 	case "turn-started":
-		return "at the start of the turn"
+		return "at the start of each turn"
 	case "turn-ended":
 		return "at the end of the turn"
 	case "step-started":
@@ -422,7 +422,11 @@ func triggerEventPhrase(t map[string]any) string {
 			return "when a Charge is declared"
 		}
 		if object != nil {
-			return "when " + who + " targets " + triggerObjectPhrase(object)
+			every := ""
+			if f["all_attacks"] == true {
+				every = " with all of its attacks"
+			}
+			return "when " + who + " targets " + triggerObjectPhrase(object) + every
 		}
 		return "when " + who + " selects its targets"
 	case "move-started":
@@ -502,8 +506,11 @@ func triggerEventPhrase(t map[string]any) string {
 				return "after " + who + " has shot and targeted " + triggerObjectPhrase(object)
 			}
 			verb := "shoots"
-			if f["kind"] == "fight" {
+			switch f["kind"] {
+			case "fight":
 				verb = "fights"
+			case "attack":
+				verb = "resolves its attacks"
 			}
 			return "after " + who + " " + verb
 		}
@@ -635,6 +642,12 @@ func triggerEventPhrase(t map[string]any) string {
 		}
 		return "each time " + who + " " + verb
 	case "state-changed":
+		switch f["strength"] {
+		case "below-half":
+			return "when " + who + " becomes Below Half-strength"
+		case "below-starting":
+			return "when " + who + " falls below its Starting Strength"
+		}
 		return "when " + who + " becomes " + capWord(cstr(f["state"]))
 	case "designation-changed":
 		if f["tag"] == "EMPOWERED" {

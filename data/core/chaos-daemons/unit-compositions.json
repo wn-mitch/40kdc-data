@@ -33,7 +33,172 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Soul Grinder",
+          "models": 1,
+          "items": [
+            {
+              "id": "harvester-cannon",
+              "count": 1
+            },
+            {
+              "id": "iron-claw",
+              "count": 1
+            },
+            {
+              "id": "warpsword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Soul Grinder",
+          "items": [
+            {
+              "id": "harvester-cannon",
+              "count": 1
+            },
+            {
+              "id": "iron-claw",
+              "count": 1
+            },
+            {
+              "id": "warpsword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Soul Grinder",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "harvester-cannon",
+                "count": 1
+              },
+              {
+                "id": "iron-claw",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Soul Grinder",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "phlegm-bombardment",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "scream-of-despair",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "torrent-of-burning-blood",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "warp-gaze",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Soul Grinder",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "warpclaw",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "warpsword",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Soul Grinder",
+          "id": "harvester-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Soul Grinder",
+          "id": "iron-claw",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Soul Grinder",
+          "id": "phlegm-bombardment",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Soul Grinder",
+          "id": "scream-of-despair",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Soul Grinder",
+          "id": "torrent-of-burning-blood",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Soul Grinder",
+          "id": "warp-gaze",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Soul Grinder",
+          "id": "warpclaw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Soul Grinder",
+          "id": "warpsword",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "daemon-prince-of-chaos-with-wings",
@@ -68,7 +233,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Daemon Prince of Chaos with Wings",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellforged-weapons",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Daemon Prince of Chaos with Wings",
+          "items": [
+            {
+              "id": "hellforged-weapons",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Daemon Prince of Chaos with Wings",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellforged-weapons",
+                "count": 1
+              },
+              {
+                "id": "infernal-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Daemon Prince of Chaos with Wings",
+          "id": "hellforged-weapons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Daemon Prince of Chaos with Wings",
+          "id": "infernal-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "daemon-prince-of-chaos",
@@ -103,7 +337,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Daemon Prince of Chaos",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellforged-weapons",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Daemon Prince of Chaos",
+          "items": [
+            {
+              "id": "hellforged-weapons",
+              "count": 1
+            },
+            {
+              "id": "infernal-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Daemon Prince of Chaos",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellforged-weapons",
+                "count": 1
+              },
+              {
+                "id": "infernal-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Daemon Prince of Chaos",
+          "id": "hellforged-weapons",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Daemon Prince of Chaos",
+          "id": "infernal-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "rotigus",
@@ -138,7 +441,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Rotigus",
+          "models": 1,
+          "items": [
+            {
+              "id": "gnarlrod",
+              "count": 1
+            },
+            {
+              "id": "streams-of-brackish-filth",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Rotigus",
+          "items": [
+            {
+              "id": "gnarlrod",
+              "count": 1
+            },
+            {
+              "id": "streams-of-brackish-filth",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Rotigus",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "gnarlrod",
+                "count": 1
+              },
+              {
+                "id": "streams-of-brackish-filth",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Rotigus",
+          "id": "gnarlrod",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Rotigus",
+          "id": "streams-of-brackish-filth",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "the-masque-of-slaanesh",
@@ -172,7 +544,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "The Masque of Slaanesh",
+          "models": 1,
+          "items": [
+            {
+              "id": "serrated-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "The Masque of Slaanesh",
+          "items": [
+            {
+              "id": "serrated-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "The Masque of Slaanesh",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "serrated-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "The Masque of Slaanesh",
+          "id": "serrated-claws",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "daemonettes",
@@ -225,7 +648,165 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Alluress",
+          "models": 1,
+          "items": [
+            {
+              "id": "slashing-claws",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Daemonette",
+          "models": 9,
+          "items": [
+            {
+              "id": "slashing-claws",
+              "count": 9
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Alluress",
+          "items": [
+            {
+              "id": "slashing-claws",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Daemonette",
+          "items": [
+            {
+              "id": "slashing-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Alluress",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "slashing-claws",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Daemonette",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Daemonette",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "slashing-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Daemonette",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Daemonette",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Alluress",
+          "id": "slashing-claws",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Daemonette",
+          "id": "daemonic-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Daemonette",
+          "id": "instrument-of-chaos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Daemonette",
+          "id": "slashing-claws",
+          "input": "stepper",
+          "default": 9
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "nurglings",
@@ -268,7 +849,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Nurgling Swarm",
+          "models": 3,
+          "items": [
+            {
+              "id": "diseased-claws-and-teeth",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Nurgling Swarm",
+          "items": [
+            {
+              "id": "diseased-claws-and-teeth",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Nurgling Swarm",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "diseased-claws-and-teeth",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Nurgling Swarm",
+          "id": "diseased-claws-and-teeth",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "bloodmaster",
@@ -302,7 +934,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Bloodmaster",
+          "models": 1,
+          "items": [
+            {
+              "id": "blade-of-blood",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Bloodmaster",
+          "items": [
+            {
+              "id": "blade-of-blood",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Bloodmaster",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blade-of-blood",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Bloodmaster",
+          "id": "blade-of-blood",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tranceweaver",
@@ -336,7 +1019,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tranceweaver",
+          "models": 1,
+          "items": [
+            {
+              "id": "ravaging-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Tranceweaver",
+          "items": [
+            {
+              "id": "ravaging-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Tranceweaver",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ravaging-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Tranceweaver",
+          "id": "ravaging-claws",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "burning-chariot",
@@ -373,7 +1107,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Burning Chariot",
+          "models": 1,
+          "items": [
+            {
+              "id": "fire-of-tzeentch",
+              "count": 1
+            },
+            {
+              "id": "flamer-mouths",
+              "count": 1
+            },
+            {
+              "id": "screamer-bites",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Burning Chariot",
+          "items": [
+            {
+              "id": "fire-of-tzeentch",
+              "count": 1
+            },
+            {
+              "id": "flamer-mouths",
+              "count": 1
+            },
+            {
+              "id": "screamer-bites",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Burning Chariot",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "fire-of-tzeentch",
+                "count": 1
+              },
+              {
+                "id": "flamer-mouths",
+                "count": 1
+              },
+              {
+                "id": "screamer-bites",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Burning Chariot",
+          "id": "fire-of-tzeentch",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Burning Chariot",
+          "id": "flamer-mouths",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Burning Chariot",
+          "id": "screamer-bites",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "pink-horrors",
@@ -406,6 +1227,178 @@
             "min": 10,
             "max": 10
           }
+        ]
+      }
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Pink Horror",
+          "models": 10,
+          "items": [
+            {
+              "id": "coruscating-pink-flames",
+              "count": 10
+            },
+            {
+              "id": "pink-claws",
+              "count": 10
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Pink Horror",
+          "items": [
+            {
+              "id": "coruscating-pink-flames",
+              "count": 1
+            },
+            {
+              "id": "pink-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Pink Horror",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Pink Horror",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "coruscating-pink-flames",
+                "count": 1
+              },
+              {
+                "id": "pink-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Pink Horror",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Pink Horror",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Pink Horror",
+          "id": "coruscating-pink-flames",
+          "input": "stepper",
+          "default": 10
+        },
+        {
+          "model": "Pink Horror",
+          "id": "daemonic-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Pink Horror",
+          "id": "instrument-of-chaos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Pink Horror",
+          "id": "pink-claws",
+          "input": "stepper",
+          "default": 10
+        }
+      ],
+      "uniform": []
+    },
+    "added_models": [
+      {
+        "name": "Blue Horror",
+        "keywords": [
+          "Infantry",
+          "Battleline",
+          "Chaos",
+          "Daemon",
+          "Tzeentch",
+          "Horrors",
+          "Blue"
+        ],
+        "default_weapon_ids": [
+          "blue-claws",
+          "coruscating-blue-flames"
+        ]
+      },
+      {
+        "name": "Brimstone Horror",
+        "profile_name": "Brimstone Horror",
+        "keywords": [
+          "Infantry",
+          "Battleline",
+          "Chaos",
+          "Daemon",
+          "Tzeentch",
+          "Horrors",
+          "Brimstone"
+        ],
+        "default_weapon_ids": [
+          "coruscating-yellow-flames",
+          "yellow-claws"
         ]
       }
     ]
@@ -444,7 +1437,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Infernal Enrapturess",
+          "models": 1,
+          "items": [
+            {
+              "id": "heartstring-lyre",
+              "count": 1
+            },
+            {
+              "id": "ravaging-claws-infernal-enrapturess",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Infernal Enrapturess",
+          "items": [
+            {
+              "id": "heartstring-lyre",
+              "count": 1
+            },
+            {
+              "id": "ravaging-claws-infernal-enrapturess",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Infernal Enrapturess",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heartstring-lyre",
+                "count": 1
+              },
+              {
+                "id": "ravaging-claws-infernal-enrapturess",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Infernal Enrapturess",
+          "id": "heartstring-lyre",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Infernal Enrapturess",
+          "id": "ravaging-claws-infernal-enrapturess",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "plaguebearers",
@@ -497,7 +1559,165 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Plaguebearer",
+          "models": 9,
+          "items": [
+            {
+              "id": "plaguesword",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Plagueridden",
+          "models": 1,
+          "items": [
+            {
+              "id": "plaguesword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Plaguebearer",
+          "items": [
+            {
+              "id": "plaguesword",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Plagueridden",
+          "items": [
+            {
+              "id": "plaguesword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Plaguebearer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plaguebearer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "plaguesword",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plagueridden",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "plaguesword",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Plaguebearer",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plaguebearer",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Plaguebearer",
+          "id": "daemonic-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Plaguebearer",
+          "id": "instrument-of-chaos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Plaguebearer",
+          "id": "plaguesword",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Plagueridden",
+          "id": "plaguesword",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "keeper-of-secrets",
@@ -533,7 +1753,139 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Keeper of Secrets",
+          "models": 1,
+          "items": [
+            {
+              "id": "phantasmagoria",
+              "count": 1
+            },
+            {
+              "id": "snapping-claws",
+              "count": 1
+            },
+            {
+              "id": "witstealer-sword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Keeper of Secrets",
+          "items": [
+            {
+              "id": "phantasmagoria",
+              "count": 1
+            },
+            {
+              "id": "snapping-claws",
+              "count": 1
+            },
+            {
+              "id": "witstealer-sword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Keeper of Secrets",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "living-whip",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "ritual-knife",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shining-aegis",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Keeper of Secrets",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "phantasmagoria",
+                "count": 1
+              },
+              {
+                "id": "snapping-claws",
+                "count": 1
+              },
+              {
+                "id": "witstealer-sword",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Keeper of Secrets",
+          "id": "living-whip",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Keeper of Secrets",
+          "id": "phantasmagoria",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Keeper of Secrets",
+          "id": "ritual-knife",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Keeper of Secrets",
+          "id": "shining-aegis",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Keeper of Secrets",
+          "id": "snapping-claws",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Keeper of Secrets",
+          "id": "witstealer-sword",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "shalaxi-helbane",
@@ -570,7 +1922,112 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Shalaxi Helbane",
+          "models": 1,
+          "items": [
+            {
+              "id": "lash-of-slaanesh",
+              "count": 1
+            },
+            {
+              "id": "pavane-of-slaanesh",
+              "count": 1
+            },
+            {
+              "id": "snapping-claws",
+              "count": 1
+            },
+            {
+              "id": "soulpiercer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Shalaxi Helbane",
+          "items": [
+            {
+              "id": "lash-of-slaanesh",
+              "count": 1
+            },
+            {
+              "id": "pavane-of-slaanesh",
+              "count": 1
+            },
+            {
+              "id": "snapping-claws",
+              "count": 1
+            },
+            {
+              "id": "soulpiercer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Shalaxi Helbane",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lash-of-slaanesh",
+                "count": 1
+              },
+              {
+                "id": "pavane-of-slaanesh",
+                "count": 1
+              },
+              {
+                "id": "snapping-claws",
+                "count": 1
+              },
+              {
+                "id": "soulpiercer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Shalaxi Helbane",
+          "id": "lash-of-slaanesh",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Shalaxi Helbane",
+          "id": "pavane-of-slaanesh",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Shalaxi Helbane",
+          "id": "snapping-claws",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Shalaxi Helbane",
+          "id": "soulpiercer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "seekers",
@@ -641,7 +2098,201 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Heartseeker",
+          "models": 1,
+          "items": [
+            {
+              "id": "lashing-tongue",
+              "count": 1
+            },
+            {
+              "id": "slashing-claws",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Seeker",
+          "models": 4,
+          "items": [
+            {
+              "id": "lashing-tongue",
+              "count": 4
+            },
+            {
+              "id": "slashing-claws",
+              "count": 4
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Heartseeker",
+          "items": [
+            {
+              "id": "lashing-tongue",
+              "count": 1
+            },
+            {
+              "id": "slashing-claws",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Seeker",
+          "items": [
+            {
+              "id": "lashing-tongue",
+              "count": 1
+            },
+            {
+              "id": "slashing-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Heartseeker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lashing-tongue",
+                "count": 1
+              },
+              {
+                "id": "slashing-claws",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Seeker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Seeker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lashing-tongue",
+                "count": 1
+              },
+              {
+                "id": "slashing-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Seeker",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Seeker",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Heartseeker",
+          "id": "lashing-tongue",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Heartseeker",
+          "id": "slashing-claws",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Seeker",
+          "id": "daemonic-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Seeker",
+          "id": "instrument-of-chaos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Seeker",
+          "id": "lashing-tongue",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Seeker",
+          "id": "slashing-claws",
+          "input": "stepper",
+          "default": 4
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "syllesske",
@@ -677,7 +2328,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Syll’Esske",
+          "models": 1,
+          "items": [
+            {
+              "id": "axe-of-dominion",
+              "count": 1
+            },
+            {
+              "id": "cacophonic-choir",
+              "count": 1
+            },
+            {
+              "id": "scourging-whip",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Syll’Esske",
+          "items": [
+            {
+              "id": "axe-of-dominion",
+              "count": 1
+            },
+            {
+              "id": "cacophonic-choir",
+              "count": 1
+            },
+            {
+              "id": "scourging-whip",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Syll’Esske",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "axe-of-dominion",
+                "count": 1
+              },
+              {
+                "id": "cacophonic-choir",
+                "count": 1
+              },
+              {
+                "id": "scourging-whip",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Syll’Esske",
+          "id": "axe-of-dominion",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Syll’Esske",
+          "id": "cacophonic-choir",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Syll’Esske",
+          "id": "scourging-whip",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "screamers",
@@ -721,7 +2459,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Screamer",
+          "models": 3,
+          "items": [
+            {
+              "id": "lamprey-bite",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Screamer",
+          "items": [
+            {
+              "id": "lamprey-bite",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Screamer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lamprey-bite",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Screamer",
+          "id": "lamprey-bite",
+          "input": "stepper",
+          "default": 3
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "bloodletters",
@@ -774,7 +2563,165 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Bloodletter",
+          "models": 9,
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 9
+            }
+          ]
+        },
+        {
+          "model": "Bloodreaper",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Bloodletter",
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Bloodreaper",
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Bloodletter",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Bloodletter",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellblade",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Bloodreaper",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellblade",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Bloodletter",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Bloodletter",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Bloodletter",
+          "id": "daemonic-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Bloodletter",
+          "id": "hellblade",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Bloodletter",
+          "id": "instrument-of-chaos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Bloodreaper",
+          "id": "hellblade",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "lord-of-change",
@@ -809,7 +2756,109 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Lord of Change",
+          "models": 1,
+          "items": [
+            {
+              "id": "bolt-of-change",
+              "count": 1
+            },
+            {
+              "id": "staff-of-tzeentch",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Lord of Change",
+          "items": [
+            {
+              "id": "bolt-of-change",
+              "count": 1
+            },
+            {
+              "id": "staff-of-tzeentch",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Lord of Change",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "baleful-sword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "rod-of-sorcery",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Lord of Change",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bolt-of-change",
+                "count": 1
+              },
+              {
+                "id": "staff-of-tzeentch",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Lord of Change",
+          "id": "baleful-sword",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Lord of Change",
+          "id": "bolt-of-change",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Lord of Change",
+          "id": "rod-of-sorcery",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Lord of Change",
+          "id": "staff-of-tzeentch",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "changecaster",
@@ -844,7 +2893,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Changecaster",
+          "models": 1,
+          "items": [
+            {
+              "id": "arcane-fireball",
+              "count": 1
+            },
+            {
+              "id": "herald-combat-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Changecaster",
+          "items": [
+            {
+              "id": "arcane-fireball",
+              "count": 1
+            },
+            {
+              "id": "herald-combat-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Changecaster",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arcane-fireball",
+                "count": 1
+              },
+              {
+                "id": "herald-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Changecaster",
+          "id": "arcane-fireball",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Changecaster",
+          "id": "herald-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "feculent-gnarlmaw",
@@ -876,7 +2994,31 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Feculent Gnarlmaw",
+          "models": 1,
+          "items": []
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Feculent Gnarlmaw",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            []
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [],
+      "uniform": []
+    }
   },
   {
     "unit_id": "great-unclean-one",
@@ -912,7 +3054,138 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Great Unclean One",
+          "models": 1,
+          "items": [
+            {
+              "id": "bilesword",
+              "count": 1
+            },
+            {
+              "id": "plague-flail",
+              "count": 1
+            },
+            {
+              "id": "putrid-vomit",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Great Unclean One",
+          "items": [
+            {
+              "id": "bilesword",
+              "count": 1
+            },
+            {
+              "id": "plague-flail",
+              "count": 1
+            },
+            {
+              "id": "putrid-vomit",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Great Unclean One",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bileblade",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "plague-flail",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Great Unclean One",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bilesword",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "doomsday-bell",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Great Unclean One",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "putrid-vomit",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Great Unclean One",
+          "id": "bileblade",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Great Unclean One",
+          "id": "bilesword",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Great Unclean One",
+          "id": "doomsday-bell",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Great Unclean One",
+          "id": "plague-flail",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Great Unclean One",
+          "id": "putrid-vomit",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "bloodcrushers",
@@ -982,7 +3255,201 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Bloodcrusher",
+          "models": 2,
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 2
+            },
+            {
+              "id": "juggernauts-bladed-horn",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "model": "Bloodhunter",
+          "models": 1,
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 1
+            },
+            {
+              "id": "juggernauts-bladed-horn",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Bloodcrusher",
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 1
+            },
+            {
+              "id": "juggernauts-bladed-horn",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Bloodhunter",
+          "items": [
+            {
+              "id": "hellblade",
+              "count": 1
+            },
+            {
+              "id": "juggernauts-bladed-horn",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Bloodcrusher",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Bloodcrusher",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellblade",
+                "count": 1
+              },
+              {
+                "id": "juggernauts-bladed-horn",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Bloodhunter",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellblade",
+                "count": 1
+              },
+              {
+                "id": "juggernauts-bladed-horn",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Bloodcrusher",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Bloodcrusher",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Bloodcrusher",
+          "id": "daemonic-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Bloodcrusher",
+          "id": "hellblade",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Bloodcrusher",
+          "id": "instrument-of-chaos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Bloodcrusher",
+          "id": "juggernauts-bladed-horn",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Bloodhunter",
+          "id": "hellblade",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Bloodhunter",
+          "id": "juggernauts-bladed-horn",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "fiends",
@@ -1050,7 +3517,97 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Blissbringer",
+          "models": 1,
+          "items": [
+            {
+              "id": "barbed-tail-and-dissecting-claws",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Fiend",
+          "models": 2,
+          "items": [
+            {
+              "id": "barbed-tail-and-dissecting-claws",
+              "count": 2
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Blissbringer",
+          "items": [
+            {
+              "id": "barbed-tail-and-dissecting-claws",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Fiend",
+          "items": [
+            {
+              "id": "barbed-tail-and-dissecting-claws",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Blissbringer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "barbed-tail-and-dissecting-claws",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Fiend",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "barbed-tail-and-dissecting-claws",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Blissbringer",
+          "id": "barbed-tail-and-dissecting-claws",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Fiend",
+          "id": "barbed-tail-and-dissecting-claws",
+          "input": "stepper",
+          "default": 2
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "skarbrand",
@@ -1085,7 +3642,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skarbrand",
+          "models": 1,
+          "items": [
+            {
+              "id": "bellow-of-endless-fury",
+              "count": 1
+            },
+            {
+              "id": "slaughter-and-carnage",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Skarbrand",
+          "items": [
+            {
+              "id": "bellow-of-endless-fury",
+              "count": 1
+            },
+            {
+              "id": "slaughter-and-carnage",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Skarbrand",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "bellow-of-endless-fury",
+                "count": 1
+              },
+              {
+                "id": "slaughter-and-carnage",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Skarbrand",
+          "id": "bellow-of-endless-fury",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skarbrand",
+          "id": "slaughter-and-carnage",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "belakor",
@@ -1103,7 +3729,8 @@
         "default_weapon_ids": [
           "betraying-shades",
           "the-blade-of-shadows"
-        ]
+        ],
+        "is_supreme_commander": true
       }
     ],
     "game_version": {
@@ -1120,7 +3747,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Be’lakor",
+          "models": 1,
+          "items": [
+            {
+              "id": "betraying-shades",
+              "count": 1
+            },
+            {
+              "id": "the-blade-of-shadows",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Be’lakor",
+          "items": [
+            {
+              "id": "betraying-shades",
+              "count": 1
+            },
+            {
+              "id": "the-blade-of-shadows",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Be’lakor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "betraying-shades",
+                "count": 1
+              },
+              {
+                "id": "the-blade-of-shadows",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Be’lakor",
+          "id": "betraying-shades",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Be’lakor",
+          "id": "the-blade-of-shadows",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "horticulous-slimux",
@@ -1156,7 +3852,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Horticulous Slimux",
+          "models": 1,
+          "items": [
+            {
+              "id": "acidic-maw",
+              "count": 1
+            },
+            {
+              "id": "lopping-shears",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Horticulous Slimux",
+          "items": [
+            {
+              "id": "acidic-maw",
+              "count": 1
+            },
+            {
+              "id": "lopping-shears",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Horticulous Slimux",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "acidic-maw",
+                "count": 1
+              },
+              {
+                "id": "lopping-shears",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Horticulous Slimux",
+          "id": "acidic-maw",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Horticulous Slimux",
+          "id": "lopping-shears",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "contorted-epitome",
@@ -1192,7 +3957,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Contorted Epitome",
+          "models": 1,
+          "items": [
+            {
+              "id": "coiled-tentacles",
+              "count": 1
+            },
+            {
+              "id": "ravaging-claws-contorted-epitome",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Contorted Epitome",
+          "items": [
+            {
+              "id": "coiled-tentacles",
+              "count": 1
+            },
+            {
+              "id": "ravaging-claws-contorted-epitome",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Contorted Epitome",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "coiled-tentacles",
+                "count": 1
+              },
+              {
+                "id": "ravaging-claws-contorted-epitome",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Contorted Epitome",
+          "id": "coiled-tentacles",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Contorted Epitome",
+          "id": "ravaging-claws-contorted-epitome",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "poxbringer",
@@ -1226,7 +4060,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Poxbringer",
+          "models": 1,
+          "items": [
+            {
+              "id": "foul-balesword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Poxbringer",
+          "items": [
+            {
+              "id": "foul-balesword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Poxbringer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "foul-balesword",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Poxbringer",
+          "id": "foul-balesword",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "fateskimmer",
@@ -1263,7 +4148,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Fateskimmer",
+          "models": 1,
+          "items": [
+            {
+              "id": "arcane-fireball",
+              "count": 1
+            },
+            {
+              "id": "herald-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "screamer-bites",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Fateskimmer",
+          "items": [
+            {
+              "id": "arcane-fireball",
+              "count": 1
+            },
+            {
+              "id": "herald-combat-weapon",
+              "count": 1
+            },
+            {
+              "id": "screamer-bites",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Fateskimmer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arcane-fireball",
+                "count": 1
+              },
+              {
+                "id": "herald-combat-weapon",
+                "count": 1
+              },
+              {
+                "id": "screamer-bites",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Fateskimmer",
+          "id": "arcane-fireball",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Fateskimmer",
+          "id": "herald-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Fateskimmer",
+          "id": "screamer-bites",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "hellflayers",
@@ -1309,7 +4281,94 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Hellflayer",
+          "models": 1,
+          "items": [
+            {
+              "id": "lashes-of-torment",
+              "count": 1
+            },
+            {
+              "id": "seeker-tongues",
+              "count": 1
+            },
+            {
+              "id": "slashing-claws-hellflayers",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Hellflayer",
+          "items": [
+            {
+              "id": "lashes-of-torment",
+              "count": 1
+            },
+            {
+              "id": "seeker-tongues",
+              "count": 1
+            },
+            {
+              "id": "slashing-claws-hellflayers",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Hellflayer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lashes-of-torment",
+                "count": 1
+              },
+              {
+                "id": "seeker-tongues",
+                "count": 1
+              },
+              {
+                "id": "slashing-claws-hellflayers",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Hellflayer",
+          "id": "lashes-of-torment",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Hellflayer",
+          "id": "seeker-tongues",
+          "input": "stepper",
+          "default": 1
+        },
+        {
+          "model": "Hellflayer",
+          "id": "slashing-claws-hellflayers",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "plague-drones",
@@ -1385,7 +4444,237 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Plague Drone",
+          "models": 2,
+          "items": [
+            {
+              "id": "deaths-heads",
+              "count": 2
+            },
+            {
+              "id": "foul-mouthparts",
+              "count": 2
+            },
+            {
+              "id": "plaguesword",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "model": "Plaguebringer",
+          "models": 1,
+          "items": [
+            {
+              "id": "deaths-heads",
+              "count": 1
+            },
+            {
+              "id": "foul-mouthparts",
+              "count": 1
+            },
+            {
+              "id": "plaguesword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Plague Drone",
+          "items": [
+            {
+              "id": "deaths-heads",
+              "count": 1
+            },
+            {
+              "id": "foul-mouthparts",
+              "count": 1
+            },
+            {
+              "id": "plaguesword",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Plaguebringer",
+          "items": [
+            {
+              "id": "deaths-heads",
+              "count": 1
+            },
+            {
+              "id": "foul-mouthparts",
+              "count": 1
+            },
+            {
+              "id": "plaguesword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Plague Drone",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Drone",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "deaths-heads",
+                "count": 1
+              },
+              {
+                "id": "foul-mouthparts",
+                "count": 1
+              },
+              {
+                "id": "plaguesword",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plaguebringer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "deaths-heads",
+                "count": 1
+              },
+              {
+                "id": "foul-mouthparts",
+                "count": 1
+              },
+              {
+                "id": "plaguesword",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "model": "Plague Drone",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "daemonic-icon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Plague Drone",
+          "breakpoints": [
+            {
+              "models": 0,
+              "choices": 1
+            }
+          ],
+          "choices": [
+            [
+              {
+                "id": "instrument-of-chaos",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "options": [
+        {
+          "model": "Plague Drone",
+          "id": "daemonic-icon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Plague Drone",
+          "id": "deaths-heads",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Plague Drone",
+          "id": "foul-mouthparts",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Plague Drone",
+          "id": "instrument-of-chaos",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Plague Drone",
+          "id": "plaguesword",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Plaguebringer",
+          "id": "deaths-heads",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plaguebringer",
+          "id": "foul-mouthparts",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Plaguebringer",
+          "id": "plaguesword",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "bloodthirster",
@@ -1421,7 +4710,124 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Bloodthirster",
+          "models": 1,
+          "items": [
+            {
+              "id": "great-axe-of-khorne",
+              "count": 1
+            },
+            {
+              "id": "hellfire-breath",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Bloodthirster",
+          "items": [
+            {
+              "id": "great-axe-of-khorne",
+              "count": 1
+            },
+            {
+              "id": "hellfire-breath",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Bloodthirster",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "axe-of-khorne",
+                "count": 1
+              },
+              {
+                "id": "bloodflail",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "axe-of-khorne",
+                "count": 1
+              },
+              {
+                "id": "lash-of-khorne",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "great-axe-of-khorne",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Bloodthirster",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hellfire-breath",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Bloodthirster",
+          "id": "axe-of-khorne",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Bloodthirster",
+          "id": "bloodflail",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Bloodthirster",
+          "id": "great-axe-of-khorne",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Bloodthirster",
+          "id": "hellfire-breath",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Bloodthirster",
+          "id": "lash-of-khorne",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "exalted-flamer",
@@ -1441,7 +4847,8 @@
           "fire-of-tzeentch",
           "flamer-mouths-exalted-flamer"
         ],
-        "excluded_from_enhancements": true
+        "excluded_from_enhancements": true,
+        "cannot_be_warlord": true
       }
     ],
     "game_version": {
@@ -1458,7 +4865,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Exalted Flamer",
+          "models": 1,
+          "items": [
+            {
+              "id": "fire-of-tzeentch",
+              "count": 1
+            },
+            {
+              "id": "flamer-mouths-exalted-flamer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Exalted Flamer",
+          "items": [
+            {
+              "id": "fire-of-tzeentch",
+              "count": 1
+            },
+            {
+              "id": "flamer-mouths-exalted-flamer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Exalted Flamer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "fire-of-tzeentch",
+                "count": 1
+              },
+              {
+                "id": "flamer-mouths-exalted-flamer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Exalted Flamer",
+          "id": "fire-of-tzeentch",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Exalted Flamer",
+          "id": "flamer-mouths-exalted-flamer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "skullmaster",
@@ -1494,7 +4970,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skullmaster",
+          "models": 1,
+          "items": [
+            {
+              "id": "blade-of-blood",
+              "count": 1
+            },
+            {
+              "id": "juggernauts-bladed-horn",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Skullmaster",
+          "items": [
+            {
+              "id": "blade-of-blood",
+              "count": 1
+            },
+            {
+              "id": "juggernauts-bladed-horn",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Skullmaster",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blade-of-blood",
+                "count": 1
+              },
+              {
+                "id": "juggernauts-bladed-horn",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Skullmaster",
+          "id": "blade-of-blood",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skullmaster",
+          "id": "juggernauts-bladed-horn",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "epidemius",
@@ -1528,7 +5073,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Epidemius",
+          "models": 1,
+          "items": [
+            {
+              "id": "balesword-and-nurgling-attendants",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Epidemius",
+          "items": [
+            {
+              "id": "balesword-and-nurgling-attendants",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Epidemius",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "balesword-and-nurgling-attendants",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Epidemius",
+          "id": "balesword-and-nurgling-attendants",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "karanak",
@@ -1565,7 +5161,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Karanak",
+          "models": 1,
+          "items": [
+            {
+              "id": "brass-collar-of-bloody-vengeance",
+              "count": 1
+            },
+            {
+              "id": "scalding-roar",
+              "count": 1
+            },
+            {
+              "id": "soul-rending-fangs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Karanak",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "brass-collar-of-bloody-vengeance",
+                "count": 1
+              },
+              {
+                "id": "scalding-roar",
+                "count": 1
+              },
+              {
+                "id": "soul-rending-fangs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Karanak",
+          "id": "brass-collar-of-bloody-vengeance",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Karanak",
+          "id": "scalding-roar",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Karanak",
+          "id": "soul-rending-fangs",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "spoilpox-scrivener",
@@ -1600,7 +5265,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Spoilpox Scrivener",
+          "models": 1,
+          "items": [
+            {
+              "id": "disgusting-sneezes",
+              "count": 1
+            },
+            {
+              "id": "plaguesword-and-distended-maw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Spoilpox Scrivener",
+          "items": [
+            {
+              "id": "disgusting-sneezes",
+              "count": 1
+            },
+            {
+              "id": "plaguesword-and-distended-maw",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Spoilpox Scrivener",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "disgusting-sneezes",
+                "count": 1
+              },
+              {
+                "id": "plaguesword-and-distended-maw",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Spoilpox Scrivener",
+          "id": "disgusting-sneezes",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Spoilpox Scrivener",
+          "id": "plaguesword-and-distended-maw",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "tormentbringer",
@@ -1637,7 +5371,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Tormentbringer",
+          "models": 1,
+          "items": [
+            {
+              "id": "lashes-of-torment-tormentbringer",
+              "count": 1
+            },
+            {
+              "id": "seeker-tongues",
+              "count": 1
+            },
+            {
+              "id": "slashing-claws-tormentbringer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Tormentbringer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "lashes-of-torment-tormentbringer",
+                "count": 1
+              },
+              {
+                "id": "seeker-tongues",
+                "count": 1
+              },
+              {
+                "id": "slashing-claws-tormentbringer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Tormentbringer",
+          "id": "lashes-of-torment-tormentbringer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tormentbringer",
+          "id": "seeker-tongues",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Tormentbringer",
+          "id": "slashing-claws-tormentbringer",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "skulltaker",
@@ -1671,7 +5474,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skulltaker",
+          "models": 1,
+          "items": [
+            {
+              "id": "the-slayer-sword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Skulltaker",
+          "items": [
+            {
+              "id": "the-slayer-sword",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Skulltaker",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "the-slayer-sword",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Skulltaker",
+          "id": "the-slayer-sword",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "rendmaster-on-blood-throne",
@@ -1707,7 +5561,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Rendmaster on Blood Throne",
+          "models": 1,
+          "items": [
+            {
+              "id": "attendants-hellblades",
+              "count": 1
+            },
+            {
+              "id": "blade-of-blood",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Rendmaster on Blood Throne",
+          "items": [
+            {
+              "id": "attendants-hellblades",
+              "count": 1
+            },
+            {
+              "id": "blade-of-blood",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Rendmaster on Blood Throne",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "attendants-hellblades",
+                "count": 1
+              },
+              {
+                "id": "blade-of-blood",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Rendmaster on Blood Throne",
+          "id": "attendants-hellblades",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Rendmaster on Blood Throne",
+          "id": "blade-of-blood",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "skull-altar",
@@ -1739,7 +5662,31 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skull Altar",
+          "models": 1,
+          "items": []
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Skull Altar",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            []
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [],
+      "uniform": []
+    }
   },
   {
     "unit_id": "sloppity-bilepiper",
@@ -1773,7 +5720,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Sloppity Bilepiper",
+          "models": 1,
+          "items": [
+            {
+              "id": "marotter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Sloppity Bilepiper",
+          "items": [
+            {
+              "id": "marotter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Sloppity Bilepiper",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "marotter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Sloppity Bilepiper",
+          "id": "marotter",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "kairos-fateweaver",
@@ -1808,7 +5806,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Kairos Fateweaver",
+          "models": 1,
+          "items": [
+            {
+              "id": "infernal-gateway",
+              "count": 1
+            },
+            {
+              "id": "staff-of-tomorrow",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Kairos Fateweaver",
+          "items": [
+            {
+              "id": "infernal-gateway",
+              "count": 1
+            },
+            {
+              "id": "staff-of-tomorrow",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Kairos Fateweaver",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "infernal-gateway",
+                "count": 1
+              },
+              {
+                "id": "staff-of-tomorrow",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Kairos Fateweaver",
+          "id": "infernal-gateway",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Kairos Fateweaver",
+          "id": "staff-of-tomorrow",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "blue-horrors",
@@ -1841,6 +5908,94 @@
             "min": 10,
             "max": 10
           }
+        ]
+      }
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Blue Horror",
+          "models": 10,
+          "items": [
+            {
+              "id": "blue-claws",
+              "count": 10
+            },
+            {
+              "id": "coruscating-blue-flames",
+              "count": 10
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Blue Horror",
+          "items": [
+            {
+              "id": "blue-claws",
+              "count": 1
+            },
+            {
+              "id": "coruscating-blue-flames",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Blue Horror",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "blue-claws",
+                "count": 1
+              },
+              {
+                "id": "coruscating-blue-flames",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Blue Horror",
+          "id": "blue-claws",
+          "input": "stepper",
+          "default": 10
+        },
+        {
+          "model": "Blue Horror",
+          "id": "coruscating-blue-flames",
+          "input": "stepper",
+          "default": 10
+        }
+      ],
+      "uniform": []
+    },
+    "added_models": [
+      {
+        "name": "Brimstone Horror",
+        "profile_name": "Brimstone Horror",
+        "keywords": [
+          "Infantry",
+          "Battleline",
+          "Chaos",
+          "Daemon",
+          "Tzeentch",
+          "Horrors",
+          "Brimstone"
+        ],
+        "default_weapon_ids": [
+          "coruscating-yellow-flames",
+          "yellow-claws"
         ]
       }
     ]
@@ -1880,7 +6035,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "The Blue Scribes",
+          "models": 1,
+          "items": [
+            {
+              "id": "sharp-quills",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "The Blue Scribes",
+          "items": [
+            {
+              "id": "sharp-quills",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "The Blue Scribes",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "sharp-quills",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "The Blue Scribes",
+          "id": "sharp-quills",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "the-changeling",
@@ -1915,7 +6121,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "The Changeling",
+          "models": 1,
+          "items": [
+            {
+              "id": "infernal-flames",
+              "count": 1
+            },
+            {
+              "id": "the-tricksters-staff",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "The Changeling",
+          "items": [
+            {
+              "id": "infernal-flames",
+              "count": 1
+            },
+            {
+              "id": "the-tricksters-staff",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "The Changeling",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "infernal-flames",
+                "count": 1
+              },
+              {
+                "id": "the-tricksters-staff",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "The Changeling",
+          "id": "infernal-flames",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "The Changeling",
+          "id": "the-tricksters-staff",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "fluxmaster",
@@ -1953,7 +6228,76 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Fluxmaster",
+          "models": 1,
+          "items": [
+            {
+              "id": "arcane-fireball",
+              "count": 1
+            },
+            {
+              "id": "herald-combat-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Fluxmaster",
+          "items": [
+            {
+              "id": "arcane-fireball",
+              "count": 1
+            },
+            {
+              "id": "herald-combat-weapon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Fluxmaster",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arcane-fireball",
+                "count": 1
+              },
+              {
+                "id": "herald-combat-weapon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Fluxmaster",
+          "id": "arcane-fireball",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Fluxmaster",
+          "id": "herald-combat-weapon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "flamers",
@@ -2021,7 +6365,133 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Flamer",
+          "models": 2,
+          "items": [
+            {
+              "id": "flamer-mouths-flamers",
+              "count": 2
+            },
+            {
+              "id": "flickering-flames",
+              "count": 2
+            }
+          ]
+        },
+        {
+          "model": "Pyrocaster",
+          "models": 1,
+          "items": [
+            {
+              "id": "flamer-mouths-flamers",
+              "count": 1
+            },
+            {
+              "id": "flickering-flames",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Flamer",
+          "items": [
+            {
+              "id": "flamer-mouths-flamers",
+              "count": 1
+            },
+            {
+              "id": "flickering-flames",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Pyrocaster",
+          "items": [
+            {
+              "id": "flamer-mouths-flamers",
+              "count": 1
+            },
+            {
+              "id": "flickering-flames",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Flamer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "flamer-mouths-flamers",
+                "count": 1
+              },
+              {
+                "id": "flickering-flames",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Pyrocaster",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "flamer-mouths-flamers",
+                "count": 1
+              },
+              {
+                "id": "flickering-flames",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Flamer",
+          "id": "flamer-mouths-flamers",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Flamer",
+          "id": "flickering-flames",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Pyrocaster",
+          "id": "flamer-mouths-flamers",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Pyrocaster",
+          "id": "flickering-flames",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "beasts-of-nurgle",
@@ -2064,7 +6534,58 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Beast of Nurgle",
+          "models": 1,
+          "items": [
+            {
+              "id": "putrid-appendages",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Beast of Nurgle",
+          "items": [
+            {
+              "id": "putrid-appendages",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Beast of Nurgle",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "putrid-appendages",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Beast of Nurgle",
+          "id": "putrid-appendages",
+          "input": "stepper",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "flesh-hounds",
@@ -2135,7 +6656,151 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Flesh Hound",
+          "models": 4,
+          "items": [
+            {
+              "id": "collar-of-khorne",
+              "count": 4
+            },
+            {
+              "id": "gore-drenched-fangs",
+              "count": 4
+            }
+          ]
+        },
+        {
+          "model": "Gore Hound",
+          "models": 1,
+          "items": [
+            {
+              "id": "burning-roar",
+              "count": 1
+            },
+            {
+              "id": "collar-of-khorne",
+              "count": 1
+            },
+            {
+              "id": "gore-drenched-fangs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Flesh Hound",
+          "items": [
+            {
+              "id": "collar-of-khorne",
+              "count": 1
+            },
+            {
+              "id": "gore-drenched-fangs",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Gore Hound",
+          "items": [
+            {
+              "id": "burning-roar",
+              "count": 1
+            },
+            {
+              "id": "collar-of-khorne",
+              "count": 1
+            },
+            {
+              "id": "gore-drenched-fangs",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Flesh Hound",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "collar-of-khorne",
+                "count": 1
+              },
+              {
+                "id": "gore-drenched-fangs",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Gore Hound",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "burning-roar",
+                "count": 1
+              },
+              {
+                "id": "collar-of-khorne",
+                "count": 1
+              },
+              {
+                "id": "gore-drenched-fangs",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Flesh Hound",
+          "id": "collar-of-khorne",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Flesh Hound",
+          "id": "gore-drenched-fangs",
+          "input": "stepper",
+          "default": 4
+        },
+        {
+          "model": "Gore Hound",
+          "id": "burning-roar",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gore Hound",
+          "id": "collar-of-khorne",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gore Hound",
+          "id": "gore-drenched-fangs",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   },
   {
     "unit_id": "skull-cannon",
@@ -2172,6 +6837,93 @@
           }
         ]
       }
-    ]
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Skull Cannon",
+          "models": 1,
+          "items": [
+            {
+              "id": "attendants-hellblades",
+              "count": 1
+            },
+            {
+              "id": "biting-maw",
+              "count": 1
+            },
+            {
+              "id": "skull-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Skull Cannon",
+          "items": [
+            {
+              "id": "attendants-hellblades",
+              "count": 1
+            },
+            {
+              "id": "biting-maw",
+              "count": 1
+            },
+            {
+              "id": "skull-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Skull Cannon",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "attendants-hellblades",
+                "count": 1
+              },
+              {
+                "id": "biting-maw",
+                "count": 1
+              },
+              {
+                "id": "skull-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Skull Cannon",
+          "id": "attendants-hellblades",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skull Cannon",
+          "id": "biting-maw",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Skull Cannon",
+          "id": "skull-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

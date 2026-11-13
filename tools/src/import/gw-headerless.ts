@@ -68,6 +68,7 @@ import {
   inferBattleSizeRaw,
   splitWargearList,
 } from "./newrecruit-text.js";
+import { isReferenceEntry } from "./gw.js";
 
 const CHARACTERS_SECTION = "CHARACTERS";
 const ALLIED_SECTION = "ALLIED UNITS";
@@ -712,6 +713,10 @@ export const gwHeaderlessAdapter: FormatAdapter = {
     };
 
     const flush = (): void => {
+      if (current && isReferenceEntry(current)) {
+        current = null;
+        return;
+      }
       if (current) {
         const unitIndex = units.length;
         units.push(finishUnit(current));

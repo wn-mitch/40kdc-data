@@ -4,7 +4,9 @@
     "args": {
       "unitId": "neurogaunts",
       "modelCount": 11,
-      "counts": {}
+      "counts": {
+        "chitinous-claws-and-teeth-neurogaunts": 11
+      }
     },
     "expected": []
   },
@@ -13,7 +15,9 @@
     "args": {
       "unitId": "neurogaunts",
       "modelCount": 21,
-      "counts": {}
+      "counts": {
+        "chitinous-claws-and-teeth-neurogaunts": 21
+      }
     },
     "expected": []
   },
@@ -22,7 +26,9 @@
     "args": {
       "unitId": "neurogaunts",
       "modelCount": 22,
-      "counts": {}
+      "counts": {
+        "chitinous-claws-and-teeth-neurogaunts": 22
+      }
     },
     "expected": []
   },
@@ -55,9 +61,11 @@
       "factionId": "world-eaters",
       "modelCount": 10,
       "counts": {
+        "bolt-pistol-khorne-berzerkers": 7,
+        "chainblade-khorne-berzerkers": 8,
         "icon-of-khorne": 1,
-        "plasma-pistol-khorne-berzerkers": 3,
-        "khornate-eviscerator": 2
+        "khornate-eviscerator": 2,
+        "plasma-pistol-khorne-berzerkers": 3
       }
     },
     "expected": []
@@ -69,6 +77,8 @@
       "factionId": "world-eaters",
       "modelCount": 10,
       "counts": {
+        "bolt-pistol-khorne-berzerkers": 10,
+        "chainblade-khorne-berzerkers": 10,
         "icon-of-khorne": 2
       }
     },
@@ -83,6 +93,8 @@
       "factionId": "world-eaters",
       "modelCount": 10,
       "counts": {
+        "bolt-pistol-khorne-berzerkers": 7,
+        "chainblade-khorne-berzerkers": 10,
         "plasma-pistol-khorne-berzerkers": 3
       }
     },
@@ -95,6 +107,8 @@
       "factionId": "world-eaters",
       "modelCount": 10,
       "counts": {
+        "bolt-pistol-khorne-berzerkers": 10,
+        "chainblade-khorne-berzerkers": 10,
         "plasma-pistol-khorne-berzerkers": 4
       }
     },
@@ -109,6 +123,8 @@
       "factionId": "world-eaters",
       "modelCount": 10,
       "counts": {
+        "bolt-pistol-khorne-berzerkers": 10,
+        "chainblade-khorne-berzerkers": 10,
         "khornate-eviscerator": 3
       }
     },
@@ -124,7 +140,9 @@
       "modelCount": 10,
       "counts": {
         "incinerator": 1,
-        "psycannon-brotherhood-terminator-squad": 1
+        "nemesis-force-weapon-brotherhood-terminator-squad": 10,
+        "psycannon-brotherhood-terminator-squad": 1,
+        "storm-bolter-brotherhood-terminator-squad": 8
       }
     },
     "expected": []
@@ -137,12 +155,14 @@
       "modelCount": 10,
       "counts": {
         "incinerator": 1,
+        "nemesis-force-weapon-brotherhood-terminator-squad": 10,
         "psilencer-brotherhood-terminator-squad": 1,
-        "psycannon-brotherhood-terminator-squad": 1
+        "psycannon-brotherhood-terminator-squad": 1,
+        "storm-bolter-brotherhood-terminator-squad": 10
       }
     },
     "expected": [
-      "exceeds-allowance:incinerator+psilencer-brotherhood-terminator-squad+psycannon-brotherhood-terminator-squad"
+      "swap-conflict:brotherhood-terminator-squad"
     ]
   },
   {
@@ -152,11 +172,13 @@
       "factionId": "grey-knights",
       "modelCount": 10,
       "counts": {
-        "incinerator": 3
+        "incinerator": 3,
+        "nemesis-force-weapon-brotherhood-terminator-squad": 10,
+        "storm-bolter-brotherhood-terminator-squad": 10
       }
     },
     "expected": [
-      "exceeds-allowance:incinerator+psilencer-brotherhood-terminator-squad+psycannon-brotherhood-terminator-squad"
+      "swap-conflict:brotherhood-terminator-squad"
     ]
   },
   {
@@ -166,7 +188,9 @@
       "factionId": "grey-knights",
       "modelCount": 10,
       "counts": {
-        "psycannon": 4
+        "nemesis-force-weapon-paladin-squad": 10,
+        "psycannon": 4,
+        "storm-bolter-paladin-squad": 6
       }
     },
     "expected": []
@@ -178,11 +202,13 @@
       "factionId": "grey-knights",
       "modelCount": 9,
       "counts": {
-        "psycannon": 3
+        "nemesis-force-weapon-paladin-squad": 9,
+        "psycannon": 3,
+        "storm-bolter-paladin-squad": 9
       }
     },
     "expected": [
-      "exceeds-allowance:incinerator+psilencer+psycannon"
+      "swap-conflict:paladin-squad"
     ]
   },
   {
@@ -193,11 +219,13 @@
       "modelCount": 10,
       "counts": {
         "incinerator": 1,
-        "psycannon": 4
+        "nemesis-force-weapon-paladin-squad": 10,
+        "psycannon": 4,
+        "storm-bolter-paladin-squad": 10
       }
     },
     "expected": [
-      "exceeds-allowance:incinerator+psilencer+psycannon"
+      "swap-conflict:paladin-squad"
     ]
   },
   {
@@ -223,6 +251,8 @@
       "factionId": "world-eaters",
       "modelCount": 10,
       "counts": {
+        "accursed-weapon": 10,
+        "combi-bolter": 8,
         "reaper-autocannon-chaos-terminators": 2
       }
     },
@@ -235,6 +265,8 @@
       "factionId": "world-eaters",
       "modelCount": 10,
       "counts": {
+        "accursed-weapon": 10,
+        "combi-bolter": 10,
         "reaper-autocannon-chaos-terminators": 3
       }
     },
@@ -249,12 +281,14 @@
       "factionId": "world-eaters",
       "modelCount": 10,
       "counts": {
-        "reaper-autocannon-chaos-terminators": 1,
-        "heavy-flamer": 2
+        "accursed-weapon": 10,
+        "combi-bolter": 10,
+        "heavy-flamer": 2,
+        "reaper-autocannon-chaos-terminators": 1
       }
     },
     "expected": [
-      "exceeds-allowance:heavy-flamer+reaper-autocannon-chaos-terminators"
+      "swap-conflict:chaos-terminators"
     ]
   },
   {
@@ -264,6 +298,8 @@
       "factionId": "world-eaters",
       "modelCount": 5,
       "counts": {
+        "accursed-weapon": 2,
+        "combi-bolter": 5,
         "power-fist": 3
       }
     },
@@ -276,6 +312,8 @@
       "factionId": "world-eaters",
       "modelCount": 5,
       "counts": {
+        "accursed-weapon": 5,
+        "combi-bolter": 5,
         "power-fist": 4
       }
     },
@@ -290,22 +328,30 @@
       "factionId": "world-eaters",
       "modelCount": 8,
       "counts": {
-        "blood-harpoon": 1
+        "autopistol": 8,
+        "blood-harpoon": 1,
+        "chainblade-goremongers": 7,
+        "close-combat-weapon-goremongers": 8
       }
     },
     "expected": []
   },
   {
-    "name": "goremongers-blood-harpoon-two-app-permitted",
+    "name": "goremongers-blood-harpoon-two-over",
     "args": {
       "unitId": "goremongers",
       "factionId": "world-eaters",
       "modelCount": 8,
       "counts": {
-        "blood-harpoon": 2
+        "autopistol": 8,
+        "blood-harpoon": 2,
+        "chainblade-goremongers": 8,
+        "close-combat-weapon-goremongers": 8
       }
     },
-    "expected": []
+    "expected": [
+      "exceeds-max:blood-harpoon"
+    ]
   },
   {
     "name": "tzaangors-herd-banner-at-cap-legal",
@@ -314,7 +360,8 @@
       "factionId": "thousand-sons",
       "modelCount": 10,
       "counts": {
-        "herd-banner": 1
+        "herd-banner": 1,
+        "tzaangor-blades": 10
       }
     },
     "expected": []
@@ -326,7 +373,8 @@
       "factionId": "thousand-sons",
       "modelCount": 10,
       "counts": {
-        "herd-banner": 2
+        "herd-banner": 2,
+        "tzaangor-blades": 10
       }
     },
     "expected": [
@@ -340,8 +388,9 @@
       "factionId": "thousand-sons",
       "modelCount": 10,
       "counts": {
+        "brayhorn": 1,
         "herd-banner": 1,
-        "brayhorn": 1
+        "tzaangor-blades": 10
       }
     },
     "expected": []
@@ -353,6 +402,10 @@
       "factionId": "astra-militarum",
       "modelCount": 20,
       "counts": {
+        "chainsword-cadian-shock-troops": 2,
+        "close-combat-weapon-cadian-shock-troops": 18,
+        "lasgun": 18,
+        "laspistol-cadian-shock-troops": 2,
         "meltagun": 4
       }
     },
@@ -367,6 +420,10 @@
       "factionId": "astra-militarum",
       "modelCount": 20,
       "counts": {
+        "chainsword-cadian-shock-troops": 2,
+        "close-combat-weapon-cadian-shock-troops": 18,
+        "lasgun": 16,
+        "laspistol-cadian-shock-troops": 2,
         "meltagun": 2
       }
     },
@@ -379,6 +436,10 @@
       "factionId": "astra-militarum",
       "modelCount": 20,
       "counts": {
+        "chainsword-cadian-shock-troops": 2,
+        "close-combat-weapon-cadian-shock-troops": 18,
+        "lasgun": 14,
+        "laspistol-cadian-shock-troops": 2,
         "meltagun": 2,
         "plasma-gun": 2
       }
@@ -392,6 +453,10 @@
       "factionId": "astra-militarum",
       "modelCount": 10,
       "counts": {
+        "chainsword-kasrkin": 1,
+        "close-combat-weapon-kasrkin": 9,
+        "hot-shot-lasgun": 9,
+        "hot-shot-laspistol": 1,
         "meltagun-kasrkin": 3
       }
     },
@@ -406,6 +471,10 @@
       "factionId": "astra-militarum",
       "modelCount": 10,
       "counts": {
+        "chainsword-kasrkin": 1,
+        "close-combat-weapon-kasrkin": 9,
+        "hot-shot-lasgun": 5,
+        "hot-shot-laspistol": 1,
         "meltagun-kasrkin": 2,
         "plasma-gun-kasrkin": 2
       }
@@ -463,7 +532,9 @@
         "vox-relay-beacon": 1
       }
     },
-    "expected": []
+    "expected": [
+      "swap-conflict:cadian-recon-squad"
+    ]
   },
   {
     "name": "atc-exceeds-allowance-cadian-shock-troops",
@@ -568,41 +639,6 @@
     "expected": []
   },
   {
-    "name": "atc-exceeds-allowance-deathwatch-kill-team",
-    "args": {
-      "unitId": "deathwatch-kill-team",
-      "modelCount": 10,
-      "counts": {
-        "astartes-shield": 2,
-        "black-shield-blades": 1,
-        "close-combat-weapon-deathwatch-kill-team": 2,
-        "combi-weapon-deathwatch-kill-team": 1,
-        "deathwatch-thunder-hammer": 4,
-        "infernus-heavy-bolter": 2,
-        "power-weapon": 2,
-        "xenophase-blade": 1
-      }
-    },
-    "expected": []
-  },
-  {
-    "name": "atc-exceeds-allowance-deathwatch-veterans",
-    "args": {
-      "unitId": "deathwatch-veterans",
-      "factionId": "adeptus-astartes",
-      "modelCount": 10,
-      "counts": {
-        "astartes-shield": 4,
-        "black-shield-blades": 1,
-        "combi-weapon-deathwatch-veterans": 1,
-        "deathwatch-thunder-hammer": 4,
-        "power-weapon-deathwatch-veterans": 4,
-        "xenophase-blade": 1
-      }
-    },
-    "expected": []
-  },
-  {
     "name": "atc-exceeds-allowance-dominion-squad",
     "args": {
       "unitId": "dominion-squad",
@@ -683,26 +719,6 @@
     },
     "expected": [
       "exceeds-max:icon-of-khorne"
-    ]
-  },
-  {
-    "name": "atc-exceeds-allowance-kommandos",
-    "args": {
-      "unitId": "kommandos",
-      "factionId": "orks",
-      "modelCount": 10,
-      "counts": {
-        "breacha-ram": 1,
-        "burna-kommandos": 1,
-        "choppa-kommandos": 6,
-        "close-combat-weapon": 2,
-        "power-klaw": 1,
-        "rokkit-launcha-kommandos": 1,
-        "slugga": 7
-      }
-    },
-    "expected": [
-      "below-min:slugga"
     ]
   },
   {
@@ -799,20 +815,6 @@
         "psycannon-purifier-squad": 4,
         "purifying-flame": 10,
         "storm-bolter-purifier-squad": 6
-      }
-    },
-    "expected": []
-  },
-  {
-    "name": "atc-exceeds-allowance-sanguinary-guard",
-    "args": {
-      "unitId": "sanguinary-guard",
-      "modelCount": 6,
-      "counts": {
-        "angelus-boltgun": 4,
-        "encarmine-spear": 6,
-        "inferno-pistol-sanguinary-guard": 2,
-        "sanguinary-banner": 1
       }
     },
     "expected": []
@@ -926,6 +928,7 @@
         "flamer": 2,
         "fusion-gun": 2,
         "power-sword-storm-guardians": 2,
+        "serpent-shield": 1,
         "shuriken-pistol": 6
       }
     },
@@ -941,20 +944,6 @@
         "nemesis-force-weapon-strike-squad": 4,
         "psycannon-strike-squad": 1,
         "storm-bolter-strike-squad": 4
-      }
-    },
-    "expected": []
-  },
-  {
-    "name": "atc-exceeds-allowance-tankbustas",
-    "args": {
-      "unitId": "tankbustas",
-      "modelCount": 6,
-      "counts": {
-        "choppa-tankbustas": 1,
-        "close-combat-weapon-tankbustas": 5,
-        "rokkit-launcha-tankbustas": 6,
-        "rokkit-pistol-tankbustas": 2
       }
     },
     "expected": []
@@ -980,6 +969,7 @@
       "factionId": "aeldari",
       "modelCount": 11,
       "counts": {
+        "flip-belt": 11,
         "fusion-pistol": 4,
         "harlequins-special-weapon-troupe": 10,
         "neuro-disruptor": 4,
@@ -1063,21 +1053,6 @@
         "lascannon": 4,
         "quake-cannon": 1,
         "twin-heavy-bolter": 5
-      }
-    },
-    "expected": []
-  },
-  {
-    "name": "atc-exceeds-max-battlewagon",
-    "args": {
-      "unitId": "battlewagon",
-      "modelCount": 1,
-      "counts": {
-        "ard-case": 1,
-        "big-shoota": 4,
-        "deff-rolla": 1,
-        "kannon": 1,
-        "lobba": 1
       }
     },
     "expected": []
@@ -1282,21 +1257,6 @@
     "expected": []
   },
   {
-    "name": "atc-exceeds-max-gladiator-lancer",
-    "args": {
-      "unitId": "gladiator-lancer",
-      "modelCount": 1,
-      "counts": {
-        "armoured-hull-gladiator-lancer": 1,
-        "fragstorm-grenade-launcher": 2,
-        "icarus-rocket-pod": 1,
-        "ironhail-heavy-stubber": 1,
-        "lancer-laser-destroyer": 1
-      }
-    },
-    "expected": []
-  },
-  {
     "name": "atc-exceeds-max-hammerhead-gunship",
     "args": {
       "unitId": "hammerhead-gunship",
@@ -1324,8 +1284,7 @@
       }
     },
     "expected": [
-      "exceeds-max:fragstorm-grenade-launcher-impulsor",
-      "swap-conflict:storm-bolter-impulsor"
+      "exceeds-max:fragstorm-grenade-launcher-impulsor"
     ]
   },
   {
@@ -1506,6 +1465,7 @@
         "ministorum-flamer": 1,
         "ministorum-hand-flamer": 5,
         "plasma-gun": 1,
+        "salvationist-medikit": 1,
         "sanctifier-melee-weapon": 4,
         "simulacrum-imperialis": 1
       }
@@ -1519,6 +1479,7 @@
       "factionId": "adeptus-mechanicus",
       "modelCount": 3,
       "counts": {
+        "cavalry-sabre-and-clawed-limbs": 3,
         "galvanic-carbine": 3,
         "mechanicus-pistol-serberys-raiders": 1
       }
@@ -1545,21 +1506,6 @@
         "accelerator-burst-cannon": 2,
         "armoured-hull-sky-ray-gunship": 1,
         "seeker-missile-rack": 1
-      }
-    },
-    "expected": []
-  },
-  {
-    "name": "atc-exceeds-max-stormraven-gunship",
-    "args": {
-      "unitId": "stormraven-gunship",
-      "modelCount": 1,
-      "counts": {
-        "armoured-hull-stormraven-gunship": 1,
-        "hurricane-bolter": 2,
-        "stormstrike-missile-launcher": 2,
-        "twin-heavy-plasma-cannon": 1,
-        "typhoon-missile-launcher": 1
       }
     },
     "expected": []
@@ -1692,26 +1638,6 @@
     "expected": []
   },
   {
-    "name": "atc-exceeds-max-wolf-scouts",
-    "args": {
-      "unitId": "wolf-scouts",
-      "factionId": "adeptus-astartes",
-      "modelCount": 6,
-      "counts": {
-        "bolt-pistol": 1,
-        "combat-blade": 3,
-        "haywire-mine": 1,
-        "plasma-gun": 1,
-        "plasma-pistol-wolf-scouts": 3,
-        "power-weapon": 1,
-        "runic-stave": 1,
-        "teeth-and-claws-wolf-scouts": 1,
-        "thunderclap": 1
-      }
-    },
-    "expected": []
-  },
-  {
     "name": "atc-exceeds-max-wraithknight",
     "args": {
       "unitId": "wraithknight",
@@ -1748,26 +1674,6 @@
       "counts": {
         "death-totem": 10,
         "thunder-hammer-wulfen-with-storm-shields": 10
-      }
-    },
-    "expected": []
-  },
-  {
-    "name": "atc-swap-conflict-krieg-command-squad",
-    "args": {
-      "unitId": "krieg-command-squad",
-      "factionId": "astra-militarum",
-      "modelCount": 6,
-      "counts": {
-        "close-combat-weapon-krieg-command-squad": 4,
-        "lasgun": 2,
-        "laspistol-krieg-command-squad": 2,
-        "master-vox": 1,
-        "plasma-gun": 1,
-        "plasma-pistol-krieg-command-squad": 2,
-        "power-fist-krieg-command-squad": 1,
-        "power-weapon-krieg-command-squad": 1,
-        "regimental-standard": 1
       }
     },
     "expected": []
@@ -1855,28 +1761,8 @@
         "lasgun": 2,
         "laspistol-cadian-command-squad": 2,
         "master-vox": 1,
+        "medi-pack": 1,
         "plasma-gun": 2
-      }
-    },
-    "expected": []
-  },
-  {
-    "name": "atc-exceeds-max-decimus-kill-team",
-    "args": {
-      "unitId": "decimus-kill-team",
-      "factionId": "adeptus-astartes",
-      "modelCount": 10,
-      "counts": {
-        "bolt-pistol-decimus-kill-team": 6,
-        "close-combat-weapon": 6,
-        "deathwatch-marksman-bolt-carbine": 2,
-        "heavy-thunder-hammer": 2,
-        "infernus-heavy-bolter-decimus-kill-team": 2,
-        "plasma-incinerator": 2,
-        "plasma-pistol-decimus-kill-team": 1,
-        "power-weapon-decimus-kill-team": 1,
-        "special-issue-bolt-pistol": 3,
-        "xenophase-blade": 1
       }
     },
     "expected": []
@@ -1912,16 +1798,21 @@
     "expected": []
   },
   {
-    "name": "legionaries-two-of-one-special-at-ten-legal",
+    "name": "legionaries-two-of-one-special-at-ten-over",
     "args": {
       "unitId": "legionaries",
       "factionId": "chaos-space-marines",
       "modelCount": 10,
       "counts": {
+        "bolt-pistol-legionaries": 10,
+        "boltgun-legionaries": 10,
+        "close-combat-weapon-legionaries": 10,
         "plasma-gun": 2
       }
     },
-    "expected": []
+    "expected": [
+      "exceeds-max:plasma-gun"
+    ]
   },
   {
     "name": "legionaries-two-of-one-special-at-five-over",
@@ -1930,6 +1821,9 @@
       "factionId": "chaos-space-marines",
       "modelCount": 5,
       "counts": {
+        "bolt-pistol-legionaries": 5,
+        "boltgun-legionaries": 5,
+        "close-combat-weapon-legionaries": 5,
         "plasma-gun": 2
       }
     },
@@ -1944,27 +1838,35 @@
       "factionId": "chaos-space-marines",
       "modelCount": 10,
       "counts": {
-        "plasma-gun": 2,
-        "flamer": 1
+        "bolt-pistol-legionaries": 10,
+        "boltgun-legionaries": 10,
+        "close-combat-weapon-legionaries": 10,
+        "flamer": 1,
+        "plasma-gun": 2
       }
     },
     "expected": [
-      "exceeds-allowance:flamer+havoc-autocannon-legionaries+heavy-bolter+lascannon-legionaries+meltagun+missile-launcher+plasma-gun+reaper-chaincannon"
+      "exceeds-max:plasma-gun"
     ]
   },
   {
-    "name": "legionaries-two-pistol-chainsword-combos-at-ten-legal",
+    "name": "legionaries-two-pistol-chainsword-combos-at-ten-over",
     "args": {
       "unitId": "legionaries",
       "factionId": "chaos-space-marines",
       "modelCount": 10,
       "counts": {
-        "plasma-pistol": 2,
+        "accursed-weapon": 2,
         "astartes-chainsword": 2,
-        "accursed-weapon": 2
+        "bolt-pistol-legionaries": 10,
+        "boltgun-legionaries": 10,
+        "close-combat-weapon-legionaries": 10,
+        "plasma-pistol": 2
       }
     },
-    "expected": []
+    "expected": [
+      "swap-conflict:legionaries"
+    ]
   },
   {
     "name": "legionaries-three-heavy-melee-at-ten-legal",
@@ -1973,6 +1875,9 @@
       "factionId": "chaos-space-marines",
       "modelCount": 10,
       "counts": {
+        "bolt-pistol-legionaries": 9,
+        "boltgun-legionaries": 8,
+        "close-combat-weapon-legionaries": 10,
         "heavy-melee-weapon": 3
       }
     },
@@ -1985,6 +1890,9 @@
       "factionId": "chaos-space-marines",
       "modelCount": 10,
       "counts": {
+        "bolt-pistol-legionaries": 10,
+        "boltgun-legionaries": 10,
+        "close-combat-weapon-legionaries": 10,
         "heavy-melee-weapon": 4
       }
     },
@@ -1999,12 +1907,15 @@
       "factionId": "chaos-space-marines",
       "modelCount": 10,
       "counts": {
-        "heavy-melee-weapon": 3,
-        "accursed-weapon": 2
+        "accursed-weapon": 2,
+        "bolt-pistol-legionaries": 10,
+        "boltgun-legionaries": 10,
+        "close-combat-weapon-legionaries": 10,
+        "heavy-melee-weapon": 3
       }
     },
     "expected": [
-      "exceeds-allowance:heavy-melee-weapon"
+      "swap-conflict:legionaries"
     ]
   },
   {
@@ -2014,13 +1925,16 @@
       "factionId": "chaos-space-marines",
       "modelCount": 10,
       "counts": {
-        "plasma-pistol": 3,
+        "accursed-weapon": 2,
         "astartes-chainsword": 3,
-        "accursed-weapon": 2
+        "bolt-pistol-legionaries": 10,
+        "boltgun-legionaries": 10,
+        "close-combat-weapon-legionaries": 10,
+        "plasma-pistol": 3
       }
     },
     "expected": [
-      "exceeds-allowance:astartes-chainsword+flamer+havoc-autocannon-legionaries+heavy-bolter+lascannon-legionaries+meltagun+missile-launcher+plasma-gun+plasma-pistol+reaper-chaincannon"
+      "exceeds-max:plasma-pistol"
     ]
   },
   {
@@ -2030,10 +1944,11 @@
       "factionId": "chaos-space-marines",
       "modelCount": 5,
       "counts": {
-        "plasma-pistol": 2,
         "astartes-chainsword": 1,
         "bolt-pistol-legionaries": 4,
-        "boltgun-legionaries": 4
+        "boltgun-legionaries": 4,
+        "close-combat-weapon-legionaries": 5,
+        "plasma-pistol": 2
       }
     },
     "expected": []
@@ -2047,7 +1962,8 @@
       "counts": {
         "accursed-weapon": 2,
         "bolt-pistol-legionaries": 4,
-        "boltgun-legionaries": 4
+        "boltgun-legionaries": 4,
+        "close-combat-weapon-legionaries": 5
       }
     },
     "expected": []
@@ -2059,9 +1975,10 @@
       "factionId": "chaos-space-marines",
       "modelCount": 5,
       "counts": {
-        "plasma-pistol": 2,
         "bolt-pistol-legionaries": 4,
-        "boltgun-legionaries": 4
+        "boltgun-legionaries": 4,
+        "close-combat-weapon-legionaries": 5,
+        "plasma-pistol": 2
       }
     },
     "expected": [
@@ -2075,8 +1992,11 @@
       "factionId": "chaos-space-marines",
       "modelCount": 10,
       "counts": {
-        "plasma-pistol": 4,
-        "astartes-chainsword": 2
+        "astartes-chainsword": 2,
+        "bolt-pistol-legionaries": 10,
+        "boltgun-legionaries": 10,
+        "close-combat-weapon-legionaries": 10,
+        "plasma-pistol": 4
       }
     },
     "expected": [
@@ -2090,8 +2010,12 @@
       "factionId": "astra-militarum",
       "modelCount": 10,
       "counts": {
-        "plasma-gun-tempestus-scions": 2,
-        "meltagun-tempestus-scions": 2
+        "chainsword-tempestus-scions": 1,
+        "close-combat-weapon-tempestus-scions": 9,
+        "hot-shot-lasgun": 5,
+        "hot-shot-laspistol": 1,
+        "meltagun-tempestus-scions": 2,
+        "plasma-gun-tempestus-scions": 2
       }
     },
     "expected": []
@@ -2103,13 +2027,17 @@
       "factionId": "astra-militarum",
       "modelCount": 5,
       "counts": {
-        "plasma-gun-tempestus-scions": 1,
+        "chainsword-tempestus-scions": 1,
+        "close-combat-weapon-tempestus-scions": 4,
+        "flamer": 1,
+        "hot-shot-lasgun": 4,
+        "hot-shot-laspistol": 1,
         "meltagun-tempestus-scions": 1,
-        "flamer": 1
+        "plasma-gun-tempestus-scions": 1
       }
     },
     "expected": [
-      "exceeds-allowance:flamer+grenade-launcher-tempestus-scions+hot-shot-volley-gun+meltagun-tempestus-scions+plasma-gun-tempestus-scions"
+      "swap-conflict:tempestus-scions"
     ]
   },
   {
@@ -2119,13 +2047,17 @@
       "factionId": "astra-militarum",
       "modelCount": 10,
       "counts": {
-        "plasma-gun-tempestus-scions": 2,
+        "chainsword-tempestus-scions": 1,
+        "close-combat-weapon-tempestus-scions": 9,
+        "flamer": 1,
+        "hot-shot-lasgun": 9,
+        "hot-shot-laspistol": 1,
         "meltagun-tempestus-scions": 2,
-        "flamer": 1
+        "plasma-gun-tempestus-scions": 2
       }
     },
     "expected": [
-      "exceeds-allowance:flamer+grenade-launcher-tempestus-scions+hot-shot-volley-gun+meltagun-tempestus-scions+plasma-gun-tempestus-scions"
+      "swap-conflict:tempestus-scions"
     ]
   },
   {

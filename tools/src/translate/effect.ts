@@ -16,7 +16,7 @@
 
 import { dekebab, describeCondition, titleCase, type Condition } from "./condition.js";
 import { conditionLeadIn, describeSelectionEligibility, isDefensiveEffect } from "./condition-leadin.js";
-import { unitRefPhrase, usageClause } from "./condition-refs.js";
+import { modelObjectRefs, unitRefPhrase, usageClause } from "./condition-refs.js";
 import { describeTrigger, normalizeTriggers, type AbilityTrigger, type AbilityTriggerSpec } from "./trigger.js";
 import { definedGrantHead, definitionPart, describeLeaf, isDefinedGrant, LEAF_TYPES, type Leaf } from "./effect-leaf.js";
 import { expiryTrail } from "./expiry.js";
@@ -1214,6 +1214,8 @@ function renderTopLevel(
   // within-range condition on the effect, render the range once (drop it here).
   const triggers = normalizeTriggers(trigger).filter((t) => t.event != null);
   if (triggers.some((t) => t.event === "destroyed" || t.event === "model-destroyed")) ctx.destroyedTrigger = true;
+  // Every trigger's object is a model: the effect's `event-object` reads "that model".
+  if (triggers.length > 0 && triggers.every((t) => (t.object as { level?: unknown } | undefined)?.level === "model")) e = modelObjectRefs(e);
   const condRange = conditionWithinRange(e.type === "conditional" ? e.condition : undefined);
   const trig = triggers
     .map((t) => withAuraRecipient(t, e, ctx))

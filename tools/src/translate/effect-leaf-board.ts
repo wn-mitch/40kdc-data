@@ -5,7 +5,7 @@
 
 import { describeCondition, type Condition } from "./condition.js";
 import { conditionLeadIn } from "./condition-leadin.js";
-import { objectivePhrase, type P } from "./condition-refs.js";
+import { isEventObject, objectivePhrase, type P } from "./condition-refs.js";
 import type { Inline, Leaf } from "./effect-leaf.js";
 import {
   amountOf, andList, orList, dekebab, designationFor, movedPhrase, noneOf, diceCase, effectSubject, formatComparison, isLiteral, jstr, ofOrPossessive, pronoun,
@@ -100,7 +100,7 @@ function destroyModels(e: Leaf, m: Record<string, unknown>, subj: string): strin
 
 function actOnDeath(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const act = m.act === "shoot" ? "shoot" : "fight";
-  const model = e.target === "event-object" ? "a model in this unit" : subj === "this model" ? "this model" : typeof e.target === "object" && e.target != null && (e.target as P).level === "model" ? `a ${subj.replace(/^all /, "").replace(/\bmodels\b/, "model")}` : `a model in ${subj}`;
+  const model = isEventObject(e.target) ? "a model in this unit" : subj === "this model" ? "this model" : typeof e.target === "object" && e.target != null && (e.target as P).level === "model" ? `a ${subj.replace(/^all /, "").replace(/\bmodels\b/, "model")}` : `a model in ${subj}`;
   const gate = m.gate as { dice?: unknown; threshold?: unknown; comparison?: unknown; modifiers?: { condition?: Condition; value?: unknown }[] } | undefined;
   const eligibility = m.eligibility != null ? conditionLeadIn(m.eligibility as Condition) : "";
   const resolution = m.resolution === "when-unit-fights" ? `when its unit is selected to fight, it can ${act}`
@@ -116,7 +116,7 @@ function actOnDeath(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx)
   }
   const lead = eligibility ? `${eligibility}, ` : "";
   // The destroyed model the trigger names stays, not its unit.
-  const held = e.target === "event-object" ? "that model" : subj;
+  const held = isEventObject(e.target) ? "that model" : subj;
   if (m.resolution === "when-unit-fights") return `${lead}do not remove ${held} yet; ${resolution}; remove it after its unit has finished fighting or at the end of the phase, whichever happens first`;
   if (m.resolution === "after-attacking-unit-finishes") return `${lead}do not remove ${held} yet; ${resolution}; then remove it`;
   if (ctx.destroyedTrigger) return `${lead}${model === "this model" ? "this model" : "that model"} can ${act} before being removed from play`;
@@ -129,7 +129,11 @@ function addUnit(m: Record<string, unknown>, ctx: Ctx): string {
   const models = m.model_count != null ? ` containing ${amountOf(m.model_count, "model", "models")}` : "";
   const strength = m.starting_strength != null ? ` with a Starting Strength of ${jstr(m.starting_strength)}` : "";
   // New models that join an existing unit rather than forming their own.
-  if (m.join != null) return `add ${amountOf(m.model_count ?? m.count ?? 1, `${titleCase(jstr(m.datasheet))} model`, `${titleCase(jstr(m.datasheet))} models`)} to ${effectSubject(m.join, ctx)}${where}${engage}`;
+  // A model type of the unit itself (`model`) is already its printed name.
+  if (m.join != null) {
+    const kind = m.model != null ? jstr(m.model) : titleCase(jstr(m.datasheet));
+    return `add ${amountOf(m.model_count ?? m.count ?? 1, `${kind} model`, `${kind} models`)} to ${effectSubject(m.join, ctx)}${where}${engage}`;
+  }
   // A fixed count reads as a number; a dice expression or bound quantity reads through amountOf.
   const count = m.count ?? 1;
   const n = typeof count === "number" ? count : null;
@@ -528,7 +532,7 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
       return `${subj} ${v(subj, "has")} a ${jstr(m.invuln_sv)}+ invulnerable save${vs}`;
     }
     case "heal": {
-      const who = m.per === "model" ? `each model in ${subj}` : subj;
+      const who = m.per === "model" ? `each model in ${subj}` : m.per === "one-model" ? `one model in ${subj}` : subj;
       if (m.amount === "full") return `${who} ${v(who, "regains")} all ${pronoun(who)} lost wounds`;
       if (!isLiteral(m.amount)) return `${who} ${v(who, "regains")} up to ${amountOf(m.amount, "lost wound", "lost wounds")}`;
       const amount = diceCase(m.amount);

@@ -36,6 +36,8 @@ jobs:
       - run: cd tools && npm run build
       # The test files are outside the build's tsconfig; typecheck them too.
       - run: cd tools && npx tsc -p tsconfig.test.json
+      # xmllint validates the BattleScribe XML export against its schema.
+      - run: command -v xmllint || (sudo apt-get update && sudo apt-get install -y libxml2-utils)
       - run: cd tools && npm test
       - name: Test DSL campaign graph and workflow contracts
         run: node --test .omp/skills/dsl-campaign/graph/*.test.js .omp/skills/dsl-campaign/workflows/*.test.js
@@ -219,6 +221,29 @@ jobs:
       - run: npm run typecheck
       - run: npm test
 
+  tts-worker:
+    # The TTS army-code worker (workers/tts): typecheck, the vitest workers
+    # pool (uploads, codes, Durable Object expiry), and a bundle dry run. It
+    # imports the package's sources, so the monorepo's dependencies and the
+    # generated data bundle must exist first; it owns its own lockfile for
+    # the same vitest-3 reason as sync-worker.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: cd tools && npm run codegen:data
+      - run: npm ci
+        working-directory: workers/tts
+      - run: npm run typecheck
+        working-directory: workers/tts
+      - run: npm test
+        working-directory: workers/tts
+      - run: npx wrangler deploy --dry-run --outdir dist
+        working-directory: workers/tts
+
   publish-crate:
     # Auto-publish wh40kdc to crates.io once main is green. Self-gates on the
     # crate version: if this version is already on the registry the publish is
@@ -326,6 +351,76 @@ jobs:
           gh release create "$TAG" \
             --title "@alpaca-software/40kdc-data v${{ steps.ver.outputs.version }}" \
             --notes "Published to https://www.npmjs.com/package/@alpaca-software/40kdc-data/v/${{ steps.ver.outputs.version }}"
+
+  publish-bsdata:
+    # Attach the BSData-compatible export (a game system plus one catalogue
+    # per faction) to a GitHub release, so BattleScribe and NewRecruit users
+    # can load the dataset as a data repo. BattleScribe adds it by the URL of
+    # index.bsi on the rolling bsdata-latest release. Self-gates on the
+    # `bsdata-v<version>` tag: the job is a no-op until tools/package.json's
+    # version is bumped. JSON is NewRecruit's format; the .gst/.cat XML is
+    # BattleScribe's. Ability descriptions are the describer's own text.
+    needs: [validate, rust, python, go, conformance]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      published: ${{ steps.check.outputs.publish }}
+      version: ${{ steps.ver.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: cd tools && npm ci
+      - name: Read package version
+        id: ver
+        run: echo "version=$(node -p "require('./tools/package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Skip if this version's export is already released
+        id: check
+        run: |
+          if git ls-remote --exit-code --tags origin "refs/tags/bsdata-v${{ steps.ver.outputs.version }}" >/dev/null; then
+            echo "bsdata-v${{ steps.ver.outputs.version }} already released; skipping."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build the export
+        if: steps.check.outputs.publish == 'true'
+        run: |
+          # The exporter reads the embedded dataset, which is generated, not committed.
+          cd tools && npm run codegen:data && npm run export:bsdata -- --out ../dist/bsdata \
+            --index-url "https://github.com/${{ github.repository }}/releases/download/bsdata-latest/index.bsi"
+          cd ../dist/bsdata
+          (cd json && zip -q -r "../wh40k-11e-40kdc-${{ steps.ver.outputs.version }}-newrecruit.zip" .)
+          (cd xml && zip -q -r "../wh40k-11e-40kdc-${{ steps.ver.outputs.version }}-battlescribe.zip" .)
+      - name: Tag and create GitHub release
+        if: steps.check.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: bsdata-v${{ steps.ver.outputs.version }}
+        run: |
+          git tag "$TAG"
+          git push origin "$TAG"
+          gh release create "$TAG" \
+            --title "BSData-compatible export v${{ steps.ver.outputs.version }}" \
+            --notes "Warhammer 40,000 11th edition game system and faction catalogues generated from @alpaca-software/40kdc-data ${{ steps.ver.outputs.version }}. The -newrecruit zip holds the JSON catalogues; the -battlescribe zip holds .gst/.cat XML. Stat lines and points only; ability descriptions are 40kdc's own plain-English summaries." \
+            dist/bsdata/*.zip dist/bsdata/battlescribe/*
+      - name: Refresh the bsdata-latest release BattleScribe updates from
+        if: steps.check.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # index.bsi names bsdata-latest as its update URL, so this release
+          # always carries the newest data index and data files.
+          if ! gh release view bsdata-latest >/dev/null 2>&1; then
+            gh release create bsdata-latest --latest=false \
+              --title "BSData-compatible export (latest)" \
+              --notes "Add https://github.com/${{ github.repository }}/releases/download/bsdata-latest/index.bsi as a data index URL in BattleScribe. Refreshed on every BSData export release."
+          fi
+          gh release upload bsdata-latest --clobber dist/bsdata/battlescribe/*
 
   publish-pypi:
     # Auto-publish wh40kdc to PyPI once main is green, via trusted publishing

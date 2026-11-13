@@ -1,0 +1,396 @@
+{
+  "slug": "",
+  "key": "",
+  "visible": "hidden",
+  "locked": false,
+  "rulebook": {
+    "name": "40kdc",
+    "game": "Warhammer 40,000",
+    "publisher": "Alpaca Software",
+    "url": "https://40kdc.dev",
+    "genre": "wargame"
+  },
+  "snapshot": {
+    "item": "Roster§Roster",
+    "name": "Unnamed list",
+    "quantity": 1,
+    "stats": {
+      "Points": {
+        "value": 2000
+      }
+    },
+    "assets": {
+      "included": [
+        {
+          "item": "Faction§Adeptus Custodes",
+          "name": "Adeptus Custodes",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Emissaries Imperatus",
+          "name": "Emissaries Imperatus",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Honoured Companions",
+          "name": "Honoured Companions",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Might of the Moritoi",
+          "name": "Might of the Moritoi",
+          "quantity": 1
+        },
+        {
+          "item": "Force Disposition§Take And Hold",
+          "name": "Take And Hold",
+          "quantity": 1
+        },
+        {
+          "item": "Battle Size§Strike Force (2000 Point limit)",
+          "name": "Strike Force (2000 Point limit)",
+          "quantity": 1
+        },
+        {
+          "item": "Unit§Trajann Valoris",
+          "name": "Trajann Valoris",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 265
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Eagle's Scream",
+                "name": "Eagle's Scream",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Watcher's Axe",
+                "name": "Watcher's Axe",
+                "quantity": 1
+              }
+            ],
+            "traits": [
+              {
+                "item": "Trait§Warlord",
+                "name": "Warlord",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Custodian Guard Sodality",
+          "name": "Custodian Guard Sodality",
+          "quantity": 3,
+          "stats": {
+            "Points": {
+              "value": 240
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Model§Custodian Guard",
+                "name": "Custodian Guard",
+                "quantity": 2,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Guardian Spear",
+                      "name": "Guardian Spear",
+                      "quantity": 2
+                    }
+                  ]
+                }
+              },
+              {
+                "item": "Model§Custodian Guard",
+                "name": "Custodian Guard",
+                "quantity": 1,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Guardian Spear",
+                      "name": "Guardian Spear",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Vexilla",
+                      "name": "Vexilla",
+                      "quantity": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Allarus Custodians",
+          "name": "Allarus Custodians",
+          "quantity": 3,
+          "stats": {
+            "Points": {
+              "value": 270
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Model§Allarus Custodians",
+                "name": "Allarus Custodians",
+                "quantity": 2,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Balistus grenade launcher",
+                      "name": "Balistus grenade launcher",
+                      "quantity": 2
+                    },
+                    {
+                      "item": "Weapon§Guardian Spear",
+                      "name": "Guardian Spear",
+                      "quantity": 2
+                    }
+                  ]
+                }
+              },
+              {
+                "item": "Model§Allarus Custodians",
+                "name": "Allarus Custodians",
+                "quantity": 1,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Balistus grenade launcher",
+                      "name": "Balistus grenade launcher",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Guardian Spear",
+                      "name": "Guardian Spear",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Vexilla",
+                      "name": "Vexilla",
+                      "quantity": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Caladius Annihilator Grav-tank",
+          "name": "Caladius Annihilator Grav-tank",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 250
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Arachnus Blaze Carronade",
+                "name": "Arachnus Blaze Carronade",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Armoured hull",
+                "name": "Armoured hull",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Twin Lastrum Bolt Cannon",
+                "name": "Twin Lastrum Bolt Cannon",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Custodian Wardens",
+          "name": "Custodian Wardens",
+          "quantity": 3,
+          "stats": {
+            "Points": {
+              "value": 295
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Model§Custodian Wardens",
+                "name": "Custodian Wardens",
+                "quantity": 2,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Guardian Spear",
+                      "name": "Guardian Spear",
+                      "quantity": 2
+                    }
+                  ]
+                }
+              },
+              {
+                "item": "Model§Custodian Wardens",
+                "name": "Custodian Wardens",
+                "quantity": 1,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Guardian Spear",
+                      "name": "Guardian Spear",
+                      "quantity": 1
+                    },
+                    {
+                      "item": "Weapon§Vexilla",
+                      "name": "Vexilla",
+                      "quantity": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Prosecutor Squad",
+          "name": "Prosecutor Squad",
+          "quantity": 4,
+          "stats": {
+            "Points": {
+              "value": 45
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Model§Prosecutor",
+                "name": "Prosecutor",
+                "quantity": 4,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Boltgun",
+                      "name": "Boltgun",
+                      "quantity": 4
+                    },
+                    {
+                      "item": "Weapon§Gun Stock",
+                      "name": "Gun Stock",
+                      "quantity": 4
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Telemon Heavy Dreadnought",
+          "name": "Telemon Heavy Dreadnought",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 310
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Enhancement§Augury Uplink",
+                "name": "Augury Uplink",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Dual Caestus Fists",
+                "name": "Dual Caestus Fists",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Spiculus bolt launcher",
+                "name": "Spiculus bolt launcher",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Twin Neutronium Cascade Projectors",
+                "name": "Twin Neutronium Cascade Projectors",
+                "quantity": 2
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Venatari with Verutum Lances",
+          "name": "Venatari with Verutum Lances",
+          "quantity": 3,
+          "stats": {
+            "Points": {
+              "value": 270
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Model§Venatari",
+                "name": "Venatari",
+                "quantity": 3,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Verutum Lance",
+                      "name": "Verutum Lance",
+                      "quantity": 3
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Witchseeker Squad",
+          "name": "Witchseeker Squad",
+          "quantity": 4,
+          "stats": {
+            "Points": {
+              "value": 55
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Model§Witchseeker",
+                "name": "Witchseeker",
+                "quantity": 4,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Flamer",
+                      "name": "Flamer",
+                      "quantity": 4
+                    },
+                    {
+                      "item": "Weapon§Gun Stock",
+                      "name": "Gun Stock",
+                      "quantity": 4
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

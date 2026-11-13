@@ -118,6 +118,27 @@ export const ord = (n: number): string => ORDINAL[n] ?? `${n}th`;
 
 // ── Shared references ───────────────────────────────────────────────────────
 
+/**
+ * The describer's spelling of `event-object` when every trigger's object is a model ("that model"
+ * rather than "that unit"). `modelObjectRefs` writes it into the effect before rendering.
+ */
+export const EVENT_OBJECT_MODEL = "event-object-model";
+
+/** Whether `ref` is the trigger's event object, a unit or a model. */
+export function isEventObject(ref: unknown): boolean {
+  return ref === "event-object" || ref === EVENT_OBJECT_MODEL;
+}
+
+/** `value` with every `event-object` ref spelled `EVENT_OBJECT_MODEL`. */
+export function modelObjectRefs<T>(value: T): T {
+  if (value === "event-object") return EVENT_OBJECT_MODEL as T;
+  if (Array.isArray(value)) return value.map(modelObjectRefs) as T;
+  if (value != null && typeof value === "object") {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, modelObjectRefs(v)])) as T;
+  }
+  return value;
+}
+
 const ROLE_PHRASES: Record<string, string> = {
   "this-unit": "the unit",
   "this-model": "this model",
@@ -126,6 +147,7 @@ const ROLE_PHRASES: Record<string, string> = {
   defender: "the target unit",
   "event-subject": "the triggering unit",
   "event-object": "that unit",
+  "event-object-model": "that model",
   "stratagem-target": "the Stratagem's target",
   "selected-unit": "the selected unit",
   recipient: "the unit",
@@ -252,6 +274,7 @@ export function objectivePhrase(f: P, plural = false, noun = "objective"): strin
   if (f.home_of === "friendly") s += " (your home)";
   if (f.name != null) s += ` (${dekebab(str(f.name))})`;
   if (f.territory != null) s += ` in ${territoryPhrase(str(f.territory))}`;
+  if (f.outside_territory != null) s += ` not in ${territoryPhrase(str(f.outside_territory))}`;
   if (f.role === "non-home") s += " (excluding home)";
   const within = f.within as P | undefined;
   // Your control, within this unit's own range of it: the unit itself is controlling it.
@@ -340,6 +363,7 @@ export function usageClause(u: AbilityUsage | AbilityUsage[]): string {
     case "once-per-opponent-turn": base = "once per opponent's turn"; break;
     case "first-this-battle": base = "the first time this battle"; break;
     case "first-time-this-phase": base = "the first time this phase"; break;
+    case "first-time-this-turn": base = "the first time each turn"; break;
     case "n-per-battle": base = n === 1 ? "once per battle" : n === 2 ? "twice per battle" : `${str(n)} times per battle`; break;
     default: base = dekebab(str(u.frequency));
   }

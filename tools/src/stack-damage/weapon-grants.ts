@@ -12,7 +12,6 @@
 import type { Buff, BuffSource, EngineContext } from "../cruncher/index.js";
 import type { Dataset } from "../data/dataset.js";
 import { abilityRefId, abilityRefWargear } from "../data/ability-refs.js";
-import { baseLoadout, type LoadoutModel } from "../data/loadout.js";
 import type { AbilityView } from "../data/entities.js";
 import type { Unit } from "../generated.js";
 import { resolveUnitWeapon } from "./unit-damage.js";
@@ -130,8 +129,7 @@ export function combinedWargear(members: readonly Readonly<Record<string, number
 
 /** The wargear of a unit's out-of-the-box loadout at `modelCount` models; see {@link loadoutWargear}. */
 export function baseWargear(dataset: Dataset, unit: Unit, modelCount: number): Record<string, number> {
-  const models = (dataset.unitCompositionOf(unit) as { models?: LoadoutModel[] } | undefined)?.models ?? [];
-  return loadoutWargear(dataset, unit, baseLoadout(unit, modelCount, dataset.wargearOptionsOf(unit), models).counts);
+  return loadoutWargear(dataset, unit, dataset.loadoutOf(unit).base(modelCount) ?? new Map());
 }
 
 /**

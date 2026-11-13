@@ -222,7 +222,7 @@ fn act_on_death(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String 
     } else {
         "fight"
     };
-    let model = if target.and_then(Value::as_str) == Some("event-object") {
+    let model = if crate::translate::condition::is_event_object(target) {
         "a model in this unit".to_string()
     } else if subj == "this model" {
         "this model".to_string()
@@ -306,7 +306,7 @@ fn act_on_death(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String 
         .map(|s| format!("{s}, "))
         .unwrap_or_default();
     // The destroyed model the trigger names stays, not its unit.
-    let held = if target.and_then(Value::as_str) == Some("event-object") {
+    let held = if crate::translate::condition::is_event_object(target) {
         "that model"
     } else {
         subj
@@ -353,9 +353,11 @@ fn add_unit(m: &P, ctx: &Ctx) -> String {
         let q = nn(m, "model_count")
             .or_else(|| nn(m, "count"))
             .unwrap_or(&one_value);
+        // A model type of the unit itself (model) is already its printed name.
+        let kind = nn(m, "model").map_or_else(|| name.clone(), |model| jstr(Some(model)));
         return format!(
             "add {} to {}{place}{engage}",
-            amount_of(Some(q), &format!("{name} model"), &format!("{name} models")),
+            amount_of(Some(q), &format!("{kind} model"), &format!("{kind} models")),
             effect_subject(Some(join), ctx)
         );
     }
@@ -452,10 +454,10 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             )
         }
         Some("heal") => {
-            let who = if sv(m, "per") == Some("model") {
-                format!("each model in {subj}")
-            } else {
-                subj.to_string()
+            let who = match sv(m, "per") {
+                Some("model") => format!("each model in {subj}"),
+                Some("one-model") => format!("one model in {subj}"),
+                _ => subj.to_string(),
             };
             if sv(m, "amount") == Some("full") {
                 return format!(
