@@ -45,23 +45,41 @@ generated descriptions, stat lines, and point costs.
 
 ## Use It in NewRecruit or BattleScribe
 
-Each release exports the dataset as a BSData-format game system and faction
-catalogues, attached to the `bsdata-v<version>` releases
-([all BSData releases](https://github.com/wn-mitch/40kdc-data/releases?q=bsdata)):
+NewRecruit and BattleScribe are army list builders that read data in the
+format of the community [BSData](https://github.com/BSData) project. Each
+release of the 40kdc-data package also exports its Warhammer 40,000 11th
+edition dataset in that format, as a game system file and one catalogue file
+per faction, attached to a `bsdata-v<version>` release
+([all BSData releases](https://github.com/wn-mitch/40kdc-data/releases?q=bsdata)).
 
-- **NewRecruit:** download `wh40k-11e-40kdc-<version>-newrecruit.zip` and
-  unzip it. In NewRecruit, open **My Systems → Add more games** and upload the
-  JSON files. Uploaded data stays on that device, so install it on each device
-  you build lists on.
+- **NewRecruit:** download `wh40k-11e-40kdc-<version>-newrecruit.zip` from the
+  newest `bsdata-v<version>` release and unzip it. In NewRecruit, open
+  **My Systems → Add more games** and upload every JSON file from the zip.
+  Uploaded data stays on that device, so install it on each device you build
+  lists on. To update, upload the files from a newer release the same way.
 - **BattleScribe:** add
   `https://github.com/wn-mitch/40kdc-data/releases/download/bsdata-latest/index.bsi`
-  as a data index URL, and BattleScribe updates from it with each release. The
-  `-battlescribe.zip` on each release holds the same `.gst`/`.cat` files for a
-  manual install. BattleScribe's format has no default selections, leader
-  attachments or per-copy pricing, so NewRecruit gives the fuller experience.
+  as a data index URL. `bsdata-latest` is a release that always carries the
+  newest export's game system and catalogue files, so BattleScribe picks up
+  each new version from it. For a manual install, each `bsdata-v<version>`
+  release also has `wh40k-11e-40kdc-<version>-battlescribe.zip`, which holds
+  the game system and catalogue files in BattleScribe's `.gst` and `.cat`
+  format. `bsdata-latest` holds only BattleScribe files.
 
-Points and stat lines match the dataset. Ability text is 40kdc's own
-plain-English descriptions, not the published rules wording.
+  BattleScribe's format cannot express three things NewRecruit supports:
+  - A unit's starting models. NewRecruit starts each unit with the models the
+    official app gives it by default; BattleScribe starts each model type at
+    its minimum count, so some units need models added by hand.
+  - Leader attachments. BattleScribe does not check which leaders a unit can
+    take.
+  - Points that rise with each copy of a unit in the army. BattleScribe
+    prices every copy at the first copy's cost, so a list with repeated units
+    shows fewer points than it costs. NewRecruit prices those copies
+    correctly.
+
+The export carries the same points and stat lines as the package.
+Ability text is this project's own plain-English descriptions, not the
+published rules wording.
 
 ## Quick Start
 
