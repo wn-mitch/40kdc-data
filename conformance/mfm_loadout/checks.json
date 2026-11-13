@@ -75252,6 +75252,44 @@
     ]
   },
   {
+    "name": "chaos terminators one model unarmed",
+    "args": {
+      "unitId": "chaos-terminator-squad",
+      "factionId": "chaos-space-marines",
+      "models": {
+        "Chaos Terminator": 4,
+        "Terminator Champion": 1
+      },
+      "counts": {
+        "accursed-weapon": 4,
+        "combi-bolter": 4
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "chaos terminators one model on paired weapons",
+    "args": {
+      "unitId": "chaos-terminator-squad",
+      "factionId": "chaos-space-marines",
+      "models": {
+        "Chaos Terminator": 4,
+        "Terminator Champion": 1
+      },
+      "counts": {
+        "accursed-weapon": 4,
+        "combi-bolter": 4,
+        "paired-accursed-weapons-chaos-terminator-squad": 1
+      }
+    },
+    "expected": []
+  },
+  {
     "name": "immortals all tesla",
     "args": {
       "unitId": "immortals",

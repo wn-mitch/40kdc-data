@@ -347,11 +347,13 @@ fn row_bundles(
     let product = |group: &[&MfmSlot]| -> Option<Vec<Copies>> {
         let mut bundles: Vec<Vec<MfmItem>> = vec![Vec::new()];
         for slot in group {
-            let picks = pick_combinations(
-                &row_slot_choices(rules, model, &slot.choices, &stock),
-                slot.picks,
-                slot.repeats,
-            );
+            // An alternative is taken by one of its own choices; leaving it untaken is the regular bundles.
+            let choices = if slot.alternate {
+                slot.choices.clone()
+            } else {
+                row_slot_choices(rules, model, &slot.choices, &stock)
+            };
+            let picks = pick_combinations(&choices, slot.picks, slot.repeats);
             let mut next = Vec::new();
             for bundle in &bundles {
                 for pick in &picks {

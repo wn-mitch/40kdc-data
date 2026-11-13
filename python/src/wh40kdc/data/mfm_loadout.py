@@ -181,9 +181,12 @@ def row_bundles(
     def product(group: list[Mapping[str, Any]]) -> list[Copies] | None:
         bundles: list[list[Any]] = [[]]
         for slot in group:
-            picks = _pick_combinations(
-                _row_slot_choices(rules, slot, stock), slot["picks"], slot["repeats"]
+            # An alternative is taken by one of its own choices; leaving it untaken is the
+            # regular bundles.
+            choices = (
+                slot["choices"] if slot["alternate"] else _row_slot_choices(rules, slot, stock)
             )
+            picks = _pick_combinations(choices, slot["picks"], slot["repeats"])
             bundles = [
                 b for b in ([*bundle, *pick] for bundle in bundles for pick in picks) if fits(b)
             ]

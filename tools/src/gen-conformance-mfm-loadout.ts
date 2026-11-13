@@ -94,6 +94,9 @@ const CURATED: [string, string, string, Counts, Swap[]][] = [
   ["two carnifexes with bio-plasma", "tyranids", "carnifexes", { Carnifex: 2 }, [[null, "bio-plasma", 2]]],
   ["two carnifexes with three bio-plasma", "tyranids", "carnifexes", { Carnifex: 2 }, [[null, "bio-plasma", 3]]],
   ["one carnifex with two bio-plasma", "tyranids", "carnifexes", {}, [[null, "bio-plasma", 2]]],
+  // An alternative wargear slot is taken only by one of its choices: no model carries nothing instead.
+  ["chaos terminators one model unarmed", "chaos-space-marines", "chaos-terminator-squad", {}, [["accursed-weapon", null, 1], ["combi-bolter", null, 1]]],
+  ["chaos terminators one model on paired weapons", "chaos-space-marines", "chaos-terminator-squad", {}, [["accursed-weapon", "paired-accursed-weapons-chaos-terminator-squad", 1], ["combi-bolter", null, 1]]],
   ["immortals all tesla", "necrons", "immortals", {}, [["gauss-blaster", "tesla-carbine", 5]]],
   ["immortals mixed guns", "necrons", "immortals", {}, [["gauss-blaster", "tesla-carbine", 2]]],
   ["breaka boyz pistol and tankhammer", "orks", "breaka-boyz", {}, [["smash-hammer", "rokkit-pistol", 1], ["smash-hammer", "tankhammer", 1]]],
