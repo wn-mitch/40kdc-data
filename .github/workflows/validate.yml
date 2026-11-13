@@ -221,6 +221,29 @@ jobs:
       - run: npm run typecheck
       - run: npm test
 
+  tts-worker:
+    # The TTS army-code worker (workers/tts): typecheck, the vitest workers
+    # pool (uploads, codes, Durable Object expiry), and a bundle dry run. It
+    # imports the package's sources, so the monorepo's dependencies and the
+    # generated data bundle must exist first; it owns its own lockfile for
+    # the same vitest-3 reason as sync-worker.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: cd tools && npm run codegen:data
+      - run: npm ci
+        working-directory: workers/tts
+      - run: npm run typecheck
+        working-directory: workers/tts
+      - run: npm test
+        working-directory: workers/tts
+      - run: npx wrangler deploy --dry-run --outdir dist
+        working-directory: workers/tts
+
   publish-crate:
     # Auto-publish wh40kdc to crates.io once main is green. Self-gates on the
     # crate version: if this version is already on the registry the publish is
