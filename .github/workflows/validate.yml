@@ -36,6 +36,8 @@ jobs:
       - run: cd tools && npm run build
       # The test files are outside the build's tsconfig; typecheck them too.
       - run: cd tools && npx tsc -p tsconfig.test.json
+      # xmllint validates the BattleScribe XML export against its schema.
+      - run: command -v xmllint || (sudo apt-get update && sudo apt-get install -y libxml2-utils)
       - run: cd tools && npm test
       - name: Test DSL campaign graph and workflow contracts
         run: node --test .omp/skills/dsl-campaign/graph/*.test.js .omp/skills/dsl-campaign/workflows/*.test.js
@@ -330,7 +332,8 @@ jobs:
   publish-bsdata:
     # Attach the BSData-compatible export (a game system plus one catalogue
     # per faction) to a GitHub release, so BattleScribe and NewRecruit users
-    # can load the dataset as a data repo. Self-gates on the
+    # can load the dataset as a data repo. BattleScribe adds it by the URL of
+    # index.bsi on the rolling bsdata-latest release. Self-gates on the
     # `bsdata-v<version>` tag: the job is a no-op until tools/package.json's
     # version is bumped. JSON is NewRecruit's format; the .gst/.cat XML is
     # BattleScribe's. Ability descriptions are the describer's own text.
@@ -364,7 +367,8 @@ jobs:
       - name: Build the export
         if: steps.check.outputs.publish == 'true'
         run: |
-          cd tools && npm run export:bsdata -- --out ../dist/bsdata
+          cd tools && npm run export:bsdata -- --out ../dist/bsdata \
+            --index-url "https://github.com/${{ github.repository }}/releases/download/bsdata-latest/index.bsi"
           cd ../dist/bsdata
           (cd json && zip -q -r "../wh40k-11e-40kdc-${{ steps.ver.outputs.version }}-newrecruit.zip" .)
           (cd xml && zip -q -r "../wh40k-11e-40kdc-${{ steps.ver.outputs.version }}-battlescribe.zip" .)
@@ -379,7 +383,20 @@ jobs:
           gh release create "$TAG" \
             --title "BSData-compatible export v${{ steps.ver.outputs.version }}" \
             --notes "Warhammer 40,000 11th edition game system and faction catalogues generated from @alpaca-software/40kdc-data ${{ steps.ver.outputs.version }}. The -newrecruit zip holds the JSON catalogues; the -battlescribe zip holds .gst/.cat XML. Stat lines and points only; ability descriptions are 40kdc's own plain-English summaries." \
-            dist/bsdata/*.zip
+            dist/bsdata/*.zip dist/bsdata/battlescribe/*
+      - name: Refresh the bsdata-latest release BattleScribe updates from
+        if: steps.check.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # index.bsi names bsdata-latest as its update URL, so this release
+          # always carries the newest data index and data files.
+          if ! gh release view bsdata-latest >/dev/null 2>&1; then
+            gh release create bsdata-latest --latest=false \
+              --title "BSData-compatible export (latest)" \
+              --notes "Add https://github.com/${{ github.repository }}/releases/download/bsdata-latest/index.bsi as a data index URL in BattleScribe. Refreshed on every BSData export release."
+          fi
+          gh release upload bsdata-latest --clobber dist/bsdata/battlescribe/*
 
   publish-pypi:
     # Auto-publish wh40kdc to PyPI once main is green, via trusted publishing

@@ -13,10 +13,12 @@ import { bsdataJson } from "./json.js";
 import type { BsNode } from "./source.js";
 import { FACTION_CATALOGUE_FILES, GAME_SYSTEM_FILE } from "./source.js";
 import { buildGameSystem, systemRefs } from "./system.js";
-import { ROOT_EXTENSION, toBattleScribeXml } from "./xml.js";
+import { loadBattleScribeSchema } from "./battlescribe-schema.js";
+import { hostedDataRepo, type IndexedFile } from "./data-index.js";
+import { ROOT_EXTENSION, toBattleScribeSchemaXml } from "./xml.js";
 
-/** NewRecruit-only constructs BattleScribe 2.03's schema has no element for. */
-export const BATTLESCRIBE_OMIT = new Set(["associations", "localConditionGroups"]);
+/** The data repo's name in BattleScribe's data index. */
+export const DATA_INDEX_NAME = "Warhammer 40,000 11th Edition (40kdc-data)";
 
 export interface ExportedDocument {
   /** BSData file name, e.g. `Necrons.json`. */
@@ -47,18 +49,32 @@ export function buildExport(options: { readonly version: string; readonly datase
   return [{ file: GAME_SYSTEM_FILE, document: system }, ...catalogues.map((c) => ({ file: c.file, document: c.document }))];
 }
 
-/** Writes `json/<file>` and `xml/<name>.gst|.cat` for every document under `outDir`. */
-export function writeExport(documents: readonly ExportedDocument[], outDir: string): string[] {
+/**
+ * Writes under `outDir`: `json/<file>` (NewRecruit), `xml/<name>.gst|.cat`
+ * (BattleScribe), and `battlescribe/` — the hosted data repo BattleScribe adds
+ * by the URL of its `index.bsi` (see `data-index.ts`), served at `indexUrl`.
+ */
+export function writeExport(documents: readonly ExportedDocument[], outDir: string, options: { readonly indexUrl: string }): string[] {
   const written: string[] = [];
-  mkdirSync(path.join(outDir, "json"), { recursive: true });
-  mkdirSync(path.join(outDir, "xml"), { recursive: true });
+  const schema = loadBattleScribeSchema();
+  for (const dir of ["json", "xml", "battlescribe"]) mkdirSync(path.join(outDir, dir), { recursive: true });
+  const indexed: IndexedFile[] = [];
   for (const { file, document } of documents) {
     const jsonPath = path.join(outDir, "json", file);
     writeFileSync(jsonPath, bsdataJson(document));
     const root = Object.keys(document)[0];
-    const xmlPath = path.join(outDir, "xml", `${path.basename(file, ".json")}${ROOT_EXTENSION[root]}`);
-    writeFileSync(xmlPath, toBattleScribeXml(document as never, { omitKeys: BATTLESCRIBE_OMIT }));
+    const node = document[root] as BsNode;
+    const name = `${path.basename(file, ".json")}${ROOT_EXTENSION[root]}`;
+    const xml = toBattleScribeSchemaXml(document, schema);
+    const xmlPath = path.join(outDir, "xml", name);
+    writeFileSync(xmlPath, xml);
     written.push(jsonPath, xmlPath);
+    indexed.push({ name, kind: root === "gameSystem" ? "gamesystem" : "catalogue", id: String(node.id), dataName: String(node.name), revision: Number(node.revision), xml });
+  }
+  for (const [name, bytes] of hostedDataRepo(DATA_INDEX_NAME, options.indexUrl, indexed)) {
+    const hostedPath = path.join(outDir, "battlescribe", name);
+    writeFileSync(hostedPath, bytes);
+    written.push(hostedPath);
   }
   return written;
 }

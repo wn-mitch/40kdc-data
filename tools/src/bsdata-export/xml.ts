@@ -10,6 +10,8 @@
  * with everything beneath them.
  */
 
+import { projectDocument, type BattleScribeSchema, type ProjectedElement } from "./battlescribe-schema.js";
+
 /** Child element name for each array wrapper. */
 const ITEM_ELEMENT: Readonly<Record<string, string>> = {
   alias: "alias",
@@ -168,6 +170,29 @@ function element(name: string, node: { [key: string]: Json }, depth: number, opt
   if (children.length === 0 && text === null) return `${open}/>`;
   const body = text === null ? children : [...children, `${indent}  ${escapeText(text)}`];
   return `${open}>\n${body.join("\n")}\n${indent}</${name}>`;
+}
+
+function renderProjected(el: ProjectedElement, depth: number): string {
+  const indent = "  ".repeat(depth);
+  const attrs = el.attributes.map(([key, value]) => ` ${key}="${escapeAttr(String(value))}"`).join("");
+  const children = el.children.map((child) =>
+    "value" in child
+      ? `${indent}  <${child.name}>${escapeText(child.value)}</${child.name}>`
+      : `${indent}  <${child.name}>\n${child.items.map((item) => renderProjected(item, depth + 2)).join("\n")}\n${indent}  </${child.name}>`,
+  );
+  const open = `${indent}<${el.name}${attrs}`;
+  if (children.length === 0) return el.text === undefined ? `${open}/>` : `${open}>${escapeText(el.text)}</${el.name}>`;
+  if (el.text !== undefined) throw new Error(`bsdata xml: ${el.name} has both text and child elements`);
+  return `${open}>\n${children.join("\n")}\n${indent}</${el.name}>`;
+}
+
+/**
+ * Renders a document as BattleScribe 2.03 XML: projected onto BattleScribe's
+ * schema (`battlescribe-schema.ts`), so child order and attributes follow it
+ * and NewRecruit-only constructs are dropped.
+ */
+export function toBattleScribeSchemaXml(document: Record<string, unknown>, schema: BattleScribeSchema): string {
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n${renderProjected(projectDocument(schema, document), 0)}\n`;
 }
 
 /** Renders a `{gameSystem}` or `{catalogue}` document as an XML string. */

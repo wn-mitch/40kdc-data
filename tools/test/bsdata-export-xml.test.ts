@@ -1,10 +1,19 @@
 import fc from "fast-check";
 import { XMLParser } from "fast-xml-parser";
-import { describe, expect, it } from "vitest";
+import { spawnSync } from "node:child_process";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import * as path from "node:path";
+import { beforeAll, describe, expect, it } from "vitest";
+import { Dataset } from "../src/data/dataset.js";
+import { loadBattleScribeSchema, projectElement, SCHEMA_PATH, type ProjectedElement } from "../src/bsdata-export/battlescribe-schema.js";
+import { evaluatePoints, type EvalContext } from "../src/bsdata-export/evaluate.js";
+import { buildExport, type ExportedDocument } from "../src/bsdata-export/export.js";
+import { BSDATA_IDS } from "../src/bsdata-export/ids.js";
 import type { FormatDescriptor } from "../src/bsdata-export/format.js";
 import formatJson from "../src/bsdata-export/format.json" with { type: "json" };
-import { CONTAINER_KIND, isNode, type BsNode } from "../src/bsdata-export/source.js";
-import { toBattleScribeXml } from "../src/bsdata-export/xml.js";
+import { children, CONTAINER_KIND, isNode, type BsNode } from "../src/bsdata-export/source.js";
+import { toBattleScribeSchemaXml, toBattleScribeXml } from "../src/bsdata-export/xml.js";
 
 const FORMAT = formatJson as unknown as FormatDescriptor;
 const ELEMENT_STRINGS = new Set(["description", "readme", "comment"]);
@@ -139,3 +148,83 @@ describe("BattleScribe XML serialization", () => {
     expect(xml).not.toContain("association");
   });
 });
+
+describe("BattleScribe 2.03 schema projection", () => {
+  const schema = loadBattleScribeSchema();
+  let documents: ExportedDocument[];
+  beforeAll(() => {
+    documents = buildExport({ version: "1.5.1", dataset: Dataset.embedded() });
+  }, 120_000);
+
+  const hasXmllint = spawnSync("xmllint", ["--version"]).status === 0;
+  // CI must run the schema check; locally it needs libxml2's xmllint.
+  it.skipIf(!hasXmllint && !process.env.CI)("writes every document valid against BattleScribe's schema", () => {
+    expect(hasXmllint, "xmllint is required in CI").toBe(true);
+    const dir = mkdtempSync(path.join(tmpdir(), "bsdata-xsd-"));
+    try {
+      const xsd = readFileSync(SCHEMA_PATH, "utf8");
+      writeFileSync(path.join(dir, "catalogue.xsd"), xsd);
+      writeFileSync(path.join(dir, "gamesystem.xsd"), xsd.replaceAll("http://www.battlescribe.net/schema/catalogueSchema", "http://www.battlescribe.net/schema/gameSystemSchema"));
+      const failures: string[] = [];
+      documents.forEach((doc, index) => {
+        const root = Object.keys(doc.document)[0];
+        const file = path.join(dir, `${index}.xml`);
+        writeFileSync(file, toBattleScribeSchemaXml(doc.document, schema));
+        const result = spawnSync("xmllint", ["--noout", "--schema", path.join(dir, root === "gameSystem" ? "gamesystem.xsd" : "catalogue.xsd"), file], { encoding: "utf8" });
+        if (result.status !== 0) failures.push(`${doc.file}: ${result.stderr.split("\n").slice(0, 3).join(" | ")}`);
+      });
+      expect(failures).toEqual([]);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }, 300_000);
+
+  it("prices every unit in BattleScribe at its first copy's points", () => {
+    const pts = BSDATA_IDS.system.costTypes.pts;
+    const units = documents.slice(1).flatMap((doc) =>
+      children(Object.values(doc.document)[0] as BsNode, "sharedSelectionEntries").filter((e) => e.type === "unit" || e.type === "model"),
+    );
+    expect(units.length).toBeGreaterThan(900);
+    fc.assert(
+      fc.property(fc.constantFrom(...units), fc.integer({ min: 1, max: 20 }), (entry, models) => {
+        const projected = toJson(projectElement(schema, "selectionEntry", "SelectionEntry", entry));
+        const ctx: EvalContext = { modelCount: models, earlierCopies: 0, primaryCatalogueId: "", selected: new Set() };
+        expect(evaluatePoints(projected, pts, { ...ctx, earlierCopies: 2 })).toBe(evaluatePoints(entry, pts, ctx));
+      }),
+      { numRuns: 1000 },
+    );
+  });
+
+  it("drops only the NewRecruit-only constructs and rejects anything else outside the schema", () => {
+    const entry: BsNode = {
+      name: "E",
+      id: "1-1-1-1",
+      hidden: false,
+      import: true,
+      type: "unit",
+      constraints: [
+        { id: "2-2-2-2", type: "max", value: 1, field: "selections", scope: "parent", shared: true },
+        { id: "3-3-3-3", type: "max", value: 1, field: "associations", scope: "self", shared: true, childId: "4-4-4-4", childName: "Leader" },
+      ],
+      modifiers: [
+        { type: "set", field: "hidden", value: true, conditions: [{ type: "atLeast", value: 1, field: "selections", scope: "force", childId: "5-5-5-5", childName: "D", shared: true }] },
+        { type: "set", field: "pts", value: 9, conditionGroups: [{ type: "and", localConditionGroups: [{ type: "atLeast", value: 1 }] }] },
+      ],
+      associations: [{ name: "Leading", id: "6-6-6-6" }],
+    };
+    const projected = toJson(projectElement(schema, "selectionEntry", "SelectionEntry", entry));
+    expect(children(projected, "constraints").map((c) => c.id)).toEqual(["2-2-2-2"]);
+    expect(children(projected, "modifiers")).toHaveLength(1);
+    expect(children(children(projected, "modifiers")[0], "conditions")[0].childName).toBeUndefined();
+    expect(projected.associations).toBeUndefined();
+    expect(() => projectElement(schema, "selectionEntry", "SelectionEntry", { ...entry, invented: 1 })).toThrow(/does not allow "invented"/);
+  });
+});
+
+/** A projected element back in BSData JSON form. */
+function toJson(el: ProjectedElement): BsNode {
+  const out: BsNode = Object.fromEntries(el.attributes);
+  if (el.text !== undefined) out.$text = el.text;
+  for (const child of el.children) out[child.name] = "value" in child ? child.value : child.items.map(toJson);
+  return out;
+}
