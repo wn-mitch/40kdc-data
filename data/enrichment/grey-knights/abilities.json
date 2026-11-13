@@ -3558,7 +3558,7 @@
       "target": "this-unit",
       "modifier": {
         "amount": 3,
-        "per": "model"
+        "per": "one-model"
       }
     },
     "scope": {

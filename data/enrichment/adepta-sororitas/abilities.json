@@ -3599,7 +3599,13 @@
       },
       "effect": {
         "type": "return-models",
-        "target": "this-unit",
+        "target": {
+          "level": "model",
+          "member_of": "this-unit",
+          "model_names": [
+            "Geminae Superia"
+          ]
+        },
         "modifier": {
           "count": 1
         }

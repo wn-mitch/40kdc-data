@@ -4943,7 +4943,7 @@
               "target": "selected-unit",
               "modifier": {
                 "amount": 3,
-                "per": "model"
+                "per": "one-model"
               }
             }
           },

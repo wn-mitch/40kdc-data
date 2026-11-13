@@ -6395,7 +6395,7 @@
                     "target": "event-subject",
                     "modifier": {
                       "amount": "D3",
-                      "per": "unit"
+                      "per": "one-model"
                     }
                   }
                 },
@@ -9526,7 +9526,7 @@
           "target": "this-unit",
           "modifier": {
             "amount": 3,
-            "per": "unit"
+            "per": "one-model"
           }
         },
         {
@@ -10262,7 +10262,7 @@
             "target": "this-unit",
             "modifier": {
               "amount": "D3+1",
-              "per": "model"
+              "per": "one-model"
             }
           }
         }

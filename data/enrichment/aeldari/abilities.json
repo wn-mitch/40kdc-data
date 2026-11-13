@@ -7907,7 +7907,7 @@
                 "target": "selected-unit",
                 "modifier": {
                   "amount": "D3",
-                  "per": "model"
+                  "per": "one-model"
                 }
               }
             }

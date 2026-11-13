@@ -7334,14 +7334,14 @@
       "target": "this-unit",
       "modifier": {
         "amount": 3,
-        "per": "model"
+        "per": "one-model"
       }
     },
     "scope": {
       "duration": "permanent"
     },
     "expected": {
-      "text": "Each model in the unit regains up to 3 lost wounds."
+      "text": "One model in the unit regains up to 3 lost wounds."
     }
   },
   {
@@ -10785,7 +10785,7 @@
             "target": "this-unit",
             "modifier": {
               "amount": "D3",
-              "per": "model"
+              "per": "one-model"
             }
           }
         },
@@ -10806,7 +10806,7 @@
             "target": "this-unit",
             "modifier": {
               "amount": 3,
-              "per": "model"
+              "per": "one-model"
             }
           }
         }
@@ -10821,7 +10821,7 @@
       ]
     },
     "expected": {
-      "text": "Unless the unit has the SOUL FORGE keyword, each model in the unit regains up to D3 lost wounds.\nIf the unit has the SOUL FORGE keyword, each model in the unit regains up to 3 lost wounds.\nApplies to: units with HERETIC ASTARTES."
+      "text": "Unless the unit has the SOUL FORGE keyword, one model in the unit regains up to D3 lost wounds.\nIf the unit has the SOUL FORGE keyword, one model in the unit regains up to 3 lost wounds.\nApplies to: units with HERETIC ASTARTES."
     }
   },
   {
@@ -24182,7 +24182,7 @@
                 "target": "this-unit",
                 "modifier": {
                   "amount": "D3",
-                  "per": "model"
+                  "per": "one-model"
                 }
               }
             ]
@@ -24206,7 +24206,7 @@
       "subject": "recipient"
     },
     "expected": {
-      "text": "When an enemy unit within 6\" of this unit fails a Battle-shock test, if the unit is the Neurothrope model, while an enemy unit is within 6\" of this unit, that unit suffers D3 mortal wounds; each model in the unit regains up to D3 lost wounds."
+      "text": "When an enemy unit within 6\" of this unit fails a Battle-shock test, if the unit is the Neurothrope model, while an enemy unit is within 6\" of this unit, that unit suffers D3 mortal wounds; one model in the unit regains up to D3 lost wounds."
     }
   },
   {
@@ -25149,7 +25149,7 @@
                     "target": "event-subject",
                     "modifier": {
                       "amount": "D3",
-                      "per": "unit"
+                      "per": "one-model"
                     }
                   }
                 },
@@ -25302,7 +25302,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "If your Army Faction is CHAOS DAEMONS, your deployment zone is within The Shadow of Chaos. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within The Shadow of Chaos until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within The Shadow of Chaos until the end of the phase (evaluated once at that time).\n-> When a friendly unit takes a Battle-shock test (the triggering unit must have LEGIONES DAEMONICA): if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos, the triggering unit gets +1 to Battle-shock rolls; if the triggering battle shock roll succeeded, unless the triggering unit has the BATTLELINE keyword and the triggering battle shock roll succeeded, the triggering unit regains up to D3 lost wounds; if the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, return D3 destroyed models (excluding CHARACTER models) to the triggering unit, each with its full wounds remaining.\n-> When an enemy unit takes a Battle-shock test: if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos or while the triggering unit is within 6\" of a friendly unit with the BLOODTHIRSTER, GREAT UNCLEAN ONE, KAIROS FATEWEAVER, KEEPER OF SECRETS, LORD OF CHANGE, ROTIGUS, SHALAXI HELBANE or SKARBRAND keyword, the triggering unit gets -1 to Battle-shock rolls; if the triggering battle shock roll was a failure, the triggering unit suffers D3 mortal wounds."
+      "text": "If your Army Faction is CHAOS DAEMONS, your deployment zone is within The Shadow of Chaos. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within The Shadow of Chaos until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within The Shadow of Chaos until the end of the phase (evaluated once at that time).\n-> When a friendly unit takes a Battle-shock test (the triggering unit must have LEGIONES DAEMONICA): if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos, the triggering unit gets +1 to Battle-shock rolls; if the triggering battle shock roll succeeded, unless the triggering unit has the BATTLELINE keyword and the triggering battle shock roll succeeded, one model in the triggering unit regains up to D3 lost wounds; if the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, return D3 destroyed models (excluding CHARACTER models) to the triggering unit, each with its full wounds remaining.\n-> When an enemy unit takes a Battle-shock test: if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos or while the triggering unit is within 6\" of a friendly unit with the BLOODTHIRSTER, GREAT UNCLEAN ONE, KAIROS FATEWEAVER, KEEPER OF SECRETS, LORD OF CHANGE, ROTIGUS, SHALAXI HELBANE or SKARBRAND keyword, the triggering unit gets -1 to Battle-shock rolls; if the triggering battle shock roll was a failure, the triggering unit suffers D3 mortal wounds."
     }
   },
   {

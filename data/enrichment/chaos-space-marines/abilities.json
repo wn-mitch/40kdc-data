@@ -8172,7 +8172,7 @@
             "target": "this-unit",
             "modifier": {
               "amount": "D3",
-              "per": "model"
+              "per": "one-model"
             }
           }
         },
@@ -8193,7 +8193,7 @@
             "target": "this-unit",
             "modifier": {
               "amount": 3,
-              "per": "model"
+              "per": "one-model"
             }
           }
         }
@@ -15718,7 +15718,7 @@
           "target": "this-unit",
           "modifier": {
             "amount": 3,
-            "per": "model"
+            "per": "one-model"
           }
         },
         {

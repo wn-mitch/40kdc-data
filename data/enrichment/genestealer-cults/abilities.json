@@ -5003,7 +5003,8 @@
                               "modifier": {
                                 "amount": {
                                   "roll_var": "that-many"
-                                }
+                                },
+                                "per": "one-model"
                               }
                             }
                           ]
@@ -7273,7 +7274,7 @@
         "target": "this-unit",
         "modifier": {
           "amount": 1,
-          "per": "model"
+          "per": "one-model"
         }
       }
     },
