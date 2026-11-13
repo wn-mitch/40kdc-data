@@ -390,7 +390,8 @@ jobs:
       - name: Build the export
         if: steps.check.outputs.publish == 'true'
         run: |
-          cd tools && npm run export:bsdata -- --out ../dist/bsdata \
+          # The exporter reads the embedded dataset, which is generated, not committed.
+          cd tools && npm run codegen:data && npm run export:bsdata -- --out ../dist/bsdata \
             --index-url "https://github.com/${{ github.repository }}/releases/download/bsdata-latest/index.bsi"
           cd ../dist/bsdata
           (cd json && zip -q -r "../wh40k-11e-40kdc-${{ steps.ver.outputs.version }}-newrecruit.zip" .)
