@@ -117,7 +117,7 @@ class ByteWriter {
 /** Cursor over a byte buffer. Throws {@link MalformedError} past the end. */
 class ByteReader {
   private pos = 0;
-  private readonly dec = new TextDecoder("utf-8", { fatal: false });
+  private readonly dec = new TextDecoder("utf-8", { fatal: false, ignoreBOM: false });
   constructor(private readonly bytes: Uint8Array) {}
 
   byte(): number {

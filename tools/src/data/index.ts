@@ -117,6 +117,7 @@ export {
   encodeShareToken,
   decodeShareToken,
   rosterToShareList,
+  shareListToRoster,
   shareRegistryVersion,
   ShareRegistryIndex,
   SHARE_FORMAT_VERSION,

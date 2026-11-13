@@ -143,6 +143,7 @@ export {
   importRoster,
   tryImportRoster,
   decodeListForge,
+  importBattleScribe,
 } from "./import/index.js";
 
 // Army-list exporter (Roster → text or JSON for any of the supported formats).
@@ -158,8 +159,9 @@ export {
   atc2026CompactSerializer,
   atc2026FullSerializer,
   yellowscribeSerializer,
+  yellowscribeArmy,
 } from "./export/index.js";
-export type { DatasetSerializer, ExportFormat, RosterSerializer } from "./export/index.js";
+export type { DatasetSerializer, ExportFormat, RosterSerializer, YellowscribeArmy, YellowscribeUnit } from "./export/index.js";
 export type { FormatAdapter } from "./import/index.js";
 export type {
   ImportOptions,

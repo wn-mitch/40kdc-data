@@ -107,19 +107,19 @@ function render(node: XmlEl, depth: number): string {
 // ---------------------------------------------------------------------------
 
 /** Movement: append the inch mark unless the stored value already carries one. */
-function fmtMove(m: StatValue): string {
+export function fmtMove(m: StatValue): string {
   const s = String(m);
   return s.endsWith('"') ? s : `${s}"`;
 }
 
 /** A "target-number" stat (Sv, Ld, BS, WS): append `+`. */
-function fmtTarget(v: number): string {
+export function fmtTarget(v: number): string {
   return `${v}+`;
 }
 
 /** A weapon keyword's display label: `Anti-Infantry 4+`, `Rapid Fire 1`, or a
  * bare `Devastating Wounds`. Mirrors the datasheet convention. */
-function keywordLabel(
+export function keywordLabel(
   name: string,
   parameters: Record<string, unknown> | undefined,
 ): string {
