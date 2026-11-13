@@ -327,6 +327,60 @@ jobs:
             --title "@alpaca-software/40kdc-data v${{ steps.ver.outputs.version }}" \
             --notes "Published to https://www.npmjs.com/package/@alpaca-software/40kdc-data/v/${{ steps.ver.outputs.version }}"
 
+  publish-bsdata:
+    # Attach the BSData-compatible export (a game system plus one catalogue
+    # per faction) to a GitHub release, so BattleScribe and NewRecruit users
+    # can load the dataset as a data repo. Self-gates on the
+    # `bsdata-v<version>` tag: the job is a no-op until tools/package.json's
+    # version is bumped. JSON is NewRecruit's format; the .gst/.cat XML is
+    # BattleScribe's. Ability descriptions are the describer's own text.
+    needs: [validate, rust, python, go, conformance]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      published: ${{ steps.check.outputs.publish }}
+      version: ${{ steps.ver.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: cd tools && npm ci
+      - name: Read package version
+        id: ver
+        run: echo "version=$(node -p "require('./tools/package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Skip if this version's export is already released
+        id: check
+        run: |
+          if git ls-remote --exit-code --tags origin "refs/tags/bsdata-v${{ steps.ver.outputs.version }}" >/dev/null; then
+            echo "bsdata-v${{ steps.ver.outputs.version }} already released; skipping."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build the export
+        if: steps.check.outputs.publish == 'true'
+        run: |
+          cd tools && npm run export:bsdata -- --out ../dist/bsdata
+          cd ../dist/bsdata
+          (cd json && zip -q -r "../wh40k-11e-40kdc-${{ steps.ver.outputs.version }}-newrecruit.zip" .)
+          (cd xml && zip -q -r "../wh40k-11e-40kdc-${{ steps.ver.outputs.version }}-battlescribe.zip" .)
+      - name: Tag and create GitHub release
+        if: steps.check.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: bsdata-v${{ steps.ver.outputs.version }}
+        run: |
+          git tag "$TAG"
+          git push origin "$TAG"
+          gh release create "$TAG" \
+            --title "BSData-compatible export v${{ steps.ver.outputs.version }}" \
+            --notes "Warhammer 40,000 11th edition game system and faction catalogues generated from @alpaca-software/40kdc-data ${{ steps.ver.outputs.version }}. The -newrecruit zip holds the JSON catalogues; the -battlescribe zip holds .gst/.cat XML. Stat lines and points only; ability descriptions are 40kdc's own plain-English summaries." \
+            dist/bsdata/*.zip
+
   publish-pypi:
     # Auto-publish wh40kdc to PyPI once main is green, via trusted publishing
     # (OIDC — no token secret). Self-gates on the package version: if this
