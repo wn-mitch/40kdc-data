@@ -162,7 +162,10 @@ pub(super) fn suppressed_ability_ids(
     let has = |keyword: &str| combined.contains(&normalize_name(keyword));
     let required = |keyword: &str| has(keyword) || !printed(keyword);
     let mut out = HashSet::new();
-    for entry in entries.iter().filter(|e| standing_source(&e.source)) {
+    for entry in entries
+        .iter()
+        .filter(|e| standing_source(&e.source) && e.ability.trigger.is_none())
+    {
         let effect =
             strip_nulls(&serde_json::to_value(&entry.ability.effect).unwrap_or(Value::Null));
         walk_suppressions(&effect, &required, &has, &mut out);

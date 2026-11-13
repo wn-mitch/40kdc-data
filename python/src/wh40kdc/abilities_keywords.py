@@ -168,7 +168,7 @@ def suppressed_ability_ids(
             out.add(rule)
 
     for entry in entries:
-        if entry["source"]["kind"] in _STANDING_SOURCES:
+        if entry["source"]["kind"] in _STANDING_SOURCES and not entry["ability"].raw.get("trigger"):
             walk(entry["ability"].raw.get("effect"))
     return out
 

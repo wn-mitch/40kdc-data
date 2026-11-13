@@ -486,7 +486,7 @@ function suppressedAbilityIds(entries: readonly EligibleAbility[], members: read
       keywordPredicateHolds(target as Record<string, unknown>, required, has) === true);
     if (reaches) out.add(modifier.rule);
   };
-  for (const entry of entries) if (STANDING_SOURCES.has(entry.source.kind)) walk(entry.ability.raw.effect);
+  for (const entry of entries) if (STANDING_SOURCES.has(entry.source.kind) && !entry.ability.raw.trigger) walk(entry.ability.raw.effect);
   return out;
 }
 

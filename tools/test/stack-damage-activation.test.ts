@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { resolveTarget } from "../src/compare.js";
 import { Dataset } from "../src/data/index.js";
+import { RAW_DATA } from "../src/data/bundle.generated.js";
 import { parseMatrixConfig } from "../src/stack-damage/config.js";
 import { resolveFactionContext } from "../src/stack-damage/factions.js";
 import type { StackMember } from "../src/stack-damage/model.js";
@@ -110,6 +111,26 @@ describe("stack damage suppression", () => {
     both.detachmentIds.push("renegade-warband");
     const levers = session("chaos-space-marines", "shooting").pool(both).levers;
     expect(levers.some((lever) => lever.source.kind === "ability" && lever.source.abilityId === pacts)).toBe(false);
+  });
+});
+
+describe("stack damage triggered suppression", () => {
+  it("leaves a suppression to play when the suppressing rule has a trigger", () => {
+    // Renegade Warband's rule suppresses Dark Pacts as a standing rule. The same rule behind a
+    // trigger only suppresses it once the trigger happens, so the pool keeps offering Dark Pacts.
+    const pacts = "dark-pacts-chaos-space-marines";
+    const triggered = new Dataset({
+      ...RAW_DATA,
+      abilities: RAW_DATA.abilities.map((a) => (a.ability_id === "slaves-to-none-chaos-space-marines" ? { ...a, trigger: { event: "round-started" } } : a)),
+    } as typeof RAW_DATA);
+    const config = parseMatrixConfig(
+      { HC_FACTIONS: "chaos-space-marines", HC_TARGETS: TARGET, HC_PHASES: "shooting", HC_OUTPUT: "stack-damage.json" },
+      { factionIds: new Set(["chaos-space-marines"]), targetIds: [TARGET] },
+    );
+    const target = resolveTarget(triggered, triggered.targetProfiles.get(TARGET)!)!;
+    const pool = damageScoringSession({ dataset: triggered, config, faction: resolveFactionContext(triggered, "chaos-space-marines"), target, phase: "shooting" })
+      .pool(emptySpec("chaos-space-marines", [{ unit: triggered.units.getInFaction("defiler", "chaos-space-marines")!, role: "bodyguard" }] as StackMember[], ["renegade-warband"]));
+    expect(pool.levers.some((lever) => lever.source.kind === "ability" && lever.source.abilityId === pacts)).toBe(true);
   });
 });
 

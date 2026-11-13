@@ -437,8 +437,9 @@ func suppressedAbilityIDs(entries []map[string]any, members []map[string]bool, p
 		}
 	}
 	for _, entry := range entries {
-		if standingSources[getStr(entry["source"].(map[string]any), "kind")] {
-			walk(entry["ability"].(*AbilityView).Raw["effect"])
+		ability := entry["ability"].(*AbilityView)
+		if standingSources[getStr(entry["source"].(map[string]any), "kind")] && ability.Raw["trigger"] == nil {
+			walk(ability.Raw["effect"])
 		}
 	}
 	return out
