@@ -2,18 +2,18 @@
  * A unit's models and wargear as BSData selections.
  *
  * Models: one model entry per composition row inside a "Models" group bounded
- * by the unit's model count. Wargear: one link per item the unit can carry,
- * whose min/max at each squad size are the item's bounds from
- * `Dataset.loadoutOf` (the same rules roster validation checks), with the
- * default squad's copies as the default amount. Where an MFM slot gives each
- * model exactly one pick among items no other slot offers, the slot's items sit
- * in a group whose total is fixed at picks × that row's models, so a swap
- * cannot leave models unarmed. Slots that fail that check against the default
- * loadout get no group.
+ * by the unit's model count. Wargear: under MFM loadout rules each model
+ * carries its own bundle choices (`model-wargear.ts`). A unit with only
+ * authored wargear options gets one link per item it can carry, whose min/max
+ * at each squad size are the item's bounds from `Dataset.loadoutOf`, with the
+ * default squad's copies as the default amount.
  */
 import type { Dataset } from "../data/dataset.js";
 import type { Unit } from "../generated.js";
 import type { IdAllocator } from "./ids.js";
+import type { MfmLoadoutRules } from "../data/mfm-loadout.js";
+import { mfmRowSplits } from "../data/mfm-loadout-unit.js";
+import { modelWargear } from "./model-wargear.js";
 import { compact, condition, constraint, cost, entryLink, modifier } from "./nodes.js";
 import type { BsNode } from "./source.js";
 
@@ -23,14 +23,6 @@ interface Row {
   readonly max: number;
 }
 
-interface Slot {
-  readonly model?: string;
-  readonly picks: number;
-  readonly repeats: boolean;
-  readonly alternate: boolean;
-  readonly choices: readonly (readonly { id: string; count: number }[])[];
-}
-
 export interface WargearContext {
   readonly ids: IdAllocator;
   readonly dataset: Dataset;
@@ -38,6 +30,8 @@ export interface WargearContext {
   readonly ptsTypeId: string;
   /** The shared entry id for an item id, when the catalogue defines one. */
   readonly itemEntry: (itemId: string) => { readonly id: string; readonly name: string } | undefined;
+  /** A hidden category, defined in the unit's catalogue, that the members of the shared cap `key` link to. */
+  readonly capCategory: (key: string) => { readonly id: string; readonly name: string };
 }
 
 /** Every model count the unit can be fielded at. */
@@ -52,17 +46,6 @@ export function compositionRows(dataset: Dataset, unit: Unit): Row[] {
   if (rows.length > 0) return rows.map((r) => ({ name: r.name, min: r.min, max: r.max }));
   const counts = modelCounts(unit);
   return [{ name: unit.name, min: counts[0], max: counts[counts.length - 1] }];
-}
-
-/** Models on `row` in a unit of `total` models, when the rows decide it. */
-function rowModels(rows: readonly Row[], rowName: string, total: number): number | null {
-  const variable = rows.filter((r) => r.min !== r.max);
-  const fixed = rows.filter((r) => r.min === r.max).reduce((sum, r) => sum + r.min, 0);
-  const row = rows.find((r) => r.name === rowName.replace(/#\d+$/, ""));
-  if (!row) return null;
-  if (row.min === row.max) return row.min;
-  if (variable.length !== 1) return null;
-  return total - fixed;
 }
 
 function countModifiers(ctx: WargearContext, constraintId: string, values: readonly (readonly [number, number])[]): BsNode[] {
@@ -96,30 +79,6 @@ function sizedLimits(ctx: WargearContext, key: string, mins: [number, number][],
   };
 }
 
-function safeGroups(unit: Unit, ctx: WargearContext, rows: readonly Row[], items: ReadonlySet<string>): { slot: Slot; itemIds: string[] }[] {
-  const loadout = ctx.dataset.unitCompositionOf(unit)?.loadout as { slots?: Slot[] } | undefined;
-  const slots = loadout?.slots ?? [];
-  const offeredBy = new Map<string, number>();
-  for (const slot of slots) for (const choice of slot.choices) for (const item of choice) offeredBy.set(item.id, (offeredBy.get(item.id) ?? 0) + 1);
-  const view = ctx.dataset.loadoutOf(unit);
-  const out: { slot: Slot; itemIds: string[] }[] = [];
-  for (const slot of slots) {
-    if (slot.alternate || !slot.model || slot.choices.length < 2) continue;
-    if (!slot.choices.every((choice) => choice.length === 1 && choice[0].count === 1)) continue;
-    const itemIds = slot.choices.map((choice) => choice[0].id);
-    if (new Set(itemIds).size !== itemIds.length) continue;
-    if (!itemIds.every((id) => offeredBy.get(id) === 1 && items.has(id))) continue;
-    const holds = modelCounts(unit).every((n) => {
-      const models = rowModels(rows, slot.model!, n);
-      const base = view.base(n);
-      if (models === null || !base) return false;
-      return itemIds.reduce((sum, id) => sum + (base.get(id) ?? 0), 0) === slot.picks * models;
-    });
-    if (holds) out.push({ slot, itemIds });
-  }
-  return out;
-}
-
 export interface UnitSelections {
   readonly selectionEntries: BsNode[];
   readonly selectionEntryGroups: BsNode[];
@@ -133,31 +92,107 @@ export function unitSelections(unit: Unit, ctx: WargearContext, multiModel: bool
   const key = `unit:${unit.faction_id}/${unit.id}`;
   const selectionEntryGroups: BsNode[] = [];
 
+  const rules = (ctx.dataset.unitCompositionOf(unit)?.loadout ?? undefined) as MfmLoadoutRules | undefined;
+  const perModel = rules ? modelWargear(unit, ctx, rules, rows, counts, multiModel) : undefined;
+
   if (multiModel) {
-    selectionEntryGroups.push({
-      name: "Models",
-      id: ctx.ids.id(`${key}:models`),
-      hidden: false,
-      constraints: [
-        constraint({ id: ctx.ids.id(`${key}:models:min`), type: "min", value: counts[0], field: "selections", scope: "parent", includeChildSelections: false }),
-        constraint({ id: ctx.ids.id(`${key}:models:max`), type: "max", value: counts[counts.length - 1], field: "selections", scope: "parent", includeChildSelections: false }),
-      ],
-      selectionEntries: rows.map((row, index) =>
-        compact({
-          name: row.name,
-          id: ctx.ids.id(`${key}:model:${index}:${row.name}`),
-          hidden: false,
-          import: true,
-          type: "model",
-          constraints: [
-            constraint({ id: ctx.ids.id(`${key}:model:${index}:min`), type: "min", value: row.min, field: "selections", scope: "parent" }),
-            constraint({ id: ctx.ids.id(`${key}:model:${index}:max`), type: "max", value: row.max, field: "selections", scope: "parent" }),
-          ],
-          costs: [cost("pts", ctx.ptsTypeId, 0)],
-        }),
-      ),
+    const minId = ctx.ids.id(`${key}:models:min`);
+    const composition = ctx.dataset.unitCompositionOf(unit);
+    // Unit sizes no tier allows: reaching one raises the minimum to the next allowed size.
+    const allowed = rules && composition ? counts.filter((n) => mfmRowSplits(composition as never, n).length > 0) : counts;
+    const gaps = allowed.flatMap((n, i) => (i > 0 && n > allowed[i - 1] + 1 ? [[allowed[i - 1] + 1, n] as const] : []));
+    const rowEntry = (row: Row, index: number, bounds: { min: number; max: number }): BsNode =>
+      compact({
+        name: row.name,
+        id: ctx.ids.id(`${key}:model:${index}:${row.name}`),
+        hidden: false,
+        import: true,
+        type: "model",
+        constraints: [
+          constraint({ id: ctx.ids.id(`${key}:model:${index}:min`), type: "min", value: bounds.min, field: "selections", scope: "parent" }),
+          constraint({ id: ctx.ids.id(`${key}:model:${index}:max`), type: "max", value: bounds.max, field: "selections", scope: "parent" }),
+        ],
+        entryLinks: perModel?.rowLinks[index],
+        selectionEntryGroups: perModel?.rowGroups[index],
+        costs: [cost("pts", ctx.ptsTypeId, 0)],
+      });
+    const entries: BsNode[] = [];
+    const groups: BsNode[] = [];
+    rows.forEach((row, index) => {
+      const bare = perModel?.bare[index] ?? 0;
+      if (bare === 0) {
+        entries.push(rowEntry(row, index, row));
+        return;
+      }
+      // Up to `bare` of the row's models may carry nothing, as the default unit's do.
+      const rowKey = `${key}:row-group:${index}`;
+      groups.push({
+        name: row.name,
+        id: ctx.ids.id(rowKey),
+        hidden: false,
+        constraints: [
+          constraint({ id: ctx.ids.id(`${rowKey}:min`), type: "min", value: row.min, field: "selections", scope: "parent", includeChildSelections: false }),
+          constraint({ id: ctx.ids.id(`${rowKey}:max`), type: "max", value: row.max, field: "selections", scope: "parent", includeChildSelections: false }),
+        ],
+        selectionEntries: [
+          rowEntry(row, index, { min: 0, max: row.max }),
+          compact({
+            name: `${row.name} (no wargear)`,
+            id: ctx.ids.id(`${key}:model:${index}:bare`),
+            hidden: false,
+            import: true,
+            type: "model",
+            constraints: [constraint({ id: ctx.ids.id(`${key}:model:${index}:bare:max`), type: "max", value: bare, field: "selections", scope: "parent" })],
+            costs: [cost("pts", ctx.ptsTypeId, 0)],
+          }),
+        ],
+      });
     });
+    // A unit whose rows must match one of several tiers: no matching tier sets the maximum to 0.
+    const tiers = (composition?.tiers ?? []) as { models: Row[] }[];
+    const rowIds = rows.map((_, index) => (perModel && (perModel.bare[index] ?? 0) > 0 ? ctx.ids.id(`${key}:row-group:${index}`) : ctx.ids.id(`${key}:model:${index}:${rows[index].name}`)));
+    const tierRange = (tier: { models: Row[] }, index: number): { min: number; max: number } => {
+      const ordinal = rows.slice(0, index + 1).filter((r) => r.name === rows[index].name).length;
+      const named = tier.models.filter((m) => m.name === rows[index].name);
+      return named[ordinal - 1] ?? { min: 0, max: 0 };
+    };
+    const outside = (tier: { models: Row[] }): BsNode => ({
+      type: "or",
+      conditions: rows.flatMap((_, index) => {
+        const { min, max } = tierRange(tier, index);
+        const count = (type: "lessThan" | "greaterThan", value: number) => condition({ childId: rowIds[index], field: "selections", scope: "unit", type, value, includeChildSelections: true });
+        return [...(min > 0 ? [count("lessThan", min)] : []), count("greaterThan", max)];
+      }),
+    });
+    const maxId = ctx.ids.id(`${key}:models:max`);
+    const tierModifiers = tiers.length > 1 ? [modifier({ field: maxId, type: "set", value: 0, conditionGroups: [{ type: "and", conditionGroups: tiers.map(outside) }] })] : [];
+    selectionEntryGroups.push(
+      compact({
+        name: "Models",
+        id: ctx.ids.id(`${key}:models`),
+        hidden: false,
+        constraints: [
+          constraint({ id: minId, type: "min", value: allowed[0] ?? counts[0], field: "selections", scope: "parent", includeChildSelections: false }),
+          constraint({ id: maxId, type: "max", value: counts[counts.length - 1], field: "selections", scope: "parent", includeChildSelections: false }),
+        ],
+        modifiers: [
+          ...gaps.map(([from, next]) =>
+          modifier({
+            field: minId,
+            type: "set",
+            value: next,
+            conditions: [condition({ childId: "model", field: "selections", scope: ctx.entryId, type: "atLeast", value: from, includeChildSelections: true })],
+          }),
+          ),
+          ...tierModifiers,
+        ],
+        selectionEntries: entries,
+        selectionEntryGroups: groups,
+      }),
+    );
   }
+  // Under MFM rules the models carry their wargear; the unit holds only its own slots.
+  if (perModel) return { selectionEntries: [], selectionEntryGroups: [...selectionEntryGroups, ...perModel.unitGroups], entryLinks: [...perModel.unitLinks] };
 
   const view = ctx.dataset.loadoutOf(unit);
   const bounds = counts.map((n) => [n, view.bounds(n)] as const).filter(([, b]) => b !== null);
@@ -189,27 +224,7 @@ export function unitSelections(unit: Unit, ctx: WargearContext, multiModel: bool
     });
   };
 
-  const grouped = new Set<string>();
-  safeGroups(unit, ctx, rows, items).forEach(({ slot, itemIds }, index) => {
-    const links = itemIds.map(itemLink).filter((l): l is BsNode => l !== null);
-    if (links.length !== itemIds.length) return;
-    for (const id of itemIds) grouped.add(id);
-    const totals = counts.map((n) => [n, slot.picks * rowModels(rows, slot.model!, n)!] as [number, number]);
-    const limits = sizedLimits(ctx, `${key}:slot:${index}`, totals, totals);
-    selectionEntryGroups.push(
-      compact({
-        name: `${slot.model!.replace(/#\d+$/, "")} wargear`,
-        id: ctx.ids.id(`${key}:slot:${index}`),
-        hidden: false,
-        constraints: limits.constraints,
-        entryLinks: links,
-        modifiers: limits.modifiers.length > 0 ? limits.modifiers : undefined,
-      }),
-    );
-  });
-
   const entryLinks = [...items]
-    .filter((id) => !grouped.has(id))
     .sort()
     .map(itemLink)
     .filter((l): l is BsNode => l !== null);

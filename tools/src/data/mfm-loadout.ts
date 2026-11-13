@@ -165,7 +165,7 @@ export function rowBundles(
 }
 
 /** What one model of `model` starts with: its stock template, or its default copies over its model count. */
-function modelStock(rules: MfmLoadoutRules, model: string): Copies {
+export function modelStock(rules: MfmLoadoutRules, model: string): Copies {
   const out = copiesOf(rules.templates.find((entry) => entry.model === model)?.items ?? []);
   const row = rules.stock.find((entry) => entry.model === model);
   if (row && row.models > 0) for (const item of row.items) out.set(item.id, Math.max(out.get(item.id) ?? 0, Math.ceil(item.count / row.models)));

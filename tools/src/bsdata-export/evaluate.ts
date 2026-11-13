@@ -20,6 +20,14 @@ export interface EvalContext {
   readonly primaryCatalogueId: string;
   /** Entry ids selected in the army (battle size, detachments, toggles). */
   readonly selected: ReadonlySet<string>;
+  /** Selections of an entry within the evaluated unit (`unit` scope) or parent selection (`parent` scope). */
+  readonly counts?: { readonly unit?: ReadonlyMap<string, number>; readonly parent?: ReadonlyMap<string, number> };
+}
+
+function scopedCount(ctx: EvalContext, scope: string, childId: string): number | undefined {
+  if (scope === "unit") return ctx.counts?.unit ? (ctx.counts.unit.get(childId) ?? 0) : undefined;
+  if (scope === "parent") return ctx.counts?.parent ? (ctx.counts.parent.get(childId) ?? 0) : undefined;
+  return undefined;
 }
 
 function compare(type: string, actual: number, value: number): boolean {
@@ -58,6 +66,8 @@ function conditionHolds(condition: BsNode, entryId: string, ctx: EvalContext): b
     (childId === "model" && (scope === entryId || scope === "self")) ||
     (ctx.modelScopes?.has(childId) === true && (scope === entryId || scope === "self"));
   if (countsModels) return compare(type, ctx.modelCount, value);
+  const scoped = scopedCount(ctx, scope, childId);
+  if (scoped !== undefined) return compare(type, scoped, value);
   if (scope === "force" || scope === "roster") return compare(type, ctx.selected.has(childId) ? 1 : 0, value);
   throw new UnsupportedLogic(`condition ${childId} in ${scope}`);
 }
@@ -84,8 +94,18 @@ function groupHolds(group: BsNode, entryId: string, ctx: EvalContext): boolean {
   throw new UnsupportedLogic(`condition group ${type}`);
 }
 
+/** How many times a modifier applies: once, or per its repeats' counts. */
+function timesApplied(modifier: BsNode, ctx: EvalContext): number {
+  const repeats = children(modifier, "repeats");
+  if (repeats.length === 0) return 1;
+  return repeats.reduce((total, r) => {
+    const count = scopedCount(ctx, str(r, "scope") ?? "", str(r, "childId") ?? "");
+    if (count === undefined || r.roundUp === true) throw new UnsupportedLogic(`repeat over ${str(r, "childId")} in ${str(r, "scope")}`);
+    return total + Math.floor(count / Number(r.value)) * Number(r.repeats);
+  }, 0);
+}
+
 function modifierApplies(modifier: BsNode, entryId: string, ctx: EvalContext): boolean {
-  if (children(modifier, "repeats").length > 0) throw new UnsupportedLogic("repeating modifier");
   return groupHolds({ type: "and", conditions: modifier.conditions, conditionGroups: modifier.conditionGroups }, entryId, ctx);
 }
 
@@ -115,9 +135,9 @@ export function evaluateField(node: BsNode, entryId: string, field: string, base
   for (const modifier of modifiersOf(node)) {
     if (str(modifier, "field") !== field) continue;
     if (!modifierApplies(modifier, entryId, ctx)) continue;
-    const amount = Number(modifier.value);
+    const amount = Number(modifier.value) * timesApplied(modifier, ctx);
     const type = str(modifier, "type");
-    if (type === "set") value = amount;
+    if (type === "set") value = Number(modifier.value);
     else if (type === "increment") value += amount;
     else if (type === "decrement") value -= amount;
     else throw new UnsupportedLogic(`modifier type ${type}`);

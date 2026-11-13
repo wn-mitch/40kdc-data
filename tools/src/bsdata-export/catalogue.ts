@@ -51,6 +51,7 @@ function parentOf(dataset: Dataset, factionId: string): string | null {
 /** Shared state for every catalogue in one export. */
 export class CatalogueSet {
   private readonly categoryDefs = new Map<string, Map<string, string>>();
+  private readonly hiddenCategories = new Set<string>();
   private readonly categoryRules = new Map<string, { constraints: BsNode[]; modifiers: BsNode[] }>();
 
   constructor(private readonly ctx: CatalogueContext) {}
@@ -79,10 +80,22 @@ export class CatalogueSet {
     return id;
   }
 
+  /** A hidden category that groups a unit's wargear entries for a shared cap, defined in the family root's catalogue. */
+  hiddenCategory(home: string, key: string, name: string): string {
+    const root = this.rootOf(home);
+    const id = this.ctx.ids.id(`category:${key}`);
+    const defs = this.categoryDefs.get(root) ?? new Map<string, string>();
+    if (defs.has(name) && defs.get(name) !== id) throw new Error(`bsdata export: two categories named ${name} in ${root}`);
+    defs.set(name, id);
+    this.categoryDefs.set(root, defs);
+    this.hiddenCategories.add(id);
+    return id;
+  }
+
   categoryEntries(root: string): BsNode[] {
     return [...(this.categoryDefs.get(root) ?? new Map<string, string>())]
       .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
-      .map(([name, id]) => compact({ name, id, hidden: false, ...this.categoryRules.get(id) }));
+      .map(([name, id]) => compact({ name, id, hidden: this.hiddenCategories.has(id), ...this.categoryRules.get(id) }));
   }
 
   /** Constraints and modifiers a keyword category carries (unit minimums). */
@@ -241,6 +254,7 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
       dataset: ctx.dataset,
       refs: ctx.refs,
       category: (home, name) => set.category(home, name),
+      hiddenCategory: (home, key, name) => set.hiddenCategory(home, key, name),
       catalogueId: (f) => set.catalogueId(f),
       hostCatalogues,
       detachmentEntryId: (d) => set.detachmentEntryId(d, root),

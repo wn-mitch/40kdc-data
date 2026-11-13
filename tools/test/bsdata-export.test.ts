@@ -252,42 +252,6 @@ describe("BSData export rules agree with the package", () => {
     }
   });
 
-  it("bounds every wargear item as Dataset.loadoutOf does at every squad size", () => {
-    fc.assert(
-      fc.property(fc.nat(), fc.nat(), (pick, sizePick) => {
-        const unit = units[pick % units.length];
-        const view = dataset.units.byFaction(unit.factionId).find((u) => u.id === unit.unitId)!;
-        const counts = modelCounts(view.raw);
-        const n = counts[sizePick % counts.length];
-        const bounds = dataset.loadoutOf(view.raw).bounds(n);
-        fc.pre(bounds !== null);
-        const links = [
-          ...children(unit.entry, "entryLinks"),
-          ...children(unit.entry, "selectionEntryGroups").filter((g) => g.name !== "Enhancements").flatMap((g) => children(g, "entryLinks")),
-        ].filter((l) => l.name !== "Warlord");
-        const ctx = ctxFor(unit, { modelCount: n });
-        const entryId = str(unit.entry, "id")!;
-        const itemName = (id: string): string =>
-          (dataset.weapons.byFaction(view.raw.faction_id).find((w) => w.id === id)?.name ?? dataset.weapons.getAny(id)?.name ?? dataset.wargear.getAny(id)?.name ?? "").toLowerCase();
-        for (const link of links) {
-          const matches = [...bounds!.keys()].filter((id) => itemName(id) === String(link.name).toLowerCase());
-          if (matches.length !== 1) continue;
-          const bound = bounds!.get(matches[0])!;
-          const [min, max] = children(link, "constraints");
-          expect({ item: matches[0], n, bounds: [evaluateConstraint(link, str(min, "id")!, entryId, ctx), evaluateConstraint(link, str(max, "id")!, entryId, ctx)] }).toEqual({
-            item: matches[0],
-            n,
-            bounds: [bound.min, bound.max],
-          });
-        }
-        // Every item the unit can carry at this size has a link.
-        const linked = new Set(links.map((l) => String(l.name).toLowerCase()));
-        for (const [id, bound] of bounds!) if (bound.max > 0) expect(linked.has(itemName(id)), `${unit.unitId} ${id}`).toBe(true);
-      }),
-      { numRuns: 1500 },
-    );
-  });
-
   it("limits datasheets per battle size as roster validation does", () => {
     fc.assert(
       fc.property(fc.nat(), fc.constantFrom("incursion" as const, "strike-force" as const), (pick, size) => {

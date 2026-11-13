@@ -24,6 +24,8 @@ export interface UnitBuildContext {
   readonly refs: SystemRefs;
   /** Category id for a keyword or datasheet name, defined in `catalogueFaction`'s catalogue. */
   readonly category: (catalogueFaction: string, name: string) => string;
+  /** A hidden category for the wargear cap `key`, defined in `catalogueFaction`'s catalogue. */
+  readonly hiddenCategory: (catalogueFaction: string, key: string, name: string) => string;
   readonly catalogueId: (factionId: string) => string | undefined;
   readonly hostCatalogues: (host: string, unit: Unit) => { readonly exact: boolean; readonly ids: readonly string[] };
   readonly detachmentEntryId: (detachmentId: string) => string | undefined;
@@ -230,12 +232,19 @@ export function buildUnitEntry(view: UnitView, ctx: UnitBuildContext, preferredI
   const name = preferredUnitName(unit);
   const multiModel = (unit.model_count?.max ?? 1) > 1;
   const home = homeFactionOf(ctx.dataset, unit);
+  const capNumbers = new Map<string, number>();
   const selections = unitSelections(unit, {
     ids: ctx.ids,
     dataset: ctx.dataset,
     entryId: id,
     ptsTypeId: ctx.refs.cost.pts,
     itemEntry: (itemId) => ctx.itemEntry(unit, itemId),
+    capCategory: (capKey) => {
+      // Hidden, and numbered within the unit so the name stays unique in a catalogue.
+      if (!capNumbers.has(capKey)) capNumbers.set(capKey, capNumbers.size + 1);
+      const label = `${name} wargear limit ${capNumbers.get(capKey)} [${unit.faction_id}]`;
+      return { id: ctx.hiddenCategory(home, capKey, label), name: label };
+    },
   }, multiModel);
   const limit = datasheetLimit(unit, ctx, key);
   const character = ctx.characterOptions(view, key);
