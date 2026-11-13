@@ -144,8 +144,9 @@ export function rowBundles(
   const product = (group: typeof slots): Copies[] | null => {
     let bundles: MfmItem[][] = [[]];
     for (const slot of group) {
-      // An alternative is taken by one of its own choices; leaving it untaken is the regular bundles.
-      const choices = slot.alternate ? slot.choices : rowSlotChoices(rules, slot, stock);
+      // An alternative is taken by one of its own real choices; leaving it untaken (an empty
+      // choice) is the regular bundles, so an empty choice never stands in for them.
+      const choices = slot.alternate ? slot.choices.filter((choice) => choice.length > 0) : rowSlotChoices(rules, slot, stock);
       const picks = pickCombinations(choices, slot.picks, slot.repeats);
       bundles = bundles.flatMap((bundle) => picks.map((pick) => [...bundle, ...pick])).filter(fits);
       if (bundles.length > maxBundles) return null;

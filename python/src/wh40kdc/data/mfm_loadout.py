@@ -181,10 +181,12 @@ def row_bundles(
     def product(group: list[Mapping[str, Any]]) -> list[Copies] | None:
         bundles: list[list[Any]] = [[]]
         for slot in group:
-            # An alternative is taken by one of its own choices; leaving it untaken is the
-            # regular bundles.
+            # An alternative is taken by one of its own real choices; leaving it untaken (an
+            # empty choice) is the regular bundles, so an empty choice never stands in for them.
             choices = (
-                slot["choices"] if slot["alternate"] else _row_slot_choices(rules, slot, stock)
+                [choice for choice in slot["choices"] if choice]
+                if slot["alternate"]
+                else _row_slot_choices(rules, slot, stock)
             )
             picks = _pick_combinations(choices, slot["picks"], slot["repeats"])
             bundles = [

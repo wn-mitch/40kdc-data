@@ -347,9 +347,14 @@ fn row_bundles(
     let product = |group: &[&MfmSlot]| -> Option<Vec<Copies>> {
         let mut bundles: Vec<Vec<MfmItem>> = vec![Vec::new()];
         for slot in group {
-            // An alternative is taken by one of its own choices; leaving it untaken is the regular bundles.
+            // An alternative is taken by one of its own real choices; leaving it untaken (an empty
+            // choice) is the regular bundles, so an empty choice never stands in for them.
             let choices = if slot.alternate {
-                slot.choices.clone()
+                slot.choices
+                    .iter()
+                    .filter(|choice| !choice.is_empty())
+                    .cloned()
+                    .collect()
             } else {
                 row_slot_choices(rules, model, &slot.choices, &stock)
             };

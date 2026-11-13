@@ -371,3 +371,19 @@ describe("addedModels", () => {
     expect(addedModels(dump, "ds", () => null, new Set())).toEqual({ unresolvedItems: ["Echo Claws"] });
   });
 });
+
+describe("alternate wargear slots", () => {
+  // An alternate slot that lists an empty choice: leaving the alternate untaken keeps the
+  // standard gun, so a model carrying nothing is still not a legal loadout.
+  const rules = {"stock":[{"model":"Trooper","models":1,"items":[{"id":"gun","count":1}]}],"templates":[{"model":"Trooper","items":[{"id":"gun","count":1}]}],"slots":[{"model":"Trooper","picks":1,"repeats":false,"alternate":false,"choices":[[{"id":"gun","count":1}]]},{"model":"Trooper","picks":1,"repeats":false,"alternate":true,"choices":[[],[{"id":"sword","count":1}]]}],"limits":[],"uniform":[],"options":[]} as MfmLoadoutRules;
+  const check = (counts: Record<string, number>) => checkMfmLoadout(rules, new Map([["Trooper", 1]]), new Map(Object.entries(counts)));
+
+  it("refuses a model the alternate's empty choice would leave unarmed", () => {
+    expect(check({}).map((v) => v.code)).toEqual(["no-assignment"]);
+  });
+
+  it("allows the standard loadout or the alternate", () => {
+    expect(check({ gun: 1 })).toEqual([]);
+    expect(check({ sword: 1 })).toEqual([]);
+  });
+});

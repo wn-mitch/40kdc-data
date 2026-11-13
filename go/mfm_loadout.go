@@ -373,9 +373,16 @@ func (r *MfmLoadoutRules) rowBundles(model string, fitsCopies func(mfmCopies) bo
 		bundles := [][]mfmItem{{}}
 		for _, s := range group {
 			slot := r.Slots[s]
-			// An alternative is taken by one of its own choices; leaving it untaken is the regular bundles.
-			choices := slot.Choices
-			if !slot.Alternate {
+			// An alternative is taken by one of its own real choices; leaving it untaken (an empty
+			// choice) is the regular bundles, so an empty choice never stands in for them.
+			var choices [][]mfmItem
+			if slot.Alternate {
+				for _, choice := range slot.Choices {
+					if len(choice) > 0 {
+						choices = append(choices, choice)
+					}
+				}
+			} else {
 				choices = r.rowSlotChoices(model, slot.Choices, stock)
 			}
 			picks := mfmPickCombinations(choices, slot.Picks, slot.Repeats)
