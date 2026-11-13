@@ -19,6 +19,7 @@ import { bsdataJson } from "../src/bsdata-export/json.js";
 import { children, str, walk, type BsNode } from "../src/bsdata-export/source.js";
 import { homeFactionOf, isEpicHero } from "../src/bsdata-export/unit.js";
 import { modelCounts } from "../src/bsdata-export/wargear.js";
+import { defaultMfmLoadout } from "../src/data/mfm-loadout.js";
 import { factionCatalogue } from "./bsdata-export-fixture.js";
 
 const FORMAT = formatJson as unknown as FormatDescriptor;
@@ -236,6 +237,55 @@ describe("BSData export rules agree with the package", () => {
       }),
       { numRuns: 2000 },
     );
+  });
+
+  it("guards a tiered unit's model split only once every row holds its own minimum", () => {
+    // A builder fills a new unit's required rows (its leader) only while the Models
+    // group's maximum is above 0, so the tier guard must not close it on an empty unit.
+    let guarded = 0;
+    for (const unit of units) {
+      const models = children(unit.entry, "selectionEntryGroups").find((g) => g.name === "Models");
+      const maxId = str(children(models ?? {}, "constraints").find((c) => c.type === "max") ?? {}, "id");
+      if (!models || !maxId || !children(models, "modifiers").some((m) => m.field === maxId && m.value === 0)) continue;
+      guarded += 1;
+      const rows = [...children(models, "selectionEntries"), ...children(models, "selectionEntryGroups")].map((row) => {
+        const bound = (type: string) => Number(children(row, "constraints").find((c) => c.type === type)?.value ?? 0);
+        return { id: str(row, "id")!, min: bound("min"), max: bound("max") };
+      });
+      const maxWith = (count: (row: { min: number; max: number }, index: number) => number) => {
+        const unitCounts = new Map(rows.map((row, index) => [row.id, count(row, index)]));
+        const total = [...unitCounts.values()].reduce((a, b) => a + b, 0);
+        return evaluateConstraint(models, maxId, str(unit.entry, "id")!, ctxFor(unit, { modelCount: total, counts: { unit: unitCounts } }));
+      };
+      expect({ unit: unit.unitId, empty: maxWith(() => 0) > 0 }).toEqual({ unit: unit.unitId, empty: true });
+      // Past every tier's count for the last row, with the other rows at their minimum, the guard closes the group.
+      expect({ unit: unit.unitId, over: maxWith((row, index) => (index === rows.length - 1 ? row.max + 1 : row.min)) }).toEqual({ unit: unit.unitId, over: 0 });
+    }
+    expect(guarded).toBeGreaterThan(0);
+  });
+
+  it("starts every unit on the package's default model split", () => {
+    // A builder gives each row its defaultAmount, else its minimum, before topping the group up
+    // from its first entries; the rows alone must reach the default unit.
+    let compared = 0;
+    for (const unit of units) {
+      const view = dataset.units.byFaction(unit.factionId).find((u) => u.id === unit.unitId)!;
+      const rules = dataset.unitCompositionOf(view.raw)?.loadout as Parameters<typeof defaultMfmLoadout>[0] | undefined;
+      const models = children(unit.entry, "selectionEntryGroups").find((g) => g.name === "Models");
+      if (!rules || !models || children(models, "selectionEntryGroups").length > 0) continue;
+      const filled = new Map<string, number>();
+      for (const row of children(models, "selectionEntries")) {
+        const min = Number(children(row, "constraints").find((c) => c.type === "min")?.value ?? 0);
+        const name = String(row.name);
+        filled.set(name, (filled.get(name) ?? 0) + (typeof row.defaultAmount === "number" ? row.defaultAmount : min));
+      }
+      const want = new Map<string, number>();
+      for (const [name, n] of defaultMfmLoadout(rules).models) if (n > 0) want.set(name.replace(/#\d+$/, ""), (want.get(name.replace(/#\d+$/, "")) ?? 0) + n);
+      const got = new Map([...filled].filter(([, n]) => n > 0));
+      expect({ unit: unit.unitId, split: Object.fromEntries([...got].sort()) }).toEqual({ unit: unit.unitId, split: Object.fromEntries([...want].sort()) });
+      compared += 1;
+    }
+    expect(compared).toBeGreaterThan(200);
   });
 
   it("prices detachment-specific tables while that detachment is selected", () => {

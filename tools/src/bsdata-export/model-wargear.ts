@@ -188,6 +188,43 @@ export function startingBundles(composition: MfmComposition, modelCount: number)
  * bundles: a slot takes the largest choice its row's remaining bundle holds. A row whose bundle the
  * slots do not use up exactly gets none.
  */
+/**
+ * Rows split so a unit with no uniform start can still start legal: when the base loadout gives a
+ * fixed-size row's models different bundles (Sanctifiers: one Missionary with a Ministorum flamer,
+ * one with a plasma gun, each capped at one), the row becomes one row per bundle. Returns the rows
+ * and, per row, the bundle its models start with and the composed row it came from (`of`); null
+ * when the unit needs no split or has none.
+ */
+export function splitStartingRows(composition: MfmComposition, rows: readonly Row[], modelCount: number): { rows: Row[]; starts: (MfmItem[] | undefined)[]; of: number[] } | null {
+  const rules = composition.loadout;
+  const split = rules ? mfmRows(composition, modelCount) : null;
+  if (!rules || !split || startingBundles(composition, modelCount)) return null;
+  const base = mfmBaseLoadout(rules, split);
+  const assigned = base?.legal ? mfmAssignment(rules, split, base.counts) : null;
+  if (!assigned) return null;
+  const out: Row[] = [];
+  const starts: (MfmItem[] | undefined)[] = [];
+  const of: number[] = [];
+  let changed = false;
+  for (const [c, row] of rows.entries()) {
+    const groups = assigned.groups.filter((g) => g.model === row.name && g.count > 0);
+    const total = groups.reduce((n, g) => n + g.count, 0);
+    if (groups.length > 1 && row.min === row.max && total === row.max && rows.filter((r) => r.name === row.name).length === 1) {
+      for (const g of groups) {
+        out.push({ ...row, min: g.count, max: g.count });
+        starts.push(g.items);
+        of.push(c);
+      }
+      changed = true;
+    } else {
+      out.push(row);
+      starts.push(groups.length === 1 ? groups[0].items : undefined);
+      of.push(c);
+    }
+  }
+  return changed ? { rows: out, starts, of } : null;
+}
+
 function startingChoices(rules: MfmLoadoutRules, expanded: readonly (readonly MfmItem[])[][], bundles: ReadonlyMap<string | undefined, MfmItem[]>): Map<number, number> {
   const out = new Map<number, number>();
   for (const [model, items] of bundles) {
@@ -216,7 +253,7 @@ function startingChoices(rules: MfmLoadoutRules, expanded: readonly (readonly Mf
 }
 
 /** The per-model selections for `unit`'s MFM `rules`; `rows` are its composition rows in order. */
-export function modelWargear(unit: Unit, ctx: WargearContext, rules: MfmLoadoutRules, rows: readonly Row[], counts: readonly number[], multiModel: boolean): ModelWargear {
+export function modelWargear(unit: Unit, ctx: WargearContext, rules: MfmLoadoutRules, rows: readonly Row[], counts: readonly number[], multiModel: boolean, rowStarts?: readonly (MfmItem[] | undefined)[]): ModelWargear {
   const key = `unit:${unit.faction_id}/${unit.id}:mfm`;
   const keys = rowKeys(rows);
   const surcharge = new Map((unit.wargear_costs ?? []).map((wc) => [wc.item_id, wc.cost]));
@@ -233,6 +270,8 @@ export function modelWargear(unit: Unit, ctx: WargearContext, rules: MfmLoadoutR
   const composition = ctx.dataset.unitCompositionOf(unit) as MfmComposition | undefined;
   const bundles = composition ? startingBundles(composition, counts[0]) : null;
   const starts = bundles ? startingChoices(rules, expanded, bundles) : new Map<number, number>();
+  // A split row's own starting choices, from the bundle its models start with.
+  const rowStartChoices = rows.map((row, r) => (rowStarts?.[r] ? startingChoices(rules, expanded, new Map([[row.name, rowStarts[r]!]])) : undefined));
   // Choice entries per slot and row ("unit" for a slot without a row): each row gets its own.
   const choicesBySlot = new Map<string, Choice[]>();
   rules.slots.forEach((slot, s) => {
@@ -396,7 +435,10 @@ export function modelWargear(unit: Unit, ctx: WargearContext, rules: MfmLoadoutR
     // The choice the unit's starting loadout gives the slot (`startingChoices`); without one, the
     // choice one model's stock holds, else the empty choice, so an optional slot starts empty.
     const start = slot.model === undefined ? unitStock : modelStock(rules, slot.model);
-    const defaultChoice = starts.has(s)
+    const rowStart = row === null ? undefined : rowStartChoices[row];
+    const defaultChoice = rowStart?.has(s)
+      ? choices[rowStart.get(s)!]
+      : starts.has(s)
       ? choices[starts.get(s)!]
       : (choices.find((c) => c.items.length > 0 && c.items.every((i) => (start.get(i.id) ?? 0) >= i.count)) ?? choices.find((c) => c.items.length === 0));
     const offAlternate = alternates.length > 0 && !slot.alternate;
@@ -429,7 +471,10 @@ export function modelWargear(unit: Unit, ctx: WargearContext, rules: MfmLoadoutR
   const unitLinks: BsNode[] = [];
   rows.forEach((_, r) => {
     const own = rules.slots.map((slot, s) => ({ slot, s })).filter(({ slot }) => rowsOf(slot.model).includes(r));
-    const alternates = own.filter(({ slot }) => slot.alternate).map(({ s }) => ctx.ids.id(`${key}:slot:${s}:${r}`));
+    // An alternative counts as taken by its real choices only: its empty choice ("None") is how a model keeps its standard wargear.
+    const alternates = own
+      .filter(({ slot }) => slot.alternate)
+      .flatMap(({ s }) => choicesBySlot.get(`${s}:${r}`)!.filter((c) => c.items.length > 0).map((c) => c.id));
     const groups = own.map(({ s }) => groupFor(s, r, alternates));
     // A row with no slots carries its template.
     const template = keys[r].map((k) => templates.get(k)).find((items) => items !== undefined) ?? [];

@@ -11,9 +11,9 @@
 import type { Dataset } from "../data/dataset.js";
 import type { Unit } from "../generated.js";
 import type { IdAllocator } from "./ids.js";
-import type { MfmLoadoutRules } from "../data/mfm-loadout.js";
+import { defaultMfmLoadout, type MfmLoadoutRules } from "../data/mfm-loadout.js";
 import { mfmRowSplits } from "../data/mfm-loadout-unit.js";
-import { modelWargear } from "./model-wargear.js";
+import { modelWargear, splitStartingRows } from "./model-wargear.js";
 import { compact, condition, constraint, cost, entryLink, modifier } from "./nodes.js";
 import type { BsNode } from "./source.js";
 
@@ -88,12 +88,14 @@ export interface UnitSelections {
 /** The unit's models and wargear; `multiModel` false for a single-model entry. */
 export function unitSelections(unit: Unit, ctx: WargearContext, multiModel: boolean): UnitSelections {
   const counts = modelCounts(unit);
-  const rows = compositionRows(ctx.dataset, unit);
+  const composed = compositionRows(ctx.dataset, unit);
+  const startSplit = counts.length === 1 && ctx.dataset.unitCompositionOf(unit)?.loadout ? splitStartingRows(ctx.dataset.unitCompositionOf(unit) as never, composed, counts[0]) : null;
+  const rows = startSplit?.rows ?? composed;
   const key = `unit:${unit.faction_id}/${unit.id}`;
   const selectionEntryGroups: BsNode[] = [];
 
   const rules = (ctx.dataset.unitCompositionOf(unit)?.loadout ?? undefined) as MfmLoadoutRules | undefined;
-  const perModel = rules ? modelWargear(unit, ctx, rules, rows, counts, multiModel) : undefined;
+  const perModel = rules ? modelWargear(unit, ctx, rules, rows, counts, multiModel, startSplit?.starts) : undefined;
 
   if (multiModel) {
     const minId = ctx.ids.id(`${key}:models:min`);
@@ -101,8 +103,18 @@ export function unitSelections(unit: Unit, ctx: WargearContext, multiModel: bool
     // Unit sizes no tier allows: reaching one raises the minimum to the next allowed size.
     const allowed = rules && composition ? counts.filter((n) => mfmRowSplits(composition as never, n).length > 0) : counts;
     const gaps = allowed.flatMap((n, i) => (i > 0 && n > allowed[i - 1] + 1 ? [[allowed[i - 1] + 1, n] as const] : []));
-    const rowEntry = (row: Row, index: number, bounds: { min: number; max: number }): BsNode =>
-      compact({
+    // The default unit's models per row. A builder fills a group's minimum from its first entries,
+    // so a row the default holds above its own minimum says so (Victrix Honour Guard starts with no
+    // Chapter Ancient, the first row).
+    const starting = rules ? defaultMfmLoadout(rules).models : undefined;
+    const startOf = (index: number): number | undefined => {
+      const name = rows[index].name;
+      const ordinal = rows.slice(0, index + 1).filter((r) => r.name === name).length;
+      return starting?.get(rows.filter((r) => r.name === name).length > 1 ? `${name}#${ordinal}` : name);
+    };
+    const rowEntry = (row: Row, index: number, bounds: { min: number; max: number }): BsNode => {
+      const start = startOf(index);
+      return compact({
         name: row.name,
         id: ctx.ids.id(`${key}:model:${index}:${row.name}`),
         hidden: false,
@@ -115,10 +127,30 @@ export function unitSelections(unit: Unit, ctx: WargearContext, multiModel: bool
         entryLinks: perModel?.rowLinks[index],
         selectionEntryGroups: perModel?.rowGroups[index],
         costs: [cost("pts", ctx.ptsTypeId, 0)],
+        defaultAmount: start !== undefined && start > bounds.min ? start : undefined,
       });
+    };
     const entries: BsNode[] = [];
     const groups: BsNode[] = [];
+    // A composed row split for its start (`splitStartingRows`) keeps its bounds as a group of its parts.
+    const partsOf = (c: number): number[] => (startSplit ? startSplit.of.flatMap((parent, i) => (parent === c ? [i] : [])) : [c]);
+    const splitGroupId = (c: number) => ctx.ids.id(`${key}:row-group:split:${c}`);
+    composed.forEach((row, c) => {
+      const parts = partsOf(c);
+      if (parts.length < 2) return;
+      groups.push({
+        name: row.name,
+        id: splitGroupId(c),
+        hidden: false,
+        constraints: [
+          constraint({ id: ctx.ids.id(`${key}:row-group:split:${c}:min`), type: "min", value: row.min, field: "selections", scope: "parent", includeChildSelections: false }),
+          constraint({ id: ctx.ids.id(`${key}:row-group:split:${c}:max`), type: "max", value: row.max, field: "selections", scope: "parent", includeChildSelections: false }),
+        ],
+        selectionEntries: parts.map((i) => rowEntry(rows[i], i, rows[i])),
+      });
+    });
     rows.forEach((row, index) => {
+      if (startSplit && partsOf(startSplit.of[index]).length > 1) return;
       const bare = perModel?.bare[index] ?? 0;
       if (bare === 0) {
         entries.push(rowEntry(row, index, row));
@@ -150,22 +182,33 @@ export function unitSelections(unit: Unit, ctx: WargearContext, multiModel: bool
     });
     // A unit whose rows must match one of several tiers: no matching tier sets the maximum to 0.
     const tiers = (composition?.tiers ?? []) as { models: Row[] }[];
-    const rowIds = rows.map((_, index) => (perModel && (perModel.bare[index] ?? 0) > 0 ? ctx.ids.id(`${key}:row-group:${index}`) : ctx.ids.id(`${key}:model:${index}:${rows[index].name}`)));
+    // Tiers name the composed rows: each counts its entry, its bare-model group, or its split group.
+    const rowIds = composed.map((_, c) => {
+      const parts = partsOf(c);
+      if (parts.length > 1) return splitGroupId(c);
+      const index = parts[0];
+      return perModel && (perModel.bare[index] ?? 0) > 0 ? ctx.ids.id(`${key}:row-group:${index}`) : ctx.ids.id(`${key}:model:${index}:${rows[index].name}`);
+    });
     const tierRange = (tier: { models: Row[] }, index: number): { min: number; max: number } => {
-      const ordinal = rows.slice(0, index + 1).filter((r) => r.name === rows[index].name).length;
-      const named = tier.models.filter((m) => m.name === rows[index].name);
+      const ordinal = composed.slice(0, index + 1).filter((r) => r.name === composed[index].name).length;
+      const named = tier.models.filter((m) => m.name === composed[index].name);
       return named[ordinal - 1] ?? { min: 0, max: 0 };
     };
     const outside = (tier: { models: Row[] }): BsNode => ({
       type: "or",
-      conditions: rows.flatMap((_, index) => {
+      conditions: composed.flatMap((_, index) => {
         const { min, max } = tierRange(tier, index);
         const count = (type: "lessThan" | "greaterThan", value: number) => condition({ childId: rowIds[index], field: "selections", scope: "unit", type, value, includeChildSelections: true });
         return [...(min > 0 ? [count("lessThan", min)] : []), count("greaterThan", max)];
       }),
     });
     const maxId = ctx.ids.id(`${key}:models:max`);
-    const tierModifiers = tiers.length > 1 ? [modifier({ field: maxId, type: "set", value: 0, conditionGroups: [{ type: "and", conditionGroups: tiers.map(outside) }] })] : [];
+    // The guard waits until every row holds its own minimum: a new unit starts below them, and a
+    // maximum of 0 then would stop the builder from adding the required models (the leader).
+    const rowsFilled = composed.flatMap((row, index) =>
+      row.min > 0 ? [condition({ childId: rowIds[index], field: "selections", scope: "unit", type: "atLeast", value: row.min, includeChildSelections: true })] : [],
+    );
+    const tierModifiers = tiers.length > 1 ? [modifier({ field: maxId, type: "set", value: 0, conditionGroups: [{ type: "and", conditions: rowsFilled, conditionGroups: tiers.map(outside) }] })] : [];
     selectionEntryGroups.push(
       compact({
         name: "Models",

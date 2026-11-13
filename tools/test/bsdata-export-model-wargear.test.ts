@@ -13,7 +13,7 @@ import { evaluateConstraint, type EvalContext } from "../src/bsdata-export/evalu
 import { buildExport } from "../src/bsdata-export/export.js";
 import { children, str, type BsNode } from "../src/bsdata-export/source.js";
 import { IdAllocator } from "../src/bsdata-export/ids.js";
-import { modelWargear, startingBundles } from "../src/bsdata-export/model-wargear.js";
+import { modelWargear, splitStartingRows, startingBundles } from "../src/bsdata-export/model-wargear.js";
 import { compositionRows, modelCounts } from "../src/bsdata-export/wargear.js";
 import { mfmRows } from "../src/data/mfm-loadout-unit.js";
 import { BSDATA_IDS } from "../src/bsdata-export/ids.js";
@@ -371,8 +371,9 @@ describe("BSData export per-model wargear agrees with the MFM loadout checker", 
       const n = modelCounts(unit)[0];
       const split = composition ? mfmRows(composition, n) : null;
       if (!split) continue;
-      // With no legal loadout whose rows each carry one bundle, a stack of identical models cannot start legal.
-      if (!startingBundles(composition!, n)) {
+      // With no legal loadout whose rows each carry one bundle, a stack of identical models cannot
+      // start legal unless the export splits its rows by starting bundle.
+      if (!startingBundles(composition!, n) && !splitStartingRows(composition!, compositionRows(dataset, unit), n)) {
         uniformless.push(`${model.entry.factionId}/${model.entry.unitId}`);
         continue;
       }
@@ -404,7 +405,7 @@ describe("BSData export per-model wargear agrees with the MFM loadout checker", 
     if (process.env.MW_DEBUG) console.log(failures.join("\n"));
     expect(checked).toBeGreaterThan(300);
     expect(failures).toEqual([]);
-    expect(uniformless.length).toBeLessThanOrEqual(5);
+    expect(uniformless).toEqual([]);
   });
 
   it("can build every loadout the package lists as legal", () => {
