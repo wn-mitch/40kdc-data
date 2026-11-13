@@ -173,6 +173,13 @@ describe("BSData export format", () => {
     const gstIds = definitions(gst);
     const byId = new Map([...roots.values()].map((r) => [str(r, "id")!, r]));
     const sentinels = new Set(["model", "unit", "any", "self", "parent", "force", "roster", "primary-catalogue", "ancestor", "selections", "forces", "associations", "hidden", "category"]);
+    // Constraint ids of each entry, which a link to the entry may modify.
+    const entryConstraints = new Map<string, Set<string>>();
+    for (const r of roots.values()) {
+      for (const { node, kind } of walk(r, "catalogue")) {
+        if (kind === "selectionEntry") entryConstraints.set(str(node, "id")!, new Set(children(node, "constraints").map((c) => str(c, "id")!)));
+      }
+    }
     const problems: string[] = [];
     for (const doc of documents.slice(1)) {
       const root = rootOf(doc);
@@ -196,6 +203,7 @@ describe("BSData export format", () => {
           if (key === "field" && ancestors.some((a) => children(a, "constraints").some((c) => str(c, "id") === ref))) continue;
           if (key === "field" && ancestors.some((a) => children(a, "forceEntries").some((f) => children(f, "constraints").some((c) => str(c, "id") === ref)))) continue;
           if (key === "field" && (ref === "name" || ref === "error")) continue;
+          if (key === "field" && ancestors.some((a) => entryConstraints.get(str(a, "targetId") ?? "")?.has(ref))) continue;
           if (key === "scope" && ancestors.some((a) => str(a, "id") === ref)) continue;
           // A primary-catalogue condition names a catalogue, which any army can be built from.
           if (key === "childId" && str(node, "scope") === "primary-catalogue" && byId.has(ref)) continue;
@@ -339,7 +347,9 @@ describe("BSData export rules agree with the package", () => {
         expect(option, detachment.id).toBeDefined();
         const dp = children(option!, "costs").find((c) => str(c, "typeId") === BSDATA_IDS.system.costTypes["Detachment Points"])!;
         expect(dp.value).toBe(detachment.detachment_points ?? 0);
-        const granted = children(option!, "categoryLinks").map((l) => dispositions.get(str(l, "targetId")!));
+        const granted = children(option!, "categoryLinks")
+          .filter((l) => dispositions.has(str(l, "targetId")!))
+          .map((l) => dispositions.get(str(l, "targetId")!));
         expect(new Set(granted)).toEqual(new Set((detachment.force_dispositions ?? []).map((d) => dataset.forceDispositions.get(d)!.name)));
         checked += 1;
       }

@@ -97,6 +97,8 @@ export interface AllyContext {
   readonly unitEntryId: (unit: UnitView) => string;
   readonly unitName: (unit: UnitView) => string;
   readonly detachmentEntryId: (detachmentId: string) => string | undefined;
+  /** Modifiers the host's link carries for its own detachments: keyword grants and datasheet bars. */
+  readonly hostModifiers: (host: string, unit: UnitView) => BsNode[];
   /** Whether the host catalogue's own root list links the unit. */
   readonly offeredBy: (host: string, unit: UnitView) => boolean;
 }
@@ -187,9 +189,10 @@ export function allyPieces(ctx: AllyContext, host: string, plans: readonly AllyP
   }
   for (const [keyOfUnit, offer] of offers) {
     const gate = gateModifier(offer.closed);
+    const modifiers = [...(gate ? [gate] : []), ...ctx.hostModifiers(host, offer.unit)];
     if (ctx.offeredBy(host, offer.unit)) {
       // Already on the army's list: the rules gate and count the existing link.
-      pieces.onExisting.set(keyOfUnit, { modifiers: gate ? [gate] : [], categoryLinks: offer.categoryLinks });
+      pieces.onExisting.set(keyOfUnit, { modifiers, categoryLinks: offer.categoryLinks });
       continue;
     }
     pieces.sources.add(sourceRootOf(offer.unit.raw.faction_id));
@@ -200,7 +203,7 @@ export function allyPieces(ctx: AllyContext, host: string, plans: readonly AllyP
         targetId: ctx.unitEntryId(offer.unit),
         type: "selectionEntry",
         categoryLinks: offer.categoryLinks,
-        modifiers: gate ? [gate] : undefined,
+        modifiers: modifiers.length > 0 ? modifiers : undefined,
       }),
     );
   }

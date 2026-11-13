@@ -12,6 +12,7 @@ import { categoryLink, characteristic, compact, condition, constraint, cost, hid
 import { basePrice, pointsModifiers } from "./points.js";
 import type { BsNode } from "./source.js";
 import { SECTION_CATEGORIES, type SystemRefs } from "./system.js";
+import { doublesLimit } from "./restrictions.js";
 import { unitSelections } from "./wargear.js";
 
 /** Base types in the order a unit's section falls back to them. */
@@ -31,6 +32,8 @@ export interface UnitBuildContext {
   readonly excludingCatalogues: (unit: Unit) => readonly string[];
   /** Catalogue ids in whose armies an allied rule removes `abilityId` from the unit. */
   readonly abilityRemovedIn: (unit: Unit, abilityId: string) => readonly string[];
+  /** Detachment bars and conditional keywords (`restrictions.ts`), applied after the datasheet limit. */
+  readonly restrictions: (unit: Unit, limitId: string, limits: { incursion: number; strike: number } | null) => BsNode[];
   /** Unit ids some leader / support character can attach to. */
   readonly ledBy: { readonly leader: ReadonlySet<string>; readonly support: ReadonlySet<string> };
   /** What the unit takes from its catalogue: the Warlord upgrade link and an enhancement group. */
@@ -109,6 +112,12 @@ function unitProfiles(view: UnitView, ctx: UnitBuildContext, key: string): BsNod
   return [...stats, ...described];
 }
 
+/** The category a unit's `keyword` links: a game-system category, else the home family's keyword category. */
+export function keywordCategoryId(ctx: Pick<UnitBuildContext, "refs" | "category">, home: string, keyword: string): string {
+  const sectionLike = (SECTION_CATEGORIES as readonly string[]).includes(keyword) || ctx.refs.hasCategory(keyword);
+  return sectionLike ? ctx.refs.category(keyword) : ctx.category(home, keyword);
+}
+
 function unitCategoryLinks(unit: Unit, ctx: UnitBuildContext, key: string, home: string): BsNode[] {
   const primary = primarySection(unit);
   const links: BsNode[] = [];
@@ -120,30 +129,32 @@ function unitCategoryLinks(unit: Unit, ctx: UnitBuildContext, key: string, home:
   };
   add(primary, ctx.refs.category(primary), true);
   for (const keyword of unit.faction_keywords ?? []) add(`Faction: ${keyword}`, ctx.refs.category(`Faction: ${keyword}`), false);
-  for (const keyword of [...(unit.keywords ?? []), unit.name]) {
-    const sectionLike = (SECTION_CATEGORIES as readonly string[]).includes(keyword) || ctx.refs.hasCategory(keyword);
-    add(keyword, sectionLike ? ctx.refs.category(keyword) : ctx.category(home, keyword), false);
-  }
+  for (const keyword of [...(unit.keywords ?? []), unit.name]) add(keyword, keywordCategoryId(ctx, home, keyword), false);
   if (unit.attachment_role === "leader") add("Leader", ctx.refs.category("Leader"), false);
   if (unit.attachment_role === "support") add("Support", ctx.refs.category("Support"), false);
   return links;
 }
 
-function datasheetLimit(unit: Unit, ctx: UnitBuildContext, key: string): { constraints: BsNode[]; modifiers: BsNode[] } {
+function datasheetLimit(
+  unit: Unit,
+  ctx: UnitBuildContext,
+  key: string,
+): { id: string; limits: { incursion: number; strike: number } | null; constraints: BsNode[]; modifiers: BsNode[] } {
   const id = ctx.ids.id(`${key}:limit`);
   if (isEpicHero(unit)) {
     return {
+      id,
+      limits: null,
       constraints: [constraint({ id, type: "max", value: 1, field: "selections", scope: "roster", includeChildSelections: true, includeChildForces: true })],
       modifiers: [],
     };
   }
-  const keywords = new Set(unit.keywords ?? []);
-  const doubled =
-    unit.role === "battleline" || unit.role === "dedicated-transport" || keywords.has("Battleline") || keywords.has("Dedicated Transport");
-  const factor = doubled ? 2 : 1;
+  const factor = doublesLimit(unit) ? 2 : 1;
   const strike = unitLimitForBattleSize("strike-force")! * factor;
   const incursion = unitLimitForBattleSize("incursion")! * factor;
   return {
+    id,
+    limits: { incursion, strike },
     constraints: [constraint({ id, type: "max", value: strike, field: "selections", scope: "force", includeChildSelections: true })],
     modifiers: [
       modifier({
@@ -254,6 +265,7 @@ export function buildUnitEntry(view: UnitView, ctx: UnitBuildContext, preferredI
       detachmentEntryId: ctx.detachmentEntryId,
     }),
     ...limit.modifiers,
+    ...ctx.restrictions(unit, limit.id, limit.limits),
     ...hide,
   ];
   return compact({

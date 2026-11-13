@@ -28,7 +28,8 @@ import {
 import type { BsNode } from "./source.js";
 import type { SystemRefs } from "./system.js";
 import { allyLocks, allyPieces, allyPlans, hiddenInCatalogues, unitKey, type AllyContext } from "./allies.js";
-import { buildUnitEntry, homeFactionOf, isEpicHero, type UnitBuildContext } from "./unit.js";
+import { minimumConstraints, tagCategories, barModifiers, baseLimits, doublesLimit, keywordGrantModifiers, type RestrictionContext } from "./restrictions.js";
+import { buildUnitEntry, homeFactionOf, isEpicHero, keywordCategoryId, type UnitBuildContext } from "./unit.js";
 
 export interface CatalogueContext {
   readonly ids: IdAllocator;
@@ -56,6 +57,7 @@ function parentOf(dataset: Dataset, factionId: string): string | null {
 /** Shared state for every catalogue in one export. */
 export class CatalogueSet {
   private readonly categoryDefs = new Map<string, Map<string, string>>();
+  private readonly categoryRules = new Map<string, { constraints: BsNode[]; modifiers: BsNode[] }>();
 
   constructor(private readonly ctx: CatalogueContext) {}
 
@@ -86,7 +88,12 @@ export class CatalogueSet {
   categoryEntries(root: string): BsNode[] {
     return [...(this.categoryDefs.get(root) ?? new Map<string, string>())]
       .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
-      .map(([name, id]) => ({ name, id, hidden: false }));
+      .map(([name, id]) => compact({ name, id, hidden: false, ...this.categoryRules.get(id) }));
+  }
+
+  /** Constraints and modifiers a keyword category carries (unit minimums). */
+  constrainCategory(id: string, rules: { constraints: BsNode[]; modifiers: BsNode[] }): void {
+    this.categoryRules.set(id, rules);
   }
 
   familyDetachments(root: string): Detachment[] {
@@ -135,7 +142,7 @@ function abilityText(dataset: Dataset, factionId: string, abilityId: string): { 
   return ability ? { name: ability.name, text: ability.describe() } : undefined;
 }
 
-function detachmentEntry(set: CatalogueSet, ctx: CatalogueContext, root: string, detachment: Detachment): BsNode {
+function detachmentEntry(set: CatalogueSet, ctx: CatalogueContext, root: string, detachment: Detachment, tagLinks: readonly BsNode[]): BsNode {
   const id = set.detachmentEntryId(detachment.id, root)!;
   const key = `detachment:${root}/${detachment.id}`;
   const rules = (detachment.detachment_rule_ids ?? (detachment.detachment_rule_id ? [detachment.detachment_rule_id] : []))
@@ -148,10 +155,13 @@ function detachmentEntry(set: CatalogueSet, ctx: CatalogueContext, root: string,
     hidden: false,
     import: true,
     type: "upgrade",
-    categoryLinks: (detachment.force_dispositions ?? []).map((dispositionId) => {
-      const disposition = ctx.refs.disposition(dispositionId);
-      return categoryLink(disposition.name, ctx.ids.id(`${key}:disposition:${dispositionId}`), disposition.categoryId, false);
-    }),
+    categoryLinks: [
+      ...(detachment.force_dispositions ?? []).map((dispositionId) => {
+        const disposition = ctx.refs.disposition(dispositionId);
+        return categoryLink(disposition.name, ctx.ids.id(`${key}:disposition:${dispositionId}`), disposition.categoryId, false);
+      }),
+      ...tagLinks,
+    ],
     constraints: [constraint({ id: ctx.ids.id(`${key}:max`), type: "max", value: 1, field: "selections", scope: "force", includeChildSelections: true })],
     costs: [cost("pts", ctx.refs.cost.pts, 0), cost("Detachment Points", ctx.refs.cost.dp, detachment.detachment_points ?? 0)],
     rules,
@@ -291,6 +301,16 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
       .map((f) => set.catalogueId(f)!);
     return { exact: false, ids };
   };
+  const restrictionCtx: RestrictionContext = {
+    ids: ctx.ids,
+    dataset: ctx.dataset,
+    refs: ctx.refs,
+    factions: ctx.factions,
+    catalogueId: (f) => set.catalogueId(f)!,
+    // A detachment's own family: a bar can come from another army's detachment.
+    detachmentEntryId: (d) => set.detachmentEntryId(d),
+    keywordCategory: (unit, keyword) => keywordCategoryId({ refs: ctx.refs, category: (home, name) => set.category(home, name) }, homeFactionOf(ctx.dataset, unit), keyword),
+  };
   const allyCtx: AllyContext = {
     ids: ctx.ids,
     dataset: ctx.dataset,
@@ -298,11 +318,28 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
     unitEntryId,
     unitName: (view) => (view.raw.is_legend ? `${view.name} [Legends]` : view.name),
     detachmentEntryId: (d) => set.detachmentEntryId(d),
+    hostModifiers: (host, view) => {
+      const limitId = ctx.ids.id(`unit:${view.raw.faction_id}/${view.id}:limit`);
+      const hostFamily = (detachmentId: string): boolean => {
+        const d = ctx.dataset.detachments.getAny(detachmentId);
+        return d !== undefined && set.rootOf(d.faction_id) === set.rootOf(host) && set.rootOf(d.faction_id) !== set.rootOf(view.raw.faction_id);
+      };
+      const limits = isEpicHero(view.raw) ? null : baseLimits(doublesLimit(view.raw));
+      return [
+        ...keywordGrantModifiers(restrictionCtx, view.raw, limitId, limits, (d) => d !== null && hostFamily(d)),
+        ...barModifiers(restrictionCtx, view.raw, limitId, (d) => hostFamily(d.id)),
+      ];
+    },
     offeredBy: (host, view) => homeFactionOf(ctx.dataset, view.raw) === host,
   };
   const pieces = new Map(ctx.factions.map((f) => [f, allyPieces(allyCtx, f, plans, (factionId) => set.rootOf(factionId))]));
   const out: BuiltCatalogue[] = [];
   for (const root of roots) {
+    const familyDetachments = set.familyDetachments(root);
+    const tags = tagCategories(ctx.ids, root, familyDetachments);
+    for (const [categoryId, rules] of minimumConstraints(restrictionCtx, familyDetachments, (keyword) => keywordCategoryId({ refs: ctx.refs, category: (home, name) => set.category(home, name) }, root, keyword))) {
+      set.constrainCategory(categoryId, rules);
+    }
     const items = new Map<string, BsNode>();
     const enhancements = set.familyEnhancements(root);
     const warlordId = ctx.ids.id(`warlord:${root}`, BSDATA_IDS.factionEntries[root]?.Warlord);
@@ -330,6 +367,14 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
           .filter((f) => (ctx.dataset.factions.get(f)?.raw.keywords ?? []).some((k) => (unit.excluded_faction_keywords ?? []).includes(k)))
           .map((f) => set.catalogueId(f)!),
       ledBy: { leader, support },
+      restrictions: (unit, limitId, limits) => [
+        ...keywordGrantModifiers(restrictionCtx, unit, limitId, limits, (d) => {
+          if (d === null) return true;
+          const detachment = ctx.dataset.detachments.getAny(d);
+          return detachment !== undefined && set.rootOf(detachment.faction_id) === set.rootOf(unit.faction_id);
+        }),
+        ...barModifiers(restrictionCtx, unit, limitId, (d) => set.rootOf(d.faction_id) === set.rootOf(unit.faction_id)),
+      ],
       abilityRemovedIn: (unit, abilityId) =>
         [...(locks.abilities.get(`${unitKey(unit)}|${abilityId}`) ?? [])].map((f) => set.catalogueId(f)!).sort(),
       characterOptions: (view: UnitView, entryKey: string) => {
@@ -413,7 +458,7 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
     const shared = [
       ...unitEntries,
       ...[...items.values()],
-      ...set.familyDetachments(root).map((d) => detachmentEntry(set, ctx, root, d)),
+      ...familyDetachments.map((d) => detachmentEntry(set, ctx, root, d, tags.links.get(d.id) ?? [])),
       ...enhancements.map(({ enhancement, detachment }) => enhancementEntry(set, ctx, root, enhancement, detachment)),
       warlord,
       container,
@@ -424,7 +469,7 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
       file: BSDATA_IDS.catalogues[root].file,
       document: catalogueRoot(ctx, root, set, {
         catalogueLinks: sourceLinks(root, []),
-        categoryEntries: [...set.categoryEntries(root), ...rootAllies.categoryEntries],
+        categoryEntries: [...set.categoryEntries(root), ...tags.entries, ...rootAllies.categoryEntries],
         entryLinks: [
           ...rootLinksFor(root),
           ...rootAllies.rootLinks,
