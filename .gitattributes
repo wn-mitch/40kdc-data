@@ -1,0 +1,42 @@
+# Files a tool writes. linguist-generated collapses them in GitHub diffs and
+# leaves local diffs alone. Regenerate them with `just regen` or the named tool;
+# never edit them by hand.
+
+# Codegen and embedded bundles (`just regen`; the preflight drift gate checks them).
+tools/src/generated.ts linguist-generated
+tools/src/mfm/dump.generated.ts linguist-generated
+crates/wh40kdc/schemas/*.schema.json linguist-generated
+crates/wh40kdc/src/generated.rs linguist-generated
+crates/wh40kdc/src/data/bundle.generated.json linguist-generated
+crates/wh40kdc/src/share/registry.generated.json linguist-generated
+python/src/wh40kdc/_bundle.json linguist-generated
+python/src/wh40kdc/_share_registry.json linguist-generated
+python/src/wh40kdc/_spec.py linguist-generated
+python/src/wh40kdc/_types.py linguist-generated
+python/src/wh40kdc/schemas/** linguist-generated
+go/bundle.json linguist-generated
+go/share_registry.json linguist-generated
+go/spec.go linguist-generated
+go/schemas/** linguist-generated
+
+# Conformance goldens (`npm run gen:conformance`). Inputs are hand-authored fixtures.
+conformance/**/*.json linguist-generated
+conformance/**/expected.* linguist-generated
+conformance/**/input.* -linguist-generated
+
+# Data written by ingest and build tools (MFM passes, registry:build, audits).
+data/core/*/unit-compositions.json linguist-generated
+data/share-registry.json linguist-generated
+data/_audit/** linguist-generated
+data/core/_reports/** linguist-generated
+tools/src/bsdata-export/bsdata-ids.json linguist-generated
+
+# API reference (TypeDoc).
+tools/docs/api/** linguist-generated
+
+# Lockfiles.
+**/package-lock.json linguist-generated
+Cargo.lock linguist-generated
+
+# Vendored Yellowscribe Lua (CC0).
+workers/tts/lua/** linguist-vendored
