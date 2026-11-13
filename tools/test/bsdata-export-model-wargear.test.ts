@@ -408,6 +408,30 @@ describe("BSData export per-model wargear agrees with the MFM loadout checker", 
     expect(uniformless).toEqual([]);
   });
 
+  it("offers alternate wargear as a swap from the default, with no group left to clear", () => {
+    // A builder never clears a group's picks when a modifier closes it, so an alternate offered in
+    // its own group leaves the model's standard picks standing as an error until cleared by hand.
+    const failures: string[] = [];
+    let checked = 0;
+    for (const model of models) {
+      for (const slot of model.rules.slots.filter((s) => s.alternate && s.model !== undefined)) {
+        for (const row of model.rows.filter((r) => r.name === slot.model!.replace(/#\d+$/, ""))) {
+          for (const items of slot.choices.filter((c) => c.length > 0)) {
+            checked += 1;
+            const want = new Map(items.map((i) => [i.id, i.count]));
+            const group = row.groups.find((g) => g.choices.some((c) => c.items.size === want.size && [...want].every(([id, n]) => c.items.get(id) === n)));
+            const where = `${model.entry.factionId}/${model.entry.unitId} ${row.name} ${[...want.keys()].join("+")}`;
+            if (!group || group.alternate || !str(group.node, "defaultSelectionEntryId")) failures.push(`${where}: not a swap in a group with a default`);
+            const closing = row.groups.filter((g) => g !== group && children(g.node, "modifiers").some((m) => m.value === 0));
+            if (closing.length > 0) failures.push(`${where}: closes ${closing.map((g) => g.node.name).join(", ")}`);
+          }
+        }
+      }
+    }
+    expect(checked).toBeGreaterThan(0);
+    expect(failures).toEqual([]);
+  });
+
   it("can build every loadout the package lists as legal", () => {
     const missing: string[] = [];
     let checked = 0;

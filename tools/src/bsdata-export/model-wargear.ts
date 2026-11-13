@@ -7,8 +7,11 @@
  *   takes `picks` choices from each group (a choice at most once unless the
  *   slot repeats); each choice is a whole bundle, an entry holding exactly its
  *   items. A slot without a row is a group on the unit.
- * - A row with alternate slots takes picks from those instead of its other
- *   slots: selecting an alternate choice sets the other groups to zero.
+ * - A row with alternate slots offers them in one group with every
+ *   combination of its other slots (`mergeAlternates`), so taking an
+ *   alternate is one swap that leaves nothing to clear. Past
+ *   `MERGED_CHOICES` combinations the slots stay apart and selecting an
+ *   alternate choice sets the other groups to zero.
  * - A limit whose choices are single items caps, across its row (or the unit),
  *   the bundles that add those items above the row's default: each such bundle
  *   entry's maximum is the cap less the other such bundles taken, and 0 once
@@ -252,8 +255,41 @@ function startingChoices(rules: MfmLoadoutRules, expanded: readonly (readonly Mf
   return out;
 }
 
+/** The most choices a merged alternate group may offer before its row keeps separate groups. */
+export const MERGED_CHOICES = 32;
+
+/**
+ * `rules` with each model's alternate slots folded into one slot alongside every combination of that
+ * model's other slots (one pick each, no repeats): a model either keeps a standard combination or
+ * takes an alternate whole. BattleScribe cannot clear a group's picks when a modifier closes it, so
+ * separate groups would leave the standard picks standing beside the alternate. Models whose
+ * combinations exceed {@link MERGED_CHOICES}, or whose other slots take several picks, keep their
+ * slots as they are.
+ */
+export function mergeAlternates(rules: MfmLoadoutRules): MfmLoadoutRules {
+  const models = [...new Set(rules.slots.filter((slot) => slot.alternate && slot.model !== undefined).map((slot) => slot.model!))];
+  let slots = rules.slots;
+  for (const model of models) {
+    const own = slots.filter((slot) => slot.model === model);
+    const standard = own.filter((slot) => !slot.alternate);
+    if (standard.some((slot) => slot.picks !== 1 || slot.repeats)) continue;
+    const stock = modelStock(rules, model);
+    let combos: MfmItem[][] = [[]];
+    for (const slot of standard) {
+      combos = combos.flatMap((combo) => rowSlotChoices(rules, slot, stock).map((choice) => [...copiesOf([...combo, ...choice])].map(([id, count]) => ({ id, count }))));
+    }
+    const alternates = own.filter((slot) => slot.alternate).flatMap((slot) => slot.choices.filter((choice) => choice.length > 0));
+    if (combos.length + alternates.length > MERGED_CHOICES) continue;
+    const merged = { model, picks: 1, repeats: false, alternate: false, choices: [...combos, ...alternates] };
+    const first = slots.findIndex((slot) => slot.model === model);
+    slots = slots.flatMap((slot, s) => (s === first ? [merged] : slot.model === model ? [] : [slot]));
+  }
+  return slots === rules.slots ? rules : { ...rules, slots };
+}
+
 /** The per-model selections for `unit`'s MFM `rules`; `rows` are its composition rows in order. */
-export function modelWargear(unit: Unit, ctx: WargearContext, rules: MfmLoadoutRules, rows: readonly Row[], counts: readonly number[], multiModel: boolean, rowStarts?: readonly (MfmItem[] | undefined)[]): ModelWargear {
+export function modelWargear(unit: Unit, ctx: WargearContext, source: MfmLoadoutRules, rows: readonly Row[], counts: readonly number[], multiModel: boolean, rowStarts?: readonly (MfmItem[] | undefined)[]): ModelWargear {
+  const rules = mergeAlternates(source);
   const key = `unit:${unit.faction_id}/${unit.id}:mfm`;
   const keys = rowKeys(rows);
   const surcharge = new Map((unit.wargear_costs ?? []).map((wc) => [wc.item_id, wc.cost]));
