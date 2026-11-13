@@ -8,7 +8,9 @@ import {
   unitLimitForBattleSize,
 } from "../src/data/battle-sizes.js";
 import { hostUnitPoints } from "../src/data/pricing.js";
+import type { AlliedRule } from "../src/generated.js";
 import { evaluateConstraint, evaluateField, evaluatePoints, type EvalContext } from "../src/bsdata-export/evaluate.js";
+import { allyPlans } from "../src/bsdata-export/allies.js";
 import { buildExport, type ExportedDocument } from "../src/bsdata-export/export.js";
 import { formatViolations, type FormatDescriptor } from "../src/bsdata-export/format.js";
 import formatJson from "../src/bsdata-export/format.json" with { type: "json" };
@@ -343,5 +345,83 @@ describe("BSData export rules agree with the package", () => {
       }
     }
     expect(checked).toBeGreaterThan(400);
+  });
+});
+
+describe("BSData export allied rules agree with the package", () => {
+  const hostCatalogueId = (host: string): string => str(catalogueOf(host), "id")!;
+  const plansFor = () =>
+    allyPlans(dataset, Object.keys(BSDATA_IDS.catalogues)).flatMap((plan) =>
+      plan.units.filter((u) => homeFactionOf(dataset, u.raw) !== plan.host).map((unit) => ({ plan, unit })),
+    );
+
+  it("prices an allied unit as hostUnitPoints does inside the host army", () => {
+    const pairs = plansFor();
+    expect(pairs.length).toBeGreaterThan(200);
+    fc.assert(
+      fc.property(fc.nat(), fc.nat(), fc.integer({ min: 1, max: 3 }), (pick, sizePick, ordinal) => {
+        const { plan, unit } = pairs[pick % pairs.length];
+        const entry = units.find((u) => u.factionId === unit.raw.faction_id && u.unitId === unit.id)!;
+        const counts = modelCounts(unit.raw);
+        const n = counts[sizePick % counts.length];
+        const host = dataset.factions.get(plan.host)!.raw;
+        const actual = evaluatePoints(entry.entry, PTS, ctxFor(entry, { modelCount: n, earlierCopies: ordinal - 1, primaryCatalogueId: hostCatalogueId(plan.host) }));
+        expect({ host: plan.host, unit: unit.id, n, ordinal, points: actual }).toEqual({ host: plan.host, unit: unit.id, n, ordinal, points: hostUnitPoints(unit.raw, n, ordinal, host) });
+      }),
+      { numRuns: 1500 },
+    );
+  });
+
+  it("offers each allied unit once in its host army, hidden until a rule offering it is open", () => {
+    const offers = new Map<string, { host: string; unit: (typeof units)[number]; rules: AlliedRule[] }>();
+    for (const { plan, unit } of plansFor()) {
+      const entry = units.find((u) => u.factionId === unit.raw.faction_id && u.unitId === unit.id)!;
+      const key = `${plan.host}|${unit.raw.faction_id}/${unit.id}`;
+      const offer = offers.get(key) ?? { host: plan.host, unit: entry, rules: [] };
+      offer.rules.push(plan.rule);
+      offers.set(key, offer);
+    }
+    const optionId = (detachmentId: string): string => {
+      const detachment = dataset.detachments.getAny(detachmentId)!;
+      const root = dataset.factions.get(detachment.faction_id)!.raw.parent_faction_id ?? detachment.faction_id;
+      return str(children(catalogueOf(root), "sharedSelectionEntries").find((e) => e.name === detachment.name && children(e, "costs").some((c) => str(c, "typeId") === BSDATA_IDS.system.costTypes["Detachment Points"]))!, "id")!;
+    };
+    for (const { host, unit, rules } of offers.values()) {
+      const links = children(catalogueOf(host), "entryLinks").filter((l) => str(l, "targetId") === str(unit.entry, "id") && children(l, "categoryLinks").some((c) => String(c.name).startsWith("Allies:")));
+      expect(links.length, `${host} ${unit.unitId}`).toBe(1);
+      const ctx = ctxFor(unit, { primaryCatalogueId: str(catalogueOf(host), "id")! });
+      const hidden = (selected: string[]): number => evaluateField(links[0], str(unit.entry, "id")!, "hidden", 0, { ...ctx, selected: new Set([...ctx.selected, ...selected]) });
+      const gated = rules.every((r) => (r.detachment_ids ?? []).length > 0);
+      expect(hidden([]), `${host} ${unit.unitId} closed`).toBe(gated ? 1 : 0);
+      for (const rule of rules) for (const d of rule.detachment_ids ?? []) expect(hidden([optionId(d)]), `${host} ${unit.unitId} via ${d}`).toBe(0);
+    }
+  });
+
+  it("caps each allied rule's points per battle size and locks Warlord and Enhancements in the host army", () => {
+    const plans = allyPlans(dataset, Object.keys(BSDATA_IDS.catalogues));
+    for (const plan of plans) {
+      const category = children(catalogueOf(plan.host), "categoryEntries").find((c) => c.name === `Allies: ${plan.rule.label ?? plan.rule.name}`)!;
+      expect(category, `${plan.host} ${plan.rule.id}`).toBeDefined();
+      for (const size of ["incursion", "strike-force"] as const) {
+        const cap = (plan.rule.points_limits ?? []).find((p) => p.battle_size === size)?.max_points;
+        const constraint = children(category, "constraints").find((c) => str(c, "field") === PTS);
+        if (cap === undefined) continue;
+        const ctx: EvalContext = { modelCount: 1, earlierCopies: 0, primaryCatalogueId: "", selected: new Set([battleSizeId(size)]) };
+        expect(evaluateField(category, "", str(constraint!, "id")!, Number(constraint!.value), ctx)).toBe(cap);
+      }
+      for (const unit of plan.units) {
+        const entry = units.find((u) => u.factionId === unit.raw.faction_id && u.unitId === unit.id)!;
+        const ctx = ctxFor(entry, { primaryCatalogueId: hostCatalogueId(plan.host) });
+        const warlord = children(entry.entry, "entryLinks").find((l) => l.name === "Warlord");
+        if (plan.rule.cannot_be_warlord && warlord) expect(evaluateField(warlord, "", "hidden", 0, ctx), `${unit.id} warlord in ${plan.host}`).toBe(1);
+        const enhancements = children(entry.entry, "selectionEntryGroups").find((g) => g.name === "Enhancements");
+        if (plan.rule.cannot_take_enhancements && enhancements) expect(evaluateField(enhancements, "", "hidden", 0, ctx), `${unit.id} enhancements in ${plan.host}`).toBe(1);
+        for (const abilityId of plan.rule.removes_ability_ids ?? []) {
+          const name = dataset.abilities.byFaction(unit.raw.faction_id).find((a) => a.id === abilityId)?.name;
+          const shown = children(entry.entry, "profiles").find((p) => p.typeName === "Abilities" && p.name === name);
+          if (shown) expect(evaluateField(shown, "", "hidden", 0, ctx), `${unit.id} keeps ${abilityId} in ${plan.host}`).toBe(1);
+        }
+      }
+    }
   });
 });

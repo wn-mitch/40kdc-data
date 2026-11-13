@@ -24,8 +24,12 @@ export interface PointsContext {
   /** The unit's smallest model count. */
   readonly minModels: number;
   readonly ptsTypeId: string;
-  /** The catalogue id for a faction id, when that faction has a catalogue. */
-  readonly catalogueId: (factionId: string) => string | undefined;
+  /**
+   * The catalogues an `allied_points` host names: the host faction's own
+   * catalogue for a faction id, or every other faction's catalogue whose
+   * faction keywords include a keyword host (`imperium`). Empty when none.
+   */
+  readonly hostCatalogues: (host: string) => { readonly exact: boolean; readonly ids: readonly string[] };
   /** The detachment option id for a detachment id, when exported. */
   readonly detachmentEntryId: (detachmentId: string) => string | undefined;
 }
@@ -67,16 +71,16 @@ function modelsAtLeast(ctx: PointsContext, models: number): BsNode {
   return condition({ childId: "model", field: "selections", scope: ctx.entryId, type: "atLeast", value: models, includeChildSelections: true });
 }
 
-function tierModifiers(ctx: PointsContext, tiers: readonly Tier[], guard: readonly BsNode[]): BsNode[] {
+function tierModifiers(ctx: PointsContext, tiers: readonly Tier[], guard: readonly BsNode[], guardGroups: readonly BsNode[] = []): BsNode[] {
   const ordered = tiers
     .slice()
     .sort((a, b) => (a.unit_count_min ?? 1) - (b.unit_count_min ?? 1) || a.models - b.models);
   return ordered.map((tier) => {
     // The first copy's price at the smallest size is the entry's base cost.
-    if ((tier.unit_count_min ?? 1) <= 1 && tier.models <= ctx.minModels && guard.length === 0) return {};
+    if ((tier.unit_count_min ?? 1) <= 1 && tier.models <= ctx.minModels && guard.length === 0 && guardGroups.length === 0) return {};
     const conditions = [...guard];
     if (ctx.multiModel && tier.models > 1) conditions.push(modelsAtLeast(ctx, tier.models));
-    const groups: BsNode[] = [];
+    const groups: BsNode[] = [...guardGroups];
     const band = tier.unit_count_min ?? 1;
     if (band > 1) groups.push(earlierCopies(ctx, band - 1));
     return compact({
@@ -96,11 +100,18 @@ function groupBy<T>(items: readonly T[], key: (item: T) => string): Map<string, 
 /** The `set` modifiers that price the unit; empty when one cost always applies. */
 export function pointsModifiers(unit: Unit, ctx: PointsContext): BsNode[] {
   const out = tierModifiers(ctx, (unit.points ?? []) as Tier[], []).filter((m) => m.field !== undefined);
-  for (const [host, tiers] of groupBy(unit.allied_points ?? [], (t) => t.host_faction)) {
-    const catalogueId = ctx.catalogueId(host);
-    if (!catalogueId) continue;
-    const inCatalogue = condition({ childId: catalogueId, field: "selections", scope: "primary-catalogue", type: "instanceOf", value: 1 });
-    out.push(...tierModifiers(ctx, tiers as Tier[], [inCatalogue]));
+  // Keyword hosts first, so a faction's own reprice (applied after) wins in its army, as
+  // `hostPointsTiers` prefers an exact host over a keyword host.
+  const hosts = [...groupBy(unit.allied_points ?? [], (t) => t.host_faction)]
+    .map(([host, tiers]) => ({ tiers, ...ctx.hostCatalogues(host) }))
+    .filter((h) => h.ids.length > 0)
+    .sort((a, b) => Number(a.exact) - Number(b.exact));
+  for (const host of hosts) {
+    const inCatalogue: BsNode = {
+      type: "or",
+      conditions: host.ids.map((id) => condition({ childId: id, field: "selections", scope: "primary-catalogue", type: "instanceOf", value: 1 })),
+    };
+    out.push(...tierModifiers(ctx, host.tiers as Tier[], [], [inCatalogue]));
   }
   for (const [detachment, tiers] of groupBy(unit.detachment_pricing ?? [], (t) => t.detachment_id)) {
     const detachmentId = ctx.detachmentEntryId(detachment);

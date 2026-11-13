@@ -24,10 +24,13 @@ export interface UnitBuildContext {
   /** Category id for a keyword or datasheet name, defined in `catalogueFaction`'s catalogue. */
   readonly category: (catalogueFaction: string, name: string) => string;
   readonly catalogueId: (factionId: string) => string | undefined;
+  readonly hostCatalogues: (host: string, unit: Unit) => { readonly exact: boolean; readonly ids: readonly string[] };
   readonly detachmentEntryId: (detachmentId: string) => string | undefined;
   readonly itemEntry: (unit: Unit, itemId: string) => { readonly id: string; readonly name: string } | undefined;
   /** Catalogues (by faction id) whose army keywords bar a unit's `excluded_faction_keywords`. */
   readonly excludingCatalogues: (unit: Unit) => readonly string[];
+  /** Catalogue ids in whose armies an allied rule removes `abilityId` from the unit. */
+  readonly abilityRemovedIn: (unit: Unit, abilityId: string) => readonly string[];
   /** Unit ids some leader / support character can attach to. */
   readonly ledBy: { readonly leader: ReadonlySet<string>; readonly support: ReadonlySet<string> };
   /** What the unit takes from its catalogue: the Warlord upgrade link and an enhancement group. */
@@ -83,11 +86,26 @@ function unitProfiles(view: UnitView, ctx: UnitBuildContext, key: string): BsNod
     ]),
   );
   const abilities = ctx.refs.profileTypes.Abilities;
-  const described = view.abilities.map((ability) =>
-    profile(ability.name, ctx.ids.id(`${key}:ability:${ability.id}`), abilities.id, "Abilities", [
+  const described = view.abilities.map((ability) => {
+    const node = profile(ability.name, ctx.ids.id(`${key}:ability:${ability.id}`), abilities.id, "Abilities", [
       characteristic("Description", abilities.characteristics.Description, ability.describe()),
-    ]),
-  );
+    ]);
+    const removedIn = ctx.abilityRemovedIn(view.raw, ability.id);
+    if (removedIn.length === 0) return node;
+    return {
+      ...node,
+      modifiers: [
+        modifier({
+          field: "hidden",
+          type: "set",
+          value: true,
+          conditionGroups: [
+            { type: "or", conditions: removedIn.map((id) => condition({ childId: id, field: "selections", scope: "primary-catalogue", type: "instanceOf", value: 1 })) },
+          ],
+        }),
+      ],
+    };
+  });
   return [...stats, ...described];
 }
 
@@ -232,7 +250,7 @@ export function buildUnitEntry(view: UnitView, ctx: UnitBuildContext, preferredI
       multiModel,
       minModels: unit.model_count?.min ?? 1,
       ptsTypeId: ctx.refs.cost.pts,
-      catalogueId: ctx.catalogueId,
+      hostCatalogues: (host) => ctx.hostCatalogues(host, unit),
       detachmentEntryId: ctx.detachmentEntryId,
     }),
     ...limit.modifiers,

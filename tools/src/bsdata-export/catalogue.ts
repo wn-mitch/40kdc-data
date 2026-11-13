@@ -27,6 +27,7 @@ import {
 } from "./nodes.js";
 import type { BsNode } from "./source.js";
 import type { SystemRefs } from "./system.js";
+import { allyLocks, allyPieces, allyPlans, hiddenInCatalogues, unitKey, type AllyContext } from "./allies.js";
 import { buildUnitEntry, homeFactionOf, isEpicHero, type UnitBuildContext } from "./unit.js";
 
 export interface CatalogueContext {
@@ -276,6 +277,30 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
     }
   }
   const roots = ctx.factions.filter((f) => set.rootOf(f) === f);
+  const plans = allyPlans(ctx.dataset, ctx.factions);
+  const locks = allyLocks(plans);
+  const lockedIn = (map: Map<string, Set<string>>, view: UnitView): string[] =>
+    [...(map.get(unitKey(view.raw)) ?? [])].map((f) => set.catalogueId(f)!).sort();
+  const unitEntryId = (view: UnitView): string =>
+    ctx.ids.id(`unit:${view.raw.faction_id}/${view.id}`, BSDATA_IDS.units[view.raw.faction_id]?.[view.id]);
+  const keywordSlug = (k: string): string => k.trim().toLowerCase().replace(/\s+/g, "-");
+  const hostCatalogues = (host: string, unit: Unit): { exact: boolean; ids: string[] } => {
+    if (ctx.factions.includes(host)) return { exact: true, ids: host === unit.faction_id ? [] : [set.catalogueId(host)!] };
+    const ids = ctx.factions
+      .filter((f) => f !== unit.faction_id && (ctx.dataset.factions.get(f)?.raw.keywords ?? []).map(keywordSlug).includes(host))
+      .map((f) => set.catalogueId(f)!);
+    return { exact: false, ids };
+  };
+  const allyCtx: AllyContext = {
+    ids: ctx.ids,
+    dataset: ctx.dataset,
+    refs: ctx.refs,
+    unitEntryId,
+    unitName: (view) => (view.raw.is_legend ? `${view.name} [Legends]` : view.name),
+    detachmentEntryId: (d) => set.detachmentEntryId(d),
+    offeredBy: (host, view) => homeFactionOf(ctx.dataset, view.raw) === host,
+  };
+  const pieces = new Map(ctx.factions.map((f) => [f, allyPieces(allyCtx, f, plans, (factionId) => set.rootOf(factionId))]));
   const out: BuiltCatalogue[] = [];
   for (const root of roots) {
     const items = new Map<string, BsNode>();
@@ -287,6 +312,7 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
       refs: ctx.refs,
       category: (home, name) => set.category(home, name),
       catalogueId: (f) => set.catalogueId(f),
+      hostCatalogues,
       detachmentEntryId: (d) => set.detachmentEntryId(d, root),
       itemEntry: (unit, itemId) => {
         const preferred = BSDATA_IDS.weapons[unit.faction_id]?.[itemId];
@@ -304,16 +330,28 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
           .filter((f) => (ctx.dataset.factions.get(f)?.raw.keywords ?? []).some((k) => (unit.excluded_faction_keywords ?? []).includes(k)))
           .map((f) => set.catalogueId(f)!),
       ledBy: { leader, support },
+      abilityRemovedIn: (unit, abilityId) =>
+        [...(locks.abilities.get(`${unitKey(unit)}|${abilityId}`) ?? [])].map((f) => set.catalogueId(f)!).sort(),
       characterOptions: (view: UnitView, entryKey: string) => {
+        const warlordLock = hiddenInCatalogues(lockedIn(locks.warlord, view));
         const entryLinks = canBeWarlord(ctx, view.raw)
-          ? [entryLink({ name: "Warlord", id: ctx.ids.id(`${entryKey}:warlord`), targetId: warlordId, type: "selectionEntry" })]
+          ? [
+              entryLink({
+                name: "Warlord",
+                id: ctx.ids.id(`${entryKey}:warlord`),
+                targetId: warlordId,
+                type: "selectionEntry",
+                modifiers: warlordLock ? [warlordLock] : undefined,
+              }),
+            ]
           : [];
         const eligible = enhancements.filter(({ enhancement }) => canTake(ctx, view.raw, enhancement));
+        const enhancementLock = hiddenInCatalogues(lockedIn(locks.enhancements, view));
         const groups =
           eligible.length === 0
             ? []
             : [
-                {
+                compact({
                   name: "Enhancements",
                   id: ctx.ids.id(`${entryKey}:enhancements`),
                   hidden: false,
@@ -321,20 +359,46 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
                   entryLinks: eligible.map(({ enhancement }) =>
                     entryLink({ name: enhancement.name, id: ctx.ids.id(`${entryKey}:enhancement:${enhancement.id}`), targetId: set.enhancementEntryId(root, enhancement), type: "selectionEntry" }),
                   ),
-                },
+                  modifiers: enhancementLock ? [enhancementLock] : undefined,
+                }),
               ];
         return { entryLinks, groups };
       },
     };
     const units = ctx.dataset.units.byFaction(root);
-    const unitEntries = units.map((view) => buildUnitEntry(view, unitCtx, BSDATA_IDS.units[root]?.[view.id]));
-    const rootLinksFor = (factionId: string): BsNode[] =>
-      units
+    const unitEntries = units.map((view) => {
+      const entry = buildUnitEntry(view, unitCtx, BSDATA_IDS.units[root]?.[view.id]);
+      if (entry.id !== unitEntryId(view)) throw new Error(`bsdata export: ${view.id} entry id is not its allocated id`);
+      return entry;
+    });
+    const rootLinksFor = (factionId: string): BsNode[] => {
+      const existing = pieces.get(factionId)!.onExisting;
+      return units
         .map((view, index) => ({ view, entry: unitEntries[index] }))
         .filter(({ view }) => homeFactionOf(ctx.dataset, view.raw) === factionId)
-        .map(({ view, entry }) =>
-          entryLink({ name: entry.name as string, id: ctx.ids.id(`root-link:${factionId}/${view.id}`), targetId: entry.id as string, type: "selectionEntry" }),
-        );
+        .map(({ view, entry }) => {
+          const ally = existing.get(unitKey(view.raw));
+          return entryLink({
+            name: entry.name as string,
+            id: ctx.ids.id(`root-link:${factionId}/${view.id}`),
+            targetId: entry.id as string,
+            type: "selectionEntry",
+            categoryLinks: ally && ally.categoryLinks.length > 0 ? ally.categoryLinks : undefined,
+            modifiers: ally && ally.modifiers.length > 0 ? ally.modifiers : undefined,
+          });
+        });
+    };
+    const sourceLinks = (factionId: string, alreadyLinked: readonly string[]): BsNode[] =>
+      [...pieces.get(factionId)!.sources]
+        .filter((source) => source !== root && !alreadyLinked.includes(source))
+        .sort()
+        .map((source) => ({
+          name: BSDATA_IDS.catalogues[source]?.name ?? source,
+          id: ctx.ids.id(`catalogue-link:${factionId}:${source}`),
+          importRootEntries: false,
+          targetId: set.catalogueId(source)!,
+          type: "catalogue",
+        }));
     const warlord = {
       name: "Warlord",
       id: warlordId,
@@ -354,30 +418,36 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
       warlord,
       container,
     ];
-    const rootLinks = [
-      ...rootLinksFor(root),
-      entryLink({ name: "Detachment", id: ctx.ids.id(`root-link:${root}/detachment`), targetId: container.id as string, type: "selectionEntry" }),
-    ];
+    const rootAllies = pieces.get(root)!;
     out.push({
       factionId: root,
       file: BSDATA_IDS.catalogues[root].file,
       document: catalogueRoot(ctx, root, set, {
-        categoryEntries: set.categoryEntries(root),
-        entryLinks: rootLinks,
+        catalogueLinks: sourceLinks(root, []),
+        categoryEntries: [...set.categoryEntries(root), ...rootAllies.categoryEntries],
+        entryLinks: [
+          ...rootLinksFor(root),
+          ...rootAllies.rootLinks,
+          entryLink({ name: "Detachment", id: ctx.ids.id(`root-link:${root}/detachment`), targetId: container.id as string, type: "selectionEntry" }),
+        ],
         sharedSelectionEntries: shared,
       }),
     });
     for (const child of set.familyOf(root).filter((f) => f !== root)) {
       const childContainer = detachmentContainer(set, ctx, child, root);
+      const childAllies = pieces.get(child)!;
       out.push({
         factionId: child,
         file: BSDATA_IDS.catalogues[child].file,
         document: catalogueRoot(ctx, child, set, {
           catalogueLinks: [
             { name: BSDATA_IDS.catalogues[root]?.name ?? root, id: ctx.ids.id(`catalogue-link:${child}`), importRootEntries: true, targetId: set.catalogueId(root)!, type: "catalogue" },
+            ...sourceLinks(child, [root]),
           ],
+          categoryEntries: childAllies.categoryEntries,
           entryLinks: [
             ...rootLinksFor(child),
+            ...childAllies.rootLinks,
             entryLink({ name: "Detachment", id: ctx.ids.id(`root-link:${child}/detachment`), targetId: childContainer.id as string, type: "selectionEntry" }),
           ],
           sharedSelectionEntries: [childContainer],
