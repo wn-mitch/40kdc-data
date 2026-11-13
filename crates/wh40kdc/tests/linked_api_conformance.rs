@@ -125,9 +125,11 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
             let model_count: u64 = arg_str("modelCount")
                 .parse()
                 .expect("modelCount is an integer");
-            let u = ds
-                .units
-                .get_any(id)
+            let u = args
+                .get("factionId")
+                .and_then(Value::as_str)
+                .and_then(|faction| ds.units.get_in_faction(id, faction))
+                .or_else(|| ds.units.get_any(id))
                 .unwrap_or_else(|| panic!("{query}: unknown unit {id}"));
             let view = ds.loadout_of(u);
             // Empty when the size cannot be built.
@@ -149,9 +151,11 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
             let model_count: u64 = arg_str("modelCount")
                 .parse()
                 .expect("modelCount is an integer");
-            let u = ds
-                .units
-                .get_any(id)
+            let u = args
+                .get("factionId")
+                .and_then(Value::as_str)
+                .and_then(|faction| ds.units.get_in_faction(id, faction))
+                .or_else(|| ds.units.get_any(id))
                 .unwrap_or_else(|| panic!("{query}: unknown unit {id}"));
             let bounds = ds
                 .loadout_of(u)

@@ -947,6 +947,56 @@
     "expected": []
   },
   {
+    "name": "base_loadout chaos-terminators @10 in world-eaters resolves that faction's copy",
+    "query": "base_loadout",
+    "args": {
+      "unitId": "chaos-terminators",
+      "factionId": "world-eaters",
+      "modelCount": "10"
+    },
+    "comparison": "set",
+    "expected": [
+      "accursed-weapon:10",
+      "combi-bolter:10"
+    ]
+  },
+  {
+    "name": "weapon_bounds chaos-terminators @10 in world-eaters resolves that faction's copy",
+    "query": "weapon_bounds",
+    "args": {
+      "unitId": "chaos-terminators",
+      "factionId": "world-eaters",
+      "modelCount": "10"
+    },
+    "comparison": "set",
+    "expected": [
+      "accursed-weapon:0-10",
+      "chainfist:0-2",
+      "combi-bolter:0-10",
+      "combi-weapon:0-10",
+      "heavy-flamer:0-2",
+      "paired-accursed-weapons:0-2",
+      "power-fist:0-6",
+      "reaper-autocannon-chaos-terminators:0-2"
+    ]
+  },
+  {
+    "name": "maximal_loadout chaos-terminators @10 in world-eaters resolves that faction's copy",
+    "query": "maximal_loadout",
+    "args": {
+      "unitId": "chaos-terminators",
+      "factionId": "world-eaters",
+      "modelCount": "10"
+    },
+    "comparison": "set",
+    "expected": [
+      "accursed-weapon:2",
+      "chainfist:2",
+      "combi-weapon:10",
+      "power-fist:6"
+    ]
+  },
+  {
     "name": "base_loadout khorne-berzerkers @20 grows the bulk row by its template",
     "query": "base_loadout",
     "args": {

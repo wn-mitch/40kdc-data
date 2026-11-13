@@ -442,19 +442,19 @@ type LinkedApiQuery =
   | {
       name: string;
       query: "base_loadout";
-      args: { unitId: string; modelCount: string };
+      args: { unitId: string; factionId?: string; modelCount: string };
       comparison: "set";
     }
   | {
       name: string;
       query: "maximal_loadout";
-      args: { unitId: string; modelCount: string };
+      args: { unitId: string; factionId?: string; modelCount: string };
       comparison: "set";
     }
   | {
       name: string;
       query: "weapon_bounds";
-      args: { unitId: string; modelCount: string };
+      args: { unitId: string; factionId?: string; modelCount: string };
       comparison: "set";
     }
   | {
@@ -840,6 +840,26 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     args: { unitId: "chaos-terminators", modelCount: "10" },
     comparison: "set",
   },
+  // A shared chassis resolves in the requested faction: the World Eaters copy fields ten
+  // models, the first-wins (Emperor's Children) copy does not.
+  {
+    name: "base_loadout chaos-terminators @10 in world-eaters resolves that faction's copy",
+    query: "base_loadout",
+    args: { unitId: "chaos-terminators", factionId: "world-eaters", modelCount: "10" },
+    comparison: "set",
+  },
+  {
+    name: "weapon_bounds chaos-terminators @10 in world-eaters resolves that faction's copy",
+    query: "weapon_bounds",
+    args: { unitId: "chaos-terminators", factionId: "world-eaters", modelCount: "10" },
+    comparison: "set",
+  },
+  {
+    name: "maximal_loadout chaos-terminators @10 in world-eaters resolves that faction's copy",
+    query: "maximal_loadout",
+    args: { unitId: "chaos-terminators", factionId: "world-eaters", modelCount: "10" },
+    comparison: "set",
+  },
   {
     name: "base_loadout khorne-berzerkers @20 grows the bulk row by its template",
     query: "base_loadout",
@@ -1056,14 +1076,14 @@ function runLinkedQuery(
     case "weapon_bounds": {
       // Mirrors the runner's weapon_bounds op: each id's inclusive range as a sorted
       // "id:min-max" set; empty when the size cannot be built.
-      const u = ds.units.getAny(q.args.unitId);
+      const u = q.args.factionId ? ds.units.getInFaction(q.args.unitId, q.args.factionId) : ds.units.getAny(q.args.unitId);
       if (!u) throw new Error(`weapon_bounds: unknown unit ${q.args.unitId}`);
       const bounds = ds.loadoutOf(u.raw).bounds(Number(q.args.modelCount));
       return [...(bounds ?? [])].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort();
     }
     case "maximal_loadout": {
       // Mirrors the runner's maximal_loadout op: a sorted "id:count" multiset.
-      const u = ds.units.getAny(q.args.unitId);
+      const u = q.args.factionId ? ds.units.getInFaction(q.args.unitId, q.args.factionId) : ds.units.getAny(q.args.unitId);
       if (!u) throw new Error(`maximal_loadout: unknown unit ${q.args.unitId}`);
       const counts = ds.loadoutOf(u.raw).maximal(Number(q.args.modelCount));
       return [...(counts ?? [])].map(([id, n]) => `${id}:${n}`).sort();
@@ -1071,7 +1091,7 @@ function runLinkedQuery(
     case "base_loadout": {
       // Mirrors the runner's base_loadout op: the default loadout encoded as a sorted
       // "id:count" multiset (set-compared); empty when the size cannot be built.
-      const u = ds.units.getAny(q.args.unitId);
+      const u = q.args.factionId ? ds.units.getInFaction(q.args.unitId, q.args.factionId) : ds.units.getAny(q.args.unitId);
       if (!u) throw new Error(`base_loadout: unknown unit ${q.args.unitId}`);
       const counts = ds.loadoutOf(u.raw).base(Number(q.args.modelCount));
       return [...(counts ?? [])].map(([id, n]) => `${id}:${n}`).sort();

@@ -1111,7 +1111,12 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
         }
         "base_loadout" => {
             let id = str_arg("unitId");
-            let Some(unit) = ds.units.get_any(id) else {
+            let unit = if str_arg("factionId").is_empty() {
+                ds.units.get_any(id)
+            } else {
+                ds.units.get_in_faction(id, str_arg("factionId"))
+            };
+            let Some(unit) = unit else {
                 return err_value(
                     ErrorKind::UnknownEntity,
                     Some(json!({ "kind": "unit", "id": id })),
@@ -1124,7 +1129,12 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
         }
         "weapon_bounds" => {
             let id = str_arg("unitId");
-            let Some(unit) = ds.units.get_any(id) else {
+            let unit = if str_arg("factionId").is_empty() {
+                ds.units.get_any(id)
+            } else {
+                ds.units.get_in_faction(id, str_arg("factionId"))
+            };
+            let Some(unit) = unit else {
                 return err_value(
                     ErrorKind::UnknownEntity,
                     Some(json!({ "kind": "unit", "id": id })),
@@ -1144,7 +1154,12 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
         }
         "maximal_loadout" => {
             let id = str_arg("unitId");
-            let Some(unit) = ds.units.get_any(id) else {
+            let unit = if str_arg("factionId").is_empty() {
+                ds.units.get_any(id)
+            } else {
+                ds.units.get_in_faction(id, str_arg("factionId"))
+            };
+            let Some(unit) = unit else {
                 return err_value(
                     ErrorKind::UnknownEntity,
                     Some(json!({ "kind": "unit", "id": id })),

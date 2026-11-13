@@ -630,17 +630,17 @@ function runLinkedApi(base: Dataset, c: LinkedApiCase): string | null | string[]
       return u.wargearOptions.map((o) => o.id);
     }
     case "base_loadout": {
-      const u = ds.units.getAny(c.args.unitId);
+      const u = c.args.factionId ? ds.units.getInFaction(c.args.unitId, c.args.factionId) : ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`base_loadout: unknown unit ${c.args.unitId}`);
       return [...(ds.loadoutOf(u.raw).base(Number(c.args.modelCount)) ?? [])].map(([id, n]) => `${id}:${n}`).sort();
     }
     case "weapon_bounds": {
-      const u = ds.units.getAny(c.args.unitId);
+      const u = c.args.factionId ? ds.units.getInFaction(c.args.unitId, c.args.factionId) : ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`weapon_bounds: unknown unit ${c.args.unitId}`);
       return [...(ds.loadoutOf(u.raw).bounds(Number(c.args.modelCount)) ?? [])].map(([id, b]) => `${id}:${b.min}-${b.max}`).sort();
     }
     case "maximal_loadout": {
-      const u = ds.units.getAny(c.args.unitId);
+      const u = c.args.factionId ? ds.units.getInFaction(c.args.unitId, c.args.factionId) : ds.units.getAny(c.args.unitId);
       if (!u) throw new Error(`maximal_loadout: unknown unit ${c.args.unitId}`);
       return [...(ds.loadoutOf(u.raw).maximal(Number(c.args.modelCount)) ?? [])].map(([id, n]) => `${id}:${n}`).sort();
     }
