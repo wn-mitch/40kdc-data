@@ -112,8 +112,7 @@ export function unitSelections(unit: Unit, ctx: WargearContext, multiModel: bool
       const ordinal = rows.slice(0, index + 1).filter((r) => r.name === name).length;
       return starting?.get(rows.filter((r) => r.name === name).length > 1 ? `${name}#${ordinal}` : name);
     };
-    const rowEntry = (row: Row, index: number, bounds: { min: number; max: number }): BsNode => {
-      const start = startOf(index);
+    const rowEntry = (row: Row, index: number, bounds: { min: number; max: number }, start = startOf(index)): BsNode => {
       return compact({
         name: row.name,
         id: ctx.ids.id(`${key}:model:${index}:${row.name}`),
@@ -156,8 +155,11 @@ export function unitSelections(unit: Unit, ctx: WargearContext, multiModel: bool
         entries.push(rowEntry(row, index, row));
         return;
       }
-      // Up to `bare` of the row's models may carry nothing, as the default unit's do.
+      // Up to `bare` of the row's models may carry nothing, as the default unit's do: it starts with
+      // that many bare and the rest armed.
       const rowKey = `${key}:row-group:${index}`;
+      const start = startOf(index) ?? row.min;
+      const bareStart = Math.min(bare, start);
       groups.push({
         name: row.name,
         id: ctx.ids.id(rowKey),
@@ -167,7 +169,7 @@ export function unitSelections(unit: Unit, ctx: WargearContext, multiModel: bool
           constraint({ id: ctx.ids.id(`${rowKey}:max`), type: "max", value: row.max, field: "selections", scope: "parent", includeChildSelections: false }),
         ],
         selectionEntries: [
-          rowEntry(row, index, { min: 0, max: row.max }),
+          rowEntry(row, index, { min: 0, max: row.max }, start - bareStart),
           compact({
             name: `${row.name} (no wargear)`,
             id: ctx.ids.id(`${key}:model:${index}:bare`),
@@ -176,6 +178,7 @@ export function unitSelections(unit: Unit, ctx: WargearContext, multiModel: bool
             type: "model",
             constraints: [constraint({ id: ctx.ids.id(`${key}:model:${index}:bare:max`), type: "max", value: bare, field: "selections", scope: "parent" })],
             costs: [cost("pts", ctx.ptsTypeId, 0)],
+            defaultAmount: bareStart > 0 ? bareStart : undefined,
           }),
         ],
       });

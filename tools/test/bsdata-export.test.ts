@@ -19,7 +19,7 @@ import { bsdataJson } from "../src/bsdata-export/json.js";
 import { children, str, walk, type BsNode } from "../src/bsdata-export/source.js";
 import { homeFactionOf, isEpicHero } from "../src/bsdata-export/unit.js";
 import { modelCounts } from "../src/bsdata-export/wargear.js";
-import { defaultMfmLoadout } from "../src/data/mfm-loadout.js";
+import { bareModels, defaultMfmLoadout } from "../src/data/mfm-loadout.js";
 import { factionCatalogue } from "./bsdata-export-fixture.js";
 
 const FORMAT = formatJson as unknown as FormatDescriptor;
@@ -266,26 +266,41 @@ describe("BSData export rules agree with the package", () => {
 
   it("starts every unit on the package's default model split", () => {
     // A builder gives each row its defaultAmount, else its minimum, before topping the group up
-    // from its first entries; the rows alone must reach the default unit.
+    // from its first entries; the rows alone must reach the default unit, with the default's bare
+    // models on a row's "(no wargear)" entry and its split rows inside their group.
     let compared = 0;
+    let grouped = 0;
     for (const unit of units) {
       const view = dataset.units.byFaction(unit.factionId).find((u) => u.id === unit.unitId)!;
       const rules = dataset.unitCompositionOf(view.raw)?.loadout as Parameters<typeof defaultMfmLoadout>[0] | undefined;
       const models = children(unit.entry, "selectionEntryGroups").find((g) => g.name === "Models");
-      if (!rules || !models || children(models, "selectionEntryGroups").length > 0) continue;
+      if (!rules || !models) continue;
+      const subgroups = children(models, "selectionEntryGroups");
+      if (subgroups.length > 0) grouped += 1;
       const filled = new Map<string, number>();
-      for (const row of children(models, "selectionEntries")) {
+      for (const row of [...children(models, "selectionEntries"), ...subgroups.flatMap((g) => children(g, "selectionEntries"))]) {
         const min = Number(children(row, "constraints").find((c) => c.type === "min")?.value ?? 0);
         const name = String(row.name);
         filled.set(name, (filled.get(name) ?? 0) + (typeof row.defaultAmount === "number" ? row.defaultAmount : min));
       }
       const want = new Map<string, number>();
-      for (const [name, n] of defaultMfmLoadout(rules).models) if (n > 0) want.set(name.replace(/#\d+$/, ""), (want.get(name.replace(/#\d+$/, "")) ?? 0) + n);
+      for (const [key, n] of defaultMfmLoadout(rules).models) {
+        const name = key.replace(/#\d+$/, "");
+        if (n > 0) want.set(name, (want.get(name) ?? 0) + n);
+      }
+      for (const [name, n] of [...want]) {
+        const bare = Math.min(n, bareModels(rules, name));
+        if (bare === 0) continue;
+        want.set(name, n - bare);
+        want.set(`${name} (no wargear)`, bare);
+      }
       const got = new Map([...filled].filter(([, n]) => n > 0));
-      expect({ unit: unit.unitId, split: Object.fromEntries([...got].sort()) }).toEqual({ unit: unit.unitId, split: Object.fromEntries([...want].sort()) });
+      const nonzero = new Map([...want].filter(([, n]) => n > 0));
+      expect({ unit: unit.unitId, split: Object.fromEntries([...got].sort()) }).toEqual({ unit: unit.unitId, split: Object.fromEntries([...nonzero].sort()) });
       compared += 1;
     }
     expect(compared).toBeGreaterThan(200);
+    expect(grouped).toBeGreaterThan(0);
   });
 
   it("prices detachment-specific tables while that detachment is selected", () => {
