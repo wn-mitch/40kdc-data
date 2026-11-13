@@ -85,8 +85,9 @@ type mfmRange struct{ lo, hi int }
 // mfmTierRanges is the composition's default loadout rows in stock order (each
 // once), their default model counts, and each tier's range per row in that
 // order, tiers in declaration order (the composition's models when it has no
-// tiers). A row a tier does not list keeps its default count. ok is false
-// without a loadout.
+// tiers). A row the composition names but a tier does not list has no models in
+// that tier; a row the composition never names keeps its default count. ok is
+// false without a loadout.
 func mfmTierRanges(composition *MfmComposition) (order []string, defaults map[string]int, tiers [][]mfmRange, ok bool) {
 	rules := composition.Loadout
 	if rules == nil {
@@ -111,6 +112,9 @@ func mfmTierRanges(composition *MfmComposition) (order []string, defaults map[st
 			lo, hi, found := mfmRowRange(tier, row)
 			if !found {
 				lo, hi = defaults[row], defaults[row]
+				if _, _, named := mfmRowRange(composition.Models, row); named {
+					lo, hi = 0, 0
+				}
 			}
 			ranges[i] = mfmRange{lo, hi}
 		}

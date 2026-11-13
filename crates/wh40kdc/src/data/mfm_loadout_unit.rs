@@ -149,8 +149,9 @@ pub fn mfm_rows(composition: &MfmComposition, model_count: i64) -> Option<BTreeM
 }
 
 /// Each tier's model-count range per loadout row, in declaration order, rows in
-/// the default unit's stock order (`defaults`). A row the tier does not list
-/// keeps its default count. None without a loadout.
+/// the default unit's stock order (`defaults`). A row the composition names but
+/// a tier does not list has no models in that tier; a row the composition never
+/// names keeps its default count. None without a loadout.
 #[allow(clippy::type_complexity)]
 fn tier_ranges(composition: &MfmComposition) -> Option<(Vec<(String, i64)>, Vec<Vec<(i64, i64)>>)> {
     let rules = composition.loadout.as_ref()?;
@@ -165,7 +166,15 @@ fn tier_ranges(composition: &MfmComposition) -> Option<(Vec<(String, i64)>, Vec<
         .map(|tier| {
             defaults
                 .iter()
-                .map(|(row, n)| row_range(tier, row).unwrap_or((*n, *n)))
+                .map(|(row, n)| {
+                    row_range(tier, row).unwrap_or_else(|| {
+                        if row_range(&composition.models, row).is_some() {
+                            (0, 0)
+                        } else {
+                            (*n, *n)
+                        }
+                    })
+                })
                 .collect()
         })
         .collect();

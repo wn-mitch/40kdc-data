@@ -35,7 +35,8 @@ type Range = { min: number; max: number };
 
 /**
  * Each tier's model-count range per loadout row, in declaration order, rows in stock order. A row
- * the tier does not list keeps its default count.
+ * the composition names but a tier does not list has no models in that tier; a row the composition
+ * never names (its loadout and model names disagree) keeps its default count.
  */
 function tierRanges(composition: MfmComposition): { defaults: Map<string, number>; tiers: Map<string, Range>[] } | null {
   const rules = composition.loadout;
@@ -44,7 +45,12 @@ function tierRanges(composition: MfmComposition): { defaults: Map<string, number
   const defaults = defaultMfmLoadout(rules).models;
   return {
     defaults,
-    tiers: tiers.map((tier) => new Map([...defaults].map(([row, n]) => [row, rowRange(tier, row) ?? { min: n, max: n }]))),
+    tiers: tiers.map(
+      (tier) =>
+        new Map(
+          [...defaults].map(([row, n]) => [row, rowRange(tier, row) ?? (rowRange(composition.models, row) ? { min: 0, max: 0 } : { min: n, max: n })]),
+        ),
+    ),
   };
 }
 

@@ -49,6 +49,8 @@ const EVERY_SIZE: [string, string][] = [
   ["chaos-space-marines", "accursed-cultists"],
   ["agents-of-the-imperium", "voidsmen-at-arms"],
   ["astra-militarum", "cadian-command-squad"],
+  // Its 3- and 6-model tiers leave out the Chapter Champion its default unit has.
+  ["adeptus-astartes", "victrix-honour-guard"],
 ];
 
 /** A fabricated loadout with stock rows only; slots and the rest default to empty. */
@@ -105,6 +107,13 @@ const FABRICATED: [string, number[], Record<string, unknown>][] = [
       ],
       limits: [{ breakpoints: [{ models: 0, choices: 1 }], choices: [[{ id: "pair-gun", count: 2 }]] }],
     }),
+  }],
+  // A tier leaves out a row the composition names: the row has no models in that tier. A loadout
+  // row the composition never names keeps its default count in every tier.
+  ["omitted rows", [4, 5, 6], {
+    models: [{ name: "Leader", min: 0, max: 1 }, { name: "Trooper", min: 2, max: 5 }],
+    tiers: [{ models: [{ name: "Leader", min: 1, max: 1 }, { name: "Trooper", min: 2, max: 3 }] }, { models: [{ name: "Trooper", min: 3, max: 5 }] }],
+    loadout: loadout([{ model: "Leader", models: 1 }, { model: "Trooper", models: 2 }, { model: "Gunner", models: 1 }]),
   }],
   // Neither the resized nor the scaled default fits the only slot: the resized one is reported.
   ["illegal fallback", [2, 3], {

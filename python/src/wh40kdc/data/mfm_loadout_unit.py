@@ -61,8 +61,9 @@ def _tier_ranges(
 ) -> tuple[dict[str, int], list[dict[str, Range]]] | None:
     """The default rows' model counts and each tier's ``(min, max)`` per row.
 
-    Tiers in declaration order, rows in stock order. A row the tier does not
-    list keeps its default count. None without a loadout.
+    Tiers in declaration order, rows in stock order. A row the composition
+    names but a tier does not list has no models in that tier; a row the
+    composition never names keeps its default count. None without a loadout.
     """
     rules = composition.get("loadout")
     if rules is None:
@@ -75,7 +76,9 @@ def _tier_ranges(
         ranges: dict[str, Range] = {}
         for row, n in defaults.items():
             found = _row_range(tier, row)
-            ranges[row] = found if found is not None else (n, n)
+            if found is None:
+                found = (0, 0) if _row_range(composition["models"], row) is not None else (n, n)
+            ranges[row] = found
         out.append(ranges)
     return defaults, out
 
