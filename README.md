@@ -43,6 +43,26 @@ generated descriptions, stat lines, and point costs.
 | Source rules prose | **No** | Kept outside the public dataset |
 | Artwork / logos | **No** | Creative IP |
 
+## Use It in NewRecruit or BattleScribe
+
+Each release exports the dataset as a BSData-format game system and faction
+catalogues, attached to the `bsdata-v<version>` releases
+([all BSData releases](https://github.com/wn-mitch/40kdc-data/releases?q=bsdata)):
+
+- **NewRecruit:** download `wh40k-11e-40kdc-<version>-newrecruit.zip` and
+  unzip it. In NewRecruit, open **My Systems → Add more games** and upload the
+  JSON files. Uploaded data stays on that device, so install it on each device
+  you build lists on.
+- **BattleScribe:** add
+  `https://github.com/wn-mitch/40kdc-data/releases/download/bsdata-latest/index.bsi`
+  as a data index URL, and BattleScribe updates from it with each release. The
+  `-battlescribe.zip` on each release holds the same `.gst`/`.cat` files for a
+  manual install. BattleScribe's format has no default selections, leader
+  attachments or per-copy pricing, so NewRecruit gives the fuller experience.
+
+Points and stat lines match the dataset. Ability text is 40kdc's own
+plain-English descriptions, not the published rules wording.
+
 ## Quick Start
 
 Use the dataset (TypeScript / JavaScript):
