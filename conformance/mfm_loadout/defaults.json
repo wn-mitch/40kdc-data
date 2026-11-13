@@ -7502,11 +7502,11 @@
         "Rough Rider with Hunting Lance": 3
       },
       "counts": {
-        "goad-lance": 1,
+        "goad-lance-draydens-lance-attilan-rough-riders": 1,
         "hunting-lance": 4,
         "lasgun": 4,
-        "laspistol": 5,
-        "power-sabre": 1,
+        "laspistol-draydens-lance-attilan-rough-riders": 5,
+        "power-sabre-draydens-lance-attilan-rough-riders": 1,
         "steeds-hooves": 5
       }
     }
@@ -11269,10 +11269,10 @@
         "Wrack with Ossefactor": 1
       },
       "counts": {
-        "hexrifle": 1,
-        "ossefactor": 1,
-        "torturers-tool": 2,
-        "twin-torturers-tools": 3
+        "hexrifle-coven-of-agonies-wracks": 1,
+        "ossefactor-coven-of-agonies-wracks": 1,
+        "torturers-tool-coven-of-agonies-wracks": 2,
+        "twin-torturers-tools-coven-of-agonies-wracks": 3
       }
     }
   },

@@ -9710,7 +9710,6 @@
       "icarus-rocket-pod": "5afc-2af9-3bb7-d28f",
       "armoured-hull": "3b59-048c-5410-33fe",
       "assault-cannon": "2de6-ff2-dc37-b20d",
-      "heavy-flamer": "b3e6-f7a7-8357-2055",
       "cyclone-missile-launcher": "da0b-ae86-a275-13f1",
       "power-fist": "99de-5985-8cb8-f571",
       "chainfist": "cb6c-970e-444a-3ec3",
@@ -10309,7 +10308,10 @@
       "twin-bolt-rifle-invader-atvs": "3451-a59-ad9d-cc65",
       "heavy-bolt-pistol-captain-on-bike": "83a1-feb8-d495-aa28",
       "master-crafted-power-weapon-captain-on-bike": "ebda-08ed-994a-b579",
-      "thunder-hammer-captain-on-bike": "62ad-da0b-24f7-fe33"
+      "thunder-hammer-captain-on-bike": "62ad-da0b-24f7-fe33",
+      "heavy-flamer-venerable-dreadnought": "b3e6-f7a7-8357-2055",
+      "twin-lascannon-corvus-blackstar": "e008-470a-83cb-c5e6",
+      "helfrost-cannon-venerable-dreadnought": "ece7-7c5e-28d7-9a0d"
     },
     "adeptus-custodes": {
       "spiculus-bolt-launcher": "1189-dcd8-e3ed-7837",

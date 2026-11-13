@@ -32,7 +32,7 @@
 import * as path from "path";
 import { MfmDump } from "./loader.js";
 import { readJsonArray, CORE_DIR } from "./repo-files.js";
-import { findDatasheet } from "./project-loadout.js";
+import { findDatasheet, mfmRefsOf } from "./project-loadout.js";
 import {
   mintWeapon,
   type WeaponProfile,
@@ -319,7 +319,7 @@ export function runWeaponVariants(
     for (const unit of [...units].sort((a, b) => a.id.localeCompare(b.id))) {
       const refs = refsOf(unit);
       if (refs.size === 0) continue;
-      const ds = findDatasheet(dump, unit.id, dir);
+      const ds = findDatasheet(dump, unit.id, dir, mfmRefsOf(unit));
       if (!ds) {
         warnings.push(
           `${unit.id}: no unambiguous dump datasheet — left on bare for [${[...refs].sort().join(", ")}]`,

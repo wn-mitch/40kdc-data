@@ -5526,8 +5526,8 @@
           "diameter": 25
         },
         "default_weapon_ids": [
-          "hexrifle",
-          "torturers-tool"
+          "hexrifle-coven-of-agonies-wracks",
+          "torturers-tool-coven-of-agonies-wracks"
         ]
       },
       {
@@ -5541,8 +5541,8 @@
           "diameter": 25
         },
         "default_weapon_ids": [
-          "ossefactor",
-          "torturers-tool"
+          "ossefactor-coven-of-agonies-wracks",
+          "torturers-tool-coven-of-agonies-wracks"
         ]
       },
       {
@@ -5555,7 +5555,7 @@
           "diameter": 25
         },
         "default_weapon_ids": [
-          "twin-torturers-tools"
+          "twin-torturers-tools-coven-of-agonies-wracks"
         ]
       }
     ],
@@ -5594,11 +5594,11 @@
           "models": 1,
           "items": [
             {
-              "id": "hexrifle",
+              "id": "hexrifle-coven-of-agonies-wracks",
               "count": 1
             },
             {
-              "id": "torturers-tool",
+              "id": "torturers-tool-coven-of-agonies-wracks",
               "count": 1
             }
           ]
@@ -5608,11 +5608,11 @@
           "models": 1,
           "items": [
             {
-              "id": "ossefactor",
+              "id": "ossefactor-coven-of-agonies-wracks",
               "count": 1
             },
             {
-              "id": "torturers-tool",
+              "id": "torturers-tool-coven-of-agonies-wracks",
               "count": 1
             }
           ]
@@ -5622,7 +5622,7 @@
           "models": 3,
           "items": [
             {
-              "id": "twin-torturers-tools",
+              "id": "twin-torturers-tools-coven-of-agonies-wracks",
               "count": 3
             }
           ]
@@ -5638,11 +5638,11 @@
           "choices": [
             [
               {
-                "id": "hexrifle",
+                "id": "hexrifle-coven-of-agonies-wracks",
                 "count": 1
               },
               {
-                "id": "torturers-tool",
+                "id": "torturers-tool-coven-of-agonies-wracks",
                 "count": 1
               }
             ]
@@ -5656,11 +5656,11 @@
           "choices": [
             [
               {
-                "id": "ossefactor",
+                "id": "ossefactor-coven-of-agonies-wracks",
                 "count": 1
               },
               {
-                "id": "torturers-tool",
+                "id": "torturers-tool-coven-of-agonies-wracks",
                 "count": 1
               }
             ]
@@ -5674,7 +5674,7 @@
           "choices": [
             [
               {
-                "id": "twin-torturers-tools",
+                "id": "twin-torturers-tools-coven-of-agonies-wracks",
                 "count": 1
               }
             ]
@@ -5685,31 +5685,31 @@
       "options": [
         {
           "model": "Acothyst",
-          "id": "hexrifle",
+          "id": "hexrifle-coven-of-agonies-wracks",
           "input": "checkbox",
           "default": 1
         },
         {
           "model": "Acothyst",
-          "id": "torturers-tool",
+          "id": "torturers-tool-coven-of-agonies-wracks",
           "input": "checkbox",
           "default": 1
         },
         {
           "model": "Wrack with Ossefactor",
-          "id": "ossefactor",
+          "id": "ossefactor-coven-of-agonies-wracks",
           "input": "checkbox",
           "default": 1
         },
         {
           "model": "Wrack with Ossefactor",
-          "id": "torturers-tool",
+          "id": "torturers-tool-coven-of-agonies-wracks",
           "input": "checkbox",
           "default": 1
         },
         {
           "model": "Wrack",
-          "id": "twin-torturers-tools",
+          "id": "twin-torturers-tools-coven-of-agonies-wracks",
           "input": "stepper",
           "default": 3
         }

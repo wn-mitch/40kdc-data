@@ -10829,7 +10829,7 @@
             ],
             [
               {
-                "id": "twin-lascannon",
+                "id": "twin-lascannon-corvus-blackstar",
                 "count": 1
               }
             ]
@@ -10876,7 +10876,7 @@
         },
         {
           "model": "Corvus Blackstar",
-          "id": "twin-lascannon",
+          "id": "twin-lascannon-corvus-blackstar",
           "input": "checkbox",
           "default": 0
         }
@@ -26364,9 +26364,8 @@
           "diameter": 60
         },
         "default_weapon_ids": [
-          "armoured-feet",
           "assault-cannon",
-          "dreadnought-fist",
+          "dreadnought-combat-weapon",
           "storm-bolter"
         ]
       }
@@ -26459,7 +26458,7 @@
                 "count": 1
               },
               {
-                "id": "helfrost-cannon",
+                "id": "helfrost-cannon-venerable-dreadnought",
                 "count": 1
               }
             ],
@@ -26483,7 +26482,7 @@
           "choices": [
             [
               {
-                "id": "heavy-flamer",
+                "id": "heavy-flamer-venerable-dreadnought",
                 "count": 1
               }
             ],
@@ -26524,13 +26523,13 @@
         },
         {
           "model": "Venerable Dreadnought",
-          "id": "heavy-flamer",
+          "id": "heavy-flamer-venerable-dreadnought",
           "input": "checkbox",
           "default": 0
         },
         {
           "model": "Venerable Dreadnought",
-          "id": "helfrost-cannon",
+          "id": "helfrost-cannon-venerable-dreadnought",
           "input": "checkbox",
           "default": 0
         },

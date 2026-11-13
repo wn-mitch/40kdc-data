@@ -1,5 +1,5 @@
 {
-  "version": 38,
+  "version": 39,
   "kinds": {
     "faction": [
       "adepta-sororitas",
@@ -5509,7 +5509,17 @@
       "combat-shield",
       "heavy-bolt-pistol-captain-on-bike",
       "master-crafted-power-weapon-captain-on-bike",
-      "thunder-hammer-captain-on-bike"
+      "thunder-hammer-captain-on-bike",
+      "goad-lance-draydens-lance-attilan-rough-riders",
+      "heavy-flamer-venerable-dreadnought",
+      "helfrost-cannon-venerable-dreadnought",
+      "hexrifle-coven-of-agonies-wracks",
+      "laspistol-draydens-lance-attilan-rough-riders",
+      "ossefactor-coven-of-agonies-wracks",
+      "power-sabre-draydens-lance-attilan-rough-riders",
+      "torturers-tool-coven-of-agonies-wracks",
+      "twin-lascannon-corvus-blackstar",
+      "twin-torturers-tools-coven-of-agonies-wracks"
     ],
     "enhancement": [
       "a-chink-in-their-armour",

@@ -52,7 +52,7 @@ import {
   WEAPON_ALIASES_BY_UNIT,
   type AutoResolution,
 } from "./wargear.js";
-import { repoDirForFactionName } from "./faction-map.js";
+import { repoDirForFactionName, SHARED_ROSTERS } from "./faction-map.js";
 import { nameToId } from "../converters/id-generator.js";
 import { applyWrites, type StagedWrite } from "./apply.js";
 import { currentGameVersion } from "./dataslate.js";
@@ -246,7 +246,7 @@ async function runInvulnsOnly(opts: {
       console.error(`[${dir}] ${unitId}: not found in units.json`);
       continue;
     }
-    const ds = findDatasheet(dump, unitId, dir);
+    const ds = findDatasheet(dump, unitId, dir, mfmRefsOf(unit));
     if (!ds) {
       console.error(`[${dir}] ${unitId}: no unambiguous dump datasheet`);
       continue;
@@ -262,7 +262,26 @@ async function runInvulnsOnly(opts: {
 }
 
 // ───────────────────────── datasheet lookup ─────────────────────────
-export function findDatasheet(dump: MfmDump, unitId: string, dir: string): DatasheetRow | null {
+/** A unit's `mfm` external ref ids, the datasheets it was reconciled against. */
+export function mfmRefsOf(unit: object): string[] {
+  const raw = (unit as { external_refs?: unknown }).external_refs;
+  const refs = Array.isArray(raw) ? (raw as { namespace?: string; id?: string }[]) : [];
+  return refs.filter((r) => r.namespace === "mfm" && typeof r.id === "string").map((r) => r.id!);
+}
+
+/**
+ * The dump datasheet a repo unit reconciles against: by name within `dir` (see below), else the
+ * one current datasheet among `mfmRefs`, for a unit the dump prints under another name (a Combat
+ * Patrol box's renamed copy).
+ */
+export function findDatasheet(dump: MfmDump, unitId: string, dir: string, mfmRefs: readonly string[] = []): DatasheetRow | null {
+  const byName = findDatasheetByName(dump, unitId, dir);
+  if (byName || mfmRefs.length === 0) return byName;
+  const cited = mfmRefs.map((id) => dump.byId("datasheet").get(id)).filter((ds): ds is DatasheetRow => !!ds && !ds.isLegends);
+  return cited.length === 1 ? cited[0] : null;
+}
+
+function findDatasheetByName(dump: MfmDump, unitId: string, dir: string): DatasheetRow | null {
   const matches: DatasheetRow[] = [];
   for (const ds of dump.table("datasheet")) {
     if (ds.isLegends) continue;
@@ -278,13 +297,18 @@ export function findDatasheet(dump: MfmDump, unitId: string, dir: string): Datas
   }
   if (matches.length === 0) return null;
   if (matches.length === 1) return matches[0];
-  // Disambiguate by faction dir (shared-roster datasheets slug-collide across dirs).
-  const scoped = matches.filter((ds) => {
+  // Disambiguate by faction dir (shared-roster datasheets slug-collide across dirs). A chapter's
+  // datasheet is filed under the roster it shares (a Space Wolves Venerable Dreadnought lives in
+  // adeptus-astartes), so with no match in `dir` itself, one from a chapter sharing it counts.
+  const dirOf = (ds: DatasheetRow): string | null => {
     const fkId = dump.factionKeywordOfDatasheet(ds.id!);
     const fk = fkId ? dump.byId("faction_keyword").get(fkId) : undefined;
-    return repoDirForFactionName(dump.enName(fk)) === dir;
-  });
-  return scoped.length === 1 ? scoped[0] : null;
+    return repoDirForFactionName(dump.enName(fk));
+  };
+  const scoped = matches.filter((ds) => dirOf(ds) === dir);
+  if (scoped.length > 0) return scoped.length === 1 ? scoped[0] : null;
+  const shared = matches.filter((ds) => (SHARED_ROSTERS[dirOf(ds) ?? ""] ?? []).includes(dir));
+  return shared.length === 1 ? shared[0] : null;
 }
 
 // ───────────────────────── per-unit projection ─────────────────────────
@@ -315,7 +339,7 @@ function projectUnit(
   const warnings: string[] = [];
   const unit = files.units.find((u) => u.id === unitId);
   if (!unit) throw new Error(`unit "${unitId}" not found in ${dir}/units.json`);
-  const ds = findDatasheet(dump, unitId, dir);
+  const ds = findDatasheet(dump, unitId, dir, mfmRefsOf(unit));
   if (!ds) throw new Error(`no unambiguous dump datasheet for "${unitId}" in ${dir}`);
   const gv: GameVersion = unit.game_version ?? currentGameVersion(dump);
 

@@ -6786,12 +6786,12 @@
       "max": 5
     },
     "weapon_ids": [
-      "goad-lance",
+      "goad-lance-draydens-lance-attilan-rough-riders",
       "hunting-lance",
       "lasgun",
       "steeds-hooves",
-      "laspistol",
-      "power-sabre"
+      "laspistol-draydens-lance-attilan-rough-riders",
+      "power-sabre-draydens-lance-attilan-rough-riders"
     ],
     "ability_ids": [
       "horsemasters-draydens-lance-attilan-rough-riders-astra-militarum",

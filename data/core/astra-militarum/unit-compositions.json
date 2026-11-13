@@ -19459,8 +19459,8 @@
         "default_weapon_ids": [
           "hunting-lance",
           "lasgun",
-          "laspistol",
-          "power-sabre",
+          "laspistol-draydens-lance-attilan-rough-riders",
+          "power-sabre-draydens-lance-attilan-rough-riders",
           "steeds-hooves"
         ]
       },
@@ -19475,8 +19475,8 @@
           "length": 35.5
         },
         "default_weapon_ids": [
-          "goad-lance",
-          "laspistol",
+          "goad-lance-draydens-lance-attilan-rough-riders",
+          "laspistol-draydens-lance-attilan-rough-riders",
           "steeds-hooves"
         ]
       },
@@ -19493,7 +19493,7 @@
         "default_weapon_ids": [
           "hunting-lance",
           "lasgun",
-          "laspistol",
+          "laspistol-draydens-lance-attilan-rough-riders",
           "steeds-hooves"
         ]
       }
@@ -19541,11 +19541,11 @@
               "count": 1
             },
             {
-              "id": "laspistol",
+              "id": "laspistol-draydens-lance-attilan-rough-riders",
               "count": 1
             },
             {
-              "id": "power-sabre",
+              "id": "power-sabre-draydens-lance-attilan-rough-riders",
               "count": 1
             },
             {
@@ -19559,11 +19559,11 @@
           "models": 1,
           "items": [
             {
-              "id": "goad-lance",
+              "id": "goad-lance-draydens-lance-attilan-rough-riders",
               "count": 1
             },
             {
-              "id": "laspistol",
+              "id": "laspistol-draydens-lance-attilan-rough-riders",
               "count": 1
             },
             {
@@ -19585,7 +19585,7 @@
               "count": 3
             },
             {
-              "id": "laspistol",
+              "id": "laspistol-draydens-lance-attilan-rough-riders",
               "count": 3
             },
             {
@@ -19613,11 +19613,11 @@
                 "count": 1
               },
               {
-                "id": "laspistol",
+                "id": "laspistol-draydens-lance-attilan-rough-riders",
                 "count": 1
               },
               {
-                "id": "power-sabre",
+                "id": "power-sabre-draydens-lance-attilan-rough-riders",
                 "count": 1
               },
               {
@@ -19635,11 +19635,11 @@
           "choices": [
             [
               {
-                "id": "goad-lance",
+                "id": "goad-lance-draydens-lance-attilan-rough-riders",
                 "count": 1
               },
               {
-                "id": "laspistol",
+                "id": "laspistol-draydens-lance-attilan-rough-riders",
                 "count": 1
               },
               {
@@ -19665,7 +19665,7 @@
                 "count": 1
               },
               {
-                "id": "laspistol",
+                "id": "laspistol-draydens-lance-attilan-rough-riders",
                 "count": 1
               },
               {
@@ -19692,13 +19692,13 @@
         },
         {
           "model": "Rough Rider Sergeant",
-          "id": "laspistol",
+          "id": "laspistol-draydens-lance-attilan-rough-riders",
           "input": "checkbox",
           "default": 1
         },
         {
           "model": "Rough Rider Sergeant",
-          "id": "power-sabre",
+          "id": "power-sabre-draydens-lance-attilan-rough-riders",
           "input": "checkbox",
           "default": 1
         },
@@ -19710,13 +19710,13 @@
         },
         {
           "model": "Rough Rider with Goad Lance",
-          "id": "goad-lance",
+          "id": "goad-lance-draydens-lance-attilan-rough-riders",
           "input": "checkbox",
           "default": 1
         },
         {
           "model": "Rough Rider with Goad Lance",
-          "id": "laspistol",
+          "id": "laspistol-draydens-lance-attilan-rough-riders",
           "input": "checkbox",
           "default": 1
         },
@@ -19740,7 +19740,7 @@
         },
         {
           "model": "Rough Rider with Hunting Lance",
-          "id": "laspistol",
+          "id": "laspistol-draydens-lance-attilan-rough-riders",
           "input": "stepper",
           "default": 3
         },

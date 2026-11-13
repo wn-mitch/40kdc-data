@@ -9,16 +9,16 @@ dump confirmation.
 | Entity | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
 | units | 0 | 0 | 1098 | 6 |
-| weapons | 0 | 0 | 3495 | 120 |
-| wargear | 0 | 0 | 165 | 87 |
+| weapons | 0 | 0 | 3509 | 119 |
+| wargear | 0 | 0 | 166 | 87 |
 | unit-compositions | 0 | 0 | 1104 | 0 |
-| wargear-options | 0 | 0 | 1237 | 0 |
+| wargear-options | 0 | 0 | 1235 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 5 | 0 | 195 | 257 |
-| stratagems | 3 | 0 | 1082 | 228 |
-| abilities | 0 | 0 | 3851 | 685 |
-| phase-mappings | 6 | 0 | 1215 | 360 |
+| detachments | 0 | 0 | 200 | 257 |
+| stratagems | 0 | 0 | 1086 | 227 |
+| abilities | 0 | 0 | 3854 | 682 |
+| phase-mappings | 0 | 0 | 1221 | 360 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -28,7 +28,7 @@ dump confirmation.
 | _core | 0 | 0 | 11 | 15 |
 | adepta-sororitas | 0 | 0 | 121 | 27 |
 | adeptus-astartes | 0 | 0 | 232 | 18 |
-| adeptus-custodes | 0 | 0 | 154 | 4 |
+| adeptus-custodes | 0 | 0 | 155 | 3 |
 | adeptus-mechanicus | 0 | 0 | 142 | 25 |
 | aeldari | 0 | 0 | 247 | 53 |
 | agents-of-the-imperium | 0 | 0 | 99 | 39 |
@@ -50,13 +50,13 @@ dump confirmation.
 | iron-hands | 0 | 0 | 11 | 0 |
 | leagues-of-votann | 0 | 0 | 131 | 24 |
 | necrons | 0 | 0 | 195 | 35 |
-| orks | 0 | 0 | 195 | 14 |
+| orks | 0 | 0 | 196 | 13 |
 | raven-guard | 0 | 0 | 11 | 0 |
 | salamanders | 0 | 0 | 10 | 1 |
 | space-wolves | 0 | 0 | 81 | 6 |
 | tau-empire | 0 | 0 | 138 | 28 |
 | thousand-sons | 0 | 0 | 128 | 30 |
-| tyranids | 0 | 0 | 158 | 28 |
+| tyranids | 0 | 0 | 159 | 27 |
 | ultramarines | 0 | 0 | 11 | 0 |
 | white-scars | 0 | 0 | 11 | 0 |
 | world-eaters | 0 | 0 | 122 | 25 |
@@ -78,10 +78,10 @@ dump confirmation.
 | adeptus-astartes | no-source | 4 |
 | adeptus-astartes | unpublished | 1 |
 | adeptus-astartes | verified | 232 |
-| adeptus-custodes | digest-differs | 2 |
+| adeptus-custodes | digest-differs | 1 |
 | adeptus-custodes | stub | 1 |
 | adeptus-custodes | unpublished | 1 |
-| adeptus-custodes | verified | 154 |
+| adeptus-custodes | verified | 155 |
 | adeptus-mechanicus | digest-differs | 8 |
 | adeptus-mechanicus | stub | 16 |
 | adeptus-mechanicus | unpublished | 1 |
@@ -158,8 +158,8 @@ dump confirmation.
 | necrons | unpublished | 13 |
 | necrons | verified | 195 |
 | orks | digest-differs | 10 |
-| orks | unpublished | 4 |
-| orks | verified | 195 |
+| orks | unpublished | 3 |
+| orks | verified | 196 |
 | raven-guard | verified | 11 |
 | salamanders | digest-differs | 1 |
 | salamanders | verified | 10 |
@@ -176,8 +176,8 @@ dump confirmation.
 | thousand-sons | verified | 128 |
 | tyranids | digest-differs | 4 |
 | tyranids | stub | 13 |
-| tyranids | unpublished | 11 |
-| tyranids | verified | 158 |
+| tyranids | unpublished | 10 |
+| tyranids | verified | 159 |
 | ultramarines | verified | 11 |
 | white-scars | verified | 11 |
 | world-eaters | digest-differs | 5 |
@@ -190,7 +190,7 @@ dump confirmation.
 | Outcome | Records |
 |---|--:|
 | dangling-ref | 4 |
-| differs | 15 |
+| differs | 14 |
 | no-ref | 99 |
 | unmapped-keyword | 2 |
-| verified | 3495 |
+| verified | 3509 |

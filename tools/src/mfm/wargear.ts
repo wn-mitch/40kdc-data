@@ -1912,6 +1912,15 @@ export function homeScore(dump: MfmDump, ds: DatasheetRow, dir: string): number 
   return name && repoDirForFactionName(name) === dir ? 0 : 1;
 }
 
+/**
+ * The order in which `dir`'s wargear pass tries datasheets; the first to claim a unit wins. A
+ * current datasheet comes before a Legends one a unit also cites (the Space Wolves Venerable
+ * Dreadnought before the Legends Space Marines one), then the dir's own before a shared import.
+ */
+export function datasheetPreference(dump: MfmDump, dir: string): (a: DatasheetRow, b: DatasheetRow) => number {
+  return (a, b) => Number(!!a.isLegends) - Number(!!b.isLegends) || homeScore(dump, a, dir) - homeScore(dump, b, dir);
+}
+
 export interface DirWargearResult {
   dir: string;
   matched: number;
@@ -2033,7 +2042,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
           ...dump.table("datasheet").filter((ds) => !!ds.id && byMfmId.has(ds.id)),
         ].map((ds) => [ds.id!, ds] as const),
       ).values(),
-    ].sort((a, b) => homeScore(dump, a, dir) - homeScore(dump, b, dir));
+    ].sort(datasheetPreference(dump, dir));
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
@@ -3200,7 +3209,7 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
           ...dump.table("datasheet").filter((ds) => !!ds.id && byMfmId.has(ds.id)),
         ].map((ds) => [ds.id!, ds] as const),
       ).values(),
-    ].sort((a, b) => homeScore(dump, a, dir) - homeScore(dump, b, dir));
+    ].sort(datasheetPreference(dump, dir));
     const matchedRepoIds = new Set<string>();
     let matched = 0;
     let unitsTiered = 0;

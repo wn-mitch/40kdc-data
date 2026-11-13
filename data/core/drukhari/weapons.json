@@ -1409,10 +1409,6 @@
         "namespace": "mfm",
         "id": "044f7f88-1f00-4509-81c5-725ba8af59e4"
       }
-    ],
-    "game_modes": [
-      "matched-play",
-      "combat-patrol"
     ]
   },
   {
@@ -1493,10 +1489,6 @@
         "namespace": "mfm",
         "id": "e582d3a8-ab0b-49b0-9884-5a3dee83c3e2"
       }
-    ],
-    "game_modes": [
-      "matched-play",
-      "combat-patrol"
     ]
   },
   {
@@ -1581,10 +1573,6 @@
         "namespace": "mfm",
         "id": "99b4a56c-8933-4a2e-9b72-012051c7e4a2"
       }
-    ],
-    "game_modes": [
-      "matched-play",
-      "combat-patrol"
     ]
   },
   {
@@ -1622,10 +1610,6 @@
         "namespace": "mfm",
         "id": "c0e01bbc-5d7b-42b8-b18f-92bed0e618d3"
       }
-    ],
-    "game_modes": [
-      "matched-play",
-      "combat-patrol"
     ]
   },
   {
@@ -3054,6 +3038,170 @@
       {
         "namespace": "mfm",
         "id": "fb72893c-611b-44d5-96a3-c39631763dc0"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "hexrifle-coven-of-agonies-wracks",
+    "name": "Hexrifle",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Hexrifle",
+        "range": 36,
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -2,
+          "D": 3,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "heavy"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "044f7f88-1f00-4509-81c5-725ba8af59e4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5de1d6ee-1f4b-41e1-94b3-3a1eefd1c133"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "ossefactor-coven-of-agonies-wracks",
+    "name": "Ossefactor",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Ossefactor",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 2,
+          "AP": -2,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7649a29a-e94e-45c8-a9ff-97bf984487c5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e582d3a8-ab0b-49b0-9884-5a3dee83c3e2"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "torturers-tool-coven-of-agonies-wracks",
+    "name": "Torturer’s tool",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Torturer's Tool",
+        "range": "Melee",
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0b10f2b8-b779-4ba4-932f-877b21d84783"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c0e01bbc-5d7b-42b8-b18f-92bed0e618d3"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "twin-torturers-tools-coven-of-agonies-wracks",
+    "name": "Twin torturer’s tools",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Twin Torturer's Tools",
+        "range": "Melee",
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "99b4a56c-8933-4a2e-9b72-012051c7e4a2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a714b802-7dc6-4c40-8812-66f727eaf188"
       }
     ],
     "game_modes": [

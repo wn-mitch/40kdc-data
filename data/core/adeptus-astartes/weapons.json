@@ -102,12 +102,12 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Storm Bolters",
+        "name": "Storm Bolter",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
@@ -153,6 +153,10 @@
       {
         "namespace": "mfm",
         "id": "15cb7b56-d9d4-42c7-b6d0-d1864bb1539a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "755f4b1b-8cdb-4a9e-927c-60852951cc37"
       }
     ]
   },
@@ -365,13 +369,16 @@
         "stats": {
           "A": 6,
           "S": 6,
-          "AP": 0,
+          "AP": -2,
           "D": 1,
           "BS": 3
         },
         "keywords": [
           {
-            "keyword_id": "devastating-wounds"
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
@@ -400,6 +407,10 @@
       {
         "namespace": "bsdata",
         "id": "be34-7406-10cd-c6e2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "561a0c6b-d312-4699-8d35-5fdfb371308e"
       },
       {
         "namespace": "mfm",
@@ -459,7 +470,6 @@
       }
     ],
     "game_modes": [
-      "matched-play",
       "combat-patrol"
     ]
   },
@@ -1026,11 +1036,11 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Master-crafted power weapon",
+        "name": "Master-crafted Power Weapon",
         "range": "Melee",
         "stats": {
           "A": 6,
-          "S": 5,
+          "S": 6,
           "AP": -2,
           "D": 2,
           "WS": 2
@@ -1046,6 +1056,10 @@
       {
         "namespace": "bsdata",
         "id": "7c1e-5549-391f-bdbd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b1de4907-cf00-4368-b71a-2aa98bba33c3"
       },
       {
         "namespace": "mfm",
@@ -1784,18 +1798,21 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Twin assault cannon",
+        "name": "Twin Assault Cannon",
         "range": 24,
         "stats": {
           "A": 6,
           "S": 6,
-          "AP": 0,
+          "AP": -2,
           "D": 1,
           "BS": 3
         },
         "keywords": [
           {
-            "keyword_id": "devastating-wounds"
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
           },
           {
             "keyword_id": "twin-linked"
@@ -1819,6 +1836,10 @@
       {
         "namespace": "mfm",
         "id": "00ff8bdc-208f-4c2e-b2af-cf4093ce754a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8515a505-ffba-4f2a-b1e6-89c974a2a110"
       }
     ]
   },
@@ -1828,12 +1849,12 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Hurricane bolter",
+        "name": "Hurricane Bolter",
         "range": 24,
         "stats": {
           "A": 6,
-          "S": 4,
-          "AP": 0,
+          "S": 5,
+          "AP": -1,
           "D": 1,
           "BS": 3
         },
@@ -1852,7 +1873,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1870,6 +1891,10 @@
       {
         "namespace": "mfm",
         "id": "3c334083-8354-4918-941f-e1aaa4d6ab82"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a99b90d9-3ad5-4071-a720-03b9a9c38040"
       }
     ]
   },
@@ -1927,16 +1952,16 @@
         "range": 18,
         "stats": {
           "A": 2,
-          "S": 9,
-          "AP": -4,
-          "D": "D6",
+          "S": 10,
+          "AP": -3,
+          "D": "D3+2",
           "BS": 3
         },
         "keywords": [
           {
             "keyword_id": "melta",
             "parameters": {
-              "value": 2
+              "value": 3
             }
           }
         ]
@@ -1953,7 +1978,31 @@
       },
       {
         "namespace": "mfm",
+        "id": "637035bb-ba47-4e5d-8487-f401b2eb8abd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8d2bae8d-0c6d-4c2a-9698-b5b4b25d4fe9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a66abe5e-d599-4e77-bdc7-c22222f75888"
+      },
+      {
+        "namespace": "mfm",
+        "id": "caa23e54-63e1-46fe-97d0-e490a498b790"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e6aa437d-2562-4b5f-8537-4f6031c8691c"
+      },
+      {
+        "namespace": "mfm",
         "id": "ed2590a9-b050-488f-a467-442bae1eea53"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fcfb4c7c-c10e-4165-ac61-5c24555e7060"
       }
     ]
   },
@@ -5055,7 +5104,7 @@
         "name": "Hellfire Extremis",
         "range": 12,
         "stats": {
-          "A": "D6",
+          "A": 3,
           "S": 4,
           "AP": -1,
           "D": 1,
@@ -5089,6 +5138,10 @@
       {
         "namespace": "bsdata",
         "id": "76ca-f0fb-310-285a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "206636ca-bfc4-48fb-b171-854985c6d698"
       },
       {
         "namespace": "mfm",
@@ -6278,11 +6331,11 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Ranged",
+        "name": "Vigil Spear",
         "range": 24,
         "stats": {
           "A": 2,
-          "S": 4,
+          "S": 5,
           "AP": -1,
           "D": 2,
           "BS": 2
@@ -6290,13 +6343,13 @@
         "keywords": []
       },
       {
-        "name": "Melee",
+        "name": "Vigil Spear",
         "range": "Melee",
         "stats": {
           "A": 6,
           "S": 6,
           "AP": -2,
-          "D": "D3",
+          "D": 2,
           "WS": 2
         },
         "keywords": [
@@ -6318,6 +6371,10 @@
       {
         "namespace": "mfm",
         "id": "03e55197-ee10-45db-91ef-b4cf0b94cc75"
+      },
+      {
+        "namespace": "mfm",
+        "id": "52bc6733-4131-4089-a7c5-3b20505b688b"
       }
     ]
   },
@@ -6327,10 +6384,10 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Blackstar rocket launcher",
+        "name": "Blackstar Rocket Launcher",
         "range": 30,
         "stats": {
-          "A": "D6+1",
+          "A": 4,
           "S": 5,
           "AP": 0,
           "D": 1,
@@ -6338,7 +6395,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       }
@@ -6355,6 +6415,10 @@
       {
         "namespace": "mfm",
         "id": "8d0b4fd2-3433-41a1-a476-eee9896a60df"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f749d44e-8d0b-4eb8-9870-fe5cc52a8840"
       }
     ]
   },
@@ -32905,5 +32969,174 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     }
+  },
+  {
+    "id": "heavy-flamer-venerable-dreadnought",
+    "name": "Heavy flamer",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Heavy Flamer",
+        "range": 12,
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 2
+            }
+          },
+          {
+            "keyword_id": "torrent"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "51cd-b22d-18eb-0d18"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "b3e6-f7a7-8357-2055"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "f705-bc58-183b-767"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3f556022-c6a9-470c-b982-38dc7f5f8641"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5d461290-c8f4-41d6-b3db-1a0c62346084"
+      },
+      {
+        "namespace": "mfm",
+        "id": "82923e47-95c5-4487-b9ff-00a430a068c4"
+      }
+    ]
+  },
+  {
+    "id": "twin-lascannon-corvus-blackstar",
+    "name": "Twin lascannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Twin Lascannon",
+        "range": 48,
+        "stats": {
+          "A": 1,
+          "S": 12,
+          "AP": -3,
+          "D": "D3+3",
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "twin-linked"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c36c-6247-f673-fe00"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ce7c-2f31-957b-e430"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "e008-470a-83cb-c5e6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5a97b1c7-565a-4d6c-be51-5e8fe08d6c34"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a9bdbe08-2919-457d-8fdc-3a2d09abe00c"
+      }
+    ]
+  },
+  {
+    "id": "helfrost-cannon-venerable-dreadnought",
+    "name": "Helfrost cannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Dispersed",
+        "range": 12,
+        "stats": {
+          "A": 3,
+          "S": 6,
+          "AP": -1,
+          "D": 2,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "torrent"
+          }
+        ]
+      },
+      {
+        "name": "Focused",
+        "range": 36,
+        "stats": {
+          "A": 1,
+          "S": 10,
+          "AP": -3,
+          "D": 5,
+          "BS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "ba38-62d3-698a-3f35"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "ece7-7c5e-28d7-9a0d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "17b62aaa-af2a-43fa-9b9a-0430fb5d7fe6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "71ca3b65-754b-4fc4-a285-09938b07765f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a037c131-356e-430f-9b4f-99f418e8aa5e"
+      }
+    ]
   }
 ]

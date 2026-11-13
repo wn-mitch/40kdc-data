@@ -30177,18 +30177,18 @@
         "Rough Rider with Hunting Lance": 3
       },
       "counts": {
-        "goad-lance": 1,
+        "goad-lance-draydens-lance-attilan-rough-riders": 1,
         "hunting-lance": 4,
         "lasgun": 4,
-        "laspistol": 5,
-        "power-sabre": 1,
+        "laspistol-draydens-lance-attilan-rough-riders": 5,
+        "power-sabre-draydens-lance-attilan-rough-riders": 1,
         "steeds-hooves": 5
       }
     },
     "expected": []
   },
   {
-    "name": "astra-militarum/draydens-lance-attilan-rough-riders goad-lance+1",
+    "name": "astra-militarum/draydens-lance-attilan-rough-riders goad-lance-draydens-lance-attilan-rough-riders+1",
     "args": {
       "unitId": "draydens-lance-attilan-rough-riders",
       "factionId": "astra-militarum",
@@ -30198,11 +30198,11 @@
         "Rough Rider with Hunting Lance": 3
       },
       "counts": {
-        "goad-lance": 2,
+        "goad-lance-draydens-lance-attilan-rough-riders": 2,
         "hunting-lance": 4,
         "lasgun": 4,
-        "laspistol": 5,
-        "power-sabre": 1,
+        "laspistol-draydens-lance-attilan-rough-riders": 5,
+        "power-sabre-draydens-lance-attilan-rough-riders": 1,
         "steeds-hooves": 5
       }
     },
@@ -30214,7 +30214,7 @@
     ]
   },
   {
-    "name": "astra-militarum/draydens-lance-attilan-rough-riders goad-lance-1",
+    "name": "astra-militarum/draydens-lance-attilan-rough-riders goad-lance-draydens-lance-attilan-rough-riders-1",
     "args": {
       "unitId": "draydens-lance-attilan-rough-riders",
       "factionId": "astra-militarum",
@@ -30224,11 +30224,11 @@
         "Rough Rider with Hunting Lance": 3
       },
       "counts": {
-        "goad-lance": 0,
+        "goad-lance-draydens-lance-attilan-rough-riders": 0,
         "hunting-lance": 4,
         "lasgun": 4,
-        "laspistol": 5,
-        "power-sabre": 1,
+        "laspistol-draydens-lance-attilan-rough-riders": 5,
+        "power-sabre-draydens-lance-attilan-rough-riders": 1,
         "steeds-hooves": 5
       }
     },
@@ -45051,16 +45051,16 @@
         "Wrack with Ossefactor": 1
       },
       "counts": {
-        "hexrifle": 1,
-        "ossefactor": 1,
-        "torturers-tool": 2,
-        "twin-torturers-tools": 3
+        "hexrifle-coven-of-agonies-wracks": 1,
+        "ossefactor-coven-of-agonies-wracks": 1,
+        "torturers-tool-coven-of-agonies-wracks": 2,
+        "twin-torturers-tools-coven-of-agonies-wracks": 3
       }
     },
     "expected": []
   },
   {
-    "name": "drukhari/coven-of-agonies-wracks hexrifle+1",
+    "name": "drukhari/coven-of-agonies-wracks hexrifle-coven-of-agonies-wracks+1",
     "args": {
       "unitId": "coven-of-agonies-wracks",
       "factionId": "drukhari",
@@ -45070,10 +45070,10 @@
         "Wrack with Ossefactor": 1
       },
       "counts": {
-        "hexrifle": 2,
-        "ossefactor": 1,
-        "torturers-tool": 2,
-        "twin-torturers-tools": 3
+        "hexrifle-coven-of-agonies-wracks": 2,
+        "ossefactor-coven-of-agonies-wracks": 1,
+        "torturers-tool-coven-of-agonies-wracks": 2,
+        "twin-torturers-tools-coven-of-agonies-wracks": 3
       }
     },
     "expected": [
@@ -45084,7 +45084,7 @@
     ]
   },
   {
-    "name": "drukhari/coven-of-agonies-wracks hexrifle-1",
+    "name": "drukhari/coven-of-agonies-wracks hexrifle-coven-of-agonies-wracks-1",
     "args": {
       "unitId": "coven-of-agonies-wracks",
       "factionId": "drukhari",
@@ -45094,10 +45094,10 @@
         "Wrack with Ossefactor": 1
       },
       "counts": {
-        "hexrifle": 0,
-        "ossefactor": 1,
-        "torturers-tool": 2,
-        "twin-torturers-tools": 3
+        "hexrifle-coven-of-agonies-wracks": 0,
+        "ossefactor-coven-of-agonies-wracks": 1,
+        "torturers-tool-coven-of-agonies-wracks": 2,
+        "twin-torturers-tools-coven-of-agonies-wracks": 3
       }
     },
     "expected": [
