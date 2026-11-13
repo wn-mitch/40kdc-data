@@ -14,6 +14,7 @@ export default defineWorkersConfig({
         miniflare: {
           bindings: {
             MAX_UPLOAD_BYTES: "200000",
+            YELLOWSCRIBE_ORIGIN: "https://yellowscribe.test",
             // Upload fixtures (the workers pool cannot import files as text).
             FIXTURE_DAEMONS_ROS: repo("tools/test/fixtures/import/battlescribe/daemons.ros"),
             FIXTURE_GW_TEXT: repo("conformance/roster/sm-gw-app-exact-groups/input.gw.txt"),

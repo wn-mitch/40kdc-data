@@ -16,6 +16,8 @@
   "vars": {
     // Minutes a code stays readable, as Yellowscribe's ten.
     "CODE_TTL_MINUTES": "10",
-    "MAX_UPLOAD_BYTES": "1048576"
+    "MAX_UPLOAD_BYTES": "1048576",
+    // Mints codes the stock Yellowscribe TTS mod reads (POST /yellowscribeArmyCode).
+    "YELLOWSCRIBE_ORIGIN": "https://yellowscribe.link"
   }
 }

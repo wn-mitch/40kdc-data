@@ -6,6 +6,9 @@
  * - `POST /makeArmyAndReturnCode` — upload a list, get `{code}`.
  * - `POST /getFormattedArmy` — upload a list, get the army data without storing it.
  * - `POST /getArmyCode` — store army data (as `getFormattedArmy` returns it), get `{code}`.
+ * - `POST /yellowscribeArmyCode` — upload a list, get `{code}` minted on
+ *   yellowscribe.link, which the stock TTS mod reads (codes from this host
+ *   need the mod's script re-pointed here).
  * - `GET /get_army_by_id?id=<code>` — what the mod fetches.
  * - `GET /machine.lua` — the Yellow Machine script pointed at this host.
  *
@@ -23,6 +26,8 @@ export interface Env {
   ARMIES: DurableObjectNamespace<ArmyStore>;
   CODE_TTL_MINUTES?: string;
   MAX_UPLOAD_BYTES?: string;
+  /** Yellowscribe server that mints codes for the stock mod. */
+  YELLOWSCRIBE_ORIGIN?: string;
 }
 
 const CORS = {
@@ -32,6 +37,7 @@ const CORS = {
 } as const;
 
 const CODE_ATTEMPTS = 5;
+const YELLOWSCRIBE_TIMEOUT_MS = 15_000;
 
 function json(body: unknown, status = 200): Response {
   return new Response(typeof body === "string" ? body : JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...CORS } });
@@ -120,6 +126,36 @@ async function store(env: Env, army: ArmyData, settings: Settings): Promise<stri
   return null;
 }
 
+/**
+ * Mints a code for `army` on Yellowscribe's own server (`POST /getArmyCode`, the
+ * call its site makes), so the stock TTS mod can load it. Returns the code, or a
+ * 502 when that server fails or answers with something other than a code.
+ */
+async function yellowscribeCode(env: Env, army: ArmyData, settings: Settings): Promise<string | Response> {
+  const origin = env.YELLOWSCRIBE_ORIGIN ?? "https://yellowscribe.link";
+  const query = new URLSearchParams({ uiHeight: settings.uiHeight, uiWidth: settings.uiWidth, decorativeNames: settings.decorativeNames, modules: settings.modules.join(",") });
+  let res: Response;
+  try {
+    res = await fetch(`${origin}/getArmyCode?${query}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(army),
+      signal: AbortSignal.timeout(YELLOWSCRIBE_TIMEOUT_MS),
+    });
+  } catch (err) {
+    return fail(`Yellowscribe did not answer: ${(err as Error).message}`, 502);
+  }
+  const text = await res.text();
+  let code: unknown;
+  try {
+    code = (JSON.parse(text) as { code?: unknown }).code;
+  } catch {
+    code = undefined;
+  }
+  if (!res.ok || typeof code !== "string" || !/^[0-9a-f]{8}$/.test(code)) return fail(`Yellowscribe refused the army (HTTP ${res.status})`, 502);
+  return code;
+}
+
 /** The document Yellowscribe serves for a code: the stored army plus the Lua its modules build. */
 function served(stored: StoredArmy): string {
   const { modules, armyData, ...rest } = stored;
@@ -140,15 +176,19 @@ export default {
         return json(served(JSON.parse(body) as StoredArmy));
       }
       if (url.pathname === "/machine.lua") return new Response(machineScript(url.origin), { headers: { "Content-Type": "text/plain; charset=utf-8", ...CORS } });
-      if (url.pathname === "/") return json({ service: "40kdc-tts", endpoints: ["POST /makeArmyAndReturnCode", "POST /getFormattedArmy", "POST /getArmyCode", "GET /get_army_by_id?id=", "GET /machine.lua"] });
+      if (url.pathname === "/") return json({ service: "40kdc-tts", endpoints: ["POST /makeArmyAndReturnCode", "POST /getFormattedArmy", "POST /getArmyCode", "POST /yellowscribeArmyCode", "GET /get_army_by_id?id=", "GET /machine.lua"] });
       return fail("not found", 404);
     }
 
     if (request.method !== "POST") return fail("method not allowed", 405);
 
-    if (url.pathname === "/makeArmyAndReturnCode" || url.pathname === "/getFormattedArmy") {
+    if (url.pathname === "/makeArmyAndReturnCode" || url.pathname === "/getFormattedArmy" || url.pathname === "/yellowscribeArmyCode") {
       const made = await armyFromUpload(request, url, env);
       if (made instanceof Response) return made;
+      if (url.pathname === "/yellowscribeArmyCode") {
+        const code = await yellowscribeCode(env, made.army, settingsOf(url));
+        return code instanceof Response ? code : json({ code, server: env.YELLOWSCRIBE_ORIGIN ?? "https://yellowscribe.link", skipped: made.skipped });
+      }
       if (url.pathname === "/getFormattedArmy") return json({ ...made.army, errors: made.skipped.map((name) => `${name}: no matching datasheet`) });
       const code = await store(env, made.army, settingsOf(url));
       return code ? json({ code, skipped: made.skipped }) : fail("could not allocate a code; try again", 503);
