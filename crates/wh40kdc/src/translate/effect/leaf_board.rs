@@ -454,10 +454,10 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             )
         }
         Some("heal") => {
-            let who = if sv(m, "per") == Some("model") {
-                format!("each model in {subj}")
-            } else {
-                subj.to_string()
+            let who = match sv(m, "per") {
+                Some("model") => format!("each model in {subj}"),
+                Some("one-model") => format!("one model in {subj}"),
+                _ => subj.to_string(),
             };
             if sv(m, "amount") == Some("full") {
                 return format!(

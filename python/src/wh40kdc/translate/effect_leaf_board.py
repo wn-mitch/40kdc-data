@@ -809,7 +809,13 @@ def _damage_reduction(m: dict[str, Any], subj: str) -> str:
 
 
 def _heal(m: dict[str, Any], subj: str) -> str:
-    who = f"each model in {subj}" if m.get("per") == "model" else subj
+    per = m.get("per")
+    if per == "model":
+        who = f"each model in {subj}"
+    elif per == "one-model":
+        who = f"one model in {subj}"
+    else:
+        who = subj
     if m.get("amount") == "full":
         return f"{who} {v(who, 'regains')} all {pronoun(who)} lost wounds"
     if not is_literal(m.get("amount")):

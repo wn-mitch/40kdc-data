@@ -1775,7 +1775,7 @@ class Modifier16(TypedDict):
 
 class Modifier26(TypedDict):
     amount: Quantity | Literal["full"]
-    per: NotRequired[Literal["model", "unit"]]
+    per: NotRequired[Literal["model", "unit", "one-model"]]
 
 
 class Modifier28(TypedDict):

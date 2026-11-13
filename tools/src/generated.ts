@@ -5616,7 +5616,10 @@ export interface HealEffect {
   target: UnitRef;
   modifier: {
     amount: Quantity | "full";
-    per?: "model" | "unit";
+    /**
+     * model: each model in the target regains the amount; one-model: one model in the target does; unit (or absent): the target unit does.
+     */
+    per?: "model" | "unit" | "one-model";
   };
   scaling?: Scaling;
 }

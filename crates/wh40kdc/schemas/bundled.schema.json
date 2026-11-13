@@ -9812,8 +9812,10 @@
                 "per": {
                   "enum": [
                     "model",
-                    "unit"
-                  ]
+                    "unit",
+                    "one-model"
+                  ],
+                  "description": "model: each model in the target regains the amount; one-model: one model in the target does; unit (or absent): the target unit does."
                 }
               },
               "required": [

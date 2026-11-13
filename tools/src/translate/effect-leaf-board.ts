@@ -532,7 +532,7 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
       return `${subj} ${v(subj, "has")} a ${jstr(m.invuln_sv)}+ invulnerable save${vs}`;
     }
     case "heal": {
-      const who = m.per === "model" ? `each model in ${subj}` : subj;
+      const who = m.per === "model" ? `each model in ${subj}` : m.per === "one-model" ? `one model in ${subj}` : subj;
       if (m.amount === "full") return `${who} ${v(who, "regains")} all ${pronoun(who)} lost wounds`;
       if (!isLiteral(m.amount)) return `${who} ${v(who, "regains")} up to ${amountOf(m.amount, "lost wound", "lost wounds")}`;
       const amount = diceCase(m.amount);

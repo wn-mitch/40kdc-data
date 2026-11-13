@@ -41595,6 +41595,62 @@
     }
   },
   {
+    "caseId": "fidelity/heal-per-model",
+    "effect": {
+      "type": "heal",
+      "target": "this-unit",
+      "modifier": {
+        "amount": 3,
+        "per": "model"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, each model in the unit regains up to 3 lost wounds."
+    }
+  },
+  {
+    "caseId": "fidelity/heal-per-one-model",
+    "effect": {
+      "type": "heal",
+      "target": "this-unit",
+      "modifier": {
+        "amount": 3,
+        "per": "one-model"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, one model in the unit regains up to 3 lost wounds."
+    }
+  },
+  {
+    "caseId": "fidelity/return-models-named",
+    "effect": {
+      "type": "return-models",
+      "target": {
+        "level": "model",
+        "member_of": "this-unit",
+        "model_names": [
+          "Healer Twin"
+        ]
+      },
+      "modifier": {
+        "count": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, return 1 destroyed model named Healer Twin to the unit, each with its full wounds remaining."
+    }
+  },
+  {
     "caseId": "fidelity/roll-result-at-most",
     "effect": {
       "type": "roll-result",

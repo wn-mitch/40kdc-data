@@ -40,6 +40,23 @@ const RETURN_MODELS_COUNTS: FamilyExtension = {
     : previous(input),
 };
 
+const RETURN_MODELS_NAMED: FamilyExtension = {
+  // "return 1 destroyed Geminae Superia model to this unit".
+  family: "return-models",
+  version: 7,
+  description: "As the previous version, plus model_name: only destroyed models with this profile name, as the datasheet prints it (\"1 destroyed Geminae Superia model\"). It needs a unit subject.",
+  schema: (previous) => withProperties(previous, { model_name: optional({ type: "string", minLength: 1 }) }),
+  normalize: (input, previous) => {
+    if (input.model_name === undefined) return previous(input);
+    const { model_name: modelName, ...rest } = input;
+    const normalized = previous(rest);
+    // A model returns to a unit; a single model has no other models to name.
+    if (normalized.subject === "this-model") throw new TypeError("return-models.model_name names models of a unit; its subject cannot be this-model.");
+    if (typeof modelName !== "string" || modelName.trim().length === 0) throw new TypeError("return-models.model_name is the model's profile name as its datasheet prints it.");
+    return { ...normalized, model_name: modelName.trim() };
+  },
+};
+
 const HIT_THIS_PHASE: FamilyExtension = {
   // "that was hit by one or more Psychic Attacks made by a" + "THOUSAND SONS PSYKER model" + "this phase".
   family: "hit-by-attacks",
@@ -320,4 +337,5 @@ export const ATTACK_EXTENSIONS: readonly FamilyExtension[] = [
   printedKeywordsExtension("return-models", 3),
   RETURN_MODELS_WOUNDS,
   RETURN_MODELS_COUNTS,
+  RETURN_MODELS_NAMED,
 ];

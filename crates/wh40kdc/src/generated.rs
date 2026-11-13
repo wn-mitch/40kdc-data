@@ -21275,9 +21275,11 @@ pub struct HasKeywordConditionParameters {
 ///      ]
 ///    },
 ///    "per": {
+///      "description": "model: each model in the target regains the amount; one-model: one model in the target does; unit (or absent): the target unit does.",
 ///      "enum": [
 ///        "model",
-///        "unit"
+///        "unit",
+///        "one-model"
 ///      ]
 ///    }
 ///  },
@@ -21289,6 +21291,7 @@ pub struct HasKeywordConditionParameters {
 #[serde(deny_unknown_fields)]
 pub struct HealEffectModifier {
     pub amount: HealEffectModifierAmount,
+    ///model: each model in the target regains the amount; one-model: one model in the target does; unit (or absent): the target unit does.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub per: ::std::option::Option<HealEffectModifierPer>,
 }
@@ -21325,15 +21328,17 @@ impl ::std::convert::From<::serde_json::Value> for HealEffectModifierAmount {
         Self::Variant1(value)
     }
 }
-///`HealEffectModifierPer`
+///model: each model in the target regains the amount; one-model: one model in the target does; unit (or absent): the target unit does.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
+///  "description": "model: each model in the target regains the amount; one-model: one model in the target does; unit (or absent): the target unit does.",
 ///  "enum": [
 ///    "model",
-///    "unit"
+///    "unit",
+///    "one-model"
 ///  ]
 ///}
 /// ```
@@ -21355,12 +21360,15 @@ pub enum HealEffectModifierPer {
     Model,
     #[serde(rename = "unit")]
     Unit,
+    #[serde(rename = "one-model")]
+    OneModel,
 }
 impl ::std::fmt::Display for HealEffectModifierPer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Model => f.write_str("model"),
             Self::Unit => f.write_str("unit"),
+            Self::OneModel => f.write_str("one-model"),
         }
     }
 }
@@ -21372,6 +21380,7 @@ impl ::std::str::FromStr for HealEffectModifierPer {
         match value {
             "model" => Ok(Self::Model),
             "unit" => Ok(Self::Unit),
+            "one-model" => Ok(Self::OneModel),
             _ => Err("invalid value".into()),
         }
     }

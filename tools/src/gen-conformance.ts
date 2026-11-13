@@ -4365,6 +4365,11 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/resource-gain-characteristic", effect: { type: "resource-gain", target: "this-unit", modifier: { pool: "fury", amount: { characteristic: "W" } } } },
     // A heal of a two-dice amount.
     { caseId: "fidelity/heal-two-d3", effect: { type: "heal", target: "this-model", modifier: { amount: "2D3" } } },
+    // A heal of every model in the unit, against a heal of one model the player picks.
+    { caseId: "fidelity/heal-per-model", effect: { type: "heal", target: "this-unit", modifier: { amount: 3, per: "model" } } },
+    { caseId: "fidelity/heal-per-one-model", effect: { type: "heal", target: "this-unit", modifier: { amount: 3, per: "one-model" } } },
+    // A return of a destroyed model named by its datasheet entry, not any model of the unit.
+    { caseId: "fidelity/return-models-named", effect: { type: "return-models", target: { level: "model", member_of: "this-unit", model_names: ["Healer Twin"] }, modifier: { count: 1 } } },
     // A cap on a roll after modifiers: "if the result is greater than 6, change it to 6".
     { caseId: "fidelity/roll-result-at-most", effect: { type: "roll-result", target: "this-unit", modifier: { roll: "charge", at_most: 6 } } },
     // An embark under the core rules with a longer distance to the Transport than 3".
