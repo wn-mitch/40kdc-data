@@ -5,106 +5,42 @@
  */
 import fc from "fast-check";
 import { beforeAll, describe, expect, it } from "vitest";
-import { Dataset } from "../src/data/dataset.js";
-import { validateRosterCore, type NormRoster, type RosterViolationCode } from "../src/data/roster-resolve.js";
-import type { Detachment } from "../src/generated.js";
+import type { RosterViolationCode } from "../src/data/roster-resolve.js";
 import { evaluateField, type EvalContext } from "../src/bsdata-export/evaluate.js";
-import { buildExport } from "../src/bsdata-export/export.js";
-import { BSDATA_IDS } from "../src/bsdata-export/ids.js";
 import { hostsOffering, restrictingDetachments } from "../src/bsdata-export/restrictions.js";
 import { children, str, type BsNode } from "../src/bsdata-export/source.js";
+import {
+  battleSizeId as sizeId,
+  codes,
+  dataset,
+  detachmentOption as option,
+  FACTIONS,
+  linkedField as linked,
+  loadExportFixture,
+  resolvesTo,
+  rootFaction,
+  roster,
+  sharedEntry as shared,
+  unitLinks as links,
+  type ExportFixture,
+  type Size,
+} from "./bsdata-export-fixture.js";
 
-const dataset = Dataset.embedded();
-const FACTIONS = Object.keys(BSDATA_IDS.catalogues);
-const DP = BSDATA_IDS.system.costTypes["Detachment Points"];
-type Size = "incursion" | "strike-force";
-
+let fx: ExportFixture;
 let catalogues: Map<string, BsNode>;
-let gst: BsNode;
-/** Unit entry id → its faction, unit id and entry node. */
-let entries: Map<string, { factionId: string; unitId: string; node: BsNode }>;
-
-function rootFaction(factionId: string): string {
-  return dataset.factions.get(factionId)?.raw.parent_faction_id ?? factionId;
-}
-
-function sharedEntry(name: string): BsNode {
-  return children(gst, "sharedSelectionEntries").find((e) => e.name === name)!;
-}
-
-function battleSizeId(size: Size): string {
-  const group = children(sharedEntry("Battle Size"), "selectionEntryGroups")[0];
-  return str(children(group, "selectionEntries").find((o) => String(o.name).includes(size === "incursion" ? "Incursion" : "Strike Force"))!, "id")!;
-}
-
-function detachmentOption(detachment: Detachment): BsNode {
-  return children(catalogues.get(rootFaction(detachment.faction_id))!, "sharedSelectionEntries").find(
-    (e) => e.name === detachment.name && children(e, "costs").some((c) => str(c, "typeId") === DP),
-  )!;
-}
-
-/** Unit links an army built from `host` offers: its own root list and, for a child faction, its parent's. */
-function unitLinks(host: string): { link: BsNode; entry: { factionId: string; unitId: string; node: BsNode } }[] {
-  const lists = [catalogues.get(host)!, ...(rootFaction(host) !== host ? [catalogues.get(rootFaction(host))!] : [])];
-  return lists.flatMap((c) =>
-    children(c, "entryLinks")
-      .map((link) => ({ link, entry: entries.get(str(link, "targetId")!)! }))
-      .filter(({ entry }) => entry !== undefined),
-  );
-}
+const battleSizeId = (size: Size): string => sizeId(fx, size);
+const detachmentOption = (d: Parameters<typeof option>[1]): BsNode => option(fx, d);
+const sharedEntry = (name: string): BsNode | undefined => shared(fx, name);
+const unitLinks = (host: string) => links(fx, host);
+const linkedField = (entry: BsNode, link: BsNode, field: string, base: number, ctx: EvalContext): number => linked(entry, link, str(entry, "id")!, field, base, ctx);
 
 function limitId(entry: BsNode): string {
   return str(children(entry, "constraints").find((c) => str(c, "field") === "selections" && c.type === "max")!, "id")!;
 }
 
-/** A field on a linked entry: the entry's modifiers, then the link's. */
-function linkedField(entry: BsNode, link: BsNode, field: string, base: number, ctx: EvalContext): number {
-  const merged = { modifiers: [...children(entry, "modifiers"), ...children(link, "modifiers")] };
-  return evaluateField(merged, str(entry, "id")!, field, base, ctx);
-}
-
-function roster(host: string, size: Size, detachmentIds: string[], unitIds: string[]): NormRoster {
-  return {
-    factionId: host,
-    battleSize: size,
-    forceDisposition: null,
-    detachmentIds,
-    units: unitIds.map((unitId) => ({
-      unitId,
-      modelCount: dataset.units.getAny(unitId)?.raw.model_count?.min ?? 1,
-      isWarlord: false,
-      enhancementId: null,
-      leaderBodyguardId: null,
-      counts: new Map(),
-    })),
-  };
-}
-
-function codes(spec: NormRoster): Set<RosterViolationCode> {
-  return new Set(validateRosterCore(spec, dataset).army.map((v) => v.code));
-}
-
-/** Whether validation resolves `unitId` in `host`'s army to the record from `factionId`. */
-function resolvesTo(host: string, unitId: string, factionId: string): boolean {
-  return (dataset.units.getInFaction(unitId, host) ?? dataset.units.getAny(unitId))?.raw.faction_id === factionId;
-}
-
 beforeAll(() => {
-  const documents = buildExport({ version: "1.5.1", dataset });
-  gst = Object.values(documents[0].document)[0] as BsNode;
-  catalogues = new Map();
-  entries = new Map();
-  for (const factionId of FACTIONS) {
-    const doc = documents.find((d) => d.file === BSDATA_IDS.catalogues[factionId].file);
-    if (!doc) continue;
-    const catalogue = Object.values(doc.document)[0] as BsNode;
-    catalogues.set(factionId, catalogue);
-    for (const node of children(catalogue, "sharedSelectionEntries")) {
-      if (node.type !== "unit" && node.type !== "model") continue;
-      const view = dataset.units.byFaction(factionId).find((u) => (u.raw.is_legend ? `${u.name} [Legends]` : u.name) === node.name);
-      if (view) entries.set(str(node, "id")!, { factionId, unitId: view.id, node });
-    }
-  }
+  fx = loadExportFixture();
+  catalogues = fx.catalogues;
 }, 120_000);
 
 describe("BSData export detachment rules agree with roster validation", () => {

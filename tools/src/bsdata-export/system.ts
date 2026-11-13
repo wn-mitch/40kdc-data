@@ -46,7 +46,7 @@ export const SECTION_CATEGORIES = [
 ] as const;
 
 /** Marker categories the exporter's rules refer to. */
-export const MARKER_CATEGORIES = ["Leader", "Support", "Warlord", "3DP Detachment"] as const;
+export const MARKER_CATEGORIES = ["Leader", "Support", "Warlord", "3DP Detachment", "Supreme Commander"] as const;
 
 const BATTLE_SIZES = [
   { key: "Incursion", size: "incursion", label: "1. Incursion" },

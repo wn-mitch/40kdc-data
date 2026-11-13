@@ -32,8 +32,13 @@ export function unitKey(unit: { faction_id: string; id: string }): string {
   return `${unit.faction_id}/${unit.id}`;
 }
 
-/** Every (catalogue, rule) pair where the rule's army gate admits the catalogue's army. */
+/**
+ * Every (catalogue, rule) pair where the rule's army gate admits the
+ * catalogue's army. A non-exclusive rule does not apply in an army of its
+ * source faction's family: there its datasheets are ordinary picks.
+ */
 export function allyPlans(dataset: Dataset, factions: readonly string[]): AllyPlan[] {
+  const rootOf = (factionId: string): string => dataset.factions.get(factionId)?.raw.parent_faction_id ?? factionId;
   const out: AllyPlan[] = [];
   for (const host of factions) {
     const keywords = new Set(dataset.factions.get(host)?.raw.keywords ?? []);
@@ -42,6 +47,7 @@ export function allyPlans(dataset: Dataset, factions: readonly string[]): AllyPl
       if (gate.length > 0 && !gate.some((k) => keywords.has(k))) continue;
       const source = rule.source_faction_id;
       if (!source) continue;
+      if (!rule.exclusive && rootOf(source) === rootOf(host)) continue;
       const units = (rule.source_datasheet_ids ?? [])
         .map((id) => dataset.units.byFaction(source).find((u) => u.id === id))
         .filter((u): u is UnitView => u !== undefined);

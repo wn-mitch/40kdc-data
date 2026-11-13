@@ -81,8 +81,8 @@ export function hostsOffering(ctx: Pick<RestrictionContext, "dataset" | "faction
   return ctx.factions.filter((f) => ctx.dataset.detachments.byFaction(f).some((d) => d.id === detachmentId));
 }
 
-/** `unit`'s keywords in `host`'s army with only `detachmentId` selected. */
-export function armyKeywords(dataset: Dataset, unit: Unit, host: string, detachmentId: string): Set<string> {
+/** `unit`'s keywords in `host`'s army with only `detachmentId` selected (none for null). */
+export function armyKeywords(dataset: Dataset, unit: Unit, host: string, detachmentId: string | null): Set<string> {
   const army = dataset.factions.get(host)?.raw.keywords ?? [];
   const owned = new Set<string>([...(unit.keywords ?? []), ...(unit.faction_keywords ?? []), unit.name]);
   if (army.length > 0 && (unit.faction_keywords ?? []).every((k) => army.includes(k))) for (const k of army) owned.add(k);

@@ -37,7 +37,10 @@ export interface UnitBuildContext {
   /** Unit ids some leader / support character can attach to. */
   readonly ledBy: { readonly leader: ReadonlySet<string>; readonly support: ReadonlySet<string> };
   /** What the unit takes from its catalogue: the Warlord upgrade link and an enhancement group. */
-  readonly characterOptions: (unit: UnitView, entryKey: string) => { readonly entryLinks: readonly BsNode[]; readonly groups: readonly BsNode[] };
+  readonly characterOptions: (
+    unit: UnitView,
+    entryKey: string,
+  ) => { readonly entryLinks: readonly BsNode[]; readonly groups: readonly BsNode[]; readonly categoryLinks: readonly BsNode[] };
 }
 
 export function preferredUnitName(unit: Unit): string {
@@ -275,7 +278,7 @@ export function buildUnitEntry(view: UnitView, ctx: UnitBuildContext, preferredI
     import: true,
     type: multiModel ? "unit" : "model",
     associations: association(view, ctx, key),
-    categoryLinks: unitCategoryLinks(unit, ctx, key, home),
+    categoryLinks: [...unitCategoryLinks(unit, ctx, key, home), ...character.categoryLinks],
     constraints,
     costs: [cost("pts", ctx.refs.cost.pts, basePrice(unit, unit.model_count?.min ?? 1))],
     entryLinks: [...selections.entryLinks, ...character.entryLinks],
