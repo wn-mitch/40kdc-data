@@ -24,6 +24,8 @@
  */
 import type { MfmItem, MfmLoadoutRules } from "../data/mfm-loadout.js";
 import { bareModels, checkboxCaps, copiesOf, limitCap, modelStock, rowSlotChoices, slotChoices } from "../data/mfm-loadout.js";
+import { forEachMfmConfiguration, mfmAssignment, MfmSearchTooLarge, type MfmConfiguration } from "../data/mfm-loadout-search.js";
+import { mfmBaseLoadout, mfmRows, type MfmComposition } from "../data/mfm-loadout-unit.js";
 import type { Unit } from "../generated.js";
 import { categoryLink, compact, condition, constraint, cost, entryLink, modifier } from "./nodes.js";
 import type { BsNode } from "./source.js";
@@ -147,6 +149,72 @@ function sharedCap(
   return out;
 }
 
+/** Configurations the starting-loadout search visits before giving up. */
+const START_SEARCH_LIMIT = 2000;
+
+/**
+ * The loadout a unit of `modelCount` models starts on: the package's base loadout when each row's
+ * models carry one bundle in it, else the first legal configuration that does. Keyed by row model,
+ * `undefined` for the unit's own wargear. Null when the size has no such configuration.
+ */
+export function startingBundles(composition: MfmComposition, modelCount: number): Map<string | undefined, MfmItem[]> | null {
+  const rules = composition.loadout;
+  const rows = rules ? mfmRows(composition, modelCount) : null;
+  if (!rules || !rows) return null;
+  const uniform = (c: MfmConfiguration) => new Set(c.groups.map((g) => g.model)).size === c.groups.length;
+  let found: MfmConfiguration | null = null;
+  try {
+    const base = mfmBaseLoadout(rules, rows);
+    const assigned = base?.legal ? mfmAssignment(rules, rows, base.counts) : null;
+    if (assigned && uniform(assigned)) found = assigned;
+    let visited = 0;
+    if (!found) {
+      forEachMfmConfiguration(rules, rows, (c) => {
+        visited += 1;
+        if (uniform(c)) found = c;
+        return found !== null || visited >= START_SEARCH_LIMIT;
+      });
+    }
+  } catch (error) {
+    if (!(error instanceof MfmSearchTooLarge)) throw error;
+  }
+  if (!found) return null;
+  const chosen: MfmConfiguration = found;
+  return new Map<string | undefined, MfmItem[]>([...chosen.groups.map((g) => [g.model, g.items] as [string, MfmItem[]]), [undefined, chosen.unit]]);
+}
+
+/**
+ * Each non-alternate slot's starting choice (an index into `expanded[s]`), drawn from the starting
+ * bundles: a slot takes the largest choice its row's remaining bundle holds. A row whose bundle the
+ * slots do not use up exactly gets none.
+ */
+function startingChoices(rules: MfmLoadoutRules, expanded: readonly (readonly MfmItem[])[][], bundles: ReadonlyMap<string | undefined, MfmItem[]>): Map<number, number> {
+  const out = new Map<number, number>();
+  for (const [model, items] of bundles) {
+    const left = copiesOf(items);
+    const picked = new Map<number, number>();
+    let mixed = false;
+    for (const [s, slot] of rules.slots.entries()) {
+      if (slot.model !== model || slot.alternate) continue;
+      for (let k = 0; k < slot.picks; k += 1) {
+        const fits = expanded[s]
+          .map((choice, c) => ({ choice, c }))
+          .filter(({ choice }) => choice.every((i) => (left.get(i.id) ?? 0) >= i.count))
+          .sort((a, b) => b.choice.reduce((n, i) => n + i.count, 0) - a.choice.reduce((n, i) => n + i.count, 0))[0];
+        if (!fits) break;
+        for (const i of fits.choice) left.set(i.id, left.get(i.id)! - i.count);
+        // A group starts on one choice taken `picks` times; a slot that starts on two cannot be stated.
+        if (picked.has(s) && picked.get(s) !== fits.c) mixed = true;
+        picked.set(s, fits.c);
+      }
+    }
+    // The row's slots must account for its whole bundle, or the starting choices would misstate it.
+    const stock = rules.slots.some((slot) => slot.model === model) ? [...left.values()].every((n) => n === 0) : true;
+    if (stock && !mixed) for (const [s, c] of picked) out.set(s, c);
+  }
+  return out;
+}
+
 /** The per-model selections for `unit`'s MFM `rules`; `rows` are its composition rows in order. */
 export function modelWargear(unit: Unit, ctx: WargearContext, rules: MfmLoadoutRules, rows: readonly Row[], counts: readonly number[], multiModel: boolean): ModelWargear {
   const key = `unit:${unit.faction_id}/${unit.id}:mfm`;
@@ -162,6 +230,9 @@ export function modelWargear(unit: Unit, ctx: WargearContext, rules: MfmLoadoutR
   const unitStock = copiesOf(rules.stock.filter((entry) => entry.model === undefined).flatMap((entry) => entry.items));
   // The package's own expansion: an add-on slot can be left empty, and a stock choice can drop unticked checkbox items.
   const expanded = rules.slots.map((slot) => (slot.model === undefined ? slotChoices(slot, unitStock) : rowSlotChoices(rules, slot, modelStock(rules, slot.model))));
+  const composition = ctx.dataset.unitCompositionOf(unit) as MfmComposition | undefined;
+  const bundles = composition ? startingBundles(composition, counts[0]) : null;
+  const starts = bundles ? startingChoices(rules, expanded, bundles) : new Map<number, number>();
   // Choice entries per slot and row ("unit" for a slot without a row): each row gets its own.
   const choicesBySlot = new Map<string, Choice[]>();
   rules.slots.forEach((slot, s) => {
@@ -322,8 +393,12 @@ export function modelWargear(unit: Unit, ctx: WargearContext, rules: MfmLoadoutR
     const minId = ctx.ids.id(`${slotKey}:min`);
     const maxId = ctx.ids.id(`${slotKey}:max`);
     const choices = choicesBySlot.get(`${s}:${row ?? "unit"}`)!;
-    const template = slot.model === undefined ? undefined : templates.get(slot.model) ?? (row === null ? undefined : keys[row].map((k) => templates.get(k)).find(Boolean));
-    const defaultChoice = choices.find((c) => c.items.length > 0 && c.items.every((i) => (template ?? []).some((t) => t.id === i.id && t.count >= i.count)));
+    // The choice the unit's starting loadout gives the slot (`startingChoices`); without one, the
+    // choice one model's stock holds, else the empty choice, so an optional slot starts empty.
+    const start = slot.model === undefined ? unitStock : modelStock(rules, slot.model);
+    const defaultChoice = starts.has(s)
+      ? choices[starts.get(s)!]
+      : (choices.find((c) => c.items.length > 0 && c.items.every((i) => (start.get(i.id) ?? 0) >= i.count)) ?? choices.find((c) => c.items.length === 0));
     const offAlternate = alternates.length > 0 && !slot.alternate;
     const alternateTaken = alternates.map((id) => condition({ childId: id, field: "selections", scope: "parent", type: "atLeast", value: 1, includeChildSelections: true }));
     return compact({

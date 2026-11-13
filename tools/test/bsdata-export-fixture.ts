@@ -29,15 +29,35 @@ export interface ExportFixture {
   readonly entries: Map<string, UnitEntry>;
 }
 
+/**
+ * A faction's catalogue with the content of the library it was split into, if any
+ * (`libraries.ts`): its categories and shared entries alongside its own links.
+ */
+export function factionCatalogue(documents: readonly { file: string; document: BsNode }[], factionId: string): BsNode | undefined {
+  const doc = documents.find((d) => d.file === BSDATA_IDS.catalogues[factionId].file);
+  if (!doc) return undefined;
+  const army = Object.values(doc.document)[0] as BsNode;
+  const byId = new Map(documents.map((d) => Object.values(d.document)[0] as BsNode).map((c) => [str(c, "id")!, c]));
+  const library = children(army, "catalogueLinks")
+    .map((l) => byId.get(str(l, "targetId")!))
+    .find((c) => c?.library === true && c.name === `${String(army.name)} Library`);
+  if (!library) return army;
+  const merged: BsNode = { ...army };
+  for (const key of ["categoryEntries", "sharedSelectionEntries", "sharedSelectionEntryGroups", "sharedProfiles", "sharedRules", "sharedInfoGroups"]) {
+    const all = [...children(army, key), ...children(library, key)];
+    if (all.length > 0) merged[key] = all;
+  }
+  return merged;
+}
+
 export function loadExportFixture(): ExportFixture {
   const documents = buildExport({ version: "1.5.1", dataset });
   const gst = Object.values(documents[0].document)[0] as BsNode;
   const catalogues = new Map<string, BsNode>();
   const entries = new Map<string, UnitEntry>();
   for (const factionId of FACTIONS) {
-    const doc = documents.find((d) => d.file === BSDATA_IDS.catalogues[factionId].file);
-    if (!doc) continue;
-    const catalogue = Object.values(doc.document)[0] as BsNode;
+    const catalogue = factionCatalogue(documents, factionId);
+    if (!catalogue) continue;
     catalogues.set(factionId, catalogue);
     for (const node of children(catalogue, "sharedSelectionEntries")) {
       if (node.type !== "unit" && node.type !== "model") continue;

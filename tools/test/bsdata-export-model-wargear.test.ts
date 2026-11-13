@@ -13,10 +13,11 @@ import { evaluateConstraint, type EvalContext } from "../src/bsdata-export/evalu
 import { buildExport } from "../src/bsdata-export/export.js";
 import { children, str, type BsNode } from "../src/bsdata-export/source.js";
 import { IdAllocator } from "../src/bsdata-export/ids.js";
-import { modelWargear } from "../src/bsdata-export/model-wargear.js";
+import { modelWargear, startingBundles } from "../src/bsdata-export/model-wargear.js";
 import { compositionRows, modelCounts } from "../src/bsdata-export/wargear.js";
+import { mfmRows } from "../src/data/mfm-loadout-unit.js";
 import { BSDATA_IDS } from "../src/bsdata-export/ids.js";
-import { dataset, FACTIONS, loadExportFixture, type ExportFixture, type UnitEntry } from "./bsdata-export-fixture.js";
+import { dataset, factionCatalogue, FACTIONS, loadExportFixture, type ExportFixture, type UnitEntry } from "./bsdata-export-fixture.js";
 
 interface ChoiceNode {
   readonly id: string;
@@ -358,6 +359,54 @@ describe("BSData export per-model wargear agrees with the MFM loadout checker", 
     expect(units.filter((u) => !unencodedUnits.has(u))).toEqual([]);
   });
 
+  it("starts every unit, at its smallest size, on a loadout the package accepts", () => {
+    // Each model takes its row's items and each group's default choice; the Models group starts at the package's row split.
+    const failures: string[] = [];
+    const uniformless: string[] = [];
+    let checked = 0;
+    for (const model of models) {
+      if (!model.modelsGroup) continue;
+      const unit = unitOf(model.entry);
+      const composition = dataset.unitCompositionOf(unit) as Parameters<typeof mfmRows>[0] | undefined;
+      const n = modelCounts(unit)[0];
+      const split = composition ? mfmRows(composition, n) : null;
+      if (!split) continue;
+      // With no legal loadout whose rows each carry one bundle, a stack of identical models cannot start legal.
+      if (!startingBundles(composition!, n)) {
+        uniformless.push(`${model.entry.factionId}/${model.entry.unitId}`);
+        continue;
+      }
+      const items = new Map<string, number>();
+      const defaults = (groups: readonly GroupNode[], copies: number): void => {
+        for (const g of groups.filter((g) => !g.alternate)) {
+          const choice = g.choices.find((c) => c.id === str(g.node, "defaultSelectionEntryId"));
+          if (choice) addAll(items, choice.items, copies * Number(choice.node.defaultAmount ?? 1));
+        }
+      };
+      for (const [name, count] of split) {
+        let left = count;
+        // `name#k` is the k-th row of that name.
+        const hash = /^(.*)#(\d+)$/.exec(name);
+        const named = model.rows.filter((r) => r.name === (hash ? hash[1] : name));
+        for (const row of hash ? [named[Number(hash[2]) - 1]] : named) {
+          const take = Math.min(left, row.max);
+          addAll(items, row.fixed, take);
+          defaults(row.groups, take);
+          left -= take;
+        }
+      }
+      addAll(items, model.unitFixed, 1);
+      defaults(model.unitGroups, 1);
+      checked += 1;
+      const violations = dataset.loadoutOf(unit).check(n, items);
+      if (violations.length > 0) failures.push(`${model.entry.factionId}/${model.entry.unitId} n=${n} ${violations.map((v) => v.code).join(",")} ${[...items].map(([k, v]) => `${k}:${v}`).join(",")} split=${JSON.stringify([...split])} rows=${model.rows.map((r) => r.name).join("|")}`);
+    }
+    if (process.env.MW_DEBUG) console.log(failures.join("\n"));
+    expect(checked).toBeGreaterThan(300);
+    expect(failures).toEqual([]);
+    expect(uniformless.length).toBeLessThanOrEqual(5);
+  });
+
   it("can build every loadout the package lists as legal", () => {
     const missing: string[] = [];
     let checked = 0;
@@ -430,8 +479,7 @@ describe("BSData export flat wargear for units without MFM rules", () => {
     const documents = buildExport({ version: "1.5.1", dataset: flat });
     let compared = 0;
     for (const factionId of FACTIONS) {
-      const doc = documents.find((d) => d.file === BSDATA_IDS.catalogues[factionId].file)!;
-      const catalogue = Object.values(doc.document)[0] as BsNode;
+      const catalogue = factionCatalogue(documents, factionId)!;
       for (const entry of children(catalogue, "sharedSelectionEntries").filter((e) => e.type === "unit" || e.type === "model").slice(0, 40)) {
         // Names repeat across factions (each Chaos army has its own Helbrute).
         const view = flat.units.byFaction(factionId).find((u) => u.name === entry.name);

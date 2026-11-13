@@ -58,8 +58,8 @@ function fromXml(element: Record<string, unknown>, kind: string): BsNode {
     if (childKind) {
       const wrapper = value as Record<string, unknown>;
       const item = Object.keys(wrapper).find((k) => k !== "#text")!;
-      // An attribute-less empty element parses as "".
-      out[key] = (wrapper[item] as unknown[]).map((child) => fromXml(isNode(child) ? child : {}, childKind));
+      // An attribute-less element parses as its text: "" when empty.
+      out[key] = (wrapper[item] as unknown[]).map((child) => fromXml(isNode(child) ? child : child === "" ? {} : { "#text": child }, childKind));
     } else if (key === "#text") {
       // Indentation between child elements is not content.
       const hasChildren = Object.keys(element).some((k) => CONTAINER_KIND[k] !== undefined || ELEMENT_STRINGS.has(k));

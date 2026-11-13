@@ -19,6 +19,7 @@ import { bsdataJson } from "../src/bsdata-export/json.js";
 import { children, str, walk, type BsNode } from "../src/bsdata-export/source.js";
 import { homeFactionOf, isEpicHero } from "../src/bsdata-export/unit.js";
 import { modelCounts } from "../src/bsdata-export/wargear.js";
+import { factionCatalogue } from "./bsdata-export-fixture.js";
 
 const FORMAT = formatJson as unknown as FormatDescriptor;
 const dataset = Dataset.embedded();
@@ -40,7 +41,7 @@ function rootOf(doc: ExportedDocument): BsNode {
 }
 
 function catalogueOf(factionId: string): BsNode {
-  return rootOf(documents.find((d) => d.file === BSDATA_IDS.catalogues[factionId].file)!);
+  return factionCatalogue(documents, factionId)!;
 }
 
 function battleSizeId(size: "incursion" | "strike-force"): string {
@@ -65,8 +66,8 @@ beforeAll(() => {
   documents = documents.map((d) => ({ ...d, document: { [Object.keys(d.document)[0]]: roots.get(d.file)! } }));
   gst = rootOf(documents[0]);
   units = [];
-  for (const [factionId, { file }] of Object.entries(BSDATA_IDS.catalogues)) {
-    const catalogue = roots.get(file);
+  for (const factionId of Object.keys(BSDATA_IDS.catalogues)) {
+    const catalogue = factionCatalogue(documents, factionId);
     if (!catalogue) continue;
     for (const entry of children(catalogue, "sharedSelectionEntries")) {
       const type = str(entry, "type");
@@ -80,10 +81,15 @@ beforeAll(() => {
 }, 120_000);
 
 describe("BSData export format", () => {
-  it("writes the game system and one catalogue per faction", () => {
+  it("writes the game system, one catalogue per faction, and a library for each army on a link cycle", () => {
     expect(documents[0].file).toBe("Warhammer 40,000.json");
-    expect(new Set(documents.slice(1).map((d) => d.file))).toEqual(
+    const libraries = documents.slice(1).filter((d) => rootOf(d).library === true);
+    expect(new Set(documents.slice(1).filter((d) => rootOf(d).library !== true).map((d) => d.file))).toEqual(
       new Set(Object.values(BSDATA_IDS.catalogues).map((c) => c.file)),
+    );
+    // The armies that ally each other: Chaos Space Marines, Daemons and Knights; Imperial Knights, Mechanicus and Agents.
+    expect(libraries.map((d) => d.file).sort()).toEqual(
+      ["Chaos - Chaos Daemons", "Chaos - Chaos Knights", "Chaos - Chaos Space Marines", "Imperium - Adeptus Mechanicus", "Imperium - Agents of the Imperium", "Imperium - Imperial Knights"].map((n) => `${n} Library.json`),
     );
     expect(units.length).toBe(dataset.factions.all.reduce((sum, f) => sum + dataset.units.byFaction(f.id).length, 0));
   });

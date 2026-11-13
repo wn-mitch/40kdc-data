@@ -8,6 +8,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import * as path from "node:path";
 import { Dataset } from "../data/dataset.js";
 import { buildCatalogues } from "./catalogue.js";
+import { splitCyclicCatalogues } from "./libraries.js";
 import { IdAllocator } from "./ids.js";
 import { bsdataJson } from "./json.js";
 import type { BsNode } from "./source.js";
@@ -46,7 +47,8 @@ export function buildExport(options: { readonly version: string; readonly datase
   // Catalogues first: they claim the BSData ids for units and categories the system file links to.
   const catalogues = buildCatalogues({ ids, dataset, refs, revision, factions });
   const system = buildGameSystem({ ids, dataset, revision, readme, legends }, refs);
-  return [{ file: GAME_SYSTEM_FILE, document: system }, ...catalogues.map((c) => ({ file: c.file, document: c.document }))];
+  // Armies that ally each other would link in a cycle, which NewRecruit refuses: split them into army and library.
+  return [{ file: GAME_SYSTEM_FILE, document: system }, ...splitCyclicCatalogues(catalogues.map((c) => ({ file: c.file, document: c.document })), ids)];
 }
 
 /**
