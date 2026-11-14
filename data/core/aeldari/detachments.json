@@ -484,7 +484,8 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "priority-assets"
+      "priority-assets",
+      "reconnaissance"
     ],
     "external_refs": [
       {

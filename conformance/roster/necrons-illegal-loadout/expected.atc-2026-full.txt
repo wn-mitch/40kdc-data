@@ -2,7 +2,7 @@
 + PLAYER NAME: —
 + TEAM NAME: —
 + FACTIONS USED: Necrons
-+ DISPOSITION: Take And Hold
++ DISPOSITION: —
 + DETACHMENT: Awakened Dynasty
 + ARMY POINTS: 170pts
 +

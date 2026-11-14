@@ -2,7 +2,6 @@
 + LIST NAME: Imported roster
 + FACTION KEYWORD: Necrons
 + DETACHMENT: Awakened Dynasty
-+ FORCE DISPOSITION: Take And Hold
 + TOTAL ARMY POINTS: 170pts
 + POINTS LIMIT: 170pts
 +

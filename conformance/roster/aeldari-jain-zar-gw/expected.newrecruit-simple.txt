@@ -5,7 +5,6 @@ Aeldari - Imported roster - [105 pts]
 List Name: Imported roster
 Faction: Aeldari
 Detachment: Aspect Host
-Force Disposition: Priority Assets
 
 ## Battleline [105 pts]
 Jain Zar [105 pts]: Warlord, Silent Death, The Blade of Destruction

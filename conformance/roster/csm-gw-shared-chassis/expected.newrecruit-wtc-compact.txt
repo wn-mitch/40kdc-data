@@ -2,7 +2,6 @@
 + LIST NAME: Imported roster
 + FACTION KEYWORD: Chaos Space Marines
 + DETACHMENT: Huron’s Marauders
-+ FORCE DISPOSITION: Disruption
 + TOTAL ARMY POINTS: 295pts
 + POINTS LIMIT: 295pts
 +

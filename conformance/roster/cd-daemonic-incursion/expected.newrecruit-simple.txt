@@ -6,7 +6,6 @@ List Name: all gas no breaks
 Faction: Chaos Daemons
 Battle Size: Strike Force (1995 Point limit)
 Detachment: Daemonic Incursion
-Force Disposition: Take And Hold
 
 ## Battleline [795 pts]
 Rotigus [250 pts]: Gnarlrod, Streams of brackish filth

@@ -5,7 +5,6 @@ Adeptus Astartes - Star Bullets Test - [85 pts]
 List Name: Star Bullets Test
 Faction: Adeptus Astartes
 Detachment: Gladius Task Force
-Force Disposition: Priority Assets
 
 ## Battleline [85 pts]
 Intercessor Squad [85 pts]:

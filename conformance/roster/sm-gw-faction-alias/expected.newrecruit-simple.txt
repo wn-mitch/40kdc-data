@@ -5,7 +5,6 @@ Adeptus Astartes - Imported roster - [75 pts]
 List Name: Imported roster
 Faction: Adeptus Astartes
 Detachment: Gladius Task Force
-Force Disposition: Priority Assets
 
 ## Battleline [75 pts]
 Assault Intercessor Squad [75 pts]:

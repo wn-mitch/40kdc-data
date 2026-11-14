@@ -62,7 +62,8 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "take-and-hold"
+      "take-and-hold",
+      "disruption"
     ],
     "external_refs": [
       {
