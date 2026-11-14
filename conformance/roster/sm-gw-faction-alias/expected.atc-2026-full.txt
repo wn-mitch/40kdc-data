@@ -2,7 +2,7 @@
 + PLAYER NAME: —
 + TEAM NAME: —
 + FACTIONS USED: Adeptus Astartes
-+ DISPOSITION: Priority Assets
++ DISPOSITION: —
 + DETACHMENT: Gladius Task Force
 + ARMY POINTS: 75pts
 +

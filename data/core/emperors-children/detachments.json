@@ -61,7 +61,8 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "priority-assets"
+      "priority-assets",
+      "disruption"
     ],
     "external_refs": [
       {
@@ -247,7 +248,8 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "priority-assets"
+      "priority-assets",
+      "purge-the-foe"
     ],
     "external_refs": [
       {

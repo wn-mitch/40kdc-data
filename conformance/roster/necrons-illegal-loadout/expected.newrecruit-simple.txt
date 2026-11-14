@@ -5,7 +5,6 @@ Necrons - Imported roster - [170 pts]
 List Name: Imported roster
 Faction: Necrons
 Detachment: Awakened Dynasty
-Force Disposition: Take And Hold
 
 ## Battleline [170 pts]
 Overlord [90 pts]: Warlord, Overlord's blade, Tachyon arrow

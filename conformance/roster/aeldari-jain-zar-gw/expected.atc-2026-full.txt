@@ -2,7 +2,7 @@
 + PLAYER NAME: —
 + TEAM NAME: —
 + FACTIONS USED: Aeldari
-+ DISPOSITION: Priority Assets
++ DISPOSITION: —
 + DETACHMENT: Aspect Host
 + ARMY POINTS: 105pts
 +
