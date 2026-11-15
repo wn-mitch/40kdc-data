@@ -12,12 +12,12 @@ import { DamageCellCache } from "./cache.js";
 import { validateCandidateLoadout, type CandidateLoadoutLegality, type LocalStackMember } from "./legality.js";
 import { isLegalStackLevers } from "./lever-legality.js";
 import { searchLevers, type LeverSpace } from "./lever-search.js";
-import { countsKey, mfmLoadouts, searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
+import { countsKey, MFM_EXHAUSTIVE_LOADOUTS, mfmCandidates as mfmCandidatesOf, mfmLoadouts, searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
 import type { ProfileDamage } from "./loadout-scoring.js";
 import { attributeSelectedProfile, crunchProfileScorer, profileApplicableBuffs, unitLoadoutDamage, type DamageAttribution, type UnscoreableProfile } from "./unit-damage.js";
 import { translationWarnings } from "./translation-warnings.js";
 import { loadoutLeverBuffs, namedLoadoutWargear, surfacedByLoadout, wargearRules, wargearTranslation, type WargearRules } from "./wargear-levers.js";
-import { combinedWargear, equippedBuffs, loadoutWargear, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrants } from "./weapon-grants.js";
+import { combinedWargear, equippedBuffs, loadoutWargear, phaseScoredItem, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrants } from "./weapon-grants.js";
 import { equippedLevers, othersEquippedBuffs, othersUnequippedKey, settleMemberLoadouts, type MemberLoadouts } from "./member-loadouts.js";
 import { activationPossible, filterStackEligibleAbilities, filterStackableStratagems, unitLookup } from "./stratagem-eligibility.js";
 import { combinedKeywords, issuesOrders, ordersReach } from "./orders.js";
@@ -138,7 +138,11 @@ export class DamageScoringSession {
       const base = mfm.byKey.has(countsKey(stock)) || mfm.loadouts.length === 0 ? stock : new Map(mfm.loadouts[0].counts);
       const carriable = new Set<string>();
       for (const { counts } of mfm.loadouts) for (const id of counts.keys()) carriable.add(id);
-      scaffold = { models, modelCount, options: [], caps: [], base, carriable: [...carriable].sort(), mfm };
+      const phase = this.state.phase === "fight" ? "fight" : "shooting";
+      const mfmCandidates = mfm.loadouts.length > MFM_EXHAUSTIVE_LOADOUTS
+        ? mfmCandidatesOf(mfm, base, phaseScoredItem(this.dataset, unit.raw, phase))
+        : undefined;
+      scaffold = { models, modelCount, options: [], caps: [], base, carriable: [...carriable].sort(), mfm, ...(mfmCandidates ? { mfmCandidates } : {}) };
     } else {
       const authored = this.dataset.wargearOptionsOf(unit.raw);
       const options = this.config.perFiveSensitivity

@@ -202,7 +202,12 @@ export function legalDetachmentSpec(
   return { ...spec, detachmentIssues: issues };
 }
 
-function deepOptimise(
+/**
+ * The members' best result over `combinations`; ties keep the fewer detachment points, then the
+ * earlier combination. A detachment that is legal alone and scores no higher alone than no
+ * detachment is idle: combinations with it are skipped, as it adds nothing to them but points.
+ */
+export function deepOptimise(
   session: DamageScoringSession,
   factionId: string,
   members: StackMember[],
@@ -210,11 +215,23 @@ function deepOptimise(
 ): StackResult {
   let best = session.optimiseLevers(emptySpec(factionId, members));
   let bestPoints = 0;
+  const single = new Map<string, StackResult | null>();
+  for (const combination of combinations) {
+    if (combination.length !== 1) continue;
+    const spec = legalDetachmentSpec(session, factionId, members, combination);
+    single.set(combination[0].id, spec ? session.optimiseLevers(spec) : null);
+  }
+  const idle = new Set([...single].flatMap(([id, result]) => result && result.total <= best.total + 1e-9 ? [id] : []));
   for (const combination of combinations) {
     if (combination.length === 0) continue;
-    const spec = legalDetachmentSpec(session, factionId, members, combination);
-    if (!spec) continue;
-    const result = session.optimiseLevers(spec);
+    let result: StackResult | null | undefined;
+    if (combination.length === 1) result = single.get(combination[0].id);
+    else if (combination.some((detachment) => idle.has(detachment.id))) continue;
+    else {
+      const spec = legalDetachmentSpec(session, factionId, members, combination);
+      result = spec ? session.optimiseLevers(spec) : null;
+    }
+    if (!result) continue;
     const points = combination.reduce((sum, detachment) => sum + (detachment.detachment_points ?? 0), 0);
     if (result.total > best.total + 1e-9 || (Math.abs(result.total - best.total) <= 1e-9 && points < bestPoints)) {
       best = result;

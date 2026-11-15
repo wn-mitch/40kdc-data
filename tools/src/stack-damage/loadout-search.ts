@@ -2,9 +2,11 @@
  * Wargear choice for one unit as a coordinate search.
  *
  * A unit with MFM loadout rules has its distinct legal loadouts listed up front
- * ({@link mfmLoadouts}). A short list is scored whole; a longer one is searched from the base
- * loadout, each move taking the first loadout that scores higher among those within L1 distance 2
- * of the current one (one copy swapped, added or dropped), then within 4, then within 8.
+ * ({@link mfmLoadouts}). A longer list is first reduced to one candidate per class of loadouts whose
+ * models carry the same items that can score in the phase ({@link mfmCandidates}). A short list is
+ * scored whole; a longer one is searched from the base loadout, each move taking the first loadout
+ * that scores higher among those within L1 distance 2 of the current one (one copy swapped, added
+ * or dropped), then within 4, then within 8.
  *
  * A unit without them searches over option plans. A plan sets, for every wargear option, which
  * replacement branch is taken and how many times. Single-option moves change one option's setting.
@@ -25,6 +27,15 @@ export interface MfmLoadouts {
   byKey: Map<string, number>;
 }
 
+/**
+ * One searched MFM loadout: a legal loadout standing for every listed loadout whose models carry
+ * the same scored items, with those items' counts.
+ */
+export interface MfmCandidate {
+  counts: Map<string, number>;
+  scored: Map<string, number>;
+}
+
 export interface LoadoutScaffold {
   models: LoadoutModel[];
   modelCount: number;
@@ -36,6 +47,8 @@ export interface LoadoutScaffold {
   carriable: string[];
   /** Present when the unit's MFM loadout rules decide its loadouts. */
   mfm?: MfmLoadouts;
+  /** The MFM loadouts the search scores, one per {@link mfmCandidates} class; every listed loadout when absent. */
+  mfmCandidates?: MfmCandidate[];
 }
 
 /** A loadout's copies as ascending `id:count` pairs, zero counts left out. */
@@ -60,6 +73,45 @@ export function mfmLoadouts(composition: MfmComposition, modelCount: number): Mf
     });
   }
   return out;
+}
+
+/** `counts` with only the items `scores` keeps. */
+function scoredCounts(counts: ReadonlyMap<string, number>, scores: (id: string) => boolean): Map<string, number> {
+  return new Map([...counts].filter(([id, n]) => n !== 0 && scores(id)));
+}
+
+/** What a loadout's models carry of the scored items: per-model groups when listed, merged where they match, else counts. */
+function scoredKey(loadout: MfmLoadouts["loadouts"][number], scored: ReadonlyMap<string, number>, scores: (id: string) => boolean): string {
+  if (!loadout.groups) return countsKey(scored);
+  const merged = new Map<string, number>();
+  for (const group of loadout.groups) {
+    const items = countsKey(new Map(group.weapons.filter((weapon) => scores(weapon.id)).map((weapon) => [weapon.id, weapon.count])));
+    const key = `${group.model_name ?? ""}|${items}`;
+    merged.set(key, (merged.get(key) ?? 0) + group.count);
+  }
+  return [...merged].map(([key, count]) => `${count}x${key}`).sort().join(";");
+}
+
+/**
+ * The listed loadouts grouped by what their models carry of the items `scores` keeps, one candidate
+ * per class in listing order. Items `scores` drops cannot change a loadout's score, so every member
+ * of a class scores alike; the class's candidate is the member nearest `base` (the earliest on a
+ * tie), so a reported loadout keeps the base's unscored items where it can.
+ */
+export function mfmCandidates(mfm: MfmLoadouts, base: ReadonlyMap<string, number>, scores: (id: string) => boolean): MfmCandidate[] {
+  const classes = new Map<string, { candidate: MfmCandidate; distance: number }>();
+  for (const loadout of mfm.loadouts) {
+    const scored = scoredCounts(loadout.counts, scores);
+    const key = scoredKey(loadout, scored, scores);
+    const d = distance(loadout.counts, base);
+    const known = classes.get(key);
+    if (!known) classes.set(key, { candidate: { counts: loadout.counts, scored }, distance: d });
+    else if (d < known.distance) {
+      known.candidate = { counts: loadout.counts, scored };
+      known.distance = d;
+    }
+  }
+  return [...classes.values()].map(({ candidate }) => candidate);
 }
 
 /** MFM loadout lists up to this long are scored whole. */
@@ -205,27 +257,33 @@ export function searchLoadout<Result extends { total: number }>(space: LoadoutSp
   throw new Error(`loadout search: no fixed point after ${MAX_MOVES} improving moves`);
 }
 
-/** The MFM search described above; the base loadout is the start, and ties keep the earlier loadout. */
+/**
+ * The MFM search described above, over the scaffold's candidates (distances between their scored
+ * items); the base loadout is the start, and ties keep the earlier loadout.
+ */
 function searchMfmLoadout<Result extends { total: number }>(space: LoadoutSpace<Result>, mfm: MfmLoadouts): Result {
+  const candidates = space.scaffold.mfmCandidates ?? mfm.loadouts.map(({ counts }) => ({ counts, scored: counts }));
   let best = space.score(space.scaffold.base);
-  if (mfm.loadouts.length <= MFM_EXHAUSTIVE_LOADOUTS) {
-    for (const { counts } of mfm.loadouts) {
+  if (candidates.length <= MFM_EXHAUSTIVE_LOADOUTS) {
+    for (const { counts } of candidates) {
       const trial = space.score(counts);
       if (trial.total > best.total + EPSILON) best = trial;
     }
     return best;
   }
-  let current: ReadonlyMap<string, number> = space.scaffold.base;
+  const baseKey = countsKey(space.scaffold.base);
+  let current: ReadonlyMap<string, number> = space.scaffold.mfmCandidates?.find(({ counts }) => countsKey(counts) === baseKey)?.scored
+    ?? space.scaffold.base;
   for (let accepted = 0; accepted < MAX_MOVES; accepted++) {
     let improved = false;
     let nearer = 0;
     for (const radius of MFM_RADII) {
-      for (const { counts } of mfm.loadouts) {
-        const d = distance(counts, current);
+      for (const { counts, scored } of candidates) {
+        const d = distance(scored, current);
         if (d <= nearer || d > radius) continue;
         const trial = space.score(counts);
         if (trial.total > best.total + EPSILON) {
-          current = counts;
+          current = scored;
           best = trial;
           improved = true;
           break;

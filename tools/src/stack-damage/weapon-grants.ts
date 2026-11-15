@@ -14,6 +14,7 @@ import type { Dataset } from "../data/dataset.js";
 import { abilityRefId, abilityRefWargear } from "../data/ability-refs.js";
 import type { AbilityView } from "../data/entities.js";
 import type { Unit } from "../generated.js";
+import { isMeleeProfile } from "../data/weapon-profile.js";
 import { resolveUnitWeapon } from "./unit-damage.js";
 
 /** The reason the translator gives a weapon grant it hands back to the caller. */
@@ -253,6 +254,38 @@ export function loadoutWargearScoring(input: {
     context,
     grants: unitWeaponGrants(input.dataset, input.unit, input.factionId, context),
     buffs: equippedBuffs(input.unit, input.counts, input.buffs),
+  };
+}
+
+const namedIdsByDataset = new WeakMap<Dataset, ReadonlySet<string>>();
+
+/** Every string some ability record's effect or condition names, so an id a rule reads is kept. */
+function abilityNamedIds(dataset: Dataset): ReadonlySet<string> {
+  const cached = namedIdsByDataset.get(dataset);
+  if (cached) return cached;
+  const named = new Set<string>();
+  const visit = (node: unknown): void => {
+    if (typeof node === "string") named.add(node);
+    else if (Array.isArray(node)) for (const item of node) visit(item);
+    else if (isObject(node)) for (const value of Object.values(node)) visit(value);
+  };
+  for (const ability of dataset.abilities.all) visit(ability.raw);
+  namedIdsByDataset.set(dataset, named);
+  return named;
+}
+
+/**
+ * Whether item `id` of `unit`'s loadout can change its damage in `phase`. Only a weapon of the
+ * unit with profiles, none of them usable in the phase, that no ability names and that is not the
+ * item of one of the unit's printed wargear rules is left out; wargear and everything else stays.
+ */
+export function phaseScoredItem(dataset: Dataset, unit: Unit, phase: "shooting" | "fight"): (id: string) => boolean {
+  const named = abilityNamedIds(dataset);
+  const printed = new Set(printedWargear(unit).values());
+  return (id) => {
+    const profiles = resolveUnitWeapon(dataset, unit, id)?.profiles ?? [];
+    if (profiles.length === 0 || named.has(id) || printed.has(id)) return true;
+    return profiles.some((profile) => isMeleeProfile(profile) === (phase === "fight"));
   };
 }
 

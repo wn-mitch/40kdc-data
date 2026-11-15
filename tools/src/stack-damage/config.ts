@@ -30,6 +30,8 @@ export interface MatrixConfig {
   droppedArmyRules: string[];
   dpBudget: number;
   maxDetachments: number;
+  /** Cells run at once, each in its own process (`HC_WORKERS`); results do not depend on it. */
+  workers: number;
   /** Board and game state every cell assumes, from the `HC_SCENARIO` JSON file. */
   scenario: Scenario;
 }
@@ -147,6 +149,13 @@ function limit(value: string | undefined, name: string): number {
   return parsed;
 }
 
+function workers(value: string | undefined): number {
+  if (value === undefined) return 1;
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 1) throw new Error("HC_WORKERS must be a positive integer");
+  return parsed;
+}
+
 export function parseMatrixConfig(
   env: Readonly<Record<string, string | undefined>>,
   catalog: MatrixCatalog,
@@ -188,6 +197,7 @@ export function parseMatrixConfig(
     droppedArmyRules: env.HC_DROP_RULE ? list(env.HC_DROP_RULE, [], "HC_DROP_RULE") : [],
     dpBudget: 3,
     maxDetachments: 3,
+    workers: workers(env.HC_WORKERS),
     scenario: env.HC_SCENARIO ? parseScenario(JSON.parse(readFileSync(resolve(cwd, env.HC_SCENARIO), "utf8"))) : {},
   };
 }
