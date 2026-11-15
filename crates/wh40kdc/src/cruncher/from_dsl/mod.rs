@@ -418,6 +418,7 @@ fn translate_effect(
         effect
     };
     let effect = super::weapon_bindings::resolve_named_weapon_bindings(&effect);
+    let effect = levers::lasting_setup(&effect, duration);
     let (ability_id, ability_kind) = match source {
         BuffSource::Ability {
             ability_id,
@@ -965,6 +966,16 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             ) {
                 part_opts.attack_roll = Some(roll);
                 part.to_mut().insert("effect".into(), effect);
+            }
+            // An untriggered part with its own duration is a record root of its own (`lasting_setup`).
+            if present(node, "trigger").is_none() && node.get("duration").is_some() {
+                let body = levers::lasting_setup(
+                    part.get("effect").unwrap_or(&Value::Null),
+                    node.get("duration"),
+                );
+                if part.get("effect") != Some(&body) {
+                    part.to_mut().insert("effect".into(), body);
+                }
             }
             // A part firing on its own moment is gated like a timing-is step; one with only a
             // cost, a choice or a usage limit is an activation, as a named effect is.

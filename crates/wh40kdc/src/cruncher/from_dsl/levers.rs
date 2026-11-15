@@ -401,6 +401,100 @@ fn without_selection_window(condition: &Obj, effect: Option<&Value>) -> Option<O
     })
 }
 
+/// A record duration that outlasts the phase its top-level gate names ("until the end of the
+/// turn"). Mirrors TS `outlastsPhase`.
+fn outlasts_phase(duration: Option<&Value>) -> bool {
+    duration.and_then(Value::as_str).is_some_and(|d| {
+        d == "turn" || d == "battle-round" || d == "battle" || d.starts_with("until-")
+    })
+}
+
+/// Selections made in the gate's phase whose result lasts the record's duration.
+const LASTING_SELECTIONS: [&str; 4] = ["choice", "select-units", "designate-target", "designate"];
+
+fn has_phase_clock(condition: &Obj) -> bool {
+    if is_str(condition, "type", "phase-is") {
+        return true;
+    }
+    is_str(condition, "operator", "and")
+        && condition
+            .get("operands")
+            .and_then(Value::as_array)
+            .is_some_and(|items| {
+                items
+                    .iter()
+                    .filter_map(Value::as_object)
+                    .any(has_phase_clock)
+            })
+}
+
+/// A record's top-level phase gate under a duration that outlasts the phase says when the effect
+/// is set up, not when it applies. Around a selection the window only times the pick, so it is
+/// dropped; around any other effect the gate still holds in its own phase, and in a later phase
+/// it is the player-timed activation clock. Mirrors TS `lastingSetup`; the activation source
+/// travels inside the cloned node.
+pub(super) fn lasting_setup(effect: &Value, duration: Option<&Value>) -> Value {
+    let Some(node) = effect.as_object() else {
+        return effect.clone();
+    };
+    let Some(condition) = object(node.get("condition")) else {
+        return effect.clone();
+    };
+    if !is_str(node, "type", "conditional")
+        || !outlasts_phase(duration)
+        || !has_phase_clock(condition)
+    {
+        return effect.clone();
+    }
+    let inner = node.get("effect");
+    let selection = inner
+        .and_then(Value::as_object)
+        .and_then(|o| o.get("type"))
+        .and_then(Value::as_str)
+        .is_some_and(|kind| LASTING_SELECTIONS.contains(&kind));
+    let mut rewritten = node.clone();
+    if selection {
+        fn operands(node: &Obj) -> Vec<&Obj> {
+            match (
+                node.get("operator").and_then(Value::as_str),
+                node.get("operands").and_then(Value::as_array),
+            ) {
+                (Some("and"), Some(items)) => items
+                    .iter()
+                    .filter_map(Value::as_object)
+                    .flat_map(operands)
+                    .collect(),
+                _ => vec![node],
+            }
+        }
+        let kept: Vec<Value> = operands(condition)
+            .into_iter()
+            .filter(|operand| {
+                !operand
+                    .get("type")
+                    .and_then(Value::as_str)
+                    .is_some_and(|kind| SELECTION_WINDOW.contains(&kind))
+            })
+            .map(|operand| Value::Object(operand.clone()))
+            .collect();
+        let guard = match kept.len() {
+            0 => return inner.cloned().unwrap_or(Value::Null),
+            1 => kept.into_iter().next().unwrap(),
+            _ => json!({ "operator": "and", "operands": kept }),
+        };
+        rewritten.insert("condition".into(), guard);
+    } else {
+        rewritten.insert(
+            "condition".into(),
+            json!({
+                "operator": "or",
+                "operands": [Value::Object(condition.clone()), activation_condition(condition, duration)],
+            }),
+        );
+    }
+    Value::Object(rewritten)
+}
+
 pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let Some(condition) = object(node.get("condition")) else {
         return;

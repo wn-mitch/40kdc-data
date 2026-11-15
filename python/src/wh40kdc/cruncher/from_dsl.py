@@ -171,6 +171,7 @@ def _translate_effect(
         out["unsupported"].extend(snapshot.get("scoped", []))
         effect = snapshot["effect"]
     effect = resolve_named_weapon_bindings(effect)
+    effect = _lasting_setup(effect, activation.get("duration") if activation else None)
     ability_id = source.get("abilityId", "effect") if source.get("kind") == "ability" else "effect"
     opts = {
         "context": context,
@@ -661,6 +662,9 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
             "usage": opts.get("usage") if node.get("usage") is None else node["usage"],
         }
         step_effect, step_opts = _on_attack_roll(node.get("trigger"), node.get("effect"), part_opts)
+        # An untriggered part with its own duration is a record root of its own (_lasting_setup).
+        if node.get("trigger") is None and "duration" in node:
+            step_effect = _lasting_setup(step_effect, node["duration"])
         part = node if step_effect is node.get("effect") else {**node, "effect": step_effect}
         if (
             node.get("optional") is True
@@ -2070,6 +2074,103 @@ def _without_selection_window(condition: dict[str, Any], effect: Any) -> dict[st
     if not kept:
         return None
     return kept[0] if len(kept) == 1 else {"operator": "and", "operands": kept}
+
+
+def _outlasts_phase(duration: Any) -> bool:
+    """A record duration that outlasts the phase its top-level gate names ("until the end of the
+    turn"). Mirrors TS ``outlastsPhase``."""
+    return isinstance(duration, str) and (
+        duration in ("turn", "battle-round", "battle") or duration.startswith("until-")
+    )
+
+
+# Selections made in the gate's phase whose result lasts the record's duration.
+_LASTING_SELECTIONS = frozenset({"choice", "select-units", "designate-target", "designate"})
+
+
+def _has_phase_clock(condition: dict[str, Any]) -> bool:
+    if condition.get("type") == "phase-is":
+        return True
+    operands = condition.get("operands")
+    return (
+        condition.get("operator") == "and"
+        and isinstance(operands, list)
+        and any(_is_object(operand) and _has_phase_clock(operand) for operand in operands)
+    )
+
+
+def _lasting_activation_condition(condition: dict[str, Any], duration: Any) -> dict[str, Any]:
+    """A lasting activation's clock is historical; its other eligibility still applies. Mirrors
+    TS ``activationCondition``."""
+    expiry = duration if isinstance(duration, str) else ""
+    spans_phases = expiry in {
+        "turn",
+        "battle-round",
+        "battle",
+        "permanent",
+        "while-leading",
+        "one-use",
+        "control-lost",
+    } or expiry.startswith("until-")
+    clock = condition.get("type")
+    if spans_phases and (
+        clock == "phase-is"
+        or (clock == "player-turn-is" and expiry != "turn")
+        or (clock == "battle-round" and expiry not in ("turn", "battle-round"))
+    ):
+        return {"type": "timing-is", "parameters": {"timing": "activation"}}
+    operands = condition.get("operands")
+    if isinstance(condition.get("operator"), str) and isinstance(operands, list):
+        return {
+            **condition,
+            "operands": [
+                _lasting_activation_condition(operand, duration) if _is_object(operand) else operand
+                for operand in operands
+            ],
+        }
+    return condition
+
+
+def _lasting_setup(effect: Any, duration: Any) -> Any:
+    """A record's top-level phase gate under a duration that outlasts the phase says when the
+    effect is set up, not when it applies. Around a selection the window only times the pick, so
+    it is dropped; around any other effect the gate still holds in its own phase, and in a later
+    phase it is the player-timed activation clock. Mirrors TS ``lastingSetup``."""
+    if (
+        not _is_object(effect)
+        or effect.get("type") != "conditional"
+        or not _is_object(effect.get("condition"))
+        or not _outlasts_phase(duration)
+    ):
+        return effect
+    condition = effect["condition"]
+    if not _has_phase_clock(condition):
+        return effect
+    inner = effect.get("effect")
+    if _is_object(inner) and str(inner.get("type")) in _LASTING_SELECTIONS:
+
+        def operands(node: dict[str, Any]) -> list[dict[str, Any]]:
+            if node.get("operator") == "and" and isinstance(node.get("operands"), list):
+                items = [item for item in node["operands"] if _is_object(item)]
+                return [leaf for item in items for leaf in operands(item)]
+            return [node]
+
+        kept = [
+            operand
+            for operand in operands(condition)
+            if not (isinstance(operand.get("type"), str) and operand["type"] in _SELECTION_WINDOW)
+        ]
+        if not kept:
+            return inner
+        guard = kept[0] if len(kept) == 1 else {"operator": "and", "operands": kept}
+        return {**effect, "condition": guard}
+    return {
+        **effect,
+        "condition": {
+            "operator": "or",
+            "operands": [condition, _lasting_activation_condition(condition, duration)],
+        },
+    }
 
 
 _DICE_TABLE_REASON = 'effect type "dice-table" is not modelled by the buff layer'
@@ -4659,15 +4760,6 @@ def _alternative_matches(alternative: Any, have: set[str]) -> bool | str:
     return "unknown" if other else True
 
 
-_SELECTOR_FIDELITY_FIELDS = (
-    "eligibility",
-    "reference",
-    "origin",
-    "limit",
-    "bind_as",
-)
-
-
 def _trigger_has_unresolved_source(trigger: Any) -> bool:
     if not _is_object(trigger):
         return False
@@ -4677,20 +4769,15 @@ def _trigger_has_unresolved_source(trigger: Any) -> bool:
 
 
 def _has_unresolved_fidelity_binding(node: dict[str, Any]) -> bool:
-    selector = node.get("selector") or {}
     # A list of entries never binds a beneficiary or reference (bound-unit-attacks-reference).
     applies_raw = node.get("applies")
     applies: dict[str, Any] = applies_raw if isinstance(applies_raw, dict) else {}
     modifier = node.get("modifier") or {}
     consumer = modifier.get("consumer") or {}
     node_type = node.get("type")
-    selection_binding = node_type in ("select-units", "for-each-unit") and (
-        isinstance(selector.get("filter"), dict)
-        and (
-            selector["filter"].get("level") == "model"
-            or selector["filter"].get("model_names") is not None
-            or any(selector.get(key) is not None for key in _SELECTOR_FIDELITY_FIELDS)
-        )
+    # TS `hasUnresolvedFidelityBinding`: any selector names a binding the buff engine cannot hold.
+    selection_binding = node_type in ("select-units", "for-each-unit") and _is_object(
+        node.get("selector")
     )
     # A designation's own selection (range, visibility, eligibility) is what its
     # lever's player vouches for, so only the `applies` bindings are unresolved.

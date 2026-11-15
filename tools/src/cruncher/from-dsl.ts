@@ -297,6 +297,7 @@ function translateEffect(
     const activation = activationSources.get(from);
     if (activation) activationSources.set(to, activation);
   });
+  effect = lastingSetup(effect, activation?.duration);
   const abilityId = source.kind === "ability" ? source.abilityId : "effect";
   // The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
   const step = onAttackRoll(activation?.trigger, effect, { context, perspective, abilityId, duration: activation?.duration, usage: activation?.usage, selfDesignations: selfDesignations(effect, abilityId), definitions: ownDefinitions(effect, abilityId) });
@@ -532,7 +533,9 @@ function walk(
         }
       }
       const step = onAttackRoll(currentNode.trigger, currentNode.effect, partOpts);
-      const part = step.effect === currentNode.effect ? currentNode : { ...currentNode, effect: step.effect };
+      // An untriggered part with its own duration is a record root of its own (`lastingSetup`).
+      const body = currentNode.trigger == null && currentNode.duration !== undefined ? lastingSetup(step.effect, currentNode.duration) : step.effect;
+      const part = body === currentNode.effect ? currentNode : { ...currentNode, effect: body };
       if (currentNode.optional === true || currentNode.cost != null || currentNode.usage != null) {
         translateNamedEffect(part, source, step.opts, out);
       } else {
@@ -1748,6 +1751,47 @@ function withoutSelectionWindow(condition: Record<string, unknown>, effect: unkn
   if (kept.length === all.length) return condition;
   if (kept.length === 0) return null;
   return kept.length === 1 ? kept[0]! : { operator: "and", operands: kept };
+}
+
+/** A record duration that outlasts the phase its top-level gate names ("until the end of the turn"). */
+function outlastsPhase(duration: unknown): boolean {
+  return typeof duration === "string" && (duration === "turn" || duration === "battle-round" || duration === "battle" || duration.startsWith("until-"));
+}
+
+/** Selections made in the gate's phase whose result lasts the record's duration. */
+const LASTING_SELECTIONS = new Set(["choice", "select-units", "designate-target", "designate"]);
+
+function hasPhaseClock(condition: Record<string, unknown>): boolean {
+  if (condition.type === "phase-is") return true;
+  return condition.operator === "and" && Array.isArray(condition.operands) && condition.operands.some((operand) => isObject(operand) && hasPhaseClock(operand));
+}
+
+/**
+ * A record's top-level phase gate under a duration that outlasts the phase ("In your Command
+ * phase, select one … until the start of your next Command phase") says when the effect is set
+ * up, not when it applies. Around a selection the window only times the pick, so it is dropped
+ * (as `withoutSelectionWindow` does for stances and orders). Around any other effect the gate
+ * still holds in its own phase, and in a later phase it is the player-timed activation clock.
+ */
+function lastingSetup(effect: unknown, duration: unknown): unknown {
+  if (!isObject(effect) || effect.type !== "conditional" || !isObject(effect.condition) || !outlastsPhase(duration)) return effect;
+  const condition = effect.condition;
+  if (!hasPhaseClock(condition)) return effect;
+  const inner = effect.effect;
+  if (isObject(inner) && LASTING_SELECTIONS.has(String(inner.type))) {
+    const operands = (node: Record<string, unknown>): Record<string, unknown>[] =>
+      node.operator === "and" && Array.isArray(node.operands) ? node.operands.filter(isObject).flatMap(operands) : [node];
+    const kept = operands(condition).filter((operand) => !(typeof operand.type === "string" && SELECTION_WINDOW.has(operand.type)));
+    if (kept.length === 0) return inner;
+    return copyActivation(effect, { ...effect, condition: kept.length === 1 ? kept[0]! : { operator: "and", operands: kept } });
+  }
+  return copyActivation(effect, { ...effect, condition: { operator: "or", operands: [condition, activationCondition(condition, duration)] } });
+}
+
+function copyActivation(from: object, to: Record<string, unknown>): Record<string, unknown> {
+  const activation = activationSources.get(from);
+  if (activation) activationSources.set(to, activation);
+  return to;
 }
 
 function translateConditional(

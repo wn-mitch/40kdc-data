@@ -49,6 +49,10 @@ func planSelection(node, source map[string]any, perspective string, context map[
 	if filter["level"] == "model" || filter["model_names"] != nil || selector["bind_as"] != nil {
 		return selectionPlan{kind: "none"}
 	}
+	// TS planSelection: a selection whose effect never reaches the selected unit plans nothing.
+	if !referencesSelectedUnit(node["effect"]) {
+		return selectionPlan{kind: "none"}
+	}
 	keywords, keywordsOK := selectorKeywordList(filter["all_of"])
 	anyKeywords, anyOK := selectorKeywordList(filter["any_of"])
 	excluded, excludedOK := selectorKeywordList(filter["none_of"])

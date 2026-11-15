@@ -39,6 +39,7 @@ import {
 } from "./gen-conformance-cruncher-cases.js";
 import { canonicalDamageZeroingCases, DAMAGE_ZEROING_CASE_PREFIX } from "./gen-conformance-zeroing-cases.js";
 import { canonicalIgnoreModifiersCases, IGNORE_MODIFIERS_CASE_PREFIX } from "./gen-conformance-ignore-cases.js";
+import { canonicalLastingSetupCases, LASTING_SETUP_CASE_PREFIX } from "./gen-conformance-lasting-cases.js";
 import { canonicalGrantedRecordCases, canonicalOwnDefinitionCases, GRANTED_RECORD_CASE_PREFIX, OWN_DEFINITION_CASE_PREFIX, withGrantedRecords } from "./gen-conformance-granted-cases.js";
 
 export type ResolverDslCase = {
@@ -67,7 +68,7 @@ export type ResolverDslCase = {
  */
 export const CANONICAL_DSL_CASE_PREFIXES: readonly string[] = [
   RECIPIENT_CASE_PREFIX, HALF_WEAPON_RANGE_CASE_PREFIX, NEGATED_CONJUNCTION_CASE_PREFIX, TARGET_DEBUFF_CASE_PREFIX, SCENARIO_CASE_PREFIX, GRANTED_RECORD_CASE_PREFIX,
-  DAMAGE_ZEROING_CASE_PREFIX, IGNORE_MODIFIERS_CASE_PREFIX, TRIGGER_SUBJECT_CASE_PREFIX, STRATAGEM_MODEL_CASE_PREFIX,
+  DAMAGE_ZEROING_CASE_PREFIX, IGNORE_MODIFIERS_CASE_PREFIX, LASTING_SETUP_CASE_PREFIX, TRIGGER_SUBJECT_CASE_PREFIX, STRATAGEM_MODEL_CASE_PREFIX,
   STRATAGEM_TARGET_CASE_PREFIX, NAMED_REGION_BENEFICIARY_CASE_PREFIX, DESIGNATION_CASE_PREFIX, MOVE_TYPE_CASE_PREFIX,
   REMOVED_KEYWORD_CASE_PREFIX, OWN_DEFINITION_CASE_PREFIX,
 ];
@@ -82,7 +83,7 @@ export function isCanonicalDslCase(row: { caseId?: unknown }): boolean {
 export function canonicalDslCases(): Array<Record<string, unknown> & { perspective: "attacker" | "target" }> {
   return [
     ...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases(), ...canonicalNegatedConjunctionCases(), ...canonicalTargetDebuffCases(), ...canonicalScenarioCases(),
-    ...canonicalGrantedRecordCases(), ...canonicalDamageZeroingCases(), ...canonicalIgnoreModifiersCases(),
+    ...canonicalGrantedRecordCases(), ...canonicalDamageZeroingCases(), ...canonicalIgnoreModifiersCases(), ...canonicalLastingSetupCases(),
     ...canonicalTriggerSubjectCases(), ...canonicalStratagemModelCases(), ...canonicalStratagemTargetCases(),
     ...canonicalNamedRegionBeneficiaryCases(), ...canonicalDesignationCases(), ...canonicalMoveTypeCases(),
     ...canonicalRemovedKeywordCases(), ...canonicalOwnDefinitionCases(),

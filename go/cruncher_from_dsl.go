@@ -138,6 +138,9 @@ func translateEffect(effect any, source map[string]any, context map[string]any, 
 	if len(activation) > 0 {
 		act = activation[0]
 	}
+	if act != nil {
+		effect = lastingSetup(effect, act["duration"])
+	}
 	opts := dslOpts{context: context, perspective: perspective, abilityID: abilityID, selfDesignations: selfDesignations(effect, abilityID), definitions: ownDefinitions(effect, abilityID)}
 	if act != nil {
 		opts.duration = act["duration"]
@@ -550,6 +553,13 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 			partOpts.attackRoll = roll
 			part = cloneMap(n)
 			part["effect"] = effect
+		}
+		// An untriggered part with its own duration is a record root of its own (lastingSetup).
+		if _, hasDuration := n["duration"]; hasDuration && n["trigger"] == nil {
+			if body, changed := lastingSetupChanged(part["effect"], n["duration"]); changed {
+				part = cloneMap(part)
+				part["effect"] = body
+			}
 		}
 		// A part with its own optionality, cost or usage is an activation.
 		// Otherwise its trigger is only the moment at which its effect fires.
@@ -2281,6 +2291,91 @@ func withoutSelectionWindow(condition map[string]any, effect any) (guard map[str
 	return map[string]any{"operator": "and", "operands": kept}, true
 }
 
+// outlastsPhase reports whether a record duration outlasts the phase its top-level gate names
+// ("until the end of the turn"). Mirrors TS outlastsPhase.
+func outlastsPhase(duration any) bool {
+	d, ok := duration.(string)
+	return ok && (d == "turn" || d == "battle-round" || d == "battle" || strings.HasPrefix(d, "until-"))
+}
+
+// lastingSelections are selections made in the gate's phase whose result lasts the record's duration.
+var lastingSelections = map[string]bool{"choice": true, "select-units": true, "designate-target": true, "designate": true}
+
+func hasPhaseClock(condition map[string]any) bool {
+	if condition["type"] == "phase-is" {
+		return true
+	}
+	items, ok := condition["operands"].([]any)
+	if condition["operator"] != "and" || !ok {
+		return false
+	}
+	for _, item := range items {
+		if child, ok := item.(map[string]any); ok && hasPhaseClock(child) {
+			return true
+		}
+	}
+	return false
+}
+
+// lastingSetup reads a record's top-level phase gate under a duration that outlasts the phase as
+// when the effect is set up, not when it applies. Around a selection the window only times the
+// pick, so it is dropped; around any other effect the gate still holds in its own phase, and in a
+// later phase it is the player-timed activation clock. Mirrors TS lastingSetup; the activation
+// source travels inside the cloned node.
+func lastingSetup(effect any, duration any) any {
+	out, _ := lastingSetupChanged(effect, duration)
+	return out
+}
+
+// lastingSetupChanged is lastingSetup, also reporting whether it rewrote the effect.
+func lastingSetupChanged(effect any, duration any) (any, bool) {
+	node, ok := effect.(map[string]any)
+	if !ok || node["type"] != "conditional" || !outlastsPhase(duration) {
+		return effect, false
+	}
+	condition, ok := node["condition"].(map[string]any)
+	if !ok || !hasPhaseClock(condition) {
+		return effect, false
+	}
+	if inner, ok := node["effect"].(map[string]any); ok {
+		if kind, _ := inner["type"].(string); lastingSelections[kind] {
+			var operands func(n map[string]any) []map[string]any
+			operands = func(n map[string]any) []map[string]any {
+				items, isList := n["operands"].([]any)
+				if n["operator"] != "and" || !isList {
+					return []map[string]any{n}
+				}
+				var leaves []map[string]any
+				for _, item := range items {
+					if child, ok := item.(map[string]any); ok {
+						leaves = append(leaves, operands(child)...)
+					}
+				}
+				return leaves
+			}
+			var kept []any
+			for _, operand := range operands(condition) {
+				if kind, _ := operand["type"].(string); !selectionWindow[kind] {
+					kept = append(kept, operand)
+				}
+			}
+			if len(kept) == 0 {
+				return inner, true
+			}
+			out := cloneMap(node)
+			if len(kept) == 1 {
+				out["condition"] = kept[0]
+			} else {
+				out["condition"] = map[string]any{"operator": "and", "operands": kept}
+			}
+			return out, true
+		}
+	}
+	out := cloneMap(node)
+	out["condition"] = map[string]any{"operator": "or", "operands": []any{condition, activationCondition(condition, duration)}}
+	return out, true
+}
+
 func translateConditional(node, source map[string]any, opts dslOpts, out *effectTranslation) {
 	condition, ok := getMap(node, "condition")
 	if !ok {
@@ -3607,21 +3702,8 @@ func hasUnresolvedFidelityBinding(n map[string]any) bool {
 	applies, _ := getMap(n, "applies")
 	modifier, _ := getMap(n, "modifier")
 	consumer, _ := getMap(modifier, "consumer")
-	selectorUnresolved := false
-	if n["type"] == "select-units" || n["type"] == "for-each-unit" {
-		filter, _ := getMap(selector, "filter")
-		for key := range filter {
-			switch key {
-			case "owner", "level", "member_of", "attachment_role", "all_of", "any_of", "none_of", "not_all_of":
-			default:
-				selectorUnresolved = true
-			}
-		}
-		selectorUnresolved = selectorUnresolved ||
-			selector["eligibility"] != nil ||
-			selector["limit"] != nil ||
-			selector["bind_as"] != nil
-	}
+	// TS hasUnresolvedFidelityBinding: any selector names a binding the buff engine cannot hold.
+	selectorUnresolved := (n["type"] == "select-units" || n["type"] == "for-each-unit") && selector != nil
 	// A designation's own selection (range, visibility, eligibility) is what its lever's player vouches for.
 	designationUnresolved := n["type"] == "designate-target" && (applies["attacker_filter"] != nil ||
 		applies["attacker_unit_filter"] != nil ||

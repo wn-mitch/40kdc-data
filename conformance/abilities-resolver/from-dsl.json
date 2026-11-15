@@ -17452,6 +17452,468 @@
       }
     },
     {
+      "caseId": "canonical/lasting-setup/choice-in-later-phase",
+      "abilityId": "fabricated-lasting-setup",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-lasting-setup",
+        "abilityKind": "detachment"
+      },
+      "effect": {
+        "type": "ability-part",
+        "duration": "until-next-command-phase",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "choice",
+            "options": [
+              {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "add",
+                  "value": 1
+                }
+              },
+              {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "wound",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ],
+            "choice_label": "Fabricated ability",
+            "min_choices": 1,
+            "max_choices": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-lasting-setup?0",
+            "label": "+1 to hit",
+            "group": {
+              "id": "fabricated-lasting-setup?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "id": "fabricated-lasting-setup?1",
+            "label": "+1 to wound",
+            "group": {
+              "id": "fabricated-lasting-setup?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "wound-mod",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/lasting-setup/choice-in-own-phase",
+      "abilityId": "fabricated-lasting-setup",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-lasting-setup",
+        "abilityKind": "detachment"
+      },
+      "effect": {
+        "type": "ability-part",
+        "duration": "until-next-command-phase",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "choice",
+            "options": [
+              {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "add",
+                  "value": 1
+                }
+              },
+              {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "wound",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ],
+            "choice_label": "Fabricated ability",
+            "min_choices": 1,
+            "max_choices": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "command"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-lasting-setup?0",
+            "label": "+1 to hit",
+            "group": {
+              "id": "fabricated-lasting-setup?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "id": "fabricated-lasting-setup?1",
+            "label": "+1 to wound",
+            "group": {
+              "id": "fabricated-lasting-setup?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "wound-mod",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/lasting-setup/selection-in-later-phase",
+      "abilityId": "fabricated-lasting-setup",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-lasting-setup",
+        "abilityKind": "detachment"
+      },
+      "effect": {
+        "type": "ability-part",
+        "duration": "until-next-command-phase",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "selection/history/model/attack predicates are not resolved by the buff engine"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/lasting-setup/direct-in-later-phase",
+      "abilityId": "fabricated-lasting-setup",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-lasting-setup",
+        "abilityKind": "detachment"
+      },
+      "effect": {
+        "type": "ability-part",
+        "duration": "turn",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-lasting-setup@activation",
+            "label": "+1 to wound",
+            "group": null,
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "wound-mod",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/lasting-setup/direct-in-own-phase",
+      "abilityId": "fabricated-lasting-setup",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-lasting-setup",
+        "abilityKind": "detachment"
+      },
+      "effect": {
+        "type": "ability-part",
+        "duration": "turn",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "wound-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/lasting-setup/phase-duration-keeps-gate",
+      "abilityId": "fabricated-lasting-setup",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-lasting-setup",
+        "abilityKind": "detachment"
+      },
+      "effect": {
+        "type": "ability-part",
+        "duration": "phase",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/lasting-setup/permanent-keeps-gate",
+      "abilityId": "fabricated-lasting-setup",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-lasting-setup",
+        "abilityKind": "detachment"
+      },
+      "effect": {
+        "type": "ability-part",
+        "duration": "permanent",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/trigger-subject/owned-moment-defaults-to-this-unit",
       "effect": {
         "type": "ability-part",
