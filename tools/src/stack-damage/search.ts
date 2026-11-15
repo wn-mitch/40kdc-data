@@ -9,7 +9,7 @@ import { DamageScoringSession, type DamageScoringInvariants } from "./scoring.js
 import { isCombatPatrolDetachment } from "../abilities-resolver/resolver.js";
 import { buildLedger, unscoreableEntries } from "./ledger.js";
 import { baseWargear } from "./weapon-grants.js";
-import { assumedEligibility, unitLookup } from "./stratagem-eligibility.js";
+import { assumedEligibility, stratagemCost, unitLookup } from "./stratagem-eligibility.js";
 import { combinedKeywords, issuesOrders, orderIssuingUnits } from "./orders.js";
 import type { DamageCellState, StackMember, StackResult, StackSpec } from "./model.js";
 import type { StackableBuff } from "../data/dataset.js";
@@ -52,6 +52,76 @@ function attackerToughness(spec: StackSpec): { attackerToughness?: number } {
   const toughness = (bodyguard.length > 0 ? bodyguard : spec.members)
     .flatMap((member) => (member.unit.raw.profiles ?? []).map((profile) => profile.T)).filter((t) => typeof t === "number");
   return toughness.length > 0 ? { attackerToughness: Math.max(...toughness) } : {};
+}
+
+/** The battle round a cell assumes when the scenario names none: inside both Kauyon's (3–5) and Mont'ka's (1–3) windows. */
+export const DEFAULT_BATTLE_ROUND = 3;
+
+/**
+ * The designations the faction's own rules put on enemy units with a `designate` effect (Afflicted
+ * from Nurgle's Gift's aura): on enemies an aura reaches, on an enemy filter, or on the defender. A
+ * designation a Stratagem or another lever chooses (`designate-target`) is the search's to price,
+ * not an assumption.
+ */
+export function enemyDesignations(dataset: Dataset, lineage: readonly string[]): string[] {
+  const tags = new Set<string>();
+  const visit = (node: unknown, onEnemies: boolean): void => {
+    if (Array.isArray(node)) {
+      for (const item of node) visit(item, onEnemies);
+      return;
+    }
+    if (typeof node !== "object" || node === null) return;
+    const record = node as Record<string, unknown>;
+    const modifier = typeof record.modifier === "object" && record.modifier !== null ? record.modifier as Record<string, unknown> : undefined;
+    const eligible = typeof modifier?.eligible === "object" && modifier.eligible !== null ? modifier.eligible as Record<string, unknown> : undefined;
+    const enemies = onEnemies || (record.type === "aura" && eligible?.owner === "enemy");
+    if (record.type === "designate" && modifier && typeof modifier.tag === "string" && modifier.clear !== true) {
+      const target = record.target;
+      const enemyTarget = target === "defender" ||
+        (typeof target === "object" && target !== null && (target as Record<string, unknown>).owner === "enemy") ||
+        (target === "recipient" && enemies);
+      if (enemyTarget) tags.add(modifier.tag.toLowerCase());
+    }
+    for (const value of Object.values(record)) visit(value, enemies);
+  };
+  for (const factionId of lineage) for (const ability of dataset.abilities.byFaction(factionId)) visit(ability.raw.effect, false);
+  return [...tags].sort();
+}
+
+/**
+ * The board and game state a cell assumes where the scenario is silent: battle round
+ * {@link DEFAULT_BATTLE_ROUND}, the target in its own deployment zone and territory, and the target
+ * carrying exactly the designations the faction's own rules apply ({@link enemyDesignations}), when
+ * they apply any. Each declared list is complete, so a rule wanting another region or designation
+ * does not apply.
+ */
+export function defaultScenario(dataset: Dataset, lineage: readonly string[]): Scenario {
+  const designations = enemyDesignations(dataset, lineage);
+  return {
+    battleRound: DEFAULT_BATTLE_ROUND,
+    targetRegions: [{ territory: "target", deploymentZone: "target" }],
+    // A faction whose rules apply none leaves designations undecided, so its designation-gated
+    // rules stay listed as unsupported rather than read as absent.
+    ...(designations.length > 0 ? { targetDesignations: designations } : {}),
+  };
+}
+
+/** The scenario a cell runs under: the matrix's declared facts over {@link defaultScenario}. */
+export function cellScenario(dataset: Dataset, faction: FactionContext, config: MatrixConfig): Scenario {
+  return { ...defaultScenario(dataset, faction.lineage), ...config.scenario };
+}
+
+/** The assumptions a cell's scenario adds to its report. */
+function scenarioAssumptions(scenario: Scenario): string[] {
+  const lines: string[] = [];
+  if (scenario.battleRound !== undefined) lines.push(`Battle round ${scenario.battleRound}.`);
+  if (scenario.targetRegions !== undefined) lines.push(`Target regions: ${JSON.stringify(scenario.targetRegions)}; no others.`);
+  if (scenario.targetDesignations !== undefined) {
+    lines.push(scenario.targetDesignations.length > 0
+      ? `Target designations assumed (applied by the army's own rules): ${scenario.targetDesignations.join(", ")}; no others.`
+      : "Target carries no designations.");
+  }
+  return lines;
 }
 
 /**
@@ -277,7 +347,7 @@ export function addOrderIssuers(
   }
 }
 
-function winnerReport(dataset: Dataset, faction: FactionContext, session: DamageScoringSession, result: StackResult, targetModelCount: number): WinnerReport {
+function winnerReport(dataset: Dataset, faction: FactionContext, session: DamageScoringSession, result: StackResult, targetModelCount: number, scenario: Scenario): WinnerReport {
   const selected = session.selectedPoolLevers(result);
   const enhancements = selected.flatMap((lever) => {
     if (lever.cost?.points === undefined) return [];
@@ -319,6 +389,7 @@ function winnerReport(dataset: Dataset, faction: FactionContext, session: Damage
       : {}),
   }));
   const chosen = new Map(result.members.map(({ member, loadout }) => [member.unit.id, loadout.counts]));
+  const cost = stratagem ? stratagemCost(dataset, stratagem, result.spec.members.map((member) => member.unit.raw)) : undefined;
   // Each profile's kills are capped at the unit's size on their own; the stack's total is capped once more.
   const kills = result.members.reduce((sum, { loadout }) => sum + loadout.selectedWeapons.reduce((total, weapon) =>
     total + (weapon.stages.find((stage) => stage.name === "models-killed")?.expected ?? 0) * weapon.count, 0), 0);
@@ -352,7 +423,7 @@ function winnerReport(dataset: Dataset, faction: FactionContext, session: Damage
       return { id, detachmentPoints: detachment?.detachment_points ?? 0 };
     }),
     enhancements,
-    stratagem: stratagem ? { id: stratagem.id, cp: stratagem.cp_cost } : null,
+    stratagem: stratagem && cost ? { id: stratagem.id, cp: cost.cp, ...(cost.cp !== stratagem.cp_cost ? { printedCp: stratagem.cp_cost, modifiedBy: cost.modifiedBy } : {}) } : null,
     selectedLevers: leverReports,
     supportingUnits: [...supportAbilityIds].map(([unitId, abilityIds]) => ({
       unitId,
@@ -361,12 +432,14 @@ function winnerReport(dataset: Dataset, faction: FactionContext, session: Damage
     })),
     assumptions: [
       "Favourable state: 1 inch, within half range, stationary when shooting, charged when fighting.",
+      ...scenarioAssumptions(scenario),
       "Each selected support ability is assumed in range and otherwise activatable; support units are costed but are not an army roster.",
       "At most one Stratagem is selected; CP across a full game is not simulated.",
       "Loadouts and levers use coordinate ascent; outer bodyguard, attachment, finalist and detachment pools are exhaustive when their limits are Infinity.",
       ...(result.spec.members.some((member) => member.role === "support")
         ? ["Support-attached characters count as leading their unit for rules that apply while a model is leading."] : []),
       ...(stratagem ? assumedEligibility(dataset, stratagem.id).map((condition) => `Stratagem ${stratagem.id} target condition assumed met: ${condition}.`) : []),
+      ...(cost?.unapplied ?? []).map((abilityId) => `Conditional Stratagem cost rule not applied: ${abilityId}.`),
       ...result.spec.detachmentIssues.map((issue) => `Unproven local-stack detachment condition: ${issue.code} (${issue.id}).`),
       ...selected.flatMap((lever) => (lever.requires ?? []).map(() => `Selected lever ${lever.id} requires caller-attested activation context recorded in selectedLevers.requires.`)),
       ...(supportCosts.status === "incomplete" ? supportCosts.issues.map((issue) => `Support cost incomplete: ${issue.code} (${issue.id}).`) : []),
@@ -389,7 +462,7 @@ export function damageScoringSession(input: {
     factionId: input.faction.id,
     target: input.target,
     phase: input.phase,
-    contextFor: contextForCell(input.dataset, input.faction.id, input.target, input.phase, input.config.scenario,
+    contextFor: contextForCell(input.dataset, input.faction.id, input.target, input.phase, cellScenario(input.dataset, input.faction, input.config),
       input.targetWargear ?? baseWargear(input.dataset, input.target.unitRaw, input.target.modelCount)),
   };
   return new DamageScoringSession(input.dataset, state, input.config, input.faction.units, input.invariants);
@@ -424,7 +497,7 @@ export function runDamageCell(input: {
   const offensiveWarnings = winner ? session.relevantWarnings(winner) : [];
   const unsupported = offensiveWarnings.map(({ sourceKind: _sourceKind, ...warning }) => warning);
   const defensiveWarnings = session.defensiveWarnings.map(({ sourceKind: _sourceKind, ...warning }) => warning);
-  const result = winner ? winnerReport(input.dataset, input.faction, session, winner, input.target.modelCount) : null;
+  const result = winner ? winnerReport(input.dataset, input.faction, session, winner, input.target.modelCount, cellScenario(input.dataset, input.faction, input.config)) : null;
   const ledger = [...(winner ? buildLedger(session, winner) : []), ...unscoreableEntries(session)];
   const incomplete = ledger.some((entry) => entry.relevant) || (winner?.spec.detachmentIssues.length ?? 0) > 0 || result?.members.some((member) => member.legalityErrors.length > 0);
   return {

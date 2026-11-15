@@ -58,7 +58,8 @@ export interface WinnerReport {
   members: MemberReport[];
   detachments: { id: string; detachmentPoints: number }[];
   enhancements: { id: string; bearerUnitId: string; points: number }[];
-  stratagem: { id: string; cp: number } | null;
+  /** The selected Stratagem at its cost on this stack; `printedCp` and `modifiedBy` when a member's rule changed it. */
+  stratagem: { id: string; cp: number; printedCp?: number; modifiedBy?: string[] } | null;
   selectedLevers: LeverReport[];
   supportingUnits: { unitId: string; points: number | null; selectedAbilityIds: string[] }[];
   assumptions: string[];

@@ -5,7 +5,7 @@ import { Dataset, emptyRawData } from "../src/data/index.js";
 import { parseMatrixConfig } from "../src/stack-damage/config.js";
 import { resolveFactionContext } from "../src/stack-damage/factions.js";
 import { damageScoringSession, emptySpec } from "../src/stack-damage/search.js";
-import { filterStackEligibleAbilities } from "../src/stack-damage/stratagem-eligibility.js";
+import { filterStackEligibleAbilities, stratagemCost } from "../src/stack-damage/stratagem-eligibility.js";
 
 const dataset = Dataset.embedded();
 const factionId = "adeptus-custodes";
@@ -112,5 +112,19 @@ describe("attached-unit Stratagem targets", () => {
 
   it("offers Blessings of Filth to an attached unit", () => {
     expect(offered([{ unitId: "blightlord-terminators", role: "bodyguard" }, { unitId: "lord-of-contagion", role: "leader" }])).toBe(true);
+  });
+});
+
+describe("a Stratagem's cost on a stack", () => {
+  const dataset = Dataset.embedded();
+  const strat = dataset.stratagems.all.find((candidate) => candidate.id === "point-blank-ambush-kauyon-tau-empire")!;
+  const unit = (id: string) => dataset.units.getInFaction(id, "tau-empire")!.raw;
+
+  it("triples a Stratagem used on the Manta (Air Caste Colossus)", () => {
+    expect(stratagemCost(dataset, strat, [unit("manta")])).toEqual({ cp: strat.cp_cost * 3, modifiedBy: ["air-caste-colossus-tau-empire"], unapplied: [] });
+  });
+
+  it("leaves the printed cost on a unit with no cost rule", () => {
+    expect(stratagemCost(dataset, strat, [unit("broadside-battlesuits")])).toEqual({ cp: strat.cp_cost, modifiedBy: [], unapplied: [] });
   });
 });

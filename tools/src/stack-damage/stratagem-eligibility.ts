@@ -233,3 +233,69 @@ export function assumedEligibility(dataset: Dataset, stratagemId: string): strin
   for (const target of Array.isArray(raw) ? raw : raw ? [raw] : []) if (target.side !== "enemy") walk(target.eligibility);
   return [...out];
 }
+
+/** A Stratagem's cost on a stack: its printed CP and the cost rules its members' abilities print. */
+export interface StratagemCost {
+  cp: number;
+  /** The abilities that changed it, in the order they applied. */
+  modifiedBy: string[];
+  /** Cost rules for this Stratagem the stack carries but this cost does not apply: conditional ones. */
+  unapplied: string[];
+}
+
+/**
+ * The CP a Stratagem costs used on `units` (one attached unit): its printed cost with each member's
+ * unconditional `cost-modifier` "targeting this unit" applied (Air Caste Colossus triples it, a
+ * named waiver makes it free). A rule naming another Stratagem does not apply. Waivers and sets
+ * apply first, then multipliers, then increases and decreases, never below 0. A cost rule inside a
+ * condition or a timed part is listed as unapplied rather than assumed.
+ */
+export function stratagemCost(dataset: Dataset, stratagem: { id: string; ability_id?: string | null; cp_cost: number }, units: readonly Unit[]): StratagemCost {
+  type Rule = { abilityId: string; operation: string; amount: number };
+  const rules: Rule[] = [];
+  const unapplied = new Set<string>();
+  const names = new Set([stratagem.id, stratagem.ability_id].filter((id): id is string => typeof id === "string"));
+  const visit = (node: unknown, abilityId: string, gated: boolean): void => {
+    if (Array.isArray(node)) {
+      for (const item of node) visit(item, abilityId, gated);
+      return;
+    }
+    if (typeof node !== "object" || node === null) return;
+    const record = node as Record<string, unknown>;
+    const modifier = typeof record.modifier === "object" && record.modifier !== null ? record.modifier as Record<string, unknown> : undefined;
+    if (record.type === "cost-modifier" && modifier?.of === "stratagem" && modifier.applies_to === "targeting-this-unit" &&
+      (record.target === "this-unit" || record.target === "this-model") &&
+      (modifier.id === undefined || (typeof modifier.id === "string" && [...names].some((name) => name === modifier.id || name.startsWith(`${modifier.id as string}-`))))) {
+      if (gated) unapplied.add(abilityId);
+      else rules.push({ abilityId, operation: String(modifier.operation), amount: typeof modifier.amount === "number" ? modifier.amount : 0 });
+      return;
+    }
+    const gates = gated || record.type === "conditional" || record.type === "ability-part";
+    for (const value of Object.values(record)) visit(value, abilityId, gates);
+  };
+  for (const unit of units) {
+    for (const ref of unit.ability_ids ?? []) {
+      const abilityId = abilityRefId(ref);
+      const ability = dataset.abilities.getInFaction(abilityId, unit.faction_id) ?? dataset.abilities.getAny(abilityId);
+      if (ability) visit(ability.raw.effect, abilityId, false);
+    }
+  }
+  const order = ["waive", "set", "multiply", "increase", "decrease"];
+  rules.sort((left, right) => order.indexOf(left.operation) - order.indexOf(right.operation));
+  let cp = stratagem.cp_cost;
+  const modifiedBy: string[] = [];
+  for (const rule of rules) {
+    const before = cp;
+    if (rule.operation === "waive") cp = 0;
+    else if (rule.operation === "set") cp = rule.amount;
+    else if (rule.operation === "multiply") cp *= rule.amount;
+    else if (rule.operation === "increase") cp += rule.amount;
+    else if (rule.operation === "decrease") cp = Math.max(0, cp - rule.amount);
+    else {
+      unapplied.add(rule.abilityId);
+      continue;
+    }
+    if (cp !== before && !modifiedBy.includes(rule.abilityId)) modifiedBy.push(rule.abilityId);
+  }
+  return { cp, modifiedBy, unapplied: [...unapplied].sort() };
+}

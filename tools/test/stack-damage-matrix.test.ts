@@ -19,7 +19,7 @@ import {
   sourceFingerprint,
   type DamageCellReport,
 } from "../src/stack-damage/report.js";
-import { damageScoringSession, emptySpec, runDamageCell } from "../src/stack-damage/search.js";
+import { damageScoringSession, defaultScenario, emptySpec, enemyDesignations, runDamageCell } from "../src/stack-damage/search.js";
 import type { Unit } from "../src/generated.js";
 
 const catalog = {
@@ -165,9 +165,23 @@ describe("stack damage scenario", () => {
       attackerWounds: { remaining: W, starting: W },
       targetWounds: { remaining: 2, starting: 2 },
     });
+    // Where the scenario is silent: battle round 3, the target in its own deployment zone, and no
+    // designations declared for an army whose rules apply none.
+    expect(context({})).toMatchObject({ battleRound: 3, targetRegions: [{ territory: "target", deploymentZone: "target" }] });
     expect(context({}).targetDesignations).toBeUndefined();
+    expect(context({ battleRound: 1 }).battleRound).toBe(1);
     expect(context({ targetStrength: "below-half", targetDesignations: ["focus-of-hatred"] }))
       .toMatchObject({ targetStrength: "below-half", targetDesignations: ["focus-of-hatred"], phase: "shooting" });
+  });
+});
+
+describe("stack damage default scenario", () => {
+  it("assumes the designations an army's own always-on rules apply to enemies, and no others", () => {
+    const dataset = Dataset.embedded();
+    // Nurgle's Gift's aura designates enemies within Contagion Range Afflicted.
+    expect(enemyDesignations(dataset, resolveFactionContext(dataset, "death-guard").lineage)).toEqual(["afflicted"]);
+    // T'au rules read Spotted, but none applies it unprompted: it stays undecided.
+    expect(defaultScenario(dataset, resolveFactionContext(dataset, "tau-empire").lineage).targetDesignations).toBeUndefined();
   });
 });
 
@@ -259,14 +273,17 @@ describe("stack damage loadout search performance", () => {
     // Ammunition targets only a BATTLESUIT CHARACTER unit, so it cannot either.
     const tigerShark = run(1).winner;
     expect(tigerShark?.members.map((member) => member.unitId)).toEqual(["ax-1-0-tiger-shark"]);
-    expect(tigerShark?.expectedDamage).toBeCloseTo(8.020833333333332, 12);
+    expect(tigerShark?.expectedDamage).toBeCloseTo(11.126543209876539, 12);
+    // The default battle round (3) opens Kauyon's Patient Hunter, which round-gated rules otherwise lose.
+    expect(tigerShark?.selectedLevers.map((lever) => lever.id)).toContain("detachment:patient-hunter-tau-empire");
+    expect(tigerShark?.assumptions).toContain("Battle round 3.");
     expect(tigerShark?.stratagem?.id).not.toBe("the-arrokon-protocol-retaliation-cadre-tau-empire");
     expect(tigerShark?.stratagem?.id).not.toBe("experimental-ammunition-experimental-prototype-cadre-tau-empire");
     // Against one-Wound Guardsmen a Fireblade-led Breacher Team's many Damage 1 shots beat the
     // Broadsides, whose damage past each model's single Wound is lost.
     const geq = run(3).winner;
     expect(geq?.members.map((member) => member.unitId)).toEqual(["breacher-team", "cadre-fireblade"]);
-    expect(geq?.expectedDamage).toBeCloseTo(22.976851851851848, 12);
+    expect(geq?.expectedDamage).toBeCloseTo(34.84876543209876, 12);
     expect(geq?.expectedModelsKilled).toBe(10);
 
     const withBroadside = run(3, "meq-intercessors");
@@ -276,27 +293,28 @@ describe("stack damage loadout search performance", () => {
       broadResults: 4,
       deepFinalists: 1,
     });
-    // Every Broadside model is a BATTLESUIT, so Bonded Heroes' model-level +1 S and AP applies.
+    // In battle round 3 Kauyon's Patient Hunter and Point-blank Ambush outscore Bonded Heroes.
     // Each model takes its two Missile Drones, whose pods its drone rule equips.
-    expect(withBroadside.winner?.expectedDamage).toBeCloseTo(22.620370370370367, 12);
+    expect(withBroadside.winner?.expectedDamage).toBeCloseTo(30.85185185185184, 12);
     expect(withBroadside.winner?.expectedModelsKilled).toBeLessThanOrEqual(5);
-    expect(withBroadside.winner?.selectedLevers.map((lever) => lever.id)).toContain("detachment:bonded-heroes-tau-empire");
+    expect(withBroadside.winner?.selectedLevers.map((lever) => lever.id)).toContain("detachment:patient-hunter-tau-empire");
+    expect(withBroadside.winner?.stratagem?.id).toBe("point-blank-ambush-kauyon-tau-empire");
     expect(withBroadside.winner?.members[0]).toMatchObject({
       unitId: "broadside-battlesuits",
       modelCount: 3,
       legalityErrors: [],
     });
     expect(withBroadside.winner?.members[0]?.loadout).toContainEqual({ weaponId: "missile-drone", count: 6 });
-    // Each reported profile's attribution reconciles with the damage it deals, and Bonded Heroes shows its lift.
+    // Each reported profile's attribution reconciles with the damage it deals, and the Stratagem shows its lift.
     const weapons = withBroadside.winner!.members.flatMap((member) => member.weapons);
     for (const weapon of weapons) {
       const attribution = weapon.attribution!;
       const lifted = attribution.lifts.reduce((sum, lift) => sum + lift.delta, 0);
       expect(attribution.baseline + lifted + attribution.residual).toBeCloseTo(weapon.stages["damage-dealt"], 9);
     }
-    const bonded = weapons.flatMap((weapon) => weapon.attribution!.lifts)
-      .filter((lift) => lift.source.kind === "ability" && lift.source.abilityId.startsWith("bonded-heroes"));
-    expect(bonded.reduce((sum, lift) => sum + lift.delta, 0)).toBeGreaterThan(0);
+    const strat = weapons.flatMap((weapon) => weapon.attribution!.lifts)
+      .filter((lift) => lift.source.kind === "ability" && lift.source.abilityId.startsWith("point-blank-ambush"));
+    expect(strat.reduce((sum, lift) => sum + lift.delta, 0)).toBeGreaterThan(0);
   }, 10_000);
 });
 
