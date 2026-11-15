@@ -7,7 +7,10 @@
 use serde_json::{json, Map, Value};
 
 use super::applicability::{condition_to_applicability, label_for_buffs, App};
-use super::attack_scope::{is_weapon_scoped_condition, split_attack_scoped, walk_gated};
+use super::attack_scope::{
+    is_weapon_scoped_condition, reduce_negated_conjunctions, split_attack_scoped, walk_gated,
+    Reduced,
+};
 use super::conditions::evaluate_condition_for_source;
 use super::gated::{
     gated, offer_self_designated, offer_stance_gated, self_designation_gate, split_stance_option,
@@ -412,6 +415,19 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             }
         }
         return;
+    }
+    match reduce_negated_conjunctions(condition, &|leaf| evaluate_condition(leaf, opts)) {
+        Reduced::Unchanged => {}
+        Reduced::Holds => {
+            walk(node.get("effect").unwrap_or(&Value::Null), opts, out);
+            return;
+        }
+        Reduced::Narrowed(reduced) => {
+            let mut narrowed = node.clone();
+            narrowed.insert("condition".to_string(), Value::Object(reduced));
+            conditional(&narrowed, opts, out);
+            return;
+        }
     }
     if is_weapon_scoped_condition(condition) {
         if let App::When(applicability) =

@@ -992,6 +992,8 @@ function translateStatModifier(
   }
   const stat = modifier.stat;
   const isOnBuffedUnit = appliesToBuffedUnit(node, opts.perspective);
+  // The attacker's rule changing a characteristic of the unit its attacks target.
+  const debuffsTarget = opts.perspective === "attacker" && classifyTarget(node) === "defender";
   // Weapon type gates the attack phase; name and keyword predicates stay on each buff.
   const applicability = combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier));
   const emit = (contribution: BuffContribution): void => {
@@ -1083,15 +1085,16 @@ function translateStatModifier(
       emit({ type: "strength-mod", value });
       return;
     case "T":
-      // Defender stat. Only relevant under target perspective.
-      if (opts.perspective !== "target") {
+      // Defender stat: the buffed unit's own under target perspective, or the attack's target when
+      // the attacker's rule changes it ("enemy units within Contagion Range get -1 Toughness").
+      if (opts.perspective !== "target" && !debuffsTarget) {
         out.unsupported.push({
           reason: "stat-modifier T: defender-side stat; applies when the buffed unit is the target",
           effectFragment: node,
         });
         return;
       }
-      if (!isOnBuffedUnit) return;
+      if (!isOnBuffedUnit && !debuffsTarget) return;
       emit({ type: "toughness-mod", value });
       return;
     case "D":
@@ -1108,15 +1111,16 @@ function translateStatModifier(
       return;
     case "Sv":
       // Improvement is a save-roll bonus. Literal addition to the Save characteristic
-      // instead raises the needed roll, so add/subtract use the opposite sign.
-      if (opts.perspective !== "target") {
+      // instead raises the needed roll, so add/subtract use the opposite sign. Like T, the
+      // attacker's rule can change the attack's target's.
+      if (opts.perspective !== "target" && !debuffsTarget) {
         out.unsupported.push({
           reason: "stat-modifier Sv: defender-side stat; applies when the buffed unit is the target",
           effectFragment: node,
         });
         return;
       }
-      if (!isOnBuffedUnit) return;
+      if (!isOnBuffedUnit && !debuffsTarget) return;
       // A capped improvement ("cannot improve a Save to better than N+") changes the Save
       // characteristic itself, not the save roll.
       if (modifier.operation === "improve" && typeof modifier.minimum === "number") {
@@ -1651,6 +1655,46 @@ function isWeaponScopedCondition(condition: Record<string, unknown>): boolean {
 }
 
 /**
+ * `condition` with each negated conjunction decided as far as the context allows. In `not (A and
+ * B)` the operands that are not attack-scoped are evaluated: one false makes the negation hold, so
+ * it drops out of an enclosing `and` (and the whole condition holds when nothing is left); all true
+ * leave `not` of the one attack-scoped operand, which gates per attack. Any undecided operand, or
+ * more than one attack-scoped operand, leaves the negation as authored. Returns `true` when the
+ * condition holds outright and `condition` itself when nothing changes.
+ */
+function reduceNegatedConjunctions(
+  condition: Record<string, unknown>,
+  evaluate: (leaf: Record<string, unknown>) => boolean | "unknown",
+): Record<string, unknown> | true {
+  if (condition.operator === "not" && Array.isArray(condition.operands) && condition.operands.length === 1) {
+    const inner = condition.operands[0];
+    if (!isObject(inner) || inner.operator !== "and" || !Array.isArray(inner.operands)) return condition;
+    const operands = inner.operands.filter(isObject);
+    if (operands.length !== inner.operands.length) return condition;
+    const scoped = operands.filter((operand) => operand.operator === undefined && isWeaponScopedCondition(operand));
+    const rest = operands.filter((operand) => !scoped.includes(operand));
+    if (scoped.length === 0 || rest.length === 0) return condition;
+    const verdicts = rest.map(evaluate);
+    if (verdicts.includes(false)) return true;
+    if (verdicts.includes("unknown") || scoped.length !== 1) return condition;
+    return { operator: "not", operands: [scoped[0]] };
+  }
+  if (condition.operator === "and" && Array.isArray(condition.operands)) {
+    let changed = false;
+    const kept: unknown[] = [];
+    for (const operand of condition.operands) {
+      const reduced = isObject(operand) ? reduceNegatedConjunctions(operand, evaluate) : operand;
+      if (reduced !== operand) changed = true;
+      if (reduced !== true) kept.push(reduced);
+    }
+    if (!changed) return condition;
+    if (kept.length === 0) return true;
+    return kept.length === 1 && isObject(kept[0]) ? kept[0] : { ...condition, operands: kept };
+  }
+  return condition;
+}
+
+/**
  * An `and` whose operands mix attack-scoped predicates (a weapon, the attack's Strength against
  * the target's Toughness) with predicates on the units: the attack-scoped operands as one buff
  * gate, and the rest to evaluate. Nested `and`s flatten. Undefined when no operand is
@@ -1722,6 +1766,19 @@ function translateConditional(
   }
   if (guard !== condition) {
     const narrowed = { ...node, condition: guard };
+    const activation = activationSources.get(node);
+    if (activation) activationSources.set(narrowed, activation);
+    translateConditional(narrowed, source, opts, out);
+    return;
+  }
+  const reduced = reduceNegatedConjunctions(condition, (leaf) =>
+    evaluateCondition(leaf, opts.context, opts.perspective, opts.grantedHolder ? undefined : source));
+  if (reduced !== condition) {
+    if (reduced === true) {
+      walk(effect, source, opts, out);
+      return;
+    }
+    const narrowed = { ...node, condition: reduced };
     const activation = activationSources.get(node);
     if (activation) activationSources.set(narrowed, activation);
     translateConditional(narrowed, source, opts, out);

@@ -58,6 +58,43 @@ describe("effectToBuffs: weapon-scoped conditions", () => {
       expect(result.unsupported.map((entry) => entry.reason)).toEqual(['conditional: cannot evaluate condition "not" against current context']);
     }
   });
+
+  // Blight Bombardment's shape: "ranged, and not (ranged and Blast)". The negated conjunction's
+  // unit-level operand is decided by the phase, leaving the Blast exclusion as the per-weapon gate.
+  const ranged = { type: "attack-is", parameters: { attack_type: "ranged" } };
+  const notRangedBlast = { operator: "and", operands: [ranged, { operator: "not", operands: [{ operator: "and", operands: [ranged, blast] }] }] };
+
+  it("decides a negated conjunction's unit operands and gates the attack-scoped rest per weapon", () => {
+    const result = effectToBuffs(rerollOnes(notRangedBlast), source, { phase: "shooting" }, "attacker");
+    expect(result.unsupported).toEqual([]);
+    expect(result.applied.map((buff) => buff.applicableWhen)).toEqual([{ excludedWeaponKeywords: [{ keyword_id: "blast" }] }]);
+    const rifle = gun("rifle", []);
+    const cannon = gun("cannon", ["blast"]);
+    expect(hits(rifle, result.applied)).toBeGreaterThan(hits(rifle, []));
+    expect(hits(cannon, result.applied)).toBe(hits(cannon, []));
+  });
+
+  it("drops the effect where the negated conjunction's unit operand fails the enclosing condition", () => {
+    // In the Fight phase the attack is not ranged: the negation holds, and the outer `ranged` fails.
+    const result = effectToBuffs(rerollOnes(notRangedBlast), source, { phase: "fight" }, "attacker");
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toEqual([]);
+  });
+
+  it("applies the effect outright when a false unit operand makes the negation hold on its own", () => {
+    const result = effectToBuffs(rerollOnes({ operator: "not", operands: [{ operator: "and", operands: [ranged, blast] }] }), source, { phase: "fight" }, "attacker");
+    expect(result.unsupported).toEqual([]);
+    expect(result.applied).toHaveLength(1);
+    expect(result.applied[0]!.applicableWhen).toBeUndefined();
+  });
+
+  it("leaves a negated conjunction with an undecided unit operand unresolved", () => {
+    const lateRounds = { type: "battle-round", parameters: { min: 3 } };
+    const condition = { operator: "not", operands: [{ operator: "and", operands: [lateRounds, blast] }] };
+    const result = effectToBuffs(rerollOnes(condition), source, { phase: "shooting" }, "attacker");
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toHaveLength(1);
+  });
 });
 
 describe("effectToBuffs: a weapon a selection binds by name", () => {

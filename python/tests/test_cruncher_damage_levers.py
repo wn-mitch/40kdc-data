@@ -308,3 +308,78 @@ def test_drops_a_removed_blast_only_from_the_weapons_the_removals_scope_names(
     assert _lobba(dataset, everything["applied"]) == (3, False)
     torrent_only = removal({"type": "ranged", "keyword": {"keyword_id": "torrent"}})
     assert _lobba(dataset, torrent_only["applied"])[0] == 9
+
+
+def _fabricated_gun(weapon_id: str, keywords: list[str]) -> dict[str, Any]:
+    return {
+        "id": weapon_id,
+        "name": weapon_id,
+        "type": "ranged",
+        "profiles": [
+            {
+                "name": weapon_id,
+                "range": 24,
+                "stats": {"A": 6, "BS": 4, "S": 4, "AP": 0, "D": 1},
+                "keywords": [{"keyword_id": keyword} for keyword in keywords],
+            }
+        ],
+        "game_version": {"edition": "11th", "dataslate": "launch"},
+    }
+
+
+_FABRICATED_TARGET = {
+    "id": "target",
+    "name": "Target",
+    "faction_id": "test",
+    "profiles": [{"name": "target", "M": 6, "T": 4, "W": 1, "Sv": 7, "Ld": 7, "OC": 1}],
+    "keywords": ["Infantry"],
+    "faction_keywords": [],
+    "game_version": {"edition": "11th", "dataslate": "launch"},
+}
+
+
+def _hits(dataset: Any, weapon: dict[str, Any], buffs: list[dict[str, Any]]) -> float:
+    out = crunch(
+        {
+            "attacker": {"weapon": weapon, "profileIndex": 0},
+            "target": {"unit": _FABRICATED_TARGET, "profileIndex": 0, "modelCount": 1},
+            "modelsFiring": 1,
+            "buffs": buffs,
+            "context": SHOOTING,
+        },
+        dataset,
+    )
+    return float(next(s["expected"] for s in out["stages"] if s["name"] == "hits"))
+
+
+def test_negated_conjunction_decides_unit_operands_and_gates_the_rest_per_weapon(
+    dataset: Any,
+) -> None:
+    # Blight Bombardment's shape: "ranged, and not (ranged and Blast)". The phase decides the
+    # negated conjunction's unit-level operand, leaving the Blast exclusion as the weapon gate.
+    ranged = {"type": "attack-is", "parameters": {"attack_type": "ranged"}}
+    blast = {"type": "attack-is", "parameters": {"weapons": {"keyword": {"keyword_id": "blast"}}}}
+    effect = {
+        "type": "conditional",
+        "condition": {
+            "operator": "and",
+            "operands": [
+                ranged,
+                {"operator": "not", "operands": [{"operator": "and", "operands": [ranged, blast]}]},
+            ],
+        },
+        "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {"roll": "hit", "subset": "ones"},
+        },
+    }
+    result = effect_to_buffs(effect, SOURCE, SHOOTING, "attacker")
+    assert result["unsupported"] == []
+    assert [buff.get("applicableWhen") for buff in result["applied"]] == [
+        {"excludedWeaponKeywords": [{"keyword_id": "blast"}]}
+    ]
+    rifle = _fabricated_gun("rifle", [])
+    cannon = _fabricated_gun("cannon", ["blast"])
+    assert _hits(dataset, rifle, result["applied"]) > _hits(dataset, rifle, [])
+    assert _hits(dataset, cannon, result["applied"]) == _hits(dataset, cannon, [])

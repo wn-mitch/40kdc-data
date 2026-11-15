@@ -1880,6 +1880,8 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 		out.unsupported = append(out.unsupported, unsup("stat-modifier: operation \""+jsStr(modifier["operation"])+"\" not supported", node))
 		return
 	}
+	// The attacker's rule changing a characteristic of the unit its attacks target.
+	debuffsTarget := opts.perspective == "attacker" && classifyTarget(node) == "defender"
 	switch stat {
 	case "A":
 		if opts.perspective != "attacker" || !isOnBuffedUnit {
@@ -1892,11 +1894,13 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 		}
 		emit(map[string]any{"type": "strength-mod", "value": value})
 	case "T":
-		if opts.perspective != "target" {
+		// Defender stat: the buffed unit's own under target perspective, or the attack's target
+		// when the attacker's rule changes it ("enemy units within Contagion Range get -1 Toughness").
+		if opts.perspective != "target" && !debuffsTarget {
 			out.unsupported = append(out.unsupported, unsup("stat-modifier T: defender-side stat; applies when the buffed unit is the target", node))
 			return
 		}
-		if !isOnBuffedUnit {
+		if !isOnBuffedUnit && !debuffsTarget {
 			return
 		}
 		emit(map[string]any{"type": "toughness-mod", "value": value})
@@ -1919,11 +1923,12 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 		}
 		emit(map[string]any{"type": "damage-mod", "value": value})
 	case "Sv":
-		if opts.perspective != "target" {
+		// Like T, the attacker's rule can change the attack's target's Save.
+		if opts.perspective != "target" && !debuffsTarget {
 			out.unsupported = append(out.unsupported, unsup("stat-modifier Sv: defender-side stat; applies when the buffed unit is the target", node))
 			return
 		}
-		if !isOnBuffedUnit {
+		if !isOnBuffedUnit && !debuffsTarget {
 			return
 		}
 		// A capped improvement ("cannot improve a Save to better than N+") changes the Save
@@ -2294,6 +2299,25 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 		translateConditional(narrowed, source, opts, out)
 		return
 	}
+	var reduceSource map[string]any
+	if !opts.grantedHolder {
+		reduceSource = source
+	}
+	if reduced, holds, changed := reduceNegatedConjunctions(condition, func(leaf map[string]any) any {
+		return evaluateCondition(leaf, opts.context, opts.perspective, reduceSource)
+	}); changed {
+		if holds {
+			dslWalk(node["effect"], source, opts, out)
+			return
+		}
+		narrowed := make(map[string]any, len(node))
+		for key, value := range node {
+			narrowed[key] = value
+		}
+		narrowed["condition"] = reduced
+		translateConditional(narrowed, source, opts, out)
+		return
+	}
 	if isWeaponScopedCondition(condition) {
 		if applicability, ok := conditionToApplicability(condition, opts.perspective, ownToughness(opts.context)).(map[string]any); ok {
 			walkWithApplicability(node["effect"], source, opts, applicability, out)
@@ -2433,6 +2457,100 @@ func negatedWeaponApplicability(operands []any) any {
 		return "context"
 	}
 	return map[string]any{"excludedWeaponKeywords": included}
+}
+
+// reduceNegatedConjunctions decides each negated conjunction in condition as far as the context
+// allows. In `not (A and B)` the operands that are not attack-scoped are evaluated: one false
+// makes the negation hold, so it drops out of an enclosing `and` (and the whole condition holds
+// when nothing is left); all true leave `not` of the one attack-scoped operand, which gates per
+// attack. Any undecided operand, or more than one attack-scoped operand, leaves the negation as
+// authored. It returns holds when the condition holds outright, changed when it rewrote
+// anything, and the rewritten condition otherwise. Mirrors reduceNegatedConjunctions in
+// tools/src/cruncher/from-dsl.ts.
+func reduceNegatedConjunctions(condition map[string]any, evaluate func(map[string]any) any) (reduced map[string]any, holds bool, changed bool) {
+	raw, isList := asList(condition["operands"])
+	switch getStr(condition, "operator") {
+	case "not":
+		if !isList || len(raw) != 1 {
+			return condition, false, false
+		}
+		inner, ok := asMap(raw[0])
+		if !ok || getStr(inner, "operator") != "and" {
+			return condition, false, false
+		}
+		innerRaw, ok := asList(inner["operands"])
+		if !ok {
+			return condition, false, false
+		}
+		var scoped, rest []map[string]any
+		for _, item := range innerRaw {
+			operand, ok := asMap(item)
+			if !ok {
+				return condition, false, false
+			}
+			if operand["operator"] == nil && isWeaponScopedCondition(operand) {
+				scoped = append(scoped, operand)
+			} else {
+				rest = append(rest, operand)
+			}
+		}
+		if len(scoped) == 0 || len(rest) == 0 {
+			return condition, false, false
+		}
+		undecided := false
+		for _, operand := range rest {
+			switch evaluate(operand) {
+			case false:
+				return nil, true, true
+			case true:
+			default:
+				undecided = true
+			}
+		}
+		if undecided || len(scoped) != 1 {
+			return condition, false, false
+		}
+		return map[string]any{"operator": "not", "operands": []any{scoped[0]}}, false, true
+	case "and":
+		if !isList {
+			return condition, false, false
+		}
+		anyChanged := false
+		kept := make([]any, 0, len(raw))
+		for _, item := range raw {
+			operand, ok := asMap(item)
+			if !ok {
+				kept = append(kept, item)
+				continue
+			}
+			next, operandHolds, operandChanged := reduceNegatedConjunctions(operand, evaluate)
+			if operandChanged {
+				anyChanged = true
+			}
+			if operandHolds {
+				continue
+			}
+			kept = append(kept, next)
+		}
+		if !anyChanged {
+			return condition, false, false
+		}
+		if len(kept) == 0 {
+			return nil, true, true
+		}
+		if len(kept) == 1 {
+			if only, ok := asMap(kept[0]); ok {
+				return only, false, true
+			}
+		}
+		next := make(map[string]any, len(condition))
+		for key, value := range condition {
+			next[key] = value
+		}
+		next["operands"] = kept
+		return next, false, true
+	}
+	return condition, false, false
 }
 
 // isWeaponScopedCondition reports an `attack-is` naming weapons, or its negation, or an

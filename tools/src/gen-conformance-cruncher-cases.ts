@@ -11,6 +11,8 @@ import type { Trigger, UnitSelector } from "./generated.js";
 
 export const RECIPIENT_CASE_PREFIX = "canonical/recipient-snapshot/";
 export const HALF_WEAPON_RANGE_CASE_PREFIX = "canonical/half-weapon-range/";
+export const NEGATED_CONJUNCTION_CASE_PREFIX = "canonical/negated-conjunction/";
+export const TARGET_DEBUFF_CASE_PREFIX = "canonical/target-debuff/";
 export const SCENARIO_CASE_PREFIX = "canonical/scenario/";
 export const TRIGGER_SUBJECT_CASE_PREFIX = "canonical/trigger-subject/";
 export const STRATAGEM_MODEL_CASE_PREFIX = "canonical/stratagem-model/";
@@ -293,6 +295,74 @@ export function canonicalHalfWeaponRangeCases() {
   return inputs.map((input) => {
     const row: DslInput = {
       caseId: `${HALF_WEAPON_RANGE_CASE_PREFIX}${input.id}`,
+      abilityId: source.abilityId,
+      source,
+      effect: input.effect,
+      context: input.context,
+      perspective: "attacker",
+    };
+    const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
+    return { ...row, expected: dslProjection(result) };
+  });
+}
+
+/**
+ * A negated conjunction mixing unit and attack-scoped operands (Blight Bombardment's "ranged, and not
+ * (ranged and Blast)"): its unit operands are decided first, leaving the attack-scoped operand's
+ * negation as the per-weapon gate, the negation holding outright, or the condition unresolved.
+ */
+export function canonicalNegatedConjunctionCases() {
+  const source = { kind: "ability", abilityId: "fabricated-negated-conjunction", abilityKind: "unit" } as const;
+  const ranged = { type: "attack-is", parameters: { attack_type: "ranged" } };
+  const blast = { type: "attack-is", parameters: { weapons: { keyword: { keyword_id: "blast" } } } };
+  const lateRounds = { type: "battle-round", parameters: { min: 3 } };
+  const rerollOnes = (condition: unknown) => ({
+    type: "conditional",
+    condition,
+    effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } },
+  });
+  const notBoth = (left: unknown) => ({ operator: "not", operands: [{ operator: "and", operands: [left, blast] }] });
+  const blightShape = { operator: "and", operands: [ranged, notBoth(ranged)] };
+  const inputs: Array<{ id: string; context: EngineContext; effect: unknown }> = [
+    { id: "unit-operand-true-gates-per-weapon", context: { phase: "shooting" }, effect: rerollOnes(blightShape) },
+    { id: "enclosing-operand-fails", context: { phase: "fight" }, effect: rerollOnes(blightShape) },
+    { id: "unit-operand-false-holds-outright", context: { phase: "fight" }, effect: rerollOnes(notBoth(ranged)) },
+    { id: "unit-operand-undecided", context: { phase: "shooting" }, effect: rerollOnes(notBoth(lateRounds)) },
+  ];
+  return inputs.map((input) => {
+    const row: DslInput = {
+      caseId: `${NEGATED_CONJUNCTION_CASE_PREFIX}${input.id}`,
+      abilityId: source.abilityId,
+      source,
+      effect: input.effect,
+      context: input.context,
+      perspective: "attacker",
+    };
+    const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
+    return { ...row, expected: dslProjection(result) };
+  });
+}
+
+/**
+ * The attacker's rule changing the attack target's Toughness or Save (Nurgle's Gift on Afflicted
+ * enemies): a target-side contribution from the attacker perspective, gated by the enemy filter.
+ */
+export function canonicalTargetDebuffCases() {
+  const source = { kind: "ability", abilityId: "fabricated-target-debuff", abilityKind: "army" } as const;
+  const afflicted = { owner: "enemy", designated: "afflicted" };
+  const toughness = { type: "stat-modifier", target: afflicted, modifier: { stat: "T", operation: "subtract", value: 1 } };
+  const save = { type: "stat-modifier", target: afflicted, modifier: { stat: "Sv", operation: "worsen", value: 1 } };
+  const onDefender = { type: "stat-modifier", target: "defender", modifier: { stat: "T", operation: "subtract", value: 1 } };
+  const inputs: Array<{ id: string; context: EngineContext; effect: unknown }> = [
+    { id: "toughness-on-designated-target", context: { phase: "fight", targetDesignations: ["afflicted"] }, effect: toughness },
+    { id: "save-on-designated-target", context: { phase: "fight", targetDesignations: ["afflicted"] }, effect: save },
+    { id: "target-not-designated", context: { phase: "fight", targetDesignations: [] }, effect: toughness },
+    { id: "designation-undecided", context: { phase: "fight" }, effect: save },
+    { id: "toughness-on-defender", context: { phase: "shooting" }, effect: onDefender },
+  ];
+  return inputs.map((input) => {
+    const row: DslInput = {
+      caseId: `${TARGET_DEBUFF_CASE_PREFIX}${input.id}`,
       abilityId: source.abilityId,
       source,
       effect: input.effect,

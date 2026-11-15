@@ -15,6 +15,8 @@ import {
   canonicalMoveTypeCases,
   canonicalRemovedKeywordCases,
   canonicalHalfWeaponRangeCases,
+  canonicalNegatedConjunctionCases,
+  canonicalTargetDebuffCases,
   canonicalNamedRegionBeneficiaryCases,
   canonicalRecipientCases,
   canonicalScenarioCases,
@@ -25,6 +27,8 @@ import {
   MOVE_TYPE_CASE_PREFIX,
   REMOVED_KEYWORD_CASE_PREFIX,
   HALF_WEAPON_RANGE_CASE_PREFIX,
+  NEGATED_CONJUNCTION_CASE_PREFIX,
+  TARGET_DEBUFF_CASE_PREFIX,
   NAMED_REGION_BENEFICIARY_CASE_PREFIX,
   dslProjection,
   RECIPIENT_CASE_PREFIX,
@@ -62,7 +66,7 @@ export type ResolverDslCase = {
  * (e.g. `canonical/save-characteristic/`) is a seeded row and is refreshed like any other.
  */
 export const CANONICAL_DSL_CASE_PREFIXES: readonly string[] = [
-  RECIPIENT_CASE_PREFIX, HALF_WEAPON_RANGE_CASE_PREFIX, SCENARIO_CASE_PREFIX, GRANTED_RECORD_CASE_PREFIX,
+  RECIPIENT_CASE_PREFIX, HALF_WEAPON_RANGE_CASE_PREFIX, NEGATED_CONJUNCTION_CASE_PREFIX, TARGET_DEBUFF_CASE_PREFIX, SCENARIO_CASE_PREFIX, GRANTED_RECORD_CASE_PREFIX,
   DAMAGE_ZEROING_CASE_PREFIX, IGNORE_MODIFIERS_CASE_PREFIX, TRIGGER_SUBJECT_CASE_PREFIX, STRATAGEM_MODEL_CASE_PREFIX,
   STRATAGEM_TARGET_CASE_PREFIX, NAMED_REGION_BENEFICIARY_CASE_PREFIX, DESIGNATION_CASE_PREFIX, MOVE_TYPE_CASE_PREFIX,
   REMOVED_KEYWORD_CASE_PREFIX, OWN_DEFINITION_CASE_PREFIX,
@@ -77,7 +81,7 @@ export function isCanonicalDslCase(row: { caseId?: unknown }): boolean {
 /** Every fabricated canonical row, both perspectives, with its expectation. */
 export function canonicalDslCases(): Array<Record<string, unknown> & { perspective: "attacker" | "target" }> {
   return [
-    ...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases(), ...canonicalScenarioCases(),
+    ...canonicalRecipientCases(), ...canonicalHalfWeaponRangeCases(), ...canonicalNegatedConjunctionCases(), ...canonicalTargetDebuffCases(), ...canonicalScenarioCases(),
     ...canonicalGrantedRecordCases(), ...canonicalDamageZeroingCases(), ...canonicalIgnoreModifiersCases(),
     ...canonicalTriggerSubjectCases(), ...canonicalStratagemModelCases(), ...canonicalStratagemTargetCases(),
     ...canonicalNamedRegionBeneficiaryCases(), ...canonicalDesignationCases(), ...canonicalMoveTypeCases(),

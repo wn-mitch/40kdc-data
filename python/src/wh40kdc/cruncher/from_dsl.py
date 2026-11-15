@@ -19,7 +19,8 @@ from __future__ import annotations
 
 import json
 import math
-from typing import Any, TypeGuard
+from collections.abc import Callable
+from typing import Any, TypeGuard, cast
 
 from wh40kdc.cruncher import from_dsl_levers as _levers
 from wh40kdc.cruncher import from_dsl_selection as _selection
@@ -1279,6 +1280,8 @@ def _translate_stat_modifier(
             }
         )
         return
+    # The attacker's rule changing a characteristic of the unit its attacks target.
+    debuffs_target = opts["perspective"] == "attacker" and _classify_target(node) == "defender"
     if stat == "A":
         if opts["perspective"] != "attacker" or not is_on_buffed_unit:
             return
@@ -1288,8 +1291,10 @@ def _translate_stat_modifier(
             return
         emit({"type": "strength-mod", "value": value})
     elif stat == "T":
-        # Defender stat. Only relevant under target perspective.
-        if opts["perspective"] != "target":
+        # Defender stat: the buffed unit's own under target perspective, or the attack's target
+        # when the attacker's rule changes it ("enemy units within Contagion Range get -1
+        # Toughness").
+        if opts["perspective"] != "target" and not debuffs_target:
             out["unsupported"].append(
                 {
                     "reason": (
@@ -1300,7 +1305,7 @@ def _translate_stat_modifier(
                 }
             )
             return
-        if not is_on_buffed_unit:
+        if not is_on_buffed_unit and not debuffs_target:
             return
         emit({"type": "toughness-mod", "value": value})
     elif stat == "D":
@@ -1325,7 +1330,8 @@ def _translate_stat_modifier(
         emit({"type": "damage-mod", "value": value})
     elif stat == "Sv":
         # Improvement is a save-roll bonus; literal characteristic addition worsens the Save.
-        if opts["perspective"] != "target":
+        # Like T, the attacker's rule can change the attack's target's.
+        if opts["perspective"] != "target" and not debuffs_target:
             out["unsupported"].append(
                 {
                     "reason": (
@@ -1336,7 +1342,7 @@ def _translate_stat_modifier(
                 }
             )
             return
-        if not is_on_buffed_unit:
+        if not is_on_buffed_unit and not debuffs_target:
             return
         # A capped improvement ("cannot improve a Save to better than N+") changes the Save
         # characteristic itself, not the save roll.
@@ -1898,6 +1904,65 @@ def _is_weapon_scoped_condition(condition: dict[str, Any]) -> bool:
     )
 
 
+def _reduce_negated_conjunctions(
+    condition: dict[str, Any], evaluate: Callable[[dict[str, Any]], Any]
+) -> dict[str, Any] | bool:
+    """``condition`` with each negated conjunction decided as far as the context allows.
+
+    In ``not (A and B)`` the operands that are not attack-scoped are evaluated: one false makes
+    the negation hold, so it drops out of an enclosing ``and`` (and the whole condition holds when
+    nothing is left); all true leave ``not`` of the one attack-scoped operand, which gates per
+    attack. Any undecided operand, or more than one attack-scoped operand, leaves the negation as
+    authored. Returns ``True`` when the condition holds outright and ``condition`` itself when
+    nothing changes. Mirrors ``reduceNegatedConjunctions`` in ``tools/src/cruncher/from-dsl.ts``.
+    """
+    operator = condition.get("operator")
+    raw = condition.get("operands")
+    if operator == "not" and isinstance(raw, list) and len(raw) == 1:
+        inner = raw[0]
+        if not _is_object(inner) or inner.get("operator") != "and":
+            return condition
+        inner_raw = inner.get("operands")
+        if not isinstance(inner_raw, list):
+            return condition
+        operands = [operand for operand in inner_raw if _is_object(operand)]
+        if len(operands) != len(inner_raw):
+            return condition
+        scoped = [
+            operand
+            for operand in operands
+            if operand.get("operator") is None and _is_weapon_scoped_condition(operand)
+        ]
+        rest = [operand for operand in operands if not any(operand is s for s in scoped)]
+        if not scoped or not rest:
+            return condition
+        verdicts = [evaluate(operand) for operand in rest]
+        if any(verdict is False for verdict in verdicts):
+            return True
+        if any(verdict == "unknown" for verdict in verdicts) or len(scoped) != 1:
+            return condition
+        return {"operator": "not", "operands": [scoped[0]]}
+    if operator == "and" and isinstance(raw, list):
+        changed = False
+        kept: list[Any] = []
+        for operand in raw:
+            reduced = (
+                _reduce_negated_conjunctions(operand, evaluate) if _is_object(operand) else operand
+            )
+            if reduced is not operand:
+                changed = True
+            if reduced is not True:
+                kept.append(reduced)
+        if not changed:
+            return condition
+        if not kept:
+            return True
+        if len(kept) == 1 and _is_object(kept[0]):
+            return cast(dict[str, Any], kept[0])
+        return {**condition, "operands": kept}
+    return condition
+
+
 def _negated_weapon_applicability(operands: list[Any]) -> Any:
     """``not attack-is {weapons: {keyword}}`` as a weapon exclusion: the effect applies to attacks
     with none of those weapon keywords. Any other negation needs the attack context."""
@@ -2059,6 +2124,21 @@ def _translate_conditional(
         return
     if guard is not condition:
         _translate_conditional({**node, "condition": guard}, source, opts, out)
+        return
+    reduced = _reduce_negated_conjunctions(
+        condition,
+        lambda leaf: _evaluate_condition(
+            leaf,
+            opts["context"],
+            opts["perspective"],
+            None if opts.get("grantedHolder") else source,
+        ),
+    )
+    if reduced is not condition:
+        if reduced is True:
+            _walk(effect, source, opts, out)
+            return
+        _translate_conditional({**node, "condition": reduced}, source, opts, out)
         return
     if _is_weapon_scoped_condition(condition):
         applicability = _condition_to_applicability(

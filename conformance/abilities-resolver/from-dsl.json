@@ -9132,6 +9132,458 @@
       }
     },
     {
+      "caseId": "canonical/negated-conjunction/unit-operand-true-gates-per-weapon",
+      "abilityId": "fabricated-negated-conjunction",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-negated-conjunction",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "ranged"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "attack-is",
+                      "parameters": {
+                        "attack_type": "ranged"
+                      }
+                    },
+                    {
+                      "type": "attack-is",
+                      "parameters": {
+                        "weapons": {
+                          "keyword": {
+                            "keyword_id": "blast"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "ones"
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/negated-conjunction/enclosing-operand-fails",
+      "abilityId": "fabricated-negated-conjunction",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-negated-conjunction",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "ranged"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "attack-is",
+                      "parameters": {
+                        "attack_type": "ranged"
+                      }
+                    },
+                    {
+                      "type": "attack-is",
+                      "parameters": {
+                        "weapons": {
+                          "keyword": {
+                            "keyword_id": "blast"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/negated-conjunction/unit-operand-false-holds-outright",
+      "abilityId": "fabricated-negated-conjunction",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-negated-conjunction",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "attack_type": "ranged"
+                  }
+                },
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "weapons": {
+                      "keyword": {
+                        "keyword_id": "blast"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "ones"
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/negated-conjunction/unit-operand-undecided",
+      "abilityId": "fabricated-negated-conjunction",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-negated-conjunction",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "battle-round",
+                  "parameters": {
+                    "min": 3
+                  }
+                },
+                {
+                  "type": "attack-is",
+                  "parameters": {
+                    "weapons": {
+                      "keyword": {
+                        "keyword_id": "blast"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"not\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"min\":3},\"type\":\"battle-round\"}",
+          "attacker:{\"parameters\":{\"weapons\":{\"keyword\":{\"keyword_id\":\"blast\"}}},\"type\":\"attack-is\"}"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/target-debuff/toughness-on-designated-target",
+      "abilityId": "fabricated-target-debuff",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-target-debuff",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": {
+          "owner": "enemy",
+          "designated": "afflicted"
+        },
+        "modifier": {
+          "stat": "T",
+          "operation": "subtract",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "targetDesignations": [
+          "afflicted"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "toughness-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/target-debuff/save-on-designated-target",
+      "abilityId": "fabricated-target-debuff",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-target-debuff",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": {
+          "owner": "enemy",
+          "designated": "afflicted"
+        },
+        "modifier": {
+          "stat": "Sv",
+          "operation": "worsen",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "targetDesignations": [
+          "afflicted"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "save-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/target-debuff/target-not-designated",
+      "abilityId": "fabricated-target-debuff",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-target-debuff",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": {
+          "owner": "enemy",
+          "designated": "afflicted"
+        },
+        "modifier": {
+          "stat": "T",
+          "operation": "subtract",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "targetDesignations": []
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/target-debuff/designation-undecided",
+      "abilityId": "fabricated-target-debuff",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-target-debuff",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": {
+          "owner": "enemy",
+          "designated": "afflicted"
+        },
+        "modifier": {
+          "stat": "Sv",
+          "operation": "worsen",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "unit-filter target: identity, state or model membership is unresolved"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/target-debuff/toughness-on-defender",
+      "abilityId": "fabricated-target-debuff",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-target-debuff",
+        "abilityKind": "army"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "defender",
+        "modifier": {
+          "stat": "T",
+          "operation": "subtract",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "toughness-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/scenario/rule-active-option",
       "abilityId": "fabricated-scenario",
       "source": {
