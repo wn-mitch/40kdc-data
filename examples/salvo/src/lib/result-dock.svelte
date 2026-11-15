@@ -3,12 +3,12 @@
   // change to a toggle has no visible result without scrolling. This bar pins the
   // combined answer to the bottom of the viewport and links down to the full
   // projection; it hides while the projection itself is on screen.
-  import type { AttributedStage } from "@alpaca-software/40kdc-data";
+  import { DAMAGE_DEALT, type AttributedStage } from "@alpaca-software/40kdc-data";
   import { fmt, stageOf } from "./projection-model.js";
 
   let { aggregate, modelCount }: { aggregate: AttributedStage[]; modelCount: number } = $props();
 
-  const damage = $derived(stageOf(aggregate, "after-fnp")?.expected);
+  const damage = $derived(stageOf(aggregate, DAMAGE_DEALT)?.expected);
   const killed = $derived(stageOf(aggregate, "models-killed")?.expected);
 
   let projectionVisible = $state(false);

@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  DAMAGE_DEALT,
+  DAMAGE_DEALT_MEASURES,
   attributeSelectedProfile,
   attributeStages,
   crunch,
@@ -46,7 +48,7 @@ function lineTotal(unitId: string, firing: Map<string, number>, context: EngineC
     const models = firing.get(line.id);
     if (!models) return sum;
     const out = crunch(lineInput(unitId, line, models, buffs, context), ds);
-    return sum + out.stages.find((stage) => stage.name === "after-fnp")!.expected;
+    return sum + out.damageDealt;
   }, 0);
 }
 
@@ -75,8 +77,8 @@ describe("selectLines", () => {
 
     for (const weapon of shared.selected) {
       const line = linesOf("defiler", context).find((candidate) => candidate.id === lineId("defiler", weapon.weaponId, weapon.profileIndex))!;
-      const salvo = attributeStages(lineInput("defiler", line, selection.firing.get(line.id)!, buffs, context), ds)
-        .find((stage) => stage.name === "after-fnp")!;
+      const salvo = attributeStages(lineInput("defiler", line, selection.firing.get(line.id)!, buffs, context), ds, { measures: DAMAGE_DEALT_MEASURES })
+        .find((stage) => stage.name === DAMAGE_DEALT)!;
       const matrix = attributeSelectedProfile({ dataset: ds, unit: loadout.unit, selected: weapon, target, buffs, context })!;
       expect(salvo.baseline).toBeCloseTo(matrix.baseline, 9);
       expect(salvo.lifts.map((lift) => lift.delta)).toEqual(matrix.lifts.map((lift) => lift.delta));

@@ -19,27 +19,28 @@ const every = dataset.forGameMode("all");
 const faction = resolveFactionContext(dataset, "tau-empire");
 const target = resolveTarget(dataset, dataset.targetProfiles.get("geq-guardsmen")!)!;
 
-function cellFor(factionId: string, phase: "shooting" | "fight", extra: Record<string, string> = {}, view = dataset) {
+function cellFor(factionId: string, phase: "shooting" | "fight", extra: Record<string, string> = {}, view = dataset, targetId = "geq-guardsmen") {
+  const cellTarget = targetId === "geq-guardsmen" ? target : resolveTarget(dataset, dataset.targetProfiles.get(targetId)!)!;
   const config = parseMatrixConfig({
     HC_FACTIONS: factionId,
-    HC_TARGETS: "geq-guardsmen",
+    HC_TARGETS: targetId,
     HC_PHASES: phase,
     HC_BODYGUARDS: "1",
     HC_TOP: "1",
     HC_DEEP: "1",
     HC_OUTPUT: "ledger.json",
     ...extra,
-  }, { factionIds: new Set([factionId]), targetIds: ["geq-guardsmen"] });
+  }, { factionIds: new Set([factionId]), targetIds: [targetId] });
   const context = factionId === "tau-empire" && view === dataset ? faction : resolveFactionContext(view, factionId);
-  return runDamageCell({ dataset: view, config, faction: context, target, phase });
+  return runDamageCell({ dataset: view, config, faction: context, target: cellTarget, phase });
 }
 
 const tauCell = (extra: Record<string, string> = {}) => cellFor("tau-empire", "shooting", extra);
 
 describe("stack damage ledger", () => {
   const cell = tauCell();
-  // Broadsides take Missile Drones, and bring Retaliation Cadre.
-  const broadside = tauCell({ HC_BODYGUARDS: "3" });
+  // Against Intercessors Broadsides win: they take Missile Drones, and bring Retaliation Cadre.
+  const broadside = cellFor("tau-empire", "shooting", { HC_BODYGUARDS: "3" }, dataset, "meq-intercessors");
   const entry = (abilityId: string, side: "attacker" | "target" = "attacker", from = cell) =>
     from.ledger.filter((candidate) => candidate.abilityId === abilityId && candidate.side === side);
 
@@ -182,16 +183,19 @@ describe("stack damage ledger", () => {
     expect(pechra(session.memberBuffs(spec, leader, undefined, loadouts(0)))).toBe(false);
     expect(pechra(session.memberBuffs(spec, leader, undefined, loadouts(1)))).toBe(true);
 
-    // The leader's final search runs under the bodyguard's chosen loadout.
-    const searched: Buff[][] = [];
+    // The leader's reported loadout was searched under the bodyguard's chosen loadout.
+    const searched: Array<{ buffs: Buff[]; result: ReturnType<typeof session.bestLoadout> }> = [];
     const bestLoadout = session.bestLoadout.bind(session);
     vi.spyOn(session, "bestLoadout").mockImplementation((member, buffs, ...rest) => {
-      if (member.id === "kroot-war-shaper") searched.push(buffs);
-      return bestLoadout(member, buffs, ...rest);
+      const found = bestLoadout(member, buffs, ...rest);
+      if (member.id === "kroot-war-shaper") searched.push({ buffs, result: found });
+      return found;
     });
     const result = session.scoreStack(spec);
     const carried = (result.members[0]!.loadout.counts.get("pechra") ?? 0) > 0;
-    expect(pechra(searched.at(-1)!)).toBe(carried);
+    const reported = searched.filter((entry) => entry.result === result.members[1]!.loadout);
+    expect(reported.length).toBeGreaterThan(0);
+    for (const entry of reported) expect(pechra(entry.buffs)).toBe(carried);
   });
 });
 

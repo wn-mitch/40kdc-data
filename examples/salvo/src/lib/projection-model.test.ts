@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { AttributedStage, BuffSource, Dataset, Stage, StageLift } from "@alpaca-software/40kdc-data";
+import { DAMAGE_DEALT, type AttributedStage, type BuffSource, type Dataset, type StageLift } from "@alpaca-software/40kdc-data";
 import {
   STAGE_COLUMNS,
   aggregateStages,
@@ -12,14 +12,17 @@ import {
 
 const manual = (label: string): BuffSource => ({ kind: "manual", label });
 
-/** A full 7-stage attribution where only after-fnp carries interesting numbers. */
+/**
+ * A full attribution where only after-fnp and damage dealt carry interesting numbers: the same
+ * ones unless `dealt` is given (no damage lost past a model's Wounds).
+ */
 function lineWith(afterFnp: {
   expected: number;
   baseline: number;
   lifts?: StageLift[];
   residual?: number;
-}): { attributed: AttributedStage[] } {
-  const blank = (name: Stage["name"]): AttributedStage => ({
+}, dealt = afterFnp): { attributed: AttributedStage[] } {
+  const blank = (name: AttributedStage["name"]): AttributedStage => ({
     name,
     expected: 1,
     detail: "",
@@ -29,22 +32,23 @@ function lineWith(afterFnp: {
     intrinsics: [],
   });
   return {
-    attributed: STAGE_COLUMNS.map((c) =>
-      c.name === "after-fnp"
+    attributed: STAGE_COLUMNS.map((c) => {
+      const measured = c.name === "after-fnp" ? afterFnp : c.name === DAMAGE_DEALT ? dealt : undefined;
+      return measured
         ? {
-            ...blank("after-fnp"),
-            expected: afterFnp.expected,
-            baseline: afterFnp.baseline,
-            lifts: afterFnp.lifts ?? [],
-            residual: afterFnp.residual ?? 0,
+            ...blank(c.name),
+            expected: measured.expected,
+            baseline: measured.baseline,
+            lifts: measured.lifts ?? [],
+            residual: measured.residual ?? 0,
           }
-        : blank(c.name),
-    ),
+        : blank(c.name);
+    }),
   };
 }
 
 describe("STAGE_COLUMNS", () => {
-  it("walks the 7 pipeline stages in engine order", () => {
+  it("walks the pipeline stages in engine order, with damage dealt before kills", () => {
     expect(STAGE_COLUMNS.map((c) => c.name)).toEqual([
       "attacks",
       "hits",
@@ -52,6 +56,7 @@ describe("STAGE_COLUMNS", () => {
       "unsaved",
       "damage",
       "after-fnp",
+      "damage-dealt",
       "models-killed",
     ]);
   });
@@ -172,6 +177,18 @@ describe("aggregateStages", () => {
     expect(killed.lifts).toHaveLength(2);
     for (const l of killed.lifts) expect(l.delta).toBeCloseTo(1);
     expect(killed.residual).toBe(0);
+  });
+
+  it("counts kills from the damage dealt, not the damage before overkill is lost", () => {
+    // Two D3 lines into W1 models: 6 damage after FNP each, but only 2 wounds dealt each.
+    const agg = aggregateStages([
+      lineWith({ expected: 6, baseline: 3 }, { expected: 2, baseline: 1 }),
+      lineWith({ expected: 6, baseline: 3 }, { expected: 2, baseline: 1 }),
+    ], 1, 10);
+    expect(stageOf(agg, "after-fnp")!.expected).toBe(12);
+    expect(stageOf(agg, DAMAGE_DEALT)!.expected).toBe(4);
+    expect(stageOf(agg, "models-killed")!.expected).toBe(4);
+    expect(stageOf(agg, "models-killed")!.baseline).toBe(2);
   });
 
   it("guards the zero-wounds target", () => {

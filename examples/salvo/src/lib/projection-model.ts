@@ -4,28 +4,32 @@
  * can carry unit tests; the reactive `$derived` plumbing stays in the
  * component.
  */
-import type {
-  AttributedStage,
-  BuffSource,
-  Dataset,
-  Stage,
-  StageLift,
+import {
+  DAMAGE_DEALT,
+  type AttributedStage,
+  type BuffSource,
+  type Dataset,
+  type StageLift,
 } from "@alpaca-software/40kdc-data";
 
-/** The 7 pipeline stages as ordered columns, abbreviated with a full title. */
-export const STAGE_COLUMNS: { name: Stage["name"]; short: string; full: string }[] = [
+/**
+ * The pipeline stages as ordered columns, abbreviated with a full title. "Dealt" is the damage
+ * after Feel No Pain that reaches models: each attack's damage past one model's Wounds is lost.
+ */
+export const STAGE_COLUMNS: { name: AttributedStage["name"]; short: string; full: string }[] = [
   { name: "attacks", short: "Atk", full: "Attacks" },
   { name: "hits", short: "Hit", full: "Hits" },
   { name: "wounds", short: "Wnd", full: "Wounds" },
   { name: "unsaved", short: "Uns", full: "Unsaved" },
   { name: "damage", short: "Dmg", full: "Damage" },
   { name: "after-fnp", short: "FNP", full: "After FNP" },
+  { name: DAMAGE_DEALT, short: "Dealt", full: "Damage dealt (overkill lost)" },
   { name: "models-killed", short: "Kill", full: "Models killed" },
 ];
 
 export function stageOf(
   attributed: AttributedStage[],
-  name: Stage["name"],
+  name: AttributedStage["name"],
 ): AttributedStage | undefined {
   return attributed.find((s) => s.name === name);
 }
@@ -64,9 +68,9 @@ const EPS = 1e-6;
  * The "Combined" stages: one AttributedStage per pipeline stage, decomposed
  * the same way per-line cells are so the aggregate cells carry breakdowns
  * too. Stages 1–6 sum by linearity (expected, baseline, residual, and
- * per-source lifts all add); models-killed is NOT additive — its lift is
- * recomputed through the cap formula on the summed after-fnp, never summed
- * from per-line kills.
+ * per-source lifts all add), as does damage dealt; models-killed is NOT
+ * additive — its lift is recomputed through the cap formula on the summed
+ * damage dealt, never summed from per-line kills.
  *
  * `included` must already be filtered to the lines in play (not excluded, no
  * crunch error). `W` and `modelCount` describe the target.
@@ -76,11 +80,11 @@ export function aggregateStages(
   W: number,
   modelCount: number,
 ): AttributedStage[] {
-  const killed = (afterFnp: number): number =>
-    W > 0 ? Math.min(modelCount, afterFnp / W) : 0;
+  const killed = (dealt: number): number =>
+    W > 0 ? Math.min(modelCount, dealt / W) : 0;
 
   // Sum a source-keyed lift map across the included lines for one stage.
-  function sumLifts(name: Stage["name"]): Map<string, StageLift> {
+  function sumLifts(name: AttributedStage["name"]): Map<string, StageLift> {
     const map = new Map<string, StageLift>();
     for (const r of included) {
       for (const l of stageOf(r.attributed, name)?.lifts ?? []) {
@@ -94,7 +98,7 @@ export function aggregateStages(
   }
 
   const out: AttributedStage[] = [];
-  const additive: Stage["name"][] = ["attacks", "hits", "wounds", "unsaved", "damage", "after-fnp"];
+  const additive: AttributedStage["name"][] = ["attacks", "hits", "wounds", "unsaved", "damage", "after-fnp", DAMAGE_DEALT];
   for (const name of additive) {
     let expected = 0;
     let baseline = 0;
@@ -120,20 +124,20 @@ export function aggregateStages(
   }
 
   // models-killed via the aggregate (non-additive) path.
-  const sumAfterFnp = included.reduce(
-    (s, r) => s + (stageOf(r.attributed, "after-fnp")?.expected ?? 0),
+  const sumDealt = included.reduce(
+    (s, r) => s + (stageOf(r.attributed, DAMAGE_DEALT)?.expected ?? 0),
     0,
   );
-  const sumAfterFnpBaseline = included.reduce(
-    (s, r) => s + (stageOf(r.attributed, "after-fnp")?.baseline ?? 0),
+  const sumDealtBaseline = included.reduce(
+    (s, r) => s + (stageOf(r.attributed, DAMAGE_DEALT)?.baseline ?? 0),
     0,
   );
-  const killedExpected = killed(sumAfterFnp);
-  const killedBaseline = killed(sumAfterFnpBaseline);
+  const killedExpected = killed(sumDealt);
+  const killedBaseline = killed(sumDealtBaseline);
   const killedLifts: StageLift[] = [];
   let killedLiftSum = 0;
-  for (const { source, delta } of sumLifts("after-fnp").values()) {
-    const d = killedExpected - killed(sumAfterFnp - delta);
+  for (const { source, delta } of sumLifts(DAMAGE_DEALT).values()) {
+    const d = killedExpected - killed(sumDealt - delta);
     killedLiftSum += d;
     if (Math.abs(d) > EPS) killedLifts.push({ source, delta: d });
   }

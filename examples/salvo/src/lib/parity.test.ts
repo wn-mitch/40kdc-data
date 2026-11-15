@@ -3,7 +3,7 @@
  * scenario must score the same total, fire the same lines and attribute the same lifts.
  */
 import { describe, expect, it } from "vitest";
-import { Dataset, resolveTarget, type AttributedStage, type Buff, type ResolvedTarget, type StageLift } from "@alpaca-software/40kdc-data";
+import { DAMAGE_DEALT, Dataset, resolveTarget, type AttributedStage, type Buff, type ResolvedTarget, type StageLift } from "@alpaca-software/40kdc-data";
 
 // The matrix session and the raw bundle are not part of the package's public surface; the test reads them from the build.
 import { RAW_DATA } from "../../../../tools/dist/data/bundle.generated.js";
@@ -135,7 +135,7 @@ describe("Salvo and the damage matrix", () => {
       const line = run.lines.find((candidate) => candidate.id === lineId(run.member.memberId, weapon.weaponId, weapon.profileIndex))!;
       const result = crunchLine({ ds: run.ds, line, owner: run.member.unit.raw, models: weapon.count, target: run.salvoTarget, buffs: run.buffs, context: run.context });
       expect(result.error).toBeUndefined();
-      const stage = stageOf(result.attributed, "after-fnp") as AttributedStage;
+      const stage = stageOf(result.attributed, DAMAGE_DEALT) as AttributedStage;
       expect(stage.expected).toBeCloseTo(weapon.damage, 9);
       expect(stage.baseline).toBeCloseTo(expected.baseline, 9);
       expect(stage.residual).toBeCloseTo(expected.residual, 9);

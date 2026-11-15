@@ -77,8 +77,8 @@
 {#snippet headline(stages: AttributedStage[])}
   <div class="wcard-headline">
     <span class="metric">
-      <span class="metric-label" title="Expected damage after feel-no-pain">damage</span>
-      <span class="metric-num">{fmt(stageOf(stages, "after-fnp")?.expected ?? NaN)}</span>
+      <span class="metric-label" title="Expected damage dealt after feel-no-pain; damage past a model's wounds is lost">damage</span>
+      <span class="metric-num">{fmt(stageOf(stages, "damage-dealt")?.expected ?? NaN)}</span>
     </span>
     <span class="metric">
       <span class="metric-label" title="Expected models killed">killed</span>

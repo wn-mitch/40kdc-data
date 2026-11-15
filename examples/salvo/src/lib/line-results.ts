@@ -3,6 +3,7 @@
  * leave-one-out attribution of every stage.
  */
 import {
+  DAMAGE_DEALT_MEASURES,
   attributeStages,
   loadoutHitModifier,
   profileApplicableBuffs,
@@ -118,6 +119,7 @@ export function crunchLine(input: {
         hitModifier: owner && profile ? loadoutHitModifier(owner, profile, context) : 0,
       }),
       ds,
+      { measures: DAMAGE_DEALT_MEASURES },
     );
   };
   try {

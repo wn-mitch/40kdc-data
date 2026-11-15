@@ -18,7 +18,7 @@ import { attributeSelectedProfile, crunchProfileScorer, profileApplicableBuffs, 
 import { translationWarnings } from "./translation-warnings.js";
 import { loadoutLeverBuffs, namedLoadoutWargear, surfacedByLoadout, wargearRules, wargearTranslation, type WargearRules } from "./wargear-levers.js";
 import { combinedWargear, equippedBuffs, loadoutWargear, phaseScoredItem, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrants } from "./weapon-grants.js";
-import { equippedLevers, othersEquippedBuffs, othersUnequippedKey, settleMemberLoadouts, type MemberLoadouts } from "./member-loadouts.js";
+import { equippedLevers, othersEquippedBuffs, othersUnequippedKey, sameLoadoutCounts, settleMemberLoadouts, type MemberLoadouts } from "./member-loadouts.js";
 import { activationPossible, filterStackEligibleAbilities, filterStackableStratagems, unitLookup } from "./stratagem-eligibility.js";
 import { combinedKeywords, issuesOrders, ordersReach } from "./orders.js";
 import type {
@@ -494,11 +494,50 @@ export class DamageScoringSession {
     const cached = this.stackCache.get(key);
     if (cached) return cached;
     this.stackEvaluations += 1;
-    const members = settleMemberLoadouts(spec.members, (member, chosen) =>
-      this.bestLoadout(member.unit, this.memberBuffs(spec, member, undefined, chosen), this.state.contextFor(spec, member), this.perLoadoutBuffs(spec, member, chosen)));
+    const respond = (member: StackMember, chosen?: MemberLoadouts) =>
+      this.bestLoadout(member.unit, this.memberBuffs(spec, member, undefined, chosen), this.state.contextFor(spec, member), this.perLoadoutBuffs(spec, member, chosen));
+    const members = this.jointMemberLoadouts(spec, settleMemberLoadouts(spec.members, respond), respond);
     const result = { spec, total: members.reduce((sum, member) => sum + member.loadout.total, 0), members };
     this.stackCache.set(key, result);
     return result;
+  }
+
+  /**
+   * Settled loadouts, improved where one member's best loadout for itself costs the stack: each
+   * member picks the loadout that scores it most, so one that drops an item whose rule buffs the
+   * others (a leader's shield granting the unit +1 to Wound) can lower the stack's total. For each
+   * member whose out-of-the-box loadout would change another member's buffs, that loadout is
+   * scored with the others answering it, and kept when the stack's total rises.
+   */
+  private jointMemberLoadouts(
+    spec: StackSpec,
+    settled: { member: StackMember; loadout: UnitLoadoutResult }[],
+    respond: (member: StackMember, chosen?: MemberLoadouts) => UnitLoadoutResult,
+  ): { member: StackMember; loadout: UnitLoadoutResult }[] {
+    if (spec.members.length < 2) return settled;
+    const total = (members: readonly { loadout: UnitLoadoutResult }[]) => members.reduce((sum, { loadout }) => sum + loadout.total, 0);
+    const chosenOf = (members: readonly { member: StackMember; loadout: UnitLoadoutResult }[]): MemberLoadouts =>
+      new Map(members.map(({ member, loadout }) => [member.unit.id, loadout.counts]));
+    const othersKey = (member: StackMember, chosen: MemberLoadouts) => spec.members.filter((other) => other !== member)
+      .map((other) => `${othersUnequippedKey(spec, other, chosen)}#${this.perLoadoutBuffs(spec, other, chosen)?.key ?? ""}`).join("~");
+    let best = settled;
+    for (const member of spec.members) {
+      const current = best.find((entry) => entry.member === member)!;
+      const base = this.scaffold(member.unit).base;
+      if (sameLoadoutCounts(current.loadout.counts, base)) continue;
+      const chosen = chosenOf(best);
+      const pinned = new Map(chosen).set(member.unit.id, base);
+      if (othersKey(member, pinned) === othersKey(member, chosen)) continue;
+      const context = this.state.contextFor(spec, member);
+      const own = this.loadoutSpace(member.unit, this.memberBuffs(spec, member, undefined, pinned), context, this.perLoadoutBuffs(spec, member, pinned));
+      if (!own.legal(base)) continue;
+      const candidate = spec.members.map((other) => ({
+        member: other,
+        loadout: other === member ? own.score(base) : respond(other, pinned),
+      }));
+      if (total(candidate) > total(best)) best = candidate;
+    }
+    return best;
   }
 
   /** How a member's buffs follow its loadout, when its rules read `unit-wargear`; `chosen` as in {@link memberBuffs}. */

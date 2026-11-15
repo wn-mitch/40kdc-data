@@ -33,6 +33,8 @@ export {
 } from "./engine.js";
 export {
   attributeStages,
+  DAMAGE_DEALT,
+  DAMAGE_DEALT_MEASURES,
   type AttributedStage,
   type StageLift,
 } from "./attribution.js";

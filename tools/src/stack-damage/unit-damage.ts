@@ -6,6 +6,8 @@
  */
 import {
   attributeStages,
+  DAMAGE_DEALT,
+  DAMAGE_DEALT_MEASURES,
   crunch,
   profileCanTarget,
   type Buff,
@@ -249,13 +251,17 @@ export function crunchProfileScorer(
       return null;
     }
     return {
-      damage: output.stages.find((stage) => stage.name === "after-fnp")?.expected ?? 0,
-      stages: output.stages.map((stage) => ({ name: stage.name, expected: stage.expected })),
+      // Each attack's damage past one model's Wounds is lost: the score is the wounds that land.
+      damage: output.damageDealt,
+      stages: [
+        ...output.stages.map((stage) => ({ name: stage.name, expected: stage.expected })),
+        { name: DAMAGE_DEALT, expected: output.damageDealt },
+      ],
     };
   };
 }
 
-/** How much each toggleable buff group lifts a selected profile's damage after Feel No Pain. */
+/** How much each toggleable buff group lifts a selected profile's damage dealt (overkill lost). */
 export interface DamageAttribution {
   /** Damage with every buff group removed; weapon keywords stay. */
   baseline: number;
@@ -283,8 +289,8 @@ export function attributeSelectedProfile(args: {
     buffs: args.buffs,
     context: args.context,
     hitModifier: args.selected.hitModifier,
-  }), args.dataset);
-  const damage = stages.find((stage) => stage.name === "after-fnp");
+  }), args.dataset, { measures: DAMAGE_DEALT_MEASURES });
+  const damage = stages.find((stage) => stage.name === DAMAGE_DEALT);
   return damage ? { baseline: damage.baseline, lifts: damage.lifts, residual: damage.residual } : null;
 }
 

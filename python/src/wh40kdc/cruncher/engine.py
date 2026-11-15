@@ -757,19 +757,53 @@ def crunch_model(
     )
 
     # 7. Models killed
+    # One attack's damage goes to one model and what exceeds its Wounds is lost; Feel No Pain
+    # rolls for each wound before that. Devastating Wounds' mortal wounds are capped the same
+    # way; mortal wounds an ability inflicts on a roll carry over. Each stream keeps its share of
+    # the expected damage above (re-roll-one gains included), scaled by what the cap leaves of it.
     wounds_stat = unit_profile["W"]
-    expected_models_killed = (
-        min(target_model_count, after_fnp / wounds_stat) if wounds_stat > 0 else 0
+    if critical is not None:
+        main_capped = unsaved_regular * capped_damage(
+            per_attack["distribution"], p_survive_all, wounds_stat
+        ) + unsaved_critical * capped_damage(
+            per_critical["distribution"], p_survive_all, wounds_stat
+        )
+        main_raw = (
+            unsaved_regular * damage_per_hit + unsaved_critical * per_critical["expected"]
+        ) * p_survive_all
+    else:
+        main_capped = unsaved * capped_damage(
+            per_attack["distribution"], p_survive_all, wounds_stat
+        )
+        main_raw = unsaved * damage_per_hit * p_survive_all
+    mortal_survive = p_survive_all * p_survive_mortal
+    devastating_raw = mortal_wounds_stream * per_critical["expected"] * mortal_survive
+    devastating_capped = mortal_wounds_stream * capped_damage(
+        per_critical["distribution"], mortal_survive, wounds_stat
     )
-    per_model = after_fnp / wounds_stat if wounds_stat > 0 else 0.0
+    ability_mortals = roll_mortals * mortal_survive
+    main_share = main_capped / main_raw if main_raw > 0 else 1
+    devastating_share = devastating_capped / devastating_raw if devastating_raw > 0 else 1
+    after_mortal_devastating = max(0, after_mortal - ability_mortals)
+    damage_dealt = (
+        after_main * main_share
+        + after_mortal_devastating * devastating_share
+        + (after_mortal - after_mortal_devastating)
+        if wounds_stat > 0
+        else 0
+    )
+    expected_models_killed = (
+        min(target_model_count, damage_dealt / wounds_stat) if wounds_stat > 0 else 0
+    )
+    per_model = damage_dealt / wounds_stat if wounds_stat > 0 else 0.0
     stages.append(
         {
             "name": "models-killed",
             "expected": expected_models_killed,
             "detail": (
                 f"W{wounds_stat} per model, {target_model_count} models in target; "
-                f"{after_fnp:.4f} damage / {wounds_stat} = {per_model:.4f} "
-                f"(capped at {target_model_count})"
+                f"{damage_dealt:.4f} damage with overkill lost / {wounds_stat} = "
+                f"{per_model:.4f} (capped at {target_model_count})"
             ),
         }
     )
@@ -827,7 +861,7 @@ def crunch_model(
             "unsaved": 1 - p_saved_critical,
             "damage": per_critical["distribution"],
         }
-    return {"stages": stages, "resolved": resolved}, model
+    return {"stages": stages, "resolved": resolved, "damageDealt": damage_dealt}, model
 
 
 # ---------------------------------------------------------------------------
@@ -1044,6 +1078,32 @@ def _num_str(n: float) -> str:
     if isinstance(n, float) and n.is_integer():
         return str(int(n))
     return str(n)
+
+
+def capped_damage(distribution: list[DamageOutcome], lost: float, wounds: float) -> float:
+    """Expected wounds one unsaved attack removes from a model with ``wounds`` Wounds.
+
+    Each point of its Damage is a wound lost with probability ``lost`` (Feel No Pain), and
+    wounds past the model's Wounds are lost. A fractional Damage value is capped in expectation.
+    """
+    total = 0.0
+    for entry in distribution:
+        value, probability = entry["value"], entry["probability"]
+        if probability == 0 or value <= 0:
+            continue
+        if value != int(value):
+            total += probability * min(value * lost, wounds)
+            continue
+        expected = 0.0
+        coefficient = 1.0
+        for removed in range(int(value) + 1):
+            if removed > 0:
+                coefficient = coefficient * (value - removed + 1) / removed
+            expected += (
+                coefficient * lost**removed * (1 - lost) ** (value - removed) * min(removed, wounds)
+            )
+        total += probability * expected
+    return total
 
 
 def _fnp_survival_fraction(fnp: dict[str, Any] | None) -> float:

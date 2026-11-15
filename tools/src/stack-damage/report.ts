@@ -51,7 +51,10 @@ export interface LeverReport {
 }
 
 export interface WinnerReport {
+  /** Expected wounds dealt after Feel No Pain, with each attack's damage past one model's Wounds lost. */
   expectedDamage: number;
+  /** Expected target models destroyed: the members' kills summed, capped at the target unit's size. */
+  expectedModelsKilled: number;
   members: MemberReport[];
   detachments: { id: string; detachmentPoints: number }[];
   enhancements: { id: string; bearerUnitId: string; points: number }[];

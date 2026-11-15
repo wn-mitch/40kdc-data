@@ -229,14 +229,13 @@ describe("stack damage loadout search performance", () => {
   it("preserves the bounded Tau scores and evaluates Broadside Battlesuits without truncation", () => {
     const dataset = Dataset.embedded();
     const faction = resolveFactionContext(dataset, "tau-empire");
-    const targetProfile = dataset.targetProfiles.get("geq-guardsmen");
-    const target = targetProfile ? resolveTarget(dataset, targetProfile) : null;
-    expect(target).not.toBeNull();
-
-    const run = (bodyguardLimit: number) => {
+    const run = (bodyguardLimit: number, targetId = "geq-guardsmen") => {
+      const targetProfile = dataset.targetProfiles.get(targetId);
+      const target = targetProfile ? resolveTarget(dataset, targetProfile) : null;
+      expect(target).not.toBeNull();
       const config = parseMatrixConfig({
         HC_FACTIONS: "tau-empire",
-        HC_TARGETS: "geq-guardsmen",
+        HC_TARGETS: targetId,
         HC_PHASES: "shooting",
         HC_BODYGUARDS: String(bodyguardLimit),
         HC_TOP: "1",
@@ -244,7 +243,7 @@ describe("stack damage loadout search performance", () => {
         HC_OUTPUT: "tau-broadside-regression.json",
       }, {
         factionIds: new Set(["tau-empire"]),
-        targetIds: ["geq-guardsmen"],
+        targetIds: [targetId],
       });
       return runDamageCell({
         dataset,
@@ -259,38 +258,45 @@ describe("stack damage loadout search performance", () => {
     // Drones penalise only attacks against the bearer's unit, never its own shooting. Experimental
     // Ammunition targets only a BATTLESUIT CHARACTER unit, so it cannot either.
     const tigerShark = run(1).winner;
-    expect(tigerShark?.expectedDamage).toBeCloseTo(29.004629629629623, 12);
+    expect(tigerShark?.members.map((member) => member.unitId)).toEqual(["ax-1-0-tiger-shark"]);
+    expect(tigerShark?.expectedDamage).toBeCloseTo(8.020833333333332, 12);
     expect(tigerShark?.stratagem?.id).not.toBe("the-arrokon-protocol-retaliation-cadre-tau-empire");
     expect(tigerShark?.stratagem?.id).not.toBe("experimental-ammunition-experimental-prototype-cadre-tau-empire");
-    expect(run(2).winner?.expectedDamage).toBeCloseTo(29.004629629629623, 12);
-    const withBroadside = run(3);
+    // Against one-Wound Guardsmen a Fireblade-led Breacher Team's many Damage 1 shots beat the
+    // Broadsides, whose damage past each model's single Wound is lost.
+    const geq = run(3).winner;
+    expect(geq?.members.map((member) => member.unitId)).toEqual(["breacher-team", "cadre-fireblade"]);
+    expect(geq?.expectedDamage).toBeCloseTo(22.976851851851848, 12);
+    expect(geq?.expectedModelsKilled).toBe(10);
+
+    const withBroadside = run(3, "meq-intercessors");
     expect(withBroadside.candidateCounts).toMatchObject({
       bodyguards: 3,
       memberStacks: 4,
       broadResults: 4,
       deepFinalists: 1,
     });
-    // Broadsides are BATTLESUITs; Guardsmen (10 models) meet Arro'kon's 6+ band for Sustained Hits 1,
-    // and every Broadside model is a BATTLESUIT, so Bonded Heroes' model-level +1 S and AP applies.
+    // Every Broadside model is a BATTLESUIT, so Bonded Heroes' model-level +1 S and AP applies.
     // Each model takes its two Missile Drones, whose pods its drone rule equips.
-    expect(withBroadside.winner?.expectedDamage).toBeCloseTo(55.200617283950606, 12);
+    expect(withBroadside.winner?.expectedDamage).toBeCloseTo(22.620370370370367, 12);
+    expect(withBroadside.winner?.expectedModelsKilled).toBeLessThanOrEqual(5);
     expect(withBroadside.winner?.selectedLevers.map((lever) => lever.id)).toContain("detachment:bonded-heroes-tau-empire");
-    expect(withBroadside.winner?.stratagem?.id).toBe("the-arrokon-protocol-retaliation-cadre-tau-empire");
     expect(withBroadside.winner?.members[0]).toMatchObject({
       unitId: "broadside-battlesuits",
       modelCount: 3,
       legalityErrors: [],
     });
-    // Each reported profile's attribution reconciles with its damage, and the Stratagem shows its lift.
+    expect(withBroadside.winner?.members[0]?.loadout).toContainEqual({ weaponId: "missile-drone", count: 6 });
+    // Each reported profile's attribution reconciles with the damage it deals, and Bonded Heroes shows its lift.
     const weapons = withBroadside.winner!.members.flatMap((member) => member.weapons);
     for (const weapon of weapons) {
       const attribution = weapon.attribution!;
       const lifted = attribution.lifts.reduce((sum, lift) => sum + lift.delta, 0);
-      expect(attribution.baseline + lifted + attribution.residual).toBeCloseTo(weapon.stages["after-fnp"], 9);
+      expect(attribution.baseline + lifted + attribution.residual).toBeCloseTo(weapon.stages["damage-dealt"], 9);
     }
-    const strat = weapons.flatMap((weapon) => weapon.attribution!.lifts)
-      .filter((lift) => lift.source.kind === "ability" && lift.source.abilityId.startsWith("the-arrokon-protocol"));
-    expect(strat.reduce((sum, lift) => sum + lift.delta, 0)).toBeGreaterThan(0);
+    const bonded = weapons.flatMap((weapon) => weapon.attribution!.lifts)
+      .filter((lift) => lift.source.kind === "ability" && lift.source.abilityId.startsWith("bonded-heroes"));
+    expect(bonded.reduce((sum, lift) => sum + lift.delta, 0)).toBeGreaterThan(0);
   }, 10_000);
 });
 

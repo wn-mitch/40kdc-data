@@ -277,7 +277,7 @@ export function addOrderIssuers(
   }
 }
 
-function winnerReport(dataset: Dataset, faction: FactionContext, session: DamageScoringSession, result: StackResult): WinnerReport {
+function winnerReport(dataset: Dataset, faction: FactionContext, session: DamageScoringSession, result: StackResult, targetModelCount: number): WinnerReport {
   const selected = session.selectedPoolLevers(result);
   const enhancements = selected.flatMap((lever) => {
     if (lever.cost?.points === undefined) return [];
@@ -319,8 +319,12 @@ function winnerReport(dataset: Dataset, faction: FactionContext, session: Damage
       : {}),
   }));
   const chosen = new Map(result.members.map(({ member, loadout }) => [member.unit.id, loadout.counts]));
+  // Each profile's kills are capped at the unit's size on their own; the stack's total is capped once more.
+  const kills = result.members.reduce((sum, { loadout }) => sum + loadout.selectedWeapons.reduce((total, weapon) =>
+    total + (weapon.stages.find((stage) => stage.name === "models-killed")?.expected ?? 0) * weapon.count, 0), 0);
   return {
     expectedDamage: result.total,
+    expectedModelsKilled: Math.min(targetModelCount, kills),
     members: result.members.map(({ member, loadout }) => ({
       unitId: member.unit.id,
       unitName: member.unit.name,
@@ -420,7 +424,7 @@ export function runDamageCell(input: {
   const offensiveWarnings = winner ? session.relevantWarnings(winner) : [];
   const unsupported = offensiveWarnings.map(({ sourceKind: _sourceKind, ...warning }) => warning);
   const defensiveWarnings = session.defensiveWarnings.map(({ sourceKind: _sourceKind, ...warning }) => warning);
-  const result = winner ? winnerReport(input.dataset, input.faction, session, winner) : null;
+  const result = winner ? winnerReport(input.dataset, input.faction, session, winner, input.target.modelCount) : null;
   const ledger = [...(winner ? buildLedger(session, winner) : []), ...unscoreableEntries(session)];
   const incomplete = ledger.some((entry) => entry.relevant) || (winner?.spec.detachmentIssues.length ?? 0) > 0 || result?.members.some((member) => member.legalityErrors.length > 0);
   return {

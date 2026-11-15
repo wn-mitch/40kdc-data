@@ -34,10 +34,14 @@ func resolveTarget(ds *Dataset, profile map[string]any) (*resolvedTarget, error)
 	return &resolvedTarget{profile: profile, unitRaw: unit.Raw, modelCount: modelCount}, nil
 }
 
+// damageDealtMeasure names, for stageValue, the wounds dealt with each attack's damage past one
+// model's Wounds lost, rather than a stage.
+const damageDealtMeasure = "damage-dealt"
+
 func (ds *Dataset) stageValue(weaponRaw map[string]any, profileIndex int, target *resolvedTarget, phase string, modelsFiring int, withinHalf bool, stageName string) (float64, error) {
 	ctx := map[string]any{"phase": phase, "withinHalfRange": withinHalf}
 	buffs := ds.defensiveBuffsFor(map[string]any{"unitId": getStr(target.unitRaw, "id"), "factionId": getStr(target.unitRaw, "faction_id")}, ctx)
-	stages, _, err := crunch(map[string]any{
+	stages, _, model, err := crunchModel(map[string]any{
 		"attacker":     map[string]any{"weapon": weaponRaw, "profileIndex": float64(profileIndex)},
 		"target":       map[string]any{"unit": target.unitRaw, "profileIndex": float64(0), "modelCount": float64(target.modelCount)},
 		"modelsFiring": float64(modelsFiring),
@@ -46,6 +50,9 @@ func (ds *Dataset) stageValue(weaponRaw map[string]any, profileIndex int, target
 	}, ds)
 	if err != nil {
 		return 0, err
+	}
+	if stageName == damageDealtMeasure {
+		return model.DamageDealt, nil
 	}
 	for _, st := range stages {
 		if st["name"] == stageName {
@@ -127,7 +134,7 @@ func loadoutCell(ds *Dataset, lines []loadoutLine, targetProfileID string, dista
 			continue
 		}
 		withinHalf := isRanged && distance <= rngV/2
-		d, err := ds.stageValue(weapon.Raw, line.profileIndex, target, phase, line.count, withinHalf, "after-fnp")
+		d, err := ds.stageValue(weapon.Raw, line.profileIndex, target, phase, line.count, withinHalf, damageDealtMeasure)
 		if err != nil {
 			return nil, err
 		}

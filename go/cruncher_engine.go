@@ -657,10 +657,36 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	stages = append(stages, stage("after-fnp", afterFnp))
 
 	// 7. Models killed
+	// One attack's damage goes to one model and what exceeds its Wounds is lost; Feel No Pain
+	// rolls for each wound before that. Devastating Wounds' mortal wounds are capped the same
+	// way; mortal wounds an ability inflicts on a roll carry over. Each stream keeps its share of
+	// the expected damage above (re-roll-one gains included), scaled by what the cap leaves of it.
 	woundsStat := numOr0(unitProfile["W"])
+	mainCapped := unsaved * cappedDamage(perAttack.distribution, pSurviveAll, woundsStat)
+	mainRaw := unsaved * damagePerHit * pSurviveAll
+	if critical != nil {
+		mainCapped = unsavedRegular*cappedDamage(perAttack.distribution, pSurviveAll, woundsStat) +
+			unsavedCritical*cappedDamage(perCritical.distribution, pSurviveAll, woundsStat)
+		mainRaw = (unsavedRegular*damagePerHit + unsavedCritical*perCritical.expected) * pSurviveAll
+	}
+	mortalSurvive := pSurviveAll * pSurviveMortal
+	devastatingRaw := mortalWoundsStream * perCritical.expected * mortalSurvive
+	devastatingCapped := mortalWoundsStream * cappedDamage(perCritical.distribution, mortalSurvive, woundsStat)
+	abilityMortals := rollMortals * mortalSurvive
+	share := func(capped, raw float64) float64 {
+		if raw > 0 {
+			return capped / raw
+		}
+		return 1
+	}
+	mainShare := share(mainCapped, mainRaw)
+	devastatingShare := share(devastatingCapped, devastatingRaw)
+	afterMortalDevastating := math.Max(0, afterMortal-abilityMortals)
+	damageDealt := 0.0
 	expectedModelsKilled := 0.0
 	if woundsStat > 0 {
-		expectedModelsKilled = math.Min(tmc, afterFnp/woundsStat)
+		damageDealt = afterMain*mainShare + afterMortalDevastating*devastatingShare + (afterMortal - afterMortalDevastating)
+		expectedModelsKilled = math.Min(tmc, damageDealt/woundsStat)
 	}
 	stages = append(stages, stage("models-killed", expectedModelsKilled))
 
@@ -691,6 +717,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		MortalWoundLost: pSurviveAll * pSurviveMortal,
 		Wounds:          woundsStat,
 		ModelCount:      tmc,
+		DamageDealt:     damageDealt,
 	}
 	for _, priced := range []struct {
 		on   bool
@@ -973,6 +1000,33 @@ func evalStatValue(v any) (float64, error) {
 
 func clampF(n, lo, hi float64) float64 {
 	return math.Max(lo, math.Min(hi, n))
+}
+
+// cappedDamage is the expected wounds one unsaved attack removes from a model with `wounds`
+// Wounds: each point of its Damage is a wound lost with probability `lost` (Feel No Pain), and
+// wounds past the model's Wounds are lost. A fractional Damage value is capped in expectation.
+func cappedDamage(distribution []DamageOutcome, lost, wounds float64) float64 {
+	total := 0.0
+	for _, outcome := range distribution {
+		value, probability := outcome.Value, outcome.Probability
+		if probability == 0 || value <= 0 {
+			continue
+		}
+		if value != math.Trunc(value) {
+			total += probability * math.Min(value*lost, wounds)
+			continue
+		}
+		expected := 0.0
+		coefficient := 1.0
+		for removed := 0.0; removed <= value; removed++ {
+			if removed > 0 {
+				coefficient = coefficient * (value - removed + 1) / removed
+			}
+			expected += coefficient * math.Pow(lost, removed) * math.Pow(1-lost, value-removed) * math.Min(removed, wounds)
+		}
+		total += probability * expected
+	}
+	return total
 }
 
 func fnpSurvivalFraction(f *fnpState) float64 {
