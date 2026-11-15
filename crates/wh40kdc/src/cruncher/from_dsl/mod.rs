@@ -21,6 +21,7 @@
 
 mod applicability;
 mod attack_scope;
+mod complement;
 pub(crate) mod conditions;
 mod damage_leaves;
 mod gated;
@@ -896,8 +897,28 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         Some("named-region-state") => leaves::named_region_state(node, opts, out),
         Some("conditional") => levers::conditional(node, opts, out),
         Some("rules-bundle" | "sequence") => {
-            for step in list(node.get("steps")) {
-                walk(step, opts, out);
+            let steps = list(node.get("steps"));
+            let floors = complement::complementary_floors(steps, opts);
+            for (step, floor) in steps.iter().zip(floors) {
+                match floor {
+                    None => walk(step, opts, out),
+                    Some(complement::Floor::Weaker) => walk(
+                        step.get("effect").unwrap_or(&Value::Null),
+                        opts,
+                        out,
+                    ),
+                    Some(complement::Floor::Stronger) => {
+                        let needs = step
+                            .get("condition")
+                            .and_then(Value::as_object)
+                            .map(|condition| levers::undecided_needs(condition, opts));
+                        out.unsupported.push((
+                            complement::COMPLEMENT_REASON.to_string(),
+                            step.clone(),
+                            needs,
+                        ));
+                    }
+                }
             }
         }
         Some("ability-part") => {

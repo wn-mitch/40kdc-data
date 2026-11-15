@@ -497,9 +497,21 @@ function walk(
       translateConditional(currentNode, source, opts, out);
       return;
     case "rules-bundle":
-    case "sequence":
-      for (const step of (currentNode.steps as unknown[]) ?? []) walk(step, source, opts, out);
+    case "sequence": {
+      const steps = (currentNode.steps as unknown[]) ?? [];
+      const floors = complementaryFloors(steps, source, opts);
+      for (const [index, step] of steps.entries()) {
+        const floor = floors.get(index);
+        if (floor === undefined) walk(step, source, opts, out);
+        else if (floor === "weaker") walk((step as Record<string, unknown>).effect, source, opts, out);
+        else out.unsupported.push({
+          reason: COMPLEMENT_REASON,
+          effectFragment: step,
+          needs: undecidedNeeds((step as { condition: Record<string, unknown> }).condition, opts.context, opts.perspective, opts.grantedHolder ? undefined : source),
+        });
+      }
       return;
+    }
     case "ability-part": {
       const partOpts = currentNode.duration === undefined && currentNode.usage == null ? opts : {
         ...opts,
@@ -1773,6 +1785,58 @@ function translateConditional(
   }
   if (!verdict) return;
   walk(effect, source, opts, out);
+}
+
+/** The reason the stronger of a complementary re-roll pair is reported under while its condition is undecided. */
+export const COMPLEMENT_REASON = "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies";
+
+/** JSON with object keys sorted, so equal values compare equal whatever their key order. */
+function stableJson(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(stableJson).join(",")}]`;
+  if (isObject(value)) return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${stableJson(value[key])}`).join(",")}}`;
+  return JSON.stringify(value) ?? "null";
+}
+
+/** How much of a roll a re-roll covers: a re-roll of a higher rank re-rolls every die a lower one does. */
+function rerollRank(modifier: Record<string, unknown>): number | undefined {
+  if (modifier.result_scope === "any-result") return 4;
+  return ({ ones: 1, "ones-and-twos": 2, "all-failures": 3 } as Record<string, number>)[String(modifier.subset)];
+}
+
+/** The re-roll effect's target and modifier without its coverage, which two comparable re-rolls share. */
+function rerollIdentity(effect: unknown): string | undefined {
+  if (!isObject(effect) || effect.type !== "re-roll" || !isObject(effect.modifier) || rerollRank(effect.modifier) === undefined) return undefined;
+  const { subset: _subset, result_scope: _scope, ...rest } = effect.modifier;
+  return stableJson({ target: effect.target, modifier: rest });
+}
+
+/**
+ * Steps of a sequence that form complementary conditionals ("C: A", "not C: B") whose condition is
+ * undecided and whose effects are re-rolls of the same roll, one covering the other. Exactly one of
+ * them applies, so the weaker always does: it is marked `weaker` (applied without its condition) and
+ * the stronger `stronger` (reported as needing the condition).
+ */
+function complementaryFloors(steps: readonly unknown[], source: BuffSource, opts: WalkOpts): Map<number, "weaker" | "stronger"> {
+  const floors = new Map<number, "weaker" | "stronger">();
+  const negationOf = (condition: unknown) =>
+    isObject(condition) && condition.operator === "not" && Array.isArray(condition.operands) && condition.operands.length === 1 ? condition.operands[0] : undefined;
+  const same = (left: unknown, right: unknown) => left !== undefined && stableJson(left) === stableJson(right);
+  for (let left = 0; left < steps.length; left++) {
+    for (let right = left + 1; right < steps.length; right++) {
+      if (floors.has(left) || floors.has(right)) continue;
+      const [a, b] = [steps[left], steps[right]];
+      if (!isObject(a) || !isObject(b) || a.type !== "conditional" || b.type !== "conditional") continue;
+      const positive = same(negationOf(a.condition), b.condition) ? b.condition : same(negationOf(b.condition), a.condition) ? a.condition : undefined;
+      if (!isObject(positive)) continue;
+      if (evaluateCondition(positive, opts.context, opts.perspective, opts.grantedHolder ? undefined : source) !== "unknown") continue;
+      const identity = rerollIdentity(a.effect);
+      if (identity === undefined || identity !== rerollIdentity(b.effect)) continue;
+      const [rankA, rankB] = [rerollRank((a.effect as { modifier: Record<string, unknown> }).modifier)!, rerollRank((b.effect as { modifier: Record<string, unknown> }).modifier)!];
+      floors.set(left, rankA <= rankB ? "weaker" : "stronger");
+      floors.set(right, rankA <= rankB ? "stronger" : "weaker");
+    }
+  }
+  return floors;
 }
 
 /** The reason a dice table's outcomes with no damage content are reported under. */

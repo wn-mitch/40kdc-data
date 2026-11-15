@@ -522,9 +522,7 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	case "conditional":
 		translateConditional(n, source, opts, out)
 	case "rules-bundle", "sequence":
-		for _, step := range getList(n, "steps") {
-			dslWalk(step, source, opts, out)
-		}
+		walkSequence(getList(n, "steps"), source, opts, out)
 	case "ability-part":
 		partOpts := opts
 		if n["duration"] != nil {

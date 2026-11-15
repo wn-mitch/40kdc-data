@@ -762,3 +762,43 @@ fn oath_policy_changes_never_apply_nested_rewards_immediately() {
     assert!(result.applied.is_empty() && result.activatable.is_empty());
     assert_eq!(result.unsupported.len(), 1);
 }
+
+/// Breaching Command: "re-roll a Hit roll of 1; within 6in of a friendly Battleline unit, re-roll
+/// the Hit roll instead". With no board state one branch still applies, so the weaker re-roll does.
+#[test]
+fn complementary_reroll_pair_applies_the_weaker_while_undecided() {
+    let ability = crate::Dataset::embedded()
+        .abilities
+        .get("breaching-command-adeptus-mechanicus")
+        .expect("breaching command is bundled");
+    let effect = serde_json::to_value(ability).unwrap()["effect"].clone();
+    let subsets = |result: &EffectTranslation| -> Vec<Value> {
+        result
+            .applied
+            .iter()
+            .map(|buff| serde_json::to_value(buff).unwrap()["contribution"]["subset"].clone())
+            .collect()
+    };
+
+    let undecided = run(effect.clone());
+    assert_eq!(subsets(&undecided), vec![json!("ones")]);
+    assert_eq!(undecided.unsupported.len(), 1);
+    assert_eq!(
+        undecided.unsupported[0].reason,
+        complement::COMPLEMENT_REASON
+    );
+    assert!(undecided.unsupported[0]
+        .needs
+        .as_ref()
+        .is_some_and(|needs| !needs.is_empty()));
+
+    let mut context = EngineContext::new(Phase::Shooting);
+    context.attacker_neighbours = Some(vec![crate::cruncher::ScenarioNeighbour {
+        keywords: vec!["ADEPTUS MECHANICUS".into(), "BATTLELINE".into()],
+        owner: crate::cruncher::NeighbourOwner::Friendly,
+        distance_inches: 3.0,
+    }]);
+    let near = effect_to_buffs(&effect, &src(), &context, TranslationPerspective::Attacker);
+    assert_eq!(subsets(&near), vec![json!("all-failures")]);
+    assert!(near.unsupported.is_empty());
+}

@@ -613,8 +613,27 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
     elif node_type == "conditional":
         _translate_conditional(node, source, opts, out)
     elif node_type in ("rules-bundle", "sequence"):
-        for step in node.get("steps") or []:
-            _walk(step, source, opts, out)
+        steps = node.get("steps") or []
+        floors = _complementary_floors(steps, source, opts)
+        for index, step in enumerate(steps):
+            floor = floors.get(index)
+            if floor is None:
+                _walk(step, source, opts, out)
+            elif floor == "weaker":
+                _walk(step.get("effect"), source, opts, out)
+            else:
+                out["unsupported"].append(
+                    {
+                        "reason": COMPLEMENT_REASON,
+                        "effectFragment": step,
+                        "needs": _undecided_needs(
+                            step["condition"],
+                            opts["context"],
+                            opts["perspective"],
+                            None if opts.get("grantedHolder") else source,
+                        ),
+                    }
+                )
     elif node_type == "ability-part":
         # Orders are issued at their own moment and last for the part's duration: each Order is a
         # lever for the attacks made while it lasts, as a stance option is.
@@ -2116,6 +2135,101 @@ def _translate_conditional(
         return
     if verdict:
         _walk(effect, source, opts, out)
+
+
+COMPLEMENT_REASON = (
+    "conditional: the stronger re-roll of a complementary pair needs its undecided condition; "
+    "the weaker applies"
+)
+"""The reason the stronger of a complementary re-roll pair is reported under while its condition
+is undecided."""
+
+_REROLL_SUBSET_RANK = {"ones": 1, "ones-and-twos": 2, "all-failures": 3}
+
+
+def _stable_json(value: Any) -> str:
+    """JSON with object keys sorted, so equal values compare equal whatever their key order."""
+    return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+
+def _reroll_rank(modifier: dict[str, Any]) -> int | None:
+    """How much of a roll a re-roll covers: a higher rank re-rolls every die a lower one does."""
+    if modifier.get("result_scope") == "any-result":
+        return 4
+    return _REROLL_SUBSET_RANK.get(str(modifier.get("subset")))
+
+
+def _reroll_identity(effect: Any) -> str | None:
+    """The re-roll effect's target and modifier without its coverage, which two comparable
+    re-rolls share."""
+    if not _is_object(effect) or effect.get("type") != "re-roll":
+        return None
+    modifier = effect.get("modifier")
+    if not _is_object(modifier) or _reroll_rank(modifier) is None:
+        return None
+    rest = {k: v for k, v in modifier.items() if k not in ("subset", "result_scope")}
+    identity: dict[str, Any] = {"modifier": rest}
+    if "target" in effect:
+        identity["target"] = effect["target"]
+    return _stable_json(identity)
+
+
+def _complementary_floors(
+    steps: list[Any], source: BuffSource, opts: dict[str, Any]
+) -> dict[int, str]:
+    """Steps of a sequence that form complementary conditionals ("C: A", "not C: B") whose
+    condition is undecided and whose effects are re-rolls of the same roll, one covering the
+    other. Exactly one of them applies, so the weaker always does: it is marked ``weaker``
+    (applied without its condition) and the stronger ``stronger`` (reported as needing it)."""
+    floors: dict[int, str] = {}
+    missing = object()
+
+    def negation_of(condition: Any) -> Any:
+        if (
+            _is_object(condition)
+            and condition.get("operator") == "not"
+            and isinstance(condition.get("operands"), list)
+            and len(condition["operands"]) == 1
+        ):
+            return condition["operands"][0]
+        return missing
+
+    def same(left: Any, right: Any) -> bool:
+        return left is not missing and _stable_json(left) == _stable_json(right)
+
+    for left in range(len(steps)):
+        for right in range(left + 1, len(steps)):
+            if left in floors or right in floors:
+                continue
+            a, b = steps[left], steps[right]
+            if not _is_object(a) or not _is_object(b):
+                continue
+            if a.get("type") != "conditional" or b.get("type") != "conditional":
+                continue
+            if same(negation_of(a.get("condition")), b.get("condition")):
+                positive = b.get("condition")
+            elif same(negation_of(b.get("condition")), a.get("condition")):
+                positive = a.get("condition")
+            else:
+                continue
+            if not _is_object(positive):
+                continue
+            verdict = _evaluate_condition(
+                positive,
+                opts["context"],
+                opts["perspective"],
+                None if opts.get("grantedHolder") else source,
+            )
+            if verdict != "unknown":
+                continue
+            identity = _reroll_identity(a.get("effect"))
+            if identity is None or identity != _reroll_identity(b.get("effect")):
+                continue
+            rank_a = _reroll_rank(a["effect"]["modifier"]) or 0
+            rank_b = _reroll_rank(b["effect"]["modifier"]) or 0
+            floors[left] = "weaker" if rank_a <= rank_b else "stronger"
+            floors[right] = "stronger" if rank_a <= rank_b else "weaker"
+    return floors
 
 
 def _stance_option_of(operand: Any) -> dict[str, str] | None:

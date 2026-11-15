@@ -6550,6 +6550,214 @@
       }
     },
     {
+      "abilityId": "breaching-command-adeptus-mechanicus",
+      "source": {
+        "kind": "ability",
+        "abilityId": "breaching-command-adeptus-mechanicus",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "owner": "friendly",
+                          "all_of": [
+                            "ADEPTUS MECHANICUS",
+                            "BATTLELINE"
+                          ]
+                        },
+                        "range": {
+                          "inches": 6
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "subset": "ones"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "ADEPTUS MECHANICUS",
+                        "BATTLELINE"
+                      ]
+                    },
+                    "range": {
+                      "inches": 6
+                    }
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "result_scope": "any-result"
+              }
+            }
+          }
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "ones"
+          }
+        ],
+        "unsupportedReasons": [
+          "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"within\":{\"of\":{\"all_of\":[\"ADEPTUS MECHANICUS\",\"BATTLELINE\"],\"owner\":\"friendly\"},\"range\":{\"inches\":6}}}},\"type\":\"matches\"}"
+        ],
+        "activatable": []
+      },
+      "_comment": "Complementary re-rolls on an undecided range: exactly one applies, so the weaker (re-roll 1s) applies and the full re-roll is reported as needing the condition."
+    },
+    {
+      "abilityId": "breaching-command-adeptus-mechanicus",
+      "source": {
+        "kind": "ability",
+        "abilityId": "breaching-command-adeptus-mechanicus",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerNeighbours": [
+          {
+            "keywords": [
+              "ADEPTUS MECHANICUS",
+              "BATTLELINE"
+            ],
+            "owner": "friendly",
+            "distanceInches": 3
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "owner": "friendly",
+                          "all_of": [
+                            "ADEPTUS MECHANICUS",
+                            "BATTLELINE"
+                          ]
+                        },
+                        "range": {
+                          "inches": 6
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "subset": "ones"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "ADEPTUS MECHANICUS",
+                        "BATTLELINE"
+                      ]
+                    },
+                    "range": {
+                      "inches": 6
+                    }
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "result_scope": "any-result"
+              }
+            }
+          }
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "all-failures"
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      },
+      "_comment": "The same pair with a Battleline neighbour within 6in: the condition holds, so the full re-roll applies alone."
+    },
+    {
       "caseId": "canonical/recipient-snapshot/attested-strength-after-detachment",
       "abilityId": "snapshot-example",
       "source": {
