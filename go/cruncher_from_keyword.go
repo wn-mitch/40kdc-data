@@ -44,9 +44,6 @@ func buffsFromKeyword(keywordID, weaponID string, effect any, parameters map[str
 	if !keywordAppliesToTarget(parameters, ctx) {
 		return nil
 	}
-	if keywordID == "blast" && parameters["value"] == nil {
-		return nil
-	}
 	if engineDispatchKeywords[keywordID] {
 		ref := map[string]any{"keyword_id": keywordID}
 		if parameters != nil {

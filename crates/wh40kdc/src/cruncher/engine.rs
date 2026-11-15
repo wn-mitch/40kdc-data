@@ -424,8 +424,12 @@ pub fn crunch_model(
             .map(|mc| mc.min.get())
             .unwrap_or(1)
     });
-    let blast_extra_per_model = match blast.and_then(|keyword| parameter(keyword, "value")) {
-        Some(value) => (target_model_count / 5) as f64 * eval_param_value(Some(value))?,
+    // Bare [BLAST] adds one attack per five target models; [BLAST X] adds X.
+    let blast_extra_per_model = match blast {
+        Some(keyword) => match parameter(keyword, "value") {
+            Some(value) => (target_model_count / 5) as f64 * eval_param_value(Some(value))?,
+            None => (target_model_count / 5) as f64,
+        },
         None => 0.0,
     };
     let models_firing = input.models_firing as f64;

@@ -57,13 +57,13 @@ describe("weapon keyword quantity boundaries", () => {
     }
   });
 
-  it("does not invent a Blast rating for an unparameterized DSL grant", () => {
+  it("scores an unrated Blast grant as one attack per five models, a rated one as its rating", () => {
     const input = inputFor("bolt-rifle", 0, 1, "intercessor-squad", { phase: "shooting" }, [], 10);
     const baseline = stage(crunch(input, ds), "attacks");
     input.buffs = [{ source: { kind: "manual", label: "Example grant" }, contribution: { type: "extra-keyword", keywordRef: { keyword_id: "blast" } } }];
-    expect(stage(crunch(input, ds), "attacks")).toBe(baseline);
-    input.buffs = [{ source: { kind: "manual", label: "Example rated grant" }, contribution: { type: "extra-keyword", keywordRef: { keyword_id: "blast", parameters: { value: 1 } } } }];
     expect(stage(crunch(input, ds), "attacks")).toBe(baseline + 2);
+    input.buffs = [{ source: { kind: "manual", label: "Example rated grant" }, contribution: { type: "extra-keyword", keywordRef: { keyword_id: "blast", parameters: { value: 2 } } } }];
+    expect(stage(crunch(input, ds), "attacks")).toBe(baseline + 4);
   });
 });
 

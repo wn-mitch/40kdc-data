@@ -69,7 +69,6 @@ export function buffsFromKeyword(args: {
     keywordId: args.keywordId,
   };
   if (!keywordAppliesToTarget(args.parameters, args.context)) return [];
-  if (args.keywordId === "blast" && args.parameters?.value === undefined) return [];
 
   if (ENGINE_DISPATCH_KEYWORDS.has(args.keywordId)) {
     const ref: WeaponKeywordRef = {

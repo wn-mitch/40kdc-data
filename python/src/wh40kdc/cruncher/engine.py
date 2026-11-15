@@ -266,7 +266,8 @@ def crunch_model(
     if target_model_count is None:
         target_model_count = 1
     blast_params = (blast.get("parameters") or {}) if blast else {}
-    blast_value = blast_params.get("value") if "value" in blast_params else 0
+    # Bare [BLAST] adds one attack per five target models; [BLAST X] adds X.
+    blast_value = blast_params.get("value") if "value" in blast_params else 1
     blast_extra = (
         math.floor(target_model_count / 5) * eval_stat_value(blast_value)
         if blast

@@ -75,8 +75,6 @@ def buffs_from_keyword(
     }
     if not _keyword_applies_to_target(parameters, context):
         return []
-    if keyword_id == "blast" and (parameters is None or "value" not in parameters):
-        return []
 
     if keyword_id in ENGINE_DISPATCH_KEYWORDS:
         ref: dict[str, Any] = {"keyword_id": keyword_id}

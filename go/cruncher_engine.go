@@ -255,9 +255,14 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	}
 	blastExtra := 0.0
 	if blast != nil {
-		value, err := evalStatValue(paramValue(blast, "value"))
-		if err != nil {
-			value = 1
+		// Bare [BLAST] adds one attack per five target models; [BLAST X] adds X.
+		value := 1.0
+		if raw := paramValue(blast, "value"); raw != nil {
+			parsed, err := evalStatValue(raw)
+			if err != nil {
+				return nil, nil, nil, err
+			}
+			value = parsed
 		}
 		blastExtra = math.Floor(tmc/5) * value
 	}

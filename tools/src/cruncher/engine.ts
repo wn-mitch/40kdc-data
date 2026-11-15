@@ -184,8 +184,9 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   const rapidFireExtraPerModel = rapidFire && halfRange ? evalStatValue(rapidFire.parameters?.value) : 0;
   const blast = findKeyword(resolved, "blast");
   const targetModelCount = input.target.modelCount ?? input.target.unit.model_count?.min ?? 1;
-  const blastExtraPerModel = blast?.parameters?.value !== undefined
-    ? Math.floor(targetModelCount / 5) * evalStatValue(blast.parameters.value)
+  // Bare [BLAST] adds one attack per five target models; [BLAST X] adds X.
+  const blastExtraPerModel = blast
+    ? Math.floor(targetModelCount / 5) * (blast.parameters?.value !== undefined ? evalStatValue(blast.parameters.value) : 1)
     : 0;
   const attacks = input.modelsFiring * (attacksPerModel + rapidFireExtraPerModel + blastExtraPerModel);
   stages.push({

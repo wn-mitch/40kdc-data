@@ -30,9 +30,6 @@ pub fn buffs_from_keyword(
         weapon_id: weapon_id.to_string(),
         keyword_id: keyword_id.to_string(),
     };
-    if keyword_id == "blast" && parameters.and_then(|value| value.get("value")).is_none() {
-        return Vec::new();
-    }
     if ENGINE_DISPATCH_KEYWORDS.contains(&keyword_id) {
         return vec![Buff {
             source,
