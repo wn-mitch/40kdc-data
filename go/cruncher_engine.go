@@ -99,6 +99,48 @@ func manualWeaponKeywordBuffs(attacker map[string]any, ds *Dataset, ctx map[stri
 	return out
 }
 
+// grantedKeywordBuffs returns the catalog buffs of each resolved granted keyword the profile does
+// not print, with the grant's source. Engine-dispatched keywords have no catalog DSL and are read
+// from extraKeywords directly.
+func grantedKeywordBuffs(res *resolved, attacker map[string]any, ds *Dataset, ctx map[string]any) []any {
+	weapon, _ := getMap(attacker, "weapon")
+	profiles := getList(weapon, "profiles")
+	index := asInt(attacker["profileIndex"])
+	printed := map[string]bool{}
+	if index >= 0 && index < len(profiles) {
+		prof, _ := asMap(profiles[index])
+		for _, refAny := range getList(prof, "keywords") {
+			ref, _ := asMap(refAny)
+			printed[getStr(ref, "keyword_id")] = true
+		}
+	}
+	var out []any
+	for _, entry := range res.extraKeywords {
+		keywordID := getStr(entry.keywordRef, "keyword_id")
+		view, ok := ds.WeaponKeywords.Get(keywordID)
+		if printed[keywordID] || !ok || view.Raw["effect"] == nil {
+			continue
+		}
+		var params map[string]any
+		if p, ok := getMap(entry.keywordRef, "parameters"); ok {
+			params = p
+		}
+		for _, buffAny := range buffsFromKeyword(view.ID(), getStr(weapon, "id"), view.Raw["effect"], params, ctx) {
+			buff, ok := asMap(buffAny)
+			if !ok {
+				continue
+			}
+			copied := map[string]any{}
+			for key, value := range buff {
+				copied[key] = value
+			}
+			copied["source"] = entry.source
+			out = append(out, copied)
+		}
+	}
+	return out
+}
+
 func stage(name string, expected float64) map[string]any {
 	return map[string]any{"name": name, "expected": expected}
 }
@@ -184,6 +226,12 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	profBuffs := profileBuffsFor(attacker, ds, ctx)
 	allBuffs := append(append([]any{}, profBuffs...), getList(input, "buffs")...)
 	res := resolveBuffs(allBuffs, ctx)
+	// A granted keyword whose rule is catalog DSL ([HEAVY], [TWIN-LINKED], [LANCE]) applies that DSL,
+	// credited to the grant; resolving again keeps every grant's applicability and keyword removals.
+	if granted := grantedKeywordBuffs(res, attacker, ds, ctx); len(granted) > 0 {
+		allBuffs = append(allBuffs, granted...)
+		res = resolveBuffs(allBuffs, ctx)
+	}
 	// A buff gated on the attack's Strength against the target's Toughness needs both, which the
 	// buffs themselves modify: take them from the stack without the comparison-gated buffs, then
 	// resolve again with them known. No comparison-gated buff feeds any comparison, which keeps a
@@ -266,8 +314,19 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		}
 		blastExtra = math.Floor(tmc/5) * value
 	}
+	// [CLEAVE X] adds X attacks per five target models when the weapon picks one target, as every crunch does.
+	cleaveExtra := 0.0
+	if cleave := res.findKeyword("cleave"); cleave != nil {
+		if raw := paramValue(cleave, "value"); raw != nil {
+			value, err := evalStatValue(raw)
+			if err != nil {
+				return nil, nil, nil, err
+			}
+			cleaveExtra = math.Floor(tmc/5) * value
+		}
+	}
 	modelsFiring, _ := num(input["modelsFiring"])
-	attacks := modelsFiring * (attacksPerModel + rapidFireExtra + blastExtra)
+	attacks := modelsFiring * (attacksPerModel + rapidFireExtra + blastExtra + cleaveExtra)
 	stages = append(stages, stage("attacks", attacks))
 
 	// 2. Hits
@@ -616,7 +675,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		ModelsFiring:    modelsFiring,
 		AttacksStat:     res.setOr("A", stats["A"]),
 		AttacksReroll:   rerollIfUnset(attacksReroll, attacksSet),
-		AttacksBonus:    res.attacksMod + blastExtra,
+		AttacksBonus:    res.attacksMod + blastExtra + cleaveExtra,
 		RapidFireStat:   rapidFireStat,
 		Torrent:         torrent,
 		HitPass:         hitPass,

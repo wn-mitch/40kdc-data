@@ -156,6 +156,13 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   const profileBuffs = profileBuffsFor(input.attacker, ds, ctx);
   const allBuffs = [...profileBuffs, ...input.buffs];
   let resolved = resolveBuffs(allBuffs, ctx);
+  // A granted keyword whose rule is catalog DSL ([HEAVY], [TWIN-LINKED], [LANCE]) applies that DSL,
+  // credited to the grant; resolving again keeps every grant's applicability and keyword removals.
+  const granted = grantedKeywordBuffs(resolved, weaponProfile, input.attacker.weapon.id, ds, ctx);
+  if (granted.length > 0) {
+    allBuffs.push(...granted);
+    resolved = resolveBuffs(allBuffs, ctx);
+  }
   // A buff gated on the attack's Strength against the target's Toughness needs both, which the
   // buffs themselves modify: take them from the stack without the comparison-gated buffs, then
   // resolve again with them known. No comparison-gated buff feeds any comparison, which keeps a
@@ -188,11 +195,14 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   const blastExtraPerModel = blast
     ? Math.floor(targetModelCount / 5) * (blast.parameters?.value !== undefined ? evalStatValue(blast.parameters.value) : 1)
     : 0;
-  const attacks = input.modelsFiring * (attacksPerModel + rapidFireExtraPerModel + blastExtraPerModel);
+  // [CLEAVE X] adds X attacks per five target models when the weapon picks one target, as every crunch does.
+  const cleave = findKeyword(resolved, "cleave");
+  const cleaveExtraPerModel = cleave?.parameters?.value !== undefined ? Math.floor(targetModelCount / 5) * evalStatValue(cleave.parameters.value) : 0;
+  const attacks = input.modelsFiring * (attacksPerModel + rapidFireExtraPerModel + blastExtraPerModel + cleaveExtraPerModel);
   stages.push({
     name: "attacks",
     expected: attacks,
-    detail: attacksDetail(input.modelsFiring, attacksPerModel, rapidFireExtraPerModel, blastExtraPerModel)
+    detail: attacksDetail(input.modelsFiring, attacksPerModel, rapidFireExtraPerModel, blastExtraPerModel, cleaveExtraPerModel)
       + (attacksReroll && resolved.statSet.A === undefined && typeof weaponProfile.stats.A === "string" ? `; reroll ${attacksReroll} of A ${weaponProfile.stats.A}` : ""),
   });
 
@@ -477,7 +487,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     modelsFiring: input.modelsFiring,
     attacksStat: resolved.statSet.A?.value ?? weaponProfile.stats.A,
     ...(attacksReroll && resolved.statSet.A === undefined ? { attacksReroll } : {}),
-    attacksBonus: resolved.attacksMod.value + blastExtraPerModel,
+    attacksBonus: resolved.attacksMod.value + blastExtraPerModel + cleaveExtraPerModel,
     rapidFireStat: rapidFire && halfRange ? rapidFire.parameters?.value : null,
     torrent,
     hit: hitProbs,
@@ -552,6 +562,25 @@ function profileBuffsFor(
     );
   }
   return out;
+}
+
+/**
+ * The catalog buffs of each resolved granted keyword the profile does not print, with the grant's
+ * source. Engine-dispatched keywords have no catalog DSL and are read from `extraKeywords` directly.
+ */
+function grantedKeywordBuffs(
+  resolved: ResolvedModifiers,
+  profile: Weapon["profiles"][number],
+  weaponId: string,
+  dataset: Dataset,
+  ctx: EngineContext,
+): Buff[] {
+  const printed = new Set((profile.keywords ?? []).map((ref) => ref.keyword_id));
+  return resolved.extraKeywords.flatMap(({ keywordRef, source }) => {
+    const view = dataset.weaponKeywords.get(keywordRef.keyword_id);
+    if (printed.has(keywordRef.keyword_id) || !view || view.raw.effect == null) return [];
+    return view.getBuffs(keywordRef.parameters as Record<string, unknown> | undefined, weaponId, ctx).map((buff) => ({ ...buff, source }));
+  });
 }
 
 function findKeyword(
@@ -699,10 +728,12 @@ function attacksDetail(
   per: number,
   rapidFire: number,
   blast: number,
+  cleave: number,
 ): string {
   const parts = [`${models} × ${per}`];
   if (rapidFire) parts.push(`+ Rapid Fire ${rapidFire} (half range)`);
   if (blast) parts.push(`+ Blast ${blast}/model`);
+  if (cleave) parts.push(`+ Cleave ${cleave}/model`);
   return parts.join(" ");
 }
 

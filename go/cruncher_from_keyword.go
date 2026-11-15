@@ -7,7 +7,7 @@ import "math"
 
 var engineDispatchKeywords = map[string]bool{
 	"lethal-hits": true, "sustained-hits": true, "devastating-wounds": true,
-	"anti": true, "melta": true, "rapid-fire": true, "torrent": true, "blast": true,
+	"anti": true, "melta": true, "rapid-fire": true, "torrent": true, "blast": true, "cleave": true,
 	"ignores-cover": true,
 }
 
@@ -194,8 +194,17 @@ func kwEvaluateCondition(condition, ctx map[string]any) any {
 	case "happened":
 		filter, _ := getMap(params, "filter")
 		types, _ := asList(filter["move_types"])
-		if params["event"] == "move-ended" && len(types) == 1 && types[0] == "remain-stationary" && params["subject"] == nil {
+		if params["event"] != "move-ended" || len(types) != 1 || params["subject"] != nil {
+			return nil
+		}
+		if types[0] == "remain-stationary" {
 			return ctx["attackerStationary"] == true
+		}
+		// An unset charge flag means the caller could not say whether the unit charged.
+		if types[0] == "charge" {
+			if charged, ok := ctx["attackerCharged"].(bool); ok {
+				return charged
+			}
 		}
 		return nil
 	case "has-keyword":

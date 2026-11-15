@@ -362,6 +362,13 @@ pub fn crunch_model(
     let mut all_buffs = profile_buffs_for(input.attacker, ds, &ctx);
     all_buffs.extend(input.buffs.iter().cloned());
     let mut resolved = resolve_buffs(&all_buffs, &ctx);
+    // A granted keyword whose rule is catalog DSL ([HEAVY], [TWIN-LINKED], [LANCE]) applies that DSL,
+    // credited to the grant; resolving again keeps every grant's applicability and keyword removals.
+    let granted = granted_keyword_buffs(&resolved, input.attacker, ds, &ctx);
+    if !granted.is_empty() {
+        all_buffs.extend(granted);
+        resolved = resolve_buffs(&all_buffs, &ctx);
+    }
     // A buff gated on the attack's Strength against the target's Toughness needs both, which the
     // buffs themselves modify: take them from the stack without the comparison-gated buffs, then
     // resolve again with them known. No comparison-gated buff feeds any comparison, which keeps a
@@ -432,9 +439,19 @@ pub fn crunch_model(
         },
         None => 0.0,
     };
+    // [CLEAVE X] adds X attacks per five target models when the weapon picks one target, as every crunch does.
+    let cleave_extra_per_model = match find_extra_keyword(&resolved, "cleave")
+        .and_then(|keyword| parameter(keyword, "value"))
+    {
+        Some(value) => (target_model_count / 5) as f64 * eval_param_value(Some(value))?,
+        None => 0.0,
+    };
     let models_firing = input.models_firing as f64;
-    let attacks =
-        models_firing * (attacks_per_model + rapid_fire_extra_per_model + blast_extra_per_model);
+    let attacks = models_firing
+        * (attacks_per_model
+            + rapid_fire_extra_per_model
+            + blast_extra_per_model
+            + cleave_extra_per_model);
     stages.push(Stage {
         name: StageName::Attacks,
         expected: attacks,
@@ -444,6 +461,7 @@ pub fn crunch_model(
                 attacks_per_model,
                 rapid_fire_extra_per_model,
                 blast_extra_per_model,
+                cleave_extra_per_model,
             );
             if let (None, Some(reroll), StatValue::DiceExpression(dice)) = (
                 &resolved.stat_set.a,
@@ -1134,7 +1152,7 @@ pub fn crunch_model(
             |set| Value::from(set.value as u64),
         ),
         attacks_reroll: attacks_reroll.filter(|_| resolved.stat_set.a.is_none()),
-        attacks_bonus: resolved.attacks_mod.value + blast_extra_per_model,
+        attacks_bonus: resolved.attacks_mod.value + blast_extra_per_model + cleave_extra_per_model,
         rapid_fire_stat: rapid_fire
             .filter(|_| half_range)
             .and_then(|kw| parameter(kw, "value").cloned()),
@@ -1259,6 +1277,63 @@ fn profile_buffs_for(
             params_value.as_ref(),
             ctx,
         ));
+    }
+    out
+}
+
+/// The catalog buffs of each resolved granted keyword the profile does not print, with the
+/// grant's source. Engine-dispatched keywords have no catalog DSL and are read from
+/// `extra_keywords` directly.
+fn granted_keyword_buffs(
+    resolved: &ResolvedModifiers,
+    attacker: AttackProfileRef<'_>,
+    dataset: &Dataset,
+    ctx: &EngineContext,
+) -> Vec<Buff> {
+    let printed: Vec<String> = attacker
+        .weapon
+        .profiles
+        .get(attacker.profile_index)
+        .map(|profile| {
+            profile
+                .keywords
+                .iter()
+                .map(|kref| kref.keyword_id.to_string())
+                .collect()
+        })
+        .unwrap_or_default();
+    let weapon_id = attacker.weapon.id.to_string();
+    let mut out = Vec::new();
+    for entry in &resolved.extra_keywords {
+        let keyword_id = entry.keyword_ref.keyword_id.as_str();
+        if printed.iter().any(|id| id == keyword_id) {
+            continue;
+        }
+        let Some(effect) = dataset
+            .weapon_keywords
+            .get(keyword_id)
+            .and_then(|catalog| catalog.effect.as_ref())
+            .and_then(|effect| serde_json::to_value(effect).ok())
+        else {
+            continue;
+        };
+        if !keyword_applies_to_target(entry.keyword_ref.parameters.as_ref(), ctx) {
+            continue;
+        }
+        out.extend(
+            buffs_from_keyword(
+                keyword_id,
+                &weapon_id,
+                Some(&effect),
+                entry.keyword_ref.parameters.as_ref(),
+                ctx,
+            )
+            .into_iter()
+            .map(|buff| Buff {
+                source: entry.source.clone(),
+                ..buff
+            }),
+        );
     }
     out
 }
@@ -1547,13 +1622,16 @@ fn describe_fnp(all: Option<&FeelNoPainState>, mortal: Option<&FeelNoPainState>)
     }
 }
 
-fn attacks_detail(models: f64, per: f64, rapid_fire: f64, blast: f64) -> String {
+fn attacks_detail(models: f64, per: f64, rapid_fire: f64, blast: f64, cleave: f64) -> String {
     let mut parts = vec![format!("{models} × {per}")];
     if rapid_fire != 0.0 {
         parts.push(format!("+ Rapid Fire {rapid_fire} (half range)"));
     }
     if blast != 0.0 {
         parts.push(format!("+ Blast {blast}/model"));
+    }
+    if cleave != 0.0 {
+        parts.push(format!("+ Cleave {cleave}/model"));
     }
     parts.join(" ")
 }

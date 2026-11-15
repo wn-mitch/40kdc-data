@@ -794,7 +794,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "tau-empire",
     "trigger": {
       "event": "battle-started"

@@ -1,0 +1,42 @@
+{
+  "name": "boltgun x10 granted [TWIN-LINKED]: re-roll the Wound roll from the granted keyword's catalog rule",
+  "attacker": {
+    "weaponId": "boltgun",
+    "profileIndex": 0
+  },
+  "modelsFiring": 10,
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting",
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-keyword-grant",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "extra-keyword",
+        "keywordRef": {
+          "keyword_id": "twin-linked"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 6.6667,
+      "wounds": 3.7037,
+      "unsaved": 1.2346,
+      "damage": 1.2346,
+      "after-fnp": 1.2346,
+      "models-killed": 0.6173
+    }
+  }
+}

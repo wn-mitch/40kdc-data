@@ -1,0 +1,28 @@
+{
+  "name": "vigil spear (Lance) x1 vs intercessors after charging: +1 to wound",
+  "attacker": {
+    "weaponId": "vigil-spear",
+    "profileIndex": 1
+  },
+  "modelsFiring": 1,
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "fight",
+    "attackerCharged": true
+  },
+  "buffs": [],
+  "expected": {
+    "stages": {
+      "attacks": 6,
+      "hits": 5,
+      "wounds": 4.1667,
+      "unsaved": 2.7778,
+      "damage": 5.5556,
+      "after-fnp": 5.5556,
+      "models-killed": 2.7778
+    }
+  }
+}

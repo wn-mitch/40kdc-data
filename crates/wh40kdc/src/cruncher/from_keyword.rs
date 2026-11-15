@@ -15,6 +15,7 @@ const ENGINE_DISPATCH_KEYWORDS: &[&str] = &[
     "rapid-fire",
     "torrent",
     "blast",
+    "cleave",
     "ignores-cover",
 ];
 

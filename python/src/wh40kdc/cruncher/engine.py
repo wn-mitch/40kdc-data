@@ -222,6 +222,12 @@ def crunch_model(
     profile_buffs = _profile_buffs_for(attacker, ds, ctx)
     all_buffs = [*profile_buffs, *input.get("buffs", [])]
     resolved = resolve_buffs(all_buffs, ctx)
+    # A granted keyword whose rule is catalog DSL ([HEAVY], [TWIN-LINKED], [LANCE]) applies that
+    # DSL, credited to the grant; resolving again keeps every grant's applicability and removals.
+    granted = _granted_keyword_buffs(resolved, attacker, ds, ctx)
+    if granted:
+        all_buffs.extend(granted)
+        resolved = resolve_buffs(all_buffs, ctx)
     # A buff gated on the attack's Strength against the target's Toughness needs both, which the
     # buffs themselves modify: take them from the stack without the comparison-gated buffs, then
     # resolve again with them known. No comparison-gated buff feeds any comparison.
@@ -273,13 +279,28 @@ def crunch_model(
         if blast
         else 0
     )
-    attacks = input["modelsFiring"] * (attacks_per_model + rapid_fire_extra + blast_extra)
+    # [CLEAVE X] adds X attacks per five target models when the weapon picks one target, as every
+    # crunch does.
+    cleave = _find_keyword(resolved, "cleave")
+    cleave_params = (cleave.get("parameters") or {}) if cleave else {}
+    cleave_extra = (
+        math.floor(target_model_count / 5) * eval_stat_value(cleave_params["value"])
+        if "value" in cleave_params
+        else 0
+    )
+    attacks = input["modelsFiring"] * (
+        attacks_per_model + rapid_fire_extra + blast_extra + cleave_extra
+    )
     stages.append(
         {
             "name": "attacks",
             "expected": attacks,
             "detail": _attacks_detail(
-                input["modelsFiring"], attacks_per_model, rapid_fire_extra, blast_extra
+                input["modelsFiring"],
+                attacks_per_model,
+                rapid_fire_extra,
+                blast_extra,
+                cleave_extra,
             )
             + (
                 f"; reroll {attacks_reroll} of A {stats['A']}"
@@ -758,7 +779,7 @@ def crunch_model(
         "attacksStat": (
             resolved["statSet"]["A"]["value"] if "A" in resolved["statSet"] else stats.get("A")
         ),
-        "attacksBonus": resolved["attacksMod"]["value"] + blast_extra,
+        "attacksBonus": resolved["attacksMod"]["value"] + blast_extra + cleave_extra,
         "rapidFireStat": (
             (rapid_fire.get("parameters") or {}).get("value") if rapid_fire and half_range else None
         ),
@@ -846,6 +867,27 @@ def _manual_weapon_keyword_buffs(
         if view is None:
             continue
         out.extend(view.get_buffs(parameters, attacker["weapon"]["id"], ctx))
+    return out
+
+
+def _granted_keyword_buffs(
+    resolved: ResolvedModifiers, attacker: dict[str, Any], dataset: Dataset, ctx: EngineContext
+) -> list[Buff]:
+    """Catalog buffs of each resolved granted keyword the profile does not print, with the grant's
+    source. Engine-dispatched keywords have no catalog DSL and are read from extraKeywords."""
+    profiles = attacker["weapon"]["profiles"]
+    index = attacker["profileIndex"]
+    profile = profiles[index] if 0 <= index < len(profiles) else {}
+    printed = {ref["keyword_id"] for ref in profile.get("keywords") or []}
+    out: list[Buff] = []
+    for entry in resolved["extraKeywords"]:
+        keyword_id = entry["keywordRef"].get("keyword_id")
+        view = dataset.weapon_keywords.get(keyword_id)
+        if keyword_id in printed or view is None or view.raw.get("effect") is None:
+            continue
+        parameters = entry["keywordRef"].get("parameters")
+        for buff in view.get_buffs(parameters, attacker["weapon"]["id"], ctx):
+            out.append({**buff, "source": entry["source"]})
     return out
 
 
@@ -1025,12 +1067,16 @@ def _describe_fnp(all_fnp: dict[str, Any] | None, mortal_fnp: dict[str, Any] | N
     return ", ".join(parts)
 
 
-def _attacks_detail(models: float, per: float, rapid_fire: float, blast: float) -> str:
+def _attacks_detail(
+    models: float, per: float, rapid_fire: float, blast: float, cleave: float
+) -> str:
     parts = [f"{_num_str(models)} × {_num_str(per)}"]
     if rapid_fire:
         parts.append(f"+ Rapid Fire {_num_str(rapid_fire)} (half range)")
     if blast:
         parts.append(f"+ Blast {_num_str(blast)}/model")
+    if cleave:
+        parts.append(f"+ Cleave {_num_str(cleave)}/model")
     return " ".join(parts)
 
 
