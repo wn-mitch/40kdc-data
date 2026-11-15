@@ -63,17 +63,20 @@ function stratagemAllowsUnitIds(dataset: Dataset, stratagemId: string, trigger: 
   return targets.some((target) => {
     const candidates = target.selects === "model" ? memberIds.map((id) => [id]) : [memberIds];
     return candidates.some((ids) =>
-      conditionVerdict(target.eligibility, ids, units) !== false &&
+      conditionVerdict(target.eligibility, ids, units, memberIds.length > 1) !== false &&
       (target.bound_to !== "triggering-unit" || friendlyTriggerVerdict(triggerSubject, ids) !== false));
   });
 }
 
-/** Evaluate only unit-id facts; unknown battlefield predicates intentionally remain permissive. */
-function conditionVerdict(condition: unknown, ids: readonly string[], units?: UnitLookup): Verdict {
+/**
+ * Evaluate unit-id facts, and with `attached` (whether the stack has more than one member) whether
+ * the unit is an attached unit; unknown battlefield predicates intentionally remain permissive.
+ */
+function conditionVerdict(condition: unknown, ids: readonly string[], units?: UnitLookup, attached?: boolean): Verdict {
   if (condition === null || typeof condition !== "object" || Array.isArray(condition)) return undefined;
   if ("operator" in condition && typeof condition.operator === "string") {
     if (!("operands" in condition) || !Array.isArray(condition.operands)) return undefined;
-    const values = condition.operands.map((operand) => conditionVerdict(operand, ids, units));
+    const values = condition.operands.map((operand) => conditionVerdict(operand, ids, units, attached));
     if (condition.operator === "and") return values.includes(false) ? false : values.every((value) => value === true) ? true : undefined;
     if (condition.operator === "or") return values.includes(true) ? true : values.every((value) => value === false) ? false : undefined;
     if (condition.operator === "not" && values.length === 1) return values[0] === undefined ? undefined : !values[0];
@@ -82,11 +85,20 @@ function conditionVerdict(condition: unknown, ids: readonly string[], units?: Un
   if (units && "type" in condition && condition.type === "happened" && "parameters" in condition) {
     return eventVerdict(condition.parameters, ids, units);
   }
+  if ("type" in condition && condition.type === "attachment") return attachmentVerdict((condition as { parameters?: unknown }).parameters, attached);
   if (!("type" in condition) || condition.type !== "matches" || !("parameters" in condition)) return undefined;
   const { parameters } = condition;
   if (parameters === null || typeof parameters !== "object" || Array.isArray(parameters)) return undefined;
   if ("subject" in parameters && parameters.subject !== "this-unit") return undefined;
   return "filter" in parameters ? filterVerdict(parameters.filter, ids) : undefined;
+}
+
+/** Whether the stack is an attached unit, for `attached` on the unit itself; other roles stay unknown. */
+function attachmentVerdict(parameters: unknown, attached: boolean | undefined): Verdict {
+  if (attached === undefined || parameters === null || typeof parameters !== "object" || Array.isArray(parameters)) return undefined;
+  const params = parameters as Record<string, unknown>;
+  if (params.role !== "attached" || params.with !== undefined || !OWN_SUBJECTS.has(params.subject)) return undefined;
+  return attached;
 }
 
 /** A trigger subject is a unit filter, not a condition wrapper. */
@@ -170,7 +182,7 @@ export function activationPossible(requires: readonly unknown[] | undefined, ids
     if (triggers.length === 0) continue;
     const verdicts = triggers.map((item) => {
       const own = eventVerdict({ event: item.event, filter: item.filter, subject: ownSubject(item.subject) }, ids, units);
-      return own === false ? false : conditionVerdict(item.condition, ids, units);
+      return own === false ? false : conditionVerdict(item.condition, ids, units, ids.length > 1);
     });
     if (verdicts.every((verdict) => verdict === false)) return false;
   }

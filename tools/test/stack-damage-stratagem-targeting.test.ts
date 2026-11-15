@@ -92,3 +92,25 @@ describe("static target and trigger facts", () => {
     )).toBe(true);
   });
 });
+
+describe("attached-unit Stratagem targets", () => {
+  const dgFaction = resolveFactionContext(dataset, "death-guard");
+  const dgConfig = parseMatrixConfig(
+    { HC_FACTIONS: "death-guard", HC_TARGETS: "rhino", HC_PHASES: "fight", HC_OUTPUT: "stack-damage.json" },
+    { factionIds: new Set(["death-guard"]), targetIds: ["rhino"] },
+  );
+  const dgSession = damageScoringSession({
+    dataset, config: dgConfig, faction: dgFaction, target: resolveTarget(dataset, dataset.targetProfiles.get("rhino")!)!, phase: "fight",
+  });
+  const offered = (members: { unitId: string; role: "bodyguard" | "leader" }[]) =>
+    dgSession.pool(emptySpec("death-guard", members.map(({ unitId, role }) => ({ unit: dataset.units.getInFaction(unitId, "death-guard")!, role })), ["champions-of-contagion"]))
+      .levers.some((lever) => lever.source.kind === "ability" && lever.source.abilityId === "blessings-of-filth-champions-of-contagion-death-guard");
+
+  it("refuses Blessings of Filth to a unit nothing is attached to", () => {
+    expect(offered([{ unitId: "blightlord-terminators", role: "bodyguard" }])).toBe(false);
+  });
+
+  it("offers Blessings of Filth to an attached unit", () => {
+    expect(offered([{ unitId: "blightlord-terminators", role: "bodyguard" }, { unitId: "lord-of-contagion", role: "leader" }])).toBe(true);
+  });
+});
