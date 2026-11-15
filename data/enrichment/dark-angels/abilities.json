@@ -1912,7 +1912,6 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "dark-angels"
   },
   {
@@ -2987,7 +2986,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "dark-angels"
   },
   {

@@ -922,7 +922,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "aeldari",
     "trigger": {
       "event": "phase-started",
@@ -1153,7 +1152,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "usage": {
       "frequency": "once-per-turn",
       "per": "unit"
@@ -2180,7 +2178,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "aeldari",
     "trigger": {
       "event": "attacks-resolved",
@@ -3605,7 +3602,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "aeldari"
   },
   {
@@ -7434,7 +7430,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "aeldari",
     "trigger": {
       "event": "phase-started",

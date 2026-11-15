@@ -1156,7 +1156,6 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "tyranids"
   },
   {
@@ -1215,7 +1214,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "tyranids",
     "trigger": [
       {
@@ -2056,7 +2054,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "tyranids",
     "trigger": {
       "event": "damage-allocated",
@@ -2214,7 +2211,6 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "tyranids"
   },
   {
@@ -4298,7 +4294,6 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "tyranids"
   },
   {

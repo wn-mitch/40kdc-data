@@ -81,7 +81,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "astra-militarum",
     "trigger": {
       "event": "phase-started",
@@ -2253,7 +2252,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "astra-militarum",
     "trigger": {
       "event": "phase-started",
@@ -2659,7 +2657,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "astra-militarum"
   },
   {
@@ -3669,7 +3666,6 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "astra-militarum",
     "optional": true
   },
@@ -3800,7 +3796,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "astra-militarum",
     "trigger": {
       "event": "damage-allocated"

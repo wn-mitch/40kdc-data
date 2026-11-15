@@ -66,33 +66,33 @@ Repair worklist by faction — abilities still needing DSL work (not total cover
 
 | faction | stub\* | notes-stub | gw-leak | def-skipped |
 |---|--:|--:|--:|--:|
-| aeldari | 26 | 7 | 0 | 5 |
-| chaos-space-marines | 22 | 7 | 0 | 3 |
-| drukhari | 19 | 5 | 0 | 1 |
-| chaos-daemons | 17 | 7 | 0 | 4 |
-| agents-of-the-imperium | 17 | 0 | 0 | 2 |
-| adeptus-mechanicus | 16 | 0 | 0 | 2 |
-| necrons | 15 | 1 | 0 | 1 |
-| astra-militarum | 14 | 2 | 0 | 5 |
-| death-guard | 14 | 1 | 0 | 3 |
+| aeldari | 26 | 7 | 0 | 0 |
+| chaos-space-marines | 22 | 7 | 0 | 0 |
+| drukhari | 19 | 5 | 0 | 0 |
+| chaos-daemons | 17 | 7 | 0 | 0 |
+| agents-of-the-imperium | 17 | 0 | 0 | 0 |
+| adeptus-mechanicus | 16 | 0 | 0 | 0 |
+| necrons | 15 | 1 | 0 | 0 |
+| astra-militarum | 14 | 2 | 0 | 0 |
+| death-guard | 14 | 1 | 0 | 0 |
 | leagues-of-votann | 14 | 0 | 0 | 0 |
-| tyranids | 13 | 4 | 0 | 5 |
-| imperial-knights | 13 | 3 | 0 | 1 |
-| genestealer-cults | 13 | 1 | 0 | 1 |
+| tyranids | 13 | 4 | 0 | 0 |
+| imperial-knights | 13 | 3 | 0 | 0 |
+| genestealer-cults | 13 | 1 | 0 | 0 |
 | grey-knights | 11 | 0 | 0 | 0 |
-| adepta-sororitas | 4 | 7 | 0 | 1 |
-| tau-empire | 3 | 3 | 0 | 3 |
-| thousand-sons | 2 | 3 | 0 | 1 |
+| adepta-sororitas | 4 | 7 | 0 | 0 |
+| tau-empire | 3 | 3 | 0 | 0 |
+| thousand-sons | 2 | 3 | 0 | 0 |
 | world-eaters | 2 | 0 | 0 | 0 |
 | space-wolves | 1 | 5 | 0 | 0 |
 | adeptus-custodes | 1 | 1 | 0 | 0 |
 | blood-angels | 1 | 1 | 0 | 0 |
-| dark-angels | 1 | 0 | 0 | 2 |
 | _core | 1 | 0 | 0 | 0 |
 | black-templars | 1 | 0 | 0 | 0 |
-| emperors-children | 0 | 3 | 0 | 1 |
+| dark-angels | 1 | 0 | 0 | 0 |
+| emperors-children | 0 | 3 | 0 | 0 |
 | chaos-knights | 0 | 2 | 0 | 0 |
-| adeptus-astartes | 0 | 1 | 0 | 3 |
+| adeptus-astartes | 0 | 1 | 0 | 0 |
 | deathwatch | 0 | 1 | 0 | 0 |
 | imperial-fists | 0 | 0 | 0 | 0 |
 | iron-hands | 0 | 0 | 0 | 0 |
@@ -101,7 +101,7 @@ Repair worklist by faction — abilities still needing DSL work (not total cover
 | salamanders | 0 | 0 | 0 | 0 |
 | ultramarines | 0 | 0 | 0 | 0 |
 | white-scars | 0 | 0 | 0 | 0 |
-| **TOTAL** | **241** | **65** | **0** | **44** |
+| **TOTAL** | **241** | **65** | **0** | **0** |
 
 `stub*` = empty-modifier placeholder nodes (highest need first) · `notes-stub` = flagged in `community_notes` · `gw-leak` = suspected verbatim GW text · `def-skipped` = defensive abilities skipped by the buff walk. Enumerated stub ids: [`data/_audit/worklist.md`](data/_audit/worklist.md). Full total+repair breakdown: [`data/_audit/summary.md`](data/_audit/summary.md).
 <!-- coverage:end -->

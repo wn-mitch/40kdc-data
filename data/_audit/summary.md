@@ -7,41 +7,41 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 | faction | total | offensive | defensive | inert | stub* | notes-stub | gw-leak | def-skipped |
 |---|--:|--:|--:|--:|--:|--:|--:|--:|
 | _core | 26 | 0 | 1 | 25 | 1 | 0 | 0 | 0 |
-| adepta-sororitas | 148 | 32 | 16 | 101 | 4 | 7 | 0 | 1 |
-| adeptus-astartes | 250 | 52 | 25 | 174 | 0 | 1 | 0 | 3 |
+| adepta-sororitas | 148 | 33 | 16 | 100 | 4 | 7 | 0 | 0 |
+| adeptus-astartes | 250 | 52 | 25 | 174 | 0 | 1 | 0 | 0 |
 | adeptus-custodes | 158 | 23 | 17 | 119 | 1 | 1 | 0 | 0 |
-| adeptus-mechanicus | 167 | 26 | 12 | 129 | 16 | 0 | 0 | 2 |
-| aeldari | 300 | 44 | 24 | 233 | 26 | 7 | 0 | 5 |
-| agents-of-the-imperium | 138 | 26 | 10 | 102 | 17 | 0 | 0 | 2 |
-| astra-militarum | 251 | 22 | 17 | 212 | 14 | 2 | 0 | 5 |
+| adeptus-mechanicus | 167 | 27 | 12 | 128 | 16 | 0 | 0 | 0 |
+| aeldari | 300 | 48 | 24 | 229 | 26 | 7 | 0 | 0 |
+| agents-of-the-imperium | 138 | 27 | 10 | 101 | 17 | 0 | 0 | 0 |
+| astra-militarum | 251 | 23 | 17 | 211 | 14 | 2 | 0 | 0 |
 | black-templars | 63 | 13 | 7 | 44 | 1 | 0 | 0 | 0 |
 | blood-angels | 61 | 15 | 6 | 40 | 1 | 1 | 0 | 0 |
-| chaos-daemons | 195 | 22 | 14 | 160 | 17 | 7 | 0 | 4 |
+| chaos-daemons | 195 | 24 | 14 | 158 | 17 | 7 | 0 | 0 |
 | chaos-knights | 110 | 12 | 15 | 83 | 0 | 2 | 0 | 0 |
-| chaos-space-marines | 281 | 50 | 21 | 212 | 22 | 7 | 0 | 3 |
-| dark-angels | 77 | 15 | 10 | 53 | 1 | 0 | 0 | 2 |
-| death-guard | 160 | 17 | 6 | 137 | 14 | 1 | 0 | 3 |
+| chaos-space-marines | 281 | 51 | 21 | 211 | 22 | 7 | 0 | 0 |
+| dark-angels | 77 | 15 | 10 | 53 | 1 | 0 | 0 | 0 |
+| death-guard | 160 | 17 | 6 | 137 | 14 | 1 | 0 | 0 |
 | deathwatch | 36 | 12 | 2 | 22 | 0 | 1 | 0 | 0 |
-| drukhari | 164 | 25 | 15 | 125 | 19 | 5 | 0 | 1 |
-| emperors-children | 148 | 23 | 16 | 109 | 0 | 3 | 0 | 1 |
-| genestealer-cults | 147 | 21 | 6 | 121 | 13 | 1 | 0 | 1 |
-| grey-knights | 134 | 27 | 11 | 96 | 11 | 0 | 0 | 0 |
+| drukhari | 164 | 25 | 15 | 125 | 19 | 5 | 0 | 0 |
+| emperors-children | 148 | 24 | 16 | 108 | 0 | 3 | 0 | 0 |
+| genestealer-cults | 147 | 22 | 6 | 120 | 13 | 1 | 0 | 0 |
+| grey-knights | 134 | 28 | 11 | 95 | 11 | 0 | 0 | 0 |
 | imperial-fists | 11 | 3 | 1 | 7 | 0 | 0 | 0 | 0 |
-| imperial-knights | 118 | 13 | 8 | 97 | 13 | 3 | 0 | 1 |
+| imperial-knights | 118 | 13 | 8 | 97 | 13 | 3 | 0 | 0 |
 | iron-hands | 11 | 3 | 3 | 6 | 0 | 0 | 0 | 0 |
-| leagues-of-votann | 155 | 25 | 11 | 119 | 14 | 0 | 0 | 0 |
-| necrons | 230 | 28 | 23 | 179 | 15 | 1 | 0 | 1 |
+| leagues-of-votann | 155 | 28 | 11 | 116 | 14 | 0 | 0 | 0 |
+| necrons | 230 | 31 | 23 | 176 | 15 | 1 | 0 | 0 |
 | orks | 209 | 32 | 11 | 166 | 0 | 0 | 0 | 0 |
 | raven-guard | 11 | 1 | 0 | 10 | 0 | 0 | 0 | 0 |
 | salamanders | 11 | 6 | 1 | 4 | 0 | 0 | 0 | 0 |
 | space-wolves | 87 | 18 | 6 | 63 | 1 | 5 | 0 | 0 |
-| tau-empire | 166 | 29 | 12 | 125 | 3 | 3 | 0 | 3 |
-| thousand-sons | 158 | 26 | 14 | 118 | 2 | 3 | 0 | 1 |
-| tyranids | 186 | 28 | 14 | 147 | 13 | 4 | 0 | 5 |
+| tau-empire | 166 | 30 | 12 | 124 | 3 | 3 | 0 | 0 |
+| thousand-sons | 158 | 26 | 14 | 118 | 2 | 3 | 0 | 0 |
+| tyranids | 186 | 28 | 14 | 147 | 13 | 4 | 0 | 0 |
 | ultramarines | 11 | 4 | 3 | 4 | 0 | 0 | 0 | 0 |
 | white-scars | 11 | 5 | 2 | 5 | 0 | 0 | 0 | 0 |
-| world-eaters | 147 | 13 | 8 | 126 | 2 | 0 | 0 | 0 |
-| **TOTAL** | **4536** | **711** | **368** | **3473** | **241** | **65** | **0** | **44** |
+| world-eaters | 147 | 14 | 8 | 125 | 2 | 0 | 0 | 0 |
+| **TOTAL** | **4536** | **733** | **368** | **3451** | **241** | **65** | **0** | **0** |
 
 `stub*` = structural (empty-modifier placeholder node) — the authoring worklist. `notes-stub` = flagged in community_notes.
 
@@ -50,7 +50,7 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `249` — effect type "permission" is not modelled by the buff layer
 - `246` — effect type "no-effect" is not modelled by the buff layer
 - `133` — conditional: cannot evaluate condition "matches" against current context
-- `127` — conditional: cannot evaluate condition "and" against current context
+- `126` — conditional: cannot evaluate condition "and" against current context
 - `89` — effect type "army-rule" is not modelled by the buff layer
 - `88` — effect type "ability-grant" is not modelled by the buff layer
 - `83` — effect type "cost-modifier" is not modelled by the buff layer
@@ -60,13 +60,13 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `67` — effect type "ability-modifier" is not modelled by the buff layer
 - `65` — effect type "move" is not modelled by the buff layer
 - `61` — target "event-object" is not resolved by the buff engine
-- `58` — conditional: cannot evaluate condition "happened" against current context
 - `58` — effect type "designate" is not modelled by the buff layer
+- `57` — conditional: cannot evaluate condition "happened" against current context
 - `57` — target "event-subject" is not resolved by the buff engine
 - `50` — dice-gated effect: stochastic; not expressible as a buff
 - `50` — mortal-wounds: inflicted outside an attack, not a change to it
 - `49` — effect type "test" is not modelled by the buff layer
-- `48` — conditional: cannot evaluate condition "not" against current context
+- `46` — conditional: cannot evaluate condition "not" against current context
 - `45` — effect type "keyword-grant" is not modelled by the buff layer
 - `43` — effect type "resource-spend" is not modelled by the buff layer
 - `38` — stat-modifier on "M" is outside the damage path
@@ -81,13 +81,14 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `28` — effect type "dice-table" is not modelled by the buff layer
 - `27` — effect type "targeting" is not modelled by the buff layer
 - `26` — stat-modifier on "detection-range" is outside the damage path
-- `25` — conditional: cannot evaluate condition "attachment" against current context
 - `24` — effect type "rule-state" is not modelled by the buff layer
+- `24` — conditional: cannot evaluate condition "attachment" against current context
 - `24` — stat-modifier on "W" is outside the damage path
 - `22` — select-objective: the bound objective marker is not resolved by the buff engine
+- `21` — conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies
 - `20` — effect type "cp-gain" is not modelled by the buff layer
 - `19` — effect type "resource-gain" is not modelled by the buff layer
-- `19` — stat-modifier T: defender-side stat; applies when the buffed unit is the target
+- `18` — stat-modifier T: defender-side stat; applies when the buffed unit is the target
 - `17` — post-attack moment: applies only to attacks made after the triggering unit's
 - `16` — trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients
 - `15` — stat-modifier Sv: defender-side stat; applies when the buffed unit is the target
@@ -183,12 +184,12 @@ Undecided under the audit's context, which declares no scenario, but decided by 
 once a scenario declares every fact they read (two opposite declarations must both decide
 them). They are not engine gaps and are absent from the list above.
 
-- `475` — conditional: cannot evaluate condition "and" against current context
-- `222` — conditional: cannot evaluate condition "matches" against current context
-- `126` — conditional: cannot evaluate condition "not" against current context
-- `36` — conditional: cannot evaluate condition "strength" against current context
-- `23` — conditional: cannot evaluate condition "or" against current context
+- `474` — conditional: cannot evaluate condition "and" against current context
+- `209` — conditional: cannot evaluate condition "matches" against current context
+- `107` — conditional: cannot evaluate condition "not" against current context
+- `33` — conditional: cannot evaluate condition "strength" against current context
 - `22` — conditional: cannot evaluate condition "happened" against current context
+- `22` — conditional: cannot evaluate condition "or" against current context
 - `18` — conditional: cannot evaluate condition "model-count" against current context
 - `18` — conditional: cannot evaluate condition "army-faction" against current context
 - `17` — conditional: cannot evaluate condition "roll-result" against current context
@@ -197,8 +198,8 @@ them). They are not engine gaps and are absent from the list above.
 - `14` — conditional: cannot evaluate condition "battle-round" against current context
 - `12` — conditional: cannot evaluate condition "in-region" against current context
 - `7` — conditional: cannot evaluate condition "wounds" against current context
-- `4` — conditional: cannot evaluate condition "closest" against current context
 - `4` — conditional: cannot evaluate condition "dice-table-result" against current context
+- `3` — conditional: cannot evaluate condition "closest" against current context
 - `2` — conditional: cannot evaluate condition "designated" against current context
 - `1` — conditional: cannot evaluate condition "attachment" against current context
 - `1` — conditional: cannot evaluate condition "within" against current context

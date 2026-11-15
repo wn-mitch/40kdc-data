@@ -14,13 +14,13 @@
     {
       "faction": "adepta-sororitas",
       "total": 148,
-      "offensive": 32,
+      "offensive": 33,
       "defensive": 16,
-      "inert": 101,
+      "inert": 100,
       "stub": 7,
       "stubStructural": 4,
       "gwTextLeak": 0,
-      "defensiveSkipped": 1
+      "defensiveSkipped": 0
     },
     {
       "faction": "adeptus-astartes",
@@ -31,7 +31,7 @@
       "stub": 1,
       "stubStructural": 0,
       "gwTextLeak": 0,
-      "defensiveSkipped": 3
+      "defensiveSkipped": 0
     },
     {
       "faction": "adeptus-custodes",
@@ -47,46 +47,46 @@
     {
       "faction": "adeptus-mechanicus",
       "total": 167,
-      "offensive": 26,
+      "offensive": 27,
       "defensive": 12,
-      "inert": 129,
+      "inert": 128,
       "stub": 0,
       "stubStructural": 16,
       "gwTextLeak": 0,
-      "defensiveSkipped": 2
+      "defensiveSkipped": 0
     },
     {
       "faction": "aeldari",
       "total": 300,
-      "offensive": 44,
+      "offensive": 48,
       "defensive": 24,
-      "inert": 233,
+      "inert": 229,
       "stub": 7,
       "stubStructural": 26,
       "gwTextLeak": 0,
-      "defensiveSkipped": 5
+      "defensiveSkipped": 0
     },
     {
       "faction": "agents-of-the-imperium",
       "total": 138,
-      "offensive": 26,
+      "offensive": 27,
       "defensive": 10,
-      "inert": 102,
+      "inert": 101,
       "stub": 0,
       "stubStructural": 17,
       "gwTextLeak": 0,
-      "defensiveSkipped": 2
+      "defensiveSkipped": 0
     },
     {
       "faction": "astra-militarum",
       "total": 251,
-      "offensive": 22,
+      "offensive": 23,
       "defensive": 17,
-      "inert": 212,
+      "inert": 211,
       "stub": 2,
       "stubStructural": 14,
       "gwTextLeak": 0,
-      "defensiveSkipped": 5
+      "defensiveSkipped": 0
     },
     {
       "faction": "black-templars",
@@ -113,13 +113,13 @@
     {
       "faction": "chaos-daemons",
       "total": 195,
-      "offensive": 22,
+      "offensive": 24,
       "defensive": 14,
-      "inert": 160,
+      "inert": 158,
       "stub": 7,
       "stubStructural": 17,
       "gwTextLeak": 0,
-      "defensiveSkipped": 4
+      "defensiveSkipped": 0
     },
     {
       "faction": "chaos-knights",
@@ -135,13 +135,13 @@
     {
       "faction": "chaos-space-marines",
       "total": 281,
-      "offensive": 50,
+      "offensive": 51,
       "defensive": 21,
-      "inert": 212,
+      "inert": 211,
       "stub": 7,
       "stubStructural": 22,
       "gwTextLeak": 0,
-      "defensiveSkipped": 3
+      "defensiveSkipped": 0
     },
     {
       "faction": "dark-angels",
@@ -152,7 +152,7 @@
       "stub": 0,
       "stubStructural": 1,
       "gwTextLeak": 0,
-      "defensiveSkipped": 2
+      "defensiveSkipped": 0
     },
     {
       "faction": "death-guard",
@@ -163,7 +163,7 @@
       "stub": 1,
       "stubStructural": 14,
       "gwTextLeak": 0,
-      "defensiveSkipped": 3
+      "defensiveSkipped": 0
     },
     {
       "faction": "deathwatch",
@@ -185,36 +185,36 @@
       "stub": 5,
       "stubStructural": 19,
       "gwTextLeak": 0,
-      "defensiveSkipped": 1
+      "defensiveSkipped": 0
     },
     {
       "faction": "emperors-children",
       "total": 148,
-      "offensive": 23,
+      "offensive": 24,
       "defensive": 16,
-      "inert": 109,
+      "inert": 108,
       "stub": 3,
       "stubStructural": 0,
       "gwTextLeak": 0,
-      "defensiveSkipped": 1
+      "defensiveSkipped": 0
     },
     {
       "faction": "genestealer-cults",
       "total": 147,
-      "offensive": 21,
+      "offensive": 22,
       "defensive": 6,
-      "inert": 121,
+      "inert": 120,
       "stub": 1,
       "stubStructural": 13,
       "gwTextLeak": 0,
-      "defensiveSkipped": 1
+      "defensiveSkipped": 0
     },
     {
       "faction": "grey-knights",
       "total": 134,
-      "offensive": 27,
+      "offensive": 28,
       "defensive": 11,
-      "inert": 96,
+      "inert": 95,
       "stub": 0,
       "stubStructural": 11,
       "gwTextLeak": 0,
@@ -240,7 +240,7 @@
       "stub": 3,
       "stubStructural": 13,
       "gwTextLeak": 0,
-      "defensiveSkipped": 1
+      "defensiveSkipped": 0
     },
     {
       "faction": "iron-hands",
@@ -256,9 +256,9 @@
     {
       "faction": "leagues-of-votann",
       "total": 155,
-      "offensive": 25,
+      "offensive": 28,
       "defensive": 11,
-      "inert": 119,
+      "inert": 116,
       "stub": 0,
       "stubStructural": 14,
       "gwTextLeak": 0,
@@ -267,13 +267,13 @@
     {
       "faction": "necrons",
       "total": 230,
-      "offensive": 28,
+      "offensive": 31,
       "defensive": 23,
-      "inert": 179,
+      "inert": 176,
       "stub": 1,
       "stubStructural": 15,
       "gwTextLeak": 0,
-      "defensiveSkipped": 1
+      "defensiveSkipped": 0
     },
     {
       "faction": "orks",
@@ -322,13 +322,13 @@
     {
       "faction": "tau-empire",
       "total": 166,
-      "offensive": 29,
+      "offensive": 30,
       "defensive": 12,
-      "inert": 125,
+      "inert": 124,
       "stub": 3,
       "stubStructural": 3,
       "gwTextLeak": 0,
-      "defensiveSkipped": 3
+      "defensiveSkipped": 0
     },
     {
       "faction": "thousand-sons",
@@ -339,7 +339,7 @@
       "stub": 3,
       "stubStructural": 2,
       "gwTextLeak": 0,
-      "defensiveSkipped": 1
+      "defensiveSkipped": 0
     },
     {
       "faction": "tyranids",
@@ -350,7 +350,7 @@
       "stub": 4,
       "stubStructural": 13,
       "gwTextLeak": 0,
-      "defensiveSkipped": 5
+      "defensiveSkipped": 0
     },
     {
       "faction": "ultramarines",
@@ -377,9 +377,9 @@
     {
       "faction": "world-eaters",
       "total": 147,
-      "offensive": 13,
+      "offensive": 14,
       "defensive": 8,
-      "inert": 126,
+      "inert": 125,
       "stub": 0,
       "stubStructural": 2,
       "gwTextLeak": 0,
@@ -388,13 +388,13 @@
   ],
   "totals": {
     "total": 4536,
-    "offensive": 711,
+    "offensive": 733,
     "defensive": 368,
-    "inert": 3473,
+    "inert": 3451,
     "stub": 65,
     "stubStructural": 241,
     "gwTextLeak": 0,
-    "defensiveSkipped": 44
+    "defensiveSkipped": 0
   },
   "unsupportedReasons": [
     {
@@ -411,7 +411,7 @@
     },
     {
       "reason": "conditional: cannot evaluate condition \"and\" against current context",
-      "count": 127
+      "count": 126
     },
     {
       "reason": "effect type \"army-rule\" is not modelled by the buff layer",
@@ -450,12 +450,12 @@
       "count": 61
     },
     {
-      "reason": "conditional: cannot evaluate condition \"happened\" against current context",
+      "reason": "effect type \"designate\" is not modelled by the buff layer",
       "count": 58
     },
     {
-      "reason": "effect type \"designate\" is not modelled by the buff layer",
-      "count": 58
+      "reason": "conditional: cannot evaluate condition \"happened\" against current context",
+      "count": 57
     },
     {
       "reason": "target \"event-subject\" is not resolved by the buff engine",
@@ -475,7 +475,7 @@
     },
     {
       "reason": "conditional: cannot evaluate condition \"not\" against current context",
-      "count": 48
+      "count": 46
     },
     {
       "reason": "effect type \"keyword-grant\" is not modelled by the buff layer",
@@ -534,11 +534,11 @@
       "count": 26
     },
     {
-      "reason": "conditional: cannot evaluate condition \"attachment\" against current context",
-      "count": 25
+      "reason": "effect type \"rule-state\" is not modelled by the buff layer",
+      "count": 24
     },
     {
-      "reason": "effect type \"rule-state\" is not modelled by the buff layer",
+      "reason": "conditional: cannot evaluate condition \"attachment\" against current context",
       "count": 24
     },
     {
@@ -550,6 +550,10 @@
       "count": 22
     },
     {
+      "reason": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies",
+      "count": 21
+    },
+    {
       "reason": "effect type \"cp-gain\" is not modelled by the buff layer",
       "count": 20
     },
@@ -559,7 +563,7 @@
     },
     {
       "reason": "stat-modifier T: defender-side stat; applies when the buffed unit is the target",
-      "count": 19
+      "count": 18
     },
     {
       "reason": "post-attack moment: applies only to attacks made after the triggering unit's",
@@ -917,26 +921,26 @@
   "scenarioGatedReasons": [
     {
       "reason": "conditional: cannot evaluate condition \"and\" against current context",
-      "count": 475
+      "count": 474
     },
     {
       "reason": "conditional: cannot evaluate condition \"matches\" against current context",
-      "count": 222
+      "count": 209
     },
     {
       "reason": "conditional: cannot evaluate condition \"not\" against current context",
-      "count": 126
+      "count": 107
     },
     {
       "reason": "conditional: cannot evaluate condition \"strength\" against current context",
-      "count": 36
-    },
-    {
-      "reason": "conditional: cannot evaluate condition \"or\" against current context",
-      "count": 23
+      "count": 33
     },
     {
       "reason": "conditional: cannot evaluate condition \"happened\" against current context",
+      "count": 22
+    },
+    {
+      "reason": "conditional: cannot evaluate condition \"or\" against current context",
       "count": 22
     },
     {
@@ -972,12 +976,12 @@
       "count": 7
     },
     {
-      "reason": "conditional: cannot evaluate condition \"closest\" against current context",
+      "reason": "conditional: cannot evaluate condition \"dice-table-result\" against current context",
       "count": 4
     },
     {
-      "reason": "conditional: cannot evaluate condition \"dice-table-result\" against current context",
-      "count": 4
+      "reason": "conditional: cannot evaluate condition \"closest\" against current context",
+      "count": 3
     },
     {
       "reason": "conditional: cannot evaluate condition \"designated\" against current context",
@@ -1603,9 +1607,9 @@
       "name": "Impetuous Fervour",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "adepta-sororitas",
@@ -7143,9 +7147,9 @@
       "name": "Breaching Command",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "adeptus-mechanicus",
@@ -9263,9 +9267,9 @@
       "name": "Reavers of the Void",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "aeldari",
@@ -9483,9 +9487,9 @@
       "name": "Swift Demise",
       "shape": "conditional",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "aeldari",
@@ -9563,9 +9567,9 @@
       "name": "Overlord",
       "shape": "conditional",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "aeldari",
@@ -10393,9 +10397,9 @@
       "name": "Emissaries of Ynnead",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "aeldari",
@@ -11853,9 +11857,9 @@
       "name": "Breaching Team",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "agents-of-the-imperium",
@@ -13413,9 +13417,9 @@
       "name": "Storm Troopers",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "astra-militarum",
@@ -16803,9 +16807,9 @@
       "name": "Tranceweaver",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "chaos-daemons",
@@ -17053,9 +17057,9 @@
       "name": "Nurgle’s Rot (Psychic)",
       "shape": "select-units",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "stat-modifier T: defender-side stat; applies when the buffed unit is the target"
+      "gap": null
     },
     {
       "faction": "chaos-daemons",
@@ -20343,9 +20347,9 @@
       "name": "Veterans of the Long War",
       "shape": "conditional",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "chaos-space-marines",
@@ -23515,7 +23519,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"and\" against current context"
+      "gap": null
     },
     {
       "faction": "death-guard",
@@ -27103,9 +27107,9 @@
       "name": "Excessive Assault",
       "shape": "conditional",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "emperors-children",
@@ -29433,9 +29437,9 @@
       "name": "Hyperferocity",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "genestealer-cults",
@@ -29853,9 +29857,9 @@
       "name": "Sanctity of Purpose",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "grey-knights",
@@ -33423,7 +33427,7 @@
       "name": "Cyberstimm Infusion",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
       "gap": "effect type \"resource-spend\" is not modelled by the buff layer"
     },
@@ -33763,7 +33767,7 @@
       "name": "Optimal Expenditure",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
       "gap": "effect type \"resource-spend\" is not modelled by the buff layer"
     },
@@ -33823,7 +33827,7 @@
       "name": "Privateer Arsenal",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
       "gap": "effect type \"resource-spend\" is not modelled by the buff layer"
     },
@@ -34263,9 +34267,9 @@
       "name": "Implacable Eradication",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "necrons",
@@ -35403,9 +35407,9 @@
       "name": "Arisen Tyrant",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "necrons",
@@ -36023,9 +36027,9 @@
       "name": "Protocol of the Conquering Tyrant",
       "shape": "conditional",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "necrons",
@@ -39603,9 +39607,9 @@
       "name": "Fireknife",
       "shape": "conditional",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"strength\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "tau-empire",
@@ -45743,9 +45747,9 @@
       "name": "Fail Not the Blood God",
       "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"not\" against current context"
+      "gap": "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
     },
     {
       "faction": "world-eaters",

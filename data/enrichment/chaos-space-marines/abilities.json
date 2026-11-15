@@ -1383,7 +1383,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-space-marines",
     "trigger": {
       "event": "phase-started",
@@ -2802,7 +2801,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-space-marines"
   },
   {
@@ -3252,7 +3250,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-space-marines"
   },
   {

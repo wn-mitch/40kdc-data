@@ -214,7 +214,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "emperors-children"
   },
   {

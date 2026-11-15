@@ -3412,7 +3412,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-daemons",
     "trigger": {
       "event": "phase-started",
@@ -3784,7 +3783,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-daemons",
     "trigger": {
       "event": "attacks-resolved",
@@ -4955,7 +4953,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-daemons",
     "trigger": {
       "event": "phase-started",
@@ -5906,7 +5903,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-daemons",
     "trigger": [
       {

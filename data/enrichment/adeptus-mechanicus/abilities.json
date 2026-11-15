@@ -674,7 +674,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "adeptus-mechanicus",
     "trigger": {
       "event": "battle-started"
@@ -3507,7 +3506,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "adeptus-mechanicus",
     "trigger": {
       "event": "targets-selected",

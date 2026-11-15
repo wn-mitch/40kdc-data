@@ -1262,7 +1262,6 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "usage": {
       "frequency": "once-per-turn",
       "per": "unit"

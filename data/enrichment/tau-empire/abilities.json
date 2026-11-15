@@ -2966,7 +2966,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "usage": {
       "frequency": "n-per-battle",
       "count": 2,
@@ -3647,7 +3646,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "tau-empire"
   },
   {

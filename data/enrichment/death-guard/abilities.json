@@ -1669,7 +1669,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "death-guard",
     "trigger": {
       "event": "phase-started",
@@ -1844,7 +1843,6 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "death-guard"
   },
   {
@@ -2187,7 +2185,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "death-guard",
     "trigger": {
       "event": "phase-started",
