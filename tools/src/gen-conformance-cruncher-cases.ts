@@ -454,6 +454,10 @@ export function canonicalScenarioCases() {
   ] };
   // A defender's rule naming the attacker's Toughness: the translation cannot know it.
   const enemyWeaker = { type: "attack-compare", parameters: { left: { of: "attacker", stat: "T" }, comparison: "lt", right: { of: "defender", stat: "T" } } };
+  const eachLoop = (filter: Record<string, unknown>, also?: Record<string, unknown>) => {
+    const bs = { type: "stat-modifier", target: "recipient", modifier: { stat: "BS", operation: "improve", value: 1 } };
+    return { type: "for-each-unit", selector: { filter }, effect: also ? { type: "sequence", steps: [bs, also] } : bs };
+  };
   const members = (bodyguard: string[]) => [
     { unitId: "leader", role: "leader" as const, keywords: ["CHARACTER"] },
     { unitId: "squad", role: "bodyguard" as const, keywords: bodyguard },
@@ -561,6 +565,12 @@ export function canonicalScenarioCases() {
     { id: "guided-attacker-subject", effect: gated({ type: "guided", parameters: { subject: "attacker" } }), context: { attackerGuided: true } },
     // "Each model from your army": every model of a friendly unit, so the whole unit.
     { id: "every-friendly-model-target", effect: { type: "stat-modifier", target: { owner: "friendly", level: "model" }, modifier: { stat: "BS", operation: "improve", value: 1 } }, context: {} },
+    // A loop binds its recipient to the selector's filter, then reads that filter like any unit-filter target.
+    { id: "each-bodyguard-model-recipient", effect: eachLoop({ level: "model", member_of: "this-unit", attachment_role: "bodyguard" }), context: { attackerMembers: members(["EXAMPLE SQUAD"]) }, source: attached },
+    { id: "each-friendly-recipient", effect: eachLoop({ owner: "friendly" }), context: {} },
+    // A body that also targets another unit, or a selector with eligibility, is not bound as one pool.
+    { id: "each-recipient-and-other-target", effect: eachLoop({ owner: "friendly" }, { type: "stat-modifier", target: "this-unit", modifier: { stat: "T", operation: "improve", value: 1 } }), context: {} },
+    { id: "each-recipient-eligibility", effect: { ...eachLoop({ owner: "friendly" }), selector: { filter: { owner: "friendly" }, eligibility: { type: "happened", parameters: { subject: "this-unit", event: "charge" } } } }, context: {} },
     { id: "wounds-defender-remaining", effect: gated(defenderWounds), context: { targetWounds: { remaining: 2, starting: 6 } } },
     { id: "wounds-defender-unhurt", effect: gated(defenderWounds), context: { targetWounds: { remaining: 6, starting: 6 } } },
     { id: "model-count-keyword-declared", effect: gated(championCount), context: { attackerKeywordModels: { "example champion": 1 } } },

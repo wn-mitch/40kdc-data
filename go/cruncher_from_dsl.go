@@ -389,14 +389,10 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		}
 	}
 	if n["type"] == "for-each-unit" {
-		selector, _ := getMap(n, "selector")
-		filter, _ := getMap(selector, "filter")
-		if filter == nil {
-			out.unsupported = append(out.unsupported, unsup("for-each-unit: recipient filter is malformed", n))
+		if bound, ok := bindEachRecipient(n); ok {
+			dslWalk(bound, source, opts, out)
 			return
 		}
-		dslWalk(bindEachRecipient(n["effect"], filter), source, opts, out)
-		return
 	}
 	// Walking a granted definition for a non-holder: what is not an aura is the holder's own.
 	if opts.auraEmitter != nil && !auraEmitterNodes[getStr(n, "type")] {

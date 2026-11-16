@@ -153,32 +153,61 @@ func planSelection(node, source map[string]any, perspective string, context map[
 	}
 	return selectionPlan{kind: "lever", effect: effect, applicability: applicability, requires: requires, label: label}
 }
-func bindEachRecipient(effect any, filter map[string]any) any {
-	switch value := effect.(type) {
-	case []any:
-		out := make([]any, len(value))
-		for i, item := range value {
-			out[i] = bindEachRecipient(item, filter)
+
+// bindEachRecipient binds a for-each-unit loop's recipient to its selector filter. Every
+// matching unit receives the effect; no count or player choice is invented. It binds only
+// when every target in the body is the recipient and the selector carries no eligibility;
+// otherwise the loop falls through to the generic walk. Nested selections and loops keep
+// their own recipients. Mirror of TS bindEachRecipient (cruncher/from-dsl-selection.ts).
+func bindEachRecipient(node map[string]any) (any, bool) {
+	selector, _ := getMap(node, "selector")
+	filter, ok := asMap(selector["filter"])
+	if !ok || filter == nil {
+		return nil, false
+	}
+	if _, has := selector["eligibility"]; has {
+		return nil, false
+	}
+	bindAs := getStr(selector, "bind_as")
+	bound, other := false, false
+	var bind func(any) any
+	bind = func(value any) any {
+		if list, ok := value.([]any); ok {
+			out := make([]any, len(list))
+			for i, child := range list {
+				out[i] = bind(child)
+			}
+			return out
 		}
-		return out
-	case map[string]any:
-		out := make(map[string]any, len(value))
-		for key, child := range value {
-			if key == "target" && child == "recipient" {
-				level := getStr(filter, "level")
-				if level == "model" {
-					out[key] = "this-model"
-				} else {
-					out[key] = "this-unit"
+		m, ok := value.(map[string]any)
+		if !ok || m == nil || m["type"] == "select-units" || m["type"] == "for-each-unit" {
+			return value
+		}
+		out := make(map[string]any, len(m))
+		for key, child := range m {
+			recipient := child == "recipient"
+			if bindAs != "" {
+				if ref, ok := child.(map[string]any); ok && getStr(ref, "selection_var") == bindAs {
+					recipient = true
 				}
+			}
+			if key == "target" && recipient {
+				out[key] = filter
 			} else {
-				out[key] = bindEachRecipient(child, filter)
+				out[key] = bind(child)
+			}
+			if key == "target" {
+				bound = bound || recipient
+				other = other || !recipient
 			}
 		}
 		return out
-	default:
-		return effect
 	}
+	effect := bind(node["effect"])
+	if !bound || other {
+		return nil, false
+	}
+	return effect, true
 }
 
 func matchesEachRecipient(filter map[string]any, context map[string]any, perspective string) (bool, string) {
