@@ -224,4 +224,20 @@ export const DURATION_AND_DESIGNATION_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...previous({ ...input, subject: "this-unit" }), subject: VISIBLE_TERRAIN };
     },
   },
+  {
+    // "for each Observer unit …, select one enemy unit … to be marked as their Spotted unit": the pass's unit applies it.
+    family: "apply-mark",
+    version: 7,
+    description: "As the previous version, plus by recipient: the unit of the current for-each-unit pass applied the designation (\"for each Observer unit …, select one enemy unit … to be marked as their Spotted unit\").",
+    schema: (previous) => withProperties(previous, { by: widenedEnum(previous, "by", ["recipient"]) }),
+    normalize: (input, previous) => input.by === "recipient" ? { ...previous({ ...input, by: "this-unit" }), by: "recipient" } : previous(input),
+  },
+  {
+    // "if the Spotted unit was marked by an Observer unit that has the Markerlight keyword": who applied it is a group of units.
+    family: "designated-filter",
+    version: 3,
+    description: "As the previous version, plus by following-filter: the designation was applied by a unit the unit-filter right after the leaf names (\"was marked by an Observer unit that has the Markerlight keyword\").",
+    schema: (previous) => withProperties(previous, { by: widenedEnum(previous, "by", ["following-filter"]) }),
+    normalize: (input, previous) => input.by === "following-filter" ? { ...previous({ ...input, by: "this-unit" }), by: "following-filter" } : previous(input),
+  },
 ];

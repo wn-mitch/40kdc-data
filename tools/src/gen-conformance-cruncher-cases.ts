@@ -56,6 +56,10 @@ export function canonicalRecipientCases() {
     context: { phase: "fight", targetUnitId: "recipient", targetKeywords: ["INFANTRY", "CHARACTER"], targetAttached: false, recipientSnapshots: [{ ...snapshot, perspective: "target" }] },
   });
   add("missing", []);
+  // A loop that only marks units grants nothing, so it needs no snapshot and leaves the rest of the part scored.
+  const marking = { type: "for-each-unit", selector: { filter: { owner: "friendly" } }, effect: { type: "designate", target: "recipient", modifier: { tag: "example-mark" } } };
+  add("mark-only-loop-needs-none", [], { effect: { ...effect, effect: { type: "sequence", steps: [marking,
+    { type: "stat-modifier", target: "this-unit", modifier: { stat: "S", operation: "add", value: 1, weapons: { type: "melee" } } }] } } });
   add("wrong-source-unit", [{ ...snapshot, sourceUnitId: "outsider" }]);
   add("wrong-source-identity", [{ ...snapshot, source: { ...source, sourceUnitId: "outsider" } }]);
   add("conflicting", [snapshot, { ...snapshot, selected: false }]);
@@ -553,6 +557,10 @@ export function canonicalScenarioCases() {
     { id: "guided-true", effect: gated(guided), context: { attackerGuided: true } },
     { id: "guided-false", effect: gated(guided), context: { attackerGuided: false } },
     { id: "guided-undeclared", effect: gated(guided), context: {} },
+    // "attacker" names the attacking unit, the one attackerGuided describes.
+    { id: "guided-attacker-subject", effect: gated({ type: "guided", parameters: { subject: "attacker" } }), context: { attackerGuided: true } },
+    // "Each model from your army": every model of a friendly unit, so the whole unit.
+    { id: "every-friendly-model-target", effect: { type: "stat-modifier", target: { owner: "friendly", level: "model" }, modifier: { stat: "BS", operation: "improve", value: 1 } }, context: {} },
     { id: "wounds-defender-remaining", effect: gated(defenderWounds), context: { targetWounds: { remaining: 2, starting: 6 } } },
     { id: "wounds-defender-unhurt", effect: gated(defenderWounds), context: { targetWounds: { remaining: 6, starting: 6 } } },
     { id: "model-count-keyword-declared", effect: gated(championCount), context: { attackerKeywordModels: { "example champion": 1 } } },

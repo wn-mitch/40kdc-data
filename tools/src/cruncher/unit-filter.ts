@@ -108,6 +108,9 @@ export function matchesUnitFilter(filter: unknown, context: EngineContext, side:
       if (verdict === "unknown") unknown = true;
     } else if (key === "level" && value === "unit") {
       continue;
+    } else if (key === "level" && value === "model" && Object.keys(filter).every((name) => name === "level" || name === "owner")) {
+      // "Each model from your army": every model of a unit on that side, so the whole unit.
+      continue;
     } else if (key === "level" && value === "model" && everyModelMatches && filter.attachment_role === undefined) {
       // Every model of the unit meets the keyword predicate, so the filter selects the whole unit.
       continue;

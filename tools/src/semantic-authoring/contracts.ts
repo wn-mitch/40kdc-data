@@ -23,6 +23,7 @@ import { normalizePredicateParameters, PREDICATE_FAMILIES } from "./predicate-fa
 import { normalizePredicateParameters2, PREDICATE_FAMILIES_2 } from "./predicate-families-2.js";
 import { normalizeSetUpRestrictionParameters, SET_UP_RESTRICTION_FAMILIES } from "./families/set-up.js";
 import { MENU_OPTIONS_GRANT_FAMILIES, normalizeMenuOptionsGrantParameters } from "./families/menu-options-grant.js";
+import { DESIGNATION_ONCE_FAMILIES, normalizeDesignationOnceParameters } from "./families/designation-once.js";
 import { normalizeOptionalCostParameters, OPTIONAL_COST_FAMILIES } from "./optional-cost-families.js";
 import { normalizePredicateSubjectParameters, PREDICATE_SUBJECT_FAMILIES } from "./predicate-subject-families.js";
 import { normalizeTestParameters, TEST_FAMILIES } from "./test-family.js";
@@ -115,6 +116,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...PREDICATE_FAMILIES_2,
   ...SET_UP_RESTRICTION_FAMILIES,
   ...MENU_OPTIONS_GRANT_FAMILIES,
+  ...DESIGNATION_ONCE_FAMILIES,
   ...OPTIONAL_COST_FAMILIES,
   ...PREDICATE_SUBJECT_FAMILIES,
   ...TEST_FAMILIES,
@@ -214,6 +216,7 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizePredicateParameters2(family, input)
     ?? normalizeSetUpRestrictionParameters(family, input)
     ?? normalizeMenuOptionsGrantParameters(family, input)
+    ?? normalizeDesignationOnceParameters(family, input)
     ?? normalizeOptionalCostParameters(family, input)
     ?? normalizePredicateSubjectParameters(family, input, version)
     ?? normalizeTestParameters(family, input, version)

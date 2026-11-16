@@ -46,7 +46,7 @@ import {
   attachmentFromMembers, boundsVerdict, evaluateControls, evaluateDesignated, evaluateInRegion, evaluateOwnMove, evaluatePhaseEvent, evaluateRuleActive,
   evaluateTestResult, keywordModelBounds,
 } from "./scenario-conditions.js";
-import { RECIPIENT_SNAPSHOT_UNAVAILABLE, resolveRecipientSnapshots } from "./recipient-snapshots.js";
+import { marksOnly, RECIPIENT_SNAPSHOT_UNAVAILABLE, resolveRecipientSnapshots } from "./recipient-snapshots.js";
 import { resolveNamedWeaponBindings } from "./weapon-bindings.js";
 import { conditionFactKey, conditionNeeds, type ConditionNeed } from "./condition-facts.js";
 import { quantityDistribution } from "./damage-roll.js";
@@ -2269,6 +2269,8 @@ export function recipientSnapshotReason(trigger: unknown, effect: unknown): stri
     if (!isObject(value)) return false;
     const inherited = value.type === "ability-part" && value.trigger !== undefined ? value.trigger : activeTrigger;
     const triggers = (Array.isArray(inherited) ? inherited : [inherited]).filter(isObject);
+    // A loop that only marks units grants nothing to snapshot (marksOnly).
+    if (value.type === "for-each-unit" && marksOnly(value)) return false;
     if (value.type === "for-each-unit" && triggers.some((item) => typeof item.event === "string" && !isAttackStep(item))) return true;
     return Object.entries(value).some(([key, child]) => key !== "trigger" && check(child, inherited));
   };
@@ -3177,8 +3179,9 @@ function evaluateConditionFromContext(
     }
     case "guided": {
       // Guided is read for the attacking unit: a For the Greater Good unit, not an Observer, targeting a Spotted unit.
+      // "attacker" names that unit in either perspective.
       const subject = (condition.parameters as Record<string, unknown> | undefined)?.subject;
-      if ((subject != null && !isBuffedUnit(subject)) || ctx.attackerGuided === undefined) return "unknown";
+      if ((subject != null && subject !== "attacker" && !isBuffedUnit(subject)) || ctx.attackerGuided === undefined) return "unknown";
       return ctx.attackerGuided;
     }
     default:

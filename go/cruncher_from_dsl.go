@@ -785,6 +785,10 @@ func recipientSnapshotUnavailable(trigger, effect any) bool {
 			if item["type"] == "ability-part" && item["trigger"] != nil {
 				inherited = item["trigger"]
 			}
+			// A loop that only marks units grants nothing to snapshot (marksOnly).
+			if item["type"] == "for-each-unit" && marksOnly(item) {
+				return false
+			}
 			if item["type"] == "for-each-unit" {
 				candidates, ok := asList(inherited)
 				if !ok {
@@ -926,6 +930,9 @@ func resolveRecipientSnapshots(trigger, effect any, source map[string]any, conte
 			if t, ok := raw.(map[string]any); ok && getStr(t, "event") != "" && !isAttackStep(t) {
 				historical = append(historical, t)
 			}
+		}
+		if m["type"] == "for-each-unit" && len(historical) > 0 && marksOnly(m) {
+			return map[string]any{"type": "sequence", "steps": []any{}}
 		}
 		if m["type"] == "for-each-unit" && len(historical) > 0 {
 			matches := []map[string]any{}
@@ -3304,6 +3311,10 @@ func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
 			if value == "unit" || (value == "model" && filter["attachment_role"] != nil && memberSide) {
 				continue
 			}
+			// "Each model from your army": every model of a unit on that side, so the whole unit.
+			if value == "model" && onlyLevelAndOwner(filter) {
+				continue
+			}
 			// Every model of the unit meets the keyword predicate, so the filter selects the whole unit.
 			if value == "model" && everyModelMatches && filter["attachment_role"] == nil {
 				continue
@@ -3579,7 +3590,8 @@ func evaluateConditionFromContext(condition, ctx map[string]any, rest ...any) an
 	case "battle-round", "player-turn-is", "strength", "wounds", "closest":
 		return evaluateScenarioCondition(getStr(condition, "type"), params, ctx, perspective)
 	case "guided":
-		if (params["subject"] != nil && !isBuffedUnit(params["subject"])) || ctx["attackerGuided"] == nil {
+		// "attacker" names the attacking unit in either perspective.
+		if (params["subject"] != nil && params["subject"] != "attacker" && !isBuffedUnit(params["subject"])) || ctx["attackerGuided"] == nil {
 			return nil
 		}
 		return ctx["attackerGuided"] == true
@@ -3842,4 +3854,44 @@ func translateDiceTable(node, source map[string]any, opts dslOpts, out *effectTr
 		fragment = restricted
 	}
 	out.unsupported = append(out.unsupported, unsup(diceTableReason, fragment))
+}
+
+// onlyLevelAndOwner reports whether a unit filter names nothing but its level and side.
+func onlyLevelAndOwner(filter map[string]any) bool {
+	for name := range filter {
+		if name != "level" && name != "owner" {
+			return false
+		}
+	}
+	return true
+}
+
+// marksOnly reports whether an effect only marks units: designations, possibly under
+// selections, loops, gates and sequences. It grants no buff, so a loop over it needs no
+// trigger-time recipients; the marks it leaves are scenario facts.
+func marksOnly(node any) bool {
+	m, ok := node.(map[string]any)
+	if !ok || m == nil {
+		return false
+	}
+	switch m["type"] {
+	case "designate":
+		return true
+	case "select-units", "for-each-unit":
+		return marksOnly(m["effect"])
+	case "conditional":
+		return marksOnly(m["effect"]) && (m["on_fail"] == nil || marksOnly(m["on_fail"]))
+	case "sequence":
+		steps, ok := m["steps"].([]any)
+		if !ok || len(steps) == 0 {
+			return false
+		}
+		for _, step := range steps {
+			if !marksOnly(step) {
+				return false
+			}
+		}
+		return true
+	}
+	return false
 }

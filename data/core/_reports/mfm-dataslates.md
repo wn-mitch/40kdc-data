@@ -17,7 +17,7 @@ dump confirmation.
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 202 | 255 |
 | stratagems | 0 | 0 | 1086 | 227 |
-| abilities | 0 | 0 | 3856 | 680 |
+| abilities | 0 | 0 | 3857 | 679 |
 | phase-mappings | 0 | 0 | 1223 | 358 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -54,7 +54,7 @@ dump confirmation.
 | raven-guard | 0 | 0 | 11 | 0 |
 | salamanders | 0 | 0 | 10 | 1 |
 | space-wolves | 0 | 0 | 81 | 6 |
-| tau-empire | 0 | 0 | 138 | 28 |
+| tau-empire | 0 | 0 | 139 | 27 |
 | thousand-sons | 0 | 0 | 128 | 30 |
 | tyranids | 0 | 0 | 159 | 27 |
 | ultramarines | 0 | 0 | 11 | 0 |
@@ -168,8 +168,8 @@ dump confirmation.
 | space-wolves | verified | 81 |
 | tau-empire | digest-differs | 5 |
 | tau-empire | stub | 3 |
-| tau-empire | unpublished | 20 |
-| tau-empire | verified | 138 |
+| tau-empire | unpublished | 19 |
+| tau-empire | verified | 139 |
 | thousand-sons | digest-differs | 7 |
 | thousand-sons | stub | 2 |
 | thousand-sons | unpublished | 21 |

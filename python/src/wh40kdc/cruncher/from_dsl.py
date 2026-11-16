@@ -2938,6 +2938,29 @@ def same_snapshot_value(left: Any, right: Any) -> bool:
     )
 
 
+def marks_only(node: Any) -> bool:
+    """Whether an effect only marks units: designations, possibly under selections, loops,
+    gates and sequences. It grants no buff, so a loop over it needs no trigger-time recipients;
+    the marks it leaves are scenario facts."""
+    if not _is_object(node):
+        return False
+    kind = node.get("type")
+    if kind == "designate":
+        return True
+    if kind in ("select-units", "for-each-unit"):
+        return marks_only(node.get("effect"))
+    if kind == "conditional":
+        return marks_only(node.get("effect")) and (
+            node.get("on_fail") is None or marks_only(node.get("on_fail"))
+        )
+    if kind == "sequence":
+        steps = node.get("steps")
+        return (
+            isinstance(steps, list) and len(steps) > 0 and all(marks_only(step) for step in steps)
+        )
+    return False
+
+
 def recipient_snapshot_reason(trigger: Any, effect: Any) -> str | None:
     """Detect trigger-time recipient sets that require caller-attested history."""
 
@@ -2952,6 +2975,9 @@ def recipient_snapshot_reason(trigger: Any, effect: Any) -> str | None:
             else active_trigger
         )
         triggers = inherited if isinstance(inherited, list) else [inherited]
+        # A loop that only marks units grants nothing to snapshot (marks_only).
+        if value.get("type") == "for-each-unit" and marks_only(value):
+            return False
         if value.get("type") == "for-each-unit" and any(
             _is_object(item) and isinstance(item.get("event"), str) and not is_attack_step(item)
             for item in triggers
@@ -2996,6 +3022,8 @@ def resolve_recipient_snapshots(
             and isinstance(item.get("event"), str)
             and not is_attack_step(item)
         ]
+        if node.get("type") == "for-each-unit" and historical and marks_only(node):
+            return {"type": "sequence", "steps": []}
         if node.get("type") == "for-each-unit" and historical:
             matches = [
                 snap
@@ -4050,6 +4078,13 @@ def _matches_unit_filter(
         elif (
             key == "level"
             and value == "model"
+            and all(name in ("level", "owner") for name in filt)
+        ):
+            # "Each model from your army": every model of a unit on that side, so the whole unit.
+            continue
+        elif (
+            key == "level"
+            and value == "model"
             and every_model_matches
             and filt.get("attachment_role") is None
         ):
@@ -4474,10 +4509,11 @@ def _evaluate_condition_from_context(
     if ctype == "guided":
         # Guided is read for the attacking unit: a For the Greater Good unit, not an
         # Observer, targeting a Spotted unit.
+        # "attacker" names that unit in either perspective.
         subject = params.get("subject") if params else None
-        if (subject is not None and not _is_buffed_unit(subject)) or ctx.get(
-            "attackerGuided"
-        ) is None:
+        if (
+            subject is not None and subject != "attacker" and not _is_buffed_unit(subject)
+        ) or ctx.get("attackerGuided") is None:
             return "unknown"
         return ctx["attackerGuided"]
     if ctype == "attachment":

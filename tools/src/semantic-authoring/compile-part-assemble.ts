@@ -29,6 +29,7 @@ import { AURA_RECIPIENT } from "./compile-antecedent.js";
 import type { PartFrame } from "./compile-part-classify.js";
 import type { planEffects } from "./compile-part-plan.js";
 import { loopUnderBand, stepsBeforeLoop, wrapBandLoop } from "./compile-band-loop.js";
+import { loopTail } from "./compile-loop-tail.js";
 import { firstPartContradicted } from "./compile-round-sections.js";
 import { firstPartLoop, loopInSelection, selectionPerPass, type PartBindings } from "./compile-part-bindings.js";
 
@@ -252,6 +253,16 @@ export function assemblePart(
     && partStarts.every((part) => places[part.index]!.sentence > places[durationAt[0]!]!.sentence);
   // "If an enemy unit within 8\" of this unit is below Starting Strength": a gate on each unit an
   // aura or a for-each reaches holds per recipient, inside the wrap, not once around it.
+  // "For each Observer unit …, select one enemy unit … to be marked as their Spotted unit. … Until the end of the phase, each
+  // time a model … makes an attack that targets a Spotted unit, …": the steps of the sentences after the loop's run once,
+  // after it, when they read neither the pass's unit nor the selected unit (compile-loop-tail.ts).
+  const passTail = forEachLeaf !== null && selections.length === 1 && partStarts.length === 0 && window === null && body === unwrapped
+    && selectionPerPass(list, forEachLeaf, selections, planned, (leaf) => partOf(list.indexOf(leaf)))
+    ? loopTail(steps, pieceItems.filter((item) => partOf(item.index) === 0).map((item) => places[item.index]!.sentence), places[list.indexOf(forEachLeaf)]!.sentence) : [];
+  if (passTail.length) {
+    const lead = steps.slice(0, steps.length - passTail.length);
+    body = lead.length === 1 ? lead[0]! : { type: "sequence", steps: lead };
+  }
   if (auraLeaf || forEachLeaf) {
     const perUnit = global.filter((node) => JSON.stringify(node).includes(`"${AURA_RECIPIENT}"`));
     if (perUnit.length) {
@@ -345,6 +356,7 @@ export function assemblePart(
     });
     body = ahead.length ? { type: "sequence", steps: [...ahead, select] } : select;
     if (perPass) body = attempt(() => wrapForEachUnit(forEachLeaf!, body!));
+    if (body && passTail.length) body = { type: "sequence", steps: [body, ...passTail] };
   }
   else if ((forEachLeaf && forEachPart === 0) || recordLoop) {
     const each = recordLoop ?? forEachLeaf!;

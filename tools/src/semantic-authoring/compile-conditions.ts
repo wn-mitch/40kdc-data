@@ -157,7 +157,7 @@ const STRENGTH_STATES: Record<string, string> = { "below-starting-strength": "st
 
 /** Marks as the designations an effect applies, uppercase as the rules print them. */
 const MARK_TAGS: Record<string, string> = {
-  "oath-of-moment": "OATH OF MOMENT TARGET", afflicted: "AFFLICTED", spotted: "SPOTTED", hidden: "HIDDEN", marked: "MARKED",
+  "oath-of-moment": "OATH OF MOMENT TARGET", afflicted: "AFFLICTED", spotted: "spotted", hidden: "HIDDEN", marked: "MARKED",
   "riled-up": "riled-up",
 };
 
@@ -721,7 +721,8 @@ export function condition(leaf: CompileLeaf): Node {
       // The Warlord is one model: a count of Warlords has no meaning.
       if (parameters.tag === "warlord" && (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined)) throw new CompileError("A count of Warlords is not a Warlord test; the Warlord is one model.");
       if (parameters.tag === "warlord" && leaf.parameters.subject === undefined) throw new CompileError("A Warlord test has no subject: name the model or unit it tests.");
-      if (leaf.parameters.by !== undefined) parameters.by = closed(leaf, "by");
+      // designated-filter@3: applied by a unit of the unit-filter after the leaf (compile-unit-filters.ts folds it in).
+      if (leaf.parameters.by !== undefined) parameters.by = leaf.parameters.by === "following-filter" ? followingFilter(leaf) : closed(leaf, "by");
       if (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined) parameters.count = countBounds(leaf);
       return polarity(leaf, pred("designated", parameters, subjectOf(leaf)));
     }

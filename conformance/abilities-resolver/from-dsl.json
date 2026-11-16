@@ -6958,6 +6958,113 @@
       }
     },
     {
+      "caseId": "canonical/recipient-snapshot/mark-only-loop-needs-none",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "for-each-unit",
+              "selector": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              },
+              "effect": {
+                "type": "designate",
+                "target": "recipient",
+                "modifier": {
+                  "tag": "example-mark"
+                }
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "S",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": []
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"designate\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "encounter-layer"
+        ],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "snapshot-example@battle-started",
+            "label": "+1 strength",
+            "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "battle-started",
+                  "condition": {
+                    "type": "attachment",
+                    "parameters": {
+                      "subject": "this-model",
+                      "role": "leading"
+                    }
+                  }
+                },
+                "duration": "battle"
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "strength-mod",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
       "caseId": "canonical/recipient-snapshot/wrong-source-unit",
       "abilityId": "snapshot-example",
       "source": {
@@ -12758,6 +12865,94 @@
         ],
         "activatable": [],
         "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/guided-attacker-subject",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "guided",
+          "parameters": {
+            "subject": "attacker"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerGuided": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/scenario/every-friendly-model-target",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": {
+          "owner": "friendly",
+          "level": "model"
+        },
+        "modifier": {
+          "stat": "BS",
+          "operation": "improve",
+          "value": 1
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "skill-mod",
+            "stat": "BS",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": [
+          null
+        ]
       }
     },
     {
