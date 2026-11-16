@@ -4912,7 +4912,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "this-unit",
+        "target": "this-model",
         "modifier": {
           "roll": "hit",
           "subset": "ones"
@@ -4926,15 +4926,9 @@
       "taunar-supremacy-armour"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "tau-empire",
-    "trigger": {
-      "event": "attacks-resolved",
-      "filter": {
-        "kind": "attack"
-      }
-    }
+    "faction_id": "tau-empire"
   },
   {
     "ability_id": "expert-fieldcraft-tau-empire",

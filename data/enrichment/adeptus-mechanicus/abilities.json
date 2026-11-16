@@ -5862,9 +5862,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "51118827ed1b2f31636ff3bbcfd744aaaaf547de29f7fe43b5bd5e9af9bbe4a8",
+    "source_digest": "3faedd27abcd7882fb5ca5ad4d4488de617755634d5e4ec59b78ae9a6a8fe6b3",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -5873,83 +5873,133 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "phase-started",
-        "condition": {
-          "operator": "and",
-          "operands": [
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS MECHANICUS"
+            ]
+          },
+          "count": {
+            "min": 0,
+            "max": {
+              "incursion": 1,
+              "strike-force": 2,
+              "onslaught": 3
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
             {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "command"
+              "type": "keyword-grant",
+              "target": "selected-unit",
+              "modifier": {
+                "keywords": [
+                  "HALO OVERRIDE"
+                ]
               }
             },
             {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
-              }
+              "type": "choice",
+              "options": [
+                {
+                  "type": "stat-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "HALO OVERRIDE"
+                    ]
+                  },
+                  "modifier": {
+                    "stat": "M",
+                    "operation": "add",
+                    "value": 2
+                  }
+                },
+                {
+                  "type": "stat-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "HALO OVERRIDE"
+                    ]
+                  },
+                  "modifier": {
+                    "stat": "T",
+                    "operation": "add",
+                    "value": 1
+                  }
+                },
+                {
+                  "type": "permission",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "HALO OVERRIDE"
+                    ]
+                  },
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": true,
+                    "after": [
+                      "advance"
+                    ]
+                  }
+                },
+                {
+                  "type": "ability-grant",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "HALO OVERRIDE"
+                    ]
+                  },
+                  "modifier": {
+                    "ability": "stealth"
+                  }
+                }
+              ],
+              "choice_label": "Override ability",
+              "min_choices": 1,
+              "max_choices": 1
             }
           ]
         }
-      },
-      "effect": {
-        "type": "stance-select",
-        "mode": "re-selectable",
-        "options": [
-          {
-            "name": "Electromotive Energisation",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "M",
-                "operation": "add",
-                "value": 2
-              }
-            },
-            "id": "electromotive-energisation"
-          },
-          {
-            "name": "Microactuator Bracing",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "T",
-                "operation": "add",
-                "value": 1
-              }
-            },
-            "id": "microactuator-bracing"
-          },
-          {
-            "name": "Predation Protocols",
-            "effect": {
-              "type": "permission",
-              "target": "this-unit",
-              "modifier": {
-                "activity": "declare-charge",
-                "allow": true
-              }
-            },
-            "id": "predation-protocols"
-          },
-          {
-            "name": "Muted Servomotors",
-            "effect": {
-              "type": "roll-modifier",
-              "target": "attacker",
-              "modifier": {
-                "roll": "hit",
-                "operation": "subtract",
-                "value": 1
-              }
-            },
-            "id": "muted-servomotors"
-          }
-        ]
       }
     },
     "scope": {

@@ -7222,67 +7222,47 @@
         "type": "sequence",
         "steps": [
           {
-            "type": "ability-part",
-            "trigger": {
-              "event": "selected",
-              "filter": {
-                "to": "shoot"
-              },
-              "optional": true
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "all_of": [
+                    "FLY"
+                  ]
+                }
+              }
             },
             "effect": {
-              "type": "conditional",
-              "condition": {
-                "type": "matches",
-                "parameters": {
-                  "subject": "defender",
-                  "filter": {
-                    "all_of": [
-                      "FLY"
-                    ]
-                  }
-                }
-              },
-              "effect": {
-                "type": "designate",
-                "target": "this-model",
-                "modifier": {
-                  "tag": "enhancement-expended"
-                }
+              "type": "designate",
+              "target": "this-model",
+              "modifier": {
+                "tag": "enhancement-expended"
               }
             }
           },
           {
-            "type": "ability-part",
-            "trigger": {
-              "event": "attacks-resolved",
-              "filter": {
-                "kind": "attack"
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "all_of": [
+                    "FLY"
+                  ]
+                }
               }
             },
             "effect": {
-              "type": "conditional",
-              "condition": {
-                "type": "matches",
-                "parameters": {
-                  "subject": "defender",
-                  "filter": {
-                    "all_of": [
-                      "FLY"
-                    ]
-                  }
-                }
-              },
-              "effect": {
-                "type": "re-roll",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "hit",
-                  "result_scope": "any-result"
-                }
+              "type": "re-roll",
+              "target": "this-model",
+              "modifier": {
+                "roll": "hit",
+                "result_scope": "any-result"
               }
-            },
-            "duration": "phase"
+            }
           }
         ]
       }
@@ -7291,6 +7271,13 @@
       "duration": "phase"
     },
     "behavior": "reactive",
-    "source_digest": "f4b26ac77fd4aacad52446b9b5b574fb4bc0c644b610d65479b0c38029560312"
+    "source_digest": "f4b26ac77fd4aacad52446b9b5b574fb4bc0c644b610d65479b0c38029560312",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "optional": true
+    }
   }
 ]

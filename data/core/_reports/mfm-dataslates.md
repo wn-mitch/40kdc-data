@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1235 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 0 | 200 | 257 |
+| detachments | 1 | 0 | 200 | 256 |
 | stratagems | 0 | 0 | 1086 | 227 |
-| abilities | 0 | 0 | 3854 | 682 |
-| phase-mappings | 0 | 0 | 1221 | 360 |
+| abilities | 0 | 0 | 3855 | 681 |
+| phase-mappings | 1 | 0 | 1221 | 359 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -29,7 +29,7 @@ dump confirmation.
 | adepta-sororitas | 0 | 0 | 121 | 27 |
 | adeptus-astartes | 0 | 0 | 232 | 18 |
 | adeptus-custodes | 0 | 0 | 155 | 3 |
-| adeptus-mechanicus | 0 | 0 | 142 | 25 |
+| adeptus-mechanicus | 0 | 0 | 143 | 24 |
 | aeldari | 0 | 0 | 247 | 53 |
 | agents-of-the-imperium | 0 | 0 | 99 | 39 |
 | astra-militarum | 0 | 0 | 208 | 43 |
@@ -82,10 +82,10 @@ dump confirmation.
 | adeptus-custodes | stub | 1 |
 | adeptus-custodes | unpublished | 1 |
 | adeptus-custodes | verified | 155 |
-| adeptus-mechanicus | digest-differs | 8 |
+| adeptus-mechanicus | digest-differs | 7 |
 | adeptus-mechanicus | stub | 16 |
 | adeptus-mechanicus | unpublished | 1 |
-| adeptus-mechanicus | verified | 142 |
+| adeptus-mechanicus | verified | 143 |
 | aeldari | digest-differs | 9 |
 | aeldari | stub | 26 |
 | aeldari | unpublished | 18 |
