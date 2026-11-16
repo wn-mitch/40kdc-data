@@ -5,7 +5,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { awaitsFollowingFilter } from "./families/shared.js";
 import { exclusionOnly } from "./compile-select-exclusions.js";
 import { allocatedObject, destroyedObject, rollOwnerEvent } from "./compile-model-level.js";
-import { refuseDestroyedUnitAntecedent, trailingDestroyerFilter } from "./compile-destroying-attack.js";
+import { destroyerSideOf, refuseDestroyedUnitAntecedent, trailingDestroyerFilter } from "./compile-destroying-attack.js";
 import { claimedByEmbarkedState } from "./compile-embarked-exclusion.js";
 import { isTargetRef, TARGET_REF_KEYS } from "./compile-target-refs.js";
 import { placements } from "./compile-placement.js";
@@ -443,6 +443,23 @@ function unitFilterBetween(leaves: readonly CompileLeaf[], from: number, to: num
 }
 
 /**
+ * Whether a unit-filter between a destroyer filter and an anaphor is a nearer unit for it. A Stratagem's
+ * TARGET filter on the other side from the destroyer is not: "destroyed by an enemy unit. TARGET: One
+ * friendly X unit. EFFECT: That enemy unit …" still names the destroyer (refuseDestroyedUnitAntecedent
+ * checks the anaphor's wording).
+ */
+function unitNearerThanDestroyer(leaves: readonly CompileLeaf[], from: number, to: number, destroyerSide: "friendly" | "enemy" | undefined): boolean {
+  for (let at = from; at < to; at += 1) {
+    const leaf = leaves[at];
+    if (leaf?.family_id !== "unit-filter") continue;
+    const side = leaf.parameters.side;
+    if (leaf.fragment === "TARGET" && destroyerSide !== undefined && (side === "friendly" || side === "enemy") && side !== destroyerSide) continue;
+    return true;
+  }
+  return false;
+}
+
+/**
  * Whether an attack earlier in the leaf's fragment names its target by the unit-filter right after it
  * ("makes a ranged attack that targets an enemy unit"): that filter is the defender. Bound before the
  * filters fold (compile-unit-filters.ts), so the filter is still a plain unit-filter here.
@@ -545,7 +562,8 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   if (destroyedAt >= 0 && namedDestroyerFilterAfter(leaves[destroyedAt], leaves[destroyedAt + 1])
     && !unitFilterBetween(leaves, destroyedAt + 2, index)) return "event-subject";
   // A unit-filter between the destroyer filter and the antecedent is the nearer unit, so the later rules take it.
-  if (destroyedAt >= 0 && trailingDestroyerFilter(leaves, destroyedAt, sourceText) !== null && !unitFilterBetween(leaves, destroyedAt + 2, index)) {
+  if (destroyedAt >= 0 && trailingDestroyerFilter(leaves, destroyedAt, sourceText) !== null
+    && !unitNearerThanDestroyer(leaves, destroyedAt + 2, index, destroyerSideOf(leaves, destroyedAt + 1))) {
     refuseDestroyedUnitAntecedent(leaves, destroyedAt, leaves[index]!, sourceText);
     return "event-subject";
   }

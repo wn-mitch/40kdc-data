@@ -104,7 +104,9 @@ export function refuseDestroyedUnitAntecedent(leaves: readonly CompileLeaf[], ev
   const filterIndex = eventIndex + 1;
   const destroyer = leaves[filterIndex]!;
   if (sourceText === undefined || destroyer.end_byte === undefined || antecedent.end_byte === undefined || antecedent.end_byte <= destroyer.end_byte) return;
-  const wording = Buffer.from(sourceText, "utf8").subarray(destroyer.end_byte, antecedent.end_byte).toString("utf8").toUpperCase();
+  // In a later Stratagem fragment ("EFFECT: That enemy unit …") the wording between holds the TARGET's own units, so only the anaphor's wording is read.
+  const from = antecedent.fragment === destroyer.fragment ? destroyer.end_byte : antecedent.start_byte;
+  const wording = Buffer.from(sourceText, "utf8").subarray(from, antecedent.end_byte).toString("utf8").toUpperCase();
   const destroyerSide = destroyerSideOf(leaves, filterIndex);
   const leading = leadingObjectFilter(leaves, eventIndex);
   const object = leading === undefined || leading === null ? undefined : leaves[leading];

@@ -431,3 +431,32 @@ describe("Semantic authoring ability-used gate over a destruction-gated list", (
     expect(steps[1]!.effect).toMatchObject({ type: "conditional", condition: { operator: "not" } });
   });
 });
+
+describe("a Stratagem's EFFECT naming the destroyer past its TARGET", () => {
+  // Vengeance shape: "WHEN: … a friendly ALPHA unit is destroyed by an enemy unit. TARGET: One friendly BETA unit. EFFECT: That enemy unit is marked …".
+  const text = "Any phase, just after a friendly ALPHA unit is destroyed by an enemy unit. One friendly BETA unit. That enemy unit is marked until the end of the battle.";
+  const fragments = ["WHEN", "WHEN", "WHEN", "WHEN", "TARGET", "TARGET", "EFFECT", "EFFECT"];
+  const leaves = () => placed(text, [
+    ["Any phase", "use-window", { your_phases: [], opponent_phases: [], either_phases: ["command", "movement", "shooting", "charge", "fight"] }],
+    ALPHA,
+    destroyedUnit(),
+    ENEMY,
+    ["One", "stratagem-target", { count: "one" }],
+    ["friendly BETA unit", "unit-filter", { side: "friendly", keywords: ["BETA"] }],
+    ["That enemy unit is marked", "apply-mark", { subject: "antecedent", tag: "afflicted" }],
+    ["until the end of the battle", "duration", { endpoint: "end-of-battle" }],
+  ]).map((leaf, at) => ({ ...leaf, fragment: fragments[at]! }));
+
+  it("marks the destroyer, not the Stratagem's target", () => {
+    const result = compileLeaves(leaves(), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(JSON.stringify(result.mechanics.effect)).toContain('"type":"designate","target":"event-subject"');
+    expect((result.mechanics.trigger as Record<string, unknown>).subject).toEqual({ owner: "enemy" });
+  });
+
+  it("still takes a TARGET filter on the destroyer's side as the nearer unit", () => {
+    const sameSide = leaves().map((leaf) => leaf.parameters.keywords?.toString() === "BETA" ? { ...leaf, parameters: { ...leaf.parameters, side: "enemy" } } : leaf);
+    const result = compileLeaves(sameSide, text);
+    expect(result.ok && JSON.stringify(result.mechanics.effect).includes('"target":"event-subject"')).toBe(false);
+  });
+});
