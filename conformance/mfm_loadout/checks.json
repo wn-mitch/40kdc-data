@@ -15289,7 +15289,7 @@
       },
       "counts": {
         "kinetic-destroyer": 3,
-        "tarsis-buckler": 3
+        "tarsus-buckler": 3
       }
     },
     "expected": []
@@ -15304,7 +15304,7 @@
       },
       "counts": {
         "kinetic-destroyer": 4,
-        "tarsis-buckler": 3
+        "tarsus-buckler": 3
       }
     },
     "expected": [
@@ -15324,7 +15324,7 @@
       },
       "counts": {
         "kinetic-destroyer": 2,
-        "tarsis-buckler": 3
+        "tarsus-buckler": 3
       }
     },
     "expected": [
@@ -17096,7 +17096,7 @@
       },
       "counts": {
         "kinetic-destroyer": 3,
-        "tarsis-buckler": 3
+        "tarsus-buckler": 3
       }
     },
     "expected": []
@@ -17111,7 +17111,7 @@
       },
       "counts": {
         "kinetic-destroyer": 4,
-        "tarsis-buckler": 3
+        "tarsus-buckler": 3
       }
     },
     "expected": [
@@ -17131,7 +17131,7 @@
       },
       "counts": {
         "kinetic-destroyer": 2,
-        "tarsis-buckler": 3
+        "tarsus-buckler": 3
       }
     },
     "expected": [

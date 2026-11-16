@@ -7,7 +7,7 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 |---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
 | adepta-sororitas | 37 | 51 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 |
 | adeptus-astartes | 177 | 182 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 | 16 | 0 | 0 |
-| adeptus-custodes | 39 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 1 | 0 | 0 |
+| adeptus-custodes | 39 | 20 | 2 | 2 | 0 | 1 | 0 | 0 | 0 | 2 | 1 | 0 | 0 |
 | adeptus-mechanicus | 38 | 37 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
 | aeldari | 80 | 97 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 5 | 0 | 0 |
 | agents-of-the-imperium | 33 | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 10 | 0 | 0 |
@@ -28,7 +28,7 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 | thousand-sons | 38 | 43 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
 | tyranids | 57 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | world-eaters | 34 | 42 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
-| **TOTAL** | **1104** | **1235** | **0** | **0** | **0** | **0** | **0** | **0** | **0** | **22** | **101** | **191** | **0** |
+| **TOTAL** | **1104** | **1235** | **2** | **2** | **0** | **1** | **0** | **0** | **0** | **21** | **101** | **191** | **0** |
 
 ## adepta-sororitas
 
@@ -68,10 +68,13 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 
 ## adeptus-custodes
 
+**Default loadout changes:**
+- venatari-with-kinetic-destroyers / Venatari: ["kinetic-destroyer","tarsis-buckler"] → ["kinetic-destroyer","tarsus-buckler"]
+- aquilan-wing-venatari-with-kinetic-destroyers / Venatari: ["kinetic-destroyer","tarsis-buckler"] → ["kinetic-destroyer","tarsus-buckler"]
+
 **Fuzzy-resolved spelling drift (GW name → repo id, edit-distance ≤1):**
 - `Solarite Power Gauntlet` → `solerite-power-gauntlet` (was `solarite-power-gauntlet`)
 - `Solarite Power Talon` → `solerite-power-talon` (was `solarite-power-talon`)
-- `Tarsus Buckler` → `tarsis-buckler` (was `tarsus-buckler`)
 
 **Notes (cap approximations / alternates):**
 - allarus-custodians: loadout set 59b68be9 kept as one menu: its swaps do not stack freely (Allarus Custodians)

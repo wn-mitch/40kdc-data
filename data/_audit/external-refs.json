@@ -62,15 +62,15 @@
       }
     },
     "weapon": {
-      "entities": 3628,
-      "with_external_refs": 3542,
+      "entities": 3629,
+      "with_external_refs": 3543,
       "covered_entities_by_namespace": {
         "bsdata": 2910,
-        "mfm": 3529
+        "mfm": 3530
       },
       "references_by_namespace": {
         "bsdata": 3758,
-        "mfm": 5217
+        "mfm": 5219
       }
     },
     "wargear": {

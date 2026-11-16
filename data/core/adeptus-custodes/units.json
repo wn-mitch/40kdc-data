@@ -2851,7 +2851,8 @@
       "diameter": 40
     },
     "weapon_ids": [
-      "kinetic-destroyer"
+      "kinetic-destroyer",
+      "tarsus-buckler"
     ]
   },
   {
@@ -3157,7 +3158,8 @@
       "diameter": 40
     },
     "weapon_ids": [
-      "kinetic-destroyer"
+      "kinetic-destroyer",
+      "tarsus-buckler"
     ]
   }
 ]

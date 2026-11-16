@@ -194,10 +194,13 @@ export const WEAPON_ALIASES: Record<string, Record<string, string>> = {
  * fuzzy fallback in {@link makeResolver} must never bridge them. Keyed
  * `<dump-slug>|<repo-id>`. A Great Unclean One's `bilesword` (S9 AP-2) is not the
  * Plague Surgeon's `balesword`; bridging them rewrote the Plague Surgeon's weapon
- * name the first time a Death Guard Great Unclean One was projected.
+ * name the first time a Death Guard Great Unclean One was projected. The
+ * Venatari's `tarsus-buckler` is a melee weapon (S6); `tarsis-buckler` is a
+ * separate profile-less wargear record, so bridging them dropped the weapon.
  */
 export const NOT_SPELLING_DRIFT: ReadonlySet<string> = new Set([
   "bilesword|balesword",
+  "tarsus-buckler|tarsis-buckler",
 ]);
 
 /**
