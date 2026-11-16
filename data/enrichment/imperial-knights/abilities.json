@@ -6932,52 +6932,41 @@
     "detachment_id": "questor-forgepact",
     "ability_type": "stratagem",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "enemy"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "designate",
+          "target": "event-subject",
+          "modifier": {
+            "tag": "marked"
           }
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "designate",
-            "target": "this-unit",
-            "modifier": {
-              "tag": "marked"
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "designated": "marked"
+              }
             }
           },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "subject": "defender",
-                "filter": {
-                  "designated": "marked"
-                }
-              }
+          "effect": {
+            "type": "re-roll",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS MECHANICUS"
+              ]
             },
-            "effect": {
-              "type": "re-roll",
-              "target": {
-                "owner": "friendly",
-                "all_of": [
-                  "ADEPTUS MECHANICUS"
-                ]
-              },
-              "modifier": {
-                "roll": "wound",
-                "result_scope": "any-result"
-              }
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "battle"
@@ -6985,6 +6974,9 @@
     "behavior": "reactive",
     "trigger": {
       "event": "destroyed",
+      "subject": {
+        "owner": "enemy"
+      },
       "object": {
         "owner": "friendly",
         "all_of": [
