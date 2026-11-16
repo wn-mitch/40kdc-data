@@ -7170,24 +7170,10 @@
         "type": "sequence",
         "steps": [
           {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "subject": "defender",
-                "filter": {
-                  "all_of": [
-                    "FLY"
-                  ]
-                }
-              }
-            },
-            "effect": {
-              "type": "designate",
-              "target": "this-model",
-              "modifier": {
-                "tag": "enhancement-expended"
-              }
+            "type": "designate",
+            "target": "this-model",
+            "modifier": {
+              "tag": "enhancement-expended"
             }
           },
           {

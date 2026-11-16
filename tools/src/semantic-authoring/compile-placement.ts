@@ -35,7 +35,7 @@ function gapBetween(previous: CompileLeaf, next: CompileLeaf, sourceText: string
   // "that unit's ranged attacks:\rDo not have [Heavy].\rHave +1 to hit rolls.": the lines under a colon are items of one list, so a
   // full stop that ends one item's line does not end the sentence the colon opened.
   const lineEnd = ends && /^[ \t]*[\r\n]+[ \t]*$/u.test(gap) && !colonListItem(sourceText, previous.start_byte);
-  return { sentence: closes || lineMoment || bandRow || lineEnd || (ends && /[\r\n]/u.test(gap) && !/^[ \t]*[\r\n]+[ \t]*$/u.test(gap)) || /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
+  return { sentence: closes || lineMoment || bandRow || lineEnd || (ends && /[\r\n]/u.test(gap) && !/^[ \t]*[\r\n]+[ \t]*$/u.test(gap)) || /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(|,\s*then\b/iu.test(gap) };
 }
 
 /** A printed table's result cell on a line of its own: "1‑2", "3", "5+". */
