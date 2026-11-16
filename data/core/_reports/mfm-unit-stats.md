@@ -1,0 +1,318 @@
+# MFM unit characteristics — APPLIED
+
+Reconciles each unit profile's M, T, W, Sv, Ld and OC with the statline of the dump miniature
+that has its name (or, for a one-profile unit, the one statline its visible miniatures share).
+A differing value is corrected. A characteristic the dump prints as "-" keeps the authored value.
+
+| Metric | Count |
+|---|--:|
+| Corrected | 225 |
+| Confirmed | 6768 |
+| No number in the dump (authored kept) | 57 |
+| Unmatched profiles | 14 |
+
+## Corrected (dump authoritative)
+
+- adeptus-astartes/high-marshal-helbrecht :: High Marshal Helbrecht T: 4 → 5
+- adeptus-astartes/marshal :: Marshal T: 4 → 5
+- adeptus-astartes/sword-brethren-squad :: Sword Brethren Squad T: 4 → 5
+- adeptus-astartes/crusader-squad :: Initiate T: 4 → 5
+- adeptus-astartes/execrator :: Execrator T: 4 → 5
+- adeptus-astartes/chaplain-grimaldus :: Chaplain Grimaldus T: 4 → 5
+- adeptus-astartes/chaplain-grimaldus :: Chaplain Grimaldus W: 4 → 5
+- adeptus-astartes/castellan :: Castellan T: 4 → 5
+- adeptus-astartes/emperors-champion :: Emperor’s Champion T: 4 → 5
+- adeptus-astartes/crusade-ancient :: Crusade Ancient T: 4 → 5
+- adeptus-astartes/death-company-dreadnought :: Death Company Dreadnought M: 8 → 10
+- adeptus-astartes/sanguinary-priest :: Sanguinary Priest T: 4 → 5
+- adeptus-astartes/death-company-captain-with-jump-pack :: Death Company Captain with Jump Pack T: 4 → 5
+- adeptus-astartes/death-company-marines :: Death Company Marines T: 4 → 5
+- adeptus-astartes/astorath :: Astorath T: 4 → 5
+- adeptus-astartes/blood-angels-captain :: Blood Angels Captain T: 4 → 5
+- adeptus-astartes/chief-librarian-mephiston :: Chief Librarian Mephiston M: 7 → 8
+- adeptus-astartes/chief-librarian-mephiston :: Chief Librarian Mephiston T: 5 → 6
+- adeptus-astartes/lemartes :: Lemartes T: 4 → 5
+- adeptus-astartes/lemartes :: Lemartes W: 4 → 5
+- adeptus-astartes/commander-dante :: Commander Dante T: 4 → 5
+- adeptus-astartes/the-sanguinor :: The Sanguinor T: 4 → 5
+- adeptus-astartes/sanguinary-guard :: Sanguinary Guard T: 4 → 5
+- adeptus-astartes/sanguinary-guard :: Sanguinary Guard OC: 1 → 2
+- adeptus-astartes/death-company-marines-with-jump-packs :: Death Company Marines with Jump Packs T: 4 → 5
+- adeptus-astartes/death-company-captain :: Death Company Captain T: 4 → 5
+- adeptus-astartes/ravenwing-black-knights :: Ravenwing Black Knight T: 5 → 6
+- adeptus-astartes/ezekiel :: Ezekiel T: 4 → 5
+- adeptus-astartes/ezekiel :: Ezekiel W: 4 → 5
+- adeptus-astartes/deathwing-terminator-squad :: Deathwing Terminator T: 5 → 6
+- adeptus-astartes/inner-circle-companions :: Inner Circle Companions T: 4 → 5
+- adeptus-astartes/azrael :: Azrael T: 4 → 5
+- adeptus-astartes/land-speeder-vengeance :: Land Speeder Vengeance T: 8 → 9
+- adeptus-astartes/land-speeder-vengeance :: Land Speeder Vengeance W: 10 → 11
+- adeptus-astartes/asmodai :: Asmodai T: 4 → 5
+- adeptus-astartes/deathwing-knights :: Deathwing Knight T: 5 → 6
+- adeptus-astartes/belial :: Belial T: 5 → 6
+- adeptus-astartes/lion-eljonson :: Lion El’Jonson T: 9 → 10
+- adeptus-astartes/lion-eljonson :: Lion El’Jonson W: 10 → 16
+- adeptus-astartes/ravenwing-command-squad :: Ravenwing Champion T: 5 → 6
+- adeptus-astartes/lazarus :: Lazarus T: 4 → 5
+- adeptus-astartes/sammael :: Sammael T: 5 → 6
+- adeptus-astartes/watch-captain-artemis :: Watch Captain Artemis T: 4 → 5
+- adeptus-astartes/deathwatch-veterans :: Watch Sergeant T: 4 → 5
+- adeptus-astartes/talonstrike-kill-team :: Kill Team Intercessor with Jump Pack T: 4 → 5
+- adeptus-astartes/watch-master :: Watch Master T: 4 → 5
+- adeptus-astartes/corvus-blackstar :: Corvus Blackstar M: 20 → 14
+- adeptus-astartes/deathwatch-terminator-squad :: Deathwatch Terminator T: 5 → 6
+- adeptus-astartes/fortis-kill-team :: Kill Team Intercessor T: 4 → 5
+- adeptus-astartes/spectrus-kill-team :: Kill Team Infiltrator M: 6 → 8
+- adeptus-astartes/adrax-agatone :: Adrax Agatone T: 4 → 5
+- adeptus-astartes/korsarro-khan :: Kor’sarro Khan T: 4 → 5
+- adeptus-astartes/suboden-khan :: Suboden Khan T: 5 → 6
+- adeptus-astartes/aethon-shaan :: Aethon Shaan T: 4 → 5
+- adeptus-astartes/vulkan-hestan :: Vulkan He’stan T: 4 → 5
+- adeptus-astartes/caanok-var :: Caanok Var T: 5 → 6
+- adeptus-astartes/thunderhawk-gunship :: Thunderhawk Gunship M: 20 → 14
+- adeptus-astartes/ragnar-blackmane :: Ragnar Blackmane T: 4 → 5
+- adeptus-astartes/grey-hunters :: Grey Hunter T: 4 → 5
+- adeptus-astartes/wolf-priest :: Wolf Priest T: 4 → 5
+- adeptus-astartes/wolf-guard-headtakers :: Wolf Guard Headtaker T: 4 → 5
+- adeptus-astartes/iron-priest :: Iron Priest T: 4 → 5
+- adeptus-astartes/njal-stormcaller :: Njal Stormcaller T: 4 → 5
+- adeptus-astartes/blood-claws :: Blood Claw T: 4 → 5
+- adeptus-astartes/ulrik-the-slayer :: Ulrik the Slayer T: 4 → 5
+- adeptus-astartes/logan-grimnar :: Logan Grimnar T: 5 → 6
+- adeptus-astartes/wolf-guard-terminators :: Wolf Guard Terminator T: 5 → 6
+- adeptus-astartes/bjorn-the-fell-handed :: Bjorn the Fell-Handed T: 9 → 10
+- adeptus-astartes/arjac-rockfist :: Arjac Rockfist T: 5 → 6
+- adeptus-astartes/wolf-guard-battle-leader :: Wolf Guard Battle Leader T: 4 → 5
+- adeptus-astartes/wolf-scouts :: Wolf Scout M: 7 → 8
+- adeptus-custodes/telemon-heavy-dreadnought :: Telemon Heavy Dreadnought M: 8 → 10
+- adeptus-custodes/telemon-heavy-dreadnought :: Telemon Heavy Dreadnought T: 10 → 11
+- adeptus-custodes/telemon-heavy-dreadnought :: Telemon Heavy Dreadnought W: 12 → 14
+- adeptus-custodes/telemon-heavy-dreadnought :: Telemon Heavy Dreadnought Ld: 6 → 5
+- adeptus-custodes/contemptor-achillus-dreadnought :: Contemptor-Achillus Dreadnought M: 6 → 9
+- adeptus-custodes/contemptor-achillus-dreadnought :: Contemptor-Achillus Dreadnought T: 9 → 10
+- adeptus-custodes/contemptor-achillus-dreadnought :: Contemptor-Achillus Dreadnought W: 10 → 12
+- adeptus-custodes/contemptor-achillus-dreadnought :: Contemptor-Achillus Dreadnought Ld: 6 → 5
+- adeptus-custodes/contemptor-galatus-dreadnought :: Contemptor-Galatus Dreadnought M: 6 → 9
+- adeptus-custodes/contemptor-galatus-dreadnought :: Contemptor-Galatus Dreadnought T: 9 → 10
+- adeptus-custodes/contemptor-galatus-dreadnought :: Contemptor-Galatus Dreadnought W: 10 → 12
+- adeptus-custodes/contemptor-galatus-dreadnought :: Contemptor-Galatus Dreadnought Ld: 6 → 5
+- adeptus-custodes/blade-champion :: Blade Champion M: 6 → 8
+- adeptus-custodes/blade-champion :: Blade Champion T: 6 → 7
+- adeptus-custodes/blade-champion :: Blade Champion W: 6 → 7
+- adeptus-custodes/blade-champion :: Blade Champion Ld: 6 → 5
+- adeptus-custodes/caladius-grav-tank :: Caladius Grav-tank Ld: 6 → 5
+- adeptus-custodes/allarus-custodians :: Allarus Custodians M: 5 → 7
+- adeptus-custodes/allarus-custodians :: Allarus Custodians T: 7 → 8
+- adeptus-custodes/allarus-custodians :: Allarus Custodians W: 4 → 6
+- adeptus-custodes/allarus-custodians :: Allarus Custodians Ld: 6 → 5
+- adeptus-custodes/shield-captain-on-dawneagle-jetbike :: Shield-Captain on Dawneagle Jetbike T: 7 → 8
+- adeptus-custodes/shield-captain-on-dawneagle-jetbike :: Shield-Captain on Dawneagle Jetbike W: 8 → 10
+- adeptus-custodes/shield-captain-on-dawneagle-jetbike :: Shield-Captain on Dawneagle Jetbike Ld: 6 → 5
+- adeptus-custodes/vigilator-squad :: Vigilator M: 6 → 7
+- adeptus-custodes/witchseeker-squad :: Witchseeker M: 6 → 7
+- adeptus-custodes/custodian-guard-sodality :: Custodian Guard M: 6 → 8
+- adeptus-custodes/custodian-guard-sodality :: Custodian Guard T: 6 → 7
+- adeptus-custodes/custodian-guard-sodality :: Custodian Guard W: 3 → 5
+- adeptus-custodes/custodian-guard-sodality :: Custodian Guard Ld: 6 → 5
+- adeptus-custodes/custodian-guard-sodality :: Custodian Guard OC: 2 → 3
+- adeptus-custodes/orion-assault-dropship :: Orion Assault Dropship M: 20 → 14
+- adeptus-custodes/knight-centura :: Knight-Centura M: 6 → 7
+- adeptus-custodes/gyrfalcon-jetbike-sodality :: Agamatus Custodians T: 6 → 8
+- adeptus-custodes/gyrfalcon-jetbike-sodality :: Agamatus Custodians W: 4 → 9
+- adeptus-custodes/gyrfalcon-jetbike-sodality :: Agamatus Custodians Ld: 6 → 5
+- adeptus-custodes/custodian-wardens :: Custodian Wardens M: 6 → 8
+- adeptus-custodes/custodian-wardens :: Custodian Wardens T: 6 → 7
+- adeptus-custodes/custodian-wardens :: Custodian Wardens W: 3 → 6
+- adeptus-custodes/custodian-wardens :: Custodian Wardens Ld: 6 → 5
+- adeptus-custodes/pallas-grav-attack :: Pallas Grav-attack T: 8 → 9
+- adeptus-custodes/pallas-grav-attack :: Pallas Grav-attack W: 9 → 10
+- adeptus-custodes/pallas-grav-attack :: Pallas Grav-attack Ld: 6 → 5
+- adeptus-custodes/vertus-praetors :: Vertus Praetors T: 7 → 8
+- adeptus-custodes/vertus-praetors :: Vertus Praetors W: 5 → 7
+- adeptus-custodes/vertus-praetors :: Vertus Praetors Ld: 6 → 5
+- adeptus-custodes/venatari-with-verutum-lances :: Venatari Custodians M: 10 → 12
+- adeptus-custodes/venatari-with-verutum-lances :: Venatari Custodians T: 6 → 7
+- adeptus-custodes/venatari-with-verutum-lances :: Venatari Custodians W: 3 → 5
+- adeptus-custodes/venatari-with-verutum-lances :: Venatari Custodians Ld: 6 → 5
+- adeptus-custodes/shield-captain-in-allarus-terminator-armour :: Shield-Captain in Allarus Terminator Armour M: 5 → 7
+- adeptus-custodes/shield-captain-in-allarus-terminator-armour :: Shield-Captain in Allarus Terminator Armour T: 7 → 8
+- adeptus-custodes/shield-captain-in-allarus-terminator-armour :: Shield-Captain in Allarus Terminator Armour W: 7 → 9
+- adeptus-custodes/shield-captain-in-allarus-terminator-armour :: Shield-Captain in Allarus Terminator Armour Ld: 6 → 5
+- adeptus-custodes/aquilon-terminators-with-solarite-power-gauntlets :: Aquilon Custodians M: 5 → 7
+- adeptus-custodes/aquilon-terminators-with-solarite-power-gauntlets :: Aquilon Custodians T: 7 → 8
+- adeptus-custodes/aquilon-terminators-with-solarite-power-gauntlets :: Aquilon Custodians W: 4 → 6
+- adeptus-custodes/aquilon-terminators-with-solarite-power-gauntlets :: Aquilon Custodians Ld: 6 → 5
+- adeptus-custodes/coronus-grav-carrier :: Coronus Grav-carrier Ld: 6 → 5
+- adeptus-custodes/prosecutor-squad :: Prosecutor M: 6 → 7
+- adeptus-custodes/shield-captain :: Shield-Captain M: 6 → 8
+- adeptus-custodes/shield-captain :: Shield-Captain T: 6 → 7
+- adeptus-custodes/shield-captain :: Shield-Captain W: 6 → 8
+- adeptus-custodes/shield-captain :: Shield-Captain Ld: 6 → 5
+- adeptus-custodes/trajann-valoris :: Trajann Valoris M: 6 → 8
+- adeptus-custodes/trajann-valoris :: Trajann Valoris T: 6 → 7
+- adeptus-custodes/trajann-valoris :: Trajann Valoris W: 7 → 10
+- adeptus-mechanicus/archaeopter-transvector :: Archaeopter Transvector M: 20 → 14
+- agents-of-the-imperium/watch-captain-artemis :: Watch Captain Artemis T: 4 → 5
+- agents-of-the-imperium/grey-knights-terminator-squad :: Grey Knights Terminators T: 5 → 6
+- agents-of-the-imperium/deathwatch-kill-team :: Watch Sergeant T: 4 → 5
+- agents-of-the-imperium/watch-master :: Watch Master T: 4 → 5
+- agents-of-the-imperium/corvus-blackstar :: Corvus Blackstar M: 20 → 14
+- astra-militarum/valkyrie :: Valkyrie M: 20 → 14
+- chaos-space-marines/sorcerer-in-terminator-armour :: Sorcerer in Terminator Armour T: 5 → 6
+- chaos-space-marines/nemesis-claw :: Legionary T: 4 → 5
+- chaos-space-marines/sorcerer :: Sorcerer T: 4 → 5
+- chaos-space-marines/master-of-possession :: Master of Possession T: 4 → 5
+- chaos-space-marines/chaos-terminator-squad :: Chaos Terminator T: 5 → 6
+- chaos-space-marines/dark-apostle :: Dark Apostle T: 4 → 5
+- chaos-space-marines/dark-apostle :: Dark Disciple T: 4 → 5
+- chaos-space-marines/havocs :: Havoc W: 2 → 3
+- chaos-space-marines/raptors :: Raptor T: 4 → 5
+- chaos-space-marines/chosen :: Chosen T: 4 → 5
+- chaos-space-marines/warpsmith :: Warpsmith T: 4 → 5
+- chaos-space-marines/chaos-lord-in-terminator-armour :: Chaos Lord in Terminator Armour T: 5 → 6
+- chaos-space-marines/red-corsairs-raiders :: Red Corsairs Raider T: 4 → 5
+- chaos-space-marines/master-of-executions :: Master of Executions T: 4 → 5
+- chaos-space-marines/chaos-lord-with-jump-pack :: Chaos Lord with Jump Pack T: 4 → 5
+- chaos-space-marines/chaos-lord :: Chaos Lord T: 4 → 5
+- chaos-space-marines/chaos-bikers :: Chaos Biker T: 5 → 6
+- chaos-space-marines/warp-talons :: Warp Talon T: 4 → 5
+- chaos-space-marines/legionaries :: Legionary T: 4 → 5
+- chaos-space-marines/red-corsairs-reave-captain :: Red Corsairs Reave-Captain T: 4 → 5
+- chaos-space-marines/masters-of-the-maelstrom :: Katar Garrix T: 4 → 5
+- chaos-space-marines/huron-blackheart :: Huron Blackheart T: 5 → 6
+- chaos-space-marines/haarken-worldclaimer :: Haarken Worldclaimer T: 4 → 5
+- chaos-space-marines/abaddon-the-despoiler :: Abaddon the Despoiler T: 5 → 6
+- chaos-space-marines/fabius-bile :: Fabius Bile T: 4 → 5
+- chaos-space-marines/fabius-bile :: Surgeon Acolyte T: 4 → 5
+- chaos-space-marines/cypher :: Cypher T: 4 → 5
+- chaos-space-marines/mutilators :: Mutilators M: 4 → 5
+- chaos-space-marines/mutilators :: Mutilators W: 4 → 5
+- chaos-space-marines/kravek-morne :: Kravek Morne T: 5 → 6
+- emperors-children/chaos-terminators :: Chaos Terminator T: 5 → 6
+- emperors-children/sorcerer :: Sorcerer T: 4 → 5
+- emperors-children/lord-exultant :: Lord Exultant T: 4 → 5
+- emperors-children/lord-kakophonist :: Lord Kakophonist T: 5 → 6
+- emperors-children/noise-marines :: Noise Marine W: 2 → 3
+- emperors-children/tormentors :: Tormentor T: 4 → 5
+- emperors-children/lucius-the-eternal :: Lucius the Eternal T: 5 → 6
+- emperors-children/infractors :: Infractor T: 4 → 5
+- grey-knights/grand-master-in-nemesis-dreadknight :: Grand Master in Nemesis Dreadknight T: 8 → 9
+- grey-knights/grand-master :: Grand Master T: 5 → 6
+- grey-knights/purifier-squad :: Purifier T: 4 → 5
+- grey-knights/nemesis-dreadknight :: Nemesis Dreadknight T: 8 → 9
+- grey-knights/brother-captain :: Brother-Captain T: 5 → 6
+- grey-knights/castellan-crowe :: Castellan Crowe T: 4 → 5
+- grey-knights/strike-squad :: Grey Knight T: 4 → 5
+- grey-knights/brotherhood-techmarine :: Brotherhood Techmarine T: 4 → 5
+- grey-knights/brotherhood-librarian :: Brotherhood Librarian T: 5 → 6
+- grey-knights/brotherhood-champion :: Brotherhood Champion T: 4 → 5
+- grey-knights/purgation-squad :: Purgator T: 4 → 5
+- grey-knights/interceptor-squad :: Interceptor T: 4 → 5
+- grey-knights/brotherhood-chaplain :: Brotherhood Chaplain T: 5 → 6
+- grey-knights/paladin-squad :: Paladin T: 5 → 6
+- grey-knights/grand-master-voldus :: Grand Master Voldus T: 5 → 6
+- grey-knights/brotherhood-terminator-squad :: Terminator T: 5 → 6
+- orks/warboss-in-mega-armour :: Warboss in Mega Armour T: 6 → 7
+- orks/battlewagon :: Battlewagon T: 10 → 11
+- orks/morkanaut :: Morkanaut M: 8 → 9
+- orks/morkanaut :: Morkanaut Sv: 3 → 2
+- orks/breaka-boyz :: Breaka Boy W: 3 → 2
+- orks/gorkanaut :: Gorkanaut M: 8 → 9
+- orks/gorkanaut :: Gorkanaut Sv: 3 → 2
+- orks/mek-gunz :: Mek Gunz M: 3 → 5
+- orks/mek-gunz :: Mek Gunz Sv: 5 → 4
+- orks/warboss :: Warboss T: 5 → 6
+- tau-empire/manta :: Manta M: 20 → 40
+- thousand-sons/sorcerer :: Sorcerer T: 4 → 5
+- thousand-sons/ahriman :: Ahriman T: 4 → 5
+- thousand-sons/rubric-marines :: Aspiring Sorcerer T: 4 → 5
+- thousand-sons/rubric-marines :: Rubric Marine T: 4 → 5
+- thousand-sons/infernal-master :: Infernal Master T: 4 → 5
+- thousand-sons/scarab-occult-terminators :: Scarab Occult Sorcerer T: 5 → 6
+- thousand-sons/scarab-occult-terminators :: Scarab Occult Terminator T: 5 → 6
+- thousand-sons/exalted-sorcerer-on-disc-of-tzeentch :: Exalted Sorcerer on Disc of Tzeentch T: 4 → 5
+- thousand-sons/exalted-sorcerer :: Exalted Sorcerer T: 4 → 5
+- thousand-sons/sorcerer-in-terminator-armour :: Sorcerer in Terminator Armour T: 5 → 6
+- tyranids/harridan :: Harridan M: 20 → 14
+- world-eaters/kharn-the-betrayer :: Khârn the Betrayer T: 4 → 5
+- world-eaters/master-of-executions :: Master of Executions T: 4 → 5
+- world-eaters/khorne-berzerkers :: Khorne Berzerker T: 4 → 5
+- world-eaters/chaos-terminators :: World Eaters Terminator T: 5 → 6
+
+## No number in the dump (authored kept)
+
+- adeptus-astartes/nephilim-jetfighter :: Nephilim Jetfighter M: dump "-", authored 20
+- adeptus-astartes/nephilim-jetfighter :: Nephilim Jetfighter OC: dump "-", authored 0
+- adeptus-astartes/ravenwing-dark-talon :: Ravenwing Dark Talon M: dump "-", authored 20
+- adeptus-astartes/ravenwing-dark-talon :: Ravenwing Dark Talon OC: dump "-", authored 0
+- adeptus-astartes/drop-pod :: Drop Pod M: dump "-", authored 0
+- adeptus-astartes/drop-pod :: Drop Pod OC: dump "-", authored 0
+- adeptus-custodes/ares-gunship :: Ares Gunship M: dump "-", authored 20
+- adeptus-custodes/ares-gunship :: Ares Gunship OC: dump "-", authored 0
+- adeptus-mechanicus/archaeopter-stratoraptor :: Archaeopter Stratoraptor M: dump "-", authored 20
+- adeptus-mechanicus/archaeopter-stratoraptor :: Archaeopter Stratoraptor OC: dump "-", authored 0
+- adeptus-mechanicus/archaeopter-fusilave :: Archaeopter Fusilave M: dump "-", authored 20
+- adeptus-mechanicus/archaeopter-fusilave :: Archaeopter Fusilave OC: dump "-", authored 0
+- aeldari/hemlock-wraithfighter :: Hemlock Wraithfighter M: dump "-", authored 20
+- aeldari/hemlock-wraithfighter :: Hemlock Wraithfighter OC: dump "-", authored 0
+- aeldari/crimson-hunter :: Crimson Hunter M: dump "-", authored 20
+- aeldari/crimson-hunter :: Crimson Hunter OC: dump "-", authored 0
+- astra-militarum/aegis-defence-line :: Aegis Defence Line M: dump "-", authored 0
+- astra-militarum/valkyrie :: Valkyrie OC: dump "-", authored 0
+- astra-militarum/avenger-strike-fighter :: Avenger Strike Fighter M: dump "20+\"", authored 20
+- chaos-daemons/feculent-gnarlmaw :: Feculent Gnarlmaw M: dump "-", authored 0
+- chaos-daemons/skull-altar :: Skull Altar M: dump "-", authored 0
+- chaos-space-marines/noctilith-crown :: Noctilith Crown M: dump "-", authored 0
+- death-guard/miasmic-malignifier :: Miasmic Malignifier M: dump "-", authored 0
+- drukhari/razorwing-jetfighter :: Razorwing Jetfighter M: dump "-", authored 20
+- drukhari/razorwing-jetfighter :: Razorwing Jetfighter OC: dump "-", authored 0
+- drukhari/voidraven-bomber :: Voidraven Bomber M: dump "-", authored 20
+- drukhari/voidraven-bomber :: Voidraven Bomber OC: dump "-", authored 0
+- grey-knights/stormtalon-gunship :: Stormtalon Gunship M: dump "-", authored 20
+- grey-knights/stormtalon-gunship :: Stormtalon Gunship OC: dump "-", authored 0
+- grey-knights/stormhawk-interceptor :: Stormhawk Interceptor M: dump "-", authored 20
+- grey-knights/stormhawk-interceptor :: Stormhawk Interceptor OC: dump "-", authored 0
+- necrons/convergence-of-dominion :: Convergence of Dominion M: dump "-", authored 0
+- necrons/doom-scythe :: Doom Scythe M: dump "-", authored 20
+- necrons/doom-scythe :: Doom Scythe OC: dump "-", authored 0
+- orks/wazbom-blastajet :: Wazbom Blastajet M: dump "-", authored 20
+- orks/wazbom-blastajet :: Wazbom Blastajet OC: dump "-", authored 0
+- orks/biged-bossbunka :: Big’ed Bossbunka M: dump "-", authored 0
+- orks/blitza-bommer :: Blitza-bommer M: dump "-", authored 20
+- orks/blitza-bommer :: Blitza-bommer OC: dump "-", authored 0
+- orks/dakkajet :: Dakkajet M: dump "-", authored 20
+- orks/dakkajet :: Dakkajet OC: dump "-", authored 0
+- orks/burna-bommer :: Burna-bommer M: dump "-", authored 20
+- orks/burna-bommer :: Burna-bommer OC: dump "-", authored 0
+- tau-empire/manta :: Manta OC: dump "-", authored 0
+- tau-empire/sun-shark-bomber :: Sun Shark Bomber M: dump "-", authored 20
+- tau-empire/sun-shark-bomber :: Sun Shark Bomber OC: dump "-", authored 0
+- tau-empire/tiger-shark :: Tiger Shark M: dump "-", authored 20
+- tau-empire/tiger-shark :: Tiger Shark OC: dump "-", authored 0
+- tau-empire/ax-1-0-tiger-shark :: AX-1-0 Tiger Shark M: dump "-", authored 20
+- tau-empire/ax-1-0-tiger-shark :: AX-1-0 Tiger Shark OC: dump "-", authored 0
+- tau-empire/razorshark-strike-fighter :: Razorshark Strike Fighter M: dump "-", authored 20
+- tau-empire/razorshark-strike-fighter :: Razorshark Strike Fighter OC: dump "-", authored 0
+- tyranids/sporocyst :: Sporocyst M: dump "-", authored 0
+- tyranids/harpy :: Harpy M: dump "-", authored 20
+- tyranids/harpy :: Harpy OC: dump "-", authored 0
+- tyranids/hive-crone :: Hive Crone M: dump "-", authored 20
+- tyranids/hive-crone :: Hive Crone OC: dump "-", authored 0
+
+## Unmatched profiles (not attributed)
+
+- adeptus-astartes/deathwatch-veterans :: Deathwatch Veterans (miniatures: Watch Sergeant, Deathwatch Veteran)
+- adeptus-astartes/decimus-kill-team :: Deathwatch Veteran (miniatures: Gravis Veteran, Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol)
+- adeptus-astartes/wardens-of-ultramar :: Aemelia Minervas (miniatures: Veteran Sergeant Metaurus, Ancient Gadriel, Gaius Silva, Lucia Vestha)
+- adeptus-astartes/wardens-of-ultramar :: Dainal Kornelius (miniatures: Veteran Sergeant Metaurus, Ancient Gadriel, Gaius Silva, Lucia Vestha)
+- adeptus-astartes/wolf-guard-headtakers :: Hunting Wolves (miniatures: Wolf Guard Headtaker, Hunting Wolf)
+- agents-of-the-imperium/deathwatch-kill-team :: Deathwatch Veterans (miniatures: Watch Sergeant, Deathwatch Veteran)
+- agents-of-the-imperium/aquila-kill-team :: Deathwatch Veteran (miniatures: Gravis Veteran, Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol)
+- orks/warbikers :: Boss Nob on Warbike (miniatures: Warbiker, Biker Nob)
+- orks/tankbustas :: Boss Nob (miniatures: Tankbusta, Nob)
+- orks/kommandos :: Boss Nob (miniatures: Kommando, Nob)
+- orks/boyz :: Boss Nob (miniatures: Boy, Nob)
+- orks/stormboyz :: Boss Nob (miniatures: Stormboy, Nob)
+- orks/beast-snagga-boyz :: Beast Snagga Nob (miniatures: Beast Snagga Boy, Nob)
+- orks/gretchin :: Runtherd (miniatures: Gretchin)
+

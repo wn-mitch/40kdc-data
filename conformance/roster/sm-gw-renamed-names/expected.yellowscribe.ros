@@ -119,7 +119,7 @@ The unit gains Tactical Doctrine (Combat Doctrines).</characteristic>
             <profile name="Death Company Marines with Jump Packs" typeName="Unit">
               <characteristics>
                 <characteristic name="M">12"</characteristic>
-                <characteristic name="T">4</characteristic>
+                <characteristic name="T">5</characteristic>
                 <characteristic name="SV">3+</characteristic>
                 <characteristic name="W">2</characteristic>
                 <characteristic name="LD">6+</characteristic>

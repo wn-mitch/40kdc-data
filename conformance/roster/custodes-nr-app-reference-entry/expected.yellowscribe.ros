@@ -7,10 +7,10 @@
           <profiles>
             <profile name="Trajann Valoris" typeName="Unit">
               <characteristics>
-                <characteristic name="M">6"</characteristic>
-                <characteristic name="T">6</characteristic>
+                <characteristic name="M">8"</characteristic>
+                <characteristic name="T">7</characteristic>
                 <characteristic name="SV">2+</characteristic>
-                <characteristic name="W">7</characteristic>
+                <characteristic name="W">10</characteristic>
                 <characteristic name="LD">5+</characteristic>
                 <characteristic name="OC">2</characteristic>
               </characteristics>
@@ -119,12 +119,12 @@
           <profiles>
             <profile name="Custodian Guard" typeName="Unit">
               <characteristics>
-                <characteristic name="M">6"</characteristic>
-                <characteristic name="T">6</characteristic>
+                <characteristic name="M">8"</characteristic>
+                <characteristic name="T">7</characteristic>
                 <characteristic name="SV">2+</characteristic>
-                <characteristic name="W">3</characteristic>
-                <characteristic name="LD">6+</characteristic>
-                <characteristic name="OC">2</characteristic>
+                <characteristic name="W">5</characteristic>
+                <characteristic name="LD">5+</characteristic>
+                <characteristic name="OC">3</characteristic>
               </characteristics>
             </profile>
             <profile name="Invulnerable Save" typeName="Abilities">
@@ -240,11 +240,11 @@ The unit ignores any modifiers to its Leadership characteristics.</characteristi
           <profiles>
             <profile name="Allarus Custodians" typeName="Unit">
               <characteristics>
-                <characteristic name="M">5"</characteristic>
-                <characteristic name="T">7</characteristic>
+                <characteristic name="M">7"</characteristic>
+                <characteristic name="T">8</characteristic>
                 <characteristic name="SV">2+</characteristic>
-                <characteristic name="W">4</characteristic>
-                <characteristic name="LD">6+</characteristic>
+                <characteristic name="W">6</characteristic>
+                <characteristic name="LD">5+</characteristic>
                 <characteristic name="OC">2</characteristic>
               </characteristics>
             </profile>
@@ -489,11 +489,11 @@ The unit ignores any modifiers to its Leadership characteristics.</characteristi
           <profiles>
             <profile name="Custodian Wardens" typeName="Unit">
               <characteristics>
-                <characteristic name="M">6"</characteristic>
-                <characteristic name="T">6</characteristic>
+                <characteristic name="M">8"</characteristic>
+                <characteristic name="T">7</characteristic>
                 <characteristic name="SV">2+</characteristic>
-                <characteristic name="W">3</characteristic>
-                <characteristic name="LD">6+</characteristic>
+                <characteristic name="W">6</characteristic>
+                <characteristic name="LD">5+</characteristic>
                 <characteristic name="OC">2</characteristic>
               </characteristics>
             </profile>
@@ -604,7 +604,7 @@ The unit ignores any modifiers to its Leadership characteristics.</characteristi
           <profiles>
             <profile name="Prosecutor" typeName="Unit">
               <characteristics>
-                <characteristic name="M">6"</characteristic>
+                <characteristic name="M">7"</characteristic>
                 <characteristic name="T">3</characteristic>
                 <characteristic name="SV">3+</characteristic>
                 <characteristic name="W">1</characteristic>
@@ -679,11 +679,11 @@ All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
           <profiles>
             <profile name="Telemon Heavy Dreadnought" typeName="Unit">
               <characteristics>
-                <characteristic name="M">8"</characteristic>
-                <characteristic name="T">10</characteristic>
+                <characteristic name="M">10"</characteristic>
+                <characteristic name="T">11</characteristic>
                 <characteristic name="SV">2+</characteristic>
-                <characteristic name="W">12</characteristic>
-                <characteristic name="LD">6+</characteristic>
+                <characteristic name="W">14</characteristic>
+                <characteristic name="LD">5+</characteristic>
                 <characteristic name="OC">4</characteristic>
               </characteristics>
             </profile>
@@ -784,11 +784,11 @@ All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
           <profiles>
             <profile name="Venatari Custodians" typeName="Unit">
               <characteristics>
-                <characteristic name="M">10"</characteristic>
-                <characteristic name="T">6</characteristic>
+                <characteristic name="M">12"</characteristic>
+                <characteristic name="T">7</characteristic>
                 <characteristic name="SV">2+</characteristic>
-                <characteristic name="W">3</characteristic>
-                <characteristic name="LD">6+</characteristic>
+                <characteristic name="W">5</characteristic>
+                <characteristic name="LD">5+</characteristic>
                 <characteristic name="OC">2</characteristic>
               </characteristics>
             </profile>
@@ -879,7 +879,7 @@ The unit's Rapid Ingress ability has no limit on its number of uses, and this us
           <profiles>
             <profile name="Witchseeker" typeName="Unit">
               <characteristics>
-                <characteristic name="M">6"</characteristic>
+                <characteristic name="M">7"</characteristic>
                 <characteristic name="T">3</characteristic>
                 <characteristic name="SV">3+</characteristic>
                 <characteristic name="W">1</characteristic>

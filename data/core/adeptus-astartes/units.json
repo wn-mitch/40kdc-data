@@ -8,7 +8,7 @@
       {
         "name": "High Marshal Helbrecht",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -326,7 +326,7 @@
       {
         "name": "Marshal",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -403,7 +403,7 @@
       {
         "name": "Sword Brethren Squad",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 3,
         "Sv": 3,
         "invuln_sv": null,
@@ -523,7 +523,7 @@
       {
         "name": "Initiate",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -629,7 +629,7 @@
       {
         "name": "Execrator",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
@@ -948,8 +948,8 @@
       {
         "name": "Chaplain Grimaldus",
         "M": 6,
-        "T": 4,
-        "W": 4,
+        "T": 5,
+        "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
         "Ld": 5,
@@ -1044,7 +1044,7 @@
       {
         "name": "Castellan",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
@@ -1121,7 +1121,7 @@
       {
         "name": "Emperor’s Champion",
         "M": 8,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -1624,7 +1624,7 @@
       {
         "name": "Crusade Ancient",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
@@ -1901,7 +1901,7 @@
     "profiles": [
       {
         "name": "Death Company Dreadnought",
-        "M": 8,
+        "M": 10,
         "T": 10,
         "W": 12,
         "Sv": 2,
@@ -2005,7 +2005,7 @@
       {
         "name": "Sanguinary Priest",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
@@ -2080,7 +2080,7 @@
       {
         "name": "Death Company Captain with Jump Pack",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -2171,7 +2171,7 @@
       {
         "name": "Death Company Marines",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -2304,7 +2304,7 @@
       {
         "name": "Astorath",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -2382,7 +2382,7 @@
       {
         "name": "Blood Angels Captain",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -2461,8 +2461,8 @@
     "profiles": [
       {
         "name": "Chief Librarian Mephiston",
-        "M": 7,
-        "T": 5,
+        "M": 8,
+        "T": 6,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 5,
@@ -2545,8 +2545,8 @@
       {
         "name": "Lemartes",
         "M": 12,
-        "T": 4,
-        "W": 4,
+        "T": 5,
+        "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
         "Ld": 5,
@@ -2630,7 +2630,7 @@
       {
         "name": "Commander Dante",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -2711,7 +2711,7 @@
       {
         "name": "The Sanguinor",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 7,
         "Sv": 2,
         "invuln_sv": 4,
@@ -2787,12 +2787,12 @@
       {
         "name": "Sanguinary Guard",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,
         "Ld": 6,
-        "OC": 1
+        "OC": 2
       }
     ],
     "points": [
@@ -2977,7 +2977,7 @@
       {
         "name": "Death Company Marines with Jump Packs",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -3099,7 +3099,7 @@
       {
         "name": "Death Company Captain",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -3265,7 +3265,7 @@
       {
         "name": "Ravenwing Black Knight",
         "M": 12,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 3,
         "invuln_sv": 5,
@@ -3368,8 +3368,8 @@
       {
         "name": "Ezekiel",
         "M": 6,
-        "T": 4,
-        "W": 4,
+        "T": 5,
+        "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
         "Ld": 6,
@@ -3449,7 +3449,7 @@
       {
         "name": "Deathwing Terminator",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,
@@ -3568,7 +3568,7 @@
       {
         "name": "Inner Circle Companions",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 3,
         "Sv": 3,
         "invuln_sv": null,
@@ -3660,7 +3660,7 @@
       {
         "name": "Azrael",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -3743,8 +3743,8 @@
       {
         "name": "Land Speeder Vengeance",
         "M": 14,
-        "T": 8,
-        "W": 10,
+        "T": 9,
+        "W": 11,
         "Sv": 3,
         "invuln_sv": 5,
         "Ld": 6,
@@ -3917,7 +3917,7 @@
       {
         "name": "Asmodai",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
@@ -3995,7 +3995,7 @@
       {
         "name": "Deathwing Knight",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 4,
         "Sv": 2,
         "invuln_sv": 4,
@@ -4082,7 +4082,7 @@
       {
         "name": "Belial",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -4161,8 +4161,8 @@
       {
         "name": "Lion El’Jonson",
         "M": 8,
-        "T": 9,
-        "W": 10,
+        "T": 10,
+        "W": 16,
         "Sv": 2,
         "invuln_sv": 3,
         "Ld": 5,
@@ -4242,7 +4242,7 @@
       {
         "name": "Ravenwing Champion",
         "M": 12,
-        "T": 5,
+        "T": 6,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 5,
@@ -4339,7 +4339,7 @@
       {
         "name": "Lazarus",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -4499,7 +4499,7 @@
       {
         "name": "Sammael",
         "M": 12,
-        "T": 5,
+        "T": 6,
         "W": 7,
         "Sv": 3,
         "invuln_sv": 4,
@@ -4584,7 +4584,7 @@
       {
         "name": "Watch Captain Artemis",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
@@ -4753,7 +4753,7 @@
       {
         "name": "Watch Sergeant",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -4978,7 +4978,7 @@
       {
         "name": "Kill Team Intercessor with Jump Pack",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -5079,7 +5079,7 @@
       {
         "name": "Watch Master",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -5154,7 +5154,7 @@
     "profiles": [
       {
         "name": "Corvus Blackstar",
-        "M": 20,
+        "M": 14,
         "T": 10,
         "W": 14,
         "Sv": 3,
@@ -5248,7 +5248,7 @@
       {
         "name": "Deathwatch Terminator",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,
@@ -5374,7 +5374,7 @@
       {
         "name": "Kill Team Intercessor",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -5476,7 +5476,7 @@
     "profiles": [
       {
         "name": "Kill Team Infiltrator",
-        "M": 6,
+        "M": 8,
         "T": 4,
         "W": 2,
         "Sv": 3,
@@ -5656,7 +5656,7 @@
       {
         "name": "Adrax Agatone",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -6170,7 +6170,7 @@
       {
         "name": "Kor’sarro Khan",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -6249,7 +6249,7 @@
       {
         "name": "Suboden Khan",
         "M": 12,
-        "T": 5,
+        "T": 6,
         "W": 8,
         "Sv": 3,
         "invuln_sv": 4,
@@ -6329,7 +6329,7 @@
       {
         "name": "Aethon Shaan",
         "M": 14,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -7768,7 +7768,7 @@
       {
         "name": "Vulkan He’stan",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -9936,7 +9936,7 @@
       {
         "name": "Caanok Var",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -10916,7 +10916,7 @@
     "profiles": [
       {
         "name": "Thunderhawk Gunship",
-        "M": 20,
+        "M": 14,
         "T": 12,
         "W": 30,
         "Sv": 2,
@@ -11987,7 +11987,7 @@
       {
         "name": "Ragnar Blackmane",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -12176,7 +12176,7 @@
       {
         "name": "Grey Hunter",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -12341,7 +12341,7 @@
       {
         "name": "Wolf Priest",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
@@ -12414,7 +12414,7 @@
       {
         "name": "Wolf Guard Headtaker",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 3,
         "Sv": 3,
         "invuln_sv": null,
@@ -12547,7 +12547,7 @@
       {
         "name": "Iron Priest",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 2,
         "invuln_sv": null,
@@ -12622,7 +12622,7 @@
       {
         "name": "Njal Stormcaller",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
@@ -12700,7 +12700,7 @@
       {
         "name": "Blood Claw",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -12778,7 +12778,7 @@
       {
         "name": "Ulrik the Slayer",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
@@ -12858,7 +12858,7 @@
       {
         "name": "Logan Grimnar",
         "M": 6,
-        "T": 5,
+        "T": 6,
         "W": 8,
         "Sv": 2,
         "invuln_sv": 4,
@@ -12936,7 +12936,7 @@
       {
         "name": "Wolf Guard Terminator",
         "M": 6,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,
@@ -13230,7 +13230,7 @@
       {
         "name": "Bjorn the Fell-Handed",
         "M": 9,
-        "T": 9,
+        "T": 10,
         "W": 8,
         "Sv": 2,
         "invuln_sv": 5,
@@ -13316,7 +13316,7 @@
       {
         "name": "Arjac Rockfist",
         "M": 6,
-        "T": 5,
+        "T": 6,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -13391,7 +13391,7 @@
       {
         "name": "Wolf Guard Battle Leader",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -13468,7 +13468,7 @@
     "profiles": [
       {
         "name": "Wolf Scout",
-        "M": 7,
+        "M": 8,
         "T": 4,
         "W": 2,
         "Sv": 3,

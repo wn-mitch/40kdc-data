@@ -8,7 +8,7 @@
             <profile name="Castellan Crowe" typeName="Unit">
               <characteristics>
                 <characteristic name="M">6"</characteristic>
-                <characteristic name="T">4</characteristic>
+                <characteristic name="T">5</characteristic>
                 <characteristic name="SV">2+</characteristic>
                 <characteristic name="W">5</characteristic>
                 <characteristic name="LD">6+</characteristic>
@@ -114,7 +114,7 @@
             <profile name="Grand Master in Nemesis Dreadknight" typeName="Unit">
               <characteristics>
                 <characteristic name="M">8"</characteristic>
-                <characteristic name="T">8</characteristic>
+                <characteristic name="T">9</characteristic>
                 <characteristic name="SV">2+</characteristic>
                 <characteristic name="W">13</characteristic>
                 <characteristic name="LD">6+</characteristic>
@@ -228,7 +228,7 @@
             <profile name="Purifier" typeName="Unit">
               <characteristics>
                 <characteristic name="M">6"</characteristic>
-                <characteristic name="T">4</characteristic>
+                <characteristic name="T">5</characteristic>
                 <characteristic name="SV">2+</characteristic>
                 <characteristic name="W">2</characteristic>
                 <characteristic name="LD">6+</characteristic>

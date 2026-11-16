@@ -595,7 +595,7 @@ def _slayer_wound_mod(dataset: Any, target_id: str) -> int:
 
 def test_own_toughness_comparison_fires_only_against_a_higher_toughness(dataset: Any) -> None:
     allarus = dataset.units.get_in_faction("allarus-custodians", "adeptus-custodes")
-    assert allarus.raw["profiles"][0]["T"] == 7
+    assert allarus.raw["profiles"][0]["T"] == 8
     assert _slayer_wound_mod(dataset, "land-raider") == 1
     assert _slayer_wound_mod(dataset, "allarus-custodians") == 0
     assert _slayer_wound_mod(dataset, "custodian-wardens") == 0

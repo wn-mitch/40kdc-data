@@ -104,7 +104,7 @@
       {
         "name": "Khârn the Betrayer",
         "M": 8,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -180,7 +180,7 @@
       {
         "name": "Master of Executions",
         "M": 8,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
@@ -256,7 +256,7 @@
       {
         "name": "Khorne Berzerker",
         "M": 8,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -1838,7 +1838,7 @@
       {
         "name": "World Eaters Terminator",
         "M": 7,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,

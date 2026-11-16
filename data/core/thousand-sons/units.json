@@ -432,7 +432,7 @@
       {
         "name": "Sorcerer",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 5,
@@ -700,7 +700,7 @@
       {
         "name": "Ahriman",
         "M": 10,
-        "T": 4,
+        "T": 5,
         "W": 6,
         "Sv": 3,
         "invuln_sv": 4,
@@ -778,7 +778,7 @@
       {
         "name": "Aspiring Sorcerer",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 3,
         "Sv": 3,
         "invuln_sv": 5,
@@ -788,7 +788,7 @@
       {
         "name": "Rubric Marine",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": 5,
@@ -908,7 +908,7 @@
       {
         "name": "Infernal Master",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 5,
@@ -1133,7 +1133,7 @@
       {
         "name": "Scarab Occult Sorcerer",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 4,
         "Sv": 2,
         "invuln_sv": 4,
@@ -1143,7 +1143,7 @@
       {
         "name": "Scarab Occult Terminator",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,
@@ -1833,7 +1833,7 @@
       {
         "name": "Exalted Sorcerer on Disc of Tzeentch",
         "M": 10,
-        "T": 4,
+        "T": 5,
         "W": 6,
         "Sv": 3,
         "invuln_sv": 4,
@@ -2000,7 +2000,7 @@
       {
         "name": "Exalted Sorcerer",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -2077,7 +2077,7 @@
       {
         "name": "Sorcerer in Terminator Armour",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,

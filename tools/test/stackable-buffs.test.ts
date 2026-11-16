@@ -198,7 +198,7 @@ describe("Dataset.stackableBuffsFor: the unit's own Toughness in a comparison", 
   };
 
   it("fires against a higher Toughness and not against an equal or lower one", () => {
-    expect(allarus.raw.profiles[0].T).toBe(7);
+    expect(allarus.raw.profiles[0].T).toBe(8);
     expect(melee).toBeGreaterThanOrEqual(0);
     expect(woundMod("land-raider")).toBe(1);
     expect(woundMod("allarus-custodians")).toBe(0);

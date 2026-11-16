@@ -33,6 +33,7 @@ import {
   runWargearCosts,
 } from "../src/mfm/wargear.js";
 import { runWeaponStats } from "../src/mfm/weapon-stats.js";
+import { runUnitStats } from "../src/mfm/unit-stats.js";
 import { runWeaponVariants } from "../src/mfm/weapon-variants.js";
 import { openWorkbenchReadOnly } from "../src/semantic-authoring/db.js";
 
@@ -77,6 +78,7 @@ const PASSES: [string, (dump: MfmDump) => { staged: StagedWrite[] }][] = [
   ["allies", runAllies],
   ["weapon-variants", (dump) => runWeaponVariants(dump)],
   ["weapon-stats", (dump) => runWeaponStats(dump)],
+  ["unit-stats", (dump) => runUnitStats(dump)],
   ["external-refs", (dump) => runMfmExternalRefs(dump)],
   ["dataslates", (dump) => {
     const db = openWorkbenchReadOnly();

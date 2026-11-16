@@ -8,7 +8,7 @@
             <profile name="High Marshal Helbrecht" typeName="Unit">
               <characteristics>
                 <characteristic name="M">6"</characteristic>
-                <characteristic name="T">4</characteristic>
+                <characteristic name="T">5</characteristic>
                 <characteristic name="SV">2+</characteristic>
                 <characteristic name="W">6</characteristic>
                 <characteristic name="LD">6+</characteristic>

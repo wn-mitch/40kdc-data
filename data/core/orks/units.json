@@ -1048,7 +1048,7 @@
       {
         "name": "Warboss in Mega Armour",
         "M": 5,
-        "T": 6,
+        "T": 7,
         "W": 7,
         "Sv": 2,
         "invuln_sv": 5,
@@ -1223,7 +1223,7 @@
       {
         "name": "Battlewagon",
         "M": 10,
-        "T": 10,
+        "T": 11,
         "W": 16,
         "Sv": 3,
         "invuln_sv": 6,
@@ -1399,10 +1399,10 @@
     "profiles": [
       {
         "name": "Morkanaut",
-        "M": 8,
+        "M": 9,
         "T": 12,
         "W": 20,
-        "Sv": 3,
+        "Sv": 2,
         "invuln_sv": 5,
         "Ld": 7,
         "OC": 8
@@ -1577,7 +1577,7 @@
         "name": "Breaka Boy",
         "M": 6,
         "T": 5,
-        "W": 3,
+        "W": 2,
         "Sv": 4,
         "invuln_sv": null,
         "Ld": 7,
@@ -2312,10 +2312,10 @@
     "profiles": [
       {
         "name": "Gorkanaut",
-        "M": 8,
+        "M": 9,
         "T": 12,
         "W": 20,
-        "Sv": 3,
+        "Sv": 2,
         "invuln_sv": 6,
         "Ld": 7,
         "OC": 8
@@ -2410,10 +2410,10 @@
     "profiles": [
       {
         "name": "Mek Gunz",
-        "M": 3,
+        "M": 5,
         "T": 6,
         "W": 6,
-        "Sv": 5,
+        "Sv": 4,
         "invuln_sv": 6,
         "Ld": 8,
         "OC": 2
@@ -4278,7 +4278,7 @@
       {
         "name": "Warboss",
         "M": 6,
-        "T": 5,
+        "T": 6,
         "W": 6,
         "Sv": 4,
         "invuln_sv": 5,

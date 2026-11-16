@@ -8,7 +8,7 @@
             <profile name="Khorne Berzerker" typeName="Unit">
               <characteristics>
                 <characteristic name="M">8"</characteristic>
-                <characteristic name="T">4</characteristic>
+                <characteristic name="T">5</characteristic>
                 <characteristic name="SV">3+</characteristic>
                 <characteristic name="W">2</characteristic>
                 <characteristic name="LD">6+</characteristic>

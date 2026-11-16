@@ -117,7 +117,7 @@
             <profile name="World Eaters Terminator" typeName="Unit">
               <characteristics>
                 <characteristic name="M">7"</characteristic>
-                <characteristic name="T">5</characteristic>
+                <characteristic name="T">6</characteristic>
                 <characteristic name="SV">2+</characteristic>
                 <characteristic name="W">3</characteristic>
                 <characteristic name="LD">6+</characteristic>
@@ -311,7 +311,7 @@
             <profile name="World Eaters Terminator" typeName="Unit">
               <characteristics>
                 <characteristic name="M">7"</characteristic>
-                <characteristic name="T">5</characteristic>
+                <characteristic name="T">6</characteristic>
                 <characteristic name="SV">2+</characteristic>
                 <characteristic name="W">3</characteristic>
                 <characteristic name="LD">6+</characteristic>

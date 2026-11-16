@@ -7,7 +7,7 @@
           <profiles>
             <profile name="Witchseeker" typeName="Unit">
               <characteristics>
-                <characteristic name="M">6"</characteristic>
+                <characteristic name="M">7"</characteristic>
                 <characteristic name="T">3</characteristic>
                 <characteristic name="SV">3+</characteristic>
                 <characteristic name="W">1</characteristic>
@@ -87,7 +87,7 @@ All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
           <profiles>
             <profile name="Prosecutor" typeName="Unit">
               <characteristics>
-                <characteristic name="M">6"</characteristic>
+                <characteristic name="M">7"</characteristic>
                 <characteristic name="T">3</characteristic>
                 <characteristic name="SV">3+</characteristic>
                 <characteristic name="W">1</characteristic>
@@ -162,7 +162,7 @@ All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
           <profiles>
             <profile name="Vigilator" typeName="Unit">
               <characteristics>
-                <characteristic name="M">6"</characteristic>
+                <characteristic name="M">7"</characteristic>
                 <characteristic name="T">3</characteristic>
                 <characteristic name="SV">3+</characteristic>
                 <characteristic name="W">1</characteristic>
@@ -219,11 +219,11 @@ All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
           <profiles>
             <profile name="Venatari Custodians" typeName="Unit">
               <characteristics>
-                <characteristic name="M">10"</characteristic>
-                <characteristic name="T">6</characteristic>
+                <characteristic name="M">12"</characteristic>
+                <characteristic name="T">7</characteristic>
                 <characteristic name="SV">2+</characteristic>
-                <characteristic name="W">3</characteristic>
-                <characteristic name="LD">6+</characteristic>
+                <characteristic name="W">5</characteristic>
+                <characteristic name="LD">5+</characteristic>
                 <characteristic name="OC">2</characteristic>
               </characteristics>
             </profile>

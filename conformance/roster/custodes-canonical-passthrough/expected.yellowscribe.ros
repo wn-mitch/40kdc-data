@@ -126,7 +126,7 @@
           <profiles>
             <profile name="Prosecutor" typeName="Unit">
               <characteristics>
-                <characteristic name="M">6"</characteristic>
+                <characteristic name="M">7"</characteristic>
                 <characteristic name="T">3</characteristic>
                 <characteristic name="SV">3+</characteristic>
                 <characteristic name="W">1</characteristic>
