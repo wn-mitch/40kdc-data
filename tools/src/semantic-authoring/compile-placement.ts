@@ -177,12 +177,23 @@ export function placements(leaves: readonly CompileLeaf[], sourceText: string | 
   // A sentence without an effect ("While this model is leading a unit.") only sets conditions
   // for what follows, so it joins the next sentence; the last one joins the one before.
   const effectful = new Set(leaves.flatMap((leaf, index) => leaf.role === "EFFECT" ? [sentenceOf[index]!] : []));
+  // "Select one of the following abilities. Until …, each X unit has that ability. At the start of each phase, …": an
+  // effect-less sentence before one that opens with a moment qualifies the effects before it, not the later part.
+  const opensWithMoment = new Set(leaves.flatMap((leaf, index) => leaf.role === "EVENT" && leaf.family_id === "event"
+    && (index === 0 || sentenceOf[index - 1] !== sentenceOf[index]) ? [sentenceOf[index]!] : []));
+  const grantsChosenOption = (sentence: number) => leaves.some((leaf, index) => sentenceOf[index] === sentence && leaf.family_id === "chosen-option-grant");
   const sentences = [...new Set(sentenceOf)];
   const merged = new Map<number, number>();
   let pending: number[] = [];
+  let lastEffectful: number | undefined;
   for (const sentence of sentences) {
+    if (pending.length > 0 && lastEffectful !== undefined && opensWithMoment.has(sentence) && pending.some((item) => grantsChosenOption(item))) {
+      for (const item of pending) merged.set(item, lastEffectful);
+      pending = [];
+    }
     pending.push(sentence);
     if (effectful.has(sentence)) {
+      lastEffectful = sentence;
       for (const item of pending) merged.set(item, sentence);
       pending = [];
     }

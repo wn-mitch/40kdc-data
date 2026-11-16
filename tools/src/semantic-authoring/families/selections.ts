@@ -170,6 +170,22 @@ export const SELECTION_EXTENSIONS: readonly FamilyExtension[] = [
       return { including: "target" };
     },
   },
+  /**
+   * "if such a unit is visible to …, it has …": each pass takes one of the units an earlier unit-filter named.
+   */
+  {
+    family: "for-each-unit-select",
+    version: 4,
+    description: "As the previous version, plus units antecedent, alone: each pass takes one of the units the nearest earlier unit-filter named (\"such a unit\" after \"each X unit has that ability\"). A later \"it\" / \"that unit\" is the unit of each pass.",
+    schema: (previous) => withProperties(previous, { units: optional({ const: "antecedent" }) }),
+    normalize: (input, previous) => {
+      if (!("units" in input)) return previous(input);
+      const { units, ...rest } = input;
+      if (units !== "antecedent") throw new TypeError("for-each-unit-select.units is antecedent, or omitted.");
+      if (Object.keys(rest).length) throw new TypeError("for-each-unit-select.units antecedent takes its side and filter from the earlier unit-filter, so it has no other parameter.");
+      return { units: "antecedent" };
+    },
+  },
   printedKeywordsExtension("stratagem-target", 3),
   /**
    * Stratagems with several targets ("One X unit and one Y unit within 6\" of it").

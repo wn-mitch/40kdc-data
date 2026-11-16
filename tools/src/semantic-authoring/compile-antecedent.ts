@@ -653,6 +653,7 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "named-ability-grant": ["subject"], "named-ability-suppression": ["subject"], "named-ability-exchange": ["subject"],
   // "That Vow is active for" + "friendly K units": the menu's holders are every unit the filter names.
   "chosen-option-grant": ["holder"],
+  "menu-options-grant": ["holder"],
   "characteristic-modifier": ["subject"], "weapon-ability-grant": ["subject"], "weapon-ability-range": ["subject"], "keyword-grant": ["subject"], "feel-no-pain": ["subject"],
   "regain-wounds": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject", "into"], "core-ability-grant": ["subject"],
   "invulnerable-save": ["subject"], "ability-record-grant": ["subject"], "move-through": ["subject"],
@@ -717,7 +718,7 @@ function boundValue(leaf: CompileLeaf, key: string, role: string): string | null
   if (role === "defender" && leaf.family_id === "visible" && key === "subject") return role;
   if (isTargetRef(role)) return TARGET_REF_KEYS[leaf.family_id]?.includes(key) ? role : null;
   // "that unit has that ability": the unit whose options the menu before it applies (compile.ts retargets them).
-  if (leaf.family_id === "chosen-option-grant") return MENU_HOLDERS.has(role) ? role : null;
+  if (leaf.family_id === "chosen-option-grant" || leaf.family_id === "menu-options-grant") return MENU_HOLDERS.has(role) ? role : null;
   // "your **WARLORD** model" + "suffers D3 mortal wounds": the units the filter names (compile-fragments.ts unitOf).
   if (role === FILTERED_UNITS) return anyUnitKey(leaf, key) || (leaf.family_id === "mortal-wounds" && key === "recipient") ? role : null;
   if (role === AURA_RECIPIENT) {

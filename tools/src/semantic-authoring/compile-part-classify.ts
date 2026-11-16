@@ -1,3 +1,4 @@
+import { MENU_AS_OPENED } from "./compile-menu-options.js";
 import { exactSpan } from "./contracts.js";
 import { retargetMenu } from "./compile-activation.js";
 import { AURA_RECIPIENT, FILTERED_UNITS } from "./compile-antecedent.js";
@@ -384,7 +385,12 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
           const filtered = leaf.parameters.holder === FILTERED_UNITS;
           if (filtered && leaf.parameters.subject_filter === undefined) throw new CompileError("\"That unit has that ability\" points back to a unit-filter whose units it cannot name.");
           const holder = filtered ? leaf.parameters.subject_filter : String(leaf.parameters.holder);
-          if (holder !== "this-unit" && holder !== "this-model" && containerNodes.has(opener)) containerNodes.set(opener, retargetMenu(containerNodes.get(opener), holder) as Node);
+          if (holder !== "this-unit" && holder !== "this-model" && containerNodes.has(opener)) {
+            const opened = containerNodes.get(opener)!;
+            const retargeted = retargetMenu(opened, holder) as Node;
+            MENU_AS_OPENED.set(retargeted, MENU_AS_OPENED.get(opened) ?? opened);
+            containerNodes.set(opener, retargeted);
+          }
         }
         else throw new CompileError(`Restriction ${leaf.family_id} has no DSL fragment yet.`);
       }

@@ -115,6 +115,12 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       if (next!.parameters.side === "any") throw new CompileError("A move-end nearest the closest unit must say friendly or enemy.");
       out.push({ ...leaf, parameters: { ...leaf.parameters, of: dslUnitFilter(next!) } });
       index += 1;
+    } else if (leaf.family_id === "for-each-unit-select" && leaf.parameters.units === "antecedent") {
+      // "If such a unit is visible to …": each pass takes one of the units the nearest earlier unit-filter named.
+      const earlier = list.slice(0, index).reverse().find((other) => isFilter(other));
+      if (earlier === undefined) throw new CompileError("\"Such a unit\" (for-each-unit-select units antecedent) needs a unit-filter earlier in the ability.");
+      if (earlier.parameters.side !== "friendly" && earlier.parameters.side !== "enemy") throw new CompileError("The unit-filter \"such a unit\" points back to must say friendly or enemy.");
+      out.push({ ...leaf, parameters: { scope: earlier.parameters.side, distance: "any", filter: filterOf(earlier) } });
     } else if (leaf.family_id === "move-end-nearest") {
       // An objective destination names no unit: it takes no filter, and a filter after it is left for its own rule.
       // One that already took its unit (a named option's body compiled again) is kept as it is.

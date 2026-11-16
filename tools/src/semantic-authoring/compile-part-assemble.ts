@@ -513,12 +513,12 @@ export function assemblePart(
     });
     // A record-wide gate that a later part contradicts (its own rounds, phase, player turn or the negated condition)
     // heads the first part only (compile-round-sections.ts).
-    const sectioned = entryTrigger
-      ? firstPartContradicted(global, partStarts.map((part, position) => ({ trigger: asTrigger(partMoments(part, position)), effect: rawEffects[position] })))
-      : [];
+    const sectioned = firstPartContradicted(global, partStarts.map((part, position) => ({ trigger: asTrigger(partMoments(part, position)), effect: rawEffects[position] })));
     if (sectioned.length) {
       const own = sectioned.filter((node, at) => sectioned.findIndex((other) => JSON.stringify(other) === JSON.stringify(node)) === at);
-      partSteps[0] = { ...partSteps[0]!, effect: gated(own, partSteps[0]!.effect as Node) };
+      if (entryPart !== null) partSteps[0] = { ...partSteps[0]!, effect: gated(own, partSteps[0]!.effect as Node) };
+      // No entry moment: the first part is its own steps, which the gate heads together.
+      else partSteps.splice(0, first.length, gated(own, first.length === 1 ? first[0]! : { type: "sequence", steps: first }));
       global.splice(0, global.length, ...global.filter((node) => !sectioned.includes(node)));
     }
     // "each time a friendly X unit within 9\" of the bearer fails a test, …": an aura no part's effect names the recipient of

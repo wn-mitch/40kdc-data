@@ -1,3 +1,4 @@
+import { allMenuOptions } from "./compile-menu-options.js";
 import type { CompileOptions } from "./compile.js";
 import { exactSpan } from "./contracts.js";
 import { AURA_RECIPIENT, momentNamesUnit } from "./compile-antecedent.js";
@@ -61,7 +62,9 @@ export function planEffects(frame: PartFrame, sourceText: string | undefined, op
     if (consumedByContainer.has(index)) return;
     if (leaf.role !== "EFFECT") return;
     const { sentence, clause } = places[index]!;
-    const node = containerNodes.has(index) ? containerNodes.get(index)! : attempt(() => {
+    const node = containerNodes.has(index) ? containerNodes.get(index)!
+      // "It has both of the following abilities": every option of the menu before it (compile-menu-options.ts).
+      : leaf.family_id === "menu-options-grant" ? attempt(() => allMenuOptions(list, index, containerNodes)) : attempt(() => {
       // Find the current attack and event frames without copying the preceding leaves.
       let attack: CompileLeaf | undefined;
       let currentMoment: CompileLeaf | undefined;

@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1235 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 0 | 201 | 256 |
+| detachments | 0 | 0 | 202 | 255 |
 | stratagems | 0 | 0 | 1086 | 227 |
-| abilities | 0 | 0 | 3855 | 681 |
-| phase-mappings | 0 | 0 | 1222 | 359 |
+| abilities | 0 | 0 | 3856 | 680 |
+| phase-mappings | 0 | 0 | 1223 | 358 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -37,7 +37,7 @@ dump confirmation.
 | blood-angels | 0 | 0 | 53 | 8 |
 | chaos-daemons | 0 | 0 | 163 | 32 |
 | chaos-knights | 0 | 0 | 88 | 22 |
-| chaos-space-marines | 0 | 0 | 233 | 48 |
+| chaos-space-marines | 0 | 0 | 234 | 47 |
 | dark-angels | 0 | 0 | 69 | 8 |
 | death-guard | 0 | 0 | 134 | 26 |
 | deathwatch | 0 | 0 | 33 | 3 |
@@ -112,10 +112,10 @@ dump confirmation.
 | chaos-knights | digest-differs | 4 |
 | chaos-knights | unpublished | 18 |
 | chaos-knights | verified | 88 |
-| chaos-space-marines | digest-differs | 12 |
+| chaos-space-marines | digest-differs | 11 |
 | chaos-space-marines | stub | 22 |
 | chaos-space-marines | unpublished | 14 |
-| chaos-space-marines | verified | 233 |
+| chaos-space-marines | verified | 234 |
 | dark-angels | digest-differs | 7 |
 | dark-angels | stub | 1 |
 | dark-angels | verified | 69 |

@@ -81,6 +81,7 @@ const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "target-is-selected": ["by", "target"],
   "ability-activate": ["subject"],
   "chosen-option-grant": ["holder"],
+  "menu-options-grant": ["holder"],
   // "change the Damage of that attack to 0" for the model whose save an earlier roll moment names.
   "damage-reduction": ["subject"],
   // "your **VEHICLE** unit is eligible to shoot …", "do not make an Advance roll for it" (act-after-move@3 and no-advance-roll@3, families/moves.ts).

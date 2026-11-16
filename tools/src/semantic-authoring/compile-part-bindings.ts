@@ -210,7 +210,9 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
     const selectsAttacks = selections.length === 1 && planned.some((item) => item.selected);
     // A roll only a later part makes ("In addition, until …, roll one D6 each time that unit ends a move") is that part's own.
     const firstPartRoll = rolls.some((roll) => partOfLeaf(roll) === 0);
-    if (firstPartRoll || auraLeaf || forEachLeaf || leaderLeaf || rulesBundle || optionalSpend || selectsAttacks) errors.push(CONFLICTING_DURATIONS);
+    // A loop in a later part repeats only that part (compile-part-assemble.ts), so its own duration is that part's.
+    const recordPartLoop = forEachLeaf !== null && partOfLeaf(forEachLeaf) === 0;
+    if (firstPartRoll || auraLeaf || recordPartLoop || leaderLeaf || rulesBundle || optionalSpend || selectsAttacks) errors.push(CONFLICTING_DURATIONS);
     if (usages.length) errors.push("A usage limit in an ability with several durations has no reading yet.");
     const testAfterMark = refuseTestAfterMark(planned.map((item) => ({ index: item.index, node: item.node, gate: item.gate })), (index) => partStarts.filter((part) => part.index < index).length);
     if (testAfterMark) errors.push(testAfterMark);
