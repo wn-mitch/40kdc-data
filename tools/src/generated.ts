@@ -3368,6 +3368,33 @@ export interface HullShape {
   game_version: GameVersionReference;
 }
 /**
+ * A keyword a unit takes from a set of alternatives when its army is mustered (a Mark of Chaos, a Daemonic Allegiance, a detachment's CHARACTER pick). Each option is a unit's conditional_keywords entry whose choice_group is this group's id; a unit takes at most one option of a group.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "keyword-choice-group".
+ */
+export interface KeywordChoiceGroup {
+  id: EntityId;
+  name: string;
+  /**
+   * The detachment whose army makes the choice; null when any army that includes the unit makes it.
+   */
+  detachment_id: EntityId | null;
+  /**
+   * Whether every unit with options in this group must take one.
+   */
+  mandatory: boolean;
+  /**
+   * The fewest units in the army that must take an option of this group; null for no minimum.
+   */
+  min_units: number | null;
+  /**
+   * The most units in the army that can take an option of this group; null for no maximum.
+   */
+  max_units: number | null;
+  game_version: GameVersionReference;
+}
+/**
  * Defines which character units can attach to which bodyguard units.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -8533,6 +8560,10 @@ export interface Unit {
     keyword: Keyword;
     required_detachment_id?: EntityId | null;
     required_faction_keyword?: Keyword | null;
+    /**
+     * Kebab-case identifier
+     */
+    choice_group?: string;
   }[];
   /**
    * Faction keywords whose armies are barred from taking this otherwise-generic unit. Used where the game removes a generic unit from a specific sub-faction without printing a replacement (e.g. Black Templars cannot field Librarians; Deathwatch cannot field the generic Tactical Squad). An army may take this unit only if none of its faction keywords appear here. Absent/empty = available to every keyword-eligible army. Distinct from `faction_keywords`, which is the positive access list; this is the negative one for the rare exclusions a flat shared pool cannot otherwise express.

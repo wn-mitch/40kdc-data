@@ -50,10 +50,6 @@
             <category name="Smoke"/>
             <category name="Chaos"/>
             <category name="Rhino"/>
-            <category name="Nurgle"/>
-            <category name="Slaanesh"/>
-            <category name="Tzeentch"/>
-            <category name="Khorne"/>
             <category name="Frame"/>
             <category name="Chaos Rhino"/>
           </categories>
@@ -140,10 +136,6 @@
             <category name="Smoke"/>
             <category name="Chaos"/>
             <category name="Land Raider"/>
-            <category name="Nurgle"/>
-            <category name="Slaanesh"/>
-            <category name="Tzeentch"/>
-            <category name="Khorne"/>
             <category name="Frame"/>
             <category name="Chaos Land Raider"/>
           </categories>

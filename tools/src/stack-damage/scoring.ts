@@ -21,6 +21,7 @@ import { combinedWargear, equippedBuffs, loadoutWargear, phaseScoredItem, unequi
 import { equippedLevers, othersEquippedBuffs, othersUnequippedKey, sameLoadoutCounts, settleMemberLoadouts, type MemberLoadouts } from "./member-loadouts.js";
 import { activationPossible, filterStackEligibleAbilities, filterStackableStratagems, unitLookup } from "./stratagem-eligibility.js";
 import { combinedKeywords, issuesOrders, ordersReach } from "./orders.js";
+import { memberKey, ownKeywords } from "./keyword-choices.js";
 import type {
   DamageCellState,
   PoolLever,
@@ -53,7 +54,7 @@ function buffKey(buffs: readonly Buff[]): string {
 function memberKeywords(members: readonly StackMember[]): string[] {
   const keywords = new Set<string>();
   for (const member of members) {
-    for (const keyword of [...member.unit.keywords, ...member.unit.factionKeywords]) keywords.add(keyword.toLowerCase());
+    for (const keyword of ownKeywords(member)) keywords.add(keyword.toLowerCase());
   }
   return [...keywords].sort();
 }
@@ -323,6 +324,9 @@ export class DamageScoringSession {
       attachmentRoles: attachmentRoles(spec.members),
       supportingUnitIds: this.supportUnits.filter((support) => !spec.members.some((candidate) => candidate.unit.id === support.id)).map((support) => support.id),
       weaponProfiles: [],
+      ...(spec.members.some((candidate) => candidate.chosen) ? {
+        keywordChoices: Object.fromEntries(spec.members.flatMap((candidate) => candidate.chosen ? [[candidate.unit.id, [...candidate.chosen]]] : [])),
+      } : {}),
     };
   }
 
@@ -345,7 +349,7 @@ export class DamageScoringSession {
   }
 
   private poolKey(spec: StackSpec): string {
-    return `${spec.members.map((member) => `${member.unit.id}:${member.role}`).join("+")}|${spec.detachmentIds.join("+")}`;
+    return `${spec.members.map((member) => `${memberKey(member)}:${member.role}`).join("+")}|${spec.detachmentIds.join("+")}`;
   }
 
   /** Each detachment resolves on its own; a spec without one resolves once. */
@@ -490,7 +494,7 @@ export class DamageScoringSession {
   }
 
   scoreStack(spec: StackSpec): StackResult {
-    const key = `${spec.members.map((member) => member.unit.id).join("+")}|${spec.detachmentIds.join("+")}|${[...spec.selectedLeverIds].sort().join("+")}`;
+    const key = `${spec.members.map(memberKey).join("+")}|${spec.detachmentIds.join("+")}|${[...spec.selectedLeverIds].sort().join("+")}`;
     const cached = this.stackCache.get(key);
     if (cached) return cached;
     this.stackEvaluations += 1;

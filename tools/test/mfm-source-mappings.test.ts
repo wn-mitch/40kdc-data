@@ -101,7 +101,7 @@ describe("committed MFM source mappings", () => {
     const report = validateSourceMappings(CATALOG, MAPPINGS_DIR);
     expect(report.errors).toEqual([]);
     expect(report.present).toBe(report.total);
-    expect(report.total).toBe(25);
+    expect(report.total).toBe(26);
   });
 
   it("pins the partial invulnerable-save provenance and consumer precedence", () => {

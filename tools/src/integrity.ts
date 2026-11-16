@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { glob } from "glob";
 import { resolve, basename, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { checkChoiceGroupRefs } from "./integrity-choice-groups.js";
 import type { ValidationResult } from "./validate.js";
 import { checkModelNames } from "./integrity-model-names.js";
 import { checkGameModeStamps } from "./game-mode-stamps.js";
@@ -742,6 +743,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   await checkTargetProfiles(root, result);
   await checkWeaponGrantRefs(root, result);
   await checkModelNames(root, result);
+  await checkChoiceGroupRefs(root, result);
   checkGameModeStamps(root, result);
 
   // Shared core ability pool, available to every faction (optional).

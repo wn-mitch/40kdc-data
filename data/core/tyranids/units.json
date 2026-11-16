@@ -62,6 +62,10 @@
       {
         "keyword": "Burrower",
         "required_detachment_id": "subterranean-assault"
+      },
+      {
+        "keyword": "Character",
+        "choice_group": "subterranean-assault-keywords-subterranean-assault"
       }
     ],
     "external_refs": [

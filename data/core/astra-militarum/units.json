@@ -1166,6 +1166,12 @@
         "namespace": "mfm",
         "id": "86ec5de6-c352-4762-840f-b5a74da06b2e"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Character",
+        "choice_group": "steel-hammer-keywords-steel-hammer"
+      }
     ]
   },
   {
@@ -2040,6 +2046,12 @@
         "namespace": "mfm",
         "id": "38e92f7b-3cfe-44da-8563-32da63d92c5d"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Character",
+        "choice_group": "steel-hammer-keywords-steel-hammer"
+      }
     ]
   },
   {
@@ -2853,6 +2865,12 @@
         "namespace": "mfm",
         "id": "1f064811-1c2f-4d78-aa12-0f91652011ba"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Character",
+        "choice_group": "steel-hammer-keywords-steel-hammer"
+      }
     ]
   },
   {
@@ -3423,6 +3441,12 @@
         "namespace": "mfm",
         "id": "85f52c31-2ce0-4ba2-89e8-c1bd98ccb465"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Character",
+        "choice_group": "steel-hammer-keywords-steel-hammer"
+      }
     ]
   },
   {
@@ -3788,6 +3812,12 @@
       {
         "namespace": "mfm",
         "id": "43c4b15c-9229-42bc-b49e-f88d5607a5fa"
+      }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Character",
+        "choice_group": "steel-hammer-keywords-steel-hammer"
       }
     ]
   },
@@ -4896,6 +4926,12 @@
         "namespace": "mfm",
         "id": "70415ed5-2654-45e2-89f7-c919c7ab16cd"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Character",
+        "choice_group": "steel-hammer-keywords-steel-hammer"
+      }
     ]
   },
   {
@@ -5363,6 +5399,12 @@
       {
         "namespace": "mfm",
         "id": "3edb4ee0-78d4-4367-b282-4d8f58b35a1a"
+      }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Character",
+        "choice_group": "steel-hammer-keywords-steel-hammer"
       }
     ]
   },
@@ -5919,6 +5961,12 @@
       {
         "namespace": "mfm",
         "id": "3d17ac1d-7e36-4a2e-859a-7db04836bcb4"
+      }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Character",
+        "choice_group": "steel-hammer-keywords-steel-hammer"
       }
     ]
   },

@@ -1,0 +1,11 @@
+[
+  {
+    "id": "example-oath-example-detachment",
+    "name": "Example Oath",
+    "detachment_id": "example-detachment",
+    "mandatory": true,
+    "min_units": null,
+    "max_units": null,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "name": "Chosen (chaos-space-marines) in Cabal of Chaos, shooting, with the Khorne option taken: the resolver takes the caller's keyword choices as given, so Empyric Wellspring, which excludes KHORNE units, does not apply",
+  "input": {
+    "unitId": "chosen",
+    "factionId": "chaos-space-marines",
+    "detachmentId": "cabal-of-chaos",
+    "keywordChoices": {
+      "chosen": [
+        "Khorne"
+      ]
+    }
+  },
+  "phase": "shooting",
+  "expected": {
+    "army": [
+      "cults-of-the-dark-gods-chaos-space-marines",
+      "dark-pacts-chaos-space-marines"
+    ],
+    "unit": [
+      "chaos-icon-chaos-space-marines",
+      "chosen-marauders-chaos-space-marines"
+    ]
+  }
+}

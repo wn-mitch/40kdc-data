@@ -75,6 +75,24 @@
         "namespace": "mfm",
         "id": "5e8b0541-446b-4e3a-b6e1-5bd97c633bb3"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Khorne",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "daemonic-allegiance"
+      }
     ]
   },
   {
@@ -154,6 +172,24 @@
         "namespace": "mfm",
         "id": "ea87dcd6-d8bb-49a8-bfcf-36fbbfe00c09"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Khorne",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "daemonic-allegiance"
+      }
     ]
   },
   {
@@ -185,8 +221,7 @@
       "Psyker",
       "Chaos",
       "Terminator",
-      "Sorcerer in Terminator Armour",
-      "Tzeentch"
+      "Sorcerer in Terminator Armour"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -241,8 +276,24 @@
     ],
     "conditional_keywords": [
       {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
         "keyword": "Shadow Legion",
         "required_detachment_id": "shadow-legion"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ],
     "external_refs": [
@@ -380,6 +431,24 @@
         "namespace": "mfm",
         "id": "2207af75-2e11-4e13-8fa2-b7e83689f841"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -411,9 +480,7 @@
       "Psyker",
       "Grenades",
       "Chaos",
-      "Sorcerer",
-      "Slaanesh",
-      "Tzeentch"
+      "Sorcerer"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -467,8 +534,24 @@
     ],
     "conditional_keywords": [
       {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
         "keyword": "Shadow Legion",
         "required_detachment_id": "shadow-legion"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ],
     "external_refs": [
@@ -574,8 +657,24 @@
     "attachment_role": "leader",
     "conditional_keywords": [
       {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
         "keyword": "Shadow Legion",
         "required_detachment_id": "shadow-legion"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ],
     "external_refs": [
@@ -654,8 +753,24 @@
     "attachment_role": "leader",
     "conditional_keywords": [
       {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
         "keyword": "Shadow Legion",
         "required_detachment_id": "shadow-legion"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ],
     "external_refs": [
@@ -748,6 +863,28 @@
         "namespace": "mfm",
         "id": "080a58e3-1ee6-4300-86f7-9c5586ebb91a"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -825,6 +962,28 @@
       {
         "namespace": "mfm",
         "id": "6c611076-a030-4daa-8286-26a50a4cbca2"
+      }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ]
   },
@@ -954,6 +1113,28 @@
         "namespace": "mfm",
         "id": "c9466348-3667-4ea4-8f2f-597dc6072b9b"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -1025,8 +1206,28 @@
     "attachment_role": "leader",
     "conditional_keywords": [
       {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
         "keyword": "Shadow Legion",
         "required_detachment_id": "shadow-legion"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ],
     "external_refs": [
@@ -1080,10 +1281,6 @@
       "Smoke",
       "Chaos",
       "Land Raider",
-      "Nurgle",
-      "Slaanesh",
-      "Tzeentch",
-      "Khorne",
       "Frame",
       "Chaos Land Raider"
     ],
@@ -1169,6 +1366,28 @@
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "emperors-children"
+      }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ]
   },
@@ -1276,6 +1495,28 @@
         "namespace": "mfm",
         "id": "6360d229-e164-4799-9186-eb92e24ec9a1"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -1350,8 +1591,28 @@
     "attachment_role": "leader",
     "conditional_keywords": [
       {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
         "keyword": "Shadow Legion",
         "required_detachment_id": "shadow-legion"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ],
     "external_refs": [
@@ -1445,8 +1706,28 @@
     "attachment_role": "leader",
     "conditional_keywords": [
       {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
         "keyword": "Shadow Legion",
         "required_detachment_id": "shadow-legion"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ],
     "external_refs": [
@@ -1493,11 +1774,7 @@
     "keywords": [
       "Beast",
       "Chaos",
-      "Chaos Spawn",
-      "Nurgle",
-      "Slaanesh",
-      "Tzeentch",
-      "Khorne"
+      "Chaos Spawn"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -1566,6 +1843,28 @@
         "namespace": "mfm",
         "id": "1043278b-3771-4b55-ad11-1cacdd04ac72"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -1603,9 +1902,6 @@
       "Smoke",
       "Chaos",
       "Predator Annihilator",
-      "Nurgle",
-      "Tzeentch",
-      "Khorne",
       "Frame",
       "Chaos Predator Annihilator"
     ],
@@ -1690,6 +1986,28 @@
         "namespace": "mfm",
         "id": "fc55abc3-aef8-41ea-a118-02e2ba45f1b0"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -1770,6 +2088,28 @@
       {
         "namespace": "mfm",
         "id": "75180920-3701-4315-88c8-48892abfaf72"
+      }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ]
   },
@@ -1858,6 +2198,28 @@
         "namespace": "mfm",
         "id": "bff8ce3a-998d-4ce8-af32-40bf2b6e93f1"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -1930,6 +2292,28 @@
       {
         "namespace": "mfm",
         "id": "50b9dd14-e4ac-4d60-bdea-cb9a17c19df2"
+      }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ]
   },
@@ -2044,6 +2428,28 @@
         "namespace": "mfm",
         "id": "1cc26153-281a-467a-91ea-868ae008354f"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -2081,10 +2487,7 @@
       "Walker",
       "Chaos",
       "Daemon",
-      "Defiler",
-      "Nurgle",
-      "Tzeentch",
-      "Khorne"
+      "Defiler"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -2167,6 +2570,28 @@
         "namespace": "mfm",
         "id": "efa73f6a-2706-48db-9459-58413bbd0f3c"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -2204,9 +2629,6 @@
       "Smoke",
       "Chaos",
       "Predator Destructor",
-      "Nurgle",
-      "Tzeentch",
-      "Khorne",
       "Frame",
       "Chaos Predator Destructor"
     ],
@@ -2304,6 +2726,28 @@
       {
         "namespace": "mfm",
         "id": "2576a56a-4a55-4fa1-85af-2f70d4cef994"
+      }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ]
   },
@@ -2441,6 +2885,28 @@
         "namespace": "mfm",
         "id": "93427578-9687-4e27-b9a7-a81825e5d028"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -2524,6 +2990,26 @@
       {
         "keyword": "Battleline",
         "required_detachment_id": "chaos-cult"
+      },
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ],
     "external_refs": [
@@ -2568,10 +3054,7 @@
       "Fly",
       "Chaos",
       "Daemon",
-      "Heldrake",
-      "Slaanesh",
-      "Tzeentch",
-      "Khorne"
+      "Heldrake"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -2622,6 +3105,28 @@
         "namespace": "mfm",
         "id": "785d99dd-f932-4180-906e-b1d0e94423a0"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -2659,7 +3164,6 @@
       "Smoke",
       "Chaos",
       "Vindicator",
-      "Tzeentch",
       "Frame",
       "Chaos Vindicator"
     ],
@@ -2728,6 +3232,28 @@
         "unit_count_max": null,
         "host_faction": "thousand-sons"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -2765,9 +3291,7 @@
       "Walker",
       "Chaos",
       "Daemon",
-      "Forgefiend",
-      "Tzeentch",
-      "Khorne"
+      "Forgefiend"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -2855,6 +3379,28 @@
         "namespace": "mfm",
         "id": "70d8e9c4-9fda-4add-a63d-1bb502ed4858"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -2932,6 +3478,28 @@
         "namespace": "mfm",
         "id": "a9f80056-77e1-4d62-a684-0c43bf2d8f1c"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -3000,8 +3568,28 @@
     "attachment_role": "leader",
     "conditional_keywords": [
       {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
         "keyword": "Shadow Legion",
         "required_detachment_id": "shadow-legion"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ],
     "external_refs": [
@@ -3112,6 +3700,28 @@
         "namespace": "mfm",
         "id": "8abbe95c-de52-41af-9a20-e215aa1758fc"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -3142,8 +3752,7 @@
       "Character",
       "Grenades",
       "Chaos",
-      "Master of Executions",
-      "Khorne"
+      "Master of Executions"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -3192,6 +3801,28 @@
       {
         "namespace": "mfm",
         "id": "d35234e3-a15d-4a50-bfca-2a337426ef23"
+      }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ]
   },
@@ -3301,6 +3932,28 @@
         "namespace": "mfm",
         "id": "48e2f7a2-ff71-4f14-bf01-c9c00a8b9fdd"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -3329,10 +3982,7 @@
       "Vehicle",
       "Walker",
       "Chaos",
-      "Helbrute",
-      "Nurgle",
-      "Tzeentch",
-      "Khorne"
+      "Helbrute"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -3393,8 +4043,28 @@
     ],
     "conditional_keywords": [
       {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
         "keyword": "Contagion Engines",
         "required_detachment_id": "contagion-engines"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ],
     "external_refs": [
@@ -3479,8 +4149,28 @@
     "attachment_role": "leader",
     "conditional_keywords": [
       {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
         "keyword": "Shadow Legion",
         "required_detachment_id": "shadow-legion"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ],
     "external_refs": [
@@ -3573,6 +4263,28 @@
         "namespace": "mfm",
         "id": "bf8b6130-d968-4660-9228-a4086983349d"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -3638,8 +4350,28 @@
     "attachment_role": "leader",
     "conditional_keywords": [
       {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
         "keyword": "Shadow Legion",
         "required_detachment_id": "shadow-legion"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ],
     "external_refs": [
@@ -3761,6 +4493,28 @@
         "namespace": "mfm",
         "id": "92522b41-7f37-465b-b427-c164625d96ff"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -3854,6 +4608,28 @@
         "namespace": "mfm",
         "id": "c7032f7f-e912-4101-9291-802c3be57f40"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -3944,6 +4720,28 @@
         "namespace": "mfm",
         "id": "30ffee9f-7068-46bd-bed7-d1605200124e"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -3973,10 +4771,7 @@
       "Walker",
       "Chaos",
       "Daemon",
-      "Maulerfiend",
-      "Slaanesh",
-      "Tzeentch",
-      "Khorne"
+      "Maulerfiend"
     ],
     "faction_keywords": [
       "Heretic Astartes"
@@ -4070,6 +4865,28 @@
         "namespace": "mfm",
         "id": "a78ad914-6870-42f1-9c00-6d54fbdb6a0e"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -4110,10 +4927,6 @@
       "Smoke",
       "Chaos",
       "Rhino",
-      "Nurgle",
-      "Slaanesh",
-      "Tzeentch",
-      "Khorne",
       "Frame",
       "Chaos Rhino"
     ],
@@ -4228,6 +5041,28 @@
       {
         "namespace": "mfm",
         "id": "9b28d56a-79af-4eb9-8617-631b28072dc6"
+      }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ]
   },
@@ -4352,6 +5187,28 @@
         "namespace": "mfm",
         "id": "0536bb6c-1638-41bb-a99c-9ec05c4135e8"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      }
     ]
   },
   {
@@ -4426,6 +5283,28 @@
       {
         "namespace": "mfm",
         "id": "a569312e-8642-47db-89e6-83332b19f844"
+      }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ]
   },
@@ -5193,6 +6072,28 @@
       {
         "namespace": "mfm",
         "id": "bca403ae-5339-4a17-8f7f-c28b35ab109c"
+      }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Chaos Undivided",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Khorne",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "mark-of-chaos-pactbound-zealots"
       }
     ]
   },

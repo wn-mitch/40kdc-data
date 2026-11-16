@@ -1,0 +1,177 @@
+{
+  "$schema": "../mfm-source-map.schema.json",
+  "entity_schema": "schemas/core/keyword-choice-group.schema.json",
+  "mapping_version": 1,
+  "root_tables": [
+    "allegiance_ability_group"
+  ],
+  "fields": {
+    "/detachment_id": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.allegiance_ability_group.detachmentId",
+        "data.detachment.localisations.*.name"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/conditional-keywords.ts#choiceGroups"
+      ],
+      "reason": "The detachment id resolves to the repository detachment slug; a group with none is null."
+    },
+    "/game_version": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "metadata.data_version"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/dataslate.ts#currentGameVersion",
+          "operation": "Look up the dump's data version in the curated dataslate table."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/conditional-keywords.ts#choiceGroups"
+      ],
+      "reason": "The dataslate the dump was verified against, from the curated data-version table."
+    },
+    "/game_version/dataslate": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "metadata.data_version"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/dataslate.ts#currentGameVersion",
+          "operation": "Look up the dump's data version in the curated dataslate table."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/conditional-keywords.ts#choiceGroups"
+      ],
+      "reason": "The dataslate the dump's data version maps to, named by its release date."
+    },
+    "/game_version/edition": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "metadata.data_version"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/dataslate.ts#currentGameVersion",
+          "operation": "Look up the dump's data version in the curated dataslate table."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/conditional-keywords.ts#choiceGroups"
+      ],
+      "reason": "The edition of the dataslate the dump's data version maps to."
+    },
+    "/id": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.allegiance_ability_group.localisations.*.name",
+        "data.allegiance_ability_group.detachmentId",
+        "data.detachment.localisations.*.name"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/conditional-keywords.ts#choiceGroups",
+          "operation": "Slug the group name and its detachment name; merge groups that share an id and agree on their mandatory flag and limits."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/conditional-keywords.ts#choiceGroups"
+      ],
+      "reason": "The group's name slug, then its detachment's slug; groups sharing that id merge."
+    },
+    "/mandatory": {
+      "provenance": "direct",
+      "coverage": "implemented",
+      "sources": [
+        "data.allegiance_ability_group.isMandatory"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/conditional-keywords.ts#choiceGroups"
+      ],
+      "reason": "Whether every unit with options in the group must take one."
+    },
+    "/max_units": {
+      "provenance": "direct",
+      "coverage": "implemented",
+      "sources": [
+        "data.allegiance_ability_group.maxRosterLimit"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/conditional-keywords.ts#choiceGroups"
+      ],
+      "reason": "The most units in the army that can take an option."
+    },
+    "/min_units": {
+      "provenance": "direct",
+      "coverage": "implemented",
+      "sources": [
+        "data.allegiance_ability_group.minRosterLimit"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/conditional-keywords.ts#choiceGroups"
+      ],
+      "reason": "The fewest units in the army that must take an option."
+    },
+    "/name": {
+      "provenance": "direct",
+      "coverage": "implemented",
+      "sources": [
+        "data.allegiance_ability_group.localisations.*.name"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/conditional-keywords.ts#choiceGroups"
+      ],
+      "reason": "The group's display name."
+    }
+  },
+  "unmapped_mfm_fields": [
+    {
+      "source": "data.allegiance_ability_group.id",
+      "candidate_pointer": null,
+      "reason": "The group's primary key; conditional-keywords.ts joins allegiance abilities to it and names the group by its slug instead.",
+      "classification": "id",
+      "spread": "8 rows, 8 values (0 null/absent): string, 8 distinct"
+    }
+  ]
+}

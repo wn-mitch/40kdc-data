@@ -24,16 +24,24 @@ _PREDICATE_KEYS = frozenset({"all_of", "any_of", "none_of", "not_all_of", "owner
 _STANDING_SOURCES = frozenset({"army", "detachment", "unit", "attached"})
 
 
-def member_keywords(member: UnitView | None, detachment_id: Any) -> set[str]:
+def member_keywords(
+    member: UnitView | None, detachment_id: Any, chosen: Any = ()
+) -> set[str]:
     """A member's keywords, lower-cased: its datasheet and faction keywords, plus each
-    conditional keyword whose ``required_detachment_id`` is unset or the selected detachment."""
+    conditional keyword whose ``required_detachment_id`` is unset or the selected detachment,
+    and each keyword-choice option ``chosen`` lists."""
     if member is None:
         return set()
+    taken = {str(keyword).lower() for keyword in chosen or ()}
     conditional = [
         entry["keyword"]
         for entry in member.raw.get("conditional_keywords") or []
-        if entry.get("required_detachment_id") is None
-        or entry.get("required_detachment_id") == detachment_id
+        if (
+            entry["keyword"].lower() in taken
+            if entry.get("choice_group") is not None
+            else entry.get("required_detachment_id") is None
+            or entry.get("required_detachment_id") == detachment_id
+        )
     ]
     return {
         keyword.lower()

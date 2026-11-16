@@ -13,11 +13,11 @@ use std::sync::{Arc, Mutex, OnceLock};
 
 use crate::generated::{
     Ability, AbilityTrigger, AlliedRule, DeploymentPattern, Detachment, Enhancement, Faction,
-    ForceDisposition, GameVersion, HullShape, InteractionFlag, KeywordList, LeaderAttachment,
-    LeaderAttachmentConditionalGroupsItemRole, Mission, MissionMatchup, Phase, PhaseMapping,
-    ResourcePool, SecondaryCard, Stratagem, TargetProfile, TerrainLayout, TerrainTemplate, Trigger,
-    Unit, UnitAttachmentRole, UnitComposition, UnitKeyword, Wargear, WargearOption, Weapon,
-    WeaponKeyword,
+    ForceDisposition, GameVersion, HullShape, InteractionFlag, KeywordChoiceGroup, KeywordList,
+    LeaderAttachment, LeaderAttachmentConditionalGroupsItemRole, Mission, MissionMatchup, Phase,
+    PhaseMapping, ResourcePool, SecondaryCard, Stratagem, TargetProfile, TerrainLayout,
+    TerrainTemplate, Trigger, Unit, UnitAttachmentRole, UnitComposition, UnitKeyword, Wargear,
+    WargearOption, Weapon, WeaponKeyword,
 };
 
 use super::collection::Collection;
@@ -85,6 +85,9 @@ pub struct RawData {
     pub deployment_patterns: Vec<DeploymentPattern>,
     #[serde(default)]
     pub force_dispositions: Vec<ForceDisposition>,
+    /// Muster-time keyword choices (a Mark of Chaos); each option is a unit conditional keyword naming the group.
+    #[serde(default)]
+    pub keyword_choice_groups: Vec<KeywordChoiceGroup>,
     /// Reusable terrain catalog: standard areas and scenery features.
     #[serde(default)]
     pub terrain_templates: Vec<TerrainTemplate>,
@@ -175,6 +178,7 @@ pub struct Dataset {
     pub mission_cards: Collection<SecondaryCard>,
     pub deployment_patterns: Collection<DeploymentPattern>,
     pub force_dispositions: Collection<ForceDisposition>,
+    pub keyword_choice_groups: Collection<KeywordChoiceGroup>,
     pub terrain_templates: Collection<TerrainTemplate>,
     pub terrain_layouts: Collection<TerrainLayout>,
     pub hull_shapes: Collection<HullShape>,
@@ -427,6 +431,11 @@ impl Dataset {
             |f| f.id.to_string(),
             |f| Some(f.name.as_str()),
         );
+        let keyword_choice_groups = id_name_collection(
+            raw.keyword_choice_groups,
+            |g| g.id.to_string(),
+            |g| Some(g.name.as_str()),
+        );
         let terrain_templates = id_name_collection(
             raw.terrain_templates,
             |t| t.id.to_string(),
@@ -490,6 +499,7 @@ impl Dataset {
             mission_cards,
             deployment_patterns,
             force_dispositions,
+            keyword_choice_groups,
             terrain_templates,
             terrain_layouts,
             hull_shapes,

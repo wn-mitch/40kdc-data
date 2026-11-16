@@ -69,10 +69,17 @@ func resolveWithSuppressions(ds *Dataset, input map[string]any, phase string) ([
 	detachmentID := getStr(input, "detachmentId")
 	// Each member's keywords (lower-cased); a unit target reads them as one combined unit. An
 	// attached id that resolves to no unit is a member with no keywords.
-	members := []map[string]bool{memberKeywords(unit, detachmentID)}
+	choices, _ := getMap(input, "keywordChoices")
+	chosenFor := func(member *UnitView) []string {
+		if member == nil || choices == nil {
+			return nil
+		}
+		return getStrList(choices, getStr(member.Raw, "id"))
+	}
+	members := []map[string]bool{memberKeywords(unit, detachmentID, chosenFor(unit))}
 	for _, memberID := range getStrList(input, "attachedUnitIds") {
 		member, _ := ds.resolveUnitScoped(memberID, factionID)
-		members = append(members, memberKeywords(member, detachmentID))
+		members = append(members, memberKeywords(member, detachmentID, chosenFor(member)))
 	}
 	printed := ds.printedKeyword()
 	applies := func(ability *AbilityView) bool {

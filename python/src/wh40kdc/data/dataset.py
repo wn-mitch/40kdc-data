@@ -286,6 +286,7 @@ class Dataset:
         self.mission_cards = id_collection(raw["mission_cards"])
         self.deployment_patterns = id_collection(raw["deployment_patterns"])
         self.force_dispositions = id_collection(raw["force_dispositions"])
+        self.keyword_choice_groups = id_collection(raw["keyword_choice_groups"])
         self.terrain_templates = id_collection(raw["terrain_templates"])
         self.terrain_layouts = id_collection(raw["terrain_layouts"])
         self.hull_shapes = id_collection(raw["hull_shapes"])

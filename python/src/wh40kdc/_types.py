@@ -636,6 +636,16 @@ class HullShape(TypedDict):
     game_version: GameVersionRef
 
 
+class KeywordChoiceGroup(TypedDict):
+    id: EntityId
+    name: str
+    detachment_id: EntityId | None
+    mandatory: bool
+    min_units: int | None
+    max_units: int | None
+    game_version: GameVersionRef
+
+
 EligibleBodyguardKeyword: TypeAlias = str
 
 
@@ -992,6 +1002,7 @@ class ConditionalKeyword(TypedDict):
     keyword: Keyword
     required_detachment_id: NotRequired[EntityId | None]
     required_faction_keyword: NotRequired[Keyword | None]
+    choice_group: NotRequired[EntityId]
 
 
 class ModelCount(TypedDict):

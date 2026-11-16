@@ -1,0 +1,7 @@
+[
+  { "id": "jester", "conditional_keywords": [
+    { "keyword": "Mirth", "choice_group": "oath-masque" },
+    { "keyword": "mirth", "choice_group": "oath-masque" },
+    { "keyword": "Gloom", "choice_group": "oath-unknown" }
+  ] }
+]

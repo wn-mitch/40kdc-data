@@ -13,6 +13,7 @@ import type {
   Detachment,
   Enhancement,
   ForceDisposition,
+  KeywordChoiceGroup,
   GameEvent,
   GameVersion,
   HullShape,
@@ -132,6 +133,7 @@ export class Dataset {
   readonly missionCards: Collection<SecondaryCard, SecondaryCard>;
   readonly deploymentPatterns: Collection<DeploymentPattern, DeploymentPattern>;
   readonly forceDispositions: Collection<ForceDisposition, ForceDisposition>;
+  readonly keywordChoiceGroups: Collection<KeywordChoiceGroup, KeywordChoiceGroup>;
   readonly terrainTemplates: Collection<TerrainTemplate, TerrainTemplate>;
   readonly terrainLayouts: Collection<TerrainLayout, TerrainLayout>;
   readonly hullShapes: Collection<HullShape, HullShape>;
@@ -279,6 +281,7 @@ export class Dataset {
     this.missionCards = idCollection(raw.missionCards);
     this.deploymentPatterns = idCollection(raw.deploymentPatterns);
     this.forceDispositions = idCollection(raw.forceDispositions);
+    this.keywordChoiceGroups = idCollection(raw.keywordChoiceGroups);
     this.terrainTemplates = idCollection(raw.terrainTemplates);
     this.terrainLayouts = idCollection(raw.terrainLayouts);
     this.hullShapes = idCollection(raw.hullShapes);
@@ -794,6 +797,7 @@ function push<T>(map: Map<string, T[]>, key: string, value: T): void {
  */
 function eligibilityKey(input: EligibilityInput, phase: Phase): string {
   const roles = Object.entries(input.attachmentRoles ?? {}).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
+  const choices = Object.entries(input.keywordChoices ?? {}).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
   return JSON.stringify([phase, input.unitId, input.factionId ?? null, input.detachmentId ?? null,
-    input.attachedUnitIds ?? [], roles, input.supportingUnitIds ?? []]);
+    input.attachedUnitIds ?? [], roles, input.supportingUnitIds ?? [], choices]);
 }

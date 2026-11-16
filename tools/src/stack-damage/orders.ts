@@ -56,14 +56,16 @@ function eligibleHolds(filter: unknown, keywords: ReadonlySet<string>): boolean 
 
 /**
  * The keywords the combined unit of `ids` carries in `detachmentId`, lower-cased: printed and
- * faction keywords plus conditional keywords that detachment grants.
+ * faction keywords plus conditional keywords that detachment grants, and the keyword-choice
+ * options `chosen` names.
  */
-export function combinedKeywords(ids: readonly string[], units: UnitLookup, detachmentId: string | undefined): Set<string> {
+export function combinedKeywords(ids: readonly string[], units: UnitLookup, detachmentId: string | undefined, chosen: readonly string[] = []): Set<string> {
   const out = new Set<string>();
   for (const id of ids) {
     const unit = units(id);
     if (!unit) continue;
     const conditional = (unit.conditional_keywords ?? [])
+      .filter((entry) => entry.choice_group === undefined || chosen.includes(entry.keyword))
       .filter((entry) => entry.required_detachment_id == null || entry.required_detachment_id === detachmentId)
       .map((entry) => entry.keyword);
     for (const keyword of [...(unit.keywords ?? []), ...(unit.faction_keywords ?? []), ...conditional]) out.add(keyword.toLowerCase());

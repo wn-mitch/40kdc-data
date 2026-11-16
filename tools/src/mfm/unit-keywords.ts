@@ -6,10 +6,11 @@
  * name ({@link buildKeywords}). Units imported before an 11th-edition codex keep keywords that
  * codex replaced (Grenades where it prints Explosives) and often lack their datasheet name; this
  * pass adds what the dump lists and drops what it does not. A keyword the dump grants the
- * datasheet only conditionally (a Mark of Chaos chosen at muster) is kept where the unit already
- * carries it, since the repo does not yet model that choice. Kept keywords keep their order, and
- * added ones follow in the dump's order. `faction_keywords` and `conditional_keywords` are left
- * alone.
+ * datasheet only conditionally is the unit's `conditional_keywords` entry (a Mark of Chaos is one
+ * option of its keyword-choice group, conditional-keywords.ts), not a keyword, except one granted
+ * only with a given Warlord, which the repo does not model and keeps where the unit carries it.
+ * Kept keywords keep their order, and added ones follow in the dump's order. `faction_keywords`
+ * and `conditional_keywords` are left alone.
  *
  * Datasheet→repo-unit matching reuses {@link forEachDirDatasheet}, so it cannot drift from the
  * wargear reconcile. Mutations are routed through {@link applyWrites}, which validates the
@@ -38,10 +39,11 @@ export interface UnitKeywordsReport {
 const same = (a: readonly string[], b: readonly string[]): boolean => a.length === b.length && a.every((k, i) => k === b[i]);
 const lower = (list: Iterable<string>) => new Set([...list].map((k) => k.toLowerCase()));
 
-/** The keyword names the dump grants a datasheet only under a condition (`conditional_keyword`). */
+/** The keyword names the dump grants a datasheet only with a given Warlord (`conditional_keyword`), which no repo field carries. */
 function conditionalKeywords(dump: MfmDump, datasheetId: string): string[] {
   const kwById = dump.byId("keyword");
   return (dump.groupBy("conditional_keyword", "datasheetId").get(datasheetId) ?? [])
+    .filter((row) => row.requiredWarlordMiniatureId)
     .map((row) => dump.enName(kwById.get(row.keywordId)))
     .filter((name): name is string => typeof name === "string");
 }

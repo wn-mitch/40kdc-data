@@ -19,23 +19,24 @@ type Dataset struct {
 	Abilities      *Collection[*AbilityView]
 
 	// Id-bearing collections without bespoke views (records returned as-is).
-	TargetProfiles     *Collection[any]
-	Detachments        *Collection[any]
-	AlliedRules        *Collection[any]
-	Enhancements       *Collection[any]
-	Stratagems         *Collection[any]
-	WargearOptions     *Collection[any]
-	Wargear            *Collection[any]
-	Missions           *Collection[any]
-	MissionMatchups    *Collection[any]
-	MissionCards       *Collection[any]
-	DeploymentPatterns *Collection[any]
-	ForceDispositions  *Collection[any]
-	TerrainTemplates   *Collection[any]
-	TerrainLayouts     *Collection[any]
-	HullShapes         *Collection[any]
-	ResourcePools      *Collection[any]
-	UnitKeywords       *Collection[any]
+	TargetProfiles      *Collection[any]
+	Detachments         *Collection[any]
+	AlliedRules         *Collection[any]
+	Enhancements        *Collection[any]
+	Stratagems          *Collection[any]
+	WargearOptions      *Collection[any]
+	Wargear             *Collection[any]
+	Missions            *Collection[any]
+	MissionMatchups     *Collection[any]
+	MissionCards        *Collection[any]
+	DeploymentPatterns  *Collection[any]
+	ForceDispositions   *Collection[any]
+	KeywordChoiceGroups *Collection[any]
+	TerrainTemplates    *Collection[any]
+	TerrainLayouts      *Collection[any]
+	HullShapes          *Collection[any]
+	ResourcePools       *Collection[any]
+	UnitKeywords        *Collection[any]
 
 	// Id-less collections, exposed as plain lists. UnitCompositions is a
 	// listing, filtered by the view's game mode.
@@ -167,6 +168,7 @@ func buildDataset(raw rawData) *Dataset {
 	ds.MissionCards = idCollection(raw["mission_cards"], nil)
 	ds.DeploymentPatterns = idCollection(raw["deployment_patterns"], nil)
 	ds.ForceDispositions = idCollection(raw["force_dispositions"], nil)
+	ds.KeywordChoiceGroups = idCollection(raw["keyword_choice_groups"], nil)
 	ds.TerrainTemplates = idCollection(raw["terrain_templates"], nil)
 	ds.TerrainLayouts = idCollection(raw["terrain_layouts"], nil)
 	ds.HullShapes = idCollection(raw["hull_shapes"], nil)

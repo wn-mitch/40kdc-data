@@ -263,6 +263,8 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
       for (const k of armyKeywords) owned.add(k);
     }
       for (const grant of view.raw.conditional_keywords ?? []) {
+        // A keyword-choice option is the unit's only when the roster takes it (keywordOverrides below).
+        if (grant.choice_group) continue;
         if (
           grant.required_detachment_id &&
           !spec.detachmentIds.includes(grant.required_detachment_id)

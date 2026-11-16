@@ -14,11 +14,12 @@ use crate::cruncher::from_dsl::strip_nulls;
 use crate::Unit;
 
 /// A member's keywords, lower-cased: its datasheet and faction keywords, plus each conditional
-/// keyword with no required detachment or whose required detachment is `detachment_id`. An
-/// unresolved member has none.
+/// keyword with no required detachment or whose required detachment is `detachment_id`, and each
+/// keyword-choice option `chosen` lists. An unresolved member has none.
 pub(super) fn member_keywords(
     member: Option<&Unit>,
     detachment_id: Option<&str>,
+    chosen: &[String],
 ) -> HashSet<String> {
     let Some(member) = member else {
         return HashSet::new();
@@ -30,10 +31,16 @@ pub(super) fn member_keywords(
     let conditional = member
         .conditional_keywords
         .iter()
-        .filter(|entry| match &entry.required_detachment_id {
-            None => true,
-            Some(id) => Some(id.as_str()) == detachment_id,
-        })
+        .filter(
+            |entry| match (&entry.choice_group, &entry.required_detachment_id) {
+                // A keyword-choice option is the member's only when `chosen` lists it.
+                (Some(_), _) => chosen
+                    .iter()
+                    .any(|taken| taken.eq_ignore_ascii_case(entry.keyword.as_str())),
+                (None, None) => true,
+                (None, Some(id)) => Some(id.as_str()) == detachment_id,
+            },
+        )
         .map(|entry| entry.keyword.to_lowercase());
     printed.chain(conditional).collect()
 }

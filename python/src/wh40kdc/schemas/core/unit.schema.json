@@ -190,6 +190,10 @@
               { "$ref": "../defs/common.schema.json#/$defs/keyword" },
               { "type": "null" }
             ]
+          },
+          "choice_group": {
+            "$ref": "../defs/common.schema.json#/$defs/entity-id",
+            "description": "The keyword-choice group (keyword-choice-groups.json) this keyword is one option of: the unit has it only when it takes this option at muster, and takes at most one option per group."
           }
         },
         "required": ["keyword"],

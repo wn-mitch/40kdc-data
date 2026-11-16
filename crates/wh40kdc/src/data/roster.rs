@@ -200,6 +200,10 @@ fn roster_keyword_set(
     }
 
     for grant in &view.conditional_keywords {
+        // A keyword-choice option is the unit's only when the roster takes it (keyword overrides).
+        if grant.choice_group.is_some() {
+            continue;
+        }
         if grant.required_detachment_id.as_ref().is_some_and(|id| {
             !detachment_ids
                 .iter()

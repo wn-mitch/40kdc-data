@@ -212,7 +212,7 @@ func unitKeywordNames(raw map[string]any) []string {
 // memberKeywords is a member's keywords, lower-cased: its datasheet and faction keywords, plus each
 // conditional keyword with no required detachment or whose required detachment is detachmentID.
 // A nil member has none.
-func memberKeywords(member *UnitView, detachmentID string) map[string]bool {
+func memberKeywords(member *UnitView, detachmentID string, chosen []string) map[string]bool {
 	keywords := map[string]bool{}
 	if member == nil {
 		return keywords
@@ -227,6 +227,15 @@ func memberKeywords(member *UnitView, detachmentID string) map[string]bool {
 		}
 		keyword, ok := entry["keyword"].(string)
 		if !ok {
+			continue
+		}
+		// A keyword-choice option is the member's only when chosen lists it.
+		if entry["choice_group"] != nil {
+			for _, taken := range chosen {
+				if strings.EqualFold(taken, keyword) {
+					keywords[strings.ToLower(keyword)] = true
+				}
+			}
 			continue
 		}
 		required := entry["required_detachment_id"]

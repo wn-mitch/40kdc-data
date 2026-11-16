@@ -11,6 +11,8 @@ export type MemberRole = "bodyguard" | "leader" | "support";
 export interface StackMember {
   unit: UnitView;
   role: MemberRole;
+  /** The keyword-choice options this unit took at muster (a Mark of Chaos), when any (keyword-choices.ts). */
+  chosen?: readonly string[];
 }
 
 export interface StackSpec {

@@ -32,6 +32,8 @@ export interface MemberReport {
   unitId: string;
   unitName: string;
   role: "bodyguard" | "leader" | "support";
+  /** The keyword-choice options the member took (a Mark of Chaos); absent when it took none. */
+  chosen?: string[];
   modelCount: number;
   expectedDamage: number;
   loadout: { weaponId: string; count: number }[];

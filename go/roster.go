@@ -113,7 +113,8 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 		for _, grantAny := range getList(view.Raw, "conditional_keywords") {
 			grant, ok := asMap(grantAny)
-			if !ok {
+			// A keyword-choice option is the unit's only when the roster takes it (keyword overrides).
+			if !ok || grant["choice_group"] != nil {
 				continue
 			}
 			if requiredDetachmentID := getStr(grant, "required_detachment_id"); requiredDetachmentID != "" &&

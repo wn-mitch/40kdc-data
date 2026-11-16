@@ -205,6 +205,7 @@ export const missionCards = dataset.missionCards;
 export const deploymentPatterns = dataset.deploymentPatterns;
 /** All force dispositions. */
 export const forceDispositions = dataset.forceDispositions;
+export const keywordChoiceGroups = dataset.keywordChoiceGroups;
 /** Reusable terrain catalog: standard areas and scenery features. */
 export const terrainTemplates = dataset.terrainTemplates;
 /** All terrain layouts. */

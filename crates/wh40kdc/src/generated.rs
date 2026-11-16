@@ -22903,6 +22903,171 @@ impl<'de> ::serde::Deserialize<'de> for Keyword {
             })
     }
 }
+///A keyword a unit takes from a set of alternatives when its army is mustered (a Mark of Chaos, a Daemonic Allegiance, a detachment's CHARACTER pick). Each option is a unit's conditional_keywords entry whose choice_group is this group's id; a unit takes at most one option of a group.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "title": "Keyword Choice Group",
+///  "description": "A keyword a unit takes from a set of alternatives when its army is mustered (a Mark of Chaos, a Daemonic Allegiance, a detachment's CHARACTER pick). Each option is a unit's conditional_keywords entry whose choice_group is this group's id; a unit takes at most one option of a group.",
+///  "type": "object",
+///  "required": [
+///    "detachment_id",
+///    "game_version",
+///    "id",
+///    "mandatory",
+///    "max_units",
+///    "min_units",
+///    "name"
+///  ],
+///  "properties": {
+///    "detachment_id": {
+///      "description": "The detachment whose army makes the choice; null when any army that includes the unit makes it.",
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/entity-id"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "game_version": {
+///      "$ref": "#/$defs/game-version-ref"
+///    },
+///    "id": {
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    "mandatory": {
+///      "description": "Whether every unit with options in this group must take one.",
+///      "type": "boolean"
+///    },
+///    "max_units": {
+///      "description": "The most units in the army that can take an option of this group; null for no maximum.",
+///      "oneOf": [
+///        {
+///          "type": "integer",
+///          "minimum": 1.0
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "min_units": {
+///      "description": "The fewest units in the army that must take an option of this group; null for no minimum.",
+///      "oneOf": [
+///        {
+///          "type": "integer",
+///          "minimum": 0.0
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 128,
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct KeywordChoiceGroup {
+    ///The detachment whose army makes the choice; null when any army that includes the unit makes it.
+    pub detachment_id: ::std::option::Option<EntityId>,
+    pub game_version: GameVersionRef,
+    pub id: EntityId,
+    ///Whether every unit with options in this group must take one.
+    pub mandatory: bool,
+    ///The most units in the army that can take an option of this group; null for no maximum.
+    pub max_units: ::std::option::Option<::std::num::NonZeroU64>,
+    ///The fewest units in the army that must take an option of this group; null for no minimum.
+    pub min_units: ::std::option::Option<u64>,
+    pub name: KeywordChoiceGroupName,
+}
+///`KeywordChoiceGroupName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 128,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct KeywordChoiceGroupName(::std::string::String);
+impl ::std::ops::Deref for KeywordChoiceGroupName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<KeywordChoiceGroupName> for ::std::string::String {
+    fn from(value: KeywordChoiceGroupName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for KeywordChoiceGroupName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 128usize {
+            return Err("longer than 128 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for KeywordChoiceGroupName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for KeywordChoiceGroupName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for KeywordChoiceGroupName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for KeywordChoiceGroupName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///`KeywordGrantEffectModifier`
 ///
 /// <details><summary>JSON schema</summary>
@@ -55946,6 +56111,10 @@ impl<'de> ::serde::Deserialize<'de> for TriggerSourceAbilityKeywordsItem {
 ///          "keyword"
 ///        ],
 ///        "properties": {
+///          "choice_group": {
+///            "description": "The keyword-choice group (keyword-choice-groups.json) this keyword is one option of: the unit has it only when it takes this option at muster, and takes at most one option per group.",
+///            "$ref": "#/$defs/entity-id"
+///          },
 ///          "keyword": {
 ///            "$ref": "#/$defs/keyword"
 ///          },
@@ -59375,6 +59544,10 @@ impl<'de> ::serde::Deserialize<'de> for UnitCompositionTiersItemModelsItemName {
 ///    "keyword"
 ///  ],
 ///  "properties": {
+///    "choice_group": {
+///      "description": "The keyword-choice group (keyword-choice-groups.json) this keyword is one option of: the unit has it only when it takes this option at muster, and takes at most one option per group.",
+///      "$ref": "#/$defs/entity-id"
+///    },
 ///    "keyword": {
 ///      "$ref": "#/$defs/keyword"
 ///    },
@@ -59406,6 +59579,9 @@ impl<'de> ::serde::Deserialize<'de> for UnitCompositionTiersItemModelsItemName {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct UnitConditionalKeywordsItem {
+    ///The keyword-choice group (keyword-choice-groups.json) this keyword is one option of: the unit has it only when it takes this option at muster, and takes at most one option per group.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub choice_group: ::std::option::Option<EntityId>,
     pub keyword: Keyword,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub required_detachment_id: ::std::option::Option<EntityId>,

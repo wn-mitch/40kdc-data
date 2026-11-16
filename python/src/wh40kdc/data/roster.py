@@ -82,6 +82,9 @@ def _keyword_set(
     if army_keyword_set and all(keyword in army_keyword_set for keyword in faction_keywords):
         owned.update(army_keywords)
     for grant in unit.get("conditional_keywords") or []:
+        # A keyword-choice option is the unit's only when the roster takes it (keyword overrides).
+        if grant.get("choice_group") is not None:
+            continue
         required_detachment_id = grant.get("required_detachment_id")
         if required_detachment_id and required_detachment_id not in detachment_ids:
             continue

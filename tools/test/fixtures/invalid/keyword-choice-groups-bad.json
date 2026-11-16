@@ -1,0 +1,9 @@
+[
+  {
+    "id": "Example Oath",
+    "name": "Example Oath",
+    "mandatory": "yes",
+    "max_units": 0,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

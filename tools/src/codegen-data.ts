@@ -52,6 +52,7 @@ const FILE_TO_COLLECTION: Record<string, keyof RawData> = {
   "mission-cards": "missionCards",
   "deployment-patterns": "deploymentPatterns",
   "force-dispositions": "forceDispositions",
+  "keyword-choice-groups": "keywordChoiceGroups",
   "terrain-templates": "terrainTemplates",
   "terrain-layouts": "terrainLayouts",
   "hull-shapes": "hullShapes",

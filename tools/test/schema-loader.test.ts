@@ -55,6 +55,7 @@ describe("schema-loader", () => {
     expect(ids).toContain(
       "https://40kdc.dev/schemas/core/force-disposition.schema.json",
     );
+    expect(ids).toContain("https://40kdc.dev/schemas/core/keyword-choice-group.schema.json");
     expect(ids).toContain(
       "https://40kdc.dev/schemas/core/game-mode.schema.json",
     );

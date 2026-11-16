@@ -116,8 +116,11 @@ def _resolve_with_suppressions(
         listed = set(patrol.get("detachment_rule_ids") or [])
         replaced |= {ability.id for ability in army if ability.id not in listed}
     # Each member's keywords (lower-cased); a unit target reads them as one combined unit.
+    choices = input.get("keywordChoices") or {}
     members = [
-        member_keywords(member, input.get("detachmentId"))
+        member_keywords(
+            member, input.get("detachmentId"), choices.get(member.id, ()) if member else ()
+        )
         for member in [unit]
         + [
             resolve_unit(member_id, faction_id)

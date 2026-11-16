@@ -691,6 +691,7 @@
       "sources": [
         "data.conditional_keyword.datasheetId",
         "data.conditional_keyword.keywordId",
+        "data.conditional_keyword.requiredAllegianceAbilityId",
         "data.conditional_keyword.requiredDetachmentId",
         "data.conditional_keyword.requiredRosterFactionKeywordId"
       ],
@@ -698,11 +699,11 @@
       "transforms": [
         {
           "symbol": "tools/src/mfm/conditional-keywords.ts#runConditionalKeywords",
-          "operation": "Resolve supported conditional keyword rows to keyword labels and repository detachment ids."
+          "operation": "Resolve supported conditional keyword rows to keyword labels, repository detachment ids and keyword-choice group ids."
         }
       ],
       "filters": [
-        "Rows requiring an allegiance-ability choice or a specific warlord miniature are reported rather than flattened because those source choices live on the imported roster, not the unit datasheet."
+        "Rows requiring a specific warlord miniature are reported rather than flattened because that choice lives on the imported roster, not the unit datasheet."
       ],
       "precedence": [
         "Supported MFM conditional-keyword rows are authoritative and replace the matched unit's prior conditional keyword list."
@@ -710,7 +711,7 @@
       "consumers": [
         "tools/src/mfm/conditional-keywords.ts#runConditionalKeywords"
       ],
-      "reason": "The source explicitly models detachment- and roster-faction-dependent unit keywords; allegiance and warlord choice conditions remain unsupported."
+      "reason": "The source models detachment-, roster-faction- and allegiance-dependent unit keywords; an allegiance condition makes the keyword one option of a keyword-choice group. Warlord choice conditions remain unsupported."
     },
     "/conditional_keywords/*": {
       "provenance": "derived",
@@ -718,6 +719,7 @@
       "sources": [
         "data.conditional_keyword.datasheetId",
         "data.conditional_keyword.keywordId",
+        "data.conditional_keyword.requiredAllegianceAbilityId",
         "data.conditional_keyword.requiredDetachmentId",
         "data.conditional_keyword.requiredRosterFactionKeywordId"
       ],
@@ -729,6 +731,28 @@
         "tools/src/mfm/conditional-keywords.ts#runConditionalKeywords"
       ],
       "reason": "One supported source row becomes one conditional keyword grant."
+    },
+    "/conditional_keywords/*/choice_group": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.allegiance_ability.allegianceAbilityGroupId",
+        "data.allegiance_ability_group.localisations.*.name",
+        "data.conditional_keyword.requiredAllegianceAbilityId"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/conditional-keywords.ts#choiceGroups",
+          "operation": "Resolve the required allegiance ability to its group's keyword-choice group id."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/conditional-keywords.ts#runConditionalKeywords"
+      ],
+      "reason": "An allegiance-ability condition makes the keyword one option of that ability's keyword-choice group."
     },
     "/conditional_keywords/*/keyword": {
       "provenance": "derived",

@@ -14,6 +14,7 @@ import { combinedKeywords, issuesOrders, orderIssuingUnits } from "./orders.js";
 import type { DamageCellState, StackMember, StackResult, StackSpec } from "./model.js";
 import type { StackableBuff } from "../data/dataset.js";
 import { damageCellKey, type DamageCellReport, type LeverReport, type WinnerReport } from "./report.js";
+import { choiceVariants, ownKeywords } from "./keyword-choices.js";
 
 interface SearchCounts {
   bodyguards: number;
@@ -29,7 +30,7 @@ export function emptySpec(factionId: string, members: StackMember[], detachmentI
 function unitKeywords(members: readonly StackMember[]): string[] {
   const values = new Set<string>();
   for (const member of members) {
-    for (const keyword of [...member.unit.keywords, ...member.unit.factionKeywords]) values.add(keyword.toLowerCase());
+    for (const keyword of ownKeywords(member)) values.add(keyword.toLowerCase());
   }
   return [...values].sort();
 }
@@ -283,13 +284,23 @@ export function deepOptimise(
   members: StackMember[],
   combinations: readonly Detachment[][],
 ): StackResult {
-  let best = session.optimiseLevers(emptySpec(factionId, members));
+  // Each way the members can take their keyword-choice options (a Mark of Chaos) in the spec's
+  // detachments is priced, and the best kept; ties keep the earlier variant.
+  const optimise = (spec: StackSpec): StackResult => {
+    let top: StackResult | undefined;
+    for (const variant of choiceVariants(session.dataset, spec.members, spec.detachmentIds)) {
+      const result = session.optimiseLevers({ ...spec, members: variant });
+      if (!top || result.total > top.total + 1e-9) top = result;
+    }
+    return top!;
+  };
+  let best = optimise(emptySpec(factionId, members));
   let bestPoints = 0;
   const single = new Map<string, StackResult | null>();
   for (const combination of combinations) {
     if (combination.length !== 1) continue;
     const spec = legalDetachmentSpec(session, factionId, members, combination);
-    single.set(combination[0].id, spec ? session.optimiseLevers(spec) : null);
+    single.set(combination[0].id, spec ? optimise(spec) : null);
   }
   const idle = new Set([...single].flatMap(([id, result]) => result && result.total <= best.total + 1e-9 ? [id] : []));
   for (const combination of combinations) {
@@ -299,7 +310,7 @@ export function deepOptimise(
     else if (combination.some((detachment) => idle.has(detachment.id))) continue;
     else {
       const spec = legalDetachmentSpec(session, factionId, members, combination);
-      result = spec ? session.optimiseLevers(spec) : null;
+      result = spec ? optimise(spec) : null;
     }
     if (!result) continue;
     const points = combination.reduce((sum, detachment) => sum + (detachment.detachment_points ?? 0), 0);
@@ -400,6 +411,7 @@ function winnerReport(dataset: Dataset, faction: FactionContext, session: Damage
       unitId: member.unit.id,
       unitName: member.unit.name,
       role: member.role,
+      ...(member.chosen && member.chosen.length > 0 ? { chosen: [...member.chosen] } : {}),
       modelCount: loadout.modelCount,
       expectedDamage: loadout.total,
       loadout: [...loadout.counts].map(([weaponId, count]) => ({ weaponId, count })).sort((left, right) => left.weaponId.localeCompare(right.weaponId)),
