@@ -64,7 +64,11 @@ per faction, attached to a `bsdata-v<version>` release
   each new version from it. For a manual install, each `bsdata-v<version>`
   release also has `wh40k-11e-40kdc-<version>-battlescribe.zip`, which holds
   the game system and catalogue files in BattleScribe's `.gst` and `.cat`
-  format. `bsdata-latest` holds only BattleScribe files.
+  format.
+- **Tools:** `bsdata-latest` also carries the newest export's zips under fixed
+  names, `wh40k-11e-40kdc-newrecruit.zip` (JSON) and
+  `wh40k-11e-40kdc-battlescribe.zip` (XML), at
+  `https://github.com/wn-mitch/40kdc-data/releases/download/bsdata-latest/<file>`.
 
   BattleScribe's format cannot express three things NewRecruit supports:
   - A unit's starting models. NewRecruit starts each unit with the models the

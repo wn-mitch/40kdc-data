@@ -414,13 +414,18 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # index.bsi names bsdata-latest as its update URL, so this release
-          # always carries the newest data index and data files.
+          # always carries the newest data index and data files. The zips go
+          # up under unversioned names so tools can fetch the newest export
+          # from one fixed URL.
           if ! gh release view bsdata-latest >/dev/null 2>&1; then
             gh release create bsdata-latest --latest=false \
               --title "BSData-compatible export (latest)" \
-              --notes "Add https://github.com/${{ github.repository }}/releases/download/bsdata-latest/index.bsi as a data index URL in BattleScribe. Refreshed on every BSData export release."
+              --notes "Add https://github.com/${{ github.repository }}/releases/download/bsdata-latest/index.bsi as a data index URL in BattleScribe. wh40k-11e-40kdc-newrecruit.zip (JSON) and wh40k-11e-40kdc-battlescribe.zip (XML) hold the newest export. Refreshed on every BSData export release."
           fi
-          gh release upload bsdata-latest --clobber dist/bsdata/battlescribe/*
+          cp "dist/bsdata/wh40k-11e-40kdc-${{ steps.ver.outputs.version }}-newrecruit.zip" dist/bsdata/wh40k-11e-40kdc-newrecruit.zip
+          cp "dist/bsdata/wh40k-11e-40kdc-${{ steps.ver.outputs.version }}-battlescribe.zip" dist/bsdata/wh40k-11e-40kdc-battlescribe.zip
+          gh release upload bsdata-latest --clobber dist/bsdata/battlescribe/* \
+            dist/bsdata/wh40k-11e-40kdc-newrecruit.zip dist/bsdata/wh40k-11e-40kdc-battlescribe.zip
 
   publish-pypi:
     # Auto-publish wh40kdc to PyPI once main is green, via trusted publishing
