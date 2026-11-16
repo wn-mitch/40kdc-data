@@ -22,6 +22,7 @@ export const ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "unit-activity": ["subject"],
   "unit-position": ["subject", "of"],
   visible: ["subject", "to"],
+  guided: ["subject"],
   "hit-by-attacks": ["subject"],
   "destroy-models": ["recipient"],
   "set-up": ["subject"],
