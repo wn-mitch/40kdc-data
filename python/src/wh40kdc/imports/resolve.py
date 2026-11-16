@@ -232,6 +232,11 @@ def _resolve_unit_ability_id(ds: Dataset, hit: Any, raw_name: str) -> str | None
     return None
 
 
+def _is_combat_patrol_label(raw: str) -> bool:
+    """A Combat Patrol label names a game mode, not a matched-play battle size."""
+    return "combat patrol" in normalize_name(raw)
+
+
 def _map_battle_size(raw: str | None) -> str | None:
     """Map a source battle-size label to the 40kdc enum, if recognisable."""
     if not raw:
@@ -398,7 +403,11 @@ def resolve(parsed: dict[str, Any], ds: Dataset, format: str = "listforge") -> d
 
     # --- Battle size. ---------------------------------------------------------
     battle_size = _map_battle_size(parsed["battle_size_raw"])
-    if parsed["battle_size_raw"] and battle_size is None:
+    if (
+        parsed["battle_size_raw"]
+        and battle_size is None
+        and not _is_combat_patrol_label(parsed["battle_size_raw"])
+    ):
         diag.warn(
             "battle-size-unmapped",
             "Battle size label could not be mapped.",

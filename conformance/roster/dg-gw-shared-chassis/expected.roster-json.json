@@ -94,12 +94,6 @@
     "unresolved_units": 0,
     "resolved_weapons": 3,
     "unresolved_weapons": 0,
-    "warnings": [
-      {
-        "code": "battle-size-unmapped",
-        "message": "Battle size label could not be mapped.",
-        "raw_name": "Combat Patrol (500 Point limit)"
-      }
-    ]
+    "warnings": []
   }
 }

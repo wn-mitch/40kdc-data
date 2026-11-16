@@ -86,6 +86,13 @@ func candFromWeapons(records []*WeaponView) []any {
 	return out
 }
 
+// isCombatPatrolLabel reports whether a label names Combat Patrol: a game mode,
+// not a matched-play battle size, so it resolves to no battle size and is not
+// an unmapped label.
+func isCombatPatrolLabel(raw string) bool {
+	return containsSub(NormalizeName(raw), "combat patrol")
+}
+
 func mapBattleSize(raw any) any {
 	s, ok := raw.(string)
 	if !ok || s == "" {
@@ -316,7 +323,7 @@ func resolveRoster(parsed map[string]any, ds *Dataset, format string) map[string
 	}
 
 	battleSize := mapBattleSize(parsed["battle_size_raw"])
-	if bsr, ok := parsed["battle_size_raw"].(string); ok && bsr != "" && battleSize == nil {
+	if bsr, ok := parsed["battle_size_raw"].(string); ok && bsr != "" && battleSize == nil && !isCombatPatrolLabel(bsr) {
 		diag.warn("battle-size-unmapped", "Battle size label could not be mapped.", bsr)
 	}
 	cap := detachmentCap(battleSize)
