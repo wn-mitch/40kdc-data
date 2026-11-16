@@ -144,24 +144,13 @@
     "source_digest": "09136a2ba1d01fd21bd6e339bd1d32f13fccfab2235cf0d0627601420c8e4f9d",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "cost-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "of": "stratagem",
-          "operation": "decrease",
-          "amount": 1,
-          "applies_to": "the-triggering-use"
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
@@ -7464,24 +7453,13 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "cost-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "of": "stratagem",
-          "operation": "decrease",
-          "amount": 1,
-          "applies_to": "the-triggering-use"
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {

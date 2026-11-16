@@ -1741,24 +1741,13 @@
     "source_digest": "e7c00ec9753f172491785ae9a392cec956e6691dcb5b82205f8685752d7dade7",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "cost-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "of": "stratagem",
-          "operation": "decrease",
-          "amount": 1,
-          "applies_to": "the-triggering-use"
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {

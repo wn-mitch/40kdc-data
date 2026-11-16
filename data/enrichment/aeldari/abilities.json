@@ -1293,24 +1293,13 @@
     "source_digest": "7ed55043db0e9460b7ca1371bf15ebee27852bc3d13b4871e6ce64f208babe68",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "cost-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "of": "stratagem",
-          "operation": "decrease",
-          "amount": 1,
-          "applies_to": "the-triggering-use"
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
@@ -6800,66 +6789,55 @@
     "source_digest": "cb1126d0f26ef144b4d22f069a20fb074a71d9feb221eae7e6b8addee5e193f0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "friendly",
-            "all_of": [
-              "AELDARI",
-              "INFANTRY"
-            ]
-          },
-          "count": {
-            "min": 1,
-            "max": 1
-          },
-          "eligibility": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "visible": {
-                      "to": "this-unit"
-                    }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "AELDARI",
+            "INFANTRY"
+          ]
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "visible": {
+                    "to": "this-unit"
                   }
                 }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "within": {
-                      "of": "this-unit",
-                      "range": {
-                        "inches": 36
-                      }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-unit",
+                    "range": {
+                      "inches": 36
                     }
                   }
                 }
               }
-            ]
-          }
-        },
-        "effect": {
-          "type": "ability-grant",
-          "target": "selected-unit",
-          "modifier": {
-            "ability": "stealth"
-          }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "selected-unit",
+        "modifier": {
+          "ability": "stealth"
         }
       }
     },
@@ -7032,24 +7010,13 @@
     "source_digest": "7ed55043db0e9460b7ca1371bf15ebee27852bc3d13b4871e6ce64f208babe68",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "cost-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "of": "stratagem",
-          "operation": "decrease",
-          "amount": 1,
-          "applies_to": "the-triggering-use"
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {

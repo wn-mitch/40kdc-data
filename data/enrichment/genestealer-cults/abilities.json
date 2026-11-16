@@ -533,28 +533,15 @@
         "operator": "and",
         "operands": [
           {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "your-turn"
-                }
-              }
-            ]
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
           },
           {
-            "type": "matches",
+            "type": "player-turn-is",
             "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
+              "turn": "your-turn"
             }
           }
         ]
@@ -1772,24 +1759,13 @@
     "source_digest": "09136a2ba1d01fd21bd6e339bd1d32f13fccfab2235cf0d0627601420c8e4f9d",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "cost-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "of": "stratagem",
-          "operation": "decrease",
-          "amount": 1,
-          "applies_to": "the-triggering-use"
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
@@ -2865,28 +2841,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "subject": "this-model",
-              "filter": {
-                "all_of": [
-                  "PSYKER"
-                ]
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "all_of": [
+              "PSYKER"
+            ]
           }
-        ]
+        }
       },
       "effect": {
         "type": "select-units",

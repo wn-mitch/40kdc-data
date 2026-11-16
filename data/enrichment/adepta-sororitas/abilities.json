@@ -154,28 +154,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "subject": "this-unit",
-              "filter": {
-                "has_ability": [
-                  "sacred-command-adepta-sororitas"
-                ]
-              }
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "has_ability": [
+              "sacred-command-adepta-sororitas"
+            ]
           }
-        ]
+        }
       },
       "effect": {
         "type": "cost-modifier",
@@ -7123,26 +7110,13 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "subject": "this-unit",
-                    "filter": {
-                      "designated": "righteous"
-                    }
-                  }
-                },
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "owner": "friendly"
-                    }
-                  }
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "designated": "righteous"
                 }
-              ]
+              }
             },
             "effect": {
               "type": "conditional",

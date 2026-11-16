@@ -638,28 +638,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "subject": "this-unit",
-              "filter": {
-                "has_ability": [
-                  "my-will-be-done-necrons"
-                ]
-              }
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "has_ability": [
+              "my-will-be-done-necrons"
+            ]
           }
-        ]
+        }
       },
       "effect": {
         "type": "cost-modifier",
@@ -9619,24 +9606,13 @@
         ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "matches",
-          "parameters": {
-            "filter": {
-              "owner": "friendly"
-            }
-          }
-        },
-        "effect": {
-          "type": "ability-modifier",
-          "target": "this-model",
-          "modifier": {
-            "ability": "hyperphasing-necrons",
-            "aspect": "selections",
-            "operation": "add",
-            "value": 1
-          }
+        "type": "ability-modifier",
+        "target": "this-model",
+        "modifier": {
+          "ability": "hyperphasing-necrons",
+          "aspect": "selections",
+          "operation": "add",
+          "value": 1
         }
       }
     },

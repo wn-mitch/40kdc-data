@@ -25,6 +25,7 @@ import { resolveAttackBackrefs } from "./compile-attack-backref.js";
 import { compileReactionParts } from "./compile-reaction-parts.js";
 import { compileOpposedDesignations } from "./compile-opposed-designations.js";
 import { hoistResolvedSelections } from "./compile-resolved-selection.js";
+import { dropOwnSideRestatements } from "./compile-owner-restatement.js";
 import { bindArmyAntecedents, foldArmyAttachments, foldArmyPer, foldForwardComposition, resolveArmyGroups } from "./compile-army.js";
 import { bindPrecedingRolls } from "./compile-preceding-roll.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
@@ -236,7 +237,10 @@ function compileChecked(leaves: readonly CompileLeaf[], sourceText: string | und
   // A rolled distance or a start-of-move position that a lowering path read as plain inches would be lost, not refused.
   const lost = result.ok ? lostDistance(leaves, result.mechanics) : null;
   if (lost !== null) return { ok: false, signature: result.signature, errors: [lost] };
-  return result.ok && !enclosed ? withSelfGrantHolders(result, options.abilityId) : result;
+  if (!result.ok || enclosed) return result;
+  // An unclaimed "from your army" that only restates the holder's side gates nothing (compile-owner-restatement.ts).
+  const restated = { ...result, mechanics: { ...result.mechanics, effect: dropOwnSideRestatements(result.mechanics.effect) as typeof result.mechanics.effect } };
+  return withSelfGrantHolders(restated, options.abilityId);
 }
 
 /**

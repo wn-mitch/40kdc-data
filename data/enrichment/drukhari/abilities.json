@@ -3516,24 +3516,13 @@
     "source_digest": "09136a2ba1d01fd21bd6e339bd1d32f13fccfab2235cf0d0627601420c8e4f9d",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "cost-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "of": "stratagem",
-          "operation": "decrease",
-          "amount": 1,
-          "applies_to": "the-triggering-use"
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
@@ -3832,49 +3821,38 @@
     "source_digest": "2ad38a4dd95be03b580c6497b76250e3c94608dadfa06dd037851ead07552221",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "DRUKHARI"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 3
         }
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "friendly",
-            "all_of": [
-              "DRUKHARI"
-            ]
-          },
-          "count": {
-            "min": 0,
-            "max": 3
-          }
-        },
-        "effect": {
-          "type": "choice",
-          "options": [
-            {
-              "type": "set-up",
-              "target": "selected-unit",
-              "modifier": {
-                "to": "battlefield"
-              }
-            },
-            {
-              "type": "set-up",
-              "target": "selected-unit",
-              "modifier": {
-                "to": "strategic-reserves",
-                "ignore_limits": true
-              }
+        "type": "choice",
+        "options": [
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "battlefield"
             }
-          ]
-        }
+          },
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "strategic-reserves",
+              "ignore_limits": true
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -7287,14 +7265,6 @@
             }
           },
           {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
             "type": "attack-compare",
             "parameters": {
               "left": {
@@ -8842,36 +8812,25 @@
     "detachment_id": "kabalite-cartel",
     "ability_type": "enhancement",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "any_of": [
+            "HAND OF THE ARCHON",
+            "KABALITE WARRIORS"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 3
         }
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "friendly",
-            "any_of": [
-              "HAND OF THE ARCHON",
-              "KABALITE WARRIORS"
-            ]
-          },
-          "count": {
-            "min": 0,
-            "max": 3
-          }
-        },
-        "effect": {
-          "type": "ability-grant",
-          "target": "selected-unit",
-          "modifier": {
-            "ability": "infiltrators"
-          }
+        "type": "ability-grant",
+        "target": "selected-unit",
+        "modifier": {
+          "ability": "infiltrators"
         }
       }
     },

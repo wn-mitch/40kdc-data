@@ -237,24 +237,13 @@
     "source_digest": "2ee42b23febd1cfb14990c1465bc635deac8c94a6801d1de8f4a4dd0f265a039",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "cost-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "of": "stratagem",
-          "operation": "decrease",
-          "amount": 1,
-          "applies_to": "the-triggering-use"
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
@@ -11078,49 +11067,38 @@
     "detachment_id": "subterranean-assault",
     "ability_type": "enhancement",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "TYRANIDS"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 3
         }
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "friendly",
-            "all_of": [
-              "TYRANIDS"
-            ]
-          },
-          "count": {
-            "min": 0,
-            "max": 3
-          }
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "set-up",
-              "target": "selected-unit",
-              "modifier": {
-                "to": "battlefield"
-              }
-            },
-            {
-              "type": "set-up",
-              "target": "selected-unit",
-              "modifier": {
-                "to": "strategic-reserves",
-                "ignore_limits": true
-              }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "battlefield"
             }
-          ]
-        }
+          },
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "strategic-reserves",
+              "ignore_limits": true
+            }
+          }
+        ]
       }
     },
     "scope": {

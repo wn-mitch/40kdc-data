@@ -148,7 +148,9 @@ describe("unit-position models every: compiled shapes", () => {
       ["from your army", "unit-owner", { owner: "friendly" }],
       ["it can embark within that TRANSPORT", "eligibility-permission", { subject: "this-unit", activity: "embark", allow: true }],
     ), text);
-    const within = mechanics.effect.condition.operands[2];
+    // "One ZETA unit from your army" restates the target's side, so it gates nothing (compile-owner-restatement.ts).
+    expect(JSON.stringify(mechanics.effect.condition)).not.toContain('{"type":"matches","parameters":{"filter":{"owner":"friendly"}}}');
+    const within = mechanics.effect.condition.operands.find((operand: { type: string }) => operand.type === "within");
     expect(within).toEqual({
       type: "within",
       parameters: { of: { owner: "friendly", all_of: ["TRANSPORT", "ZETA"] }, range: { inches: 3 }, models: "every" },

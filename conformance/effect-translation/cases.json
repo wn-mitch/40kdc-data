@@ -8908,26 +8908,13 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "subject": "this-unit",
-                    "filter": {
-                      "designated": "righteous"
-                    }
-                  }
-                },
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "owner": "friendly"
-                    }
-                  }
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "designated": "righteous"
                 }
-              ]
+              }
             },
             "effect": {
               "type": "conditional",
@@ -8972,7 +8959,7 @@
       "optional": true
     },
     "expected": {
-      "text": "When an enemy unit targets this unit, you may use this ability, until the end of the phase:\n  -> The attacking unit gets -1 to Hit rolls.\n  -> Select one friendly CELESTIAN SACRESANTS unit other than the unit if the selected unit is not Battle-shocked and the selected unit is within 6\" of the unit: while the unit is tagged righteous, while the unit is friendly, if the target unit is the same unit as the selected unit, the attacking unit gets -1 to Hit rolls.\nApplies to: units with CELESTIAN SACRESANTS."
+      "text": "When an enemy unit targets this unit, you may use this ability, until the end of the phase:\n  -> The attacking unit gets -1 to Hit rolls.\n  -> Select one friendly CELESTIAN SACRESANTS unit other than the unit if the selected unit is not Battle-shocked and the selected unit is within 6\" of the unit: while the unit is tagged righteous, if the target unit is the same unit as the selected unit, the attacking unit gets -1 to Hit rolls.\nApplies to: units with CELESTIAN SACRESANTS."
     }
   },
   {
@@ -9875,105 +9862,94 @@
   {
     "caseId": "bearer-of-the-iron-chalice-valourstrike-lance-imperial-knights#167",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "friendly",
-            "all_of": [
-              "IMPERIAL KNIGHTS"
-            ],
-            "excluding": "this-unit",
-            "level": "model"
-          },
-          "count": {
-            "min": 1,
-            "max": 1
-          },
-          "eligibility": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "within": {
-                      "of": "this-model",
-                      "range": {
-                        "inches": 12
-                      }
-                    }
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "visible": {
-                      "to": "this-model"
-                    }
-                  }
-                }
-              }
-            ]
-          }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "IMPERIAL KNIGHTS"
+          ],
+          "excluding": "this-unit",
+          "level": "model"
         },
-        "effect": {
-          "type": "sequence",
-          "steps": [
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
             {
-              "type": "conditional",
-              "condition": {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "army-state",
-                    "parameters": {
-                      "owner": "friendly",
-                      "state": "honoured"
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-model",
+                    "range": {
+                      "inches": 12
                     }
                   }
-                ]
-              },
-              "effect": {
-                "type": "heal",
-                "target": "selected-unit",
-                "modifier": {
-                  "amount": "D3"
                 }
               }
             },
             {
-              "type": "conditional",
-              "condition": {
-                "type": "army-state",
-                "parameters": {
-                  "owner": "friendly",
-                  "state": "honoured"
-                }
-              },
-              "effect": {
-                "type": "heal",
-                "target": "selected-unit",
-                "modifier": {
-                  "amount": 3
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "visible": {
+                    "to": "this-model"
+                  }
                 }
               }
             }
           ]
         }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "army-state",
+                  "parameters": {
+                    "owner": "friendly",
+                    "state": "honoured"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "heal",
+              "target": "selected-unit",
+              "modifier": {
+                "amount": "D3"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "army-state",
+              "parameters": {
+                "owner": "friendly",
+                "state": "honoured"
+              }
+            },
+            "effect": {
+              "type": "heal",
+              "target": "selected-unit",
+              "modifier": {
+                "amount": 3
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -10000,7 +9976,7 @@
       }
     },
     "expected": {
-      "text": "At the end of your Movement phase, while the unit is friendly:\n  -> Select one friendly IMPERIAL KNIGHTS model other than the unit if the selected unit is within 12\" of this model and the selected unit is visible to this model:\n    -> Unless your army is honoured, that model regains up to D3 lost wounds.\n    -> If your army is honoured, that model regains up to 3 lost wounds."
+      "text": "At the end of your Movement phase:\n  -> Select one friendly IMPERIAL KNIGHTS model other than the unit if the selected unit is within 12\" of this model and the selected unit is visible to this model:\n    -> Unless your army is honoured, that model regains up to D3 lost wounds.\n    -> If your army is honoured, that model regains up to 3 lost wounds."
     }
   },
   {
@@ -12609,24 +12585,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-unit",
-              "role": "attached"
-            }
-          }
-        ]
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-unit",
+          "role": "attached"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -12689,7 +12652,7 @@
       }
     },
     "expected": {
-      "text": "When the unit becomes Battle-shocked, if the unit has the INFANTRY and ORKS keywords, you may use this ability, while the unit is friendly, while the unit is an attached unit, until the end of the phase:\n  -> The unit is eligible to be targeted with Stratagems even if it is Battle-shocked.\n  -> Roll D3; then the unit suffers a number of mortal wounds equal to the result of that roll.\n  -> The unit is no longer Battle-shocked."
+      "text": "When the unit becomes Battle-shocked, if the unit has the INFANTRY and ORKS keywords, you may use this ability, while the unit is an attached unit, until the end of the phase:\n  -> The unit is eligible to be targeted with Stratagems even if it is Battle-shocked.\n  -> Roll D3; then the unit suffers a number of mortal wounds equal to the result of that roll.\n  -> The unit is no longer Battle-shocked."
     }
   },
   {
@@ -24898,14 +24861,6 @@
               {
                 "type": "matches",
                 "parameters": {
-                  "filter": {
-                    "owner": "friendly"
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
                   "subject": "attacker",
                   "filter": {
                     "state": "battle-shocked"
@@ -24957,7 +24912,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "-> At the start of the Battle Shock step in your opponent's turn:\n  For each enemy unit: While the unit is below its starting strength, while the unit is within 12\" of a friendly HERETIC ASTARTES unit, the unit must take a Battle-shock test, applying -1 to that test; the unit does not need to take any further Battle-shock tests this phase.\nWhile the target unit is below half strength, all friendly HERETIC ASTARTES models get +1 to Hit rolls.\nAgainst HERETIC ASTARTES targets, while the unit is friendly, while the attacking unit is Battle-shocked, the attacking unit gets -1 to Hit rolls.\nWhile the target is Battle-shocked, all friendly HERETIC ASTARTES models get +1 to Wound rolls."
+      "text": "-> At the start of the Battle Shock step in your opponent's turn:\n  For each enemy unit: While the unit is below its starting strength, while the unit is within 12\" of a friendly HERETIC ASTARTES unit, the unit must take a Battle-shock test, applying -1 to that test; the unit does not need to take any further Battle-shock tests this phase.\nWhile the target unit is below half strength, all friendly HERETIC ASTARTES models get +1 to Hit rolls.\nAgainst HERETIC ASTARTES targets, while the attacking unit is Battle-shocked, the attacking unit gets -1 to Hit rolls.\nWhile the target is Battle-shocked, all friendly HERETIC ASTARTES models get +1 to Wound rolls."
     }
   },
   {
@@ -29355,24 +29310,13 @@
   {
     "caseId": "grey-knights-fidelity/warrior-strategist-grey-knights",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "cost-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "of": "stratagem",
-          "operation": "decrease",
-          "amount": 1,
-          "applies_to": "the-triggering-use"
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
@@ -29391,7 +29335,7 @@
       "per": "army"
     },
     "expected": {
-      "text": "Each time you target the unit with a Stratagem, you may use this ability, once per battle round per army, while the unit is friendly, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP)."
+      "text": "Each time you target the unit with a Stratagem, you may use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP)."
     }
   },
   {
@@ -30729,28 +30673,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "subject": "this-unit",
-              "filter": {
-                "has_ability": [
-                  "sacred-command-adepta-sororitas"
-                ]
-              }
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "has_ability": [
+              "sacred-command-adepta-sororitas"
+            ]
           }
-        ]
+        }
       },
       "effect": {
         "type": "cost-modifier",
@@ -30782,7 +30713,7 @@
       "per": "army"
     },
     "expected": {
-      "text": "When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, while the unit is friendly, while the unit has the Sacred Command ability, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP)."
+      "text": "When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, while the unit has the Sacred Command ability, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP)."
     }
   },
   {

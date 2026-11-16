@@ -2548,22 +2548,11 @@
     "source_digest": "33e6699498b8fe53cba86ddf09fa505c74983600f41a4fec0602ff49bf576ff8",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "resource-gain",
-        "target": "this-model",
-        "modifier": {
-          "pool": "yp-pool",
-          "amount": 1
-        }
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "yp-pool",
+        "amount": 1
       }
     },
     "scope": {

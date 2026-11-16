@@ -5878,28 +5878,15 @@
         "operator": "and",
         "operands": [
           {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "command"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "your-turn"
-                }
-              }
-            ]
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
           },
           {
-            "type": "matches",
+            "type": "player-turn-is",
             "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
+              "turn": "your-turn"
             }
           }
         ]
@@ -5914,7 +5901,7 @@
             ]
           },
           "count": {
-            "min": 0,
+            "min": 1,
             "max": {
               "incursion": 1,
               "strike-force": 2,

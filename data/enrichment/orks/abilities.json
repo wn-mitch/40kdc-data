@@ -7006,24 +7006,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-unit",
-              "role": "attached"
-            }
-          }
-        ]
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-unit",
+          "role": "attached"
+        }
       },
       "effect": {
         "type": "sequence",

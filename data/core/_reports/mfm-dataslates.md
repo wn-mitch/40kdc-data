@@ -15,10 +15,10 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1235 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 1 | 0 | 200 | 256 |
+| detachments | 0 | 0 | 201 | 256 |
 | stratagems | 0 | 0 | 1086 | 227 |
 | abilities | 0 | 0 | 3855 | 681 |
-| phase-mappings | 1 | 0 | 1221 | 359 |
+| phase-mappings | 0 | 0 | 1222 | 359 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction

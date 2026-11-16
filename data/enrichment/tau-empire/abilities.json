@@ -571,20 +571,39 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
-        "parameters": {
-          "subject": "defender",
-          "filter": {
-            "designated": "SPOTTED"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "guided",
+            "parameters": {
+              "subject": "attacker"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "designated": "SPOTTED"
+              }
+            }
           }
-        }
+        ]
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
             "type": "re-roll",
-            "target": "this-unit",
+            "target": {
+              "owner": "friendly"
+            },
             "modifier": {
               "roll": "hit",
               "subset": "ones"
@@ -592,7 +611,9 @@
           },
           {
             "type": "re-roll",
-            "target": "this-unit",
+            "target": {
+              "owner": "friendly"
+            },
             "modifier": {
               "roll": "wound",
               "subset": "ones"
@@ -611,23 +632,12 @@
     "behavior": "reactive",
     "community_notes": "auto-generated, partial",
     "faction_id": "tau-empire",
-    "trigger": [
-      {
-        "event": "designation-changed",
-        "filter": {
-          "tag": "observer"
-        }
-      },
-      {
-        "event": "attacks-resolved",
-        "subject": {
-          "owner": "friendly"
-        },
-        "filter": {
-          "kind": "shoot"
-        }
+    "trigger": {
+      "event": "designation-changed",
+      "filter": {
+        "tag": "observer"
       }
-    ]
+    }
   },
   {
     "ability_id": "homing-beacon-tau-empire",
@@ -2507,28 +2517,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "subject": "this-unit",
-              "filter": {
-                "has_ability": [
-                  "my-will-be-done-necrons"
-                ]
-              }
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "has_ability": [
+              "my-will-be-done-necrons"
+            ]
           }
-        ]
+        }
       },
       "effect": {
         "type": "cost-modifier",
@@ -4229,28 +4226,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "subject": "this-unit",
-              "filter": {
-                "has_ability": [
-                  "war-leader-tau-empire"
-                ]
-              }
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "has_ability": [
+              "war-leader-tau-empire"
+            ]
           }
-        ]
+        }
       },
       "effect": {
         "type": "cost-modifier",
