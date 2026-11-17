@@ -384,3 +384,24 @@ describe("mfm:mirror links rules and rosters to what the dump prints", () => {
     expect(plan.stubs.map((s) => s.id)).not.toContain("old-gears-necrons");
   });
 });
+
+describe("mfm:mirror code literals", () => {
+  it("renames an id literal but leaves a prefix or suffix pattern alone", async () => {
+    const root = fixtureRepo();
+    roots.push(root);
+    const code = [
+      `const id = "crimson-oath";`,
+      `const ts = ids.filter((x) => x.startsWith("crimson-oath"));`,
+      `if ability_id.startswith("crimson-oath"):`,
+      `let rs = id.starts_with("crimson-oath");`,
+      `go := strings.HasPrefix(id, "crimson-oath")`,
+      `const tail = id.endsWith("crimson-oath");`,
+      "",
+    ].join("\n");
+    mkdirSync(path.join(root, "tools/test"), { recursive: true });
+    writeFileSync(path.join(root, "tools/test/literal.test.ts"), code);
+    const result = await runMirror(fixtureDump(), { root, validate: false, outside: true });
+    const file = result.files.find((f) => f.rel === "tools/test/literal.test.ts");
+    expect(file?.after.split("\n")).toEqual([`const id = "crimson-oath-blood-angels";`, ...code.split("\n").slice(1)]);
+  });
+});

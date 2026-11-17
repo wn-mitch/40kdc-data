@@ -19,6 +19,8 @@ import { runCull } from "../src/mfm/legends-cull.js";
 import { runLoadoutLift } from "../src/mfm/loadout-lift.js";
 import { runMissionMatchups } from "../src/mfm/mission-matchups.js";
 import { runMissions } from "../src/mfm/missions.js";
+import { runMirror } from "../src/mfm/mirror/mirror.js";
+import type { IdHistory } from "../src/mfm/mirror/plan.js";
 import { runPoints } from "../src/mfm/points.js";
 import { runReissue } from "../src/mfm/reissue.js";
 import { runSeedDetachments } from "../src/mfm/seed-detachments.js";
@@ -99,4 +101,12 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("the repo is in sync with the
       expect(changedFiles(run(shared()).staged)).toEqual([]);
     }, 300_000);
   }
+
+  it("ingest-mfm mirror has nothing left to write", async () => {
+    // The CLI reads the earlier writes' renames from this file; the test sees what the CLI sees.
+    const historyPath = path.join(REPO_ROOT, "_private", "phase4", "mirror-id-history.json");
+    const history = fs.existsSync(historyPath) ? (JSON.parse(fs.readFileSync(historyPath, "utf8")) as IdHistory) : {};
+    const result = await runMirror(shared(), { attachmentRoles: true, validate: false, outside: true, history });
+    expect(result.files.filter((f) => f.before !== f.after).map((f) => f.rel)).toEqual([]);
+  }, 300_000);
 });
