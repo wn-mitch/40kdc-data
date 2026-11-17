@@ -10082,7 +10082,10 @@
     "ability_ids": [
       "vanguard-assault-adeptus-astartes",
       "deep-strike",
-      "combat-shield-adeptus-astartes",
+      {
+        "id": "combat-shield-adeptus-astartes",
+        "wargear": "combat-shield"
+      },
       "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
