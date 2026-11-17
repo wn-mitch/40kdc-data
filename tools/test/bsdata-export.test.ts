@@ -89,14 +89,20 @@ describe("BSData export format", () => {
       new Set(Object.values(BSDATA_IDS.catalogues).map((c) => c.file)),
     );
     // The armies that ally each other: Chaos Space Marines, Daemons, Knights and Titans; Imperial Knights, Mechanicus, Agents and Titans.
+    // BSData's own names for the Imperial Knights library and the one library both Titan Legions share,
+    // then BSData's libraries the export holds nothing for.
     expect(libraries.map((d) => d.file).sort()).toEqual(
       [
-        "Chaos - Chaos Daemons", "Chaos - Chaos Knights", "Chaos - Chaos Space Marines", "Chaos - Titanicus Traitoris",
-        "Imperium - Adeptus Mechanicus", "Imperium - Adeptus Titanicus", "Imperium - Agents of the Imperium",
+        ...["Chaos - Chaos Daemons", "Chaos - Chaos Knights", "Chaos - Chaos Space Marines", "Imperium - Adeptus Mechanicus", "Imperium - Agents of the Imperium"].map((n) => `${n} Library`),
+        "Imperium - Imperial Knights - Library",
+        "Library - Titans",
+        "Aeldari - Aeldari Library",
+        "Imperium - Astra Militarum - Library",
+        "Library - Tyranids",
+        "Library - Astartes Heresy Legends",
+        "Unaligned Forces",
       ]
-        .map((n) => `${n} Library.json`)
-        // BSData's own name for the Imperial Knights library.
-        .concat("Imperium - Imperial Knights - Library.json")
+        .map((n) => `${n}.json`)
         .sort(),
     );
     expect(units.length).toBe(dataset.factions.all.reduce((sum, f) => sum + dataset.units.byFaction(f.id).length, 0));

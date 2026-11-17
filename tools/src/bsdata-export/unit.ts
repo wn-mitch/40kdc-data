@@ -140,6 +140,26 @@ function armyRuleLinks(view: UnitView, ctx: UnitBuildContext, key: string): BsNo
   });
 }
 
+/**
+ * Datasheets whose statline another unit's entry also prints, as BSData's do, by `faction/unit`.
+ * Sir Hekhtur takes the field with Canis Rex and can't be taken alone (the dump excludes his
+ * datasheet from selection; both carry Using Sir Hekhtur). Calgar's datasheet has an ability for
+ * while his unit contains Victrix Honour Guard models.
+ */
+const COMPANION_STATLINES: Readonly<Record<string, readonly string[]>> = {
+  "imperial-knights/canis-rex": ["imperial-knights/sir-hekhtur"],
+  "adeptus-astartes/marneus-calgar": ["adeptus-astartes/victrix-honour-guard"],
+};
+
+function companionProfiles(view: UnitView, ctx: UnitBuildContext, key: string): BsNode[] {
+  return (COMPANION_STATLINES[`${view.raw.faction_id}/${view.id}`] ?? []).flatMap((ref) => {
+    const [factionId, unitId] = ref.split("/");
+    const companion = ctx.dataset.units.getInFaction(unitId, factionId);
+    if (!companion) throw new Error(`bsdata export: companion ${ref} of ${view.id} is not a unit`);
+    return companion.raw.profiles.map((p, index) => statProfile(companion, ctx, p, ctx.ids.id(`${key}:companion:${ref}:${index}`)));
+  });
+}
+
 /** Unit-level profiles: every statline no model entry prints (`printed`), then the abilities that aren't army rules. */
 function unitProfiles(view: UnitView, ctx: UnitBuildContext, key: string, printed: ReadonlySet<UnitProfile> = new Set()): BsNode[] {
   const stats = view.raw.profiles.flatMap((p, index) => (printed.has(p) ? [] : [statProfile(view, ctx, p, ctx.ids.id(`${key}:profile:${index}`))]));
@@ -159,7 +179,7 @@ function unitProfiles(view: UnitView, ctx: UnitBuildContext, key: string, printe
     const hidden = removedInModifier(removedIn);
     return nodes.map((node) => ({ ...node, modifiers: [hidden] }));
   });
-  return [...stats, ...described];
+  return [...stats, ...companionProfiles(view, ctx, key), ...described];
 }
 
 /** The category a unit's `keyword` links: a game-system category, else the home family's keyword category. */
@@ -292,12 +312,12 @@ export function buildUnitEntry(view: UnitView, ctx: UnitBuildContext, preferredI
       const label = `${name} wargear limit ${capNumbers.get(capKey)} [${unit.faction_id}]`;
       return { id: ctx.hiddenCategory(home, capKey, label), name: label };
     },
-    rowProfile: (row, rowKey) => {
+    rowProfile: (row, rowKey, profileName) => {
       const p = rowStatline(unit, row);
       if (!p) return undefined;
       printed.add(p);
       // Named for the model, as BSData and the dump's miniatures name it, even when it shares another model's numbers.
-      return statProfile(view, ctx, p, ctx.ids.id(`${rowKey}:profile`), row.name);
+      return statProfile(view, ctx, p, ctx.ids.id(`${rowKey}:profile`), profileName ?? row.name);
     },
   }, multiModel);
   const limit = datasheetLimit(unit, ctx, key);

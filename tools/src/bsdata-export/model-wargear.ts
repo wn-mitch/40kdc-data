@@ -440,6 +440,16 @@ export function modelWargear(unit: Unit, ctx: WargearContext, source: MfmLoadout
       });
     });
 
+  // A model that takes a storm shield prints its statline again under BSData's loadout name for it
+  // ("Wolf Guard Terminator w/ Storm Shield"), with the model's own numbers.
+  const loadoutStatline = (choice: Choice): BsNode[] | undefined => {
+    if (!multiModel || choice.row === null) return undefined;
+    if (!choice.items.some((item) => /^storm shield$/i.test(ctx.itemEntry(item.id)?.name ?? ""))) return undefined;
+    const row = rows[Number(choice.row)];
+    const node = ctx.rowProfile?.(row, choice.id, `${row.name} w/ Storm Shield`);
+    return node ? [node] : undefined;
+  };
+
   const choiceEntry = (choice: Choice, repeats: boolean, picks: number): BsNode => {
     const shared = caps.get(choice.id);
     const links = itemLinks(choice.id, choice.items);
@@ -458,6 +468,7 @@ export function modelWargear(unit: Unit, ctx: WargearContext, source: MfmLoadout
       categoryLinks: shared && shared.categoryLinks.length > 0 ? shared.categoryLinks : undefined,
       entryLinks: links,
       costs: [cost("pts", ctx.ptsTypeId, 0)],
+      profiles: loadoutStatline(choice),
     });
   };
 

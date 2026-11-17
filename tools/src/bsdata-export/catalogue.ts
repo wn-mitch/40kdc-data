@@ -334,6 +334,8 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
       return units
         .map((view, index) => ({ view, entry: unitEntries[index] }))
         .filter(({ view }) => homeFactionOf(ctx.dataset, view.raw) === factionId)
+        // A unit with no points (Sir Hekhtur, who comes with Canis Rex) isn't taken on its own.
+        .filter(({ view }) => (view.raw.points ?? []).length > 0)
         .map(({ view, entry }) => {
           const ally = existing.get(unitKey(view.raw));
           return entryLink({

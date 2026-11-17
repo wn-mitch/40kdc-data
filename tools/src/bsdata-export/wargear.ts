@@ -34,8 +34,11 @@ export interface WargearContext {
   readonly itemEntry: (itemId: string) => { readonly id: string; readonly name: string } | undefined;
   /** A hidden category, defined in the unit's catalogue, that the members of the shared cap `key` link to. */
   readonly capCategory: (key: string) => { readonly id: string; readonly name: string };
-  /** The Unit profile a model row's entry prints, keyed for its entry; none when no statline is known for it. */
-  readonly rowProfile?: (row: { readonly name: string; readonly profileName?: string }, key: string) => BsNode | undefined;
+  /**
+   * The Unit profile a model row's entry prints, keyed for its entry and named `name` (default: the
+   * row's name); none when no statline is known for it.
+   */
+  readonly rowProfile?: (row: { readonly name: string; readonly profileName?: string }, key: string, name?: string) => BsNode | undefined;
 }
 
 /** Every model count the unit can be fielded at. */

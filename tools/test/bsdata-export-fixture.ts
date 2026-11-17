@@ -9,6 +9,7 @@ import type { Detachment } from "../src/generated.js";
 import { evaluateField, type EvalContext } from "../src/bsdata-export/evaluate.js";
 import { buildExport } from "../src/bsdata-export/export.js";
 import { BSDATA_IDS } from "../src/bsdata-export/ids.js";
+import { libraryNameFor } from "../src/bsdata-export/libraries.js";
 import { children, str, type BsNode } from "../src/bsdata-export/source.js";
 
 export const dataset = Dataset.embedded();
@@ -40,8 +41,7 @@ export function factionCatalogue(documents: readonly { file: string; document: B
   const byId = new Map(documents.map((d) => Object.values(d.document)[0] as BsNode).map((c) => [str(c, "id")!, c]));
   const library = children(army, "catalogueLinks")
     .map((l) => byId.get(str(l, "targetId")!))
-    // The library split from the army: "<army> Library", or BSData's "<army> - Library".
-    .find((c) => c?.library === true && (c.name === `${String(army.name)} Library` || c.name === `${String(army.name)} - Library`));
+    .find((c) => c?.library === true && c.name === libraryNameFor(String(army.name)));
   if (!library) return army;
   const merged: BsNode = { ...army };
   for (const key of ["categoryEntries", "sharedSelectionEntries", "sharedSelectionEntryGroups", "sharedProfiles", "sharedRules", "sharedInfoGroups"]) {
