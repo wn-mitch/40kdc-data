@@ -72,6 +72,11 @@ export function cyclicCatalogues(docs: readonly CatalogueDocument[]): Set<string
   return out;
 }
 
+/** BSData's own name and id for the library split from an army, where BSData has that library. */
+const BSDATA_LIBRARIES: Readonly<Record<string, { readonly name: string; readonly id: string }>> = {
+  "Imperium - Imperial Knights": { name: "Imperium - Imperial Knights - Library", id: "1b6d-dc06-5db9-c7d1" },
+};
+
 /** `docs` with every catalogue on a link cycle split into its army and a library; throws if a cycle remains. */
 export function splitCyclicCatalogues(docs: readonly CatalogueDocument[], ids: IdAllocator): CatalogueDocument[] {
   const cyclic = cyclicCatalogues(docs);
@@ -81,15 +86,16 @@ export function splitCyclicCatalogues(docs: readonly CatalogueDocument[], ids: I
   for (const doc of docs) {
     const catalogue = catalogueOf(doc);
     if (!catalogue || !cyclic.has(String(catalogue.id))) continue;
-    const name = `${String(catalogue.name)} Library`;
-    const id = ids.id(`library:${String(catalogue.id)}`);
+    const known = BSDATA_LIBRARIES[String(catalogue.name)];
+    const name = known?.name ?? `${String(catalogue.name)} Library`;
+    const id = ids.id(`library:${String(catalogue.id)}`, known?.id);
     libraryOf.set(String(catalogue.id), { id, name });
     const content = Object.fromEntries(LIBRARY_CONTENT.filter((k) => catalogue[k] !== undefined).map((k) => [k, catalogue[k]]));
     const { catalogueLinks: _links, entryLinks: _entries, ...header } = Object.fromEntries(
       Object.entries(catalogue).filter(([k]) => !(LIBRARY_CONTENT as readonly string[]).includes(k)),
     ) as BsNode;
     libraries.push({
-      file: doc.file.replace(/\.json$/, " Library.json"),
+      file: known ? `${known.name}.json` : doc.file.replace(/\.json$/, " Library.json"),
       document: { catalogue: { ...header, name, id, library: true, ...content } },
     });
   }

@@ -40,7 +40,8 @@ export function factionCatalogue(documents: readonly { file: string; document: B
   const byId = new Map(documents.map((d) => Object.values(d.document)[0] as BsNode).map((c) => [str(c, "id")!, c]));
   const library = children(army, "catalogueLinks")
     .map((l) => byId.get(str(l, "targetId")!))
-    .find((c) => c?.library === true && c.name === `${String(army.name)} Library`);
+    // The library split from the army: "<army> Library", or BSData's "<army> - Library".
+    .find((c) => c?.library === true && (c.name === `${String(army.name)} Library` || c.name === `${String(army.name)} - Library`));
   if (!library) return army;
   const merged: BsNode = { ...army };
   for (const key of ["categoryEntries", "sharedSelectionEntries", "sharedSelectionEntryGroups", "sharedProfiles", "sharedRules", "sharedInfoGroups"]) {
@@ -81,10 +82,16 @@ export function battleSizeId(fx: ExportFixture, size: Size): string {
   return str(children(group, "selectionEntries").find((o) => String(o.name).includes(size === "incursion" ? "Incursion" : "Strike Force"))!, "id")!;
 }
 
+/** The detachment options a family root's Detachment selection holds inline. */
+export function detachmentOptions(catalogue: BsNode): BsNode[] {
+  return children(catalogue, "sharedSelectionEntries")
+    .filter((e) => e.name === "Detachment")
+    .flatMap((container) => children(container, "selectionEntryGroups").flatMap((g) => children(g, "selectionEntries")))
+    .filter((e) => children(e, "costs").some((c) => str(c, "typeId") === DP));
+}
+
 export function detachmentOption(fx: ExportFixture, detachment: Detachment): BsNode {
-  return children(fx.catalogues.get(rootFaction(detachment.faction_id))!, "sharedSelectionEntries").find(
-    (e) => e.name === detachment.name && children(e, "costs").some((c) => str(c, "typeId") === DP),
-  )!;
+  return detachmentOptions(fx.catalogues.get(rootFaction(detachment.faction_id))!).find((e) => e.name === detachment.name)!;
 }
 
 /** Unit links an army built from `host` offers: its own root list and, for a child faction, its parent's. */

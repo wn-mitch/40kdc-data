@@ -20,7 +20,7 @@ import { children, str, walk, type BsNode } from "../src/bsdata-export/source.js
 import { homeFactionOf, isEpicHero } from "../src/bsdata-export/unit.js";
 import { modelCounts } from "../src/bsdata-export/wargear.js";
 import { bareModels, defaultMfmLoadout } from "../src/data/mfm-loadout.js";
-import { factionCatalogue } from "./bsdata-export-fixture.js";
+import { detachmentOptions, factionCatalogue } from "./bsdata-export-fixture.js";
 
 const FORMAT = formatJson as unknown as FormatDescriptor;
 const dataset = Dataset.embedded();
@@ -92,8 +92,12 @@ describe("BSData export format", () => {
     expect(libraries.map((d) => d.file).sort()).toEqual(
       [
         "Chaos - Chaos Daemons", "Chaos - Chaos Knights", "Chaos - Chaos Space Marines", "Chaos - Titanicus Traitoris",
-        "Imperium - Adeptus Mechanicus", "Imperium - Adeptus Titanicus", "Imperium - Agents of the Imperium", "Imperium - Imperial Knights",
-      ].map((n) => `${n} Library.json`),
+        "Imperium - Adeptus Mechanicus", "Imperium - Adeptus Titanicus", "Imperium - Agents of the Imperium",
+      ]
+        .map((n) => `${n} Library.json`)
+        // BSData's own name for the Imperial Knights library.
+        .concat("Imperium - Imperial Knights - Library.json")
+        .sort(),
     );
     expect(units.length).toBe(dataset.factions.all.reduce((sum, f) => sum + dataset.units.byFaction(f.id).length, 0));
   });
@@ -101,7 +105,11 @@ describe("BSData export format", () => {
   it("gives an army with no detachments no Detachment selection, and every other army one", () => {
     for (const doc of documents.slice(1).filter((d) => rootOf(d).library !== true)) {
       const factionId = Object.entries(BSDATA_IDS.catalogues).find(([, c]) => c.file === doc.file)![0];
-      const links = ((rootOf(doc).entryLinks as BsNode[] | undefined) ?? []).filter((l) => l.name === "Detachment");
+      // A child army takes its family root's selection through the catalogue link that imports its root entries.
+      const imported = children(rootOf(doc), "catalogueLinks")
+        .filter((l) => l.importRootEntries === true)
+        .map((l) => documents.map(rootOf).find((c) => str(c, "id") === str(l, "targetId"))!);
+      const links = [rootOf(doc), ...imported].flatMap((c) => children(c, "entryLinks")).filter((l) => l.name === "Detachment");
       expect(links.length, doc.file).toBe(dataset.detachments.byFaction(factionId).length > 0 ? 1 : 0);
     }
     expect(dataset.detachments.byFaction("adeptus-titanicus")).toHaveLength(0);
@@ -388,9 +396,7 @@ describe("BSData export rules agree with the package", () => {
     for (const faction of dataset.factions.all) {
       for (const detachment of dataset.detachments.byFaction(faction.id)) {
         const root = dataset.factions.get(faction.id)!.raw.parent_faction_id ?? faction.id;
-        const option = children(catalogueOf(root), "sharedSelectionEntries").find(
-          (e) => e.name === detachment.name && children(e, "costs").some((c) => str(c, "typeId") === BSDATA_IDS.system.costTypes["Detachment Points"]),
-        );
+        const option = detachmentOptions(catalogueOf(root)).find((e) => e.name === detachment.name);
         expect(option, detachment.id).toBeDefined();
         const dp = children(option!, "costs").find((c) => str(c, "typeId") === BSDATA_IDS.system.costTypes["Detachment Points"])!;
         expect(dp.value).toBe(detachment.detachment_points ?? 0);
@@ -441,7 +447,7 @@ describe("BSData export allied rules agree with the package", () => {
     const optionId = (detachmentId: string): string => {
       const detachment = dataset.detachments.getAny(detachmentId)!;
       const root = dataset.factions.get(detachment.faction_id)!.raw.parent_faction_id ?? detachment.faction_id;
-      return str(children(catalogueOf(root), "sharedSelectionEntries").find((e) => e.name === detachment.name && children(e, "costs").some((c) => str(c, "typeId") === BSDATA_IDS.system.costTypes["Detachment Points"]))!, "id")!;
+      return str(detachmentOptions(catalogueOf(root)).find((e) => e.name === detachment.name)!, "id")!;
     };
     for (const { host, unit, rules } of offers.values()) {
       const links = children(catalogueOf(host), "entryLinks").filter((l) => str(l, "targetId") === str(unit.entry, "id") && children(l, "categoryLinks").some((c) => String(c.name).startsWith("Allies:")));
@@ -471,11 +477,13 @@ describe("BSData export allied rules agree with the package", () => {
         const ctx = ctxFor(entry, { primaryCatalogueId: hostCatalogueId(plan.host) });
         const warlord = children(entry.entry, "entryLinks").find((l) => l.name === "Warlord");
         if (plan.rule.cannot_be_warlord && warlord) expect(evaluateField(warlord, "", "hidden", 0, ctx), `${unit.id} warlord in ${plan.host}`).toBe(1);
-        const enhancements = children(entry.entry, "selectionEntryGroups").find((g) => g.name === "Enhancements");
+        const enhancements = children(entry.entry, "entryLinks").find((l) => l.name === "Enhancements" && l.type === "selectionEntryGroup");
         if (plan.rule.cannot_take_enhancements && enhancements) expect(evaluateField(enhancements, "", "hidden", 0, ctx), `${unit.id} enhancements in ${plan.host}`).toBe(1);
         for (const abilityId of plan.rule.removes_ability_ids ?? []) {
           const name = dataset.abilities.byFaction(unit.raw.faction_id).find((a) => a.id === abilityId)?.name;
-          const shown = children(entry.entry, "profiles").find((p) => p.typeName === "Abilities" && p.name === name);
+          const shown =
+            children(entry.entry, "profiles").find((p) => p.typeName === "Abilities" && p.name === name) ??
+            children(entry.entry, "infoLinks").find((l) => l.type === "rule" && l.name === name);
           if (shown) expect(evaluateField(shown, "", "hidden", 0, ctx), `${unit.id} keeps ${abilityId} in ${plan.host}`).toBe(1);
         }
       }

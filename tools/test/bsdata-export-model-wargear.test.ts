@@ -115,7 +115,7 @@ function readUnit(entry: UnitEntry, rules: MfmLoadoutRules): UnitModel | null {
         })),
       ]
     : [{ id: "", min: 1, max: 1, members: [{ id: "", name: unit.name, min: 1, max: 1, groups: [], fixed: new Map() }] }];
-  const unitFixed = itemsOfLinks(children(entry.node, "entryLinks").filter((l) => l.name !== "Warlord"));
+  const unitFixed = itemsOfLinks(children(entry.node, "entryLinks").filter((l) => l.name !== "Warlord" && l.type !== "selectionEntryGroup"));
   const model: UnitModel = { entry, rules, sets, rows: sets.flatMap((set) => set.members), unitGroups: wargearGroups(entry.node), unitFixed, modelsGroup };
   return ambiguous ? null : model;
 }

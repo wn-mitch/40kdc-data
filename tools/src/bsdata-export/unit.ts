@@ -33,6 +33,8 @@ export interface UnitBuildContext {
   readonly itemEntry: (unit: Unit, itemId: string) => { readonly id: string; readonly name: string } | undefined;
   /** Catalogues (by faction id) whose army keywords bar a unit's `excluded_faction_keywords`. */
   readonly excludingCatalogues: (unit: Unit) => readonly string[];
+  /** The catalogue-level army rule an ability id names for `unit`, when it is one of its family's army rules. */
+  readonly armyRule?: (unit: Unit, abilityId: string) => { readonly id: string; readonly name: string } | undefined;
   /** Catalogue ids in whose armies an allied rule removes `abilityId` from the unit. */
   readonly abilityRemovedIn: (unit: Unit, abilityId: string) => readonly string[];
   /** Detachment bars and conditional keywords (`restrictions.ts`), applied after the datasheet limit. */
@@ -79,25 +81,73 @@ function baseText(unit: Unit): string {
   return "";
 }
 
-function unitProfiles(view: UnitView, ctx: UnitBuildContext, key: string): BsNode[] {
+type UnitProfile = Unit["profiles"][number];
+
+/** The Unit profile node for one statline, named `name` (default: the profile's own name). */
+function statProfile(view: UnitView, ctx: UnitBuildContext, p: UnitProfile, id: string, name = p.name ?? view.name): BsNode {
   const type = ctx.refs.profileTypes.Unit;
   const c = type.characteristics;
-  const stats = view.raw.profiles.map((p, index) =>
-    profile(p.name ?? view.name, ctx.ids.id(`${key}:profile:${index}`), type.id, "Unit", [
-      characteristic("M", c.M, statText(p.M, '"')),
-      characteristic("T", c.T, statText(p.T)),
-      characteristic("Sv", c.Sv, statText(p.Sv, "+")),
-      characteristic("W", c.W, statText(p.W)),
-      characteristic("LD", c.LD, statText(p.Ld, "+")),
-      characteristic("OC", c.OC, statText(p.OC)),
-      characteristic("InSv", c.InSv, statText(p.invuln_sv, "+")),
-      characteristic("Base", c.Base, baseText(view.raw)),
-    ]),
-  );
+  return profile(name, id, type.id, "Unit", [
+    // The datasheet prints "-" where a model has no Move or OC (an aircraft, a fortification).
+    characteristic("M", c.M, p.M === null ? "-" : statText(p.M, '"')),
+    characteristic("T", c.T, statText(p.T)),
+    characteristic("Sv", c.Sv, statText(p.Sv, "+")),
+    characteristic("W", c.W, statText(p.W)),
+    characteristic("LD", c.LD, statText(p.Ld, "+")),
+    characteristic("OC", c.OC, p.OC === null ? "-" : statText(p.OC)),
+    characteristic("InSv", c.InSv, statText(p.invuln_sv, "+")),
+    characteristic("Base", c.Base, baseText(view.raw)),
+  ]);
+}
+
+/**
+ * The profile a model row's models print: the one named like the row, else the row's
+ * `profileName`, else the unit's only profile. Undefined when none of those resolve.
+ */
+function rowStatline(unit: Unit, row: { readonly name: string; readonly profileName?: string }): UnitProfile | undefined {
+  const named = (name: string | undefined) => (name === undefined ? undefined : unit.profiles.find((p) => p.name === name));
+  return named(row.name) ?? named(row.profileName) ?? (unit.profiles.length === 1 ? unit.profiles[0] : undefined);
+}
+
+/** Hides a unit's ability in the armies (`removedIn` catalogue ids) whose allied rule removes it. */
+function removedInModifier(removedIn: readonly string[]): BsNode {
+  return modifier({
+    field: "hidden",
+    type: "set",
+    value: true,
+    conditionGroups: [
+      { type: "or", conditions: removedIn.map((id) => condition({ childId: id, field: "selections", scope: "primary-catalogue", type: "instanceOf", value: 1 })) },
+    ],
+  });
+}
+
+/** Rule links to the catalogue-level army rules the unit has, in place of Abilities profiles, as BSData links them. */
+function armyRuleLinks(view: UnitView, ctx: UnitBuildContext, key: string): BsNode[] {
+  return view.abilities.flatMap((ability) => {
+    const rule = ctx.armyRule?.(view.raw, ability.id);
+    if (!rule) return [];
+    const removedIn = ctx.abilityRemovedIn(view.raw, ability.id);
+    return [
+      compact({
+        name: rule.name,
+        id: ctx.ids.id(`${key}:army-rule:${ability.id}`),
+        hidden: false,
+        targetId: rule.id,
+        type: "rule",
+        modifiers: removedIn.length > 0 ? [removedInModifier(removedIn)] : undefined,
+      }),
+    ];
+  });
+}
+
+/** Unit-level profiles: every statline no model entry prints (`printed`), then the abilities that aren't army rules. */
+function unitProfiles(view: UnitView, ctx: UnitBuildContext, key: string, printed: ReadonlySet<UnitProfile> = new Set()): BsNode[] {
+  const stats = view.raw.profiles.flatMap((p, index) => (printed.has(p) ? [] : [statProfile(view, ctx, p, ctx.ids.id(`${key}:profile:${index}`))]));
   const abilities = ctx.refs.profileTypes.Abilities;
   const describedAs = (name: string, id: string, text: string): BsNode =>
     profile(name, id, abilities.id, "Abilities", [characteristic("Description", abilities.characteristics.Description, text)]);
   const described = view.abilities.flatMap((ability) => {
+    if (ctx.armyRule?.(view.raw, ability.id)) return [];
     // An ability that picks one of several named options lists each option after it, as BSData does.
     const nodes = [
       describedAs(ability.name, ctx.ids.id(`${key}:ability:${ability.id}`), ability.describe()),
@@ -106,14 +156,7 @@ function unitProfiles(view: UnitView, ctx: UnitBuildContext, key: string): BsNod
     ];
     const removedIn = ctx.abilityRemovedIn(view.raw, ability.id);
     if (removedIn.length === 0) return nodes;
-    const hidden = modifier({
-      field: "hidden",
-      type: "set",
-      value: true,
-      conditionGroups: [
-        { type: "or", conditions: removedIn.map((id) => condition({ childId: id, field: "selections", scope: "primary-catalogue", type: "instanceOf", value: 1 })) },
-      ],
-    });
+    const hidden = removedInModifier(removedIn);
     return nodes.map((node) => ({ ...node, modifiers: [hidden] }));
   });
   return [...stats, ...described];
@@ -235,6 +278,8 @@ export function buildUnitEntry(view: UnitView, ctx: UnitBuildContext, preferredI
   const multiModel = (unit.model_count?.max ?? 1) > 1;
   const home = homeFactionOf(ctx.dataset, unit);
   const capNumbers = new Map<string, number>();
+  // Statlines a model entry prints; the unit entry keeps only the rest.
+  const printed = new Set<UnitProfile>();
   const selections = unitSelections(unit, {
     ids: ctx.ids,
     dataset: ctx.dataset,
@@ -246,6 +291,13 @@ export function buildUnitEntry(view: UnitView, ctx: UnitBuildContext, preferredI
       if (!capNumbers.has(capKey)) capNumbers.set(capKey, capNumbers.size + 1);
       const label = `${name} wargear limit ${capNumbers.get(capKey)} [${unit.faction_id}]`;
       return { id: ctx.hiddenCategory(home, capKey, label), name: label };
+    },
+    rowProfile: (row, rowKey) => {
+      const p = rowStatline(unit, row);
+      if (!p) return undefined;
+      printed.add(p);
+      // Named for the model, as BSData and the dump's miniatures name it, even when it shares another model's numbers.
+      return statProfile(view, ctx, p, ctx.ids.id(`${rowKey}:profile`), row.name);
     },
   }, multiModel);
   const limit = datasheetLimit(unit, ctx, key);
@@ -293,8 +345,9 @@ export function buildUnitEntry(view: UnitView, ctx: UnitBuildContext, preferredI
     constraints,
     costs: [cost("pts", ctx.refs.cost.pts, basePrice(unit, unit.model_count?.min ?? 1))],
     entryLinks: [...selections.entryLinks, ...character.entryLinks],
+    infoLinks: armyRuleLinks(view, ctx, key),
     modifiers,
-    profiles: unitProfiles(view, ctx, key),
+    profiles: unitProfiles(view, ctx, key, printed),
     selectionEntryGroups: [...selections.selectionEntryGroups, ...character.groups],
   });
 }
