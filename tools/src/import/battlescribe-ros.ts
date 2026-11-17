@@ -21,6 +21,9 @@ const parser = new XMLParser({
   parseAttributeValue: false,
   parseTagValue: false,
   trimValues: true,
+  // The boolean default caps standard escapes (&quot; for every inch mark) at 1000 per document,
+  // which a full roster exceeds. The object form lifts that cap and keeps the DOCTYPE entity limits.
+  processEntities: {},
 });
 
 /** Attributes the adapter reads as numbers. */

@@ -63,6 +63,16 @@ describe("BattleScribe roster import", () => {
     expect(rosToJson(xml).roster).toEqual({ xmlns: "x", rules: [{ name: "A", description: { $text: "Some text" } }], costs: [{ name: "pts", value: "n/a" }] });
   });
 
+  it("imports a roster whose text escapes more than a thousand characters", () => {
+    // Every inch mark in a profile prints as &quot;; a full army's roster easily holds thousands.
+    const ros = fixture("daemons.ros").toString("utf8");
+    const padded = ros.replace("</roster>", `<rules><rule name="Padding"><description>${'12&quot; '.repeat(2000)}</description></rule></rules></roster>`);
+    const result = importBattleScribe(padded);
+    expect(result.ok, result.ok ? "" : result.message).toBe(true);
+    const plain = importBattleScribe(ros);
+    if (result.ok && plain.ok) expect(result.roster.units).toEqual(plain.roster.units);
+  });
+
   it("finds the .ros inside a .rosz whatever its entry name", () => {
     const zipped = zipSync({ "readme.txt": strToU8("x"), "My List.ros": strToU8("<roster/>") });
     expect(isZip(zipped)).toBe(true);
