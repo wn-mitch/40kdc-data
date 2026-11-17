@@ -14,6 +14,7 @@ import type { BsNode } from "./source.js";
 import { SECTION_CATEGORIES, type SystemRefs } from "./system.js";
 import { doublesLimit } from "./restrictions.js";
 import { unitSelections } from "./wargear.js";
+import { namedOptions } from "./ability-options.js";
 
 /** Base types in the order a unit's section falls back to them. */
 const BASE_TYPES = ["Infantry", "Mounted", "Beast", "Monster", "Vehicle", "Swarm", "Drone", "Fortification"] as const;
@@ -94,25 +95,26 @@ function unitProfiles(view: UnitView, ctx: UnitBuildContext, key: string): BsNod
     ]),
   );
   const abilities = ctx.refs.profileTypes.Abilities;
-  const described = view.abilities.map((ability) => {
-    const node = profile(ability.name, ctx.ids.id(`${key}:ability:${ability.id}`), abilities.id, "Abilities", [
-      characteristic("Description", abilities.characteristics.Description, ability.describe()),
-    ]);
+  const describedAs = (name: string, id: string, text: string): BsNode =>
+    profile(name, id, abilities.id, "Abilities", [characteristic("Description", abilities.characteristics.Description, text)]);
+  const described = view.abilities.flatMap((ability) => {
+    // An ability that picks one of several named options lists each option after it, as BSData does.
+    const nodes = [
+      describedAs(ability.name, ctx.ids.id(`${key}:ability:${ability.id}`), ability.describe()),
+      ...namedOptions(ability.raw as unknown as Record<string, unknown>).map((option) =>
+        describedAs(option.name, ctx.ids.id(`${key}:ability:${ability.id}:option:${option.key}`), option.description)),
+    ];
     const removedIn = ctx.abilityRemovedIn(view.raw, ability.id);
-    if (removedIn.length === 0) return node;
-    return {
-      ...node,
-      modifiers: [
-        modifier({
-          field: "hidden",
-          type: "set",
-          value: true,
-          conditionGroups: [
-            { type: "or", conditions: removedIn.map((id) => condition({ childId: id, field: "selections", scope: "primary-catalogue", type: "instanceOf", value: 1 })) },
-          ],
-        }),
+    if (removedIn.length === 0) return nodes;
+    const hidden = modifier({
+      field: "hidden",
+      type: "set",
+      value: true,
+      conditionGroups: [
+        { type: "or", conditions: removedIn.map((id) => condition({ childId: id, field: "selections", scope: "primary-catalogue", type: "instanceOf", value: 1 })) },
       ],
-    };
+    });
+    return nodes.map((node) => ({ ...node, modifiers: [hidden] }));
   });
   return [...stats, ...described];
 }

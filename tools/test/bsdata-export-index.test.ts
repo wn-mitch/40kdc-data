@@ -44,7 +44,8 @@ describe("BattleScribe hosted data repo", () => {
       expect(Object.keys(zipped)).toHaveLength(1);
       const xml = strFromU8(zipped[name]);
       expect(xml).toBe(readFileSync(path.join(dir, "xml", name), "utf8"));
-      const doc = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "" }).parse(xml) as Record<string, Record<string, string>>;
+      // Standard entities are no expansion risk; a catalogue escapes far more than the default cap of 1000.
+      const doc = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "", processEntities: {} }).parse(xml) as Record<string, Record<string, string>>;
       const root = doc.gameSystem ?? doc.catalogue;
       expect({ file: name, id: entry.dataId, name: entry.dataName, revision: entry.dataRevision, type: entry.dataType }).toEqual({
         file: name,
