@@ -4,6 +4,7 @@
  * each army sees its own detachments and no other army's, each enhancement shows
  * under exactly the units that may take it, and each model prints its statline.
  */
+import { readFileSync } from "node:fs";
 import fc from "fast-check";
 import { beforeAll, describe, expect, it } from "vitest";
 import { validateRosterCore, type RosterViolationCode } from "../src/data/roster-resolve.js";
@@ -236,5 +237,47 @@ describe("BSData export companion and loadout statlines", () => {
       }
     }
     expect(checked).toBeGreaterThan(5);
+  });
+});
+
+describe("BSData export saved rosters", () => {
+  /** Every id the export defines, in any file. */
+  const exportedIds = (): Set<string> => {
+    const ids = new Set<string>();
+    const walk = (o: unknown): void => {
+      if (Array.isArray(o)) o.forEach(walk);
+      else if (o && typeof o === "object") {
+        const r = o as Record<string, unknown>;
+        if (typeof r.id === "string") ids.add(r.id);
+        Object.values(r).forEach(walk);
+      }
+    };
+    for (const catalogue of [fx.gst, ...fx.catalogues.values()]) walk(catalogue);
+    return ids;
+  };
+
+  // Rosters saved from the 1.5.1 export. 1.5.2 holds detachments inline, as BSData does, so a saved
+  // detachment pick (made through 1.5.1's links) is re-picked; every other selection resolves.
+  it.each(["wolves", "daemons"])("resolves every selection of the saved %s roster but the detachment pick", (list) => {
+    const ids = exportedIds();
+    const roster = JSON.parse(readFileSync(new URL(`./fixtures/import/battlescribe/${list}.json`, import.meta.url), "utf8")) as unknown;
+    const unresolved: string[] = [];
+    const detachmentEntries: string[] = [];
+    const visit = (o: unknown, underDetachment: boolean): void => {
+      if (Array.isArray(o)) return o.forEach((v) => visit(v, underDetachment));
+      if (!o || typeof o !== "object") return;
+      const r = o as Record<string, unknown>;
+      const inDetachment = underDetachment || r.name === "Detachment";
+      if (typeof r.entryId === "string") {
+        const parts = r.entryId.split("::");
+        if (!inDetachment && parts.some((p) => !ids.has(p))) unresolved.push(`${String(r.name)}: ${r.entryId}`);
+        if (underDetachment) detachmentEntries.push(parts[parts.length - 1]);
+      }
+      Object.values(r).forEach((v) => visit(v, inDetachment));
+    };
+    visit(roster, false);
+    expect(unresolved).toEqual([]);
+    expect(detachmentEntries.length).toBeGreaterThan(0);
+    expect(detachmentEntries.filter((id) => !ids.has(id))).toEqual([]);
   });
 });
