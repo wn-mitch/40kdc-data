@@ -196,6 +196,7 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "the-eternal-dance-target",
     "throne-tyrannicus",
     "titanic-duel-target",
+    "titanic-fire-support-target",
     "transport-support-target",
     "trap",
     "trapped",

@@ -205,6 +205,7 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "the-eternal-dance-target",
         "throne-tyrannicus",
         "titanic-duel-target",
+        "titanic-fire-support-target",
         "transport-support-target",
         "trap",
         "trapped",

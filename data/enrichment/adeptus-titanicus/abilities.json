@@ -18,7 +18,8 @@
     "unit_ids": [],
     "ability_type": "faction",
     "behavior": "passive",
-    "faction_id": "adeptus-titanicus"
+    "faction_id": "adeptus-titanicus",
+    "community_notes": "[APPROX] Army-construction rule: Adeptus Titanicus datasheets can represent Titanicus Traitoris models, swapping the Imperium keyword for Chaos and the faction keyword for Titanicus Traitoris, at the Adeptus Titanicus points. Modelled by the titanicus-traitoris faction's own units; unmodelled in the DSL by design."
   },
   {
     "ability_id": "titanic-support-adeptus-titanicus",
@@ -39,7 +40,8 @@
     "unit_ids": [],
     "ability_type": "faction",
     "behavior": "passive",
-    "faction_id": "adeptus-titanicus"
+    "faction_id": "adeptus-titanicus",
+    "community_notes": "[APPROX] Army-construction rule: an army whose models all have the IMPERIUM keyword can include one ADEPTUS TITANICUS model whatever its Army Faction. Modelled by the allied-rule pool in data/core/allies.json; unmodelled in the DSL by design."
   },
   {
     "ability_id": "towering-example-adeptus-titanicus",
@@ -60,7 +62,8 @@
     "unit_ids": [],
     "ability_type": "faction",
     "behavior": "passive",
-    "faction_id": "adeptus-titanicus"
+    "faction_id": "adeptus-titanicus",
+    "community_notes": "[APPROX] Army-construction rule: a ADEPTUS TITANICUS army takes no detachment rules and can choose a non-CHARACTER ADEPTUS TITANICUS model as its WARLORD; the army has the Take and Hold force disposition. Warlord eligibility is modelled by can_be_non_character_warlord on the unit compositions; the rest is unmodelled in the DSL by design."
   },
   {
     "ability_id": "flank-speed-adeptus-titanicus",
@@ -68,22 +71,34 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "version": "2025-q3",
-    "stub": true,
     "effect": {
-      "type": "no-effect"
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "advance": "fixed-8"
+      }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "warhound-titan"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-titanicus"
+    "behavior": "reactive",
+    "faction_id": "adeptus-titanicus",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "advance"
+        ]
+      }
+    },
+    "source_digest": "9ccf4475433a0feb4919ab5079105f336669cfb49dacd60d32bcb40cc39f68b7"
   },
   {
     "ability_id": "god-machine-adeptus-titanicus",
@@ -91,12 +106,35 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "version": "2025-q3",
-    "stub": true,
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -106,7 +144,8 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "faction_id": "adeptus-titanicus"
+    "faction_id": "adeptus-titanicus",
+    "source_digest": "6008a1e2bb5541c53a2ae2369c4f146ca6ad4de89a55ca56e409ffc0308df293"
   },
   {
     "ability_id": "striding-colossus-adeptus-titanicus",
@@ -114,12 +153,18 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "version": "2025-q3",
-    "stub": true,
     "effect": {
-      "type": "no-effect"
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "multiply",
+        "amount": 3,
+        "applies_to": "targeting-this-unit"
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -129,8 +174,16 @@
       "warbringer-nemesis-titan"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-titanicus"
+    "behavior": "reactive",
+    "faction_id": "adeptus-titanicus",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      },
+      "object": "this-model"
+    },
+    "source_digest": "6af1c590f90f9ff6241990686ca37f21ac41f030c6299b9914fdcbdf1eaa6620"
   },
   {
     "ability_id": "titanic-fire-support-adeptus-titanicus",
@@ -138,22 +191,102 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "version": "2025-q3",
-    "stub": true,
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "titanic-fire-support-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success"
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "roll-result",
+              "parameters": {
+                "roll": "wound",
+                "result": "critical"
+              }
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "IMPERIUM"
+                ]
+              },
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1
+              }
+            }
+          }
+        },
+        "duration": "phase"
+      }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "warbringer-nemesis-titan"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-titanicus"
+    "behavior": "reactive",
+    "faction_id": "adeptus-titanicus",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "source_digest": "3cc61ddb3ff8256d92a2dee9b004ffa859f82a1d90250442da1f94c2f8edceee"
   },
   {
     "ability_id": "wrath-of-the-omnissiah-adeptus-titanicus",
@@ -161,12 +294,60 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "version": "2025-q3",
-    "stub": true,
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "test",
+          "target": "selected-unit",
+          "modifier": {
+            "test": "battle-shock"
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -175,8 +356,15 @@
       "warlord-titan"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-titanicus"
+    "behavior": "reactive",
+    "faction_id": "adeptus-titanicus",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "source_digest": "7b76922f9d29bfca1cfaab985ebc9ac7e31e04664fdc6f0d71ae906fdc945662"
   },
   {
     "ability_id": "striding-colossus-warhound-titan-adeptus-titanicus",
@@ -184,9 +372,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "warhound-titan"
     ],
@@ -194,11 +381,27 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "multiply",
+        "amount": 2,
+        "applies_to": "targeting-this-unit"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      },
+      "object": "this-model"
+    },
+    "source_digest": "b8c33203b19476ff6757b26876925ed11fb14d367a8cc915cc0a6b5f8a33cd46"
   },
   {
     "ability_id": "striding-colossus-warlord-titan-adeptus-titanicus",
@@ -206,9 +409,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "warlord-titan"
     ],
@@ -216,10 +418,26 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "multiply",
+        "amount": 4,
+        "applies_to": "targeting-this-unit"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "stratagem"
+      },
+      "object": "this-model"
+    },
+    "source_digest": "1db2dc64a97ecd56f2b88c292c4febcddfe333e3a13b5ec654181fe366d01033"
   }
 ]
