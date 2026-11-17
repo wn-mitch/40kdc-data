@@ -5008,6 +5008,81 @@
     }
   },
   {
+    "name": "adeptus-titanicus/reaver-titan",
+    "args": {
+      "unitId": "reaver-titan",
+      "factionId": "adeptus-titanicus"
+    },
+    "expected": {
+      "models": {
+        "Reaver Titan": 1
+      },
+      "counts": {
+        "reaver-apocalypse-launcher": 1,
+        "reaver-feet": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-titanicus/warbringer-nemesis-titan",
+    "args": {
+      "unitId": "warbringer-nemesis-titan",
+      "factionId": "adeptus-titanicus"
+    },
+    "expected": {
+      "models": {
+        "Warbringer Nemesis Titan": 1
+      },
+      "counts": {
+        "anvillus-defence-battery": 2,
+        "ardex-defensor-mauler": 3,
+        "nemesis-feet": 1,
+        "nemesis-quake-cannon": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-titanicus/warhound-titan",
+    "args": {
+      "unitId": "warhound-titan",
+      "factionId": "adeptus-titanicus"
+    },
+    "expected": {
+      "models": {
+        "Warhound Titan": 1
+      },
+      "counts": {
+        "warhound-feet": 1,
+        "warhound-plasma-blastgun": 1,
+        "warhound-vulcan-mega-bolter": 1
+      }
+    }
+  },
+  {
+    "name": "adeptus-titanicus/warlord-titan",
+    "args": {
+      "unitId": "warlord-titan",
+      "factionId": "adeptus-titanicus"
+    },
+    "expected": {
+      "models": {
+        "Warlord Titan": 1
+      },
+      "counts": {
+        "apocalypse-launcher": 2,
+        "ardex-defensor-lascannon": 2,
+        "ardex-defensor-mauler": 2,
+        "arioch-power-claw": 1,
+        "macro-gatling-blaster": 1,
+        "warlord-feet": 1
+      }
+    }
+  },
+  {
     "name": "aeldari/asurmen",
     "args": {
       "unitId": "asurmen",
@@ -17323,6 +17398,81 @@
       "counts": {
         "hellforged-weapons": 1,
         "infernal-cannon": 1
+      }
+    }
+  },
+  {
+    "name": "titanicus-traitoris/chaos-reaver-titan",
+    "args": {
+      "unitId": "chaos-reaver-titan",
+      "factionId": "titanicus-traitoris"
+    },
+    "expected": {
+      "models": {
+        "Chaos Reaver Titan": 1
+      },
+      "counts": {
+        "reaver-apocalypse-launcher": 1,
+        "reaver-feet": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    }
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warbringer-nemesis-titan",
+    "args": {
+      "unitId": "chaos-warbringer-nemesis-titan",
+      "factionId": "titanicus-traitoris"
+    },
+    "expected": {
+      "models": {
+        "Chaos Warbringer Nemesis Titan": 1
+      },
+      "counts": {
+        "anvillus-defence-battery": 2,
+        "ardex-defensor-mauler": 3,
+        "nemesis-feet": 1,
+        "nemesis-quake-cannon": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    }
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warhound-titan",
+    "args": {
+      "unitId": "chaos-warhound-titan",
+      "factionId": "titanicus-traitoris"
+    },
+    "expected": {
+      "models": {
+        "Chaos Warhound Titan": 1
+      },
+      "counts": {
+        "warhound-feet": 1,
+        "warhound-plasma-blastgun": 1,
+        "warhound-vulcan-mega-bolter": 1
+      }
+    }
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warlord-titan",
+    "args": {
+      "unitId": "chaos-warlord-titan",
+      "factionId": "titanicus-traitoris"
+    },
+    "expected": {
+      "models": {
+        "Chaos Warlord Titan": 1
+      },
+      "counts": {
+        "apocalypse-launcher": 2,
+        "ardex-defensor-lascannon": 2,
+        "ardex-defensor-mauler": 2,
+        "arioch-power-claw": 1,
+        "macro-gatling-blaster": 1,
+        "warlord-feet": 1
       }
     }
   },

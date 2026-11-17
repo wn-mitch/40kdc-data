@@ -545,7 +545,8 @@
     },
     "comparison": "ordered",
     "expected": [
-      "daemonic-pact"
+      "daemonic-pact",
+      "titanicus-traitoris-allies"
     ]
   },
   {
@@ -560,7 +561,8 @@
     "comparison": "ordered",
     "expected": [
       "daemonic-pact",
-      "iconoclast-fiefdom-damned"
+      "iconoclast-fiefdom-damned",
+      "titanicus-traitoris-allies"
     ]
   },
   {
@@ -571,7 +573,8 @@
     },
     "comparison": "ordered",
     "expected": [
-      "chaos-knights-allies"
+      "chaos-knights-allies",
+      "titanicus-traitoris-allies"
     ]
   },
   {
@@ -586,6 +589,7 @@
     "comparison": "ordered",
     "expected": [
       "chaos-knights-allies",
+      "titanicus-traitoris-allies",
       "world-eaters-khorne-daemons"
     ]
   },
@@ -597,6 +601,7 @@
     },
     "comparison": "ordered",
     "expected": [
+      "adeptus-titanicus-allies",
       "agents-of-the-imperium-allies"
     ]
   },
@@ -611,6 +616,7 @@
     },
     "comparison": "ordered",
     "expected": [
+      "adeptus-titanicus-allies",
       "agents-of-the-imperium-allies",
       "imperial-knights-questor-forgepact"
     ]
@@ -667,7 +673,8 @@
     "comparison": "ordered",
     "expected": [
       "chaos-daemons-shadow-legion",
-      "chaos-knights-allies"
+      "chaos-knights-allies",
+      "titanicus-traitoris-allies"
     ]
   },
   {

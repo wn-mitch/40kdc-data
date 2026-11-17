@@ -19,8 +19,8 @@ values and absent source relations clear them. Prose is never read or written.
 | blood-angels | 12 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | chaos-daemons | 29 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | chaos-knights | 28 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| chaos-space-marines | 64 | 0 | 0 | 0 | 0 | 0 | 3 | 0 |
-| dark-angels | 12 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
+| chaos-space-marines | 64 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dark-angels | 12 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | death-guard | 32 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | deathwatch | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | drukhari | 32 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -38,28 +38,11 @@ values and absent source relations clear them. Prose is never read or written.
 | space-wolves | 12 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | tau-empire | 25 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | thousand-sons | 32 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tyranids | 36 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
+| tyranids | 36 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ultramarines | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | white-scars | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | world-eaters | 28 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **890** | **0** | **0** | **0** | **0** | **0** | **5** | **0** |
-
-## chaos-space-marines
-
-**required_ability_ids changes:**
-- eye-of-the-warp-warpstrike-champions-chaos-space-marines: null → ["deep-strike"]
-- akshurs-binding-runes-warpstrike-champions-chaos-space-marines: null → ["deep-strike"]
-- tzagulla-warpstrike-champions-chaos-space-marines: null → ["deep-strike"]
-
-## dark-angels
-
-**required_ability_ids changes:**
-- deathwing-assault-wrath-of-the-rock-dark-angels: null → ["deep-strike"]
-
-## tyranids
-
-**required_ability_ids changes:**
-- vanguard-intellect-subterranean-assault-tyranids: null → ["deep-strike"]
+| **TOTAL** | **890** | **0** | **0** | **0** | **0** | **0** | **0** | **0** |
 
 ## Enhancement seeds skipped (1)
 

@@ -1,0 +1,225 @@
+[
+  {
+    "ability_id": "titanic-support-titanicus-traitoris",
+    "name": "Titanic Support",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "stub": true,
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "faction",
+    "behavior": "passive",
+    "faction_id": "titanicus-traitoris"
+  },
+  {
+    "ability_id": "towering-example-titanicus-traitoris",
+    "name": "Towering Example",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "stub": true,
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "faction",
+    "behavior": "passive",
+    "faction_id": "titanicus-traitoris"
+  },
+  {
+    "ability_id": "titanicus-traitoris",
+    "name": "Titanicus Traitoris",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "stub": true,
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [],
+    "ability_type": "faction",
+    "behavior": "passive",
+    "faction_id": "titanicus-traitoris"
+  },
+  {
+    "ability_id": "flank-speed-titanicus-traitoris",
+    "name": "Flank Speed",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "stub": true,
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "chaos-warhound-titan"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "titanicus-traitoris"
+  },
+  {
+    "ability_id": "god-machine-titanicus-traitoris",
+    "name": "God-machine",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "stub": true,
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "chaos-reaver-titan"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "titanicus-traitoris"
+  },
+  {
+    "ability_id": "striding-colossus-titanicus-traitoris",
+    "name": "Striding Colossus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "stub": true,
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "chaos-reaver-titan",
+      "chaos-warbringer-nemesis-titan"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "titanicus-traitoris"
+  },
+  {
+    "ability_id": "titanic-fire-support-titanicus-traitoris",
+    "name": "Titanic Fire Support",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "stub": true,
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "chaos-warbringer-nemesis-titan"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "titanicus-traitoris"
+  },
+  {
+    "ability_id": "wrath-of-the-omnissiah-titanicus-traitoris",
+    "name": "Wrath of the Omnissiah",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "stub": true,
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "chaos-warlord-titan"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "faction_id": "titanicus-traitoris"
+  },
+  {
+    "ability_id": "striding-colossus-chaos-warhound-titan-titanicus-traitoris",
+    "name": "Striding Colossus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [
+      "chaos-warhound-titan"
+    ],
+    "faction_id": "titanicus-traitoris",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "striding-colossus-chaos-warlord-titan-titanicus-traitoris",
+    "name": "Striding Colossus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [
+      "chaos-warlord-titan"
+    ],
+    "faction_id": "titanicus-traitoris",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  }
+]

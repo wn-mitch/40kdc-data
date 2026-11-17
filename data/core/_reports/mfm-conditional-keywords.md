@@ -9,12 +9,13 @@ An allegiance-ability condition is one option of a keyword-choice group (`keywor
 | adeptus-astartes | 177 | 0 |
 | adeptus-custodes | 39 | 0 |
 | adeptus-mechanicus | 38 | 0 |
+| adeptus-titanicus | 4 | 0 |
 | aeldari | 80 | 0 |
 | agents-of-the-imperium | 33 | 0 |
-| astra-militarum | 75 | 8 |
-| chaos-daemons | 53 | 3 |
-| chaos-knights | 20 | 6 |
-| chaos-space-marines | 58 | 45 |
+| astra-militarum | 75 | 0 |
+| chaos-daemons | 53 | 0 |
+| chaos-knights | 20 | 0 |
+| chaos-space-marines | 58 | 0 |
 | death-guard | 41 | 0 |
 | drukhari | 27 | 0 |
 | emperors-children | 26 | 0 |
@@ -26,7 +27,8 @@ An allegiance-ability condition is one option of a keyword-choice group (`keywor
 | orks | 60 | 0 |
 | tau-empire | 47 | 0 |
 | thousand-sons | 38 | 0 |
-| tyranids | 57 | 1 |
+| titanicus-traitoris | 4 | 0 |
+| tyranids | 57 | 0 |
 | world-eaters | 34 | 0 |
 
 Unsupported source conditions: 1

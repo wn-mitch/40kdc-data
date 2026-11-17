@@ -358,7 +358,7 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
       ...familyDetachments.map((d) => detachmentEntry(set, ctx, root, d, tags.links.get(d.id) ?? [])),
       ...enhancements.map(({ enhancement, detachment }) => enhancementEntry(set, ctx, root, enhancement, detachment)),
       warlord,
-      container,
+      ...(container ? [container] : []),
     ];
     const rootAllies = pieces.get(root)!;
     const rootLimits = keywordLimitPieces(limitCtx, root);
@@ -371,7 +371,7 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
         categoryEntries: [...set.categoryEntries(root), ...tags.entries, ...mandateCategories(warlordCtx, root), ...rootAllies.categoryEntries, ...rootLimits.categoryEntries],
         entryLinks: [
           ...rootUnitLinks,
-          entryLink({ name: "Detachment", id: ctx.ids.id(`root-link:${root}/detachment`), targetId: container.id as string, type: "selectionEntry" }),
+          ...(container ? [entryLink({ name: "Detachment", id: ctx.ids.id(`root-link:${root}/detachment`), targetId: container.id as string, type: "selectionEntry" })] : []),
         ],
         sharedSelectionEntries: shared,
       }),
@@ -394,9 +394,9 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
           categoryEntries: [...childAllies.categoryEntries, ...childLimits.categoryEntries],
           entryLinks: [
             ...withLimits(child, childLimits, [...rootLinksFor(child), ...childAllies.rootLinks]),
-            entryLink({ name: "Detachment", id: ctx.ids.id(`root-link:${child}/detachment`), targetId: childContainer.id as string, type: "selectionEntry" }),
+            ...(childContainer ? [entryLink({ name: "Detachment", id: ctx.ids.id(`root-link:${child}/detachment`), targetId: childContainer.id as string, type: "selectionEntry" })] : []),
           ],
-          sharedSelectionEntries: [childContainer],
+          sharedSelectionEntries: childContainer ? [childContainer] : [],
         }),
       });
     }

@@ -72,6 +72,107 @@
     "cannot_take_enhancements": true
   },
   {
+    "id": "adeptus-titanicus-allies",
+    "name": "Adeptus Titanicus",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "label": "Adeptus Titanicus",
+    "army_keywords_any": [
+      "Adepta Sororitas",
+      "Adeptus Astartes",
+      "Adeptus Custodes",
+      "Adeptus Mechanicus",
+      "Agents of the Imperium",
+      "Astra Militarum",
+      "Black Templars",
+      "Blood Angels",
+      "Dark Angels",
+      "Deathwatch",
+      "Grey Knights",
+      "Imperial Fists",
+      "Imperial Knights",
+      "Iron Hands",
+      "Raven Guard",
+      "Salamanders",
+      "Space Wolves",
+      "Ultramarines",
+      "White Scars"
+    ],
+    "source_faction_id": "adeptus-titanicus",
+    "source_datasheet_ids": [
+      "reaver-titan",
+      "warbringer-nemesis-titan",
+      "warhound-titan",
+      "warlord-titan"
+    ],
+    "keyword_limits": [
+      {
+        "keyword": "Reaver Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Reaver Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Reaver Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warbringer Nemesis Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warbringer Nemesis Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warbringer Nemesis Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warhound Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warhound Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warhound Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warlord Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warlord Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warlord Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      }
+    ],
+    "cannot_be_warlord": true,
+    "cannot_take_enhancements": true
+  },
+  {
     "id": "aeldari-harlequins",
     "name": "Harlequins",
     "game_version": {
@@ -1116,6 +1217,95 @@
     ],
     "exclusive": true,
     "cannot_be_warlord": true
+  },
+  {
+    "id": "titanicus-traitoris-allies",
+    "name": "Titanicus Traitoris",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "label": "Titanicus Traitoris",
+    "army_keywords_any": [
+      "Chaos Knights",
+      "Death Guard",
+      "Emperor’s Children",
+      "Heretic Astartes",
+      "Legiones Daemonica",
+      "Thousand Sons",
+      "World Eaters"
+    ],
+    "source_faction_id": "titanicus-traitoris",
+    "source_datasheet_ids": [
+      "chaos-reaver-titan",
+      "chaos-warbringer-nemesis-titan",
+      "chaos-warhound-titan",
+      "chaos-warlord-titan"
+    ],
+    "keyword_limits": [
+      {
+        "keyword": "Reaver Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Reaver Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Reaver Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warbringer Nemesis Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warbringer Nemesis Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warbringer Nemesis Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warhound Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warhound Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warhound Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warlord Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warlord Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warlord Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      }
+    ],
+    "cannot_be_warlord": true,
+    "cannot_take_enhancements": true
   },
   {
     "id": "world-eaters-khorne-daemons",

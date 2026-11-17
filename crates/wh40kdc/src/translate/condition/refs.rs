@@ -26,8 +26,10 @@ pub(crate) fn event_relation_phrase(filter: &P) -> String {
 const FACTION_SUFFIXES: &[&str] = &[
     "agents-of-the-imperium",
     "chaos-space-marines",
+    "titanicus-traitoris",
     "adeptus-mechanicus",
     "leagues-of-votann",
+    "adeptus-titanicus",
     "emperors-children",
     "genestealer-cults",
     "adepta-sororitas",

@@ -460,7 +460,7 @@ func filterRelations(f map[string]any, ctx effCtx) string {
 // factionSuffixes are the faction dir slugs an ability or Stratagem id ends
 // with (`<name>-<faction>`), longest first. The suffix is identity, not name,
 // so it never reaches the English.
-var factionSuffixes = []string{"agents-of-the-imperium", "chaos-space-marines", "adeptus-mechanicus", "leagues-of-votann", "emperors-children",
+var factionSuffixes = []string{"agents-of-the-imperium", "chaos-space-marines", "titanicus-traitoris", "adeptus-mechanicus", "leagues-of-votann", "adeptus-titanicus", "emperors-children",
 	"genestealer-cults", "adepta-sororitas", "imperial-knights", "adeptus-custodes", "adeptus-astartes", "astra-militarum", "black-templars",
 	"imperial-fists", "chaos-knights", "thousand-sons", "chaos-daemons", "blood-angels", "ultramarines", "space-wolves",
 	"grey-knights", "world-eaters", "white-scars", "raven-guard", "dark-angels", "salamanders", "death-guard", "iron-hands", "tau-empire",

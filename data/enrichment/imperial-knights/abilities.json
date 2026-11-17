@@ -2057,6 +2057,10 @@
       "cerastus-knight-atrapos",
       "cerastus-knight-castigator",
       "cerastus-knight-lancer",
+      "chaos-reaver-titan",
+      "chaos-warbringer-nemesis-titan",
+      "chaos-warhound-titan",
+      "chaos-warlord-titan",
       "knight-castellan",
       "knight-crusader",
       "knight-defender",
@@ -2068,7 +2072,11 @@
       "knight-valiant",
       "knight-warden",
       "questoris-knight-magaera",
-      "questoris-knight-styrix"
+      "questoris-knight-styrix",
+      "reaver-titan",
+      "warbringer-nemesis-titan",
+      "warhound-titan",
+      "warlord-titan"
     ],
     "source_digest": "68c5153b55c80b5a04b53c8c071fa532fb59856d6c23aa9ddb86326bd05b9484"
   },

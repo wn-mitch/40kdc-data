@@ -2,29 +2,29 @@
   "schema_version": 1,
   "entity_types": {
     "faction": {
-      "entities": 34,
-      "with_external_refs": 34,
+      "entities": 36,
+      "with_external_refs": 36,
       "covered_entities_by_namespace": {
         "game-datacards": 28,
-        "mfm": 32
+        "mfm": 34
       },
       "references_by_namespace": {
         "game-datacards": 28,
-        "mfm": 32
+        "mfm": 34
       }
     },
     "unit": {
-      "entities": 1104,
-      "with_external_refs": 1101,
+      "entities": 1112,
+      "with_external_refs": 1109,
       "covered_entities_by_namespace": {
         "bsdata": 955,
         "game-datacards": 961,
-        "mfm": 1101
+        "mfm": 1109
       },
       "references_by_namespace": {
         "bsdata": 1018,
         "game-datacards": 961,
-        "mfm": 1114
+        "mfm": 1122
       }
     },
     "detachment": {
@@ -62,15 +62,15 @@
       }
     },
     "weapon": {
-      "entities": 3629,
-      "with_external_refs": 3543,
+      "entities": 3681,
+      "with_external_refs": 3595,
       "covered_entities_by_namespace": {
         "bsdata": 2910,
-        "mfm": 3530
+        "mfm": 3582
       },
       "references_by_namespace": {
         "bsdata": 3758,
-        "mfm": 5219
+        "mfm": 5271
       }
     },
     "wargear": {
@@ -10432,6 +10432,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "0f76b6cf-a977-4128-b1c8-421c72b5378f",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "arioch-power-claw",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "arioch-power-claw",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "0f931617-2dd9-4bfd-a1e0-81946b995edd",
       "targets": [
         {
@@ -10490,6 +10506,22 @@
           "entity_type": "weapon",
           "id": "bolt-rifle-vow-sworn-crusader-squad",
           "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "10163039-ddb5-4083-813f-00905ba1577a",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "nemesis-quake-cannon",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "nemesis-quake-cannon",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -10641,6 +10673,22 @@
           "entity_type": "weapon",
           "id": "autocannon-catachan-heavy-weapons-squad",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "11c90f72-097b-4c4c-b9fb-b173510c223d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "ardex-defensor-mauler",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "ardex-defensor-mauler",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -11926,6 +11974,22 @@
           "entity_type": "weapon",
           "id": "relics-of-battle-bladeguard-ancient",
           "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "23861042-6349-4b82-ada1-a45af6bbcf3d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "ardex-defensor-lascannon",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "ardex-defensor-lascannon",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -13522,6 +13586,38 @@
           "entity_type": "weapon",
           "id": "storm-bolter-venerable-dreadnought",
           "faction_id": "grey-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "341f48b3-663f-48fe-9919-ebc460d00dee",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "nemesis-volcano-cannon",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "nemesis-volcano-cannon",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "347baea8-9b43-4d3f-8e24-2ad2693be2f0",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "reaver-gatling-blaster",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "reaver-gatling-blaster",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -15588,6 +15684,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "50ee8858-c720-4b58-9abb-0b3d90cad8c2",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "laser-blaster",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "laser-blaster",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "515cceb5-7bca-45db-b384-c5b27ddb805f",
       "targets": [
         {
@@ -16183,6 +16295,22 @@
           "entity_type": "weapon",
           "id": "blight-launcher-maggot-lords-plague-marines",
           "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "5870b9e0-639b-406f-9f27-588298c3fbda",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "reaver-volcano-cannon",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "reaver-volcano-cannon",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -16980,6 +17108,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "6b4f11be-6d5c-43d7-a2a9-8f81e5eae2d3",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "belicosa-volcano-cannon",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "belicosa-volcano-cannon",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "6bad4683-676a-4109-9a55-bc1ddda551f7",
       "targets": [
         {
@@ -17200,6 +17344,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "6f2a7eee-ac32-46b7-8b56-e858a38dccb7",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "warhound-inferno-gun",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "warhound-inferno-gun",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "6f407c4d-5e3e-4309-81dd-fe675a2cc334",
       "targets": [
         {
@@ -17309,6 +17469,22 @@
           "entity_type": "detachment",
           "id": "assault-brethren",
           "faction_id": "white-scars"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "70adeffe-2310-43f1-8d04-6b2455882b4c",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "reaver-apocalypse-launcher",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "reaver-apocalypse-launcher",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -18553,6 +18729,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "8649c33e-5f1c-4d50-9941-0f42f46b6ad7",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "anvillus-defence-battery",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "anvillus-defence-battery",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "869a5870-c5cc-4955-8381-9119f0aa953d",
       "targets": [
         {
@@ -18672,6 +18864,22 @@
           "entity_type": "weapon",
           "id": "havoc-launcher-maggot-lords-chaos-rhino",
           "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "895aa29a-ca2e-4c2e-9ae2-920a73b1f7f8",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "reaver-laser-blaster",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "reaver-laser-blaster",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -18953,6 +19161,22 @@
           "entity_type": "weapon",
           "id": "dark-lance-ynnari-raider",
           "faction_id": "aeldari"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "8eaec81e-19f8-40e2-a8ae-26b30e2f1bbf",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "apocalypse-launcher",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "apocalypse-launcher",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -19634,6 +19858,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "9a0460f5-b5e5-471f-9567-0b402d178fbc",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "sunfury-plasma-annihilator",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sunfury-plasma-annihilator",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "9a1d5aad-539a-4013-8a06-3af5b6839e08",
       "targets": [
         {
@@ -19760,6 +20000,22 @@
           "entity_type": "weapon",
           "id": "combi-weapon-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "9c7f5c9b-d955-4fd1-9c77-3f6759a69ad2",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "reaver-melta-cannon",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "reaver-melta-cannon",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -20349,6 +20605,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "a86f34a6-8511-4a45-95be-218390eea8d2",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "nemesis-feet",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "nemesis-feet",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "a8e8cb81-6541-44c6-9f3c-3abaed1644a3",
       "targets": [
         {
@@ -20897,6 +21169,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "b0604277-fac5-4f81-9974-89596bb4f1b0",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "warhound-vulcan-mega-bolter",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "warhound-vulcan-mega-bolter",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "b0e16f66-2fd8-4619-a415-090ca40a3806",
       "targets": [
         {
@@ -21225,6 +21513,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "b507168c-6853-420e-90d5-b49101e34b8e",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "mori-quake-cannon",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "mori-quake-cannon",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "b526157a-2607-4cea-a7df-b174634d38a3",
       "targets": [
         {
@@ -21300,6 +21604,22 @@
           "entity_type": "weapon",
           "id": "stalker-bolt-rifle",
           "faction_id": "agents-of-the-imperium"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "b7419726-c004-405f-9e6f-e1b88466e6ef",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "warlord-feet",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "warlord-feet",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -21763,6 +22083,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "bd253087-a583-454a-818f-33b2369ea408",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "reaver-power-fist",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "reaver-power-fist",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "bdaef0d5-c13b-4dbc-8abf-604189ef3752",
       "targets": [
         {
@@ -22088,6 +22424,22 @@
           "entity_type": "weapon",
           "id": "close-combat-weapon-hernkyn-yaegirs",
           "faction_id": "leagues-of-votann"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "c309e16c-8377-4749-bd29-69fc77448882",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "reaver-feet",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "reaver-feet",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -23801,6 +24153,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "dc0016d8-09c9-46db-987e-dbbb3ef6d017",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "warhound-plasma-blastgun",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "warhound-plasma-blastgun",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "dc3d0741-18a1-4fea-9836-c121c5070a35",
       "targets": [
         {
@@ -24055,6 +24423,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "e1810d06-a6e9-4449-8ae7-52596d861ec8",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "macro-gatling-blaster",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "macro-gatling-blaster",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "e193a937-84fc-42d6-93e6-5e7b938c8196",
       "targets": [
         {
@@ -24298,6 +24682,22 @@
           "entity_type": "weapon",
           "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "e3d3b092-dd91-4707-bd5d-7f2e219579b3",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "warhound-feet",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "warhound-feet",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -24780,6 +25180,22 @@
           "entity_type": "weapon",
           "id": "demolisher-cannon",
           "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "ec2ecfc0-7946-4090-a3bb-342d0ec27d7b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "warhound-turbo-laser-destructor",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "warhound-turbo-laser-destructor",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },

@@ -9,6 +9,7 @@ Ambiguous units (multiple same-size base comps) are preserved, not overwritten.
 | adeptus-astartes | 177 | 0 | 0 | 1 | 0 |
 | adeptus-custodes | 39 | 0 | 0 | 0 | 0 |
 | adeptus-mechanicus | 38 | 0 | 0 | 0 | 0 |
+| adeptus-titanicus | 4 | 0 | 0 | 0 | 0 |
 | aeldari | 80 | 0 | 0 | 0 | 0 |
 | agents-of-the-imperium | 33 | 0 | 0 | 0 | 0 |
 | astra-militarum | 75 | 0 | 0 | 0 | 0 |
@@ -26,9 +27,10 @@ Ambiguous units (multiple same-size base comps) are preserved, not overwritten.
 | orks | 60 | 0 | 0 | 0 | 0 |
 | tau-empire | 47 | 0 | 0 | 0 | 0 |
 | thousand-sons | 38 | 0 | 0 | 0 | 0 |
+| titanicus-traitoris | 4 | 0 | 0 | 0 | 0 |
 | tyranids | 57 | 0 | 0 | 0 | 0 |
 | world-eaters | 34 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **1104** | **0** | **0** | **1** | **0** |
+| **TOTAL** | **1112** | **0** | **0** | **1** | **0** |
 
 ## adeptus-astartes
 

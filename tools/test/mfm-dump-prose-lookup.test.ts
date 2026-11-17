@@ -22,14 +22,14 @@ function fixture(): MfmDump {
       { id: "fk-a", parentFactionKeywordId: null, ...loc({ name: "Warden Host" }) },
       { id: "fk-b", parentFactionKeywordId: null, ...loc({ name: "Ember Court" }) },
       { id: "fk-c", parentFactionKeywordId: "fk-a", ...loc({ name: "Night Wardens" }) },
-      { id: "fk-t", parentFactionKeywordId: null, ...loc({ name: "Adeptus Titanicus" }) },
     ],
     publication: [
       pub("Codex A", "fk-a"),
       pub("Codex B", "fk-b"),
       pub("Patrol A", "fk-a", { isCombatPatrol: true }),
       pub("Supplement C", "fk-c"),
-      pub("Titans", "fk-t"),
+      // A publication with no faction keyword places its rows under no faction.
+      pub("Titans", null),
       pub("Core", null, { isCoreRules: true }),
     ],
     datasheet: [

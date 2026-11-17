@@ -7,8 +7,9 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 |---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
 | adepta-sororitas | 37 | 51 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 |
 | adeptus-astartes | 177 | 182 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 | 16 | 0 | 0 |
-| adeptus-custodes | 39 | 20 | 2 | 2 | 0 | 1 | 0 | 0 | 0 | 2 | 1 | 0 | 0 |
+| adeptus-custodes | 39 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 |
 | adeptus-mechanicus | 38 | 37 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
+| adeptus-titanicus | 4 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | aeldari | 80 | 97 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 5 | 0 | 0 |
 | agents-of-the-imperium | 33 | 48 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 10 | 0 | 0 |
 | astra-militarum | 75 | 155 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 25 | 0 | 0 |
@@ -26,9 +27,10 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 | orks | 60 | 52 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 | 0 |
 | tau-empire | 47 | 103 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
 | thousand-sons | 38 | 43 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
+| titanicus-traitoris | 4 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | tyranids | 57 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | world-eaters | 34 | 42 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
-| **TOTAL** | **1104** | **1235** | **2** | **2** | **0** | **1** | **0** | **0** | **0** | **21** | **101** | **191** | **0** |
+| **TOTAL** | **1112** | **1247** | **0** | **0** | **0** | **0** | **0** | **0** | **0** | **21** | **103** | **191** | **0** |
 
 ## adepta-sororitas
 
@@ -68,10 +70,6 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 
 ## adeptus-custodes
 
-**Default loadout changes:**
-- venatari-with-kinetic-destroyers / Venatari: ["kinetic-destroyer","tarsis-buckler"] → ["kinetic-destroyer","tarsus-buckler"]
-- aquilan-wing-venatari-with-kinetic-destroyers / Venatari: ["kinetic-destroyer","tarsis-buckler"] → ["kinetic-destroyer","tarsus-buckler"]
-
 **Fuzzy-resolved spelling drift (GW name → repo id, edit-distance ≤1):**
 - `Solarite Power Gauntlet` → `solerite-power-gauntlet` (was `solarite-power-gauntlet`)
 - `Solarite Power Talon` → `solerite-power-talon` (was `solarite-power-talon`)
@@ -85,6 +83,11 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 - skitarii-vanguard: loadout set b2098259 kept as one menu: its swaps do not stack freely (Skitarii Vanguard)
 - onager-dunecrawler: loadout set fb58a367 kept as one menu: its swaps do not stack freely (Onager Dunecrawler)
 - skitarii-rangers: loadout set f18df1b1 kept as one menu: its swaps do not stack freely (Skitarii Ranger)
+
+## adeptus-titanicus
+
+**Notes (cap approximations / alternates):**
+- reaver-titan: loadout set a88b5476 kept as one menu: its swaps do not stack freely (Reaver Titan)
 
 ## aeldari
 
@@ -240,6 +243,11 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 - defiler: loadout set fced7f2a kept as one menu: its swaps do not stack freely (Defiler)
 - chaos-rhino: loadout set 68144a14 kept as one menu: its swaps do not stack freely (Chaos Rhino)
 - tzaangors: loadout set cf71195b kept as one menu: its swaps do not stack freely (Tzaangor)
+
+## titanicus-traitoris
+
+**Notes (cap approximations / alternates):**
+- chaos-reaver-titan: loadout set 1c2fb327 kept as one menu: its swaps do not stack freely (Chaos Reaver Titan)
 
 ## tyranids
 

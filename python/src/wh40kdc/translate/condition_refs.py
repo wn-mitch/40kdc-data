@@ -60,8 +60,10 @@ def title_case(s: str) -> str:
 _FACTION_SUFFIXES: tuple[str, ...] = (
     "agents-of-the-imperium",
     "chaos-space-marines",
+    "titanicus-traitoris",
     "adeptus-mechanicus",
     "leagues-of-votann",
+    "adeptus-titanicus",
     "emperors-children",
     "genestealer-cults",
     "adepta-sororitas",

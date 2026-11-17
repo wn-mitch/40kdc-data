@@ -14,8 +14,7 @@
  * Resolution is name-based: the dump carries GW GUIDs, our entities carry
  * `nameToId`-derived kebab ids, so a datasheet/detachment/keyword English name
  * slugged with {@link nameToId} matches our id. A pool that resolves to zero
- * datasheets is skipped and logged (today: the two Titan pools, whose datasheets
- * are not yet ported into `data/core`); a partially-resolving pool emits with its
+ * datasheets is skipped and logged; a partially-resolving pool emits with its
  * resolved members and logs the rest.
  *
  * The dump has no display names for these rules and a couple of constraints that
@@ -100,9 +99,8 @@ interface OverlayEntry {
 /**
  * Stable id/name/label per GW pool plus the few prose-only constraints the dump
  * tables don't carry. Ids match the current hand-authored rules where a pool
- * maps onto one, so existing share tokens keep resolving for those. The two
- * Titan GUIDs are intentionally absent — they resolve to zero datasheets and are
- * skipped, not authored.
+ * maps onto one, so existing share tokens keep resolving for those. A pool with
+ * no entry (the two Titan pools among them) takes `<source-faction>-allies`.
  */
 const OVERLAY: Record<string, OverlayEntry> = {
   "2c3e6117-fa73-4efc-9ec0-ce49dc1f92ce": {
@@ -375,7 +373,7 @@ export function runAllies(dump: MfmDump): AlliesReport {
   const kwLimByAf = dump.groupBy("allied_faction_keyword", "alliedFactionId");
   const warlordByAf = dump.groupBy("allied_faction_allowed_warlord_miniature", "alliedFactionId");
   // The pool's "source" faction keyword(s) — used for labels/skip logging when
-  // the overlay has no entry (a new GW pool, or a skipped Titan pool).
+  // the overlay has no entry (a new GW pool, or one resolving to no datasheets).
   const parentByAf = dump.groupBy("allied_faction_parent_faction_keyword", "alliedFactionId");
 
   // battle_size GUID → enum.

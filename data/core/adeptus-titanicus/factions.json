@@ -1,0 +1,29 @@
+[
+  {
+    "id": "adeptus-titanicus",
+    "name": "Adeptus Titanicus",
+    "parent_faction_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "keywords": [
+      "Imperium",
+      "Adeptus Titanicus"
+    ],
+    "aliases": [
+      "Titan Legions"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fec6e6a5-f491-4d83-99c0-e46e510f29e8"
+      }
+    ],
+    "faction_rule_ids": [
+      "towering-example-adeptus-titanicus",
+      "titanic-support-adeptus-titanicus",
+      "titanicus-traitoris-adeptus-titanicus"
+    ]
+  }
+]

@@ -8,197 +8,16 @@ strings are reported, never guessed. A parsed dump value carries no `draft` flag
 
 | Metric | Count |
 |---|--:|
-| Filled | 142 |
-| Corrected | 33 |
+| Filled | 0 |
+| Corrected | 0 |
 | De-drafted | 0 |
 | Rounding kept (authored kept) | 5 |
-| Confirmed (units) | 871 |
-| Confirmed (models) | 1080 |
+| Confirmed (units) | 881 |
+| Confirmed (models) | 1245 |
 | Unmatched labels | 14 |
 | Conflicting labels | 2 |
 | Representative unresolved | 2 |
-| Unresolved (list/category/null) | 189 |
-
-## Filled (was empty)
-
-- adepta-sororitas/sanctuary-guardians-celestian-sacresants :: Sacresant Superior: none → round 32
-- adepta-sororitas/sanctuary-guardians-celestian-sacresants :: Celestian Sacresants: none → round 32
-- adepta-sororitas/sanctuary-guardians-arco-flagellants :: Arco-Flagellents: none → round 25
-- adepta-sororitas/sanctuary-canoness-adalya :: Canoness Adalya: none → round 32
-- adepta-sororitas/sanctuary-guardians-battle-sisters-squad :: Battle Sister with Simulacrum Imperialis: none → round 32
-- adepta-sororitas/sanctuary-guardians-battle-sisters-squad :: Battle Sister with Ministorum Flamer: none → round 32
-- adepta-sororitas/sanctuary-guardians-battle-sisters-squad :: Battle Sister: none → round 32
-- adepta-sororitas/sanctuary-guardians-battle-sisters-squad :: Battle Sister with Ministorum Heavy Flamer: none → round 32
-- adepta-sororitas/sanctuary-guardians-battle-sisters-squad :: Sister Superior: none → round 32
-- adeptus-astartes/assault-force-intercessor-squad :: Intercessor: none → round 32
-- adeptus-astartes/assault-force-intercessor-squad :: Intercessor Sergeant: none → round 32
-- adeptus-astartes/assault-force-intercessor-squad :: Intercessor with Grenade Launcher: none → round 32
-- adeptus-astartes/assault-force-captain :: Captain: none → round 40
-- adeptus-astartes/assault-force-vanguard-veteran-squad-with-jump-packs :: Vanguard Veteran Sergeant: none → round 32
-- adeptus-astartes/assault-force-vanguard-veteran-squad-with-jump-packs :: Vanguard Veteran with Plasma Pistol: none → round 32
-- adeptus-astartes/assault-force-vanguard-veteran-squad-with-jump-packs :: Vanguard Veteran: none → round 32
-- adeptus-astartes/assault-force-librarian :: Librarian: none → round 40
-- adeptus-astartes/assault-force-land-speeder :: Land Speeder: none → oval 105x70
-- adeptus-astartes/kaius-konorius :: Kaius Konorius: none → round 40
-- adeptus-astartes/eradicator-squad-with-melta-rifles :: Eradicator Sergeant: none → round 40
-- adeptus-astartes/eradicator-squad-with-melta-rifles :: Eradicator: none → round 40
-- adeptus-astartes/eradicator-squad-with-heavy-bolters :: Eradicator Sergeant: none → round 40
-- adeptus-astartes/eradicator-squad-with-heavy-bolters :: Eradicator: none → round 40
-- adeptus-astartes/captain-on-bike :: Captain on Bike: none → oval 90x52.5
-- adeptus-astartes/victrix-honour-guard :: Victrix Honour Guard: none → round 40
-- adeptus-astartes/victrix-honour-guard :: Chapter Champion: none → round 40
-- adeptus-astartes/victrix-honour-guard :: Chapter Ancient: none → round 40
-- adeptus-astartes/land-speeder :: Land Speeder: none → oval 105x70
-- adeptus-astartes/marneus-calgar :: Marneus Calgar: none → round 50
-- adeptus-astartes/sanguinary-spearhead-sanguinary-guard :: Sanguinary Guard with Encarmine Blade: none → round 40
-- adeptus-astartes/sanguinary-spearhead-sanguinary-guard :: Sanguinary Guard with Encarmine Spear: none → round 40
-- adeptus-astartes/vengeful-brethren-intercessor-squad :: Intercessor Sergeant: none → round 32
-- adeptus-astartes/vengeful-brethren-intercessor-squad :: Intercessor: none → round 32
-- adeptus-astartes/askars-wolfpack-wolf-guard-terminators :: Wolf Guard Terminator Pack Leader: none → round 40
-- adeptus-astartes/askars-wolfpack-wolf-guard-terminators :: Wolf Guard Terminator with Assault Cannon and Power Fist: none → round 40
-- adeptus-astartes/askars-wolfpack-wolf-guard-terminators :: Wolf Guard Terminator with Storm Bolter and Master-crafted Power Weapon: none → round 40
-- adeptus-astartes/sanguinary-spearhead-assault-intercessor-squad :: Assault Intercessor Sergeant: none → round 32
-- adeptus-astartes/sanguinary-spearhead-assault-intercessor-squad :: Assault Intercessor: none → round 32
-- adeptus-astartes/fyrri-askar :: Fyrri Askar: none → round 40
-- adeptus-astartes/master-zacharial :: Master Zacharial: none → round 40
-- adeptus-astartes/vengeful-brethren-hellblaster-squad :: Hellblaster Sergeant: none → round 32
-- adeptus-astartes/vengeful-brethren-hellblaster-squad :: Hellblaster: none → round 32
-- adeptus-astartes/vow-sworn-sword-brethren-squad :: Sword Brother with Plasma Pistol and Master-crafted Power Weapon: none → round 40
-- adeptus-astartes/vow-sworn-sword-brethren-squad :: Sword Brother with Pyre Pistol and Master-crafted Power Weapon: none → round 40
-- adeptus-astartes/vow-sworn-sword-brethren-squad :: Sword Brother with Twin Lightning Claws: none → round 40
-- adeptus-astartes/vow-sworn-sword-brethren-squad :: Sword Brother with Heavy Bolt Pistol and Chainsword: none → round 40
-- adeptus-astartes/vow-sworn-sword-brethren-squad :: Sword Brother Castellan: none → round 40
-- adeptus-astartes/captain-raldeo :: Captain Raldeo: none → round 40
-- adeptus-astartes/emperors-champion-vedrenn :: Emperor's Champion Vedrenn: none → round 40
-- adeptus-astartes/askars-wolfpack-blood-claws :: Blood Claw Pack Leader: none → round 32
-- adeptus-astartes/askars-wolfpack-blood-claws :: Blood Claw: none → round 32
-- adeptus-astartes/vow-sworn-bladeguard-veteran-squad :: Bladeguard Veteran Sergeant: none → round 40
-- adeptus-astartes/vow-sworn-bladeguard-veteran-squad :: Bladeguard Veteran: none → round 40
-- adeptus-astartes/askars-wolfpack-wulfen :: Wulfen: none → round 40
-- adeptus-astartes/askars-wolfpack-wulfen :: Wulfen with Stormfrag Auto-launcher: none → round 40
-- adeptus-astartes/vengeful-brethren-bladeguard-veteran-squad :: Bladeguard Veteran: none → round 40
-- adeptus-astartes/vengeful-brethren-bladeguard-veteran-squad :: Bladeguard Veteran Sergeant: none → round 40
-- adeptus-custodes/venatari-with-kinetic-destroyers :: Venatari: none → round 40
-- adeptus-custodes/aquilon-terminators-with-solarite-power-talons :: Aquilon Custodians: none → round 50
-- adeptus-custodes/aquilan-wing-sentinel-guard-sodality :: Sentinel Guard: none → round 40
-- adeptus-custodes/aquilan-wing-sentinel-guard-sodality :: Sentinel Guard with Vexilla: none → round 40
-- adeptus-custodes/aquilan-talon-contemptor-achillus-dreadnought :: Contemptor-Achillus Dreadnought: none → round 60
-- adeptus-custodes/aquilan-wing-venatari-with-kinetic-destroyers :: Venatari: none → round 40
-- adeptus-custodes/aquilan-talon-sentinel-guard-sodality :: Sentinel Guard: none → round 40
-- adeptus-custodes/aquilan-talon-shield-captain :: Shield-Captain: none → round 40
-- adeptus-custodes/aquilan-wing-shield-captain :: Shield-Captain: none → round 40
-- adeptus-custodes/sentinel-guard-sodality :: Custodian Guard: none → round 40
-- adeptus-custodes/caladius-annihilator-grav-tank :: Caladius Annihilator Grav Tank: none → oval 150x95
-- adeptus-mechanicus/purge-corps-serberys-sulphurhounds :: Serberys Sulphurhound: none → oval 60x35.5
-- adeptus-mechanicus/purge-corps-serberys-sulphurhounds :: Serberys Sulphurhound Alpha: none → oval 60x35.5
-- adeptus-mechanicus/purge-corps-serberys-sulphurhounds :: Serberys Sulphurhound with Phosphor Pistols: none → oval 60x35.5
-- adeptus-mechanicus/purge-corps-skitarii-vanguard :: Skitarii Vanguard Alpha: none → round 25
-- adeptus-mechanicus/purge-corps-skitarii-vanguard :: Skitarii Vanguard with Arc Rifle: none → round 25
-- adeptus-mechanicus/purge-corps-skitarii-vanguard :: Skitarii Vanguard with Plasma Caliver: none → round 25
-- adeptus-mechanicus/purge-corps-skitarii-vanguard :: Skitarii Vanguard: none → round 25
-- adeptus-mechanicus/purge-corps-pteraxii-sterylizors :: Pteraxii Sterylizor Alpha: none → round 40
-- adeptus-mechanicus/purge-corps-pteraxii-sterylizors :: Pteraxii Sterylizor: none → round 40
-- adeptus-mechanicus/thulia-ghuld :: Thulia Ghuld: none → round 80
-- adeptus-mechanicus/manipulus-skand :: Manipulus Skand: none → round 50
-- adeptus-mechanicus/hastarii-fusiliers :: Hastarii Fusilier Alpha: none → round 32
-- adeptus-mechanicus/hastarii-fusiliers :: Hastarii Fusilier: none → round 32
-- adeptus-mechanicus/hastarii-exterminators :: Hastarii Exterminator Alpha: none → round 32
-- adeptus-mechanicus/hastarii-exterminators :: Hastarii Exterminator: none → round 32
-- agents-of-the-imperium/inquisitor-kroyle :: Inquisitor Kroyle: none → round 60
-- astra-militarum/commissar-yarrick :: Commissar Yarrick: none → round 32
-- astra-militarum/commissar-graves-on-foot :: Commissar Graves on Foot: none → round 32
-- astra-militarum/cadian-recon-squad :: Recon Sergeant: none → round 28
-- astra-militarum/cadian-recon-squad :: Recon Trooper: none → round 28
-- death-guard/sholgor-the-putrid :: Sholgor the Putrid: none → round 50
-- death-guard/defiler :: Defiler: none → round 160
-- death-guard/plaguebearers :: Plagueridden: none → round 32
-- death-guard/plaguebearers :: Plaguebearer: none → round 32
-- death-guard/maggot-lords-deathshroud-terminators :: Deathshroud Champion: none → round 40
-- death-guard/maggot-lords-deathshroud-terminators :: Deathshroud Terminator: none → round 40
-- death-guard/nurglings :: Nurgling Swarm: none → round 40
-- death-guard/beasts-of-nurgle :: Beast of Nurgle: none → round 60
-- death-guard/septimol-fulg-maggot-lords-tallyman :: Septimol Fulg: none → round 40
-- death-guard/rotigus :: Rotigus: none → round 130
-- death-guard/great-unclean-one :: Great Unclean One: none → round 130
-- death-guard/maggot-lords-plague-marines :: Plague Champion: none → round 32
-- death-guard/maggot-lords-plague-marines :: Plague Marine with Blight Launcher: none → round 32
-- death-guard/maggot-lords-plague-marines :: Plague Marine with Plague Spewer: none → round 32
-- death-guard/maggot-lords-plague-marines :: Plague Marine: none → round 32
-- emperors-children/shalaxi-helbane :: Shalaxi Helbane: none → round 100
-- emperors-children/keeper-of-secrets :: Keeper of Secrets: none → round 100
-- emperors-children/defiler :: Defiler: none → round 160
-- emperors-children/daemonettes :: Alluress: none → round 25
-- emperors-children/daemonettes :: Daemonette: none → round 25
-- emperors-children/seekers :: Heartseeker: none → oval 60x35.5
-- emperors-children/seekers :: Seeker: none → oval 60x35.5
-- emperors-children/fiends :: Blissbringer: none → oval 75x42
-- emperors-children/fiends :: Fiend: none → oval 75x42
-- orks/ardmob-wartrakk :: Wartrakk: none → oval 105x70
-- orks/runtherd :: Runtherd: none → round 32
-- orks/nazdreg :: Nazdreg: none → round 60
-- orks/ardmob-weirdboy :: 'Ardmob Weirdboy: none → round 50
-- orks/bannernob :: Bannernob: none → round 40
-- orks/ardmob-gretchin :: Gretchin: none → round 25
-- orks/rukkatrukk-squigbuggies :: Rukkatrukk Squigbuggy: none → round 150
-- orks/warbuggies :: Warbuggy: none → round 150
-- orks/ardmob-warboss :: Warboss: none → round 50
-- orks/nobz :: Nob: none → round 40
-- thousand-sons/blue-horrors :: Blue Horror: none → round 25
-- thousand-sons/kairos-fateweaver :: Kairos Fateweaver: none → round 100
-- thousand-sons/pink-horrors :: Pink Horror: none → round 32
-- thousand-sons/lord-of-change :: Lord of Change: none → round 100
-- thousand-sons/flamers :: Pyrocaster: none → round 32
-- thousand-sons/flamers :: Flamer: none → round 32
-- world-eaters/frenzied-reavers-master-of-executions :: Master of Executions: none → round 40
-- world-eaters/bloodcrushers :: Bloodhunter: none → oval 90x52.5
-- world-eaters/bloodcrushers :: Bloodcrusher: none → oval 90x52.5
-- world-eaters/skarbrand :: Skarbrand: none → round 100
-- world-eaters/frenzied-reavers-khorne-berzerkers :: Khorne Berzerker with Bolt Pistol and Chainblade: none → round 32
-- world-eaters/frenzied-reavers-khorne-berzerkers :: Khorne Berzerker Champion: none → round 32
-- world-eaters/frenzied-reavers-khorne-berzerkers :: Khorne Berzerker with Plasma Pistol and Chainblade: none → round 32
-- world-eaters/frenzied-reavers-khorne-berzerkers :: Khorne Berzerker with Bolt Pistol and Khornate Eviscerator: none → round 32
-- world-eaters/flesh-hounds :: Gore Hound: none → oval 60x35.5
-- world-eaters/flesh-hounds :: Flesh Hound: none → oval 60x35.5
-- world-eaters/vorrakh-lord-of-the-frenzied-reavers :: Vorrakh: none → round 60
-- world-eaters/bloodletters :: Bloodreaper: none → round 32
-- world-eaters/bloodletters :: Bloodletter: none → round 32
-- world-eaters/bloodthirster :: Bloodthirster: none → oval 120x92
-
-## Corrected (dump authoritative)
-
-- adeptus-astartes/vulkan-hestan: round 32 → round 40
-- adeptus-astartes/vulkan-hestan :: Vulkan He'stan: round 32 → round 40
-- adeptus-astartes/chaplain-with-jump-pack: round 32 → round 40
-- adeptus-astartes/chaplain-with-jump-pack :: Chaplain with Jump Pack: round 32 → round 40
-- adeptus-astartes/darnath-lysander: round 40 → round 50
-- adeptus-astartes/darnath-lysander :: Darnath Lysander: round 40 → round 50
-- adeptus-astartes/chaplain-in-terminator-armour: round 40 → round 50
-- adeptus-astartes/chaplain-in-terminator-armour :: Chaplain in Terminator Armour: round 40 → round 50
-- adeptus-astartes/captain-in-terminator-armour: round 50 → round 40
-- adeptus-astartes/captain-in-terminator-armour :: Captain in Terminator Armour: round 50 → round 40
-- adeptus-astartes/commander-dante: round 50 → round 40
-- adeptus-astartes/commander-dante :: Commander Dante: round 50 → round 40
-- adeptus-custodes/caladius-grav-tank: oval 170x109 → oval 150x95
-- adeptus-custodes/caladius-grav-tank :: Caladius Grav-Tank: oval 170x109 → oval 150x95
-- adeptus-custodes/coronus-grav-carrier: oval 170x109 → oval 150x95
-- adeptus-custodes/coronus-grav-carrier :: Coronus Grav-Carrier: oval 170x109 → oval 150x95
-- adeptus-mechanicus/servitor-battleclade :: Combat Servitor: round 32 → round 25
-- aeldari/ynnari-archon :: Archon: round 25 → round 32
-- aeldari/vyper :: Vypers: flying-base:large → oval 105x70
-- agents-of-the-imperium/voidsmen-at-arms :: Voidmaster: round 32 → round 25
-- agents-of-the-imperium/voidsmen-at-arms :: Voidsman: round 32 → round 25
-- agents-of-the-imperium/voidsmen-at-arms :: Canid: round 32 → round 25
-- agents-of-the-imperium/inquisitorial-agents :: Gun Servitor: round 25 → round 32
-- astra-militarum/krieg-command-squad :: Lord Commissar: round 32 → round 25
-- orks/deffkoptas :: Deffkopta: oval 75x42 → round 75
-- orks/wazbom-blastajet: round 120 → oval 120x92
-- orks/wazbom-blastajet :: Wazbom Blastajet: oval 150x95 → oval 120x92
-- orks/dakkajet :: Dakkajet: oval 120x92 → round 120
-- orks/weirdboy :: Weirdboy: round 40 → round 50
-- orks/burna-bommer :: Burna-bommer: oval 120x92 → round 120
-- orks/warboss: round 40 → round 50
-- orks/warboss :: Warboss: round 40 → round 50
-- orks/blitza-bommer :: Blitza-bommer: oval 120x92 → round 120
+| Unresolved (list/category/null) | 197 |
 
 ## Rounding kept (authored value kept — within 1 mm of the dump)
 
@@ -264,6 +83,10 @@ strings are reported, never guessed. A parsed dump value carries no `draft` flag
 - adeptus-custodes/anathema-psykana-rhino [null]: null
 - adeptus-mechanicus/skorpius-disintegrator [category]: "Hull"
 - adeptus-mechanicus/skorpius-dunerider [category]: "Hull"
+- adeptus-titanicus/warhound-titan [category]: "Hull"
+- adeptus-titanicus/warlord-titan [category]: "Hull"
+- adeptus-titanicus/reaver-titan [category]: "Hull"
+- adeptus-titanicus/warbringer-nemesis-titan [category]: "Hull"
 - aeldari/warlock-skyrunners [category]: "Small Flying Base"
 - aeldari/ynnari-venom [category]: "Large Flying Base"
 - aeldari/skyweavers [category]: "Large Flying Base"
@@ -416,6 +239,10 @@ strings are reported, never guessed. A parsed dump value carries no `draft` flag
 - thousand-sons/chaos-rhino [category]: "Hull"
 - thousand-sons/chaos-land-raider [category]: "Hull"
 - thousand-sons/chaos-predator-destructor [category]: "Hull"
+- titanicus-traitoris/chaos-warbringer-nemesis-titan [category]: "Hull"
+- titanicus-traitoris/chaos-warhound-titan [category]: "Hull"
+- titanicus-traitoris/chaos-reaver-titan [category]: "Hull"
+- titanicus-traitoris/chaos-warlord-titan [category]: "Hull"
 - tyranids/sporocyst [category]: "Hull"
 - tyranids/gargoyles [category]: "Small Flying Base"
 - tyranids/harridan [category]: "Unique"

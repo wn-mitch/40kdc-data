@@ -88,11 +88,23 @@ describe("BSData export format", () => {
     expect(new Set(documents.slice(1).filter((d) => rootOf(d).library !== true).map((d) => d.file))).toEqual(
       new Set(Object.values(BSDATA_IDS.catalogues).map((c) => c.file)),
     );
-    // The armies that ally each other: Chaos Space Marines, Daemons and Knights; Imperial Knights, Mechanicus and Agents.
+    // The armies that ally each other: Chaos Space Marines, Daemons, Knights and Titans; Imperial Knights, Mechanicus, Agents and Titans.
     expect(libraries.map((d) => d.file).sort()).toEqual(
-      ["Chaos - Chaos Daemons", "Chaos - Chaos Knights", "Chaos - Chaos Space Marines", "Imperium - Adeptus Mechanicus", "Imperium - Agents of the Imperium", "Imperium - Imperial Knights"].map((n) => `${n} Library.json`),
+      [
+        "Chaos - Chaos Daemons", "Chaos - Chaos Knights", "Chaos - Chaos Space Marines", "Chaos - Titanicus Traitoris",
+        "Imperium - Adeptus Mechanicus", "Imperium - Adeptus Titanicus", "Imperium - Agents of the Imperium", "Imperium - Imperial Knights",
+      ].map((n) => `${n} Library.json`),
     );
     expect(units.length).toBe(dataset.factions.all.reduce((sum, f) => sum + dataset.units.byFaction(f.id).length, 0));
+  });
+
+  it("gives an army with no detachments no Detachment selection, and every other army one", () => {
+    for (const doc of documents.slice(1).filter((d) => rootOf(d).library !== true)) {
+      const factionId = Object.entries(BSDATA_IDS.catalogues).find(([, c]) => c.file === doc.file)![0];
+      const links = ((rootOf(doc).entryLinks as BsNode[] | undefined) ?? []).filter((l) => l.name === "Detachment");
+      expect(links.length, doc.file).toBe(dataset.detachments.byFaction(factionId).length > 0 ? 1 : 0);
+    }
+    expect(dataset.detachments.byFaction("adeptus-titanicus")).toHaveLength(0);
   });
 
   it("matches the BSData node format on every node", () => {

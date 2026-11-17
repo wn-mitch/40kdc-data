@@ -1,4 +1,4 @@
-# MFM stratagems — DRY RUN
+# MFM stratagems — APPLIED
 
 APPLIED (first-class dump columns): `cp_cost` ← cpCost, `player_turn` ← key,
 `type` ← category (fill-only), `category` ← detachmentId presence.

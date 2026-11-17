@@ -106,10 +106,15 @@ export function configurationContainer(ctx: CatalogueContext, key: string, name:
   });
 }
 
-/** The Detachment selection a faction's army picks its detachments from. */
-export function detachmentContainer(set: CatalogueSet, ctx: CatalogueContext, factionId: string, root: string): BsNode {
+/**
+ * The Detachment selection a faction's army picks its detachments from. Null for a faction with no
+ * detachments of its own (the titan legions, taken only as allies): BSData gives those no Detachment
+ * selection, and an empty choice would be one no roster could fill.
+ */
+export function detachmentContainer(set: CatalogueSet, ctx: CatalogueContext, factionId: string, root: string): BsNode | null {
   const key = `detachments:${factionId}`;
   const own = ctx.dataset.detachments.byFaction(factionId);
+  if (own.length === 0) return null;
   const hideOutside =
     factionId === root && set.familyOf(root).length > 1
       ? [hiddenWhen([condition({ childId: set.catalogueId(root)!, field: "selections", scope: "primary-catalogue", type: "notInstanceOf", value: 1 })])]

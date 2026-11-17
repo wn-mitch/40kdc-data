@@ -20041,6 +20041,354 @@
     ]
   },
   {
+    "name": "adeptus-titanicus/reaver-titan default",
+    "args": {
+      "unitId": "reaver-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Reaver Titan": 1
+      },
+      "counts": {
+        "reaver-apocalypse-launcher": 1,
+        "reaver-feet": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "adeptus-titanicus/reaver-titan reaver-apocalypse-launcher+1",
+    "args": {
+      "unitId": "reaver-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Reaver Titan": 1
+      },
+      "counts": {
+        "reaver-apocalypse-launcher": 2,
+        "reaver-feet": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "adeptus-titanicus/reaver-titan reaver-apocalypse-launcher-1",
+    "args": {
+      "unitId": "reaver-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Reaver Titan": 1
+      },
+      "counts": {
+        "reaver-apocalypse-launcher": 0,
+        "reaver-feet": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "adeptus-titanicus/reaver-titan reaver-apocalypse-launcher->reaver-melta-cannon",
+    "args": {
+      "unitId": "reaver-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Reaver Titan": 1
+      },
+      "counts": {
+        "reaver-apocalypse-launcher": 0,
+        "reaver-feet": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1,
+        "reaver-melta-cannon": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "adeptus-titanicus/warbringer-nemesis-titan default",
+    "args": {
+      "unitId": "warbringer-nemesis-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Warbringer Nemesis Titan": 1
+      },
+      "counts": {
+        "anvillus-defence-battery": 2,
+        "ardex-defensor-mauler": 3,
+        "nemesis-feet": 1,
+        "nemesis-quake-cannon": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "adeptus-titanicus/warbringer-nemesis-titan anvillus-defence-battery+1",
+    "args": {
+      "unitId": "warbringer-nemesis-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Warbringer Nemesis Titan": 1
+      },
+      "counts": {
+        "anvillus-defence-battery": 3,
+        "ardex-defensor-mauler": 3,
+        "nemesis-feet": 1,
+        "nemesis-quake-cannon": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "adeptus-titanicus/warbringer-nemesis-titan anvillus-defence-battery-1",
+    "args": {
+      "unitId": "warbringer-nemesis-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Warbringer Nemesis Titan": 1
+      },
+      "counts": {
+        "anvillus-defence-battery": 1,
+        "ardex-defensor-mauler": 3,
+        "nemesis-feet": 1,
+        "nemesis-quake-cannon": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "adeptus-titanicus/warbringer-nemesis-titan anvillus-defence-battery->nemesis-volcano-cannon",
+    "args": {
+      "unitId": "warbringer-nemesis-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Warbringer Nemesis Titan": 1
+      },
+      "counts": {
+        "anvillus-defence-battery": 1,
+        "ardex-defensor-mauler": 3,
+        "nemesis-feet": 1,
+        "nemesis-quake-cannon": 1,
+        "nemesis-volcano-cannon": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "adeptus-titanicus/warhound-titan default",
+    "args": {
+      "unitId": "warhound-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Warhound Titan": 1
+      },
+      "counts": {
+        "warhound-feet": 1,
+        "warhound-plasma-blastgun": 1,
+        "warhound-vulcan-mega-bolter": 1
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "adeptus-titanicus/warhound-titan warhound-feet+1",
+    "args": {
+      "unitId": "warhound-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Warhound Titan": 1
+      },
+      "counts": {
+        "warhound-feet": 2,
+        "warhound-plasma-blastgun": 1,
+        "warhound-vulcan-mega-bolter": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "adeptus-titanicus/warhound-titan warhound-feet-1",
+    "args": {
+      "unitId": "warhound-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Warhound Titan": 1
+      },
+      "counts": {
+        "warhound-feet": 0,
+        "warhound-plasma-blastgun": 1,
+        "warhound-vulcan-mega-bolter": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "adeptus-titanicus/warhound-titan warhound-feet->warhound-inferno-gun",
+    "args": {
+      "unitId": "warhound-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Warhound Titan": 1
+      },
+      "counts": {
+        "warhound-feet": 0,
+        "warhound-inferno-gun": 1,
+        "warhound-plasma-blastgun": 1,
+        "warhound-vulcan-mega-bolter": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "adeptus-titanicus/warlord-titan default",
+    "args": {
+      "unitId": "warlord-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Warlord Titan": 1
+      },
+      "counts": {
+        "apocalypse-launcher": 2,
+        "ardex-defensor-lascannon": 2,
+        "ardex-defensor-mauler": 2,
+        "arioch-power-claw": 1,
+        "macro-gatling-blaster": 1,
+        "warlord-feet": 1
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "adeptus-titanicus/warlord-titan apocalypse-launcher+1",
+    "args": {
+      "unitId": "warlord-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Warlord Titan": 1
+      },
+      "counts": {
+        "apocalypse-launcher": 3,
+        "ardex-defensor-lascannon": 2,
+        "ardex-defensor-mauler": 2,
+        "arioch-power-claw": 1,
+        "macro-gatling-blaster": 1,
+        "warlord-feet": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "adeptus-titanicus/warlord-titan apocalypse-launcher-1",
+    "args": {
+      "unitId": "warlord-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Warlord Titan": 1
+      },
+      "counts": {
+        "apocalypse-launcher": 1,
+        "ardex-defensor-lascannon": 2,
+        "ardex-defensor-mauler": 2,
+        "arioch-power-claw": 1,
+        "macro-gatling-blaster": 1,
+        "warlord-feet": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "adeptus-titanicus/warlord-titan apocalypse-launcher->belicosa-volcano-cannon",
+    "args": {
+      "unitId": "warlord-titan",
+      "factionId": "adeptus-titanicus",
+      "models": {
+        "Warlord Titan": 1
+      },
+      "counts": {
+        "apocalypse-launcher": 1,
+        "ardex-defensor-lascannon": 2,
+        "ardex-defensor-mauler": 2,
+        "arioch-power-claw": 1,
+        "belicosa-volcano-cannon": 1,
+        "macro-gatling-blaster": 1,
+        "warlord-feet": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
     "name": "aeldari/asurmen default",
     "args": {
       "unitId": "asurmen",
@@ -69489,6 +69837,354 @@
       "counts": {
         "hellforged-weapons": 0,
         "infernal-cannon": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "titanicus-traitoris/chaos-reaver-titan default",
+    "args": {
+      "unitId": "chaos-reaver-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Reaver Titan": 1
+      },
+      "counts": {
+        "reaver-apocalypse-launcher": 1,
+        "reaver-feet": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "titanicus-traitoris/chaos-reaver-titan reaver-apocalypse-launcher+1",
+    "args": {
+      "unitId": "chaos-reaver-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Reaver Titan": 1
+      },
+      "counts": {
+        "reaver-apocalypse-launcher": 2,
+        "reaver-feet": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "titanicus-traitoris/chaos-reaver-titan reaver-apocalypse-launcher-1",
+    "args": {
+      "unitId": "chaos-reaver-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Reaver Titan": 1
+      },
+      "counts": {
+        "reaver-apocalypse-launcher": 0,
+        "reaver-feet": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "titanicus-traitoris/chaos-reaver-titan reaver-apocalypse-launcher->reaver-melta-cannon",
+    "args": {
+      "unitId": "chaos-reaver-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Reaver Titan": 1
+      },
+      "counts": {
+        "reaver-apocalypse-launcher": 0,
+        "reaver-feet": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1,
+        "reaver-melta-cannon": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warbringer-nemesis-titan default",
+    "args": {
+      "unitId": "chaos-warbringer-nemesis-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Warbringer Nemesis Titan": 1
+      },
+      "counts": {
+        "anvillus-defence-battery": 2,
+        "ardex-defensor-mauler": 3,
+        "nemesis-feet": 1,
+        "nemesis-quake-cannon": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warbringer-nemesis-titan anvillus-defence-battery+1",
+    "args": {
+      "unitId": "chaos-warbringer-nemesis-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Warbringer Nemesis Titan": 1
+      },
+      "counts": {
+        "anvillus-defence-battery": 3,
+        "ardex-defensor-mauler": 3,
+        "nemesis-feet": 1,
+        "nemesis-quake-cannon": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warbringer-nemesis-titan anvillus-defence-battery-1",
+    "args": {
+      "unitId": "chaos-warbringer-nemesis-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Warbringer Nemesis Titan": 1
+      },
+      "counts": {
+        "anvillus-defence-battery": 1,
+        "ardex-defensor-mauler": 3,
+        "nemesis-feet": 1,
+        "nemesis-quake-cannon": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warbringer-nemesis-titan anvillus-defence-battery->nemesis-volcano-cannon",
+    "args": {
+      "unitId": "chaos-warbringer-nemesis-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Warbringer Nemesis Titan": 1
+      },
+      "counts": {
+        "anvillus-defence-battery": 1,
+        "ardex-defensor-mauler": 3,
+        "nemesis-feet": 1,
+        "nemesis-quake-cannon": 1,
+        "nemesis-volcano-cannon": 1,
+        "reaver-gatling-blaster": 1,
+        "reaver-laser-blaster": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warhound-titan default",
+    "args": {
+      "unitId": "chaos-warhound-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Warhound Titan": 1
+      },
+      "counts": {
+        "warhound-feet": 1,
+        "warhound-plasma-blastgun": 1,
+        "warhound-vulcan-mega-bolter": 1
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warhound-titan warhound-feet+1",
+    "args": {
+      "unitId": "chaos-warhound-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Warhound Titan": 1
+      },
+      "counts": {
+        "warhound-feet": 2,
+        "warhound-plasma-blastgun": 1,
+        "warhound-vulcan-mega-bolter": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warhound-titan warhound-feet-1",
+    "args": {
+      "unitId": "chaos-warhound-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Warhound Titan": 1
+      },
+      "counts": {
+        "warhound-feet": 0,
+        "warhound-plasma-blastgun": 1,
+        "warhound-vulcan-mega-bolter": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warhound-titan warhound-feet->warhound-inferno-gun",
+    "args": {
+      "unitId": "chaos-warhound-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Warhound Titan": 1
+      },
+      "counts": {
+        "warhound-feet": 0,
+        "warhound-inferno-gun": 1,
+        "warhound-plasma-blastgun": 1,
+        "warhound-vulcan-mega-bolter": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warlord-titan default",
+    "args": {
+      "unitId": "chaos-warlord-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Warlord Titan": 1
+      },
+      "counts": {
+        "apocalypse-launcher": 2,
+        "ardex-defensor-lascannon": 2,
+        "ardex-defensor-mauler": 2,
+        "arioch-power-claw": 1,
+        "macro-gatling-blaster": 1,
+        "warlord-feet": 1
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warlord-titan apocalypse-launcher+1",
+    "args": {
+      "unitId": "chaos-warlord-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Warlord Titan": 1
+      },
+      "counts": {
+        "apocalypse-launcher": 3,
+        "ardex-defensor-lascannon": 2,
+        "ardex-defensor-mauler": 2,
+        "arioch-power-claw": 1,
+        "macro-gatling-blaster": 1,
+        "warlord-feet": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warlord-titan apocalypse-launcher-1",
+    "args": {
+      "unitId": "chaos-warlord-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Warlord Titan": 1
+      },
+      "counts": {
+        "apocalypse-launcher": 1,
+        "ardex-defensor-lascannon": 2,
+        "ardex-defensor-mauler": 2,
+        "arioch-power-claw": 1,
+        "macro-gatling-blaster": 1,
+        "warlord-feet": 1
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "titanicus-traitoris/chaos-warlord-titan apocalypse-launcher->belicosa-volcano-cannon",
+    "args": {
+      "unitId": "chaos-warlord-titan",
+      "factionId": "titanicus-traitoris",
+      "models": {
+        "Chaos Warlord Titan": 1
+      },
+      "counts": {
+        "apocalypse-launcher": 1,
+        "ardex-defensor-lascannon": 2,
+        "ardex-defensor-mauler": 2,
+        "arioch-power-claw": 1,
+        "belicosa-volcano-cannon": 1,
+        "macro-gatling-blaster": 1,
+        "warlord-feet": 1
       }
     },
     "expected": [
