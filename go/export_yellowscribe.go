@@ -98,13 +98,24 @@ func ysRender(node *ysEl, depth int) string {
 // ---------------------------------------------------------------------------
 
 // ysFmtMove renders movement: append the inch mark unless the stored value
-// already carries one.
+// already carries one; "-" for none (an aircraft).
 func ysFmtMove(m any) string {
+	if m == nil {
+		return "-"
+	}
 	s := numStr(m)
 	if strings.HasSuffix(s, "\"") {
 		return s
 	}
 	return s + "\""
+}
+
+// ysDash renders a stat, or "-" where the datasheet prints none.
+func ysDash(v any) string {
+	if v == nil {
+		return "-"
+	}
+	return numStr(v)
 }
 
 // ysFmtTarget renders a target-number stat (Sv, Ld, BS, WS): append +.
@@ -162,7 +173,7 @@ func ysUnitStatProfiles(view *UnitView) []*ysEl {
 				ysLeaf("characteristic", [][2]string{{"name", "SV"}}, ysFmtTarget(p["Sv"])),
 				ysLeaf("characteristic", [][2]string{{"name", "W"}}, numStr(p["W"])),
 				ysLeaf("characteristic", [][2]string{{"name", "LD"}}, ysFmtTarget(p["Ld"])),
-				ysLeaf("characteristic", [][2]string{{"name", "OC"}}, numStr(p["OC"])),
+				ysLeaf("characteristic", [][2]string{{"name", "OC"}}, ysDash(p["OC"])),
 			}),
 		}))
 	}

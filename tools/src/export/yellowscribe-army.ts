@@ -106,7 +106,7 @@ function modelProfiles(view: UnitView): Record<string, YellowscribeProfile> {
       sv: fmtTarget(p.Sv),
       w: String(p.W),
       ld: fmtTarget(p.Ld),
-      oc: String(p.OC),
+      oc: p.OC === null ? "-" : String(p.OC),
     };
     if (p.invuln_sv !== undefined && p.invuln_sv !== null) profile.insv = fmtTarget(p.invuln_sv);
     out[name] = profile;

@@ -1042,9 +1042,9 @@
         "OC": 2
       },
       {
-        "name": "Deathwatch Veterans",
+        "name": "Deathwatch Veteran",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -1371,9 +1371,9 @@
     "role": "battleline",
     "profiles": [
       {
-        "name": "Deathwatch Veteran",
+        "name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,

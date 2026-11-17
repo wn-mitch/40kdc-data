@@ -4224,7 +4224,8 @@
         "default_weapon_ids": [
           "splinter-rifle",
           "close-combat-weapon"
-        ]
+        ],
+        "profile_name": "Kabalite Agents"
       },
       {
         "name": "Kabalite Agents",

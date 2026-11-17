@@ -2061,7 +2061,7 @@
     "profiles": [
       {
         "name": "Aegis Defence Line",
-        "M": 0,
+        "M": null,
         "T": 12,
         "W": 10,
         "Sv": 2,
@@ -5155,7 +5155,7 @@
         "Sv": 2,
         "invuln_sv": null,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [

@@ -876,13 +876,13 @@
     "profiles": [
       {
         "name": "Razorwing Jetfighter",
-        "M": 20,
+        "M": null,
         "T": 8,
         "W": 10,
         "Sv": 4,
         "invuln_sv": 6,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -1824,13 +1824,13 @@
     "profiles": [
       {
         "name": "Voidraven Bomber",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 12,
         "Sv": 4,
         "invuln_sv": 6,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [

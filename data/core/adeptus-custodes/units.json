@@ -793,13 +793,13 @@
     "profiles": [
       {
         "name": "Ares Gunship",
-        "M": 20,
+        "M": null,
         "T": 12,
         "W": 22,
         "Sv": 2,
         "invuln_sv": 5,
         "Ld": 6,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [

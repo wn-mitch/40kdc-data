@@ -8446,7 +8446,10 @@ export interface Unit {
        * Profile name (e.g., 'Wounded' for degrading)
        */
       name?: string;
-      M: StatValue;
+      /**
+       * Move in inches. Null where the datasheet prints "-" (an aircraft, a fortification).
+       */
+      M: StatValue | null;
       T: number;
       W: number;
       Sv: number;
@@ -8460,7 +8463,10 @@ export interface Unit {
        */
       invuln_sv_melee?: number | null;
       Ld: number;
-      OC: number;
+      /**
+       * Objective Control. Null where the datasheet prints "-" (an aircraft, a fortification).
+       */
+      OC: number | null;
       [k: string]: unknown;
     },
     ...{
@@ -8468,7 +8474,10 @@ export interface Unit {
        * Profile name (e.g., 'Wounded' for degrading)
        */
       name?: string;
-      M: StatValue;
+      /**
+       * Move in inches. Null where the datasheet prints "-" (an aircraft, a fortification).
+       */
+      M: StatValue | null;
       T: number;
       W: number;
       Sv: number;
@@ -8482,7 +8491,10 @@ export interface Unit {
        */
       invuln_sv_melee?: number | null;
       Ld: number;
-      OC: number;
+      /**
+       * Objective Control. Null where the datasheet prints "-" (an aircraft, a fortification).
+       */
+      OC: number | null;
       [k: string]: unknown;
     }[]
   ];

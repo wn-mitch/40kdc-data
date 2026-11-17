@@ -242,7 +242,8 @@
         "default_weapon_ids": [
           "power-fist-terminator-squad",
           "storm-bolter-terminator-squad"
-        ]
+        ],
+        "profile_name": "Terminator"
       },
       {
         "name": "Terminator",
@@ -1552,7 +1553,8 @@
           "artificer-firearm-sternguard-veteran-squad",
           "bolt-pistol",
           "chainsword-sternguard-veteran-squad"
-        ]
+        ],
+        "profile_name": "Sternguard Veteran"
       },
       {
         "name": "Sternguard Veteran",
@@ -5933,7 +5935,8 @@
           "bolt-pistol",
           "plasma-talon",
           "corvus-hammers"
-        ]
+        ],
+        "profile_name": "Ravenwing Black Knight"
       },
       {
         "name": "Ravenwing Black Knight",
@@ -7809,7 +7812,8 @@
           "bolt-pistol",
           "plasma-talon",
           "corvus-hammers"
-        ]
+        ],
+        "profile_name": "Ravenwing Champion"
       },
       {
         "name": "Ravenwing Ancient",
@@ -7825,7 +7829,8 @@
           "bolt-pistol",
           "plasma-talon",
           "corvus-hammers"
-        ]
+        ],
+        "profile_name": "Ravenwing Champion"
       }
     ],
     "game_version": {
@@ -9009,7 +9014,6 @@
       },
       {
         "name": "Deathwatch Veteran",
-        "profile_name": "Deathwatch Veterans",
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
@@ -9509,7 +9513,7 @@
     "models": [
       {
         "name": "Kill Team Sergeant",
-        "profile_name": "Deathwatch Veteran",
+        "profile_name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
@@ -9549,7 +9553,8 @@
         "default_weapon_ids": [
           "heavy-thunder-hammer",
           "bolt-pistol-decimus-kill-team"
-        ]
+        ],
+        "profile_name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol"
       },
       {
         "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
@@ -9564,7 +9569,8 @@
           "deathwatch-marksman-bolt-carbine",
           "special-issue-bolt-pistol",
           "knives-and-fists"
-        ]
+        ],
+        "profile_name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol"
       },
       {
         "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
@@ -9579,7 +9585,8 @@
           "stalker-bolt-rifle",
           "bolt-pistol-decimus-kill-team",
           "knives-and-fists"
-        ]
+        ],
+        "profile_name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol"
       },
       {
         "name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
@@ -10182,7 +10189,8 @@
         "default_weapon_ids": [
           "heavy-bolt-pistol",
           "chainsword"
-        ]
+        ],
+        "profile_name": "Kill Team Intercessor with Jump Pack"
       },
       {
         "name": "Kill Team Intercessor with Jump Pack",
@@ -10900,7 +10908,8 @@
         "default_weapon_ids": [
           "power-fist",
           "storm-bolter-deathwatch-terminator-squad"
-        ]
+        ],
+        "profile_name": "Deathwatch Terminator"
       },
       {
         "name": "Deathwatch Terminator",
@@ -13271,7 +13280,8 @@
         "default_weapon_ids": [
           "chainsword",
           "heavy-bolt-pistol-assault-intercessor-squad"
-        ]
+        ],
+        "profile_name": "Assault Intercessor"
       },
       {
         "name": "Assault Intercessor",
@@ -13535,7 +13545,8 @@
         "default_weapon_ids": [
           "assault-bolters-inceptor-squad",
           "ceramite-fists-inceptor-squad"
-        ]
+        ],
+        "profile_name": "Inceptor"
       },
       {
         "name": "Inceptor",
@@ -14943,7 +14954,8 @@
         "default_weapon_ids": [
           "heavy-bolt-pistol-bladeguard-veteran-squad",
           "master-crafted-power-sword"
-        ]
+        ],
+        "profile_name": "Bladeguard Veteran"
       },
       {
         "name": "Bladeguard Veteran",
@@ -17246,7 +17258,8 @@
           "boltgun-scout-squad",
           "bolt-pistol-scout-squad",
           "combat-knife-scout-squad"
-        ]
+        ],
+        "profile_name": "Scout"
       },
       {
         "name": "Scout",
@@ -19151,7 +19164,8 @@
           "bolt-pistol-eliminator-squad",
           "bolt-sniper-rifle-eliminator-squad",
           "ceramite-fists-eliminator-squad"
-        ]
+        ],
+        "profile_name": "Eliminator"
       },
       {
         "name": "Eliminator",
@@ -20226,7 +20240,6 @@
     "models": [
       {
         "name": "Ancient Gadriel",
-        "profile_name": "Veteran Sergeant Metaurus",
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
@@ -20237,7 +20250,6 @@
       },
       {
         "name": "Veteran Sergeant Metaurus",
-        "profile_name": "Lucia Vestha",
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
@@ -21304,7 +21316,8 @@
           "bolt-pistol-incursor-squad",
           "occulus-bolt-carbine",
           "paired-combat-blades-incursor-squad"
-        ]
+        ],
+        "profile_name": "Incursor"
       },
       {
         "name": "Incursor",
@@ -22658,7 +22671,8 @@
         "default_weapon_ids": [
           "flamestorm-gauntlets-aggressor-squad",
           "twin-power-fists-aggressor-squad"
-        ]
+        ],
+        "profile_name": "Aggressor"
       },
       {
         "name": "Aggressor",
@@ -23510,7 +23524,8 @@
           "bolt-pistol-intercessor-squad",
           "bolt-rifle-intercessor-squad",
           "knives-and-fists"
-        ]
+        ],
+        "profile_name": "Intercessor"
       },
       {
         "name": "Intercessor",
@@ -24817,7 +24832,8 @@
           "bolt-pistol-infiltrator-squad",
           "ceramite-fists-infiltrator-squad",
           "marksman-bolt-carbine"
-        ]
+        ],
+        "profile_name": "Infiltrator"
       },
       {
         "name": "Infiltrator",
@@ -25706,7 +25722,8 @@
           "bolt-carbine",
           "monomolecular-combat-knife",
           "special-issue-bolt-pistol-reiver-squad"
-        ]
+        ],
+        "profile_name": "Reiver"
       },
       {
         "name": "Reiver",
@@ -26670,7 +26687,8 @@
           "bolt-pistol",
           "teeth-and-claws",
           "wolf-guard-weapon"
-        ]
+        ],
+        "profile_name": "Thunderwolf Cavalry"
       },
       {
         "name": "Thunderwolf Cavalry",
@@ -27011,7 +27029,8 @@
           "bolt-pistol",
           "bolt-carbine-grey-hunters",
           "chainsword"
-        ]
+        ],
+        "profile_name": "Grey Hunter"
       },
       {
         "name": "Grey Hunter",
@@ -27928,7 +27947,8 @@
         "default_weapon_ids": [
           "bolt-pistol",
           "chainsword"
-        ]
+        ],
+        "profile_name": "Blood Claw"
       },
       {
         "name": "Blood Claw",
@@ -28383,7 +28403,8 @@
         "default_weapon_ids": [
           "storm-bolter-wolf-guard-terminators",
           "master-crafted-power-weapon-wolf-guard-terminators"
-        ]
+        ],
+        "profile_name": "Wolf Guard Terminator"
       },
       {
         "name": "Wolf Guard Terminator",
@@ -30073,7 +30094,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
-        }
+        },
+        "profile_name": "Eradicator"
       },
       {
         "name": "Eradicator",
@@ -30478,7 +30500,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
-        }
+        },
+        "profile_name": "Victrix Honour Guard"
       },
       {
         "name": "Chapter Ancient",
@@ -30492,7 +30515,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
-        }
+        },
+        "profile_name": "Victrix Honour Guard"
       }
     ],
     "tiers": [
@@ -31922,7 +31946,8 @@
           "bolt-pistol",
           "ceramite-fists",
           "melta-rifle"
-        ]
+        ],
+        "profile_name": "Eradicator"
       },
       {
         "name": "Eradicator",

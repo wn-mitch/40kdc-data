@@ -51,7 +51,7 @@ import { type GoldenMode, modeOfPublication, mergeMode } from "./game-mode.js";
 import { repoDirForFactionName, repoDirs, FACTION_ALIASES, SHARED_ROSTERS } from "./faction-map.js";
 import type { StagedWrite } from "./apply.js";
 import { currentGameVersion } from "./dataslate.js";
-import { applyModelFlags, flaggedModelNames } from "./model-flags.js";
+import { applyModelFlags, applyStatlineSource, flaggedModelNames, statlineSources } from "./model-flags.js";
 import {
   mintWargear,
   mintWeapon,
@@ -2889,8 +2889,15 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
       // when the dump drops it. Runs before the composition rebuild, which skips
       // datasheets with no composition rows (Sir Hekhtur).
       const flagged = flaggedModelNames(dump, ds.id!);
+      // Which unit profile each row prints (`profile_name`), from the statlines the dump shows.
+      const sources = statlineSources(dump, ds.id!);
+      const unitProfiles = ((unitById.get(id) as { profiles?: { name?: string }[] } | undefined)?.profiles ?? []);
+      const profileNames = new Set(unitProfiles.map((p) => p.name).filter((n): n is string => !!n));
       for (const comp of compsByUnit.get(id) ?? []) {
-        for (const row of comp.models) if (applyModelFlags(row, flagged)) changed = true;
+        for (const row of comp.models) {
+          if (applyModelFlags(row, flagged)) changed = true;
+          if (applyStatlineSource(row as never, sources, profileNames)) changed = true;
+        }
       }
       const agg = aggregateComposition(dump, ds.id!);
       if (agg.skip === "duplicate-names") {

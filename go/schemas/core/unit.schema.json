@@ -41,7 +41,10 @@
             "type": "string",
             "description": "Profile name (e.g., 'Wounded' for degrading)"
           },
-          "M": { "$ref": "../defs/common.schema.json#/$defs/stat-value" },
+          "M": {
+            "description": "Move in inches. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+            "oneOf": [{ "$ref": "../defs/common.schema.json#/$defs/stat-value" }, { "type": "null" }]
+          },
           "T": { "type": "integer", "minimum": 1 },
           "W": { "type": "integer", "minimum": 1 },
           "Sv": { "type": "integer", "minimum": 2, "maximum": 7 },
@@ -66,7 +69,10 @@
             ]
           },
           "Ld": { "type": "integer", "minimum": 2, "maximum": 10 },
-          "OC": { "type": "integer", "minimum": 0 }
+          "OC": {
+            "description": "Objective Control. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+            "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }]
+          }
         },
         "required": ["M", "T", "W", "Sv", "Ld", "OC"]
       },

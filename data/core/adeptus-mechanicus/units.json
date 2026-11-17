@@ -6,13 +6,13 @@
     "profiles": [
       {
         "name": "Archaeopter Stratoraptor",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 10,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -2563,13 +2563,13 @@
     "profiles": [
       {
         "name": "Archaeopter Fusilave",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 10,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [

@@ -389,7 +389,8 @@
         "default_weapon_ids": [
           "bolt-pistol-nemesis-claw",
           "nostraman-chainblade"
-        ]
+        ],
+        "profile_name": "Legionary"
       },
       {
         "name": "Legionary",
@@ -1136,7 +1137,7 @@
       },
       {
         "name": "Mindwitch",
-        "profile_name": "Cult Demagogue",
+        "profile_name": "Blessed Blade",
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
@@ -1151,7 +1152,7 @@
       },
       {
         "name": "Iconarch",
-        "profile_name": "Cult Demagogue",
+        "profile_name": "Blessed Blade",
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
@@ -2619,7 +2620,8 @@
         },
         "default_weapon_ids": [
           "hideous-mutations-possessed"
-        ]
+        ],
+        "profile_name": "Possessed"
       },
       {
         "name": "Possessed",
@@ -5515,7 +5517,7 @@
     "models": [
       {
         "name": "Traitor Sergeant",
-        "profile_name": "Traitor Guardsman",
+        "profile_name": "Traitor Guardsmen",
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
@@ -6619,7 +6621,8 @@
           "boltgun-red-corsairs-raiders",
           "bolt-pistol-red-corsairs-raiders",
           "reavers-blade"
-        ]
+        ],
+        "profile_name": "Red Corsairs Raider"
       },
       {
         "name": "Red Corsairs Raider",
@@ -8147,7 +8150,7 @@
     "models": [
       {
         "name": "Cultist Champion",
-        "profile_name": "Cultist",
+        "profile_name": "Chaos Cultist",
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
@@ -9144,7 +9147,7 @@
     "models": [
       {
         "name": "Fellgor Champion",
-        "profile_name": "Fellgor Beastman",
+        "profile_name": "Fellgor Beastmen",
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
@@ -10836,7 +10839,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
-        }
+        },
+        "profile_name": "Katar Garrix"
       },
       {
         "name": "Garlon Souleater",
@@ -10850,7 +10854,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
-        }
+        },
+        "profile_name": "Katar Garrix"
       },
       {
         "name": "Katar Garrix",
@@ -10878,7 +10883,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
-        }
+        },
+        "profile_name": "The Enforcer"
       },
       {
         "name": "The Enforcer",

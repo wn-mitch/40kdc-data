@@ -182,7 +182,8 @@ fn unit_stat_profiles(unit: &Unit) -> Vec<XmlEl> {
                         leaf(
                             "characteristic",
                             vec![("name", "M".to_string())],
-                            fmt_move(&p.m.to_string()),
+                            p.m.as_ref()
+                                .map_or_else(|| "-".to_string(), |m| fmt_move(&m.to_string())),
                         ),
                         leaf(
                             "characteristic",
@@ -207,7 +208,7 @@ fn unit_stat_profiles(unit: &Unit) -> Vec<XmlEl> {
                         leaf(
                             "characteristic",
                             vec![("name", "OC".to_string())],
-                            p.oc.to_string(),
+                            p.oc.map_or_else(|| "-".to_string(), |oc| oc.to_string()),
                         ),
                     ],
                 )],

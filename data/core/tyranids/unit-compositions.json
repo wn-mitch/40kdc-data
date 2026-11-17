@@ -2989,7 +2989,8 @@
         "default_weapon_ids": [
           "warp-blast",
           "chitinous-claws-and-teeth-zoanthropes"
-        ]
+        ],
+        "profile_name": "Zoanthrope"
       },
       {
         "name": "Zoanthrope",
@@ -5076,7 +5077,8 @@
         },
         "default_weapon_ids": [
           "chitinous-claws-and-teeth-neurogaunts"
-        ]
+        ],
+        "profile_name": "Neurogaunt"
       },
       {
         "name": "Neurogaunt",

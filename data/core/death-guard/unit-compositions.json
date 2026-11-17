@@ -6504,7 +6504,8 @@
           "deaths-heads",
           "foul-mouthparts",
           "plaguesword"
-        ]
+        ],
+        "profile_name": "Plague Drone"
       },
       {
         "name": "Plague Drone",
@@ -6796,7 +6797,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        }
+        },
+        "profile_name": "Plaguebearer"
       },
       {
         "name": "Plaguebearer",

@@ -1891,7 +1891,7 @@
     "profiles": [
       {
         "name": "Feculent Gnarlmaw",
-        "M": 0,
+        "M": null,
         "T": 9,
         "W": 9,
         "Sv": 4,
@@ -3726,7 +3726,7 @@
     "profiles": [
       {
         "name": "Skull Altar",
-        "M": 0,
+        "M": null,
         "T": 12,
         "W": 10,
         "Sv": 3,

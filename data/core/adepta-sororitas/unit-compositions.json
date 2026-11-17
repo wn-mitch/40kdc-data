@@ -4107,7 +4107,8 @@
           "heavy-bolter",
           "paragon-storm-bolters",
           "paragon-war-blade"
-        ]
+        ],
+        "profile_name": "Paragon"
       },
       {
         "name": "Paragon",

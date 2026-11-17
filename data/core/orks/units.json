@@ -524,7 +524,7 @@
         "OC": 2
       },
       {
-        "name": "Boss Nob on Warbike",
+        "name": "Biker Nob",
         "M": 12,
         "T": 6,
         "W": 4,
@@ -1128,13 +1128,13 @@
     "profiles": [
       {
         "name": "Wazbom Blastajet",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 12,
         "Sv": 3,
         "invuln_sv": 6,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -1749,7 +1749,7 @@
     "profiles": [
       {
         "name": "Big’ed Bossbunka",
-        "M": 0,
+        "M": null,
         "T": 10,
         "W": 12,
         "Sv": 3,
@@ -1830,7 +1830,7 @@
     "faction_id": "orks",
     "profiles": [
       {
-        "name": "Boss Nob",
+        "name": "Nob",
         "M": 6,
         "T": 5,
         "W": 3,
@@ -1943,7 +1943,7 @@
         "OC": 1
       },
       {
-        "name": "Boss Nob",
+        "name": "Nob",
         "M": 6,
         "T": 5,
         "W": 3,
@@ -2042,7 +2042,7 @@
         "OC": 2
       },
       {
-        "name": "Boss Nob",
+        "name": "Nob",
         "M": 6,
         "T": 5,
         "W": 3,
@@ -2522,7 +2522,7 @@
         "OC": 1
       },
       {
-        "name": "Boss Nob",
+        "name": "Nob",
         "M": 12,
         "T": 5,
         "W": 3,
@@ -2699,13 +2699,13 @@
     "profiles": [
       {
         "name": "Blitza-bommer",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 12,
         "Sv": 3,
         "invuln_sv": 6,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -2938,13 +2938,13 @@
     "profiles": [
       {
         "name": "Dakkajet",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 12,
         "Sv": 3,
         "invuln_sv": 6,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -3107,10 +3107,10 @@
         "OC": 2
       },
       {
-        "name": "Beast Snagga Nob",
+        "name": "Nob",
         "M": 6,
         "T": 5,
-        "W": 2,
+        "W": 3,
         "Sv": 5,
         "invuln_sv": null,
         "Ld": 7,
@@ -4090,13 +4090,13 @@
     "profiles": [
       {
         "name": "Burna-bommer",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 12,
         "Sv": 3,
         "invuln_sv": 6,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [

@@ -1674,7 +1674,7 @@
     "profiles": [
       {
         "name": "Sporocyst",
-        "M": 0,
+        "M": null,
         "T": 10,
         "W": 10,
         "Sv": 3,
@@ -2162,13 +2162,13 @@
     "profiles": [
       {
         "name": "Harpy",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 12,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 8,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -3369,13 +3369,13 @@
     "profiles": [
       {
         "name": "Hive Crone",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 12,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 8,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [

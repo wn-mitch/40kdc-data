@@ -381,7 +381,8 @@
         "default_weapon_ids": [
           "bolt-pistol-khorne-berzerkers",
           "chainblade-khorne-berzerkers"
-        ]
+        ],
+        "profile_name": "Khorne Berzerker"
       },
       {
         "name": "Khorne Berzerker",
@@ -5922,7 +5923,8 @@
           "shape": "oval",
           "width": 90,
           "length": 52.5
-        }
+        },
+        "profile_name": "Bloodcrusher"
       },
       {
         "name": "Bloodcrusher",
@@ -6182,7 +6184,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        }
+        },
+        "profile_name": "Bloodletter"
       },
       {
         "name": "Bloodletter",
@@ -6393,7 +6396,8 @@
           "shape": "oval",
           "width": 60,
           "length": 35.5
-        }
+        },
+        "profile_name": "Flesh Hound"
       },
       {
         "name": "Flesh Hound",

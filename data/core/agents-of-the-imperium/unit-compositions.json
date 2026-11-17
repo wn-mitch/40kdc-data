@@ -1384,7 +1384,8 @@
         "default_weapon_ids": [
           "heavy-bolter-inquisitorial-agents",
           "agent-melee-weapon"
-        ]
+        ],
+        "profile_name": "Inquisitorial Agent"
       }
     ],
     "game_version": {
@@ -2057,7 +2058,8 @@
         "default_weapon_ids": [
           "storm-bolter-grey-knights-terminator-squad",
           "nemesis-force-weapon"
-        ]
+        ],
+        "profile_name": "Grey Knights Terminators"
       },
       {
         "name": "Grey Knights Terminators",
@@ -2691,7 +2693,6 @@
       },
       {
         "name": "Deathwatch Veteran",
-        "profile_name": "Deathwatch Veterans",
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
@@ -3485,7 +3486,8 @@
         "default_weapon_ids": [
           "plasma-pistol-aquila-kill-team",
           "power-weapon-aquila-kill-team"
-        ]
+        ],
+        "profile_name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol"
       },
       {
         "name": "Gravis Veteran",
@@ -3514,7 +3516,8 @@
         "default_weapon_ids": [
           "bolt-pistol-aquila-kill-team",
           "heavy-thunder-hammer"
-        ]
+        ],
+        "profile_name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol"
       },
       {
         "name": "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists",
@@ -3529,7 +3532,8 @@
           "deathwatch-marksman-bolt-carbine",
           "knives-and-fists",
           "special-issue-bolt-pistol"
-        ]
+        ],
+        "profile_name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol"
       },
       {
         "name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
@@ -3544,7 +3548,8 @@
           "bolt-pistol-aquila-kill-team",
           "knives-and-fists",
           "stalker-bolt-rifle"
-        ]
+        ],
+        "profile_name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol"
       },
       {
         "name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
@@ -4967,7 +4972,8 @@
         "default_weapon_ids": [
           "navis-shotgun",
           "close-combat-weapon-imperial-navy-breachers"
-        ]
+        ],
+        "profile_name": "Navis Armsman"
       },
       {
         "name": "Navis Armsman",
@@ -6718,7 +6724,8 @@
           "bolt-pistol",
           "boltgun-sisters-of-battle-squad",
           "close-combat-weapon-sisters-of-battle-squad"
-        ]
+        ],
+        "profile_name": "Battle Sister"
       },
       {
         "name": "Battle Sister",
@@ -7884,7 +7891,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 25
-        }
+        },
+        "profile_name": "Rejuvenat Adept"
       },
       {
         "name": "Lectro‐Maester",
@@ -7898,7 +7906,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 25
-        }
+        },
+        "profile_name": "Rejuvenat Adept"
       },
       {
         "name": "Rejuvenat Adept",

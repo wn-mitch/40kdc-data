@@ -4782,7 +4782,15 @@
                 "description": "Profile name (e.g., 'Wounded' for degrading)"
               },
               "M": {
-                "$ref": "#/$defs/stat-value"
+                "description": "Move in inches. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/stat-value"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               },
               "T": {
                 "type": "integer",
@@ -4841,8 +4849,16 @@
                 "maximum": 10
               },
               "OC": {
-                "type": "integer",
-                "minimum": 0
+                "description": "Objective Control. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+                "oneOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             },
             "required": [

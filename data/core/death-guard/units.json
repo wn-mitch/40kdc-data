@@ -1624,7 +1624,7 @@
     "profiles": [
       {
         "name": "Miasmic Malignifier",
-        "M": 0,
+        "M": null,
         "T": 10,
         "W": 12,
         "Sv": 3,

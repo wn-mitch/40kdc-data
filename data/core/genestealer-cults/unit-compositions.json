@@ -2566,7 +2566,8 @@
         },
         "default_weapon_ids": [
           "aberrant-weapons"
-        ]
+        ],
+        "profile_name": "Aberrant"
       },
       {
         "name": "Aberrant",

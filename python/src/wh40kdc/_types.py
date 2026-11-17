@@ -956,7 +956,7 @@ class UnitComposition(TypedDict):
 
 class Profile(TypedDict):
     name: NotRequired[str]
-    M: StatValue
+    M: StatValue | None
     T: int
     W: int
     Sv: int
@@ -964,7 +964,7 @@ class Profile(TypedDict):
     invuln_sv_ranged: NotRequired[int | None]
     invuln_sv_melee: NotRequired[int | None]
     Ld: int
-    OC: int
+    OC: int | None
 
 
 class Point(TypedDict):

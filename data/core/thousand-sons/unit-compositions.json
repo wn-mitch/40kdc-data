@@ -2311,7 +2311,8 @@
         },
         "default_weapon_ids": [
           "divining-spear"
-        ]
+        ],
+        "profile_name": "Enlightened"
       },
       {
         "name": "Enlightened",
@@ -2512,7 +2513,8 @@
         "default_weapon_ids": [
           "fatecaster-greatbow",
           "close-combat-weapon-tzaangor-enlightened-with-fatecaster-greatbows"
-        ]
+        ],
+        "profile_name": "Enlightened"
       },
       {
         "name": "Enlightened",
@@ -6107,7 +6109,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 25
-        }
+        },
+        "profile_name": "Brimstone Horror"
       }
     ],
     "game_version": {

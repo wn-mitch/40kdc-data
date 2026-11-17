@@ -3370,7 +3370,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 25
-        }
+        },
+        "profile_name": "Daemonette"
       },
       {
         "name": "Daemonette",
@@ -3579,7 +3580,8 @@
           "shape": "oval",
           "width": 75,
           "length": 42
-        }
+        },
+        "profile_name": "Fiend"
       },
       {
         "name": "Fiend",
@@ -3736,7 +3738,8 @@
           "shape": "oval",
           "width": 60,
           "length": 35.5
-        }
+        },
+        "profile_name": "Seeker"
       },
       {
         "name": "Seeker",

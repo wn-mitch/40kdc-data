@@ -106,8 +106,9 @@ function render(node: XmlEl, depth: number): string {
 // Stat-line rendering (datasheet conventions; deterministic across ports).
 // ---------------------------------------------------------------------------
 
-/** Movement: append the inch mark unless the stored value already carries one. */
-export function fmtMove(m: StatValue): string {
+/** Movement: append the inch mark unless the stored value already carries one; "-" for none (an aircraft). */
+export function fmtMove(m: StatValue | null): string {
+  if (m === null) return "-";
   const s = String(m);
   return s.endsWith('"') ? s : `${s}"`;
 }
@@ -153,7 +154,7 @@ function unitStatProfiles(view: UnitView): XmlEl[] {
         leaf("characteristic", [["name", "SV"]], fmtTarget(p.Sv)),
         leaf("characteristic", [["name", "W"]], String(p.W)),
         leaf("characteristic", [["name", "LD"]], fmtTarget(p.Ld)),
-        leaf("characteristic", [["name", "OC"]], String(p.OC)),
+        leaf("characteristic", [["name", "OC"]], p.OC === null ? "-" : String(p.OC)),
       ]),
     ]);
   });

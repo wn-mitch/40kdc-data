@@ -56398,11 +56398,27 @@ impl<'de> ::serde::Deserialize<'de> for TriggerSourceAbilityKeywordsItem {
 ///            "minimum": 2.0
 ///          },
 ///          "M": {
-///            "$ref": "#/$defs/stat-value"
+///            "description": "Move in inches. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+///            "oneOf": [
+///              {
+///                "$ref": "#/$defs/stat-value"
+///              },
+///              {
+///                "type": "null"
+///              }
+///            ]
 ///          },
 ///          "OC": {
-///            "type": "integer",
-///            "minimum": 0.0
+///            "description": "Objective Control. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+///            "oneOf": [
+///              {
+///                "type": "integer",
+///                "minimum": 0.0
+///              },
+///              {
+///                "type": "null"
+///              }
+///            ]
 ///          },
 ///          "Sv": {
 ///            "type": "integer",
@@ -60772,11 +60788,27 @@ pub struct UnitPointsItem {
 ///      "minimum": 2.0
 ///    },
 ///    "M": {
-///      "$ref": "#/$defs/stat-value"
+///      "description": "Move in inches. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/stat-value"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
 ///    },
 ///    "OC": {
-///      "type": "integer",
-///      "minimum": 0.0
+///      "description": "Objective Control. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+///      "oneOf": [
+///        {
+///          "type": "integer",
+///          "minimum": 0.0
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
 ///    },
 ///    "Sv": {
 ///      "type": "integer",
@@ -60849,13 +60881,15 @@ pub struct UnitProfilesItem {
     pub invuln_sv_ranged: ::std::option::Option<i64>,
     #[serde(rename = "Ld")]
     pub ld: i64,
+    ///Move in inches. Null where the datasheet prints "-" (an aircraft, a fortification).
     #[serde(rename = "M")]
-    pub m: StatValue,
+    pub m: ::std::option::Option<StatValue>,
     ///Profile name (e.g., 'Wounded' for degrading)
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    ///Objective Control. Null where the datasheet prints "-" (an aircraft, a fortification).
     #[serde(rename = "OC")]
-    pub oc: u64,
+    pub oc: ::std::option::Option<u64>,
     #[serde(rename = "Sv")]
     pub sv: i64,
     #[serde(rename = "T")]

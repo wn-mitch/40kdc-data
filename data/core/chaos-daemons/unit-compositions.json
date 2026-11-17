@@ -3204,7 +3204,8 @@
         "default_weapon_ids": [
           "hellblade",
           "juggernauts-bladed-horn"
-        ]
+        ],
+        "profile_name": "Bloodcrusher"
       },
       {
         "name": "Bloodcrusher",
@@ -3467,7 +3468,8 @@
         },
         "default_weapon_ids": [
           "barbed-tail-and-dissecting-claws"
-        ]
+        ],
+        "profile_name": "Fiend"
       },
       {
         "name": "Fiend",
@@ -4390,7 +4392,8 @@
           "deaths-heads",
           "foul-mouthparts",
           "plaguesword"
-        ]
+        ],
+        "profile_name": "Plague Drone"
       },
       {
         "name": "Plague Drone",
@@ -6315,7 +6318,8 @@
         "default_weapon_ids": [
           "flickering-flames",
           "flamer-mouths-flamers"
-        ]
+        ],
+        "profile_name": "Flamer"
       },
       {
         "name": "Flamer",
@@ -6605,7 +6609,8 @@
           "burning-roar",
           "gore-drenched-fangs",
           "collar-of-khorne"
-        ]
+        ],
+        "profile_name": "Flesh Hound"
       },
       {
         "name": "Flesh Hound",

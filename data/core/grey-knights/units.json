@@ -1561,13 +1561,13 @@
     "profiles": [
       {
         "name": "Stormtalon Gunship",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 10,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 6,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -2231,13 +2231,13 @@
     "profiles": [
       {
         "name": "Stormhawk Interceptor",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 10,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 6,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [

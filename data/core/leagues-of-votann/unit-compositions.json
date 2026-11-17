@@ -1402,7 +1402,8 @@
           "heavy-volkanite-disintegrator",
           "plasma-knife-ironkin-steeljacks-with-heavy-volkanite-disintegrators",
           "preymark-crest"
-        ]
+        ],
+        "profile_name": "Ironkin Steeljack"
       },
       {
         "name": "Ironkin Steeljack",
@@ -2416,7 +2417,8 @@
           "autoch-pattern-bolter-ironkin-steeljacks-with-melee-weapons",
           "plasma-sword",
           "preymark-crest"
-        ]
+        ],
+        "profile_name": "Ironkin Steeljack"
       },
       {
         "name": "Ironkin Steeljack",
@@ -2799,7 +2801,8 @@
         "default_weapon_ids": [
           "bolt-shotgun",
           "close-combat-weapon-hernkyn-yaegirs"
-        ]
+        ],
+        "profile_name": "Hernkyn Yaegir"
       },
       {
         "name": "Hernkyn Yaegir",
