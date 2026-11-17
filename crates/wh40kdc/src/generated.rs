@@ -159,6 +159,15 @@ pub mod error {
 ///    "name": {
 ///      "type": "string"
 ///    },
+///    "option_names": {
+///      "description": "The printed name of each option of the record's one choice effect, in option order (\"Paragon of Hatred\"). Present only on a record whose effect holds exactly one choice, with one name per option.",
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 2
+///    },
 ///    "optional": {
 ///      "description": "The player chooses whether to use this ability, which has no trigger. Absent when the ability always applies, when a trigger decides when it is used, or for a Stratagem, which is always the player's choice.",
 ///      "type": "boolean",
@@ -236,6 +245,9 @@ pub struct Ability {
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub interactions: ::std::vec::Vec<AbilityInteractionsItem>,
     pub name: ::std::string::String,
+    ///The printed name of each option of the record's one choice effect, in option order ("Paragon of Hatred"). Present only on a record whose effect holds exactly one choice, with one name per option.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub option_names: ::std::vec::Vec<AbilityOptionNamesItem>,
     ///The player chooses whether to use this ability, which has no trigger. Absent when the ability always applies, when a trigger decides when it is used, or for a Stratagem, which is always the player's choice.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub optional: ::std::option::Option<bool>,
@@ -2419,6 +2431,78 @@ for AbilityModifierEffectModifierValueString {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for AbilityModifierEffectModifierValueString {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`AbilityOptionNamesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct AbilityOptionNamesItem(::std::string::String);
+impl ::std::ops::Deref for AbilityOptionNamesItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AbilityOptionNamesItem> for ::std::string::String {
+    fn from(value: AbilityOptionNamesItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for AbilityOptionNamesItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AbilityOptionNamesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for AbilityOptionNamesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for AbilityOptionNamesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for AbilityOptionNamesItem {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,

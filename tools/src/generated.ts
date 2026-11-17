@@ -8791,6 +8791,12 @@ export interface Weapon {
 export interface AbilityDSLEntry {
   ability_id: EntityId;
   name: string;
+  /**
+   * The printed name of each option of the record's one choice effect, in option order ("Paragon of Hatred"). Present only on a record whose effect holds exactly one choice, with one name per option.
+   *
+   * @minItems 2
+   */
+  option_names?: [string, string, ...string[]];
   authored_by: ContributorRef;
   game_version: GameVersionReference;
   /**

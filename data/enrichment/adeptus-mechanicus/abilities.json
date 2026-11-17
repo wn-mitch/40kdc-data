@@ -908,7 +908,12 @@
           }
         ]
       }
-    }
+    },
+    "option_names": [
+      "Invocation of Machine Vengeance",
+      "Mantra of Discipline",
+      "Shroudpsalm"
+    ]
   },
   {
     "ability_id": "mechanicus-bodyguard-adeptus-mechanicus",
@@ -5992,7 +5997,13 @@
     "scope": {
       "duration": "until-next-command-phase"
     },
-    "community_notes": "[APPROX] In the Command phase, selected units gain the Halo Override keyword (max selectable scales with battle size: 1/2/3 for Incursion/Strike Force/Onslaught) and then one Override ability is chosen for them; only the chosen ability is modeled. Predation Protocols is expressed as a granted charge eligibility (rule is charge-after-Advance) and Muted Servomotors as the Stealth hit penalty. Full rule in raw-text store."
+    "community_notes": "[APPROX] In the Command phase, selected units gain the Halo Override keyword (max selectable scales with battle size: 1/2/3 for Incursion/Strike Force/Onslaught) and then one Override ability is chosen for them; only the chosen ability is modeled. Predation Protocols is expressed as a granted charge eligibility (rule is charge-after-Advance) and Muted Servomotors as the Stealth hit penalty. Full rule in raw-text store.",
+    "option_names": [
+      "Electromotive Energisation",
+      "Microactuator Bracing",
+      "Predation Protocols",
+      "Muted Servomotors"
+    ]
   },
   {
     "ability_id": "cyber-psalm-programming-adeptus-mechanicus",
@@ -6575,7 +6586,11 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "[APPROX] Only the BOMBARDMENT 'standing firm' branch is modeled (3+ → D3 mortal wounds to each enemy unit in the opponent's deployment zone at the start of the first battle round). The opponent's cover/stand-firm choice, the 'taking cover' branch (Battle-shock plus 5+ → D3 mortal wounds), and the FALLOUT effect across battle rounds 2–5 are not encoded. Full rule in raw-text store."
+    "community_notes": "[APPROX] Only the BOMBARDMENT 'standing firm' branch is modeled (3+ → D3 mortal wounds to each enemy unit in the opponent's deployment zone at the start of the first battle round). The opponent's cover/stand-firm choice, the 'taking cover' branch (Battle-shock plus 5+ → D3 mortal wounds), and the FALLOUT effect across battle rounds 2–5 are not encoded. Full rule in raw-text store.",
+    "option_names": [
+      "Standing Firm",
+      "Taking Cover"
+    ]
   },
   {
     "ability_id": "broad-spectrum-targeting-augurs-adeptus-mechanicus",
@@ -6893,7 +6908,12 @@
     "ability_type": "unit",
     "behavior": "passive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "adeptus-mechanicus"
+    "faction_id": "adeptus-mechanicus",
+    "option_names": [
+      "Fanatical Devotion",
+      "Adaptive Tactics",
+      "The Fires of Mars"
+    ]
   },
   {
     "ability_id": "secutor-of-olympus-adeptus-mechanicus",

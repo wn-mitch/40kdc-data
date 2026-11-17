@@ -10,7 +10,8 @@ import { canonicalDataRoot, semanticAuthoringDataRoot, schemaTreeHash, type Mech
 import { recordGateErrors } from "./gates.js";
 import { bumpWorkbenchRevision, withTransaction } from "./db.js";
 import { gameVersionForDataVersion } from "../mfm/dataslate.js";
-import { fullyDescribed } from "./leaf-view.js";
+import { fullyDescribed, tiledSources } from "./leaf-view.js";
+import { choiceOptionNames } from "./option-names.js";
 import { PublicationError, projectRecords, record, stagedWrites, type PublicationDiff, type PublicationStamp } from "./publication-projection.js";
 import { coreManifest, coreReplicaManifests, observeFile, type CoreManifest, type CoreProjection } from "./publish-core.js";
 import {
@@ -163,7 +164,13 @@ function buildProjection(
     gameVersion: gameVersionForDataVersion(sources.dataVersion),
     digests: new Map([...sources.records.values()].map((source) => [source.abilityId, sourceDigest(source.text)])),
   };
-  const projected = projectRecords(dataRoot, options.faction_id, rows.map((row, index) => ({ ...row, source_digest: snapshots[index]!.source_digest })), stamp);
+  // The choice's option names come from the named-option leaves the approval compiled from.
+  const leaves = new Map(tiledSources(db, { abilityVersionIds: new Set(rows.map((row) => row.ability_version_id)) }).map((source) => [source.id, source.leaves]));
+  const projected = projectRecords(dataRoot, options.faction_id, rows.map((row, index) => ({
+    ...row,
+    source_digest: snapshots[index]!.source_digest,
+    option_names: choiceOptionNames(leaves.get(row.ability_version_id) ?? [], row.mechanics.effect),
+  })), stamp);
   // An approval judged the record gates against the data root of its day; the entry written now is judged again.
   const published = new Set(snapshots.map((snapshot) => snapshot.ability_id));
   for (const entry of projected.entries) {

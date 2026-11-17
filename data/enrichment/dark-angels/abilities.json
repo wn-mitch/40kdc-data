@@ -2449,7 +2449,12 @@
       },
       "optional": true
     },
-    "faction_id": "dark-angels"
+    "faction_id": "dark-angels",
+    "option_names": [
+      "Mist-wreathed Shadow Realms",
+      "Martial Exemplar",
+      "No Hiding from the Watchers"
+    ]
   },
   {
     "ability_id": "psychic-hood-dark-angels",

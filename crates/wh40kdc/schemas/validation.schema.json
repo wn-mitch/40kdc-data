@@ -6235,6 +6235,15 @@
         "name": {
           "type": "string"
         },
+        "option_names": {
+          "type": "array",
+          "description": "The printed name of each option of the record's one choice effect, in option order (\"Paragon of Hatred\"). Present only on a record whose effect holds exactly one choice, with one name per option.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 2
+        },
         "authored_by": {
           "$ref": "#/$defs/contributor-ref"
         },

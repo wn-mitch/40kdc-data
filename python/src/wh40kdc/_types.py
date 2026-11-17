@@ -1140,6 +1140,9 @@ class AbilityUsageLimit(TypedDict):
     per: NotRequired[Literal["army", "unit", "model"]]
 
 
+OptionName: TypeAlias = str
+
+
 class Interaction(TypedDict):
     ability_ref: EntityId
     type: Literal["conflicts-with", "combos-with", "superseded-by", "requires", "replaces"]
@@ -2469,6 +2472,7 @@ AbilityTrigger: TypeAlias = Trigger | list[Trigger]
 class Ability(TypedDict):
     ability_id: EntityId
     name: str
+    option_names: NotRequired[list[OptionName]]
     authored_by: ContributorRef
     game_version: GameVersionRef
     source_digest: NotRequired[str]

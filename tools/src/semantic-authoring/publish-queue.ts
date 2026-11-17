@@ -4,7 +4,8 @@ import { compilationInputsHash, getCompiledEntry } from "./compiled.js";
 import { existsSync, readFileSync } from "node:fs";
 
 import { keywordIndex } from "./core-keywords.js";
-import { fullyDescribed } from "./leaf-view.js";
+import { fullyDescribed, tiledSources } from "./leaf-view.js";
+import { choiceOptionNames } from "./option-names.js";
 import { entryWithMechanics, resolveAbilityEntity, semanticAuthoringDataRoot } from "./entries.js";
 import { canonicalTarget, coreStratagemFile } from "./publish-core.js";
 
@@ -59,6 +60,8 @@ export function publishableEntries(db: DatabaseSync): { factions: PublishableFac
   const entries = rows.map((row) => getCompiledEntry(db, row.id)!);
   // An approval whose source is no longer fully described (an undone connective) is stale too.
   const described = fullyDescribed(db, entries.map((entry) => entry.ability_version_id));
+  // Publication writes the choice's option names from the leaves (option-names.ts), so a record missing them is publishable.
+  const leaves = new Map(tiledSources(db, { abilityVersionIds: new Set(described) }).map((source) => [source.id, source.leaves]));
   for (const [index, row] of rows.entries()) {
     const entry = entries[index]!;
     if (!described.has(entry.ability_version_id) || compilationInputsHash(db, entry.ability_version_id) !== entry.inputs_hash) { stale += 1; continue; }
@@ -71,6 +74,8 @@ export function publishableEntries(db: DatabaseSync): { factions: PublishableFac
     }
     const projected = entryWithMechanics(original, entry.mechanics);
     const changes: string[] = FIELDS.filter((field) => hashJson(original[field] ?? null) !== hashJson(projected[field] ?? null));
+    const optionNames = choiceOptionNames(leaves.get(entry.ability_version_id) ?? [], entry.mechanics.effect);
+    if (hashJson(original.option_names ?? null) !== hashJson(optionNames)) changes.push("option_names");
     const core = entry.core ? coreTargetChanges(row.faction_id, row.ability_id, entry.core.target_restrictions) : false;
     if (core === "blocked") { blocked.push(row.ability_id); continue; }
     if (core) changes.push("core.target_restrictions");

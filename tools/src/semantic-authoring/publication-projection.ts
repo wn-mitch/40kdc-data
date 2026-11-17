@@ -19,7 +19,7 @@ import { CorePublicationError, projectCore, type CoreProjection, type CoreRow } 
  */
 
 const OPTIONAL_MECHANICS_FIELDS = ["behavior", "optional", "trigger", "usage", "applies_to"] as const;
-const DIFF_FIELDS = ["effect", "scope", ...OPTIONAL_MECHANICS_FIELDS, "source_digest", "game_version"] as const;
+const DIFF_FIELDS = ["effect", "scope", ...OPTIONAL_MECHANICS_FIELDS, "source_digest", "game_version", "option_names"] as const;
 
 export class PublicationError extends Error {
   readonly status: number;
@@ -37,8 +37,11 @@ export type PublicationDiff = {
   fields: Array<{ field: string; before: unknown; after: unknown }>;
 };
 
-/** One compiled record as publication writes it. */
-export type ProjectedRecord = CoreRow & { mechanics: Mechanics; source_digest: string };
+/**
+ * One compiled record as publication writes it. `option_names` (`option-names.ts`) replaces the
+ * entry's names when an array, removes them when null, and leaves them as they are when absent.
+ */
+export type ProjectedRecord = CoreRow & { mechanics: Mechanics; source_digest: string; option_names?: string[] | null };
 
 /**
  * The dataslate publication stamps: a published record whose `source_digest` is the digest of
@@ -96,6 +99,8 @@ export function projectRecords(dataRoot: string, factionId: string, records: rea
     // authored effect is the reviewed outcome, not an accident to guard against here.
     const proposed: Record<string, unknown> = { ...entryWithMechanics(current, row.mechanics), source_digest: row.source_digest };
     if (stamp && stamp.digests.get(row.ability_id) === row.source_digest) proposed.game_version = { ...stamp.gameVersion };
+    if (row.option_names) proposed.option_names = [...row.option_names];
+    else if (row.option_names === null) delete proposed.option_names;
     const check = checkEntry(proposed);
     if (check.errors.length > 0) {
       throw new PublicationError(409, `Compiled entry ${row.id} fails the ability schema or canonical form: ${check.errors.join("; ")}`);

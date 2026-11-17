@@ -5064,7 +5064,12 @@
     "ability_type": "unit",
     "behavior": "passive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "chaos-space-marines"
+    "faction_id": "chaos-space-marines",
+    "option_names": [
+      "Paragon of Hatred",
+      "Mark of Chaos Ascendant",
+      "Lord of the Traitor Legions"
+    ]
   },
   {
     "ability_id": "dark-destiny-chaos-space-marines",
@@ -8549,7 +8554,11 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "[APPROX] Each Command phase, HERETIC ASTARTES INFANTRY units gain one selected ability — Huron's Elite (+1 to Hit rolls) or Mobile Marauders (eligible to shoot and declare a charge in a turn it Fell Back), modeled as a re-selectable menu. The clause granting BOTH abilities to units visible to Huron Blackheart is not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] Each Command phase, HERETIC ASTARTES INFANTRY units gain one selected ability — Huron's Elite (+1 to Hit rolls) or Mobile Marauders (eligible to shoot and declare a charge in a turn it Fell Back), modeled as a re-selectable menu. The clause granting BOTH abilities to units visible to Huron Blackheart is not modeled. Full rule in raw-text store.",
+    "option_names": [
+      "Huron’s Elite",
+      "Mobile Marauders"
+    ]
   },
   {
     "ability_id": "raiders-and-reavers-chaos-space-marines",

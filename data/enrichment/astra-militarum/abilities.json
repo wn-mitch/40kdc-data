@@ -10253,7 +10253,12 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "trigger": {
       "event": "round-started"
-    }
+    },
+    "option_names": [
+      "Creeping Barrage",
+      "Incendiary Bombardment",
+      "Smoke Shells"
+    ]
   },
   {
     "ability_id": "independent-operatives-astra-militarum",

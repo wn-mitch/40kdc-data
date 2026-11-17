@@ -7406,7 +7406,12 @@
           "phase": "fight"
         }
       }
-    }
+    },
+    "option_names": [
+      "Hero’s Prowess",
+      "Villain’s Doom",
+      "Trickster’s Grace"
+    ]
   },
   {
     "ability_id": "lithe-embarkation-aeldari",

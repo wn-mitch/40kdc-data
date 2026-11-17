@@ -5353,7 +5353,12 @@
     "faction_id": "necrons",
     "trigger": {
       "event": "round-started"
-    }
+    },
+    "option_names": [
+      "Phaeron of the Stars",
+      "Phaeron of the Blades",
+      "Relentless March"
+    ]
   },
   {
     "ability_id": "the-silent-king-necrons",

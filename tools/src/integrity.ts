@@ -15,6 +15,7 @@ import { checkLeaderKeywordClauses } from "./integrity-leader-keywords.js";
 import { checkDslShapes } from "./integrity-shapes.js";
 import { checkDslContract } from "./integrity-dsl-contract.js";
 import { checkAuraRangeRefs } from "./integrity-aura-ranges.js";
+import { checkOptionNames } from "./integrity-option-names.js";
 import { baseLoadout, checkUnitLegality, type LoadoutModel, type LoadoutTier } from "./data/loadout.js";
 import type { Unit, WargearOption } from "./generated.js";
 
@@ -740,6 +741,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   await checkDslShapes(root, result);
   await checkDslContract(root, result);
   await checkAuraRangeRefs(root, result);
+  await checkOptionNames(root, result);
   await checkTargetProfiles(root, result);
   await checkWeaponGrantRefs(root, result);
   await checkModelNames(root, result);

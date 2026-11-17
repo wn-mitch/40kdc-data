@@ -3931,7 +3931,12 @@
     "ability_type": "unit",
     "behavior": "passive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "option_names": [
+      "Turbo Engine",
+      "Shokk Attack Engine",
+      "Pulse Jet"
+    ]
   },
   {
     "ability_id": "fully-loaded-butchery-orks",

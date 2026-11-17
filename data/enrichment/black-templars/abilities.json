@@ -1075,7 +1075,12 @@
           }
         ]
       }
-    }
+    },
+    "option_names": [
+      "Banner of the Emperor Victorious",
+      "Column from the Major Altar",
+      "Water from the Stoup of Elucidation"
+    ]
   },
   {
     "ability_id": "vehement-aggression-black-templars",

@@ -57,6 +57,11 @@ const NAMED_OPTION_CONTAINERS = new Set(["stance-select-open", "issue-orders-ope
 /** Openers whose options may number just one (the DSL's own `actions`/`outcomes` array allows it). */
 const ONE_OR_MORE_CONTAINERS = new Set(["resource-action-menu-open"]);
 
+/** True for an opener other than choice-open whose options lead with named-option leaves. */
+export function namesItsOptions(familyId: string): boolean {
+  return NAMED_OPTION_CONTAINERS.has(familyId);
+}
+
 export function isContainerOpener(familyId: string): boolean {
   return LEADING_CONTAINERS.has(familyId);
 }

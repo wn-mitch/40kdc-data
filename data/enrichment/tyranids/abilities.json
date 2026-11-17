@@ -6452,7 +6452,12 @@
     "community_notes": "[APPROX] At the start of the first battle round, pick one Hyper-adaptation for the battle: Swarming Instincts ([SUSTAINED HITS 1] vs INFANTRY/SWARM), Hyper-aggression ([LETHAL HITS] vs MONSTER/VEHICLE), or Hive Predators ([PRECISION] vs CHARACTER). The Hive Predators grant applies only on a Critical Hit, which is not gated here. Full rule in raw-text store.",
     "trigger": {
       "event": "round-started"
-    }
+    },
+    "option_names": [
+      "Swarming Instincts",
+      "Hyper-aggression",
+      "Hive Predators"
+    ]
   },
   {
     "ability_id": "feed-the-swarm-tyranids",
