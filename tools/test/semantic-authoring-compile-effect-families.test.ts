@@ -27,7 +27,7 @@ function authored(factionId: string, abilityId: string): Record<string, unknown>
 
 let offset = 0;
 /** A leaf with its parameters as stored (normalized at its version). */
-function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion = 1): CompileLeaf {
+function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion = currentFamilyVersion(familyId)): CompileLeaf {
   offset += 10;
   return { role, family_id: familyId, family_version: familyVersion, parameters: normalizeFingerprintParameters(familyId, parameters, familyVersion), start_byte: offset };
 }
@@ -147,14 +147,14 @@ describe("Semantic authoring batch-3 families: targeting, eligibility and unit-s
     }
   });
 
-  it("compiles regain-wounds@3 with the new amounts and per", () => {
+  it("compiles regain-wounds with dice amounts, per and the full heal", () => {
     const cases: Array<[CompileLeaf, Record<string, unknown>]> = [
-      [leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "D3+1" }, 3),
+      [leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "D3+1" }),
         { type: "heal", target: "this-model", modifier: { amount: "D3+1" } }],
-      [leaf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "D6", per: "model" }, 3),
+      [leaf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "D6", per: "model" }),
         { type: "heal", target: "this-unit", modifier: { amount: "D6", per: "model" } }],
-      // Version 5: "regains all of its lost wounds" is the full heal.
-      [leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "all" }, 5),
+      // "Regains all of its lost wounds" is the full heal.
+      [leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "all" }),
         { type: "heal", target: "this-model", modifier: { amount: "full" } }],
     ];
     for (const [input, expected] of cases) {
@@ -179,33 +179,33 @@ describe("Semantic authoring batch-3 families: targeting, eligibility and unit-s
     expect(() => normalize({ subject: "this-unit", what: ["rolls"], rolls: ["all"], except_rolls: ["all"] })).toThrow();
   });
 
-  it("compiles a faction rule granted whatever the Army Faction (rule-state@4) and the Dark Pact test's auto-pass (roll-auto-result@5)", () => {
+  it("compiles a faction rule granted whatever the Army Faction (rule-state) and the Dark Pact test's auto-pass (roll-auto-result)", () => {
     const grant = { subject: "this-unit", direction: "granted", rule_kind: "faction-rule", rule: "dark-pacts", any_army_faction: true }; // mfm:mirror keep — a fabricated rule id
     expect(compiled([leaf("EFFECT", "rule-state", grant, 4)]).mechanics.effect).toEqual({
       type: "rule-state", target: "this-unit", modifier: { direction: "granted", rule_kind: "faction-rule", rule: "dark-pacts", any_army_faction: true }, // mfm:mirror keep — a fabricated rule id
     });
     expect(() => normalizeFingerprintParameters("rule-state", { ...grant, direction: "suppressed" }, 4)).toThrow(/granted faction rule/u);
-    expect(compiled([leaf("EFFECT", "roll-auto-result", { roll: "dark-pact", outcome: "auto-pass" }, 5)]).mechanics.effect)
+    expect(compiled([leaf("EFFECT", "roll-auto-result", { roll: "dark-pact", outcome: "auto-pass" })]).mechanics.effect)
       .toMatchObject({ type: "roll-result", modifier: { roll: "dark-pact", result: "pass" } });
-    expect(() => normalizeFingerprintParameters("roll-auto-result", { roll: "dark-pact", outcome: "counts-as-6" }, 5)).toThrow(/automatic pass/u);
+    expect(() => normalizeFingerprintParameters("roll-auto-result", { roll: "dark-pact", outcome: "counts-as-6" })).toThrow(/automatic pass/u);
   });
 
   it("round-trips leaf parameters to readable describer English", () => {
-    const previews: Array<[string, Record<string, unknown>, number, RegExp]> = [
-      ["eligibility-permission", { subject: "this-unit", activity: "fall-back", allow: true }, 1, /eligible to fall back/iu],
-      ["targeting-restriction", { subject: "this-unit", may: "cannot-target", kind: "shoot", weapon_type: "all" }, 1, /cannot target/iu],
-      ["counts-as", { subject: "this-unit", within: 3 }, 1, /counts as being within/iu],
-      ["rule-state", { subject: "this-unit", direction: "granted", rule_kind: "keyword", rule: "FLY" }, 1, /gains the fly keyword/iu],
-      ["damage-reduction", { subject: "this-unit", reduction: "half", weapon_type: "all" }, 1, /halve the damage/iu],
-      ["return-models", { subject: "this-unit", count: "D3" }, 1, /return .* to the unit/iu],
-      ["destroy-models", { recipient: "this-unit", count: "1" }, 1, /destroy/iu],
-      ["split-unit", { mode: "model" }, 1, /split the unit/iu],
-      ["add-unit", { source: "datasheet", datasheet: "blue-horrors", count: "2" }, 1, /add/iu],
-      ["battle-shock-state", { recipient: "this-unit", set: true }, 1, /battle-shocked/iu],
-      ["regain-wounds", { subject: "this-model", amount: "D3+1" }, 3, /regains up to/iu],
+    const previews: Array<[string, Record<string, unknown>, RegExp]> = [
+      ["eligibility-permission", { subject: "this-unit", activity: "fall-back", allow: true }, /eligible to fall back/iu],
+      ["targeting-restriction", { subject: "this-unit", may: "cannot-target", kind: "shoot", weapon_type: "all" }, /cannot target/iu],
+      ["counts-as", { subject: "this-unit", within: 3 }, /counts as being within/iu],
+      ["rule-state", { subject: "this-unit", direction: "granted", rule_kind: "keyword", rule: "FLY" }, /gains the fly keyword/iu],
+      ["damage-reduction", { subject: "this-unit", reduction: "half", weapon_type: "all" }, /halve the damage/iu],
+      ["return-models", { subject: "this-unit", count: "D3" }, /return .* to the unit/iu],
+      ["destroy-models", { recipient: "this-unit", count: "1" }, /destroy/iu],
+      ["split-unit", { mode: "model" }, /split the unit/iu],
+      ["add-unit", { source: "datasheet", datasheet: "blue-horrors", count: "2" }, /add/iu],
+      ["battle-shock-state", { recipient: "this-unit", set: true }, /battle-shocked/iu],
+      ["regain-wounds", { subject: "this-model", amount: "D3+1" }, /regains up to/iu],
     ];
-    for (const [family_id, parameters, family_version, expected] of previews) {
-      const preview = previewLeaf({ family_id, family_version, parameters });
+    for (const [family_id, parameters, expected] of previews) {
+      const preview = previewLeaf({ family_id, family_version: currentFamilyVersion(family_id), parameters });
       expect(preview.problem).toBeNull();
       expect(preview.text).toMatch(expected);
     }
@@ -228,20 +228,20 @@ describe("Semantic authoring movement-family compiler", () => {
   it("lowers an unlimited Advance ceiling as a move modifier without inventing a distance", () => {
     expect(compiled([leaf("EFFECT", "move-distance", {
       subject: "this-unit", move_types: ["advance"], maximum: "unlimited",
-    }, 2)]).mechanics.effect).toEqual({
+    })]).mechanics.effect).toEqual({
       type: "move-modifier",
       target: "this-unit",
       modifier: { applies_to_moves: ["advance"], maximum: "unlimited" },
     });
     expect(normalizeFingerprintParameters("move-distance", {
       subject: "this-unit", move_types: ["advance"], maximum: "unlimited",
-    }, 2)).toEqual({ subject: "this-unit", move_types: ["advance"], maximum: "unlimited" });
+    })).toEqual({ subject: "this-unit", move_types: ["advance"], maximum: "unlimited" });
     expect(() => normalizeFingerprintParameters("move-distance", {
       subject: "this-unit", move_types: ["advance"], maximum: "unlimited", bonus: 1,
-    }, 2)).toThrow(/mutually exclusive/u);
+    })).toThrow(/mutually exclusive/u);
     expect(() => normalizeFingerprintParameters("move-distance", {
       subject: "this-unit", move_types: ["normal"], maximum: "unlimited",
-    }, 2)).toThrow(/exactly one advance/u);
+    })).toThrow(/exactly one advance/u);
   });
 
   it("accepts a dice expression outside the sampled enum, since normalize reads the full pattern", () => {
@@ -417,20 +417,18 @@ describe("Semantic authoring economy-family compiler", () => {
       .toEqual({ type: "resource-die", target: "this-model", modifier: { pool: "miracle-dice-pool", operation: "substitute", rolls: ["advance", "normal"] } });
   });
 
-  it("extends sticky-objective to an optional subject, v1 leaves still meaning this-unit", () => {
+  it("takes an optional sticky-objective subject, this-unit when absent", () => {
     expect(compiled([leaf("EFFECT", "sticky-objective", {})]).mechanics.effect).toEqual({ type: "objective-sticky", target: "this-unit" });
-    expect(compiled([leaf("EFFECT", "sticky-objective", {}, 2)]).mechanics.effect).toEqual({ type: "objective-sticky", target: "this-unit" });
-    expect(compiled([leaf("EFFECT", "sticky-objective", { subject: "this-model" }, 2)]).mechanics.effect).toEqual({ type: "objective-sticky", target: "this-model" });
-    expect(() => normalizeFingerprintParameters("sticky-objective", { subject: "this-model" }, 1)).toThrow(/sticky-objective parameters must be exactly:/u);
-    expect(rendered(base(), [leaf("EFFECT", "sticky-objective", { subject: "this-model" }, 2)]).length).toBeGreaterThan(0);
+    expect(compiled([leaf("EFFECT", "sticky-objective", {})]).mechanics.effect).toEqual({ type: "objective-sticky", target: "this-unit" });
+    expect(compiled([leaf("EFFECT", "sticky-objective", { subject: "this-model" })]).mechanics.effect).toEqual({ type: "objective-sticky", target: "this-model" });
+    expect(rendered(base(), [leaf("EFFECT", "sticky-objective", { subject: "this-model" })]).length).toBeGreaterThan(0);
   });
 
-  it("lets sticky-objective@3 name each unit a for-each loop reaches, which v2 refuses", () => {
-    expect(normalizeFingerprintParameters("sticky-objective", { subject: "recipient" }, 3)).toEqual({ subject: "recipient" });
-    expect(() => normalizeFingerprintParameters("sticky-objective", { subject: "recipient" }, 2)).toThrow(/sticky-objective\.subject/u);
+  it("lets sticky-objective name each unit a for-each loop reaches", () => {
+    expect(normalizeFingerprintParameters("sticky-objective", { subject: "recipient" })).toEqual({ subject: "recipient" });
     // The leaf lowers to the loop's recipient; on its own, with no loop around it, the record reaches no unit and is refused.
-    expect(effect(leaf("EFFECT", "sticky-objective", { subject: "recipient" }, 3), { attached: false, incoming: false })).toEqual({ type: "objective-sticky", target: "recipient" });
-    expect(compileLeaves([leaf("EFFECT", "sticky-objective", { subject: "recipient" }, 3)]).ok).toBe(false);
+    expect(effect(leaf("EFFECT", "sticky-objective", { subject: "recipient" }), { attached: false, incoming: false })).toEqual({ type: "objective-sticky", target: "recipient" });
+    expect(compileLeaves([leaf("EFFECT", "sticky-objective", { subject: "recipient" })]).ok).toBe(false);
   });
 
   it("compiles stratagem-cost, amount required unless the operation waives the cost", () => {

@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { SHARED_ROSTERS } from "../mfm/faction-map.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { foldName } from "./compile-weapon-names.js";
+import { foldName } from "./families/vocabulary.js";
 
 type UnitIdentity = { id: string; name: string };
 export type UnitNameContext = { faction_id: string; units?: readonly UnitIdentity[] };

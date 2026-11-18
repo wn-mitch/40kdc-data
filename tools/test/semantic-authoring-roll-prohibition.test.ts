@@ -5,7 +5,6 @@ import { CONFLICTING_DURATIONS } from "../src/semantic-authoring/compile-duratio
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "../src/semantic-authoring/contracts.js";
 import { prefillFromSource, type PrefillFamily } from "../src/semantic-authoring/leaf-prefill.js";
 import { previewLeaf } from "../src/semantic-authoring/leaf-preview.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { createValidator } from "../src/schema-loader.js";
 
 // Fabricated wording only. Each shape keeps the sentence structure of a real record with invented words.
@@ -242,18 +241,6 @@ describe("roll-prohibition leaf preview and prefill", () => {
   });
 });
 
-/** The family versions the extensions under test create. */
-const ROLL_MODIFIER_AND_REROLL_GAPS_VERSIONS: ReadonlySet<string> = new Set(["roll-modifier@10"]);
-
-/** The version of `family` this file's extension defines, found by its extension (later ones may sit above it). */
-function extendedVersion(family: string): number {
-  for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
-    const extension = familyExtension(family, version);
-    if (extension !== undefined && ROLL_MODIFIER_AND_REROLL_GAPS_VERSIONS.has(`${extension.family}@${extension.version}`)) return version;
-  }
-  throw new Error(`The extension of ${family} is not registered.`);
-}
-
 const DEMISE_TEXT = "Set the threshold of Deadly Demise to 4+. Add 1 to the Deadly Demise roll if it is a BEACON unit.";
 const demiseItems = (modifier: Record<string, unknown>): Piece[] => [
   ["Set the threshold of Deadly Demise to 4+", "ability-modifier", { subject: "this-unit", ability: "deadly-demise", aspect: "threshold", operation: "set", value: 4 }],
@@ -263,15 +250,12 @@ const demiseItems = (modifier: Record<string, unknown>): Piece[] => [
 const demiseLeaf = { roll: "deadly-demise", operation: "add", value: 1 };
 
 describe("roll-modifier roll deadly-demise", () => {
-  it("is accepted at the extension's version and refused at the one before", () => {
-    const version = extendedVersion("roll-modifier");
-    expect(normalizeFingerprintParameters("roll-modifier", demiseLeaf, version)).toEqual(demiseLeaf);
-    expect(() => normalizeFingerprintParameters("roll-modifier", demiseLeaf, version - 1)).toThrow();
-    expect(normalizeFingerprintParameters("roll-modifier", demiseLeaf, currentFamilyVersion("roll-modifier"))).toEqual(demiseLeaf);
+  it("is accepted", () => {
+    expect(normalizeFingerprintParameters("roll-modifier", demiseLeaf)).toEqual(demiseLeaf);
   });
 
-  it("keeps every roll and form the previous version accepted", () => {
-    const version = extendedVersion("roll-modifier");
+  it("keeps every other roll and form", () => {
+    const version = currentFamilyVersion("roll-modifier");
     const accepted: Record<string, unknown>[] = [
       ...["hit", "wound", "charge", "advance", "save", "leadership", "battle-shock", "damage", "hazard", "psychic", "desperate-escape"]
         .map((roll) => ({ roll, operation: "add", value: 1 })),

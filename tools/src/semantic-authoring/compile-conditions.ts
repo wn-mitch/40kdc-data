@@ -55,7 +55,7 @@ function attackFilter(leaf: CompileLeaf, source: Node): Node {
   for (const key of ["attack_type", "shooting_type", "fight_type", "all_target_same_unit"]) {
     if (source[key] !== undefined) parameters[key] = source[key];
   }
-  // Version 5: the weapons a core ability selected (Firing Deck).
+  // The weapons a core ability selected (Firing Deck).
   if (source.weapon_selected_for !== undefined) {
     parameters.weapons = { ...(parameters.weapons as Node | undefined), ref: { selected_by: { ability: String(source.weapon_selected_for) } } };
   }
@@ -75,9 +75,9 @@ const ACTIVITIES: Record<string, [string, Node, string]> = {
   "disembarked-this-turn": ["disembarked", {}, "turn"],
   "made-ingress-move-this-turn": ["move-ended", { move_types: ["ingress"] }, "turn"],
   "set-up-this-turn": ["set-up", {}, "turn"],
-  // Version 12: "whose attacks have been resolved this phase".
+  // "whose attacks have been resolved this phase".
   "resolved-attacks-this-phase": ["attacks-resolved", {}, "phase"],
-  // Version 13: more of a unit's own moves and moments, this phase or turn.
+  // More of a unit's own moves and moments, this phase or turn.
   "fell-back-this-phase": ["move-ended", { move_types: ["fall-back"] }, "phase"],
   "charged-this-phase": ["move-ended", { move_types: ["charge"] }, "phase"],
   "made-normal-move-this-phase": ["move-ended", { move_types: ["normal"] }, "phase"],
@@ -85,7 +85,7 @@ const ACTIVITIES: Record<string, [string, Node, string]> = {
   "disembarked-this-phase": ["disembarked", {}, "phase"],
   "set-up-this-phase": ["set-up", {}, "phase"],
   "made-dark-pact-this-phase": ["used", { kind: "dark-pact" }, "phase"],
-  // Version 24: a move type's eligibility (Special Move Types).
+  // A move type's eligibility (Special Move Types).
   "embarked-this-phase": ["move-ended", { move_types: ["embark"] }, "phase"],
   "advanced-this-phase": ["move-ended", { move_types: ["advance"] }, "phase"],
 };
@@ -114,19 +114,19 @@ function setUpByAbility(subject: unknown, ability: string, window: string): Node
 }
 
 /**
- * Version 8 history, whose subject is not the unit the event happens to: the unit that destroyed
+ * History whose subject is not the unit the event happens to: the unit that destroyed
  * enemy units (the DSL's filter.by), or the unit whose models the triggering attacks destroyed.
  */
 const HISTORY: Record<string, (subject: string | undefined, attackType?: string) => Node> = {
-  // Version 15: "whose melee attacks destroyed an enemy unit"; attackType narrows the destroying attacks.
+  // "whose melee attacks destroyed an enemy unit"; attackType narrows the destroying attacks.
   "destroyed-enemy-unit-this-phase": (subject, attackType) => ({ event: "destroyed", object: { owner: "enemy" }, filter: { by: subject ?? "this-unit", ...(attackType ? { attack_type: attackType } : {}) }, window: "phase" }),
   "destroyed-enemy-unit-this-turn": (subject, attackType) => ({ event: "destroyed", object: { owner: "enemy" }, filter: { by: subject ?? "this-unit", ...(attackType ? { attack_type: attackType } : {}) }, window: "turn" }),
-  // Version 9: "that disembarked from this TRANSPORT this turn"; the Transport is this unit.
-  // Version 10: "that arrived from Reserves this turn"; Reserves are Strategic Reserves.
+  // "that disembarked from this TRANSPORT this turn"; the Transport is this unit.
+  // "that arrived from Reserves this turn"; Reserves are Strategic Reserves.
   "set-up-from-reserves-this-phase": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "strategic-reserves" }, window: "phase" }),
   "set-up-from-reserves-this-turn": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "strategic-reserves" }, window: "turn" }),
   "disembarked-from-this-transport-this-turn": (subject) => ({ ...(subject ? { subject } : {}), event: "disembarked", filter: { transport: "this-unit" }, window: "turn" }),
-  // Version 13: models the subject lost, and enemy models it destroyed.
+  // Models the subject lost, and enemy models it destroyed.
   "lost-models-this-phase": (subject) => ({ event: "model-destroyed", object: !subject || subject === "this-unit" ? "model-in-this-unit" : { level: "model", member_of: subject }, window: "phase" }),
   "destroyed-enemy-model-this-phase": (subject) => ({ event: "model-destroyed", object: { owner: "enemy", level: "model" }, filter: { by: subject ?? "this-unit" }, window: "phase" }),
   "destroyed-enemy-model-this-turn": (subject) => ({ event: "model-destroyed", object: { owner: "enemy", level: "model" }, filter: { by: subject ?? "this-unit" }, window: "turn" }),
@@ -168,7 +168,7 @@ function pred(type: string, parameters: Node, subject?: unknown): Node {
   if (type === "has-keyword" && parameters.chosen_by === undefined) filter = parameters;
   else if (type === "has-ability") {
     filter = { has_ability: [parameters.ability] };
-    // unit-has-ability@4: every model but the excluded ones has the ability.
+    // unit-has-ability excluding_keywords: every model but the excluded ones has the ability.
     if (Array.isArray(parameters.excluding_keywords)) filter.has_ability_models = { none_of: parameters.excluding_keywords };
   }
   else if (type === "owned-by") filter = { owner: parameters.owner };
@@ -286,7 +286,7 @@ export function matchingUnit(leaf: CompileLeaf, subject: string | undefined): No
     ...(leaf.parameters.of_not_designated !== undefined ? { not_designated: closed(leaf, "of_not_designated") } : {}),
     // "of one or more friendly X VEHICLE or Y units": any one alternative.
     ...dslAlternatives(leaf.parameters.of_alternatives as FilterAlternative[] | undefined),
-    // "units with which it shares the KHORNE … keyword": one of these the subject also has (unit-position@27).
+    // "units with which it shares the KHORNE … keyword": one of these the subject also has.
     ...(leaf.parameters.of_shares_keywords !== undefined ? { shares_any_of: closed(leaf, "of_shares_keywords") } : {}),
     ...(leaf.parameters.of_other === true ? { excluding: subject ?? "this-unit" } : {}),
   };
@@ -363,7 +363,7 @@ export function condition(leaf: CompileLeaf): Node {
     const filter = leaf.parameters.subject_filter as Node | undefined;
     if (filter === undefined) throw new CompileError(`${leaf.family_id} names the units of a unit-filter, but none sits right before it.`);
     const { subject_filter: _filter, ...rest } = leaf.parameters;
-    // Version 16: "a BIG MEK model is embarked within this unit" is that filter's units, embarked within the named Transport.
+    // "a BIG MEK model is embarked within this unit" is that filter's units, embarked within the named Transport.
     const withTransport = leaf.family_id === "unit-state" && isEmbarkedWithin(leaf);
     const { with: transport, ...withoutTransport } = rest;
     const parameters = Object.fromEntries(Object.entries(withTransport ? withoutTransport : rest).map(([key, value]) => [key, value === "filtered-units" ? FILTER_STAND_IN : value]));
@@ -388,7 +388,7 @@ export function condition(leaf: CompileLeaf): Node {
   const who = target ? "defender" : undefined;
   switch (leaf.family_id) {
     case "leading-unit": {
-      // Version 5: "unless it is leading a unit" negates; a led unit is the bodyguard's view.
+      // "unless it is leading a unit" negates; a led unit is the bodyguard's view.
       if (leaf.parameters.negated === true) return negate(condition({ ...leaf, parameters: { ...leaf.parameters, negated: false } }));
       if (leaf.parameters.attachment === "led") {
         const leaders = leaf.parameters.leader_keywords === undefined ? {} : { with: { all_of: closed(leaf, "leader_keywords") } };
@@ -396,13 +396,13 @@ export function condition(leaf: CompileLeaf): Node {
         return pred("attachment", { role: "led", ...leaders }, subject === "this-model" || subject === "bearers-unit" ? "this-unit" : widenedWho(subject));
       }
       // A Leader is a model, so this model, this unit and the bearer's unit leading all say the
-      // Leader model is leading. Version 1 leaves only ever meant leading.
-      const attachment = leaf.family_version >= 2 ? closed(leaf, "attachment") : "leading";
-      // Version 4: the unit it is attached to has these keywords; a unit-filter right after the leaf
+      // Leader model is leading.
+      const attachment = closed(leaf, "attachment");
+      // The unit it is attached to has these keywords; a unit-filter right after the leaf
       // names that unit whole (compile-unit-filters.ts), keeping any authored keywords.
       const attachedTo = leaf.parameters.attached_to_filter !== undefined ? { with: leaf.parameters.attached_to_filter }
         : leaf.parameters.attached_to_keywords === undefined ? {} : { with: { all_of: closed(leaf, "attached_to_keywords") } };
-      // Version 5: another model or unit ("that CHARACTER model is leading a unit").
+      // Another model or unit ("that CHARACTER model is leading a unit").
       const named = String(closed(leaf, "subject"));
       if (!["this-model", "this-unit", "bearers-unit"].includes(named)) {
         if (attachment === "supporting") throw new CompileError("leading-unit supporting for another unit has no DSL condition yet.");
@@ -419,26 +419,18 @@ export function condition(leaf: CompileLeaf): Node {
       if (attachment === "supporting" && closed(leaf, "subject") === "this-model") return pred("attachment", { role: "attached" }, "this-model");
       throw new CompileError(`leading-unit ${String(attachment)} with subject ${JSON.stringify(leaf.parameters.subject)} has no DSL condition yet.`);
     }
-    case "below-starting-strength":
-      return pred("strength", { below: "starting" }, target || leaf.parameters.subject === "target-unit" ? "defender" : undefined);
     case "unit-state": {
-      // Version 4 (batch 6) widens subject beyond this-unit/this-model/target; below that,
-      // only being on the battlefield could ever be said of this model.
-      const wide = leaf.family_version >= 4;
       return polarity(leaf, anyOf((leaf.parameters.states as string[]).map((state) => {
-        const subject = wide ? widenedWho(closed(leaf, "subject"))
-          : STRENGTH_STATES[state] ? who
-            : state === "on-battlefield" && !target && leaf.parameters.subject === "this-model" ? "this-model" : who;
+        const subject = widenedWho(closed(leaf, "subject"));
         if (leaf.parameters.at !== undefined && (STRENGTH_STATES[state] || state === "carrying-units" || state === "embarked")) throw new CompileError(`unit-state ${state} has no DSL form for an earlier point (at).`);
         // "at half-strength/below half-strength": at or below half its Starting Strength.
         if (STRENGTH_STATES[state]) return pred("strength", { below: STRENGTH_STATES[state], ...(state === "at-or-below-half-strength" ? { at_or_below: true } : {}) }, subject);
-        // Version 13: the subject is embarked within some Transport (the state itself, not the units it carries).
+        // The subject is embarked within some Transport (the state itself, not the units it carries).
         if (state === "embarked" && leaf.parameters.with !== undefined) throw new CompileError("DSL_GAP: a named unit embarked within a named Transport has no DSL form; unit-state has no embarked-within reference.");
         if (state === "embarked") return pred("unit-state", { state: "embarked" }, subject);
         // A Transport carries units when some unit is embarked in that Transport.
         if (state === "carrying-units") return pred("unit-state", { state: "embarked" }, { embarked_in: subject ?? "this-unit" });
-        // Version 5: engaged with one named unit, the DSL's `with`.
-        // Version 10: the state as it was at the start of the phase or turn.
+        // Engaged with one named unit is the DSL's `with`; `at` is the state as it was at the start of the phase or turn.
         const at = leaf.parameters.at === undefined ? {} : { at: closed(leaf, "at") };
         if (leaf.parameters.with === "following-filter") {
           const engaged = pred("unit-state", { state, with: followingFilter(leaf), ...at }, subject);
@@ -446,13 +438,13 @@ export function condition(leaf: CompileLeaf): Node {
         }
         // The DSL's `with` absent means engaged with any unit, so this unit is named, not defaulted.
         if (leaf.parameters.with !== undefined) return pred("unit-state", { state, with: widenedWho(closed(leaf, "with")) ?? "this-unit", ...at }, subject);
-        // Version 8: "in Reserves" is Strategic Reserves in the rules; the DSL has only that state.
+        // "in Reserves" is Strategic Reserves in the rules; the DSL has only that state.
         return pred("unit-state", { state: state === "in-reserves" ? "in-strategic-reserves" : state, ...at }, subject);
       })));
     }
     case "unit-keyword": {
-      // Version 2 widens the subject; version 6 can reference an ability's keyword choice.
-      const subject = leaf.family_version >= 2 ? widenedWho(closed(leaf, "subject")) : who;
+      // chosen_by references an ability's keyword choice.
+      const subject = widenedWho(closed(leaf, "subject"));
       if (leaf.parameters.chosen_by !== undefined) return polarity(leaf, pred("has-keyword", { chosen_by: closed(leaf, "chosen_by") }, subject));
       const keywords = leaf.parameters.keywords as string[];
       // "not a MONSTER or VEHICLE" excludes both, so each keyword carries the negation.
@@ -460,7 +452,7 @@ export function condition(leaf: CompileLeaf): Node {
         const each = keywords.map((keyword) => negate(pred("has-keyword", { all_of: [keyword] }, subject)));
         return each.length === 1 ? each[0]! : { operator: "and", operands: each };
       }
-      // Version 8: match all is one unit with every keyword ("an **ADEPTA SORORITAS JUMP PACK** unit").
+      // Match all is one unit with every keyword ("an **ADEPTA SORORITAS JUMP PACK** unit").
       return pred("has-keyword", keywords.length === 1 || leaf.parameters.match === "all" ? { all_of: keywords } : { any_of: keywords }, subject);
     }
     // "In a turn in which it used its Foo ability", "while it is performing a Bar" (compile-named-ability.ts).
@@ -472,11 +464,10 @@ export function condition(leaf: CompileLeaf): Node {
         const happened = lowerTriggeringDestructions(leaf).map((parameters) => ({ type: "happened", parameters }));
         return polarity(leaf, happened.length === 1 ? happened[0]! : anyOf(happened));
       }
-      // Version 3 (batch 6) widens subject beyond this-unit/target.
-      const subject = leaf.family_version >= 3 ? widenedWho(closed(leaf, "subject")) : who;
-      // Version 4 names several activities: any of them, and negated none of them.
-      const activities = leaf.family_version >= 4 ? closed(leaf, "activities") as string[] : [String(closed(leaf, "activity"))];
-      // Version 15: "not chosen by the Foo Gadget this phase" names its Gadgets (compile-opponent-stratagem.ts).
+      const subject = widenedWho(closed(leaf, "subject"));
+      // Several activities: any of them, and negated none of them.
+      const activities = closed(leaf, "activities") as string[];
+      // "not chosen by the Foo Gadget this phase" names its Gadgets (compile-opponent-stratagem.ts).
       if (checkStratagemActivity(leaf, activities)) return polarity(leaf, stratagemTargetedAnyOf(leaf, subject));
       const own = anyOf(activities.map((activity) => {
         const byAbility = SET_UP_BY_ABILITY[activity];
@@ -500,7 +491,7 @@ export function condition(leaf: CompileLeaf): Node {
       // attacks of the ability's moment ("after this model has shot"), during that moment.
       // `hit_filter` is the attack-filter foldHitFilters or foldLeadingHitFilters folded in ("… made with its Plague Wind").
       // Window phase: any hit this phase, by the moment's unit or by the units of the unit-filter after it.
-      // Version 4: object following-filter names the unit hit as the unit-filter after it ("scored a hit against an enemy unit").
+      // Object following-filter names the unit hit as the unit-filter after it ("scored a hit against an enemy unit").
       return { type: "happened", parameters: {
         event: "after-roll", subject: leaf.parameters.by === "following-filter" ? followingFilter(leaf) : "event-subject",
         object: leaf.parameters.object === "following-filter" ? followingFilter(leaf) : widenedWho(closed(leaf, "subject")) ?? "this-unit",
@@ -519,8 +510,7 @@ export function condition(leaf: CompileLeaf): Node {
       return polarity(leaf, pred("designated", { tag: MARK_TAGS[String(closed(leaf, "mark"))] }, who));
     case "unit-position": {
       const kind = closed(leaf, "kind");
-      // Widened for every version: v1 always authored subject as "target", so widenedWho gives
-      // the same "defender" it always compiled to; only v2 (batch 6) can author anything else.
+      // widenedWho maps the subject to its DSL unit-ref; "target" is the "defender".
       const subject = widenedWho(closed(leaf, "subject"));
       if (kind === "closest-eligible") {
         const parameters: Node = { among: "eligible-targets" };
@@ -532,36 +522,35 @@ export function condition(leaf: CompileLeaf): Node {
         return polarity(leaf, pred("closest", parameters, subject));
       }
       if (kind === "within" && leaf.parameters.weapon_range !== undefined) {
-        // Version 15: the distance is the attacking weapon's range, or half of it (compile-attack-properties reads the weapon).
+        // The distance is the attacking weapon's range, or half of it (compile-attack-properties reads the weapon).
         const range = closed(leaf, "weapon_range") === "half" ? "half-weapon" : "weapon";
         return polarity(leaf, pred("within", { of: "attacker", range }, subject));
       }
       if (kind === "within" || kind === "beyond") {
-        // Version 4 names what the distance is measured from; earlier versions always meant the
-        // distance from this unit to the attack's target, as the authored data measures it.
-        // A named range (range_ref, unit-position@15) replaces inches:
+        // `of` names what the distance is measured from; without it, the distance runs from this
+        // unit to the attack's target. A named range (range_ref) replaces inches:
         // its aura carries the anchor, and `of` says whose units the distance is measured to.
         // range_ref engagement is the Engagement Range itself: the DSL names it as the string "engagement", not an aura.
         const engagement = leaf.parameters.range_ref === "engagement";
         const named = leaf.parameters.range_ref !== undefined && !engagement;
         if (named && kind === "beyond") throw new CompileError("A named range is measured within, not beyond.");
-        // A weapon distance (distance half-weapon, unit-position@21) is the attacking weapon's half range: a range string, not inches.
+        // A weapon distance (distance half-weapon) is the attacking weapon's half range: a range string, not inches.
         const weaponDistance = leaf.parameters.distance !== undefined;
-        // Version 30: a distance rolled each time the ability resolves ("within D6\"").
+        // A distance rolled each time the ability resolves ("within D6\"").
         const inches = (): Node => leaf.parameters.rolled_inches !== undefined ? { dice: closed(leaf, "rolled_inches") } : { inches: closed(leaf, "inches") };
         const range = (engagement ? "engagement" : named ? { aura_of: namedRange(leaf.parameters.range_ref).aura_of } : weaponDistance ? "half-weapon" : inches()) as unknown as Node;
         const inchesOnly = (): Node => {
           if (named || engagement || weaponDistance) throw new CompileError(`unit-position of ${String(leaf.parameters.of)} takes inches, not a named range or a weapon distance.`);
           return inches();
         };
-        // Version 29: where the subject was when the triggering move began (compile.ts checks the record has that move).
+        // Where the subject was when the triggering move began (compile.ts checks the record has that move).
         const at = leaf.parameters.at === "move-start" ? { at: "move-start" } : {};
         if (leaf.parameters.at === "move-start" && (leaf.parameters.of === "objective" || leaf.parameters.of === undefined)) {
           throw new CompileError("unit-position at move-start measures to a unit or place, not an objective or the defender.");
         }
         // How the distance is read: wholly inside it, and when.
         const measured = { ...(leaf.parameters.wholly === true ? { wholly: true } : {}), ...at };
-        // Version 22: every model of the subject is within (unit-position@23).
+        // Every model of the subject is within.
         const every = everyModelFlag(leaf);
         // Wave 10: a distance to an objective marker by its designation and controller, or to the
         // enemy deployment zone (a region place, beyond only; compile-set-up-placement folds it).
@@ -586,7 +575,7 @@ export function condition(leaf: CompileLeaf): Node {
       }
       const controlled = closed(leaf, "controlled_by");
       const objective: Node = controlled === "you" ? { controlled_by: "friendly" } : controlled === "opponent" ? { controlled_by: "enemy" } : {};
-      // Version 13: the marker this record selected (bound by compile.ts), or the one carrying a designation.
+      // The marker this record selected (bound by compile.ts), or the one carrying a designation.
       if (leaf.parameters.objective === "designated") objective.designated = closed(leaf, "objective_tag");
       if (leaf.parameters.objective === "selected") {
         if (typeof leaf.parameters.selection_var !== "string") throw new CompileError("unit-position names the selected objective marker, but this record selects no objective marker.");
@@ -621,9 +610,9 @@ export function condition(leaf: CompileLeaf): Node {
       const window = leaf.parameters.window === undefined ? undefined : closed(leaf, "window");
       return polarity(leaf, pred("moved-over", { by: closed(leaf, "by"), ...(window && window !== "event" ? { window } : {}) }, leaf.parameters.subject === undefined ? undefined : closed(leaf, "subject") as string));
     }
-    // ── New predicate families (batch 6, predicate-families.ts) ─────────────────────────────
+    // ── Predicate families ──────────────────────────────────────────────────────────────────
     case "rule-active": {
-      // Version 2: one option of an option-bearing rule (stance-option-ref), or an ability a record
+      // One option of an option-bearing rule (stance-option-ref), or an ability a record
       // defines inside itself (named-ability-ref).
       const rule = closed(leaf, "rule");
       const reference = rule !== null && typeof rule === "object" ? rule as Node : null;
@@ -692,7 +681,7 @@ export function condition(leaf: CompileLeaf): Node {
     case "attack-filter": {
       const parameters = attackFilter(leaf, leaf.parameters);
       if (leaf.parameters.target !== "that-unit") return polarity(leaf, { type: "attack-is", parameters });
-      // Version 4: aimed at the unit a Stratagem's WHEN moment named, its bound event's object (compile-when-subject.ts).
+      // Aimed at the unit a Stratagem's WHEN moment named, its bound event's object (compile-when-subject.ts).
       if (typeof leaf.parameters.defender_var !== "string") throw new CompileError("Attacks that target \"that unit\" name the unit a Stratagem's WHEN moment targeted, past a moment nested under it; this record has none.");
       const aimed: Node = { type: "same-unit", parameters: { subject: "defender", as: { event_var: leaf.parameters.defender_var, role: "object" } } };
       return polarity(leaf, Object.keys(parameters).length ? { operator: "and", operands: [{ type: "attack-is", parameters }, aimed] } : aimed);
@@ -710,7 +699,7 @@ export function condition(leaf: CompileLeaf): Node {
     }
     case "visible": {
       const parameters: Node = {};
-      // Version 3: visible to the unit-filter right after it (compile-unit-filters.ts).
+      // Visible to the unit-filter right after it (compile-unit-filters.ts).
       if (leaf.parameters.to !== undefined) parameters.to = leaf.parameters.to === "following-filter" ? followingFilter(leaf) : closed(leaf, "to");
       if (leaf.parameters.fully === true) parameters.fully = true;
       if (leaf.parameters.blocked_by !== undefined) parameters.blocked_by = closed(leaf, "blocked_by");
@@ -721,13 +710,13 @@ export function condition(leaf: CompileLeaf): Node {
       // The Warlord is one model: a count of Warlords has no meaning.
       if (parameters.tag === "warlord" && (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined)) throw new CompileError("A count of Warlords is not a Warlord test; the Warlord is one model.");
       if (parameters.tag === "warlord" && leaf.parameters.subject === undefined) throw new CompileError("A Warlord test has no subject: name the model or unit it tests.");
-      // designated-filter@3: applied by a unit of the unit-filter after the leaf (compile-unit-filters.ts folds it in).
+      // by: applied by a unit of the unit-filter after the leaf (compile-unit-filters.ts folds it in).
       if (leaf.parameters.by !== undefined) parameters.by = leaf.parameters.by === "following-filter" ? followingFilter(leaf) : closed(leaf, "by");
       if (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined) parameters.count = countBounds(leaf);
       return polarity(leaf, pred("designated", parameters, subjectOf(leaf)));
     }
     case "battle-round": {
-      // Version 2: any one of several listed rounds.
+      // Any one of several listed rounds.
       if (Array.isArray(leaf.parameters.rounds)) return anyOf((leaf.parameters.rounds as number[]).map((round) => ({ type: "battle-round", parameters: { min: round, max: round } })));
       const parameters: Node = {};
       if (leaf.parameters.min !== undefined) parameters.min = closed(leaf, "min");
@@ -741,14 +730,14 @@ export function condition(leaf: CompileLeaf): Node {
     }
     case "phase-window": {
       const operands: Node[] = [];
-      // Version 2: "in any phase" names no phase; compile.ts drops it when no turn is named either.
+      // "in any phase" names no phase; compile.ts drops it when no turn is named either.
       if (leaf.parameters.phase !== undefined && leaf.parameters.phase !== "any") operands.push({ type: "phase-is", parameters: { phase: closed(leaf, "phase") } });
       const turn = leaf.parameters.turn === undefined ? undefined : closed(leaf, "turn");
       if (turn !== undefined && turn !== "either") operands.push({ type: "player-turn-is", parameters: { turn: `${String(turn)}-turn` } });
       if (operands.length === 0) throw new CompileError("phase-window needs a phase, a turn other than either, or both.");
       return operands.length === 1 ? operands[0]! : { operator: "and", operands };
     }
-    // ── Mission/composition predicate families (batch 7a, mission-predicate-families.ts) ────
+    // ── Mission/composition predicate families ──────────────────────────────────────────────
     case "model-profile":
       return polarity(leaf, pred("model-profile", { profile: closed(leaf, "profile") }, subjectOf(leaf)));
     case "loadout": {
@@ -913,7 +902,7 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
     ...(Array.isArray((filter as Node).unit_ids) ? [pred("matches", { subject: "this-unit", filter: { level: "unit", unit_ids: (filter as Node).unit_ids } })] : []),
     ...(filter.any_keywords?.length ? [pred("has-keyword", { any_of: filter.any_keywords })] : []),
     ...(filter.alternatives?.length ? [alternativesCheck(filter.alternatives)!] : []),
-    // Version 3: "That ADEPTUS ASTARTES INFANTRY/MOUNTED unit" also has one of these.
+    // "That ADEPTUS ASTARTES INFANTRY/MOUNTED unit" also has one of these.
     ...(Array.isArray(selector.parameters.any_keywords) ? [pred("has-keyword", { any_of: selector.parameters.any_keywords })] : []),
     ...(filter.states ?? []).map((state) => stateCheck(state)),
     ...(filter.excluded_all_keywords?.length ? [negate(pred("has-keyword", { all_of: filter.excluded_all_keywords }))] : []),

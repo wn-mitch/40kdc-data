@@ -1,6 +1,6 @@
 import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, objectEvent, targetedAttackOfFilter, targetedByOtherSide } from "./compile-antecedent.js";
 import { ANTECEDENT } from "./antecedent-families.js";
-import { EXCLUDED_FROM_ATTACKS, FILTER_SUBJECT_TARGET } from "./families/unit-filters.js";
+import { EXCLUDED_FROM_ATTACKS, FILTER_SUBJECT_TARGET } from "./families/vocabulary.js";
 import { destinationOf } from "./compile-move-end-nearest.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { allocatedObject, destroyedFilter, destroyedModelAfter, destroyedObject, membershipOf, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";

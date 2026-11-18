@@ -4,7 +4,7 @@ import { duration } from "./compile-duration-scope.js";
 import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { ordered, placements, shapeSignature } from "./compile-placement.js";
 import { exactSpan } from "./contracts.js";
-import { NAMED_ABILITY_DEFINITION, NAMED_ABILITY_DEFINITION_END, RESOURCE_BEFORE_ABILITIES } from "./named-ability-state-families.js";
+import { NAMED_ABILITY_DEFINITION, NAMED_ABILITY_DEFINITION_END, RESOURCE_BEFORE_ABILITIES } from "./families/vocabulary.js";
 
 type Node = Record<string, unknown>;
 type Compile = (leaves: readonly CompileLeaf[], sourceText?: string) => Compiled;

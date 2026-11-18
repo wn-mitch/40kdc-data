@@ -12,7 +12,7 @@ import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
 
 /**
  * Batch 2 (grants & ability control): core-ability-grant, keyword-grant, weapon-grant,
- * ability-modifier, ability-activate, and weapon-ability-grant@4's new filters and flags.
+ * ability-modifier, ability-activate, and weapon-ability-grant's weapon filters and flags.
  */
 
 const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment");
@@ -25,7 +25,7 @@ function authored(factionId: string, abilityId: string): Record<string, unknown>
 }
 
 let offset = 0;
-function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion = 1): CompileLeaf {
+function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion = currentFamilyVersion(familyId)): CompileLeaf {
   offset += 10;
   return { role, family_id: familyId, family_version: familyVersion, parameters, start_byte: offset };
 }
@@ -88,7 +88,7 @@ describe("Semantic authoring grants & ability control families", () => {
     expect(() => normalizeFingerprintParameters("weapon-grant", { subject: "this-unit", weapon_id: "Power Fist" })).toThrow();
   });
 
-  it("changes a named ability's range, uses, or other measured aspect (@1, frozen)", () => {
+  it("changes a named ability's range, uses, or other measured aspect", () => {
     const widenRange = leaf("EFFECT", "ability-modifier", { subject: "this-unit", ability: "voice-of-command-astra-militarum", aspect: "range", operation: "add", value: 3 });
     expect(compiled([widenRange]).mechanics.effect).toEqual({
       type: "ability-modifier", target: "this-unit", modifier: { ability: "voice-of-command-astra-militarum", aspect: "range", operation: "add", value: 3 },
@@ -99,16 +99,13 @@ describe("Semantic authoring grants & ability control families", () => {
     });
     expect(rendered(base, [widenRange]).length).toBeGreaterThan(0);
     expect(rendered(base, [extraUse]).length).toBeGreaterThan(0);
-    // @1 never had recipients/options/lift-limit; those only exist from @2.
-    expect(() => normalizeFingerprintParameters("ability-modifier", { subject: "this-unit", ability: "x", aspect: "recipients", operation: "add", value: 1 }, 1)).toThrow();
-    expect(() => normalizeFingerprintParameters("ability-modifier", { subject: "this-unit", ability: "x", aspect: "range", operation: "lift-limit", value: 1 }, 1)).toThrow();
   });
 
-  it("changes a named ability at @2: recipients, options, an object ability ref, and uses-only limits", () => {
+  it("changes a named ability's recipients, options, an object ability ref, and uses-only limits", () => {
     // Widen recipients: no value, a unit-filter names who else the ability now reaches.
     const widen = leaf("EFFECT", "ability-modifier", {
       subject: "this-unit", ability: "oath-of-moment", aspect: "recipients", operation: "add", recipients: { owner: "friendly", all_of: ["CHARACTER"] },
-    }, 2);
+    });
     expect(compiled([widen]).mechanics.effect).toEqual({
       type: "ability-modifier", target: "this-unit",
       modifier: { ability: "oath-of-moment", aspect: "recipients", operation: "add", recipients: { owner: "friendly", all_of: ["CHARACTER"] } },
@@ -119,27 +116,27 @@ describe("Semantic authoring grants & ability control families", () => {
     const addOption = leaf("EFFECT", "ability-modifier", {
       subject: "this-model", ability: "warlord-trait-x", aspect: "options", operation: "add",
       add_option: { name: "Total Carnage", effect: { type: "mortal-wounds", target: "this-unit", modifier: { count: 3 } } },
-    }, 2);
+    });
     expect(compiled([addOption]).mechanics.effect).toMatchObject({ modifier: { aspect: "options", add_option: { name: "Total Carnage" } } });
     expect(rendered(base, [addOption]).length).toBeGreaterThan(0);
     expect(() => normalizeFingerprintParameters("ability-modifier", {
       subject: "this-model", ability: "warlord-trait-x", aspect: "options", operation: "add", add_option: { name: "X", effect: { type: "not-a-real-effect" } },
-    }, 2)).toThrow();
+    })).toThrow();
 
     // An object ability ref: every ability with a keyword, or the ability a used-trigger names.
-    const byKeyword = leaf("EFFECT", "ability-modifier", { subject: "this-unit", ability: { keyword: "PSYCHIC" }, aspect: "threshold", operation: "set", value: 4 }, 2);
+    const byKeyword = leaf("EFFECT", "ability-modifier", { subject: "this-unit", ability: { keyword: "PSYCHIC" }, aspect: "threshold", operation: "set", value: 4 });
     expect(compiled([byKeyword]).mechanics.effect).toEqual({
       type: "ability-modifier", target: "this-unit", modifier: { ability: { keyword: "PSYCHIC" }, aspect: "threshold", operation: "set", value: 4 },
     });
     expect(rendered(base, [byKeyword]).length).toBeGreaterThan(0);
-    const affecting = leaf("EFFECT", "ability-modifier", { subject: "this-unit", ability: { affecting: { owner: "enemy" } }, aspect: "range", operation: "add", value: 3 }, 2);
+    const affecting = leaf("EFFECT", "ability-modifier", { subject: "this-unit", ability: { affecting: { owner: "enemy" } }, aspect: "range", operation: "add", value: 3 });
     expect(compiled([affecting]).mechanics.effect).toMatchObject({ modifier: { ability: { affecting: { owner: "enemy" } } } });
     expect(rendered(base, [affecting]).length).toBeGreaterThan(0);
 
     // Uses-only limits: cap_per and not_same only apply to the uses aspect.
     const cappedUse = leaf("EFFECT", "ability-modifier", {
       subject: "this-model", ability: "overkill", aspect: "uses", operation: "add", value: 1, cap_per: { count: 1, period: "battle-round" }, not_same: "phase",
-    }, 2);
+    });
     expect(compiled([cappedUse]).mechanics.effect).toEqual({
       type: "ability-modifier", target: "this-model",
       modifier: { ability: "overkill", aspect: "uses", operation: "add", value: 1, cap_per: { count: 1, period: "battle-round" }, not_same: "phase" },
@@ -147,15 +144,7 @@ describe("Semantic authoring grants & ability control families", () => {
     expect(rendered(base, [cappedUse]).length).toBeGreaterThan(0);
     expect(() => normalizeFingerprintParameters("ability-modifier", {
       subject: "this-model", ability: "overkill", aspect: "range", operation: "add", value: 1, not_same: "phase",
-    }, 2)).toThrow();
-  });
-
-  it("migrates ability-modifier@1 leaves to @2 with no data loss", () => {
-    const v1 = leaf("EFFECT", "ability-modifier", { subject: "this-unit", ability: "voice-of-command-astra-militarum", aspect: "range", operation: "add", value: 3 }, 1);
-    const v2 = leaf("EFFECT", "ability-modifier", { subject: "this-unit", ability: "voice-of-command-astra-militarum", aspect: "range", operation: "add", value: 3 }, 2);
-    expect(compiled([v1]).mechanics.effect).toEqual(compiled([v2]).mechanics.effect);
-    expect(normalizeFingerprintParameters("ability-modifier", { subject: "this-unit", ability: "voice-of-command-astra-militarum", aspect: "range", operation: "add", value: 3 }, 1))
-      .toEqual(normalizeFingerprintParameters("ability-modifier", { subject: "this-unit", ability: "voice-of-command-astra-militarum", aspect: "range", operation: "add", value: 3 }, 2));
+    })).toThrow();
   });
 
   it("grants a non-core ability record, distinct from core-ability-grant", () => {
@@ -173,30 +162,30 @@ describe("Semantic authoring grants & ability control families", () => {
   it("activates a named ability now, or one of its options exclusively", () => {
     const now = leaf("EFFECT", "ability-activate", { subject: "this-unit", ability: "voice-of-command-astra-militarum" });
     expect(compiled([now]).mechanics.effect).toEqual({ type: "ability-activate", target: "this-unit", modifier: { ability: "voice-of-command-astra-militarum" } });
-    const option = leaf("EFFECT", "ability-activate", { subject: "this-model", ability: "stratagem-x", option: "advance", exclusive: true });
+    const option = leaf("EFFECT", "ability-activate", { subject: "this-model", ability: "stratagem-x", option: "advance" });
     expect(compiled([option]).mechanics.effect).toEqual({
       type: "ability-activate", target: "this-model", modifier: { ability: "stratagem-x", option: "advance", exclusive: true },
     });
     expect(rendered(base, [now]).length).toBeGreaterThan(0);
     expect(rendered(base, [option]).length).toBeGreaterThan(0);
-    // exclusive names which option is exclusively active; it needs an option to point at.
+    // An option activation is exclusive unless additive; exclusive is not a parameter of its own.
     expect(() => normalizeFingerprintParameters("ability-activate", { subject: "this-unit", ability: "x", exclusive: true })).toThrow();
   });
 
-  it("extends weapon-ability-grant@4 with a weapon filter, if_present, and incoming", () => {
-    const named = leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "all", weapon_name: "Volkite Charger" }, 4);
+  it("gives weapon-ability-grant a weapon filter, if_present, and incoming", () => {
+    const named = leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "all", weapon_name: "Volkite Charger" });
     expect(compiled([named]).mechanics.effect).toEqual({
       type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }], weapons: { name: "Volkite Charger" } },
     });
-    const byKeyword = leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Precision", weapon_type: "ranged", weapon_keyword: "PISTOL" }, 4);
+    const byKeyword = leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Precision", weapon_type: "ranged", weapon_keyword: "PISTOL" });
     expect(compiled([byKeyword]).mechanics.effect).toEqual({
       type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "precision" }], weapons: { type: "ranged", keyword: { keyword_id: "pistol" } } },
     });
-    const incrementing = leaf("EFFECT", "weapon-ability-grant", { subject: "this-model", keyword: "Sustained Hits 1", weapon_type: "all", if_present: "increment" }, 4);
+    const incrementing = leaf("EFFECT", "weapon-ability-grant", { subject: "this-model", keyword: "Sustained Hits 1", weapon_type: "all", if_present: "increment" });
     expect(compiled([incrementing]).mechanics.effect).toEqual({
       type: "weapon-ability-grant", target: "this-model", modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }], if_present: "increment" },
     });
-    const incoming = leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Devastating Wounds", weapon_type: "melee", incoming: true }, 4);
+    const incoming = leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Devastating Wounds", weapon_type: "melee", incoming: true });
     expect(compiled([incoming]).mechanics.effect).toEqual({
       type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "devastating-wounds" }], weapons: { type: "melee" }, incoming: true },
     });
@@ -204,18 +193,11 @@ describe("Semantic authoring grants & ability control families", () => {
     // weapon_name and weapon_keyword are alternative filters, never both at once.
     expect(() => normalizeFingerprintParameters("weapon-ability-grant", {
       subject: "this-unit", keyword: "Lethal Hits", weapon_type: "all", weapon_name: "X", weapon_keyword: "PISTOL",
-    }, 4)).toThrow();
+    })).toThrow();
     // incoming names the attacking weapon; combining it with a named-weapon filter has no text.
     expect(() => normalizeFingerprintParameters("weapon-ability-grant", {
       subject: "this-unit", keyword: "Lethal Hits", weapon_type: "all", weapon_name: "X", incoming: true,
-    }, 4)).toThrow();
-  });
-
-  it("migrates weapon-ability-grant@3 leaves to @4 with no data loss", () => {
-    // v3->v4 is purely additive: a v3 leaf's parameters are already a valid v4 parameter set.
-    const v3 = leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "melee" }, 3);
-    const v4 = leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "melee" }, 4);
-    expect(compiled([v3]).mechanics.effect).toEqual(compiled([v4]).mechanics.effect);
+    })).toThrow();
   });
 });
 

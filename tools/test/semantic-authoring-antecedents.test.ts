@@ -8,8 +8,7 @@ import { compileLeaves, leafFragment, type Compiled } from "../src/semantic-auth
 import { bindAntecedents, postfixFilter } from "../src/semantic-authoring/compile-antecedent.js";
 import type { CompileLeaf } from "../src/semantic-authoring/compile-fragments.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "../src/semantic-authoring/contracts.js";
-import { ANTECEDENT_KEYS, antecedentVersion } from "../src/semantic-authoring/antecedent-families.js";
-import { mapToLatest } from "../src/semantic-authoring/family-versions.js";
+import { ANTECEDENT_KEYS } from "../src/semantic-authoring/antecedent-families.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
 
@@ -113,18 +112,15 @@ describe("Semantic authoring anaphoric subjects", () => {
     expect(leafFragment(engaged("antecedent"))).toMatchObject({ kind: "implicit", note: expect.stringMatching(/^No separate text: points back/u) });
   });
 
-  it("accepts antecedent only from the new version, which every earlier leaf still fits", () => {
+  it("accepts antecedent beside the named subjects, which keep their meaning", () => {
     const old = { states: ["engaged"], subject: "selected-unit", negated: false };
-    expect(currentFamilyVersion("unit-state")).toBeGreaterThanOrEqual(6);
-    expect(normalizeFingerprintParameters("unit-state", old, 5)).toEqual(old);
-    expect(mapToLatest("unit-state", 5, old)).toEqual({ family: "unit-state", version: currentFamilyVersion("unit-state"), parameters: old });
-    expect(() => normalizeFingerprintParameters("unit-state", { ...old, subject: "antecedent" }, 5)).toThrow(/subject must be one of/u);
-    expect(normalizeFingerprintParameters("unit-state", { ...old, subject: "antecedent" }, 6)).toEqual({ ...old, subject: "antecedent" });
+    expect(normalizeFingerprintParameters("unit-state", old)).toEqual(old);
+    expect(normalizeFingerprintParameters("unit-state", { ...old, subject: "antecedent" })).toEqual({ ...old, subject: "antecedent" });
     // Both ends of one leaf can point back, and each stays its own value.
-    expect(normalizeFingerprintParameters("unit-state", { ...old, subject: "antecedent", with: "antecedent" }, 6))
+    expect(normalizeFingerprintParameters("unit-state", { ...old, subject: "antecedent", with: "antecedent" }))
       .toEqual({ ...old, subject: "antecedent", with: "antecedent" });
     // A key that is not a unit-ref never takes it.
-    expect(() => normalizeFingerprintParameters("unit-state", { ...old, states: ["antecedent"] }, 6)).toThrow();
+    expect(() => normalizeFingerprintParameters("unit-state", { ...old, states: ["antecedent"] })).toThrow();
     // anyOf subjects (a value or quoted source) take it too.
     expect(normalizeFingerprintParameters("apply-mark", { subject: "antecedent", tag: "suppressed" }, currentFamilyVersion("apply-mark")).subject).toBe("antecedent");
   });
@@ -135,14 +131,8 @@ describe("Semantic authoring anaphoric subjects", () => {
       const current = versions.filter((family) => !family.deprecated);
       expect(current, id).toHaveLength(1);
       expect(Math.max(...versions.map((family) => family.version)), id).toBe(current[0]!.version);
-      // The antecedent version may have been widened again since (families/); its predecessor never takes it.
-      const first = antecedentVersion(id)!;
-      expect(current[0]!.version, id).toBeGreaterThanOrEqual(first);
-      const previous = versions.find((family) => family.version === first - 1)!;
-      expect(previous.deprecated, id).toBe(true);
       for (const key of keys) {
         expect(JSON.stringify((current[0]!.parameterSchema.properties as Record<string, unknown>)[key]), `${id}.${key}`).toContain("antecedent");
-        expect(JSON.stringify((previous.parameterSchema.properties as Record<string, unknown>)[key]), `${id}.${key}`).not.toContain("antecedent");
       }
     }
   });

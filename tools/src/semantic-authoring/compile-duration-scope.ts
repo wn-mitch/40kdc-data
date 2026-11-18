@@ -1,17 +1,16 @@
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { PHASE_EDGE_ENDPOINTS } from "./families/durations-and-designations.js";
+import { PHASE_EDGE_ENDPOINTS } from "./families/vocabulary.js";
 
 /** DSL scope.duration for each endpoint a DURATION leaf names outside the phase edges below. */
 const DURATIONS: Record<string, string> = {
   "end-of-phase": "phase", "end-of-turn": "turn", "end-of-battle-round": "battle-round", "end-of-battle": "battle",
   "start-of-next-turn": "until-start-next-turn", "start-of-next-command-phase": "until-next-command-phase",
   "start-of-next-movement-phase": "until-next-movement-phase", "start-of-next-battle-round": "until-next-battle-round",
-  // Version 3 (batch 7a).
   "end-of-attack-sequence": "attack-sequence", "end-of-this-use": "resolution", "start-of-next-shooting-phase": "until-next-shooting-phase",
   "end-of-your-next-turn": "until-end-of-your-next-turn", "end-of-opponents-next-turn": "until-end-of-opponent-next-turn",
   "this-unit-has-shot": "until-this-unit-has-shot", "control-lost": "control-lost",
   "after-this-use": "after-resolving",
-  // Version 6: the turn after the current one, whoever's.
+  // The turn after the current one, whoever's.
   "end-of-next-turn": "until-end-of-next-turn",
 };
 

@@ -1,7 +1,7 @@
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 /**
- * A cost read from a table (resource-spend@4), bound before any role-based pass.
+ * A cost read from a table (resource-spend), bound before any role-based pass.
  *
  * "spend the relevant number of Resurgence points shown below based on that unit's Starting
  * Strength" is a resource-spend with amount by-table. The table follows it: each heading is a

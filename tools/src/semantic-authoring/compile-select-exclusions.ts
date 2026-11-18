@@ -1,4 +1,4 @@
-import { awaitsFollowingFilter } from "./families/shared.js";
+import { awaitsFollowingFilter } from "./families/vocabulary.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 const isFilter = (leaf: CompileLeaf | undefined) => leaf?.family_id === "unit-filter";

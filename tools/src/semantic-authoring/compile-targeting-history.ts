@@ -6,7 +6,7 @@
  */
 
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { FOLLOWING_FILTER } from "./families/shared.js";
+import { FOLLOWING_FILTER } from "./families/vocabulary.js";
 
 type Node = Record<string, unknown>;
 
@@ -18,7 +18,7 @@ function unitOf(leaf: CompileLeaf, key: string): unknown {
   return structuredClone(filter);
 }
 
-/** Whether a target-is-selected leaf names who selected which unit (version 2), rather than gating attacks on the selected unit. */
+/** Whether a target-is-selected leaf names who selected which unit, rather than gating attacks on the selected unit. */
 export function namesSelection(leaf: CompileLeaf): boolean {
   return leaf.family_id === "target-is-selected" && leaf.parameters.target !== undefined;
 }

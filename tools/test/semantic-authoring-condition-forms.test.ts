@@ -6,7 +6,6 @@ import { foldAlternativeConditions } from "../src/semantic-authoring/compile-alt
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
-import { mapToLatest } from "../src/semantic-authoring/family-versions.js";
 
 /** Leaves placed on their own wording in `text`, in order, so the words between them are real source. */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
@@ -246,7 +245,7 @@ describe("attack kind or attacker keyword gating an invulnerable save (SS-F)", (
 // semantic-authoring-rule-active-option
 {
 /**
- * rule-active v2: the active rule can be one option of an option-bearing rule
+ * rule-active: the active rule can be one option of an option-bearing rule
  * ({ability_id, option_id}: "the Protector Imperative is active for that unit"), lowered to the
  * condition schema's option reference. The string form keeps naming a whole ability record.
  */
@@ -261,35 +260,29 @@ function authored(factionId: string, abilityId: string): Record<string, unknown>
   return entry;
 }
 
-function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion: number, startByte: number): CompileLeaf {
-  return { role, family_id: familyId, family_version: familyVersion, parameters, start_byte: startByte };
+function leaf(role: string, familyId: string, parameters: Record<string, unknown>, startByte: number): CompileLeaf {
+  return { role, family_id: familyId, family_version: currentFamilyVersion(familyId), parameters, start_byte: startByte };
 }
 
 function compiledEffect(rule: Record<string, unknown>): unknown {
   const result = compileLeaves([
-    leaf("CONDITION", "rule-active", normalizeFingerprintParameters("rule-active", rule, 2), 2, 10),
-    leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" }, 1, 20),
+    leaf("CONDITION", "rule-active", normalizeFingerprintParameters("rule-active", rule), 10),
+    leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }, 20),
   ]);
   if (!result.ok) throw new Error(result.errors.join("; "));
   return result.mechanics.effect;
 }
 
-describe("rule-active v2 option references", () => {
-  it("is the current version, and v1 still takes only a whole-record id", () => {
-    expect(currentFamilyVersion("rule-active")).toBe(2);
-    expect(normalizeFingerprintParameters("rule-active", { rule: "oath-of-moment" }, 1)).toEqual({ rule: "oath-of-moment" });
-    expect(() => normalizeFingerprintParameters("rule-active", { rule: option }, 1)).toThrow();
-  });
-
-  it("v2 canonicalises an option reference and keeps the string form and negation", () => {
-    expect(normalizeFingerprintParameters("rule-active", { rule: { option_id: "example-stance", ability_id: "example-doctrines" }, negated: false }, 2))
+describe("rule-active option references", () => {
+  it("canonicalises an option reference and keeps the string form and negation", () => {
+    expect(normalizeFingerprintParameters("rule-active", { rule: { option_id: "example-stance", ability_id: "example-doctrines" }, negated: false }))
       .toEqual({ rule: option, negated: false });
-    expect(JSON.stringify(normalizeFingerprintParameters("rule-active", { rule: { option_id: "example-stance", ability_id: "example-doctrines" } }, 2)))
+    expect(JSON.stringify(normalizeFingerprintParameters("rule-active", { rule: { option_id: "example-stance", ability_id: "example-doctrines" } })))
       .toBe('{"rule":{"ability_id":"example-doctrines","option_id":"example-stance"}}');
-    expect(normalizeFingerprintParameters("rule-active", { rule: "oath-of-moment", negated: true }, 2)).toEqual({ rule: "oath-of-moment", negated: true });
+    expect(normalizeFingerprintParameters("rule-active", { rule: "oath-of-moment", negated: true })).toEqual({ rule: "oath-of-moment", negated: true });
   });
 
-  it("v2 refuses an option reference that is incomplete, padded, or names a display label", () => {
+  it("refuses an option reference that is incomplete, padded, or names a display label", () => {
     for (const rule of [
       { ability_id: "example-doctrines" },
       { option_id: "example-stance" },
@@ -298,12 +291,8 @@ describe("rule-active v2 option references", () => {
       { ability_id: "Example Doctrines", option_id: "example-stance" },
       { ability_id: "example-doctrines", option_id: "" },
       ["example-doctrines", "example-stance"],
-    ]) expect(() => normalizeFingerprintParameters("rule-active", { rule }, 2)).toThrow();
-    expect(() => normalizeFingerprintParameters("rule-active", { rule: option, extra: true }, 2)).toThrow();
-  });
-
-  it("moves a v1 leaf to v2 unchanged", () => {
-    expect(mapToLatest("rule-active", 1, { rule: "oath-of-moment", negated: false })).toMatchObject({ version: 2, parameters: { rule: "oath-of-moment", negated: false } });
+    ]) expect(() => normalizeFingerprintParameters("rule-active", { rule })).toThrow();
+    expect(() => normalizeFingerprintParameters("rule-active", { rule: option, extra: true })).toThrow();
   });
 
   it("lowers an option reference to the condition schema's {ability_id, option_id} rule", () => {
@@ -318,8 +307,8 @@ describe("rule-active v2 option references", () => {
   it("produces an entry that validates and renders on a real stance-consumer base", () => {
     const base = authored("adeptus-mechanicus", "murderous-imperative-adeptus-mechanicus");
     const result = compileLeaves([
-      leaf("CONDITION", "rule-active", { rule: { ability_id: "doctrina-imperatives-adeptus-mechanicus", option_id: "option-1" } }, 2, 10),
-      leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" }, 1, 20),
+      leaf("CONDITION", "rule-active", { rule: { ability_id: "doctrina-imperatives-adeptus-mechanicus", option_id: "option-1" } }, 10),
+      leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }, 20),
     ]);
     if (!result.ok) throw new Error(result.errors.join("; "));
     const check = checkEntry(entryWithMechanics(base, result.mechanics));

@@ -33,7 +33,7 @@ function mechanicsOf(list: CompileLeaf[], text: string): Record<string, any> {
 /** A parameter set checked against the duration family's current version. */
 const checkDuration = (parameters: Record<string, unknown>) => normalizeAt("duration", parameters, currentFamilyVersion("duration"));
 
-const V3_ENDPOINTS = [
+const PLAIN_ENDPOINTS = [
   "end-of-phase", "end-of-turn", "end-of-battle-round", "end-of-battle",
   "start-of-next-turn", "start-of-next-command-phase", "start-of-next-movement-phase", "start-of-next-battle-round",
   "end-of-attack-sequence", "end-of-this-use", "start-of-next-shooting-phase", "end-of-your-next-turn",
@@ -58,7 +58,7 @@ const compileWithDuration = (parameters: Record<string, unknown>, wording = DEFA
   return mechanicsOf(leaves, text);
 };
 
-describe("duration@4 phase-edge endpoints: parameters", () => {
+describe("duration phase-edge endpoints: parameters", () => {
   it("accepts an end edge for each official phase and each owner", () => {
     for (const phase of ["command", "movement", "shooting", "charge", "fight"]) {
       for (const turn of ["your", "opponent"]) {
@@ -85,21 +85,21 @@ describe("duration@4 phase-edge endpoints: parameters", () => {
     expect(() => checkDuration({ endpoint: "start-of-next-phase", phase: "fight", turn: "opponent" })).toThrow(/not phase-edge endpoints/u);
   });
 
-  it("names the v3 endpoint when start-of-next-phase is asked for the player's own turn", () => {
+  it("names the plain next-phase endpoint when start-of-next-phase is asked for the player's own turn", () => {
     expect(() => checkDuration({ endpoint: "start-of-next-phase", phase: "command", turn: "your" })).toThrow(/start-of-next-command-phase/u);
     expect(() => checkDuration({ endpoint: "start-of-next-phase", phase: "movement", turn: "your" })).toThrow(/start-of-next-movement-phase/u);
     expect(() => checkDuration({ endpoint: "start-of-next-phase", phase: "shooting", turn: "your" })).toThrow(/start-of-next-shooting-phase/u);
     expect(() => checkDuration({ endpoint: "start-of-next-phase", phase: "fight", turn: "your" })).toThrow(/other starts are not phase-edge endpoints/u);
   });
 
-  it("keeps every v3 endpoint's parameters unchanged under version 4", () => {
-    for (const endpoint of V3_ENDPOINTS) {
-      expect(checkDuration({ endpoint })).toEqual(normalizeAt("duration", { endpoint }, 3));
+  it("keeps every endpoint without a phase edge unchanged", () => {
+    for (const endpoint of PLAIN_ENDPOINTS) {
+      expect(checkDuration({ endpoint })).toEqual({ endpoint });
     }
   });
 });
 
-describe("duration@4 phase-edge endpoints: scope.duration", () => {
+describe("duration phase-edge endpoints: scope.duration", () => {
   const rows: Array<[Record<string, string>, string]> = [
     [{ endpoint: "end-of-next-phase", phase: "fight", turn: "your" }, "until-end-of-your-next-fight-phase"],
     [{ endpoint: "end-of-next-phase", phase: "shooting", turn: "your" }, "until-end-of-your-next-shooting-phase"],
@@ -161,8 +161,8 @@ describe("duration@4 phase-edge endpoints: scope.duration", () => {
   // duration names the next start of that phase). The compiler maps the leaf to the start-edge
   // value only; it cannot evaluate which phase is in progress when the effect applies. That rule is
   // the scope-duration description, which the consumers of the DSL apply. A regression that maps this
-  // record to an end edge, or to the v3 next-phase value, fails here.
-  it("does not map a start edge inside the named phase to an end edge or to the v3 next-phase value", () => {
+  // record to an end edge, or to the plain next-phase value, fails here.
+  it("does not map a start edge inside the named phase to an end edge or to the plain next-phase value", () => {
     const text = "At the start of your opponent's Command phase, that unit is wracked with agonies until the start of your opponent's next Command phase.";
     const mechanics = mechanicsOf(placed(text,
       ["At the start of your opponent's Command phase", "event", { kind: "phase-start", phase: "command", turn: "opponent" }],
@@ -172,7 +172,7 @@ describe("duration@4 phase-edge endpoints: scope.duration", () => {
     expect(mechanics.scope).toEqual({ duration: "until-start-of-opponent-next-command-phase" });
   });
 
-  it("maps the v3 attack-sequence endpoint to attack-sequence", () => {
+  it("maps the attack-sequence endpoint to attack-sequence", () => {
     expect(compileWithDuration({ endpoint: "end-of-attack-sequence" }, "until the attacking unit has resolved all of its attacks").scope).toEqual({ duration: "attack-sequence" });
   });
 

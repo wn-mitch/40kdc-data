@@ -22,7 +22,7 @@ import { namesSelection, onAttackedTarget } from "./compile-targeting-history.js
 import { usabilityGates } from "./compile-usability-gate.js";
 import { type MoveEndRule } from "./compile-move-end.js";
 import type { CoreCheck } from "./core-checks.js";
-import { usageFor } from "./restriction-families.js";
+import { usageFor } from "./families/vocabulary.js";
 import { bindPairEligibility, candidateIndexes, pairIndexes } from "./compile-pair-eligibility.js";
 import { optionalTargetGroup } from "./compile-target-groups.js";
 import { checkOptionalCosts, flatLeaves, isSpendRead, optionalSpendLeaves } from "./compile-optional-cost.js";

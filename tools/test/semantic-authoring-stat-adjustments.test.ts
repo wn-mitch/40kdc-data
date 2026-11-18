@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { compileLeaves, leafFragment, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "../src/semantic-authoring/contracts.js";
-import { mapToLatest } from "../src/semantic-authoring/family-versions.js";
 import { prefillFromSource } from "../src/semantic-authoring/leaf-prefill.js";
 import { leafSurfaceKey, normalizedProjection } from "../src/semantic-authoring/matching.js";
 import { matchesAt } from "../src/semantic-authoring/retrieval.js";
@@ -44,22 +43,11 @@ describe("signed stat adjustments", () => {
     } } });
   });
 
-  it("retains the reviewed model and melee binding through the family migration", () => {
+  it("binds a reviewed model and melee scope to the adjustment", () => {
     const parameters = { subject: "this-model", characteristics: ["AP"], operation: "improve", value: 2, weapon_type: "melee" };
-    const migrated = mapToLatest(family.id, 4, parameters)!;
-    expect(migrated.version).toBe(currentFamilyVersion(family.id));
-    expect(compileLeaves([adjustment(migrated.parameters)])).toMatchObject({ ok: true, mechanics: { effect: {
+    expect(compileLeaves([adjustment(normalizeFingerprintParameters(family.id, parameters))])).toMatchObject({ ok: true, mechanics: { effect: {
       type: "stat-modifier", target: "this-model", modifier: { stat: "AP", operation: "improve", value: 2, weapons: { type: "melee" } },
     } } });
-  });
-
-  it("previews a legacy singular-stat adjustment with its reviewed model", () => {
-    expect(leafFragment({
-      role: "EFFECT", family_id: family.id, family_version: 1, start_byte: 0,
-      parameters: { subject: "this-model", characteristic: "S", operation: "add", value: 2 },
-    })).toEqual({ kind: "effect", node: {
-      type: "stat-modifier", target: "this-model", modifier: { stat: "S", operation: "add", value: 2 },
-    } });
   });
 
   it("reads an explicit attack-property recipient and scope without guessing missing qualifiers", () => {
@@ -92,14 +80,14 @@ describe("signed stat adjustments", () => {
 
 describe("separately scoped characteristic setters", () => {
   const setter = (parameters: Record<string, unknown>, start = 1): CompileLeaf => ({
-    role: "EFFECT", family_id: "characteristic-set", family_version: 3, parameters, start_byte: start,
+    role: "EFFECT", family_id: "characteristic-set", family_version: currentFamilyVersion("characteristic-set"), parameters, start_byte: start,
   });
   const scope = (parameters: Record<string, unknown>): CompileLeaf => ({
-    role: "CONDITION", family_id: "weapon-property-scope", family_version: 1, parameters, start_byte: 0,
+    role: "CONDITION", family_id: "weapon-property-scope", family_version: currentFamilyVersion("weapon-property-scope"), parameters, start_byte: 0,
   });
 
   it("accepts the operand without guessing who or which weapons it changes", () => {
-    const leaf = setter(normalizeFingerprintParameters("characteristic-set", { characteristic: "A", value: 3 }, 3));
+    const leaf = setter(normalizeFingerprintParameters("characteristic-set", { characteristic: "A", value: 3 }));
     expect(leaf.parameters).toEqual({ characteristic: "A", value: 3 });
     expect(compileLeaves([leaf])).toMatchObject({ ok: false, errors: ["Characteristic setter needs a reviewed recipient."] });
     expect(leafFragment(leaf).kind).toBe("implicit");
@@ -133,7 +121,7 @@ describe("separately scoped characteristic setters", () => {
     expect(compileLeaves([prefix, setter({ characteristic: "A", value: 3, subject: "this-model" })])).toMatchObject({ ok: false });
     expect(compileLeaves([prefix, setter({ characteristic: "A", value: 3, weapon_type: "ranged" })])).toMatchObject({ ok: false });
     expect(compileLeaves([prefix, setter({ characteristic: "T", value: 3 })])).toMatchObject({ ok: false });
-    expect(() => normalizeFingerprintParameters("characteristic-set", { characteristic: "T", value: 3, weapon_type: "melee" }, 3)).toThrow();
+    expect(() => normalizeFingerprintParameters("characteristic-set", { characteristic: "T", value: 3, weapon_type: "melee" })).toThrow();
   });
 
   it("does not let a weapon prefix cross a sentence boundary", () => {
@@ -142,20 +130,9 @@ describe("separately scoped characteristic setters", () => {
     expect(compileLeaves([prefix, value], "x. y")).toMatchObject({ ok: false });
   });
 
-  it("retains model-only setter bindings through version migration", () => {
-    const migrated = mapToLatest("characteristic-set", 2, { subject: "this-model", characteristic: "M", value: 7 })!;
-    expect(compileLeaves([{ ...setter(migrated.parameters), family_version: migrated.version }])).toMatchObject({ ok: true, mechanics: { effect: {
+  it("sets a model characteristic for a reviewed model without a weapon scope", () => {
+    expect(compileLeaves([setter(normalizeFingerprintParameters("characteristic-set", { subject: "this-model", characteristic: "M", value: 7 }))])).toMatchObject({ ok: true, mechanics: { effect: {
       type: "stat-modifier", target: "this-model", modifier: { stat: "M", operation: "set", value: 7 },
     } } });
   });
-});
-
-it("preserves the historical all-weapons setter while refusing to assume that scope for a new bare leaf", () => {
-  const migrated = mapToLatest("characteristic-set", 2, { subject: "this-model", characteristic: "A", value: 3 })!;
-  expect(compileLeaves([{ role: "EFFECT", family_id: "characteristic-set", family_version: migrated.version, parameters: migrated.parameters, start_byte: 0 }]))
-    .toMatchObject({ ok: true, mechanics: { effect: {
-      type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "set", value: 3 },
-    } } });
-  expect(normalizeFingerprintParameters("characteristic-set", { characteristic: "A", value: 3 }, 3))
-    .toEqual({ characteristic: "A", value: 3 });
 });

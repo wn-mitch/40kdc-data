@@ -2,7 +2,7 @@ import { exactSpan } from "./contracts.js";
 import { condition } from "./compile-conditions.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { historyConnective } from "./compile-connective-history.js";
-import { AMONG_TARGETS } from "./families/unit-filters.js";
+import { AMONG_TARGETS } from "./families/vocabulary.js";
 
 /**
  * Where a set-up may (or may not) place a unit. Three folds tie placement wording to the set-up

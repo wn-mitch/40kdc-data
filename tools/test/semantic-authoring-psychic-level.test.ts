@@ -7,7 +7,7 @@ import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
 
 /**
  * Psychic levels: the psychic-level cost of each "**Name (psychic level N)**" heading (a spend of N
- * from the psychic-level pool), the psyker-level setter (characteristic-set v6), and the record shapes
+ * from the psychic-level pool), the psyker-level setter (characteristic-set), and the record shapes
  * that combine a psyker level in the name with psychic heading costs. Fabricated wording only.
  */
 
@@ -130,14 +130,12 @@ describe("Semantic authoring psychic-level cost", () => {
   });
 });
 
-const SETTER = 6;
-const setter = (parameters: Record<string, unknown>, version = SETTER) => normalizeFingerprintParameters("characteristic-set", parameters, version);
+const setter = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("characteristic-set", parameters);
 const setterAt = (text: string, wording: string, parameters: Record<string, unknown>) => leafAt(text, wording, "characteristic-set", parameters);
 
-describe("Semantic authoring characteristic-set v6 psyker-level setter", () => {
-  it("accepts a model's psyker level, and v5 still refuses it", () => {
+describe("Semantic authoring characteristic-set psyker-level setter", () => {
+  it("accepts a model's psyker level", () => {
     expect(setter({ subject: "this-model", characteristic: "psyker-level", value: 2 })).toEqual({ subject: "this-model", characteristic: "psyker-level", value: 2 });
-    expect(() => setter({ subject: "this-model", characteristic: "psyker-level", value: 2 }, 5)).toThrow();
   });
 
   it("lowers \"has psyker level 2\" to a model stat-modifier set, with no weapon scope", () => {
@@ -158,10 +156,6 @@ describe("Semantic authoring characteristic-set v6 psyker-level setter", () => {
     const steps = (result as unknown as { mechanics: { effect: { type: string; steps: Array<{ modifier: Record<string, unknown> }> } } }).mechanics.effect;
     expect(steps.type).toBe("sequence");
     expect(steps.steps.map((step) => step.modifier.stat)).toEqual(["psyker-level", "M"]);
-  });
-
-  it("refuses a psyker level in a values list under v5, which has no psyker-level value", () => {
-    expect(() => setter({ subject: "this-model", values: [{ characteristic: "psyker-level", value: 2 }, { characteristic: "M", value: 7 }] }, 5)).toThrow();
   });
 
   it("emits a setter the ability schema accepts and the describer renders", () => {
@@ -187,7 +181,7 @@ describe("Semantic authoring characteristic-set v6 psyker-level setter", () => {
     expect(() => setter({ subject: "this-unit", values: [{ characteristic: "psyker-level", value: 2 }, { characteristic: "M", value: 7 }] })).toThrow(/this-model/);
   });
 
-  it("keeps the earlier characteristic-set forms unchanged", () => {
+  it("keeps a plain characteristic-set as it is", () => {
     expect(setter({ subject: "this-unit", characteristic: "M", value: 7 })).toEqual({ subject: "this-unit", characteristic: "M", value: 7 });
   });
 });

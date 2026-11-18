@@ -8,8 +8,8 @@ import { abilityUseTrigger } from "./compile-ability-use.js";
 import { attackTypeCondition } from "./compile-conditions.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { weaponScope } from "./compile-weapon-effects.js";
-import { OWNED_EVENT_KINDS } from "./event-family.js";
-import { TRIGGER_ROLL_KINDS } from "./dice-families.js";
+import { OWNED_EVENT_KINDS } from "./families/vocabulary.js";
+import { TRIGGER_ROLL_KINDS } from "./families/vocabulary.js";
 import { ANTECEDENT } from "./antecedent-families.js";
 import { STEP_PHASES } from "./compile-step-window.js";
 
@@ -34,13 +34,13 @@ const TRIGGERS: Record<string, Node> = {
   "turn-start:opponent-turn": { event: "turn-started", condition: { type: "player-turn-is", parameters: { turn: "opponent-turn" } } },
   "turn-start:any-turn": { event: "turn-started" },
   "turn-start:battle-round": { event: "round-started" },
-  // Version 7 (batch 6): bare game-clock and history moments with no narrowing of their own.
+  // Bare game-clock and history moments with no narrowing of their own.
   "event:battle-started": { event: "battle-started" },
   "event:deployment-ended": { event: "deployment-ended" },
   "event:round-ended": { event: "round-ended" },
   "event:disembarked": { event: "disembarked" },
   "event:damage-allocated": { event: "damage-allocated" },
-  // Version 8 (batch 7a): more bare moments.
+  // More bare moments.
   "event:battle-formations-declared": { event: "battle-formations-declared" },
   "event:objective-gained": { event: "objective-gained" },
 };
@@ -63,7 +63,7 @@ function phaseTurnOperands(leaf: CompileLeaf): Node[] {
   return operands;
 }
 
-/** A turn-boundary trigger (version 7's turn-ended), narrowed by whose turn unless "either". */
+/** A turn-boundary trigger (turn-ended), narrowed by whose turn unless "either". */
 function turnEndedTrigger(leaf: CompileLeaf): Node {
   const turn = leaf.parameters.turn;
   if (!turn || turn === "either") return { event: "turn-ended" };
@@ -85,7 +85,7 @@ function triggerRoll(leaf: CompileLeaf): unknown {
 }
 
 /**
- * The triggers one EVENT leaf lowers to: a list of roll kinds (`rolls`, version 19) is one trigger
+ * The triggers one EVENT leaf lowers to: a list of roll kinds (`rolls`) is one trigger
  * per kind, in the listed order, each with that kind as its roll. Every other leaf is one trigger.
  */
 export function triggerLeaves(leaf: CompileLeaf): CompileLeaf[] {
@@ -164,17 +164,16 @@ function spentTrigger(leaf: CompileLeaf): Node {
   };
 }
 
-/** Version 7 kinds that need one extra filter field the bare `TRIGGERS` table cannot carry. */
+/** Event kinds that need one extra filter field the bare `TRIGGERS` table cannot carry. */
 const V7_FILTERED_KINDS: Record<string, (leaf: CompileLeaf) => Node> = {
   "turn-ended": turnEndedTrigger,
   "step-started": (leaf) => withTurn({ event: "step-started", filter: { step: closed(leaf, "step") } }, leaf),
   used: usedTrigger,
-  // Version 39: a strength threshold in place of a state ("become Below Half-strength").
+  // A strength threshold in place of a state ("become Below Half-strength").
   "state-changed": (leaf) => ({ event: "state-changed", filter: leaf.parameters.strength !== undefined ? { strength: closed(leaf, "strength") } : { state: closed(leaf, "state") } }),
   "designation-changed": (leaf) => ({ event: "designation-changed", filter: { tag: closed(leaf, "tag") } }),
   "designation-resolved": (leaf) => ({ event: "designation-resolved", filter: { tag: closed(leaf, "tag") } }),
   "before-roll": (leaf) => ({ event: "before-roll", filter: { roll: triggerRoll(leaf) } }),
-  // Version 8 (batch 7a).
   "after-roll": (leaf) => ({
     event: "after-roll", filter: { roll: triggerRoll(leaf), ...(leaf.parameters.result !== undefined ? { result: closed(leaf, "result") } : {}),
       // "on an unmodified 6" after the moment (compile-roll-faces.ts).
@@ -192,7 +191,7 @@ export function kindKey(leaf: CompileLeaf): string {
   return `${leaf.family_id}:${String(leaf.family_id === "turn-start" ? leaf.parameters.turn : leaf.parameters.kind)}`;
 }
 
-/** Version 9's four general moments: any owner, and their own move_types/to/action_kind filter. */
+/** The general moments (OWNED_EVENT_KINDS and move-started): any owner, and their own move_types/to/action_kind filter. */
 function ownedEventTrigger(leaf: CompileLeaf): Node {
   const node: Node = { event: closed(leaf, "kind") };
   if (leaf.parameters.owner !== undefined) node.subject = { owner: closed(leaf, "owner") };
@@ -200,14 +199,14 @@ function ownedEventTrigger(leaf: CompileLeaf): Node {
   if (leaf.parameters.subject !== undefined && leaf.parameters.subject !== "this-unit") node.subject = closed(leaf, "subject");
   const filter: Node = {};
   if (leaf.parameters.move_types !== undefined) filter.move_types = closed(leaf, "move_types");
-  // Version 37: the disembark mode a unit is selected to move with.
+  // The disembark mode a unit is selected to move with.
   if (leaf.parameters.mode !== undefined) filter.mode = closed(leaf, "mode");
   // "But if it does, after it has moved": the move passed through the named terrain (compile-passthrough-used.ts).
   if (leaf.parameters.through !== undefined) filter.through = closed(leaf, "through");
   // Selected "to charge" is selected to declare a charge, which the DSL spells declare-charge.
   if (leaf.parameters.to !== undefined) filter.to = closed(leaf, "to") === "charge" ? "declare-charge" : closed(leaf, "to");
   if (leaf.parameters.action_kind !== undefined) filter.kind = closed(leaf, "action_kind");
-  // Version 17: where a set-up moment brings the unit from ("set up … from Reserves").
+  // Where a set-up moment brings the unit from ("set up … from Reserves").
   if (leaf.parameters.from !== undefined) filter.from = closed(leaf, "from");
   // "Each time you target this unit with the Foo Stratagem": which Stratagem.
   if (leaf.parameters.id !== undefined) {
@@ -411,7 +410,7 @@ function eventTrigger(leaf: CompileLeaf): Node {
   if (leaf.family_id === "event") {
     const kind = String(leaf.parameters.kind);
     if (kind === "disembarked" && leaf.parameters.transport !== undefined) return disembarkedFromTransport(leaf);
-    // Version 13's move-started takes the same owner, subject and move_types as move-ended.
+    // move-started takes the same owner, subject and move_types as move-ended.
     if ((OWNED_EVENT_KINDS as readonly string[]).includes(kind) || kind === "move-started") return ownedEventTrigger(leaf);
     if (V7_FILTERED_KINDS[kind]) return V7_FILTERED_KINDS[kind]!(leaf);
     const boundary = phaseTrigger(leaf);

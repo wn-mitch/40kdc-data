@@ -3,7 +3,6 @@ import { describe, expect, it } from "vitest";
 import { createValidator } from "../src/schema-loader.js";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
@@ -32,19 +31,7 @@ function errorsOf(list: CompileLeaf[], text: string): string {
 
 // semantic-authoring-unit-state-values
 {
-/** The family versions the extensions under test create. */
-const UNIT_STATE_AND_PRESENCE_VALUES_VERSIONS: ReadonlySet<string> = new Set(["unit-state@17", "unit-position@25", "unit-filter@15"]);
-
-/** The version just below this wave's extension of `family`; later extensions may sit above it. */
-function previousVersion(family: string): number {
-  for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
-    const extension = familyExtension(family, version);
-    if (extension !== undefined && UNIT_STATE_AND_PRESENCE_VALUES_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
-  }
-  throw new Error(`The unit-state-and-presence-values wave does not extend ${family}.`);
-}
-
-const norm = (family: string, parameters: Record<string, unknown>, version = currentFamilyVersion(family)) => normalizeFingerprintParameters(family, parameters, version);
+const norm = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters);
 
 describe("filtered-units presence (a condition on the units a bare unit-filter names)", () => {
   const text = "If one or more ALPHA units from your army are on the battlefield when you use the Beacon, subtract 1 from the Battle-shock test each enemy unit must take as a result.";
@@ -120,8 +107,7 @@ describe("no other friendly units engaged with that enemy unit", () => {
     expect(() => norm("unit-filter", { side: "friendly", other_than: "event-subject" })).toThrow();
     expect(() => norm("unit-filter", { side: "friendly", other: false, other_than: "event-subject" })).toThrow();
     expect(() => norm("unit-filter", { side: "friendly", other: true, other_than: "this-unit" })).toThrow();
-    expect(() => norm("unit-filter", { side: "friendly", other: true, other_than: "event-subject" }, previousVersion("unit-filter"))).toThrow();
-    expect(norm("unit-filter", { side: "friendly", other: true })).toEqual(norm("unit-filter", { side: "friendly", other: true }, previousVersion("unit-filter")));
+    expect(norm("unit-filter", { side: "friendly", other: true })).toEqual({ side: "friendly", other: true });
   });
 });
 
@@ -149,26 +135,23 @@ describe("a conditional bonus on the ability's own roll (filtered-units position
     expect(errorsOf(leaves("antecedent"), text)).toMatch(/conditional change to this ability's own roll/u);
   });
 
-  it("accepts filtered-units on unit-position at the current version and not the one before", () => {
+  it("accepts filtered-units and this-unit subjects on unit-position", () => {
     const params = { kind: "within", inches: 6, of: "this-unit", subject: "filtered-units", negated: false };
     expect(norm("unit-position", params)).toEqual(params);
-    expect(() => norm("unit-position", params, previousVersion("unit-position"))).toThrow();
-    const earlier = { kind: "within", inches: 6, of: "this-unit", subject: "this-unit", negated: false };
-    expect(norm("unit-position", earlier)).toEqual(norm("unit-position", earlier, previousVersion("unit-position")));
+    const own = { kind: "within", inches: 6, of: "this-unit", subject: "this-unit", negated: false };
+    expect(norm("unit-position", own)).toEqual(own);
   });
 });
 
 describe("unit-state: filtered-units and a this-model engagement", () => {
-  const version = () => currentFamilyVersion("unit-state");
   const engagedModel = { states: ["engaged"], subject: "this-model", negated: false };
 
-  it("accepts filtered-units with every state and qualifier a this-unit subject takes, and not at the previous version", () => {
+  it("accepts filtered-units with every state and qualifier a this-unit subject takes", () => {
     for (const params of [
       { states: ["on-battlefield"], subject: "filtered-units", negated: false },
       { states: ["engaged"], subject: "filtered-units", negated: true, with: "target" },
     ]) {
       expect(norm("unit-state", params)).toEqual(params);
-      expect(() => norm("unit-state", params, previousVersion("unit-state"))).toThrow();
     }
     expect(() => norm("unit-state", { states: ["battle-shocked"], subject: "this-model", negated: false })).toThrow();
   });
@@ -177,7 +160,6 @@ describe("unit-state: filtered-units and a this-model engagement", () => {
     for (const extra of [{ negated: true }, { with: "target", at: "phase-start" }, { with: "following-filter" }]) {
       const params = { ...engagedModel, ...extra };
       expect(norm("unit-state", params)).toEqual(params);
-      expect(() => norm("unit-state", params, previousVersion("unit-state"))).toThrow();
     }
     expect(() => norm("unit-state", { ...engagedModel, with: "this-model" })).toThrow(/cannot be engaged with itself/u);
   });
@@ -187,7 +169,7 @@ describe("unit-state: filtered-units and a this-model engagement", () => {
     expect(() => norm("unit-state", { states: ["engaged", "on-battlefield"], subject: "this-model", negated: false })).toThrow(/only being on the battlefield/u);
   });
 
-  it("returns the previous version's result for every input it accepted", () => {
+  it("returns every this-unit, this-model and antecedent input unchanged", () => {
     const accepted: Array<Record<string, unknown>> = [
       { states: ["engaged"], subject: "this-unit", negated: true },
       { states: ["engaged"], subject: "this-model", negated: false },
@@ -195,8 +177,7 @@ describe("unit-state: filtered-units and a this-model engagement", () => {
       { states: ["engaged"], subject: "antecedent", negated: false, with: "event-subject", at: "phase-start" },
       { states: ["in-strategic-reserves"], subject: "this-unit", negated: false },
     ];
-    for (const params of accepted) expect(norm("unit-state", params)).toEqual(norm("unit-state", params, previousVersion("unit-state")));
-    expect(version()).toBeGreaterThan(previousVersion("unit-state"));
+    for (const params of accepted) expect(norm("unit-state", params)).toEqual(params);
   });
 
   it("lowers a negated this-model engagement to not(unit-state this-model engaged)", () => {
@@ -273,9 +254,6 @@ describe("condition-exclusion (a group of conditions excluded together)", () => 
 
 // semantic-authoring-unit-position-values-t8
 {
-/** The family versions the extensions under test create. */
-const UNIT_POSITION_AND_REGION_VALUES_VERSIONS: ReadonlySet<string> = new Set(["unit-position@24"]);
-
 const REGION = { region_id: "the-shadow-of-chaos", owner_faction: "chaos-daemons" };
 const AREA_TEXT = "The area around this model is held in the Zed zone.";
 const areaLeaves = (side: string) => placed(AREA_TEXT,
@@ -285,23 +263,13 @@ const areaLeaves = (side: string) => placed(AREA_TEXT,
 
 const validEffect = createValidator().compile({ $ref: "https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json#/$defs/effect-node" });
 
-/** The version just before this extension of unit-position; later extensions may sit above it. */
-const PREVIOUS = (() => {
-  for (let version = currentFamilyVersion("unit-position"); version > 1; version -= 1) {
-    const extension = familyExtension("unit-position", version);
-    if (extension !== undefined && UNIT_POSITION_AND_REGION_VALUES_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
-  }
-  throw new Error("The unit-position and region values extension is not registered.");
-})();
-const CURRENT = currentFamilyVersion("unit-position");
-const normalize = (parameters: Record<string, unknown>, version = CURRENT) => normalizeFingerprintParameters("unit-position", parameters, version);
+const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("unit-position", parameters);
 const WITHIN = { kind: "within", inches: 3, subject: "this-unit", negated: false };
 
 describe("unit-position place values (family version)", () => {
-  it("accepts a distance from the battlefield centre and refuses it one version earlier", () => {
+  it("accepts a distance from the battlefield centre", () => {
     const leaf = { ...WITHIN, of: "battlefield-centre" };
     expect(normalize(leaf)).toEqual(leaf);
-    expect(() => normalize(leaf, PREVIOUS)).toThrow();
     expect(normalize({ ...leaf, kind: "beyond" })).toMatchObject({ kind: "beyond", of: "battlefield-centre" });
   });
 
@@ -320,12 +288,10 @@ describe("unit-position place values (family version)", () => {
   it("accepts wholly within the enemy deployment zone, and keeps the beyond rule", () => {
     const leaf = { ...WITHIN, inches: 12, of: "enemy-deployment-zone", wholly: true };
     expect(normalize(leaf)).toEqual(leaf);
-    expect(() => normalize(leaf, PREVIOUS)).toThrow();
     const { wholly: _wholly, ...plain } = leaf;
     expect(normalize(plain)).toEqual(plain);
     expect(() => normalize({ ...leaf, kind: "beyond" })).toThrow();
     expect(normalize({ ...WITHIN, kind: "beyond", of: "enemy-deployment-zone" })).toMatchObject({ kind: "beyond", of: "enemy-deployment-zone" });
-    expect(normalize({ ...WITHIN, kind: "beyond", of: "enemy-deployment-zone" }, PREVIOUS)).toMatchObject({ kind: "beyond" });
   });
 
   it("refuses an objective marker's fields on the deployment zone", () => {
@@ -336,7 +302,6 @@ describe("unit-position place values (family version)", () => {
   it("accepts the event's object as the subject and refuses it for closest-eligible", () => {
     const leaf = { ...WITHIN, of: "this-model", subject: "event-object" };
     expect(normalize(leaf)).toEqual(leaf);
-    expect(() => normalize(leaf, PREVIOUS)).toThrow();
     expect(normalize({ kind: "objective-range", subject: "event-object", controlled_by: "any", negated: false })).toMatchObject({ subject: "event-object" });
     expect(() => normalize({ kind: "closest-eligible", subject: "event-object", negated: false, to: "this-unit" })).toThrow();
   });
@@ -348,15 +313,14 @@ describe("unit-position place values (family version)", () => {
     expect(normalize(zone)).toEqual(zone);
   });
 
-  it("still accepts every of and subject value the previous version accepted", () => {
+  it("accepts every other of and subject value", () => {
     for (const of of ["this-unit", "this-model", "target", "attacker", "event-subject", "recipient", "selected-unit", "event-object", "antecedent", "battlefield-edge", "following-filter"]) {
       const leaf = { ...WITHIN, of };
-      expect(normalize(leaf)).toEqual(normalize(leaf, PREVIOUS));
       expect(normalize(leaf)).toEqual(leaf);
     }
     for (const subject of ["this-unit", "this-model", "target", "attacker", "event-subject", "recipient", "selected-unit", "antecedent", "bearer-transport", "each-target"]) {
       const leaf = { kind: "objective-range", subject, controlled_by: "any", negated: false };
-      expect(normalize(leaf)).toEqual(normalize(leaf, PREVIOUS));
+      expect(normalize(leaf)).toEqual(leaf);
     }
     const edge = { ...WITHIN, of: "battlefield-edge", wholly: true };
     expect(normalize(edge)).toEqual(edge);

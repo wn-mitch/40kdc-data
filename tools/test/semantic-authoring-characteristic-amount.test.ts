@@ -46,10 +46,10 @@ function authored(factionId: string, abilityId: string): Record<string, unknown>
 describe("Semantic authoring characteristic-amount parameter values", () => {
   it("takes a whole amount from 1 and a dice amount, and refuses zero, a text number and a fraction", () => {
     for (const value of [2, 10, "D6+1"]) {
-      expect(normalizeFingerprintParameters("characteristic-amount", { value }, 1)).toEqual({ value });
+      expect(normalizeFingerprintParameters("characteristic-amount", { value })).toEqual({ value });
     }
     for (const value of [0, "2", 1.5]) {
-      expect(() => normalizeFingerprintParameters("characteristic-amount", { value }, 1)).toThrow();
+      expect(() => normalizeFingerprintParameters("characteristic-amount", { value })).toThrow();
     }
   });
 });
@@ -139,7 +139,7 @@ describe("Semantic authoring characteristic amounts after a recipient filter", (
     const bound = bindCharacteristicAmounts(placedIn(text, [...change], [...recipient], [...owner], [...amount("by 2", 2)]));
     expect(bound.map((leaf) => leaf.family_id)).toEqual(["characteristic-modifier", "unit-filter", "unit-owner"]);
     expect(bound[0]!.parameters).toEqual({ subject: "antecedent", characteristics: ["OC"], operation: "improve", weapon_type: "all", value: 2 });
-    expect(normalizeFingerprintParameters("characteristic-modifier", bound[0]!.parameters, 15)).toMatchObject({ value: 2 });
+    expect(normalizeFingerprintParameters("characteristic-modifier", bound[0]!.parameters)).toMatchObject({ value: 2 });
   });
 });
 
@@ -177,50 +177,49 @@ describe("a floor after a characteristic change", () => {
   });
 
   it("validates its parameters", () => {
-    expect(normalizeFingerprintParameters("characteristic-floor", { characteristics: ["OC", "M"], minimum: 1 }, 1)).toEqual({ characteristics: ["M", "OC"], minimum: 1 });
-    expect(() => normalizeFingerprintParameters("characteristic-floor", { characteristics: [], minimum: 1 }, 1)).toThrow();
-    expect(() => normalizeFingerprintParameters("characteristic-floor", { characteristics: ["Zorn"], minimum: 1 }, 1)).toThrow();
+    expect(normalizeFingerprintParameters("characteristic-floor", { characteristics: ["OC", "M"], minimum: 1 })).toEqual({ characteristics: ["M", "OC"], minimum: 1 });
+    expect(() => normalizeFingerprintParameters("characteristic-floor", { characteristics: [], minimum: 1 })).toThrow();
+    expect(() => normalizeFingerprintParameters("characteristic-floor", { characteristics: ["Zorn"], minimum: 1 })).toThrow();
   });
 });
 
 
 /**
- * Round 17 of family extensions: characteristic-modifier v15 leaves its amount optional for the
- * additive operations; halve and multiply keep their rules; v14 still requires an integer or a dice
- * amount. Fabricated parameters only.
+ * characteristic-modifier leaves its amount optional for the additive operations; halve and multiply
+ * keep their rules; an amount, when given, is a whole number from 1 or a dice amount. Fabricated
+ * parameters only.
  */
 
 const base = { characteristics: ["OC"], weapon_type: "all" };
 
-describe("Semantic authoring characteristic-modifier v15 optional amount", () => {
-  it("v14 takes a whole amount and dice amounts", () => {
-    expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "improve", value: 10 }, 14)).toMatchObject({ value: 10 });
-    expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "add", value: "D3" }, 14)).toMatchObject({ value: "D3" });
-    expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "add", value: "D6+1" }, 14)).toMatchObject({ value: "D6+1" });
+describe("Semantic authoring characteristic-modifier optional amount", () => {
+  it("takes a whole amount and dice amounts", () => {
+    expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "improve", value: 10 })).toMatchObject({ value: 10 });
+    expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "add", value: "D3" })).toMatchObject({ value: "D3" });
+    expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "add", value: "D6+1" })).toMatchObject({ value: "D6+1" });
   });
 
-  it("v14 refuses zero, a string number, and an additive change with no amount", () => {
-    expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "improve", value: 0 }, 14)).toThrow();
-    expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "improve", value: "2" }, 14)).toThrow();
-    expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "improve" }, 14)).toThrow();
+  it("refuses zero and a string number", () => {
+    expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "improve", value: 0 })).toThrow();
+    expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "improve", value: "2" })).toThrow();
   });
 
-  it("v15 accepts an additive change with no amount and returns no value", () => {
+  it("accepts an additive change with no amount and returns no value", () => {
     for (const operation of ["add", "subtract", "improve", "worsen"]) {
-      const normalized = normalizeFingerprintParameters("characteristic-modifier", { ...base, operation }, 15);
+      const normalized = normalizeFingerprintParameters("characteristic-modifier", { ...base, operation });
       expect(normalized).toEqual({ ...base, operation });
       expect("value" in normalized).toBe(false);
     }
   });
 
-  it("v15 still takes an amount when one is given, and keeps the dice amount", () => {
-    expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "subtract", value: 3 }, 15)).toMatchObject({ value: 3 });
-    expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "add", value: "D6" }, 15)).toMatchObject({ value: "D6" });
+  it("still takes an amount when one is given, and keeps the dice amount", () => {
+    expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "subtract", value: 3 })).toMatchObject({ value: 3 });
+    expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "add", value: "D6" })).toMatchObject({ value: "D6" });
   });
 
-  it("v15 halves with no amount, and refuses a multiply with no factor", () => {
-    expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "halve" }, 15)).toMatchObject({ operation: "halve" });
-    expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "multiply" }, 15)).toThrow();
-    expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "multiply", value: 2 }, 15)).toMatchObject({ operation: "multiply", value: 2 });
+  it("halves with no amount, and refuses a multiply with no factor", () => {
+    expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "halve" })).toMatchObject({ operation: "halve" });
+    expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "multiply" })).toThrow();
+    expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "multiply", value: 2 })).toMatchObject({ operation: "multiply", value: 2 });
   });
 });

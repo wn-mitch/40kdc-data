@@ -10,7 +10,7 @@ export function isBonusNode(node: Node): boolean {
   return node.type === "move-modifier" && (node.modifier as Node | undefined)?.distance_bonus !== undefined;
 }
 
-/** A move-end nearest's destination: following-filter (version 1, the unit its filter names) when absent. */
+/** A move-end nearest's destination: following-filter (the unit its filter names) when absent. */
 export function destinationOf(leaf: CompileLeaf): string {
   return typeof leaf.parameters.to === "string" ? leaf.parameters.to : "following-filter";
 }

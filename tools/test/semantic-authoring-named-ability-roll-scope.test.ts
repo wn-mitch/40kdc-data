@@ -11,7 +11,7 @@ import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from
 // Fabricated wording only: each leaf sits on its own words in the text below.
 const DATA_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../data");
 
-/** Leaves on their own wording in `text`, in order, each at the current version of its family unless one is given. */
+/** Leaves on their own wording in `text`, in order, each at the current version of its family. */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
@@ -52,7 +52,7 @@ const CALTROPS_LEAVES: Array<[string, string, Record<string, unknown>]> = [
   ["for each model in this unit that carries cluster caltrops", "count-scale", { per: 1, counts: "models-equipped-with", wargear: "cluster-caltrops" }],
 ];
 
-describe("Manoeuvre roll on a re-roll (reroll v6)", () => {
+describe("Manoeuvre roll on a re-roll", () => {
   it("compiles the manoeuvre's own dice as re-rolled while the unit performs the manoeuvre", () => {
     const mechanics = compiled(placed(MANOEUVRE_TEXT, manoeuvreReroll, manoeuvreNow), MANOEUVRE_TEXT).mechanics;
     expect(mechanics.effect.type).toBe("conditional");
@@ -88,18 +88,17 @@ describe("Manoeuvre roll on a re-roll (reroll v6)", () => {
     expect(refusal(placed(text, modifier), text)).toMatch(/has no manoeuvre-own-roll moment/);
   });
 
-  it("accepts a manoeuvre roll value on version 6 only", () => {
-    expect(normalizeFingerprintParameters("reroll", { roll: "manoeuvre", subset: "all", weapon_type: "all" }, 6)).toMatchObject({ roll: "manoeuvre" });
-    expect(() => normalizeFingerprintParameters("reroll", { roll: "manoeuvre", subset: "all", weapon_type: "all" }, 5)).toThrow();
+  it("accepts a manoeuvre roll value", () => {
+    expect(normalizeFingerprintParameters("reroll", { roll: "manoeuvre", subset: "all", weapon_type: "all" })).toMatchObject({ roll: "manoeuvre" });
   });
 
-  it("keeps every roll value version 5 accepted", () => {
+  it("accepts every named roll value", () => {
     const values = ["hit", "wound", "charge", "advance", "save", "leadership", "battle-shock", "damage", "attacks", "psychic", "surge", "hazard", "any", "resource-die", "blessings-of-khorne", "desperate-escape", "deadly-demise", "all"];
-    for (const roll of values) expect(normalizeFingerprintParameters("reroll", { roll, subset: "all", weapon_type: "all" }, 6)).toMatchObject({ roll });
+    for (const roll of values) expect(normalizeFingerprintParameters("reroll", { roll, subset: "all", weapon_type: "all" })).toMatchObject({ roll });
   });
 });
 
-describe("Named ability's own dice (reroll v6, roll-modifier v7)", () => {
+describe("Named ability's own dice (reroll, roll-modifier)", () => {
   it("re-rolls the dice an ability rolls, once the ability is used in the clause", () => {
     const mechanics = compiled(placed(RP_TEXT, RP_EVENT, RP_REROLL), RP_TEXT).mechanics;
     expect(mechanics.trigger).toEqual({ event: "used", filter: { kind: "ability", id: "reanimation-protocols-necrons" } });
@@ -136,8 +135,8 @@ describe("Named ability's own dice (reroll v6, roll-modifier v7)", () => {
   });
 
   it("rejects an ability roll whose id is not a kebab-case id, or that carries more keys", () => {
-    expect(() => normalizeFingerprintParameters("reroll", { roll: { ability: "Sample Aura" }, subset: "all", weapon_type: "all" }, 6)).toThrow();
-    expect(() => normalizeFingerprintParameters("roll-modifier", { roll: { ability: "reanimation-protocols-necrons", source: "x" }, operation: "add", value: 1 }, 7)).toThrow();
+    expect(() => normalizeFingerprintParameters("reroll", { roll: { ability: "Sample Aura" }, subset: "all", weapon_type: "all" })).toThrow();
+    expect(() => normalizeFingerprintParameters("roll-modifier", { roll: { ability: "reanimation-protocols-necrons", source: "x" }, operation: "add", value: 1 })).toThrow();
   });
 
   it("keeps a quoted-source roll refused at compile time", () => {
@@ -164,7 +163,7 @@ describe("Named ability's own dice (reroll v6, roll-modifier v7)", () => {
   });
 });
 
-describe("Count of models equipped with a wargear item (count-scale v3)", () => {
+describe("Count of models equipped with a wargear item (count-scale)", () => {
   it("re-rolls one die for each model that carries the wargear, on the named ability's wound roll", () => {
     const mechanics = compiled(placed(CALTROPS_TEXT, ...CALTROPS_LEAVES), CALTROPS_TEXT).mechanics;
     expect(mechanics.trigger).toEqual({ event: "before-roll", filter: { roll: "wound" } });
@@ -194,9 +193,9 @@ describe("Count of models equipped with a wargear item (count-scale v3)", () => 
   });
 
   it("refuses a models-equipped-with count with no wargear, and any wargear on another count", () => {
-    expect(() => normalizeFingerprintParameters("count-scale", { per: 1, counts: "models-equipped-with" }, 3)).toThrow(/wargear/);
-    expect(() => normalizeFingerprintParameters("count-scale", { per: 1, counts: "following-filter", wargear: "cluster-caltrops" }, 3)).toThrow(/wargear/);
-    expect(() => normalizeFingerprintParameters("count-scale", { per: 1, counts: "models-equipped-with", wargear: "cluster-caltrops", timing: "on-apply" }, 3)).toThrow(/live/);
+    expect(() => normalizeFingerprintParameters("count-scale", { per: 1, counts: "models-equipped-with" })).toThrow(/wargear/);
+    expect(() => normalizeFingerprintParameters("count-scale", { per: 1, counts: "following-filter", wargear: "cluster-caltrops" })).toThrow(/wargear/);
+    expect(() => normalizeFingerprintParameters("count-scale", { per: 1, counts: "models-equipped-with", wargear: "cluster-caltrops", timing: "on-apply" })).toThrow(/live/);
   });
 
   it("refuses the count taking a following unit-filter", () => {
@@ -230,7 +229,7 @@ describe("Counts of models equipped with wargear leave their qualifiers alone (m
   const counted = { per: 1, counts: "models-equipped-with", wargear: "cluster-caltrops" };
   const qualifier = { subject: "antecedent", subject_kind: "unit", activity: "ability", window: "now", negated: false };
   const leafAt = (family: string, parameters: Record<string, unknown>, role: CompileLeaf["role"], start: number): CompileLeaf => ({
-    role, family_id: family, family_version: 1, parameters, start_byte: start, end_byte: start + 1, fragment: "RAW_TEXT",
+    role, family_id: family, family_version: currentFamilyVersion(family), parameters, start_byte: start, end_byte: start + 1, fragment: "RAW_TEXT",
   });
 
   it("does not rewrite a qualifier after a models-equipped-with count to COUNTED", () => {

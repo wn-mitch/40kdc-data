@@ -16,8 +16,8 @@ import { FILTERED_UNITS } from "./compile-antecedent.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { mergeStackedFilters } from "./compile-unit-filter-merge.js";
-import { FOLLOWING_FILTER } from "./families/shared.js";
-import { ARMY_SUBJECT_RULES } from "./families/army.js";
+import { FOLLOWING_FILTER } from "./families/vocabulary.js";
+import { ARMY_SUBJECT_RULES } from "./families/vocabulary.js";
 
 type Node = Record<string, unknown>;
 

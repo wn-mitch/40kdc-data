@@ -13,7 +13,6 @@ import { NAME_FRAGMENT } from "./compile-name.js";
 import { LEAF_PROPOSAL_KINDS_MARKER, LEAF_PROPOSALS_SCHEMA, LEAVES_SCHEMA, LEAVES_TABLES } from "./leaves-schema.js";
 import { normalizedSurface } from "./matching.js";
 import { EXTENSION_SCHEMA, EXTENSION_TABLES } from "./schema-ext.js";
-import { AUTHORITY_INDEXES, needsAuthorityMigration, upgradeAuthority } from "./authority-migration.js";
 export { exactSpan } from "./contracts.js";
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new (path: string, options?: { readOnly?: boolean }): DatabaseType };
@@ -541,6 +540,31 @@ function upgradeDataEpoch(db: DatabaseSync): void {
   }
 }
 
+/**
+ * When the workbench last dropped its replaced rows (superseded and retracted annotations, retired
+ * family versions, retracted compiled entries). A batch from before then cannot be undone: the
+ * rows it replaced are gone. Null when it never has.
+ */
+function upgradeHistoryCompaction(db: DatabaseSync): void {
+  const columns = new Set((db.prepare("PRAGMA table_info(workbench_state)").all() as Array<{ name: string }>).map((column) => column.name));
+  if (!columns.has("history_compacted_at")) db.exec("ALTER TABLE workbench_state ADD COLUMN history_compacted_at TEXT");
+}
+
+/** The moment the workbench last dropped its replaced rows, or null (see `upgradeHistoryCompaction`). */
+export function historyCompactedAt(db: DatabaseSync): string | null {
+  const row = db.prepare("SELECT history_compacted_at FROM workbench_state WHERE singleton = 1").get() as { history_compacted_at: string | null } | undefined;
+  return row?.history_compacted_at ?? null;
+}
+
+const AUTHORITY_INDEXES = `
+CREATE INDEX IF NOT EXISTS annotations_active_span_fingerprint_lookup ON annotations(span_id, fingerprint_id) WHERE status = 'active';
+CREATE INDEX IF NOT EXISTS annotations_derived_from_surface ON annotations(derived_from_surface_id) WHERE derived_from_surface_id IS NOT NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS leaf_surfaces_one_meaning ON leaf_surfaces(normalized_surface) WHERE status = 'active';
+CREATE INDEX IF NOT EXISTS leaf_surfaces_fingerprint_lookup ON leaf_surfaces(fingerprint_id, status);
+CREATE INDEX IF NOT EXISTS gaps_type_status_lookup ON gaps(type, status, ability_version_id);
+CREATE INDEX IF NOT EXISTS gaps_proposal_lookup ON gaps(proposal_id) WHERE proposal_id IS NOT NULL;
+`;
+
 const ONTOLOGY_BACKFILL_VERSION = 1;
 
 /** Attach pre-existing NOVEL proposals to provisional candidates once per database. */
@@ -555,59 +579,8 @@ function upgradeOntologyBackfill(db: DatabaseSync): void {
   db.prepare("UPDATE workbench_state SET ontology_backfill_version = ? WHERE singleton = 1").run(ONTOLOGY_BACKFILL_VERSION);
 }
 
-/** Tables of the retired stamp, assembly, and escalation pipeline, dropped in dependency order. */
-const RETIRED_TABLES = [
-  "escalation_members", "escalations", "stamp_audit_decisions", "assembly_drafts",
-  "stamp_applications", "stamp_evidence", "stamps",
-] as const;
-
 function tableExists(db: DatabaseSync, name: string): boolean {
   return db.prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = ?").get(name) !== undefined;
-}
-
-/**
- * Retire the stamp pipeline once per database. Annotations an approved leaf stamp derived become
- * ordinary active annotations (origin `migrated-stamp`); annotations of any other stamp were never
- * effective and are retracted. The approved leaf definitions are kept in the migration batch's
- * metadata so their literal surfaces survive the dropped `stamps` table.
- */
-function upgradeRetireStamps(db: DatabaseSync): void {
-  if (!tableExists(db, "stamps")) return;
-  const hasApplications = tableExists(db, "stamp_applications");
-  const approvedLeafStamps = (db.prepare(`
-    SELECT id, revision, definition_json FROM stamps WHERE kind = 'leaf' AND status = 'approved' ORDER BY id, revision
-  `).all() as Array<{ id: string; revision: number; definition_json: string }>)
-    .map((row) => ({ id: row.id, revision: row.revision, definition: JSON.parse(row.definition_json) as unknown }));
-  const supported = new Set(hasApplications
-    ? (db.prepare(`
-      SELECT DISTINCT stamp_applications.annotation_id AS id
-      FROM stamp_applications
-      JOIN stamps ON stamps.id = stamp_applications.stamp_id AND stamps.revision = stamp_applications.stamp_revision
-      WHERE stamp_applications.annotation_id IS NOT NULL
-        AND stamp_applications.status = 'active' AND stamps.status = 'approved'
-    `).all() as Array<{ id: number }>).map((row) => row.id)
-    : []);
-  const derived = db.prepare(`
-    SELECT id FROM annotations WHERE authority_kind = 'stamp' AND status = 'active' ORDER BY id
-  `).all() as Array<{ id: number }>;
-  const batchId = `migration_${randomUUID()}`;
-  db.prepare(`
-    INSERT INTO annotation_batches (id, operation, reviewer, created_at, metadata_json)
-    VALUES (?, 'migration-retire-stamps', 'system', ?, ?)
-  `).run(batchId, new Date().toISOString(), JSON.stringify({ approved_leaf_stamps: approvedLeafStamps }));
-  const member = db.prepare("INSERT INTO batch_members (batch_id, entity_kind, entity_id) VALUES (?, ?, ?)");
-  const keep = db.prepare("UPDATE annotations SET authority_kind = 'human', origin = 'migrated-stamp' WHERE id = ? AND status = 'active'");
-  const retract = db.prepare("UPDATE annotations SET status = 'retracted' WHERE id = ? AND status = 'active'");
-  for (const { id } of derived) {
-    if (supported.has(id)) {
-      keep.run(id);
-      member.run(batchId, "annotation-migrated", String(id));
-    } else {
-      retract.run(id);
-      member.run(batchId, "annotation-retracted", String(id));
-    }
-  }
-  for (const table of RETIRED_TABLES) db.exec(`DROP TABLE IF EXISTS ${table}`);
 }
 
 /** Identity of the persisted state: stable across connections, advanced by any table write. */
@@ -785,14 +758,12 @@ export function initializeWorkbench(db: DatabaseSync): void {
     upgradeAnnotationAuthority(db);
     upgradeAnnotationBatchMetadata(db);
     upgradeGapProposalLink(db);
-    upgradeRetireStamps(db);
     seedReviewedFamilies(db);
     upgradeFamilyVersions(db);
     upgradeDataEpoch(db);
     upgradeOntologyBackfill(db);
+    upgradeHistoryCompaction(db);
   });
-  // After the stamp retirement and version migrations above, which still write the old shape.
-  upgradeAuthority(db);
   upgradeDuplicateCopyLink(db);
   upgradeSurfaceScope(db);
   upgradeSurfaceOperator(db);
@@ -824,22 +795,17 @@ function upgradeSurfaceOperator(db: DatabaseSync): void {
 }
 
 /**
- * Keep a copy of a database that still has the retired stamp tables before its one-way
- * migration. The copy sits beside the database and is never overwritten.
+ * Whether annotations predate recorded authority (no `derived` kind). Such a database was last
+ * migrated by the one-time authority migration, since removed; this checkout cannot open it.
  */
-function backupBeforeStampRetirement(db: DatabaseSync, databasePath: string): void {
-  if (!tableExists(db, "stamps")) return;
-  const backup = `${databasePath}.pre5e`;
-  if (existsSync(backup)) return;
-  db.prepare("VACUUM INTO ?").run(backup);
+function predatesAuthority(db: DatabaseSync): boolean {
+  const row = db.prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'annotations'").get() as { sql: string } | undefined;
+  return row !== undefined && !row.sql.includes("'derived'");
 }
 
-/** Keep a copy of a database before the one-way authority migration (`*.pre5d`). */
-function backupBeforeAuthority(db: DatabaseSync, databasePath: string): void {
-  if (!needsAuthorityMigration(db)) return;
-  const backup = `${databasePath}.pre5d`;
-  if (existsSync(backup)) return;
-  db.prepare("VACUUM INTO ?").run(backup);
+function refuseOutdated(db: DatabaseSync, databasePath: string): void {
+  if (!predatesAuthority(db)) return;
+  throw Object.assign(new Error(`${databasePath} predates recorded authority; migrate it with a checkout that still has the authority migration.`), { code: "SCHEMA_OUTDATED" });
 }
 
 /** The database a command acts on: the explicit path, else `SEMANTIC_AUTHORING_DB`, else the live workbench. */
@@ -887,7 +853,7 @@ export function openWorkbenchReadOnly(path?: string): DatabaseSync {
   const databasePath = workbenchPath(path);
   if (!existsSync(databasePath)) throw Object.assign(new Error(`No workbench database at ${databasePath}.`), { code: "DATABASE_MISSING" });
   const db = new DatabaseSync(databasePath, { readOnly: true });
-  if (!tableExists(db, "annotations") || needsAuthorityMigration(db)) {
+  if (!tableExists(db, "annotations") || predatesAuthority(db)) {
     db.close();
     throw Object.assign(new Error(`${databasePath} predates the current schema; open it read-write once to migrate it.`), { code: "SCHEMA_OUTDATED" });
   }
@@ -914,8 +880,7 @@ export function openWorkbench(path?: string): DatabaseSync {
         // Another connection holds the file; it stays in its current mode until next open.
       }
     }
-    if (databasePath !== ":memory:") backupBeforeStampRetirement(db, databasePath);
-    if (databasePath !== ":memory:") backupBeforeAuthority(db, databasePath);
+    refuseOutdated(db, databasePath);
     initializeWorkbench(db);
     return db;
   } catch (error) {

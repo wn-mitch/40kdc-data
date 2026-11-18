@@ -2,9 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { foldAlternativeConditions } from "../src/semantic-authoring/compile-alternative-conditions.js";
-import { normalizeOptionalCostParameters } from "../src/semantic-authoring/optional-cost-families.js";
 import { DESIGNATION_IDS, designationLabel } from "../src/translate/designations.js";
 import { createValidator } from "../src/schema-loader.js";
 
@@ -47,8 +45,7 @@ const S1_TEXT = "Your Shooting phase. One ORBITAL unit from your army. Each time
   + "Until the end of the phase, ranged weapons equipped by models in that unit have the SUSTAINED HITS 1 ability. "
   + "If you spent YP during this use of this Stratagem, until the end of the phase, those weapons have the SUSTAINED HITS 2 ability instead.";
 
-function s1Leaves(text: string, read: Record<string, unknown> = { pool: "yp-pool", window: "use", subject: "this-unit" }): CompileLeaf[] {
-  // Version 1 leaves: a use that names no tag reads the legacy designation (version 2 names its own).
+function s1Leaves(text: string, read: Record<string, unknown> = { pool: "yp-pool", window: "use", subject: "this-unit", tag: "yp-spent-this-use" }): CompileLeaf[] {
   return placed(text,
     ["Your Shooting phase", "use-window", { your_phases: ["shooting"], opponent_phases: [], either_phases: [] }],
     ["One", "stratagem-target", { count: "one" }],
@@ -61,26 +58,26 @@ function s1Leaves(text: string, read: Record<string, unknown> = { pool: "yp-pool
     ["If you spent YP during this use of this Stratagem", "optional-cost-paid", read],
     ...grant("those weapons have the", "SUSTAINED HITS 2"),
     ["instead", "instead", {}],
-  ).map((leaf) => leaf.family_id === "optional-cost-paid" ? { ...leaf, family_version: 1 } : leaf);
+  );
 }
 
 describe("optional-cost-paid parameters", () => {
-  it("accepts window use with a subject and window turn with negation", () => {
-    expect(normalizeOptionalCostParameters("optional-cost-paid", { pool: "yp-pool", window: "use", subject: "attacker" })).toEqual({ pool: "yp-pool", window: "use", subject: "attacker" });
-    expect(normalizeOptionalCostParameters("optional-cost-paid", { pool: "yp-pool", window: "turn", negated: true })).toEqual({ pool: "yp-pool", window: "turn", negated: true });
+  it("accepts window use with a subject, reading the use's own designation when it names no tag, and window turn with negation", () => {
+    expect(normalizeFingerprintParameters("optional-cost-paid", { pool: "yp-pool", window: "use", subject: "attacker" })).toEqual({ pool: "yp-pool", window: "use", subject: "attacker", tag: "yp-spent-this-use" });
+    expect(normalizeFingerprintParameters("optional-cost-paid", { pool: "yp-pool", window: "turn", negated: true })).toEqual({ pool: "yp-pool", window: "turn", negated: true });
   });
 
   it("refuses window use with no subject: the spender is never defaulted", () => {
-    expect(() => normalizeOptionalCostParameters("optional-cost-paid", { pool: "yp-pool", window: "use" })).toThrow(/subject/);
+    expect(() => normalizeFingerprintParameters("optional-cost-paid", { pool: "yp-pool", window: "use" })).toThrow(/subject/);
   });
 
   it("refuses negation on window use and a subject on window turn", () => {
-    expect(() => normalizeOptionalCostParameters("optional-cost-paid", { pool: "yp-pool", window: "use", subject: "this-unit", negated: true })).toThrow(/negated/);
-    expect(() => normalizeOptionalCostParameters("optional-cost-paid", { pool: "yp-pool", window: "turn", subject: "this-unit" })).toThrow();
+    expect(() => normalizeFingerprintParameters("optional-cost-paid", { pool: "yp-pool", window: "use", subject: "this-unit", negated: true })).toThrow(/negated/);
+    expect(() => normalizeFingerprintParameters("optional-cost-paid", { pool: "yp-pool", window: "turn", subject: "this-unit" })).toThrow();
   });
 
   it("refuses a pool with no designation", () => {
-    expect(() => normalizeOptionalCostParameters("optional-cost-paid", { pool: "cp-pool", window: "turn" })).toThrow();
+    expect(() => normalizeFingerprintParameters("optional-cost-paid", { pool: "cp-pool", window: "turn" })).toThrow();
   });
 });
 
@@ -207,34 +204,18 @@ describe("compiled optional part is a valid DSL effect", () => {
   });
 });
 
-/** The family versions the extensions under test create. */
-const SPEND_AMOUNT_VERSIONS: ReadonlySet<string> = new Set(["resource-spend@3"]);
-
-/** The version of resource-spend this file's extension defines, found by its extension (later ones may sit above it). */
-function spendVersion(): number {
-  for (let version = currentFamilyVersion("resource-spend"); version > 1; version -= 1) {
-    const extension = familyExtension("resource-spend", version);
-    if (extension !== undefined && SPEND_AMOUNT_VERSIONS.has(`${extension.family}@${extension.version}`)) return version;
-  }
-  throw new Error("The spend-amount extension is not registered.");
-}
-
 const leafOf = (amount: unknown, extra: Record<string, unknown> = {}) => ({ pool: "blood-tithe-pool", amount, ...extra });
 
 describe("resource-spend amount one-or-more", () => {
-  it("is accepted at the extension's version and refused at the one before", () => {
-    const version = spendVersion();
-    expect(normalizeFingerprintParameters("resource-spend", leafOf("one-or-more"), version)).toEqual(leafOf("one-or-more"));
-    expect(() => normalizeFingerprintParameters("resource-spend", leafOf("one-or-more"), version - 1)).toThrow();
-    expect(normalizeFingerprintParameters("resource-spend", leafOf("one-or-more"), currentFamilyVersion("resource-spend"))).toEqual(leafOf("one-or-more"));
+  it("accepts one-or-more", () => {
+    expect(normalizeFingerprintParameters("resource-spend", leafOf("one-or-more"))).toEqual(leafOf("one-or-more"));
   });
 
-  it("keeps every amount the previous version accepted", () => {
-    const version = spendVersion();
+  it("keeps a whole number, all, and a sourced amount", () => {
     for (const amount of [2, "all", { source: "any number" }]) {
-      expect(normalizeFingerprintParameters("resource-spend", leafOf(amount), version)).toEqual(leafOf(amount));
+      expect(normalizeFingerprintParameters("resource-spend", leafOf(amount))).toEqual(leafOf(amount));
     }
-    expect(normalizeFingerprintParameters("resource-spend", { pool: "yp-pool", amount: "one-or-more", spend_gate: "face", face: 3 }, version)).toMatchObject({ amount: "one-or-more", face: 3 });
+    expect(normalizeFingerprintParameters("resource-spend", { pool: "yp-pool", amount: "one-or-more", spend_gate: "face", face: 3 })).toMatchObject({ amount: "one-or-more", face: 3 });
   });
 
   it("refuses a cap spelled as an amount, since the DSL has no largest-amount field", () => {

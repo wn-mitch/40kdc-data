@@ -3,7 +3,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { joinSegments } from "./compile-segments.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
-import { PSYCHIC_COST_FAMILY } from "./psychic-families.js";
+import { PSYCHIC_COST_FAMILY } from "./families/vocabulary.js";
 
 /**
  * Psychic abilities in one record. Each bold heading "**Name (psychic level N)**" starts one

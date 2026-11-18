@@ -4,14 +4,14 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { selectObjectiveInline } from "../src/translate/effect-bind.js";
 
 /**
  * Batch 7b, containers half: risk-reward, resource-action-menu, persistent-designation,
  * select-objective — each an opener composed like choice-open (see compile-containers.ts).
- * resource-action-menu's actions read their trigger from ordinary `event` leaves (version 9's
+ * resource-action-menu's actions read their trigger from ordinary `event` leaves (the
  * general owner/move_types/to/action_kind filters) and their eligibility from ordinary
  * unit-keyword/select-unit leaves in the action's own group — not a closed vocabulary of its own.
  * The aura-emitter compiler (an aura opened inside a stance option, or with an optional use) is here too.
@@ -27,8 +27,9 @@ function authored(factionId: string, abilityId: string): Record<string, unknown>
 }
 
 let offset = 0;
-function leaf(role: string, familyId: string, parameters: Record<string, unknown>, fragment?: string, version = 1): CompileLeaf {
+function leaf(role: string, familyId: string, parameters: Record<string, unknown>, fragment?: string): CompileLeaf {
   offset += 10;
+  const version = currentFamilyVersion(familyId);
   return { role, family_id: familyId, family_version: version, parameters: normalizeFingerprintParameters(familyId, parameters, version), start_byte: offset, ...(fragment !== undefined ? { fragment } : {}) };
 }
 
@@ -56,8 +57,8 @@ describe("Semantic authoring risk-reward compiler", () => {
       leaf("EFFECT", "risk-reward-open", { test: "leadership" }, "A"),
       leaf("EVENT", "on-fail-open", {}, "B"),
       leaf("EFFECT", "mortal-wounds", { recipient: "this-model", count: "D3" }, "B"),
-      leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits" }, "C"),
-      leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Sustained Hits 1", weapon_type: "all" }, "D", 11),
+      leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "all" }, "C"),
+      leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Sustained Hits 1", weapon_type: "all" }, "D"),
     ]);
     // Keep the canonical expectation independent of the authored public-data migration.
     expect(result.mechanics.effect).toEqual({
@@ -78,8 +79,8 @@ describe("Semantic authoring risk-reward compiler", () => {
       leaf("EFFECT", "risk-reward-open", { test: "leadership" }, "A"),
       leaf("EVENT", "on-fail-open", {}, "B"),
       leaf("EFFECT", "mortal-wounds", { recipient: "this-model", count: "D3" }, "B"),
-      leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits" }, "C"),
-      leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Sustained Hits 1", weapon_type: "all" }, "D", 11),
+      leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "all" }, "C"),
+      leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Sustained Hits 1", weapon_type: "all" }, "D"),
     ]).length).toBeGreaterThan(0);
   });
 
@@ -113,8 +114,8 @@ describe("Semantic authoring resource-action-menu compiler", () => {
     expect(compiled([
       leaf("EFFECT", "resource-action-menu-open", { menu_id: "agile-manoeuvres", pool_id: "battle-focus-pool" }, "A"),
       leaf("EVENT", "menu-action", { action_id: "swift-as-the-wind", label: "Swift as the Wind", cost_amount: 1, duration: "until-end-of-phase" }, "B"),
-      leaf("EVENT", "event", { kind: "phase-start", phase: "movement", turn: "your" }, "B", 38),
-      leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }, "B", 3),
+      leaf("EVENT", "event", { kind: "phase-start", phase: "movement", turn: "your" }, "B"),
+      leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }, "B"),
     ]).mechanics.effect).toEqual({
       type: "resource-action-menu", menu_id: "agile-manoeuvres", pool_id: "battle-focus-pool",
       actions: [{
@@ -128,8 +129,8 @@ describe("Semantic authoring resource-action-menu compiler", () => {
     expect(rendered(base(), [
       leaf("EFFECT", "resource-action-menu-open", { menu_id: "agile-manoeuvres", pool_id: "battle-focus-pool" }, "A"),
       leaf("EVENT", "menu-action", { action_id: "swift-as-the-wind", label: "Swift as the Wind", cost_amount: 1 }, "B"),
-      leaf("EVENT", "event", { kind: "phase-start", phase: "movement", turn: "your" }, "B", 38),
-      leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }, "B", 3),
+      leaf("EVENT", "event", { kind: "phase-start", phase: "movement", turn: "your" }, "B"),
+      leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }, "B"),
     ]).length).toBeGreaterThan(0);
   });
 
@@ -138,12 +139,12 @@ describe("Semantic authoring resource-action-menu compiler", () => {
       leaf("EFFECT", "resource-action-menu-open", { menu_id: "m", pool_id: "p" }, "A"),
       leaf("EVENT", "menu-action", { action_id: "vehicle-only", label: "Vehicle Only", cost_amount: 1 }, "B"),
       leaf("CONDITION", "unit-keyword", { keywords: ["VEHICLE"], negated: false, subject: "this-unit" }, "B"),
-      leaf("EVENT", "event", { kind: "selected", owner: "friendly", to: "move" }, "B", 9),
+      leaf("EVENT", "event", { kind: "selected", owner: "friendly", to: "move" }, "B"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
       leaf("EVENT", "menu-action", { action_id: "not-titanic", label: "Not Titanic", cost_amount: 1 }, "C"),
       leaf("EVENT", "select-unit", { scope: "friendly", distance: "any", visible: false }, "C"),
       leaf("CONDITION", "unit-keyword", { keywords: ["TITANIC"], negated: true, subject: "this-unit" }, "C"),
-      leaf("EVENT", "event", { kind: "move-ended", owner: "enemy", move_types: ["fall-back"] }, "C", 9),
+      leaf("EVENT", "event", { kind: "move-ended", owner: "enemy", move_types: ["fall-back"] }, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, "C"),
     ]).mechanics.effect).toMatchObject({
       actions: [
@@ -164,38 +165,38 @@ describe("Semantic authoring resource-action-menu compiler", () => {
 
   it("reproduces battle-focus-aeldari exactly, all six actions", () => {
     const cost = { cost_pool_id: "battle-focus-pool", cost_resource_label: "Battle Focus token" };
-    const move = (owner: string, moveTypes: string[], fragment: string) => leaf("EVENT", "event", { kind: "move-ended", owner, move_types: moveTypes }, fragment, 9);
+    const move = (owner: string, moveTypes: string[], fragment: string) => leaf("EVENT", "event", { kind: "move-ended", owner, move_types: moveTypes }, fragment);
     const result = compiled([
       leaf("EFFECT", "resource-action-menu-open", {
         menu_id: "agile-manoeuvres", pool_id: "battle-focus-pool", unit_max_manoeuvres_per_phase: 1, default_manoeuvre_max_per_phase: 1,
         pool_gain: { trigger: "round-started", amount: "variable", label: "Battle Focus token" },
         pool_spend: { trigger: "round-ended", amount: "all", label: "Battle Focus token" },
-      }, "A", 2),
-      leaf("EVENT", "menu-action", { action_id: "swift-as-the-wind", label: "Swift as the Wind", cost_amount: 1, ...cost, repeatable_if_different_unit: true, duration: "until-end-of-phase" }, "B", 2),
+      }, "A"),
+      leaf("EVENT", "menu-action", { action_id: "swift-as-the-wind", label: "Swift as the Wind", cost_amount: 1, ...cost, repeatable_if_different_unit: true, duration: "until-end-of-phase" }, "B"),
       move("friendly", ["normal"], "B"), move("friendly", ["advance"], "B"), move("friendly", ["fall-back"], "B"),
-      leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }, "B", 3),
-      leaf("EVENT", "menu-action", { action_id: "flitting-shadows", label: "Flitting Shadows", cost_amount: 1, ...cost, duration: "until-end-of-turn" }, "C", 2),
+      leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }, "B"),
+      leaf("EVENT", "menu-action", { action_id: "flitting-shadows", label: "Flitting Shadows", cost_amount: 1, ...cost, duration: "until-end-of-turn" }, "C"),
       move("friendly", ["normal"], "C"), move("friendly", ["advance"], "C"), move("friendly", ["fall-back"], "C"),
-      leaf("EVENT", "event", { kind: "set-up", owner: "friendly" }, "C", 9),
-      leaf("EVENT", "event", { kind: "targets-selected", owner: "friendly", action_kind: "charge" }, "C", 9),
+      leaf("EVENT", "event", { kind: "set-up", owner: "friendly" }, "C"),
+      leaf("EVENT", "event", { kind: "targets-selected", owner: "friendly", action_kind: "charge" }, "C"),
       leaf("EFFECT", "rule-state", { subject: "this-unit", direction: "suppressed", rule_kind: "core-rule", rule: "overwatch-against-bearer" }, "C"),
-      leaf("EVENT", "menu-action", { action_id: "star-engines", label: "Star Engines", cost_amount: 1, ...cost, duration: "until-end-of-turn" }, "D", 2),
+      leaf("EVENT", "menu-action", { action_id: "star-engines", label: "Star Engines", cost_amount: 1, ...cost, duration: "until-end-of-turn" }, "D"),
       leaf("CONDITION", "unit-keyword", { keywords: ["VEHICLE"], negated: false, subject: "this-unit" }, "D"),
-      leaf("EVENT", "event", { kind: "selected", owner: "friendly", to: "move", move_types: ["advance"] }, "D", 9),
-      leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Assault", weapon_type: "ranged" }, "D", 11),
-      leaf("EVENT", "menu-action", { action_id: "sudden-strike", label: "Sudden Strike", cost_amount: 1, ...cost, duration: "until-end-of-phase" }, "E", 2),
-      leaf("EVENT", "event", { kind: "selected", owner: "friendly", to: "fight" }, "E", 9),
+      leaf("EVENT", "event", { kind: "selected", owner: "friendly", to: "move", move_types: ["advance"] }, "D"),
+      leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Assault", weapon_type: "ranged" }, "D"),
+      leaf("EVENT", "menu-action", { action_id: "sudden-strike", label: "Sudden Strike", cost_amount: 1, ...cost, duration: "until-end-of-phase" }, "E"),
+      leaf("EVENT", "event", { kind: "selected", owner: "friendly", to: "fight" }, "E"),
       leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "pile-in", distance: 6 }, "E"),
       leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "consolidation", distance: 6 }, "E"),
-      leaf("EVENT", "menu-action", { action_id: "opportunity-seized", label: "Opportunity Seized", cost_amount: 1, ...cost, duration: "immediate", binds_event_variable: "triggering-enemy", eligibility_engaged_with_bound_at_phase_start: true }, "F", 2),
+      leaf("EVENT", "menu-action", { action_id: "opportunity-seized", label: "Opportunity Seized", cost_amount: 1, ...cost, duration: "immediate", binds_event_variable: "triggering-enemy", eligibility_engaged_with_bound_at_phase_start: true }, "F"),
       leaf("EVENT", "select-unit", { scope: "friendly", distance: "any", visible: false }, "F"),
       leaf("CONDITION", "unit-keyword", { keywords: ["TITANIC"], negated: true, subject: "this-unit" }, "F"),
       move("enemy", ["fall-back"], "F"),
       leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "F"),
-      leaf("EVENT", "menu-action", { action_id: "fade-back", label: "Fade Back", cost_amount: 1, ...cost, duration: "immediate", binds_event_variable: "triggering-shooter", eligibility_after_bound_hit_roll: true }, "G", 2),
+      leaf("EVENT", "menu-action", { action_id: "fade-back", label: "Fade Back", cost_amount: 1, ...cost, duration: "immediate", binds_event_variable: "triggering-shooter", eligibility_after_bound_hit_roll: true }, "G"),
       leaf("EVENT", "select-unit", { scope: "friendly", distance: "any", visible: false }, "G"),
       leaf("CONDITION", "unit-keyword", { keywords: ["TITANIC"], negated: true, subject: "this-unit" }, "G"),
-      leaf("EVENT", "event", { kind: "attacks-resolved", owner: "enemy", action_kind: "shoot" }, "G", 9),
+      leaf("EVENT", "event", { kind: "attacks-resolved", owner: "enemy", action_kind: "shoot" }, "G"),
       leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "G"),
     ]);
     const moveTriggers = ["normal", "advance", "fall-back"].map((moveType) => ({
@@ -337,23 +338,23 @@ describe("Semantic authoring persistent-designation compiler", () => {
     };
     const result = compiled([
       leaf("EFFECT", "persistent-designation-open", { designation: "unbridled-ardour-slayer", scope: "enemy-unit", timing: "on-unit-destroyed", beneficiary: "this-model" }, "A"),
-      leaf("EFFECT", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }, "B", 7),
-      leaf("EFFECT", "reroll", { roll: "wound", subset: "all", weapon_type: "all" }, "B", 7),
+      leaf("EFFECT", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }, "B"),
+      leaf("EFFECT", "reroll", { roll: "wound", subset: "all", weapon_type: "all" }, "B"),
     ]);
     expect(result.mechanics.effect).toEqual(entry.effect);
     expect(rendered(base(), [
       leaf("EFFECT", "persistent-designation-open", { designation: "unbridled-ardour-slayer", scope: "enemy-unit", timing: "on-unit-destroyed", beneficiary: "this-model" }, "A"),
-      leaf("EFFECT", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }, "B", 7),
-      leaf("EFFECT", "reroll", { roll: "wound", subset: "all", weapon_type: "all" }, "B", 7),
+      leaf("EFFECT", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }, "B"),
+      leaf("EFFECT", "reroll", { roll: "wound", subset: "all", weapon_type: "all" }, "B"),
     ]).length).toBeGreaterThan(0);
   });
 
   it("retains the establishing selection's zero allowance and keyword alternatives", () => {
     const result = compiled([
-      leaf("EVENT", "select-unit", { distance: "any", visible: false, count: 1, up_to: true }, "A", 6),
-      leaf("CONDITION", "unit-filter", { side: "enemy", any_keywords: ["ALPHA", "BETA"] }, "A", 16),
+      leaf("EVENT", "select-unit", { distance: "any", visible: false, count: 1, up_to: true }, "A"),
+      leaf("CONDITION", "unit-filter", { side: "enemy", any_keywords: ["ALPHA", "BETA"] }, "A"),
       leaf("EFFECT", "persistent-designation-open", { designation: "example-prey", scope: "enemy-unit", timing: "start-of-first-battle-round", beneficiary: "this-unit" }, "A"),
-      leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }, "B", 7),
+      leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }, "B"),
     ]);
     expect(result.mechanics.effect).toMatchObject({ type: "ability-part", effect: {
       type: "persistent-designation",
@@ -365,7 +366,7 @@ describe("Semantic authoring persistent-designation compiler", () => {
   it("compiles the objective-marker scope with the matching within-selected-marker relation", () => {
     expect(compiled([
       leaf("EFFECT", "persistent-designation-open", { designation: "singular-purpose-marker", scope: "objective-marker", timing: "start-of-first-battle-round", beneficiary: "this-model" }, "A"),
-      leaf("EFFECT", "feel-no-pain", { subject: "this-model", threshold: 5, against: "all" }, "B", 5),
+      leaf("EFFECT", "feel-no-pain", { subject: "this-model", threshold: 5, against: "all" }, "B"),
     ]).mechanics.effect).toMatchObject({ type: "ability-part", trigger: { event: "round-started" }, effect: { select: { kind: "objective", selector: { filter: {}, count: { min: 1, max: 1 }, bind_as: "singular-purpose-marker-selection" } }, selection_policy: "one-time", consumer: { relation: "within-selected-marker", beneficiary: "this-model" } } });
   });
 });
@@ -430,19 +431,19 @@ describe("Semantic authoring select-objective compiler", () => {
 describe("Semantic authoring aura-emitter compiler", () => {
   it("keeps consumable option auras disjoint for Titanic's conditional radius", () => {
     const effect = compiledEffect([
-      leaf("EFFECT", "stance-select-open", { scope: "army", mode: "consumable" }, "A", 1),
-      leaf("EVENT", "named-option", { label: "Rite Alpha", option_id: "rite-alpha" }, "B", 3),
-      leaf("CONDITION", "aura-emitter", { side: "friendly", keywords: ["WORLD EATERS"], any_keywords: ["MONSTER", "TITANIC"] }, "B", 1),
-      leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, "B", 16),
-      leaf("CONDITION", "aura-range", { inches: 6, conditional_range: { inches: 9, keywords: ["TITANIC"] } }, "B", 4),
-      leaf("CONDITION", "unit-keyword", { keywords: ["TITANIC"], subject: "this-model", negated: false }, "B", 8),
-      leaf("EFFECT", "fights-first", { subject: "this-unit" }, "B", 1),
-      leaf("EVENT", "named-option", { label: "Rite Beta", option_id: "rite-beta" }, "C", 3),
-      leaf("CONDITION", "aura-emitter", { side: "friendly", keywords: ["WORLD EATERS"], any_keywords: ["MONSTER", "TITANIC"] }, "C", 1),
-      leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, "C", 16),
-      leaf("CONDITION", "aura-range", { inches: 6, conditional_range: { inches: 9, keywords: ["TITANIC"] } }, "C", 4),
-      leaf("CONDITION", "unit-keyword", { keywords: ["TITANIC"], subject: "this-model", negated: false }, "C", 8),
-      leaf("EFFECT", "fights-first", { subject: "this-unit" }, "C", 1),
+      leaf("EFFECT", "stance-select-open", { scope: "army", mode: "consumable" }, "A"),
+      leaf("EVENT", "named-option", { label: "Rite Alpha", option_id: "rite-alpha" }, "B"),
+      leaf("CONDITION", "aura-emitter", { side: "friendly", keywords: ["WORLD EATERS"], any_keywords: ["MONSTER", "TITANIC"] }, "B"),
+      leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, "B"),
+      leaf("CONDITION", "aura-range", { inches: 6, conditional_range: { inches: 9, keywords: ["TITANIC"] } }, "B"),
+      leaf("CONDITION", "unit-keyword", { keywords: ["TITANIC"], subject: "this-model", negated: false }, "B"),
+      leaf("EFFECT", "fights-first", { subject: "this-unit" }, "B"),
+      leaf("EVENT", "named-option", { label: "Rite Beta", option_id: "rite-beta" }, "C"),
+      leaf("CONDITION", "aura-emitter", { side: "friendly", keywords: ["WORLD EATERS"], any_keywords: ["MONSTER", "TITANIC"] }, "C"),
+      leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, "C"),
+      leaf("CONDITION", "aura-range", { inches: 6, conditional_range: { inches: 9, keywords: ["TITANIC"] } }, "C"),
+      leaf("CONDITION", "unit-keyword", { keywords: ["TITANIC"], subject: "this-model", negated: false }, "C"),
+      leaf("EFFECT", "fights-first", { subject: "this-unit" }, "C"),
     ]);
     expect(effect.type).toBe("stance-select");
     const options = effect.options as Node[];
@@ -470,9 +471,9 @@ describe("Semantic authoring aura-emitter compiler", () => {
     ["this-model", undefined],
   ])("keeps an aura measured from %s", (of, expected) => {
     const effect = compiledEffect([
-      leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, "A", 16),
-      leaf("CONDITION", "aura-range", { inches: 6, of }, "A", 3),
-      leaf("EFFECT", "fights-first", { subject: "this-unit" }, "A", 1),
+      leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, "A"),
+      leaf("CONDITION", "aura-range", { inches: 6, of }, "A"),
+      leaf("EFFECT", "fights-first", { subject: "this-unit" }, "A"),
     ]);
     expect(effect.type).toBe("aura");
     expect((effect.modifier as Node).of).toBe(expected);
@@ -482,10 +483,10 @@ describe("Semantic authoring aura-emitter compiler", () => {
   // what that use sets up; a bare "you can re-roll" inside an aura is a permission, not a use.
   describe("behavior of an aura with an optional use", () => {
     const aura = (fragment: string) => [
-      leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, fragment, 16),
-      leaf("CONDITION", "aura-range", { inches: 6, of: "this-unit" }, fragment, 3),
-      leaf("RESTRICTION", "optional-use", { who: "you" }, fragment, 2),
-      leaf("EFFECT", "fights-first", { subject: "this-unit" }, fragment, 1),
+      leaf("CONDITION", "unit-filter", { side: "friendly", any_keywords: ["JAKHALS", "GOREMONGERS"] }, fragment),
+      leaf("CONDITION", "aura-range", { inches: 6, of: "this-unit" }, fragment),
+      leaf("RESTRICTION", "optional-use", { who: "you" }, fragment),
+      leaf("EFFECT", "fights-first", { subject: "this-unit" }, fragment),
     ];
     function behavior(leaves: CompileLeaf[]): unknown {
       const result = compileLeaves(leaves);
@@ -494,10 +495,10 @@ describe("Semantic authoring aura-emitter compiler", () => {
     }
 
     it("is activated when a usage limit bounds the use", () => {
-      expect(behavior([leaf("RESTRICTION", "usage-limit", { frequency: "once-per-battle", per: "army" }, "A", 5), ...aura("A")])).toBe("activated");
+      expect(behavior([leaf("RESTRICTION", "usage-limit", { frequency: "once-per-battle", per: "army" }, "A"), ...aura("A")])).toBe("activated");
     });
     it("is reactive when a trigger offers the use", () => {
-      expect(behavior([leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "either" }, "A", 33), ...aura("A")])).toBe("reactive");
+      expect(behavior([leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "either" }, "A"), ...aura("A")])).toBe("reactive");
     });
     it("stays an aura when the optional use is only a permission inside it", () => {
       expect(behavior(aura("A"))).toBe("aura");
@@ -510,10 +511,10 @@ describe("Semantic authoring aura-emitter compiler", () => {
       return result.mechanics.optional;
     }
     it("marks a limited optional use as optional", () => {
-      expect(optional([leaf("RESTRICTION", "usage-limit", { frequency: "once-per-battle", per: "army" }, "A", 5), ...aura("A")])).toBe(true);
+      expect(optional([leaf("RESTRICTION", "usage-limit", { frequency: "once-per-battle", per: "army" }, "A"), ...aura("A")])).toBe(true);
     });
     it("leaves a triggered or permission-only use unmarked", () => {
-      expect(optional([leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "either" }, "A", 33), ...aura("A")])).toBeUndefined();
+      expect(optional([leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "either" }, "A"), ...aura("A")])).toBeUndefined();
       expect(optional(aura("A"))).toBeUndefined();
     });
   });

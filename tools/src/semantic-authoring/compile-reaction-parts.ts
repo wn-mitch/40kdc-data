@@ -1,7 +1,7 @@
 import type { CompileLeaf } from "./compile-fragments.js";
 import type { Compiled } from "./compile.js";
 import { joinSegments } from "./compile-segments.js";
-import { usageFor } from "./restriction-families.js";
+import { usageFor } from "./families/vocabulary.js";
 import { shapeSignature } from "./compile-placement.js";
 import { compileRecipientReaction } from "./compile-recipient-reactions.js";
 

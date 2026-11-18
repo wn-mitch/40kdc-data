@@ -8,22 +8,22 @@ import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entrie
 import { compileLeaves, leafFragment, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { CompileError } from "../src/semantic-authoring/compile-fragments.js";
 import { trigger, triggerLeaves } from "../src/semantic-authoring/compile-triggers.js";
-import { TRIGGER_ROLL_KINDS } from "../src/semantic-authoring/dice-families.js";
+import { TRIGGER_ROLL_KINDS } from "../src/semantic-authoring/families/vocabulary.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
 import { outsideContract } from "./leaf-contract.js";
 
 // Fabricated wording only; no GW rule prose.
 
-/** Leaves on their own wording in `text`, in order. `versions` pins a family below its current version. */
-function placed(text: string, items: Array<[string, string, Record<string, unknown>]>, versions: Record<string, number> = {}): CompileLeaf[] {
+/** Leaves on their own wording in `text`, in order. */
+function placed(text: string, items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters]) => {
     const start = bytes.indexOf(Buffer.from(wording, "utf8"), from);
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
-    const version = versions[family] ?? currentFamilyVersion(family);
+    const version = currentFamilyVersion(family);
     return {
       role: familyRole(family, version), family_id: family, family_version: version,
       parameters: normalizeFingerprintParameters(family, parameters, version),
@@ -53,7 +53,7 @@ const schemaErrors = (mechanics: unknown) => checkEntry(entryWithMechanics(autho
 
 const NORMALIZE_EVENT = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("event", parameters, currentFamilyVersion("event"));
 
-describe("event rolls list (event version 19)", () => {
+describe("event rolls list", () => {
   // "Each time that enemy unit takes a Battle-shock or Leadership test": one list moment, two triggers.
   const AURA_TEXT = "While an enemy unit is within 6\" of this unit, each time that enemy unit takes a Battle-shock or Leadership test, subtract 1 from the result.";
   const aura: Array<[string, string, Record<string, unknown>]> = [
@@ -143,10 +143,10 @@ describe("event rolls list (event version 19)", () => {
   });
 
   it("refuses rolls on a moment that is not a roll", () => {
-    expect(() => NORMALIZE_EVENT({ kind: "unit-destroyed", rolls: ["hit", "wound"] })).toThrow(/before-roll or after-roll/u);
+    expect(() => NORMALIZE_EVENT({ kind: "unit-destroyed", rolls: ["hit", "wound"] })).toThrow(/event\.rolls does not apply to kind unit-destroyed/u);
   });
 
-  it("keeps a legacy single roll the previous version accepts (a widening never rejects stored leaves)", () => {
+  it("accepts a single roll kind that a rolls list cannot name", () => {
     // Live event leaves carry roll: any / attacks / all / surge / resource-die; only the rolls list is trigger-limited.
     for (const roll of ["any", "attacks", "all", "surge"]) {
       expect(NORMALIZE_EVENT({ kind: "before-roll", roll })).toMatchObject({ kind: "before-roll", roll });
@@ -202,25 +202,25 @@ describe("triggers from a list moment", () => {
   });
 });
 
-describe("roll-kind refusals for a trigger (earlier versions)", () => {
-  // Version 18 takes any ROLL_KINDS value; the trigger check refuses what the DSL cannot name.
+describe("roll-kind refusals for a trigger", () => {
+  // A single roll takes any ROLL_KINDS value; the trigger check refuses what the DSL cannot name.
   const text = "After making a roll, change the result to an unmodified 6.";
   const effect: [string, string, Record<string, unknown>] = ["change the result to an unmodified 6", "roll-auto-result", { roll: "hit", outcome: "counts-as-6" }];
 
   for (const roll of ["any", "all", "attacks", "surge", "resource-die"]) {
     it(`refuses an after-roll moment that names roll ${roll}`, () => {
-      const error = refusal(placed(text, [["After making a roll", "event", { kind: "after-roll", roll }], effect], { event: 18 }), text);
+      const error = refusal(placed(text, [["After making a roll", "event", { kind: "after-roll", roll }], effect]), text);
       expect(error).toMatch(/cannot name/u);
     });
 
     it(`refuses a before-roll moment that names roll ${roll}`, () => {
-      const error = refusal(placed(text, [["After making a roll", "event", { kind: "before-roll", roll }], effect], { event: 18 }), text);
+      const error = refusal(placed(text, [["After making a roll", "event", { kind: "before-roll", roll }], effect]), text);
       expect(error).toMatch(/cannot name/u);
     });
   }
 
   it("still compiles a single trigger roll kind", () => {
-    const mechanics = compiled(placed(text, [["After making a roll", "event", { kind: "after-roll", roll: "hit" }], effect], { event: 18 }), text);
+    const mechanics = compiled(placed(text, [["After making a roll", "event", { kind: "after-roll", roll: "hit" }], effect]), text);
     expect(mechanics.trigger).toMatchObject({ event: "after-roll", filter: { roll: "hit" } });
   });
 });
@@ -265,8 +265,7 @@ describe("trigger wiring", () => {
 });
 
 describe("a menu action whose trigger is a list moment (compile-containers path)", () => {
-  // Fragment-tagged leaves, as a resource-action-menu record carries them. Versions are the current
-  // ones except characteristic-modifier, which the existing menu fixtures pin at 3.
+  // Fragment-tagged leaves, as a resource-action-menu record carries them, at current versions.
   const menuLeaf = (family: string, parameters: Record<string, unknown>, fragment: string, version = currentFamilyVersion(family), start = 0): CompileLeaf => ({
     role: familyRole(family, version), family_id: family, family_version: version, fragment,
     parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: start + 1,
@@ -277,7 +276,7 @@ describe("a menu action whose trigger is a list moment (compile-containers path)
     menuLeaf("resource-action-menu-open", { menu_id: "wave-ten-menu", pool_id: "wave-ten-pool" }, "A", undefined, 0),
     menuLeaf("menu-action", { action_id: "wave-ten-action", label: "Wave Ten Action", cost_amount: 1 }, "B", undefined, 10),
     menuLeaf("event", eventParameters, "B", undefined, 20),
-    menuLeaf("characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }, "B", 3, 30),
+    menuLeaf("characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }, "B", undefined, 30),
   ];
 
   it("lowers the action's when to one trigger per listed roll kind, in canonical order", () => {

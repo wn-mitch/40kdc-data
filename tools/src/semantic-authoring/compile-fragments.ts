@@ -78,16 +78,16 @@ const RESOURCE_POOLS: Record<string, string> = {
   "miracle-dice": "miracle-dice-pool", "fate-dice": "fate-dice-pool", "bloodshed-point": "bloodshed-point",
 };
 
-/** Whose models an effect changes. "The bearer" is this-model; leaves still spelling it bearer are on a retired version. */
+/** Whose models an effect changes. "The bearer" is this-model. */
 const SUBJECT_TARGETS: Record<string, string> = {
   "this-unit": "this-unit", "this-model": "this-model", "selected-unit": "selected-unit",
-  // Later versions of some effect families (families/) also name the triggering unit and the attack's target.
+  // Some effect families also name the triggering unit and the attack's target.
   "event-subject": "event-subject", target: "defender",
   // Bound by compile-antecedent.ts only: the unit a moment happens to (damage allocated to it).
   "event-object": "event-object",
   // Bound by compile-antecedent.ts only: the unit an aura reaches.
   recipient: "recipient",
-  // The Transport the bearer is embarked within (bearer-transport, families/shared.ts).
+  // The Transport the bearer is embarked within.
   "bearer-transport": "bearer-transport",
 };
 /** Recipients that stay themselves when a leader is attached; only the ability's own unit widens to the attached unit. */
@@ -274,12 +274,12 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
     case "fights-first":
       return { type: "ability-grant", target: target(leaf.parameters.subject), modifier: { ability: "fights-first" } };
     case "sticky-objective":
-      // Version 4: "that objective is secured", the marker the record's select-objective chose (compile.ts names it).
+      // "that objective is secured", the marker the record's select-objective chose (compile.ts names it).
       if (leaf.parameters.subject === "selected-objective") {
         if (typeof leaf.parameters.selection_var !== "string") throw new CompileError("sticky-objective names the selected objective marker, but this record selects no objective marker.");
         return { type: "objective-sticky", target: "this-unit", modifier: { objective: { selection_var: leaf.parameters.selection_var } } };
       }
-      // Version 1 leaves carry no subject at all, and always meant this-unit.
+      // A leaf with no subject secures for this unit.
       return { type: "objective-sticky", target: leaf.parameters.subject !== undefined ? closed(leaf, "subject") : "this-unit" };
     case "no-advance-roll":
       return { type: "move-modifier", target: target(leaf.parameters.subject), modifier: { advance: "fixed-6" } };
@@ -288,7 +288,7 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
       return { type: "roll-prohibition", roll: closed(leaf, "roll") };
     case "mortal-wounds": {
       const count = String(closed(leaf, "count"));
-      // Version 5: "(to a maximum of 6 mortal wounds)" caps the total.
+      // "(to a maximum of 6 mortal wounds)" caps the total.
       const cap = leaf.parameters.max === undefined ? {} : { max: closed(leaf, "max") };
       // "that enemy unit" under a later moment: the unit the Stratagem's WHEN moment bound (compile-when-subject.ts).
       // "that enemy unit" after a selection of this unit's models: the unit selection's name (compile-pair-eligibility.ts).
@@ -302,7 +302,7 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
       return { type: "mortal-wounds", target, modifier: { count: amount, ...cap, ...psychic } };
     }
     case "fight-on-death": {
-      const act = leaf.family_version >= 2 ? closed(leaf, "act") : "fight";
+      const act = closed(leaf, "act");
       // Shooting is a plain grant with no timing of its own: no resolution, removal, roll, or eligibility.
       if (act === "shoot") return { type: "act-on-death", target: target(leaf.parameters.subject), modifier: { act: "shoot" } };
       // The schema pairs each resolution with its removal; a roll or eligibility is folded in by compile-dice.
@@ -366,8 +366,8 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
     case "targeting-restriction":
       return targetingEffect(leaf, target);
     case "counts-as": {
-      // A region grant (counts-as@2, families/regions.ts) names the army rule's region instead of a range;
-      // a named-range grant (counts-as@3) names the range and whose units it is measured to.
+      // A region grant names the army rule's region instead of a range;
+      // a named-range grant names the range and whose units it is measured to.
       const modifier: Node = leaf.parameters.range_ref !== undefined
         ? { within: { aura_of: namedRange(leaf.parameters.range_ref).aura_of }, of: { owner: closed(leaf, "of_side") } }
         : leaf.parameters.region !== undefined

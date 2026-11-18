@@ -3,12 +3,8 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { resolveAuthoredNames } from "../src/semantic-authoring/compile-weapon-names.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import type { WeaponCatalog } from "../src/semantic-authoring/weapon-catalog.js";
 import { keywordRef } from "../src/semantic-authoring/compile-weapon-effects.js";
-
-/** The family versions the extensions under test create. */
-const WEAPON_SCOPE_NAME_KEYWORD_EXCLUSION_VERSIONS: ReadonlySet<string> = new Set(["weapon-property-scope@8", "characteristic-set@8", "roll-modifier@8"]);
 
 /**
  * A scope that names one weapon, a set that selects weapons by keyword, and a roll modifier for named
@@ -59,19 +55,10 @@ function resolved(text: string, piece: Piece, weapons = UNIT): CompileLeaf {
   return resolveAuthoredNames(placed(text, piece), text, weapons, undefined)[0]!;
 }
 
-describe("family versions: weapon-property-scope weapon_name, characteristic-set weapon_keyword, roll-modifier weapon names", () => {
+describe("parameters: weapon-property-scope weapon_name, characteristic-set weapon_keyword, roll-modifier weapon names", () => {
   const norm = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters, currentFamilyVersion(family));
 
-  it("tracks the extension as the current version, positionally", () => {
-    // Later extensions may sit above this one, so find its version by identity, not as the current one.
-    for (const family of ["weapon-property-scope", "characteristic-set", "roll-modifier"]) {
-      const versions = Array.from({ length: currentFamilyVersion(family) }, (_, at) => at + 1);
-      const extension = versions.map((version) => familyExtension(family, version)).find((found) => found !== undefined && WEAPON_SCOPE_NAME_KEYWORD_EXCLUSION_VERSIONS.has(`${found.family}@${found.version}`));
-      expect(extension?.description).toMatch(/^As the previous version, plus weapon_/u);
-    }
-  });
-
-  it("accepts a scope that names one weapon, and still every value the previous version accepted", () => {
+  it("accepts a scope that names one weapon, a keyword, several names, a frame, or a weapon type alone", () => {
     expect(norm("weapon-property-scope", { subject: "this-unit", weapon_type: "all", weapon_name: "Zap cannon" })).toEqual({ subject: "this-unit", weapon_type: "all", weapon_name: "Zap cannon" });
     expect(norm("weapon-property-scope", { subject: "this-unit", weapon_type: "ranged", weapon_keyword: "Torrent" })).toEqual({ subject: "this-unit", weapon_type: "ranged", weapon_keyword: "Torrent" });
     expect(norm("weapon-property-scope", { subject: "antecedent", weapon_type: "melee", weapon_names: ["Zap blade", "Twin lash"] }).weapon_names).toHaveLength(2);
@@ -80,15 +67,15 @@ describe("family versions: weapon-property-scope weapon_name, characteristic-set
   });
 
   it("refuses a scope weapon_name with no weapon_type, with a second selector, or padded", () => {
-    expect(() => norm("weapon-property-scope", { subject: "this-unit", weapon_name: "Zap cannon" })).toThrow(/needs weapon_type/u);
-    expect(() => norm("weapon-property-scope", { subject: "this-unit", weapon_type: "all", weapon_name: "Zap cannon", weapon_names: ["A b", "C d"] })).toThrow(/cannot combine with weapon_names/u);
+    expect(() => norm("weapon-property-scope", { subject: "this-unit", weapon_name: "Zap cannon" })).toThrow(/must be exactly: subject, weapon_name, weapon_type\./u);
+    expect(() => norm("weapon-property-scope", { subject: "this-unit", weapon_type: "all", weapon_name: "Zap cannon", weapon_names: ["A b", "C d"] })).toThrow(/weapon_names cannot combine with weapon_name\./u);
     expect(() => norm("weapon-property-scope", { subject: "this-unit", weapon_type: "all", weapon_name: "Zap cannon", weapon_keyword: "Torrent" })).toThrow(/weapon_keyword/u);
     expect(() => norm("weapon-property-scope", { subject: "this-unit", weapon_type: "all", weapon_name: "Zap cannon", frame: "antecedent" })).toThrow(/frame/u);
     expect(() => norm("weapon-property-scope", { subject: "this-unit", weapon_type: "all", weapon_name: " Zap cannon" })).toThrow(/no padding/u);
     expect(() => norm("weapon-property-scope", { subject: "this-unit", weapon_type: "all", weapon_name: "" })).toThrow();
   });
 
-  it("accepts a set by weapon keyword, and every value the previous version accepted", () => {
+  it("accepts a set by weapon keyword, by weapon name, of a model stat, and of several values", () => {
     expect(norm("characteristic-set", { subject: "this-unit", characteristic: "A", value: 6, weapon_type: "all", weapon_keyword: "Torrent" }).weapon_keyword).toBe("Torrent");
     expect(norm("characteristic-set", { subject: "this-unit", characteristic: "A", value: 6, weapon_type: "ranged", weapon_name: "Zap cannon" })).toMatchObject({ characteristic: "A", value: 6, weapon_type: "ranged" });
     expect(norm("characteristic-set", { subject: "this-model", characteristic: "M", value: 8 })).toEqual({ subject: "this-model", characteristic: "M", value: 8 });
@@ -106,7 +93,7 @@ describe("family versions: weapon-property-scope weapon_name, characteristic-set
     expect(() => norm("characteristic-set", { ...base, weapon_keyword: "Extra Attacks" })).toThrow(/weapon_keyword/u);
   });
 
-  it("accepts a roll modifier for named weapons, and every value the previous version accepted", () => {
+  it("accepts a roll modifier for named weapons, one weapon, no weapon, several rolls, and a weapon type", () => {
     expect(norm("roll-modifier", { roll: "hazard", operation: "add", value: 1, subject: "this-unit", weapon_names: ["Plasma lamp", "Plasma pistol"] }).weapon_names).toHaveLength(2);
     expect(norm("roll-modifier", { roll: "hit", operation: "subtract", value: 1, weapon_name: "Zap cannon" }).weapon_name).toBe("Zap cannon");
     expect(norm("roll-modifier", { roll: "charge", operation: "add", value: 2 })).toEqual({ roll: "charge", operation: "add", value: 2 });
@@ -303,12 +290,12 @@ describe("reviewed source keyword lowering", () => {
   });
 });
 
-describe("a scope that leaves out one named weapon (weapon-property-scope@9)", () => {
+describe("a scope that leaves out one named weapon", () => {
   const norm = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("weapon-property-scope", parameters, currentFamilyVersion("weapon-property-scope"));
 
   it("accepts one excluded name with a weapon type, and refuses it alone or beside another selector", () => {
     expect(norm({ subject: "this-unit", weapon_type: "melee", exclude_weapon_name: "Twin lash" })).toEqual({ subject: "this-unit", weapon_type: "melee", exclude_weapon_name: "Twin lash" });
-    expect(() => norm({ subject: "this-unit", exclude_weapon_name: "Twin lash" })).toThrow(/needs weapon_type/u);
+    expect(() => norm({ subject: "this-unit", exclude_weapon_name: "Twin lash" })).toThrow(/must be exactly: exclude_weapon_name, subject, weapon_type\./u);
     expect(() => norm({ subject: "this-unit", weapon_type: "melee", weapon_name: "Hound's tooth", exclude_weapon_name: "Twin lash" })).toThrow();
     expect(() => norm({ subject: "this-unit", weapon_type: "melee", weapon_keyword: "Lance", exclude_weapon_name: "Twin lash" })).toThrow();
   });

@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { outsideContract } from "./leaf-contract.js";
 
 type Item = [string, string, Record<string, unknown>];
@@ -129,7 +128,7 @@ describe("Semantic authoring per-model usage as the selection's limit", () => {
 const BEAST_MODEL = { side: "friendly", keywords: ["BEAST"], level: "model" };
 const HIT_ROLL = ["The selected model adds 1 to its Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }] as Item;
 
-describe("Semantic authoring model selection in the bearer's unit (membership@2)", () => {
+describe("Semantic authoring model selection in the bearer's unit (membership)", () => {
   it("folds \"in your unit\" after a model unit-filter into its membership", () => {
     const text = "Select one BEAST model in your unit. The selected model adds 1 to its Hit roll.";
     const result = resultOf([
@@ -200,15 +199,11 @@ describe("Semantic authoring model selection in the bearer's unit (membership@2)
     expect(!result.ok && result.errors.join(" ")).toMatch(/only being a model of its unit/u);
   });
 
-  it("accepts stratagem-target only in membership version 2", () => {
-    expect(currentFamilyVersion("membership")).toBe(3);
-    // Version 3 (families/regions.ts) adds antecedent; version 2 still refuses it.
-    expect(() => normalizeFingerprintParameters("membership", { relation: "in", of: "antecedent" }, 2)).toThrow();
-    expect(normalizeFingerprintParameters("membership", { relation: "in", of: "antecedent" }, 3)).toEqual({ relation: "in", of: "antecedent" });
-    expect(normalizeFingerprintParameters("membership", { relation: "in", of: "stratagem-target" }, 2)).toEqual({ relation: "in", of: "stratagem-target" });
-    expect(() => normalizeFingerprintParameters("membership", { relation: "in", of: "stratagem-target" }, 1)).toThrow();
-    expect(() => normalizeFingerprintParameters("membership", { relation: "embarked-in", of: "stratagem-target" }, 2)).toThrow(/relation in/u);
-    expect(normalizeFingerprintParameters("membership", { relation: "in", of: "this-unit" }, 2)).toEqual({ relation: "in", of: "this-unit" });
+  it("accepts stratagem-target and antecedent only with relation in", () => {
+    expect(normalizeFingerprintParameters("membership", { relation: "in", of: "antecedent" })).toEqual({ relation: "in", of: "antecedent" });
+    expect(normalizeFingerprintParameters("membership", { relation: "in", of: "stratagem-target" })).toEqual({ relation: "in", of: "stratagem-target" });
+    expect(() => normalizeFingerprintParameters("membership", { relation: "embarked-in", of: "stratagem-target" })).toThrow(/relation in/u);
+    expect(normalizeFingerprintParameters("membership", { relation: "in", of: "this-unit" })).toEqual({ relation: "in", of: "this-unit" });
   });
 });
 
@@ -280,18 +275,6 @@ describe("Semantic authoring per-model cap in a compound ability", () => {
 });
 
 {
-  /** The family versions the extensions under test create. */
-  const SELECT_COUNT_POOL_AND_PAIRING_VERSIONS: ReadonlySet<string> = new Set(["select-unit@6"]);
-
-  /** The select-unit version just before the distance-free within_of extension (later extensions may sit above it). */
-  function previousSelectUnit(): number {
-    for (let version = currentFamilyVersion("select-unit"); version > 1; version -= 1) {
-      const extension = familyExtension("select-unit", version);
-      if (extension !== undefined && SELECT_COUNT_POOL_AND_PAIRING_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
-    }
-    throw new Error("The extension does not extend select-unit.");
-  }
-
   /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
   const TEXT = "Select one friendly ALPHA model. Select one enemy BRAVO unit within 8 inches of that model. That unit suffers 1 mortal wound.";
 
@@ -376,11 +359,9 @@ describe("Semantic authoring per-model cap in a compound ability", () => {
       if (!result.ok) expect(result.errors.join(" ")).toContain("not bound with it yet");
     });
 
-    it("normalizes within_of only with a distance within, and only as a selection name", () => {
-      expect(currentFamilyVersion("select-unit")).toBeGreaterThanOrEqual(3);
+    it("normalizes within_of with a distance within only as a selection name", () => {
       expect(normalizeFingerprintParameters("select-unit", { distance: "within", inches: 8, visible: false, within_of: "anchor" }, currentFamilyVersion("select-unit")))
         .toMatchObject({ within_of: "anchor", inches: 8 });
-      expect(() => normalizeFingerprintParameters("select-unit", { distance: "any", visible: false, within_of: "anchor" }, previousSelectUnit())).toThrow(/distance within/u);
       expect(() => normalizeFingerprintParameters("select-unit", { distance: "within", inches: 8, visible: false, within_of: "Anchor Model" }, currentFamilyVersion("select-unit"))).toThrow(/lowercase selection name/u);
     });
   });
@@ -395,7 +376,7 @@ describe("Semantic authoring per-model cap in a compound ability", () => {
       expect(() => normalizeFingerprintParameters("select-unit", { distance: "any", within_of: "outer" }, version())).toThrow();
     });
 
-    it("keeps accepting every shape the previous version accepted", () => {
+    it("accepts within_of at a distance within, a bind_as, a visible_to and a plain distance", () => {
       for (const leaf of [
         { distance: "within", inches: 6, visible: false, within_of: "outer" },
         { distance: "any", visible: false, bind_as: "anchor" },

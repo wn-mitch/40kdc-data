@@ -3,7 +3,6 @@ import { createValidator } from "../src/schema-loader.js";
 import { refuseDestinationMismatch } from "../src/semantic-authoring/compile-transport-embark.js";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { extensionVersionPairs } from "../src/semantic-authoring/families/index.js";
 import { describeCondition } from "../src/translate/index.js";
 
 type Item = [wording: string, family: string, parameters: Record<string, unknown>, fragment: string];
@@ -83,14 +82,9 @@ describe("Semantic authoring transport eligibility: the eligible parameters", ()
       .toEqual({ subject: "this-unit", to: "embark-within", transport: "ability-unit" });
   });
 
-  it("leaves a version 2 eligible leaf as it was", () => {
-    expect(normalizeFingerprintParameters("eligible", { subject: "this-unit", to: "fight" }, 3))
-      .toEqual(normalizeFingerprintParameters("eligible", { subject: "this-unit", to: "fight" }, 2));
-  });
-
-  it("migrates eligible from version 2 to version 3 by identity", () => {
-    expect(currentFamilyVersion("eligible")).toBe(3);
-    expect(extensionVersionPairs()).toContainEqual({ family: "eligible", from: 2, to: 3 });
+  it("leaves an eligible leaf with no Transport as it was", () => {
+    expect(normalizeFingerprintParameters("eligible", { subject: "this-unit", to: "fight" }))
+      .toEqual({ subject: "this-unit", to: "fight" });
   });
 });
 
@@ -306,16 +300,15 @@ describe("Semantic authoring embark destination: the eligibility-permission into
       .toThrow(/eligibility-permission.into must be one of/u);
   });
 
-  it("leaves every permission the previous version accepted as it was", () => {
+  it("leaves a permission without into as it was", () => {
     const current = currentFamilyVersion("eligibility-permission");
-    const previous = [
+    const permissions = [
       { subject: "this-unit", activity: "embark", allow: true },
       { subject: "this-model", activity: "shoot", allow: false, despite: ["engaged"] },
       { subject: "this-unit", activity: "embark", allow: true, engaged_with_move_end: true, despite: ["engaged"] },
     ];
-    for (const params of previous) {
-      expect(normalizeFingerprintParameters("eligibility-permission", params, current))
-        .toEqual(normalizeFingerprintParameters("eligibility-permission", params, current - 1));
+    for (const params of permissions) {
+      expect(normalizeFingerprintParameters("eligibility-permission", params, current)).toEqual(params);
     }
   });
 });

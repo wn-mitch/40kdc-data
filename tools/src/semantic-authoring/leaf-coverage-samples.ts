@@ -21,10 +21,10 @@ export type FamilySampling = "cartesian" | "pairwise";
 
 /**
  * Families whose full sampled products are unsafe or disproportionate. In particular,
- * unit-filter@17 expands to hundreds of millions of describer candidates and unit-position@25 to
+ * unit-filter expands to hundreds of millions of describer candidates and unit-position to
  * millions; their independent recipient/origin fields are the newly explosive domains. Event's
  * catalog-sized designation list and the expanded characteristic, roll, setup and activity
- * families also cross the practical boundary, as does targeting-restriction@7 (over 300,000
+ * families also cross the practical boundary, as does targeting-restriction (over 300,000
  * products of its kinds, sides, histories and moves).
  */
 const BOUNDED_SAMPLE_FAMILIES: Record<string, true> = {

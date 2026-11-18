@@ -271,11 +271,11 @@ describe("Semantic authoring holder abilities: what still does not fold", () => 
 });
 
 describe("Semantic authoring unit-has-ability own", () => {
-  const normalize = (parameters: Record<string, unknown>, version = currentFamilyVersion("unit-has-ability")) => normalizeFingerprintParameters("unit-has-ability", parameters, version);
+  const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("unit-has-ability", parameters);
 
-  it("accepts own: true in place of an ability id, and every previous leaf unchanged", () => {
+  it("accepts own: true in place of an ability id, and an ability id as it is", () => {
     expect(normalize({ subject: "antecedent", own: true })).toEqual({ subject: "antecedent", own: true });
-    expect(normalize({ subject: "antecedent", ability: "gloom-veil" })).toEqual(normalize({ subject: "antecedent", ability: "gloom-veil" }, currentFamilyVersion("unit-has-ability") - 1));
+    expect(normalize({ subject: "antecedent", ability: "gloom-veil" })).toEqual({ subject: "antecedent", ability: "gloom-veil" });
   });
 
   it("previews as \"this ability\", and refuses to lower before its record binds it", () => {
@@ -290,8 +290,6 @@ describe("Semantic authoring unit-has-ability own", () => {
     expect(() => normalize({ subject: "antecedent", own: true, ability: "gloom-veil" })).toThrow(/not both/u);
     expect(() => normalize({ subject: "antecedent" })).toThrow(/names an ability/u);
     expect(() => normalize({ subject: "antecedent", own: false })).toThrow(/own is true/u);
-    // own arrived at version 3.
-    expect(() => normalize({ subject: "antecedent", own: true }, 2)).toThrow();
   });
 });
 

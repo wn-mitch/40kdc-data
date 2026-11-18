@@ -1,8 +1,8 @@
-import { DESTRUCTION_ACTIVITIES } from "./families/unit-activity.js";
+import { DESTRUCTION_ACTIVITIES } from "./families/vocabulary.js";
 import { ANTECEDENT, antecedentKeys, keyEnum } from "./antecedent-families.js";
 import { exactSpan, reviewedFamily } from "./contracts.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { awaitsFollowingFilter } from "./families/shared.js";
+import { awaitsFollowingFilter } from "./families/vocabulary.js";
 import { exclusionOnly } from "./compile-select-exclusions.js";
 import { allocatedObject, destroyedObject, rollOwnerEvent } from "./compile-model-level.js";
 import { destroyerSideOf, refuseDestroyedUnitAntecedent, trailingDestroyerFilter } from "./compile-destroying-attack.js";
@@ -348,7 +348,7 @@ function linkedToFilter(leaves: readonly CompileLeaf[], at: number, sourceText: 
   return gap === undefined || LINKING_VERB.test(gap);
 }
 
-/** A destruction by the triggering attacks (unit-activity@15, families/unit-activity.ts). */
+/** A destruction by the triggering attacks (unit-activity). */
 function isDestructionActivity(leaf: CompileLeaf): boolean {
   return leaf.family_id === "unit-activity" && ((leaf.parameters.activities as unknown[] | undefined) ?? []).some((activity) => (DESTRUCTION_ACTIVITIES as readonly unknown[]).includes(activity));
 }

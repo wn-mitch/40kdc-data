@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
@@ -22,27 +21,16 @@ function mechanicsOf(list: CompileLeaf[], text: string): Record<string, any> {
   return result.mechanics as unknown as Record<string, any>;
 }
 
-/** The unit-filter version that adds other_than target and event-object. */
-function otherThanTargetVersion(): number {
-  for (let version = currentFamilyVersion("unit-filter"); version > 1; version -= 1) {
-    if (familyExtension("unit-filter", version)?.description.includes("other_than target")) return version;
-  }
-  throw new Error("No unit-filter version adds other_than target.");
-}
-
-const norm = (parameters: Record<string, unknown>, version = currentFamilyVersion("unit-filter")) => normalizeFingerprintParameters("unit-filter", parameters, version);
+const norm = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("unit-filter", parameters);
 
 describe("unit-filter other_than target and event-object", () => {
-  it("keeps the new values on other: true, refuses them without it, and refuses them before the version", () => {
+  it("keeps target and event-object on other: true, refuses them without it, and keeps the other values", () => {
     expect(norm({ side: "enemy", other: true, other_than: "target" })).toEqual({ side: "enemy", other: true, other_than: "target" });
     expect(norm({ side: "enemy", other: true, other_than: "event-object" })).toEqual({ side: "enemy", other: true, other_than: "event-object" });
     expect(() => norm({ side: "enemy", other_than: "target" })).toThrow();
     expect(() => norm({ side: "enemy", other: true, other_than: "this-unit" })).toThrow();
-    const previous = otherThanTargetVersion() - 1;
-    expect(() => norm({ side: "enemy", other: true, other_than: "target" }, previous)).toThrow();
-    // Earlier values move across unchanged.
-    expect(norm({ side: "friendly", other: true, other_than: "event-subject" })).toEqual(norm({ side: "friendly", other: true, other_than: "event-subject" }, previous));
-    expect(norm({ side: "enemy", other: true })).toEqual(norm({ side: "enemy", other: true }, previous));
+    expect(norm({ side: "friendly", other: true, other_than: "event-subject" })).toEqual({ side: "friendly", other: true, other_than: "event-subject" });
+    expect(norm({ side: "enemy", other: true })).toEqual({ side: "enemy", other: true });
   });
 
   const text = "In your Shooting phase, when this unit's ranged attacks target an enemy unit, select one other enemy unit within 3\" of the target. That unit suffers D3 mortal wounds.";

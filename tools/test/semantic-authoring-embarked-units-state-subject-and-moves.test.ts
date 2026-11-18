@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf, type CorePatch } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { claimedByEmbarkedState } from "../src/semantic-authoring/compile-embarked-exclusion.js";
 import { outsideContract } from "./leaf-contract.js";
 import { mergeStackedFilters } from "../src/semantic-authoring/compile-unit-filter-merge.js";
@@ -13,9 +12,6 @@ function oneRestriction(core: CorePatch | undefined): Record<string, unknown> | 
   if (Array.isArray(restrictions)) throw new Error("expected a single target restriction, got a list");
   return restrictions;
 }
-
-/** The family versions the extensions under test create. */
-const EMBARKED_UNITS_STATE_SUBJECT_AND_MOVES_VERSIONS: ReadonlySet<string> = new Set(["unit-filter@14", "make-move@6", "eligibility-permission@7", "unit-state@16"]);
 
 // Fabricated wording throughout: "stowed within this Hauler" stands for embarked within this unit.
 
@@ -49,18 +45,7 @@ function refusal(text: string, ...items: Item[]): string {
   return result.errors.join("; ");
 }
 
-/** The version at which this extension sits for `family`, found by lookup; later extensions may sit above it. */
-const ownVersion = (family: string) => {
-  for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
-    const extension = familyExtension(family, version);
-    if (extension !== undefined && EMBARKED_UNITS_STATE_SUBJECT_AND_MOVES_VERSIONS.has(`${extension.family}@${extension.version}`)) return version;
-  }
-  throw new Error(`The embarked-units extension does not extend ${family}.`);
-};
-/** The version this extension replaced: one below its own, never current - 1. */
-const previousOf = (family: string) => ownVersion(family) - 1;
-const normalize = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters, ownVersion(family));
-const normalizePrevious = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters, previousOf(family));
+const normalize = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters);
 
 const STOWED = { side: "friendly", embarked_in: "this-unit" };
 
@@ -79,9 +64,9 @@ describe("unit-filter embarked_in", () => {
     expect(() => normalize("unit-filter", { ...STOWED, designated: "bondsman-affected" })).toThrow(/designated/);
   });
 
-  it("normalizes every input the previous version accepted to the same value", () => {
+  it("keeps filters with no embarked_in unchanged", () => {
     for (const leaf of [{ side: "friendly" }, { side: "enemy", keywords: ["ALPHA"], states: ["engaged"] }, { side: "any", level: "model", excluded_keywords: ["BETA"] }]) {
-      expect(normalize("unit-filter", leaf)).toEqual(normalizePrevious("unit-filter", leaf));
+      expect(normalize("unit-filter", leaf)).toEqual(leaf);
     }
   });
 });
@@ -139,7 +124,7 @@ describe("make-move subject filtered-units and mode", () => {
 
   it("refuses a mode on a move that is not a disembark, and an unknown mode", () => {
     expect(() => normalize("make-move", { subject: "this-unit", move_type: "normal", mode: "assault" })).toThrow(/disembark/);
-    expect(() => normalize("make-move", { subject: "filtered-units", move_type: "disembark", mode: "shock" })).toThrow(/mode is one of/);
+    expect(() => normalize("make-move", { subject: "filtered-units", move_type: "disembark", mode: "hover" })).toThrow(/mode is one of/);
     expect(() => normalize("make-move", { subject: "filtered-units", move_type: "disembark", mode: "swift" })).toThrow(/mode is one of/);
   });
 
@@ -149,9 +134,9 @@ describe("make-move subject filtered-units and mode", () => {
       ["it can make a swift hop move", "make-move", { subject: "filtered-units", move_type: "disembark" }])).toMatch(/names the units of a unit-filter, but none sits right before it/);
   });
 
-  it("normalizes every input the previous version accepted to the same value", () => {
+  it("keeps moves of other subjects unchanged, and a mode on a disembark", () => {
     for (const leaf of [{ subject: "this-unit", move_type: "normal" }, { subject: "selected-unit", move_type: "advance", distance: 3 }, { subject: "event-subject", move_type: "disembark" }]) {
-      expect(normalize("make-move", leaf)).toEqual(normalizePrevious("make-move", leaf));
+      expect(normalize("make-move", leaf)).toEqual(leaf);
     }
     expect(normalize("make-move", { subject: "this-unit", move_type: "disembark", mode: "combat" })).toMatchObject({ mode: "combat" });
   });
@@ -168,9 +153,9 @@ describe("eligibility-permission subject filtered-units", () => {
     expect(JSON.stringify(mech.effect)).toContain('"into":"this-unit"');
   });
 
-  it("normalizes every input the previous version accepted to the same value", () => {
+  it("keeps other subjects unchanged and accepts filtered-units", () => {
     for (const leaf of [{ subject: "this-unit", activity: "embark", allow: false, into: "this-unit" }, { subject: "event-subject", activity: "embark", allow: true }]) {
-      expect(normalize("eligibility-permission", leaf)).toEqual(normalizePrevious("eligibility-permission", leaf));
+      expect(normalize("eligibility-permission", leaf)).toEqual(leaf);
     }
     expect(normalize("eligibility-permission", { subject: "filtered-units", activity: "embark", allow: false, into: "this-unit" })).toMatchObject({ subject: "filtered-units" });
   });
@@ -191,12 +176,12 @@ describe("unit-state embarked within a named Transport", () => {
     expect(() => normalize("unit-state", { ...ok, at: "phase-start" })).toThrow(/no earlier point/);
     expect(() => normalize("unit-state", { ...ok, with: "target" })).toThrow(/this-unit or this-model/);
     expect(() => normalize("unit-state", { ...ok, with: "antecedent" })).toThrow(/this-unit or this-model/);
-    expect(() => normalize("unit-state", { ...ok, subject: "this-unit" })).toThrow(/takes no with/);
-    expect(() => normalize("unit-state", { ...ok, subject: "this-model" })).toThrow(/takes no with/);
+    expect(() => normalize("unit-state", { ...ok, subject: "this-unit" })).toThrow(/embarked takes a with only for subject antecedent/);
+    expect(() => normalize("unit-state", { ...ok, subject: "this-model" })).toThrow(/embarked takes a with only for subject antecedent/);
     expect(() => normalize("unit-state", { ...ok, states: ["embarked", "engaged"] })).toThrow();
   });
 
-  it("normalizes every input the previous version accepted to the same value", () => {
+  it("keeps every other embarked, engaged, hidden and battle-shocked state unchanged", () => {
     const old: Array<Record<string, unknown>> = [
       { states: ["embarked"], subject: "this-unit", negated: false },
       { states: ["embarked"], subject: "this-model", negated: true },
@@ -207,8 +192,8 @@ describe("unit-state embarked within a named Transport", () => {
       { states: ["hidden"], subject: "this-unit", negated: false },
       { states: ["battle-shocked"], subject: "this-unit", negated: false, at: "phase-start" },
     ];
-    for (const leaf of old) expect(normalize("unit-state", leaf)).toEqual(normalizePrevious("unit-state", leaf));
-    // The old refusals stay: embarked with a Transport for a subject the new form does not name.
+    for (const leaf of old) expect(normalize("unit-state", leaf)).toEqual(leaf);
+    // Embarked with a Transport is refused for a subject that is not a filter's units.
     expect(() => normalize("unit-state", { states: ["embarked"], subject: "target", negated: false, with: "this-unit" })).toThrow();
   });
 
@@ -229,9 +214,9 @@ describe("unit-state embarked within a named Transport", () => {
 
   it("refuses a named Transport for a unit that is not a filter's (a selected unit)", () => {
     const text = "Select one friendly unit. If that unit is stowed within this Hauler, add 1 to the Hit roll for that unit.";
-    // The family refuses embarked with a with; the compiler names the DSL gap for a leaf that reaches it anyway.
+    // The family refuses embarked with a with for any subject but antecedent; the compiler names the DSL gap for a leaf that reaches it anyway.
     const stowed = { states: ["embarked"], subject: "selected-unit", negated: false, with: "this-unit" };
-    expect(() => normalizeFingerprintParameters("unit-state", stowed, currentFamilyVersion("unit-state"))).toThrow(/embarked takes no with/u);
+    expect(() => normalizeFingerprintParameters("unit-state", stowed)).toThrow(/embarked takes a with only for subject antecedent/u);
     const placeable = { states: ["embarked"], subject: "this-unit", negated: false };
     const leaves = placed(text,
       ["Select one friendly unit", "select-unit", { scope: "friendly", distance: "any", visible: false }],

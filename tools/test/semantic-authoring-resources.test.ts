@@ -7,7 +7,6 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, reviewedFamily } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { familyCombinations } from "../src/semantic-authoring/leaf-coverage-samples.js";
 import { resourceNoun } from "../src/translate/effect-words.js";
 
@@ -21,13 +20,12 @@ const base = () => {
 };
 
 let offset = 0;
-function leaf(parameters: Record<string, unknown>, familyVersion: number): CompileLeaf {
+function leaf(parameters: Record<string, unknown>, familyVersion = currentFamilyVersion("resource-gain")): CompileLeaf {
   offset += 10;
   return { role: "EFFECT", family_id: "resource-gain", family_version: familyVersion, parameters, start_byte: offset };
 }
 
-const normalize = (parameters: Record<string, unknown>, version: number) => normalizeFingerprintParameters("resource-gain", parameters, version);
-const current = (parameters: Record<string, unknown>) => normalize(parameters, currentFamilyVersion("resource-gain"));
+const current = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("resource-gain", parameters);
 
 function compiled(leaves: CompileLeaf[]) {
   const result = compileLeaves(leaves);
@@ -42,7 +40,7 @@ function nodes(tree: unknown, test: (node: Record<string, unknown>) => boolean):
   return [...(test(node) ? [node] : []), ...Object.values(node).flatMap((value) => nodes(value, test))];
 }
 
-describe("resource-gain v4: dice amounts and plain pool ids", () => {
+describe("resource-gain dice amounts and plain pool ids", () => {
   it("normalizes a dice amount to uppercase, trimmed", () => {
     expect(current({ pool: "miracle-dice-pool", amount: " d3 " })).toMatchObject({ pool: "miracle-dice-pool", amount: "D3" });
   });
@@ -57,11 +55,7 @@ describe("resource-gain v4: dice amounts and plain pool ids", () => {
     expect(() => current({ pool: "miracle-dice-pool", amount: "D3+" })).toThrow(/integer or an exact source snippet/u);
   });
 
-  it("refuses a dice amount at v3, so existing v3 leaves keep their meaning", () => {
-    expect(() => normalize({ pool: "miracle-dice-pool", amount: "D3" }, 3)).toThrow(/integer or an exact source snippet/u);
-  });
-
-  it("gives every value v3 accepted the same normal form at the current version", () => {
+  it("keeps integer, open, per-size and quoted-source amounts and quoted pools as given", () => {
     const accepted: Record<string, unknown>[] = [
       { pool: "miracle-dice-pool", amount: 1 },
       { pool: "resurgence-points", amount: 2 },
@@ -72,25 +66,25 @@ describe("resource-gain v4: dice amounts and plain pool ids", () => {
       { pool: "miracle-dice-pool", amount: { source: "D3" } },
     ];
     for (const parameters of accepted) {
-      expect(current(parameters)).toEqual(normalize(parameters, 3));
+      expect(current(parameters)).toEqual(parameters);
     }
   });
 
   it("keeps a quoted-source dice amount refused at compile time", () => {
     const parameters = current({ pool: "miracle-dice-pool", amount: { source: "D3" } });
-    expect(() => compiled([leaf(parameters, 4)])).toThrow(/amount is quoted source text/u);
+    expect(() => compiled([leaf(parameters)])).toThrow(/amount is quoted source text/u);
   });
 
-  it("accepts a plain kebab-case pool id at v3 and compiles it as the pool", () => {
-    const parameters = normalize({ pool: "resurgence-points", amount: 2 }, 3);
-    const mechanics = compiled([leaf(parameters, 3)]);
+  it("accepts a plain kebab-case pool id and compiles it as the pool", () => {
+    const parameters = current({ pool: "resurgence-points", amount: 2 });
+    const mechanics = compiled([leaf(parameters)]);
     const gain = nodes(mechanics, (node) => node.type === "resource-gain")[0]!;
     expect(gain.modifier).toMatchObject({ pool: "resurgence-points", amount: 2 });
     expect(checkEntry(entryWithMechanics(base(), mechanics as never)).errors).toEqual([]);
   });
 
   it("renders a plain pool gain at its count as a full sentence", () => {
-    const mechanics = compiled([leaf(normalize({ pool: "resurgence-points", amount: 2 }, 3), 3)]);
+    const mechanics = compiled([leaf(current({ pool: "resurgence-points", amount: 2 }))]);
     const check = checkEntry(entryWithMechanics(base(), mechanics as never));
     expect(check.errors).toEqual([]);
     expect(check.rendered_text).toContain("You gain 2 Resurgence points.");
@@ -112,7 +106,7 @@ describe("resource-gain v4: dice amounts and plain pool ids", () => {
   });
 
   it("samples the dice amount and every known pool id, and each combination normalizes", () => {
-    const combinations = familyCombinations(reviewedFamily("resource-gain", 4));
+    const combinations = familyCombinations(reviewedFamily("resource-gain"));
     expect(combinations.some((combination) => combination.amount === "D3")).toBe(true);
     expect(combinations.some((combination) => combination.amount === 2)).toBe(true);
     for (const pool of ["command-point", "miracle-dice-pool", "pain-token-pool", "blood-tithe-pool", "yp-pool", "battle-focus-pool", "fate-dice-pool"]) {
@@ -132,9 +126,6 @@ describe("resource-gain v4: dice amounts and plain pool ids", () => {
     expect(currentFamilyVersion("resource-gain")).toBeGreaterThanOrEqual(5);
   });
 });
-
-/** The family versions the extensions under test create. */
-const RESOURCE_SPEND_GAIN_QUALIFIERS_VERSIONS: ReadonlySet<string> = new Set(["event@27"]);
 
 type Item = [string, string, Record<string, unknown>, string?];
 
@@ -161,15 +152,6 @@ const errorsOf = (text: string, items: Item[]): string[] => {
   return result.ok ? [] : result.errors;
 };
 
-/** The version just before this extension of event. */
-const PREVIOUS_EVENT = (() => {
-  for (let version = currentFamilyVersion("event"); version > 1; version -= 1) {
-    const extension = familyExtension("event", version);
-    if (extension !== undefined && RESOURCE_SPEND_GAIN_QUALIFIERS_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
-  }
-  throw new Error("The qualifier extension does not extend event.");
-})();
-
 const POOL = { kind: "resource-spent", pool: "ember-pool" };
 const roll: Item[] = [
   ["roll one D6", "dice-roll", { dice: "D6" }],
@@ -179,15 +161,13 @@ const roll: Item[] = [
 
 describe("event resource-spent purpose keys (normalizer)", () => {
   const now = currentFamilyVersion("event");
-  it("accepts activity, tag and object on a resource-spent now and not at the version before", () => {
+  it("accepts activity, tag and object on a resource-spent", () => {
     for (const leaf of [{ ...POOL, activity: "manoeuvre" }, { ...POOL, tag: "empowered" }, { ...POOL, object: "this-unit" }, { ...POOL, tag: "empowered", object: "antecedent" }, { ...POOL, activity: "ritual", object: "this-unit" }]) {
       expect(normalizeFingerprintParameters("event", leaf, now)).toEqual(leaf);
-      expect(() => normalizeFingerprintParameters("event", leaf, PREVIOUS_EVENT)).toThrow();
     }
   });
-  it("keeps every leaf the previous version accepted", () => {
+  it("keeps a bare spend and the other kinds' qualifiers as they are", () => {
     for (const leaf of [POOL, { kind: "resource-gained", pool: "ember-pool" }, { kind: "used", activity: "ability" }, { kind: "designation-changed", tag: "empowered" }, { kind: "targets-selected", object: "antecedent" }, { kind: "damage-allocated", object: "this-model" }, { kind: "unit-destroyed", by: "this-unit" }]) {
-      expect(normalizeFingerprintParameters("event", leaf, PREVIOUS_EVENT)).toEqual(leaf);
       expect(normalizeFingerprintParameters("event", leaf, now)).toEqual(leaf);
     }
   });

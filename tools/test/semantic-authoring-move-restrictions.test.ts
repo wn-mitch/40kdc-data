@@ -29,7 +29,7 @@ function refused(leaves: CompileLeaf[]): string {
  */
 
 
-const bonus = (moves: string[] = ["pile-in", "consolidation"]) => leaf("EFFECT", "move-distance", { subject: "this-unit", move_types: moves, bonus: 3 }, 1);
+const bonus = (moves: string[] = ["pile-in", "consolidation"]) => leaf("EFFECT", "move-distance", { subject: "this-unit", move_types: moves, bonus: 3 });
 const waiver = () => leaf("RESTRICTION", "move-end-waiver", { rule: "closest-enemy-model" });
 const nearest = () => leaf("RESTRICTION", "move-end-nearest", { to: "following-filter" });
 const enemyFilter = (extra: Record<string, unknown> = {}) => leaf("CONDITION", "unit-filter", { side: "enemy", ...extra });
@@ -45,15 +45,15 @@ function compiled(leaves: CompileLeaf[]) {
 }
 
 describe("move-end-nearest and move-end-waiver families", () => {
-  it("are version 1 and refuse any parameter they do not name", () => {
+  it("refuse any parameter they do not name", () => {
     expect(currentFamilyVersion("move-end-nearest")).toBe(3);
     expect(currentFamilyVersion("move-end-waiver")).toBe(1);
-    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "closest-objective" }, 1)).toThrow();
-    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "following-filter", per: "unit" }, 1)).toThrow();
-    expect(() => normalizeFingerprintParameters("move-end-waiver", { rule: "closest-enemy-unit" }, 1)).toThrow();
+    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "closest-objective" })).toThrow();
+    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "following-filter", per: "unit" })).toThrow();
+    expect(() => normalizeFingerprintParameters("move-end-waiver", { rule: "closest-enemy-unit" })).toThrow();
   });
 
-  it("makes engaged_with_move_end a version 3 permission that needs despite engaged", () => {
+  it("makes engaged_with_move_end a permission that needs despite engaged", () => {
     const current = currentFamilyVersion("eligibility-permission");
     const ok = normalizeFingerprintParameters("eligibility-permission", { subject: "this-unit", activity: "move", allow: true, despite: ["engaged"], engaged_with_move_end: true }, current);
     expect(ok.engaged_with_move_end).toBe(true);
@@ -148,8 +148,8 @@ describe("a move-end's clause gate (6294 shape)", () => {
 });
 
 describe("the 978 leaf sequence: a move-ended trigger on the bonus's moves", () => {
-  const trigger = () => leaf("EVENT", "event", { kind: "move-ended", move_types: ["pile-in", "consolidation"], subject: "antecedent" }, 18);
-  const leading = () => leaf("CONDITION", "leading-unit", { subject: "this-model", attachment: "leading" }, 6);
+  const trigger = () => leaf("EVENT", "event", { kind: "move-ended", move_types: ["pile-in", "consolidation"], subject: "antecedent" });
+  const leading = () => leaf("CONDITION", "leading-unit", { subject: "this-model", attachment: "leading" });
 
   it("compiles the bonus with its trigger, and the waiver's end rule as a second effect of that trigger", () => {
     const result = compileLeaves([leading(), trigger(), bonus(["pile-in", "consolidation"]), waiver(), nearest(), enemyFilter()]);
@@ -165,7 +165,7 @@ describe("the 978 leaf sequence: a move-ended trigger on the bonus's moves", () 
 // semantic-authoring-move-scoped-end
 {
 /**
- * move-must-end version 3 (move_types) and the trigger-move end restriction: "…, and cannot end
+ * move-must-end's move_types and the trigger-move end restriction: "…, and cannot end
  * that move within Engagement Range of them" after a move-ended trigger with no make-move. Every
  * leaf is fabricated wording. Each case pins one binding or one refusal.
  */
@@ -183,19 +183,19 @@ function compiled(leaves: CompileLeaf[]) {
   return result.mechanics;
 }
 
-describe("move-must-end version 3 (move_types)", () => {
-  it("is the current version, takes move_types, and refuses an unknown or empty list", () => {
+describe("move-must-end move_types", () => {
+  it("takes move_types, and refuses an unknown or empty list", () => {
     expect(currentFamilyVersion("move-must-end")).toBe(4);
-    const canonical = normalizeFingerprintParameters("move-must-end", { match: "all", polarity: "cannot", move_types: ["advance", "normal"] }, 3);
+    const canonical = normalizeFingerprintParameters("move-must-end", { match: "all", polarity: "cannot", move_types: ["advance", "normal"] });
     expect(canonical.move_types).toEqual(["normal", "advance"]);
-    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", move_types: ["pile-in"] }, 3)).toThrow();
-    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", move_types: [] }, 3)).toThrow();
-    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", move_types: ["normal", "normal"] }, 3)).toThrow();
+    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", move_types: ["pile-in"] })).toThrow();
+    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", move_types: [] })).toThrow();
+    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", move_types: ["normal", "normal"] })).toThrow();
   });
 
-  it("keeps version 2 leaves exactly as they were", () => {
-    const v2 = normalizeFingerprintParameters("move-must-end", { match: "all", polarity: "cannot" }, 2);
-    expect(v2).toEqual({ match: "all", polarity: "cannot" });
+  it("adds no move_types to a leaf that names none", () => {
+    const bare = normalizeFingerprintParameters("move-must-end", { match: "all", polarity: "cannot" });
+    expect(bare).toEqual({ match: "all", polarity: "cannot" });
   });
 });
 
@@ -255,7 +255,7 @@ describe("trigger-move end restriction (no_end_in_engagement)", () => {
 
   it("refuses a move_types list on a restriction that follows a make-move, rather than dropping it", () => {
     const errors = refused([
-      leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: 6 }, 2),
+      leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: 6 }),
       leaf("RESTRICTION", "move-must-end", { match: "all", polarity: "cannot", move_types: ["normal"] }), engaged(),
     ]);
     expect(errors).toMatch(/move types/u);
@@ -324,7 +324,7 @@ describe("trigger-move end restriction, binding by the source text", () => {
 // semantic-authoring-move-through-typed
 {
 /**
- * move-through version 2: the passthrough can be a typed models item. Each case pins one way the
+ * move-through: the passthrough can be a typed models item. Each case pins one way the
  * item must compile (owner, keyword lists, canonical order) or one way it must still be refused.
  */
 
@@ -338,7 +338,6 @@ function authored(factionId: string, abilityId: string): Record<string, unknown>
 }
 
 let offset = 0;
-/** The version that adds the typed item: version 2 is the antecedent subject, so this is the one after it. */
 const TYPED = currentFamilyVersion("move-through");
 
 function leaf(familyVersion: number, parameters: Record<string, unknown>): CompileLeaf {
@@ -352,9 +351,8 @@ function compiled(leaves: CompileLeaf[]) {
   return result;
 }
 
-describe("move-through typed passthrough (version 2)", () => {
-  it("is the current move-through version, with the string tokens still accepted", () => {
-    expect(TYPED).toBeGreaterThanOrEqual(3);
+describe("move-through typed passthrough", () => {
+  it("still accepts the string tokens", () => {
     expect(compiled([leaf(TYPED, { subject: "this-unit", passthrough: "models" })]).mechanics.effect)
       .toEqual({ type: "move-modifier", target: "this-unit", modifier: { passthrough: ["models"] } });
   });
@@ -398,14 +396,7 @@ describe("move-through typed passthrough (version 2)", () => {
     expect(separate.ok).toBe(false);
   });
 
-  // The typed item came with version 3 of move-through; version 2 is the one before it.
-  it("refuses the typed item on the version before it, which only takes string tokens", () => {
-    expect(() => normalizeFingerprintParameters("move-through", {
-      subject: "this-unit", passthrough: { kind: "models", owner: "enemy" },
-    }, 2)).toThrow();
-  });
-
-  it("refuses a typed item of kind terrain, which this version does not widen", () => {
+  it("refuses a typed item of kind terrain, which the typed item does not cover", () => {
     expect(() => normalizeFingerprintParameters("move-through", {
       subject: "this-unit", passthrough: { kind: "terrain", height: "up-to-4" },
     }, TYPED)).toThrow(/kind models/u);

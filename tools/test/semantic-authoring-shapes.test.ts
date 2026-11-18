@@ -5,7 +5,9 @@ import { join } from "node:path";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { validateFingerprint } from "../src/semantic-authoring/contracts.js";
+import { hashJson } from "../src/canonical-hash.js";
+import { compilationInputsHash } from "../src/semantic-authoring/compiled.js";
+import { currentFamilyVersion, validateFingerprint } from "../src/semantic-authoring/contracts.js";
 import { initializeWorkbench, insertSpan } from "../src/semantic-authoring/db.js";
 import { upgradeFamilyVersions } from "../src/semantic-authoring/family-versions.js";
 
@@ -110,41 +112,41 @@ describe("Semantic authoring shapes", () => {
     expect(getShape(db, SHAPE).members.every((member) => member.state === "stale")).toBe(true);
   });
 
-  it("carries an approval across a family-version migration only while its compilation is unchanged", async () => {
-    const decision = reroll("ones");
-    // Alpha's re-roll leaf as an earlier workbench wrote it: reroll@2, which migrates unchanged to the current version.
+  it("carries an approval across a family-version bump only while its compilation is unchanged", async () => {
+    reroll("ones");
     const alpha = (db.prepare("SELECT id FROM abilities WHERE current = 1 AND ability_id = 'alpha'").get() as { id: number }).id;
-    const leaf = db.prepare(`
-      SELECT annotations.id, annotations.span_id FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
-      JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
-      WHERE annotations.status = 'active' AND source_spans.ability_version_id = ? AND fingerprints.family_id = 'reroll'
-    `).get(alpha) as { id: number; span_id: number };
-    db.prepare("UPDATE semantic_families SET status = 'active' WHERE id = 'reroll' AND version = 2").run();
-    const legacy = validateFingerprint(db, "reroll", { roll: "hit", subset: "ones", weapon_type: "all" } as never, 2, REROLL);
-    db.prepare("UPDATE semantic_families SET status = 'deprecated' WHERE id = 'reroll' AND version = 2").run();
-    db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at) VALUES ('legacy', 'review', ?, ?)").run(REVIEWER, new Date().toISOString());
-    db.prepare("UPDATE annotations SET status = 'superseded' WHERE id = ?").run(leaf.id);
-    const legacyAnnotation = Number(db.prepare("INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, created_at) VALUES (?, ?, 'active', 'manual', 'human', ?, 'legacy', ?)")
-      .run(leaf.span_id, legacy, REVIEWER, new Date().toISOString()).lastInsertRowid);
     await approveShape(db, { reviewer: REVIEWER, signature: SHAPE, ability_version_ids: [alpha] });
     const state = () => reviewMembers(db).find((row) => row.ability_version_id === alpha)!.state;
     expect(state()).toBe("approved");
 
-    await new Promise((resolve) => setTimeout(resolve, 5));
-    expect(upgradeFamilyVersions(db).migrated_annotations).toBe(1);
-    const stale = await applyChatReview(db, { reviewer: REVIEWER, decisions: [{ action: "retire", annotation_id: legacyAnnotation }] });
-    expect(stale.failed[0]?.error).toMatch(/No active annotation/u);
-    expect(state()).toBe("stale");
-    const carried = await applyChatReview(db, { reviewer: REVIEWER, decisions: [{ action: "carry-approvals", faction_id: "fixture" }] });
-    expect(carried.applied).toEqual([expect.objectContaining({ carried: { checked: 1, carried: 1 } })]);
+    // Alpha's re-roll leaf as the workbench held it before a bump: the same meaning on a retired
+    // version, with the approval recorded under those inputs.
+    const RETIRED = 900;
+    const toRetired = (parameters: Record<string, unknown>) => {
+      const leaf = db.prepare(`
+        SELECT annotations.id FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
+        JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
+        WHERE annotations.status = 'active' AND source_spans.ability_version_id = ? AND fingerprints.family_id = 'reroll'
+      `).get(alpha) as { id: number };
+      db.prepare("INSERT OR IGNORE INTO semantic_families (id, version, role, parameter_schema_json, status) VALUES ('reroll', ?, 'EFFECT', '{}', 'deprecated')").run(RETIRED);
+      const hash = hashJson({ family: "reroll", version: RETIRED, parameters });
+      db.prepare("INSERT OR IGNORE INTO fingerprints (id, family_id, family_version, parameters_json, canonical_hash, status) VALUES (?, 'reroll', ?, ?, ?, 'active')")
+        .run(`fp_${hash}`, RETIRED, JSON.stringify(parameters), hash);
+      db.prepare("UPDATE annotations SET fingerprint_id = ? WHERE id = ?").run(`fp_${hash}`, leaf.id);
+      db.prepare("UPDATE compiled_entries SET inputs_hash = ? WHERE ability_version_id = ? AND status = 'approved'").run(compilationInputsHash(db, alpha), alpha);
+    };
+    const bump = (map: (parameters: Record<string, unknown>) => Record<string, unknown>) =>
+      upgradeFamilyVersions(db, [{ family: "reroll", from: RETIRED, to: currentFamilyVersion("reroll"), map }]);
+    const ones = { roll: "hit", subset: "ones", weapon_type: "all" };
+
+    toRetired(ones);
+    expect(bump((parameters) => parameters)).toMatchObject({ migrated_annotations: 1, carried_approvals: 1 });
     expect(state()).toBe("approved");
     expect(publishableEntries(db).factions[0]!.entries.map((entry) => entry.ability_id)).toEqual(["alpha"]);
 
-    // A reviewed meaning change is not a migration: the approval stays stale.
-    moveSurface(db, { reviewer: REVIEWER, surface_id: decision.surface_id, family_id: "reroll", parameters: { roll: "hit", subset: "all", weapon_type: "all" } });
-    expect(state()).toBe("stale");
-    const again = await applyChatReview(db, { reviewer: REVIEWER, decisions: [{ action: "carry-approvals" }] });
-    expect(again.applied).toEqual([expect.objectContaining({ carried: { checked: 0, carried: 0 } })]);
+    // A bump that changes what the leaf means changes the compilation: the approval goes stale.
+    toRetired(ones);
+    expect(bump((parameters) => ({ ...parameters, subset: "all" }))).toMatchObject({ migrated_annotations: 1, carried_approvals: 0 });
     expect(state()).toBe("stale");
   }, 120_000);
 

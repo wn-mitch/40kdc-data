@@ -69,7 +69,7 @@ describe("unit-state embarked (wave 10)", () => {
 
   it("refuses an earlier point, a with, another state, and a subject it does not name", () => {
     expect(() => normalize("unit-state", { ...EMBARKED, at: "phase-start" })).toThrow(/no earlier point/);
-    expect(() => normalize("unit-state", { ...EMBARKED, with: "this-unit" })).toThrow(/takes no with/);
+    expect(() => normalize("unit-state", { ...EMBARKED, with: "this-unit" })).toThrow(/embarked takes a with only for subject antecedent/);
     expect(() => normalize("unit-state", { ...EMBARKED, states: ["embarked", "engaged"] })).toThrow(/other states/);
     expect(() => normalize("unit-state", { ...EMBARKED, subject: "bearer-transport" })).toThrow(/this-unit, this-model or target/);
     expect(() => normalize("unit-state", { ...EMBARKED, subject: "attacker" })).toThrow(/this-unit, this-model or target/);
@@ -250,10 +250,5 @@ describe("family registry (wave 10)", () => {
     expect(normalize("embarked-permission", { subject: "this-unit" })).toEqual({ subject: "this-unit" });
     expect(() => normalize("embarked-permission", { subject: "this-model" })).toThrow(/this-unit/);
     expect(() => normalize("embarked-permission", { subject: "this-unit", within: 6 })).toThrow(/no parameter within/);
-  });
-
-  it("keeps the wave-10 versions above the previous current ones", () => {
-    expect(currentFamilyVersion("unit-state")).toBeGreaterThanOrEqual(13);
-    expect(currentFamilyVersion("select-unit")).toBeGreaterThanOrEqual(5);
   });
 });

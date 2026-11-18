@@ -1,5 +1,5 @@
 /**
- * Opponent Stratagem targeting (event@19 and unit-activity@16): a
+ * Opponent Stratagem targeting (event and unit-activity): a
  * targets-selected moment whose unit is named by a range and a unit-filter ("a rival picks a squad
  * from its force within 12\" of this model with a Gadget"), and the restriction on units already
  * chosen by named Gadgets.
@@ -9,7 +9,7 @@ import { ANTECEDENT } from "./antecedent-families.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { sameSentence } from "./compile-named-ability.js";
-import { TARGETED_WITH_STRATAGEM } from "./families/unit-activity.js";
+import { TARGETED_WITH_STRATAGEM } from "./families/vocabulary.js";
 
 type Node = Record<string, unknown>;
 

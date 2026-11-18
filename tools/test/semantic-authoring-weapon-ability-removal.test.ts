@@ -1,8 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "../src/semantic-authoring/contracts.js";
-import { SCOPE_WEAPON_KEYWORDS } from "../src/semantic-authoring/families/weapons.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY, reviewedFamily } from "../src/semantic-authoring/contracts.js";
 import { describeEffect, type Effect } from "../src/translate/index.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import type { BuffSource, EngineContext } from "../src/cruncher/buffs.js";
@@ -59,27 +58,28 @@ describe("weapon-ability-removal family", () => {
   });
 });
 
-describe("weapon-property-scope version 4: weapon_keyword", () => {
-  it("keeps version 3 unchanged", () => {
-    expect(normalizeFingerprintParameters("weapon-property-scope", { subject: "this-unit", weapon_type: "ranged" }, 3))
+describe("weapon-property-scope: weapon_keyword", () => {
+  it("keeps a scope without a weapon keyword as it is", () => {
+    expect(normalizeFingerprintParameters("weapon-property-scope", { subject: "this-unit", weapon_type: "ranged" }))
       .toEqual({ subject: "this-unit", weapon_type: "ranged" });
   });
 
   it("selects by a weapon keyword with weapon_type required", () => {
-    expect(normalizeFingerprintParameters("weapon-property-scope", { subject: "this-unit", weapon_type: "ranged", weapon_keyword: "Blast" }, 4))
+    expect(normalizeFingerprintParameters("weapon-property-scope", { subject: "this-unit", weapon_type: "ranged", weapon_keyword: "Blast" }))
       .toEqual({ subject: "this-unit", weapon_type: "ranged", weapon_keyword: "Blast" });
-    expect(() => normalizeFingerprintParameters("weapon-property-scope", { subject: "this-unit", weapon_keyword: "Blast" }, 4)).toThrow();
+    expect(() => normalizeFingerprintParameters("weapon-property-scope", { subject: "this-unit", weapon_keyword: "Blast" })).toThrow();
   });
 
   it("refuses weapon_keyword with the bound weapon, and keywords outside the scope list", () => {
-    expect(() => normalizeFingerprintParameters("weapon-property-scope", { subject: "this-model", weapon: "antecedent", weapon_keyword: "Blast" }, 4)).toThrow();
+    expect(() => normalizeFingerprintParameters("weapon-property-scope", { subject: "this-model", weapon: "antecedent", weapon_keyword: "Blast" })).toThrow();
     for (const keyword of ["Close-quarters", "Extra Attacks", "Melta", "Sustained Hits"]) {
-      expect(() => normalizeFingerprintParameters("weapon-property-scope", { subject: "this-unit", weapon_type: "all", weapon_keyword: keyword }, 4)).toThrow();
+      expect(() => normalizeFingerprintParameters("weapon-property-scope", { subject: "this-unit", weapon_type: "all", weapon_keyword: keyword })).toThrow();
     }
   });
 
   it("names the fifteen keywords that a removal and the scope both take", () => {
-    expect([...SCOPE_WEAPON_KEYWORDS].sort()).toEqual([
+    const scopeKeywords = (reviewedFamily("weapon-property-scope").parameterSchema as { properties: { weapon_keyword: { enum: string[] } } }).properties.weapon_keyword.enum;
+    expect([...scopeKeywords].sort()).toEqual([
       "Assault", "Blast", "Devastating Wounds", "Hazardous", "Heavy", "Ignores Cover", "Indirect Fire", "Lance", "Lethal Hits",
       "One Shot", "Pistol", "Precision", "Psychic", "Torrent", "Twin-linked",
     ]);
@@ -226,8 +226,14 @@ describe("a removal under a scope refuses what it cannot bind", () => {
     ))).toContain("explicit composition relation");
   });
 
-  it("refuses a scope that names one weapon by name, so a removal cannot be scoped to one weapon", () => {
-    expect(() => normalizeFingerprintParameters("weapon-property-scope", { subject: "this-unit", weapon_type: "ranged", weapon_name: "Plasma rifle" }, 4)).toThrow();
+  it("refuses a removal under a scope that names one weapon by name", () => {
+    const text = "Your unit's Plasma rifle weapons: Do not have [Heavy].";
+    const rifle = [{ name: "Plasma rifle", type: "ranged" as const }];
+    const result = compileLeaves(placed(text,
+      ["Your unit's Plasma rifle weapons", "weapon-property-scope", { subject: "this-unit", weapon_type: "ranged", weapon_name: "Plasma rifle" }],
+      ["Do not have [Heavy].", "weapon-ability-removal", { keyword: "Heavy" }],
+    ), text, { weapons: { faction_id: "fab", source_type: "unit", catalog: { faction: rifle, own: rifle } } });
+    expect(result.ok ? "" : result.errors.join("; ")).toMatch(/cannot be scoped to named weapons/u);
   });
 
   it("refuses a subjectless hit roll in an alternative after a scope, which would land on this unit's own attacks", () => {

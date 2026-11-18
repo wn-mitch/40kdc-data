@@ -186,7 +186,7 @@ describe("Semantic authoring count-scale: one effect per listed item that holds"
       ["You control more objective markers than your opponent", "controls-objective", { mode: "more-than-opponent" }]), text)).toMatch(/no condition leaf/u);
     expect(errorsOf(placed(text, moment, ["you gain 1YP", "resource-gain", { pool: "yp-pool", amount: 2 }],
       ["for each of the following conditions you satisfy", "count-scale", { per: 1, counts: "following-items" }]), text)).toMatch(/adds 1 per item/u);
-    expect(() => normalizeFingerprintParameters("count-scale", { per: 2, counts: "following-items" }, 1)).toThrow(/per must be 1/u);
+    expect(() => normalizeFingerprintParameters("count-scale", { per: 2, counts: "following-items" })).toThrow(/per must be 1/u);
   });
 });
 

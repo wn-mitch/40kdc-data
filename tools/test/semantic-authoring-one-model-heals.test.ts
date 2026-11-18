@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { mapToLatest } from "../src/semantic-authoring/family-versions.js";
 import { describeEffect } from "../src/translate/index.js";
 
 /** Leaves in source order at the current version of their family. */
@@ -33,13 +32,6 @@ describe("regain-wounds per one-model", () => {
     expect(text("one-model")).toBe("One model in the unit regains up to 3 lost wounds.");
     expect(text("model")).toBe("Each model in the unit regains up to 3 lost wounds.");
   });
-
-  it("keeps one-model out of the retired version and carries version 8 leaves forward unchanged", () => {
-    const current = currentFamilyVersion("regain-wounds");
-    expect(() => normalizeFingerprintParameters("regain-wounds", { subject: "this-unit", amount: "3", per: "one-model" }, current - 1)).toThrow();
-    expect(mapToLatest("regain-wounds", current - 1, { subject: "this-unit", amount: "3", per: "model" }))
-      .toEqual({ family: "regain-wounds", version: current, parameters: { subject: "this-unit", amount: "3", per: "model" } });
-  });
 });
 
 describe("return-models model_name", () => {
@@ -57,6 +49,5 @@ describe("return-models model_name", () => {
     const version = currentFamilyVersion("return-models");
     expect(() => normalizeFingerprintParameters("return-models", { subject: "this-model", count: "1", model_name: "Healer Twin" }, version)).toThrow(/this-model/u);
     expect(() => normalizeFingerprintParameters("return-models", { subject: "this-unit", count: "1", model_name: "   " }, version)).toThrow();
-    expect(() => normalizeFingerprintParameters("return-models", { subject: "this-unit", count: "1", model_name: "Healer Twin" }, version - 1)).toThrow();
   });
 });

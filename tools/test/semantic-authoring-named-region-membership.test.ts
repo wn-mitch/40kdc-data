@@ -9,7 +9,7 @@ import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entrie
 
 /**
  * Named army regions (wave 9): a condition tests a unit against a region an army rule defines
- * (in-region@3 rule-region), a counts-as grant puts a unit inside one for a duration (counts-as@2
+ * (in-region rule-region), a counts-as grant puts a unit inside one for a duration (counts-as
  * region), and a whole named-region-state ability admits no other leaf. Wording is fabricated.
  */
 
@@ -20,7 +20,8 @@ const base = (): Record<string, unknown> => (JSON.parse(readFileSync(join(dataRo
 const RULE_REGION = { region_kind: "rule-region", region_id: "flow-of-magic", owner_faction: "thousand-sons" };
 const HALLOWED = { region_id: "hallowed-ground", owner_faction: "grey-knights" };
 
-function leaf(role: "CONDITION" | "EFFECT", familyId: string, parameters: Record<string, unknown>, version = currentFamilyVersion(familyId)): CompileLeaf {
+function leaf(role: "CONDITION" | "EFFECT", familyId: string, parameters: Record<string, unknown>): CompileLeaf {
+  const version = currentFamilyVersion(familyId);
   return { role: familyRole(familyId, version), family_id: familyId, family_version: version, parameters: normalizeFingerprintParameters(familyId, parameters, version), start_byte: 0 };
 }
 
@@ -43,8 +44,7 @@ function conditionCase(parameters: Record<string, unknown>, expected: Record<str
 }
 
 describe("Semantic authoring named army regions: in-region rule-region", () => {
-  it("is at version 3 and compiles a rule region as the rule_region of an in-region test", () => {
-    expect(currentFamilyVersion("in-region")).toBeGreaterThanOrEqual(3);
+  it("compiles a rule region as the rule_region of an in-region test", () => {
     conditionCase({ ...RULE_REGION, wholly: true, models: "every" },
       { type: "in-region", parameters: { region: { rule_region: { region_id: "flow-of-magic", owner_faction: "thousand-sons" } }, wholly: true, models: "every" } });
   });
@@ -81,7 +81,7 @@ describe("Semantic authoring named army regions: in-region rule-region", () => {
   });
 
   it("refuses a rule region that carries a terrain tag or territory, or lacks its owner or id", () => {
-    const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("in-region", parameters, 3);
+    const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("in-region", parameters);
     expect(() => normalize({ ...RULE_REGION, terrain_tag: "ruins" })).toThrow(/not terrain_tag or territory/u);
     expect(() => normalize({ ...RULE_REGION, territory: "no-mans-land" })).toThrow(/not terrain_tag or territory/u);
     expect(() => normalize({ region_kind: "rule-region", region_id: "flow-of-magic" })).toThrow(/owner_faction/u);
@@ -89,8 +89,8 @@ describe("Semantic authoring named army regions: in-region rule-region", () => {
     expect(() => normalize({ ...RULE_REGION, region_id: "Flow of Magic" })).toThrow(/kebab-case/u);
   });
 
-  it("still refuses the rule region's keys on the terrain-area and territory kinds", () => {
-    const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("in-region", parameters, 3);
+  it("refuses the rule region's keys on the terrain-area and territory kinds", () => {
+    const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("in-region", parameters);
     expect(() => normalize({ region_kind: "terrain-area", terrain_tag: "ruins", region_id: "flow-of-magic" })).toThrow();
     expect(() => normalize({ region_kind: "territory", territory: "no-mans-land", owner_faction: "thousand-sons" })).toThrow();
   });
@@ -103,19 +103,18 @@ describe("Semantic authoring named army regions: counts-as region grant", () => 
     return result.mechanics.effect;
   };
 
-  it("is at version 3 and compiles a region grant to modifier.in_region", () => {
-    expect(currentFamilyVersion("counts-as")).toBe(3);
+  it("compiles a region grant to modifier.in_region", () => {
     expect(grant({ subject: "this-unit", region: HALLOWED })).toEqual({
       type: "counts-as", target: "this-unit", modifier: { in_region: { rule_region: HALLOWED } },
     });
   });
 
-  it("keeps the range form at version 2 exactly as before", () => {
+  it("compiles the range form to modifier.within", () => {
     expect(grant({ subject: "this-model", within: 6 })).toEqual({ type: "counts-as", target: "this-model", modifier: { within: { inches: 6 } } });
   });
 
   it("refuses a range and a region together, a region on an enemy subject, and a malformed region", () => {
-    const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("counts-as", parameters, 2);
+    const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("counts-as", parameters);
     expect(() => normalize({ subject: "this-unit", within: 6, region: HALLOWED })).toThrow(/within or region, not both/u);
     expect(() => normalize({ subject: "enemy-units", region: HALLOWED })).toThrow();
     expect(() => normalize({ subject: "this-unit", region: { region_id: "hallowed-ground" } })).toThrow(/exactly region_id and owner_faction/u);
@@ -168,7 +167,7 @@ describe("Semantic authoring named army regions: named-region-state is the whole
   });
 });
 
-describe("a terrain feature a rule tags: apply-mark@6 visible-terrain and in-region@4 designated-terrain", () => {
+describe("a terrain feature a rule tags: apply-mark visible-terrain and in-region designated-terrain", () => {
   it("tags one visible terrain area and reads the tag back as the region an enemy unit stands in", () => {
     const text = "Select one visible terrain feature. That terrain feature is identified. While an enemy unit is within an identified terrain feature, that enemy unit has +3 to its Move characteristic.";
     const result = compileLeaves(placed(text, [

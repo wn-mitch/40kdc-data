@@ -11,8 +11,8 @@ import { condition } from "./compile-conditions.js";
 import { duration } from "./compile-duration-scope.js";
 import { gatedMoment } from "./compile-usability-gate.js";
 import { buildRitualMenu, isRitualTestLeaf } from "./compile-ritual-menu.js";
-import { RITUAL_MENU_OPEN } from "./psychic-families.js";
-import { usageFor } from "./restriction-families.js";
+import { RITUAL_MENU_OPEN } from "./families/vocabulary.js";
+import { usageFor } from "./families/vocabulary.js";
 import { buildMoveType, MOVE_TYPE_OPEN } from "./compile-move-type.js";
 
 /**

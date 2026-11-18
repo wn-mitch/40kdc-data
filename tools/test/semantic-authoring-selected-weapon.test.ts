@@ -107,7 +107,7 @@ describe("selected weapon: weapon-ability-grant weapon antecedent", () => {
   });
 
   it("keeps a grant without the antecedent unchanged: it still needs its weapon_type", () => {
-    expect(() => leaf("weapon-ability-grant", { subject: "this-model", keyword: "Lethal Hits" })).toThrow(/needs weapon_type/);
+    expect(() => leaf("weapon-ability-grant", { subject: "this-model", keyword: "Lethal Hits" })).toThrow(/needs subject and weapon_type unless weapon or frame is antecedent/);
     const plain = compiled([leaf("weapon-ability-grant", { subject: "this-model", keyword: "Lethal Hits", weapon_type: "ranged" })]);
     expect(plain).toEqual({ type: "weapon-ability-grant", target: "this-model", modifier: { keywords: [{ keyword_id: "lethal-hits" }], weapons: { type: "ranged" } } });
   });

@@ -2,7 +2,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 /**
- * Whether an id a leaf names (event@17 `id`, `by-ability`, `ability-used`) resolves to a rule the
+ * Whether an id a leaf names (event `id`, `by-ability`, `ability-used`) resolves to a rule the
  * record can mean: an ability record of the record's faction or a core ability, a core Stratagem,
  * or an action of one of the faction's resource-action menus. A subject of this unit or this model
  * also needs a datasheet that holds the record to hold that ability, which catches a wrong faction

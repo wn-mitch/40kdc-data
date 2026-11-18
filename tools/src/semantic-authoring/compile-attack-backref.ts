@@ -1,7 +1,7 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 /**
- * Attacks named again or aimed at an earlier unit (attack@6):
+ * Attacks named again or aimed at an earlier unit (attack):
  *
  * - `refers: earlier-attack` ("If that attack targets …", "each time such an attack …") is the
  *   nearest earlier attack leaf of the record. It takes that leaf's direction, unit and type, so

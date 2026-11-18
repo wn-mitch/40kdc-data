@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { mapToLatest } from "../src/semantic-authoring/family-versions.js";
 import { outsideContract } from "./leaf-contract.js";
 import { describeCondition, describeEffect, type Effect } from "../src/translate/index.js";
 
@@ -128,7 +127,7 @@ describe("Semantic authoring unit-position weapon_range: a distance equal to the
   });
 
   it("refuses a weapon_range leaf that also names inches", () => {
-    expect(() => normalize("unit-position", { kind: "within", inches: 6, subject: "target", of: "attacker", negated: false, weapon_range: "half" })).toThrow(/takes no inches/u);
+    expect(() => normalize("unit-position", { kind: "within", inches: 6, subject: "target", of: "attacker", negated: false, weapon_range: "half" })).toThrow(/not inches and weapon_range/u);
   });
 
   it("refuses a weapon_range leaf measured from anything but the attacker", () => {
@@ -151,10 +150,9 @@ describe("Semantic authoring unit-position weapon_range: a distance equal to the
     expect(() => normalize("unit-position", { kind: "within", subject: "target", of: "attacker", negated: false })).toThrow();
   });
 
-  it("maps a version-14 distance leaf to the current version with its parameters unchanged", () => {
+  it("keeps an inches distance from the attacker as it is", () => {
     const parameters = { kind: "within", inches: 12, of: "attacker", subject: "target", negated: false };
-    expect(mapToLatest("unit-position", 14, parameters)).toEqual({ family: "unit-position", version: currentFamilyVersion("unit-position"), parameters });
-    expect(currentFamilyVersion("unit-position")).toBeGreaterThan(14);
+    expect(normalize("unit-position", parameters)).toEqual(parameters);
   });
 
   it("refuses a weapon_range limit on a set-up's placement rather than folding it as a distance", () => {

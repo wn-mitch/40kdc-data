@@ -48,7 +48,7 @@ describe("disembark modes", () => {
   it("refuses a mode on any moment but a selected-to-disembark one", () => {
     const version = currentFamilyVersion("event");
     expect(() => normalizeFingerprintParameters("event", { kind: "selected", to: "move", move_types: ["advance"], mode: "tactical" }, version)).toThrow(/move_types \[disembark\]/u);
-    expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", move_types: ["disembark"], mode: "tactical" }, version)).toThrow(/kind selected/u);
+    expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", move_types: ["disembark"], mode: "tactical" }, version)).toThrow(/event.mode does not apply to kind move-ended/u);
     expect(() => normalizeFingerprintParameters("make-move", { subject: "this-unit", move_type: "normal", mode: "shock" }, currentFamilyVersion("make-move"))).toThrow(/needs move_type disembark/u);
   });
 

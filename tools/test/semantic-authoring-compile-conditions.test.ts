@@ -5,16 +5,14 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { mapToLatest } from "../src/semantic-authoring/family-versions.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { prefillFromSource, type PrefillFamily } from "../src/semantic-authoring/leaf-prefill.js";
 import { previewLeaf } from "../src/semantic-authoring/leaf-preview.js";
 
 /**
- * Batch 6 (conditions & trigger events): `event` version 7's twelve new trigger kinds, the new
- * `phase-window` condition (phase-is/player-turn-is outside a trigger), and the new predicate
- * families in `predicate-families.ts`/`predicate-families-2.ts`. Split out of
- * semantic-authoring-compile.test.ts per the leaf-family batching brief.
+ * Batch 6 (conditions & trigger events): `event`'s game-clock and history trigger kinds, the new
+ * `phase-window` condition (phase-is/player-turn-is outside a trigger), and the predicate
+ * families (`families/restrictions-and-predicates.ts`).
  */
 
 const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment");
@@ -27,7 +25,7 @@ function authored(factionId: string, abilityId: string): Record<string, unknown>
 }
 
 let offset = 0;
-function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion = 1): CompileLeaf {
+function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion = currentFamilyVersion(familyId)): CompileLeaf {
   offset += 10;
   return { role, family_id: familyId, family_version: familyVersion, parameters, start_byte: offset };
 }
@@ -47,7 +45,7 @@ const namesSelected = (parameters: Record<string, unknown>) => Object.values(par
  */
 function selectedCase(conditionLeaf: () => CompileLeaf, expected: Record<string, unknown>): void {
   const selection = leaf("EVENT", "select-unit", { scope: "enemy", distance: "any", visible: false });
-  const result = compiled([selection, conditionLeaf(), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+  const result = compiled([selection, conditionLeaf(), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" })]);
   const effect = result.mechanics.effect as unknown as Record<string, any>;
   const reroll = { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } };
   expect(effect.type).toBe("select-units");
@@ -66,14 +64,14 @@ function rendered(base: Record<string, unknown>, leaves: CompileLeaf[]): string 
   return check.rendered_text!;
 }
 
-const heal = () => leaf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "1" }, 2);
+const heal = () => leaf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "1" });
 const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
 
 it("retains a chosen keyword reference without inventing a literal keyword filter", () => {
   const parameters = normalizeFingerprintParameters("unit-keyword", {
     chosen_by: "example-adaptation", subject: "this-unit", negated: false,
-  }, 6);
-  const result = compiled([leaf("CONDITION", "unit-keyword", parameters, 6), heal()]);
+  });
+  const result = compiled([leaf("CONDITION", "unit-keyword", parameters), heal()]);
   expect(result.mechanics.effect).toMatchObject({
     type: "conditional",
     condition: { type: "has-keyword", parameters: { chosen_by: "example-adaptation" } },
@@ -81,13 +79,13 @@ it("retains a chosen keyword reference without inventing a literal keyword filte
   expect(parameters).not.toHaveProperty("keywords");
   expect(() => normalizeFingerprintParameters("unit-keyword", {
     ...parameters, keywords: ["INFANTRY"],
-  }, 6)).toThrow(/not both/u);
+  })).toThrow(/not both/u);
   expect(() => normalizeFingerprintParameters("unit-keyword", {
     ...parameters, chosen_by: "not an entity id",
-  }, 6)).toThrow(/kebab-case/u);
+  })).toThrow(/kebab-case/u);
 });
 
-describe("Semantic authoring batch-6 event@7 trigger kinds", () => {
+describe("Semantic authoring batch-6 event trigger kinds", () => {
   it("compiles the twelve new bare and filtered game-clock/history moments", () => {
     const cases: Array<[Record<string, unknown>, Record<string, unknown>]> = [
       [{ kind: "battle-started" }, { event: "battle-started" }],
@@ -106,20 +104,20 @@ describe("Semantic authoring batch-6 event@7 trigger kinds", () => {
       [{ kind: "designation-resolved", tag: "oath-of-moment-target" }, { event: "designation-resolved", filter: { tag: "oath-of-moment-target" } }],
     ];
     for (const [parameters, expected] of cases) {
-      const result = compiled([leaf("EVENT", "event", parameters, 7), heal()]);
+      const result = compiled([leaf("EVENT", "event", parameters), heal()]);
       expect(result.mechanics.trigger).toEqual(expected);
-      expect(rendered(base(), [leaf("EVENT", "event", parameters, 7), heal()])).toBeTruthy();
+      expect(rendered(base(), [leaf("EVENT", "event", parameters), heal()])).toBeTruthy();
     }
   });
 
-  it("rejects a version-7 kind's own filter field spelled outside its closed vocabulary", () => {
-    expect(() => normalizeFingerprintParameters("event", { kind: "used", activity: "shopping" }, 7)).toThrow();
-    expect(() => normalizeFingerprintParameters("event", { kind: "step-started", step: "morale" }, 7)).toThrow();
-    expect(() => normalizeFingerprintParameters("event", { kind: "before-roll" }, 7)).toThrow(/exactly/u);
+  it("rejects a kind's own filter field spelled outside its closed vocabulary", () => {
+    expect(() => normalizeFingerprintParameters("event", { kind: "used", activity: "shopping" })).toThrow();
+    expect(() => normalizeFingerprintParameters("event", { kind: "step-started", step: "morale" })).toThrow();
+    expect(() => normalizeFingerprintParameters("event", { kind: "before-roll" })).toThrow(/needs roll or rolls/u);
   });
 
-  it("migrates a version-6 event leaf straight through to version 7 unchanged", () => {
-    expect(normalizeFingerprintParameters("event", { kind: "this-model-destroyed" }, 7)).toEqual({ kind: "this-model-destroyed" });
+  it("keeps a bare this-model-destroyed event unchanged", () => {
+    expect(normalizeFingerprintParameters("event", { kind: "this-model-destroyed" })).toEqual({ kind: "this-model-destroyed" });
   });
 });
 
@@ -132,7 +130,7 @@ describe("Semantic authoring batch-6 phase-window (outside a trigger)", () => {
       [{ phase: "charge", turn: "either" }, { type: "phase-is", parameters: { phase: "charge" } }],
     ];
     for (const [parameters, condition] of cases) {
-      const result = compiled([leaf("CONDITION", "phase-window", parameters), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+      const result = compiled([leaf("CONDITION", "phase-window", parameters), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" })]);
       expect(result.mechanics.effect).toEqual({ type: "conditional", condition, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } } });
     }
   });
@@ -143,7 +141,7 @@ describe("Semantic authoring batch-6 phase-window (outside a trigger)", () => {
 });
 
 describe("Semantic authoring batch-6 predicate families", () => {
-  const effect = () => leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" });
+  const effect = () => leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" });
 
   function conditionCase(familyId: string, parameters: Record<string, unknown>, expected: Record<string, unknown>): void {
     if (namesSelected(parameters)) return selectedCase(() => leaf("CONDITION", familyId, parameters), expected);
@@ -239,112 +237,94 @@ describe("Semantic authoring batch-6 predicate families", () => {
   });
 });
 
-describe("Semantic authoring batch-6 army-faction@2 (resolved kebab id)", () => {
+describe("Semantic authoring batch-6 army-faction (resolved kebab id)", () => {
   it("compiles a reviewer-resolved faction id, and still refuses a pending quote", () => {
-    const resolved = compiled([leaf("CONDITION", "army-faction", { faction: "ultramarines" }, 2), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+    const resolved = compiled([leaf("CONDITION", "army-faction", { faction: "ultramarines" }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" })]);
     expect(resolved.mechanics.effect).toEqual({
       type: "conditional", condition: { type: "army-faction", parameters: { faction: "ultramarines" } },
       effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } },
     });
-    const pending = compileLeaves([leaf("CONDITION", "army-faction", { faction: { source: "Ultramarines" } }, 2), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+    const pending = compileLeaves([leaf("CONDITION", "army-faction", { faction: { source: "Ultramarines" } }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" })]);
     expect(pending.ok).toBe(false);
   });
 });
 
-describe("Semantic authoring batch-6 widened subject vocabulary (unit-keyword@2, unit-state@4, unit-activity@3, unit-position@2)", () => {
-  function conditionCase(familyId: string, parameters: Record<string, unknown>, version: number, expected: Record<string, unknown>): void {
-    if (namesSelected(parameters)) return selectedCase(() => leaf("CONDITION", familyId, parameters, version), expected);
-    const result = compiled([leaf("CONDITION", familyId, parameters, version), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+describe("Semantic authoring batch-6 widened subject vocabulary (unit-keyword, unit-state, unit-activity, unit-position)", () => {
+  function conditionCase(familyId: string, parameters: Record<string, unknown>, expected: Record<string, unknown>): void {
+    if (namesSelected(parameters)) return selectedCase(() => leaf("CONDITION", familyId, parameters), expected);
+    const result = compiled([leaf("CONDITION", familyId, parameters), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" })]);
     expect(result.mechanics.effect).toEqual({ type: "conditional", condition: expected, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } } });
   }
 
-  it("compiles unit-keyword@2's new subjects, in addition to the old this-unit/target", () => {
-    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "attacker", negated: false }, 2, { type: "matches", parameters: { subject: "attacker", filter: { all_of: ["CHARACTER"] } } });
-    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "event-subject", negated: false }, 2, { type: "matches", parameters: { subject: "event-subject", filter: { all_of: ["CHARACTER"] } } });
-    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "recipient", negated: false }, 2, { type: "matches", parameters: { subject: "recipient", filter: { all_of: ["CHARACTER"] } } });
-    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "selected-unit", negated: false }, 2, { type: "matches", parameters: { subject: "selected-unit", filter: { all_of: ["CHARACTER"] } } });
-    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "this-model", negated: false }, 2, { type: "matches", parameters: { subject: "this-model", filter: { all_of: ["CHARACTER"] } } });
-    // Old this-unit/target still compile the same way as version 1.
-    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "this-unit", negated: false }, 2, { type: "matches", parameters: { filter: { all_of: ["CHARACTER"] } } });
-    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "target", negated: false }, 2, { type: "matches", parameters: { subject: "defender", filter: { all_of: ["CHARACTER"] } } });
+  it("compiles unit-keyword's widened subjects, and this-unit/target", () => {
+    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "attacker", negated: false }, { type: "matches", parameters: { subject: "attacker", filter: { all_of: ["CHARACTER"] } } });
+    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "event-subject", negated: false }, { type: "matches", parameters: { subject: "event-subject", filter: { all_of: ["CHARACTER"] } } });
+    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "recipient", negated: false }, { type: "matches", parameters: { subject: "recipient", filter: { all_of: ["CHARACTER"] } } });
+    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "selected-unit", negated: false }, { type: "matches", parameters: { subject: "selected-unit", filter: { all_of: ["CHARACTER"] } } });
+    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "this-model", negated: false }, { type: "matches", parameters: { subject: "this-model", filter: { all_of: ["CHARACTER"] } } });
+    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "this-unit", negated: false }, { type: "matches", parameters: { filter: { all_of: ["CHARACTER"] } } });
+    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "target", negated: false }, { type: "matches", parameters: { subject: "defender", filter: { all_of: ["CHARACTER"] } } });
   });
 
-  it("compiles unit-state@4's new subjects for both strength and core states", () => {
-    conditionCase("unit-state", { states: ["below-half-strength"], subject: "attacker", negated: false }, 4, { type: "strength", parameters: { subject: "attacker", below: "half" } });
-    conditionCase("unit-state", { states: ["battle-shocked"], subject: "recipient", negated: false }, 4, { type: "matches", parameters: { subject: "recipient", filter: { state: "battle-shocked" } } });
-    conditionCase("unit-state", { states: ["on-battlefield"], subject: "this-model", negated: false }, 4, { type: "matches", parameters: { subject: "this-model", filter: { state: "on-battlefield" } } });
+  it("compiles unit-state's widened subjects for both strength and core states", () => {
+    conditionCase("unit-state", { states: ["below-half-strength"], subject: "attacker", negated: false }, { type: "strength", parameters: { subject: "attacker", below: "half" } });
+    conditionCase("unit-state", { states: ["battle-shocked"], subject: "recipient", negated: false }, { type: "matches", parameters: { subject: "recipient", filter: { state: "battle-shocked" } } });
+    conditionCase("unit-state", { states: ["on-battlefield"], subject: "this-model", negated: false }, { type: "matches", parameters: { subject: "this-model", filter: { state: "on-battlefield" } } });
   });
 
   // Hunts: "at half-strength/below half-strength" was narrowed to strictly below half.
-  it("compiles unit-state@18's at-or-below-half-strength, and refuses it beside below-half-strength", () => {
-    conditionCase("unit-state", { states: ["at-or-below-half-strength"], subject: "this-unit", negated: false }, 18, { type: "strength", parameters: { below: "half", at_or_below: true } });
-    conditionCase("unit-state", { states: ["below-half-strength"], subject: "this-unit", negated: false }, 18, { type: "strength", parameters: { below: "half" } });
-    expect(() => normalizeFingerprintParameters("unit-state", { states: ["at-or-below-half-strength", "below-half-strength"], subject: "this-unit", negated: false }, 18)).toThrow(/already covers/u);
-    expect(() => normalizeFingerprintParameters("unit-state", { states: ["at-or-below-half-strength"], subject: "this-unit", negated: false }, 17)).toThrow();
+  it("compiles unit-state's at-or-below-half-strength, and refuses it beside below-half-strength", () => {
+    conditionCase("unit-state", { states: ["at-or-below-half-strength"], subject: "this-unit", negated: false }, { type: "strength", parameters: { below: "half", at_or_below: true } });
+    conditionCase("unit-state", { states: ["below-half-strength"], subject: "this-unit", negated: false }, { type: "strength", parameters: { below: "half" } });
+    expect(() => normalizeFingerprintParameters("unit-state", { states: ["at-or-below-half-strength", "below-half-strength"], subject: "this-unit", negated: false })).toThrow(/already covers/u);
   });
 
-  it("compiles unit-activity@3's new subjects", () => {
-    conditionCase("unit-activity", { activity: "charged-this-turn", subject: "selected-unit", negated: false }, 3,
+  it("compiles unit-activity's widened subjects", () => {
+    conditionCase("unit-activity", { activities: ["charged-this-turn"], subject: "selected-unit", negated: false },
       { type: "happened", parameters: { subject: "selected-unit", event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" } });
   });
 
-  it("compiles unit-activity@4's list as any of them, and negated as none of them", () => {
+  it("compiles unit-activity's list as any of them, and negated as none of them", () => {
     const shot = { type: "happened", parameters: { event: "selected", filter: { to: "shoot" }, window: "phase" } };
     const fought = { type: "happened", parameters: { event: "selected", filter: { to: "fight" }, window: "phase" } };
-    conditionCase("unit-activity", { activities: ["fought-this-phase", "selected-to-shoot-this-phase"], subject: "this-unit", negated: true }, 4,
+    conditionCase("unit-activity", { activities: ["fought-this-phase", "selected-to-shoot-this-phase"], subject: "this-unit", negated: true },
       { operator: "not", operands: [{ operator: "or", operands: [fought, shot] }] });
-    conditionCase("unit-activity", { activities: ["selected-to-shoot-this-phase"], subject: "this-unit", negated: false }, 4, shot);
-    expect(() => normalizeFingerprintParameters("unit-activity", { activities: [], subject: "this-unit", negated: true }, 4)).toThrow(/at least one/u);
+    conditionCase("unit-activity", { activities: ["selected-to-shoot-this-phase"], subject: "this-unit", negated: false }, shot);
+    expect(() => normalizeFingerprintParameters("unit-activity", { activities: [], subject: "this-unit", negated: true })).toThrow(/at least one/u);
   });
 
-  it("migrates a unit-activity@3 leaf to a one-item list", () => {
-    expect(mapToLatest("unit-activity", 3, { activity: "fought-this-phase", subject: "this-unit", negated: true }))
-      .toEqual({ family: "unit-activity", version: currentFamilyVersion("unit-activity"), parameters: { activities: ["fought-this-phase"], subject: "this-unit", negated: true } });
-  });
-
-  it("compiles unit-position@2's widened objective-range subject and closest-eligible's new to/range", () => {
-    conditionCase("unit-position", { kind: "objective-range", controlled_by: "any", subject: "event-subject", negated: false }, 2,
+  it("compiles unit-position's widened objective-range subject and closest-eligible's new to/range", () => {
+    conditionCase("unit-position", { kind: "objective-range", controlled_by: "any", subject: "event-subject", negated: false },
       { type: "matches", parameters: { subject: "event-subject", filter: { within: { of: { objective: {} }, range: "objective-control" } } } });
-    conditionCase("unit-position", { kind: "closest-eligible", subject: "this-unit", negated: false, to: "selected-unit", range: 9 }, 2,
+    conditionCase("unit-position", { kind: "closest-eligible", subject: "this-unit", negated: false, to: "selected-unit", range: 9 },
       { type: "closest", parameters: { among: "eligible-targets", to: "selected-unit", range: { inches: 9 } } });
-    // within/beyond still require subject "target"; closest-eligible/objective-range no longer do.
-    expect(() => normalizeFingerprintParameters("unit-position", { kind: "within", inches: 6, subject: "this-unit", negated: false }, 2)).toThrow(/subject must be target/u);
-  });
-
-  it("migrates version-1/2/3 leaves of the four widened families straight through unchanged", () => {
-    expect(normalizeFingerprintParameters("unit-keyword", { keywords: ["CHARACTER"], subject: "target", negated: false }, 1)).toEqual(
-      normalizeFingerprintParameters("unit-keyword", { keywords: ["CHARACTER"], subject: "target", negated: false }, 2),
-    );
-    expect(normalizeFingerprintParameters("unit-position", { kind: "within", inches: 6, subject: "target", negated: false }, 1)).toEqual(
-      normalizeFingerprintParameters("unit-position", { kind: "within", inches: 6, subject: "target", negated: false }, 2),
-    );
   });
 });
 
 describe("Semantic authoring batch-6 describer round-trip and prefill", () => {
   it("round-trips leaf parameters to readable describer English", () => {
-    const previews: Array<[string, Record<string, unknown>, number, RegExp]> = [
-      ["rule-active", { rule: "oath-of-moment" }, 1, /is active/iu],
-      ["unit-owner", { owner: "enemy" }, 1, /enemy unit/iu],
-      ["model-count", { min: 6 }, 1, /contains 6\+ models/iu],
-      ["wounds-state", { kind: "damaged" }, 1, /damaged/iu],
-      ["in-region", { region_kind: "territory", territory: "no-mans-land" }, 1, /no.mans.land/iu],
-      ["controls-objective", { mode: "more-than-opponent" }, 1, /more objectives than/iu],
-      ["attack-filter", { attack_type: "melee" }, 1, /melee/iu],
-      ["visible", { fully: true }, 1, /fully visible/iu],
-      ["designated-filter", { tag: "spotted" }, 1, /spotted/iu],
-      ["battle-round", { min: 3, max: 3 }, 1, /third battle round/iu],
-      ["battle-size", { size: "strike-force" }, 1, /strike force/iu],
-      ["guided", {}, 1, /guided/iu],
-      ["moved-over", { by: "this-model" }, 1, /moved over/iu],
-      ["phase-window", { phase: "shooting", turn: "your" }, 1, /shooting phase/iu],
+    const previews: Array<[string, Record<string, unknown>, RegExp]> = [
+      ["rule-active", { rule: "oath-of-moment" }, /is active/iu],
+      ["unit-owner", { owner: "enemy" }, /enemy unit/iu],
+      ["model-count", { min: 6 }, /contains 6\+ models/iu],
+      ["wounds-state", { kind: "damaged" }, /damaged/iu],
+      ["in-region", { region_kind: "territory", territory: "no-mans-land" }, /no.mans.land/iu],
+      ["controls-objective", { mode: "more-than-opponent" }, /more objectives than/iu],
+      ["attack-filter", { attack_type: "melee" }, /melee/iu],
+      ["visible", { fully: true }, /fully visible/iu],
+      ["designated-filter", { tag: "spotted" }, /spotted/iu],
+      ["battle-round", { min: 3, max: 3 }, /third battle round/iu],
+      ["battle-size", { size: "strike-force" }, /strike force/iu],
+      ["guided", {}, /guided/iu],
+      ["moved-over", { by: "this-model" }, /moved over/iu],
+      ["phase-window", { phase: "shooting", turn: "your" }, /shooting phase/iu],
       // destroyedCount() (condition-history.ts) must show a CHARACTER narrowing on either side, not just owner/window.
-      ["history-compare", { left_kind: "character", comparison: "greater-than", right_kind: "tally", right_tally_kind: "any" }, 1, /enemy CHARACTER units.*than enemy units/iu],
+      ["history-compare", { left_kind: "character", comparison: "greater-than", right_kind: "tally", right_tally_kind: "any" }, /enemy CHARACTER units.*than enemy units/iu],
       // closest's "to" (condition.ts) must show who it is closest to once it is not the default attacker.
-      ["unit-position", { kind: "closest-eligible", subject: "this-unit", negated: false, to: "selected-unit" }, 2, /closest eligible target to the selected unit/iu],
+      ["unit-position", { kind: "closest-eligible", subject: "this-unit", negated: false, to: "selected-unit" }, /closest eligible target to the selected unit/iu],
     ];
-    for (const [family_id, parameters, family_version, expected] of previews) {
-      const preview = previewLeaf({ family_id, family_version, parameters });
+    for (const [family_id, parameters, expected] of previews) {
+      const preview = previewLeaf({ family_id, family_version: currentFamilyVersion(family_id), parameters });
       expect(preview.problem).toBeNull();
       expect(preview.text).toMatch(expected);
     }
@@ -369,32 +349,30 @@ describe("Semantic authoring batch-6 describer round-trip and prefill", () => {
 
 describe("Semantic authoring picked rolls and just-destroyed Stratagem targets", () => {
   it("lowers a pick of one roll to a choice of single-roll effects, and renders one roll for count 1", () => {
-    const pick = compiled([leaf("EFFECT", "roll-auto-result", { rolls: ["hit", "wound"], outcome: "counts-as-6", count: 1 }, 2)]);
+    const pick = compiled([leaf("EFFECT", "roll-auto-result", { rolls: ["hit", "wound"], outcome: "counts-as-6", count: 1 })]);
     expect(pick.mechanics.effect).toEqual({ type: "choice", options: [
       { type: "roll-result", target: "this-unit", modifier: { roll: "hit", count: 1, result: 6 } },
       { type: "roll-result", target: "this-unit", modifier: { roll: "wound", count: 1, result: 6 } },
     ] });
-    expect(rendered(base(), [leaf("EFFECT", "roll-auto-result", { roll: "hit", outcome: "counts-as-6", count: 1 }, 2)])).toMatch(/one of [^.]*Hit rolls counts as 6/iu);
-    const reroll = compiled([leaf("EFFECT", "reroll", { rolls: ["hit", "damage"], subset: "all", weapon_type: "all", count: 1 }, 4)]);
+    expect(rendered(base(), [leaf("EFFECT", "roll-auto-result", { roll: "hit", outcome: "counts-as-6", count: 1 })])).toMatch(/one of [^.]*Hit rolls counts as 6/iu);
+    const reroll = compiled([leaf("EFFECT", "reroll", { rolls: ["hit", "damage"], subset: "all", weapon_type: "all", count: 1 })]);
     expect((reroll.mechanics.effect as { type: string; options: unknown[] }).options).toHaveLength(2);
     // A pick needs two rolls, and names either roll or rolls, never both.
-    expect(() => normalizeFingerprintParameters("reroll", { rolls: ["hit"], subset: "all", weapon_type: "all" }, 4)).toThrow(/two or more/u);
-    expect(() => normalizeFingerprintParameters("roll-auto-result", { roll: "hit", rolls: ["hit", "wound"], outcome: "counts-as-6", count: 1 }, 2)).toThrow(/exactly one of roll and rolls/u);
-    expect(() => normalizeFingerprintParameters("roll-auto-result", { rolls: ["hit", "wound"], outcome: "counts-as-6" }, 2)).toThrow(/needs count 1/u);
+    expect(() => normalizeFingerprintParameters("reroll", { rolls: ["hit"], subset: "all", weapon_type: "all" })).toThrow(/two or more/u);
+    expect(() => normalizeFingerprintParameters("roll-auto-result", { roll: "hit", rolls: ["hit", "wound"], outcome: "counts-as-6", count: 1 })).toThrow(/exactly one of roll and rolls/u);
+    expect(() => normalizeFingerprintParameters("roll-auto-result", { rolls: ["hit", "wound"], outcome: "counts-as-6" })).toThrow(/needs count 1/u);
   });
 
-  it("keeps a just-destroyed unit a legal Stratagem target, and refuses that despite before version 2", () => {
-    const permission = leaf("EFFECT", "eligibility-permission", { subject: "this-unit", activity: "use-stratagem", allow: true, despite: ["destroyed"] }, 2);
+  it("keeps a just-destroyed unit a legal Stratagem target, and renders it", () => {
+    const permission = leaf("EFFECT", "eligibility-permission", { subject: "this-unit", activity: "use-stratagem", allow: true, despite: ["destroyed"] });
     expect(compiled([permission]).mechanics.effect).toEqual({ type: "permission", target: "this-unit", modifier: { activity: "use-stratagem", allow: true, despite: ["destroyed"] } });
     expect(rendered(base(), [permission])).toMatch(/eligible to be targeted with Stratagems even if it has just been destroyed/u);
-    expect(() => normalizeFingerprintParameters("eligibility-permission", { subject: "this-unit", activity: "use-stratagem", allow: true, despite: ["destroyed"] }, 1)).toThrow();
   });
 });
 
-describe("Semantic authoring unit-mark@2", () => {
-  it("tests for being riled up, which version 1 refused", () => {
-    const riled = compiled([leaf("CONDITION", "unit-mark", { mark: "riled-up", subject: "this-unit", negated: false }, 2), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+describe("Semantic authoring unit-mark", () => {
+  it("tests for being riled up", () => {
+    const riled = compiled([leaf("CONDITION", "unit-mark", { mark: "riled-up", subject: "this-unit", negated: false }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" })]);
     expect(riled.mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { filter: { designated: "riled-up" } } } });
-    expect(() => normalizeFingerprintParameters("unit-mark", { mark: "riled-up", subject: "this-unit", negated: false }, 1)).toThrow();
   });
 });

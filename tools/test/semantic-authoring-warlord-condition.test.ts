@@ -68,7 +68,7 @@ describe("Warlord designation registry and refusals (T1, T12)", () => {
   it("refuses warlord as an apply-mark tag, an event tag and an objective tag", () => {
     expect(() => normalizeFingerprintParameters("apply-mark", { subject: "this-unit", tag: "warlord" }, currentFamilyVersion("apply-mark"))).toThrow(/list-building designation/);
     expect(() => normalizeFingerprintParameters("event", { kind: "designation-changed", tag: "warlord" }, currentFamilyVersion("event"))).toThrow(/list-building designation/);
-    expect(() => normalizeFingerprintParameters("unit-position", { kind: "objective-range", objective: "designated", objective_tag: "warlord" }, currentFamilyVersion("unit-position"))).toThrow(/list-building designation/);
+    expect(() => normalizeFingerprintParameters("unit-position", { kind: "objective-range", objective: "designated", objective_tag: "warlord", controlled_by: "any", subject: "this-unit", negated: false }, currentFamilyVersion("unit-position"))).toThrow(/list-building designation/);
   });
 
   it("refuses a count of Warlords and a Warlord test with no subject", () => {

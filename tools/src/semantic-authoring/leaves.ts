@@ -560,10 +560,6 @@ export function retireSurface(db: DatabaseSync, value: unknown, actor: Actor): {
 export function assertLeafUndo(db: DatabaseSync, batchId: string, members: ReadonlyArray<{ entity_kind: string; entity_id: string }>): void {
   const merge = mergeMetadata(db, batchId);
   for (const member of members) {
-    if (member.entity_kind === "annotation-superseded-by-surface") {
-      const row = db.prepare("SELECT status FROM annotations WHERE id = ?").get(Number(member.entity_id)) as { status: string } | undefined;
-      if (row?.status !== "superseded") throw new LeafError(409, "This batch cannot restore a shorter leaf that was later changed.");
-    }
     if (member.entity_kind === "proposal-repointed" && merge) {
       const row = db.prepare("SELECT fingerprint_id FROM proposals WHERE id = ?").get(Number(member.entity_id)) as { fingerprint_id: string | null } | undefined;
       if (row?.fingerprint_id !== merge.to) throw new LeafError(409, "This merge cannot be undone because a merged proposal was later changed.");
@@ -605,31 +601,53 @@ export function stillAuthorized(db: DatabaseSync, annotationId: number): boolean
 
 /**
  * Undoing a surface's founding also undoes every row that surface wrote in later batches (a
- * reapply after a source refresh, a scoped pilot propagation): each is retracted and the row it
- * promoted or replaced comes back. Rows in the undone batch itself are handled by the caller.
+ * reapply after a source refresh, a scoped pilot propagation): each is retracted, and the
+ * proposals it settled go back to pending. Nothing it replaced is restored; the caller re-queues
+ * the sources (`requeueSurfaces`). Rows in the undone batch itself are handled by the caller.
+ * Returns the sources it touched.
  */
-function retractDerivedRows(db: DatabaseSync, reversalId: string, surfaceId: number): void {
+function retractDerivedRows(db: DatabaseSync, reversalId: string, surfaceId: number): Set<number> {
   const rows = db.prepare(`
-    SELECT id, supersedes_id FROM annotations WHERE derived_from_surface_id = ? AND status = 'active'
+    SELECT annotations.id, annotations.span_id, annotations.fingerprint_id, source_spans.ability_version_id
+    FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
+    WHERE annotations.derived_from_surface_id = ? AND annotations.status = 'active'
       AND NOT EXISTS (SELECT 1 FROM batch_members WHERE batch_members.batch_id = annotations.batch_id
         AND batch_members.entity_kind = 'leaf-surface-created' AND batch_members.entity_id = CAST(? AS TEXT))
-  `).all(surfaceId, surfaceId) as Array<{ id: number; supersedes_id: number | null }>;
+  `).all(surfaceId, surfaceId) as Array<{ id: number; span_id: number; fingerprint_id: string; ability_version_id: number }>;
+  const touched = new Set<number>();
   for (const row of rows) {
     db.prepare("UPDATE annotations SET status = 'retracted' WHERE id = ? AND status = 'active'").run(row.id);
     addMember(db, reversalId, "annotation-retracted-with-surface", row.id);
-    if (row.supersedes_id !== null && stillAuthorized(db, row.supersedes_id)) {
-      const restored = db.prepare("UPDATE annotations SET status = 'active' WHERE id = ? AND status = 'superseded'").run(row.supersedes_id);
-      if (restored.changes === 1) addMember(db, reversalId, "annotation-restored", row.supersedes_id);
+    for (const proposal of db.prepare("SELECT id FROM proposals WHERE span_id = ? AND fingerprint_id = ? AND status = 'accepted'").all(row.span_id, row.fingerprint_id) as Array<{ id: number }>) {
+      db.prepare("UPDATE proposals SET status = 'pending' WHERE id = ?").run(proposal.id);
+      addMember(db, reversalId, "proposal-requeued", proposal.id);
     }
+    touched.add(row.ability_version_id);
   }
+  return touched;
 }
 
-/** Reverse surface rows: created ones retire, retired ones return (created ones first, so a move swaps back). */
-export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: string, members: ReadonlyArray<{ entity_kind: string; entity_id: string }>): void {
+/**
+ * Re-apply every active surface to these sources, in `batchId`: after an undo clears a surface's
+ * leaves, the wording other decisions still cover gets its leaf back as a fresh row.
+ */
+export function requeueSurfaces(db: DatabaseSync, reviewer: string, batchId: string, abilityVersionIds: ReadonlySet<number>): void {
+  if (abilityVersionIds.size === 0) return;
+  const rows = db.prepare(`SELECT ${SURFACE_COLUMNS} FROM leaf_surfaces WHERE status = 'active' ORDER BY id`).all() as SurfaceRow[];
+  for (const row of rows) applySurface(db, row, reviewer, batchId, abilityVersionIds);
+}
+
+/**
+ * Reverse surface rows: created ones retire, retired ones return (created ones first, so a move
+ * swaps back). Returns the sources whose leaves the caller re-queues once the rest of the undo is
+ * done (`requeueSurfaces`); empty when the batch decided no surface.
+ */
+export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: string, members: ReadonlyArray<{ entity_kind: string; entity_id: string }>): Set<number> {
+  const requeue = new Set<number>();
   for (const member of members.filter((item) => item.entity_kind === "leaf-surface-created")) {
     db.prepare("UPDATE leaf_surfaces SET status = 'retired' WHERE id = ? AND status = 'active'").run(Number(member.entity_id));
     addMember(db, reversalId, "leaf-surface-retired", member.entity_id);
-    retractDerivedRows(db, reversalId, Number(member.entity_id));
+    for (const id of retractDerivedRows(db, reversalId, Number(member.entity_id))) requeue.add(id);
   }
   const merge = mergeMetadata(db, batchId);
   if (merge) {
@@ -648,13 +666,21 @@ export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: str
     db.prepare("UPDATE leaf_surfaces SET status = 'active' WHERE id = ?").run(Number(member.entity_id));
     addMember(db, reversalId, "leaf-surface-restored", member.entity_id);
   }
-  // Last, once this batch's surfaces are back as they were: a shorter leaf a longer surface
-  // replaced returns only while its own decision still stands.
-  for (const member of members.filter((item) => item.entity_kind === "annotation-superseded-by-surface")) {
-    if (!stillAuthorized(db, Number(member.entity_id))) continue;
-    db.prepare("UPDATE annotations SET status = 'active' WHERE id = ? AND status = 'superseded'").run(Number(member.entity_id));
-    addMember(db, reversalId, "annotation-restored", member.entity_id);
+  // A shorter leaf a longer surface replaced is not restored: its sources are re-queued, so a
+  // surface that still covers that wording writes it afresh.
+  const replaced = members.filter((item) => item.entity_kind === "annotation-superseded-by-surface");
+  const sourceOf = db.prepare("SELECT source_spans.ability_version_id AS id FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id WHERE annotations.id = ?");
+  for (const member of replaced) {
+    const row = sourceOf.get(Number(member.entity_id)) as { id: number } | undefined;
+    if (row) requeue.add(row.id);
   }
+  if (members.some((item) => item.entity_kind === "leaf-surface-created" || item.entity_kind === "leaf-surface-retired") || replaced.length > 0) {
+    for (const member of members.filter((item) => item.entity_kind === "annotation")) {
+      const row = sourceOf.get(Number(member.entity_id)) as { id: number } | undefined;
+      if (row) requeue.add(row.id);
+    }
+  }
+  return requeue;
 }
 
 type BoardSurface = {

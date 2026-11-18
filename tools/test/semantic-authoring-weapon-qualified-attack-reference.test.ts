@@ -28,8 +28,7 @@ function compiled(list: CompileLeaf[], text: string) {
 const normalize = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters, currentFamilyVersion(family));
 
 describe("Semantic authoring weapon-qualified attack reference (wave 10)", () => {
-  it("hit-by-attacks version 4 names the unit hit by object, and keeps subject forms", () => {
-    expect(currentFamilyVersion("hit-by-attacks")).toBe(4);
+  it("hit-by-attacks names the unit hit by object, and keeps subject forms", () => {
     expect(normalize("hit-by-attacks", { subject: "antecedent" })).toEqual({ subject: "antecedent" });
     expect(normalize("hit-by-attacks", { subject: "target", window: "phase", by: "following-filter" })).toEqual({ subject: "target", window: "phase", by: "following-filter" });
     expect(normalize("hit-by-attacks", { object: "following-filter" })).toEqual({ object: "following-filter" });
@@ -39,10 +38,7 @@ describe("Semantic authoring weapon-qualified attack reference (wave 10)", () =>
     expect(() => normalize("hit-by-attacks", { object: "following-filter", subject: "target" })).toThrow(/not both/u);
     expect(() => normalize("hit-by-attacks", { object: "following-filter", by: "following-filter", window: "phase" })).toThrow(/both the unit hit and the attacks' attacker/u);
     expect(() => normalize("hit-by-attacks", { object: "target" })).toThrow();
-    // Version 3 keeps its subject form, and has no object form.
-    const v3 = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("hit-by-attacks", parameters, 3);
-    expect(v3({ subject: "antecedent", window: "phase", by: "following-filter" })).toEqual({ subject: "antecedent", window: "phase", by: "following-filter" });
-    expect(() => v3({ object: "following-filter" })).toThrow();
+    expect(normalize("hit-by-attacks", { subject: "antecedent", window: "phase", by: "following-filter" })).toEqual({ subject: "antecedent", window: "phase", by: "following-filter" });
   });
 
   it("unit-activity attack_type qualifies one destroyed-enemy-unit activity only", () => {
@@ -51,7 +47,7 @@ describe("Semantic authoring weapon-qualified attack reference (wave 10)", () =>
     expect(() => normalize("unit-activity", { subject: "this-unit", activities: ["remained-stationary"], negated: false, attack_type: "melee" })).toThrow(/qualifies only a destroyed-enemy-unit/u);
     expect(() => normalize("unit-activity", { subject: "this-unit", activities: ["destroyed-enemy-unit-this-phase", "destroyed-enemy-unit-this-turn"], negated: false, attack_type: "melee" })).toThrow(/on its own/u);
     expect(() => normalize("unit-activity", { subject: "this-unit", activities: ["destroyed-enemy-unit-this-phase"], negated: false, attack_type: "fight" })).toThrow(/one of melee, ranged, psychic/u);
-    // Without attack_type the version 14 leaf is unchanged.
+    // Without attack_type the leaf is unchanged.
     expect(normalize("unit-activity", { subject: "this-unit", activities: ["destroyed-enemy-unit-this-phase"], negated: false })).toEqual({ subject: "this-unit", activities: ["destroyed-enemy-unit-this-phase"], negated: false });
   });
 
@@ -62,7 +58,7 @@ describe("Semantic authoring weapon-qualified attack reference (wave 10)", () =>
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
     ), text);
     expect(out).toContain(JSON.stringify({ type: "happened", parameters: { event: "destroyed", object: { owner: "enemy" }, filter: { by: "this-unit", attack_type: "melee" }, window: "phase" } }));
-    // Without attack_type the history names no attack type: the same leaf before this change.
+    // Without attack_type the history names no attack type.
     const plain = compiled(placed(text,
       ["If this unit's melee attacks destroyed an enemy unit this phase", "unit-activity", { subject: "this-unit", activities: ["destroyed-enemy-unit-this-phase"], negated: false }],
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],

@@ -339,19 +339,13 @@ describe("Semantic authoring set-up relative placement: the add-unit permission 
 });
 
 describe("Semantic authoring set-up relative placement: engagement of the event object (SS4a)", () => {
-  it("normalizes range_ref engagement of event-object in the new version and refuses it in the previous", () => {
-    // unit-position 22 introduced engagement of event-object; later versions keep accepting it.
-    const introduced = 22;
+  it("normalizes range_ref engagement of event-object", () => {
     const input = { kind: "within", range_ref: "engagement", of: "event-object", subject: "antecedent", negated: false };
-    for (const version of [introduced, currentFamilyVersion("unit-position")]) {
-      expect(normalizeFingerprintParameters("unit-position", input, version)).toMatchObject({ of: "event-object", range_ref: "engagement" });
-    }
-    expect(() => normalizeFingerprintParameters("unit-position", input, introduced - 1)).toThrow(/event-object|matching-unit/u);
+    expect(normalizeFingerprintParameters("unit-position", input)).toMatchObject({ of: "event-object", range_ref: "engagement" });
   });
 
-  it("still refuses range_ref engagement of matching-unit in the new version", () => {
-    const version = currentFamilyVersion("unit-position");
-    expect(() => normalizeFingerprintParameters("unit-position", { kind: "within", range_ref: "engagement", of: "matching-unit", subject: "antecedent", negated: false }, version)).toThrow();
+  it("refuses range_ref engagement of matching-unit", () => {
+    expect(() => normalizeFingerprintParameters("unit-position", { kind: "within", range_ref: "engagement", of: "matching-unit", subject: "antecedent", negated: false })).toThrow();
   });
 });
 

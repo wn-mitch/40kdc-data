@@ -4,11 +4,6 @@ import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compi
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { describeCondition } from "../src/translate/condition.js";
 import { describeEffect } from "../src/translate/effect.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
-import { ABILITY_MODIFIER_ANTECEDENT } from "../src/semantic-authoring/families/abilities.js";
-
-/** The family versions the extensions under test create. */
-const ANTECEDENT_SUBJECT_BINDING_VERSIONS: ReadonlySet<string> = new Set(["unit-filter@13", "weapon-property-scope@7", "battle-shock-state@2", "ability-modifier@4", "unit-activity@20"]);
 
 // Fabricated wording only. Each test names the defect it hunts; the compile tests fail on the tree before the change.
 
@@ -39,15 +34,6 @@ function errorsOf(text: string, items: Item[]): string[] {
   return result.ok ? [] : result.errors;
 }
 
-/** The version just before this extension's version of `family`; later extensions may sit above it. */
-const PREVIOUS = (family: string) => {
-  for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
-    const extension = familyExtension(family, version);
-    if (extension !== undefined && ANTECEDENT_SUBJECT_BINDING_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
-  }
-  throw new Error(`The antecedent-subject-binding extensions do not extend ${family}.`);
-};
-
 const json = (value: unknown) => JSON.stringify(value);
 
 describe("ability-modifier antecedent (SS-B)", () => {
@@ -64,18 +50,14 @@ describe("ability-modifier antecedent (SS-B)", () => {
     expect(json(mechanics)).not.toContain("\"target\":\"this-unit\"");
   });
 
-  it("accepts antecedent at the current version and not at the one before; this-unit still passes both", () => {
+  it("accepts antecedent, this-unit and this-model subjects", () => {
     const leaf = { subject: "antecedent", ability: "reach-demo", aspect: "range", operation: "add", value: 3 };
-    const version = currentFamilyVersion("ability-modifier");
-    // The antecedent version is the one ABILITY_MODIFIER_ANTECEDENT appends, found by identity.
-    const first = Array.from({ length: version }, (_, at) => at + 1).find((at) => familyExtension("ability-modifier", at) === ABILITY_MODIFIER_ANTECEDENT)!;
-    expect(first).toBeDefined();
-    for (const at of [first, version]) expect(normalizeFingerprintParameters("ability-modifier", leaf, at)).toEqual(leaf);
-    expect(() => normalizeFingerprintParameters("ability-modifier", leaf, first - 1)).toThrow();
+    expect(normalizeFingerprintParameters("ability-modifier", leaf)).toEqual(leaf);
     for (const subject of ["this-unit", "this-model"]) {
       const old = { ...leaf, subject };
-      for (const at of [first - 1, first, version]) expect(normalizeFingerprintParameters("ability-modifier", old, at)).toEqual(old);
+      expect(normalizeFingerprintParameters("ability-modifier", old)).toEqual(old);
     }
+    expect(() => normalizeFingerprintParameters("ability-modifier", { ...leaf, subject: "bogus" })).toThrow();
   });
 
   it("does not claim an unrelated later unit-filter as the postfix filter of a this-unit modifier", () => {
@@ -127,11 +109,10 @@ describe("per-recipient condition is decided in its own sentence (SS-C)", () => 
   });
 });
 
-describe("family versions (unit-filter, weapon-property-scope, battle-shock-state, unit-activity)", () => {
-  it("unit-filter accepts attached_to this-unit on a friendly unit filter, and not at the version before", () => {
+describe("family parameters (unit-filter, weapon-property-scope, battle-shock-state, unit-activity)", () => {
+  it("unit-filter accepts attached_to this-unit on a friendly unit filter", () => {
     const leaf = { side: "friendly", attached_to: "this-unit" };
     expect(normalizeFingerprintParameters("unit-filter", leaf, currentFamilyVersion("unit-filter"))).toEqual(leaf);
-    expect(() => normalizeFingerprintParameters("unit-filter", leaf, PREVIOUS("unit-filter"))).toThrow();
     const keyed = { side: "friendly", keywords: ["INQUISITOR"], attached_to: "this-unit" };
     expect(normalizeFingerprintParameters("unit-filter", keyed, currentFamilyVersion("unit-filter"))).toEqual(keyed);
   });
@@ -150,18 +131,17 @@ describe("family versions (unit-filter, weapon-property-scope, battle-shock-stat
     ]) expect(() => normalizeFingerprintParameters("unit-filter", bad, at)).toThrow();
   });
 
-  it("unit-filter still accepts what the version before accepted", () => {
+  it("unit-filter accepts filters without attached_to", () => {
     const at = currentFamilyVersion("unit-filter");
     for (const leaf of [{ side: "friendly" }, { side: "enemy", keywords: ["ALPHA"], states: ["engaged"] }, { side: "friendly", level: "model", keywords: ["ALPHA"] }, { side: "any", other: true }]) {
       expect(normalizeFingerprintParameters("unit-filter", leaf, at)).toEqual(leaf);
     }
   });
 
-  it("weapon-property-scope accepts subject event-subject, and keeps every earlier subject", () => {
+  it("weapon-property-scope accepts subject event-subject and every other subject", () => {
     const at = currentFamilyVersion("weapon-property-scope");
     const leaf = { subject: "event-subject", weapon_type: "all" };
     expect(normalizeFingerprintParameters("weapon-property-scope", leaf, at)).toEqual(leaf);
-    expect(() => normalizeFingerprintParameters("weapon-property-scope", leaf, PREVIOUS("weapon-property-scope"))).toThrow();
     for (const subject of ["this-unit", "this-model", "selected-unit", "antecedent"]) {
       expect(normalizeFingerprintParameters("weapon-property-scope", { subject, weapon_type: "melee" }, at)).toEqual({ subject, weapon_type: "melee" });
     }
@@ -169,22 +149,20 @@ describe("family versions (unit-filter, weapon-property-scope, battle-shock-stat
     expect(() => normalizeFingerprintParameters("weapon-property-scope", { subject: "bogus", weapon_type: "all" }, at)).toThrow();
   });
 
-  it("battle-shock-state accepts recipient event-subject, and keeps every earlier recipient", () => {
+  it("battle-shock-state accepts recipient event-subject and every other recipient", () => {
     const at = currentFamilyVersion("battle-shock-state");
     const leaf = { recipient: "event-subject", set: true };
     expect(normalizeFingerprintParameters("battle-shock-state", leaf, at)).toEqual(leaf);
-    expect(() => normalizeFingerprintParameters("battle-shock-state", leaf, PREVIOUS("battle-shock-state"))).toThrow();
     for (const recipient of ["this-unit", "defender", "selected-unit"]) {
       expect(normalizeFingerprintParameters("battle-shock-state", { recipient, set: false }, at)).toEqual({ recipient, set: false });
     }
     expect(() => normalizeFingerprintParameters("battle-shock-state", { recipient: "bogus", set: true }, at)).toThrow();
   });
 
-  it("unit-activity accepts destroyed-stratagem-target, alone and beside an earlier activity, and keeps the earlier ones", () => {
+  it("unit-activity accepts destroyed-stratagem-target, alone and beside another activity, and the other activities", () => {
     const at = currentFamilyVersion("unit-activity");
     const leaf = { activities: ["destroyed-stratagem-target"], subject: "target", negated: false };
     expect(normalizeFingerprintParameters("unit-activity", leaf, at)).toEqual(leaf);
-    expect(() => normalizeFingerprintParameters("unit-activity", leaf, PREVIOUS("unit-activity"))).toThrow();
     const both = { activities: ["charged-this-turn", "destroyed-stratagem-target"], subject: "target", negated: false };
     expect(normalizeFingerprintParameters("unit-activity", both, at)).toMatchObject({ activities: ["charged-this-turn", "destroyed-stratagem-target"] });
     for (const activity of ["charged-this-turn", "destroyed-enemy-unit-this-phase", "lost-models-to-triggering-attacks"]) {

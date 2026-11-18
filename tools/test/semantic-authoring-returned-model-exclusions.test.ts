@@ -111,10 +111,10 @@ describe("returned-model exclusions", () => {
   });
 
   it("validates keyword sets without accepting unit-wide predicates", () => {
-    expect(normalizeFingerprintParameters("returned-model-exclusion", { keywords: ["**scout**", "hero"] }, 1))
+    expect(normalizeFingerprintParameters("returned-model-exclusion", { keywords: ["**scout**", "hero"] }))
       .toEqual({ keywords: ["HERO", "SCOUT"] });
     for (const parameters of [{ keywords: [] }, { keywords: [null] }, { keywords: ["HERO", "hero"] }, { keywords: ["HERO"], subject: "this-unit" }]) {
-      expect(() => normalizeFingerprintParameters("returned-model-exclusion", parameters, 1)).toThrow();
+      expect(() => normalizeFingerprintParameters("returned-model-exclusion", parameters)).toThrow();
     }
   });
 
@@ -135,7 +135,7 @@ describe("returned-model exclusions", () => {
 
   it("lowers bounded model selections with explicit origins and shared allowances", () => {
     const selection: CompileLeaf = {
-      role: "EFFECT", family_id: "select-unit", family_version: 6, start_byte: 0,
+      role: "EFFECT", family_id: "select-unit", family_version: currentFamilyVersion("select-unit"), start_byte: 0,
       parameters: { scope: "friendly", target_kind: "model", count: 2, up_to: true, distance: "within", inches: 9,
         within_of: "squad", visible_to: "observer", filter: { keywords: ["CHARACTER"], membership: "selected-unit" } },
     };
@@ -153,16 +153,16 @@ describe("returned-model exclusions", () => {
   it("keeps attachment roles separate from CHARACTER and Leader capability", () => {
     const parameters = normalizeFingerprintParameters("unit-filter", {
       side: "friendly", level: "model", keywords: ["CHARACTER"], attachment_role: "bodyguard", member_of: "selected-unit",
-    }, 16);
-    const filter: CompileLeaf = { role: "CONDITION", family_id: "unit-filter", family_version: 16, parameters, start_byte: 0 };
+    });
+    const filter: CompileLeaf = { role: "CONDITION", family_id: "unit-filter", family_version: currentFamilyVersion("unit-filter"), parameters, start_byte: 0 };
     expect(dslUnitFilter(filter)).toEqual({ owner: "friendly", level: "model", all_of: ["CHARACTER"], attachment_role: "bodyguard", member_of: "selected-unit" });
-    expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", attachment_role: "bodyguard" }, 16)).toThrow(/models/);
-    const old = { side: "friendly", keywords: ["SCOUT"] };
-    expect(normalizeFingerprintParameters("unit-filter", old, 16)).toEqual(normalizeFingerprintParameters("unit-filter", old, 15));
+    expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", attachment_role: "bodyguard" })).toThrow(/models/);
+    const plain = { side: "friendly", keywords: ["SCOUT"] };
+    expect(normalizeFingerprintParameters("unit-filter", plain)).toEqual(plain);
   });
 
   it("grants a model-bound ordinary definition to every attached Leader", () => {
-    const leaf: CompileLeaf = { role: "CONDITION", family_id: "leader-target", family_version: 1, start_byte: 0,
+    const leaf: CompileLeaf = { role: "CONDITION", family_id: "leader-target", family_version: currentFamilyVersion("leader-target"), start_byte: 0,
       parameters: { leader_keywords: ["CHARACTER"] } };
     const effect = { type: "sequence", steps: [
       { type: "stat-modifier", target: "this-unit", modifier: { stat: "T", operation: "add", value: 1 } },
@@ -197,11 +197,10 @@ describe("returned-model exclusions", () => {
   });
 
   it("keeps the destroying attack classification correlated with its model-destroyed event", () => {
-    const parameters = normalizeFingerprintParameters("event", { kind: "model-destroyed", attack_type: "melee" }, 29);
-    expect(trigger({ role: "EVENT", family_id: "event", family_version: 29, parameters, start_byte: 0 })).toEqual({
+    const parameters = normalizeFingerprintParameters("event", { kind: "model-destroyed", attack_type: "melee" });
+    expect(trigger({ role: "EVENT", family_id: "event", family_version: currentFamilyVersion("event"), parameters, start_byte: 0 })).toEqual({
       event: "model-destroyed", object: "model-in-this-unit", filter: { attack_type: "melee" },
     });
-    expect(() => normalizeFingerprintParameters("event", { kind: "model-destroyed", attack_type: "melee" }, 28)).toThrow();
-    expect(() => normalizeFingerprintParameters("event", { kind: "battle-started", attack_type: "melee" }, 29)).toThrow();
+    expect(() => normalizeFingerprintParameters("event", { kind: "battle-started", attack_type: "melee" })).toThrow();
   });
 });

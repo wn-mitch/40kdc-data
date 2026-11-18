@@ -22,7 +22,7 @@ const BETWEEN_ITEMS = /^[\s*]*\.[\s*.]*$/u;
 
 type Open = { host: CompileLeaf; items: CompileLeaf[]; pending: CompileLeaf[] };
 
-const isLead = (leaf: CompileLeaf) => leaf.family_id === LEAD && leaf.family_version >= 3 && Array.isArray(leaf.parameters.what);
+const isLead = (leaf: CompileLeaf) => leaf.family_id === LEAD && Array.isArray(leaf.parameters.what);
 
 export function bindIgnoreLists(leaves: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
   const hasList = leaves.some((leaf) => leaf.family_id === LIST);

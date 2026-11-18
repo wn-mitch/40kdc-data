@@ -199,7 +199,7 @@ describe("Semantic authoring unit-position named as the Engagement Range (SS4)",
   it("refuses a beyond distance, a matching-unit measure and a counts-as use of the Engagement Range", () => {
     const version = currentFamilyVersion("unit-position");
     expect(() => normalizeFingerprintParameters("unit-position", { kind: "beyond", range_ref: "engagement", of: "this-unit", subject: "this-unit", negated: false }, version)).toThrow(/beyond/);
-    expect(() => normalizeFingerprintParameters("unit-position", { kind: "within", range_ref: "engagement", of: "matching-unit", of_side: "enemy", of_keywords: ["PSYKER"], subject: "this-unit", negated: false }, version)).toThrow(/matching-unit/);
+    expect(() => normalizeFingerprintParameters("unit-position", { kind: "within", range_ref: "engagement", of: "matching-unit", of_side: "enemy", of_keywords: ["PSYKER"], subject: "this-unit", negated: false }, version)).toThrow(/range_ref engagement takes of this-unit, this-model, following-filter or event-object/);
     expect(() => normalizeFingerprintParameters("counts-as", { subject: "this-unit", range_ref: "engagement", of_side: "friendly" }, currentFamilyVersion("counts-as"))).toThrow();
   });
 
@@ -234,8 +234,7 @@ describe("Semantic authoring re-authored Charge-move selections (records 1400, 3
 });
 
 {
-  // Fabricated wording only. Engaged and hidden are unit-filter states (unit-filter@9); each test is
-  // written so it fails on the code before the change, except the regression guards.
+  // Fabricated wording only. Engaged and hidden are unit-filter states.
 
   /** Leaves placed on their own wording in `text`, normalized as the family registry reads them. */
   function placed(text: string, ...items: Array<readonly [string, string, Record<string, unknown>, string?]>): CompileLeaf[] {
@@ -269,20 +268,14 @@ describe("Semantic authoring re-authored Charge-move selections (records 1400, 3
   const FIGHT_WINDOW = { your_phases: [], opponent_phases: [], either_phases: ["fight"] };
 
   describe("unit-filter family: engaged and hidden", () => {
-    it("accepts engaged and hidden at the current version, and the version before they were introduced still refuses them", () => {
-      // The version that introduced engaged and hidden is pinned by number: later versions add to the chain above it.
-      const INTRODUCED = 10;
-      expect(currentFamilyVersion("unit-filter")).toBeGreaterThanOrEqual(INTRODUCED);
+    it("accepts engaged and hidden", () => {
       expect(normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["engaged"] }, currentFamilyVersion("unit-filter"))).toEqual({ side: "friendly", states: ["engaged"] });
       expect(normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["hidden"] }, currentFamilyVersion("unit-filter"))).toEqual({ side: "friendly", states: ["hidden"] });
-      expect(normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["engaged"] }, INTRODUCED)).toEqual({ side: "friendly", states: ["engaged"] });
-      expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["engaged"] }, INTRODUCED - 1)).toThrow();
-      expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["hidden"] }, INTRODUCED - 1)).toThrow();
     });
 
-    it("normalizes an input with none of the new states exactly as the previous version does", () => {
+    it("keeps battle-shocked with unengaged, in the family's state order", () => {
       const input = { side: "friendly", keywords: ["ARMIGER"], states: ["battle-shocked", "unengaged"] };
-      expect(normalizeFingerprintParameters("unit-filter", input, currentFamilyVersion("unit-filter"))).toEqual(normalizeFingerprintParameters("unit-filter", input, currentFamilyVersion("unit-filter") - 1));
+      expect(normalizeFingerprintParameters("unit-filter", input)).toEqual({ ...input, states: ["unengaged", "battle-shocked"] });
     });
 
     it("refuses engaged with unengaged in one filter", () => {
@@ -317,7 +310,7 @@ describe("Semantic authoring re-authored Charge-move selections (records 1400, 3
       expect(() => dslUnitFilter(filterLeaf({ side: "friendly", states: ["hidden", "battle-shocked"] }))).toThrow(CompileError);
       expect(() => dslUnitFilter(filterLeaf({ side: "friendly", states: ["engaged"], held_in: "strategic-reserves" }))).toThrow(CompileError);
       // Merged filters skip the family's normalize, so the compiler refuses this pair on its own.
-      const raw: CompileLeaf = { role: "CONDITION", family_id: "unit-filter", family_version: 9, parameters: { side: "friendly", states: ["engaged", "unengaged"] }, start_byte: 0, end_byte: 1 };
+      const raw: CompileLeaf = { role: "CONDITION", family_id: "unit-filter", family_version: currentFamilyVersion("unit-filter"), parameters: { side: "friendly", states: ["engaged", "unengaged"] }, start_byte: 0, end_byte: 1 };
       expect(() => dslUnitFilter(raw)).toThrow(CompileError);
     });
   });

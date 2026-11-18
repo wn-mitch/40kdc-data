@@ -4,9 +4,9 @@ import { duration } from "./compile-duration-scope.js";
 import { isContainerOpener } from "./compile-containers.js";
 import { effect, type CompileLeaf } from "./compile-fragments.js";
 import { trigger, triggerLeaves } from "./compile-triggers.js";
-import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
-import { usageFor } from "./restriction-families.js";
-import { awaitsFollowingFilter } from "./families/shared.js";
+import { WEAPON_CHARACTERISTICS } from "./families/vocabulary.js";
+import { usageFor } from "./families/vocabulary.js";
+import { awaitsFollowingFilter } from "./families/vocabulary.js";
 import { namesSelection } from "./compile-targeting-history.js";
 import { prohibitedRollName } from "./compile-roll-prohibition.js";
 
@@ -75,9 +75,9 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if (leaf.family_id === "weapon-ability-grant" && leaf.parameters.keyword === undefined) {
     return { kind: "implicit", note: "No separate text: grants the weapon-ability-keyword leaves of its sentence (or the nearest earlier ones)." };
   }
-  if ((leaf.family_id === "characteristic-modifier" && leaf.family_version >= 5 && (leaf.parameters.subject === undefined
+  if ((leaf.family_id === "characteristic-modifier" && (leaf.parameters.subject === undefined
     || leaf.parameters.weapon_type === undefined && (leaf.parameters.characteristics as string[]).some((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat))))
-    || (leaf.family_id === "characteristic-set" && leaf.family_version >= 3 && (leaf.parameters.subject === undefined
+    || (leaf.family_id === "characteristic-set" && (leaf.parameters.subject === undefined
       || leaf.parameters.weapon_type === undefined && (WEAPON_CHARACTERISTICS as readonly string[]).includes(String(leaf.parameters.characteristic))))) {
     return { kind: "implicit", note: `Stat adjustment ${JSON.stringify(leaf.parameters)} needs a reviewed recipient and, for weapon stats, weapon scope.` };
   }

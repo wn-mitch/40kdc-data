@@ -2,13 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 
 /** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
 const FIXTURE_RULE_NAME = "A Trap Well Laid";
-
-/** The family versions the extensions under test create. */
-const BINDING_BUNDLE_VERSIONS: ReadonlySet<string> = new Set(["usage-limit@5", "event@24", "attack@7"]);
 
 /** Leaves placed by their wording in `text`, in order (fabricated wording, not rules text). */
 function compileItems(text: string, items: Array<[string, string, Record<string, unknown>, string?]>) {
@@ -35,23 +31,13 @@ function errorsOf(text: string, items: Array<[string, string, Record<string, unk
   return result.ok ? [] : result.errors;
 }
 
-/** The version just before this bundle's extension of `family`; later extensions may sit above it. */
-const PREVIOUS = (family: string) => {
-  for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
-    const extension = familyExtension(family, version);
-    if (extension !== undefined && BINDING_BUNDLE_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
-  }
-  throw new Error(`The binding bundle does not extend ${family}.`);
-};
-
-describe("usage-limit per selected-unit (version 5 widens per only)", () => {
-  it("accepts per selected-unit at the current version and not at the one before", () => {
+describe("usage-limit per selected-unit", () => {
+  it("accepts per selected-unit", () => {
     const leaf = { frequency: "once-per-turn", per: "selected-unit" };
     expect(normalizeFingerprintParameters("usage-limit", leaf, currentFamilyVersion("usage-limit"))).toEqual(leaf);
-    expect(() => normalizeFingerprintParameters("usage-limit", leaf, PREVIOUS("usage-limit"))).toThrow();
   });
 
-  it("still accepts every per value the previous version accepted", () => {
+  it("still accepts the other per values", () => {
     for (const per of ["any", "army", "unit", "model"]) {
       const leaf = { frequency: "once-per-turn", per };
       expect(normalizeFingerprintParameters("usage-limit", leaf, currentFamilyVersion("usage-limit"))).toEqual(leaf);
@@ -59,7 +45,7 @@ describe("usage-limit per selected-unit (version 5 widens per only)", () => {
   });
 });
 
-describe("event attack_type on damage-allocated (widens the event family)", () => {
+describe("event attack_type on damage-allocated", () => {
   it("accepts ranged and psychic on a damage-allocated moment and keeps the moment's other kinds unchanged", () => {
     const version = currentFamilyVersion("event");
     expect(normalizeFingerprintParameters("event", { kind: "damage-allocated", attack_type: "ranged" }, version)).toEqual({ kind: "damage-allocated", attack_type: "ranged" });
@@ -67,13 +53,9 @@ describe("event attack_type on damage-allocated (widens the event family)", () =
     expect(() => normalizeFingerprintParameters("event", { kind: "attack-made", attack_type: "ranged" }, version)).toThrow();
     expect(normalizeFingerprintParameters("event", { kind: "damage-allocated", attack_type: "psychic" }, version)).toEqual({ kind: "damage-allocated", attack_type: "psychic" });
   });
-
-  it("refuses attack_type at the version before", () => {
-    expect(() => normalizeFingerprintParameters("event", { kind: "damage-allocated", attack_type: "ranged" }, PREVIOUS("event"))).toThrow();
-  });
 });
 
-describe("attack target following-filter (widens the attack family)", () => {
+describe("attack target following-filter", () => {
   it("accepts the defender named by the following filter, and keeps that-unit", () => {
     const version = currentFamilyVersion("attack");
     const leaf = { direction: "makes", unit: "friendly-unit", attack_type: "ranged", target: "following-filter" };

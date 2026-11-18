@@ -1,7 +1,6 @@
 /**
- * Prefill for batch 6's new predicate families (`predicate-families.ts`, `predicate-families-2.ts`)
- * and the `event` family's version 7 kinds, split out of `leaf-prefill.ts` per the batch-5-style
- * follow-up (that file has little headroom left). Same rule as the rest of `leaf-prefill.ts`:
+ * Prefill for the predicate families and the `event` kinds `leaf-prefill.ts` does not read, split
+ * out of `leaf-prefill.ts` (that file has little headroom left). Same rule as the rest of `leaf-prefill.ts`:
  * nothing is chosen by default, only read when the wording says it outright.
  */
 
@@ -134,7 +133,7 @@ const USED_ACTIVITY_WORDS: Array<[RegExp, string]> = [
   [/\bdark pact\b/iu, "dark-pact"], [/\bact of faith\b/iu, "act-of-faith"], [/\bdoctrine\b/iu, "doctrine"], [/\bability\b/iu, "ability"],
 ];
 
-/** Version-7 `event` kinds `leaf-prefill.ts`'s own `eventFromSource` does not already read. */
+/** The `event` kinds `leaf-prefill.ts`'s own `eventFromSource` does not already read. */
 export function eventV7Prefill(exactText: string): Record<string, unknown> {
   if (/\bstart of the battle\b/iu.test(exactText)) return { kind: "battle-started" };
   if (/\bafter deployment\b/iu.test(exactText)) return { kind: "deployment-ended" };

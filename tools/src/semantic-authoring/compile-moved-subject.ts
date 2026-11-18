@@ -1,6 +1,6 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { moveTriggerBefore } from "./compile-move-end.js";
-import { EVENT_SUBJECT } from "./family-extension-helpers.js";
+import { EVENT_SUBJECT } from "./families/vocabulary.js";
 
 /**
  * A move-through or move permission whose subject is the triggering unit ("that unit can move …")

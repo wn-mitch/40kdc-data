@@ -2,7 +2,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { namedRange } from "./named-ranges.js";
 
 /**
- * Named ranges and keyword-anchored auras (aura-range@5), bound before any role-based pass.
+ * Named ranges and keyword-anchored auras (aura-range), bound before any role-based pass.
  *
  * - The record that defines a named range prints how far it reaches: each named-range-value,
  *   with the battle-round leaf right before it, is one span of battle rounds. Together they form

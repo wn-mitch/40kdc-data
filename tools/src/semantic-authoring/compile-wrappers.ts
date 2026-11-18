@@ -105,10 +105,10 @@ function targetAura(leaf: CompileLeaf, body: Node, modifier: Node, eligible: Nod
 }
 
 export function wrapAura(leaf: CompileLeaf, body: Node): Node {
-  // A named range (aura-range@5 range_ref) arrives as the range-ref compile-named-range.ts built.
+  // A named range (aura-range range_ref) arrives as the range-ref compile-named-range.ts built.
   const range = leaf.parameters.range_table ?? { inches: closed(leaf, "inches") };
   const modifier: Node = { range, effect: bindPicks(body) };
-  // Version 3: a folded unit-filter (compile-unit-filters.ts) carries the keywords as `filter`.
+  // A folded unit-filter (compile-unit-filters.ts) carries the keywords as `filter`.
   const filter = (leaf.parameters.filter ?? {}) as UnitFilter;
   const eligible = dslUnitFilter({ ...leaf, parameters: { ...filter, keywords: leaf.parameters.keywords ?? filter.keywords, side: closed(leaf, "side") } });
   if (leaf.parameters.wholly === true) modifier.wholly = true;
@@ -117,7 +117,7 @@ export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   // "within 6\" of this unit" measures from any model of the unit; this model is the default origin.
   if (leaf.parameters.of === "this-unit") modifier.of = "this-unit";
   if (leaf.parameters.conditional_range !== undefined) modifier.conditional_range = leaf.parameters.conditional_range;
-  // Version 2 (batch 7a): the aura's range, extensions included, never exceeds this many inches (the DSL's range_cap distance).
+  // The aura's range, extensions included, never exceeds this many inches (the DSL's range_cap distance).
   if (leaf.parameters.range_cap_inches !== undefined) modifier.range_cap = { inches: closed(leaf, "range_cap_inches") };
   if (closed(leaf, "side") === "any") return anySideRegionGrant(leaf, body, modifier, eligible);
   if (isTargetRef(leaf.parameters.of)) return targetAura(leaf, body, modifier, eligible);
@@ -258,7 +258,7 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
 
 /**
  * "Excluding units with the Lone Operative ability that are not part of an Attached unit and are not
- * within 12" of this model" (unit-filter@19): a unit can be selected if it lacks Lone Operative, is
+ * within 12" of this model": a unit can be selected if it lacks Lone Operative, is
  * part of an Attached unit, or is within that range.
  */
 function loneOperativeProtection(selection: CompileLeaf): Node | null {

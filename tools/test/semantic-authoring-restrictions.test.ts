@@ -151,9 +151,9 @@ describe("Semantic authoring restrictions", () => {
     expect(prefillFromSource(family, "**HIEROPHANT** model with the Deep Strike ability only")).toMatchObject({ keywords: ["HIEROPHANT"], match: "all", abilities: ["deep-strike"] });
     expect(prefillFromSource(family, "Hierophant model with the **Deep Strike** ability only")).toMatchObject({ keywords: ["HIEROPHANT"], abilities: ["deep-strike"] });
     expect(prefillFromSource(family, "HIEROPHANT model only")).not.toHaveProperty("abilities");
-    expect(normalizeFingerprintParameters("bearer-eligibility", { keywords: ["HIEROPHANT"], match: "all", excluded_keywords: [], abilities: ["scouts", "deep-strike"] }, 7))
+    expect(normalizeFingerprintParameters("bearer-eligibility", { keywords: ["HIEROPHANT"], match: "all", excluded_keywords: [], abilities: ["scouts", "deep-strike"] }))
       .toMatchObject({ abilities: ["deep-strike", "scouts"] });
-    expect(() => normalizeFingerprintParameters("bearer-eligibility", { keywords: ["HIEROPHANT"], match: "all", excluded_keywords: [], abilities: ["Deep Strike"] }, 7)).toThrow(/kebab case/u);
+    expect(() => normalizeFingerprintParameters("bearer-eligibility", { keywords: ["HIEROPHANT"], match: "all", excluded_keywords: [], abilities: ["Deep Strike"] })).toThrow(/kebab case/u);
   });
 
   it("accepts a bearer spelled differently from core when both admit the same units, and only then", () => {

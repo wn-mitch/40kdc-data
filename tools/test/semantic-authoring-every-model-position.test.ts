@@ -2,13 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { describeCondition } from "../src/translate/condition.js";
 import { expectRefused } from "./semantic-authoring-connective-fixture.js";
 import { outsideContract } from "./leaf-contract.js";
-
-/** The family versions the extensions under test create. */
-const EVERY_MODEL_POSITION_VERSIONS: ReadonlySet<string> = new Set(["unit-position@23"]);
 
 /**
  * Every-model position: `models: every` on a unit-position within or objective-range. Every
@@ -37,25 +33,10 @@ function mechanicsOf(list: CompileLeaf[], text: string): Record<string, any> {
 }
 
 const POSITION = "unit-position";
-/** The unit-position version this wave's extension introduced (later extensions may sit above it). */
-const VERSION = (() => {
-  for (let version = currentFamilyVersion(POSITION); version > 1; version -= 1) {
-    const extension = familyExtension(POSITION, version);
-    if (extension !== undefined && EVERY_MODEL_POSITION_VERSIONS.has(`${extension.family}@${extension.version}`)) return version;
-  }
-  throw new Error("The every-model-position extension does not extend unit-position.");
-})();
-/** The version just before the one that added models; later extensions may sit above it. */
-const BEFORE_MODELS = (() => {
-  for (let version = currentFamilyVersion(POSITION); version > 1; version -= 1) {
-    const extension = familyExtension(POSITION, version);
-    if (extension !== undefined && EVERY_MODEL_POSITION_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
-  }
-  throw new Error("The every-model extension is not registered.");
-})();
+const VERSION = currentFamilyVersion(POSITION);
 const WITHIN = { kind: "within", inches: 3, negated: false };
 
-describe("unit-position models every: family version", () => {
+describe("unit-position models every: family parameters", () => {
   it("accepts every model within 3 inches of this unit, and of the following filter's unit", () => {
     const transport = { ...WITHIN, of: "this-unit", subject: "antecedent", models: "every" };
     expect(normalizeFingerprintParameters(POSITION, transport, VERSION)).toEqual(transport);
@@ -68,14 +49,9 @@ describe("unit-position models every: family version", () => {
     expect(normalizeFingerprintParameters(POSITION, beacon, VERSION)).toEqual(beacon);
   });
 
-  it("is not accepted by the previous version: models is new in this version", () => {
-    const filter = { ...WITHIN, of: "following-filter", subject: "this-unit", models: "every" };
-    expect(() => normalizeFingerprintParameters(POSITION, filter, BEFORE_MODELS)).toThrow();
-  });
-
-  it("leaves a leaf without models normalizing exactly as the previous version does", () => {
+  it("adds no models to a leaf that names none", () => {
     const plain = { ...WITHIN, of: "this-unit", subject: "this-unit" };
-    expect(normalizeFingerprintParameters(POSITION, plain, VERSION)).toEqual(normalizeFingerprintParameters(POSITION, plain, VERSION - 1));
+    expect(normalizeFingerprintParameters(POSITION, plain, VERSION)).toEqual(plain);
   });
 
   it.each([

@@ -3,7 +3,7 @@ import { refuseUnitEquipmentPairs } from "./compile-named-equipment.js";
 
 const COUNT = "equipped-weapon-count";
 // The equipped-weapon-count form carries a melee or ranged weapon_type; the select-weapon form carries none.
-const isAntecedentStat = (leaf: CompileLeaf) => leaf.family_id === "characteristic-modifier" && leaf.family_version >= 13
+const isAntecedentStat = (leaf: CompileLeaf) => leaf.family_id === "characteristic-modifier"
   && leaf.parameters.weapon === "antecedent" && leaf.parameters.weapon_type !== undefined;
 
 /**

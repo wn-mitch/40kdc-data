@@ -4,7 +4,7 @@ import { isContainerOpener } from "./compile-containers.js";
 type Node = Record<string, unknown>;
 
 /**
- * Activating the options of an option-bearing rule (`ability-activate`, families/abilities.ts).
+ * Activating the options of an option-bearing rule (`ability-activate`).
  *
  * "select one Plague. … that enemy unit has the effect of that Plague": the activation names the
  * option picked earlier (`chosen`), and the optionless `choice-open` before it is that pick, not a
@@ -106,9 +106,9 @@ function foldPickExclusion(list: readonly CompileLeaf[]): CompileLeaf[] {
 const NO_PICK = "ability-activate chosen names the option picked earlier, but no optionless choice-open or dice-pool-allocation-open before it picks one.";
 
 /**
- * The DSL modifier of an ability-activate leaf. Version 1 is additive unless `exclusive`; later
- * versions replace the unit's active option (`exclusive`) unless `additive`. Every option is then
- * active together (`all_options`) with nothing left to replace.
+ * The DSL modifier of an ability-activate leaf. A leaf that names or picks an option replaces the
+ * unit's active option (`exclusive`) unless `additive`. Every option active together
+ * (`all_options`) leaves nothing to replace.
  */
 export function activationModifier(leaf: CompileLeaf): Node {
   const p = leaf.parameters;
@@ -128,7 +128,7 @@ export function activationModifier(leaf: CompileLeaf): Node {
     (modifier.select as Node).excluding = p[EXCLUDING];
   }
   const hasOptions = p.option !== undefined || p.options !== undefined || pick !== undefined || p.from_event === true;
-  const exclusive = leaf.family_version === 1 ? p.exclusive === true : hasOptions && p.additive !== true;
+  const exclusive = hasOptions && p.additive !== true;
   if (exclusive) modifier.exclusive = true;
   if (picked?.ignore_consumed === true || p.ignore_consumed === true) modifier.ignore_consumed = true;
   return modifier;

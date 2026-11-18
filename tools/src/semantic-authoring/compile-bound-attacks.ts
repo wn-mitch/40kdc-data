@@ -2,7 +2,7 @@ import { ANTECEDENT } from "./antecedent-families.js";
 import { momentOfFilter } from "./compile-antecedent.js";
 import { ATTACK_EVENTS } from "./compile-conditions.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { boundAttacksProblem } from "./families/attacks.js";
+import { boundAttacksProblem } from "./families/vocabulary.js";
 
 /**
  * "When this unit has shot, those attacks do not prevent it from being hidden": "those attacks"

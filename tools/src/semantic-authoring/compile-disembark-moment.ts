@@ -1,6 +1,6 @@
 import { CompileError } from "./compile-error.js";
 import type { CompileLeaf } from "./compile-fragments.js";
-import { DISEMBARKED_FROM } from "./families/positions.js";
+import { DISEMBARKED_FROM } from "./families/vocabulary.js";
 
 const isDisembarked = (leaf: CompileLeaf | undefined): leaf is CompileLeaf => leaf?.family_id === "event" && leaf.parameters.kind === "disembarked";
 

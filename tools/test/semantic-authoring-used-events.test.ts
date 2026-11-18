@@ -82,16 +82,16 @@ const stub = (die: string) => die === "D6"
   : null;
 
 let offset = 0;
-function leaf(role: string, familyId: string, parameters: Record<string, unknown>, fragment = "A", version = 1): CompileLeaf {
+function leaf(role: string, familyId: string, parameters: Record<string, unknown>, fragment = "A"): CompileLeaf {
   offset += 10;
-  return { role, family_id: familyId, family_version: version, parameters, start_byte: offset, end_byte: offset + 5, fragment };
+  return { role, family_id: familyId, family_version: currentFamilyVersion(familyId), parameters, start_byte: offset, end_byte: offset + 5, fragment };
 }
 
-const usedManoeuvre = (fragment = "A") => leaf("EVENT", "event", { kind: "used", activity: "manoeuvre" }, fragment, 18);
+const usedManoeuvre = (fragment = "A") => leaf("EVENT", "event", { kind: "used", activity: "manoeuvre" }, fragment);
 const dieCondition = (die = "D6", fragment = "A") => leaf("CONDITION", "manoeuvre-own-roll", { die }, fragment);
 const manoeuvreRoll = (fragment = "A", extra: Record<string, unknown> = {}) => leaf("EFFECT", "roll-modifier", {
   roll: "manoeuvre", operation: "add", value: 1, subject: "event-subject", ...extra,
-}, fragment, 6);
+}, fragment);
 
 describe("manoeuvre-own-roll compile", () => {
   it("lowers the used-manoeuvre trigger to an or over the D6 manoeuvres and keeps the roll on the performing unit", () => {
@@ -132,7 +132,7 @@ describe("manoeuvre-own-roll compile", () => {
   });
 
   it("refuses a manoeuvre-own-roll with no used-manoeuvre moment in its clause", () => {
-    const result = compileLeaves([leaf("EVENT", "event", { kind: "used", activity: "ability" }, "A", 18), dieCondition(), manoeuvreRoll()], undefined, { menuActions: stub });
+    const result = compileLeaves([leaf("EVENT", "event", { kind: "used", activity: "ability" }, "A"), dieCondition(), manoeuvreRoll()], undefined, { menuActions: stub });
     expect(result.ok).toBe(false);
     if (result.ok) return;
     expect(result.errors).toEqual([expect.stringContaining("names a manoeuvre, but no used-manoeuvre moment sits before it")]);
@@ -154,15 +154,15 @@ describe("manoeuvre-own-roll compile", () => {
   });
 
   it("refuses a manoeuvre roll that subtracts, names weapons, or lacks the performing unit as subject", () => {
-    expect(() => normalizeFingerprintParameters("roll-modifier", { roll: "manoeuvre", operation: "subtract", value: 1, subject: "event-subject" }, 6)).toThrow();
-    expect(() => normalizeFingerprintParameters("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1, weapon_type: "all", subject: "event-subject" }, 6)).toThrow();
-    expect(() => normalizeFingerprintParameters("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1 }, 6)).toThrow();
-    expect(() => normalizeFingerprintParameters("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1, subject: "this-unit" }, 6)).toThrow();
+    expect(() => normalizeFingerprintParameters("roll-modifier", { roll: "manoeuvre", operation: "subtract", value: 1, subject: "event-subject" })).toThrow();
+    expect(() => normalizeFingerprintParameters("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1, weapon_type: "all", subject: "event-subject" })).toThrow();
+    expect(() => normalizeFingerprintParameters("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1 })).toThrow();
+    expect(() => normalizeFingerprintParameters("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1, subject: "this-unit" })).toThrow();
   });
 
   it("accepts the own-roll form and refuses any die but D6", () => {
-    expect(() => normalizeFingerprintParameters("manoeuvre-own-roll", { die: "D6" }, 1)).not.toThrow();
-    expect(() => normalizeFingerprintParameters("manoeuvre-own-roll", { die: "D3" }, 1)).toThrow();
+    expect(() => normalizeFingerprintParameters("manoeuvre-own-roll", { die: "D6" })).not.toThrow();
+    expect(() => normalizeFingerprintParameters("manoeuvre-own-roll", { die: "D3" })).toThrow();
   });
 
   it("finds the D6 manoeuvres of the aeldari menus from their distances, not their stat changes", () => {

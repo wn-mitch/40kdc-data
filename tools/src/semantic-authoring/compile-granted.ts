@@ -4,7 +4,7 @@ import type { CoreCheck } from "./core-checks.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { ordered, shapeSignature } from "./compile-placement.js";
-import { GRANTED_ABILITY_NAME } from "./families/abilities.js";
+import { GRANTED_ABILITY_NAME } from "./families/vocabulary.js";
 
 /**
  * Printed grants: "X units have the following ability: **Name:** …". The header leaf

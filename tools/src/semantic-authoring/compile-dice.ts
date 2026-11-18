@@ -1,5 +1,5 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { DICE_FACES } from "./dice-families.js";
+import { DICE_FACES } from "./families/vocabulary.js";
 import { perDieConditionalRolls, resolveAlternativePools, sharedPool, twoDiceConditionalRolls } from "./compile-dice-variants.js";
 
 /**
@@ -191,7 +191,7 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
   const bonus = Number(rolls[0]!.parameters.bonus ?? 0);
   const dice = bonus > 0 ? `${die}+${bonus}` : die;
   const faces = DICE_FACES[die]! + bonus;
-  // A roll_var (dice-roll@2) binds the roll as the DSL's `roll` container; a single band then
+  // A roll_var binds the roll as the DSL's `roll` container; a single band then
   // compiles its dice-gated `from` that binding instead of a fresh `dice` field.
   // A named test ("take a Psychic test") is the DSL's roll with a kind; the roll binds a var so
   // its bands read that roll.

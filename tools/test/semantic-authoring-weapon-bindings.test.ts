@@ -42,15 +42,14 @@ function compiled(list: CompileLeaf[]) {
 }
 
 describe("select-weapon names the weapon it binds", () => {
-  it("accepts weapon_name at the current version and lowercases it as the DSL carries names", () => {
+  it("accepts weapon_name and lowercases it as the DSL carries names", () => {
     const version = currentFamilyVersion("select-weapon");
     expect(normalizeFingerprintParameters("select-weapon", { target: "this-model", weapon_name: "T’au flamer", bind_as: "w" }, version))
       .toEqual({ target: "this-model", bind_as: "w", weapon_name: "t’au flamer" });
   });
 
-  it("refuses weapon_name at the earlier version and a blank name", () => {
+  it("refuses a blank weapon name", () => {
     const version = currentFamilyVersion("select-weapon");
-    expect(() => normalizeFingerprintParameters("select-weapon", { target: "this-model", weapon_name: "Plasma rifle", bind_as: "w" }, version - 1)).toThrow();
     expect(() => normalizeFingerprintParameters("select-weapon", { target: "this-model", weapon_name: "  ", bind_as: "w" }, version)).toThrow();
   });
 });
@@ -111,13 +110,13 @@ describe("a stat adjustment with weapon: antecedent changes the selected weapon"
   });
 });
 
-describe("characteristic-modifier v13 weapon: antecedent", () => {
+describe("characteristic-modifier weapon: antecedent", () => {
   const version = () => currentFamilyVersion("characteristic-modifier");
 
   it("takes weapon characteristics for this-model with no weapon_name or weapon_keyword, and hands a weapon_type to the equipped-count form", () => {
     expect(normalizeFingerprintParameters("characteristic-modifier", { characteristics: ["S"], operation: "improve", value: 2, weapon: "antecedent" }, version()))
       .toEqual({ characteristics: ["S"], operation: "improve", value: 2, weapon: "antecedent" });
-    // With a weapon_type it is the equipped-weapon-count form, which the previous version owns.
+    // With a weapon_type it is the equipped-weapon-count form.
     expect(normalizeFingerprintParameters("characteristic-modifier", { characteristics: ["S"], operation: "improve", value: 2, weapon: "antecedent", weapon_type: "ranged" }, version()))
       .toMatchObject({ weapon: "antecedent", weapon_type: "ranged" });
     expect(() => normalizeFingerprintParameters("characteristic-modifier", { characteristics: ["S"], operation: "improve", value: 2, weapon: "antecedent", weapon_name: "x" }, version())).toThrow();
@@ -229,23 +228,22 @@ describe("equipped-weapon-count: compile", () => {
 
 describe("equipped-weapon-count: family parameters", () => {
   it("accepts exactly the shape the compiler reads", () => {
-    expect(normalizeFingerprintParameters("equipped-weapon-count", { subject: "this-model", weapon_type: "melee", count: 2, other_than: " Close combat weapon " }, 1))
+    expect(normalizeFingerprintParameters("equipped-weapon-count", { subject: "this-model", weapon_type: "melee", count: 2, other_than: " Close combat weapon " }))
       .toEqual({ subject: "this-model", weapon_type: "melee", count: 2, other_than: "Close combat weapon" });
   });
 
   it("refuses a count outside 1 to 12, a blank excluded name, a non-model subject and an unknown type", () => {
     const base = { subject: "this-model", weapon_type: "melee", count: 2, other_than: "Close combat weapon" };
     for (const change of [{ count: 0 }, { count: 13 }, { other_than: "  " }, { subject: "this-unit" }, { weapon_type: "all" }, { extra: true }]) {
-      expect(() => normalizeFingerprintParameters("equipped-weapon-count", { ...base, ...change }, 1)).toThrow();
+      expect(() => normalizeFingerprintParameters("equipped-weapon-count", { ...base, ...change })).toThrow();
     }
   });
 
-  it("refuses an antecedent characteristic-modifier without a melee or ranged weapon_type", () => {
+  it("refuses an antecedent characteristic-modifier whose weapon_type is neither melee nor ranged", () => {
     const base = { characteristics: ["A"], operation: "improve", value: 1, weapon: "antecedent" };
-    expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base, weapon_type: "melee" }, 13)).not.toThrow();
-    expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base }, 13)).toThrow();
-    expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base, weapon_type: "all" }, 13)).toThrow();
-    expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base, weapon_type: "melee", weapon_name: "Spear" }, 13)).toThrow();
+    expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base, weapon_type: "melee" })).not.toThrow();
+    expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base, weapon_type: "all" })).toThrow(/needs a melee or ranged weapon_type/u);
+    expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base, weapon_type: "melee", weapon_name: "Spear" })).toThrow(/cannot combine with weapon_name/u);
   });
 });
 
@@ -312,7 +310,7 @@ describe("equipped-weapon-count: describer", () => {
   });
 }
 
-describe("equipped-weapon-count version 2: a unit's weapons by keyword", () => {
+describe("equipped-weapon-count: a unit's weapons by keyword", () => {
   const norm = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("equipped-weapon-count", parameters, currentFamilyVersion("equipped-weapon-count"));
 
   it("accepts at least min weapons with any of the keywords, in canonical order, and keeps the count form", () => {

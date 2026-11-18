@@ -17,11 +17,11 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       const modifier: Node = { move_type: closed(leaf, "move_type") };
       if (leaf.parameters.distance !== undefined) modifier.distance = closed(leaf, "distance");
       if (leaf.parameters.ends_within_inches !== undefined) modifier.ends_within = { range: { inches: closed(leaf, "ends_within_inches") } };
-      // Version 2 (batch 7a): the move counts as a different kind of move for later checks.
+      // The move counts as a different kind of move for later checks.
       if (leaf.parameters.counts_as_move !== undefined) modifier.counts_as_move = closed(leaf, "counts_as_move");
       // Folded from "as if it were your Movement phase" after the move (compile-as-if.ts).
       if (leaf.parameters.as_if !== undefined) modifier.as_if = closed(leaf, "as_if");
-      // Version 6: the disembark mode ("an assault disembark move").
+      // The disembark mode ("an assault disembark move").
       if (leaf.parameters.mode !== undefined) modifier.mode = closed(leaf, "mode");
       // An embark's distance to its Transport in place of 3" (bindEmbarkAnchors, compile-transport-embark.ts).
       if (leaf.parameters.reach !== undefined) modifier.reach = closed(leaf, "reach");
@@ -39,7 +39,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       return { type: "move-modifier", target: unitOf(leaf, "subject"), modifier: { applies_to_moves: closed(leaf, "move_types"), mode_choice: modeChoice } };
     }
     case "move-through": {
-      // A pair of listed tokens (move-through@4, families/moves.ts) is one list.
+      // A pair of listed tokens is one list.
       const modifier: Node = { passthrough: Array.isArray(leaf.parameters.passthrough) ? [...leaf.parameters.passthrough] : [closed(leaf, "passthrough")] };
       if (leaf.parameters.applies_to_moves !== undefined) modifier.applies_to_moves = closed(leaf, "applies_to_moves");
       if (leaf.parameters.ignore_vertical !== undefined) modifier.ignore_vertical = closed(leaf, "ignore_vertical");
@@ -53,14 +53,14 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.round_offset !== undefined) modifier.round_offset = closed(leaf, "round_offset");
       if (leaf.parameters.placement !== undefined) modifier.placement = closed(leaf, "placement");
       if (leaf.parameters.ignore_limits === true) modifier.ignore_limits = true;
-      // Version 4: set up using a Cult Ambush marker, touching it unless a range is given.
+      // Set up using a Cult Ambush marker, touching it unless a range is given.
       if (leaf.parameters.via !== undefined) modifier.via = leaf.parameters.via === "cult-ambush-marker" ? "cult-ambush" : closed(leaf, "via");
       if (leaf.parameters.marker_inches !== undefined) modifier.marker_range = { range: { inches: closed(leaf, "marker_inches") }, ...(leaf.parameters.marker_wholly === true ? { wholly: true } : {}) };
       // Folded from wounds-remaining, starting-strength and leaves-attached-unit (compile-model-state.ts).
       if (leaf.parameters.wounds_remaining !== undefined) modifier.wounds_remaining = countValue(closed(leaf, "wounds_remaining"));
       if (leaf.parameters.detach === true) modifier.detach = true;
       if (leaf.parameters.starting_strength !== undefined) modifier.starting_strength = closed(leaf, "starting_strength");
-      // Version 5: a forbidden ("cannot be set up") or required ("must be set up") set-up.
+      // A forbidden ("cannot be set up") or required ("must be set up") set-up.
       if (leaf.parameters.allow === false) modifier.allow = false;
       if (leaf.parameters.mandatory === true) modifier.mandatory = true;
       Object.assign(modifier, foldedPlacement(leaf, modifier.placement));
@@ -72,15 +72,15 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       const modifier: Node = { label: closed(leaf, "label") };
       if (leaf.parameters.operation !== undefined) modifier.operation = closed(leaf, "operation");
       if (leaf.parameters.distance !== undefined) modifier.distance = { inches: closed(leaf, "distance") };
-      // Version 2: only a marker not yet moved this turn.
+      // Only a marker not yet moved this turn.
       if (leaf.parameters.not_moved_this_turn === true) modifier.not_moved_this_turn = true;
-      // Version 3: a placed marker's distance from enemy units.
+      // A placed marker's distance from enemy units.
       if (leaf.parameters.min_enemy_distance !== undefined) modifier.min_enemy_distance = { inches: closed(leaf, "min_enemy_distance") };
-      // Version 4: the place a placed marker is measured to.
+      // The place a placed marker is measured to.
       if (leaf.parameters.near_inches !== undefined) {
         modifier.near = [{ of: closed(leaf, "near_of"), range: { inches: closed(leaf, "near_inches") }, ...(leaf.parameters.near_wholly === true ? { wholly: true } : {}) }];
       }
-      // Version 5: a placed marker's diameter.
+      // A placed marker's diameter.
       if (leaf.parameters.size_mm !== undefined) modifier.size_mm = closed(leaf, "size_mm");
       return { type: "marker", target: closed(leaf, "subject"), modifier };
     }
@@ -153,12 +153,12 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       const modifier: Node = { tag: closed(leaf, "tag") };
       if (LIST_BUILDING_DESIGNATIONS.has(String(modifier.tag))) throw new CompileError("A list-building designation (the Warlord) cannot be applied by a rule.");
       if (leaf.parameters.clear !== undefined) modifier.clear = closed(leaf, "clear");
-      // apply-mark@4: who applied it, and when it ends (compile-designation-expiry.ts sets clears_on).
+      // Who applied it, and when it ends (compile-designation-expiry.ts sets clears_on).
       if (leaf.parameters.by !== undefined) modifier.by = closed(leaf, "by");
       if (leaf.parameters.clears_on !== undefined) modifier.clears_on = leaf.parameters.clears_on;
-      // apply-mark@5: the selected objective marker carries the tag (designate's objective subject).
+      // The selected objective marker carries the tag (designate's objective subject).
       // The stratagem's effect has no unit to tag, so the target is this unit, as optional costs do.
-      // apply-mark@6: the one visible terrain feature the rule picks carries the tag.
+      // The one visible terrain feature the rule picks carries the tag.
       if (leaf.parameters.subject === "visible-terrain") {
         modifier.subject = { terrain_area: { visible: true } };
         return { type: "designate", target: "this-unit", modifier };

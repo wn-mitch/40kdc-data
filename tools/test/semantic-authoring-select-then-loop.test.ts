@@ -95,7 +95,7 @@ describe("unit-position rolled_inches", () => {
   it("takes a dice roll in place of inches, and not both", () => {
     expect(position({ kind: "within", rolled_inches: "D6", of: "this-unit", subject: "antecedent", negated: false })).toMatchObject({ rolled_inches: "D6" });
     expect(position({ kind: "within", rolled_inches: "D6", of: "this-unit", subject: "antecedent", negated: false })).not.toHaveProperty("inches");
-    expect(() => position({ kind: "within", rolled_inches: "D6", inches: 6, of: "this-unit", subject: "antecedent", negated: false })).toThrow(/cannot combine with inches/u);
+    expect(() => position({ kind: "within", rolled_inches: "D6", inches: 6, of: "this-unit", subject: "antecedent", negated: false })).toThrow(/not inches and rolled_inches/u);
     expect(() => position({ kind: "within", rolled_inches: "six", of: "this-unit", subject: "antecedent", negated: false })).toThrow(/dice roll/u);
   });
 });

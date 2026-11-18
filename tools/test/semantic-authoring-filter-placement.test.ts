@@ -55,12 +55,11 @@ describe("Semantic authoring unit-filter placement", () => {
     expect(rendered).toContain("friendly GLORB HERALD models");
   });
 
-  it("accepts filtered-units as an ability-modifier subject from version 7 and keeps earlier leaves", () => {
+  it("accepts filtered-units as an ability-modifier subject beside the model's own", () => {
     const filtered = { subject: "filtered-units", ability: "herald-edicts", aspect: "uses", operation: "add", value: 1 };
-    expect(normalizeFingerprintParameters("ability-modifier", filtered, 7)).toEqual(filtered);
-    expect(() => normalizeFingerprintParameters("ability-modifier", filtered, 6)).toThrow();
+    expect(normalizeFingerprintParameters("ability-modifier", filtered)).toEqual(filtered);
     const own = { ...filtered, subject: "this-model" };
-    expect(normalizeFingerprintParameters("ability-modifier", own, 7)).toEqual(normalizeFingerprintParameters("ability-modifier", own, 6));
+    expect(normalizeFingerprintParameters("ability-modifier", own)).toEqual(own);
   });
 
   it("narrows who attacks to the units a designation between the filter and the attack names", () => {

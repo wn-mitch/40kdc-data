@@ -157,7 +157,7 @@ describe("Semantic authoring destroyer filter after a unit-destroyed moment", ()
     const text = "When a friendly ALPHA unit is destroyed by an enemy unit. That enemy unit is marked.";
     const leaves = placed(text, [ALPHA, destroyedUnit(), ENEMY, marked()]);
     leaves[1]!.parameters = { kind: "unit-destroyed", destroy_filter: { weapon: "any" } };
-    expect(() => normalizeFingerprintParameters("event", leaves[1]!.parameters, currentFamilyVersion("event"))).toThrow(/event parameters must be exactly/u);
+    expect(() => normalizeFingerprintParameters("event", leaves[1]!.parameters)).toThrow(/event\.destroy_filter does not apply to kind unit-destroyed/u);
     // The contract has no destroy_filter on event; the compiler still must not fold the filter, behind that check.
     const result = compileLeaves(outsideContract(leaves), text);
     expect(JSON.stringify(result.ok ? result.mechanics.trigger : null)).not.toContain('"subject"');
@@ -216,15 +216,15 @@ describe("Semantic authoring destroyer filter after a unit-destroyed moment", ()
   });
 });
 
-describe("Semantic authoring event and unit-activity family versions for the destroyer shapes", () => {
+describe("Semantic authoring event and unit-activity parameters for the destroyer shapes", () => {
   it("accepts action_kind fight on attacks-resolved only", () => {
     expect(normalizeFingerprintParameters("event", { kind: "attacks-resolved", action_kind: "fight", subject: "this-model" }, currentFamilyVersion("event")))
       .toMatchObject({ kind: "attacks-resolved", action_kind: "fight", subject: "this-model" });
     expect(() => normalizeFingerprintParameters("event", { kind: "targets-selected", action_kind: "fight" }, currentFamilyVersion("event")))
-      .toThrow(/applies only to attacks-resolved/u);
+      .toThrow(/event\.action_kind must be one of charge, shoot, attack, stratagem, ability\./u);
   });
 
-  it("keeps the earlier attacks-resolved action kinds unchanged", () => {
+  it("keeps the other action kinds unchanged", () => {
     expect(normalizeFingerprintParameters("event", { kind: "attacks-resolved", action_kind: "attack" }, currentFamilyVersion("event")))
       .toMatchObject({ kind: "attacks-resolved", action_kind: "attack" });
     expect(normalizeFingerprintParameters("event", { kind: "attacks-resolved", action_kind: "shoot" }, currentFamilyVersion("event")))
@@ -251,7 +251,7 @@ describe("Semantic authoring event and unit-activity family versions for the des
       .toThrow();
   });
 
-  it("keeps every destroyer value the previous unit-activity version accepted", () => {
+  it("keeps the other destroyer values", () => {
     for (const destroyer of ["this-unit", "event-subject", "stratagem-target"]) {
       expect(normalizeFingerprintParameters("unit-activity", { activities: ["destroyed-models-by-triggering-attacks"], negated: false, named: "before", container: "none", destroyer }, currentFamilyVersion("unit-activity")))
         .toMatchObject({ destroyer });

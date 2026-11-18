@@ -8,7 +8,7 @@ import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
  * "…until the start of your next Command phase, in addition to any other combat doctrine": the
  * qualifier completes the option activation before it. The binder walks back from the qualifier
  * through duration leaves to the nearest effect of the same clause. That effect must be an
- * ability-activate (version 2), and only a comma or whitespace may separate it from the qualifier
+ * ability-activate, and only a comma or whitespace may separate it from the qualifier
  * once its duration's wording is removed. The binder sets additive on the activation and drops
  * the qualifier. The activation is then normalised, so an option form it cannot keep additive
  * still refuses.
@@ -21,7 +21,6 @@ import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 
 const QUALIFIER = "additive-option";
 const HOST = "ability-activate";
-const HOST_VERSION = 2;
 const CLAUSE_GAP = /^[\s,]*$/u;
 const FILTER = "unit-filter";
 const FILTERED_UNITS = "filtered-units";
@@ -49,7 +48,7 @@ export function bindAdditiveOptions(leaves: readonly CompileLeaf[], sourceText?:
       throw new CompileError(`An additive option at byte ${qualifier.start_byte} is separated from its activation by ${leaf.family_id}; only a duration may come between them.`);
     }
     if (host === undefined) throw new CompileError(`An additive option at byte ${qualifier.start_byte} has no activation before it in its clause.`);
-    if (host.family_id !== HOST || host.family_version < HOST_VERSION) {
+    if (host.family_id !== HOST) {
       throw new CompileError(`An additive option at byte ${qualifier.start_byte} follows ${host.family_id}, which has no additive form.`);
     }
     if (claimed.has(host)) throw new CompileError(`Two additive options at byte ${qualifier.start_byte} claim one activation; give each its own.`);

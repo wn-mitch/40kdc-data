@@ -1,10 +1,10 @@
 import type { Compiled } from "./compile.js";
 import type { CompileLeaf } from "./compile-fragments.js";
 import { CompileError } from "./compile-error.js";
+import { normalizeFingerprintParameters } from "./contracts.js";
 import { ordered, shapeSignature } from "./compile-placement.js";
 import { joinSegments } from "./compile-segments.js";
 import type { Mechanics } from "./entries.js";
-import { normalizeOathParameters } from "./oath-families.js";
 
 type Node = Record<string, unknown>;
 type CompilePart = (leaves: readonly CompileLeaf[]) => Compiled;
@@ -20,11 +20,10 @@ const POLICY_FAMILIES: Record<string, true> = {
 
 function parameters(leaf: CompileLeaf): Node {
   try {
-    const normalized = normalizeOathParameters(leaf.family_id, leaf.parameters);
-    if (normalized === null) throw new CompileError(`Unknown Oath family ${leaf.family_id}.`);
-    return normalized;
+    if (!leaf.family_id.startsWith("oath-")) throw new CompileError(`Unknown Oath family ${leaf.family_id}.`);
+    return normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version);
   } catch (error) {
-    if (error instanceof TypeError) throw new CompileError(error.message);
+    if (error instanceof TypeError || error instanceof RangeError) throw new CompileError(error.message);
     throw error;
   }
 }

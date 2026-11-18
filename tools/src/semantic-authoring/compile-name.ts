@@ -2,7 +2,7 @@ import type { Compiled, CompileOptions } from "./compile.js";
 import type { CompileLeaf } from "./compile-fragments.js";
 import { joinSegments } from "./compile-segments.js";
 import { exactSpan, NAME_FRAGMENT } from "./contracts.js";
-import { usageFor } from "./restriction-families.js";
+import { usageFor } from "./families/vocabulary.js";
 import { hashJson } from "../canonical-hash.js";
 
 /**

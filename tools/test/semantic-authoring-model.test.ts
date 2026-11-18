@@ -462,15 +462,14 @@ describe("Semantic authoring characteristic-set family", () => {
         subject: "this-model",
         characteristic: "M",
         value: 7,
-      }, 2)).toEqual({ subject: "this-model", characteristic: "M", value: 7 });
-      // "The bearer" is this model; version 2 has no second spelling of it.
-      expect(() => normalizeFingerprintParameters("characteristic-set", { subject: "bearer", characteristic: "M", value: 7 }, 2)).toThrow(/characteristic-set.subject/i);
-      expect(() => validateFingerprint(value.db, "characteristic-set", { subject: "bearer", characteristic: "M", value: 7 }, 1)).toThrow(/not active/i);
+      })).toEqual({ subject: "this-model", characteristic: "M", value: 7 });
+      // "The bearer" is this model; the family has no second spelling of it.
+      expect(() => normalizeFingerprintParameters("characteristic-set", { subject: "bearer", characteristic: "M", value: 7 })).toThrow(/characteristic-set.subject/i);
       expect(normalizeFingerprintParameters("characteristic-set", {
         subject: "this-model",
         characteristic: "Sv",
         value: 3,
-      }, 2)).toEqual({ subject: "this-model", characteristic: "Sv", value: 3 });
+      })).toEqual({ subject: "this-model", characteristic: "Sv", value: 3 });
 
       expect(validateFingerprint(
         value.db,
@@ -505,17 +504,17 @@ describe("Semantic authoring characteristic-set family", () => {
         subject: "target-unit",
         characteristic: "M",
         value: 7,
-      }, 2)).toThrow(/characteristic-set.subject/i);
+      })).toThrow(/characteristic-set.subject/i);
       expect(() => normalizeFingerprintParameters("characteristic-set", {
         subject: "this-model",
         characteristic: "Move",
         value: 7,
-      }, 2)).toThrow(/characteristic-set.characteristic/i);
+      })).toThrow(/characteristic-set.characteristic/i);
       expect(() => validateFingerprint(
         value.db,
         "characteristic-set",
         { subject: "this-model", characteristic: "M", value: { source: "D3" } },
-        4,
+        currentFamilyVersion("characteristic-set"),
         "Set the bearer's M characteristic to D6",
       )).toThrow(/exact source span/i);
     } finally {
@@ -615,8 +614,7 @@ describe("Semantic authoring turn and faction leaves", () => {
       for (const turn of ["battle-round", "player-turn", "opponent-turn", "any-turn"]) {
         expect(validateFingerprint(value.db, "turn-start", { turn }, currentFamilyVersion("turn-start"))).toMatch(/^fp_/);
       }
-      // "Any turn" came with version 2; the retired version 1 never accepted it.
-      expect(() => normalizeFingerprintParameters("turn-start", { turn: "any-turn" }, 1)).toThrow(/turn-start\.turn/);
+      expect(() => normalizeFingerprintParameters("turn-start", { turn: "any-round" })).toThrow(/turn-start\.turn/);
       expect(validateFingerprint(value.db, "army-faction", { faction: { source: "Example Guard" } }, 3, source)).toMatch(/^fp_/);
       expect(() => validateFingerprint(value.db, "army-faction", { faction: { source: "Other Guard" } }, 3, source)).toThrow(/exact source span/i);
       expect(() => normalizeFingerprintParameters("army-faction", { faction: "Example Guard" })).toThrow(/source-qualified/i);
