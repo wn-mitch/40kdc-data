@@ -30,6 +30,9 @@ pub(crate) struct Ctx {
     pub each_model: bool,
     /// The ability's trigger already says a unit or model is destroyed; leaves must not repeat it.
     pub destroyed_trigger: bool,
+    /// Inside a designation's `attackers-of-target` entry: a characteristic change applies to each
+    /// attack against the target.
+    pub attack_on_target: bool,
 }
 
 impl Ctx {

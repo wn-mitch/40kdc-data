@@ -43,25 +43,10 @@ pub(super) fn render_top_level(
     trigger: Option<&Value>,
 ) -> String {
     let mut ctx = Ctx::default();
-    // Every trigger's object is a model: the effect's `event-object` reads "that model".
-    let model_objects = normalize_triggers(trigger)
-        .into_iter()
-        .filter(|t| t.get("event").is_some_and(|v| !v.is_null()))
-        .map(|t| {
-            t.get("object")
-                .and_then(|o| o.get("level"))
-                .and_then(Value::as_str)
-                == Some("model")
-        })
-        .fold(None, |all, m| Some(all.unwrap_or(true) && m))
-        == Some(true);
-    let rewritten;
-    let e = if model_objects {
-        rewritten = crate::translate::condition::model_object_refs(e);
-        &rewritten
-    } else {
-        e
-    };
+    // Every trigger's object (subject) is a model: the effect's `event-object` reads "that model"
+    // (`event-subject` "the triggering model").
+    let rewritten = crate::translate::condition::model_event_refs(e, &normalize_triggers(trigger));
+    let e = &rewritten;
     let e_map = obj(Some(e));
     let (dur_lead, trail) = duration_clauses(scope.and_then(|s| s.get("duration")));
     // An explicit usage limit supersedes the duration's coarse "once per battle" lead.

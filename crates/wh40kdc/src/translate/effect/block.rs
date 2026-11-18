@@ -64,6 +64,7 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
         }
         "ability-part" => {
             // A part is always a bullet of its ability, even at the top level.
+            let e = &super::part_with_model_refs(e);
             let inner = child(e, "effect");
             // A part with nothing to head it (a printed grant's body) lists its container's steps in its place.
             if is_container(obj(Some(inner))) {

@@ -16,7 +16,7 @@
 
 import { dekebab, describeCondition, titleCase, type Condition } from "./condition.js";
 import { conditionLeadIn, describeSelectionEligibility, isDefensiveEffect } from "./condition-leadin.js";
-import { modelObjectRefs, unitRefPhrase, usageClause } from "./condition-refs.js";
+import { modelEventRefs, unitRefPhrase, usageClause } from "./condition-refs.js";
 import { describeTrigger, normalizeTriggers, type AbilityTrigger, type AbilityTriggerSpec } from "./trigger.js";
 import { definedGrantHead, definitionPart, describeLeaf, isDefinedGrant, LEAF_TYPES, type Leaf } from "./effect-leaf.js";
 import { expiryTrail } from "./expiry.js";
@@ -637,7 +637,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       return rider ?? (e.steps ?? []).map((s) => describeEffectInline(s, ctx)).join("; ");
     }
     case "ability-part":
-      return partInline(e, ctx);
+      return partInline(partWithModelRefs(e), ctx);
     case "choice": {
       const prompt = choicePrompt(e);
       return `${prompt}: ${(e.options ?? []).map((o) => describeEffectInline(o, ctx)).join(" / ")}`;
@@ -901,6 +901,12 @@ function partHead(e: Effect): string {
   return [label, moment, e.usage ? usageClause(e.usage) : "", named, cost, trail].filter(Boolean).join(", ");
 }
 
+/** A part with its own trigger: its effect's event refs read as that trigger's model, if it names one. */
+function partWithModelRefs(e: Effect): Effect {
+  const triggers = normalizeTriggers(e.trigger);
+  return triggers.length > 0 && e.effect != null ? { ...e, effect: modelEventRefs(e.effect, triggers) } : e;
+}
+
 /** A part on one line: its head, then its effect. */
 function partInline(e: Effect, ctx: Ctx): string {
   const head = partHead(e);
@@ -937,6 +943,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
     }
     case "ability-part": {
       // A part is always a bullet of its ability, even at the top level.
+      e = partWithModelRefs(e);
       const inner = e.effect ?? {};
       // A part with nothing to head it (a printed grant's body) lists its container's steps in its place.
       if (CONTAINER_TYPES.has(inner.type ?? "")) {
@@ -1214,8 +1221,9 @@ function renderTopLevel(
   // within-range condition on the effect, render the range once (drop it here).
   const triggers = normalizeTriggers(trigger).filter((t) => t.event != null);
   if (triggers.some((t) => t.event === "destroyed" || t.event === "model-destroyed")) ctx.destroyedTrigger = true;
-  // Every trigger's object is a model: the effect's `event-object` reads "that model".
-  if (triggers.length > 0 && triggers.every((t) => (t.object as { level?: unknown } | undefined)?.level === "model")) e = modelObjectRefs(e);
+  // Every trigger's object (subject) is a model: the effect's `event-object` reads "that model"
+  // (`event-subject` "the triggering model").
+  e = modelEventRefs(e, triggers);
   const condRange = conditionWithinRange(e.type === "conditional" ? e.condition : undefined);
   const trig = triggers
     .map((t) => withAuraRecipient(t, e, ctx))
@@ -1287,6 +1295,7 @@ function designatedAttackWhen(applies: Record<string, unknown>): string {
 }
 
 function designatedRecipientContext(applies: DesignationApplies | undefined, ctx: Ctx): Ctx {
+  if (applies?.to === "attackers-of-target") return { ...ctx, attackOnTarget: true };
   if (applies?.to !== "bound-unit-attacks-reference") return ctx;
   return { ...ctx, unitSubject: selectionRefName(applies.beneficiary, "the selected beneficiary unit") };
 }

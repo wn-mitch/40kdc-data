@@ -450,7 +450,23 @@ fn part_head(e: &P) -> String {
     join_nonempty(&[&label, &moment, &usage, &named, &cost, &trail], ", ")
 }
 
+/// A part with its own trigger: its effect's event refs read as that trigger's model, if it names one.
+pub(super) fn part_with_model_refs(e: &P) -> P {
+    let triggers = menu::normalize_triggers(e.get("trigger"));
+    let mut part = e.clone();
+    if !triggers.is_empty() {
+        if let Some(effect) = e.get("effect").filter(|v| !v.is_null()) {
+            part.insert(
+                "effect".into(),
+                crate::translate::condition::model_event_refs(effect, &triggers),
+            );
+        }
+    }
+    part
+}
+
 fn part_inline(e: &P, ctx: &Ctx) -> String {
+    let e = &part_with_model_refs(e);
     let head = part_head(e);
     let body = inline(child(e, "effect"), ctx);
     // An optional part whose effect already reads "you can ..." needs no "you can:" before it.

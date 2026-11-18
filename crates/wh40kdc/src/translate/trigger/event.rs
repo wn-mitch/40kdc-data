@@ -99,6 +99,7 @@ pub(crate) fn actor(r: Option<&Value>) -> String {
             "selected-unit" => "the selected unit".to_string(),
             // A moment nested in a triggered effect: the unit that triggered it.
             "event-subject" => "the triggering unit".to_string(),
+            "event-subject-model" => "the triggering model".to_string(),
             other => dekebab(other),
         },
         Some(Value::Object(f)) => {

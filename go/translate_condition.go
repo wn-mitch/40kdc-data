@@ -138,37 +138,101 @@ func jsNumberStr(v any) (float64, string) {
 
 // -- Shared references --------------------------------------------------------
 
-// eventObjectModel is the describer's spelling of `event-object` when every trigger's object is a
-// model ("that model" rather than "that unit"). modelObjectRefs writes it into the effect before
-// rendering.
-const eventObjectModel = "event-object-model"
+// eventObjectModel and eventSubjectModel are the describer's spellings of `event-object` and
+// `event-subject` when every trigger's object (or subject) is a model ("that model", "the triggering
+// model" rather than "that unit", "the triggering unit"). modelEventRefs writes them into the effect
+// before rendering.
+const (
+	eventObjectModel  = "event-object-model"
+	eventSubjectModel = "event-subject-model"
+)
 
 // isEventObject reports whether ref is the trigger's event object, a unit or a model.
 func isEventObject(ref any) bool {
 	return ref == "event-object" || ref == eventObjectModel
 }
 
-// modelObjectRefs returns v with every `event-object` ref spelled eventObjectModel.
-func modelObjectRefs(v any) any {
-	switch x := v.(type) {
-	case string:
-		if x == "event-object" {
-			return eventObjectModel
+// isEventSubject reports whether ref is the trigger's event subject, a unit or a model.
+func isEventSubject(ref any) bool {
+	return ref == "event-subject" || ref == eventSubjectModel
+}
+
+// liveTriggers is the triggers of a spec (one trigger or a list) that name an event.
+func liveTriggers(triggers []map[string]any) []map[string]any {
+	var out []map[string]any
+	for _, t := range triggers {
+		if t["event"] != nil {
+			out = append(out, t)
 		}
-	case []any:
-		out := make([]any, len(x))
-		for i, item := range x {
-			out[i] = modelObjectRefs(item)
-		}
-		return out
-	case map[string]any:
-		out := make(map[string]any, len(x))
-		for k, item := range x {
-			out[k] = modelObjectRefs(item)
-		}
-		return out
 	}
-	return v
+	return out
+}
+
+// allModels reports whether every trigger names a model as its role (its subject or object).
+func allModels(triggers []map[string]any, role string) bool {
+	live := liveTriggers(triggers)
+	if len(live) == 0 {
+		return false
+	}
+	for _, t := range live {
+		if mapOr(t[role])["level"] != "model" {
+			return false
+		}
+	}
+	return true
+}
+
+// namesRole reports whether any trigger of a spec with an event names a role.
+func namesRole(trigger any, role string) bool {
+	for _, t := range liveTriggers(normalizeTriggers(trigger)) {
+		if t[role] != nil {
+			return true
+		}
+	}
+	return false
+}
+
+// modelEventRefs returns v with its `event-object` refs spelled eventObjectModel when every
+// trigger's object is a model, and its `event-subject` refs spelled eventSubjectModel when every
+// trigger's subject is. Inside an `ability-part` whose own trigger names an object (a subject), that
+// ref names the part's event instead, so it is left for the part to rewrite when it renders.
+func modelEventRefs(v any, triggers []map[string]any) any {
+	var rewrite func(v any, object, subject bool) any
+	rewrite = func(v any, object, subject bool) any {
+		switch x := v.(type) {
+		case string:
+			if object && x == "event-object" {
+				return eventObjectModel
+			}
+			if subject && x == "event-subject" {
+				return eventSubjectModel
+			}
+		case []any:
+			out := make([]any, len(x))
+			for i, item := range x {
+				out[i] = rewrite(item, object, subject)
+			}
+			return out
+		case map[string]any:
+			part := x["type"] == "ability-part"
+			out := make(map[string]any, len(x))
+			for k, item := range x {
+				if part && k == "effect" {
+					out[k] = rewrite(item, object && !namesRole(x["trigger"], "object"), subject && !namesRole(x["trigger"], "subject"))
+				} else {
+					out[k] = rewrite(item, object, subject)
+				}
+			}
+			return out
+		}
+		return v
+	}
+	object := allModels(triggers, "object")
+	subject := allModels(triggers, "subject")
+	if !object && !subject {
+		return v
+	}
+	return rewrite(v, object, subject)
 }
 
 var rolePhrases = map[string]string{
@@ -178,6 +242,7 @@ var rolePhrases = map[string]string{
 	"attacker":           "the attacking unit",
 	"defender":           "the target unit",
 	"event-subject":      "the triggering unit",
+	eventSubjectModel:    "the triggering model",
 	"event-object":       "that unit",
 	eventObjectModel:     "that model",
 	"stratagem-target":   "the Stratagem's target",

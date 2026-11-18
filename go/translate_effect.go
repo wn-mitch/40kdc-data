@@ -655,6 +655,7 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		}
 		return strings.Join(parts, "\n")
 	case "ability-part":
+		e = partWithModelRefs(e)
 		inner := mapOr(e["effect"])
 		// A part with nothing to head it (a printed grant's body) lists its container's steps in its place.
 		if containerTypes[ejstrType(inner)] {

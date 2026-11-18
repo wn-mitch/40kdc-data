@@ -106,6 +106,8 @@ def _actor(ref: Any) -> str:
     # A moment nested in a triggered effect: the unit that triggered it.
     if ref == "event-subject":
         return "the triggering unit"
+    if ref == "event-subject-model":
+        return "the triggering model"
     if isinstance(ref, (dict, list)):
         f = _obj(ref)
         # The unit an aura reaches, as the effect's aura names it (effect_aura.with_aura_recipient).

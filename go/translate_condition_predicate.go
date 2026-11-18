@@ -219,6 +219,15 @@ func describeMatches(p map[string]any, negated bool) string {
 			return who + " is " + no + whole + "within " + rangePhrase(within["range"]) + to
 		}
 	}
+	// A trigger's model reads as a model ("the triggering model is within Engagement Range of ...").
+	if s, _ := p["subject"].(string); s == eventSubjectModel || s == eventObjectModel {
+		model := make(map[string]any, len(f)+1)
+		for k, v := range f {
+			model[k] = v
+		}
+		model["level"] = "model"
+		return who + " is " + no + strings.TrimPrefix(unitFilterPhrase(model), "a model ")
+	}
 	return who + " is " + no + unitFilterPhrase(f)
 }
 

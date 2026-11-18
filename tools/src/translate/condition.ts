@@ -20,7 +20,7 @@ export interface Condition {
 
 import { describeHappened, destroyedCount } from "./condition-history.js";
 import { namedEquipmentPhrase } from "./condition-equipment.js";
-import { andList, countPhrase, dekebab, designationPhrase, idLabel, keywordList, keywordNoun, objectivePhrase, ord, orList, type P, placeRefPhrase, rangePhrase, rollWord, ruleRefPhrase, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase } from "./condition-refs.js";
+import { andList, countPhrase, dekebab, designationPhrase, EVENT_OBJECT_MODEL, EVENT_SUBJECT_MODEL, idLabel, keywordList, keywordNoun, objectivePhrase, ord, orList, type P, placeRefPhrase, rangePhrase, rollWord, ruleRefPhrase, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase } from "./condition-refs.js";
 import { bracketKeyword, diceCase, diceTableResultLabel, weaponNoun } from "./effect-words.js";
 
 export { dekebab, moveKinds, rangePhrase, titleCase, unitFilterPhrase, unitRefPhrase } from "./condition-refs.js";
@@ -381,6 +381,8 @@ function describeMatches(p: P, negated: boolean): string {
       return `${who} is ${no}${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${to}`;
     }
   }
+  // A trigger's model reads as a model ("the triggering model is within Engagement Range of …").
+  if (p.subject === EVENT_SUBJECT_MODEL || p.subject === EVENT_OBJECT_MODEL) return `${who} is ${no}${unitFilterPhrase({ ...f, level: "model" }).replace(/^a model /, "")}`;
   return `${who} is ${no}${unitFilterPhrase(f)}`;
 }
 

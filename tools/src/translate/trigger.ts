@@ -70,6 +70,7 @@ function actor(ref: unknown): string {
   if (ref === "selected-unit") return "the selected unit";
   // A moment nested in a triggered effect: the unit that triggered it.
   if (ref === "event-subject") return "the triggering unit";
+  if (ref === "event-subject-model") return "the triggering model";
   if (typeof ref === "object") {
     const f = ref as P;
     // The unit an aura reaches, as the effect's aura names it (effect.ts withAuraRecipient).

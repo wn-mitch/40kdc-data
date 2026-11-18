@@ -315,8 +315,8 @@ func endsNearestPhrase(e map[string]any, ctx effCtx, who, moveRef string) string
 	// The enemy unit the trigger names is "that enemy unit", not the closest of a group.
 	// An objective names no unit: any marker, or the one a select-objective bound.
 	var named string
-	eventSubject, _ := e["of"].(string)
-	if eventSubject == "event-subject" {
+	eventSubject := isEventSubject(e["of"])
+	if eventSubject {
 		named = ""
 	} else if of, ok := asMap(e["of"]); ok && of != nil && of["objective"] != nil {
 		named = "objective marker"
@@ -335,8 +335,12 @@ func endsNearestPhrase(e map[string]any, ctx effCtx, who, moveRef string) string
 		named = strings.ReplaceAll(named, " units)", ")")
 	}
 	nearest := "as close as possible to the closest " + named
-	if eventSubject == "event-subject" {
-		nearest = "as close as possible to that enemy unit"
+	if eventSubject {
+		noun := "unit"
+		if e["of"] == eventSubjectModel {
+			noun = "model"
+		}
+		nearest = "as close as possible to that enemy " + noun
 	}
 	// optional: this end is the unit's choice in place of the closest enemy unit.
 	optional := e["optional"] == true

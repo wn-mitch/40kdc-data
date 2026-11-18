@@ -25,6 +25,9 @@ type effCtx struct {
 	auraRecipient bool
 	// destroyedTrigger: the ability's trigger already says a unit or model is destroyed; leaves must not repeat it.
 	destroyedTrigger bool
+	// attackOnTarget: inside a designation's attackers-of-target entry, a characteristic change applies
+	// to each attack against the target.
+	attackOnTarget bool
 	// eachModel: inside a for-each-unit over models, each pass's model (the recipient) reads "that model".
 	eachModel bool
 }
@@ -489,6 +492,7 @@ var roleSubjects = map[string]string{
 	"model-in-this-unit": "a model in this unit",
 	"defender":           "the target",
 	"event-subject":      "the triggering unit",
+	eventSubjectModel:    "the triggering model",
 	"event-object":       "that unit",
 	eventObjectModel:     "that model",
 	"stratagem-target":   "that unit",

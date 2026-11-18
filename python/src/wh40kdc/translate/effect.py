@@ -18,7 +18,7 @@ from typing import Any
 
 from wh40kdc.translate.condition import Condition, dekebab
 from wh40kdc.translate.condition_leadin import condition_lead_in, is_defensive_effect
-from wh40kdc.translate.condition_refs import model_object_refs, range_phrase
+from wh40kdc.translate.condition_refs import model_event_refs, range_phrase
 from wh40kdc.translate.effect_aura import with_aura_recipient
 from wh40kdc.translate.effect_bind import roll_head, select_objective_block
 from wh40kdc.translate.effect_inline import (
@@ -37,6 +37,7 @@ from wh40kdc.translate.effect_inline import (
     order_to,
     part_head,
     part_inline,
+    part_with_model_refs,
     pool_text,
     roll_with_rider,
     stance_additive,
@@ -184,6 +185,7 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         return "\n".join(describe_effect(_obj(s), depth, ctx) for s in steps)
     if t == "ability-part":
         # A part is always a bullet of its ability, even at the top level.
+        e = part_with_model_refs(e)
         inner = _obj(e.get("effect"))
         # A part with nothing to head it (a printed grant's body) lists its container's steps in
         # its place.
@@ -469,9 +471,9 @@ def _render_top_level(e: Effect, scope: Any, usage: Any = None, trigger: Any = N
     triggers = [t for t in normalize_triggers(trigger) if t.get("event") is not None]
     if any(t.get("event") in ("destroyed", "model-destroyed") for t in triggers):
         ctx["destroyed_trigger"] = True
-    # Every trigger's object is a model: the effect's `event-object` reads "that model".
-    if triggers and all(_obj(t.get("object")).get("level") == "model" for t in triggers):
-        e = model_object_refs(e)
+    # Every trigger's object (subject) is a model: the effect's `event-object` reads "that model"
+    # (`event-subject` "the triggering model").
+    e = model_event_refs(e, triggers)
     cond_range = _condition_within_range(
         e.get("condition") if e.get("type") == "conditional" else None
     )

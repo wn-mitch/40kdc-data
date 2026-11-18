@@ -21,6 +21,7 @@
  * `input.json` (ListForge) or `input.newrecruit-json.json` (NewRecruit). Other
  * inputs are derived.
  */
+import { ATTACKERS_OF_TARGET_CASES, EVENT_SUBJECT_MODEL_CASES } from "./gen-conformance-model-refs-cases.js";
 import {
   readdirSync,
   readFileSync,
@@ -4512,6 +4513,12 @@ function genEffectTranslation(): void {
   const appended = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "gen-conformance-appended-cases.json"), "utf8")) as Record<string, unknown>[];
   for (const example of appended) {
     cases.push({ ...example, expected: { text: describeAbility(example as Parameters<typeof describeAbility>[0]) } });
+  }
+  // A model event subject and per-attack characteristic changes (gen-conformance-model-refs-cases.ts).
+  for (const fc of [...EVENT_SUBJECT_MODEL_CASES, ...ATTACKERS_OF_TARGET_CASES]) {
+    const scope = { duration: "permanent" };
+    const example = { effect: fc.effect, scope, ...(fc.trigger != null ? { trigger: fc.trigger } : {}) };
+    cases.push({ caseId: `model-refs/${fc.id}`, ...example, expected: { text: describeAbility(example as Parameters<typeof describeAbility>[0]) } });
   }
   writeJson(join(CONFORMANCE, "effect-translation", "cases.json"), cases);
   console.log(

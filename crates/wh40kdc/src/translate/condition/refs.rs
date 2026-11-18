@@ -145,9 +145,11 @@ pub(crate) fn comparison_phrase(value: Option<&Value>) -> String {
 
 // ── Shared references ───────────────────────────────────────────────────────
 
-/// The describer's spelling of `event-object` when every trigger's object is a model ("that model"
-/// rather than "that unit"). `model_object_refs` writes it into the effect before rendering.
+/// The describer's spellings of `event-object` and `event-subject` when every trigger's object (or
+/// subject) is a model ("that model", "the triggering model" rather than "that unit", "the
+/// triggering unit"). `model_event_refs` writes them into the effect before rendering.
 pub(crate) const EVENT_OBJECT_MODEL: &str = "event-object-model";
+pub(crate) const EVENT_SUBJECT_MODEL: &str = "event-subject-model";
 
 /// Whether `v` is the trigger's event object, a unit or a model.
 pub(crate) fn is_event_object(v: Option<&Value>) -> bool {
@@ -157,17 +159,90 @@ pub(crate) fn is_event_object(v: Option<&Value>) -> bool {
     )
 }
 
-/// `v` with every `event-object` ref spelled `EVENT_OBJECT_MODEL`.
-pub(crate) fn model_object_refs(v: &Value) -> Value {
-    match v {
-        Value::String(s) if s == "event-object" => Value::String(EVENT_OBJECT_MODEL.into()),
-        Value::Array(a) => Value::Array(a.iter().map(model_object_refs).collect()),
-        Value::Object(o) => Value::Object(
-            o.iter()
-                .map(|(k, x)| (k.clone(), model_object_refs(x)))
-                .collect(),
-        ),
-        _ => v.clone(),
+/// Whether `v` is the trigger's event subject, a unit or a model.
+pub(crate) fn is_event_subject(v: Option<&Value>) -> bool {
+    matches!(
+        v.and_then(Value::as_str),
+        Some("event-subject" | EVENT_SUBJECT_MODEL)
+    )
+}
+
+/// The triggers of a spec that name an event.
+fn live_triggers<'a>(triggers: &[&'a Value]) -> Vec<&'a Value> {
+    triggers
+        .iter()
+        .copied()
+        .filter(|t| t.get("event").is_some_and(|v| !v.is_null()))
+        .collect()
+}
+
+/// Whether every trigger names a model as its `role` (its subject or object).
+fn all_models(triggers: &[&Value], role: &str) -> bool {
+    let live = live_triggers(triggers);
+    !live.is_empty()
+        && live.iter().all(|t| {
+            t.get(role)
+                .and_then(|o| o.get("level"))
+                .and_then(Value::as_str)
+                == Some("model")
+        })
+}
+
+/// Whether any trigger of a spec (one trigger or a list) with an event names a `role`.
+fn names_role(trigger: Option<&Value>, role: &str) -> bool {
+    let list: Vec<&Value> = match trigger {
+        None | Some(Value::Null) => Vec::new(),
+        Some(Value::Array(a)) => a.iter().collect(),
+        Some(t) => vec![t],
+    };
+    live_triggers(&list)
+        .iter()
+        .any(|t| t.get(role).is_some_and(|v| !v.is_null()))
+}
+
+/// `v` with its `event-object` refs spelled `EVENT_OBJECT_MODEL` when every trigger's object is a
+/// model, and its `event-subject` refs spelled `EVENT_SUBJECT_MODEL` when every trigger's subject
+/// is. Inside an `ability-part` whose own trigger names an object (a subject), that ref names the
+/// part's event instead, so it is left for the part to rewrite when it renders.
+pub(crate) fn model_event_refs(v: &Value, triggers: &[&Value]) -> Value {
+    fn rewrite(v: &Value, object: bool, subject: bool) -> Value {
+        match v {
+            Value::String(s) if object && s == "event-object" => {
+                Value::String(EVENT_OBJECT_MODEL.into())
+            }
+            Value::String(s) if subject && s == "event-subject" => {
+                Value::String(EVENT_SUBJECT_MODEL.into())
+            }
+            Value::Array(a) => {
+                Value::Array(a.iter().map(|x| rewrite(x, object, subject)).collect())
+            }
+            Value::Object(o) => {
+                let part = o.get("type").and_then(Value::as_str) == Some("ability-part");
+                Value::Object(
+                    o.iter()
+                        .map(|(k, x)| {
+                            let (ob, su) = if part && k == "effect" {
+                                (
+                                    object && !names_role(o.get("trigger"), "object"),
+                                    subject && !names_role(o.get("trigger"), "subject"),
+                                )
+                            } else {
+                                (object, subject)
+                            };
+                            (k.clone(), rewrite(x, ob, su))
+                        })
+                        .collect(),
+                )
+            }
+            _ => v.clone(),
+        }
+    }
+    let object = all_models(triggers, "object");
+    let subject = all_models(triggers, "subject");
+    if object || subject {
+        rewrite(v, object, subject)
+    } else {
+        v.clone()
     }
 }
 
@@ -179,6 +254,7 @@ pub(crate) fn role_phrase(role: &str) -> Option<&'static str> {
         "attacker" => "the attacking unit",
         "defender" => "the target unit",
         "event-subject" => "the triggering unit",
+        EVENT_SUBJECT_MODEL => "the triggering model",
         "event-object" => "that unit",
         EVENT_OBJECT_MODEL => "that model",
         "stratagem-target" => "the Stratagem's target",

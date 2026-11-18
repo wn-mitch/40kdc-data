@@ -229,8 +229,24 @@ func partHead(e map[string]any) string {
 	return joinNonEmpty([]string{label, moment, usage, named, cost, trail}, ", ")
 }
 
+// partWithModelRefs is a part with its own trigger, its effect's event refs read as that trigger's
+// model if it names one.
+func partWithModelRefs(e map[string]any) map[string]any {
+	triggers := normalizeTriggers(e["trigger"])
+	if len(triggers) == 0 || e["effect"] == nil {
+		return e
+	}
+	out := make(map[string]any, len(e))
+	for k, v := range e {
+		out[k] = v
+	}
+	out["effect"] = modelEventRefs(e["effect"], triggers)
+	return out
+}
+
 // partInline renders a part on one line: its head, then its effect.
 func partInline(e map[string]any, ctx effCtx) string {
+	e = partWithModelRefs(e)
 	head := partHead(e)
 	body := describeEffectInline(mapOr(e["effect"]), ctx)
 	// An optional part whose effect already reads "you can ..." needs no "you can:" before it.
@@ -338,21 +354,9 @@ func renderTopLevel(e, scope map[string]any, usage, trigger any) string {
 	if isList(usage) || mapOr(usage)["frequency"] != nil {
 		lead = usageClause(usage)
 	}
-	// Every trigger's object is a model: the effect's `event-object` reads "that model".
-	modelObjects := false
-	for _, t := range normalizeTriggers(trigger) {
-		if t["event"] == nil {
-			continue
-		}
-		if mapOr(t["object"])["level"] != "model" {
-			modelObjects = false
-			break
-		}
-		modelObjects = true
-	}
-	if modelObjects {
-		e = modelObjectRefs(e).(map[string]any)
-	}
+	// Every trigger's object (subject) is a model: the effect's `event-object` reads "that model"
+	// (`event-subject` "the triggering model").
+	e = modelEventRefs(e, normalizeTriggers(trigger)).(map[string]any)
 	var condRange float64
 	hasCondRange := false
 	if e["type"] == "conditional" {

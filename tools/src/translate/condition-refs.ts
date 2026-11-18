@@ -119,24 +119,58 @@ export const ord = (n: number): string => ORDINAL[n] ?? `${n}th`;
 // ── Shared references ───────────────────────────────────────────────────────
 
 /**
- * The describer's spelling of `event-object` when every trigger's object is a model ("that model"
- * rather than "that unit"). `modelObjectRefs` writes it into the effect before rendering.
+ * The describer's spellings of `event-object` and `event-subject` when every trigger's object (or
+ * subject) is a model ("that model", "the triggering model" rather than "that unit", "the
+ * triggering unit"). `modelEventRefs` writes them into the effect before rendering.
  */
 export const EVENT_OBJECT_MODEL = "event-object-model";
+export const EVENT_SUBJECT_MODEL = "event-subject-model";
 
 /** Whether `ref` is the trigger's event object, a unit or a model. */
 export function isEventObject(ref: unknown): boolean {
   return ref === "event-object" || ref === EVENT_OBJECT_MODEL;
 }
 
-/** `value` with every `event-object` ref spelled `EVENT_OBJECT_MODEL`. */
-export function modelObjectRefs<T>(value: T): T {
-  if (value === "event-object") return EVENT_OBJECT_MODEL as T;
-  if (Array.isArray(value)) return value.map(modelObjectRefs) as T;
-  if (value != null && typeof value === "object") {
-    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, modelObjectRefs(v)])) as T;
-  }
-  return value;
+/** Whether `ref` is the trigger's event subject, a unit or a model. */
+export function isEventSubject(ref: unknown): boolean {
+  return ref === "event-subject" || ref === EVENT_SUBJECT_MODEL;
+}
+
+/** Whether every trigger names a model as its `role` (its subject or object). */
+function allModels(triggers: readonly { event?: unknown }[], role: "subject" | "object"): boolean {
+  const live = triggers.filter((t) => t.event != null);
+  return live.length > 0 && live.every((t) => ((t as Record<string, unknown>)[role] as { level?: unknown } | undefined)?.level === "model");
+}
+
+/**
+ * `value` with its `event-object` refs spelled `EVENT_OBJECT_MODEL` when every trigger's object is
+ * a model, and its `event-subject` refs spelled `EVENT_SUBJECT_MODEL` when every trigger's subject
+ * is. Inside an `ability-part` whose own trigger names an object (a subject), that ref names the
+ * part's event instead, so it is left for the part to rewrite when it renders.
+ */
+export function modelEventRefs<T>(value: T, triggers: readonly { event?: unknown }[]): T {
+  const rewrite = (v: unknown, object: boolean, subject: boolean): unknown => {
+    if (object && v === "event-object") return EVENT_OBJECT_MODEL;
+    if (subject && v === "event-subject") return EVENT_SUBJECT_MODEL;
+    if (Array.isArray(v)) return v.map((x) => rewrite(x, object, subject));
+    if (v != null && typeof v === "object") {
+      const o = v as Record<string, unknown>;
+      const part = o.type === "ability-part";
+      const inner = (k: string): [boolean, boolean] =>
+        part && k === "effect" ? [object && !namesRole(o.trigger, "object"), subject && !namesRole(o.trigger, "subject")] : [object, subject];
+      return Object.fromEntries(Object.entries(o).map(([k, x]) => [k, rewrite(x, ...inner(k))]));
+    }
+    return v;
+  };
+  const object = allModels(triggers, "object");
+  const subject = allModels(triggers, "subject");
+  return object || subject ? (rewrite(value, object, subject) as T) : value;
+}
+
+/** Whether any trigger of a spec (one trigger or a list) with an event names a `role`. */
+function namesRole(trigger: unknown, role: "subject" | "object"): boolean {
+  const list = Array.isArray(trigger) ? trigger : trigger != null ? [trigger] : [];
+  return list.some((t) => t != null && typeof t === "object" && (t as P).event != null && (t as P)[role] != null);
 }
 
 const ROLE_PHRASES: Record<string, string> = {
@@ -146,6 +180,7 @@ const ROLE_PHRASES: Record<string, string> = {
   attacker: "the attacking unit",
   defender: "the target unit",
   "event-subject": "the triggering unit",
+  "event-subject-model": "the triggering model",
   "event-object": "that unit",
   "event-object-model": "that model",
   "stratagem-target": "the Stratagem's target",

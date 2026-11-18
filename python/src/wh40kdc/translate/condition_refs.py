@@ -234,9 +234,11 @@ def _list(v: Any) -> list[Any]:
 
 # -- Shared references --------------------------------------------------------
 
-# The describer's spelling of `event-object` when every trigger's object is a model ("that model"
-# rather than "that unit"). `model_object_refs` writes it into the effect before rendering.
+# The describer's spellings of `event-object` and `event-subject` when every trigger's object (or
+# subject) is a model ("that model", "the triggering model" rather than "that unit", "the
+# triggering unit"). `model_event_refs` writes them into the effect before rendering.
 EVENT_OBJECT_MODEL = "event-object-model"
+EVENT_SUBJECT_MODEL = "event-subject-model"
 
 
 def is_event_object(ref: Any) -> bool:
@@ -244,15 +246,62 @@ def is_event_object(ref: Any) -> bool:
     return ref in ("event-object", EVENT_OBJECT_MODEL)
 
 
-def model_object_refs(value: Any) -> Any:
-    """`value` with every `event-object` ref spelled `EVENT_OBJECT_MODEL`."""
-    if value == "event-object":
-        return EVENT_OBJECT_MODEL
-    if isinstance(value, list):
-        return [model_object_refs(v) for v in value]
-    if isinstance(value, dict):
-        return {k: model_object_refs(v) for k, v in value.items()}
-    return value
+def is_event_subject(ref: Any) -> bool:
+    """Whether `ref` is the trigger's event subject, a unit or a model."""
+    return ref in ("event-subject", EVENT_SUBJECT_MODEL)
+
+
+def _live_triggers(trigger: Any) -> list[dict[str, Any]]:
+    """The triggers of a spec (one trigger or a list) that name an event."""
+    items = trigger if isinstance(trigger, list) else [] if trigger is None else [trigger]
+    return [t for t in items if isinstance(t, dict) and t.get("event") is not None]
+
+
+def _all_models(triggers: list[Any], role: str) -> bool:
+    """Whether every trigger names a model as its `role` (its subject or object)."""
+    live = _live_triggers(triggers)
+    return bool(live) and all(
+        isinstance(t.get(role), dict) and t[role].get("level") == "model" for t in live
+    )
+
+
+def _names_role(trigger: Any, role: str) -> bool:
+    """Whether any trigger of a spec with an event names a `role`."""
+    return any(t.get(role) is not None for t in _live_triggers(trigger))
+
+
+def model_event_refs(value: Any, triggers: list[Any]) -> Any:
+    """`value` with its `event-object` refs spelled `EVENT_OBJECT_MODEL` when every trigger's
+    object is a model, and its `event-subject` refs spelled `EVENT_SUBJECT_MODEL` when every
+    trigger's subject is. Inside an `ability-part` whose own trigger names an object (a subject),
+    that ref names the part's event instead, so it is left for the part to rewrite when it
+    renders."""
+
+    def rewrite(v: Any, obj_: bool, subj: bool) -> Any:
+        if obj_ and v == "event-object":
+            return EVENT_OBJECT_MODEL
+        if subj and v == "event-subject":
+            return EVENT_SUBJECT_MODEL
+        if isinstance(v, list):
+            return [rewrite(x, obj_, subj) for x in v]
+        if isinstance(v, dict):
+            part = v.get("type") == "ability-part"
+            out: dict[str, Any] = {}
+            for k, x in v.items():
+                if part and k == "effect":
+                    out[k] = rewrite(
+                        x,
+                        obj_ and not _names_role(v.get("trigger"), "object"),
+                        subj and not _names_role(v.get("trigger"), "subject"),
+                    )
+                else:
+                    out[k] = rewrite(x, obj_, subj)
+            return out
+        return v
+
+    obj_ = _all_models(triggers, "object")
+    subj = _all_models(triggers, "subject")
+    return rewrite(value, obj_, subj) if obj_ or subj else value
 
 
 _ROLE_PHRASES: dict[str, str] = {
@@ -262,6 +311,7 @@ _ROLE_PHRASES: dict[str, str] = {
     "attacker": "the attacking unit",
     "defender": "the target unit",
     "event-subject": "the triggering unit",
+    "event-subject-model": "the triggering model",
     "event-object": "that unit",
     "event-object-model": "that model",
     "stratagem-target": "the Stratagem's target",

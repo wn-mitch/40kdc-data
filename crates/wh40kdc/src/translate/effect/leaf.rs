@@ -125,6 +125,67 @@ fn bounds(m: &P) -> String {
     min + &max
 }
 
+/// The characteristics an attack has: under an `attackers-of-target` designation, each attack's.
+const ATTACK_STATS: [&str; 5] = ["S", "WS", "BS", "AP", "D"];
+
+/// Which attacks against the target a per-attack change covers: " if it is made with ranged weapons
+/// by a friendly ASTRA MILITARUM unit". A target that is any friendly unit or model, or the attacking
+/// unit, adds nothing: every such attack already qualifies.
+fn attack_maker(target: Option<&Value>, m: &P, subj: &str) -> String {
+    let with_weapons = if has_weapon(m) {
+        format!(" with {}", weapon_noun(m))
+    } else {
+        String::new()
+    };
+    let f = target.and_then(Value::as_object);
+    let ref_keys = [
+        "selection_var",
+        "event_var",
+        "stratagem_target",
+        "aura_recipient",
+        "role",
+    ];
+    // A null field is an absent one.
+    let filter = f.filter(|f| {
+        !ref_keys
+            .iter()
+            .any(|k| f.get(*k).is_some_and(|v| !v.is_null()))
+    });
+    let any_attacker = match target {
+        None | Some(Value::Null) => true,
+        Some(Value::String(s)) => s == "attacker",
+        _ => filter.is_some_and(|f| {
+            f.iter().all(|(k, v)| {
+                v.is_null() || (k == "owner" && v.as_str() == Some("friendly")) || k == "level"
+            })
+        }),
+    };
+    let by = if any_attacker {
+        String::new()
+    } else if let Some(f) = filter {
+        let mut sel = P::new();
+        sel.insert("filter".into(), Value::Object(f.clone()));
+        let maker = super::select::selector_subject(&sel, false, false);
+        let article = if maker
+            .chars()
+            .next()
+            .is_some_and(|c| "aeiouAEIOU".contains(c))
+        {
+            "an"
+        } else {
+            "a"
+        };
+        format!(" by {article} {maker}")
+    } else {
+        format!(" by {subj}")
+    };
+    if with_weapons.is_empty() && by.is_empty() {
+        String::new()
+    } else {
+        format!(" if it is made{with_weapons}{by}")
+    }
+}
+
 fn stat_modifier(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
     // AP is printed negative; the DSL stores its magnitude.
     let mut owned;
@@ -149,6 +210,14 @@ fn stat_modifier(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String
             incoming_lead(m, subj),
             stat_change(m, &format!("the {stat} of that attack")),
             bounds(m)
+        );
+    }
+    if ctx.attack_on_target && ATTACK_STATS.contains(&jstr(m.get("stat")).as_str()) {
+        return format!(
+            "{}{}{}",
+            stat_change(m, &format!("the {stat} of that attack")),
+            bounds(m),
+            attack_maker(target, m, subj)
         );
     }
     if has_weapon(m) {

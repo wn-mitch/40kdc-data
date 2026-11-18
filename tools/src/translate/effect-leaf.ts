@@ -14,7 +14,7 @@ import {
 } from "./effect-words.js";
 import { describeCondition, type Condition } from "./condition.js";
 import type { P } from "./condition-refs.js";
-import { selectionBinding, selectUnitsSubject } from "./effect-bind.js";
+import { selectionBinding, selectorSubject, selectUnitsSubject } from "./effect-bind.js";
 import { expiryTrail } from "./expiry.js";
 
 /** A leaf effect node: `{type, target, modifier, scaling?}`. */
@@ -73,11 +73,32 @@ function bounds(m: Record<string, unknown>): string {
   return min + max;
 }
 
+/** The characteristics an attack has: under an `attackers-of-target` designation, each attack's. */
+const ATTACK_STATS = new Set(["S", "WS", "BS", "AP", "D"]);
+
+/**
+ * Which attacks against the target a per-attack change covers: " if it is made with ranged weapons
+ * by a friendly ASTRA MILITARUM unit". A target that is any friendly unit or model, or the attacking
+ * unit, adds nothing: every such attack already qualifies.
+ */
+function attackMaker(target: unknown, m: Record<string, unknown>, subj: string): string {
+  const withWeapons = hasWeapon(m) ? ` with ${weaponNoun(m)}` : "";
+  const f = target != null && typeof target === "object" && !Array.isArray(target) ? (target as P) : undefined;
+  const refKeys = ["selection_var", "event_var", "stratagem_target", "aura_recipient", "role"];
+  // A null field is an absent one.
+  const isFilter = f != null && !refKeys.some((k) => f[k] != null);
+  const anyAttacker = target == null || target === "attacker" || (isFilter && Object.keys(f).every((k) => f[k] == null || (k === "owner" && f.owner === "friendly") || k === "level"));
+  const maker = anyAttacker ? "" : isFilter ? selectorSubject({ filter: f }, false) : subj;
+  const by = maker === "" ? "" : ` by ${isFilter ? `${/^[aeiou]/i.test(maker) ? "an" : "a"} ${maker}` : maker}`;
+  return withWeapons || by ? ` if it is made${withWeapons}${by}` : "";
+}
+
 function statModifier(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   // AP is printed negative; the DSL stores its magnitude.
   if (m.stat === "AP" && m.operation === "set" && typeof m.value === "number" && m.value > 0) m = { ...m, value: `-${m.value}` };
   const stat = `${statName(m.stat)} characteristic`;
   if (m.incoming === true) return `${incomingLead(m, subj)}${statChange(m, `the ${stat} of that attack`)}${bounds(m)}`;
+  if (ctx.attackOnTarget && ATTACK_STATS.has(jstr(m.stat))) return `${statChange(m, `the ${stat} of that attack`)}${bounds(m)}${attackMaker(e.target, m, subj)}`;
   if (hasWeapon(m)) return `${statChange(m, `the ${stat} of ${weaponNoun(m)} equipped by ${weaponHolder(e.target, ctx)}`)}${bounds(m)}`;
   return `${statChange(m, ofOrPossessive(subj, stat))}${bounds(m)}`;
 }

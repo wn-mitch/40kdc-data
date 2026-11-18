@@ -88,6 +88,12 @@ pub(crate) fn designated_attack_when(applies: &P) -> String {
 }
 
 pub(crate) fn designated_recipient_context(applies: &P, ctx: &Ctx) -> Ctx {
+    if sv(applies, "to") == Some("attackers-of-target") {
+        return Ctx {
+            attack_on_target: true,
+            ..ctx.clone()
+        };
+    }
     if sv(applies, "to") != Some("bound-unit-attacks-reference") {
         return ctx.clone();
     }

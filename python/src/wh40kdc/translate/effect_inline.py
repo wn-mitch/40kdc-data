@@ -11,7 +11,12 @@ from typing import Any
 
 from wh40kdc.translate.condition import dekebab, describe_condition
 from wh40kdc.translate.condition_leadin import condition_lead_in, is_defensive_effect
-from wh40kdc.translate.condition_refs import _or_list, range_phrase, unit_ref_phrase
+from wh40kdc.translate.condition_refs import (
+    _or_list,
+    model_event_refs,
+    range_phrase,
+    unit_ref_phrase,
+)
 from wh40kdc.translate.effect_aura import aura_reach, with_aura_recipient
 from wh40kdc.translate.effect_bind import roll_head, select_objective_inline
 from wh40kdc.translate.effect_leaf import LEAF_TYPES, describe_leaf
@@ -562,8 +567,18 @@ def part_head(e: Effect) -> str:
     return ", ".join(p for p in (label, moment, usage, named, cost, trail) if p)
 
 
+def part_with_model_refs(e: Effect) -> Effect:
+    """A part with its own trigger: its effect's event refs read as that trigger's model, if it
+    names one."""
+    triggers = normalize_triggers(e.get("trigger"))
+    if triggers and e.get("effect") is not None:
+        return {**e, "effect": model_event_refs(e["effect"], triggers)}
+    return e
+
+
 def part_inline(e: Effect, ctx: Ctx) -> str:
     """A part on one line: its head, then its effect."""
+    e = part_with_model_refs(e)
     head = part_head(e)
     body = inline(e.get("effect"), ctx)
     # An optional part whose effect already reads "you can ..." needs no "you can:" before it.

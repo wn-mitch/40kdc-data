@@ -441,6 +441,7 @@ _ROLE_SUBJECTS = {
     "model-in-this-unit": "a model in this unit",
     "defender": "the target",
     "event-subject": "the triggering unit",
+    "event-subject-model": "the triggering model",
     "event-object": "that unit",
     "event-object-model": "that model",
     "stratagem-target": "that unit",

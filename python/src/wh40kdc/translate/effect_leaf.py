@@ -20,7 +20,11 @@ from wh40kdc.translate.effect_leaf_shapes import (
     ability_limits,
     describe_shape_leaf,
 )
-from wh40kdc.translate.effect_select import select_units_subject, selection_binding
+from wh40kdc.translate.effect_select import (
+    select_units_subject,
+    selection_binding,
+    selector_subject,
+)
 from wh40kdc.translate.effect_words import (
     Ctx,
     ability_label,
@@ -157,6 +161,41 @@ def _bounds(m: dict[str, Any]) -> str:
     return lo + hi
 
 
+# The characteristics an attack has: under an `attackers-of-target` designation, each attack's.
+_ATTACK_STATS = frozenset({"S", "WS", "BS", "AP", "D"})
+_REF_KEYS = ("selection_var", "event_var", "stratagem_target", "aura_recipient", "role")
+
+
+def _attack_maker(target: Any, m: dict[str, Any], subj: str) -> str:
+    """Which attacks against the target a per-attack change covers: " if it is made with ranged
+    weapons by a friendly ASTRA MILITARUM unit". A target that is any friendly unit or model, or the
+    attacking unit, adds nothing: every such attack already qualifies."""
+    with_weapons = f" with {weapon_noun(m)}" if has_weapon(m) else ""
+    f = target if isinstance(target, dict) else None
+    # A null field is an absent one.
+    is_filter = f is not None and not any(f.get(k) is not None for k in _REF_KEYS)
+    any_attacker = (
+        target is None
+        or target == "attacker"
+        or (
+            f is not None
+            and is_filter
+            and all(
+                f[k] is None or (k == "owner" and f[k] == "friendly") or k == "level" for k in f
+            )
+        )
+    )
+    if any_attacker:
+        by = ""
+    elif f is not None and is_filter:
+        maker = selector_subject({"filter": f}, False)
+        article = "an" if maker[:1].lower() in "aeiou" and maker else "a"
+        by = f" by {article} {maker}"
+    else:
+        by = f" by {subj}"
+    return f" if it is made{with_weapons}{by}" if with_weapons or by else ""
+
+
 def _stat_modifier(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     # AP is printed negative; the DSL stores its magnitude.
     if (
@@ -171,6 +210,9 @@ def _stat_modifier(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         return (
             f"{_incoming_lead(m, subj)}{_stat_change(m, f'the {stat} of that attack')}{_bounds(m)}"
         )
+    if ctx.get("attack_on_target") and jstr(m.get("stat")) in _ATTACK_STATS:
+        change = _stat_change(m, f"the {stat} of that attack")
+        return f"{change}{_bounds(m)}{_attack_maker(e.get('target'), m, subj)}"
     if has_weapon(m):
         holder = weapon_holder(e.get("target"), ctx)
         what = f"the {stat} of {weapon_noun(m)} equipped by {holder}"

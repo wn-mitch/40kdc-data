@@ -371,6 +371,10 @@ func designatedAttackWhen(applies map[string]any) string {
 }
 
 func designatedRecipientContext(applies map[string]any, ctx effCtx) effCtx {
+	if applies["to"] == "attackers-of-target" {
+		ctx.attackOnTarget = true
+		return ctx
+	}
 	if applies["to"] != "bound-unit-attacks-reference" {
 		return ctx
 	}

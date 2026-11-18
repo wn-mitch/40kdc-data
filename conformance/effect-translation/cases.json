@@ -614,7 +614,7 @@
       "event": "attacks-resolved"
     },
     "expected": {
-      "text": "After the unit resolves its attacks:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your A Trap Well Laid target). Until the end of the phase, each time a friendly unit makes an attack against it, while the attacking unit is not Battle-shocked, improve all friendly KROOT models' Armour Penetration characteristic by 1.\nApplies to: units with KROOT."
+      "text": "After the unit resolves its attacks:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your A Trap Well Laid target). Until the end of the phase, each time a friendly unit makes an attack against it, while the attacking unit is not Battle-shocked, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly KROOT model.\nApplies to: units with KROOT."
     }
   },
   {
@@ -4291,7 +4291,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "Until the end of the phase:\n  -> Enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons.\n  -> When damage is allocated to an enemy model, until the end of the phase:\n    -> Roll one D6: on a 5+, while that unit is a unit within Engagement Range of the unit, after the attacking unit resolves its attacks: the unit suffers 1 mortal wound."
+      "text": "Until the end of the phase:\n  -> Enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons.\n  -> When damage is allocated to an enemy model, until the end of the phase:\n    -> Roll one D6: on a 5+, while that model is within Engagement Range of the unit, after the attacking unit resolves its attacks: the unit suffers 1 mortal wound."
     }
   },
   {
@@ -10658,7 +10658,7 @@
       }
     },
     "expected": {
-      "text": "After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Bio Stimulus Target). Until the end of the turn, each time a friendly unit makes an attack against it, while making melee attacks, improve all friendly TYRANIDS units' Armour Penetration characteristic by 1."
+      "text": "After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Bio Stimulus Target). Until the end of the turn, each time a friendly unit makes an attack against it, while making melee attacks, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly TYRANIDS unit."
     }
   },
   {
@@ -11676,7 +11676,7 @@
       "optional": true
     },
     "expected": {
-      "text": "At the start of the battle round, you may use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:\n  -> Roll 8D6; allocate dice to activate up to 2 of the following:\n    - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.\n    - Rage-Fuelled Invigoration (requires pair of 2+): add 3\" to the unit's Pile-in and Consolidation moves.\n    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.\n    - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].\n    - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].\n    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS]."
+      "text": "At the start of the battle round, you may use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:\n  -> Roll 8D6; allocate dice to activate up to 2 of the following:\n    - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.\n    - Rage-Fuelled Invigoration (requires pair of 2+): add 3\" to the unit's Pile-in and Consolidation moves.\n    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee: each time a model in this unit is destroyed, unless that model has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.\n    - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].\n    - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].\n    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS]."
     }
   },
   {
@@ -13452,7 +13452,7 @@
       }
     },
     "expected": {
-      "text": "At the start of your Shooting phase, once per turn per model, if your Army Faction is THOUSAND SONS:\n  -> Attempt one of the Rituals below (each Ritual can be attempted once per turn across your army). To do so, take a Psychic test: roll 2D6, and you can roll one additional D6; if any two of its dice show the same result, the unit suffers D3 mortal wounds; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual:\n    - Destiny’s Ruin (Warp Charge 5): Until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model (your Destinys Ruin Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 10+, you can re-roll a Hit roll of 1 for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 10+, you can re-roll the Hit roll for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.\n    - Temporal Surge (Warp Charge 6): Until the end of the turn: select one friendly unit with the SCINTILLATING LEGIONS or THOUSAND SONS keyword if the selected unit is unengaged and the selected unit is within 24\" of this model and the selected unit is visible to this model: unless the Psychic test result is 10+, that unit can make a Normal move of up to D6\"; if the Psychic test result is 10+, that unit can make a Normal move of up to 6\"; that unit cannot declare a charge.\n    - Doombolt (Warp Charge 7): Select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model and (the selected unit does not have the Lone Operative ability or the selected unit is an attached unit or the selected unit is within 12\" of this model): unless the Psychic test result is 11+, that unit suffers D3 mortal wounds; if the Psychic test result is 11+, that unit suffers D3+3 mortal wounds.\n    - Twist of Fate (Warp Charge 9): Until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model (your Twist of Fate Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 12+, improve the Armour Penetration characteristic of all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword by 1; if the Psychic test result is 12+, improve the Armour Penetration characteristic of all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword by 2."
+      "text": "At the start of your Shooting phase, once per turn per model, if your Army Faction is THOUSAND SONS:\n  -> Attempt one of the Rituals below (each Ritual can be attempted once per turn across your army). To do so, take a Psychic test: roll 2D6, and you can roll one additional D6; if any two of its dice show the same result, the unit suffers D3 mortal wounds; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual:\n    - Destiny’s Ruin (Warp Charge 5): Until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model (your Destinys Ruin Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 10+, you can re-roll a Hit roll of 1 for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 10+, you can re-roll the Hit roll for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.\n    - Temporal Surge (Warp Charge 6): Until the end of the turn: select one friendly unit with the SCINTILLATING LEGIONS or THOUSAND SONS keyword if the selected unit is unengaged and the selected unit is within 24\" of this model and the selected unit is visible to this model: unless the Psychic test result is 10+, that unit can make a Normal move of up to D6\"; if the Psychic test result is 10+, that unit can make a Normal move of up to 6\"; that unit cannot declare a charge.\n    - Doombolt (Warp Charge 7): Select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model and (the selected unit does not have the Lone Operative ability or the selected unit is an attached unit or the selected unit is within 12\" of this model): unless the Psychic test result is 11+, that unit suffers D3 mortal wounds; if the Psychic test result is 11+, that unit suffers D3+3 mortal wounds.\n    - Twist of Fate (Warp Charge 9): Until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model (your Twist of Fate Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 12+, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly model with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 12+, improve the Armour Penetration characteristic of that attack by 2 if it is made by a friendly model with the SCINTILLATING LEGIONS or THOUSAND SONS keyword."
     }
   },
   {
@@ -14023,7 +14023,7 @@
       }
     },
     "expected": {
-      "text": "At the start of your Shooting phase, once per turn per model, if your Army Faction is THOUSAND SONS:\n  -> Attempt one of the Rituals below (each Ritual can be attempted once per turn across your army). To do so, take a Psychic test: roll 2D6, and you can roll one additional D6; if any two of its dice show the same result, the unit suffers D3 mortal wounds; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual:\n    - Destiny’s Ruin (Warp Charge 5): Until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model (your Destinys Ruin Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 10+, you can re-roll a Hit roll of 1 for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 10+, you can re-roll the Hit roll for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.\n    - Temporal Surge (Warp Charge 6): Until the end of the turn: select one friendly unit with the SCINTILLATING LEGIONS or THOUSAND SONS keyword if the selected unit is unengaged and the selected unit is within 24\" of this model and the selected unit is visible to this model: unless the Psychic test result is 10+, that unit can make a Normal move of up to D6\"; if the Psychic test result is 10+, that unit can make a Normal move of up to 6\"; that unit cannot declare a charge.\n    - Doombolt (Warp Charge 7): Select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model and (the selected unit does not have the Lone Operative ability or the selected unit is an attached unit or the selected unit is within 12\" of this model): unless the Psychic test result is 11+, that unit suffers D3 mortal wounds; if the Psychic test result is 11+, that unit suffers D3+3 mortal wounds.\n    - Twist of Fate (Warp Charge 9): Until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model (your Twist of Fate Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 12+, improve the Armour Penetration characteristic of all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword by 1; if the Psychic test result is 12+, improve the Armour Penetration characteristic of all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword by 2."
+      "text": "At the start of your Shooting phase, once per turn per model, if your Army Faction is THOUSAND SONS:\n  -> Attempt one of the Rituals below (each Ritual can be attempted once per turn across your army). To do so, take a Psychic test: roll 2D6, and you can roll one additional D6; if any two of its dice show the same result, the unit suffers D3 mortal wounds; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual:\n    - Destiny’s Ruin (Warp Charge 5): Until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model (your Destinys Ruin Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 10+, you can re-roll a Hit roll of 1 for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 10+, you can re-roll the Hit roll for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.\n    - Temporal Surge (Warp Charge 6): Until the end of the turn: select one friendly unit with the SCINTILLATING LEGIONS or THOUSAND SONS keyword if the selected unit is unengaged and the selected unit is within 24\" of this model and the selected unit is visible to this model: unless the Psychic test result is 10+, that unit can make a Normal move of up to D6\"; if the Psychic test result is 10+, that unit can make a Normal move of up to 6\"; that unit cannot declare a charge.\n    - Doombolt (Warp Charge 7): Select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model and (the selected unit does not have the Lone Operative ability or the selected unit is an attached unit or the selected unit is within 12\" of this model): unless the Psychic test result is 11+, that unit suffers D3 mortal wounds; if the Psychic test result is 11+, that unit suffers D3+3 mortal wounds.\n    - Twist of Fate (Warp Charge 9): Until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model (your Twist of Fate Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 12+, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly model with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 12+, improve the Armour Penetration characteristic of that attack by 2 if it is made by a friendly model with the SCINTILLATING LEGIONS or THOUSAND SONS keyword."
     }
   },
   {
@@ -14095,7 +14095,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "Until the end of the phase:\n  -> Enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons.\n  -> When damage is allocated to an enemy model, until the end of the phase:\n    -> Roll one D6: on a 4+, while that unit is a unit within Engagement Range of the unit, after the attacking unit resolves its attacks: destroy 1 model in the unit."
+      "text": "Until the end of the phase:\n  -> Enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons.\n  -> When damage is allocated to an enemy model, until the end of the phase:\n    -> Roll one D6: on a 4+, while that model is within Engagement Range of the unit, after the attacking unit resolves its attacks: destroy 1 model in the unit."
     }
   },
   {
@@ -16842,7 +16842,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "If your Army Faction is GENESTEALER CULTS, you gain 6/10/14 Resurgence points (Incursion/Strike Force/Onslaught).\n-> Each time a friendly unit is destroyed, if every model in that unit (excluding CHARACTER models) has the Cult Ambush ability, you may use this ability:\n  -> Spend the Resurgence points the cost table gives for the datasheet and Starting Strength of that unit (Aberrants: 4 for 5 models, 8 for 10 models; Acolyte Hybrids with Autopistols, Acolyte Hybrids with Hand Flamers or Hybrid Metamorphs: 2 for 5 models, 4 for 10 models; Atalan Jackals: 2 for 5 models, 6 for 10 models; Neophyte Hybrids: 3 for 10 models, 6 for 20 models; Purestrain Genestealers: 2 for 5 models, 6 for 10 models).\n  -> Add a new unit identical to that unit (excluding CHARACTER models) to your army in Cult Ambush, at its Starting Strength and with all of its wounds remaining, with its [ONE SHOT] weapons counted as not having been shot.\n  -> Place a cult ambush marker (32mm) more than 9\" horizontally away from all enemy units.\nIf your Army Faction is GENESTEALER CULTS:\n  -> Friendly units that are in Cult Ambush cannot be targeted with the Rapid Ingress Stratagem.\n  -> Friendly units that are in Cult Ambush are not destroyed for still being in Strategic Reserves at the end of the third battle round.\n-> Each time an enemy model ends a move (the triggering model must not have AIRCRAFT): if your Army Faction is GENESTEALER CULTS, while the triggering unit is within 8\" of a cult ambush marker, remove that cult ambush marker from the battlefield.\n-> At the end of your opponent's Movement phase, you may use this ability: if your Army Faction is GENESTEALER CULTS, select any number of friendly units that are in Cult Ambush (at most the number of your cult ambush markers on the battlefield): that unit can make an Ingress move; that unit can be set up on the battlefield using a Cult Ambush marker, wholly within 3\" of that marker, even in the first battle round."
+      "text": "If your Army Faction is GENESTEALER CULTS, you gain 6/10/14 Resurgence points (Incursion/Strike Force/Onslaught).\n-> Each time a friendly unit is destroyed, if every model in that unit (excluding CHARACTER models) has the Cult Ambush ability, you may use this ability:\n  -> Spend the Resurgence points the cost table gives for the datasheet and Starting Strength of that unit (Aberrants: 4 for 5 models, 8 for 10 models; Acolyte Hybrids with Autopistols, Acolyte Hybrids with Hand Flamers or Hybrid Metamorphs: 2 for 5 models, 4 for 10 models; Atalan Jackals: 2 for 5 models, 6 for 10 models; Neophyte Hybrids: 3 for 10 models, 6 for 20 models; Purestrain Genestealers: 2 for 5 models, 6 for 10 models).\n  -> Add a new unit identical to that unit (excluding CHARACTER models) to your army in Cult Ambush, at its Starting Strength and with all of its wounds remaining, with its [ONE SHOT] weapons counted as not having been shot.\n  -> Place a cult ambush marker (32mm) more than 9\" horizontally away from all enemy units.\nIf your Army Faction is GENESTEALER CULTS:\n  -> Friendly units that are in Cult Ambush cannot be targeted with the Rapid Ingress Stratagem.\n  -> Friendly units that are in Cult Ambush are not destroyed for still being in Strategic Reserves at the end of the third battle round.\n-> Each time an enemy model ends a move (the triggering model must not have AIRCRAFT): if your Army Faction is GENESTEALER CULTS, while the triggering model is within 8\" of a cult ambush marker, remove that cult ambush marker from the battlefield.\n-> At the end of your opponent's Movement phase, you may use this ability: if your Army Faction is GENESTEALER CULTS, select any number of friendly units that are in Cult Ambush (at most the number of your cult ambush markers on the battlefield): that unit can make an Ingress move; that unit can be set up on the battlefield using a Cult Ambush marker, wholly within 3\" of that marker, even in the first battle round."
     }
   },
   {
@@ -28806,7 +28806,7 @@
       }
     },
     "expected": {
-      "text": "When an enemy model selects its targets, unless the triggering unit has selected the unit as the target of all of its attacks, the triggering unit gets -1 to Hit rolls."
+      "text": "When an enemy model selects its targets, unless the triggering model has selected the unit as the target of all of its attacks, the triggering model gets -1 to Hit rolls."
     }
   },
   {
@@ -32660,7 +32660,7 @@
       "per": "unit"
     },
     "expected": {
-      "text": "After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Rites of Castigation Target). Until the end of the turn, each time a friendly unit makes an attack against it, while making ranged attacks, improve all friendly ADEPTA SORORITAS units' Armour Penetration characteristic by 1."
+      "text": "After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Rites of Castigation Target). Until the end of the turn, each time a friendly unit makes an attack against it, while making ranged attacks, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly ADEPTA SORORITAS unit."
     }
   },
   {
@@ -35088,7 +35088,7 @@
       "per": "model"
     },
     "expected": {
-      "text": "Once per turn per model:\n  -> Each time an enemy unit ends a Normal, Advance or Fall Back move, you may use this ability, when resolving this use:\n    -> Select one friendly DEATH GUARD unit that is within 8\" of the triggering unit and that is within 6\" of this model and that is unengaged: that unit can make a Normal move of up to 5\".\n  -> When an enemy unit targets a friendly DEATH GUARD unit within 6\" of this model during the Fight phase, you may use this ability, when resolving this use:\n    -> When a model in that unit is destroyed in melee, until the end of the phase: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.\n  -> When an enemy unit targets a friendly DEATH GUARD unit within 6\" of this model during your opponent's Shooting phase, you may use this ability, when resolving this use:\n    -> Select one enemy unit that is the same unit as the triggering unit, binding it as reaction enemy:\n      -> After the bound reaction-enemy shoots, when resolving this use:\n        -> When resolving this use:\n          -> That unit is eligible to shoot as if it were your Shooting phase.\n          -> While making ranged attacks, worsen that unit's Ballistic Skill characteristic by 1.\n          -> While making ranged attacks, that unit must target the triggering unit with ranged weapons."
+      "text": "Once per turn per model:\n  -> Each time an enemy unit ends a Normal, Advance or Fall Back move, you may use this ability, when resolving this use:\n    -> Select one friendly DEATH GUARD unit that is within 8\" of the triggering unit and that is within 6\" of this model and that is unengaged: that unit can make a Normal move of up to 5\".\n  -> When an enemy unit targets a friendly DEATH GUARD unit within 6\" of this model during the Fight phase, you may use this ability, when resolving this use:\n    -> When a model in that unit is destroyed in melee, until the end of the phase: each time a model in this unit is destroyed, unless that model has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.\n  -> When an enemy unit targets a friendly DEATH GUARD unit within 6\" of this model during your opponent's Shooting phase, you may use this ability, when resolving this use:\n    -> Select one enemy unit that is the same unit as the triggering unit, binding it as reaction enemy:\n      -> After the bound reaction-enemy shoots, when resolving this use:\n        -> When resolving this use:\n          -> That unit is eligible to shoot as if it were your Shooting phase.\n          -> While making ranged attacks, worsen that unit's Ballistic Skill characteristic by 1.\n          -> While making ranged attacks, that unit must target the triggering unit with ranged weapons."
     }
   },
   {
@@ -46865,7 +46865,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "Select one enemy unit (your Combined Fire Target). Until the end of the phase:\n  -> While it is your target, the selected unit cannot benefit from Cover.\n  -> Each time a friendly unit makes an attack against it, improve all friendly ALPHA units' Strength characteristic by 2."
+      "text": "Select one enemy unit (your Combined Fire Target). Until the end of the phase:\n  -> While it is your target, the selected unit cannot benefit from Cover.\n  -> Each time a friendly unit makes an attack against it, improve the Strength characteristic of that attack by 2 if it is made by a friendly ALPHA unit."
     }
   },
   {
@@ -49419,6 +49419,917 @@
     },
     "expected": {
       "text": "Unless the unit fell below its Starting Strength this turn, add 1 to the unit's Objective Control characteristic."
+    }
+  },
+  {
+    "caseId": "model-refs/event-subject-model-matches",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "engaged_with": "this-unit"
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "event-subject",
+        "modifier": {
+          "roll": "hit",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy",
+        "level": "model"
+      },
+      "filter": {
+        "kind": "attack"
+      }
+    },
+    "expected": {
+      "text": "When an enemy model selects its targets, while the triggering model is within Engagement Range of the unit, the triggering model gets -1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "model-refs/event-subject-unit-matches",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "engaged_with": "this-unit"
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "event-subject",
+        "modifier": {
+          "roll": "hit",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "attack"
+      }
+    },
+    "expected": {
+      "text": "When an enemy unit selects its targets, while the triggering unit is a unit within Engagement Range of the unit, the triggering unit gets -1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "model-refs/event-subject-mixed-triggers",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "engaged_with": "this-unit"
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "event-subject",
+        "modifier": {
+          "roll": "hit",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": [
+      {
+        "event": "targets-selected",
+        "subject": {
+          "owner": "enemy",
+          "level": "model"
+        },
+        "filter": {
+          "kind": "attack"
+        }
+      },
+      {
+        "event": "targets-selected",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "kind": "attack"
+        }
+      }
+    ],
+    "expected": {
+      "text": "When an enemy model selects its targets or when an enemy unit selects its targets, while the triggering unit is a unit within Engagement Range of the unit, the triggering unit gets -1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "model-refs/event-subject-model-part-trigger",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "targets-selected",
+        "subject": {
+          "owner": "enemy",
+          "level": "model"
+        },
+        "filter": {
+          "kind": "attack"
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "event-subject",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    },
+    "expected": {
+      "text": "At the start of the Fight phase:\n  -> When an enemy model selects its targets: while the triggering model is within Engagement Range of the unit, the triggering model gets -1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "model-refs/event-subject-model-part-block",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "targets-selected",
+        "subject": {
+          "owner": "enemy",
+          "level": "model"
+        },
+        "filter": {
+          "kind": "attack"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "roll-modifier",
+            "target": "event-subject",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "event-subject",
+            "modifier": {
+              "roll": "wound",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    },
+    "expected": {
+      "text": "At the start of the Fight phase:\n  -> When an enemy model selects its targets:\n    -> The triggering model gets -1 to Hit rolls.\n    -> The triggering model gets -1 to Wound rolls."
+    }
+  },
+  {
+    "caseId": "model-refs/event-subject-part-rebinds-unit",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "targets-selected",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "kind": "attack"
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "event-subject",
+        "modifier": {
+          "roll": "hit",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy",
+        "level": "model"
+      }
+    },
+    "expected": {
+      "text": "Each time an enemy model ends a move:\n  -> When an enemy unit selects its targets: the triggering unit gets -1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "model-refs/event-subject-part-keeps-outer-model",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-ended"
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "event-subject",
+        "modifier": {
+          "count": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy",
+        "level": "model"
+      }
+    },
+    "expected": {
+      "text": "Each time an enemy model ends a move:\n  -> At the end of each phase: the triggering model suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "model-refs/event-subject-model-nested-actor",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "targets-selected",
+        "subject": "event-subject",
+        "filter": {
+          "kind": "attack"
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "save",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy",
+        "level": "model"
+      }
+    },
+    "expected": {
+      "text": "Each time an enemy model ends a move:\n  -> When the triggering model selects its targets: the unit gets +1 to saving throw rolls."
+    }
+  },
+  {
+    "caseId": "model-refs/event-subject-model-ends-nearest",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "ends_nearest": {
+          "of": "event-subject"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy",
+        "level": "model"
+      }
+    },
+    "expected": {
+      "text": "Each time an enemy model ends a move, the unit can make a Normal move of up to 6\"; it must end that move as close as possible to that enemy model."
+    }
+  },
+  {
+    "caseId": "model-refs/event-subject-model-within",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "FABRICATED"
+          ],
+          "within": {
+            "range": {
+              "inches": 8
+            },
+            "of": "event-subject"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "selected-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": "D6"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy",
+        "level": "model"
+      }
+    },
+    "expected": {
+      "text": "Each time an enemy model ends a move:\n  -> Select one friendly FABRICATED unit within 8\" of the triggering model: that unit can make a Normal move of up to D6\"."
+    }
+  },
+  {
+    "caseId": "model-refs/attackers-of-target-keyword",
+    "effect": {
+      "type": "designate-target",
+      "designation": "fabricated-mark",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "stat-modifier",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "FABRICATED"
+            ]
+          },
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1
+          }
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select one enemy unit (your Fabricated Mark target). Until the end of the phase, each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly FABRICATED unit."
+    }
+  },
+  {
+    "caseId": "model-refs/attackers-of-target-any-friendly",
+    "effect": {
+      "type": "designate-target",
+      "designation": "fabricated-mark",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "stat-modifier",
+          "target": {
+            "owner": "friendly"
+          },
+          "modifier": {
+            "stat": "D",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select one enemy unit (your Fabricated Mark target). Until the end of the phase, each time a friendly unit makes an attack against it, add 1 to the Damage characteristic of that attack."
+    }
+  },
+  {
+    "caseId": "model-refs/attackers-of-target-attacker",
+    "effect": {
+      "type": "designate-target",
+      "designation": "fabricated-mark",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "stat-modifier",
+          "target": "attacker",
+          "modifier": {
+            "stat": "S",
+            "operation": "improve",
+            "value": 2
+          }
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select one enemy unit (your Fabricated Mark target). Until the end of the phase, each time a friendly unit makes an attack against it, improve the Strength characteristic of that attack by 2."
+    }
+  },
+  {
+    "caseId": "model-refs/attackers-of-target-weapons",
+    "effect": {
+      "type": "designate-target",
+      "designation": "fabricated-mark",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "stat-modifier",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "FABRICATED"
+            ]
+          },
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1,
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select one enemy unit (your Fabricated Mark target). Until the end of the phase, each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made with ranged weapons by a friendly FABRICATED unit."
+    }
+  },
+  {
+    "caseId": "model-refs/attackers-of-target-this-unit",
+    "effect": {
+      "type": "designate-target",
+      "designation": "fabricated-mark",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1
+          }
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select one enemy unit (your Fabricated Mark target). Until the end of the phase, each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made by the unit."
+    }
+  },
+  {
+    "caseId": "model-refs/attackers-of-target-unowned-vowel",
+    "effect": {
+      "type": "designate-target",
+      "designation": "fabricated-mark",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "stat-modifier",
+          "target": {
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1
+          }
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select one enemy unit (your Fabricated Mark target). Until the end of the phase, each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made by an ALPHA unit."
+    }
+  },
+  {
+    "caseId": "model-refs/attackers-of-target-model-filter",
+    "effect": {
+      "type": "designate-target",
+      "designation": "fabricated-mark",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "stat-modifier",
+          "target": {
+            "owner": "friendly",
+            "level": "model",
+            "any_of": [
+              "ALPHA",
+              "BETA"
+            ]
+          },
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1
+          }
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select one enemy unit (your Fabricated Mark target). Until the end of the phase, each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly model with the ALPHA or BETA keyword."
+    }
+  },
+  {
+    "caseId": "model-refs/attackers-of-target-attacks-stat",
+    "effect": {
+      "type": "designate-target",
+      "designation": "fabricated-mark",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "stat-modifier",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "FABRICATED"
+            ]
+          },
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select one enemy unit (your Fabricated Mark target). Until the end of the phase, each time a friendly unit makes an attack against it, add 1 to all friendly FABRICATED units' Attacks characteristic."
+    }
+  },
+  {
+    "caseId": "model-refs/designation-target-stat-unchanged",
+    "effect": {
+      "type": "designate-target",
+      "designation": "fabricated-mark",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "target",
+        "effect": {
+          "type": "stat-modifier",
+          "target": "selected-unit",
+          "modifier": {
+            "stat": "T",
+            "operation": "worsen",
+            "value": 1
+          }
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select one enemy unit (your Fabricated Mark target). Until the end of the phase, while it is your target, worsen the selected unit's Toughness characteristic by 1."
+    }
+  },
+  {
+    "caseId": "model-refs/attackers-of-target-entry-list",
+    "effect": {
+      "type": "designate-target",
+      "designation": "fabricated-mark",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": [
+        {
+          "to": "target",
+          "effect": {
+            "type": "ability-grant",
+            "target": "selected-unit",
+            "modifier": {
+              "ability": "stealth"
+            }
+          }
+        },
+        {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "FABRICATED"
+                  ]
+                },
+                "modifier": {
+                  "stat": "S",
+                  "operation": "improve",
+                  "value": 1
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "FABRICATED"
+                  ]
+                },
+                "modifier": {
+                  "stat": "AP",
+                  "operation": "improve",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select one enemy unit (your Fabricated Mark target). Until the end of the phase:\n  -> While it is your target, the selected unit gains the Stealth ability.\n  -> Each time a friendly unit makes an attack against it:\n    -> Improve the Strength characteristic of that attack by 1 if it is made by a friendly FABRICATED unit.\n    -> Improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly FABRICATED unit."
+    }
+  },
+  {
+    "caseId": "model-refs/attackers-of-target-inline",
+    "effect": {
+      "type": "choice",
+      "options": [
+        {
+          "type": "designate-target",
+          "designation": "fabricated-mark",
+          "select": {
+            "kind": "unit",
+            "selector": {
+              "filter": {
+                "owner": "enemy"
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          },
+          "applies": {
+            "to": "attackers-of-target",
+            "effect": {
+              "type": "stat-modifier",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "FABRICATED"
+                ]
+              },
+              "modifier": {
+                "stat": "AP",
+                "operation": "improve",
+                "value": 1
+              }
+            }
+          },
+          "duration": "phase"
+        },
+        {
+          "type": "ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "stealth"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select one of the following:\n  - Select one enemy unit (your Fabricated Mark target); until the end of the phase, each time a friendly unit attacks it, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly FABRICATED unit.\n  - The unit gains the Stealth ability."
     }
   }
 ]

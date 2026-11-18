@@ -106,10 +106,61 @@ func statModifierLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	if m["incoming"] == true {
 		return incomingLead(m, subj) + statChange(m, "the "+stat+" of that attack") + bounds(m)
 	}
+	if ctx.attackOnTarget && attackStats[ejstr(m["stat"])] {
+		return statChange(m, "the "+stat+" of that attack") + bounds(m) + attackMaker(e["target"], m, subj)
+	}
 	if hasWeapon(m) {
 		return statChange(m, "the "+stat+" of "+weaponNoun(map[string]any{"weapons": m["weapons"]})+" equipped by "+weaponHolder(e["target"], ctx)) + bounds(m)
 	}
 	return statChange(m, ofOrPossessive(subj, stat)) + bounds(m)
+}
+
+// attackStats is the characteristics an attack has: under an attackers-of-target designation, each
+// attack's.
+var attackStats = map[string]bool{"S": true, "WS": true, "BS": true, "AP": true, "D": true}
+
+// attackMaker is which attacks against the target a per-attack change covers: " if it is made with
+// ranged weapons by a friendly ASTRA MILITARUM unit". A target that is any friendly unit or model, or
+// the attacking unit, adds nothing: every such attack already qualifies.
+func attackMaker(target any, m map[string]any, subj string) string {
+	withWeapons := ""
+	if hasWeapon(m) {
+		withWeapons = " with " + weaponNoun(map[string]any{"weapons": m["weapons"]})
+	}
+	f, _ := target.(map[string]any)
+	isFilter := f != nil
+	for _, k := range []string{"selection_var", "event_var", "stratagem_target", "aura_recipient", "role"} {
+		// A null field is an absent one.
+		if f[k] != nil {
+			isFilter = false
+		}
+	}
+	anyAttacker := target == nil || target == "attacker"
+	if !anyAttacker && isFilter {
+		anyAttacker = true
+		for k, v := range f {
+			if !(v == nil || (k == "owner" && v == "friendly") || k == "level") {
+				anyAttacker = false
+			}
+		}
+	}
+	by := ""
+	switch {
+	case anyAttacker:
+	case isFilter:
+		maker := selectorSubject(map[string]any{"filter": f}, false)
+		article := "a"
+		if maker != "" && strings.ContainsRune("aeiouAEIOU", rune(maker[0])) {
+			article = "an"
+		}
+		by = " by " + article + " " + maker
+	default:
+		by = " by " + subj
+	}
+	if withWeapons == "" && by == "" {
+		return ""
+	}
+	return " if it is made" + withWeapons + by
 }
 
 func ignoreModifiersLeaf(m map[string]any, subj string) string {

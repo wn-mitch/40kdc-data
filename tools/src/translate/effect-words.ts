@@ -23,6 +23,8 @@ export interface Ctx {
   eachModel?: boolean;
   /** The ability's trigger already says a unit or model is destroyed; leaves must not repeat it. */
   destroyedTrigger?: boolean;
+  /** Inside a designation's `attackers-of-target` entry: a characteristic change applies to each attack against the target. */
+  attackOnTarget?: boolean;
 }
 
 /** `{rating: true}`: the rating the unit's datasheet prints for this rule (substituted when a unit is known). */
@@ -314,6 +316,7 @@ const ROLE_SUBJECTS: Record<string, string> = {
   "model-in-this-unit": "a model in this unit",
   defender: "the target",
   "event-subject": "the triggering unit",
+  "event-subject-model": "the triggering model",
   "event-object": "that unit",
   "event-object-model": "that model",
   "stratagem-target": "that unit",

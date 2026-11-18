@@ -287,6 +287,8 @@ def designated_attack_when(applies: dict[str, Any]) -> str:
 
 def designated_recipient_context(applies: Any, ctx: Ctx) -> Ctx:
     applies = _obj(applies)
+    if applies.get("to") == "attackers-of-target":
+        return {**ctx, "attack_on_target": True}
     if applies.get("to") != "bound-unit-attacks-reference":
         return ctx
     return {

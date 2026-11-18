@@ -13,7 +13,13 @@ from typing import Any
 
 from wh40kdc.translate.condition import describe_condition
 from wh40kdc.translate.condition_leadin import condition_lead_in
-from wh40kdc.translate.condition_refs import _objective_phrase, is_event_object, place_ref_phrase
+from wh40kdc.translate.condition_refs import (
+    EVENT_SUBJECT_MODEL,
+    _objective_phrase,
+    is_event_object,
+    is_event_subject,
+    place_ref_phrase,
+)
 from wh40kdc.translate.effect_leaf_army import (
     army_rule,
     cost_modifier,
@@ -494,9 +500,10 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
 def _ends_nearest_phrase(e: dict[str, Any], ctx: Ctx, who: str, move_ref: str) -> str:
     """As endsNearestPhrase in the TypeScript describer: the closest unit's name, with the waiver's
     alternative end when waives is closest-enemy-model."""
-    if e.get("of") == "event-subject":
+    if is_event_subject(e.get("of")):
         # The enemy unit the trigger names is "that enemy unit", not the closest of a group.
-        nearest = "as close as possible to that enemy unit"
+        noun = "model" if e.get("of") == EVENT_SUBJECT_MODEL else "unit"
+        nearest = f"as close as possible to that enemy {noun}"
     else:
         objective = e["of"].get("objective") if isinstance(e.get("of"), dict) else None
         if objective is not None:

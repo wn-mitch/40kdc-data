@@ -5,7 +5,7 @@
 
 import { describeCondition, type Condition } from "./condition.js";
 import { conditionLeadIn } from "./condition-leadin.js";
-import { isEventObject, objectivePhrase, type P } from "./condition-refs.js";
+import { EVENT_SUBJECT_MODEL, isEventObject, isEventSubject, objectivePhrase, type P } from "./condition-refs.js";
 import type { Inline, Leaf } from "./effect-leaf.js";
 import {
   amountOf, andList, orList, dekebab, designationFor, movedPhrase, noneOf, diceCase, effectSubject, formatComparison, isLiteral, jstr, ofOrPossessive, pronoun,
@@ -180,7 +180,7 @@ function endsNearestPhrase(e: P, ctx: Ctx, who: string, moveRef: string): string
   // The enemy unit the trigger names is "that enemy unit", not the closest of a group.
   // An objective names no unit: any marker, or the one a select-objective bound.
   const objective = (e.of as P).objective as P | undefined;
-  const nearest = e.of === "event-subject" ? "as close as possible to that enemy unit" : `as close as possible to the closest ${objective !== undefined
+  const nearest = isEventSubject(e.of) ? `as close as possible to that enemy ${e.of === EVENT_SUBJECT_MODEL ? "model" : "unit"}` : `as close as possible to the closest ${objective !== undefined
     ? (objective.selection_var !== undefined ? "selected objective" : "objective marker")
     // A filter names a plural group ("all enemy units"); the closest one is singular.
     : effectSubject(e.of, ctx).replace(/^(an?|the|all) /, "").replace(" units", " unit").replace(/ units\)/g, ")")}`;

@@ -550,6 +550,17 @@ fn describe_matches(p: &P, negated: bool) -> String {
             );
         }
     }
+    // A trigger's model reads as a model ("the triggering model is within Engagement Range of ...").
+    if matches!(
+        p.get("subject").and_then(Value::as_str),
+        Some(EVENT_SUBJECT_MODEL | EVENT_OBJECT_MODEL)
+    ) {
+        let mut model = f.clone();
+        model.insert("level".into(), Value::String("model".into()));
+        let phrase = unit_filter_phrase(&model);
+        let phrase = phrase.strip_prefix("a model ").unwrap_or(&phrase);
+        return format!("{who} is {not}{phrase}");
+    }
     format!("{who} is {not}{}", unit_filter_phrase(f))
 }
 
