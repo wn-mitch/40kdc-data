@@ -1,5 +1,5 @@
 import {
-  boundedInteger, enumOrSource, enumSet, enumValue, exactKeys, keySet,
+  boundedInteger, enumOrSource, enumSet, enumValue, exactKeys, keySet, sourceQualified,
 } from "../family-validation.js";
 import {
   type Params, ANTECEDENT, EVENT_SUBJECT, DICE, MOVE_SUBJECTS, subjectOrSource,
@@ -42,11 +42,8 @@ function makeMoveDistance(value: unknown): unknown {
   }
   if (typeof value === "number" && Number.isSafeInteger(value) && value >= 0) return value;
   if (typeof value === "string" && DISTANCE_DICE.test(value)) return value;
-  // A snippet object's other keys are dropped.
-  if (value !== null && typeof value === "object" && "source" in value && typeof (value as { source: unknown }).source === "string") {
-    const source = (value as { source: string }).source;
-    if (source && source === source.trim()) return { source };
-  }
+  const source = sourceQualified(value, "make-move.distance");
+  if (source) return source;
   throw new TypeError("make-move.distance must be a non-negative integer, a dice expression, or an exact source snippet.");
 }
 

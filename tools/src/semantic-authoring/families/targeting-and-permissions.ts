@@ -30,7 +30,7 @@ function normalizeAttack(input: Params): Params {
     // Who attacks and which way are the earlier attack's; a back-reference that also names them borrows wording from outside its span.
     if (extra.length) throw new TypeError(`attack with refers takes only attack_type besides it; drop ${extra.join(", ")}: the earlier attack already says them.`);
     if (rest.attack_type === undefined) return { refers: rest.refers };
-    if (!PRINTED_ATTACK_TYPES.includes(String(rest.attack_type))) throw new TypeError("attack with refers prints only melee, ranged or psychic as its attack_type; leave it out otherwise.");
+    if (typeof rest.attack_type !== "string" || !PRINTED_ATTACK_TYPES.includes(rest.attack_type)) throw new TypeError("attack with refers prints only melee, ranged or psychic as its attack_type; leave it out otherwise.");
     return { refers: rest.refers, attack_type: rest.attack_type };
   }
   for (const key of ["direction", "unit", "attack_type"]) {
@@ -98,8 +98,8 @@ function normalizeEligibilityPermission(input: Params): Params {
     throw new TypeError("eligibility-permission.stratagem is required exactly when despite includes stratagem-used-this-phase.");
   }
   if ("stratagem" in base) {
-    const stratagem = String(base.stratagem ?? "");
-    if (!KEBAB_ID.test(stratagem)) throw new TypeError("eligibility-permission.stratagem must be a kebab-case id.");
+    const stratagem = base.stratagem;
+    if (typeof stratagem !== "string" || !KEBAB_ID.test(stratagem)) throw new TypeError("eligibility-permission.stratagem must be a kebab-case id.");
     result.stratagem = stratagem;
   }
   if (engagedWithMoveEnd !== undefined) {
@@ -241,12 +241,14 @@ function normalizeCountsAs(input: Params): Params {
     if (input.range_ref !== "synapse") throw new TypeError(`counts-as.range_ref ${JSON.stringify(input.range_ref)} is not a grantable named range.`);
     if (input.of_side !== "friendly") throw new TypeError("counts-as.range_ref names whose units the range is measured to: of_side friendly.");
     if (!grantable) throw new TypeError(`counts-as.subject ${JSON.stringify(subject)} cannot take a named range.`);
+    exactKeys(input, ["subject", "range_ref", "of_side"], "counts-as");
     return { subject, range_ref: "synapse", of_side: "friendly" };
   }
   if ("of_side" in input) throw new TypeError("counts-as.of_side goes with range_ref.");
   if ("region" in input) {
     if ("within" in input) throw new TypeError("counts-as takes within or region, not both.");
     if (!grantable) throw new TypeError(`counts-as.subject ${JSON.stringify(subject)} cannot take a region.`);
+    exactKeys(input, ["subject", "region"], "counts-as");
     const region = input.region as Params | undefined;
     if (typeof region !== "object" || region === null || Array.isArray(region)) throw new TypeError("counts-as.region must be an object.");
     if (Object.keys(region).sort().join(",") !== [...REGION_KEYS].sort().join(",")) throw new TypeError("counts-as.region takes exactly region_id and owner_faction.");
@@ -260,20 +262,19 @@ function normalizeCountsAs(input: Params): Params {
 }
 
 const RULE_KINDS = ["core-rule", "keyword", "ability", "faction-rule"] as const;
-/** Subjects beyond this unit or model; any value whose text is one of these is accepted as written. */
+/** Subjects beyond this unit or model. */
 const RULE_STATE_OTHER_SUBJECTS = ["selected-unit", "event-subject", "target", ANTECEDENT];
 
 function ruleStateCore(input: Params): Params {
   exactKeys(input, ["subject", "direction", "rule_kind", "rule"], "rule-state");
   const ruleKind = enumValue(input.rule_kind, RULE_KINDS, "rule-state.rule_kind");
-  const rule = String(input.rule ?? "");
+  const rule = typeof input.rule === "string" ? input.rule : "";
   if (ruleKind === "keyword") {
     if (!ASCII_KEYWORD.test(rule)) throw new TypeError("rule-state.rule must be an uppercase keyword when rule_kind is keyword.");
   } else if (!KEBAB_ID.test(rule)) {
     throw new TypeError("rule-state.rule must be a kebab-case id when rule_kind is not keyword.");
   }
-  // The subject is compared as text, so a value that prints as one of the other subjects stays as given.
-  const subject = RULE_STATE_OTHER_SUBJECTS.includes(String(input.subject)) ? input.subject : enumValue(input.subject, SUBJECTS, "rule-state.subject");
+  const subject = enumValue(input.subject, [...SUBJECTS, ...RULE_STATE_OTHER_SUBJECTS], "rule-state.subject");
   return {
     subject,
     direction: enumValue(input.direction, ["granted", "suppressed"], "rule-state.direction"),

@@ -54,6 +54,13 @@ describe("select-weapon names the weapon it binds", () => {
   });
 });
 
+describe("weapon-property-scope weapon: antecedent parameters", () => {
+  it("takes subject and weapon only", () => {
+    expect(normalizeFingerprintParameters("weapon-property-scope", { subject: "this-model", weapon: "antecedent" })).toEqual({ subject: "this-model", weapon: "antecedent" });
+    expect(() => normalizeFingerprintParameters("weapon-property-scope", { subject: "this-model", weapon: "antecedent", extra: 1 })).toThrow(/exactly: subject, weapon/u);
+  });
+});
+
 describe("a stat adjustment with weapon: antecedent changes the selected weapon", () => {
   it("lowers the select to a named bind and each stat change to the bound weapon", () => {
     const { mechanics } = compiled(BATTLE_FORMATION());
@@ -230,6 +237,15 @@ describe("equipped-weapon-count: family parameters", () => {
   it("accepts exactly the shape the compiler reads", () => {
     expect(normalizeFingerprintParameters("equipped-weapon-count", { subject: "this-model", weapon_type: "melee", count: 2, other_than: " Close combat weapon " }))
       .toEqual({ subject: "this-model", weapon_type: "melee", count: 2, other_than: "Close combat weapon" });
+  });
+
+  it("refuses a negated that is not a boolean, in both forms", () => {
+    const keyword = { subject: "this-model", weapon_keywords: ["Torrent"], min: 1 };
+    const named = { subject: "this-model", weapon_type: "melee", count: 2, other_than: "Close combat weapon" };
+    for (const base of [keyword, named]) {
+      expect(normalizeFingerprintParameters("equipped-weapon-count", { ...base, negated: false })).toMatchObject({ negated: false });
+      for (const negated of ["yes", 1, null]) expect(() => normalizeFingerprintParameters("equipped-weapon-count", { ...base, negated })).toThrow(/negated is true, false or absent/u);
+    }
   });
 
   it("refuses a count outside 1 to 12, a blank excluded name, a non-model subject and an unknown type", () => {

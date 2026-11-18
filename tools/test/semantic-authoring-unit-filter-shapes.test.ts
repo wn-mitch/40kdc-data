@@ -418,3 +418,33 @@ describe("a unit-filter naming the unit a Leader is leading", () => {
     });
   });
 }
+
+describe("unit-filter input checks", () => {
+  const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("unit-filter", parameters, currentFamilyVersion("unit-filter"));
+
+  it("checks states beside excluded_all_keywords instead of dropping them", () => {
+    const excludedAll = { side: "friendly", excluded_all_keywords: ["ALPHA", "BETA"] };
+    expect(() => normalize({ ...excludedAll, states: "unengaged" })).toThrow(/unit-filter\.states must list/u);
+    expect(() => normalize({ ...excludedAll, states: [] })).toThrow(/unit-filter\.states must list/u);
+    expect(normalize({ ...excludedAll, states: ["unengaged"] })).toEqual({ ...excludedAll, states: ["unengaged"] });
+  });
+
+  it("refuses a repeated not-battle-shocked or excluded ability instead of folding it", () => {
+    expect(() => normalize({ side: "friendly", states: ["not-battle-shocked", "not-battle-shocked"] })).toThrow(/lists a state twice/u);
+    expect(() => normalize({ side: "friendly", states: ["unengaged", "not-battle-shocked", "not-battle-shocked"] })).toThrow(/lists a state twice/u);
+    expect(normalize({ side: "friendly", states: ["not-battle-shocked", "unengaged"] }).states).toEqual(["not-battle-shocked", "unengaged"]);
+    expect(() => normalize({ side: "friendly", excluded_abilities: ["alpha-ability", "alpha-ability"] })).toThrow(/lists an ability twice/u);
+    expect(normalize({ side: "friendly", excluded_abilities: ["beta-ability", "alpha-ability"] }).excluded_abilities).toEqual(["alpha-ability", "beta-ability"]);
+  });
+
+  it("takes excluded_keywords alone with excluded_from, engaged and hidden states included", () => {
+    const base = { side: "friendly", level: "model", excluded_keywords: ["ALPHA"], excluded_from: "attacks" };
+    expect(normalize(base)).toEqual(base);
+    for (const state of ["engaged", "hidden"]) expect(() => normalize({ ...base, states: [state] })).toThrow(/states is not allowed with it/u);
+  });
+
+  it("names a friendly or enemy side with subject target, as the compiler requires", () => {
+    expect(normalize({ side: "enemy", subject: "target" })).toEqual({ side: "enemy", subject: "target" });
+    expect(() => normalize({ side: "any", subject: "target" })).toThrow(/side must be friendly or enemy/u);
+  });
+});

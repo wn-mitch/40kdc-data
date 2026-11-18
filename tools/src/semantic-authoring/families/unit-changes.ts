@@ -56,7 +56,7 @@ function addUnitChecked(input: Params): Params {
     if (rest.join === true) throw new TypeError("add-unit.models sizes a new unit; models joining a unit are not a new unit.");
   }
   exactKeys(rest, ["source", "count", ...(source === "datasheet" ? ["datasheet"] : []), ...("join" in rest ? ["join"] : [])], family);
-  if (source === "datasheet" && !ENTITY_ID.test(String(rest.datasheet ?? ""))) throw new TypeError("add-unit.datasheet must be a kebab-case id.");
+  if (source === "datasheet" && (typeof rest.datasheet !== "string" || !ENTITY_ID.test(rest.datasheet))) throw new TypeError("add-unit.datasheet must be a kebab-case id.");
   const result: Params = { source, count: enumValue(rest.count, ADD_UNIT_COUNTS, "add-unit.count") };
   if (source === "datasheet") result.datasheet = rest.datasheet;
   if ("join" in rest) result.join = booleanValue(rest.join, "add-unit.join");
@@ -84,8 +84,9 @@ function addUnit(input: Params): Params {
     if ("model" in input) throw new TypeError("add-unit.model names the model type of source model.");
     return withApostrophes("add-unit", input, addUnitChecked);
   }
-  // Source model names its models by model, never by datasheet: a datasheet key is dropped.
-  const { model, datasheet: _datasheet, ...rest } = input;
+  // Source model names its models by model, never by datasheet.
+  if ("datasheet" in input) throw new TypeError("add-unit.datasheet names the datasheet of source datasheet; source model names its models by model.");
+  const { model, ...rest } = input;
   const name = typeof model === "string" ? model.replaceAll("*", "").replace(/\s+/gu, " ").trim() : "";
   if (!name) throw new TypeError("add-unit.model names the model type the models are, as printed (Blue Horror).");
   if (rest.join !== true) throw new TypeError("add-unit source model adds models to this unit, so join is true.");

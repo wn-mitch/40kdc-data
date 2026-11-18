@@ -237,4 +237,16 @@ describe("named-region-producer", () => {
   it("refuses a region id that is not an entity id", () => {
     expect(() => normalizeFingerprintParameters("named-region-producer", { region_id: "Shadow", owner_faction: "custom-faction" })).toThrow();
   });
+
+  it("refuses ids and keywords that are not strings instead of reading their string form", () => {
+    expect(() => normalizeFingerprintParameters("named-region-state", { ...PARAMETERS, region_id: 123 })).toThrow(/region_id must be a kebab-case entity id/u);
+    expect(() => normalizeFingerprintParameters("named-region-state", { ...PARAMETERS, region_id: ["custom-region"] })).toThrow(/region_id must be a kebab-case entity id/u);
+    expect(() => normalizeFingerprintParameters("named-region-state", { ...PARAMETERS, owner_faction: ["custom-faction"] })).toThrow(/owner_faction must be a kebab-case entity id/u);
+    expect(() => normalizeFingerprintParameters("named-region-state", { ...PARAMETERS, beneficiary_faction: ["custom-faction"] })).toThrow(/beneficiary_faction must be a kebab-case entity id/u);
+    expect(() => normalizeFingerprintParameters("named-region-state", { ...PARAMETERS, qualifies_by_keyword: 7 })).toThrow(/qualifies_by_keyword must be a nonblank keyword/u);
+    expect(() => normalizeFingerprintParameters("named-region-state", { ...PARAMETERS, default_branch: { ...PARAMETERS.default_branch, optional: "yes" } }))
+      .toThrow(/default_branch\.optional must be true or false/u);
+    expect(() => normalizeFingerprintParameters("named-region-state", { ...PARAMETERS, qualified_branch: { ...PARAMETERS.qualified_branch, optional: 0 } }))
+      .toThrow(/qualified_branch\.optional must be true or false/u);
+  });
 });

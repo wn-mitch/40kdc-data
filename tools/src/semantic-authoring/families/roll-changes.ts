@@ -12,6 +12,11 @@ import {
 // roll-modifier
 
 const MODIFIER_ROLLS = [...BASIC_ROLLS, "hazard", "psychic", "desperate-escape", "preceding", "manoeuvre", "deadly-demise"] as const;
+/**
+ * The rolls a `rolls` list takes: the single rolls that need no binding. The compiler lowers the
+ * list as one roll-modifier per roll; preceding and manoeuvre are bound one leaf at a time.
+ */
+const LISTED_MODIFIER_ROLLS = [...BASIC_ROLLS, "hazard", "psychic", "desperate-escape", "deadly-demise"] as const;
 /** Rolls made with a weapon, which weapon_type can limit to melee or ranged. */
 const WEAPON_ROLLS = ["hit", "wound", "damage"];
 /** Rolls a printed weapon name can limit. */
@@ -68,23 +73,22 @@ function normalizeRollModifier(input: Input): Input {
   if ("rolls" in input) {
     const rolls = input.rolls;
     if (!Array.isArray(rolls) || rolls.length < 2) throw new TypeError("roll-modifier.rolls lists at least two rolls.");
-    const list = rolls.map((roll) => enumValue(roll, ROLL_KINDS, "roll-modifier.rolls"));
+    const list = rolls.map((roll) => enumValue(roll, LISTED_MODIFIER_ROLLS, "roll-modifier.rolls"));
     if (new Set(list).size !== list.length) throw new TypeError("roll-modifier.rolls lists a roll twice.");
-    for (const roll of list) enumValue(roll, BASIC_ROLLS, "roll-modifier.rolls");
     if ("weapon_name" in input || "weapon_names" in input) throw new TypeError("roll-modifier weapon names cannot combine with rolls.");
     result.rolls = [...list].sort();
     weaponRolls = list;
   } else {
     const roll = input.roll;
     if (roll === "manoeuvre") {
-      if (operation === "subtract") throw new TypeError("roll-modifier roll manoeuvre adds to the result; it cannot subtract.");
+      if (operation !== "add") throw new TypeError("roll-modifier roll manoeuvre adds to the result; it needs operation add.");
       if (input.weapon_type !== undefined) throw new TypeError("roll-modifier roll manoeuvre is not a weapon roll; drop weapon_type.");
       if (input.subject !== "event-subject") throw new TypeError("roll-modifier roll manoeuvre names the performing unit as its subject (event-subject).");
     }
     if (roll === "deadly-demise" && "weapon_type" in input) throw new TypeError("roll-modifier roll deadly-demise is no weapon's roll; drop weapon_type.");
     if ("weapon_name" in input || "weapon_names" in input) {
       if ("weapon_name" in input && "weapon_names" in input) throw new TypeError("roll-modifier.weapon_name cannot combine with weapon_names.");
-      if (!(typeof roll === "string" && [...NAMED_WEAPON_ROLLS, "deadly-demise"].includes(roll))) {
+      if (!(typeof roll === "string" && NAMED_WEAPON_ROLLS.includes(roll))) {
         throw new TypeError(`roll-modifier weapon names need a ${NAMED_WEAPON_ROLLS.join(", ")} roll.`);
       }
     }
@@ -241,7 +245,7 @@ export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "roll-modifier",
-    version: 12,
+    version: 13,
     role: "EFFECT",
     label: "Change a roll",
     description: "Adds to, subtracts from, or halves a named roll. roll is a Hit, Wound, Charge, Advance, save, Leadership, Battle-shock or Damage roll, a Hazardous, Psychic or Desperate Escape test, preceding (the roll or test the record made just before, bound when the record compiles), manoeuvre (the performing unit's Agile Manoeuvre roll, which adds and takes event-subject as its subject), deadly-demise (the roll a Deadly Demise ability makes when its bearer is destroyed), or {ability: id} (the dice that named ability rolls); rolls instead applies the same change to each of two or more named rolls (\"add 1 to Advance and Charge rolls\"). value is a number or that-many: as many as the mortal wounds printed before it in its sentence, from the same roll (it needs operation add, and takes no cap or rolls). halve takes no value or cap. weapon_type limits a Hit, Wound or Damage roll change to melee or ranged weapons; weapon_name (one printed name) or weapon_names (two to eight) limit a hit, wound, damage or hazard roll to those weapons (\"+1 to hazard rolls made for its X and Y weapons\"). cap: the modifier adds no more than N in total (\"to a maximum of +2\"). subject: the unit whose rolls these are (\"add 1 to Charge rolls made for that unit\"); antecedent points back to an earlier leaf's unit. Without it, the rolls are this unit's (or the attacker's, against an attack on this unit).",
@@ -253,7 +257,7 @@ export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
         roll: { anyOf: [{ enum: MODIFIER_ROLLS }, SOURCE, ABILITY_ROLL], "x-optional": true },
         operation: { enum: ["add", "subtract", "halve"] },
         value: { anyOf: [{ type: "integer" }, SOURCE, { const: "that-many" }], "x-optional": true },
-        rolls: { type: "array", items: { enum: ROLL_KINDS }, minItems: 2, uniqueItems: true, "x-optional": true },
+        rolls: { type: "array", items: { enum: LISTED_MODIFIER_ROLLS }, minItems: 2, uniqueItems: true, "x-optional": true },
         weapon_type: { enum: WEAPON_TYPES, "x-optional": true },
         subject: { enum: ROLL_SUBJECTS, "x-optional": true },
         weapon_name: { type: "string", minLength: 1, "x-optional": true },

@@ -15,7 +15,7 @@ export const SOURCE = {
   additionalProperties: false,
 };
 
-/** The rolls the first roll families named, and the only ones a roll-modifier `rolls` list takes. */
+/** The rolls the first roll families named. */
 export const BASIC_ROLLS = ["hit", "wound", "charge", "advance", "save", "leadership", "battle-shock", "damage"] as const;
 
 /** The shared roll-kind vocabulary of re-roll, ignore-modifiers, roll-auto-result and roll-prohibition. */

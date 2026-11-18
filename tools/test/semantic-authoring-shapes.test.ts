@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { hashJson } from "../src/canonical-hash.js";
 import { compilationInputsHash } from "../src/semantic-authoring/compiled.js";
 import { currentFamilyVersion, validateFingerprint } from "../src/semantic-authoring/contracts.js";
@@ -21,6 +21,13 @@ import { refreshSources } from "../src/semantic-authoring/source.js";
 import { applyAnnotationBatch, approveShape, confirmSurface, moveSurface, rejectShapeMembers, undoBatch } from "./semantic-authoring-human.js";
 
 type DatabaseSync = DatabaseType;
+/** Set to make the cruncher gate fail every record, as a gate added after approval would. */
+const gate = vi.hoisted(() => ({ failing: false }));
+vi.mock("../src/semantic-authoring/gates.js", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../src/semantic-authoring/gates.js")>();
+  return { ...actual, cruncherGateErrors: (...args: Parameters<typeof actual.cruncherGateErrors>) => gate.failing ? ["test gate failure"] : actual.cruncherGateErrors(...args) };
+});
+
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 const REVIEWER = "fixture-reviewer";
 // Fabricated fixture prose only.
@@ -143,6 +150,17 @@ describe("Semantic authoring shapes", () => {
     expect(bump((parameters) => parameters)).toMatchObject({ migrated_annotations: 1, carried_approvals: 1 });
     expect(state()).toBe("approved");
     expect(publishableEntries(db).factions[0]!.entries.map((entry) => entry.ability_id)).toEqual(["alpha"]);
+
+    // A gate the record fails since its approval does not undo the approval: the mechanics are
+    // unchanged, and publication re-runs the gates.
+    gate.failing = true;
+    try {
+      toRetired(ones);
+      expect(bump((parameters) => parameters)).toMatchObject({ migrated_annotations: 1, carried_approvals: 1 });
+    } finally {
+      gate.failing = false;
+    }
+    expect(state()).toBe("approved");
 
     // A bump that changes what the leaf means changes the compilation: the approval goes stale.
     toRetired(ones);

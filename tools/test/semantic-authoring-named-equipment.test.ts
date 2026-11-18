@@ -79,6 +79,17 @@ describe("named-weapon and unit-wargear: family parameters", () => {
     expect(() => normalizeFingerprintParameters("named-weapon", { subject: "this-model", name: "Fizz blade", count: 1, extra: true }, currentFamilyVersion("named-weapon"))).toThrow();
   });
 
+  it("refuses a negated that is not a boolean", () => {
+    const weapon = { subject: "this-model", name: "Fizz blade", count: 1 };
+    const wargear = { subject: "this-unit", wargear: "relay-kit" };
+    expect(normalizeFingerprintParameters("named-weapon", { ...weapon, negated: false })).toEqual({ ...weapon, negated: false });
+    expect(normalizeFingerprintParameters("unit-wargear", { ...wargear, negated: false })).toEqual({ ...wargear, negated: false });
+    for (const negated of ["yes", 1, null]) {
+      expect(() => normalizeFingerprintParameters("named-weapon", { ...weapon, negated })).toThrow(/named-weapon.negated/u);
+      expect(() => normalizeFingerprintParameters("unit-wargear", { ...wargear, negated })).toThrow(/unit-wargear.negated/u);
+    }
+  });
+
   it("refuses unit-wargear for any subject but this unit", () => {
     expect(() => normalizeFingerprintParameters("unit-wargear", { subject: "this-model", wargear: "relay-kit" }, 1)).toThrow();
   });

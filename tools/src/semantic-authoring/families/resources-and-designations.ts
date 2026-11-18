@@ -1,4 +1,4 @@
-import { DESIGNATION_IDS, refuseListBuildingTag } from "../../translate/designations.js";
+import { DESIGNATION_IDS, LIST_BUILDING_DESIGNATIONS, designationId, refuseListBuildingTag } from "../../translate/designations.js";
 import { ANTECEDENT } from "../antecedent-families.js";
 import {
   booleanValue, boundedInteger, enumOrSource, enumSet, enumValue, integerOrSource, keySet, sourceQualified,
@@ -27,30 +27,8 @@ const KNOWN_POOL_IDS = ["command-point", "miracle-dice-pool", "pain-token-pool",
 /** A dice amount: D3, D6, 2D6, D3+1. */
 const DICE = /^\d*D(3|6)(\+\d+)?$/u;
 
-/** The tags apply-mark lists in its schema (every registered designation is accepted; see normalizeApplyMark). */
-const MARK_TAG_VALUES = [
-  "a-trap-well-laid", "acquisition", "affected-by-order", "afflicted", "aflame", "analysed", "assailed",
-  "assemblage-of-might", "auspex-scanned", "battle-shock-auto-succeed", "bio-stimulus-target",
-  "blight-bombardment-target", "bloody-vengeance", "breaching-fire-target", "busted", "chronosorcerous-bleed",
-  "claw-of-ascension-crossfire-target", "claw-of-ascension-priority-target", "claw-of-ascension-survey-augur-target",
-  "cleansed", "condemned", "conqueror-imperative-active", "consecrated", "contract-unit", "counterstrategist-target",
-  "covered-in-squigs", "daring-recon-target", "death-begets-vengeance-hated", "decoyed", "designated",
-  "dreadherder-target", "dual-melee", "eliminate-at-all-costs", "empowered", "enhancement-expended", "entrenched",
-  "favoured-champions", "flame-wreathed", "focus-of-hatred", "guidance-of-the-ancients",
-  "guidance-of-the-ancients-crowes-sanctifiers", "guided", "hated-foe", "held", "hidden", "hunted", "illuminated",
-  "losing-the-wager", "machine-vengeance-target", "marked", "marked-prey", "mutated", "nethershriek-mind-eater",
-  "no-benefit-of-cover", "nulled", "oath-fulfilled", "oath-of-moment", "oath-of-moment-target", "observer",
-  "octagram-battle-shock", "over-there-target", "overlapping-fire", "pinned", "pinpoint-counter-offensive",
-  "pledge-of-mortal-pain", "plundered", "prey-marked", "priority-target", "prosecuted",
-  "protector-imperative-active", "pulsa-rokkit-target", "pulse-onslaught-shaken", "quarry",
-  "remains-under-your-control", "riled-up", "sabotaged", "scornful-analysis-designated", "secured",
-  "servo-designated", "shadow-of-chaos", "shaken", "shocked", "signal-fire-target", "singular-purpose-enemy",
-  "singular-purpose-marker", "slayer-of-champions", "spirit-mark", "split-into-single-model-units", "spotted",
-  "staggered", "stormwracked", "strategic-conqueror", "suppressed", "suppressing-fire-pinned", "surveilled",
-  "symbiotic-target", "tethered", "throne-tyrannicus", "titanic-duel-target", "trapped", "triangulated",
-  "unbridled-ardour-slayer", "unhideable", "unmasked", "vengeful-dead", "whispering-web",
-  "wholly-within-flow-of-magic", "winning-the-wager", "worthy-foes", "corrupted", "warded",
-] as const;
+/** The tags apply-mark accepts: every registered designation except the ones only list building sets. */
+const MARK_TAG_VALUES = [...DESIGNATION_IDS].filter((id) => !LIST_BUILDING_DESIGNATIONS.has(designationId(id))).sort();
 
 /** A resource pool id: a plain kebab-case id, or an exact source snippet. */
 function poolId(value: unknown, label: string): string | SourceQualifiedValue {
@@ -243,7 +221,7 @@ function normalizeArmyConstruction(input: Params): Params {
     result.led_by = input.led_by;
   }
   if (measure !== undefined) result.measure = enumValue(measure, ARMY_MEASURES, "army-construction.measure");
-  if (per !== undefined) result.per_keywords = printedKeywordArray(per, "army-construction.with_keywords");
+  if (per !== undefined) result.per_keywords = printedKeywordArray(per, "army-construction.per_keywords");
   if (faction !== undefined) {
     if (typeof faction !== "string" || !ENTITY_ID.test(faction)) throw new TypeError("army-construction.faction is a kebab-case faction id.");
     result.faction = faction;
@@ -460,7 +438,7 @@ export const RESOURCES_AND_DESIGNATIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "apply-mark",
-    version: 7,
+    version: 8,
     role: "EFFECT",
     label: "Tag a unit",
     description: "Applies (or clears) a designation tag on the subject: this unit, this model, the selected unit, antecedent (the unit an earlier leaf of the record introduced, \"that enemy unit\", \"it\", bound when the record compiles), selected-objective (the objective marker a select leaf of this record bound), or visible-terrain (one terrain feature visible to the rule's unit, which the rule picks: \"select one visible terrain feature. That terrain feature is identified\"). tag is any registered designation id (tools/src/translate/designations.ts) or a source-qualified value. by names the unit that applied the designation: this-unit, this-model, selected-unit, event-subject, or recipient (the unit of the current for-each-unit pass: \"for each Observer unit …, select one enemy unit … to be marked as their Spotted unit\"); a terrain subject takes no by. The designation ends at the record's printed duration (compile-designation-expiry.ts), so a by with no printed duration is refused at compile time.",

@@ -35,7 +35,12 @@ function grantKeyword(value: unknown, label: string): string {
   throw new TypeError(`${label} must be a named weapon ability such as Lethal Hits or Sustained Hits 1.`);
 }
 
-const negatedField = (input: Params): Params => ("negated" in input ? { negated: input.negated === true } : {});
+/** An optional boolean negated, as given. */
+function negatedField(input: Params, family: string): Params {
+  if (!("negated" in input)) return {};
+  if (typeof input.negated !== "boolean") throw new TypeError(`${family}.negated is true, false or absent.`);
+  return { negated: input.negated };
+}
 
 function modelsQuantifier(value: unknown, label: string): { at_least: number; state: string } {
   if (!isObject(value)) throw new TypeError(`${label} is an object with at_least and state.`);
@@ -105,7 +110,7 @@ function normalizeEquippedWeaponCount(input: Params): Params {
       subject: enumValue(input.subject, ["this-unit", "this-model"], `${family}.subject`),
       weapon_keywords: enumSet(input.weapon_keywords, WEAPON_KEYWORDS, `${family}.weapon_keywords`),
       min: boundedInteger(input.min, 1, 12, `${family}.min`),
-      ...negatedField(input),
+      ...negatedField(input, family),
     };
   }
   if (input.subject === "this-unit") throw new TypeError(`${family} with subject this-unit is the keyword form; it needs weapon_keywords and min.`);
@@ -118,7 +123,7 @@ function normalizeEquippedWeaponCount(input: Params): Params {
     weapon_type: enumValue(input.weapon_type, ["melee", "ranged"], `${family}.weapon_type`),
     count: boundedInteger(input.count, 1, 12, `${family}.count`),
     other_than: name,
-    ...negatedField(input),
+    ...negatedField(input, family),
   };
 }
 
@@ -142,7 +147,7 @@ function normalizeWeaponPropertyScope(input: Params): Params {
     if (input.weapon !== ANTECEDENT) throw new TypeError(`${family}.weapon takes only antecedent.`);
     if ("weapon_type" in input) throw new TypeError(`${family}.weapon antecedent is the bound weapon; it takes no weapon_type.`);
     if (input.subject !== "this-model") throw new TypeError(`${family}.weapon antecedent belongs to this-model, the model that made the selection.`);
-    // Keys other than the weapon-naming ones refused above are dropped, not refused.
+    exactKeys(input, ["subject", "weapon"], family);
     return { subject: "this-model", weapon: ANTECEDENT };
   }
   const named = namings[0];
@@ -171,7 +176,7 @@ function normalizeNamedWeapon(input: Params): Params {
     name,
     count: boundedInteger(input.count, 1, 12, "named-weapon.count"),
     ...(input.models !== undefined ? { models: modelsQuantifier(input.models, "named-weapon.models") } : {}),
-    ...negatedField(input),
+    ...negatedField(input, "named-weapon"),
   };
 }
 
@@ -183,7 +188,7 @@ function normalizeUnitWargear(input: Params): Params {
     subject,
     wargear: input.wargear,
     ...(input.models !== undefined ? { models: modelsQuantifier(input.models, "unit-wargear.models") } : {}),
-    ...negatedField(input),
+    ...negatedField(input, "unit-wargear"),
   };
 }
 

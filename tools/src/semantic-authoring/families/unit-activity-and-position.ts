@@ -26,7 +26,7 @@ const LISTED_ACTIVITIES = [
   "made-dark-pact-this-phase", "lost-models-this-phase", "destroyed-enemy-model-this-phase", "destroyed-enemy-model-this-turn",
   "targeted-by-attacks-this-phase", MADE_ATTACKS_TARGETING,
 ] as const;
-/** Subject activities that can also stand beside a destruction, a Stratagem-targeting or a windowed history activity. */
+/** Subject activities read by checks of their own (compile-history-values.ts, compile-triggering-destruction.ts), listed beside the other subject activities. */
 const STRATAGEM_TARGET_ACTIVITIES = ["destroyed-stratagem-target"] as const;
 const HISTORY_VALUE_ACTIVITIES = ["lost-wounds-to-triggering-attacks", "was-charged-this-turn", "suffered-mortal-wounds-from-this-ability", "lost-models-to-own-mortal-wounds"] as const;
 const TRANSPORT_MOVES = ["embarked-this-phase", "advanced-this-phase"] as const;
@@ -62,7 +62,7 @@ function subjectActivities(listed: readonly unknown[], subject: unknown, family:
   // A Stratagem's targets and a bearer's Transport are read as units.
   const unit = subject === EACH_TARGET || subject === BEARER_TRANSPORT ? "this-unit" : subject;
   const { rest, join } = peel(listed, LISTED_ACTIVITIES);
-  const activities = join(enumSet(rest, BASE_ACTIVITIES, "unit-activity.activities"));
+  const activities = join(enumSet(rest, BASE_ACTIVITIES, "unit-activity.activities")).sort();
   enumValue(unit, WIDE_OR_ANTECEDENT, "unit-activity.subject");
   if (listed.includes(MADE_ATTACKS_TARGETING) && (unit === "this-unit" || unit === "this-model")) {
     throw new TypeError("unit-activity made-attacks-targeting-this-phase: the attacks targeted this unit, so their maker is another unit, not this unit or its model.");
@@ -83,7 +83,13 @@ function destruction(input: Params, rest: Params, destroyers: readonly string[],
 function normalizeUnitActivity(input: Params): Params {
   if (!Array.isArray(input.activities)) throw new TypeError(`unit-activity.activities must list at least one activity.`);
   if (input.subject !== undefined) enumValue(input.subject, ACTIVITY_SUBJECTS, "unit-activity.subject");
-  // Transport moves, history values and destroyed-stratagem-target stand beside any other activity.
+  // Transport moves, history values and destroyed-stratagem-target are subject activities: they
+  // stand beside other subject activities, never beside a destruction, a windowed destruction or
+  // Stratagem targeting, which the compiler lowers on their own.
+  const listedActivities = input.activities as unknown[];
+  const alone = listedActivities.find(isIn([...DESTRUCTION_ACTIVITIES, WINDOWED_DESTRUCTION, TARGETED_WITH_STRATAGEM]));
+  const beside = listedActivities.find(isIn([...TRANSPORT_MOVES, ...HISTORY_VALUE_ACTIVITIES, ...STRATAGEM_TARGET_ACTIVITIES]));
+  if (alone !== undefined && beside !== undefined) throw new TypeError(`unit-activity ${String(alone)} is not mixed with ${String(beside)} in one leaf.`);
   const transport = peel(input.activities as unknown[], TRANSPORT_MOVES);
   const scope = { ...input, activities: transport.rest };
   const apostrophe = apostrophes("unit-activity", scope);
@@ -217,7 +223,7 @@ function measure(input: Params, kind: string, subject: string): Params {
         return { range_ref: range };
       }
       if (typeof range !== "string" || !(NAMED_RANGES as readonly string[]).includes(range)) throw new TypeError(`unit-position.range_ref names one of ${NAMED_RANGES.join(", ")}.`);
-      if (!["this-unit", "this-model", "matching-unit", "objective"].includes(String(of))) throw new TypeError("unit-position.range_ref needs of: this-unit, this-model, matching-unit or objective.");
+      if (!["this-unit", "this-model", "matching-unit"].includes(String(of))) throw new TypeError("unit-position.range_ref needs of: this-unit, this-model or matching-unit.");
       if (of === "matching-unit" && input.of_other !== undefined) throw new TypeError("unit-position.range_ref does not take of_other.");
       return { range_ref: range };
     }
@@ -241,16 +247,12 @@ function matchingUnit(input: Params, original: Params, apostrophe: Spellings): P
   const designated = input.of_designated !== undefined || input.of_not_designated !== undefined;
   if (designated && input.of_other !== undefined) throw new TypeError("unit-position.of_other is not combined with of_designated.");
   if (input.of_other !== undefined && input.of_other !== true) throw new TypeError("unit-position.of_other is true or absent.");
-  // Without keywords a designated filter reads only its designations; it takes no alternatives or exclusions.
-  if (designated && input.of_keywords === undefined) {
-    const extra = ["of_alternatives", "of_excluded_keywords"].find((key) => input[key] !== undefined);
-    if (extra) throw new TypeError(`unit-position.${extra} needs of_keywords beside of_designated.`);
-  }
-  let keywords: string[] | undefined;
-  if (input.of_keywords !== undefined) {
-    const accent = accents("unit-position", without(input, ["of_alternatives", "of_excluded_keywords", "of_shares_keywords"]));
-    keywords = accent.restore(keywordList(accent.plain(input.of_keywords), "unit-position.of_keywords", 1));
-  }
+  // Keywords printed with accents: of_keywords and of_excluded_keywords read them plain and keep the printed spelling.
+  const accent = accents("unit-position", without(input, ["of_alternatives", "of_shares_keywords"]));
+  const accented = (key: string) => accent.restore(keywordList(accent.plain(input[key]), `unit-position.${key}`, 1));
+  const keywords = input.of_keywords !== undefined ? accented("of_keywords") : undefined;
+  const excluded = input.of_excluded_keywords !== undefined ? accented("of_excluded_keywords") : undefined;
+  accent.requireAllRestored();
   return {
     of_side: side,
     ...(keywords !== undefined ? { of_keywords: apostrophe.restore(keywords) } : {}),
@@ -258,8 +260,8 @@ function matchingUnit(input: Params, original: Params, apostrophe: Spellings): P
     ...(input.of_alternatives !== undefined
       ? { of_alternatives: apostrophe.restore(normalizeAlternatives(input.of_alternatives, "unit-position.of_alternatives", { keywords })) }
       : {}),
-    ...(input.of_excluded_keywords !== undefined
-      ? { of_excluded_keywords: apostrophe.restore(keywordList(input.of_excluded_keywords, "unit-position.of_excluded_keywords", 1)) }
+    ...(excluded !== undefined
+      ? { of_excluded_keywords: apostrophe.restore(excluded) }
       : {}),
     ...(original.of_shares_keywords !== undefined ? { of_shares_keywords: keywordList(original.of_shares_keywords, "unit-position.of_shares_keywords", 2) } : {}),
     ...(input.of_designated !== undefined ? { of_designated: designationId(input.of_designated, "unit-position.of_designated") } : {}),
@@ -375,10 +377,10 @@ export const UNIT_ACTIVITY_AND_POSITION_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "unit-position",
-    version: 30,
+    version: 31,
     role: "CONDITION",
     label: "Unit's position",
-    description: "Where a unit is. closest-eligible: the subject is the closest eligible target, optionally whose closest it is (to, default the attacker) and within a maximum range. objective-range: the subject is within range of an objective marker controlled_by any player, you or your opponent; objective is any (the default), selected (the marker this record's select-objective chose) or designated (the marker carrying objective_tag, a registered designation). within/beyond: the subject is within, or more than, a distance of `of`. The distance is whole inches, a dice roll (rolled_inches: D3, D6, 2D6, D6+1, rolled once each time the ability resolves), a named range (range_ref contagion or synapse, within only, measured to this unit, this model, matching units or an objective marker; range_ref engagement, the Engagement Range itself, measured to this unit, this model, the following filter's units or the event object), the attacking weapon's range or half of it (weapon_range full or half: within, of the attacker, the subject the attack's target), or half the range of the weapon the attack uses (distance half-weapon: within, of the attacker). `of` is a unit-ref (\"one enemy unit within 24\\\" of this unit\" is subject selected-unit, of this-unit; event-subject is the unit whose move triggered the ability; event-object the unit the triggering event acted on), any unit matching a filter (matching-unit: of_side friendly or enemy; of_keywords, every keyword; of_other, a unit other than the subject; of_alternatives, two or more {keywords, excluded_keywords, states} any one of which it matches; of_excluded_keywords, none of these keywords; of_shares_keywords, two or more keywords at least one of which it shares with the subject; of_designated / of_not_designated, a registered designation it carries or does not), a named marker (marker, of_marker cult-ambush-marker), a battlefield edge, the units the unit-filter right after this leaf matches (following-filter), an objective marker (objective, with objective_tag and optionally controlled_by), the enemy deployment zone, or the centre of the battlefield. wholly: every part of each model of the subject is within the distance. models every: every model of this unit or an earlier leaf's unit is within a distance of this unit or the following filter's units, or within range of an objective marker. at move-start reads where the subject was when the move that triggered the ability began. The subject is this unit, this model, the attack's target, the attacking unit, the unit that triggered the ability, the effect's recipient, a unit the ability selected earlier, an earlier leaf's unit (antecedent), the Transport the unit is embarked within (bearer-transport, objective-range only), every Stratagem target named before it (each-target), the unit the moment's event acted on (event-object, not with closest-eligible), the units the unit-filter before this leaf names (filtered-units: the position holds when any of them meets it, or none of them when negated), or the Transport the moment's unit disembarked from (disembarked-from, within or beyond this unit or model). A keyword can carry accented capitals (KÂHL) or start with an apostrophe ('ARDMOB) as the rules print it.",
+    description: "Where a unit is. closest-eligible: the subject is the closest eligible target, optionally whose closest it is (to, default the attacker) and within a maximum range. objective-range: the subject is within range of an objective marker controlled_by any player, you or your opponent; objective is any (the default), selected (the marker this record's select-objective chose) or designated (the marker carrying objective_tag, a registered designation). within/beyond: the subject is within, or more than, a distance of `of`. The distance is whole inches, a dice roll (rolled_inches: D3, D6, 2D6, D6+1, rolled once each time the ability resolves), a named range (range_ref contagion or synapse, within only, measured to this unit, this model or matching units; range_ref engagement, the Engagement Range itself, measured to this unit, this model, the following filter's units or the event object), the attacking weapon's range or half of it (weapon_range full or half: within, of the attacker, the subject the attack's target), or half the range of the weapon the attack uses (distance half-weapon: within, of the attacker). `of` is a unit-ref (\"one enemy unit within 24\\\" of this unit\" is subject selected-unit, of this-unit; event-subject is the unit whose move triggered the ability; event-object the unit the triggering event acted on), any unit matching a filter (matching-unit: of_side friendly or enemy; of_keywords, every keyword; of_other, a unit other than the subject; of_alternatives, two or more {keywords, excluded_keywords, states} any one of which it matches; of_excluded_keywords, none of these keywords; of_shares_keywords, two or more keywords at least one of which it shares with the subject; of_designated / of_not_designated, a registered designation it carries or does not), a named marker (marker, of_marker cult-ambush-marker), a battlefield edge, the units the unit-filter right after this leaf matches (following-filter), an objective marker (objective, with objective_tag and optionally controlled_by), the enemy deployment zone, or the centre of the battlefield. wholly: every part of each model of the subject is within the distance. models every: every model of this unit or an earlier leaf's unit is within a distance of this unit or the following filter's units, or within range of an objective marker. at move-start reads where the subject was when the move that triggered the ability began. The subject is this unit, this model, the attack's target, the attacking unit, the unit that triggered the ability, the effect's recipient, a unit the ability selected earlier, an earlier leaf's unit (antecedent), the Transport the unit is embarked within (bearer-transport, objective-range only), every Stratagem target named before it (each-target), the unit the moment's event acted on (event-object, not with closest-eligible), the units the unit-filter before this leaf names (filtered-units: the position holds when any of them meets it, or none of them when negated), or the Transport the moment's unit disembarked from (disembarked-from, within or beyond this unit or model). A keyword can carry accented capitals (KÂHL) or start with an apostrophe ('ARDMOB) as the rules print it.",
     starter: { kind: "", subject: "", negated: false },
     parameterSchema: {
       type: "object",
@@ -413,7 +415,7 @@ export const UNIT_ACTIVITY_AND_POSITION_FAMILIES: readonly FlatFamily[] = [
           "x-only-when": MATCHING_ONLY, "x-optional": true,
         },
         range_ref: { enum: [...NAMED_RANGES, "engagement"], "x-only-when": { kind: ["within"] }, "x-optional": true },
-        of_excluded_keywords: { type: "array", items: { type: "string", pattern: "^'?[A-Z][A-Z0-9' -]*[A-Z0-9]$" }, minItems: 1, uniqueItems: true, "x-only-when": MATCHING_ONLY, "x-optional": true },
+        of_excluded_keywords: { type: "array", items: KEYWORD_ITEMS, minItems: 1, uniqueItems: true, "x-only-when": MATCHING_ONLY, "x-optional": true },
         weapon_range: { enum: ["half", "full"], "x-only-when": { kind: ["within"] }, "x-optional": true },
         of_designated: { ...KEBAB_STRING, "x-only-when": MATCHING_ONLY, "x-optional": true },
         of_not_designated: { ...KEBAB_STRING, "x-only-when": MATCHING_ONLY, "x-optional": true },

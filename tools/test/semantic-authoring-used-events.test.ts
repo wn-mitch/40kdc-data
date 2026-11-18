@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { foldAbilityUseRefresh } from "../src/semantic-authoring/compile-ability-use-refresh.js";
-import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, reviewedFamily } from "../src/semantic-authoring/contracts.js";
 import { menuActionsForAbility } from "../src/semantic-authoring/named-ability-checks.js";
 
 type Node = Record<string, unknown>;
@@ -155,6 +155,7 @@ describe("manoeuvre-own-roll compile", () => {
 
   it("refuses a manoeuvre roll that subtracts, names weapons, or lacks the performing unit as subject", () => {
     expect(() => normalizeFingerprintParameters("roll-modifier", { roll: "manoeuvre", operation: "subtract", value: 1, subject: "event-subject" })).toThrow();
+    expect(() => normalizeFingerprintParameters("roll-modifier", { roll: "manoeuvre", operation: "halve", subject: "event-subject" })).toThrow(/needs operation add/u);
     expect(() => normalizeFingerprintParameters("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1, weapon_type: "all", subject: "event-subject" })).toThrow();
     expect(() => normalizeFingerprintParameters("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1 })).toThrow();
     expect(() => normalizeFingerprintParameters("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1, subject: "this-unit" })).toThrow();
@@ -169,5 +170,44 @@ describe("manoeuvre-own-roll compile", () => {
     expect(menuActionsForAbility(dataRoot, "martial-grace-aeldari", "D6")?.withDie).toEqual(["fade-back", "opportunity-seized"]);
     expect(menuActionsForAbility(dataRoot, "martial-grace-aeldari", "D6")?.withDie).not.toContain("sudden-strike");
     expect(menuActionsForAbility(dataRoot, "not-an-ability-anywhere", "D6")).toBeNull();
+  });
+});
+
+describe("event keys follow the schema's x-only-when", () => {
+  const now = currentFamilyVersion("event");
+  const schema = reviewedFamily("event", now).parameterSchema as { properties: Record<string, { "x-only-when"?: { kind: string[] } }> };
+  const kinds = (schema.properties.kind as unknown as { enum: string[] }).enum;
+
+  it("refuses every key on each kind its x-only-when leaves out", () => {
+    for (const [key, property] of Object.entries(schema.properties)) {
+      const only = property["x-only-when"]?.kind;
+      if (only === undefined) continue;
+      for (const kind of kinds.filter((each) => !only.includes(each))) {
+        expect(() => normalizeFingerprintParameters("event", { kind, [key]: "x" }, now), `${key} on ${kind}`).toThrow(/does not apply to kind/u);
+      }
+    }
+  });
+
+  it("takes the destruction qualifiers on unit-or-model-destroyed, which lowers to both destructions", () => {
+    const leaf = { kind: "unit-or-model-destroyed", by: "this-unit", object_owner: "enemy", timing: "before-removal", attack_type: "melee", object_keywords: ["ALPHA"] };
+    expect(normalizeFingerprintParameters("event", leaf, now)).toEqual(leaf);
+    for (const key of ["by", "object_owner", "timing", "attack_type", "object_keywords"]) {
+      expect(schema.properties[key]!["x-only-when"]!.kind, key).toContain("unit-or-model-destroyed");
+    }
+  });
+
+  it("refuses a bind_as or a designation tag given as a list instead of a string", () => {
+    expect(() => normalizeFingerprintParameters("event", { kind: "after-roll", roll: "hit", bind_as: ["hit-roll"] }, now)).toThrow(/bind_as must be a lower-case event variable/u);
+    expect(normalizeFingerprintParameters("event", { kind: "after-roll", roll: "hit", bind_as: "hit-roll" }, now)).toEqual({ kind: "after-roll", roll: "hit", bind_as: "hit-roll" });
+    // A Psychic test before its result is bound so a same-Ritual condition can name it (compile-ritual-test.ts).
+    expect(normalizeFingerprintParameters("event", { kind: "before-roll", roll: "psychic", bind_as: "own-test" }, now)).toEqual({ kind: "before-roll", roll: "psychic", bind_as: "own-test" });
+    expect(() => normalizeFingerprintParameters("event", { kind: "designation-changed", tag: ["MARKED"] }, now)).toThrow(/registered designation id/u);
+    expect(() => normalizeFingerprintParameters("event", { kind: "designation-changed", tag: ["'MARKED"] }, now)).toThrow(/registered designation id/u);
+  });
+
+  it("names rules by ids only for an activity that can be named by id", () => {
+    const named = { kind: "used", activity: "stratagem", ids: ["alpha-gambit", "beta-gambit"] };
+    expect(normalizeFingerprintParameters("event", named, now)).toEqual(named);
+    expect(() => normalizeFingerprintParameters("event", { kind: "used", activity: "ritual", ids: ["alpha-rite", "beta-rite"] }, now)).toThrow(/named only as a kind/u);
   });
 });

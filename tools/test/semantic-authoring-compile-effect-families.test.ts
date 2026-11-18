@@ -73,6 +73,9 @@ describe("Semantic authoring batch-3 families: targeting, eligibility and unit-s
   it("requires the stratagem id exactly when despite includes stratagem-used-this-phase", () => {
     expect(() => normalizeFingerprintParameters("eligibility-permission", { subject: "this-unit", activity: "use-stratagem", allow: true, despite: ["stratagem-used-this-phase"] })).toThrow();
     expect(() => normalizeFingerprintParameters("eligibility-permission", { subject: "this-unit", activity: "shoot", allow: true, stratagem: "tank-shock" })).toThrow();
+    for (const stratagem of [123, true, ["tank-shock"]]) {
+      expect(() => normalizeFingerprintParameters("eligibility-permission", { subject: "this-unit", activity: "shoot", allow: true, despite: ["stratagem-used-this-phase"], stratagem })).toThrow(/kebab-case id/u);
+    }
   });
 
   it("compiles targeting-restriction to targeting, subject enemy-units becomes an owner filter", () => {
@@ -116,6 +119,10 @@ describe("Semantic authoring batch-3 families: targeting, eligibility and unit-s
   it("rejects rule-state.rule spelled the wrong case for its rule_kind", () => {
     expect(() => normalizeFingerprintParameters("rule-state", { subject: "this-unit", direction: "granted", rule_kind: "keyword", rule: "fly" })).toThrow();
     expect(() => normalizeFingerprintParameters("rule-state", { subject: "this-unit", direction: "granted", rule_kind: "ability", rule: "Fights First" })).toThrow();
+    for (const rule of [123, true]) {
+      expect(() => normalizeFingerprintParameters("rule-state", { subject: "this-unit", direction: "granted", rule_kind: "ability", rule })).toThrow(/kebab-case id/u);
+    }
+    expect(() => normalizeFingerprintParameters("rule-state", { subject: ["target"], direction: "granted", rule_kind: "ability", rule: "deep-strike" })).toThrow(/rule-state\.subject must be one of/u);
   });
 
   it("compiles return-models, destroy-models, split-unit, add-unit and battle-shock-state", () => {

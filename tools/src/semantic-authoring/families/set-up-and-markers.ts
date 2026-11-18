@@ -28,8 +28,7 @@ function setUp(input: Params): Params {
   if (mandatory !== undefined && mandatory !== true) throw new TypeError("set-up.mandatory is true or absent.");
   if (allow === false && mandatory === true) throw new TypeError("set-up cannot be both forbidden (allow false) and required (mandatory).");
   if (allow === false) {
-    // placement within (a disembark's set-up distance) is not a placing key here.
-    const placing = SETUP_PLACING_KEYS.find((key) => key in input && !(key === "placement" && placement === "within"));
+    const placing = SETUP_PLACING_KEYS.find((key) => key in input);
     if (placing) throw new TypeError(`set-up.${placing} places a permitted set-up; a forbidden set-up (allow false) names its zone through the placement limit after it.`);
   }
   if (via !== undefined || inches !== undefined || wholly !== undefined) {

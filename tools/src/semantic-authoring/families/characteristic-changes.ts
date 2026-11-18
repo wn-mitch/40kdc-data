@@ -84,12 +84,14 @@ function normalizeCharacteristicSet(input: Params): Params {
     const { values: _values, ...shared } = rest;
     if (!Array.isArray(values) || values.length < 2) throw new TypeError("characteristic-set.values lists two or more characteristics.");
     if (shared.characteristic !== undefined || shared.value !== undefined) throw new TypeError("characteristic-set.values replaces characteristic and value.");
-    // Each pair is checked with the shared keys; a key the pair states itself takes its place.
-    const items = values.map((item) => {
-      const { characteristic, value } = oneSetter({ ...shared, ...(item as Params) }, false);
-      return { characteristic, value };
+    // Each pair names only characteristic and value, and is checked with the shared keys.
+    const checked = values.map((item) => {
+      if (!isObject(item)) throw new TypeError("characteristic-set.values items are {characteristic, value} objects.");
+      exactKeys(item, ["characteristic", "value"], "characteristic-set.values item");
+      return oneSetter({ ...shared, ...item }, false);
     });
-    const { characteristic: _c, value: _v, ...common } = oneSetter({ ...shared, ...(values[0] as Params) }, false);
+    const items = checked.map(({ characteristic, value }) => ({ characteristic, value }));
+    const { characteristic: _c, value: _v, ...common } = checked[0]!;
     result = { ...common, values: items };
   }
   if (attack) result.subject = "attack";

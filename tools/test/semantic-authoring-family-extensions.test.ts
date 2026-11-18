@@ -123,7 +123,7 @@ describe("Semantic authoring family extensions", () => {
     expect(() => normalize("roll-modifier", { roll: "hit", rolls: ["charge", "advance"], operation: "add", value: 1 })).toThrow(/not both/u);
     expect(() => normalize("roll-modifier", { operation: "add", value: 1 })).toThrow(/a roll or rolls/u);
     // Each listed roll must be one the single-roll leaf accepts.
-    expect(() => normalize("roll-modifier", { rolls: ["charge", "psychic"], operation: "add", value: 1 })).toThrow();
+    expect(() => normalize("roll-modifier", { rolls: ["charge", "attacks"], operation: "add", value: 1 })).toThrow();
   });
 
   it("denies cover to a selected unit or the attack's target as a suppressed core rule", () => {
@@ -185,6 +185,8 @@ describe("Semantic authoring family extensions, second round", () => {
   it("moves a dice amount plus a number, and refuses a malformed one", () => {
     expect(first(compiled([leaf("make-move", { subject: "this-unit", move_type: "normal", distance: "d3+3" })]), "move")!.modifier).toEqual({ move_type: "normal", distance: "D3+3" });
     expect(() => normalize("make-move", { subject: "this-unit", move_type: "normal", distance: "D4+1" })).toThrow(/dice amount/u);
+    expect(normalize("make-move", { subject: "this-unit", move_type: "normal", distance: { source: "up to D3+1" } })).toMatchObject({ distance: { source: "up to D3+1" } });
+    expect(() => normalize("make-move", { subject: "this-unit", move_type: "normal", distance: { source: "D3+1", inches: 4 } })).toThrow(/make-move.distance must be/u);
   });
 
   it("limits a characteristic change to weapons with one ability, only with a weapon scope", () => {

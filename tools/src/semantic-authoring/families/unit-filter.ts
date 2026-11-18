@@ -109,6 +109,7 @@ function unitFilterCore(input: Params): Params {
 
   if ("subject" in rest) {
     if (take("subject") !== "target") throw new TypeError("unit-filter.subject must be target.");
+    if (rest.side === "any") throw new TypeError("unit-filter.subject target names an attack's target, so the filter's side must be friendly or enemy.");
     added.subject = "target";
   }
 
@@ -129,7 +130,7 @@ function unitFilterCore(input: Params): Params {
     if (rest.level !== "model") throw new TypeError("unit-filter.excluded_from names models, so the filter must be level model.");
     if (!Array.isArray(rest.excluded_keywords) || rest.excluded_keywords.length === 0) throw new TypeError("unit-filter.excluded_from needs excluded_keywords: the models it leaves out.");
     for (const key of ["keywords", "any_keywords", "states", "alternatives"] as const) {
-      if (key in rest) throw new TypeError(`unit-filter.excluded_from takes excluded_keywords alone; ${key} is not allowed with it.`);
+      if (key in rest || (key === "states" && engagedOrHidden.length)) throw new TypeError(`unit-filter.excluded_from takes excluded_keywords alone; ${key} is not allowed with it.`);
     }
     added.excluded_from = EXCLUDED_FROM_ATTACKS;
   }
@@ -165,25 +166,25 @@ function unitFilterCore(input: Params): Params {
     if (rest.any_keywords !== undefined) throw new TypeError("unit-filter.alternatives replaces any_keywords; a one-keyword alternative is one item of alternatives.");
   }
 
-  // not-battle-shocked joins the states after the rest are checked. A states value that is not a list is
-  // dropped when excluded_all_keywords or not-battle-shocked is given, and so is an empty one.
+  // not-battle-shocked joins the states after the rest are checked; a filter of only it passes no states down.
   const states = Array.isArray(rest.states) ? rest.states as unknown[] : undefined;
   const notBattleShocked = states?.includes(NOT_BATTLE_SHOCKED) === true;
-  let excludedAll: unknown;
-  if (notBattleShocked || rest.excluded_all_keywords !== undefined) {
-    if (notBattleShocked && states!.includes("battle-shocked")) throw new TypeError("unit-filter cannot be both battle-shocked and not-battle-shocked.");
-    excludedAll = take("excluded_all_keywords");
-    delete rest.states;
-    const older = states?.filter((state) => state !== NOT_BATTLE_SHOCKED) ?? [];
+  if (notBattleShocked) {
+    if (new Set(states).size !== states!.length) throw new TypeError("unit-filter.states lists a state twice.");
+    if (states!.includes("battle-shocked")) throw new TypeError("unit-filter cannot be both battle-shocked and not-battle-shocked.");
+    const older = states!.filter((state) => state !== NOT_BATTLE_SHOCKED);
     if (older.length) rest.states = older;
+    else delete rest.states;
   }
+  const excludedAll = take("excluded_all_keywords");
 
   if (rest.excluded_abilities !== undefined) {
     const list = take("excluded_abilities") as string[];
     if (!Array.isArray(list) || list.length === 0 || list.some((id) => typeof id !== "string" || !KEBAB_ID.test(id))) {
       throw new TypeError("unit-filter excluded_abilities lists ability ids.");
     }
-    added.excluded_abilities = [...new Set(list)].sort();
+    if (new Set(list).size !== list.length) throw new TypeError("unit-filter excluded_abilities lists an ability twice.");
+    added.excluded_abilities = [...list].sort();
   }
 
   if ("held_in" in rest) added.held_in = enumValue(take("held_in"), HELD_IN, "unit-filter.held_in");

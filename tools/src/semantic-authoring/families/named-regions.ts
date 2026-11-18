@@ -32,7 +32,9 @@ function regionBranch(value: unknown, label: string): Params {
     if (!allowed.has(key)) throw new TypeError(`${label} parameters must be kind, roll, weapon_keyword, optional, and ${kind === "reroll" ? "subset" : "operation, value"} only.`);
   }
   if (typeof input.roll !== "string" || !input.roll) throw new TypeError(`${label}.roll must be a nonblank string.`);
-  const result: Params = { kind, roll: input.roll, optional: Boolean(input.optional) };
+  // An absent optional is a mandatory branch.
+  if (input.optional !== undefined && typeof input.optional !== "boolean") throw new TypeError(`${label}.optional must be true or false, or omitted.`);
+  const result: Params = { kind, roll: input.roll, optional: input.optional === true };
   if (kind === "reroll") result.subset = enumValue(input.subset, REGION_REROLL_SUBSETS, `${label}.subset`);
   else {
     result.operation = enumValue(input.operation, REGION_MODIFIER_OPERATIONS, `${label}.operation`);
@@ -77,10 +79,9 @@ const NAMED_REGION_OPTIONAL = ["beneficiary_faction", "qualifies_by_keyword", "m
 function namedRegionState(input: Params): Params {
   const label = "named-region-state";
   exactKeys(input, [...NAMED_REGION_REQUIRED, ...NAMED_REGION_OPTIONAL.filter((key) => key in input)], label);
-  // Ids and keywords are read as strings: a value whose string form is a kebab-case id is that id.
   const result: Params = {
-    region_id: String(input.region_id),
-    owner_faction: String(input.owner_faction),
+    region_id: input.region_id,
+    owner_faction: input.owner_faction,
     behavior: enumValue(input.behavior, ["aura", "passive"], `${label}.behavior`),
     membership_scope: enumValue(input.membership_scope, ["model", "whole-unit"], `${label}.membership_scope`),
     beneficiary_operator: enumValue(input.beneficiary_operator, ["and", "or"], `${label}.beneficiary_operator`),
@@ -89,16 +90,16 @@ function namedRegionState(input: Params): Params {
     qualified_branch: regionBranch(input.qualified_branch, `${label}.qualified_branch`),
   };
   for (const key of ["region_id", "owner_faction"]) {
-    if (!ENTITY_ID.test(result[key] as string)) throw new TypeError(`${label}.${key} must be a kebab-case entity id.`);
+    if (typeof result[key] !== "string" || !ENTITY_ID.test(result[key] as string)) throw new TypeError(`${label}.${key} must be a kebab-case entity id.`);
   }
   if ("beneficiary_faction" in input) {
-    const faction = String(input.beneficiary_faction);
-    if (!ENTITY_ID.test(faction)) throw new TypeError(`${label}.beneficiary_faction must be a kebab-case entity id.`);
+    const faction = input.beneficiary_faction;
+    if (typeof faction !== "string" || !ENTITY_ID.test(faction)) throw new TypeError(`${label}.beneficiary_faction must be a kebab-case entity id.`);
     result.beneficiary_faction = faction;
   }
   if ("qualifies_by_keyword" in input) {
-    const keyword = String(input.qualifies_by_keyword);
-    if (keyword.trim() === "") throw new TypeError(`${label}.qualifies_by_keyword must be a nonblank keyword.`);
+    const keyword = input.qualifies_by_keyword;
+    if (typeof keyword !== "string" || keyword.trim() === "") throw new TypeError(`${label}.qualifies_by_keyword must be a nonblank keyword.`);
     result.qualifies_by_keyword = keyword;
   }
   if ("melee_or_visible_ranged" in input) {

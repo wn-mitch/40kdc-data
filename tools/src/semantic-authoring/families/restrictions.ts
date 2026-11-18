@@ -81,7 +81,8 @@ function normalizeChosenOptionGrant(input: Params): Params {
 
 function normalizeTriggeringTarget(input: Params): Params {
   const family = "triggering-target";
-  const spelling = new PrintedKeywords(family, input, ["any_keywords", "unit_names"]);
+  // unit_names are datasheet names, not keywords: they take no accented-keyword spelling.
+  const spelling = new PrintedKeywords(family, input, ["unit_names"]);
   const { any_keywords: anyKeywords, unit_names: names, ...rest } = input;
   let unitNames: string[] | undefined;
   if (names !== undefined) {
@@ -103,7 +104,7 @@ function normalizeTriggeringTarget(input: Params): Params {
   };
   if (anyKeywords !== undefined) {
     if (match === "any") throw new TypeError("triggering-target any_keywords adds to all-of keywords; match must be all.");
-    result.any_keywords = keywordList(spelling.bare(anyKeywords, false), "triggering-target any_keywords", 2).map((keyword) => spelling.printed(keyword, false));
+    result.any_keywords = keywordList(spelling.bare(anyKeywords), "triggering-target any_keywords", 2).map((keyword) => spelling.printed(keyword));
   }
   if (unitNames !== undefined) result.unit_names = unitNames;
   return spelling.finish(result);
@@ -255,10 +256,10 @@ export const RESTRICTIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "triggering-target",
-    version: 5,
+    version: 6,
     role: "RESTRICTION",
     label: "Target is that unit",
-    description: "\"That X unit\": the target is the unit the WHEN moment names. Its keywords narrow the trigger too. any_keywords: the unit also has at least one of these (a shared prefix before a slash list, with match all). unit_names: exact named unit datasheets, resolved within the owning faction to stable unit IDs; these are unit-level identities, not keywords or model names, so selects is unit. A keyword in keywords can carry accented capitals as the rules print it (KÂHL), and any keyword can start with an apostrophe ('ARDMOB).",
+    description: "\"That X unit\": the target is the unit the WHEN moment names. Its keywords narrow the trigger too. any_keywords: the unit also has at least one of these (a shared prefix before a slash list, with match all). unit_names: exact named unit datasheets, resolved within the owning faction to stable unit IDs; these are unit-level identities, not keywords or model names, so selects is unit. A keyword in keywords or any_keywords can carry accented capitals as the rules print it (KÂHL), and any keyword can start with an apostrophe ('ARDMOB).",
     starter: { selects: "", keywords: [], match: "" },
     parameterSchema: {
       type: "object", required: ["selects", "keywords", "match"], additionalProperties: false,
@@ -266,7 +267,7 @@ export const RESTRICTIONS_FAMILIES: readonly FlatFamily[] = [
         selects: { enum: ["unit", "model"] },
         keywords: { type: "array", items: { type: "string", pattern: PRINTED_KEYWORD_PATTERN }, minItems: 0, uniqueItems: true },
         match: { enum: ["all", "any"] },
-        any_keywords: { type: "array", items: { type: "string", pattern: "^'?[A-Z][A-Z0-9' -]*[A-Z0-9]$" }, minItems: 2, uniqueItems: true, "x-optional": true },
+        any_keywords: { type: "array", items: { type: "string", pattern: PRINTED_KEYWORD_PATTERN }, minItems: 2, uniqueItems: true, "x-optional": true },
         unit_names: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string", minLength: 1 }, "x-optional": true },
       },
     },

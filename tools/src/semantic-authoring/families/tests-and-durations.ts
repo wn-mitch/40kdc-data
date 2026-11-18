@@ -140,9 +140,9 @@ function normalizeDuration(input: Input): Input {
     exactKeys(input, ["endpoint"], "duration");
     return { endpoint: enumValue(endpoint, DURATION_ENDPOINTS, "duration.endpoint") };
   }
-  // A phase edge reads endpoint, phase and turn only; any other key is ignored.
   if (input.phase === undefined) throw new TypeError(`duration.${endpoint} names a phase.`);
   if (input.turn === undefined) throw new TypeError(`duration.${endpoint} names whose phase: your or opponent's.`);
+  exactKeys(input, ["endpoint", "phase", "turn"], "duration");
   const phase = enumValue(input.phase, ACTIVE_PHASES, "duration.phase");
   const turn = enumValue(input.turn, EDGE_TURNS, "duration.turn");
   if (endpoint === "start-of-next-phase" && (phase !== "command" || turn !== "opponent")) {

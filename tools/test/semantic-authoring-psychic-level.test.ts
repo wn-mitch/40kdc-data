@@ -177,6 +177,13 @@ describe("Semantic authoring characteristic-set psyker-level setter", () => {
     expect(() => setter({ subject: "this-model", characteristic: "psyker-level", value: 2, weapon_name: "arco-flail" })).toThrow(/weapon_name/);
   });
 
+  it("refuses a values item that names anything but characteristic and value", () => {
+    for (const extra of [{ subject: "this-unit" }, { weapon_type: "melee", weapon_name: "Fizz claws" }]) {
+      expect(() => setter({ subject: "this-model", values: [{ characteristic: "A", value: 7, ...extra }, { characteristic: "S", value: 3 }] })).toThrow(/exactly: characteristic, value/u);
+    }
+    expect(() => setter({ subject: "this-model", values: [{ characteristic: "M", value: 7 }, "Sv"] })).toThrow(/values items/u);
+  });
+
   it("refuses a values list that sets a psyker level on another recipient", () => {
     expect(() => setter({ subject: "this-unit", values: [{ characteristic: "psyker-level", value: 2 }, { characteristic: "M", value: 7 }] })).toThrow(/this-model/);
   });

@@ -181,6 +181,12 @@ describe("event resource-spent purpose keys (normalizer)", () => {
     expect(() => normalizeFingerprintParameters("event", { kind: "unit-destroyed", activity: "manoeuvre" }, now)).toThrow();
     expect(() => normalizeFingerprintParameters("event", { ...POOL, extra: 1 }, now)).toThrow();
   });
+  it("keeps each destruction keyword's own spelling and refuses one keyword spelled with and without its apostrophe", () => {
+    const relation = (unit: string[], model: string[]) => ({ kind: "resource-gained", pool: "ember-pool", bind_as: "ember-gain", caused_by_destruction: { unit: { owner: "enemy", all_of: unit }, model: { owner: "enemy", all_of: model } } });
+    expect(() => normalizeFingerprintParameters("event", relation(["'ZOG"], ["zog"]), now)).toThrow(/both with and without a leading apostrophe/u);
+    expect(() => normalizeFingerprintParameters("event", relation(["'ZOG"], ["ZOG"]), now)).toThrow(/both with and without a leading apostrophe/u);
+    expect(normalizeFingerprintParameters("event", relation(["BETA", "'ZOG"], ["alpha", "'ZOG"]), now)).toEqual(relation(["BETA", "'ZOG"], ["ALPHA", "'ZOG"]));
+  });
 });
 
 describe("a spend named by its purpose compiles to the trigger's filter and object", () => {

@@ -64,6 +64,7 @@ function normalizeUnitState(input: Params): Params {
   if (withUnit !== undefined) enumValue(withUnit, STATE_WITH, "unit-state.with");
   if (!Array.isArray(input.states)) throw new TypeError(`unit-state.states must list at least one of ${UNIT_STATES.join(", ")}.`);
   const listed = input.states as unknown[];
+  if (hasDuplicate(listed)) throw new TypeError("unit-state lists a state twice.");
   if (listed.includes(AT_OR_BELOW_HALF) && listed.includes("below-half-strength")) throw new TypeError("unit-state: at-or-below-half-strength already covers below-half-strength.");
   // At or below half strength takes what below half strength takes.
   const states = listed.map((state) => (state === AT_OR_BELOW_HALF ? "below-half-strength" : state));
@@ -121,7 +122,8 @@ function normalizeUnitState(input: Params): Params {
     enumValue(withUnit === FOLLOWING_FILTER ? "this-unit" : withUnit, WIDE_OR_ANTECEDENT, "unit-state.with");
   }
   return {
-    states: listed.includes(AT_OR_BELOW_HALF) ? [...listed] : out(canonical),
+    // At or below half strength takes below half strength's place in the canonical order.
+    states: out(canonical).map((state) => (state === "below-half-strength" && listed.includes(AT_OR_BELOW_HALF) ? AT_OR_BELOW_HALF : state)),
     subject, negated,
     ...(withUnit !== undefined ? { with: withUnit } : {}),
     ...(at !== undefined ? { at } : {}),
@@ -160,6 +162,7 @@ function normalizeUnitKeyword(input: Params): Params {
     const stripped = apostrophe.plain(rest) as Params;
     const accent = accents("unit-keyword", stripped);
     named = { keywords: apostrophe.restore(accent.restore(unitKeywordList(accent.plain(stripped.keywords)))) };
+    accent.requireAllRestored();
     apostrophe.requireAllRestored();
   }
   if (match !== undefined) {

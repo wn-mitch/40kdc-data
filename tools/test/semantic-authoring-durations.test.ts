@@ -74,6 +74,11 @@ describe("duration phase-edge endpoints: parameters", () => {
     expect(() => checkDuration({ endpoint: "end-of-next-phase", phase: "fight", turn: "either" })).toThrow(/duration.turn/u);
   });
 
+  it("refuses a key beside endpoint, phase and turn on a phase edge", () => {
+    expect(() => checkDuration({ endpoint: "end-of-next-phase", phase: "fight", turn: "your", extra: 1 })).toThrow(/exactly: endpoint, phase, turn/u);
+    expect(() => checkDuration({ endpoint: "start-of-next-phase", phase: "command", turn: "opponent", extra: 1 })).toThrow(/exactly: endpoint, phase, turn/u);
+  });
+
   it("refuses phase and turn on every endpoint that does not take them", () => {
     expect(() => checkDuration({ endpoint: "end-of-phase", phase: "fight" })).toThrow(/phase-edge endpoints only/u);
     expect(() => checkDuration({ endpoint: "end-of-turn", turn: "your" })).toThrow(/phase-edge endpoints only/u);

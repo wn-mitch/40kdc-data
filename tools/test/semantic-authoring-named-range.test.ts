@@ -419,6 +419,8 @@ describe("Semantic authoring named-range reference: counts-as range_ref", () => 
     expect(normalizeRefuses("counts-as", { ...leaf, subject: "event-subject" })).toBe(true);
     expect(normalizeRefuses("counts-as", { subject: "antecedent", of_side: "friendly", within: 6 })).toBe(true);
     expect(normalizeRefuses("counts-as", { ...leaf, range_ref: "contagion" })).toBe(true);
+    expect(normalizeRefuses("counts-as", { ...leaf, extra: 1 })).toBe(true);
+    expect(normalizeRefuses("counts-as", { subject: "antecedent", region: { region_id: "hallowed-ground", owner_faction: "fabricated-faction" }, extra: 1 })).toBe(true);
   });
 
   it("normalizes a Synapse Range grant to the antecedent with of_side friendly", () => {

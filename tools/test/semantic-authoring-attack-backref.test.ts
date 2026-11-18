@@ -59,6 +59,7 @@ describe("attack@6 family checks", () => {
     expect(() => normalize("attack", { ...REFERS, unit: "this-unit" })).toThrow(/drop unit/u);
     expect(() => normalize("attack", { ...REFERS, target: "that-unit" })).toThrow(/drop target/u);
     expect(() => normalize("attack", { ...REFERS, attack_type: "any" })).toThrow(/melee, ranged or psychic/u);
+    expect(() => normalize("attack", { ...REFERS, attack_type: ["melee"] })).toThrow(/melee, ranged or psychic/u);
     expect(() => normalize("attack", { refers: "antecedent" })).toThrow(/earlier-attack/u);
   });
 

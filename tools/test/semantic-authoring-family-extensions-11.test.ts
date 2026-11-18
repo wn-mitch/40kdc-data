@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { targetRestrictions } from "../src/semantic-authoring/compile-conditions.js";
-import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { designationLabel } from "../src/translate/designations.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, reviewedFamily } from "../src/semantic-authoring/contracts.js";
+import { DESIGNATION_IDS, designationLabel } from "../src/translate/designations.js";
 
 /** A registered designation, so a designate-target compiles (compile-wrappers.ts designationIdFor). */
 const FIXTURE_RULE_NAME = "A Trap Well Laid";
@@ -557,5 +557,18 @@ describe("the model a destroyer destroyed", () => {
       ["add 1 to this unit's Leadership characteristic", "characteristic-modifier", { subject: "this-unit", characteristics: ["Ld"], operation: "add", value: 1, weapon_type: "all" }]), text, { name: FIXTURE_RULE_NAME });
     if (!result.ok) throw new Error(result.errors.join("; "));
     expect(JSON.stringify(result.mechanics)).toMatch(/"event":"model-destroyed".*"object":\{"owner":"enemy","all_of":\["CHARACTER"\],"level":"model"\}/u);
+  });
+});
+
+describe("apply-mark tag schema", () => {
+  it("lists exactly the registered designations normalize accepts", () => {
+    const version = currentFamilyVersion("apply-mark");
+    const schema = reviewedFamily("apply-mark").parameterSchema as { properties: { tag: { anyOf: [{ enum: string[] }] } } };
+    const listed = new Set(schema.properties.tag.anyOf[0].enum);
+    const accepted = [...DESIGNATION_IDS].filter((tag) => {
+      try { normalizeFingerprintParameters("apply-mark", { subject: "this-unit", tag }, version); return true; } catch { return false; }
+    });
+    expect([...listed].sort()).toEqual(accepted.sort());
+    expect(listed.has("warlord")).toBe(false);
   });
 });

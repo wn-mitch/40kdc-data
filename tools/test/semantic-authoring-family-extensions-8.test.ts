@@ -9,7 +9,7 @@ import { compileLeaves } from "../src/semantic-authoring/compile.js";
 import { targetRestrictions } from "../src/semantic-authoring/compile-conditions.js";
 import type { CompileLeaf } from "../src/semantic-authoring/compile-fragments.js";
 import { dslUnitFilter } from "../src/semantic-authoring/compile-unit-filter-dsl.js";
-import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, reviewedFamily } from "../src/semantic-authoring/contracts.js";
 import { coreCheckErrors } from "../src/semantic-authoring/core-checks.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { describeCondition } from "../src/translate/condition.js";
@@ -151,6 +151,12 @@ describe("triggering-target keyword prefix", () => {
     expect(restrictions.required_keywords).toEqual(["ADEPTUS ASTARTES"]);
     expect(restrictions.eligibility).toEqual({ type: "matches", parameters: { filter: { any_of: ["INFANTRY", "MOUNTED"] } } });
     expect(() => normalize("triggering-target", { selects: "unit", keywords: ["ADEPTUS ASTARTES"], match: "any", any_keywords: ["INFANTRY", "MOUNTED"] })).toThrow(/match must be all/u);
+  });
+
+  it("spells any_keywords as printed, like keywords, and refuses one keyword spelled both ways", () => {
+    expect(normalize("triggering-target", { selects: "unit", keywords: ["SAMPLE"], match: "all", any_keywords: ["KÂHL", "OTHER"] }))
+      .toEqual({ selects: "unit", keywords: ["SAMPLE"], match: "all", any_keywords: ["KÂHL", "OTHER"] });
+    expect(() => normalize("triggering-target", { selects: "unit", keywords: ["KÂHL"], match: "all", any_keywords: ["KAHL", "OTHER"] })).toThrow(/both with and without accents/u);
   });
 });
 
@@ -491,5 +497,56 @@ describe("describer readings the earlier rounds pinned as collisions", () => {
     ]))).toThrow(/DSL_GAP: a move cannot act as if it were the charge phase/u);
     expect(describeAbility({ effect: { type: "move", target: "this-unit", modifier: { move_type: "normal", distance: 6, as_if: "movement-phase" } }, scope: { duration: "resolution" } } as never))
       .toContain('make a Normal move of up to 6" as if it were your Movement phase');
+  });
+});
+
+describe("unit-subject input checks", () => {
+  const within = { kind: "within", subject: "this-unit", negated: false, of: "matching-unit", inches: 6, of_side: "friendly" };
+
+  it("refuses a repeated unit-state and keeps at-or-below-half-strength in canonical order", () => {
+    expect(() => normalize("unit-state", { states: ["hidden", "hidden"], subject: "this-unit", negated: false })).toThrow(/twice/u);
+    expect(() => normalize("unit-state", { states: ["at-or-below-half-strength", "hidden", "hidden"], subject: "this-unit", negated: false })).toThrow(/twice/u);
+    expect(normalize("unit-state", { states: ["battle-shocked", "at-or-below-half-strength"], subject: "this-unit", negated: false }))
+      .toEqual({ states: ["at-or-below-half-strength", "battle-shocked"], subject: "this-unit", negated: false });
+  });
+
+  it("keeps destruction, windowed and Stratagem-targeting activities apart from the subject activities", () => {
+    const destroyed = { negated: false, named: "after", container: "none", destroyer: "this-unit" };
+    expect(() => normalize("unit-activity", { activities: ["destroyed-models-by-triggering-attacks", "was-charged-this-turn"], ...destroyed })).toThrow(/not mixed/u);
+    expect(() => normalize("unit-activity", { activities: ["destroyed-units-in-window", "embarked-this-phase"], ...destroyed })).toThrow(/not mixed/u);
+    expect(() => normalize("unit-activity", { activities: ["targeted-with-stratagem-this-phase", "destroyed-stratagem-target"], subject: "this-unit", negated: false, stratagem_ids: ["alpha-gambit"] })).toThrow(/not mixed/u);
+    // A history value still stands beside other subject activities.
+    expect(normalize("unit-activity", { activities: ["was-charged-this-turn", "fought-this-phase"], subject: "this-unit", negated: false }).activities).toEqual(["fought-this-phase", "was-charged-this-turn"]);
+  });
+
+  it("sorts unit-activity lists of base activities alphabetically", () => {
+    expect(normalize("unit-activity", { activities: ["charged-this-turn", "advanced-this-turn"], subject: "this-unit", negated: false }).activities)
+      .toEqual(["advanced-this-turn", "charged-this-turn"]);
+  });
+
+  it("refuses keywords that are not strings", () => {
+    expect(() => normalize("unit-activity", { activities: ["destroyed-models-by-triggering-attacks"], negated: false, named: "after", container: "none", destroyer: "this-unit", keywords: [true] })).toThrow(/strings/u);
+    expect(() => normalize("unit-position", { ...within, of_keywords: [7] })).toThrow(/strings/u);
+  });
+
+  it("measures a named range only to a unit, not to an objective marker", () => {
+    expect(() => normalize("unit-position", { kind: "within", subject: "this-unit", negated: false, of: "objective", range_ref: "synapse", objective_tag: "afflicted" })).toThrow(/range_ref needs of/u);
+  });
+
+  it("takes exclusions and alternatives beside a designation without of_keywords", () => {
+    expect(normalize("unit-position", { ...within, of_designated: "afflicted", of_excluded_keywords: ["ORK"] })).toMatchObject({ of_designated: "afflicted", of_excluded_keywords: ["ORK"] });
+    expect(normalize("unit-position", { ...within, of_designated: "afflicted", of_alternatives: [{ keywords: ["ORK"] }, { keywords: ["GROT"] }] })).toMatchObject({ of_designated: "afflicted" });
+  });
+
+  it("keeps an accented keyword in of_excluded_keywords, as its schema allows", () => {
+    const pattern = new RegExp((reviewedFamily("unit-position").parameterSchema as any).properties.of_excluded_keywords.items.pattern, "u");
+    expect(pattern.test("ÉLITE")).toBe(true);
+    expect(normalize("unit-position", { ...within, of_excluded_keywords: ["ÉLITE"] })).toMatchObject({ of_excluded_keywords: ["ÉLITE"] });
+    expect(() => normalize("unit-position", { ...within, of_keywords: ["ÉLITE"], of_excluded_keywords: ["ELITE"] })).toThrow(/with and without accents/u);
+  });
+
+  it("refuses an accented keyword whose spacing the check rewrites", () => {
+    expect(() => normalize("unit-position", { ...within, of_keywords: ["KÂHL  X"] })).toThrow(/could not keep the accents/u);
+    expect(() => normalize("unit-keyword", { keywords: ["KÂHL  X"], subject: "this-unit", negated: false })).toThrow(/could not keep the accents/u);
   });
 });

@@ -41,7 +41,9 @@ function attackFields(input: Params): Params {
 function onlyTypeAndNegation(rest: Params, what: string): Params {
   const extra = Object.keys(rest).filter((key) => key !== "attack_type" && key !== "negated");
   if (extra.length) throw new TypeError(`attack-filter ${what} takes attack_type and negated only, not ${extra.join(", ")}.`);
-  return Object.keys(rest).length ? attackFields(rest) : {};
+  // negated alone negates the bound attacks themselves (compile-conditions.ts polarity).
+  if (!("attack_type" in rest)) return negation(rest, "attack-filter");
+  return attackFields(rest);
 }
 
 function normalizeAttackFilter(input: Params): Params {

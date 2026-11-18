@@ -276,6 +276,34 @@ describe("roll-modifier roll deadly-demise", () => {
     expect(() => normalizeFingerprintParameters("roll-modifier", { ...demiseLeaf, roll: "deadly-demise-d3" }, version)).toThrow();
   });
 
+  it("refuses weapon names, which the compiler reads only for a hit, wound, damage or hazard roll", () => {
+    const version = currentFamilyVersion("roll-modifier");
+    expect(() => normalizeFingerprintParameters("roll-modifier", { ...demiseLeaf, weapon_name: "Fizz gun" }, version)).toThrow(/weapon names need/u);
+    expect(() => normalizeFingerprintParameters("roll-modifier", { ...demiseLeaf, weapon_names: ["Fizz gun", "Buzz gun"] }, version)).toThrow(/weapon names need/u);
+  });
+});
+
+describe("roll-modifier rolls list", () => {
+  const family = () => REVIEWED_FAMILY_REGISTRY.find((item) => item.id === "roll-modifier" && item.version === currentFamilyVersion("roll-modifier"))!;
+
+  it("takes every single roll that needs no binding, and agrees with its schema", () => {
+    const version = currentFamilyVersion("roll-modifier");
+    const listed = (family().parameterSchema.properties as Record<string, { items: { enum: string[] } }>).rolls.items.enum;
+    expect([...listed].sort()).toEqual(["advance", "battle-shock", "charge", "damage", "deadly-demise", "desperate-escape", "hazard", "hit", "leadership", "psychic", "save", "wound"]);
+    for (const roll of listed) {
+      const other = roll === "hit" ? "wound" : "hit";
+      const leaf = { rolls: [roll, other], operation: "add", value: 1 };
+      expect(normalizeFingerprintParameters("roll-modifier", leaf, version), roll).toEqual({ ...leaf, rolls: [roll, other].sort() });
+    }
+  });
+
+  it("refuses a roll outside the schema's list", () => {
+    const version = currentFamilyVersion("roll-modifier");
+    for (const roll of ["attacks", "surge", "any", "all", "preceding", "manoeuvre"]) {
+      expect(() => normalizeFingerprintParameters("roll-modifier", { rolls: [roll, "hit"], operation: "add", value: 1 }, version), roll).toThrow(/roll-modifier.rolls/u);
+    }
+  });
+
   it("lowers a conditional bonus on the roll after the threshold, and the DSL validates it", () => {
     const result = compile(DEMISE_TEXT, ...demiseItems(demiseLeaf));
     if (!result.ok) throw new Error(result.errors.join("; "));

@@ -63,11 +63,12 @@ export function enumSet(value: unknown, values: readonly string[], label: string
 
 export const hasDuplicate = (list: readonly unknown[]) => new Set(list).size !== list.length;
 
-/** Keywords as the rules print them: markdown dropped, upper case, each once, sorted. Items are read as text. */
+/** Keywords as the rules print them: strings only, markdown dropped, upper case, each once, sorted. */
 export function keywordList(value: unknown, label: string, minimum: number): string[] {
   if (!Array.isArray(value) || value.length < minimum) throw new TypeError(`${label} must list at least ${minimum} keyword${minimum === 1 ? "" : "s"}.`);
   const list = value.map((item) => {
-    const keyword = String(item).replaceAll("*", "").replace(/\s+/gu, " ").trim().toUpperCase();
+    if (typeof item !== "string") throw new TypeError(`${label} must be strings.`);
+    const keyword = item.replaceAll("*", "").replace(/\s+/gu, " ").trim().toUpperCase();
     if (!UNIT_KEYWORD.test(keyword)) throw new TypeError(`${label} keyword ${JSON.stringify(item)} is not a unit keyword.`);
     return keyword;
   });

@@ -332,8 +332,9 @@ export function approvalsOnCurrentInputs(db: DatabaseSync, abilityVersionIds: It
 /**
  * Carry approvals across a family-version bump. `before` holds each touched source's approval on
  * its inputs before the bump moved its leaves; a source whose compilation is still byte-identical
- * to that entry (mechanics and core) and still renders without errors has the entry re-recorded
- * under its new inputs, in `batchId`. Any other change leaves the source stale for review.
+ * to that entry (mechanics and core) has the entry re-recorded under its new inputs, in `batchId`.
+ * The record gates are not rerun here: the approved mechanics are unchanged, and publication
+ * re-runs every gate. Any other change leaves the source stale for review.
  */
 export function carryApprovals(db: DatabaseSync, before: ReadonlyMap<number, ApprovedEntry>, batchId: string): number {
   if (before.size === 0) return 0;
@@ -354,7 +355,6 @@ export function carryApprovals(db: DatabaseSync, before: ReadonlyMap<number, App
     if (!compiled.ok) continue;
     const identity = compiledIdentity(compiled.mechanics, compiled.core ?? null);
     if (hashJson(identity) !== hashJson(compiledIdentity(JSON.parse(prior.mechanics_json), prior.core_json ? JSON.parse(prior.core_json) : null))) continue;
-    if (render(source.faction_id, source.ability_id, compiled).errors.length > 0) continue;
     const entryId = `compiled_${hashJson({ ability_version_id: source.id, inputs_hash: inputsHash, mechanics: identity, status: "approved" })}`;
     db.prepare("DELETE FROM compiled_entries WHERE id = ?").run(prior.id);
     insert.run(entryId, source.id, compiled.signature, JSON.stringify(compiled.mechanics), compiled.core ? JSON.stringify(compiled.core) : null, inputsHash, batchId, new Date().toISOString());

@@ -66,6 +66,8 @@ const ACTION_KINDS: Readonly<Record<string, readonly string[]>> = {
   "attacks-resolved": ["charge", "shoot", "attack", "stratagem", "fight"],
 };
 const BINDING = /^[a-z][a-z0-9_-]*$/u;
+/** The kinds whose exact event a later leaf can name (bind_as); a used moment only when it names an ability. */
+const BINDABLE_KINDS = ["used", "attacks-resolved", "resource-gained", "before-roll", "after-roll"] as const;
 const NAMED_ID = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;
 const UNIT_KEYWORD = /^[A-Z][A-Z0-9' -]*[A-Z0-9]$/u;
 const DESIGNATION_PATTERN = /^[A-Z][A-Z0-9' -]*[A-Z0-9]$/u;
@@ -177,8 +179,8 @@ const canonicalKeyword = (text: string) => text.replaceAll("*", "").replace(/\s+
 
 /**
  * A sorted, duplicate-free unit-keyword list. A keyword may carry one leading apostrophe as the
- * rules print it ('ARDMOB), which it keeps; it sorts by its spelling without the apostrophe, and a
- * keyword the leaf prints with an apostrophe anywhere is written with it here too.
+ * rules print it ('ARDMOB), which it keeps; it sorts by its spelling without the apostrophe. A
+ * keyword written without the apostrophe that the leaf prints with one elsewhere is refused.
  */
 function keywords(value: unknown, label: string, printed: Map<string, string>): string[] {
   if (!Array.isArray(value) || value.length < 1) throw new TypeError(`${label} must list at least 1 keyword.`);
@@ -188,10 +190,11 @@ function keywords(value: unknown, label: string, printed: Map<string, string>): 
     const keyword = canonicalKeyword(plain);
     if (!UNIT_KEYWORD.test(keyword)) throw new TypeError(`${label} keyword ${JSON.stringify(item)} is not a unit keyword.`);
     if (apostrophe && keyword !== plain) throw new TypeError(`event could not keep the leading apostrophe of ${String(item)}.`);
-    return keyword;
+    if (!apostrophe && printed.has(keyword)) throw new TypeError(`event names ${keyword} both with and without a leading apostrophe.`);
+    return { keyword, spelling: apostrophe ? item as string : keyword };
   });
-  if (new Set(list).size !== list.length) throw new TypeError(`${label} lists a keyword twice.`);
-  return list.sort().map((keyword) => printed.get(keyword) ?? keyword);
+  if (new Set(list.map(({ keyword }) => keyword)).size !== list.length) throw new TypeError(`${label} lists a keyword twice.`);
+  return list.sort((a, b) => (a.keyword < b.keyword ? -1 : a.keyword > b.keyword ? 1 : 0)).map(({ spelling }) => spelling);
 }
 
 /** unit and/or model destruction, each with an owner and optional keywords and distance. */
@@ -223,7 +226,8 @@ function destructionRelation(value: unknown, label: string, printed: Map<string,
 
 /** A designation a designation moment names: a registered id or a printed keyword, never a list-building one. */
 function designationTag(value: unknown): string {
-  const tag = String(value ?? "");
+  if (typeof value !== "string") throw new TypeError("event.tag must be a registered designation id.");
+  const tag = value;
   const plain = LEADING_APOSTROPHE.test(tag) ? tag.slice(1) : tag;
   if (!DESIGNATION_IDS.has(plain) && !DESIGNATION_PATTERN.test(plain)) throw new TypeError("event.tag must be a registered designation id.");
   refuseListBuildingTag(plain, "event.tag");
@@ -248,8 +252,8 @@ function namedId(value: unknown, label: string): string {
 }
 
 function bindingName(value: unknown): string {
-  if (!BINDING.test(String(value))) throw new TypeError("event.bind_as must be a lower-case event variable.");
-  return String(value);
+  if (typeof value !== "string" || !BINDING.test(value)) throw new TypeError("event.bind_as must be a lower-case event variable.");
+  return value;
 }
 
 function usage(value: unknown): Record<string, unknown> {
@@ -266,6 +270,7 @@ function normalizeEvent(input: Record<string, unknown>): Record<string, unknown>
   const spec = KIND_KEYS[kind] ?? {};
   const allowed = new Set(["kind", "bind_as", ...(spec.required ?? []), ...(spec.optional ?? [])]);
   for (const key of Object.keys(input)) if (!allowed.has(key)) throw new TypeError(`event.${key} does not apply to kind ${kind}.`);
+  if ("bind_as" in input && !(BINDABLE_KINDS as readonly string[]).includes(kind)) throw new TypeError(`event.bind_as does not apply to kind ${kind}.`);
   const has = (key: string) => key in input;
   const result: Record<string, unknown> = { kind };
 
@@ -347,6 +352,9 @@ function normalizeEvent(input: Record<string, unknown>): Record<string, unknown>
     result.id = namedId(input.id, "event.id");
   }
   if (has("ids")) {
+    if (!(NAMED_ACTIVITIES as readonly string[]).includes(result.activity as string)) {
+      throw new TypeError(`event.ids names ${NAMED_ACTIVITIES.join(", ")}; a ${String(result.activity)} is named only as a kind.`);
+    }
     if (!Array.isArray(input.ids) || input.ids.length < 2) throw new TypeError("event.ids lists two or more rules; one rule is id.");
     const ids = input.ids.map((id) => namedId(id, "event.ids"));
     if (new Set(ids).size !== ids.length) throw new TypeError("event.ids names a rule twice.");
@@ -385,7 +393,7 @@ function normalizeEvent(input: Record<string, unknown>): Record<string, unknown>
 
 const EVENT: FlatFamily = {
   id: "event",
-  version: 39,
+  version: 40,
   role: "EVENT",
   label: "At an event",
   description: [
@@ -407,7 +415,7 @@ const EVENT: FlatFamily = {
     properties: {
       kind: { enum: EVENT_KINDS },
       phase: { enum: PHASES, "x-only-when": { kind: ["phase-start", "phase-end", "attacks-resolved"] } },
-      turn: { enum: TURNS, "x-only-when": { kind: ["phase-start", "phase-end", "attacks-resolved"] } },
+      turn: { enum: TURNS, "x-only-when": { kind: ["phase-start", "phase-end", "attacks-resolved", "turn-ended", "step-started"] } },
       step: { enum: STEPS, "x-only-when": { kind: ["step-started"] } },
       activity: { enum: ACTIVITIES, "x-only-when": { kind: ["used", "resource-spent"] }, "x-optional": true },
       state: { enum: CHANGED_STATES, "x-only-when": { kind: ["state-changed"] } },
@@ -415,25 +423,25 @@ const EVENT: FlatFamily = {
       roll: { enum: ROLLS, "x-only-when": { kind: ["before-roll", "after-roll"] } },
       marker: { type: "string", minLength: 1, "x-only-when": { kind: ["marker-removed"] } },
       pool: { type: "string", minLength: 1, "x-only-when": { kind: ["resource-gained", "resource-spent"] } },
-      owner: { enum: ["friendly", "enemy", "any"], "x-only-when": { kind: ["move-ended", "selected", "targets-selected", "attacks-resolved", "set-up", "used"] } },
-      move_types: { type: "array", items: { enum: MOVE_TYPES }, minItems: 1, uniqueItems: true, "x-only-when": { kind: ["move-ended", "selected"] } },
+      owner: { enum: ["friendly", "enemy", "any"], "x-only-when": { kind: ["move-ended", "move-started", "selected", "targets-selected", "attacks-resolved", "set-up", "used"] } },
+      move_types: { type: "array", items: { enum: MOVE_TYPES }, minItems: 1, uniqueItems: true, "x-only-when": { kind: ["move-ended", "move-started", "selected"] } },
       to: { enum: SELECTED_TO, "x-only-when": { kind: ["selected"] } },
       action_kind: { enum: ["charge", "shoot", "attack", "stratagem", "ability", "fight"], "x-only-when": { kind: ["targets-selected", "attacks-resolved"] } },
-      subject: { enum: SUBJECTS, "x-only-when": { kind: ["move-ended", "selected", "targets-selected", "attacks-resolved", "set-up", "after-roll", "used"] }, "x-optional": true },
+      subject: { enum: SUBJECTS, "x-only-when": { kind: ["move-ended", "move-started", "selected", "targets-selected", "attacks-resolved", "set-up", "after-roll", "used"] }, "x-optional": true },
       result: { enum: ["success", "failure"], "x-only-when": { kind: ["after-roll"] }, "x-optional": true },
-      by: { enum: DESTROYERS, "x-only-when": { kind: ["unit-destroyed", "model-destroyed"] }, "x-optional": true },
-      object_owner: { enum: OBJECT_OWNERS, "x-only-when": { kind: ["unit-destroyed", "model-destroyed"] }, "x-optional": true },
+      by: { enum: DESTROYERS, "x-only-when": { kind: ["unit-destroyed", "model-destroyed", "unit-or-model-destroyed"] }, "x-optional": true },
+      object_owner: { enum: OBJECT_OWNERS, "x-only-when": { kind: ["unit-destroyed", "model-destroyed", "unit-or-model-destroyed"] }, "x-optional": true },
       also: { enum: ["move-started", "move-ended"], "x-only-when": { kind: ["move-started", "move-ended"] }, "x-optional": true },
       object: { enum: ["this-unit", "this-model", ANTECEDENT, FILTERED_UNITS, "selected-unit"], "x-only-when": { kind: ["targets-selected", "damage-allocated", "resource-spent", "used"] }, "x-optional": true },
       from: { enum: ["strategic-reserves"], "x-only-when": { kind: ["set-up"] }, "x-optional": true },
       id: { type: "string", pattern: NAMED_ID.source, "x-only-when": { kind: ["used", "targets-selected"] }, "x-optional": true },
       transport: { enum: ["this-unit"], "x-only-when": { kind: ["disembarked"] }, "x-optional": true },
       rolls: { type: "array", items: { enum: TRIGGER_ROLLS }, minItems: 2, uniqueItems: true, "x-only-when": { kind: ["before-roll", "after-roll"] }, "x-optional": true },
-      attack_type: { enum: ATTACK_TYPES, "x-only-when": { kind: ["damage-allocated", "model-destroyed", "attacks-resolved"] }, "x-optional": true },
+      attack_type: { enum: ATTACK_TYPES, "x-only-when": { kind: ["damage-allocated", "model-destroyed", "unit-or-model-destroyed", "attacks-resolved"] }, "x-optional": true },
       through: { enum: ["tall-terrain"], "x-optional": true, "x-only-when": { kind: ["move-ended"] } },
-      object_keywords: { type: "array", items: KEYWORD_ITEMS, minItems: 1, uniqueItems: true, "x-only-when": { kind: ["model-destroyed"] }, "x-optional": true },
+      object_keywords: { type: "array", items: KEYWORD_ITEMS, minItems: 1, uniqueItems: true, "x-only-when": { kind: ["model-destroyed", "unit-or-model-destroyed"] }, "x-optional": true },
       source: { type: "array", minItems: 1, uniqueItems: true, items: { enum: ["unit", "enhancement"] }, "x-only-when": { kind: ["used"] }, "x-optional": true },
-      bind_as: { type: "string", pattern: BINDING.source, minLength: 1, "x-only-when": { kind: ["used", "attacks-resolved", "resource-gained", "after-roll"] }, "x-optional": true },
+      bind_as: { type: "string", pattern: BINDING.source, minLength: 1, "x-only-when": { kind: BINDABLE_KINDS }, "x-optional": true },
       usage: {
         type: "object",
         required: ["frequency", "count"],
@@ -444,7 +452,7 @@ const EVENT: FlatFamily = {
       },
       ability_keyword: { type: "string", minLength: 1, "x-only-when": { kind: ["used"] }, "x-optional": true },
       targets_level: { enum: ["unit"], "x-only-when": { kind: ["used"] }, "x-optional": true },
-      timing: { enum: ["before-removal"], "x-only-when": { kind: ["unit-destroyed", "model-destroyed"] }, "x-optional": true },
+      timing: { enum: ["before-removal"], "x-only-when": { kind: ["unit-destroyed", "model-destroyed", "unit-or-model-destroyed"] }, "x-optional": true },
       object_designated: { enum: OBJECT_DESIGNATIONS, "x-only-when": { kind: ["unit-destroyed"] }, "x-optional": true },
       same_subject_targeted: { enum: ["stratagem-target"], "x-only-when": { kind: ["attacks-resolved"] }, "x-optional": true },
       channelled: { const: true, "x-only-when": { kind: ["after-roll"] }, "x-optional": true },
