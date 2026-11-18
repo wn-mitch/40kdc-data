@@ -300,7 +300,7 @@ function translateEffect(
   effect = lastingSetup(effect, activation?.duration);
   const abilityId = source.kind === "ability" ? source.abilityId : "effect";
   // The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
-  const step = onAttackRoll(activation?.trigger, effect, { context, perspective, abilityId, duration: activation?.duration, usage: activation?.usage, selfDesignations: selfDesignations(effect, abilityId), definitions: ownDefinitions(effect, abilityId) });
+  const step = onAttackRoll(activation?.trigger, effect, { context, perspective, abilityId, duration: activation?.duration, usage: activation?.usage, definitions: ownDefinitions(effect, abilityId) });
   walk(step.effect, source, step.opts, out);
   if (activation?.usage != null || activation?.cost != null || activation?.optional === true) {
     const { duration: _duration, trigger: _trigger, ...requirement } = activation;
@@ -349,8 +349,6 @@ type WalkOpts = {
   usage?: unknown;
   /** The abilities the owning record prints, by definition id, for a grant that names one by reference ({@link ownDefinitions}). */
   definitions?: ReadonlyMap<string, unknown>;
-  /** Tags the owning ability designates on the units holding it ({@link selfDesignations}). */
-  selfDesignations?: ReadonlySet<string>;
   /** Inside a part triggered by each hit or wound roll of the attack, that roll and its outcome. */
   /** The hit or wound roll an enclosing trigger fires on; `unmodelled` names its narrowing the attack cannot carry. */
   attackRoll?: { roll: "hit" | "wound"; outcome: "success" | "critical" | undefined; unmodelled?: string[] };
@@ -1844,9 +1842,9 @@ function translateConditional(
     out.unsupported.push({ reason: POST_ATTACK_MOMENT, effectFragment: activation.fragment });
     return;
   }
-  const designation = selfDesignationGate(condition, opts);
+  const designation = ownDesignationGate(condition, opts);
   if (designation !== undefined) {
-    offerSelfDesignated(node, designation, source, opts, out);
+    offerOwnDesignated(node, designation, source, opts, out);
     return;
   }
   const stance = opts.context.activeRules === undefined ? splitStanceOption(condition) : undefined;
@@ -2030,44 +2028,23 @@ function offerStanceGated(
 }
 
 /**
- * The tags `effect` designates on the units holding the ability (`this-unit`, `ability-unit`, or a
- * friendly filter naming the ability in `has_ability`): Martial Katah readies every such unit.
+ * The tag of a designation gate on the unit itself (`this-unit`, the default subject), when the
+ * context does not declare that unit's designations: the player's own rules put it there or not,
+ * so the gate is the player's to open, like a stance option.
  */
-function selfDesignations(effect: unknown, abilityId: string): ReadonlySet<string> {
-  const tags = new Set<string>();
-  const visit = (node: unknown): void => {
-    if (Array.isArray(node)) {
-      node.forEach(visit);
-      return;
-    }
-    if (!isObject(node)) return;
-    if (node.type === "designate" && isObject(node.modifier) && typeof node.modifier.tag === "string" && node.modifier.clear !== true) {
-      const target = node.target;
-      const holders = target === "this-unit" || target === "ability-unit" ||
-        (isObject(target) && target.owner === "friendly" && Array.isArray(target.has_ability) && target.has_ability.includes(abilityId));
-      if (holders) tags.add(node.modifier.tag);
-    }
-    Object.values(node).forEach(visit);
-  };
-  visit(effect);
-  return tags;
-}
-
-/**
- * The tag of a `this-unit` designation gate the ability itself grants its holders, when the
- * context does not declare the unit's designations: the player readies the unit, so the gate is
- * the player's to open.
- */
-function selfDesignationGate(condition: Record<string, unknown>, opts: WalkOpts): string | undefined {
-  if (opts.context.attackerDesignations !== undefined || opts.selfDesignations === undefined) return undefined;
-  if (condition.type !== "matches" || !isObject(condition.parameters) || condition.parameters.subject !== "this-unit") return undefined;
+function ownDesignationGate(condition: Record<string, unknown>, opts: WalkOpts): string | undefined {
+  const declared = opts.perspective === "target" ? opts.context.targetDesignations : opts.context.attackerDesignations;
+  if (declared !== undefined) return undefined;
+  if (condition.type !== "matches" || !isObject(condition.parameters)) return undefined;
+  const subject = condition.parameters.subject;
+  if (subject != null && subject !== "this-unit") return undefined;
   const filter = condition.parameters.filter;
   if (!isObject(filter) || Object.keys(filter).length !== 1 || typeof filter.designated !== "string") return undefined;
-  return opts.selfDesignations.has(filter.designated) ? filter.designated : undefined;
+  return filter.designated;
 }
 
-/** What a self-designation gate opens becomes opt-in levers requiring that designation. */
-function offerSelfDesignated(
+/** What an own-designation gate opens becomes opt-in levers requiring that designation. */
+function offerOwnDesignated(
   node: Record<string, unknown>,
   tag: string,
   source: BuffSource,

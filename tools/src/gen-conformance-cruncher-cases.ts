@@ -427,6 +427,8 @@ export function canonicalScenarioCases() {
   const fabricatedId = "fabricated-scenario";
   const readyHolders = { type: "designate", target: { owner: "friendly", has_ability: [fabricatedId] }, modifier: { tag: "readied" } };
   const readied = { type: "matches", parameters: { subject: "this-unit", filter: { designated: "readied" } } };
+  // No subject: the schema's default, this unit.
+  const riledUp = { type: "matches", parameters: { filter: { designated: "riled-up" } } };
   const atOrBelowHalf = { type: "strength", parameters: { subject: "this-unit", below: "half", at_or_below: true } };
   const shooting = { type: "phase-is", parameters: { phase: "shooting" } };
   const hitPlus = { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } };
@@ -518,8 +520,14 @@ export function canonicalScenarioCases() {
     { id: "rule-active-option-mixed-choice", effect: { type: "choice", options: [{ type: "sequence", steps: [woundPlus, gated(doctrine)] }] }, context: {} },
     { id: "rule-active-option-negated", effect: gated(notDoctrine), context: {} },
     { id: "self-designation-gate", effect: { type: "sequence", steps: [readyHolders, gated(readied)] }, context: {} },
-    { id: "self-designation-other-tag", effect: { type: "sequence", steps: [readyHolders, gated({ ...readied, parameters: { ...readied.parameters, filter: { designated: "marked" } } })] }, context: {} },
+    // A designation another of the player's rules applies (Waaagh! riles a unit up) is the player's toggle too.
+    { id: "own-designation-other-rule", effect: { type: "sequence", steps: [readyHolders, gated({ ...readied, parameters: { ...readied.parameters, filter: { designated: "marked" } } })] }, context: {} },
     { id: "self-designation-declared", effect: { type: "sequence", steps: [readyHolders, gated(readied)] }, context: { attackerDesignations: [] } },
+    { id: "own-designation-default-subject", effect: gated(riledUp), context: {} },
+    { id: "own-designation-declared-other", effect: gated(riledUp), context: { attackerDesignations: ["spotted"] } },
+    { id: "own-designation-target-lever", effect: defensive(riledUp), context: { attackerDesignations: [] }, perspective: "target" },
+    { id: "own-designation-target-declared", effect: defensive(riledUp), context: { targetDesignations: ["riled-up"] }, perspective: "target" },
+    { id: "own-designation-other-subject", effect: gated({ type: "matches", parameters: { subject: "defender", filter: { designated: "riled-up" } } }), context: {} },
     { id: "rule-active-option-both-sides", effect: { type: "sequence", steps: [gated({ operator: "and", operands: [notDoctrine, shooting] }), woundGated(doctrine)] }, context: {} },
     { id: "in-region-rule-region", effect: gated(region), context: { attackerRegions: [{ ruleRegion: "example-region" }] } },
     { id: "in-region-elsewhere", effect: gated(region), context: { attackerRegions: [{ ruleRegion: "other-region" }] } },

@@ -201,9 +201,6 @@ pub(crate) struct WalkOpts<'a> {
     /// Inside a printed grant's definition walked for a unit that is not one of its holders: the
     /// holders' filter. Only the definition's auras can reach the buffed unit, emitted by a holder.
     aura_emitter: Option<Value>,
-    /// Tags the owning ability designates on the units holding it
-    /// ([`gated::self_designations`]).
-    self_designations: &'a std::collections::BTreeSet<String>,
     /// The abilities the owning record prints, by definition id, for a grant that names one by
     /// reference ([`damage_leaves::own_definitions`]).
     definitions: &'a std::collections::HashMap<String, Value>,
@@ -428,7 +425,6 @@ fn translate_effect(
         _ => ("effect", None),
     };
     let source_value = serde_json::to_value(source).expect("a buff source serializes");
-    let self_designations = gated::self_designations(&effect, ability_id);
     let definitions = damage_leaves::own_definitions(&effect, ability_id);
     let mut opts = WalkOpts {
         context,
@@ -441,7 +437,6 @@ fn translate_effect(
         usage: usage.cloned(),
         granted_holder: false,
         aura_emitter: None,
-        self_designations: &self_designations,
         definitions: &definitions,
         attack_roll: None,
     };

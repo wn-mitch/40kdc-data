@@ -51,9 +51,6 @@ type dslOpts struct {
 	// usage is the usage limit inherited from the owning ability or nearest
 	// ability part.
 	usage any
-	// selfDesignations holds the tags the owning ability designates on the
-	// units holding it (selfDesignations); nil outside an ability walk.
-	selfDesignations map[string]bool
 	// definitions holds the abilities the owning record prints, by definition id, for a grant
 	// that names one by reference (ownDefinitions).
 	definitions map[string]any
@@ -141,7 +138,7 @@ func translateEffect(effect any, source map[string]any, context map[string]any, 
 	if act != nil {
 		effect = lastingSetup(effect, act["duration"])
 	}
-	opts := dslOpts{context: context, perspective: perspective, abilityID: abilityID, selfDesignations: selfDesignations(effect, abilityID), definitions: ownDefinitions(effect, abilityID)}
+	opts := dslOpts{context: context, perspective: perspective, abilityID: abilityID, definitions: ownDefinitions(effect, abilityID)}
 	if act != nil {
 		opts.duration = act["duration"]
 		opts.usage = act["usage"]
@@ -2428,8 +2425,8 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 		out.unsupported = append(out.unsupported, unsup(postAttackMoment, metadata["fragment"]))
 		return
 	}
-	if tag, ok := selfDesignationGate(condition, opts); ok {
-		offerSelfDesignated(node, tag, source, opts, out)
+	if tag, ok := ownDesignationGate(condition, opts); ok {
+		offerOwnDesignated(node, tag, source, opts, out)
 		return
 	}
 	if activeRulesUndeclared(opts.context) {

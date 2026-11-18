@@ -13,7 +13,7 @@ use super::attack_scope::{
 };
 use super::conditions::evaluate_condition_for_source;
 use super::gated::{
-    gated, offer_self_designated, offer_stance_gated, self_designation_gate, split_stance_option,
+    gated, offer_own_designated, offer_stance_gated, own_designation_gate, split_stance_option,
 };
 use super::js::*;
 use super::{walk, Lever, Out, WalkOpts, STOCHASTIC_DICE_GATED};
@@ -547,8 +547,8 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     }
     // A designation the ability grants its own holders, undeclared by the context, is the
     // player's to ready.
-    if let Some(tag) = self_designation_gate(condition, opts) {
-        offer_self_designated(node, tag, opts, out);
+    if let Some(tag) = own_designation_gate(condition, opts) {
+        offer_own_designated(node, tag, opts, out);
         return;
     }
     // A gate on a stance option the context does not declare follows the player's stance pick.

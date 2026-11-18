@@ -32,10 +32,9 @@ from wh40kdc.cruncher.from_dsl_shapes import (
     StanceGate,
     enumerate_roll_allocation,
     own_definitions,
+    own_designation_gate,
     roll_label,
     scaled_to_cap,
-    self_designation_gate,
-    self_designations,
     stance_gate_fields,
     unsized_value_reason,
 )
@@ -179,8 +178,6 @@ def _translate_effect(
         "abilityId": ability_id,
         "duration": activation.get("duration") if activation else None,
         "usage": activation.get("usage") if activation else None,
-        # Tags the owning ability designates on the units holding it.
-        "selfDesignations": self_designations(effect, ability_id),
         # The abilities the owning record prints, by definition id, for a grant naming one by
         # reference.
         "definitions": own_definitions(effect, ability_id),
@@ -2255,9 +2252,9 @@ def _translate_conditional(
             {"reason": POST_ATTACK_MOMENT, "effectFragment": node["_activation_source"]}
         )
         return
-    designation = self_designation_gate(condition, opts)
+    designation = own_designation_gate(condition, opts)
     if designation is not None:
-        _offer_self_designated(node, designation, source, opts, out)
+        _offer_own_designated(node, designation, source, opts, out)
         return
     stance = _split_stance_option(condition) if opts["context"].get("activeRules") is None else None
     if stance is not None:
@@ -2511,14 +2508,14 @@ def _offer_stance_gated(
     )
 
 
-def _offer_self_designated(
+def _offer_own_designated(
     node: dict[str, Any],
     tag: str,
     source: BuffSource,
     opts: dict[str, Any],
     out: EffectTranslation,
 ) -> None:
-    """What a self-designation gate opens becomes opt-in levers requiring that designation."""
+    """What an own-designation gate opens becomes opt-in levers requiring that designation."""
     sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
     _walk(node.get("effect"), source, opts, sub)
     out["unsupported"].extend(sub["unsupported"])

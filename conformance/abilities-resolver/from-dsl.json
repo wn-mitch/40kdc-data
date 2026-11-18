@@ -10516,7 +10516,7 @@
       }
     },
     {
-      "caseId": "canonical/scenario/self-designation-other-tag",
+      "caseId": "canonical/scenario/own-designation-other-rule",
       "abilityId": "fabricated-scenario",
       "source": {
         "kind": "ability",
@@ -10568,17 +10568,31 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [
-          "effect type \"designate\" is not modelled by the buff layer",
-          "conditional: cannot evaluate condition \"matches\" against current context"
+          "effect type \"designate\" is not modelled by the buff layer"
         ],
         "unsupportedScopes": [
-          "encounter-layer",
-          "unresolved"
+          "encounter-layer"
         ],
-        "needKeys": [
-          "attacker:{\"parameters\":{\"filter\":{\"designated\":\"marked\"},\"subject\":\"this-unit\"},\"type\":\"matches\"}"
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-scenario#marked",
+            "label": "marked: +1 to hit",
+            "group": null,
+            "requires": [
+              {
+                "designated": "marked"
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          }
         ],
-        "activatable": [],
         "applicableWhen": []
       }
     },
@@ -10642,6 +10656,157 @@
           "encounter-layer"
         ],
         "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/own-designation-default-subject",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "designated": "riled-up"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-scenario#riled-up",
+            "label": "riled-up: +1 to hit",
+            "group": null,
+            "requires": [
+              {
+                "designated": "riled-up"
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/own-designation-declared-other",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "designated": "riled-up"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerDesignations": [
+          "spotted"
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/own-designation-other-subject",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "defender",
+            "filter": {
+              "designated": "riled-up"
+            }
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"designated\":\"riled-up\"},\"subject\":\"defender\"},\"type\":\"matches\"}"
+        ],
         "activatable": [],
         "applicableWhen": []
       }
