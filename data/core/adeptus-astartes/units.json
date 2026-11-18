@@ -4742,7 +4742,8 @@
         "namespace": "mfm",
         "id": "702b93e4-6cd8-4bf1-9507-374dc1a7f397"
       }
-    ]
+    ],
+    "max_model_count": 10
   },
   {
     "id": "deathwatch-veterans",
@@ -5068,7 +5069,8 @@
         "namespace": "mfm",
         "id": "e162e0db-3a17-43c7-9f42-a0c0999e4fad"
       }
-    ]
+    ],
+    "max_model_count": 10
   },
   {
     "id": "watch-master",
@@ -5467,7 +5469,8 @@
         "namespace": "mfm",
         "id": "1ccb48ec-c82d-4d27-a4ef-f199e79e8043"
       }
-    ]
+    ],
+    "max_model_count": 10
   },
   {
     "id": "spectrus-kill-team",
@@ -5565,7 +5568,8 @@
         "namespace": "mfm",
         "id": "87f83fe4-3976-49cf-b6a7-fd09bfb8675d"
       }
-    ]
+    ],
+    "max_model_count": 10
   },
   {
     "id": "captain-in-gravis-armour",
@@ -7226,7 +7230,8 @@
         "namespace": "mfm",
         "id": "5ab7a6a5-3db3-4595-b8a4-c031bdc3ef31"
       }
-    ]
+    ],
+    "max_model_count": 6
   },
   {
     "id": "captain-in-terminator-armour",

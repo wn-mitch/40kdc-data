@@ -6725,7 +6725,7 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
         <profile name="Spirit Snare" id="e8c6-a446-2a75-23aa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When a friendly PSYKER THOUSAND SONS model with the Cabal of Sorcerers ability is destroyed:
-  -&gt; Select one friendly model within 9" of that unit with the Spirit Snare ability: that model gains the following rules (each time the unit attempts a Ritual, for the rest of the battle: this model gets +1 to Psychic rolls (to a maximum of +2)).</characteristic>
+  -&gt; Select one friendly model within 9" of that model with the Spirit Snare ability: that model gains the following rules (each time the unit attempts a Ritual, for the rest of the battle: this model gets +1 to Psychic rolls (to a maximum of +2)).</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="0c3b-7801-9db9-a7e4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -9889,7 +9889,7 @@ All friendly THOUSAND SONS units gain the Mortal Sorcery ability:
         - You can re-roll one Hit roll.
         - You can re-roll one Wound roll.
         - You can re-roll one Damage roll.
-  -&gt; When a friendly THOUSAND SONS VEHICLE model in the unit is destroyed: while the triggering unit has the Deadly Demise ability, while that unit is within 6" of a friendly PSYKER THOUSAND SONS unit, the threshold of this model's Deadly Demise ability is 5.</description>
+  -&gt; When a friendly THOUSAND SONS VEHICLE model in the unit is destroyed: while the triggering unit has the Deadly Demise ability, while that model is within 6" of a friendly PSYKER THOUSAND SONS unit, the threshold of this model's Deadly Demise ability is 5.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -11204,7 +11204,7 @@ Applies to: units with SPAWN.</characteristic>
     - Destiny’s Ruin (Warp Charge 5): Until the end of the phase: select one enemy unit if the selected unit is within 24" of this model and the selected unit is visible to this model (your Destinys Ruin Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 10+, you can re-roll a Hit roll of 1 for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 10+, you can re-roll the Hit roll for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.
     - Temporal Surge (Warp Charge 6): Until the end of the turn: select one friendly unit with the SCINTILLATING LEGIONS or THOUSAND SONS keyword if the selected unit is unengaged and the selected unit is within 24" of this model and the selected unit is visible to this model: unless the Psychic test result is 10+, that unit can make a Normal move of up to D6"; if the Psychic test result is 10+, that unit can make a Normal move of up to 6"; that unit cannot declare a charge.
     - Doombolt (Warp Charge 7): Select one enemy unit if the selected unit is within 24" of this model and the selected unit is visible to this model and (the selected unit does not have the Lone Operative ability or the selected unit is an attached unit or the selected unit is within 12" of this model): unless the Psychic test result is 11+, that unit suffers D3 mortal wounds; if the Psychic test result is 11+, that unit suffers D3+3 mortal wounds.
-    - Twist of Fate (Warp Charge 9): Until the end of the phase: select one enemy unit if the selected unit is within 24" of this model and the selected unit is visible to this model (your Twist of Fate Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 12+, improve the Armour Penetration characteristic of all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword by 1; if the Psychic test result is 12+, improve the Armour Penetration characteristic of all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword by 2.</description>
+    - Twist of Fate (Warp Charge 9): Until the end of the phase: select one enemy unit if the selected unit is within 24" of this model and the selected unit is visible to this model (your Twist of Fate Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 12+, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly model with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 12+, improve the Armour Penetration characteristic of that attack by 2 if it is made by a friendly model with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.</description>
     </rule>
     <rule name="Pact of Sorcery" id="cb84-1d12-885e-45f9" hidden="false">
       <description>You cannot select Scintillating Legions as your Army Faction.</description>

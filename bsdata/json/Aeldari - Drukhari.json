@@ -7853,7 +7853,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, once per turn per unit:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Murderous Crossfire Target). Until the end of the phase, each time a friendly unit makes an attack against it, while making ranged attacks, improve all friendly DRUKHARI units' Armour Penetration characteristic by 1.",
+                "$text": "After the unit resolves its attacks, once per turn per unit:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Murderous Crossfire Target). Until the end of the phase, each time a friendly unit makes an attack against it, while making ranged attacks, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly DRUKHARI unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

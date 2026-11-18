@@ -678,6 +678,7 @@ function handleCheckRosterLegality(
       enhancementId?: unknown;
       leaderBodyguardId?: unknown;
       counts?: Record<string, number>;
+      keywordOverrides?: unknown;
     }[];
   };
   if (!Array.isArray(a.units)) {
@@ -703,6 +704,9 @@ function handleCheckRosterLegality(
       leaderBodyguardId:
         typeof u.leaderBodyguardId === "string" ? u.leaderBodyguardId : null,
       counts: new Map<string, number>(Object.entries(u.counts ?? {})),
+      keywordOverrides: Array.isArray(u.keywordOverrides)
+        ? u.keywordOverrides.filter((k): k is string => typeof k === "string")
+        : [],
     })),
   };
   const result = validateRosterCore(spec, getDataset(state));
@@ -988,6 +992,7 @@ const VALIDATOR_TARGETS: Record<string, string> = {
 function ajvKeywordToCode(keyword: string): string {
   switch (keyword) {
     case "required":
+    case "dependentRequired":
       return "REQUIRED_MISSING";
     case "type":
       return "TYPE_MISMATCH";
@@ -1043,8 +1048,9 @@ function handleValidate(state: RunnerState, args: unknown): RunnerResponse {
   for (const e of raw) {
     const code = ajvKeywordToCode(e.keyword);
     if (code.startsWith("UNMAPPED:")) continue;
+    // A missing property (required, or required by a present one) is reported at its own path.
     const path =
-      e.keyword === "required"
+      e.keyword === "required" || e.keyword === "dependentRequired"
         ? `${e.instancePath}/${(e.params as { missingProperty?: string }).missingProperty ?? ""}`
         : e.instancePath;
     const key = `${path}|${code}`;

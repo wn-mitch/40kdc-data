@@ -111,6 +111,15 @@ func (ds *Dataset) unitCompositionRawOf(unit map[string]any) map[string]any {
 // newUnitLoadout is the view for unit with its faction-scoped composition and
 // options.
 func newUnitLoadout(unit, composition map[string]any, options []any) UnitLoadout {
+	view := uncappedUnitLoadout(unit, composition, options)
+	if c, ok := unit["max_model_count"]; ok && c != nil {
+		return &cappedUnitLoadout{unitID: getStr(unit, "id"), cap: asInt(c), view: view}
+	}
+	return view
+}
+
+// uncappedUnitLoadout is the view for unit before its max_model_count applies.
+func uncappedUnitLoadout(unit, composition map[string]any, options []any) UnitLoadout {
 	if composition != nil && composition["loadout"] != nil {
 		decoded, err := decodeMfmComposition(composition)
 		if err == nil && decoded.Loadout != nil {
@@ -224,4 +233,70 @@ func mfmCloneCounts(m map[string]int) map[string]int {
 		out[k] = v
 	}
 	return out
+}
+
+// cappedUnitLoadout is a view with the unit's max_model_count applied: a size
+// above the cap cannot be built, so every query answers as for a size no
+// composition has.
+type cappedUnitLoadout struct {
+	unitID string
+	cap    int
+	view   UnitLoadout
+}
+
+func (v *cappedUnitLoadout) over(modelCount int) bool { return modelCount > v.cap }
+
+func (v *cappedUnitLoadout) Source() string { return v.view.Source() }
+
+func (v *cappedUnitLoadout) Base(modelCount int) map[string]int {
+	if v.over(modelCount) {
+		return nil
+	}
+	return v.view.Base(modelCount)
+}
+
+func (v *cappedUnitLoadout) Bounds(modelCount int) map[string]intRange {
+	if v.over(modelCount) {
+		return nil
+	}
+	return v.view.Bounds(modelCount)
+}
+
+func (v *cappedUnitLoadout) Maximal(modelCount int) map[string]int {
+	if v.over(modelCount) {
+		return nil
+	}
+	return v.view.Maximal(modelCount)
+}
+
+func (v *cappedUnitLoadout) Check(modelCount int, counts map[string]int) []map[string]string {
+	if v.over(modelCount) {
+		return []map[string]string{{
+			"id":      v.unitID,
+			"code":    "invalid-model-count",
+			"message": fmt.Sprintf("%s: no squad size has %d models", v.unitID, modelCount),
+		}}
+	}
+	return v.view.Check(modelCount, counts)
+}
+
+func (v *cappedUnitLoadout) Groups(modelCount int, counts map[string]int) []any {
+	if v.over(modelCount) {
+		return nil
+	}
+	return v.view.Groups(modelCount, counts)
+}
+
+func (v *cappedUnitLoadout) Complete(modelCount int, explicit map[string]int) *completedLoadout {
+	if v.over(modelCount) {
+		return nil
+	}
+	return v.view.Complete(modelCount, explicit)
+}
+
+func (v *cappedUnitLoadout) Candidates(modelCount int, limit *int) []string {
+	if v.over(modelCount) {
+		return []string{}
+	}
+	return v.view.Candidates(modelCount, limit)
 }

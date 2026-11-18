@@ -19,7 +19,7 @@
     "conditional_groups": {
       "type": "array",
       "minItems": 1,
-      "description": "Attachment eligibility and role that apply only when all required roster units and no excluded roster units are present.",
+      "description": "Attachment eligibility and role that apply only when their conditions hold: every required roster unit and no excluded roster unit is present, the required detachment is selected and the excluded one is not, and the leader and bodyguard share the required keyword.",
       "items": {
         "type": "object",
         "minProperties": 3,
@@ -39,6 +39,18 @@
             "type": "array",
             "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
             "minItems": 1
+          },
+          "required_detachment_id": {
+            "$ref": "../defs/common.schema.json#/$defs/entity-id",
+            "description": "The group applies only when the army has selected this detachment."
+          },
+          "excluded_detachment_id": {
+            "$ref": "../defs/common.schema.json#/$defs/entity-id",
+            "description": "The group applies only when the army has not selected this detachment."
+          },
+          "required_shared_keyword": {
+            "$ref": "../defs/common.schema.json#/$defs/keyword",
+            "description": "The attachment holds only when both the leader and the bodyguard carry this keyword in the roster (e.g. the same Mark of Chaos)."
           }
         },
         "required": ["role", "eligible_bodyguard_ids"],

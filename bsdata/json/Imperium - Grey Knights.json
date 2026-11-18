@@ -5967,7 +5967,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (each unit can be selected for this ability at most once per turn across your army) (your Fire Focus Target). Until the end of the turn, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, improve all friendly models' Armour Penetration characteristic by 1.",
+                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (each unit can be selected for this ability at most once per turn across your army) (your Fire Focus Target). Until the end of the turn, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, improve the Armour Penetration characteristic of that attack by 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

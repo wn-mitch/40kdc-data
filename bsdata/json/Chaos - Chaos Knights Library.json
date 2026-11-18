@@ -23359,7 +23359,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "After a friendly model shoots (the triggering model must have WAR DOG), you may use this ability, while the triggering unit is within 9\" of this model:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test.\nApplies to: units with KNIGHT ABOMINANT.",
+                    "$text": "After a friendly model shoots (the triggering model must have WAR DOG), you may use this ability, while the triggering model is within 9\" of this model:\n  -> Select one enemy unit that was hit by an attack made by the triggering model during its just-finished shooting sequence: that unit must take a Battle-shock test.\nApplies to: units with KNIGHT ABOMINANT.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

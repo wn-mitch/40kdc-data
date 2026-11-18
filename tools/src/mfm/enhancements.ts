@@ -32,6 +32,14 @@ import {
   sameDatasheetGroups,
 } from "./enhancement-datasheets.js";
 import { RULES_TEXT_ELIGIBILITY } from "./enhancement-overrides.js";
+import {
+  enhancementFlags,
+  reconcileEnhancementFlags,
+  requiredWargearItemsByEnhancement,
+  weaponIdsByWargearItem,
+  type EnhancementFlags,
+  type FlagChange,
+} from "./enhancement-flags.js";
 
 
 
@@ -79,6 +87,10 @@ export interface DirEnhResult {
     to: EligibilityShape;
   }[];
   attachmentBodyguardsChanged: { id: string; from: string[] | null; to: string[] | null }[];
+  /** Flag fields (`enhancement-flags.ts`) that changed. */
+  flagsChanged: ({ id: string } & FlagChange)[];
+  /** Required wargear items that resolved to no single repo weapon (field left as authored). */
+  unresolvedWargear: { id: string; ids: string[] }[];
   /** Dump keyword ids that did not resolve to a repo label (the eligibility source
    *  cannot be represented safely, so it is left untouched). */
   unresolvedKeywords: { id: string; ids: string[] }[];
@@ -541,6 +553,18 @@ export function normalizeEnhancementNames(dump: MfmDump): EnhNormResult {
 
   return { staged, renames, nameChanges, refRewrites, collisions: [...collided].sort() };
 }
+/** Enhancement repo-id → its flag fields, keyed like {@link buildEnhFieldCanon}. */
+export function buildEnhFlagCanon(dump: MfmDump): Map<string, EnhancementFlags> {
+  const requiredItems = requiredWargearItemsByEnhancement(dump);
+  const weaponIdOf = weaponIdsByWargearItem();
+  const out = new Map<string, EnhancementFlags>();
+  for (const row of dump.table("enhancement")) {
+    const id = enhancementRepoId(dump, row);
+    if (id) out.set(id, enhancementFlags(row, requiredItems.get(row.id) ?? [], weaponIdOf));
+  }
+  return out;
+}
+
 export function runEnhancements(
   dump: MfmDump,
   write: boolean,
@@ -549,6 +573,7 @@ export function runEnhancements(
   const confirmed = currentGameVersion(dump);
   const canon = buildEnhCanon(dump);
   const fieldCanon = buildEnhFieldCanon(dump);
+  const flagCanon = buildEnhFlagCanon(dump);
   const matchedIds = new Set<string>();
   const dirs: DirEnhResult[] = [];
   const staged: StagedWrite[] = [];
@@ -592,6 +617,8 @@ export function runEnhancements(
       eligibilityChanged: [],
       attachmentBodyguardsChanged: [],
       requiredAbilitiesChanged: [],
+      flagsChanged: [],
+      unresolvedWargear: [],
       unresolvedKeywords: [],
     };
     for (const e of enhs) {
@@ -657,6 +684,11 @@ export function runEnhancements(
         if (f.unresolvedKeywordIds.length) {
           res.unresolvedKeywords.push({ id: e.id, ids: f.unresolvedKeywordIds });
         }
+      }
+      const flags = flagCanon.get(e.id);
+      if (flags) {
+        for (const change of reconcileEnhancementFlags(e, flags)) res.flagsChanged.push({ id: e.id, ...change });
+        if (flags.unresolvedWargearItemIds.length) res.unresolvedWargear.push({ id: e.id, ids: flags.unresolvedWargearItemIds });
       }
     }
     staged.push({ path: p, value: enhs });
@@ -767,6 +799,8 @@ export function runEnhancements(
     if (fields.required_ability_ids && fields.unresolvedKeywordIds.length === 0) {
       record.required_ability_ids = fields.required_ability_ids;
     }
+    const flags = flagCanon.get(id);
+    if (flags) reconcileEnhancementFlags(record, flags);
 
     const enhancements = enhancementsByDir.get(location.dir);
     if (!enhancements) {
@@ -830,6 +864,8 @@ export function buildEnhReport(report: EnhReport, write: boolean): string {
       d.eligibilityChanged.length ||
       d.exclusionChanged.length ||
       d.requiredAbilitiesChanged.length ||
+      d.flagsChanged.length ||
+      d.unresolvedWargear.length ||
       d.unresolvedKeywords.length ||
       d.unmatchedRepo.length;
     if (!hasDetail) continue;
@@ -863,6 +899,14 @@ export function buildEnhReport(report: EnhReport, write: boolean): string {
       d.requiredAbilitiesChanged.forEach((c) =>
         L.push(`- ${c.id}: ${JSON.stringify(c.from)} → ${JSON.stringify(c.to)}`),
       );
+    }
+    if (d.flagsChanged.length) {
+      L.push("", "**Flag changes:**");
+      d.flagsChanged.forEach((c) => L.push(`- ${c.id}: ${c.field} ${JSON.stringify(c.from)} → ${JSON.stringify(c.to)}`));
+    }
+    if (d.unresolvedWargear.length) {
+      L.push("", "**Unresolved required wargear items (left as authored):**");
+      d.unresolvedWargear.forEach((c) => L.push(`- ${c.id}: ${c.ids.join(", ")}`));
     }
     if (d.unresolvedKeywords.length) {
       L.push("", "**Unresolved dump keyword ids (skipped):**");

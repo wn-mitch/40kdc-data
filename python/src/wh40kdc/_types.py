@@ -564,6 +564,11 @@ class Enhancement(TypedDict):
     points_provisional: NotRequired[bool]
     upgrade_tag: NotRequired[bool]
     max_targets: NotRequired[int]
+    counts_toward_enhancement_limit: NotRequired[bool]
+    equipable_by_non_character: NotRequired[bool]
+    equipable_by_epic_hero: NotRequired[bool]
+    bearer_cannot_be_warlord: NotRequired[bool]
+    required_wargear_ids: NotRequired[list[EntityId]]
     keyword_restrictions: NotRequired[KeywordList]
     keyword_restriction_groups: NotRequired[list[KeywordRestrictionGroup]]
     datasheet_restriction_groups: NotRequired[list[DatasheetRestrictionGroup]]
@@ -654,6 +659,9 @@ class ConditionalGroup(TypedDict):
     eligible_bodyguard_ids: list[EntityId]
     required_roster_unit_ids: NotRequired[list[EntityId]]
     excluded_roster_unit_ids: NotRequired[list[EntityId]]
+    required_detachment_id: NotRequired[EntityId]
+    excluded_detachment_id: NotRequired[EntityId]
+    required_shared_keyword: NotRequired[Keyword]
 
 
 class LeaderAttachment(TypedDict):
@@ -1059,6 +1067,7 @@ class Unit(TypedDict):
     excluded_faction_keywords: NotRequired[KeywordList | None]
     base_size_mm: NotRequired[BaseSize | None]
     model_count: NotRequired[ModelCount]
+    max_model_count: NotRequired[int]
     weapon_ids: NotRequired[list[EntityId]]
     ability_ids: NotRequired[list[EntityId | AbilityIds | AbilityIds1]]
     wargear_budgets: NotRequired[list[WargearBudget]]

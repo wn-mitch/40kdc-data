@@ -6436,6 +6436,38 @@
             "value": 70
           }
         ],
+        "entryLinks": [
+          {
+            "name": "Enhancements",
+            "id": "7d35-d42c-bae7-afaa",
+            "hidden": false,
+            "import": true,
+            "targetId": "b9ab-94b8-171e-aa63",
+            "type": "selectionEntryGroup",
+            "modifiers": [
+              {
+                "field": "hidden",
+                "type": "set",
+                "value": true,
+                "conditionGroups": [
+                  {
+                    "type": "or",
+                    "conditions": [
+                      {
+                        "childId": "38de-521f-1ce0-44a0",
+                        "field": "selections",
+                        "scope": "primary-catalogue",
+                        "shared": true,
+                        "type": "instanceOf",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
         "infoLinks": [
           {
             "name": "Battle Focus",
@@ -6580,7 +6612,7 @@
                 "scope": "parent",
                 "shared": true,
                 "type": "max",
-                "value": 13
+                "value": 10
               }
             ],
             "modifiers": [
@@ -16603,6 +16635,36 @@
                 ]
               }
             ]
+          },
+          {
+            "name": "Enhancements",
+            "id": "deb9-06a5-69f7-8358",
+            "hidden": false,
+            "import": true,
+            "targetId": "b9ab-94b8-171e-aa63",
+            "type": "selectionEntryGroup",
+            "modifiers": [
+              {
+                "field": "hidden",
+                "type": "set",
+                "value": true,
+                "conditionGroups": [
+                  {
+                    "type": "or",
+                    "conditions": [
+                      {
+                        "childId": "38de-521f-1ce0-44a0",
+                        "field": "selections",
+                        "scope": "primary-catalogue",
+                        "shared": true,
+                        "type": "instanceOf",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ],
         "infoLinks": [
@@ -18592,6 +18654,38 @@
             "name": "pts",
             "typeId": "51b2-306e-1021-d207",
             "value": 75
+          }
+        ],
+        "entryLinks": [
+          {
+            "name": "Enhancements",
+            "id": "5eb8-c012-5e56-0448",
+            "hidden": false,
+            "import": true,
+            "targetId": "b9ab-94b8-171e-aa63",
+            "type": "selectionEntryGroup",
+            "modifiers": [
+              {
+                "field": "hidden",
+                "type": "set",
+                "value": true,
+                "conditionGroups": [
+                  {
+                    "type": "or",
+                    "conditions": [
+                      {
+                        "childId": "38de-521f-1ce0-44a0",
+                        "field": "selections",
+                        "scope": "primary-catalogue",
+                        "shared": true,
+                        "type": "instanceOf",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ],
         "infoLinks": [
@@ -25292,7 +25386,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit (your Crystalline Targeting Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit has the AELDARI keyword, improve all friendly units' Armour Penetration characteristic by 1.",
+                "$text": "After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit (your Crystalline Targeting Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit has the AELDARI keyword, improve the Armour Penetration characteristic of that attack by 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -26059,6 +26153,36 @@
                     "shared": true,
                     "type": "atLeast",
                     "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Enhancements",
+            "id": "5999-59e9-4427-4c27",
+            "hidden": false,
+            "import": true,
+            "targetId": "b9ab-94b8-171e-aa63",
+            "type": "selectionEntryGroup",
+            "modifiers": [
+              {
+                "field": "hidden",
+                "type": "set",
+                "value": true,
+                "conditionGroups": [
+                  {
+                    "type": "or",
+                    "conditions": [
+                      {
+                        "childId": "38de-521f-1ce0-44a0",
+                        "field": "selections",
+                        "scope": "primary-catalogue",
+                        "shared": true,
+                        "type": "instanceOf",
+                        "value": 1
+                      }
+                    ]
                   }
                 ]
               }
@@ -34234,6 +34358,38 @@
             "name": "pts",
             "typeId": "51b2-306e-1021-d207",
             "value": 65
+          }
+        ],
+        "entryLinks": [
+          {
+            "name": "Enhancements",
+            "id": "9ccc-1dee-9c5f-34bb",
+            "hidden": false,
+            "import": true,
+            "targetId": "b9ab-94b8-171e-aa63",
+            "type": "selectionEntryGroup",
+            "modifiers": [
+              {
+                "field": "hidden",
+                "type": "set",
+                "value": true,
+                "conditionGroups": [
+                  {
+                    "type": "or",
+                    "conditions": [
+                      {
+                        "childId": "38de-521f-1ce0-44a0",
+                        "field": "selections",
+                        "scope": "primary-catalogue",
+                        "shared": true,
+                        "type": "instanceOf",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ],
         "infoLinks": [
@@ -53909,6 +54065,38 @@
             "name": "pts",
             "typeId": "51b2-306e-1021-d207",
             "value": 70
+          }
+        ],
+        "entryLinks": [
+          {
+            "name": "Enhancements",
+            "id": "f69a-dbae-abed-8645",
+            "hidden": false,
+            "import": true,
+            "targetId": "b9ab-94b8-171e-aa63",
+            "type": "selectionEntryGroup",
+            "modifiers": [
+              {
+                "field": "hidden",
+                "type": "set",
+                "value": true,
+                "conditionGroups": [
+                  {
+                    "type": "or",
+                    "conditions": [
+                      {
+                        "childId": "38de-521f-1ce0-44a0",
+                        "field": "selections",
+                        "scope": "primary-catalogue",
+                        "shared": true,
+                        "type": "instanceOf",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ],
         "infoLinks": [
@@ -83159,7 +83347,7 @@
           {
             "name": "Infamy (Aura)",
             "id": "560e-1ef6-89e2-45f2",
-            "hidden": true,
+            "hidden": false,
             "import": true,
             "type": "upgrade",
             "constraints": [
@@ -83203,6 +83391,66 @@
                     "value": 1
                   }
                 ]
+              },
+              {
+                "field": "hidden",
+                "type": "set",
+                "value": true,
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "cbb7-6669-a014-36fe",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "54dc-aa1f-817a-a5c5",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "662e-14c3-c894-e830",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "4273-173c-e850-4071",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "cc68-ad19-7285-7a11",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "a074-87f8-810d-492a",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
               }
             ],
             "profiles": [
@@ -83225,7 +83473,7 @@
           {
             "name": "Webway Pathstone",
             "id": "64d3-4806-a9ae-eb4e",
-            "hidden": true,
+            "hidden": false,
             "import": true,
             "type": "upgrade",
             "constraints": [
@@ -83269,6 +83517,66 @@
                     "value": 1
                   }
                 ]
+              },
+              {
+                "field": "hidden",
+                "type": "set",
+                "value": true,
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "cbb7-6669-a014-36fe",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "54dc-aa1f-817a-a5c5",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "662e-14c3-c894-e830",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "4273-173c-e850-4071",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "cc68-ad19-7285-7a11",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "a074-87f8-810d-492a",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
               }
             ],
             "profiles": [
@@ -83291,7 +83599,7 @@
           {
             "name": "Archraider",
             "id": "1df1-bef7-9e05-a21b",
-            "hidden": true,
+            "hidden": false,
             "import": true,
             "type": "upgrade",
             "constraints": [
@@ -83335,6 +83643,34 @@
                     "value": 1
                   }
                 ]
+              },
+              {
+                "field": "hidden",
+                "type": "set",
+                "value": true,
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "54dc-aa1f-817a-a5c5",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "4273-173c-e850-4071",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
               }
             ],
             "profiles": [
@@ -83357,7 +83693,7 @@
           {
             "name": "Voidstone",
             "id": "9b12-2696-ec8c-7730",
-            "hidden": true,
+            "hidden": false,
             "import": true,
             "type": "upgrade",
             "constraints": [
@@ -83401,6 +83737,58 @@
                     "value": 1
                   }
                 ]
+              },
+              {
+                "field": "hidden",
+                "type": "set",
+                "value": true,
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "cbb7-6669-a014-36fe",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "54dc-aa1f-817a-a5c5",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "662e-14c3-c894-e830",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "4273-173c-e850-4071",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "cc68-ad19-7285-7a11",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
               }
             ],
             "profiles": [
@@ -83423,7 +83811,7 @@
           {
             "name": "Pirate Prince",
             "id": "fb27-1469-5fc4-161d",
-            "hidden": true,
+            "hidden": false,
             "import": true,
             "type": "upgrade",
             "constraints": [
@@ -83467,6 +83855,21 @@
                     "value": 1
                   }
                 ]
+              },
+              {
+                "field": "hidden",
+                "type": "set",
+                "value": true,
+                "conditions": [
+                  {
+                    "childId": "54dc-aa1f-817a-a5c5",
+                    "field": "selections",
+                    "scope": "ancestor",
+                    "shared": true,
+                    "type": "notInstanceOf",
+                    "value": 1
+                  }
+                ]
               }
             ],
             "profiles": [
@@ -83489,7 +83892,7 @@
           {
             "name": "Alacritous Assault",
             "id": "90c1-42b5-5052-5bbd",
-            "hidden": true,
+            "hidden": false,
             "import": true,
             "type": "upgrade",
             "constraints": [
@@ -83533,6 +83936,66 @@
                     "value": 1
                   }
                 ]
+              },
+              {
+                "field": "hidden",
+                "type": "set",
+                "value": true,
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "cbb7-6669-a014-36fe",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "54dc-aa1f-817a-a5c5",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "662e-14c3-c894-e830",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "4273-173c-e850-4071",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "cc68-ad19-7285-7a11",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "a074-87f8-810d-492a",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
               }
             ],
             "profiles": [
@@ -83555,7 +84018,7 @@
           {
             "name": "Exotic Munitions",
             "id": "7e77-9e44-2644-3df6",
-            "hidden": true,
+            "hidden": false,
             "import": true,
             "type": "upgrade",
             "constraints": [
@@ -83599,6 +84062,66 @@
                     "value": 1
                   }
                 ]
+              },
+              {
+                "field": "hidden",
+                "type": "set",
+                "value": true,
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "cbb7-6669-a014-36fe",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "54dc-aa1f-817a-a5c5",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "662e-14c3-c894-e830",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "4273-173c-e850-4071",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "cc68-ad19-7285-7a11",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "a074-87f8-810d-492a",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
               }
             ],
             "profiles": [
@@ -83621,7 +84144,7 @@
           {
             "name": "Adrenal Infusions",
             "id": "233a-28cc-1059-ec0d",
-            "hidden": true,
+            "hidden": false,
             "import": true,
             "type": "upgrade",
             "constraints": [
@@ -83663,6 +84186,58 @@
                     "shared": true,
                     "type": "lessThan",
                     "value": 1
+                  }
+                ]
+              },
+              {
+                "field": "hidden",
+                "type": "set",
+                "value": true,
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "cbb7-6669-a014-36fe",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "54dc-aa1f-817a-a5c5",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "662e-14c3-c894-e830",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "4273-173c-e850-4071",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      },
+                      {
+                        "childId": "cc68-ad19-7285-7a11",
+                        "field": "selections",
+                        "scope": "ancestor",
+                        "shared": true,
+                        "type": "notInstanceOf",
+                        "value": 1
+                      }
+                    ]
                   }
                 ]
               }

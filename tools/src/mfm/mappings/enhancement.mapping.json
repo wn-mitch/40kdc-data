@@ -77,6 +77,94 @@
       "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
       "reason": "The reconciliation pass applies non-null MFM costs only to existing entities whose derived ids match."
     },
+    "/counts_toward_enhancement_limit": {
+      "provenance": "direct",
+      "coverage": "implemented",
+      "sources": [
+        "data.enhancement.isIncludedInEnhancementLimit"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/enhancement-flags.ts#enhancementFlags",
+          "operation": "Copy the flag; the record carries it only when false."
+        }
+      ],
+      "filters": [],
+      "precedence": [
+        "The dump flag is authoritative: runEnhancements writes a non-default value and removes a default one."
+      ],
+      "consumers": [
+        "tools/src/mfm/enhancements.ts#runEnhancements"
+      ],
+      "reason": "False on the enhancements the Enhancement limit does not count; roster validation skips them in enhancement-limit-exceeded."
+    },
+    "/equipable_by_non_character": {
+      "provenance": "direct",
+      "coverage": "implemented",
+      "sources": [
+        "data.enhancement.isEquipableByNonCharacterUnit"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/enhancement-flags.ts#enhancementFlags",
+          "operation": "Copy the flag; the record carries it only when true."
+        }
+      ],
+      "filters": [],
+      "precedence": [
+        "The dump flag is authoritative: runEnhancements writes a non-default value and removes a default one."
+      ],
+      "consumers": [
+        "tools/src/mfm/enhancements.ts#runEnhancements"
+      ],
+      "reason": "True on the enhancements a non-CHARACTER unit may take, Upgrades and some others; roster validation reads it beside upgrade_tag."
+    },
+    "/equipable_by_epic_hero": {
+      "provenance": "direct",
+      "coverage": "implemented",
+      "sources": [
+        "data.enhancement.isEquipableByEpicHero"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/enhancement-flags.ts#enhancementFlags",
+          "operation": "Copy the flag; the record carries it only when true."
+        }
+      ],
+      "filters": [],
+      "precedence": [
+        "The dump flag is authoritative: runEnhancements writes a non-default value and removes a default one."
+      ],
+      "consumers": [
+        "tools/src/mfm/enhancements.ts#runEnhancements"
+      ],
+      "reason": "True on the enhancements an EPIC HERO may take; roster validation refuses any other enhancement on an Epic Hero."
+    },
+    "/bearer_cannot_be_warlord": {
+      "provenance": "direct",
+      "coverage": "implemented",
+      "sources": [
+        "data.enhancement.cannotBeWarlord"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/enhancement-flags.ts#enhancementFlags",
+          "operation": "Copy the flag; the record carries it only when true."
+        }
+      ],
+      "filters": [],
+      "precedence": [
+        "The dump flag is authoritative: runEnhancements writes a non-default value and removes a default one."
+      ],
+      "consumers": [
+        "tools/src/mfm/enhancements.ts#runEnhancements"
+      ],
+      "reason": "True on an enhancement whose bearer cannot be the Warlord; roster validation reports enhancement-bearer-cannot-be-warlord."
+    },
     "/datasheet_restriction_groups": {
       "provenance": "derived",
       "coverage": "implemented",
@@ -295,6 +383,63 @@
       "precedence": [],
       "consumers": ["tools/src/mfm/enhancements.ts#runEnhancements"],
       "reason": "Each source relation names one core ability the bearer must have."
+    },
+    "/required_wargear_ids": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.enhancement_required_wargear_item.enhancementId",
+        "data.enhancement_required_wargear_item.wargearItemId"
+      ],
+      "joins": [
+        {
+          "relation": "enhancement_required_wargear_item.enhancementId",
+          "direction": "children",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/enhancement-flags.ts#weaponIdsByWargearItem",
+          "operation": "Resolve each required wargear item to the repo weapon carrying it as an mfm external ref."
+        }
+      ],
+      "filters": [
+        "Leave the field as authored when a required item resolves to no single repo weapon."
+      ],
+      "precedence": [
+        "The dump flag is authoritative: runEnhancements writes a non-default value and removes a default one."
+      ],
+      "consumers": [
+        "tools/src/mfm/enhancements.ts#runEnhancements"
+      ],
+      "reason": "The weapons the bearer must carry; roster validation reports enhancement-missing-wargear when the chosen loadout lacks one."
+    },
+    "/required_wargear_ids/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.enhancement_required_wargear_item.wargearItemId"
+      ],
+      "joins": [
+        {
+          "relation": "enhancement_required_wargear_item.enhancementId",
+          "direction": "children",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/enhancement-flags.ts#weaponIdsByWargearItem",
+          "operation": "Map the wargear item id to the repo weapon id whose mfm external ref names it."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/enhancements.ts#runEnhancements"
+      ],
+      "reason": "Each source relation names one required weapon."
     },
     "/external_refs": {
       "provenance": "derived",
@@ -723,13 +868,6 @@
   },
   "unmapped_mfm_fields": [
     {
-      "source": "data.enhancement.cannotBeWarlord",
-      "candidate_pointer": null,
-      "reason": "True on 1 enhancement whose bearer cannot be Warlord. roster-resolve.ts and its ports should read it.",
-      "classification": "needs-consumer",
-      "spread": "869 rows, 869 values (0 null/absent): boolean false×868, true×1"
-    },
-    {
       "source": "data.enhancement.displayOrder",
       "candidate_pointer": null,
       "reason": "App sort position of an enhancement within its detachment (0..56).",
@@ -742,27 +880,6 @@
       "reason": "Marks the enhancement the app preselects for 26 Combat Patrol detachments; the player may still choose another, so it does not change legality.",
       "classification": "presentation",
       "spread": "869 rows, 869 values (0 null/absent): boolean false×843, true×26"
-    },
-    {
-      "source": "data.enhancement.isEquipableByEpicHero",
-      "candidate_pointer": null,
-      "reason": "True on 9 enhancements an Epic Hero may take; roster validation refuses every Epic Hero. roster-resolve.ts and its ports should read it.",
-      "classification": "needs-consumer",
-      "spread": "869 rows, 869 values (0 null/absent): boolean false×860, true×9"
-    },
-    {
-      "source": "data.enhancement.isEquipableByNonCharacterUnit",
-      "candidate_pointer": null,
-      "reason": "True on 118 enhancements; 7 are not Upgrades, which roster validation refuses on non-Characters because it reads upgrade_tag. semantic-authoring/core-checks.ts reads it; roster-resolve.ts and its ports should too.",
-      "classification": "needs-consumer",
-      "spread": "869 rows, 869 values (0 null/absent): boolean false×751, true×118"
-    },
-    {
-      "source": "data.enhancement.isIncludedInEnhancementLimit",
-      "candidate_pointer": null,
-      "reason": "False on 8 enhancements that do not count toward the Enhancement limit. roster-resolve.ts (enhancement-limit-exceeded) and its ports should skip them.",
-      "classification": "needs-consumer",
-      "spread": "869 rows, 869 values (0 null/absent): boolean false×8, true×861"
     },
     {
       "source": "data.enhancement.localisations.*.lore",
@@ -812,20 +929,6 @@
       "reason": "Join key from a bodyguard datasheet row to its group; enhancements.ts follows it.",
       "classification": "id",
       "spread": "21 rows, 21 values (0 null/absent): string, 21 distinct"
-    },
-    {
-      "source": "data.enhancement_required_wargear_item.enhancementId",
-      "candidate_pointer": null,
-      "reason": "One enhancement requires its bearer to carry a wargear item. roster-resolve.ts and its ports should read it.",
-      "classification": "needs-consumer",
-      "spread": "1 rows, 1 values (0 null/absent): string, 1 distinct"
-    },
-    {
-      "source": "data.enhancement_required_wargear_item.wargearItemId",
-      "candidate_pointer": null,
-      "reason": "The wargear item the one gated enhancement requires. roster-resolve.ts and its ports should read it.",
-      "classification": "needs-consumer",
-      "spread": "1 rows, 1 values (0 null/absent): string, 1 distinct"
     },
     {
       "source": "data.enhancement_wargear_item_profile.enhancementId",

@@ -172,7 +172,8 @@
         "Mounted",
         "Ravenwing"
       ]
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "nightforged-battery-upgrade-darkflight-pursuit-dark-angels",
@@ -202,7 +203,8 @@
       {
         "unit_id": "land-speeder-vengeance"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",
@@ -291,7 +293,8 @@
       {
         "unit_id": "vengeful-brethren-bladeguard-veteran-squad"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "supreme-combatant-the-vengeful-brethren-dark-angels",

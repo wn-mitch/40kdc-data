@@ -784,7 +784,8 @@
         "namespace": "mfm",
         "id": "c1ce9799-014d-4556-b261-ab8fd004daf1"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "long-range-scout-upgrade-designation-force-astra-militarum",
@@ -817,7 +818,8 @@
           "Astra Militarum"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "recon-star-upgrade-designation-force-astra-militarum",
@@ -847,7 +849,8 @@
         "namespace": "mfm",
         "id": "d095447a-7231-4bf4-9dba-e5879ca4cadb"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "battalion-commander-steel-hammer-astra-militarum",
@@ -1131,7 +1134,8 @@
       {
         "unit_id": "draydens-lance-kasrkin"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "sharp-eyes-upgrade-abhuman-auxiliaries-astra-militarum",
@@ -1164,6 +1168,7 @@
           "Astra Militarum"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   }
 ]

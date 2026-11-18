@@ -25,3 +25,16 @@ export function missingRequiredAbilities(enhancement: Enhancement, bearerAbility
   const held = new Set(unitAbilityIds(bearerAbilityIds));
   return (enhancement.required_ability_ids ?? []).filter((id) => !held.has(id));
 }
+
+/**
+ * The weapons an enhancement requires (`required_wargear_ids`) that the bearer's chosen loadout
+ * `counts` (weapon id → count) does not carry, in the record's order.
+ */
+export function missingRequiredWargear(enhancement: Enhancement, counts: ReadonlyMap<string, number>): string[] {
+  return (enhancement.required_wargear_ids ?? []).filter((id) => (counts.get(id) ?? 0) <= 0);
+}
+
+/** Whether a unit that is not a CHARACTER may be given the enhancement: an Upgrade, or one the record marks equipable. */
+export function equipableByNonCharacter(enhancement: Enhancement): boolean {
+  return enhancement.upgrade_tag === true || enhancement.equipable_by_non_character === true;
+}

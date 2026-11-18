@@ -1545,7 +1545,7 @@
         <profile name="Fire Focus" id="9008-b551-c2eb-956e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (each unit can be selected for this ability at most once per turn across your army) (your Fire Focus Target). Until the end of the turn, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, improve all friendly models' Armour Penetration characteristic by 1.</characteristic>
+  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (each unit can be selected for this ability at most once per turn across your army) (your Fire Focus Target). Until the end of the turn, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, improve the Armour Penetration characteristic of that attack by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="00d7-88ad-058e-e707" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">

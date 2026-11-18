@@ -638,7 +638,8 @@
           "T’au Empire"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "unmasking-suite-upgrade-advanced-acquisition-cadre-tau-empire",
@@ -676,7 +677,8 @@
       {
         "unit_id": "stealth-battlesuits"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "earth-caste-modifications-sudden-dawn-cadre-tau-empire",
@@ -731,6 +733,7 @@
       {
         "unit_id": "sudden-dawn-cadre-devilfish"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   }
 ]

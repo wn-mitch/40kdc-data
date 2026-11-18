@@ -574,7 +574,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         <profile name="Titanic Fire Support" id="0b52-b0dc-3ca5-92b9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve all friendly IMPERIUM units' Armour Penetration characteristic by 1.</characteristic>
+  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly IMPERIUM unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="af3b-5e5c-8b95-cc30" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2322,7 +2322,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         <profile name="Titanic Fire Support" id="a9eb-b2ed-8d93-b15f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve all friendly CHAOS units' Armour Penetration characteristic by 1.</characteristic>
+  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly CHAOS unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="a7f2-3203-1075-a519" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">

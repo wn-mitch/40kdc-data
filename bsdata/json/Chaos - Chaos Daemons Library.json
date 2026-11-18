@@ -24241,7 +24241,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase:\n  -> Select one enemy unit if the selected unit is within 18\" of this model and the selected unit is visible to this model (your Blood Throne Target). Until the end of the phase, each time a friendly unit makes an attack against it:\n    -> Improve all friendly KHORNE LEGIONES DAEMONICA units' Strength characteristic by 1.\n    -> Improve all friendly KHORNE LEGIONES DAEMONICA units' Armour Penetration characteristic by 1.\n    -> Improve all friendly KHORNE LEGIONES DAEMONICA units' Damage characteristic by 1.",
+                "$text": "At the start of the Fight phase:\n  -> Select one enemy unit if the selected unit is within 18\" of this model and the selected unit is visible to this model (your Blood Throne Target). Until the end of the phase, each time a friendly unit makes an attack against it:\n    -> Improve the Strength characteristic of that attack by 1 if it is made by a friendly KHORNE LEGIONES DAEMONICA unit.\n    -> Improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly KHORNE LEGIONES DAEMONICA unit.\n    -> Improve the Damage characteristic of that attack by 1 if it is made by a friendly KHORNE LEGIONES DAEMONICA unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

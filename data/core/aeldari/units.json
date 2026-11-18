@@ -655,7 +655,7 @@
     },
     "model_count": {
       "min": 5,
-      "max": 13
+      "max": 10
     },
     "weapon_ids": [
       "blaster",
@@ -737,7 +737,8 @@
         "namespace": "mfm",
         "id": "ff6c74d5-c2ad-4f9c-980c-baeacbadd918"
       }
-    ]
+    ],
+    "max_model_count": 10
   },
   {
     "id": "fire-prism",

@@ -16372,9 +16372,19 @@ pub struct EngagementFrontsConditionParameters {
 ///      "minItems": 1,
 ///      "uniqueItems": true
 ///    },
+///    "bearer_cannot_be_warlord": {
+///      "description": "True when the unit given this enhancement cannot be the army's Warlord.",
+///      "default": false,
+///      "type": "boolean"
+///    },
 ///    "cost": {
 ///      "type": "integer",
 ///      "minimum": 0.0
+///    },
+///    "counts_toward_enhancement_limit": {
+///      "description": "False when taking this enhancement does not count toward the battle size's Enhancement limit.",
+///      "default": true,
+///      "type": "boolean"
 ///    },
 ///    "datasheet_restriction_groups": {
 ///      "description": "Datasheet-scoped bearer eligibility groups: a bearer whose unit is `unit_id` and carries every listed keyword is eligible. Each group is a further alternative (OR) to the keyword groups in `keyword_restrictions` / `keyword_restriction_groups`. A datasheet group admits only that datasheet, never another unit that carries the datasheet's name as a keyword. `exclusion_keywords` still applies.",
@@ -16403,6 +16413,16 @@ pub struct EngagementFrontsConditionParameters {
 ///    },
 ///    "detachment_id": {
 ///      "$ref": "#/$defs/entity-id"
+///    },
+///    "equipable_by_epic_hero": {
+///      "description": "True when an EPIC HERO may be given this enhancement. Without it, no EPIC HERO may take it.",
+///      "default": false,
+///      "type": "boolean"
+///    },
+///    "equipable_by_non_character": {
+///      "description": "True when a unit that is not a CHARACTER may be given this enhancement. An `upgrade_tag` enhancement is always equipable by a non-CHARACTER unit.",
+///      "default": false,
+///      "type": "boolean"
 ///    },
 ///    "exclusion_keywords": {
 ///      "oneOf": [
@@ -16473,6 +16493,15 @@ pub struct EngagementFrontsConditionParameters {
 ///      "minItems": 1,
 ///      "uniqueItems": true
 ///    },
+///    "required_wargear_ids": {
+///      "description": "Weapon ids the bearer's unit must carry in its chosen loadout to be given this enhancement. Every listed id is required.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
 ///    "upgrade_tag": {
 ///      "description": "11e: when true, this enhancement applies to up to `max_targets` non-character units while counting as a single Enhancement choice.",
 ///      "default": false,
@@ -16491,13 +16520,25 @@ pub struct Enhancement {
     ///Additional bodyguard units the bearer may attach to because it carries this enhancement.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attachment_bodyguard_ids: ::std::option::Option<Vec<EntityId>>,
+    ///True when the unit given this enhancement cannot be the army's Warlord.
+    #[serde(default)]
+    pub bearer_cannot_be_warlord: bool,
     pub cost: u64,
+    ///False when taking this enhancement does not count toward the battle size's Enhancement limit.
+    #[serde(default = "defaults::default_bool::<true>")]
+    pub counts_toward_enhancement_limit: bool,
     ///Datasheet-scoped bearer eligibility groups: a bearer whose unit is `unit_id` and carries every listed keyword is eligible. Each group is a further alternative (OR) to the keyword groups in `keyword_restrictions` / `keyword_restriction_groups`. A datasheet group admits only that datasheet, never another unit that carries the datasheet's name as a keyword. `exclusion_keywords` still applies.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub datasheet_restriction_groups: ::std::vec::Vec<
         EnhancementDatasheetRestrictionGroupsItem,
     >,
     pub detachment_id: EntityId,
+    ///True when an EPIC HERO may be given this enhancement. Without it, no EPIC HERO may take it.
+    #[serde(default)]
+    pub equipable_by_epic_hero: bool,
+    ///True when a unit that is not a CHARACTER may be given this enhancement. An `upgrade_tag` enhancement is always equipable by a non-CHARACTER unit.
+    #[serde(default)]
+    pub equipable_by_non_character: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub exclusion_keywords: ::std::option::Option<KeywordList>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -16524,6 +16565,9 @@ pub struct Enhancement {
     ///Core abilities (data/core/unit-keywords.json ids) the bearer's datasheet must have ("HERETIC ASTARTES model with the Deep Strike ability only"). Every listed ability is required, on top of the keyword and datasheet groups.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub required_ability_ids: ::std::option::Option<Vec<EntityId>>,
+    ///Weapon ids the bearer's unit must carry in its chosen loadout to be given this enhancement. Every listed id is required.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub required_wargear_ids: ::std::option::Option<Vec<EntityId>>,
     ///11e: when true, this enhancement applies to up to `max_targets` non-character units while counting as a single Enhancement choice.
     #[serde(default)]
     pub upgrade_tag: bool,
@@ -23278,7 +23322,7 @@ impl ::std::default::Default for KeywordPredicate {
 ///  ],
 ///  "properties": {
 ///    "conditional_groups": {
-///      "description": "Attachment eligibility and role that apply only when all required roster units and no excluded roster units are present.",
+///      "description": "Attachment eligibility and role that apply only when their conditions hold: every required roster unit and no excluded roster unit is present, the required detachment is selected and the excluded one is not, and the leader and bodyguard share the required keyword.",
 ///      "type": "array",
 ///      "items": {
 ///        "type": "object",
@@ -23295,6 +23339,10 @@ impl ::std::default::Default for KeywordPredicate {
 ///            },
 ///            "minItems": 1
 ///          },
+///          "excluded_detachment_id": {
+///            "description": "The group applies only when the army has not selected this detachment.",
+///            "$ref": "#/$defs/entity-id"
+///          },
 ///          "excluded_roster_unit_ids": {
 ///            "type": "array",
 ///            "items": {
@@ -23302,12 +23350,20 @@ impl ::std::default::Default for KeywordPredicate {
 ///            },
 ///            "minItems": 1
 ///          },
+///          "required_detachment_id": {
+///            "description": "The group applies only when the army has selected this detachment.",
+///            "$ref": "#/$defs/entity-id"
+///          },
 ///          "required_roster_unit_ids": {
 ///            "type": "array",
 ///            "items": {
 ///              "$ref": "#/$defs/entity-id"
 ///            },
 ///            "minItems": 1
+///          },
+///          "required_shared_keyword": {
+///            "description": "The attachment holds only when both the leader and the bodyguard carry this keyword in the roster (e.g. the same Mark of Chaos).",
+///            "$ref": "#/$defs/keyword"
 ///          },
 ///          "role": {
 ///            "type": "string",
@@ -23350,7 +23406,7 @@ impl ::std::default::Default for KeywordPredicate {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct LeaderAttachment {
-    ///Attachment eligibility and role that apply only when all required roster units and no excluded roster units are present.
+    ///Attachment eligibility and role that apply only when their conditions hold: every required roster unit and no excluded roster unit is present, the required detachment is selected and the excluded one is not, and the leader and bodyguard share the required keyword.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub conditional_groups: ::std::vec::Vec<LeaderAttachmentConditionalGroupsItem>,
     pub eligible_bodyguard_ids: ::std::vec::Vec<EntityId>,
@@ -23382,6 +23438,10 @@ pub struct LeaderAttachment {
 ///      },
 ///      "minItems": 1
 ///    },
+///    "excluded_detachment_id": {
+///      "description": "The group applies only when the army has not selected this detachment.",
+///      "$ref": "#/$defs/entity-id"
+///    },
 ///    "excluded_roster_unit_ids": {
 ///      "type": "array",
 ///      "items": {
@@ -23389,12 +23449,20 @@ pub struct LeaderAttachment {
 ///      },
 ///      "minItems": 1
 ///    },
+///    "required_detachment_id": {
+///      "description": "The group applies only when the army has selected this detachment.",
+///      "$ref": "#/$defs/entity-id"
+///    },
 ///    "required_roster_unit_ids": {
 ///      "type": "array",
 ///      "items": {
 ///        "$ref": "#/$defs/entity-id"
 ///      },
 ///      "minItems": 1
+///    },
+///    "required_shared_keyword": {
+///      "description": "The attachment holds only when both the leader and the bodyguard carry this keyword in the roster (e.g. the same Mark of Chaos).",
+///      "$ref": "#/$defs/keyword"
 ///    },
 ///    "role": {
 ///      "type": "string",
@@ -23412,10 +23480,19 @@ pub struct LeaderAttachment {
 #[serde(deny_unknown_fields)]
 pub struct LeaderAttachmentConditionalGroupsItem {
     pub eligible_bodyguard_ids: ::std::vec::Vec<EntityId>,
+    ///The group applies only when the army has not selected this detachment.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub excluded_detachment_id: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub excluded_roster_unit_ids: ::std::vec::Vec<EntityId>,
+    ///The group applies only when the army has selected this detachment.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub required_detachment_id: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub required_roster_unit_ids: ::std::vec::Vec<EntityId>,
+    ///The attachment holds only when both the leader and the bodyguard carry this keyword in the roster (e.g. the same Mark of Chaos).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub required_shared_keyword: ::std::option::Option<Keyword>,
     pub role: LeaderAttachmentConditionalGroupsItemRole,
 }
 ///`LeaderAttachmentConditionalGroupsItemRole`
@@ -56309,6 +56386,11 @@ impl<'de> ::serde::Deserialize<'de> for TriggerSourceAbilityKeywordsItem {
 ///    "keywords": {
 ///      "$ref": "#/$defs/keyword-list"
 ///    },
+///    "max_model_count": {
+///      "description": "The most models the unit may contain, across all of its composition rows. It caps a composition whose row maxima sum higher (Corsair Voidscarred: 10 models although its rows allow 13).",
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
 ///    "model_count": {
 ///      "type": "object",
 ///      "required": [
@@ -56642,6 +56724,9 @@ pub struct Unit {
     pub is_legend: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub keywords: ::std::option::Option<KeywordList>,
+    ///The most models the unit may contain, across all of its composition rows. It caps a composition whose row maxima sum higher (Corsair Voidscarred: 10 models although its rows allow 13).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_model_count: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub model_count: ::std::option::Option<UnitModelCount>,
     pub name: UnitName,

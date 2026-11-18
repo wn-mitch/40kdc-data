@@ -3193,6 +3193,28 @@ export interface Enhancement {
    * Number of units this enhancement may be applied to. Only meaningful when `upgrade_tag` is true; defaults to 1.
    */
   max_targets?: number;
+  /**
+   * False when taking this enhancement does not count toward the battle size's Enhancement limit.
+   */
+  counts_toward_enhancement_limit?: boolean;
+  /**
+   * True when a unit that is not a CHARACTER may be given this enhancement. An `upgrade_tag` enhancement is always equipable by a non-CHARACTER unit.
+   */
+  equipable_by_non_character?: boolean;
+  /**
+   * True when an EPIC HERO may be given this enhancement. Without it, no EPIC HERO may take it.
+   */
+  equipable_by_epic_hero?: boolean;
+  /**
+   * True when the unit given this enhancement cannot be the army's Warlord.
+   */
+  bearer_cannot_be_warlord?: boolean;
+  /**
+   * Weapon ids the bearer's unit must carry in its chosen loadout to be given this enhancement. Every listed id is required.
+   *
+   * @minItems 1
+   */
+  required_wargear_ids?: [EntityId, ...EntityId[]];
   keyword_restrictions?: KeywordList;
   /**
    * Alternative bearer eligibility groups. Every keyword in one group is required (AND), while satisfying any group is sufficient (OR). When present, this supersedes the legacy flat `keyword_restrictions` field.
@@ -3410,7 +3432,7 @@ export interface LeaderAttachment {
    */
   eligible_bodyguard_keywords?: [string, ...string[]];
   /**
-   * Attachment eligibility and role that apply only when all required roster units and no excluded roster units are present.
+   * Attachment eligibility and role that apply only when their conditions hold: every required roster unit and no excluded roster unit is present, the required detachment is selected and the excluded one is not, and the leader and bodyguard share the required keyword.
    *
    * @minItems 1
    */
@@ -3429,6 +3451,18 @@ export interface LeaderAttachment {
        * @minItems 1
        */
       excluded_roster_unit_ids?: [EntityId, ...EntityId[]];
+      /**
+       * Kebab-case identifier
+       */
+      required_detachment_id?: string;
+      /**
+       * Kebab-case identifier
+       */
+      excluded_detachment_id?: string;
+      /**
+       * The attachment holds only when both the leader and the bodyguard carry this keyword in the roster (e.g. the same Mark of Chaos).
+       */
+      required_shared_keyword?: string;
     },
     ...{
       role: "leader" | "support";
@@ -3444,6 +3478,18 @@ export interface LeaderAttachment {
        * @minItems 1
        */
       excluded_roster_unit_ids?: [EntityId, ...EntityId[]];
+      /**
+       * Kebab-case identifier
+       */
+      required_detachment_id?: string;
+      /**
+       * Kebab-case identifier
+       */
+      excluded_detachment_id?: string;
+      /**
+       * The attachment holds only when both the leader and the bodyguard carry this keyword in the roster (e.g. the same Mark of Chaos).
+       */
+      required_shared_keyword?: string;
     }[]
   ];
   game_version: GameVersionReference;
@@ -8590,6 +8636,10 @@ export interface Unit {
     max: number;
     [k: string]: unknown;
   };
+  /**
+   * The most models the unit may contain, across all of its composition rows. It caps a composition whose row maxima sum higher (Corsair Voidscarred: 10 models although its rows allow 13).
+   */
+  max_model_count?: number;
   weapon_ids?: EntityId[];
   /**
    * The abilities the unit's datasheet prints: an ability id, or an object for a rated rule ({id, value}: Deadly Demise D3, Feel No Pain 5+, Scouts 9", Firing Deck 2, whose record reads the value through {rating: true}) or for the ability a wargear item prints ({id, wargear}: the unit's default wargear that carries it).

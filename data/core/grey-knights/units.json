@@ -1949,7 +1949,8 @@
         "namespace": "mfm",
         "id": "4ccd8473-d395-4554-88e1-5dcdef152878"
       }
-    ]
+    ],
+    "max_model_count": 10
   },
   {
     "id": "land-raider",
@@ -2222,7 +2223,8 @@
         "namespace": "mfm",
         "id": "c599d862-face-40da-830d-7f88b8d9aef4"
       }
-    ]
+    ],
+    "max_model_count": 10
   },
   {
     "id": "stormhawk-interceptor",

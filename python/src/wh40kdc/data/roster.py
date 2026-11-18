@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from wh40kdc.data.attachment_gates import attachment_gates_hold
 from wh40kdc.data.battle_sizes import (
     detachment_cap_for_battle_size,
     enhancement_limit_for_battle_size,
@@ -23,8 +24,10 @@ from wh40kdc.data.battle_sizes import (
 )
 from wh40kdc.data.dataset import Dataset
 from wh40kdc.data.enhancement_eligibility import (
+    equipable_by_non_character,
     meets_enhancement_groups,
     missing_required_abilities,
+    missing_required_wargear,
 )
 from wh40kdc.data.list_keywords import list_building_keyword_changes, with_keyword_changes
 from wh40kdc.data.pricing import host_unit_points, wargear_points
@@ -38,6 +41,8 @@ ROSTER_VIOLATION_CODES = (
     "enhancement-on-excluded-model",
     "enhancement-keyword-mismatch",
     "enhancement-missing-ability",
+    "enhancement-missing-wargear",
+    "enhancement-bearer-cannot-be-warlord",
     "enhancement-excluded-keyword",
     "enhancement-over-max-targets",
     "leader-attachment-illegal",
@@ -228,7 +233,7 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
         if (
             not _is_character(view.raw)
             and "Character" not in overrides
-            and enh.get("upgrade_tag") is not True
+            and not equipable_by_non_character(enh)
         ):
             err(
                 "enhancement-on-non-character",
@@ -244,12 +249,30 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
             overrides,
         )
         # 11e Select Enhancements: EPIC HERO models cannot be given Enhancements
-        # (Upgrades included). Mirror of TS ``enhancement-on-epic-hero``.
-        if view.raw.get("role") == "epic-hero" or "Epic Hero" in kws:
+        # (Upgrades included) unless the enhancement says an Epic Hero may take it.
+        # Mirror of TS ``enhancement-on-epic-hero``.
+        if (view.raw.get("role") == "epic-hero" or "Epic Hero" in kws) and enh.get(
+            "equipable_by_epic_hero"
+        ) is not True:
             err(
                 "enhancement-on-epic-hero",
                 enh["id"],
                 f"{enh['id']} cannot be given to Epic Hero {view.id}",
+                idx,
+            )
+        if enh.get("bearer_cannot_be_warlord") is True and su.get("is_warlord") is True:
+            err(
+                "enhancement-bearer-cannot-be-warlord",
+                enh["id"],
+                f"{view.id} carries {enh['id']} and cannot be the Warlord",
+                idx,
+            )
+        missing_wargear = missing_required_wargear(enh, su.get("counts") or {})
+        if missing_wargear:
+            err(
+                "enhancement-missing-wargear",
+                enh["id"],
+                f"{view.id} lacks the {', '.join(missing_wargear)} {enh['id']} requires",
                 idx,
             )
         # A unit whose every model is ``excluded_from_enhancements`` has no model
@@ -328,9 +351,31 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
             enhancement = (
                 dataset.enhancements.get(su["enhancement_id"]) if su.get("enhancement_id") else None
             )
-            if enhancement is not None:
-                eligible_bodyguards.update(enhancement.get("attachment_bodyguard_ids") or [])
-            if leader_bodyguard_id not in eligible_bodyguards:
+            granted = enhancement is not None and leader_bodyguard_id in (
+                enhancement.get("attachment_bodyguard_ids") or []
+            )
+            if granted:
+                eligible_bodyguards.add(leader_bodyguard_id)
+            # Detachment and shared-keyword gates (Pactbound Zealots' Marks of Chaos) narrow
+            # the eligible set; an enhancement's grant is not gated.
+            leader_keywords = _keyword_set(
+                view.raw,
+                army_keywords,
+                army_keyword_set,
+                detachment_ids,
+                su.get("keyword_overrides") or [],
+            )
+            bodyguard_keywords = attached_to_keywords(su) or set()
+            gated = not granted and not attachment_gates_hold(
+                dataset,
+                view.id,
+                leader_bodyguard_id,
+                present_unit_ids,
+                detachment_ids,
+                leader_keywords.__contains__,
+                bodyguard_keywords.__contains__,
+            )
+            if leader_bodyguard_id not in eligible_bodyguards or gated:
                 err(
                     "leader-attachment-illegal",
                     view.id,
@@ -575,7 +620,14 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
 
     # --- Enhancement limit (incursion 2, strike-force 4), distinct choices. ---
     enhancement_limit = enhancement_limit_for_battle_size(spec.get("battle_size"))
-    chosen = {su.get("enhancement_id") for su in spec_units if su.get("enhancement_id")}
+    # An enhancement whose record sets ``counts_toward_enhancement_limit: false`` is not counted.
+    chosen = {
+        enhancement_id
+        for su in spec_units
+        if (enhancement_id := su.get("enhancement_id"))
+        and (dataset.enhancements.get(enhancement_id) or {}).get("counts_toward_enhancement_limit")
+        is not False
+    }
     if enhancement_limit is not None and len(chosen) > enhancement_limit:
         err(
             "enhancement-limit-exceeded",

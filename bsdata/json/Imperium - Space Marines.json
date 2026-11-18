@@ -104205,7 +104205,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit with the MONSTER or VEHICLE keyword that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Shattered Defences Target). Each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of ranged weapons equipped by all friendly ADEPTUS ASTARTES units by 1.",
+                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit with the MONSTER or VEHICLE keyword that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Shattered Defences Target). Each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made with ranged weapons by a friendly ADEPTUS ASTARTES unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -105404,7 +105404,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Shooting phase, in your turn:\n  -> Select one enemy unit within 24\" of this model visible to this model (your Forgefather Target). Each time a friendly unit makes an attack against it, while making attacks made with [MELTA] weapons or while making attacks made with [TORRENT] weapons, improve all friendly ADEPTUS ASTARTES units' Strength characteristic by 2.",
+                "$text": "During the Shooting phase, in your turn:\n  -> Select one enemy unit within 24\" of this model visible to this model (your Forgefather Target). Each time a friendly unit makes an attack against it, while making attacks made with [MELTA] weapons or while making attacks made with [TORRENT] weapons, improve the Strength characteristic of that attack by 2 if it is made by a friendly ADEPTUS ASTARTES unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

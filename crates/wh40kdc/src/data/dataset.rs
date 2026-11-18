@@ -962,6 +962,13 @@ impl Dataset {
             .iter()
             .filter(|la| la.leader_id.as_str() == leader_unit_id)
             .flat_map(|la| la.conditional_groups.iter())
+            // Only a group naming roster units sets a role: a detachment- or
+            // keyword-gated group carries its datasheet's own role, and a shared
+            // leader id would carry it across factions.
+            .filter(|group| {
+                !(group.required_roster_unit_ids.is_empty()
+                    && group.excluded_roster_unit_ids.is_empty())
+            })
             .filter(|group| conditional_group_applies(group, roster_unit_ids))
         {
             match group.role {
@@ -1067,7 +1074,7 @@ pub(super) fn unit_keyword_set(unit: &Unit) -> std::collections::HashSet<String>
 /// its keyword set (keywords ∪ faction_keywords, case-insensitive) contains ALL
 /// of `eligible_bodyguard_keywords`. Empty keywords never match (the entry then
 /// relies solely on `eligible_bodyguard_ids`).
-fn matches_bodyguard_keywords(la: &LeaderAttachment, unit: &Unit) -> bool {
+pub(super) fn matches_bodyguard_keywords(la: &LeaderAttachment, unit: &Unit) -> bool {
     if la.eligible_bodyguard_keywords.is_empty() {
         return false;
     }
@@ -1138,7 +1145,7 @@ fn attachment_bodyguard_ids<'a>(
         )
 }
 
-fn conditional_group_applies(
+pub(super) fn conditional_group_applies(
     group: &crate::generated::LeaderAttachmentConditionalGroupsItem,
     roster_unit_ids: &HashSet<String>,
 ) -> bool {

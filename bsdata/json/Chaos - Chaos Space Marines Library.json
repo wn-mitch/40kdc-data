@@ -1798,7 +1798,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of your Shooting phase, you may use this ability, once per phase per army, until the start of your next Movement phase:\n  -> Roll one D6:\n    - On 1: The unit suffers D3 mortal wounds.\n    - On 2-6: Select one enemy unit if the selected unit is within 12\" of this model and the selected unit is visible to this model (your Death Hex Target); until the start of your next Movement phase, each time a friendly unit attacks it, improve the attacking unit's Armour Penetration characteristic by 1.",
+                "$text": "At the start of your Shooting phase, you may use this ability, once per phase per army, until the start of your next Movement phase:\n  -> Roll one D6:\n    - On 1: The unit suffers D3 mortal wounds.\n    - On 2-6: Select one enemy unit if the selected unit is within 12\" of this model and the selected unit is visible to this model (your Death Hex Target); until the start of your next Movement phase, each time a friendly unit attacks it, improve the Armour Penetration characteristic of that attack by 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

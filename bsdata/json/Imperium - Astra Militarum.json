@@ -20405,7 +20405,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit by exterminator autocannon during its just-finished shooting sequence (each unit can be selected for this ability at most once per phase across your army) (your Withering Hail Target). Until the end of the phase, each time a friendly unit makes an attack against it, improve all friendly ASTRA MILITARUM units' Armour Penetration characteristic by 1.",
+                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit by exterminator autocannon during its just-finished shooting sequence (each unit can be selected for this ability at most once per phase across your army) (your Withering Hail Target). Until the end of the phase, each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly ASTRA MILITARUM unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

@@ -3102,7 +3102,7 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
 }
 
 export interface CompTiersReport {
-  dirs: { dir: string; matched: number; unitsTiered: number; rowsAdjusted: number; modelCountResynced: number; modesStamped: number }[];
+  dirs: { dir: string; matched: number; unitsTiered: number; rowsAdjusted: number; modelCountResynced: number; maxModelCountSynced: number; modesStamped: number }[];
   skipped: { dir: string; id: string; reason: string }[];
   notes: { dir: string; id: string; note: string }[];
   staged: StagedWrite[];
@@ -3179,6 +3179,14 @@ export function stampCompositionGameModes(
   return stamped;
 }
 
+/** Set or clear a unit's `max_model_count` to the datasheet's `maxModelCount`; true when it changed. */
+export function syncMaxModelCount(unit: { max_model_count?: number }, maxModelCount: number | null): boolean {
+  if ((unit.max_model_count ?? null) === maxModelCount) return false;
+  if (maxModelCount === null) delete unit.max_model_count;
+  else unit.max_model_count = maxModelCount;
+  return true;
+}
+
 export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersReport {
   const dirs = repoDirs();
   const byDir = new Map<string, DatasheetRow[]>();
@@ -3203,7 +3211,7 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
     const compsByUnit = new Map<string, (CompRecord & { tiers?: { models: DumpTier }[] })[]>();
     for (const c of comps)
       (compsByUnit.get(c.unit_id) ?? compsByUnit.set(c.unit_id, []).get(c.unit_id)!).push(c);
-    const units = readJsonArray<UnitRecord & { model_count?: { min: number; max: number } }>(upath);
+    const units = readJsonArray<UnitRecord & { model_count?: { min: number; max: number }; max_model_count?: number }>(upath);
     const unitsById = new Map(units.map((u) => [u.id, u]));
     const byMfmId = new Map(
       units.flatMap((unit) =>
@@ -3225,6 +3233,7 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
     let unitsTiered = 0;
     let rowsAdjusted = 0;
     let modelCountResynced = 0;
+    let maxModelCountSynced = 0;
     let compsChanged = false;
     let unitsChanged = false;
     for (const ds of dsList) {
@@ -3236,6 +3245,11 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
       matchedRepoIds.add(id);
       matched++;
       const u = unitsById.get(id);
+      // The datasheet's own model cap, which a composition whose row maxima sum higher obeys.
+      if (u && syncMaxModelCount(u, ds.maxModelCount)) {
+        maxModelCountSynced++;
+        unitsChanged = true;
+      }
       const agg = aggregateComposition(dump, ds.id!);
       if (agg.skip) {
         skipped.push({ dir, id, reason: `dump composition has duplicate model names (kill-team shape)` });
@@ -3289,10 +3303,13 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
           unitsTiered++;
           compsChanged = true;
         }
-        // Re-sync the unit's model_count to the tier span.
+        // Re-sync the unit's model_count to the tier span, capped by the datasheet's model cap.
         const span = {
           min: Math.min(...agg.tiers.map((t) => t.reduce((s, r) => s + r.min, 0))),
-          max: Math.max(...agg.tiers.map((t) => t.reduce((s, r) => s + r.max, 0))),
+          max: Math.min(
+            Math.max(...agg.tiers.map((t) => t.reduce((s, r) => s + r.max, 0))),
+            ds.maxModelCount ?? Number.POSITIVE_INFINITY,
+          ),
         };
         if (u) {
           const before = JSON.stringify(u.model_count ?? null);
@@ -3309,7 +3326,7 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
     if (modesStamped > 0) compsChanged = true;
     if (compsChanged) staged.push({ path: cpath, value: comps });
     if (unitsChanged) staged.push({ path: upath, value: units });
-    reportDirs.push({ dir, matched, unitsTiered, rowsAdjusted, modelCountResynced, modesStamped });
+    reportDirs.push({ dir, matched, unitsTiered, rowsAdjusted, modelCountResynced, maxModelCountSynced, modesStamped });
   }
   return { dirs: reportDirs, skipped, notes, staged };
 }

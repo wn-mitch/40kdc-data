@@ -649,7 +649,8 @@
           "Adepta Sororitas"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "writ-of-compunction-upgrade-sacred-champions-adepta-sororitas",
@@ -682,7 +683,8 @@
           "Adepta Sororitas"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "perfervid-haste-sacred-champions-adepta-sororitas",
@@ -742,7 +744,9 @@
         "namespace": "mfm",
         "id": "36b50d74-e9ff-4420-9cba-2844461ec80c"
       }
-    ]
+    ],
+    "counts_toward_enhancement_limit": false,
+    "equipable_by_non_character": true
   },
   {
     "id": "divine-miracle-sanctuary-guardians-adepta-sororitas",
@@ -773,7 +777,8 @@
           "Adepta Sororitas"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "righteous-fervour-sanctuary-guardians-adepta-sororitas",

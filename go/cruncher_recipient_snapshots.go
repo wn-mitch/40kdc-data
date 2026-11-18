@@ -93,10 +93,10 @@ func historicalEnhancementEligible(ds *Dataset, enhancement map[string]any, owne
 		keywords[strings.ToLower(keyword)] = true
 	}
 	has := func(keyword string) bool { return keywords[strings.ToLower(keyword)] }
-	if !has("character") && enhancement["upgrade_tag"] != true {
+	if !has("character") && !equipableByNonCharacter(enhancement) {
 		return false
 	}
-	if getStr(owner.Raw, "role") == "epic-hero" || has("epic hero") {
+	if (getStr(owner.Raw, "role") == "epic-hero" || has("epic hero")) && enhancement["equipable_by_epic_hero"] != true {
 		return false
 	}
 	if rows, _ := ds.unitCompositionOf(owner.Raw); len(rows) > 0 {

@@ -14242,7 +14242,7 @@ Against DAEMON targets, you can re-roll a Wound roll of 1 for attacks made by al
           </profiles>
           <costs>
             <cost name="pts" typeId="51b2-306e-1021-d207" value="15"/>
-            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
+            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="0"/>
           </costs>
         </selectionEntry>
         <selectionEntry name="Esoteric Explosives" id="ff73-8939-2812-68ec" import="true" type="upgrade" hidden="true">
@@ -14265,7 +14265,7 @@ Against DAEMON targets, you can re-roll a Wound roll of 1 for attacks made by al
           </profiles>
           <costs>
             <cost name="pts" typeId="51b2-306e-1021-d207" value="10"/>
-            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
+            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="0"/>
           </costs>
         </selectionEntry>
         <selectionEntry name="Intraneural Biotech" id="5a53-30e6-63f0-4cc2" import="true" type="upgrade" hidden="true">
@@ -14291,7 +14291,7 @@ This model is eligible to be targeted with the Counteroffensive Stratagem even i
           </profiles>
           <costs>
             <cost name="pts" typeId="51b2-306e-1021-d207" value="15"/>
-            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
+            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="0"/>
           </costs>
         </selectionEntry>
         <selectionEntry name="Micromelta Rounds" id="480d-20e4-fd42-cb0e" import="true" type="upgrade" hidden="true">
@@ -14314,7 +14314,7 @@ This model is eligible to be targeted with the Counteroffensive Stratagem even i
           </profiles>
           <costs>
             <cost name="pts" typeId="51b2-306e-1021-d207" value="20"/>
-            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
+            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="0"/>
           </costs>
         </selectionEntry>
         <selectionEntry name="Universal Anathema" id="5947-a87c-2425-2a48" import="true" type="upgrade" hidden="false">

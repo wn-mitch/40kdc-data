@@ -20609,7 +20609,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Rites of Castigation Target). Until the end of the turn, each time a friendly unit makes an attack against it, while making ranged attacks, improve all friendly ADEPTA SORORITAS units' Armour Penetration characteristic by 1.",
+                "$text": "After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Rites of Castigation Target). Until the end of the turn, each time a friendly unit makes an attack against it, while making ranged attacks, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly ADEPTA SORORITAS unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -39925,7 +39925,7 @@
                   {
                     "name": "Desperate For Redemption",
                     "id": "4917-3a79-7634-ddb9",
-                    "description": "At the start of your Command phase, you may use this ability, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - The Path of the Penitent: add 3 to all friendly PENITENT models' Move characteristic.\n    - Absolution in Battle: when a friendly unit is selected to fight, until the end of the phase: if the triggering unit charged this turn, add 1 to the Attacks characteristic of melee weapons equipped by PENITENT models in the triggering unit; add 1 to the Strength characteristic of melee weapons equipped by PENITENT models in the triggering unit.\n    - Death Before Disgrace: when a friendly PENITENT model is destroyed: each time a model in this unit is destroyed, while making melee attacks, unless that unit has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
+                    "description": "At the start of your Command phase, you may use this ability, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - The Path of the Penitent: add 3 to all friendly PENITENT models' Move characteristic.\n    - Absolution in Battle: when a friendly unit is selected to fight, until the end of the phase: if the triggering unit charged this turn, add 1 to the Attacks characteristic of melee weapons equipped by PENITENT models in the triggering unit; add 1 to the Strength characteristic of melee weapons equipped by PENITENT models in the triggering unit.\n    - Death Before Disgrace: when a friendly PENITENT model is destroyed: each time a model in this unit is destroyed, while making melee attacks, unless that model has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
                     "hidden": false
                   }
                 ]
@@ -43272,7 +43272,7 @@
               {
                 "name": "Enhancements",
                 "typeId": "f759-1bc4-cb3a-f0d2",
-                "value": 1
+                "value": 0
               }
             ],
             "modifiers": [

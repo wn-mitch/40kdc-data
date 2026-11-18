@@ -893,7 +893,8 @@
         "namespace": "mfm",
         "id": "cb50a092-b387-493d-a329-fb3ebb9d603a"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "foresight-of-the-changer-prism-of-zadophon-thousand-sons",

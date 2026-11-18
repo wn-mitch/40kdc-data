@@ -847,7 +847,8 @@
           "Genestealer Cults"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "talons-of-the-sire-purestrain-broodswarm-genestealer-cults",
@@ -952,7 +953,8 @@
           "Genestealer Cults"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "heavy-munitions-claw-of-ascension-genestealer-cults",
@@ -979,7 +981,8 @@
       {
         "unit_id": "claw-of-ascension-achilles-ridgerunner"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "practiced-eye-claw-of-ascension-genestealer-cults",

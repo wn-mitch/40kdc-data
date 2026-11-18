@@ -31937,7 +31937,7 @@ The unit gets +1 to Charge rolls.</characteristic>
         <profile name="Shattered Defences" id="2422-3aed-44c0-cec9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit with the MONSTER or VEHICLE keyword that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Shattered Defences Target). Each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of ranged weapons equipped by all friendly ADEPTUS ASTARTES units by 1.</characteristic>
+  -&gt; Select one enemy unit with the MONSTER or VEHICLE keyword that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Shattered Defences Target). Each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made with ranged weapons by a friendly ADEPTUS ASTARTES unit.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -32259,7 +32259,7 @@ The unit gets +1 to Charge rolls.</characteristic>
         <profile name="Forgefather" id="0e65-546b-d6d4-78e1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn:
-  -&gt; Select one enemy unit within 24" of this model visible to this model (your Forgefather Target). Each time a friendly unit makes an attack against it, while making attacks made with [MELTA] weapons or while making attacks made with [TORRENT] weapons, improve all friendly ADEPTUS ASTARTES units' Strength characteristic by 2.</characteristic>
+  -&gt; Select one enemy unit within 24" of this model visible to this model (your Forgefather Target). Each time a friendly unit makes an attack against it, while making attacks made with [MELTA] weapons or while making attacks made with [TORRENT] weapons, improve the Strength characteristic of that attack by 2 if it is made by a friendly ADEPTUS ASTARTES unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Seeker of the Unfound" id="5dd5-5c66-1b29-e216" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">

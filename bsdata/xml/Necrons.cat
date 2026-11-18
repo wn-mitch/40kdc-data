@@ -10521,7 +10521,7 @@ If the unit was set up this turn, you can re-roll the Hit roll.</characteristic>
           </profiles>
           <costs>
             <cost name="pts" typeId="51b2-306e-1021-d207" value="45"/>
-            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
+            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="0"/>
           </costs>
         </selectionEntry>
         <selectionEntry name="Quantum Goad" id="c794-f821-24d9-6e27" import="true" type="upgrade" hidden="true">
@@ -10544,7 +10544,7 @@ If the unit was set up this turn, you can re-roll the Hit roll.</characteristic>
           </profiles>
           <costs>
             <cost name="pts" typeId="51b2-306e-1021-d207" value="45"/>
-            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
+            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="0"/>
           </costs>
         </selectionEntry>
         <selectionEntry name="Animus Damper" id="bc66-8e7a-ea98-143b" import="true" type="upgrade" hidden="true">
@@ -10594,7 +10594,7 @@ If the unit was set up this turn, you can re-roll the Hit roll.</characteristic>
           </profiles>
           <costs>
             <cost name="pts" typeId="51b2-306e-1021-d207" value="40"/>
-            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
+            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="0"/>
           </costs>
         </selectionEntry>
         <selectionEntry name="Honourable Combatant" id="adf7-e842-41e1-6994" import="true" type="upgrade" hidden="false">

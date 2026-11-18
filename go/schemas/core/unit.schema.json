@@ -228,6 +228,11 @@
       },
       "required": ["min", "max"]
     },
+    "max_model_count": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The most models the unit may contain, across all of its composition rows. It caps a composition whose row maxima sum higher (Corsair Voidscarred: 10 models although its rows allow 13)."
+    },
     "weapon_ids": {
       "type": "array",
       "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }

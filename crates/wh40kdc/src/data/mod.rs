@@ -56,6 +56,8 @@ pub mod battle_sizes;
 mod list_keywords;
 #[cfg(feature = "import")]
 pub mod roster;
+#[cfg(feature = "import")]
+mod roster_rules;
 mod roster_warlord;
 
 #[cfg(feature = "cruncher")]

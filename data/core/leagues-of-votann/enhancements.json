@@ -81,6 +81,9 @@
         "namespace": "mfm",
         "id": "03bcbf6f-e06f-4fe1-b393-5308acad4591"
       }
+    ],
+    "required_wargear_ids": [
+      "autoch-pattern-combi-bolter"
     ]
   },
   {
@@ -793,7 +796,8 @@
           "Leagues of Votann"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "optimised-attack-lines-upgrade-armoured-trailblazers-leagues-of-votann",
@@ -826,7 +830,8 @@
           "Leagues of Votann"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "pan-spectral-lockons-upgrade-farseekers-leagues-of-votann",
@@ -854,7 +859,8 @@
         "namespace": "mfm",
         "id": "07fa1867-192c-4271-b3e3-926e7e1b2e52"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "ironskein-hearthguard-covenant-leagues-of-votann",
@@ -909,7 +915,8 @@
       {
         "unit_id": "bane-slayers-bulwark-brokhyr-thunderkyn"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "indomitable-exemplar-bane-slayers-bulwark-leagues-of-votann",
@@ -962,7 +969,8 @@
         "namespace": "mfm",
         "id": "1bbe32e3-9196-4f6a-9b1b-bbec55014700"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "farstrydr-node-hearthfyre-arsenal-leagues-of-votann",

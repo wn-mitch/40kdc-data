@@ -203,6 +203,58 @@ export function attachmentGroupApplies(
   );
 }
 
+/** The roster facts an attachment group's detachment and shared-keyword gates read. */
+export interface AttachmentGateContext {
+  /** Unit ids in the roster, for the roster-unit conditions. */
+  rosterUnitIds: ReadonlySet<string>;
+  /** The roster's selected detachment ids. */
+  detachmentIds: ReadonlySet<string>;
+  /** Whether the leader carries a keyword in this roster. */
+  leaderHas: (keyword: string) => boolean;
+  /** Whether the bodyguard carries a keyword in this roster. */
+  bodyguardHas: (keyword: string) => boolean;
+}
+
+/**
+ * Whether a conditional group's detachment and shared-keyword gates hold: its required detachment
+ * is selected, its excluded detachment is not, and both the leader and the bodyguard carry its
+ * required shared keyword.
+ */
+function groupGatesHold(group: NonNullable<LeaderAttachment["conditional_groups"]>[number], ctx: AttachmentGateContext): boolean {
+  if (group.required_detachment_id !== undefined && !ctx.detachmentIds.has(group.required_detachment_id)) return false;
+  if (group.excluded_detachment_id !== undefined && ctx.detachmentIds.has(group.excluded_detachment_id)) return false;
+  const keyword = group.required_shared_keyword;
+  return keyword === undefined || (ctx.leaderHas(keyword) && ctx.bodyguardHas(keyword));
+}
+
+/**
+ * Whether `leaderUnitId` may join `bodyguardUnitId` under the roster's detachment and keyword
+ * gates. True when an unconditional id or keyword clause admits the bodyguard, or when a
+ * roster-applicable conditional group listing it has its gates hold; false when every such group
+ * listing it fails a gate. A bodyguard no group lists is true here: whether it is eligible at all
+ * is {@link bodyguardsAttachableFrom}'s question, which ignores these gates.
+ */
+export function attachmentGatesHold(
+  ds: Dataset,
+  leaderUnitId: string,
+  bodyguardUnitId: string,
+  ctx: AttachmentGateContext,
+): boolean {
+  const bodyguard = ds.units.getAny(bodyguardUnitId);
+  let gated = false;
+  for (const la of ds.leaderAttachments) {
+    if (la.leader_id !== leaderUnitId) continue;
+    if (la.eligible_bodyguard_ids.includes(bodyguardUnitId)) return true;
+    if (bodyguard !== undefined && matchesBodyguardKeywords(la, bodyguard.raw)) return true;
+    for (const group of la.conditional_groups ?? []) {
+      if (!group.eligible_bodyguard_ids.includes(bodyguardUnitId) || !attachmentGroupApplies(group, ctx.rosterUnitIds)) continue;
+      if (groupGatesHold(group, ctx)) return true;
+      gated = true;
+    }
+  }
+  return !gated;
+}
+
 /** Lowercased union of a unit's `keywords` and `faction_keywords`, for membership tests. */
 function unitKeywordSet(unit: Unit): Set<string> {
   const out = new Set<string>();

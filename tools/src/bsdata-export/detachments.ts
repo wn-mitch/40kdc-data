@@ -6,7 +6,7 @@
  * unless its detachment is selected and the unit taking it may.
  */
 import type { Dataset } from "../data/dataset.js";
-import { meetsEnhancementGroups, missingRequiredAbilities } from "../data/enhancement-eligibility.js";
+import { equipableByNonCharacter, meetsEnhancementGroups, missingRequiredAbilities } from "../data/enhancement-eligibility.js";
 import type { Detachment, Enhancement, Unit } from "../generated.js";
 import type { CatalogueContext, CatalogueSet } from "./catalogue.js";
 import { BSDATA_IDS } from "./ids.js";
@@ -79,7 +79,7 @@ export function enhancementEntry(set: CatalogueSet, ctx: CatalogueContext, root:
     constraints: [
       constraint({ id: ctx.ids.id(`${key}:max`), type: "max", value: enhancement.max_targets ?? 1, field: "selections", scope: "roster", includeChildSelections: true, includeChildForces: true }),
     ],
-    costs: [cost("pts", ctx.refs.cost.pts, enhancement.cost ?? 0), cost("Enhancements", ctx.refs.cost.enhancements, 1)],
+    costs: [cost("pts", ctx.refs.cost.pts, enhancement.cost ?? 0), cost("Enhancements", ctx.refs.cost.enhancements, enhancement.counts_toward_enhancement_limit === false ? 0 : 1)],
     hidden: eligible.length === 0,
     modifiers: [
       hiddenWhen([condition({ childId: detachmentId, childName: detachment.name, field: "selections", scope: "force", type: "lessThan", value: 1, includeChildSelections: true })]),
@@ -111,8 +111,8 @@ function keywordHas(ctx: CatalogueContext, unit: Unit, factionId: string, detach
 
 /** Whether `unit` may take `enhancement` in some army that offers its `detachment`. */
 export function canTake(ctx: CatalogueContext, unit: Unit, enhancement: Enhancement, detachment: Detachment): boolean {
-  if (isEpicHero(unit)) return false;
-  if (!isCharacter(unit) && enhancement.upgrade_tag !== true) return false;
+  if (isEpicHero(unit) && enhancement.equipable_by_epic_hero !== true) return false;
+  if (!isCharacter(unit) && !equipableByNonCharacter(enhancement)) return false;
   const rows = ctx.dataset.unitCompositionOf(unit)?.models ?? [];
   if (rows.length > 0 && rows.every((m) => m.excluded_from_enhancements === true)) return false;
   if (missingRequiredAbilities(enhancement, unit.ability_ids).length > 0) return false;

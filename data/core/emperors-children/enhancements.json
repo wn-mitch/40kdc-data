@@ -830,7 +830,8 @@
         "namespace": "mfm",
         "id": "7949eef1-dbe1-42e6-9742-e18fea8532fe"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "euphoric-crown-frenzied-host-emperors-children",
@@ -929,7 +930,8 @@
           "Emperor’s Children"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "beguiling-grotesquerie-upgrade-spectacle-of-slaughter-emperors-children",
@@ -962,7 +964,8 @@
           "Emperor’s Children"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "invigorating-agonies-callous-blades-emperors-children",
@@ -1016,7 +1019,8 @@
       {
         "unit_id": "callous-blades-infractors"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "pledge-of-eternal-servitude-coterie-of-the-conceited-emperors-children",

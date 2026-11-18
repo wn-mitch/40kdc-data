@@ -54,7 +54,8 @@
       {
         "unit_id": "boyz"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "blitzboss-brute-bosses-orks",
@@ -270,7 +271,8 @@
       {
         "unit_id": "big-mek-with-shokk-attack-gun"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "extra-sneaky-upgrade-runt-swarm-orks",
@@ -300,7 +302,8 @@
       {
         "unit_id": "gretchin"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "flyboss-upgrade-flyboyz-orks",
@@ -329,7 +332,8 @@
         "namespace": "mfm",
         "id": "3472f66e-cd61-4e21-b2b6-49cf922ec8e7"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "impulsive-recon-upgrade-flyboyz-orks",
@@ -358,7 +362,8 @@
         "namespace": "mfm",
         "id": "7c3c9616-ef0a-48d7-951f-7b483083b6e2"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "it-came-from-da-drops-da-big-hunt-orks",
@@ -488,7 +493,8 @@
       {
         "unit_id": "gretchin"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "morgogs-finkin-cap-brute-bosses-orks",
@@ -571,7 +577,8 @@
     ],
     "exclusion_keywords": [
       "Aircraft"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "supa-glowy-fing-shoota-boyz-orks",
@@ -631,7 +638,8 @@
       {
         "unit_id": "flash-gitz"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "surly-as-a-squiggoth-brute-bosses-orks",
@@ -753,7 +761,8 @@
       {
         "unit_id": "big-mek-with-shokk-attack-gun"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "throat-slittas-upgrade-taktikal-brigade-orks",
@@ -786,7 +795,8 @@
       {
         "unit_id": "stormboyz"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "warphead-wurrband-orks",
@@ -843,7 +853,8 @@
       {
         "unit_id": "nobz"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "glory-hog-da-big-hunt-orks",
@@ -979,7 +990,8 @@
     "max_targets": 3,
     "keyword_restrictions": [
       "Wagon"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "kunnin-but-brutal-war-horde-orks",
@@ -1027,7 +1039,8 @@
     "max_targets": 3,
     "keyword_restrictions": [
       "Wagon"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "cybork-boosta-dread-mob-orks",
@@ -1113,7 +1126,8 @@
           "Orks"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "rallying-war-cry-ardmob-orks",

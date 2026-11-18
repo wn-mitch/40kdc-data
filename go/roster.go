@@ -210,14 +210,21 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		if !contains(spec.detachmentIDs, getStr(enh, "detachment_id")) {
 			errV("enhancement-wrong-detachment", enhID, idx)
 		}
-		if !isCharacter(view) && !contains(su.keywordOverrides, "Character") && enh["upgrade_tag"] != true {
+		if !isCharacter(view) && !contains(su.keywordOverrides, "Character") && !equipableByNonCharacter(enh) {
 			errV("enhancement-on-non-character", enhID, idx)
 		}
 		kws := keywordSet(view, su.keywordOverrides)
 		// 11e Select Enhancements: EPIC HERO models cannot be given Enhancements
-		// (Upgrades included). Mirror of TS enhancement-on-epic-hero.
-		if _, epic := kws["Epic Hero"]; epic || getStr(view.Raw, "role") == "epic-hero" {
+		// (Upgrades included) unless the enhancement says an Epic Hero may take it.
+		// Mirror of TS enhancement-on-epic-hero.
+		if _, epic := kws["Epic Hero"]; (epic || getStr(view.Raw, "role") == "epic-hero") && enh["equipable_by_epic_hero"] != true {
 			errV("enhancement-on-epic-hero", enhID, idx)
+		}
+		if enh["bearer_cannot_be_warlord"] == true && su.isWarlord {
+			errV("enhancement-bearer-cannot-be-warlord", enhID, idx)
+		}
+		if len(missingRequiredWargear(enh, su.counts)) > 0 {
+			errV("enhancement-missing-wargear", enhID, idx)
 		}
 		// A unit whose every model is excluded_from_enhancements has no model that
 		// can carry the Enhancement. Mirror of TS enhancement-on-excluded-model.
@@ -272,14 +279,21 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 		if su.leaderBodyguardID != "" {
 			eligible := bodyguardEligibleIDs(ds, view.ID(), presentUnitIDs)
+			granted := false
 			if su.enhancementID != "" {
 				if enhancementAny, ok := ds.Enhancements.Get(su.enhancementID); ok {
-					for _, bodyguardID := range getStrList(enhancementAny.(map[string]any), "attachment_bodyguard_ids") {
-						eligible[bodyguardID] = struct{}{}
-					}
+					granted = contains(getStrList(enhancementAny.(map[string]any), "attachment_bodyguard_ids"), su.leaderBodyguardID)
 				}
 			}
-			if _, ok := eligible[su.leaderBodyguardID]; !ok {
+			// Detachment and shared-keyword gates (Pactbound Zealots' Marks of Chaos)
+			// narrow the eligible set; an enhancement's grant is not gated.
+			gated := !granted && !attachmentGatesHold(ds, view.ID(), su.leaderBodyguardID, attachmentGateContext{
+				presentUnitIDs:    presentUnitIDs,
+				detachmentIDs:     spec.detachmentIDs,
+				leaderKeywords:    keywordSet(view, su.keywordOverrides),
+				bodyguardKeywords: attachedToKeywords(su),
+			})
+			if _, ok := eligible[su.leaderBodyguardID]; (!ok && !granted) || gated {
 				errV("leader-attachment-illegal", view.ID(), idx)
 			}
 		} else if ds.attachmentRole(view.ID(), getStr(view.Raw, "attachment_role"), presentUnitIDs) == "support" &&
@@ -549,9 +563,14 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 	if enhLimit, ok := enhancementLimitForBattleSize(spec.battleSize); ok {
 		chosen := map[string]bool{}
 		for _, su := range spec.units {
-			if su.enhancementID != "" {
-				chosen[su.enhancementID] = true
+			if su.enhancementID == "" {
+				continue
 			}
+			// An enhancement whose record sets counts_toward_enhancement_limit: false is not counted.
+			if eAny, ok := ds.Enhancements.Get(su.enhancementID); ok && eAny.(map[string]any)["counts_toward_enhancement_limit"] == false {
+				continue
+			}
+			chosen[su.enhancementID] = true
 		}
 		if len(chosen) > enhLimit {
 			errV("enhancement-limit-exceeded", "roster", -1)

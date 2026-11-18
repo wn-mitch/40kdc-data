@@ -949,7 +949,7 @@ async function runPointsAndCompositionTiersCmd(
     report.dirs.reduce((a, d) => a + f(d), 0);
   console.log(
     `Composition tiers — matched ${sum((d) => d.matched)}, units tiered ${sum((d) => d.unitsTiered)}, ` +
-      `model rows adjusted ${sum((d) => d.rowsAdjusted)}, model_count re-synced ${sum((d) => d.modelCountResynced)}, ` +
+      `model rows adjusted ${sum((d) => d.rowsAdjusted)}, model_count re-synced ${sum((d) => d.modelCountResynced)}, max_model_count synced ${sum((d) => d.maxModelCountSynced)}, ` +
       `game modes stamped ${sum((d) => d.modesStamped)}, ` +
       `skipped (kill-team / structure differs) ${report.skipped.length}.`,
   );
@@ -1366,7 +1366,7 @@ async function runCompositionTiersCmd(
     report.dirs.reduce((a, d) => a + f(d), 0);
   console.log(
     `Composition tiers — matched ${sum((d) => d.matched)}, units tiered ${sum((d) => d.unitsTiered)}, ` +
-      `model rows adjusted ${sum((d) => d.rowsAdjusted)}, model_count re-synced ${sum((d) => d.modelCountResynced)}, ` +
+      `model rows adjusted ${sum((d) => d.rowsAdjusted)}, model_count re-synced ${sum((d) => d.modelCountResynced)}, max_model_count synced ${sum((d) => d.maxModelCountSynced)}, ` +
       `game modes stamped ${sum((d) => d.modesStamped)}, ` +
       `skipped (kill-team / structure differs) ${report.skipped.length}.`,
   );

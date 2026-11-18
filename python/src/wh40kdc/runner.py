@@ -486,6 +486,9 @@ def _handle_check_roster_legality(state: RunnerState, args: Any) -> Response:
                     else None
                 ),
                 "counts": {k: int(v) for k, v in (u.get("counts") or {}).items()},
+                "keyword_overrides": [
+                    k for k in (u.get("keywordOverrides") or []) if isinstance(k, str)
+                ],
             }
             for u in args["units"]
         ],

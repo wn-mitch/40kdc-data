@@ -37,4 +37,14 @@ describe("canTakeEnhancement on the embedded data", () => {
     expect(canTakeEnhancement(ds, hat, unit("big-mek"))).toBe(true);
     expect(canTakeEnhancement(ds, hat, unit("big-mek-dakkarig"))).toBe(false);
   });
+
+  it("follows the record's Epic Hero and non-CHARACTER flags", () => {
+    const aeldari = (id: string) => ds.units.getInFaction(id, "aeldari")!;
+    const pirate = ds.enhancements.get("pirate-prince-eldritch-raiders-aeldari")!;
+    const assault = ds.enhancements.get("alacritous-assault-eldritch-raiders-aeldari")!;
+    expect(canTakeEnhancement(ds, pirate, aeldari("prince-yriel"))).toBe(true);
+    expect(canTakeEnhancement(ds, { ...pirate, equipable_by_epic_hero: false }, aeldari("prince-yriel"))).toBe(false);
+    expect(canTakeEnhancement(ds, assault, aeldari("corsair-voidreavers"))).toBe(true);
+    expect(canTakeEnhancement(ds, { ...assault, equipable_by_non_character: false }, aeldari("corsair-voidreavers"))).toBe(false);
+  });
 });

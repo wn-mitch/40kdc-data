@@ -89,9 +89,10 @@ impl Dataset {
     fn snapshot_enhancement_eligible(&self, enhancement: &Enhancement, bearer: &Unit) -> bool {
         let keywords = unit_keyword_set(bearer);
         let has = |keyword: &str| keywords.contains(&keyword.to_lowercase());
-        if (!has("character") && !enhancement.upgrade_tag)
-            || matches!(bearer.role, Some(UnitRole::EpicHero))
-            || has("epic hero")
+        if (!has("character")
+            && !(enhancement.upgrade_tag || enhancement.equipable_by_non_character))
+            || ((matches!(bearer.role, Some(UnitRole::EpicHero)) || has("epic hero"))
+                && !enhancement.equipable_by_epic_hero)
         {
             return false;
         }

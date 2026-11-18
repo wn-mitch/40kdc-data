@@ -38350,7 +38350,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to shoot, you may use this ability, once per battle per unit, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit with the MONSTER or VEHICLE keyword if the selected unit is within 24\" of the unit (your Pulsa Rokkit Target). Each time a friendly unit makes an attack against it:\n    -> The unit's weapons gain [LETHAL HITS].\n    -> Improve the unit's Armour Penetration characteristic by 1.",
+                "$text": "When the unit is selected to shoot, you may use this ability, once per battle per unit, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit with the MONSTER or VEHICLE keyword if the selected unit is within 24\" of the unit (your Pulsa Rokkit Target). Each time a friendly unit makes an attack against it:\n    -> The unit's weapons gain [LETHAL HITS].\n    -> Improve the Armour Penetration characteristic of that attack by 1 if it is made by the unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

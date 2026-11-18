@@ -1252,6 +1252,28 @@
       "consumers": ["tools/src/mfm/seed-units.ts#buildSeedUnit"],
       "reason": "Model-count bounds are aggregated from authoritative composition rows."
     },
+    "/max_model_count": {
+      "provenance": "direct",
+      "coverage": "implemented",
+      "sources": [
+        "data.datasheet.maxModelCount"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/wargear.ts#syncMaxModelCount",
+          "operation": "Copy the datasheet's model cap; a null source removes the field."
+        }
+      ],
+      "filters": [],
+      "precedence": [
+        "The dump value is authoritative and also caps model_count.max."
+      ],
+      "consumers": [
+        "tools/src/mfm/wargear.ts#runCompositionTiers"
+      ],
+      "reason": "The datasheet's model cap, which caps sizes a composition whose row maxima sum higher would allow (Corsair Voidscarred)."
+    },
     "/model_count/min": {
       "provenance": "derived",
       "coverage": "implemented",

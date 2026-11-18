@@ -686,6 +686,13 @@ class Dataset:
                 if la.get("leader_id") != leader_unit_id:
                     continue
                 for group in la.get("conditional_groups") or []:
+                    # Only a group naming roster units sets a role: a detachment- or
+                    # keyword-gated group carries its datasheet's own role, and a shared
+                    # leader id would carry it across factions.
+                    if not group.get("required_roster_unit_ids") and not group.get(
+                        "excluded_roster_unit_ids"
+                    ):
+                        continue
                     if not _conditional_group_applies(group, roster_unit_ids):
                         continue
                     if group.get("role") == "leader":

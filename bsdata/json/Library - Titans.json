@@ -2358,7 +2358,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve all friendly IMPERIUM units' Armour Penetration characteristic by 1.",
+                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly IMPERIUM unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8356,7 +8356,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve all friendly CHAOS units' Armour Penetration characteristic by 1.",
+                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly CHAOS unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

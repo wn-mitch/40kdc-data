@@ -8,7 +8,7 @@ import type { ActivatableBuff, EffectTranslation, StanceOptionRef, UnsupportedFr
 import type { ConditionNeed } from "../cruncher/condition-facts.js";
 import type { Enhancement } from "../generated.js";
 import type { Dataset, StackableBuff, StackableBuffGroup } from "./dataset.js";
-import { meetsEnhancementGroups, missingRequiredAbilities } from "./enhancement-eligibility.js";
+import { equipableByNonCharacter, meetsEnhancementGroups, missingRequiredAbilities } from "./enhancement-eligibility.js";
 import type { AbilityView, UnitView } from "./entities.js";
 
 /** Lower-cased union of the units' keywords and faction keywords. */
@@ -46,15 +46,16 @@ export function combinedToughness(units: readonly UnitView[], roles?: Readonly<R
 
 /**
  * Whether `bearer` can take `enhancement` under the Select Enhancements rules the roster validator
- * enforces: a CHARACTER (or an Upgrade), not an EPIC HERO, with a model that may take
+ * enforces: a CHARACTER (or an enhancement a non-CHARACTER may take), not an EPIC HERO unless the
+ * enhancement allows one, with a model that may take
  * Enhancements, meeting one eligibility group (its keywords, or its datasheet and keywords), with
  * every core ability it requires and carrying none of the exclusions.
  */
 export function canTakeEnhancement(ds: Dataset, enhancement: Enhancement, bearer: UnitView): boolean {
   const keywords = new Set(combinedKeywordsLower([bearer]));
   const has = (keyword: string) => keywords.has(keyword.toLowerCase());
-  if (!has("character") && enhancement.upgrade_tag !== true) return false;
-  if (bearer.raw.role === "epic-hero" || has("epic hero")) return false;
+  if (!has("character") && !equipableByNonCharacter(enhancement)) return false;
+  if ((bearer.raw.role === "epic-hero" || has("epic hero")) && enhancement.equipable_by_epic_hero !== true) return false;
   const rows = ds.unitCompositionOf(bearer.raw)?.models ?? [];
   if (rows.length > 0 && rows.every((model) => model.excluded_from_enhancements === true)) return false;
   const eligible = meetsEnhancementGroups(enhancement, bearer.id, has);

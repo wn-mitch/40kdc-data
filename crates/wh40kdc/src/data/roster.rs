@@ -21,6 +21,10 @@ use crate::generated::{Unit, UnitRole};
 use crate::import::{BattleSize, Roster};
 use crate::Dataset;
 
+use super::roster_rules::{
+    attachment_gates_hold, equipable_by_non_character, missing_required_wargear,
+    AttachmentGateContext,
+};
 use super::roster_warlord::{warlord_violations, WarlordUnit};
 
 /// Army-construction violation codes (distinct from per-unit loadout codes).
@@ -32,6 +36,8 @@ pub enum RosterViolationCode {
     EnhancementOnExcludedModel,
     EnhancementKeywordMismatch,
     EnhancementMissingAbility,
+    EnhancementMissingWargear,
+    EnhancementBearerCannotBeWarlord,
     EnhancementExcludedKeyword,
     EnhancementOverMaxTargets,
     LeaderAttachmentIllegal,
@@ -70,6 +76,10 @@ impl RosterViolationCode {
             RosterViolationCode::EnhancementOnExcludedModel => "enhancement-on-excluded-model",
             RosterViolationCode::EnhancementKeywordMismatch => "enhancement-keyword-mismatch",
             RosterViolationCode::EnhancementMissingAbility => "enhancement-missing-ability",
+            RosterViolationCode::EnhancementMissingWargear => "enhancement-missing-wargear",
+            RosterViolationCode::EnhancementBearerCannotBeWarlord => {
+                "enhancement-bearer-cannot-be-warlord"
+            }
             RosterViolationCode::EnhancementExcludedKeyword => "enhancement-excluded-keyword",
             RosterViolationCode::EnhancementOverMaxTargets => "enhancement-over-max-targets",
             RosterViolationCode::LeaderAttachmentIllegal => "leader-attachment-illegal",
@@ -352,7 +362,7 @@ pub fn validate_roster_core_with_keyword_overrides(
                 severity: Severity::Error,
             });
         }
-        if !is_character(view, overrides) && !enh.upgrade_tag {
+        if !is_character(view, overrides) && !equipable_by_non_character(enh) {
             army.push(RosterViolation {
                 code: RosterViolationCode::EnhancementOnNonCharacter,
                 id: enh.id.as_str().to_string(),
@@ -363,8 +373,11 @@ pub fn validate_roster_core_with_keyword_overrides(
         }
         let kws = roster_keyword_set(view, &army_keywords, &spec.detachment_ids, overrides);
         // 11e Select Enhancements: EPIC HERO models cannot be given Enhancements
-        // (Upgrades included). Mirror of TS `enhancement-on-epic-hero`.
-        if matches!(view.role, Some(UnitRole::EpicHero)) || kws.contains("Epic Hero") {
+        // (Upgrades included) unless the enhancement says an Epic Hero may take it.
+        // Mirror of TS `enhancement-on-epic-hero`.
+        if (matches!(view.role, Some(UnitRole::EpicHero)) || kws.contains("Epic Hero"))
+            && !enh.equipable_by_epic_hero
+        {
             army.push(RosterViolation {
                 code: RosterViolationCode::EnhancementOnEpicHero,
                 id: enh.id.as_str().to_string(),
@@ -372,6 +385,34 @@ pub fn validate_roster_core_with_keyword_overrides(
                     "{} cannot be given to Epic Hero {}",
                     enh.id.as_str(),
                     view.id.as_str()
+                ),
+                unit_index: Some(idx),
+                severity: Severity::Error,
+            });
+        }
+        if enh.bearer_cannot_be_warlord && su.is_warlord {
+            army.push(RosterViolation {
+                code: RosterViolationCode::EnhancementBearerCannotBeWarlord,
+                id: enh.id.as_str().to_string(),
+                message: format!(
+                    "{} carries {} and cannot be the Warlord",
+                    view.id.as_str(),
+                    enh.id.as_str()
+                ),
+                unit_index: Some(idx),
+                severity: Severity::Error,
+            });
+        }
+        let missing_wargear = missing_required_wargear(enh, &su.counts);
+        if !missing_wargear.is_empty() {
+            army.push(RosterViolation {
+                code: RosterViolationCode::EnhancementMissingWargear,
+                id: enh.id.as_str().to_string(),
+                message: format!(
+                    "{} lacks the {} {} requires",
+                    view.id.as_str(),
+                    missing_wargear.join(", "),
+                    enh.id.as_str()
                 ),
                 unit_index: Some(idx),
                 severity: Severity::Error,
@@ -507,21 +548,35 @@ pub fn validate_roster_core_with_keyword_overrides(
                 .into_iter()
                 .map(|candidate| candidate.id.as_str().to_string())
                 .collect();
-            if let Some(enhancement) = su
+            let granted = su
                 .enhancement_id
                 .as_deref()
                 .and_then(|id| dataset.enhancements.get(id))
-            {
-                eligible.extend(
-                    enhancement
-                        .attachment_bodyguard_ids
-                        .as_deref()
-                        .unwrap_or(&[])
-                        .iter()
-                        .map(|id| id.as_str().to_string()),
-                );
+                .and_then(|enhancement| enhancement.attachment_bodyguard_ids.as_deref())
+                .unwrap_or(&[])
+                .iter()
+                .any(|id| id.as_str() == bodyguard_id);
+            if granted {
+                eligible.insert(bodyguard_id.clone());
             }
-            if !eligible.contains(bodyguard_id) {
+            // Detachment and shared-keyword gates (Pactbound Zealots' Marks of Chaos)
+            // narrow the eligible set; an enhancement's grant is not gated.
+            let leader_keywords =
+                roster_keyword_set(view, &army_keywords, &spec.detachment_ids, overrides);
+            let bodyguard_keywords = attached_to_keywords(su).unwrap_or_default();
+            let gated = !granted
+                && !attachment_gates_hold(
+                    dataset,
+                    view.id.as_str(),
+                    bodyguard_id,
+                    &AttachmentGateContext {
+                        roster_unit_ids: &roster_unit_ids,
+                        detachment_ids: &spec.detachment_ids,
+                        leader_keywords: &leader_keywords,
+                        bodyguard_keywords: &bodyguard_keywords,
+                    },
+                );
+            if !eligible.contains(bodyguard_id) || gated {
                 army.push(RosterViolation {
                     code: RosterViolationCode::LeaderAttachmentIllegal,
                     id: view.id.as_str().to_string(),
@@ -884,10 +939,18 @@ pub fn validate_roster_core_with_keyword_overrides(
 
     // --- Enhancement limit (incursion 2, strike-force 4), distinct choices. ---
     if let Some(limit) = enhancement_limit_for_battle_size(spec.battle_size) {
+        // An enhancement whose record sets `counts_toward_enhancement_limit: false`
+        // is not counted.
         let chosen: HashSet<&str> = spec
             .units
             .iter()
             .filter_map(|su| su.enhancement_id.as_deref())
+            .filter(|id| {
+                dataset
+                    .enhancements
+                    .get(id)
+                    .is_none_or(|e| e.counts_toward_enhancement_limit)
+            })
             .collect();
         if chosen.len() as u64 > limit {
             army.push(RosterViolation {

@@ -10,6 +10,11 @@
  * faction scope comes from the leader datasheet's publication — handled exactly the
  * way {@link runWargearBudgets} scopes (candidateDirs / homeScore / nameToId).
  *
+ * A group may also hold only under a detachment (`requiredDetachmentId`), only outside one
+ * (`excludedDetachmentId`), or only when every unit in the attachment carries a keyword
+ * (`requiresAllUnitsHaveKeywordId`: Pactbound Zealots lets a leader join a bodyguard that shares
+ * its Mark of Chaos). Such a group becomes a conditional group carrying that gate.
+ *
  * Two repo artifacts are derived, per faction dir:
  *   - `units.json` `attachment_role` — set on every leader the dump describes.
  *     Mixed detachment-scoped leader/support rows use `leader` as the flat
@@ -54,6 +59,25 @@ interface ConditionalAttachmentGroup {
   eligible_bodyguard_ids: string[];
   required_roster_unit_ids?: string[];
   excluded_roster_unit_ids?: string[];
+  required_detachment_id?: string;
+  excluded_detachment_id?: string;
+  required_shared_keyword?: string;
+}
+
+/**
+ * Fold conditional groups that share every condition and role into one, keeping the first
+ * occurrence's position: the dump lists one row per bodyguard datasheet.
+ */
+export function mergeConditionalGroups(groups: readonly ConditionalAttachmentGroup[]): ConditionalAttachmentGroup[] {
+  const byKey = new Map<string, ConditionalAttachmentGroup>();
+  for (const group of groups) {
+    const { eligible_bodyguard_ids: ids, ...conditions } = group;
+    const key = JSON.stringify(Object.entries(conditions).sort(([a], [b]) => a.localeCompare(b)));
+    const seen = byKey.get(key);
+    if (seen) seen.eligible_bodyguard_ids = [...new Set([...seen.eligible_bodyguard_ids, ...ids])].sort();
+    else byKey.set(key, { ...group, eligible_bodyguard_ids: [...ids] });
+  }
+  return [...byKey.values()];
 }
 interface LeaderAttachmentRecord {
   leader_id: string;
@@ -141,6 +165,21 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
     "datasheetBodyguardGroupId",
   );
   const dsById = dump.byId("datasheet");
+  // Read only when a group names a detachment.
+  let repoDetachmentIds: Set<string> | undefined;
+  const detachmentId = (dumpId: string): string => {
+    repoDetachmentIds ??= new Set(
+      [...dirs].flatMap((dir) => {
+        const file = path.join(CORE_DIR, dir, "detachments.json");
+        return fs.existsSync(file) ? readJsonArray<{ id: string }>(file).map((d) => d.id) : [];
+      }),
+    );
+    const name = dump.enName(dump.byId("detachment").get(dumpId));
+    if (!name) throw new Error(`Unresolved bodyguard-group detachment ${dumpId}`);
+    const id = nameToId(name);
+    if (!repoDetachmentIds.has(id)) throw new Error(`Bodyguard-group detachment ${id} has no repo record`);
+    return id;
+  };
 
   const results: DirAttachmentResult[] = [];
   const staged: StagedWrite[] = [];
@@ -240,7 +279,11 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
         }
         const required = requiredRosterByGroup.get(g.id) ?? [];
         const excluded = excludedRosterByGroup.get(g.id) ?? [];
-        if (required.length || excluded.length) {
+        const sharedKeyword = g.requiresAllUnitsHaveKeywordId ? keywordLabel(dump, g.requiresAllUnitsHaveKeywordId) : undefined;
+        if (g.requiresAllUnitsHaveKeywordId && !sharedKeyword) {
+          throw new Error(`Unresolved bodyguard-group keyword ${g.requiresAllUnitsHaveKeywordId}`);
+        }
+        if (required.length || excluded.length || g.requiredDetachmentId || g.excludedDetachmentId || sharedKeyword) {
           if ((keywordsByGroup.get(g.id) ?? []).length) {
             throw new Error(`Conditional bodyguard group ${g.id} has keyword eligibility that cannot be represented`);
           }
@@ -252,6 +295,9 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
             eligible_bodyguard_ids: [...bodyguards].sort(),
             ...(required.length ? { required_roster_unit_ids: rosterIds(required.map((row) => row.datasheetId)) } : {}),
             ...(excluded.length ? { excluded_roster_unit_ids: rosterIds(excluded.map((row) => row.datasheetId)) } : {}),
+            ...(g.requiredDetachmentId ? { required_detachment_id: detachmentId(g.requiredDetachmentId) } : {}),
+            ...(g.excludedDetachmentId ? { excluded_detachment_id: detachmentId(g.excludedDetachmentId) } : {}),
+            ...(sharedKeyword ? { required_shared_keyword: sharedKeyword } : {}),
           });
           continue;
         }
@@ -271,7 +317,7 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
           leader_id: id,
           eligible_bodyguard_ids: [...eligible].sort(),
           ...(keywords ? { eligible_bodyguard_keywords: keywords } : {}),
-          ...(conditionalGroups.length ? { conditional_groups: conditionalGroups } : {}),
+          ...(conditionalGroups.length ? { conditional_groups: mergeConditionalGroups(conditionalGroups) } : {}),
           game_version: { ...confirmed },
         });
       } else if (unresolved.length) {

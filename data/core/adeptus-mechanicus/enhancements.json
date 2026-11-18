@@ -743,7 +743,8 @@
           "Adeptus Mechanicus"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "vinghs-wafers-of-dynamism-lords-of-the-forge-adeptus-mechanicus",
@@ -1004,7 +1005,8 @@
       {
         "unit_id": "purge-corps-serberys-sulphurhounds"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "miniaturised-autosimulacra-purge-corps-deltic-9-adeptus-mechanicus",

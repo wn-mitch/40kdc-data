@@ -447,7 +447,11 @@ func (ds *Dataset) attachmentRole(leaderUnitID, defaultRole string, presentUnitI
 		}
 		for _, groupAny := range getList(attachment, "conditional_groups") {
 			group, ok := asMap(groupAny)
-			if !ok || !conditionalAttachmentGroupApplies(group, presentUnitIDs) {
+			// Only a group naming roster units sets a role: a detachment- or
+			// keyword-gated group carries its datasheet's own role, and a shared
+			// leader id would carry it across factions.
+			if !ok || (len(getStrList(group, "required_roster_unit_ids")) == 0 && len(getStrList(group, "excluded_roster_unit_ids")) == 0) ||
+				!conditionalAttachmentGroupApplies(group, presentUnitIDs) {
 				continue
 			}
 			switch getStr(group, "role") {

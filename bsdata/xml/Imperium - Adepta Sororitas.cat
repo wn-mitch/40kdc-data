@@ -5496,7 +5496,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
         <profile name="Rites of Castigation" id="85d2-e486-0c32-3597" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Rites of Castigation Target). Until the end of the turn, each time a friendly unit makes an attack against it, while making ranged attacks, improve all friendly ADEPTA SORORITAS units' Armour Penetration characteristic by 1.</characteristic>
+  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Rites of Castigation Target). Until the end of the turn, each time a friendly unit makes an attack against it, while making ranged attacks, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly ADEPTA SORORITAS unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="1204-1247-6eed-2574" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -10925,7 +10925,7 @@ Set this model's Save characteristic to 3.</characteristic>
   -&gt; Select one (each may be chosen once per battle):
     - The Path of the Penitent: add 3 to all friendly PENITENT models' Move characteristic.
     - Absolution in Battle: when a friendly unit is selected to fight, until the end of the phase: if the triggering unit charged this turn, add 1 to the Attacks characteristic of melee weapons equipped by PENITENT models in the triggering unit; add 1 to the Strength characteristic of melee weapons equipped by PENITENT models in the triggering unit.
-    - Death Before Disgrace: when a friendly PENITENT model is destroyed: each time a model in this unit is destroyed, while making melee attacks, unless that unit has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.</description>
+    - Death Before Disgrace: when a friendly PENITENT model is destroyed: each time a model in this unit is destroyed, while making melee attacks, unless that model has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -12044,7 +12044,7 @@ Applies to: units with ADEPTA SORORITAS, CHARACTER (excluding PENITENT).</charac
           </profiles>
           <costs>
             <cost name="pts" typeId="51b2-306e-1021-d207" value="25"/>
-            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
+            <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="0"/>
           </costs>
         </selectionEntry>
       </selectionEntries>

@@ -16,7 +16,13 @@ import {
   pointsLimitForBattleSize,
   unitLimitForBattleSize,
 } from "./battle-sizes.js";
-import { meetsEnhancementGroups, missingRequiredAbilities } from "./enhancement-eligibility.js";
+import { attachmentGatesHold } from "./dataset-attachments.js";
+import {
+  equipableByNonCharacter,
+  meetsEnhancementGroups,
+  missingRequiredAbilities,
+  missingRequiredWargear,
+} from "./enhancement-eligibility.js";
 import { listBuildingKeywordChanges, withKeywordChanges } from "./list-building-keywords.js";
 import type { Violation } from "./loadout.js";
 import { hostUnitPoints, wargearPoints } from "./pricing.js";
@@ -143,6 +149,8 @@ export type RosterViolationCode =
   | "enhancement-on-excluded-model"
   | "enhancement-keyword-mismatch"
   | "enhancement-missing-ability"
+  | "enhancement-missing-wargear"
+  | "enhancement-bearer-cannot-be-warlord"
   | "enhancement-excluded-keyword"
   | "enhancement-over-max-targets"
   | "leader-attachment-illegal"
@@ -332,12 +340,18 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     if (
       !isCharacter(view) &&
       !su.keywordOverrides?.includes("Character") &&
-      enh.upgrade_tag !== true
+      !equipableByNonCharacter(enh)
     )
       err("enhancement-on-non-character", enh.id, `${enh.id} can only be taken by a Character`, idx);
-    // 11e Select Enhancements: EPIC HERO models cannot be given Enhancements (Upgrades included).
-    if (view.raw.role === "epic-hero" || keywordSet(view, su).has("Epic Hero"))
+    // 11e Select Enhancements: EPIC HERO models cannot be given Enhancements (Upgrades included)
+    // unless the enhancement says an Epic Hero may take it.
+    if ((view.raw.role === "epic-hero" || keywordSet(view, su).has("Epic Hero")) && enh.equipable_by_epic_hero !== true)
       err("enhancement-on-epic-hero", enh.id, `${enh.id} cannot be given to Epic Hero ${view.id}`, idx);
+    if (enh.bearer_cannot_be_warlord === true && su.isWarlord)
+      err("enhancement-bearer-cannot-be-warlord", enh.id, `${view.id} carries ${enh.id} and cannot be the Warlord`, idx);
+    const missingWargear = missingRequiredWargear(enh, su.counts);
+    if (missingWargear.length)
+      err("enhancement-missing-wargear", enh.id, `${view.id} lacks the ${missingWargear.join(", ")} ${enh.id} requires`, idx);
     // A unit whose every model is `excluded_from_enhancements` (Ogryn Bodyguard,
     // Transcendent C'tan) has no model that can carry the Enhancement.
     const rows = dataset.unitCompositionOf(view.raw)?.models ?? [];
@@ -379,8 +393,18 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
           .map((v) => v.id),
       );
       const enhancement = su.enhancementId ? dataset.enhancements.get(su.enhancementId) : undefined;
-      for (const bodyguardId of enhancement?.attachment_bodyguard_ids ?? []) eligible.add(bodyguardId);
-      if (!eligible.has(su.leaderBodyguardId))
+      const granted = (enhancement?.attachment_bodyguard_ids ?? ([] as string[])).includes(su.leaderBodyguardId);
+      // Detachment and shared-keyword gates (Pactbound Zealots' Marks of Chaos) narrow the
+      // eligible set; an enhancement's grant is not gated.
+      const bodyguardKeywords = attachedToKeywords(su) ?? new Set<string>();
+      const leaderKeywords = keywordSet(view, su);
+      const gated = !granted && !attachmentGatesHold(dataset, view.id, su.leaderBodyguardId, {
+        rosterUnitIds,
+        detachmentIds: new Set(spec.detachmentIds),
+        leaderHas: (keyword) => leaderKeywords.has(keyword),
+        bodyguardHas: (keyword) => bodyguardKeywords.has(keyword),
+      });
+      if (!(eligible.has(su.leaderBodyguardId) || granted) || gated)
         err("leader-attachment-illegal", view.id, `${view.id} cannot attach to ${su.leaderBodyguardId}`, idx);
     } else if (
       (dataset.conditionalAttachmentRole(view.id, rosterUnitIds) ?? view.raw.attachment_role) === "support" &&
@@ -545,7 +569,14 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
   // Counted as distinct Enhancements chosen: an upgrade applied to several units
   // is one Enhancement choice.
   const enhancementLimit = enhancementLimitForBattleSize(spec.battleSize);
-  const enhancementsChosen = new Set(spec.units.flatMap((su) => (su.enhancementId ? [su.enhancementId] : []))).size;
+  // An enhancement whose record sets `counts_toward_enhancement_limit: false` is not counted.
+  const enhancementsChosen = new Set(
+    spec.units.flatMap((su) =>
+      su.enhancementId && dataset.enhancements.get(su.enhancementId)?.counts_toward_enhancement_limit !== false
+        ? [su.enhancementId]
+        : [],
+    ),
+  ).size;
   if (enhancementLimit !== null && enhancementsChosen > enhancementLimit)
     err("enhancement-limit-exceeded", "roster", `army takes ${enhancementsChosen} Enhancements, over the limit of ${enhancementLimit}`);
 

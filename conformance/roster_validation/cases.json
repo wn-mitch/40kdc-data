@@ -3086,5 +3086,478 @@
     "expected": [
       "army|error|warlord-not-supreme-commander:belisarius-cawl+thulia-ghuld"
     ]
+  },
+  {
+    "name": "enhancement-limit-skips-uncounted",
+    "args": {
+      "factionId": "adepta-sororitas",
+      "battleSize": "incursion",
+      "forceDisposition": "reconnaissance",
+      "detachments": [
+        {
+          "id": "chorus-of-condemnation"
+        },
+        {
+          "id": "sanctified-orators"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "canoness-with-jump-pack",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "clarion-of-urgency-chorus-of-condemnation-adepta-sororitas",
+          "leaderBodyguardId": null,
+          "counts": {
+            "blessed-halberd": 1
+          }
+        },
+        {
+          "unitId": "exorcist",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": "symphonic-payload-upgrade-chorus-of-condemnation-adepta-sororitas",
+          "leaderBodyguardId": null,
+          "counts": {
+            "armoured-tracks": 1,
+            "exorcist-missile-launcher": 1,
+            "heavy-bolter": 1
+          }
+        },
+        {
+          "unitId": "palatine",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": "hagiomnifex-upgrade-sanctified-orators-adepta-sororitas",
+          "leaderBodyguardId": null,
+          "counts": {
+            "bolt-pistol-palatine": 1,
+            "palatine-blade": 1
+          }
+        }
+      ]
+    },
+    "expected": [],
+    "note": "An enhancement whose record sets counts_toward_enhancement_limit false is not counted: two counted Enhancements and Hagiomnifex in an Incursion army (limit 2) stay within the limit."
+  },
+  {
+    "name": "enhancement-epic-hero-equipable",
+    "args": {
+      "factionId": "aeldari",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "eldritch-raiders"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "prince-yriel",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "pirate-prince-eldritch-raiders-aeldari",
+          "leaderBodyguardId": null,
+          "counts": {
+            "eye-of-wrath": 1,
+            "shuriken-pistol-prince-yriel": 1,
+            "spear-of-twilight": 1
+          }
+        }
+      ]
+    },
+    "expected": [],
+    "note": "An enhancement with equipable_by_epic_hero may be given to an EPIC HERO."
+  },
+  {
+    "name": "enhancement-non-character-equipable",
+    "args": {
+      "factionId": "aeldari",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "eldritch-raiders"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "prince-yriel",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "eye-of-wrath": 1,
+            "shuriken-pistol-prince-yriel": 1,
+            "spear-of-twilight": 1
+          }
+        },
+        {
+          "unitId": "corsair-voidreavers",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": "alacritous-assault-eldritch-raiders-aeldari",
+          "leaderBodyguardId": null,
+          "counts": {
+            "close-combat-weapon": 5,
+            "power-sword-corsair-voidreavers": 5,
+            "shuriken-pistol": 5
+          }
+        }
+      ]
+    },
+    "expected": [],
+    "note": "An enhancement with equipable_by_non_character may be given to a unit that is not a CHARACTER although it is not an Upgrade."
+  },
+  {
+    "name": "enhancement-bearer-cannot-be-warlord",
+    "args": {
+      "factionId": "world-eaters",
+      "battleSize": "strike-force",
+      "forceDisposition": "reconnaissance",
+      "detachments": [
+        {
+          "id": "khorne-daemonkin"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "lord-on-juggernaut",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "disciple-of-khorne-khorne-daemonkin-world-eaters",
+          "leaderBodyguardId": null,
+          "counts": {
+            "bladed-horn": 1,
+            "exalted-chainblade": 1,
+            "plasma-pistol": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|enhancement-bearer-cannot-be-warlord:disciple-of-khorne-khorne-daemonkin-world-eaters"
+    ],
+    "note": "The unit given an enhancement with bearer_cannot_be_warlord cannot be the Warlord."
+  },
+  {
+    "name": "enhancement-bearer-not-warlord-legal",
+    "args": {
+      "factionId": "world-eaters",
+      "battleSize": "strike-force",
+      "forceDisposition": "reconnaissance",
+      "detachments": [
+        {
+          "id": "khorne-daemonkin"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "lord-on-juggernaut",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": "disciple-of-khorne-khorne-daemonkin-world-eaters",
+          "leaderBodyguardId": null,
+          "counts": {
+            "bladed-horn": 1,
+            "exalted-chainblade": 1,
+            "plasma-pistol": 1
+          }
+        },
+        {
+          "unitId": "lord-on-juggernaut",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "bladed-horn": 1,
+            "exalted-chainblade": 1,
+            "plasma-pistol": 1
+          }
+        }
+      ]
+    },
+    "expected": [],
+    "note": "bearer_cannot_be_warlord does not fire when another unit is the Warlord."
+  },
+  {
+    "name": "enhancement-missing-wargear",
+    "args": {
+      "factionId": "leagues-of-votann",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "needgaard-oathband"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "memnyr-strategist",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "iron-ambassador-needgaard-oathband-leagues-of-votann",
+          "leaderBodyguardId": null,
+          "counts": {
+            "autoch-pattern-bolt-pistol": 1,
+            "close-combat-weapon": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|enhancement-missing-wargear:iron-ambassador-needgaard-oathband-leagues-of-votann"
+    ],
+    "note": "An enhancement's required_wargear_ids must all be in the bearer's chosen loadout; a Memnyr Strategist carries no Autoch-pattern combi-bolter."
+  },
+  {
+    "name": "enhancement-required-wargear-carried",
+    "args": {
+      "factionId": "leagues-of-votann",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "needgaard-oathband"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "kahl",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "iron-ambassador-needgaard-oathband-leagues-of-votann",
+          "leaderBodyguardId": null,
+          "counts": {
+            "autoch-pattern-combi-bolter": 1,
+            "forgewrought-plasma-axe": 1,
+            "rampart-crest": 1
+          }
+        }
+      ]
+    },
+    "expected": [],
+    "note": "A Kahl's default loadout carries the Autoch-pattern combi-bolter Iron Ambassador requires."
+  },
+  {
+    "name": "max-model-count-caps-composition",
+    "args": {
+      "factionId": "aeldari",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "eldritch-raiders"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "prince-yriel",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "eye-of-wrath": 1,
+            "shuriken-pistol-prince-yriel": 1,
+            "spear-of-twilight": 1
+          }
+        },
+        {
+          "unitId": "corsair-voidscarred",
+          "modelCount": 11,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "close-combat-weapon-corsair-voidscarred": 10,
+            "power-sword": 10,
+            "shuriken-pistol": 10
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u1|error|invalid-model-count:corsair-voidscarred"
+    ],
+    "note": "A unit's max_model_count caps its size below the sum of its composition rows' maxima: Corsair Voidscarred rows allow 13 models, the datasheet 10."
+  },
+  {
+    "name": "leader-gate-pactbound-shared-mark",
+    "args": {
+      "factionId": "chaos-space-marines",
+      "battleSize": "strike-force",
+      "forceDisposition": "disruption",
+      "detachments": [
+        {
+          "id": "pactbound-zealots"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "chaos-lord",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": "legionaries",
+          "keywordOverrides": [
+            "Nurgle"
+          ],
+          "counts": {
+            "daemon-hammer": 1,
+            "plasma-pistol-chaos-lord": 1
+          }
+        },
+        {
+          "unitId": "legionaries",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "keywordOverrides": [
+            "Nurgle"
+          ],
+          "counts": {
+            "bolt-pistol-legionaries": 5,
+            "boltgun-legionaries": 5,
+            "close-combat-weapon-legionaries": 5
+          }
+        }
+      ]
+    },
+    "expected": [],
+    "note": "Under Pactbound Zealots a leader may join a bodyguard only when both carry the group's required_shared_keyword (the same Mark of Chaos)."
+  },
+  {
+    "name": "leader-gate-pactbound-mark-mismatch",
+    "args": {
+      "factionId": "chaos-space-marines",
+      "battleSize": "strike-force",
+      "forceDisposition": "disruption",
+      "detachments": [
+        {
+          "id": "pactbound-zealots"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "chaos-lord",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": "legionaries",
+          "keywordOverrides": [
+            "Nurgle"
+          ],
+          "counts": {
+            "daemon-hammer": 1,
+            "plasma-pistol-chaos-lord": 1
+          }
+        },
+        {
+          "unitId": "legionaries",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "keywordOverrides": [
+            "Khorne"
+          ],
+          "counts": {
+            "bolt-pistol-legionaries": 5,
+            "boltgun-legionaries": 5,
+            "close-combat-weapon-legionaries": 5
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|leader-attachment-illegal:chaos-lord"
+    ],
+    "note": "Under Pactbound Zealots a leader and bodyguard with different Marks of Chaos cannot attach."
+  },
+  {
+    "name": "leader-gate-pactbound-no-mark",
+    "args": {
+      "factionId": "chaos-space-marines",
+      "battleSize": "strike-force",
+      "forceDisposition": "disruption",
+      "detachments": [
+        {
+          "id": "pactbound-zealots"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "chaos-lord",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": "legionaries",
+          "counts": {
+            "daemon-hammer": 1,
+            "plasma-pistol-chaos-lord": 1
+          }
+        },
+        {
+          "unitId": "legionaries",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "bolt-pistol-legionaries": 5,
+            "boltgun-legionaries": 5,
+            "close-combat-weapon-legionaries": 5
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|leader-attachment-illegal:chaos-lord"
+    ],
+    "note": "Under Pactbound Zealots every attachment group requires a shared Mark of Chaos; without marks the attachment is illegal."
+  },
+  {
+    "name": "leader-gate-other-detachment",
+    "args": {
+      "factionId": "chaos-space-marines",
+      "battleSize": "strike-force",
+      "forceDisposition": "take-and-hold",
+      "detachments": [
+        {
+          "id": "veterans-of-the-long-war"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "chaos-lord",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": "legionaries",
+          "counts": {
+            "daemon-hammer": 1,
+            "plasma-pistol-chaos-lord": 1
+          }
+        },
+        {
+          "unitId": "legionaries",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "bolt-pistol-legionaries": 5,
+            "boltgun-legionaries": 5,
+            "close-combat-weapon-legionaries": 5
+          }
+        }
+      ]
+    },
+    "expected": [],
+    "note": "Outside Pactbound Zealots the excluded_detachment_id group admits the attachment without a Mark of Chaos."
   }
 ]

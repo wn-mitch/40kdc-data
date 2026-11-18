@@ -523,12 +523,17 @@ export class Dataset {
     return attachments.bodyguardsAttachableFrom(this, leaderUnitId, factionId, rosterUnitIds);
   }
 
-  /** Conditional roster groups override the flat role; leader wins on overlap. */
+  /**
+   * Conditional roster groups override the flat role; leader wins on overlap. Only a group that
+   * names required or excluded roster units sets a role: a group gated on a detachment or keyword
+   * alone carries its datasheet's own role, and a shared leader id would carry it across factions.
+   */
   conditionalAttachmentRole(leaderUnitId: string, rosterUnitIds: ReadonlySet<string>): "leader" | "support" | undefined {
     let supportApplies = false;
     for (const attachment of this.leaderAttachments) {
       if (attachment.leader_id !== leaderUnitId) continue;
       for (const group of attachment.conditional_groups ?? []) {
+        if (!group.required_roster_unit_ids && !group.excluded_roster_unit_ids) continue;
         if (!attachments.attachmentGroupApplies(group, rosterUnitIds)) continue;
         if (group.role === "leader") return "leader";
         supportApplies = true;

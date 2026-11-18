@@ -6584,8 +6584,8 @@ This model has a 5+ invulnerable save against melee attacks.</characteristic>
           <profiles>
             <profile name="Octagram of Conjuration" id="ac39-bf34-68da-3de5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a friendly model shoots (the triggering model must have WAR DOG), you may use this ability, while the triggering unit is within 9" of this model:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test.
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a friendly model shoots (the triggering model must have WAR DOG), you may use this ability, while the triggering model is within 9" of this model:
+  -&gt; Select one enemy unit that was hit by an attack made by the triggering model during its just-finished shooting sequence: that unit must take a Battle-shock test.
 Applies to: units with KNIGHT ABOMINANT.</characteristic>
               </characteristics>
             </profile>

@@ -3,7 +3,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { DEFAULT_DUMP_PATH, MfmDump } from "../src/mfm/loader.js";
 import { CORE_DIR } from "../src/mfm/repo-files.js";
-import { runAttachmentRoles } from "../src/mfm/attachment.js";
+import { mergeConditionalGroups, runAttachmentRoles } from "../src/mfm/attachment.js";
 
 /**
  * Attachment keyword-eligibility derivation. `eligible_bodyguard_keywords` is the
@@ -109,5 +109,74 @@ describe("attachment roster-condition projection", () => {
         },
       ],
     });
+  });
+});
+
+describe("attachment detachment and shared-keyword gates", () => {
+  const dump = (extra: Record<string, unknown> = {}) =>
+    new MfmDump({
+      metadata: { data_version: 995 },
+      data: {
+        faction_keyword: [{ id: "f", localisations: { en: { name: "Adeptus Astartes" } } }],
+        publication: [{ id: "p", factionKeywordId: "f" }],
+        datasheet: [
+          { id: "character", publicationId: "p", isLegends: false, localisations: { en: { name: "Captain" } } },
+          { id: "squad", publicationId: "p", isLegends: false, localisations: { en: { name: "Intercessor Squad" } } },
+          { id: "assault", publicationId: "p", isLegends: false, localisations: { en: { name: "Assault Intercessor Squad" } } },
+        ],
+        detachment: [{ id: "det", localisations: { en: { name: "Pactbound Zealots" } } }],
+        keyword: [
+          { id: "nurgle", localisations: { en: { name: "Nurgle" } } },
+          { id: "khorne", localisations: { en: { name: "Khorne" } } },
+        ],
+        datasheet_bodyguard_group: [
+          { id: "free-squad", datasheetId: "character", bodyguardType: "leader", excludedDetachmentId: "det" },
+          { id: "free-assault", datasheetId: "character", bodyguardType: "leader", excludedDetachmentId: "det" },
+          { id: "nurgle-squad", datasheetId: "character", bodyguardType: "leader", requiredDetachmentId: "det", requiresAllUnitsHaveKeywordId: "nurgle" },
+          { id: "khorne-squad", datasheetId: "character", bodyguardType: "leader", requiredDetachmentId: "det", requiresAllUnitsHaveKeywordId: "khorne" },
+          { id: "nurgle-assault", datasheetId: "character", bodyguardType: "leader", requiredDetachmentId: "det", requiresAllUnitsHaveKeywordId: "nurgle" },
+        ],
+        datasheet_bodyguard_group_datasheet: [
+          { datasheetBodyguardGroupId: "free-squad", datasheetId: "squad" },
+          { datasheetBodyguardGroupId: "free-assault", datasheetId: "assault" },
+          { datasheetBodyguardGroupId: "nurgle-squad", datasheetId: "squad" },
+          { datasheetBodyguardGroupId: "khorne-squad", datasheetId: "squad" },
+          { datasheetBodyguardGroupId: "nurgle-assault", datasheetId: "assault" },
+        ],
+        datasheet_bodyguard_group_keyword: [],
+        datasheet_bodyguard_group_excluded_roster_datasheet: [],
+        datasheet_bodyguard_group_required_roster_datasheet: [],
+        ...extra,
+      } as never,
+    });
+  const captain = (d: MfmDump) =>
+    (runAttachmentRoles(d, "adeptus-astartes").staged.find((file) =>
+      file.path.endsWith("/adeptus-astartes/leader-attachments.json"),
+    )?.value as Array<{ leader_id: string }>).find((record) => record.leader_id === "captain");
+
+  it("keeps each gate as its own conditional group and folds rows sharing one", () => {
+    expect(captain(dump())).toMatchObject({
+      eligible_bodyguard_ids: [],
+      conditional_groups: [
+        { role: "leader", eligible_bodyguard_ids: ["assault-intercessor-squad", "intercessor-squad"], excluded_detachment_id: "pactbound-zealots" },
+        { role: "leader", eligible_bodyguard_ids: ["assault-intercessor-squad", "intercessor-squad"], required_detachment_id: "pactbound-zealots", required_shared_keyword: "Nurgle" },
+        { role: "leader", eligible_bodyguard_ids: ["intercessor-squad"], required_detachment_id: "pactbound-zealots", required_shared_keyword: "Khorne" },
+      ],
+    });
+  });
+
+  it("fails on a gate detachment with no repo record", () => {
+    expect(() => captain(dump({ detachment: [{ id: "det", localisations: { en: { name: "No Such Detachment" } } }] }))).toThrow(
+      /no-such-detachment has no repo record/,
+    );
+  });
+
+  it("does not fold groups whose roles differ", () => {
+    expect(
+      mergeConditionalGroups([
+        { role: "leader", eligible_bodyguard_ids: ["a"], required_detachment_id: "d" },
+        { role: "support", eligible_bodyguard_ids: ["b"], required_detachment_id: "d" },
+      ]),
+    ).toHaveLength(2);
   });
 });

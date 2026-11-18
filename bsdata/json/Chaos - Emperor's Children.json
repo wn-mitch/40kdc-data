@@ -28337,7 +28337,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "After a saving throw made for a friendly model is failed (the triggering model must have EMPEROR'S CHILDREN and VEHICLE), you may use this ability, once per battle round per model, while the triggering unit is within 6\" of this model, each time an attack is allocated to the triggering unit, change the Damage of that attack to 0.\nApplies to: units with EMPEROR’S CHILDREN, INFANTRY.",
+                    "$text": "After a saving throw made for a friendly model is failed (the triggering model must have EMPEROR'S CHILDREN and VEHICLE), you may use this ability, once per battle round per model, while the triggering model is within 6\" of this model, each time an attack is allocated to the triggering model, change the Damage of that attack to 0.\nApplies to: units with EMPEROR’S CHILDREN, INFANTRY.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

@@ -198,7 +198,8 @@
           "Death Guard"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "rejuvenating-swarm-paragons-of-putrescence-death-guard",
@@ -291,7 +292,8 @@
           "Death Guard"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "tendrilous-emissions-mortarions-hammer-death-guard",
@@ -795,7 +797,8 @@
         "namespace": "mfm",
         "id": "57326899-e3a2-4260-b48b-7fdce760ec8c"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "lancet-of-the-worldsore-upgrade-contagion-engines-death-guard",
@@ -834,7 +837,8 @@
           "Death Guard"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "host-of-the-hybridised-pox-paragons-of-putrescence-death-guard",

@@ -67,7 +67,30 @@ interface Composition extends MfmComposition {
 /** The view for `unit` with its faction-scoped `composition` and `options`. */
 export function unitLoadout(unit: Unit, composition: unknown, options: readonly WargearOption[]): UnitLoadout {
   const c = composition as Composition | undefined;
-  return c?.loadout ? mfmView(unit, c) : optionsView(unit, c, options);
+  return cappedView(unit, c?.loadout ? mfmView(unit, c) : optionsView(unit, c, options));
+}
+
+/**
+ * `view` with the unit's `max_model_count` applied: a size above the cap cannot be built, so every
+ * query answers as for a size no composition has.
+ */
+function cappedView(unit: Unit, view: UnitLoadout): UnitLoadout {
+  const cap = unit.max_model_count;
+  if (cap === undefined) return view;
+  const over = (modelCount: number) => modelCount > cap;
+  return {
+    source: view.source,
+    base: (modelCount) => (over(modelCount) ? null : view.base(modelCount)),
+    bounds: (modelCount) => (over(modelCount) ? null : view.bounds(modelCount)),
+    maximal: (modelCount) => (over(modelCount) ? null : view.maximal(modelCount)),
+    check: (modelCount, counts) =>
+      over(modelCount)
+        ? [{ id: unit.id, code: "invalid-model-count", message: `${unit.id}: no squad size has ${modelCount} models` }]
+        : view.check(modelCount, counts),
+    groups: (modelCount, counts) => (over(modelCount) ? null : view.groups(modelCount, counts)),
+    complete: (modelCount, explicit) => (over(modelCount) ? null : view.complete(modelCount, explicit)),
+    candidates: (modelCount, limit) => (over(modelCount) ? [] : view.candidates(modelCount, limit)),
+  };
 }
 
 const byCodeUnit = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);

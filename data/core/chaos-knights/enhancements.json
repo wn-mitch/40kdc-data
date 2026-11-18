@@ -595,7 +595,8 @@
         "namespace": "mfm",
         "id": "881abba9-9fb0-4210-b4a5-bc9d130bdec2"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "snarling-rivalry-upgrade-hunting-warpack-chaos-knights",
@@ -623,7 +624,8 @@
         "namespace": "mfm",
         "id": "d9e7e955-a716-415b-8a50-04ff6e82c8cb"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "cruel-lashmaster-aura-iconoclast-fiefdom-chaos-knights",

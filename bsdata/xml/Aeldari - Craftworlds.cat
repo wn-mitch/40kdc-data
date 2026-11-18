@@ -1928,7 +1928,7 @@ If your army includes an EPIC HERO unit (excluding YNNARI units), your army cann
           </modifiers>
           <constraints>
             <constraint id="3146-be8f-d8c2-65a2" field="selections" includeChildSelections="false" scope="parent" shared="true" type="min" value="5"/>
-            <constraint id="e458-970c-0c59-9637" field="selections" includeChildSelections="false" scope="parent" shared="true" type="max" value="13"/>
+            <constraint id="e458-970c-0c59-9637" field="selections" includeChildSelections="false" scope="parent" shared="true" type="max" value="10"/>
           </constraints>
           <selectionEntries>
             <selectionEntry name="Voidscarred Felarch" id="fa7f-c97d-188d-9d59" hidden="false" import="true" type="model">
@@ -2649,6 +2649,21 @@ If your army includes an EPIC HERO unit (excluding YNNARI units), your army cann
           </selectionEntries>
         </selectionEntryGroup>
       </selectionEntryGroups>
+      <entryLinks>
+        <entryLink name="Enhancements" id="7d35-d42c-bae7-afaa" hidden="false" import="true" targetId="b9ab-94b8-171e-aa63" type="selectionEntryGroup">
+          <modifiers>
+            <modifier field="hidden" type="set" value="true">
+              <conditionGroups>
+                <conditionGroup type="or">
+                  <conditions>
+                    <condition childId="38de-521f-1ce0-44a0" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </modifier>
+          </modifiers>
+        </entryLink>
+      </entryLinks>
       <costs>
         <cost name="pts" typeId="51b2-306e-1021-d207" value="70"/>
       </costs>
@@ -4508,6 +4523,19 @@ If your army includes an EPIC HERO unit (excluding YNNARI units), your army cann
             </modifier>
           </modifiers>
         </entryLink>
+        <entryLink name="Enhancements" id="deb9-06a5-69f7-8358" hidden="false" import="true" targetId="b9ab-94b8-171e-aa63" type="selectionEntryGroup">
+          <modifiers>
+            <modifier field="hidden" type="set" value="true">
+              <conditionGroups>
+                <conditionGroup type="or">
+                  <conditions>
+                    <condition childId="38de-521f-1ce0-44a0" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </modifier>
+          </modifiers>
+        </entryLink>
       </entryLinks>
       <costs>
         <cost name="pts" typeId="51b2-306e-1021-d207" value="95"/>
@@ -5494,6 +5522,21 @@ If your army includes an EPIC HERO unit (excluding YNNARI units), your army cann
           </selectionEntries>
         </selectionEntryGroup>
       </selectionEntryGroups>
+      <entryLinks>
+        <entryLink name="Enhancements" id="5eb8-c012-5e56-0448" hidden="false" import="true" targetId="b9ab-94b8-171e-aa63" type="selectionEntryGroup">
+          <modifiers>
+            <modifier field="hidden" type="set" value="true">
+              <conditionGroups>
+                <conditionGroup type="or">
+                  <conditions>
+                    <condition childId="38de-521f-1ce0-44a0" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </modifier>
+          </modifiers>
+        </entryLink>
+      </entryLinks>
       <costs>
         <cost name="pts" typeId="51b2-306e-1021-d207" value="75"/>
       </costs>
@@ -6793,7 +6836,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         <profile name="Crystalline Targeting" id="7e43-6928-b6d3-3705" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit (your Crystalline Targeting Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit has the AELDARI keyword, improve all friendly units' Armour Penetration characteristic by 1.</characteristic>
+  -&gt; Select one enemy unit (your Crystalline Targeting Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit has the AELDARI keyword, improve the Armour Penetration characteristic of that attack by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="1177-8991-a8c5-49f7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -7095,6 +7138,19 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
               <conditions>
                 <condition childId="75fe-c657-43c6-7c09" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
               </conditions>
+            </modifier>
+          </modifiers>
+        </entryLink>
+        <entryLink name="Enhancements" id="5999-59e9-4427-4c27" hidden="false" import="true" targetId="b9ab-94b8-171e-aa63" type="selectionEntryGroup">
+          <modifiers>
+            <modifier field="hidden" type="set" value="true">
+              <conditionGroups>
+                <conditionGroup type="or">
+                  <conditions>
+                    <condition childId="38de-521f-1ce0-44a0" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
             </modifier>
           </modifiers>
         </entryLink>
@@ -9986,6 +10042,21 @@ While the target is within range of an objective marker, you can re-roll the Hit
           </selectionEntries>
         </selectionEntryGroup>
       </selectionEntryGroups>
+      <entryLinks>
+        <entryLink name="Enhancements" id="9ccc-1dee-9c5f-34bb" hidden="false" import="true" targetId="b9ab-94b8-171e-aa63" type="selectionEntryGroup">
+          <modifiers>
+            <modifier field="hidden" type="set" value="true">
+              <conditionGroups>
+                <conditionGroup type="or">
+                  <conditions>
+                    <condition childId="38de-521f-1ce0-44a0" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </modifier>
+          </modifiers>
+        </entryLink>
+      </entryLinks>
       <costs>
         <cost name="pts" typeId="51b2-306e-1021-d207" value="65"/>
       </costs>
@@ -14937,6 +15008,21 @@ The unit is eligible to declare a charge in a turn in which it Fell Back.</chara
           </selectionEntries>
         </selectionEntryGroup>
       </selectionEntryGroups>
+      <entryLinks>
+        <entryLink name="Enhancements" id="f69a-dbae-abed-8645" hidden="false" import="true" targetId="b9ab-94b8-171e-aa63" type="selectionEntryGroup">
+          <modifiers>
+            <modifier field="hidden" type="set" value="true">
+              <conditionGroups>
+                <conditionGroup type="or">
+                  <conditions>
+                    <condition childId="38de-521f-1ce0-44a0" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </modifier>
+          </modifiers>
+        </entryLink>
+      </entryLinks>
       <costs>
         <cost name="pts" typeId="51b2-306e-1021-d207" value="70"/>
       </costs>
@@ -23559,12 +23645,26 @@ Add 1 to the Attacks characteristic of melee weapons equipped by this model.</ch
             <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
           </costs>
         </selectionEntry>
-        <selectionEntry name="Infamy (Aura)" id="560e-1ef6-89e2-45f2" import="true" type="upgrade" hidden="true">
+        <selectionEntry name="Infamy (Aura)" id="560e-1ef6-89e2-45f2" import="true" type="upgrade" hidden="false">
           <modifiers>
             <modifier field="hidden" type="set" value="true">
               <conditions>
                 <condition childId="7224-4f3e-c557-115d" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
               </conditions>
+            </modifier>
+            <modifier field="hidden" type="set" value="true">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="cbb7-6669-a014-36fe" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="54dc-aa1f-817a-a5c5" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="662e-14c3-c894-e830" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="4273-173c-e850-4071" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="cc68-ad19-7285-7a11" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="a074-87f8-810d-492a" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
             </modifier>
           </modifiers>
           <constraints>
@@ -23582,12 +23682,26 @@ Add 1 to the Attacks characteristic of melee weapons equipped by this model.</ch
             <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
           </costs>
         </selectionEntry>
-        <selectionEntry name="Webway Pathstone" id="64d3-4806-a9ae-eb4e" import="true" type="upgrade" hidden="true">
+        <selectionEntry name="Webway Pathstone" id="64d3-4806-a9ae-eb4e" import="true" type="upgrade" hidden="false">
           <modifiers>
             <modifier field="hidden" type="set" value="true">
               <conditions>
                 <condition childId="7224-4f3e-c557-115d" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
               </conditions>
+            </modifier>
+            <modifier field="hidden" type="set" value="true">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="cbb7-6669-a014-36fe" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="54dc-aa1f-817a-a5c5" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="662e-14c3-c894-e830" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="4273-173c-e850-4071" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="cc68-ad19-7285-7a11" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="a074-87f8-810d-492a" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
             </modifier>
           </modifiers>
           <constraints>
@@ -23606,12 +23720,22 @@ Add 1 to the Attacks characteristic of melee weapons equipped by this model.</ch
             <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
           </costs>
         </selectionEntry>
-        <selectionEntry name="Archraider" id="1df1-bef7-9e05-a21b" import="true" type="upgrade" hidden="true">
+        <selectionEntry name="Archraider" id="1df1-bef7-9e05-a21b" import="true" type="upgrade" hidden="false">
           <modifiers>
             <modifier field="hidden" type="set" value="true">
               <conditions>
                 <condition childId="7224-4f3e-c557-115d" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
               </conditions>
+            </modifier>
+            <modifier field="hidden" type="set" value="true">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="54dc-aa1f-817a-a5c5" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="4273-173c-e850-4071" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
             </modifier>
           </modifiers>
           <constraints>
@@ -23630,12 +23754,25 @@ Add 1 to the Attacks characteristic of melee weapons equipped by this model.</ch
             <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
           </costs>
         </selectionEntry>
-        <selectionEntry name="Voidstone" id="9b12-2696-ec8c-7730" import="true" type="upgrade" hidden="true">
+        <selectionEntry name="Voidstone" id="9b12-2696-ec8c-7730" import="true" type="upgrade" hidden="false">
           <modifiers>
             <modifier field="hidden" type="set" value="true">
               <conditions>
                 <condition childId="7224-4f3e-c557-115d" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
               </conditions>
+            </modifier>
+            <modifier field="hidden" type="set" value="true">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="cbb7-6669-a014-36fe" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="54dc-aa1f-817a-a5c5" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="662e-14c3-c894-e830" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="4273-173c-e850-4071" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="cc68-ad19-7285-7a11" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
             </modifier>
           </modifiers>
           <constraints>
@@ -23653,11 +23790,16 @@ Add 1 to the Attacks characteristic of melee weapons equipped by this model.</ch
             <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
           </costs>
         </selectionEntry>
-        <selectionEntry name="Pirate Prince" id="fb27-1469-5fc4-161d" import="true" type="upgrade" hidden="true">
+        <selectionEntry name="Pirate Prince" id="fb27-1469-5fc4-161d" import="true" type="upgrade" hidden="false">
           <modifiers>
             <modifier field="hidden" type="set" value="true">
               <conditions>
                 <condition childId="d519-c125-30b5-9c55" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+              </conditions>
+            </modifier>
+            <modifier field="hidden" type="set" value="true">
+              <conditions>
+                <condition childId="54dc-aa1f-817a-a5c5" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
               </conditions>
             </modifier>
           </modifiers>
@@ -23677,12 +23819,26 @@ Add 1 to the Attacks characteristic of melee weapons equipped by this model.</ch
             <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
           </costs>
         </selectionEntry>
-        <selectionEntry name="Alacritous Assault" id="90c1-42b5-5052-5bbd" import="true" type="upgrade" hidden="true">
+        <selectionEntry name="Alacritous Assault" id="90c1-42b5-5052-5bbd" import="true" type="upgrade" hidden="false">
           <modifiers>
             <modifier field="hidden" type="set" value="true">
               <conditions>
                 <condition childId="d519-c125-30b5-9c55" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
               </conditions>
+            </modifier>
+            <modifier field="hidden" type="set" value="true">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="cbb7-6669-a014-36fe" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="54dc-aa1f-817a-a5c5" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="662e-14c3-c894-e830" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="4273-173c-e850-4071" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="cc68-ad19-7285-7a11" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="a074-87f8-810d-492a" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
             </modifier>
           </modifiers>
           <constraints>
@@ -23700,12 +23856,26 @@ Add 1 to the Attacks characteristic of melee weapons equipped by this model.</ch
             <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
           </costs>
         </selectionEntry>
-        <selectionEntry name="Exotic Munitions" id="7e77-9e44-2644-3df6" import="true" type="upgrade" hidden="true">
+        <selectionEntry name="Exotic Munitions" id="7e77-9e44-2644-3df6" import="true" type="upgrade" hidden="false">
           <modifiers>
             <modifier field="hidden" type="set" value="true">
               <conditions>
                 <condition childId="d519-c125-30b5-9c55" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
               </conditions>
+            </modifier>
+            <modifier field="hidden" type="set" value="true">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="cbb7-6669-a014-36fe" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="54dc-aa1f-817a-a5c5" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="662e-14c3-c894-e830" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="4273-173c-e850-4071" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="cc68-ad19-7285-7a11" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="a074-87f8-810d-492a" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
             </modifier>
           </modifiers>
           <constraints>
@@ -23723,12 +23893,25 @@ Add 1 to the Attacks characteristic of melee weapons equipped by this model.</ch
             <cost name="Enhancements" typeId="f759-1bc4-cb3a-f0d2" value="1"/>
           </costs>
         </selectionEntry>
-        <selectionEntry name="Adrenal Infusions" id="233a-28cc-1059-ec0d" import="true" type="upgrade" hidden="true">
+        <selectionEntry name="Adrenal Infusions" id="233a-28cc-1059-ec0d" import="true" type="upgrade" hidden="false">
           <modifiers>
             <modifier field="hidden" type="set" value="true">
               <conditions>
                 <condition childId="d519-c125-30b5-9c55" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
               </conditions>
+            </modifier>
+            <modifier field="hidden" type="set" value="true">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="cbb7-6669-a014-36fe" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="54dc-aa1f-817a-a5c5" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="662e-14c3-c894-e830" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="4273-173c-e850-4071" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                    <condition childId="cc68-ad19-7285-7a11" field="selections" scope="ancestor" shared="true" type="notInstanceOf" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
             </modifier>
           </modifiers>
           <constraints>

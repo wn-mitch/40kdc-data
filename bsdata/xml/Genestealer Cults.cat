@@ -1775,7 +1775,7 @@
         <profile name="Heroic Fusillade" id="39a4-097a-2f5e-39d6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a friendly model with the Heroic Fusillade ability shoots, you may use this ability, once per turn per army:
-  -&gt; Select one enemy INFANTRY unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test.</characteristic>
+  -&gt; Select one enemy INFANTRY unit that was hit by an attack made by the triggering model during its just-finished shooting sequence: that unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Hypersensory Abilities" id="e4c0-51e3-cdc7-04e8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3166,7 +3166,7 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
         <profile name="Crossfire" id="dc17-2966-3410-a7d5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Crossfire Target). Until the end of the turn, each time a friendly unit makes an attack against it, improve all friendly GENESTEALER CULTS units' Armour Penetration characteristic by 1.</characteristic>
+  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Crossfire Target). Until the end of the turn, each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly GENESTEALER CULTS unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="0c69-38dd-b88d-8c3a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -8274,7 +8274,7 @@ Improve the Strength characteristic of melee weapons equipped by models in this 
 If your Army Faction is GENESTEALER CULTS:
   -&gt; Friendly units that are in Cult Ambush cannot be targeted with the Rapid Ingress Stratagem.
   -&gt; Friendly units that are in Cult Ambush are not destroyed for still being in Strategic Reserves at the end of the third battle round.
--&gt; Each time an enemy model ends a move (the triggering model must not have AIRCRAFT): if your Army Faction is GENESTEALER CULTS, while the triggering unit is within 8" of a cult ambush marker, remove that cult ambush marker from the battlefield.
+-&gt; Each time an enemy model ends a move (the triggering model must not have AIRCRAFT): if your Army Faction is GENESTEALER CULTS, while the triggering model is within 8" of a cult ambush marker, remove that cult ambush marker from the battlefield.
 -&gt; At the end of your opponent's Movement phase, you may use this ability: if your Army Faction is GENESTEALER CULTS, select any number of friendly units that are in Cult Ambush (at most the number of your cult ambush markers on the battlefield): that unit can make an Ingress move; that unit can be set up on the battlefield using a Cult Ambush marker, wholly within 3" of that marker, even in the first battle round.</description>
     </rule>
   </sharedRules>

@@ -13,6 +13,7 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 from wh40kdc.data.enhancement_eligibility import (
+    equipable_by_non_character,
     meets_enhancement_groups,
     missing_required_abilities,
 )
@@ -145,7 +146,8 @@ def shared_keywords_lower(units: list[UnitView]) -> list[str]:
 
 def can_take_enhancement(ds: Dataset, enhancement: dict[str, Any], bearer: UnitView) -> bool:
     """Whether ``bearer`` can take ``enhancement`` under the Select Enhancements rules the roster
-    validator enforces: a CHARACTER (or an Upgrade), not an EPIC HERO, with a model that may take
+    validator enforces: a CHARACTER (or an enhancement a non-CHARACTER may take), not an EPIC
+    HERO unless the enhancement allows one, with a model that may take
     Enhancements, carrying every keyword of one restriction group, every core ability it requires
     and none of the exclusions."""
     keywords = set(combined_keywords_lower([bearer]))
@@ -153,9 +155,11 @@ def can_take_enhancement(ds: Dataset, enhancement: dict[str, Any], bearer: UnitV
     def has(keyword: str) -> bool:
         return keyword.lower() in keywords
 
-    if not has("character") and enhancement.get("upgrade_tag") is not True:
+    if not has("character") and not equipable_by_non_character(enhancement):
         return False
-    if bearer.raw.get("role") == "epic-hero" or has("epic hero"):
+    if (bearer.raw.get("role") == "epic-hero" or has("epic hero")) and enhancement.get(
+        "equipable_by_epic_hero"
+    ) is not True:
         return False
     composition = ds.unit_composition_of(bearer.raw)
     rows = (composition or {}).get("models") or []
