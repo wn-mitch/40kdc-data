@@ -1,17 +1,21 @@
 /**
  * An ability that picks one of several named options lists each option as an Abilities profile
  * of its own after the ability, as BSData does: a choice named by `option_names`, or a stance
- * select whose options carry names.
+ * select whose options carry names. An ability a unit links to a wargear item prints on the
+ * item's entry, as BSData's do.
  */
 import { beforeAll, describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/dataset.js";
-import { buildExport } from "../src/bsdata-export/export.js";
+import { RAW_DATA } from "../src/data/bundle.generated.js";
+import { buildExport, type ExportedDocument } from "../src/bsdata-export/export.js";
 import { namedOptions } from "../src/bsdata-export/ability-options.js";
-import { children, walk, type BsNode } from "../src/bsdata-export/source.js";
+import { children, str, walk, type BsNode } from "../src/bsdata-export/source.js";
+import { factionCatalogue } from "./bsdata-export-fixture.js";
 
 const dataset = Dataset.embedded();
 /** Exported unit/model entry name → its Abilities profiles, in order. */
 let abilityProfiles: Map<string, BsNode[]>;
+let documents: ExportedDocument[];
 
 function description(profile: BsNode): string {
   return String(children(profile, "characteristics").find((c) => c.name === "Description")?.$text ?? "");
@@ -19,7 +23,8 @@ function description(profile: BsNode): string {
 
 beforeAll(() => {
   abilityProfiles = new Map();
-  for (const doc of buildExport({ version: "1.5.1", dataset })) {
+  documents = buildExport({ version: "1.5.1", dataset });
+  for (const doc of documents) {
     const kind = Object.keys(doc.document)[0];
     for (const { node, kind: nodeKind } of walk(Object.values(doc.document)[0] as BsNode, kind)) {
       if (nodeKind !== "selectionEntry" || (node.type !== "unit" && node.type !== "model")) continue;
@@ -57,7 +62,7 @@ describe("exported named options", () => {
   });
 
   it("lists each named stance option after its ability", () => {
-    const after = profilesAfter("Be’lakor", "Shadow Form Abilities").map((p) => p.name);
+    const after = profilesAfter("Be'lakor", "Shadow Form Abilities").map((p) => p.name);
     expect(after).toEqual(expect.arrayContaining(["Wreathed in Shadows", "Pall of Despair", "Shadow Lord"]));
   });
 
@@ -95,4 +100,71 @@ describe("namedOptions", () => {
     expect(namedOptions({ ...base, effect: { type: "sequence", steps: [stance("x"), stance("y")] } })).toEqual([]);
     expect(namedOptions({ ...base, effect: { type: "sequence", steps: [stance("x"), choice] }, option_names: ["One", "Two"] })).toEqual([]);
   });
+});
+
+/** The unit entry `unitId` defines in `factionId`'s catalogue, and the upgrade entries its links reach. */
+function exportedUnit(docs: readonly ExportedDocument[], ds: Dataset, factionId: string, unitId: string): { unit: BsNode; items: BsNode[] } {
+  const catalogue = factionCatalogue(docs, factionId)!;
+  const shared = children(catalogue, "sharedSelectionEntries");
+  const view = ds.units.getInFaction(unitId, factionId)!;
+  const unit = shared.find((e) => (e.type === "unit" || e.type === "model") && String(e.name).replace(/['’]/g, "") === view.name.replace(/['’]/g, ""))!;
+  expect(unit, unitId).toBeDefined();
+  const byId = new Map(shared.map((e) => [str(e, "id")!, e]));
+  const items: BsNode[] = [];
+  const visit = (node: unknown): void => {
+    if (Array.isArray(node)) return node.forEach(visit);
+    if (!node || typeof node !== "object") return;
+    const record = node as BsNode;
+    const target = typeof record.targetId === "string" ? byId.get(record.targetId) : undefined;
+    if (target?.type === "upgrade" && !items.includes(target)) items.push(target);
+    Object.values(record).forEach(visit);
+  };
+  visit([unit.entryLinks, unit.selectionEntries, unit.selectionEntryGroups]);
+  return { unit, items };
+}
+
+const abilityNames = (node: BsNode): string[] => children(node, "profiles").filter((p) => p.typeName === "Abilities").map((p) => String(p.name));
+
+describe("exported wargear abilities", () => {
+  it("prints a wargear item's ability on the item entry the unit links, not on the unit", () => {
+    const { unit, items } = exportedUnit(documents, dataset, "adepta-sororitas", "battle-sisters-squad");
+    const simulacrum = dataset.abilities.get("simulacrum-imperialis-adepta-sororitas")!.name;
+    expect(abilityNames(unit)).not.toContain(simulacrum);
+    const carriers = items.filter((item) => abilityNames(item).includes(simulacrum));
+    // The item takes the printed capitalisation of its ability, as BSData names it.
+    expect(carriers.map((item) => item.name)).toEqual(["Simulacrum Imperialis"]);
+    // The unit's own abilities stay on the unit.
+    expect(abilityNames(unit)).toContain(dataset.abilities.get("defenders-of-the-faith-adepta-sororitas")!.name);
+  });
+
+  it("gives an item that prints different abilities on different units an entry per set of abilities", () => {
+    const shieldOf = (unitId: string): BsNode => {
+      const shields = exportedUnit(documents, dataset, "adeptus-astartes", unitId).items.filter((item) => /^storm shield$/i.test(String(item.name)));
+      expect(shields, unitId).toHaveLength(1);
+      return shields[0];
+    };
+    const lieutenant = shieldOf("lieutenant");
+    const veterans = shieldOf("deathwatch-veterans");
+    expect(str(lieutenant, "id")).not.toBe(str(veterans, "id"));
+    expect(abilityNames(lieutenant)).toEqual([dataset.abilities.get("storm-shield-adeptus-astartes")!.name]);
+    expect(abilityNames(veterans)).toEqual([dataset.abilities.get("storm-shield-deathwatch")!.name]);
+    // Both keep the weapon-free item's name, as BSData's several Storm Shields do.
+    expect(lieutenant.name).toBe(veterans.name);
+  });
+
+  it("keeps a wargear ability on the unit when no selection offers its item", () => {
+    // Battle Sisters can't take a storm shield; the ability it would print has no entry to go on.
+    const shield = "storm-shield-adeptus-astartes";
+    const ds = new Dataset({
+      ...RAW_DATA,
+      units: RAW_DATA.units.map((u) =>
+        u.id === "battle-sisters-squad" && u.faction_id === "adepta-sororitas" ? { ...u, ability_ids: [...(u.ability_ids ?? []), { id: shield, wargear: "storm-shield" }] } : u),
+    } as typeof RAW_DATA);
+    const { unit, items } = exportedUnit(buildExport({ version: "1.5.1", dataset: ds }), ds, "adepta-sororitas", "battle-sisters-squad");
+    const name = ds.abilities.get(shield)!.name;
+    expect(abilityNames(unit)).toContain(name);
+    expect(items.some((item) => abilityNames(item).includes(name))).toBe(false);
+    // The squad's offered Simulacrum still prints its ability on its item.
+    expect(abilityNames(unit)).not.toContain(ds.abilities.get("simulacrum-imperialis-adepta-sororitas")!.name);
+  }, 120_000);
 });

@@ -11,6 +11,7 @@ import { buildExport } from "../src/bsdata-export/export.js";
 import { BSDATA_IDS } from "../src/bsdata-export/ids.js";
 import { libraryNameFor } from "../src/bsdata-export/libraries.js";
 import { children, str, type BsNode } from "../src/bsdata-export/source.js";
+import { bsName } from "../src/bsdata-export/export.js";
 
 export const dataset = Dataset.embedded();
 export const FACTIONS = Object.keys(BSDATA_IDS.catalogues);
@@ -62,7 +63,7 @@ export function loadExportFixture(): ExportFixture {
     catalogues.set(factionId, catalogue);
     for (const node of children(catalogue, "sharedSelectionEntries")) {
       if (node.type !== "unit" && node.type !== "model") continue;
-      const view = dataset.units.byFaction(factionId).find((u) => (u.raw.is_legend ? `${u.name} [Legends]` : u.name) === node.name);
+      const view = dataset.units.byFaction(factionId).find((u) => bsName(u.raw.is_legend ? `${u.name} [Legends]` : u.name) === node.name);
       if (view) entries.set(str(node, "id")!, { factionId, unitId: view.id, node });
     }
   }
@@ -91,7 +92,7 @@ export function detachmentOptions(catalogue: BsNode): BsNode[] {
 }
 
 export function detachmentOption(fx: ExportFixture, detachment: Detachment): BsNode {
-  return detachmentOptions(fx.catalogues.get(rootFaction(detachment.faction_id))!).find((e) => e.name === detachment.name)!;
+  return detachmentOptions(fx.catalogues.get(rootFaction(detachment.faction_id))!).find((e) => e.name === bsName(detachment.name))!;
 }
 
 /** Unit links an army built from `host` offers: its own root list and, for a child faction, its parent's. */

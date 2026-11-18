@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Agents of the Imperium" id="b00-cd86-4b4c-97ba" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+  <entryLinks>
+    <entryLink name="Sanctifiers" id="c13d-c2ec-2c1f-7e0c" hidden="false" import="true" targetId="4e74-3710-7a66-9d6c" type="selectionEntry"/>
+    <entryLink name="Watch Captain Artemis" id="8cd4-0d51-c141-6ca3" hidden="false" import="true" targetId="f158-1e0b-585b-bf40" type="selectionEntry"/>
+    <entryLink name="Inquisitorial Chimera" id="f348-5f29-437d-f36c" hidden="false" import="true" targetId="ede2-ae50-5f5b-cced" type="selectionEntry"/>
+    <entryLink name="Callidus Assassin" id="c19d-becd-b64a-e140" hidden="false" import="true" targetId="1cfe-be05-5603-133" type="selectionEntry"/>
+    <entryLink name="Inquisitor Greyfax" id="c91b-aa7e-9b43-f3e9" hidden="false" import="true" targetId="6e0e-b9a2-f53d-ad0e" type="selectionEntry"/>
+    <entryLink name="Sisters of Battle Immolator" id="90a7-7337-35fe-f955" hidden="false" import="true" targetId="a5c9-2cb7-d874-8169" type="selectionEntry"/>
+    <entryLink name="Inquisitorial Agents" id="8911-38d9-e9cf-6f2d" hidden="false" import="true" targetId="4469-7239-717e-9abd" type="selectionEntry"/>
+    <entryLink name="Inquisitor" id="f71a-8eab-836b-e4b2" hidden="false" import="true" targetId="3e57-b15c-5580-1de1" type="selectionEntry"/>
+    <entryLink name="Grey Knights Terminator Squad" id="5780-7c61-d0f6-4e28" hidden="false" import="true" targetId="15c0-9294-7eb8-f3a7" type="selectionEntry"/>
+    <entryLink name="Voidsmen-at-Arms" id="8c01-ca18-46a9-db3b" hidden="false" import="true" targetId="3953-4e12-fe7b-97e9" type="selectionEntry"/>
+    <entryLink name="Deathwatch Kill Team" id="bf04-1c24-cc24-3665" hidden="false" import="true" targetId="0744-61ce-619d-ffe1" type="selectionEntry"/>
+    <entryLink name="Eversor Assassin" id="08cd-37ed-3f77-52ce" hidden="false" import="true" targetId="f201-1f4a-b907-d9d1" type="selectionEntry"/>
+    <entryLink name="Imperial Rhino" id="45cd-6abe-a1d3-728d" hidden="false" import="true" targetId="cbbd-8e0a-fd90-fa0d" type="selectionEntry"/>
+    <entryLink name="Aquila Kill Team" id="8669-e831-bfb1-127b" hidden="false" import="true" targetId="b040-ce24-7e1a-c903" type="selectionEntry"/>
+    <entryLink name="Vindicare Assassin" id="7f41-2aa5-6c90-2ac7" hidden="false" import="true" targetId="efa3-2cf5-dcfb-b976" type="selectionEntry"/>
+    <entryLink name="Exaction Squad" id="950c-b112-54f5-c52b" hidden="false" import="true" targetId="ec63-524d-55a-3065" type="selectionEntry"/>
+    <entryLink name="Imperial Navy Breachers" id="af91-8454-1742-0e1e" hidden="false" import="true" targetId="24d5-9987-4d2-b42b" type="selectionEntry"/>
+    <entryLink name="Culexus Assassin" id="6239-4c9d-819c-2abd" hidden="false" import="true" targetId="5e5e-d6b2-6a1c-aa69" type="selectionEntry"/>
+    <entryLink name="Vigilant Squad" id="8c0a-8a10-e2f4-6d78" hidden="false" import="true" targetId="d44c-5cde-cb79-3ec3" type="selectionEntry"/>
+    <entryLink name="Subductor Squad" id="e827-210c-7cea-bd82" hidden="false" import="true" targetId="6db9-cede-3810-f1f0" type="selectionEntry"/>
+    <entryLink name="Navigator" id="d210-3080-ae8a-3d91" hidden="false" import="true" targetId="55cf-8d86-affd-bc9b" type="selectionEntry"/>
+    <entryLink name="Inquisitor Draxus" id="1d6a-8a9c-bfd8-2044" hidden="false" import="true" targetId="f3a6-de9-584e-c394" type="selectionEntry"/>
+    <entryLink name="Watch Master" id="ff02-dfe8-de0e-1faf" hidden="false" import="true" targetId="cfa5-df26-a886-9975" type="selectionEntry"/>
+    <entryLink name="Inquisitor Coteaz" id="d9d7-691b-3bd5-b770" hidden="false" import="true" targetId="264a-fc24-3a98-31dc" type="selectionEntry"/>
+    <entryLink name="Sisters of Battle Squad" id="70f4-b355-01aa-091a" hidden="false" import="true" targetId="73fc-a193-7da1-d9c4" type="selectionEntry"/>
+    <entryLink name="Corvus Blackstar" id="8b97-a29e-04eb-b88a" hidden="false" import="true" targetId="8b98-0ac7-a0ba-dedf" type="selectionEntry"/>
+    <entryLink name="Ministorum Priest" id="e1b6-1064-c1c0-d505" hidden="false" import="true" targetId="7554-37de-cd68-68a7" type="selectionEntry"/>
+    <entryLink name="Rogue Trader Entourage" id="d63d-1f42-7bed-7630" hidden="false" import="true" targetId="9360-d8b2-cd92-9e7f" type="selectionEntry"/>
+    <entryLink name="Inquisitor Kroyle" id="0bbb-9d5e-db5c-d067" hidden="false" import="true" targetId="2a3f-b53b-6ea4-6da9" type="selectionEntry"/>
+    <entryLink name="Reaver Titan" id="6ca5-0ada-33b0-72f2" hidden="false" import="true" targetId="b7e8-f3ae-be53-9ba5" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Adeptus Titanicus" id="447c-8877-8492-f8cb" hidden="false" primary="false" targetId="8f13-8307-aa5c-9cbe"/>
+        <categoryLink name="Allies: Adeptus Titanicus: Reaver Titan" id="65c0-07c8-8847-22b7" hidden="false" primary="false" targetId="8ecd-d8b8-c198-38c1"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Warbringer Nemesis Titan" id="4191-41b5-9df6-7d41" hidden="false" import="true" targetId="8e6f-4e09-12d5-fafd" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Adeptus Titanicus" id="43d3-3858-e890-5729" hidden="false" primary="false" targetId="8f13-8307-aa5c-9cbe"/>
+        <categoryLink name="Allies: Adeptus Titanicus: Warbringer Nemesis Titan" id="fc56-249c-abf9-0fc4" hidden="false" primary="false" targetId="076b-18e8-9a1b-070a"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Warhound Titan" id="aab5-0358-043a-ec6d" hidden="false" import="true" targetId="8eb5-a990-6eb0-9b41" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Adeptus Titanicus" id="51a2-b1f1-adb9-8a47" hidden="false" primary="false" targetId="8f13-8307-aa5c-9cbe"/>
+        <categoryLink name="Allies: Adeptus Titanicus: Warhound Titan" id="c7b3-cf17-a2c2-be04" hidden="false" primary="false" targetId="a4d1-59b4-c8d5-a775"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Warlord Titan" id="ac52-4824-28dc-8f1b" hidden="false" import="true" targetId="eafa-cd47-1c2f-61ee" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Adeptus Titanicus" id="d2ab-a799-8fab-524d" hidden="false" primary="false" targetId="8f13-8307-aa5c-9cbe"/>
+        <categoryLink name="Allies: Adeptus Titanicus: Warlord Titan" id="986c-d73c-1dbb-0398" hidden="false" primary="false" targetId="4e66-e142-2675-10a9"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Acastus Knight Asterius" id="5c9c-5a0a-a8db-778a" hidden="false" import="true" targetId="f8d0-fdf2-2e5e-3b74" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="9e40-dca4-7930-eaed" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="016e-fffd-6c1a-0bbc" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Acastus Knight Porphyrion" id="b100-1389-43f6-8a6b" hidden="false" import="true" targetId="61c9-8baf-22b4-5d84" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="712f-c732-6aac-c64a" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="9677-6d10-4c77-c788" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Armiger Helverin" id="d442-0355-fa55-abd5" hidden="false" import="true" targetId="7314-3c4a-36ab-a594" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="379f-61a4-c012-2889" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Armiger" id="7121-6135-002a-4a64" hidden="false" primary="false" targetId="f9e1-3383-5d2b-5767"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Armiger Moirax" id="0018-3d24-8a84-3dc3" hidden="false" import="true" targetId="e3dd-7e90-140a-b3ab" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="bd50-4523-bb61-db9e" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Armiger" id="7823-fb7a-4a01-86b3" hidden="false" primary="false" targetId="f9e1-3383-5d2b-5767"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Armiger Warglaive" id="3c68-28ef-bfed-a779" hidden="false" import="true" targetId="5bbd-c5d3-58d7-e391" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="70f4-6578-a792-68a0" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Armiger" id="6eae-dd6d-7a7d-7d9a" hidden="false" primary="false" targetId="f9e1-3383-5d2b-5767"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Canis Rex" id="b1f0-a436-6e79-3971" hidden="false" import="true" targetId="55fb-9c91-1a4f-3037" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="abbc-1af1-d72b-0c11" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="b83f-4189-c1df-64d3" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Cerastus Knight Acheron" id="56c8-5df8-dd6d-effc" hidden="false" import="true" targetId="11d3-167b-6dff-a4c2" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="7792-c622-e741-c4a1" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="14b2-40ee-40fe-c999" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Cerastus Knight Atrapos" id="3759-442d-d704-0c7d" hidden="false" import="true" targetId="37a7-d156-1e4c-8fe1" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="cc8a-e900-b63d-7ce1" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="bf7d-0120-40f2-a01b" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Cerastus Knight Castigator" id="8e5b-33b5-eccd-e75e" hidden="false" import="true" targetId="1654-5c17-474e-2d84" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="09d1-84c2-0a37-0a7b" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="5194-7368-895b-852a" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Cerastus Knight Lancer" id="9d01-32e0-afb5-79a3" hidden="false" import="true" targetId="9ee-e289-bc6c-d943" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="a36b-ca0b-5b99-7136" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="a405-7883-946e-2c17" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Castellan" id="4a0f-4d16-224c-288f" hidden="false" import="true" targetId="6e36-f85-1c3b-8bf3" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="64ff-2050-d5c9-925b" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="8f49-2ba8-c594-9956" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Crusader" id="1f85-3fb7-4f5d-84d3" hidden="false" import="true" targetId="1e27-a6de-3840-a050" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="6bc0-95ec-f268-c960" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="c09d-ca9d-4c10-21cf" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Defender" id="2c0b-2e2e-13d8-2695" hidden="false" import="true" targetId="f12b-ca2a-9c87-79bb" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="c622-463d-3ec1-a426" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="3005-85f4-ebf5-009b" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Destrier" id="2f72-add5-fd57-83df" hidden="false" import="true" targetId="10d8-d702-f556-5d3c" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="20fb-1717-797a-ec1d" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="68ce-99cf-5f7e-ebb7" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Errant" id="8140-6877-999c-d12b" hidden="false" import="true" targetId="9efd-ec72-353f-4b23" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="233c-be81-59ec-0464" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="1d75-771f-b900-1ab4" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Gallant" id="b39a-7981-9937-cf5f" hidden="false" import="true" targetId="eb4-4a67-11e9-3cb8" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="6a87-01c8-d5eb-6dea" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="4587-d9ef-1c5d-7f1f" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Paladin" id="24ed-0ae0-f011-3d4d" hidden="false" import="true" targetId="8441-8356-5e7c-69ee" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="4b05-daf3-7440-9405" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="c4e6-8307-53e0-589b" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Preceptor" id="f113-c1b9-df5f-f8b4" hidden="false" import="true" targetId="ebd9-7175-3f0c-72a9" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="cdc0-f1e6-8300-38cf" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="4c4c-ce4b-cfc0-7fcf" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Valiant" id="02c8-dc96-4ba8-9e6d" hidden="false" import="true" targetId="8fb9-50b2-adc6-161a" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="0d6a-ee5f-3be9-1868" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="8366-f35b-11d6-8151" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Warden" id="df2e-f49f-59ff-7ec7" hidden="false" import="true" targetId="c609-c87e-f9dd-5006" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="cccf-4259-bf2e-5afb" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="41e0-dd94-bc08-4482" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Questoris Knight Magaera" id="b157-4597-81ff-164b" hidden="false" import="true" targetId="adfa-19fc-7337-7350" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="a301-44a5-56f1-08a3" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="9c68-c225-f46c-e9e5" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Questoris Knight Styrix" id="e7a4-a7f1-a447-92da" hidden="false" import="true" targetId="f8f3-a438-1212-93e8" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Questoris Allies" id="2751-0ad4-988a-1e17" hidden="false" primary="false" targetId="42fb-c475-8806-0bef"/>
+        <categoryLink name="Allies: Questoris Allies: Titanic" id="f883-40f7-f91a-65aa" hidden="false" primary="false" targetId="6ac3-8c9e-a305-fe99"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Detachment" id="1497-e420-9e29-a69b" hidden="false" import="true" targetId="1162-9cd5-d6b0-1663" type="selectionEntry"/>
+  </entryLinks>
+  <infoLinks>
+    <infoLink name="Assigned Agents" id="3336-7ae7-2a1b-4df5" hidden="false" targetId="c2e2-7f4e-5a59-5be3" type="rule"/>
+  </infoLinks>
+  <catalogueLinks>
+    <catalogueLink name="Imperium - Agents of the Imperium Library" id="019d-8ae5-150e-cf1b" importRootEntries="false" targetId="f3d4-14d4-99b2-bd9e" type="catalogue"/>
+    <catalogueLink name="Library - Titans" id="0173-cbb4-060d-c9f1" importRootEntries="false" targetId="7481-280e-b55e-7867" type="catalogue"/>
+    <catalogueLink name="Imperium - Imperial Knights - Library" id="714e-9564-ad01-2af7" importRootEntries="false" targetId="1b6d-dc06-5db9-c7d1" type="catalogue"/>
+    <catalogueLink name="Unaligned Forces" id="03d8-c8f4-028c-333f" importRootEntries="false" targetId="581a-46b9-5b86-44b7" type="catalogue"/>
+  </catalogueLinks>
+</catalogue>

@@ -10,6 +10,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { validateRosterCore, type RosterViolationCode } from "../src/data/roster-resolve.js";
 import { evaluateField } from "../src/bsdata-export/evaluate.js";
 import { children, str, type BsNode } from "../src/bsdata-export/source.js";
+import { bsName } from "../src/bsdata-export/export.js";
 import { dataset, detachmentOptions, FACTIONS, loadExportFixture, rootFaction, type ExportFixture } from "./bsdata-export-fixture.js";
 
 let fx: ExportFixture;
@@ -70,7 +71,7 @@ describe("BSData export detachments", () => {
     let checked = 0;
     for (const factionId of FACTIONS) {
       const root = rootFaction(factionId);
-      const offered = new Set(dataset.detachments.byFaction(factionId).map((d) => d.name));
+      const offered = new Set(dataset.detachments.byFaction(factionId).map((d) => bsName(d.name)));
       for (const option of detachmentOptions(fx.catalogues.get(root)!)) {
         expect({ factionId, detachment: option.name, shown: !hiddenIn(option, factionId) }).toEqual({
           factionId,
@@ -114,8 +115,8 @@ describe("BSData export enhancements", () => {
         // The enhancement's detachment is the one whose selection it waits for; its name picks it there.
         const detachmentOptionId = str(conditions.find((c) => c.scope === "force" && c.type === "lessThan")!, "childId");
         const option = detachmentOptions(fx.catalogues.get(root)!).find((o) => str(o, "id") === detachmentOptionId)!;
-        const detachment = dataset.detachments.all.find((d) => rootFaction(d.faction_id) === root && d.name === option.name)!;
-        const enhancement = (detachment.enhancement_ids ?? []).map((id) => dataset.enhancements.getAny(id)!).find((e) => e.name === node.name)!;
+        const detachment = dataset.detachments.all.find((d) => rootFaction(d.faction_id) === root && bsName(d.name) === option.name)!;
+        const enhancement = (detachment.enhancement_ids ?? []).map((id) => dataset.enhancements.getAny(id)!).find((e) => bsName(e.name) === node.name)!;
         // Hidden under a unit when every listed eligible unit is someone else (BSData's `ancestor` conditions).
         const listed = conditions.filter((c) => c.scope === "ancestor" && c.type === "notInstanceOf").map((c) => str(c, "childId"));
         const shown = node.hidden !== true && listed.includes(entryId);
@@ -170,8 +171,8 @@ describe("BSData export model statlines", () => {
         const statlines = children(model, "profiles").filter((p) => p.typeName === "Unit");
         const name = String(model.name).replace(/ \(no wargear\)$/, "");
         // A row resolves when a profile is named for it, its composition row names one, or the unit has only one.
-        const row = dataset.unitCompositionOf(unit)?.models?.find((m) => m.name === name);
-        const resolves = unit.profiles.length === 1 || unit.profiles.some((p) => p.name === name || (row?.profile_name != null && p.name === row.profile_name));
+        const row = dataset.unitCompositionOf(unit)?.models?.find((m) => bsName(m.name) === name);
+        const resolves = unit.profiles.length === 1 || unit.profiles.some((p) => bsName(p.name ?? "") === name || (row?.profile_name != null && p.name === row.profile_name));
         expect(statlines.map((p) => p.name), `${unitId} ${String(model.name)}`).toEqual(resolves ? [name] : []);
         checked += 1;
       }

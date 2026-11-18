@@ -25,7 +25,7 @@ ARTIFACTS := "tools/src/generated.ts \
 crates/wh40kdc/schemas/bundled.schema.json crates/wh40kdc/schemas/validation.schema.json crates/wh40kdc/src/generated.rs crates/wh40kdc/src/data/bundle.generated.json \
 python/src/wh40kdc/_bundle.json python/src/wh40kdc/_spec.py python/src/wh40kdc/_types.py python/src/wh40kdc/schemas \
 go/bundle.json go/share_registry.json go/schemas go/spec.go data/_audit/external-refs.json \
-conformance"
+conformance bsdata"
 
 # List recipes.
 default:
@@ -51,6 +51,7 @@ regen:
     bash go/codegen/sync.sh
     cd tools && npm run codegen:data && npx tsc && npx tsc -p tsconfig.test.json && npm run gen:conformance
     cd tools && npm run audit:external-refs
+    cd tools && npm run export:bsdata:repo
 
 # Apply Rust + Go formatting (CI checks these; applying keeps a re-run clean).
 fmt:
@@ -64,7 +65,7 @@ verify-clean:
     @if jj root >/dev/null 2>&1; then \
         drift=$(jj diff --name-only -r @ -- {{ARTIFACTS}}); \
       elif git rev-parse --is-inside-work-tree >/dev/null 2>&1; then \
-        drift=$(git diff --name-only -- {{ARTIFACTS}}); \
+        drift=$(git status --porcelain -- {{ARTIFACTS}}); \
       else \
         echo "✗ neither a git worktree nor a jj workspace; cannot verify generated drift." >&2; \
         exit 1; \

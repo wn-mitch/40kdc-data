@@ -1,0 +1,1633 @@
+{
+  "catalogue": {
+    "name": "Imperium - Adeptus Mechanicus",
+    "id": "77b9-2f66-3f9b-5cf3",
+    "battleScribeVersion": 2.03,
+    "gameSystemId": "sys-352e-adc2-7639-d610",
+    "gameSystemRevision": 10502,
+    "library": false,
+    "revision": 10502,
+    "type": "catalogue",
+    "xmlns": "http://www.battlescribe.net/schema/catalogueSchema",
+    "catalogueLinks": [
+      {
+        "name": "Imperium - Adeptus Mechanicus Library",
+        "id": "e2a7-ed8f-abcd-f13b",
+        "importRootEntries": false,
+        "targetId": "cc02-17c0-408c-a028",
+        "type": "catalogue"
+      },
+      {
+        "name": "Library - Titans",
+        "id": "da37-e4d5-f0f9-d861",
+        "importRootEntries": false,
+        "targetId": "7481-280e-b55e-7867",
+        "type": "catalogue"
+      },
+      {
+        "name": "Imperium - Agents of the Imperium Library",
+        "id": "3347-0284-a14b-2318",
+        "importRootEntries": false,
+        "targetId": "f3d4-14d4-99b2-bd9e",
+        "type": "catalogue"
+      },
+      {
+        "name": "Imperium - Imperial Knights - Library",
+        "id": "bb49-5a4b-de33-0717",
+        "importRootEntries": false,
+        "targetId": "1b6d-dc06-5db9-c7d1",
+        "type": "catalogue"
+      }
+    ],
+    "entryLinks": [
+      {
+        "name": "Archaeopter Stratoraptor",
+        "id": "53ab-2409-8a41-b7dd",
+        "hidden": false,
+        "import": true,
+        "targetId": "d54e-1007-26b5-6a79",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Onager Dunecrawler",
+        "id": "9502-839a-0347-b2d6",
+        "hidden": false,
+        "import": true,
+        "targetId": "ea05-4db7-9ee6-7a87",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Kataphron Destroyers",
+        "id": "6911-2da3-9047-6720",
+        "hidden": false,
+        "import": true,
+        "targetId": "7bee-a476-2167-76e7",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Cybernetica Datasmith",
+        "id": "6d36-7ef3-5e68-1e78",
+        "hidden": false,
+        "import": true,
+        "targetId": "d59d-ef1-9ef8-4f44",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Ironstrider Ballistarii",
+        "id": "414d-8f09-ede8-01cf",
+        "hidden": false,
+        "import": true,
+        "targetId": "7efb-de37-79c4-cccb",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Tech-Priest Manipulus",
+        "id": "7a89-b3bb-95c9-64a7",
+        "hidden": false,
+        "import": true,
+        "targetId": "2d9b-610a-dc4d-15ae",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Sydonian Dragoons with Radium Jezzails",
+        "id": "0dc0-3ecc-f594-7ebd",
+        "hidden": false,
+        "import": true,
+        "targetId": "d99a-6563-8c08-23c",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Belisarius Cawl",
+        "id": "bef4-db77-3c79-e14f",
+        "hidden": false,
+        "import": true,
+        "targetId": "1f1e-2989-4762-cf88",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Servitor Battleclade",
+        "id": "4462-5f6f-5299-2233",
+        "hidden": false,
+        "import": true,
+        "targetId": "a523-606f-b05c-851e",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Fulgurite Electro-Priests",
+        "id": "4956-e2af-4b7d-18c4",
+        "hidden": false,
+        "import": true,
+        "targetId": "841-f339-8086-efe2",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Skorpius Disintegrator",
+        "id": "b5a8-2988-1bac-9b0d",
+        "hidden": false,
+        "import": true,
+        "targetId": "3fcc-b6a1-399b-1a29",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Sydonian Skatros",
+        "id": "c760-408b-bc4d-07d0",
+        "hidden": false,
+        "import": true,
+        "targetId": "52e7-9347-3f16-9eec",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Sicarian Infiltrators",
+        "id": "fa2a-fe3a-2316-7434",
+        "hidden": false,
+        "import": true,
+        "targetId": "9b4-26b2-9e6d-a62d",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Archaeopter Transvector",
+        "id": "aec9-d41c-59e4-e5f2",
+        "hidden": false,
+        "import": true,
+        "targetId": "295-769-8893-2bb0",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Skitarii Vanguard",
+        "id": "4795-f768-b1a2-e84b",
+        "hidden": false,
+        "import": true,
+        "targetId": "ba33-c21-bddc-ab0",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Tech-Priest Dominus",
+        "id": "eea5-cc2d-c1d1-ebd2",
+        "hidden": false,
+        "import": true,
+        "targetId": "6424-ed86-9e15-3e14",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Pteraxii Skystalkers",
+        "id": "d84c-29c2-b55d-25dc",
+        "hidden": false,
+        "import": true,
+        "targetId": "b31e-5003-5b63-a305",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Kataphron Breachers",
+        "id": "b9ee-eb79-c94a-8469",
+        "hidden": false,
+        "import": true,
+        "targetId": "a46f-848-b87d-4484",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Sicarian Ruststalkers",
+        "id": "a49a-334b-3787-15f9",
+        "hidden": false,
+        "import": true,
+        "targetId": "8863-9784-8377-aa7a",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Technoarcheologist",
+        "id": "7dd8-a7af-31cc-277b",
+        "hidden": false,
+        "import": true,
+        "targetId": "fa82-61cc-aa85-e94c",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Corpuscarii Electro-Priests",
+        "id": "fce8-f559-000b-b862",
+        "hidden": false,
+        "import": true,
+        "targetId": "fd5a-f7a3-833c-85b",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Serberys Raiders",
+        "id": "f89a-33e9-c656-015f",
+        "hidden": false,
+        "import": true,
+        "targetId": "5797-adb8-930-e832",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Sydonian Dragoons with Taser Lances",
+        "id": "93eb-aa31-e37f-83e5",
+        "hidden": false,
+        "import": true,
+        "targetId": "3053-c0c1-aedd-b211",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Serberys Sulphurhounds",
+        "id": "643f-5522-68b2-5c45",
+        "hidden": false,
+        "import": true,
+        "targetId": "e775-4fe1-832b-95ca",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Tech-Priest Enginseer",
+        "id": "681e-902b-261e-60c5",
+        "hidden": false,
+        "import": true,
+        "targetId": "c0e0-4d86-96d2-ec86",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Skitarii Marshal",
+        "id": "1e46-46dd-ac7b-9aca",
+        "hidden": false,
+        "import": true,
+        "targetId": "b897-e4c6-fcb6-6538",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Skorpius Dunerider",
+        "id": "8e69-faac-016c-71ff",
+        "hidden": false,
+        "import": true,
+        "targetId": "2b9c-3982-701d-f8fd",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Kastelan Robots",
+        "id": "eb0c-6fd0-d4df-1d1e",
+        "hidden": false,
+        "import": true,
+        "targetId": "bd6c-8683-8bc4-962d",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Pteraxii Sterylizors",
+        "id": "47f3-2fc2-06ac-ed12",
+        "hidden": false,
+        "import": true,
+        "targetId": "958-a256-360-8620",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Archaeopter Fusilave",
+        "id": "7b84-a66f-3ffc-e462",
+        "hidden": false,
+        "import": true,
+        "targetId": "7662-5fde-16f1-5267",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Skitarii Rangers",
+        "id": "ee9f-870d-08d7-b8b0",
+        "hidden": false,
+        "import": true,
+        "targetId": "de59-f65c-181a-8509",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Hastarii Exterminators",
+        "id": "0374-64fc-f88e-38a9",
+        "hidden": false,
+        "import": true,
+        "targetId": "52d3-71a9-f755-d6aa",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Hastarii Fusiliers",
+        "id": "ddc6-a866-8728-df6c",
+        "hidden": false,
+        "import": true,
+        "targetId": "d653-1ac3-d944-224f",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Thulia Ghuld",
+        "id": "108c-ab43-d818-720d",
+        "hidden": false,
+        "import": true,
+        "targetId": "7135-8430-eb02-ded4",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Reaver Titan",
+        "id": "22f1-5816-2e47-09de",
+        "hidden": false,
+        "import": true,
+        "targetId": "b7e8-f3ae-be53-9ba5",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Adeptus Titanicus",
+            "id": "37e5-be83-2c5b-bd3c",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0c94-f84e-8bdc-c949"
+          },
+          {
+            "name": "Allies: Adeptus Titanicus: Reaver Titan",
+            "id": "b11a-8d0e-6248-b61a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "5dc6-55af-7c10-01ed"
+          }
+        ]
+      },
+      {
+        "name": "Warbringer Nemesis Titan",
+        "id": "d8ea-edb6-2343-8abf",
+        "hidden": false,
+        "import": true,
+        "targetId": "8e6f-4e09-12d5-fafd",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Adeptus Titanicus",
+            "id": "9dcf-7bad-0e0f-0120",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0c94-f84e-8bdc-c949"
+          },
+          {
+            "name": "Allies: Adeptus Titanicus: Warbringer Nemesis Titan",
+            "id": "1694-e3d8-235c-f6ee",
+            "hidden": false,
+            "primary": false,
+            "targetId": "a756-029e-7393-0938"
+          }
+        ]
+      },
+      {
+        "name": "Warhound Titan",
+        "id": "4758-bdc9-5440-811b",
+        "hidden": false,
+        "import": true,
+        "targetId": "8eb5-a990-6eb0-9b41",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Adeptus Titanicus",
+            "id": "fa6f-bd1f-ba7a-d34d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0c94-f84e-8bdc-c949"
+          },
+          {
+            "name": "Allies: Adeptus Titanicus: Warhound Titan",
+            "id": "cba1-783c-9fd6-5edb",
+            "hidden": false,
+            "primary": false,
+            "targetId": "700a-3b73-075a-5853"
+          }
+        ]
+      },
+      {
+        "name": "Warlord Titan",
+        "id": "6b8b-2887-96db-4e1f",
+        "hidden": false,
+        "import": true,
+        "targetId": "eafa-cd47-1c2f-61ee",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Adeptus Titanicus",
+            "id": "a7cb-74a7-557a-d661",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0c94-f84e-8bdc-c949"
+          },
+          {
+            "name": "Allies: Adeptus Titanicus: Warlord Titan",
+            "id": "9394-68e6-7a99-2255",
+            "hidden": false,
+            "primary": false,
+            "targetId": "c0b8-5269-f23d-d614"
+          }
+        ]
+      },
+      {
+        "name": "Aquila Kill Team",
+        "id": "1d21-79db-87b3-ca89",
+        "hidden": false,
+        "import": true,
+        "targetId": "b040-ce24-7e1a-c903",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "19cf-6c7d-b637-567c",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Retinue",
+            "id": "8679-68a3-4636-40f0",
+            "hidden": false,
+            "primary": false,
+            "targetId": "c1c7-52e8-70da-cf6a"
+          }
+        ]
+      },
+      {
+        "name": "Callidus Assassin",
+        "id": "8155-4a23-e9d7-7623",
+        "hidden": false,
+        "import": true,
+        "targetId": "1cfe-be05-5603-133",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "d41a-fc59-30a2-680a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Character",
+            "id": "fccc-e528-8f2f-a70e",
+            "hidden": false,
+            "primary": false,
+            "targetId": "04dd-64c0-8de0-e7a8"
+          }
+        ]
+      },
+      {
+        "name": "Corvus Blackstar",
+        "id": "d4e4-74e0-bdc0-90da",
+        "hidden": false,
+        "import": true,
+        "targetId": "8b98-0ac7-a0ba-dedf",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "4026-b6ac-2ce0-e40e",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Retinue",
+            "id": "af63-abde-bf0a-b321",
+            "hidden": false,
+            "primary": false,
+            "targetId": "c1c7-52e8-70da-cf6a"
+          }
+        ]
+      },
+      {
+        "name": "Culexus Assassin",
+        "id": "712f-d882-dae4-7599",
+        "hidden": false,
+        "import": true,
+        "targetId": "5e5e-d6b2-6a1c-aa69",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "2343-077c-df4b-b70a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Character",
+            "id": "d2cc-03fd-72bb-9752",
+            "hidden": false,
+            "primary": false,
+            "targetId": "04dd-64c0-8de0-e7a8"
+          }
+        ]
+      },
+      {
+        "name": "Deathwatch Kill Team",
+        "id": "4245-da17-0bd3-7d1b",
+        "hidden": false,
+        "import": true,
+        "targetId": "0744-61ce-619d-ffe1",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "fbe8-7575-f874-faf6",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Retinue",
+            "id": "f7a7-dee8-09f7-59d0",
+            "hidden": false,
+            "primary": false,
+            "targetId": "c1c7-52e8-70da-cf6a"
+          }
+        ]
+      },
+      {
+        "name": "Eversor Assassin",
+        "id": "47c1-2e68-34f0-013f",
+        "hidden": false,
+        "import": true,
+        "targetId": "f201-1f4a-b907-d9d1",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "dc1d-7e26-0182-d0ae",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Character",
+            "id": "ef00-a1f7-0e0f-ea15",
+            "hidden": false,
+            "primary": false,
+            "targetId": "04dd-64c0-8de0-e7a8"
+          }
+        ]
+      },
+      {
+        "name": "Exaction Squad",
+        "id": "52be-29a4-5ac8-8299",
+        "hidden": false,
+        "import": true,
+        "targetId": "ec63-524d-55a-3065",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "f80c-c898-112f-667c",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Retinue",
+            "id": "0219-be6d-62cf-2e4e",
+            "hidden": false,
+            "primary": false,
+            "targetId": "c1c7-52e8-70da-cf6a"
+          }
+        ]
+      },
+      {
+        "name": "Grey Knights Terminator Squad",
+        "id": "4971-e942-e6a2-6963",
+        "hidden": false,
+        "import": true,
+        "targetId": "15c0-9294-7eb8-f3a7",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "eada-a949-ac74-9024",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Requisitioned",
+            "id": "ac60-4158-bf72-5d52",
+            "hidden": false,
+            "primary": false,
+            "targetId": "a948-54be-5c8c-4dce"
+          }
+        ]
+      },
+      {
+        "name": "Imperial Navy Breachers",
+        "id": "d6a2-0943-9ff1-3179",
+        "hidden": false,
+        "import": true,
+        "targetId": "24d5-9987-4d2-b42b",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "c7a7-61fd-5c87-5934",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Retinue",
+            "id": "bdf6-a696-9056-2738",
+            "hidden": false,
+            "primary": false,
+            "targetId": "c1c7-52e8-70da-cf6a"
+          }
+        ]
+      },
+      {
+        "name": "Imperial Rhino",
+        "id": "0f2a-21d2-5325-e30f",
+        "hidden": false,
+        "import": true,
+        "targetId": "cbbd-8e0a-fd90-fa0d",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "3b61-19cf-52b5-12e0",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          }
+        ]
+      },
+      {
+        "name": "Inquisitor",
+        "id": "bcd0-e29f-d1b2-9945",
+        "hidden": false,
+        "import": true,
+        "targetId": "3e57-b15c-5580-1de1",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "4979-75b2-f80b-5bb3",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Character",
+            "id": "9fa8-0f2d-aef9-a339",
+            "hidden": false,
+            "primary": false,
+            "targetId": "04dd-64c0-8de0-e7a8"
+          }
+        ]
+      },
+      {
+        "name": "Inquisitor Coteaz",
+        "id": "1ad0-aa2b-b0a5-6d92",
+        "hidden": false,
+        "import": true,
+        "targetId": "264a-fc24-3a98-31dc",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "f3f0-8f65-763c-1a1c",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Character",
+            "id": "ac64-389f-2256-9449",
+            "hidden": false,
+            "primary": false,
+            "targetId": "04dd-64c0-8de0-e7a8"
+          }
+        ]
+      },
+      {
+        "name": "Inquisitor Draxus",
+        "id": "8e93-99bd-e90d-4270",
+        "hidden": false,
+        "import": true,
+        "targetId": "f3a6-de9-584e-c394",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "659d-6410-cf74-64d8",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Character",
+            "id": "ca7e-8db2-e2af-8306",
+            "hidden": false,
+            "primary": false,
+            "targetId": "04dd-64c0-8de0-e7a8"
+          }
+        ]
+      },
+      {
+        "name": "Inquisitor Greyfax",
+        "id": "0e99-da86-a1a6-f01f",
+        "hidden": false,
+        "import": true,
+        "targetId": "6e0e-b9a2-f53d-ad0e",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "8cc8-b3aa-c342-1c86",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Character",
+            "id": "7745-31f8-c4db-cdee",
+            "hidden": false,
+            "primary": false,
+            "targetId": "04dd-64c0-8de0-e7a8"
+          }
+        ]
+      },
+      {
+        "name": "Inquisitor Kroyle",
+        "id": "ca7f-8f90-c483-ab9f",
+        "hidden": false,
+        "import": true,
+        "targetId": "2a3f-b53b-6ea4-6da9",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "ef29-c75e-0ebf-9efb",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Character",
+            "id": "e753-b811-80b0-3997",
+            "hidden": false,
+            "primary": false,
+            "targetId": "04dd-64c0-8de0-e7a8"
+          }
+        ]
+      },
+      {
+        "name": "Inquisitorial Agents",
+        "id": "0c59-7a71-bf20-f759",
+        "hidden": false,
+        "import": true,
+        "targetId": "4469-7239-717e-9abd",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "3c0c-996f-d43d-4e38",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Retinue",
+            "id": "20a8-c4f6-b8b4-d9d5",
+            "hidden": false,
+            "primary": false,
+            "targetId": "c1c7-52e8-70da-cf6a"
+          }
+        ]
+      },
+      {
+        "name": "Inquisitorial Chimera",
+        "id": "69ab-87ca-86d4-c17b",
+        "hidden": false,
+        "import": true,
+        "targetId": "ede2-ae50-5f5b-cced",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "9bc7-ecbe-3711-bc28",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          }
+        ]
+      },
+      {
+        "name": "Ministorum Priest",
+        "id": "fb40-b9a0-6be6-a74b",
+        "hidden": false,
+        "import": true,
+        "targetId": "7554-37de-cd68-68a7",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "5ace-f00a-397a-3fc1",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Character",
+            "id": "56fd-6601-8d56-dc86",
+            "hidden": false,
+            "primary": false,
+            "targetId": "04dd-64c0-8de0-e7a8"
+          }
+        ]
+      },
+      {
+        "name": "Navigator",
+        "id": "42a1-a0d7-7e85-b4e5",
+        "hidden": false,
+        "import": true,
+        "targetId": "55cf-8d86-affd-bc9b",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "9242-48e6-8529-364d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Character",
+            "id": "7c51-2935-c845-3489",
+            "hidden": false,
+            "primary": false,
+            "targetId": "04dd-64c0-8de0-e7a8"
+          }
+        ]
+      },
+      {
+        "name": "Rogue Trader Entourage",
+        "id": "bd19-df3f-09bc-50a7",
+        "hidden": false,
+        "import": true,
+        "targetId": "9360-d8b2-cd92-9e7f",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "dda4-e19e-c449-5b32",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Character",
+            "id": "9c2a-de82-9370-583b",
+            "hidden": false,
+            "primary": false,
+            "targetId": "04dd-64c0-8de0-e7a8"
+          }
+        ]
+      },
+      {
+        "name": "Sanctifiers",
+        "id": "5793-6440-fc9c-ecb2",
+        "hidden": false,
+        "import": true,
+        "targetId": "4e74-3710-7a66-9d6c",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "357b-7915-6dcb-1bbe",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Retinue",
+            "id": "3fa4-3f37-71f7-9c4f",
+            "hidden": false,
+            "primary": false,
+            "targetId": "c1c7-52e8-70da-cf6a"
+          }
+        ]
+      },
+      {
+        "name": "Sisters of Battle Immolator",
+        "id": "aa65-271f-6f1b-9087",
+        "hidden": false,
+        "import": true,
+        "targetId": "a5c9-2cb7-d874-8169",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "d063-72fa-8307-a534",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          }
+        ]
+      },
+      {
+        "name": "Sisters of Battle Squad",
+        "id": "79fa-a85f-cbdf-6675",
+        "hidden": false,
+        "import": true,
+        "targetId": "73fc-a193-7da1-d9c4",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "9310-1b87-01bd-91ae",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Requisitioned",
+            "id": "2f5e-35ff-60f2-4364",
+            "hidden": false,
+            "primary": false,
+            "targetId": "a948-54be-5c8c-4dce"
+          }
+        ]
+      },
+      {
+        "name": "Subductor Squad",
+        "id": "93db-6594-e58e-97f6",
+        "hidden": false,
+        "import": true,
+        "targetId": "6db9-cede-3810-f1f0",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "02b0-6d37-f481-c098",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Retinue",
+            "id": "de16-a757-04b8-217d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "c1c7-52e8-70da-cf6a"
+          }
+        ]
+      },
+      {
+        "name": "Vigilant Squad",
+        "id": "7cba-8ded-6aba-3503",
+        "hidden": false,
+        "import": true,
+        "targetId": "d44c-5cde-cb79-3ec3",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "6339-d185-6c54-85a7",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Retinue",
+            "id": "3d8d-a633-44d5-a053",
+            "hidden": false,
+            "primary": false,
+            "targetId": "c1c7-52e8-70da-cf6a"
+          }
+        ]
+      },
+      {
+        "name": "Vindicare Assassin",
+        "id": "d176-5cfd-800b-83d9",
+        "hidden": false,
+        "import": true,
+        "targetId": "efa3-2cf5-dcfb-b976",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "ecda-2efc-c343-90b3",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Character",
+            "id": "0d7e-4e8d-90d7-6ead",
+            "hidden": false,
+            "primary": false,
+            "targetId": "04dd-64c0-8de0-e7a8"
+          }
+        ]
+      },
+      {
+        "name": "Voidsmen-at-Arms",
+        "id": "0ac4-b1e9-5a95-5357",
+        "hidden": false,
+        "import": true,
+        "targetId": "3953-4e12-fe7b-97e9",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "492b-faba-df20-6067",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Retinue",
+            "id": "6761-e8f9-342d-2212",
+            "hidden": false,
+            "primary": false,
+            "targetId": "c1c7-52e8-70da-cf6a"
+          }
+        ]
+      },
+      {
+        "name": "Watch Captain Artemis",
+        "id": "0612-ebf2-6575-ea98",
+        "hidden": false,
+        "import": true,
+        "targetId": "f158-1e0b-585b-bf40",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "c13f-d8f0-9d4f-4072",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Character",
+            "id": "6a21-a543-1502-3407",
+            "hidden": false,
+            "primary": false,
+            "targetId": "04dd-64c0-8de0-e7a8"
+          }
+        ]
+      },
+      {
+        "name": "Watch Master",
+        "id": "0656-fd9b-e11d-1a69",
+        "hidden": false,
+        "import": true,
+        "targetId": "cfa5-df26-a886-9975",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Imperial Agents",
+            "id": "759c-241a-730d-7af9",
+            "hidden": false,
+            "primary": false,
+            "targetId": "4b1d-c4b2-eec2-3eb0"
+          },
+          {
+            "name": "Allies: Imperial Agents: Character",
+            "id": "224b-1463-99bc-074f",
+            "hidden": false,
+            "primary": false,
+            "targetId": "04dd-64c0-8de0-e7a8"
+          }
+        ]
+      },
+      {
+        "name": "Acastus Knight Asterius",
+        "id": "8bf2-64d4-e875-2813",
+        "hidden": false,
+        "import": true,
+        "targetId": "f8d0-fdf2-2e5e-3b74",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "0bc0-6239-48dd-17d2",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "30cb-0e76-a168-f009",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Acastus Knight Porphyrion",
+        "id": "30b4-403c-240e-9bab",
+        "hidden": false,
+        "import": true,
+        "targetId": "61c9-8baf-22b4-5d84",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "b94d-e6cc-be44-36e6",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "a139-216d-3ac9-5e48",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Armiger Helverin",
+        "id": "864a-3828-f545-1fbb",
+        "hidden": false,
+        "import": true,
+        "targetId": "7314-3c4a-36ab-a594",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "492f-86e5-4b15-7954",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Armiger",
+            "id": "da6d-efef-8304-229f",
+            "hidden": false,
+            "primary": false,
+            "targetId": "128a-8e54-7054-271d"
+          }
+        ]
+      },
+      {
+        "name": "Armiger Moirax",
+        "id": "3139-f0e7-74f1-70dd",
+        "hidden": false,
+        "import": true,
+        "targetId": "e3dd-7e90-140a-b3ab",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "c06b-7805-d291-c362",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Armiger",
+            "id": "6403-8c01-d661-ad14",
+            "hidden": false,
+            "primary": false,
+            "targetId": "128a-8e54-7054-271d"
+          }
+        ]
+      },
+      {
+        "name": "Armiger Warglaive",
+        "id": "6eee-bdc6-726c-dfd7",
+        "hidden": false,
+        "import": true,
+        "targetId": "5bbd-c5d3-58d7-e391",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "f1ee-bc19-0503-e8fe",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Armiger",
+            "id": "764d-597a-8d93-16c6",
+            "hidden": false,
+            "primary": false,
+            "targetId": "128a-8e54-7054-271d"
+          }
+        ]
+      },
+      {
+        "name": "Canis Rex",
+        "id": "23c5-e877-ca74-a104",
+        "hidden": false,
+        "import": true,
+        "targetId": "55fb-9c91-1a4f-3037",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "6d1f-9482-8adf-d352",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "a3c9-b22c-93d3-623a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Cerastus Knight Acheron",
+        "id": "556e-4680-e7a4-678a",
+        "hidden": false,
+        "import": true,
+        "targetId": "11d3-167b-6dff-a4c2",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "e477-79f1-ed01-5b45",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "c8fc-ad97-c1c3-0669",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Cerastus Knight Atrapos",
+        "id": "0e59-e8e7-f329-28a4",
+        "hidden": false,
+        "import": true,
+        "targetId": "37a7-d156-1e4c-8fe1",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "1f89-ab9d-3c7c-86e6",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "d4de-7ded-2c5c-156b",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Cerastus Knight Castigator",
+        "id": "4b4d-db5b-759d-c09c",
+        "hidden": false,
+        "import": true,
+        "targetId": "1654-5c17-474e-2d84",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "58fc-886c-0dd2-0f03",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "b094-138d-f429-3d60",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Cerastus Knight Lancer",
+        "id": "f62c-8be0-c9fb-5547",
+        "hidden": false,
+        "import": true,
+        "targetId": "9ee-e289-bc6c-d943",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "f884-3f8c-99de-675c",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "f13c-7ca8-5d37-85c9",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Knight Castellan",
+        "id": "cde1-95f8-5c91-b8e3",
+        "hidden": false,
+        "import": true,
+        "targetId": "6e36-f85-1c3b-8bf3",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "c286-ea61-9d80-76f8",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "8800-499c-8cd1-606d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Knight Crusader",
+        "id": "15d0-af86-dfca-35ac",
+        "hidden": false,
+        "import": true,
+        "targetId": "1e27-a6de-3840-a050",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "b957-e3c7-6677-0e25",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "a14a-d91e-047a-7605",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Knight Defender",
+        "id": "8dd5-f14e-1587-6684",
+        "hidden": false,
+        "import": true,
+        "targetId": "f12b-ca2a-9c87-79bb",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "b7d7-15ef-cfe1-9517",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "4651-09b6-d1b9-c324",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Knight Destrier",
+        "id": "4963-d720-7638-e789",
+        "hidden": false,
+        "import": true,
+        "targetId": "10d8-d702-f556-5d3c",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "84fd-9095-9f92-9fe7",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "6833-baa6-33ae-8883",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Knight Errant",
+        "id": "6bbe-6d75-3880-0695",
+        "hidden": false,
+        "import": true,
+        "targetId": "9efd-ec72-353f-4b23",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "1616-9550-b707-3ef6",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "cfd1-b659-4683-5a2a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Knight Gallant",
+        "id": "1626-8337-ab8b-7179",
+        "hidden": false,
+        "import": true,
+        "targetId": "eb4-4a67-11e9-3cb8",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "1fb6-5327-6502-13a7",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "363a-462c-4775-3756",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Knight Paladin",
+        "id": "7220-7c87-5bb4-3f2d",
+        "hidden": false,
+        "import": true,
+        "targetId": "8441-8356-5e7c-69ee",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "f2b6-a1f7-cfb6-c076",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "e8d3-b2c5-a0c8-4d37",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Knight Preceptor",
+        "id": "a6f5-c8ac-9b50-1b95",
+        "hidden": false,
+        "import": true,
+        "targetId": "ebd9-7175-3f0c-72a9",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "12e2-e5c0-2573-c60d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "2537-a2b5-755e-082b",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Knight Valiant",
+        "id": "173a-a16f-ac38-d872",
+        "hidden": false,
+        "import": true,
+        "targetId": "8fb9-50b2-adc6-161a",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "ddcf-379d-c216-920d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "f9e3-b58a-0fec-3468",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Knight Warden",
+        "id": "2354-c951-dbdf-d666",
+        "hidden": false,
+        "import": true,
+        "targetId": "c609-c87e-f9dd-5006",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "5e91-9a88-8777-068b",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "5432-2cd1-9ccf-ae5a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Questoris Knight Magaera",
+        "id": "2d29-4e50-31e3-7903",
+        "hidden": false,
+        "import": true,
+        "targetId": "adfa-19fc-7337-7350",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "a25e-3b24-65a2-fdcf",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "43fd-527b-bff9-da27",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Questoris Knight Styrix",
+        "id": "49b3-cfac-759e-bd7c",
+        "hidden": false,
+        "import": true,
+        "targetId": "f8f3-a438-1212-93e8",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Questoris Allies",
+            "id": "82c3-dc40-6210-f144",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1033-c038-7bb6-bb07"
+          },
+          {
+            "name": "Allies: Questoris Allies: Titanic",
+            "id": "10ac-1dce-ed8d-ac48",
+            "hidden": false,
+            "primary": false,
+            "targetId": "cf43-a28c-4b2e-0933"
+          }
+        ]
+      },
+      {
+        "name": "Detachment",
+        "id": "942d-bdba-977b-3aa0",
+        "hidden": false,
+        "import": true,
+        "targetId": "c82f-1b42-946-9c9a",
+        "type": "selectionEntry"
+      }
+    ],
+    "infoLinks": [
+      {
+        "name": "Doctrina Imperatives",
+        "id": "3aee-76de-9965-3f70",
+        "hidden": false,
+        "targetId": "01d3-b088-6c56-897a",
+        "type": "rule"
+      }
+    ]
+  }
+}

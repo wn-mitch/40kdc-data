@@ -94,6 +94,7 @@
     "mfm:mirror": "tsx src/mfm/mirror/cli.ts",
     "mfm:bsdata": "tsx src/mfm/bsdata-backstop.ts",
     "export:bsdata": "tsx src/bsdata-export/cli.ts",
+    "export:bsdata:repo": "tsx src/bsdata-export/cli.ts --repo ../bsdata",
     "bsdata:ids": "tsx src/bsdata-export/extract-ids.ts",
     "bsdata:loadout-variants": "tsx src/convert-bsdata-loadout-variants.ts",
     "bundle:schemas": "tsx src/bundle-schemas.ts",

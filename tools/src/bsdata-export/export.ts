@@ -4,7 +4,7 @@
  * BSData wh40k-11e files they replace, and writes them as JSON (NewRecruit)
  * and BattleScribe XML (`.gst`/`.cat`).
  */
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import * as path from "node:path";
 import { Dataset } from "../data/dataset.js";
 import { buildCatalogues } from "./catalogue.js";
@@ -49,20 +49,39 @@ export function buildExport(options: { readonly version: string; readonly datase
   const system = buildGameSystem({ ids, dataset, revision, readme, legends }, refs);
   // Armies that ally each other would link in a cycle, which NewRecruit refuses: split them into army and library.
   const split = splitCyclicCatalogues(catalogues.map((c) => ({ file: c.file, document: c.document })), ids);
-  return [{ file: GAME_SYSTEM_FILE, document: system }, ...withBsdataLibraryShells(split, ids)];
+  return [{ file: GAME_SYSTEM_FILE, document: system }, ...withBsdataLibraryShells(split, ids)]
+    .map(({ file, document }) => ({ file, document: plainNames(document) as BsNode }));
+}
+
+/** Typographic apostrophes and hyphens the dataset prints, and the plain characters BSData writes. */
+const PLAIN: Readonly<Record<string, string>> = { "\u2018": "'", "\u2019": "'", "\u2010": "-", "\u2011": "-" };
+
+/** A dataset name as the export writes it. */
+export function bsName(name: string): string {
+  return name.replace(/[\u2018\u2019\u2010\u2011]/gu, (ch) => PLAIN[ch]!);
 }
 
 /**
- * Writes under `outDir`: `json/<file>` (NewRecruit), `xml/<name>.gst|.cat`
- * (BattleScribe), and `battlescribe/` — the hosted data repo BattleScribe adds
- * by the URL of its `index.bsi` (see `data-index.ts`), served at `indexUrl`.
+ * Every node's `name` with BSData's plain apostrophes and hyphens ("Huron's Marauders",
+ * "Grav-Assault Force"), so an app that looks entries up by their BSData name finds them.
  */
-export function writeExport(documents: readonly ExportedDocument[], outDir: string, options: { readonly indexUrl: string }): string[] {
-  const written: string[] = [];
+export function plainNames(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(plainNames);
+  if (value === null || typeof value !== "object") return value;
+  return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, key === "name" && typeof item === "string" ? bsName(item) : plainNames(item)]));
+}
+
+/** One exported document as written: its JSON and BattleScribe XML forms. */
+interface WrittenDocument {
+  readonly jsonPath: string;
+  readonly xmlPath: string;
+  readonly indexed: IndexedFile;
+}
+
+function writeDocuments(documents: readonly ExportedDocument[], outDir: string): WrittenDocument[] {
   const schema = loadBattleScribeSchema();
-  for (const dir of ["json", "xml", "battlescribe"]) mkdirSync(path.join(outDir, dir), { recursive: true });
-  const indexed: IndexedFile[] = [];
-  for (const { file, document } of documents) {
+  for (const dir of ["json", "xml"]) mkdirSync(path.join(outDir, dir), { recursive: true });
+  return documents.map(({ file, document }) => {
     const jsonPath = path.join(outDir, "json", file);
     writeFileSync(jsonPath, bsdataJson(document));
     const root = Object.keys(document)[0];
@@ -71,13 +90,41 @@ export function writeExport(documents: readonly ExportedDocument[], outDir: stri
     const xml = toBattleScribeSchemaXml(document, schema);
     const xmlPath = path.join(outDir, "xml", name);
     writeFileSync(xmlPath, xml);
-    written.push(jsonPath, xmlPath);
-    indexed.push({ name, kind: root === "gameSystem" ? "gamesystem" : "catalogue", id: String(node.id), dataName: String(node.name), revision: Number(node.revision), xml });
-  }
-  for (const [name, bytes] of hostedDataRepo(DATA_INDEX_NAME, options.indexUrl, indexed)) {
+    const indexed: IndexedFile = { name, kind: root === "gameSystem" ? "gamesystem" : "catalogue", id: String(node.id), dataName: String(node.name), revision: Number(node.revision), xml };
+    return { jsonPath, xmlPath, indexed };
+  });
+}
+
+/**
+ * Writes under `outDir`: `json/<file>` (NewRecruit), `xml/<name>.gst|.cat`
+ * (BattleScribe), and `battlescribe/` — the hosted data repo BattleScribe adds
+ * by the URL of its `index.bsi` (see `data-index.ts`), served at `indexUrl`.
+ */
+export function writeExport(documents: readonly ExportedDocument[], outDir: string, options: { readonly indexUrl: string }): string[] {
+  const docs = writeDocuments(documents, outDir);
+  const written = docs.flatMap((d) => [d.jsonPath, d.xmlPath]);
+  mkdirSync(path.join(outDir, "battlescribe"), { recursive: true });
+  for (const [name, bytes] of hostedDataRepo(DATA_INDEX_NAME, options.indexUrl, docs.map((d) => d.indexed))) {
     const hostedPath = path.join(outDir, "battlescribe", name);
     writeFileSync(hostedPath, bytes);
     written.push(hostedPath);
+  }
+  return written;
+}
+
+/**
+ * Writes the committed data repo (`bsdata/` at the repository root): `json/` and `xml/` only, and
+ * removes any file there the export no longer writes, so a renamed or dropped catalogue leaves no
+ * stale copy behind. Apps load these files from raw.githubusercontent.com as they loaded BSData.
+ */
+export function writeDataRepo(documents: readonly ExportedDocument[], outDir: string): string[] {
+  const written = writeDocuments(documents, outDir).flatMap((d) => [d.jsonPath, d.xmlPath]);
+  const keep = new Set(written);
+  for (const dir of ["json", "xml"]) {
+    for (const name of readdirSync(path.join(outDir, dir))) {
+      const file = path.join(outDir, dir, name);
+      if (!keep.has(file)) rmSync(file);
+    }
   }
   return written;
 }

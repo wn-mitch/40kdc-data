@@ -10,7 +10,7 @@ import type { Dataset } from "../data/dataset.js";
 import type { UnitView } from "../data/entities.js";
 import type { Detachment, Enhancement, Unit } from "../generated.js";
 import { BSDATA_IDS, type IdAllocator } from "./ids.js";
-import { itemEntry } from "./items.js";
+import { itemEntry, itemName } from "./items.js";
 import {
   BATTLESCRIBE_VERSION,
   categoryLink,
@@ -27,7 +27,7 @@ import { minimumConstraints, tagCategories, barModifiers, baseLimits, doublesLim
 import { keywordLimitPieces, type KeywordLimitContext, type KeywordLimitPieces } from "./keyword-limits.js";
 import { mandateCategories, supremeCommanderLink, warlordLink, type WarlordContext } from "./warlord.js";
 import { abilityText, canTake, detachmentContainer, detachmentEntry, enhancementEntry, enhancementGroup } from "./detachments.js";
-import { buildUnitEntry, homeFactionOf, isEpicHero, keywordCategoryId, type UnitBuildContext } from "./unit.js";
+import { abilityProfiles, buildUnitEntry, homeFactionOf, isEpicHero, itemAbilityIds, keywordCategoryId, offeredItems, type UnitBuildContext } from "./unit.js";
 
 export interface CatalogueContext {
   readonly ids: IdAllocator;
@@ -231,6 +231,50 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
       const extra = view ? limits.linksFor(view.raw, String(link.id)) : [];
       return extra.length === 0 ? link : { ...link, categoryLinks: [...((link.categoryLinks as BsNode[] | undefined) ?? []), ...extra] };
     });
+  /**
+   * The wargear entries of a family's items. An item a unit links abilities to (`itemAbilityIds`)
+   * prints them, so each distinct set of abilities (and the armies that remove them) gets an entry
+   * of its own, as BSData has several Storm Shields. The item's plain key, and so its id, stays
+   * with the entry carried without abilities when any unit offers that, else with the set most
+   * units offer (ties to the first set in order).
+   */
+  const itemVariants = (units: readonly UnitView[], isArmyRule: (unit: Unit, abilityId: string) => boolean) => {
+    const abilitiesOf = (unit: Unit, itemId: string) =>
+      itemAbilityIds(unit, itemId)
+        .filter((id) => !isArmyRule(unit, id))
+        .flatMap((id) => {
+          const ability = ctx.dataset.abilities.get(id);
+          if (!ability) return [];
+          const removedIn = [...(locks.abilities.get(`${unitKey(unit)}|${id}`) ?? [])].map((f) => set.catalogueId(f)!).sort();
+          return [{ ability, removedIn }];
+        });
+    const signature = (abilities: ReturnType<typeof abilitiesOf>): string =>
+      abilities.map(({ ability, removedIn }) => (removedIn.length > 0 ? `${ability.id}@${removedIn.join(",")}` : ability.id)).join("+");
+    const counts = new Map<string, Map<string, number>>();
+    for (const view of units) {
+      for (const itemId of offeredItems(view.raw, ctx.dataset, ctx.refs.cost.pts, (id) => itemName(ctx.dataset, view.raw.faction_id, id))) {
+        const item = `${view.raw.faction_id}/${itemId}`;
+        const sig = signature(abilitiesOf(view.raw, itemId));
+        const bySig = counts.get(item) ?? new Map<string, number>();
+        bySig.set(sig, (bySig.get(sig) ?? 0) + 1);
+        counts.set(item, bySig);
+      }
+    }
+    const plainSig = new Map<string, string>();
+    for (const [item, bySig] of counts) {
+      const ranked = [...bySig].sort(([a, n], [b, m]) => (a === "" ? -1 : b === "" ? 1 : m - n || (a < b ? -1 : a > b ? 1 : 0)));
+      plainSig.set(item, ranked[0][0]);
+    }
+    return {
+      of: (unit: Unit, itemId: string) => {
+        const item = `${unit.faction_id}/${itemId}`;
+        const abilities = abilitiesOf(unit, itemId);
+        const sig = signature(abilities);
+        const plain = sig === (plainSig.get(item) ?? "");
+        return { key: plain ? `item:${item}` : `item:${item}|${sig === "" ? "plain" : sig}`, plain, abilities };
+      },
+    };
+  };
   const out: BuiltCatalogue[] = [];
   for (const root of roots) {
     const familyDetachments = set.familyDetachments(root);
@@ -256,6 +300,9 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
         const rule = armyRules.get(ruleId);
         return rule ? [{ name: rule.name, id: ctx.ids.id(`army-rule-link:${factionId}/${ruleId}`), hidden: false, targetId: rule.id, type: "rule" }] : [];
       });
+    const units = ctx.dataset.units.byFaction(root);
+    // The same test as `unitCtx.armyRule`: an army rule links from the unit and prints on no entry.
+    const variants = itemVariants(units, (unit, abilityId) => armyRules.has(abilityId) && set.rootOf(unit.faction_id) === root);
     const warlordId = ctx.ids.id(`warlord:${root}`, BSDATA_IDS.factionEntries[root]?.Warlord);
     const warlordCtx: WarlordContext = {
       ids: ctx.ids,
@@ -275,13 +322,15 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
       hostCatalogues,
       detachmentEntryId: (d) => set.detachmentEntryId(d, root),
       itemEntry: (unit, itemId) => {
-        const preferred = BSDATA_IDS.weapons[unit.faction_id]?.[itemId];
-        const itemKey = `${unit.faction_id}/${itemId}`;
-        let entry = items.get(itemKey);
+        const variant = variants.of(unit, itemId);
+        let entry = items.get(variant.key);
         if (!entry) {
-          entry = itemEntry(ctx.dataset, ctx.refs, ctx.ids, unit.faction_id, itemId, preferred);
+          // Only the variant that keeps the item's plain key keeps its BSData id.
+          const preferred = variant.plain ? BSDATA_IDS.weapons[unit.faction_id]?.[itemId] : undefined;
+          const profiles = variant.abilities.flatMap(({ ability, removedIn }) => abilityProfiles(ability, ctx.refs, ctx.ids, variant.key, removedIn));
+          entry = itemEntry(ctx.dataset, ctx.refs, ctx.ids, unit.faction_id, itemId, variant.key, preferred, profiles);
           if (!entry) return undefined;
-          items.set(itemKey, entry);
+          items.set(variant.key, entry);
         }
         return { id: entry.id as string, name: entry.name as string };
       },
@@ -323,7 +372,6 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
         return { entryLinks, groups: [], categoryLinks: supremeCommanderLink(warlordCtx, view.raw, entryKey) };
       },
     };
-    const units = ctx.dataset.units.byFaction(root);
     const unitEntries = units.map((view) => {
       const entry = buildUnitEntry(view, unitCtx, BSDATA_IDS.units[root]?.[view.id]);
       if (entry.id !== unitEntryId(view)) throw new Error(`bsdata export: ${view.id} entry id is not its allocated id`);

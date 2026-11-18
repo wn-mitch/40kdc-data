@@ -31,6 +31,9 @@ data/_audit/** linguist-generated
 data/core/_reports/** linguist-generated
 tools/src/bsdata-export/bsdata-ids.json linguist-generated
 
+# The BSData-compatible export apps load from main (`npm run export:bsdata:repo`, part of `just regen`).
+bsdata/** linguist-generated
+
 # API reference (TypeDoc).
 tools/docs/api/** linguist-generated
 

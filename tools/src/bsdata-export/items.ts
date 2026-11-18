@@ -94,9 +94,50 @@ function displayName(name: string): string {
   return name.length > 0 ? `${name[0].toUpperCase()}${name.slice(1)}` : name;
 }
 
+function itemWeapon(dataset: Dataset, factionId: string, itemId: string): WeaponView | undefined {
+  return dataset.weapons.byFaction(factionId).find((w) => w.id === itemId) ?? dataset.weapons.getAny(itemId);
+}
+
+/** Per dataset: each wargear id's linked ability names, by their lower-case form. */
+const LINKED_ABILITY_NAMES = new WeakMap<Dataset, Map<string, Map<string, string>>>();
+
+function linkedAbilityName(dataset: Dataset, itemId: string, name: string): string | undefined {
+  let byItem = LINKED_ABILITY_NAMES.get(dataset);
+  if (!byItem) {
+    byItem = new Map();
+    for (const unit of dataset.units.all) {
+      for (const ref of unit.raw.ability_ids ?? []) {
+        if (typeof ref !== "object" || ref === null || typeof ref.wargear !== "string" || typeof ref.id !== "string") continue;
+        const ability = dataset.abilities.byFaction(unit.raw.faction_id).find((a) => a.id === ref.id) ?? dataset.abilities.getAny(ref.id);
+        if (!ability) continue;
+        const names = byItem.get(ref.wargear) ?? new Map<string, string>();
+        names.set(ability.name.toLowerCase(), ability.name);
+        byItem.set(ref.wargear, names);
+      }
+    }
+    LINKED_ABILITY_NAMES.set(dataset, byItem);
+  }
+  return byItem.get(itemId)?.get(name.toLowerCase());
+}
+
 /**
- * The shared entry for one item a faction's units carry, or undefined when the
- * id names neither a weapon nor a wargear record.
+ * The name an item's entry takes, or undefined when the id names neither a weapon nor a wargear
+ * record. A wargear record's name is lower case in the dataset; when an ability linked to the item
+ * has the same name, the entry takes the ability's capitalisation ("Simulacrum Imperialis"), as
+ * BSData prints it.
+ */
+export function itemName(dataset: Dataset, factionId: string, itemId: string): string | undefined {
+  const weapon = itemWeapon(dataset, factionId, itemId);
+  if (weapon) return weapon.name;
+  const wargear = dataset.wargear.getAny(itemId);
+  return wargear ? (linkedAbilityName(dataset, itemId, wargear.name) ?? displayName(wargear.name)) : undefined;
+}
+
+/**
+ * The shared entry for one item a faction's units carry, keyed `key`, or undefined
+ * when the id names neither a weapon nor a wargear record. `abilityProfiles` are the
+ * Abilities profiles the item prints after its weapon profiles (`catalogue.ts` keys
+ * one entry per distinct set of them).
  */
 export function itemEntry(
   dataset: Dataset,
@@ -104,29 +145,21 @@ export function itemEntry(
   ids: IdAllocator,
   factionId: string,
   itemId: string,
+  key: string,
   preferredId: string | undefined,
+  abilityProfiles: readonly BsNode[] = [],
 ): BsNode | undefined {
-  const key = `item:${factionId}/${itemId}`;
-  const weapon = dataset.weapons.byFaction(factionId).find((w) => w.id === itemId) ?? dataset.weapons.getAny(itemId);
-  if (weapon) {
-    return {
-      name: weapon.name,
-      id: ids.id(key, preferredId),
-      hidden: false,
-      import: true,
-      type: "upgrade",
-      costs: [cost("pts", refs.cost.pts, 0)],
-      profiles: weaponProfiles(weapon, refs, ids, key),
-    };
-  }
-  const wargear = dataset.wargear.getAny(itemId);
-  if (!wargear) return undefined;
+  const name = itemName(dataset, factionId, itemId);
+  if (name === undefined) return undefined;
+  const weapon = itemWeapon(dataset, factionId, itemId);
+  const profiles = [...(weapon ? weaponProfiles(weapon, refs, ids, key) : []), ...abilityProfiles];
   return {
-    name: displayName(wargear.name),
+    name,
     id: ids.id(key, preferredId),
     hidden: false,
     import: true,
     type: "upgrade",
     costs: [cost("pts", refs.cost.pts, 0)],
+    ...(profiles.length > 0 ? { profiles } : {}),
   };
 }

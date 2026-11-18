@@ -69,6 +69,13 @@ per faction, attached to a `bsdata-v<version>` release
   names, `wh40k-11e-40kdc-newrecruit.zip` (JSON) and
   `wh40k-11e-40kdc-battlescribe.zip` (XML), at
   `https://github.com/wn-mitch/40kdc-data/releases/download/bsdata-latest/<file>`.
+- **Apps that load BSData from GitHub:** the same files are committed on
+  `main` under [`bsdata/`](bsdata), JSON in `bsdata/json/` and XML in
+  `bsdata/xml/`, and change with every data change that lands. List them with
+  `https://api.github.com/repos/wn-mitch/40kdc-data/contents/bsdata/json?ref=main`
+  and fetch each from
+  `https://raw.githubusercontent.com/wn-mitch/40kdc-data/main/bsdata/json/<file>`;
+  both allow browser requests from any origin, as BSData's did.
 
   BattleScribe's format cannot express three things NewRecruit supports:
   - A unit's starting models. NewRecruit starts each unit with the models the

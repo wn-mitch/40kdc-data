@@ -5,20 +5,22 @@
 import { strFromU8, unzipSync } from "fflate";
 import { XMLParser } from "fast-xml-parser";
 import fc from "fast-check";
-import { mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import * as path from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/dataset.js";
 import { DATA_INDEX_XMLNS, hostedName } from "../src/bsdata-export/data-index.js";
-import { buildExport, DATA_INDEX_NAME, writeExport } from "../src/bsdata-export/export.js";
+import { buildExport, DATA_INDEX_NAME, writeDataRepo, writeExport, type ExportedDocument } from "../src/bsdata-export/export.js";
 
 const INDEX_URL = "https://example.invalid/data/index.bsi";
 let dir: string;
+let documents: ExportedDocument[];
 
 beforeAll(() => {
   dir = mkdtempSync(path.join(tmpdir(), "bsdata-index-"));
-  writeExport(buildExport({ version: "1.5.1", dataset: Dataset.embedded() }), dir, { indexUrl: INDEX_URL });
+  documents = buildExport({ version: "1.5.1", dataset: Dataset.embedded() });
+  writeExport(documents, dir, { indexUrl: INDEX_URL });
 }, 120_000);
 
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
@@ -64,5 +66,25 @@ describe("BattleScribe hosted data repo", () => {
         expect(hostedName(name)).not.toContain("--");
       }),
     );
+  });
+});
+
+describe("committed BSData data repo", () => {
+  it("writes the release export's json and xml files, and removes a file the export no longer writes", () => {
+    const repo = mkdtempSync(path.join(tmpdir(), "bsdata-repo-"));
+    try {
+      const some = documents.slice(0, 3);
+      writeDataRepo(some, repo);
+      writeFileSync(path.join(repo, "json", "Retired Army.json"), "{}");
+      writeFileSync(path.join(repo, "xml", "Retired Army.cat"), "<catalogue/>");
+      writeDataRepo(some, repo);
+      expect(readdirSync(repo).sort()).toEqual(["json", "xml"]);
+      const json = readdirSync(path.join(repo, "json")).sort();
+      expect(json).toEqual(some.map((d) => d.file).sort());
+      expect(readdirSync(path.join(repo, "xml"))).toHaveLength(some.length);
+      for (const file of json) expect(readFileSync(path.join(repo, "json", file), "utf8"), file).toBe(readFileSync(path.join(dir, "json", file), "utf8"));
+    } finally {
+      rmSync(repo, { recursive: true, force: true });
+    }
   });
 });

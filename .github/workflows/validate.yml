@@ -42,6 +42,13 @@ jobs:
       - name: Test DSL campaign graph and workflow contracts
         run: node --test .omp/skills/dsl-campaign/graph/*.test.js .omp/skills/dsl-campaign/workflows/*.test.js
       - run: cd tools && npm run validate
+      # The committed BSData export (bsdata/) apps load from raw.githubusercontent.com.
+      # `git status` also catches a file the export adds or no longer writes.
+      - run: cd tools && npm run export:bsdata:repo
+      - name: Check the committed BSData export is up to date
+        run: |
+          drift=$(git status --porcelain -- bsdata)
+          if [ -n "$drift" ]; then echo "bsdata/ is stale; run just regen and commit it:"; echo "$drift"; exit 1; fi
       # Catch malformed packages on PRs instead of at publish time on main.
       # `npm pack --dry-run` exercises the prepack pipeline and prints the
       # tarball file list, so a reviewer can eyeball what would ship.

@@ -1,0 +1,1548 @@
+{
+  "catalogue": {
+    "name": "Chaos - Chaos Knights",
+    "id": "46d8-abc8-ef3a-9f85",
+    "battleScribeVersion": 2.03,
+    "gameSystemId": "sys-352e-adc2-7639-d610",
+    "gameSystemRevision": 10502,
+    "library": false,
+    "revision": 10502,
+    "type": "catalogue",
+    "xmlns": "http://www.battlescribe.net/schema/catalogueSchema",
+    "catalogueLinks": [
+      {
+        "name": "Chaos - Chaos Knights Library",
+        "id": "3ac6-39e3-7125-e72a",
+        "importRootEntries": false,
+        "targetId": "4d13-39bb-3d9b-fd5e",
+        "type": "catalogue"
+      },
+      {
+        "name": "Chaos - Chaos Daemons Library",
+        "id": "63f5-acba-9a09-554e",
+        "importRootEntries": false,
+        "targetId": "76cc-c059-558a-3e02",
+        "type": "catalogue"
+      },
+      {
+        "name": "Chaos - Chaos Space Marines Library",
+        "id": "66cb-984d-5363-94a1",
+        "importRootEntries": false,
+        "targetId": "eb4a-ef06-cb2f-4c32",
+        "type": "catalogue"
+      },
+      {
+        "name": "Library - Titans",
+        "id": "59c5-3fb7-8e81-cfed",
+        "importRootEntries": false,
+        "targetId": "7481-280e-b55e-7867",
+        "type": "catalogue"
+      }
+    ],
+    "entryLinks": [
+      {
+        "name": "War Dog Huntsman",
+        "id": "1065-c8fa-9d05-26e3",
+        "hidden": false,
+        "import": true,
+        "targetId": "6e6d-7950-ce6d-4cd4",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "War Dog Brigand",
+        "id": "2a94-4a3e-c509-c53b",
+        "hidden": false,
+        "import": true,
+        "targetId": "753d-4e02-eda3-4809",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "War Dog Executioner",
+        "id": "1cbd-8d3a-807c-f4c7",
+        "hidden": false,
+        "import": true,
+        "targetId": "8df0-fc3c-8ced-ffce",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "War Dog Stalker",
+        "id": "c4d0-9a47-17b2-6702",
+        "hidden": false,
+        "import": true,
+        "targetId": "bbc6-c0ed-24e8-86b7",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "War Dog Moirax",
+        "id": "498a-1d70-9cc5-eb82",
+        "hidden": false,
+        "import": true,
+        "targetId": "ae7c-3679-a88-6895",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "War Dog Karnivore",
+        "id": "09bf-1c3a-5a45-3be7",
+        "hidden": false,
+        "import": true,
+        "targetId": "e96b-ac98-7fd2-a155",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Knight Despoiler",
+        "id": "6181-c1da-4980-d8cc",
+        "hidden": false,
+        "import": true,
+        "targetId": "0119-8c04-435e-c782",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Cerastus Knight Acheron",
+        "id": "de96-a61b-4d60-a1a7",
+        "hidden": false,
+        "import": true,
+        "targetId": "ec6e-d1d6-f7c6-d008",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Knight Ruinator",
+        "id": "eb07-97c6-90a2-aad1",
+        "hidden": false,
+        "import": true,
+        "targetId": "c0a2-eb65-6d34-5bc6",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Knight Desecrator",
+        "id": "2a0b-0eea-e264-49eb",
+        "hidden": false,
+        "import": true,
+        "targetId": "7a51-8f1f-7290-d9d2",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Acastus Knight Porphyrion",
+        "id": "2c04-2307-7b15-f51b",
+        "hidden": false,
+        "import": true,
+        "targetId": "fe77-6f85-5ddb-65bf",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Cerastus Knight Atrapos",
+        "id": "3bba-f58d-03b9-b07a",
+        "hidden": false,
+        "import": true,
+        "targetId": "8b1d-9029-f9e1-42d9",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Acastus Knight Asterius",
+        "id": "4e5d-bce3-5c58-61d9",
+        "hidden": false,
+        "import": true,
+        "targetId": "e289-ad32-c78a-e055",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Cerastus Knight Castigator",
+        "id": "1d46-deed-7d16-e9ea",
+        "hidden": false,
+        "import": true,
+        "targetId": "b6e5-911b-93f-476",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Cerastus Knight Lancer",
+        "id": "f5f9-18ad-7599-b12b",
+        "hidden": false,
+        "import": true,
+        "targetId": "4175-82c6-8e96-bef8",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Knight Rampager",
+        "id": "a40b-b86b-bb77-7adf",
+        "hidden": false,
+        "import": true,
+        "targetId": "61e0-e55b-1926-44df",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Questoris Knight Magaera",
+        "id": "f882-18d4-b086-396b",
+        "hidden": false,
+        "import": true,
+        "targetId": "2d0e-5b83-b678-56dc",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Knight Tyrant",
+        "id": "e6dd-d5d6-c6fe-5dc3",
+        "hidden": false,
+        "import": true,
+        "targetId": "87ea-c7bd-6df0-f056",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Knight Abominant",
+        "id": "fd91-a6a1-d1a7-ada2",
+        "hidden": false,
+        "import": true,
+        "targetId": "a78d-828b-302b-1bec",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Questoris Knight Styrix",
+        "id": "e0cf-eea9-4734-6948",
+        "hidden": false,
+        "import": true,
+        "targetId": "106c-4bdf-79a4-1c70",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Beasts of Nurgle",
+        "id": "eaa1-160f-eadf-526d",
+        "hidden": false,
+        "import": true,
+        "targetId": "2de0-5897-f724-a592",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "12e4-f42a-e50a-5f6f",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Be'lakor",
+        "id": "be64-1536-94f2-1cb6",
+        "hidden": false,
+        "import": true,
+        "targetId": "2c37-2898-8350-ef45",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "2d43-4147-97d3-0afb",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Bloodcrushers",
+        "id": "06eb-c7f8-fc52-3dc6",
+        "hidden": false,
+        "import": true,
+        "targetId": "2f31-9132-b703-5fd8",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "0cea-be25-eca8-a8ec",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Bloodletters",
+        "id": "4552-4bcd-708c-3a07",
+        "hidden": false,
+        "import": true,
+        "targetId": "4ecc-6aa5-da28-2c57",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "a894-1b21-2f15-28c0",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Bloodmaster",
+        "id": "6994-6efa-206d-ef8b",
+        "hidden": false,
+        "import": true,
+        "targetId": "ccae-b5f1-8787-4c7d",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "051c-c46f-bb47-8dc0",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Bloodthirster",
+        "id": "bcc0-808c-14c1-83fa",
+        "hidden": false,
+        "import": true,
+        "targetId": "a018-ca33-afd0-be83",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "3dfd-0fad-29bb-252d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Blue Horrors",
+        "id": "6d2c-f880-a249-6893",
+        "hidden": false,
+        "import": true,
+        "targetId": "b795-b936-ad61-e407",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "5ac6-f736-b061-045a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Burning Chariot",
+        "id": "d33d-9f94-e22f-066d",
+        "hidden": false,
+        "import": true,
+        "targetId": "f6eb-b62f-5baf-d96d",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "f7a5-4038-c162-b040",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Changecaster",
+        "id": "c348-8d3d-19e3-47d7",
+        "hidden": false,
+        "import": true,
+        "targetId": "8b7c-d709-90d4-298e",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "ad58-5bde-925d-9f5a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Contorted Epitome",
+        "id": "513d-b8f5-d5a0-a5b8",
+        "hidden": false,
+        "import": true,
+        "targetId": "36df-8f40-8a6b-7d4c",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "ffe6-10d0-94ab-bd42",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Daemon Prince of Chaos",
+        "id": "3422-229e-52ba-002f",
+        "hidden": false,
+        "import": true,
+        "targetId": "497d-e065-f5a5-5e80",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "2e0d-8110-86e0-571d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Daemon Prince of Chaos with Wings",
+        "id": "6b62-8548-408a-a24b",
+        "hidden": false,
+        "import": true,
+        "targetId": "5800-3978-370d-b573",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "acdc-8568-1412-bb96",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Daemonettes",
+        "id": "9e76-ccf2-8b42-b028",
+        "hidden": false,
+        "import": true,
+        "targetId": "41c2-d2e6-ae43-3beb",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "79c3-a9df-b4ea-49bc",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Epidemius",
+        "id": "123a-8c4f-6f99-62de",
+        "hidden": false,
+        "import": true,
+        "targetId": "5851-dc90-9afe-76a7",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "2d63-deaa-b55e-767d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Exalted Flamer",
+        "id": "b3ab-4c4c-6f73-338c",
+        "hidden": false,
+        "import": true,
+        "targetId": "de54-5b38-8ca1-c39c",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "e70b-bd5d-0426-10b6",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Fateskimmer",
+        "id": "dadd-9b50-f111-047a",
+        "hidden": false,
+        "import": true,
+        "targetId": "c199-b27c-7cc2-7935",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "f7e6-41c3-0538-8560",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Feculent Gnarlmaw",
+        "id": "d2ea-0397-ba31-34c3",
+        "hidden": false,
+        "import": true,
+        "targetId": "13f0-d2b5-6201-ba84",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "a896-fc77-b415-e8eb",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Fiends",
+        "id": "81e3-6a10-30fb-f1d7",
+        "hidden": false,
+        "import": true,
+        "targetId": "d1ee-8d05-4fae-1727",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "aa07-e5b7-2d0a-f978",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Flamers",
+        "id": "0fe9-547a-d54d-15a7",
+        "hidden": false,
+        "import": true,
+        "targetId": "5f23-4d6-f2f9-5973",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "b347-f8f1-f533-d2ef",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Flesh Hounds",
+        "id": "7e45-fffe-0900-56c7",
+        "hidden": false,
+        "import": true,
+        "targetId": "fd31-64a2-b20f-f0bc",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "1402-8bc4-319f-8156",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Fluxmaster",
+        "id": "defd-2014-3502-79e9",
+        "hidden": false,
+        "import": true,
+        "targetId": "eba5-8a7a-fc5b-d7ec",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "1a95-5b2e-6012-8536",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Great Unclean One",
+        "id": "44a6-fc0c-7842-8b3c",
+        "hidden": false,
+        "import": true,
+        "targetId": "d490-6c4d-e83b-b183",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "67f0-92a9-d26b-7c59",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Hellflayers",
+        "id": "4d2b-9690-c7fe-7341",
+        "hidden": false,
+        "import": true,
+        "targetId": "e8d-bf22-b29-d20e",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "2594-bc7d-0fc8-2f2a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Horticulous Slimux",
+        "id": "bd41-8383-6ff3-20af",
+        "hidden": false,
+        "import": true,
+        "targetId": "7151-238f-a6eb-2f94",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "3aa4-16d2-dc86-e34c",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Infernal Enrapturess",
+        "id": "9dad-b507-ebba-a4ce",
+        "hidden": false,
+        "import": true,
+        "targetId": "2cc5-ef65-c4b9-28c6",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "7be6-bfa4-991a-a6e5",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Kairos Fateweaver",
+        "id": "ebe3-ec41-bdb8-ca3f",
+        "hidden": false,
+        "import": true,
+        "targetId": "6df5-f246-6bd-55b8",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "b97a-977d-c00e-4ca8",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Karanak",
+        "id": "3fab-1333-7d0a-8648",
+        "hidden": false,
+        "import": true,
+        "targetId": "8436-cec1-e65a-d1a7",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "b275-c6c7-13b8-74e7",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Keeper of Secrets",
+        "id": "8efe-190d-1cae-67f7",
+        "hidden": false,
+        "import": true,
+        "targetId": "a903-dd97-339d-6899",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "b6fc-ab87-8269-1811",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Lord of Change",
+        "id": "cf2d-b3eb-02ed-9885",
+        "hidden": false,
+        "import": true,
+        "targetId": "3600-9f92-933-bf54",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "1ec8-e0f2-7efe-8464",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Nurglings",
+        "id": "2daa-d455-4056-d56b",
+        "hidden": false,
+        "import": true,
+        "targetId": "e403-3a9-279e-41b7",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "1520-5a25-96a0-cb24",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Pink Horrors",
+        "id": "348e-e4c4-f55e-ec9f",
+        "hidden": false,
+        "import": true,
+        "targetId": "e7b8-aa40-6da7-778e",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "8c11-d89e-efe4-b04e",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Plague Drones",
+        "id": "9c5c-a4f5-1038-1c1b",
+        "hidden": false,
+        "import": true,
+        "targetId": "d620-146a-41cd-f28f",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "fdf0-08eb-98a4-6a31",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Plaguebearers",
+        "id": "4a52-e0c2-0c2d-097c",
+        "hidden": false,
+        "import": true,
+        "targetId": "d1eb-b092-d944-e729",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "a304-0eec-dad3-1201",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Poxbringer",
+        "id": "e431-bce9-fa99-b0bc",
+        "hidden": false,
+        "import": true,
+        "targetId": "7b06-189d-b11e-c189",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "6f6d-d709-6207-c43c",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Rendmaster on Blood Throne",
+        "id": "c8d7-c98c-87f2-c625",
+        "hidden": false,
+        "import": true,
+        "targetId": "d1cc-e17a-f1a1-4349",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "3697-75c1-9c15-51e6",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Rotigus",
+        "id": "1a99-0fbe-f6ed-157d",
+        "hidden": false,
+        "import": true,
+        "targetId": "cff8-7388-a2c9-946c",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "a5c2-20ba-3482-ad18",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Screamers",
+        "id": "0d1c-35b6-7e43-345b",
+        "hidden": false,
+        "import": true,
+        "targetId": "550b-c5ab-5e27-f59b",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "331a-5e9d-265c-88b8",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Seekers",
+        "id": "69b0-8334-0172-088d",
+        "hidden": false,
+        "import": true,
+        "targetId": "112d-8078-777f-76a5",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "aea7-95be-0f43-d8bc",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Shalaxi Helbane",
+        "id": "7aea-18b9-21af-3d78",
+        "hidden": false,
+        "import": true,
+        "targetId": "c49d-5ebc-4ee4-689e",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "6dcd-3e5a-ece3-8443",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Skarbrand",
+        "id": "1add-7eb9-5c49-0a4a",
+        "hidden": false,
+        "import": true,
+        "targetId": "7998-d0a-baa4-e8b3",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "8690-a6e6-16a0-6ff1",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Skull Altar",
+        "id": "56da-5155-ca75-d8b6",
+        "hidden": false,
+        "import": true,
+        "targetId": "464a-b548-355f-2058",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "cdf2-9739-c34d-9533",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Skull Cannon",
+        "id": "0059-97b6-53f7-64f1",
+        "hidden": false,
+        "import": true,
+        "targetId": "fd37-8a80-3da8-f262",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "489f-4dda-b2b9-92ae",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Skullmaster",
+        "id": "c714-2075-0cfe-328c",
+        "hidden": false,
+        "import": true,
+        "targetId": "dd30-ba4c-34a4-e788",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "d811-c759-229a-4834",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Skulltaker",
+        "id": "e175-ab24-4318-78cd",
+        "hidden": false,
+        "import": true,
+        "targetId": "8872-785a-1efa-7ca1",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "c7dd-941f-a5f7-ebeb",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Sloppity Bilepiper",
+        "id": "86eb-5d47-ba91-3db8",
+        "hidden": false,
+        "import": true,
+        "targetId": "3da0-5db0-7531-33b6",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "4a8f-1fb0-712e-24ea",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Soul Grinder",
+        "id": "367d-87da-1afe-97f7",
+        "hidden": false,
+        "import": true,
+        "targetId": "e16b-0203-c5dc-9d07",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "8be5-2956-994d-584b",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Spoilpox Scrivener",
+        "id": "8988-31a1-ace0-4f79",
+        "hidden": false,
+        "import": true,
+        "targetId": "e7cd-468b-37dd-d82f",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "6618-603e-ef80-45e6",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Syll'Esske",
+        "id": "2246-01df-fda5-431d",
+        "hidden": false,
+        "import": true,
+        "targetId": "27f6-d907-66f-ca28",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "59f4-fdbd-3121-5a59",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "The Blue Scribes",
+        "id": "06fb-d333-22c4-ba73",
+        "hidden": false,
+        "import": true,
+        "targetId": "caf1-8818-9e65-7154",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "1de7-92e1-eb56-7cfa",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "The Changeling",
+        "id": "fe44-08c9-ea78-c94b",
+        "hidden": false,
+        "import": true,
+        "targetId": "ac75-c011-9a10-2c4a",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "02fd-9558-47f9-e3b5",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "The Masque of Slaanesh",
+        "id": "e070-9802-fdb0-df76",
+        "hidden": false,
+        "import": true,
+        "targetId": "1567-b99b-bd8f-d485",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "c98d-ebb5-a30e-e412",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Tormentbringer",
+        "id": "6c3c-2a88-d8eb-4992",
+        "hidden": false,
+        "import": true,
+        "targetId": "673b-111b-6dcb-352",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "3e98-5326-32ea-6209",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Tranceweaver",
+        "id": "1662-f227-46d2-bf50",
+        "hidden": false,
+        "import": true,
+        "targetId": "dba-34e3-46f2-56e0",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons",
+            "id": "47f7-339c-e1ca-25b1",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0e2e-9c77-7bee-afbe"
+          }
+        ]
+      },
+      {
+        "name": "Accursed Cultists",
+        "id": "46c8-e96e-7bac-10a4",
+        "hidden": false,
+        "import": true,
+        "targetId": "23aa-b45a-6d5d-e92b",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Damned",
+            "id": "90bc-f97f-96ef-9ce4",
+            "hidden": false,
+            "primary": false,
+            "targetId": "49c3-83a4-c372-6b9f"
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "hidden",
+            "type": "set",
+            "value": true,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "7fe8-de91-8976-e705",
+                        "field": "selections",
+                        "includeChildSelections": true,
+                        "scope": "force",
+                        "shared": true,
+                        "type": "lessThan",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Cultist Firebrand",
+        "id": "23b3-4a92-afd1-f2e5",
+        "hidden": false,
+        "import": true,
+        "targetId": "cb66-af7-2cca-1c85",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Damned",
+            "id": "b5b8-93f9-f49a-d3af",
+            "hidden": false,
+            "primary": false,
+            "targetId": "49c3-83a4-c372-6b9f"
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "hidden",
+            "type": "set",
+            "value": true,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "7fe8-de91-8976-e705",
+                        "field": "selections",
+                        "includeChildSelections": true,
+                        "scope": "force",
+                        "shared": true,
+                        "type": "lessThan",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Cultist Mob",
+        "id": "b005-b27c-2992-d202",
+        "hidden": false,
+        "import": true,
+        "targetId": "1267-78f1-7774-859",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Damned",
+            "id": "40fa-ab2a-87f2-2499",
+            "hidden": false,
+            "primary": false,
+            "targetId": "49c3-83a4-c372-6b9f"
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "hidden",
+            "type": "set",
+            "value": true,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "7fe8-de91-8976-e705",
+                        "field": "selections",
+                        "includeChildSelections": true,
+                        "scope": "force",
+                        "shared": true,
+                        "type": "lessThan",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Dark Commune",
+        "id": "131c-a9be-0d0e-1bd8",
+        "hidden": false,
+        "import": true,
+        "targetId": "1780-25b8-ce0b-898d",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Damned",
+            "id": "bfd4-5813-69c1-f3e0",
+            "hidden": false,
+            "primary": false,
+            "targetId": "49c3-83a4-c372-6b9f"
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "hidden",
+            "type": "set",
+            "value": true,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "7fe8-de91-8976-e705",
+                        "field": "selections",
+                        "includeChildSelections": true,
+                        "scope": "force",
+                        "shared": true,
+                        "type": "lessThan",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Fellgor Beastmen",
+        "id": "2423-2e5a-565f-6c06",
+        "hidden": false,
+        "import": true,
+        "targetId": "6bf7-888c-7aa6-6831",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Damned",
+            "id": "1e03-60fe-a43b-4115",
+            "hidden": false,
+            "primary": false,
+            "targetId": "49c3-83a4-c372-6b9f"
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "hidden",
+            "type": "set",
+            "value": true,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "7fe8-de91-8976-e705",
+                        "field": "selections",
+                        "includeChildSelections": true,
+                        "scope": "force",
+                        "shared": true,
+                        "type": "lessThan",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Traitor Enforcer",
+        "id": "545e-5ade-fcc2-2c6e",
+        "hidden": false,
+        "import": true,
+        "targetId": "f69d-2171-5f95-9c88",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Damned",
+            "id": "40b5-3029-e728-ef8c",
+            "hidden": false,
+            "primary": false,
+            "targetId": "49c3-83a4-c372-6b9f"
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "hidden",
+            "type": "set",
+            "value": true,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "7fe8-de91-8976-e705",
+                        "field": "selections",
+                        "includeChildSelections": true,
+                        "scope": "force",
+                        "shared": true,
+                        "type": "lessThan",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Traitor Guardsmen Squad",
+        "id": "98c4-dabe-f4c7-c9e8",
+        "hidden": false,
+        "import": true,
+        "targetId": "8dc5-4dcb-d77f-7d23",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Damned",
+            "id": "6484-867f-f315-0c16",
+            "hidden": false,
+            "primary": false,
+            "targetId": "49c3-83a4-c372-6b9f"
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "hidden",
+            "type": "set",
+            "value": true,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "7fe8-de91-8976-e705",
+                        "field": "selections",
+                        "includeChildSelections": true,
+                        "scope": "force",
+                        "shared": true,
+                        "type": "lessThan",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Chaos Reaver Titan",
+        "id": "a723-bb25-1904-ad86",
+        "hidden": false,
+        "import": true,
+        "targetId": "0141-e2cd-472c-1a1d",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Titanicus Traitoris",
+            "id": "f0fd-b47d-52a5-0cb1",
+            "hidden": false,
+            "primary": false,
+            "targetId": "58cc-2c69-a359-bd4a"
+          },
+          {
+            "name": "Allies: Titanicus Traitoris: Reaver Titan",
+            "id": "4719-9083-4a8b-2820",
+            "hidden": false,
+            "primary": false,
+            "targetId": "a9d1-e5db-a1b4-7fbc"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Warbringer Nemesis Titan",
+        "id": "1955-f45f-6055-fe57",
+        "hidden": false,
+        "import": true,
+        "targetId": "c93d-98d6-9a89-8900",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Titanicus Traitoris",
+            "id": "8087-b2d2-7e05-3022",
+            "hidden": false,
+            "primary": false,
+            "targetId": "58cc-2c69-a359-bd4a"
+          },
+          {
+            "name": "Allies: Titanicus Traitoris: Warbringer Nemesis Titan",
+            "id": "8fc2-017d-50e6-1844",
+            "hidden": false,
+            "primary": false,
+            "targetId": "532e-acd7-4ef5-e3b7"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Warhound Titan",
+        "id": "0f7b-009c-d141-0e7e",
+        "hidden": false,
+        "import": true,
+        "targetId": "bc5d-9d13-6c87-5f9f",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Titanicus Traitoris",
+            "id": "3f1a-3441-a42b-2ac2",
+            "hidden": false,
+            "primary": false,
+            "targetId": "58cc-2c69-a359-bd4a"
+          },
+          {
+            "name": "Allies: Titanicus Traitoris: Warhound Titan",
+            "id": "2e61-28a5-c229-bf32",
+            "hidden": false,
+            "primary": false,
+            "targetId": "421a-3aba-98fa-142f"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Warlord Titan",
+        "id": "a866-3e5e-f229-3d20",
+        "hidden": false,
+        "import": true,
+        "targetId": "9210-30cc-eecc-2958",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Titanicus Traitoris",
+            "id": "6ab2-060a-e6d1-1f1e",
+            "hidden": false,
+            "primary": false,
+            "targetId": "58cc-2c69-a359-bd4a"
+          },
+          {
+            "name": "Allies: Titanicus Traitoris: Warlord Titan",
+            "id": "3617-d493-d89b-dc6a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "99db-707a-474c-27c8"
+          }
+        ]
+      },
+      {
+        "name": "Detachment",
+        "id": "1c25-f726-af37-97c3",
+        "hidden": false,
+        "import": true,
+        "targetId": "a5e5-188f-bc8f-80e2",
+        "type": "selectionEntry"
+      }
+    ],
+    "infoLinks": [
+      {
+        "name": "Harbingers of Dread",
+        "id": "809e-9889-bab2-443f",
+        "hidden": false,
+        "targetId": "8265-ea2e-0549-6dd3",
+        "type": "rule"
+      },
+      {
+        "name": "Super-heavy Walker",
+        "id": "d3df-bbaf-caef-cfa6",
+        "hidden": false,
+        "targetId": "3431-b503-f58f-5cf2",
+        "type": "rule"
+      },
+      {
+        "name": "Dreadblades",
+        "id": "c235-8801-32fb-88c9",
+        "hidden": false,
+        "targetId": "4f9f-100a-111e-c163",
+        "type": "rule"
+      }
+    ]
+  }
+}
