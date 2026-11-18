@@ -63,16 +63,6 @@ function oathRewardSelection(input: Params): Params {
   return { method: enumValue(input.method, ["any", "chosen", "random"], "oath-reward-selection.method") };
 }
 
-function abilityUseContext(input: Params): Params {
-  const family = "ability-use-context";
-  exactKeys(input, ["owner", "level", "keyword", "bind_as"], family);
-  if (typeof input.keyword !== "string" || !input.keyword.trim()) throw new TypeError(`${family}.keyword must be nonempty.`);
-  const owner = enumValue(input.owner, OWNERS, `${family}.owner`);
-  const level = enumValue(input.level, ["model", "unit"], `${family}.level`);
-  if (typeof input.bind_as !== "string" || !/^[a-z][a-z0-9-]*$/u.test(input.bind_as)) throw new TypeError(`${family}.bind_as must be a binding name.`);
-  return { owner, level, keyword: input.keyword, bind_as: input.bind_as };
-}
-
 const ritualMenuOpen = noParameters("ritual-menu-open");
 const ritualManifest = noParameters("ritual-manifest");
 const oathDetermine = oathLeaf("oath-determine", ["ability", "subject"]);
@@ -212,15 +202,5 @@ export const PSYCHIC_AND_OATHS_FAMILIES: readonly FlatFamily[] = [
     parameterSchema: {type: "object", properties: {method: {enum: ["any", "chosen", "random"]}}, required: ["method"], additionalProperties: false},
     normalize: oathRewardSelection,
   },
-  {
-    id: "ability-use-context",
-    version: 1,
-    role: "EVENT",
-    label: "Bind an ability use",
-    description: "Historical spelling of an ability-use event. Current authoring uses event plus a unit-filter; retained so trusted version-1 fingerprints keep their original meaning.",
-    starter: {owner: "friendly", level: "model", keyword: "", bind_as: "ability-use"},
-    parameterSchema: {type: "object", properties: {owner: {enum: ["friendly", "enemy", "any"]}, level: {enum: ["model", "unit"]}, keyword: {type: "string", minLength: 1}, bind_as: {type: "string", pattern: "^[a-z][a-z0-9-]*$"}}, required: ["owner", "level", "keyword", "bind_as"], additionalProperties: false},
-    deprecated: true,
-    normalize: abilityUseContext,
-  },
+
 ];

@@ -60,7 +60,7 @@ const FAMILY_ORDER: readonly string[] = [
   "named-ability-grant", "named-ability-exchange", "named-ability-suppression",
   "resource-before-ability-determination", "oath-determine", "oath-fulfilled",
   "oath-selection-history", "oath-duplicate-result", "oath-exhaustion", "oath-quality-persistence",
-  "oath-deed-reward", "oath-reward-selection", "ability-use-context", "ability-use-history",
+  "oath-deed-reward", "oath-reward-selection", "ability-use-history",
   "ability-selection-override", "army-state", "scale-cap", "characteristic-amount", "named-weapon",
   "unit-wargear", "additive-option", "ignore-modifier-list", "embarked-permission",
   "move-passthrough-used", "named-range-value", "named-range-cap", "count-by-markers", "test",

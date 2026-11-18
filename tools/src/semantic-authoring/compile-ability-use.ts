@@ -7,12 +7,6 @@ import { selectionFilter } from "./compile-wrappers.js";
 
 type Node = Record<string, unknown>;
 
-export function abilityUseTrigger(leaf: CompileLeaf): Node | null {
-  if (leaf.family_id !== "ability-use-context") return null;
-  const p = leaf.parameters;
-  return { event: "used", subject: { owner: p.owner, level: p.level }, filter: { kind: "ability", ability_keyword: p.keyword }, binds_event_variable: p.bind_as };
-}
-
 export function abilityUseCondition(leaf: CompileLeaf): Node | null {
   const p = leaf.parameters;
   if (leaf.family_id === "army-state") return { type: "army-state", parameters: { owner: p.owner, state: p.state } };
@@ -73,16 +67,13 @@ export function foldAbilityUseContext(leaves: readonly CompileLeaf[]): CompileLe
   const folded = foldUnitFilters(leaves);
   const override = one(folded, "ability-selection-override");
   const events = folded.filter((leaf) =>
-    leaf.family_id === "ability-use-context"
-    || (leaf.family_id === "event" && leaf.parameters.kind === "used" && leaf.parameters.activity === "ability"
-      && typeof leaf.parameters.ability_keyword === "string" && leaf.parameters.bind_as !== undefined));
+    leaf.family_id === "event" && leaf.parameters.kind === "used" && leaf.parameters.activity === "ability"
+    && typeof leaf.parameters.ability_keyword === "string" && leaf.parameters.bind_as !== undefined);
   if (events.length !== 1) throw new CompileError("An ability selection override needs exactly one bound used-ability event.");
   const event = events[0]!;
   const variable = event.parameters.bind_as;
   if (override.parameters.event_var !== variable) throw new CompileError("The selection override references an unbound ability use.");
-  const actor = event.family_id === "ability-use-context"
-    ? { owner: event.parameters.owner, level: event.parameters.level }
-    : event.parameters.subject_filter as Node | undefined;
+  const actor = event.parameters.subject_filter as Node | undefined;
   if (actor === undefined || typeof actor.owner !== "string") {
     throw new CompileError("A bound used-ability event needs its actor from a preceding unit-filter.");
   }

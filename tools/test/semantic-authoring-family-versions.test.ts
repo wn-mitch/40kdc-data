@@ -6,7 +6,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, describe, expect, it } from "vitest";
 import { hashJson } from "../src/canonical-hash.js";
-import { currentFamilyVersion, familyRole, REVIEWED_FAMILY_REGISTRY, validateFingerprint } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, REVIEWED_FAMILY_REGISTRY, seedReviewedFamilies, validateFingerprint } from "../src/semantic-authoring/contracts.js";
 import { initializeWorkbench, insertSpan } from "../src/semantic-authoring/db.js";
 import { FAMILY_VERSION_MAPPINGS, mapToLatest, upgradeFamilyVersions, type VersionMapping } from "../src/semantic-authoring/family-versions.js";
 import { refreshSources } from "../src/semantic-authoring/source.js";
@@ -63,17 +63,34 @@ const bump = (family: string, map: VersionMapping["map"] = (parameters) => param
   [{ family, from: RETIRED, to: currentFamilyVersion(family), map }];
 
 describe("Semantic authoring family registry", () => {
-  it("keeps one current version per family, and maps only the retired ability-use context", () => {
-    const retired = REVIEWED_FAMILY_REGISTRY.filter((family) => family.deprecated).map((family) => `${family.id}@${family.version}`);
-    expect(retired).toEqual(["ability-use-context@1"]);
-    for (const family of REVIEWED_FAMILY_REGISTRY.filter((item) => !item.deprecated)) expect(() => currentFamilyVersion(family.id), family.id).not.toThrow();
-    expect(FAMILY_VERSION_MAPPINGS.map((mapping) => `${mapping.family}@${mapping.from}`)).toEqual(["ability-use-context@1"]);
+  it("keeps one current version per family, and maps only onto current versions", () => {
+    expect(REVIEWED_FAMILY_REGISTRY.filter((family) => family.deprecated).map((family) => `${family.id}@${family.version}`)).toEqual([]);
+    for (const family of REVIEWED_FAMILY_REGISTRY) expect(() => currentFamilyVersion(family.id), family.id).not.toThrow();
     for (const mapping of FAMILY_VERSION_MAPPINGS) expect(mapping.to, mapping.family).toBe(currentFamilyVersion(mapping.to_family ?? mapping.family));
   });
 
   it("gives no current family a bearer: this-model is the one way to name the model with the ability", () => {
     for (const family of REVIEWED_FAMILY_REGISTRY.filter((item) => !item.deprecated)) {
       expect(JSON.stringify(family.parameterSchema), `${family.id}@${family.version}`).not.toMatch(/"bearer"/u);
+    }
+  });
+
+  it("deprecates the version a bump replaced on the next open, then drops it once no leaf uses it", () => {
+    const db = fixture([{ ability_id: "ward", raw_text: `${TARGETED}, it has a 5+ Feel No Pain.` }]);
+    try {
+      // Before the bump, the replaced version was the current one: its row is active.
+      const old = retiredFingerprint(db, FNP, ward("this-unit"));
+      db.prepare("UPDATE semantic_families SET status = 'active' WHERE id = ? AND version = ?").run(FNP, RETIRED);
+      annotate(db, span(db, "ward", TARGETED), old);
+      const status = () => db.prepare("SELECT status FROM semantic_families WHERE id = ? AND version = ?").get(FNP, RETIRED);
+
+      seedReviewedFamilies(db);
+      expect(status()).toEqual({ status: "deprecated" });
+      expect(db.prepare("SELECT count(*) AS n FROM semantic_families WHERE status = 'active'").get()).toEqual({ n: REVIEWED_FAMILY_REGISTRY.filter((family) => !family.deprecated).length });
+      upgradeFamilyVersions(db, bump(FNP));
+      expect(status()).toBeUndefined();
+    } finally {
+      db.close();
     }
   });
 
@@ -174,21 +191,6 @@ describe("Semantic authoring family version bump", () => {
       expect(report.unmapped).toEqual([{ fingerprint_id: old, family_id: FNP, active_annotations: 1 }]);
       expect(db.prepare("SELECT fingerprint_id, status FROM annotations WHERE id = ?").get(leaf)).toEqual({ fingerprint_id: old, status: "active" });
       expect(db.prepare("SELECT 1 AS kept FROM semantic_families WHERE id = ? AND version = ?").get(FNP, RETIRED)).toEqual({ kept: 1 });
-    } finally {
-      db.close();
-    }
-  });
-
-  it("keeps the trusted ability-use context leaf active until its actor and event are reviewed separately", () => {
-    const text = "A friendly model uses a TEST-LINK ability.";
-    const db = fixture([{ ability_id: "linked-use", raw_text: text }]);
-    try {
-      db.prepare("UPDATE semantic_families SET status = 'active' WHERE id = 'ability-use-context' AND version = 1").run();
-      const fingerprint = validateFingerprint(db, "ability-use-context", { owner: "friendly", level: "model", keyword: "TEST-LINK", bind_as: "test-use" }, 1, text);
-      db.prepare("UPDATE semantic_families SET status = 'deprecated' WHERE id = 'ability-use-context' AND version = 1").run();
-      annotate(db, span(db, "linked-use", text), fingerprint);
-      expect(upgradeFamilyVersions(db).unmapped).toEqual([{ fingerprint_id: fingerprint, family_id: "ability-use-context", active_annotations: 1 }]);
-      expect(db.prepare("SELECT status FROM annotations WHERE fingerprint_id = ?").get(fingerprint)).toEqual({ status: "active" });
     } finally {
       db.close();
     }

@@ -1,4 +1,3 @@
-import { abilityUseTrigger } from "./compile-ability-use.js";
 /**
  * EVENT-role leaves as DSL triggers, split out of `compile-conditions.ts`: the fixed kinds'
  * table, phase/turn/step boundaries, the general owned moments, and a folded unit-filter as the
@@ -405,8 +404,6 @@ function disembarkedFromTransport(leaf: CompileLeaf): Node {
 }
 
 function eventTrigger(leaf: CompileLeaf): Node {
-  const specialized = abilityUseTrigger(leaf);
-  if (specialized) return specialized;
   if (leaf.family_id === "event") {
     const kind = String(leaf.parameters.kind);
     if (kind === "disembarked" && leaf.parameters.transport !== undefined) return disembarkedFromTransport(leaf);

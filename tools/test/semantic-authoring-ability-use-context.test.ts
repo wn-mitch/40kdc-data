@@ -62,16 +62,12 @@ describe("context-bound ability selection replacement", () => {
     }
   });
 
-  it("keeps the retired context fingerprint while current authoring uses the widened event primitive", () => {
-    const historical = { owner: "friendly", level: "model", keyword: "TEST-LINK", bind_as: "test-use" };
-    expect(normalizeFingerprintParameters("ability-use-context", historical, 1)).toEqual(historical);
-    expect(() => currentFamilyVersion("ability-use-context")).toThrow(/0 current versions/u);
-
-    const version = currentFamilyVersion("event");
+  it("binds the used ability on the event and takes its actor from the unit-filter before it", () => {
     const active = { kind: "used", activity: "ability", ability_keyword: "TEST-LINK", bind_as: "test-use" };
-    expect(normalizeFingerprintParameters("event", active, version)).toEqual(active);
-    // event@33 added ability_keyword; event@32 is the version before it.
-    expect(() => normalizeFingerprintParameters("event", active, 32)).toThrow();
+    expect(normalizeFingerprintParameters("event", active)).toEqual(active);
+    const { leaves } = example();
+    const result = compileLeaves(leaves.slice(1), example().text);
+    expect(result.ok ? "" : result.errors.join("; ")).toMatch(/actor from a preceding unit-filter/u);
   });
 
   it("keeps ability identity and actor identity independent in the history guard", () => {

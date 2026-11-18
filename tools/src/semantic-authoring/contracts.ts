@@ -117,7 +117,10 @@ export function exactSpan(source: string, start: number, end: number): string {
   return text;
 }
 
-/** Seed every registry version once and reject drift in a reviewed definition. */
+/**
+ * Seed every registry version once and reject drift in a reviewed definition. A stored version the
+ * registry no longer defines (the version before a bump) is deprecated: it accepts no new leaves.
+ */
 export function seedReviewedFamilies(db: DatabaseSync): void {
   const select = db.prepare(
     "SELECT role, parameter_schema_json, status FROM semantic_families WHERE id = ? AND version = ?",
@@ -149,6 +152,10 @@ export function seedReviewedFamilies(db: DatabaseSync): void {
         if (existing.status === "deprecated") throw new Error(`Reviewed family ${family.id}@${family.version} was deprecated and cannot return.`);
         deprecate.run(family.id, family.version);
       }
+    }
+    const defined = new Set(REVIEWED_FAMILY_REGISTRY.map((family) => `${family.id}@${family.version}`));
+    for (const row of db.prepare("SELECT id, version FROM semantic_families WHERE status = 'active'").all() as Array<{ id: string; version: number }>) {
+      if (!defined.has(`${row.id}@${row.version}`)) deprecate.run(row.id, row.version);
     }
   }
 }

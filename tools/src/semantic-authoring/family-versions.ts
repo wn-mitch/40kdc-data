@@ -26,16 +26,7 @@ export type VersionMapping = {
   map: (parameters: Record<string, unknown>) => Record<string, unknown> | null;
 };
 
-export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
-  // ability-use-context split its actor into a separate unit-filter when event became the one
-  // active owner. A fingerprint migration cannot create that second span-bound leaf, so the
-  // trusted annotation stays and is reported for explicit review rather than dropping its
-  // owner/level or inventing another annotation.
-  {
-    family: "ability-use-context", from: 1, to_family: "event", to: 39,
-    map: () => null,
-  },
-];
+export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [];
 
 export type FamilyVersionReport = {
   migrated_fingerprints: number;

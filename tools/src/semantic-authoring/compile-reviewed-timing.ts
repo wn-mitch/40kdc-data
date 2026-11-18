@@ -265,8 +265,7 @@ export function compileReviewedTiming(existing: Node, leaves: readonly CompileLe
   }
 
   const abilityUse = leaves.find((leaf) =>
-    leaf.family_id === "ability-use-context"
-    || (leaf.family_id === "event" && leaf.parameters.kind === "used" && leaf.parameters.activity === "ability" && leaf.parameters.bind_as !== undefined));
+    leaf.family_id === "event" && leaf.parameters.kind === "used" && leaf.parameters.activity === "ability" && leaf.parameters.bind_as !== undefined);
   if (abilityUse) {
     after.behavior = "reactive";
     after.trigger = { ...trigger(abilityUse), optional: optional(leaves) };
