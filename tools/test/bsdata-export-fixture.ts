@@ -52,8 +52,9 @@ export function factionCatalogue(documents: readonly { file: string; document: B
   return merged;
 }
 
-export function loadExportFixture(): ExportFixture {
-  const documents = buildExport({ version: "1.5.1", dataset });
+/** The export of `ds` (the embedded dataset by default), indexed for the tests. */
+export function loadExportFixture(ds: Dataset = dataset): ExportFixture {
+  const documents = buildExport({ version: "1.5.1", dataset: ds });
   const gst = Object.values(documents[0].document)[0] as BsNode;
   const catalogues = new Map<string, BsNode>();
   const entries = new Map<string, UnitEntry>();
@@ -63,7 +64,7 @@ export function loadExportFixture(): ExportFixture {
     catalogues.set(factionId, catalogue);
     for (const node of children(catalogue, "sharedSelectionEntries")) {
       if (node.type !== "unit" && node.type !== "model") continue;
-      const view = dataset.units.byFaction(factionId).find((u) => bsName(u.raw.is_legend ? `${u.name} [Legends]` : u.name) === node.name);
+      const view = ds.units.byFaction(factionId).find((u) => bsName(u.raw.is_legend ? `${u.name} [Legends]` : u.name) === node.name);
       if (view) entries.set(str(node, "id")!, { factionId, unitId: view.id, node });
     }
   }
@@ -140,8 +141,8 @@ export function roster(
   };
 }
 
-export function codes(spec: NormRoster): Set<RosterViolationCode> {
-  return new Set(validateRosterCore(spec, dataset).army.map((v) => v.code));
+export function codes(spec: NormRoster, ds: Dataset = dataset): Set<RosterViolationCode> {
+  return new Set(validateRosterCore(spec, ds).army.map((v) => v.code));
 }
 
 /** Whether validation resolves `unitId` in `host`'s army to the record from `factionId`. */
