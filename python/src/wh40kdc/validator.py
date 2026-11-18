@@ -43,6 +43,7 @@ VALIDATOR_TARGETS = {
 #: jsonschema validator name → closed-enum code (mirrors ajvKeywordToCode).
 _KEYWORD_TO_CODE = {
     "required": "REQUIRED_MISSING",
+    "dependentRequired": "REQUIRED_MISSING",
     "type": "TYPE_MISMATCH",
     "enum": "ENUM_VIOLATION",
     "const": "ENUM_VIOLATION",
@@ -61,6 +62,7 @@ _KEYWORD_TO_CODE = {
 }
 
 _REQUIRED_PROP_RE = re.compile(r"^'(.*)' is a required property$")
+_DEPENDENT_PROP_RE = re.compile(r"^'(.*)' is a dependency of '.*'$")
 
 
 def _schemas_root() -> Path:
@@ -160,11 +162,13 @@ def _flatten_errors(errors: Any) -> Any:
 
 
 def _error_path(error: Any) -> str:
-    """AJV-style ``instancePath`` JSON Pointer; ``required`` errors get
-    ``/{missingProperty}`` appended (mirrors the TS runner's ``errorPath``)."""
+    """AJV-style ``instancePath`` JSON Pointer; ``required`` and
+    ``dependentRequired`` errors get ``/{missingProperty}`` appended (mirrors
+    the TS runner's ``errorPath``)."""
     pointer = "".join(f"/{part}" for part in error.absolute_path)
-    if error.validator == "required":
-        m = _REQUIRED_PROP_RE.match(error.message)
+    if error.validator in ("required", "dependentRequired"):
+        pattern = _REQUIRED_PROP_RE if error.validator == "required" else _DEPENDENT_PROP_RE
+        m = pattern.match(error.message)
         missing = m.group(1) if m else ""
         return f"{pointer}/{missing}"
     return pointer

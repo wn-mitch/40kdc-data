@@ -56,7 +56,7 @@ pub const VALIDATOR_TARGETS: &[&str] = &[
 
 fn keyword_to_code(keyword: &str) -> Option<&'static str> {
     Some(match keyword {
-        "required" => "REQUIRED_MISSING",
+        "required" | "dependentRequired" => "REQUIRED_MISSING",
         "type" => "TYPE_MISMATCH",
         "enum" | "const" => "ENUM_VIOLATION",
         "pattern" | "format" => "PATTERN_MISMATCH",
@@ -200,7 +200,11 @@ fn check_object(
                         .filter_map(Value::as_str)
                     {
                         if !inst.contains_key(name) {
-                            push(out, path, "dependentRequired");
+                            push(
+                                out,
+                                &format!("{}/{}", path, escape_token(name)),
+                                "dependentRequired",
+                            );
                         }
                     }
                 }
@@ -223,11 +227,8 @@ fn check_object(
                         continue;
                     }
                     match ap {
-                        Value::Bool(false) => push(
-                            out,
-                            &format!("{}/{}", path, escape_token(k)),
-                            "additionalProperties",
-                        ),
+                        // Reported at the object holding the extra property, as AJV's instancePath is.
+                        Value::Bool(false) => push(out, path, "additionalProperties"),
                         Value::Object(_) | Value::Bool(true) => {
                             check(root, ap, val, &format!("{}/{}", path, escape_token(k)), out)
                         }

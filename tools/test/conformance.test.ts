@@ -796,6 +796,7 @@ const VALIDATOR_TARGET_SCHEMAS: Record<string, string> = {
 function ajvKeywordToCode(keyword: string): string {
   switch (keyword) {
     case "required":
+    case "dependentRequired":
       return "REQUIRED_MISSING";
     case "type":
       return "TYPE_MISMATCH";
@@ -825,7 +826,7 @@ function ajvKeywordToCode(keyword: string): string {
 
 /** Compute the canonical error path for a closed-enum code. */
 function errorPath(err: { instancePath: string; keyword: string; params?: unknown }): string {
-  if (err.keyword === "required") {
+  if (err.keyword === "required" || err.keyword === "dependentRequired") {
     const params = err.params as { missingProperty?: string };
     return `${err.instancePath}/${params.missingProperty ?? ""}`;
   }

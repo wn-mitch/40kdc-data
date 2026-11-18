@@ -1387,5 +1387,598 @@
         "code": "TYPE_MISMATCH"
       }
     ]
+  },
+  {
+    "name": "ability: optional move end that names what it replaces",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "reactive",
+      "scope": {
+        "duration": "phase"
+      },
+      "effect": {
+        "type": "move-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "applies_to_moves": [
+            "surge"
+          ],
+          "ends_nearest": {
+            "of": {
+              "objective": {}
+            },
+            "instead_of": "closest-enemy-unit",
+            "optional": true
+          }
+        }
+      },
+      "trigger": {
+        "event": "move-started",
+        "filter": {
+          "move_types": [
+            "consolidation"
+          ]
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: optional move end without instead_of (only a dependentRequired rule rejects it)",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "reactive",
+      "scope": {
+        "duration": "phase"
+      },
+      "effect": {
+        "type": "move-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "applies_to_moves": [
+            "surge"
+          ],
+          "ends_nearest": {
+            "of": {
+              "objective": {}
+            },
+            "optional": true
+          }
+        }
+      },
+      "trigger": {
+        "event": "move-started",
+        "filter": {
+          "move_types": [
+            "consolidation"
+          ]
+        }
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/effect",
+        "code": "ADDITIONAL_PROPERTY"
+      },
+      {
+        "path": "/effect/actions",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/applies",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/condition",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/consumer",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/designation",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/dice",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/duration",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/effect",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/from",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/max_activations",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/menu_id",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/mode",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier",
+        "code": "ADDITIONAL_PROPERTY"
+      },
+      {
+        "path": "/effect/modifier/ability",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/ability_id",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/act",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/activity",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/additional_selections",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/allocation",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/allow",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/also",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/amount",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/aspect",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/at_most",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/bind_as",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/by",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/capacity",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/copy_of",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/count",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/critical_on",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/datasheet",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/definition",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/detachment",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/direction",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/ends_nearest/instead_of",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/equal_units",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/equivalent_model_count",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/equivalent_model_keyword",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/exempt_from",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/fails_on",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/in_region",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/invuln_sv",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/join",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/keyword",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/keywords",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/label",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/max_models",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/may",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/model",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/model_counts",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/models_per_group",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/move_type",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/occupancy_kind",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/of",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/operation",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/pool",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/producer",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/range",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/reduction",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/region_ref",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/removes",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/result",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/result_scope",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/roll",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/rounding",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/rule",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/rule_kind",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/set",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/spaces_per_group",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/spaces_per_model",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/stat",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/state",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/subject_kind",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/subset",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/succeeds_on",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/tag",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/target",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/test",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/threshold",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/tie",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/to",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/weapon_id",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/what",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/window",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/within",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/move_type",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/name",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/options",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/outcomes",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/pool",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/pool_id",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/requirement",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/reward",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/risk",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/ritual_limit",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/rituals",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/roll_var",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/select",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/selection_policy",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/selector",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/steps",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/target",
+        "code": "ENUM_VIOLATION"
+      },
+      {
+        "path": "/effect/test",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/threshold",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/type",
+        "code": "ENUM_VIOLATION"
+      }
+    ]
+  },
+  {
+    "name": "ability: community_notes that is null",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "reactive",
+      "scope": {
+        "duration": "phase"
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      },
+      "trigger": {
+        "event": "move-started",
+        "filter": {
+          "move_types": [
+            "consolidation"
+          ]
+        }
+      },
+      "community_notes": null
+    },
+    "expected_errors": [
+      {
+        "path": "/community_notes",
+        "code": "TYPE_MISMATCH"
+      }
+    ]
+  },
+  {
+    "name": "wargear-option model constraint with an unknown property",
+    "target": "wargear-option",
+    "input": {
+      "id": "khorne-berzerkers-addon-4",
+      "unit_id": "khorne-berzerkers",
+      "faction_id": "world-eaters",
+      "model_constraint": {
+        "max_count": 1,
+        "per": 5
+      },
+      "replacement": [
+        "icon-of-khorne"
+      ],
+      "is_free": true,
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/model_constraint",
+        "code": "ADDITIONAL_PROPERTY"
+      },
+      {
+        "path": "/model_constraint",
+        "code": "TYPE_MISMATCH"
+      }
+    ]
   }
 ]
