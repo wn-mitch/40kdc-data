@@ -1036,7 +1036,7 @@ async function runStratagemsCmd(dump: MfmDump, write: boolean): Promise<void> {
     report.dirs.reduce((a, d) => a + f(d), 0);
   console.log(`Stratagems report → ${path.relative(REPO_ROOT, reportPath)}`);
   console.log(
-    `Matched ${sum((d) => d.matched)}, cp applied ${sum((d) => d.cpChanged.length)}, ` +
+    `Matched ${sum((d) => d.matched)}, cp applied ${sum((d) => d.cpChanged.length)}, extra cp ${sum((d) => d.extraCpChanged.length)}, ` +
       `turn applied ${sum((d) => d.turnApplied.length)}, type filled ${sum((d) => d.typeFilled.length)}, ` +
       `type conflict ${sum((d) => d.typeConflict.length)}, category set ${sum((d) => d.categoryChanged.length)}, ` +
       `phases (review) ${sum((d) => d.phasesReview.length)}, ` +

@@ -51,6 +51,7 @@ interface SeedStratRecord {
   type?: string;
   detachment_id?: string;
   cp_cost: number;
+  secondary_effect_extra_cp?: number;
   phases: string[];
   player_turn: string;
   timing: string;
@@ -223,6 +224,7 @@ export function seedStratagems(
       ...(c.type ? { type: c.type } : {}),
       ...(detachment_id ? { detachment_id } : {}),
       cp_cost: c.cp_cost ?? 1,
+      ...(c.secondary_effect_extra_cp ? { secondary_effect_extra_cp: c.secondary_effect_extra_cp } : {}),
       phases: derived.phases ?? ["command"],
       player_turn: c.player_turn ?? derived.player_turn ?? "either",
       timing: DEFAULT_TIMING,

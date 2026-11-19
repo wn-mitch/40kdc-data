@@ -8,6 +8,8 @@
  *
  * APPLIED from the dump — only fields backed by a reliable FIRST-CLASS column:
  *   - cp_cost   ← `cpCost`   (authoritative numeric).
+ *   - secondary_effect_extra_cp ← `secondaryEffectAdditionalCPCost`: the extra CP the
+ *                   secondary (alternate) effect costs. Absent where the dump has none.
  *   - player_turn ← `key`    (`yourTurn`/`eitherPlayer`/`opponentsTurn`). A
  *                   first-class stratagem attribute that the English `whenRules`
  *                   corroborate in every spot check (e.g. "Command phase." ⇒
@@ -85,6 +87,7 @@ interface StratRecord {
   id: string;
   name: string;
   cp_cost: number;
+  secondary_effect_extra_cp?: number;
   type?: StratType;
   category?: StratCategory;
   phases?: Phase[];
@@ -96,6 +99,8 @@ interface StratRecord {
 
 export interface StratagemCanon {
   cp_cost: number | null;
+  /** From `secondaryEffectAdditionalCPCost` — APPLIED; null when the secondary effect is free or absent. */
+  secondary_effect_extra_cp: number | null;
   /** Prose-derived phases — REVIEW ONLY (stratagem_phase is unreliable; see header). */
   phases_review: Phase[] | null;
   /** From `stratagem.key` — APPLIED, unless the WHEN line names a phase in either turn. */
@@ -186,12 +191,14 @@ export function buildStratCanon(dump: MfmDump): Map<string, StratagemCanon> {
     const when = (s.localisations?.en as { whenRules?: string } | undefined)?.whenRules;
     const { phases } = deriveTrigger(when); // phases only — player_turn now from `key`
     const cp = s.cpCost != null ? parseInt(String(s.cpCost), 10) : null;
-    const row = s as { key?: string; category?: string | null; detachmentId?: string | null };
+    const row = s as { key?: string; category?: string | null; detachmentId?: string | null; secondaryEffectAdditionalCPCost?: number | null };
+    const extra = row.secondaryEffectAdditionalCPCost;
     const keyTurn = (row.key && KEY_TO_TURN[row.key]) || null;
     // The text wins where it names a phase in either turn and the key says only one player's.
     const overridden = keyTurn && keyTurn !== "either" && namesEitherTurnPhase(when) ? keyTurn : undefined;
     m.set(id, {
       cp_cost: Number.isFinite(cp as number) ? (cp as number) : null,
+      secondary_effect_extra_cp: typeof extra === "number" && Number.isInteger(extra) && extra > 0 ? extra : null,
       phases_review: phases,
       player_turn: RULES_TEXT_PLAYER_TURN[s.id] ?? (overridden ? "either" : keyTurn),
       ...(overridden ? { turn_key_overridden: overridden } : {}),
@@ -226,6 +233,8 @@ export interface DirStratResult {
   dir: string;
   matched: number;
   cpChanged: { id: string; from: number; to: number }[];
+  /** secondary_effect_extra_cp ← secondaryEffectAdditionalCPCost: APPLIED (null = removed). */
+  extraCpChanged: { id: string; from: number | null; to: number | null }[];
   /** player_turn ← key: APPLIED. */
   turnApplied: { id: string; from?: PlayerTurn; to: PlayerTurn }[];
   /** player_turn ← either although the key said one player: the WHEN line names a phase in either turn. */
@@ -268,6 +277,7 @@ export function runStratagems(dump: MfmDump, write: boolean): StratReport {
       dir: dir || "(core)",
       matched: 0,
       cpChanged: [],
+      extraCpChanged: [],
       turnApplied: [],
       turnKeyOverridden: [],
       typeFilled: [],
@@ -289,6 +299,15 @@ export function runStratagems(dump: MfmDump, write: boolean): StratReport {
       if (c.cp_cost != null && s.cp_cost !== c.cp_cost) {
         res.cpChanged.push({ id: s.id, from: s.cp_cost, to: c.cp_cost });
         s.cp_cost = c.cp_cost; // mutate in BOTH modes; rehearsal validates the result
+        dirty = true;
+      }
+
+      // secondary_effect_extra_cp ← secondaryEffectAdditionalCPCost: the dump decides presence too.
+      const extraFrom = s.secondary_effect_extra_cp ?? null;
+      if (extraFrom !== c.secondary_effect_extra_cp) {
+        res.extraCpChanged.push({ id: s.id, from: extraFrom, to: c.secondary_effect_extra_cp });
+        if (c.secondary_effect_extra_cp == null) delete s.secondary_effect_extra_cp;
+        else s.secondary_effect_extra_cp = c.secondary_effect_extra_cp;
         dirty = true;
       }
 
@@ -340,7 +359,8 @@ export function buildStratReport(report: StratReport, write: boolean): string {
   const L: string[] = [];
   L.push(`# MFM stratagems — ${write ? "APPLIED" : "DRY RUN"}`);
   L.push("");
-  L.push("APPLIED (first-class dump columns): `cp_cost` ← cpCost, `player_turn` ← key,");
+  L.push("APPLIED (first-class dump columns): `cp_cost` ← cpCost, `secondary_effect_extra_cp` ←");
+  L.push("secondaryEffectAdditionalCPCost, `player_turn` ← key,");
   L.push("`type` ← category (fill-only), `category` ← detachmentId presence.");
   L.push("REVIEW ONLY (not written): `phases`, prose-derived — the structured");
   L.push("`stratagem_phase` table is a buggy index (Insane Bravery→charge, Holy");
@@ -361,6 +381,7 @@ export function buildStratReport(report: StratReport, write: boolean): string {
   for (const d of dirs) {
     if (
       !d.cpChanged.length &&
+      !d.extraCpChanged.length &&
       !d.turnApplied.length &&
       !d.turnKeyOverridden.length &&
       !d.typeFilled.length &&
@@ -373,6 +394,10 @@ export function buildStratReport(report: StratReport, write: boolean): string {
     if (d.cpChanged.length) {
       L.push("", "**CP changes (applied):**");
       d.cpChanged.forEach((c) => L.push(`- ${c.id}: ${c.from} → ${c.to}`));
+    }
+    if (d.extraCpChanged.length) {
+      L.push("", "**Secondary-effect extra CP (applied):**");
+      d.extraCpChanged.forEach((c) => L.push(`- ${c.id}: ${c.from ?? "—"} → ${c.to ?? "—"}`));
     }
     if (d.turnApplied.length) {
       L.push("", "**Player-turn ← key (applied):**");

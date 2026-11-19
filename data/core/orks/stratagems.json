@@ -780,7 +780,8 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "2026-10-14"
-    }
+    },
+    "secondary_effect_extra_cp": 1
   },
   {
     "id": "impending-krunch-blitz-brigade-orks",

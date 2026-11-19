@@ -98,6 +98,7 @@
   function stratagemMeta(stratagem: Stratagem): string {
     return [
       `${stratagem.cp_cost}CP`,
+      stratagem.secondary_effect_extra_cp ? `+${stratagem.secondary_effect_extra_cp}CP for the alternate effect` : null,
       stratagem.type ? titleCase(stratagem.type) : null,
       stratagem.phases?.length ? stratagem.phases.map(titleCase).join("/") : null,
       titleCase(stratagem.player_turn),
