@@ -25,6 +25,11 @@ export interface MatrixConfig {
   bodyguardLimit: number;
   attachmentLimit: number;
   finalistLimit: number;
+  /**
+   * Per-unit mode (`HC_PER_UNIT`): each bodyguard unit's best `n` attached stacks from the broad
+   * pass are deep-optimised and the best kept as that unit's own result; null when off.
+   */
+  perUnitFinalists: number | null;
   detail: boolean;
   perFiveSensitivity: boolean;
   droppedArmyRules: string[];
@@ -156,6 +161,13 @@ function workers(value: string | undefined): number {
   return parsed;
 }
 
+function perUnit(value: string | undefined): number | null {
+  if (value === undefined || value === "") return null;
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 1) throw new Error("HC_PER_UNIT must be a positive integer");
+  return parsed;
+}
+
 export function parseMatrixConfig(
   env: Readonly<Record<string, string | undefined>>,
   catalog: MatrixCatalog,
@@ -192,6 +204,7 @@ export function parseMatrixConfig(
     bodyguardLimit: limit(env.HC_BODYGUARDS, "HC_BODYGUARDS"),
     attachmentLimit: limit(env.HC_TOP, "HC_TOP"),
     finalistLimit: limit(env.HC_DEEP, "HC_DEEP"),
+    perUnitFinalists: perUnit(env.HC_PER_UNIT),
     detail: env.HC_DETAIL === "1",
     perFiveSensitivity: env.HC_PER5 === "1",
     droppedArmyRules: env.HC_DROP_RULE ? list(env.HC_DROP_RULE, [], "HC_DROP_RULE") : [],
@@ -212,6 +225,7 @@ export function serializableConfig(config: MatrixConfig): Record<string, unknown
     bodyguardLimit: finite(config.bodyguardLimit),
     attachmentLimit: finite(config.attachmentLimit),
     finalistLimit: finite(config.finalistLimit),
+    ...(config.perUnitFinalists !== null ? { perUnitFinalists: config.perUnitFinalists } : {}),
     perFiveSensitivity: config.perFiveSensitivity,
     droppedArmyRules: config.droppedArmyRules,
     dpBudget: config.dpBudget,

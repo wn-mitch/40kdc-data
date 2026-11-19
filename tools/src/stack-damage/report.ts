@@ -94,6 +94,21 @@ export interface DamageCellReport {
   };
   evaluations: { stack: number; crunch: number };
   runtimeMs: number;
+  /** Per-unit mode only: each bodyguard unit's best stack in this cell, best first. */
+  units?: UnitBestReport[];
+}
+
+/** One bodyguard unit's best stack in a cell, found by per-unit mode (`HC_PER_UNIT`). */
+export interface UnitBestReport {
+  unitId: string;
+  unitName: string;
+  /** As for the cell: `incomplete` when this stack's ledger holds a relevant unresolved provider, or it has detachment or legality issues. */
+  status: "complete" | "incomplete";
+  /** How many of the unit's attached stacks were deep-optimised. */
+  deepFinalists: number;
+  winner: WinnerReport;
+  ledger: LedgerEntry[];
+  unsupported: UnsupportedWarning[];
 }
 
 export interface DamageMatrixReport {
@@ -150,7 +165,8 @@ export function reportCompleteness(
  * declared scenario, and a fingerprint of the code and embedded data that score it.
  */
 export function matrixScope(
-  config: Pick<MatrixConfig, "factionIds" | "targetIds" | "phases" | "bodyguardLimit" | "attachmentLimit" | "finalistLimit" | "perFiveSensitivity" | "droppedArmyRules" | "scenario">,
+  config: Pick<MatrixConfig, "factionIds" | "targetIds" | "phases" | "bodyguardLimit" | "attachmentLimit" | "finalistLimit" | "perFiveSensitivity" | "droppedArmyRules" | "scenario"> &
+    Partial<Pick<MatrixConfig, "perUnitFinalists">>,
   sourceFingerprint: string,
 ): string {
   return JSON.stringify({
@@ -158,6 +174,7 @@ export function matrixScope(
     targets: config.targetIds,
     phases: config.phases,
     limits: [config.bodyguardLimit, config.attachmentLimit, config.finalistLimit].map((value) => Number.isFinite(value) ? value : "Infinity"),
+    ...(config.perUnitFinalists != null ? { perUnitFinalists: config.perUnitFinalists } : {}),
     perFiveSensitivity: config.perFiveSensitivity,
     droppedArmyRules: config.droppedArmyRules,
     scenario: config.scenario,
