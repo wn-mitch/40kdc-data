@@ -7,8 +7,10 @@
 	import { type BuilderState } from "../data/builder";
 	import {
 		tryEncodeCompactShareLink,
+		tryEncodeShareToken,
 		type CompactShareLinkResult,
 	} from "../data/share-link";
+	import { requestTtsCode } from "../data/tts-code";
 	import { identity } from "../identity.svelte";
 	import { applyAtcIdentity, isAtcFormat } from "../atc-identity";
 
@@ -92,9 +94,46 @@
 		}
 	}
 
+	// ── Tabletop Simulator code ────────────────────────────────────────────────
+	let ttsCode = $state<string | null>(null);
+	let ttsSkipped = $state<string[]>([]);
+	let ttsError = $state<string | null>(null);
+	let ttsBusy = $state(false);
+
+	// A code is minted for one version of the list; a new roster makes it stale.
+	$effect(() => {
+		void roster;
+		ttsCode = null;
+		ttsSkipped = [];
+		ttsError = null;
+	});
+
+	async function sendToTts(): Promise<void> {
+		if (!draft) return;
+		const encoded = tryEncodeShareToken(draft);
+		if (!encoded.ok) {
+			ttsError = encoded.error;
+			return;
+		}
+		ttsBusy = true;
+		ttsError = null;
+		ttsCode = null;
+		try {
+			const res = await requestTtsCode(encoded.token);
+			if (res.ok) {
+				ttsCode = res.code;
+				ttsSkipped = res.skipped;
+			} else {
+				ttsError = res.error;
+			}
+		} finally {
+			ttsBusy = false;
+		}
+	}
+
 	// Transient "Copied!" feedback, keyed by which button was used.
-	let copied = $state<"text" | "link" | "short" | null>(null);
-	function copy(kind: "text" | "link" | "short", value: string): void {
+	let copied = $state<"text" | "link" | "short" | "tts" | null>(null);
+	function copy(kind: "text" | "link" | "short" | "tts", value: string): void {
 		navigator.clipboard
 			?.writeText(value)
 			.then(() => {
@@ -225,6 +264,54 @@
 			{/if}
 			{#if shortError}
 				<span class="text-[11px] text-red-400">{shortError}</span>
+			{/if}
+		</div>
+
+		<!-- Army code for the stock Yellowscribe mod in Tabletop Simulator. -->
+		<div class="border-panel-border/50 flex flex-col gap-1.5 border-t pt-3">
+			<span class="text-text-dim text-[10px] font-semibold uppercase tracking-wider">Tabletop Simulator</span>
+			{#if ttsCode}
+				<div class="flex items-center gap-2">
+					<input
+						readonly
+						data-testid="tts-code"
+						class="bg-panel border-panel-border text-text w-28 rounded border p-2 font-mono text-sm tracking-widest"
+						value={ttsCode}
+						onfocus={(e) => (e.currentTarget as HTMLInputElement).select()}
+					/>
+					<button
+						class="bg-accent text-accent-foreground hover:bg-accent-hover rounded px-3 py-1.5 text-xs font-semibold transition-colors"
+						onclick={() => copy("tts", ttsCode ?? "")}
+					>
+						{copied === "tts" ? "Copied!" : "Copy code"}
+					</button>
+				</div>
+				<p class="text-text-dim/70 text-[11px]">
+					In Tabletop Simulator, load the Yellowscribe mod, enter this code in the Yellow Machine, and
+					load the army. Codes are short-lived: if the mod says the code has expired, send the list
+					again for a new one.
+				</p>
+				{#if ttsSkipped.length > 0}
+					<span class="text-[11px] text-warning">
+						Left out (no matching datasheet): {ttsSkipped.join(", ")}
+					</span>
+				{/if}
+			{:else}
+				<p class="text-text-dim/70 text-[11px]">
+					Sends this list to tts.alpacasoft.dev and returns an 8-character code for the Yellowscribe mod.
+				</p>
+			{/if}
+			<div>
+				<button
+					class="bg-panel-surface border-panel-border text-text hover:border-panel-border/80 rounded border px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-40"
+					disabled={ttsBusy || !draft}
+					onclick={sendToTts}
+				>
+					{ttsBusy ? "Sending…" : ttsCode ? "Get a new code" : "Send to Tabletop Simulator"}
+				</button>
+			</div>
+			{#if ttsError}
+				<span class="text-[11px] text-red-400" role="alert">{ttsError}</span>
 			{/if}
 		</div>
 	</div>
