@@ -46,11 +46,14 @@ func planSelection(node, source map[string]any, perspective string, context map[
 	if !ok || (filter["owner"] != "friendly" && filter["owner"] != "enemy") {
 		return selectionPlan{kind: "none"}
 	}
-	if filter["level"] == "model" || filter["model_names"] != nil || selector["bind_as"] != nil {
+	if filter["level"] == "model" || filter["model_names"] != nil {
 		return selectionPlan{kind: "none"}
 	}
+	// binding is the selector's bind_as name: a {selection_var: binding} ref names the selected
+	// unit as "selected-unit" does.
+	binding, _ := selector["bind_as"].(string)
 	// TS planSelection: a selection whose effect never reaches the selected unit plans nothing.
-	if !referencesSelectedUnit(node["effect"]) {
+	if !referencesSelectedUnit(node["effect"], binding) {
 		return selectionPlan{kind: "none"}
 	}
 	keywords, keywordsOK := selectorKeywordList(filter["all_of"])
@@ -119,7 +122,7 @@ func planSelection(node, source map[string]any, perspective string, context map[
 		if filter["not_all_of"] != nil {
 			return selectionPlan{kind: "unsupported", reason: "select-units: not_all_of keyword selectors are not gated by the buff layer"}
 		}
-		effect = node["effect"]
+		effect = retargetSelected(node["effect"], selectedUnit, binding)
 		label = "Selected unit"
 	} else {
 		other := "attacker"
@@ -134,7 +137,7 @@ func planSelection(node, source map[string]any, perspective string, context map[
 			return selectionPlan{kind: "unsupported", reason: reason}
 		}
 		applicability = gate
-		effect = selectionHolds(retargetSelected(node["effect"], other), other, selectionDesignatedTags(node["effect"]))
+		effect = selectionHolds(retargetSelected(node["effect"], other, binding), other, selectionDesignatedTags(node["effect"], binding), binding)
 		label = "Selected enemy unit"
 	}
 
@@ -296,13 +299,29 @@ func selectedEnemyGate(keywords, excluded []string, perspective string) (map[str
 	return out, ""
 }
 
+// namesSelection reports whether a unit-ref names the selection's unit:
+// "selected-unit", or {selection_var: binding} when the selector binds a name
+// (binding is "" when it does not).
+func namesSelection(value any, binding string) bool {
+	if value == selectedUnit {
+		return true
+	}
+	ref, ok := value.(map[string]any)
+	if !ok || binding == "" {
+		return false
+	}
+	name, ok := ref["selection_var"].(string)
+	return ok && name == binding
+}
+
 // referencesSelectedUnit reports whether the effect names the selected unit as a
-// target anywhere, outside a nested selection.
-func referencesSelectedUnit(node any) bool {
+// target, or as the unit a target is a member of, anywhere outside a nested
+// selection.
+func referencesSelectedUnit(node any, binding string) bool {
 	switch n := node.(type) {
 	case []any:
 		for _, child := range n {
-			if referencesSelectedUnit(child) {
+			if referencesSelectedUnit(child, binding) {
 				return true
 			}
 		}
@@ -311,11 +330,14 @@ func referencesSelectedUnit(node any) bool {
 		if n["type"] == "select-units" {
 			return false
 		}
-		if n["target"] == selectedUnit {
+		if namesSelection(n["target"], binding) {
+			return true
+		}
+		if target, ok := n["target"].(map[string]any); ok && namesSelection(target["member_of"], binding) {
 			return true
 		}
 		for k, v := range n {
-			if k != "target" && referencesSelectedUnit(v) {
+			if k != "target" && referencesSelectedUnit(v, binding) {
 				return true
 			}
 		}
@@ -323,14 +345,15 @@ func referencesSelectedUnit(node any) bool {
 	return false
 }
 
-// retargetSelected copies the effect with each selected-unit target replaced,
-// leaving nested selections alone.
-func retargetSelected(node any, target string) any {
+// retargetSelected copies the effect with each target (or member_of) naming the
+// selected unit replaced, leaving nested selections alone. A member_of read from
+// the selected unit's own side names "this-unit".
+func retargetSelected(node any, target, binding string) any {
 	switch n := node.(type) {
 	case []any:
 		out := make([]any, len(n))
 		for i, child := range n {
-			out[i] = retargetSelected(child, target)
+			out[i] = retargetSelected(child, target, binding)
 		}
 		return out
 	case map[string]any:
@@ -339,10 +362,13 @@ func retargetSelected(node any, target string) any {
 		}
 		out := make(map[string]any, len(n))
 		for k, v := range n {
-			if k == "target" && v == selectedUnit {
+			switch {
+			case k == "member_of" && namesSelection(v, binding) && target == selectedUnit:
+				out[k] = "this-unit"
+			case (k == "target" || k == "member_of") && namesSelection(v, binding):
 				out[k] = target
-			} else {
-				out[k] = retargetSelected(v, target)
+			default:
+				out[k] = retargetSelected(v, target, binding)
 			}
 		}
 		return out

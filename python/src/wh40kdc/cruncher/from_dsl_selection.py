@@ -52,13 +52,11 @@ def plan_selection(
         return {"kind": "none"}
     if unit_ids is not None and owner in (None, "any"):
         owner = "friendly"
-    if (
-        filt.get("level") == "model"
-        or filt.get("model_names") is not None
-        or selector.get("bind_as") is not None
-    ):
+    if filt.get("level") == "model" or filt.get("model_names") is not None:
         return {"kind": "none"}
-    if not _references_selected_unit(node.get("effect")):
+    bind_as = selector.get("bind_as")
+    binding = bind_as if isinstance(bind_as, str) else None
+    if not _references_selected_unit(node.get("effect"), binding):
         return {"kind": "none"}
 
     all_of = filt.get("all_of")
@@ -120,7 +118,7 @@ def plan_selection(
             )
             if not holds:
                 return {"kind": "skip"}
-        effect = node.get("effect")
+        effect = _retarget(node.get("effect"), _SELECTED_UNIT, binding)
         label = "Selected unit"
     else:
         other = "defender" if perspective == "attacker" else "attacker"
@@ -138,7 +136,10 @@ def plan_selection(
             return {"kind": "unsupported", "reason": gate}
         applicability = gate
         effect = selection_holds(
-            _retarget(node.get("effect"), other), other, designated_tags(node.get("effect"))
+            _retarget(node.get("effect"), other, binding),
+            other,
+            designated_tags(node.get("effect"), binding),
+            binding,
         )
         label = "Selected enemy unit"
 
@@ -183,17 +184,30 @@ def _selected_enemy_gate(
     return out or None
 
 
-def _references_selected_unit(node: Any) -> bool:
-    """Does the effect name the selected unit as a target anywhere, outside a nested selection?"""
+def _names_selected(value: Any, binding: str | None) -> bool:
+    """Whether a unit-ref names the selection's unit: ``selected-unit`` or its own binding."""
+    return value == _SELECTED_UNIT or (
+        binding is not None and isinstance(value, dict) and value.get("selection_var") == binding
+    )
+
+
+def _references_selected_unit(node: Any, binding: str | None = None) -> bool:
+    """Does the effect name the selected unit as a target, or as the unit a target is a member
+    of, anywhere outside a nested selection?"""
     if isinstance(node, list):
-        return any(_references_selected_unit(child) for child in node)
+        return any(_references_selected_unit(child, binding) for child in node)
     if not isinstance(node, dict):
         return False
     if node.get("type") == "select-units":
         return False
-    if node.get("target") == _SELECTED_UNIT:
+    target = node.get("target")
+    if _names_selected(target, binding):
         return True
-    return any(_references_selected_unit(v) for k, v in node.items() if k != "target")
+    if isinstance(target, dict) and _names_selected(target.get("member_of"), binding):
+        return True
+    return any(
+        _references_selected_unit(v, binding) for k, v in node.items() if k != "target"
+    )
 
 def bind_each_recipient(node: dict[str, Any], replacement: Any | None = None) -> Any | None:
     """Bind a for-each-unit recipient to its canonical candidate filter."""
@@ -235,16 +249,21 @@ def bind_each_recipient(node: dict[str, Any], replacement: Any | None = None) ->
     return effect if bound_recipient and not other_target else None
 
 
-def _retarget(node: Any, target: str) -> Any:
-    """Copy the effect with each ``selected-unit`` target replaced, leaving nested selections."""
+def _retarget(node: Any, target: str, binding: str | None = None) -> Any:
+    """Copy the effect with each target (or ``member_of``) naming the selected unit replaced,
+    leaving nested selections. A ``member_of`` read from the selected unit's own side names
+    ``this-unit``."""
     if isinstance(node, list):
-        return [_retarget(child, target) for child in node]
+        return [_retarget(child, target, binding) for child in node]
     if not isinstance(node, dict) or node.get("type") == "select-units":
         return node
-    return {
-        k: target if k == "target" and v == _SELECTED_UNIT else _retarget(v, target)
-        for k, v in node.items()
-    }
+    out: dict[str, Any] = {}
+    for k, v in node.items():
+        if k in ("target", "member_of") and _names_selected(v, binding):
+            out[k] = "this-unit" if k == "member_of" and target == _SELECTED_UNIT else target
+        else:
+            out[k] = _retarget(v, target, binding)
+    return out
 
 
 def _excludes_ability_unit(condition: Any) -> bool:

@@ -4,12 +4,12 @@ package wh40kdc
 // designatedTags, selectionHolds and their helpers in tools/src/cruncher/from-dsl-selection.ts.
 // The lever vouches that the other side of the attack is the selected unit, so a condition that
 // it is that unit (same-unit as the selection), or that it carries a tag the selection itself
-// designates, holds. planSelection plans no selection with a named binding, so only
-// "selected-unit" names the selection here.
+// designates, holds. "selected-unit" names the selection, as does {selection_var: binding} when
+// the selector binds a name (binding is "" when it does not).
 
 // selectionDesignatedTags is the set of tags the selection's own designate steps put on the
 // selected unit, outside a nested selection.
-func selectionDesignatedTags(node any) map[string]bool {
+func selectionDesignatedTags(node any, binding string) map[string]bool {
 	tags := map[string]bool{}
 	var visit func(value any)
 	visit = func(value any) {
@@ -22,7 +22,7 @@ func selectionDesignatedTags(node any) map[string]bool {
 			if v["type"] == "select-units" {
 				return
 			}
-			if modifier, ok := v["modifier"].(map[string]any); ok && v["type"] == "designate" && v["target"] == selectedUnit {
+			if modifier, ok := v["modifier"].(map[string]any); ok && v["type"] == "designate" && namesSelection(v["target"], binding) {
 				if tag, ok := modifier["tag"].(string); ok && modifier["clear"] != true {
 					tags[tag] = true
 				}
@@ -38,13 +38,13 @@ func selectionDesignatedTags(node any) map[string]bool {
 
 // heldBySelection reports whether a condition holds once the player vouches that other is the
 // selected enemy unit.
-func heldBySelection(condition map[string]any, other string, tags map[string]bool) bool {
+func heldBySelection(condition map[string]any, other string, tags map[string]bool, binding string) bool {
 	params, ok := condition["parameters"].(map[string]any)
 	if !ok || params["subject"] != other {
 		return false
 	}
 	if condition["type"] == "same-unit" {
-		return params["as"] == selectedUnit
+		return namesSelection(params["as"], binding)
 	}
 	filter, ok := params["filter"].(map[string]any)
 	if condition["type"] != "matches" || !ok || len(filter) != 1 {
@@ -57,7 +57,7 @@ func heldBySelection(condition map[string]any, other string, tags map[string]boo
 // withoutHeld is the condition left once the selection's back-references hold, held when nothing
 // is left, and changed when anything was dropped. An and keeps its other operands; any other
 // operator is left whole.
-func withoutHeld(condition any, other string, tags map[string]bool) (left any, held bool, changed bool) {
+func withoutHeld(condition any, other string, tags map[string]bool, binding string) (left any, held bool, changed bool) {
 	node, ok := condition.(map[string]any)
 	if !ok {
 		return condition, false, false
@@ -65,7 +65,7 @@ func withoutHeld(condition any, other string, tags map[string]bool) (left any, h
 	if operands, ok := node["operands"].([]any); ok && node["operator"] == "and" {
 		rest := []any{}
 		for _, operand := range operands {
-			if op, ok := operand.(map[string]any); ok && heldBySelection(op, other, tags) {
+			if op, ok := operand.(map[string]any); ok && heldBySelection(op, other, tags, binding) {
 				continue
 			}
 			rest = append(rest, operand)
@@ -85,7 +85,7 @@ func withoutHeld(condition any, other string, tags map[string]bool) (left any, h
 		kept["operands"] = rest
 		return kept, false, true
 	}
-	if heldBySelection(node, other, tags) {
+	if heldBySelection(node, other, tags, binding) {
 		return nil, true, true
 	}
 	return condition, false, false
@@ -94,12 +94,12 @@ func withoutHeld(condition any, other string, tags map[string]bool) (left any, h
 // selectionHolds is the lever's effect with every condition that only restates the selection
 // settled: a conditional whose condition holds becomes its effect. Nested selections keep their
 // own scope.
-func selectionHolds(node any, other string, tags map[string]bool) any {
+func selectionHolds(node any, other string, tags map[string]bool, binding string) any {
 	switch n := node.(type) {
 	case []any:
 		out := make([]any, len(n))
 		for i, child := range n {
-			out[i] = selectionHolds(child, other, tags)
+			out[i] = selectionHolds(child, other, tags, binding)
 		}
 		return out
 	case map[string]any:
@@ -107,9 +107,9 @@ func selectionHolds(node any, other string, tags map[string]bool) any {
 			return n
 		}
 		if effect, has := n["effect"]; has && n["type"] == "conditional" {
-			left, held, changed := withoutHeld(n["condition"], other, tags)
+			left, held, changed := withoutHeld(n["condition"], other, tags, binding)
 			if held {
-				return selectionHolds(effect, other, tags)
+				return selectionHolds(effect, other, tags, binding)
 			}
 			if changed {
 				next := make(map[string]any, len(n))
@@ -117,12 +117,12 @@ func selectionHolds(node any, other string, tags map[string]bool) any {
 					next[k] = v
 				}
 				next["condition"] = left
-				return selectionHolds(next, other, tags)
+				return selectionHolds(next, other, tags, binding)
 			}
 		}
 		out := make(map[string]any, len(n))
 		for k, v := range n {
-			out[k] = selectionHolds(v, other, tags)
+			out[k] = selectionHolds(v, other, tags, binding)
 		}
 		return out
 	}
