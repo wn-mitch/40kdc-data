@@ -7,7 +7,7 @@
  * @packageDocumentation
  */
 import type { BattleSize, Roster, RosterDetachment, RosterUnit, RosterWargear } from "../import/types.js";
-import type { Detachment } from "../generated.js";
+import type { AlliedRule, Detachment } from "../generated.js";
 import type { Dataset } from "./dataset.js";
 import type { UnitView, WeaponView } from "./entities.js";
 import {
@@ -27,6 +27,7 @@ import { listBuildingKeywordChanges, withKeywordChanges } from "./list-building-
 import type { Violation } from "./loadout.js";
 import { hostUnitPoints, wargearPoints } from "./pricing.js";
 import { warlordViolations, type WarlordViolationCode } from "./roster-warlord.js";
+import { allyKeywordLimitViolations, attributeAllies } from "./roster-allies.js";
 
 /**
  * Resolve a roster's unit entry against the dataset, returning the linked
@@ -175,6 +176,8 @@ export type RosterViolationCode =
   | "ally-points-over-limit"
   | "ally-cannot-be-warlord"
   | "ally-cannot-take-enhancements"
+  | "ally-keyword-limit-exceeded"
+  | "ally-keyword-limits-exclusive"
   | "unit-minimum-unmet";
 
 /** One army-level legality violation. */
@@ -260,14 +263,18 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     ? (dataset.factions.get(spec.factionId)?.raw.keywords ?? [])
     : [];
   const armyKeywordSet = new Set<string>(armyKeywords);
+  // Units included through an allied rule that replaces Faction keywords
+  // (Renegades): they carry the army's Faction keywords instead of their own.
+  const replacedUnits = new Set<NormUnit>();
   const keywordSet = (view: UnitView, unit?: NormUnit): Set<string> => {
+    const replaced = unit !== undefined && replacedUnits.has(unit);
     const owned = new Set<string>([
       ...(view.raw.keywords ?? []),
-      ...(view.raw.faction_keywords ?? []),
+      ...(replaced ? [] : (view.raw.faction_keywords ?? [])),
       view.raw.name,
     ]);
     const factionKws = view.raw.faction_keywords ?? [];
-    if (armyKeywordSet.size > 0 && factionKws.every((k) => armyKeywordSet.has(k))) {
+    if (armyKeywordSet.size > 0 && (replaced || factionKws.every((k) => armyKeywordSet.has(k)))) {
       for (const k of armyKeywords) owned.add(k);
     }
       for (const grant of view.raw.conditional_keywords ?? []) {
@@ -296,6 +303,8 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
   };
 
   const views = spec.units.map((u) => resolveUnit(u.unitId));
+  const allies = attributeAllies(dataset, spec.factionId, spec.detachmentIds, armyKeywordSet, views);
+  for (const [idx, rule] of allies) if (rule.replaces_faction_keywords) replacedUnits.add(spec.units[idx]);
   /** The roster keywords of the unit `su` attaches to as a leader or support character. */
   const attachedToKeywords = (su: NormUnit): Set<string> | undefined => {
     if (!su.leaderBodyguardId) return undefined;
@@ -646,6 +655,17 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
       if (rule.cannot_take_enhancements && su.enhancementId)
         err("ally-cannot-take-enhancements", su.unitId, `${su.unitId} cannot take an Enhancement under ${rule.id}`, idx);
     }
+  }
+
+  // --- Allied pools: keyword caps of the rule each foreign unit is included through.
+  const byRule = new Map<string, { rule: AlliedRule; idxs: number[] }>();
+  for (const [idx, rule] of allies) {
+    const entry = byRule.get(rule.id) ?? byRule.set(rule.id, { rule, idxs: [] }).get(rule.id)!;
+    entry.idxs.push(idx);
+  }
+  for (const { rule, idxs } of byRule.values()) {
+    const members = idxs.map((idx) => keywordSet(views[idx]!, spec.units[idx]));
+    for (const v of allyKeywordLimitViolations(rule, members, spec.battleSize)) err(v.code, v.id, v.message);
   }
 
   // --- Unit minimums (e.g. Houndpack: 3+ WAR DOG units). --------------------

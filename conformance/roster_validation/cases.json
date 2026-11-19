@@ -879,7 +879,7 @@
   },
   {
     "name": "allied-pricing-legal-at-limit",
-    "note": "Four Officio Assassinorum units in a Blood Angels host army price at their Imperium allied_points cost (125 + 110 + 100 + 85 = 420; native 395) beside 580 of Blood Angels units: exactly 1000 at incursion. Pins that host-army pricing selects the allied table for a foreign unit whose host_faction keyword the army's faction carries.",
+    "note": "Four Officio Assassinorum units in a Blood Angels host army price at their Imperium allied_points cost (125 + 110 + 100 + 85 = 420; native 395) beside 580 of Blood Angels units: exactly 1000 at incursion. Pins that host-army pricing selects the allied table for a foreign unit whose host_faction keyword the army's faction carries. The four Assassins are CHARACTER units, over the Agents of the Imperium allies Character cap of 1 at incursion.",
     "args": {
       "factionId": "blood-angels",
       "battleSize": "incursion",
@@ -996,11 +996,13 @@
         }
       ]
     },
-    "expected": []
+    "expected": [
+      "army|error|ally-keyword-limit-exceeded:agents-of-the-imperium-allies:Character"
+    ]
   },
   {
     "name": "allied-pricing-points-over-limit",
-    "note": "Swapping the Chaplain (70) for a Librarian (75) totals 1005 under allied pricing vs 980 native: points-over-limit fires ONLY when the Imperium allied_points entries are applied.",
+    "note": "Swapping the Chaplain (70) for a Librarian (75) totals 1005 under allied pricing vs 980 native: points-over-limit fires ONLY when the Imperium allied_points entries are applied. The four Assassins also exceed the Agents of the Imperium allies Character cap of 1 at incursion.",
     "args": {
       "factionId": "blood-angels",
       "battleSize": "incursion",
@@ -1119,6 +1121,7 @@
       ]
     },
     "expected": [
+      "army|error|ally-keyword-limit-exceeded:agents-of-the-imperium-allies:Character",
       "army|error|points-over-limit:roster"
     ]
   },
@@ -3559,5 +3562,524 @@
     },
     "expected": [],
     "note": "Outside Pactbound Zealots the excluded_detachment_id group admits the attachment without a Mark of Chaos."
+  },
+  {
+    "name": "ally-knights-titanic-and-armiger-exclusive",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "wrath-of-the-doomed"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
+        },
+        {
+          "unitId": "knight-paladin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "meltagun": 1,
+            "questoris-heavy-stubber": 1,
+            "rapid-fire-battle-cannon": 1,
+            "reaper-chainsword": 1
+          }
+        },
+        {
+          "unitId": "armiger-warglaive",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "questoris-heavy-stubber": 1,
+            "reaper-chain-cleaver": 1,
+            "thermal-spear": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "army|error|ally-keyword-limits-exclusive:imperial-knights-allies"
+    ],
+    "note": "Imperial Knights allies keyword limits are alternatives (keyword_limits_exclusive): one TITANIC model or up to three ARMIGER models. A Knight Paladin beside an Armiger Warglaive breaks it although each count is within its own cap."
+  },
+  {
+    "name": "ally-knights-three-armigers-legal",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "wrath-of-the-doomed"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
+        },
+        {
+          "unitId": "armiger-warglaive",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "questoris-heavy-stubber": 1,
+            "reaper-chain-cleaver": 1,
+            "thermal-spear": 1
+          }
+        },
+        {
+          "unitId": "armiger-helverin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "armiger-autocannon": 2,
+            "armoured-feet": 1,
+            "questoris-heavy-stubber": 1
+          }
+        },
+        {
+          "unitId": "armiger-moirax",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "armoured-feet": 1,
+            "graviton-pulsar": 1,
+            "volkite-veuglaire": 1
+          }
+        }
+      ]
+    },
+    "expected": [],
+    "note": "Three ARMIGER units under the same pool sit at the Armiger cap of 3 and use only one limited keyword."
+  },
+  {
+    "name": "ally-titans-two-classes-exclusive",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": null,
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "wrath-of-the-doomed"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
+        },
+        {
+          "unitId": "warhound-titan",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "warhound-feet": 1,
+            "warhound-plasma-blastgun": 1,
+            "warhound-vulcan-mega-bolter": 1
+          }
+        },
+        {
+          "unitId": "reaver-titan",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "reaver-apocalypse-launcher": 1,
+            "reaver-feet": 1,
+            "reaver-gatling-blaster": 1,
+            "reaver-laser-blaster": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "army|error|ally-keyword-limits-exclusive:adeptus-titanicus-allies"
+    ],
+    "note": "Adeptus Titanicus allies cap each Titan class at 1, as alternatives: a Warhound beside a Reaver breaks the pool. With no battle size the per-size caps are skipped and the alternatives check still applies."
+  },
+  {
+    "name": "ally-agents-retinue-exempt-per-donor-legal",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "wrath-of-the-doomed"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
+        },
+        {
+          "unitId": "inquisitor",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "blessed-wardings": 1,
+            "bolt-pistol": 1,
+            "inquisitorial-melee-weapon": 1
+          }
+        },
+        {
+          "unitId": "rogue-trader-entourage",
+          "modelCount": 4,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "close-combat-weapon-rogue-trader-entourage": 2,
+            "dartmask": 1,
+            "death-cult-power-blade": 1,
+            "healing-serum": 1,
+            "household-pistol": 1,
+            "laspistol": 1,
+            "monomolecular-cane-rapier": 1,
+            "voltaic-pistol": 1
+          }
+        },
+        {
+          "unitId": "inquisitorial-agents",
+          "modelCount": 6,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "agent-firearm": 5,
+            "agent-melee-weapon": 6,
+            "heavy-bolter-inquisitorial-agents": 1
+          }
+        },
+        {
+          "unitId": "voidsmen-at-arms",
+          "modelCount": 6,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "artificer-shotgun": 1,
+            "close-combat-weapon-voidsmen-at-arms": 5,
+            "lasgun": 3,
+            "laspistol": 5,
+            "vicious-bite": 1,
+            "voidsman-rotor-cannon": 1
+          }
+        },
+        {
+          "unitId": "exaction-squad",
+          "modelCount": 11,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "arbites-combat-shotgun": 10,
+            "arbites-shotpistol": 10,
+            "close-combat-weapon-exaction-squad": 10,
+            "mechanical-bite": 1
+          }
+        },
+        {
+          "unitId": "vigilant-squad",
+          "modelCount": 11,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "arbites-combat-shotgun": 10,
+            "arbites-shotpistol": 10,
+            "close-combat-weapon-vigilant-squad": 10,
+            "mechanical-bite": 1
+          }
+        }
+      ]
+    },
+    "expected": [],
+    "note": "Agents of the Imperium allies cap RETINUE at 2 (strike force). Four Retinue units, but the INQUISITOR exempts the INQUISITORIAL AGENTS unit and the Voidfarers Character (Rogue Trader Entourage) exempts the VOIDSMEN-AT-ARMS unit: 2 counted."
+  },
+  {
+    "name": "ally-agents-retinue-over-without-donor",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "wrath-of-the-doomed"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
+        },
+        {
+          "unitId": "inquisitorial-agents",
+          "modelCount": 6,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "agent-firearm": 5,
+            "agent-melee-weapon": 6,
+            "heavy-bolter-inquisitorial-agents": 1
+          }
+        },
+        {
+          "unitId": "exaction-squad",
+          "modelCount": 11,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "arbites-combat-shotgun": 10,
+            "arbites-shotpistol": 10,
+            "close-combat-weapon-exaction-squad": 10,
+            "mechanical-bite": 1
+          }
+        },
+        {
+          "unitId": "vigilant-squad",
+          "modelCount": 11,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "arbites-combat-shotgun": 10,
+            "arbites-shotpistol": 10,
+            "close-combat-weapon-vigilant-squad": 10,
+            "mechanical-bite": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "army|error|ally-keyword-limit-exceeded:agents-of-the-imperium-allies:Retinue"
+    ],
+    "note": "Without an INQUISITOR the INQUISITORIAL AGENTS unit counts: 3 Retinue units over the strike-force cap of 2."
+  },
+  {
+    "name": "ally-agents-retinue-one-receiver-per-donor",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "wrath-of-the-doomed"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
+        },
+        {
+          "unitId": "inquisitor",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "blessed-wardings": 1,
+            "bolt-pistol": 1,
+            "inquisitorial-melee-weapon": 1
+          }
+        },
+        {
+          "unitId": "inquisitorial-agents",
+          "modelCount": 6,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "agent-firearm": 5,
+            "agent-melee-weapon": 6,
+            "heavy-bolter-inquisitorial-agents": 1
+          }
+        },
+        {
+          "unitId": "inquisitorial-agents",
+          "modelCount": 6,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "agent-firearm": 5,
+            "agent-melee-weapon": 6,
+            "heavy-bolter-inquisitorial-agents": 1
+          }
+        },
+        {
+          "unitId": "exaction-squad",
+          "modelCount": 11,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "arbites-combat-shotgun": 10,
+            "arbites-shotpistol": 10,
+            "close-combat-weapon-exaction-squad": 10,
+            "mechanical-bite": 1
+          }
+        },
+        {
+          "unitId": "vigilant-squad",
+          "modelCount": 11,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "arbites-combat-shotgun": 10,
+            "arbites-shotpistol": 10,
+            "close-combat-weapon-vigilant-squad": 10,
+            "mechanical-bite": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "army|error|ally-keyword-limit-exceeded:agents-of-the-imperium-allies:Retinue"
+    ],
+    "note": "One INQUISITOR exempts one of the two INQUISITORIAL AGENTS units: 4 Retinue units less 1 is 3, over the cap of 2."
+  },
+  {
+    "name": "ally-unit-in-two-pools-takes-first-offered",
+    "args": {
+      "factionId": "deathwatch",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "black-spear-task-force"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
+        },
+        {
+          "unitId": "inquisitorial-agents",
+          "modelCount": 6,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "agent-firearm": 5,
+            "agent-melee-weapon": 6,
+            "heavy-bolter-inquisitorial-agents": 1
+          }
+        },
+        {
+          "unitId": "exaction-squad",
+          "modelCount": 11,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "arbites-combat-shotgun": 10,
+            "arbites-shotpistol": 10,
+            "close-combat-weapon-exaction-squad": 10,
+            "mechanical-bite": 1
+          }
+        },
+        {
+          "unitId": "vigilant-squad",
+          "modelCount": 11,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "arbites-combat-shotgun": 10,
+            "arbites-shotpistol": 10,
+            "close-combat-weapon-vigilant-squad": 10,
+            "mechanical-bite": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "army|error|ally-keyword-limit-exceeded:agents-of-the-imperium-allies:Retinue"
+    ],
+    "note": "A Deathwatch army is offered both agents-of-the-imperium-allies and agents-of-the-imperium-deathwatch, and every Agents unit is in both pools. A foreign unit is attributed to the first offered rule in allied-rules order (by id), so the three Retinue units count against agents-of-the-imperium-allies: 3 over its strike-force cap of 2, and the violation names that rule."
   }
 ]

@@ -145,15 +145,15 @@
     {
       "source": "data.keyword.allyRestrictingFactionKeywordId",
       "candidate_pointer": null,
-      "reason": "Set on 1 keyword that restricts allied use by faction. allies.ts should read it.",
-      "classification": "needs-consumer",
+      "reason": "allies-limits.ts reads it into allied-rule battleline_ratio_keywords: the faction keyword of the pool whose ratio the keyword joins.",
+      "classification": "consumed-elsewhere",
       "spread": "1173 rows, 1173 values (1172 null/absent): string, 1 distinct"
     },
     {
       "source": "data.keyword.allyRestrictingKeywordId",
       "candidate_pointer": null,
-      "reason": "Set on 1 keyword that restricts allied use by keyword. allies.ts should read it.",
-      "classification": "needs-consumer",
+      "reason": "allies-limits.ts reads it into allied-rule battleline_ratio_keywords: the keyword the ratio counts against (Battleline).",
+      "classification": "consumed-elsewhere",
       "spread": "1173 rows, 1173 values (1172 null/absent): string, 1 distinct"
     },
     {

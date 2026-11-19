@@ -169,6 +169,7 @@
         "max_count": 1
       }
     ],
+    "keyword_limits_exclusive": true,
     "cannot_be_warlord": true,
     "cannot_take_enhancements": true
   },
@@ -322,17 +323,74 @@
       {
         "keyword": "Retinue",
         "battle_size": "incursion",
-        "max_count": 1
+        "max_count": 1,
+        "exemptions": [
+          {
+            "donor_keywords": [
+              "Character",
+              "Voidfarers"
+            ],
+            "receiver_keywords": [
+              "Voidsmen-At-Arms"
+            ]
+          },
+          {
+            "donor_keywords": [
+              "Inquisitor"
+            ],
+            "receiver_keywords": [
+              "Inquisitorial Agents"
+            ]
+          }
+        ]
       },
       {
         "keyword": "Retinue",
         "battle_size": "strike-force",
-        "max_count": 2
+        "max_count": 2,
+        "exemptions": [
+          {
+            "donor_keywords": [
+              "Character",
+              "Voidfarers"
+            ],
+            "receiver_keywords": [
+              "Voidsmen-At-Arms"
+            ]
+          },
+          {
+            "donor_keywords": [
+              "Inquisitor"
+            ],
+            "receiver_keywords": [
+              "Inquisitorial Agents"
+            ]
+          }
+        ]
       },
       {
         "keyword": "Retinue",
         "battle_size": "onslaught",
-        "max_count": 3
+        "max_count": 3,
+        "exemptions": [
+          {
+            "donor_keywords": [
+              "Character",
+              "Voidfarers"
+            ],
+            "receiver_keywords": [
+              "Voidsmen-At-Arms"
+            ]
+          },
+          {
+            "donor_keywords": [
+              "Inquisitor"
+            ],
+            "receiver_keywords": [
+              "Inquisitorial Agents"
+            ]
+          }
+        ]
       }
     ],
     "cannot_be_warlord": true,
@@ -410,17 +468,74 @@
       {
         "keyword": "Retinue",
         "battle_size": "incursion",
-        "max_count": 1
+        "max_count": 1,
+        "exemptions": [
+          {
+            "donor_keywords": [
+              "Character",
+              "Voidfarers"
+            ],
+            "receiver_keywords": [
+              "Voidsmen-At-Arms"
+            ]
+          },
+          {
+            "donor_keywords": [
+              "Inquisitor"
+            ],
+            "receiver_keywords": [
+              "Inquisitorial Agents"
+            ]
+          }
+        ]
       },
       {
         "keyword": "Retinue",
         "battle_size": "strike-force",
-        "max_count": 2
+        "max_count": 2,
+        "exemptions": [
+          {
+            "donor_keywords": [
+              "Character",
+              "Voidfarers"
+            ],
+            "receiver_keywords": [
+              "Voidsmen-At-Arms"
+            ]
+          },
+          {
+            "donor_keywords": [
+              "Inquisitor"
+            ],
+            "receiver_keywords": [
+              "Inquisitorial Agents"
+            ]
+          }
+        ]
       },
       {
         "keyword": "Retinue",
         "battle_size": "onslaught",
-        "max_count": 3
+        "max_count": 3,
+        "exemptions": [
+          {
+            "donor_keywords": [
+              "Character",
+              "Voidfarers"
+            ],
+            "receiver_keywords": [
+              "Voidsmen-At-Arms"
+            ]
+          },
+          {
+            "donor_keywords": [
+              "Inquisitor"
+            ],
+            "receiver_keywords": [
+              "Inquisitorial Agents"
+            ]
+          }
+        ]
       }
     ],
     "cannot_be_warlord": true,
@@ -642,6 +757,7 @@
         "max_count": 3
       }
     ],
+    "keyword_limits_exclusive": true,
     "cannot_be_warlord": true,
     "cannot_take_enhancements": true
   },
@@ -694,6 +810,7 @@
         "max_points": 750
       }
     ],
+    "replaces_faction_keywords": true,
     "cannot_be_warlord": true,
     "cannot_take_enhancements": true
   },
@@ -1090,6 +1207,7 @@
         "max_count": 1
       }
     ],
+    "keyword_limits_exclusive": true,
     "cannot_be_warlord": true,
     "cannot_take_enhancements": true
   },
@@ -1304,6 +1422,7 @@
         "max_count": 1
       }
     ],
+    "keyword_limits_exclusive": true,
     "cannot_be_warlord": true,
     "cannot_take_enhancements": true
   },

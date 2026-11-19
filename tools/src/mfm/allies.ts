@@ -45,6 +45,11 @@ import {
 import { CORE_DIR, readJsonArray } from "./repo-files.js";
 import type { StagedWrite } from "./apply.js";
 import { repoDirForFactionName } from "./faction-map.js";
+import {
+  battlelineRatioKeywords,
+  slotlessExemptions,
+  type AlliedKeywordLimitExemptionOut,
+} from "./allies-limits.js";
 
 
 // ─────────────────── output shape ───────────────────
@@ -55,6 +60,7 @@ interface AlliedKeywordLimitOut {
   keyword: string;
   battle_size: BattleSizeEnum;
   max_count: number;
+  exemptions?: AlliedKeywordLimitExemptionOut[];
 }
 interface AlliedPointsLimitOut {
   battle_size: BattleSizeEnum;
@@ -71,6 +77,8 @@ interface AlliedRuleOut {
   source_datasheet_ids?: string[];
   points_limits?: AlliedPointsLimitOut[];
   keyword_limits?: AlliedKeywordLimitOut[];
+  keyword_limits_exclusive?: boolean;
+  replaces_faction_keywords?: boolean;
   exclusive?: boolean;
   cannot_be_warlord?: boolean;
   cannot_take_enhancements?: boolean;
@@ -503,13 +511,17 @@ export function runAllies(dump: MfmDump): AlliesReport {
       ),
     ].sort();
 
-    // (10) per-keyword count caps.
+    // (10) per-keyword count caps, each with its slotless exemptions.
     const keywordLimits: AlliedKeywordLimitOut[] = (kwLimByAf.get(af.id) ?? [])
-      .map((r) => ({
-        keyword: dump.enName(kw.get(r.keywordId)),
-        battle_size: battleSizeEnum.get(r.battleSizeId),
-        max_count: r.limitCount,
-      }))
+      .map((r) => {
+        const exemptions = slotlessExemptions(dump, r.id);
+        return {
+          keyword: dump.enName(kw.get(r.keywordId)),
+          battle_size: battleSizeEnum.get(r.battleSizeId),
+          max_count: r.limitCount,
+          ...(exemptions.length > 0 ? { exemptions } : {}),
+        };
+      })
       .filter(
         (k): k is AlliedKeywordLimitOut => k.keyword !== undefined && k.battle_size !== undefined
       )
@@ -541,6 +553,10 @@ export function runAllies(dump: MfmDump): AlliesReport {
     if (datasheetIds.length > 0) rule.source_datasheet_ids = datasheetIds;
     if (pointsLimits.length > 0) rule.points_limits = pointsLimits;
     if (keywordLimits.length > 0) rule.keyword_limits = keywordLimits;
+    // The pool's keyword caps are alternatives: one limited keyword per army.
+    if (af.isMutuallyExclusiveKeywordLimit && keywordLimits.length > 0) rule.keyword_limits_exclusive = true;
+    // Included units take the army's Faction keywords in place of their own.
+    if (af.replacesRosterFactionKeyword) rule.replaces_faction_keywords = true;
 
     // (12) exclusive: a sibling-faction pool (`isSiblingFaction`) gated by a required
     // detachment and drawn from one repo faction lists datasheets printed in the
@@ -572,8 +588,12 @@ export function runAllies(dump: MfmDump): AlliesReport {
     if (overlay?.warlord_required_keyword)
       rule.warlord_required_keyword = overlay.warlord_required_keyword;
     if (overlay?.removes_ability_ids) rule.removes_ability_ids = overlay.removes_ability_ids;
-    if (overlay?.battleline_ratio_keywords)
-      rule.battleline_ratio_keywords = overlay.battleline_ratio_keywords;
+    // Battleline-ratio keywords: the overlay's prose-sourced list (the dump flags
+    // only some of the printed keywords), then any further keyword the dump flags.
+    const ratio = [...(overlay?.battleline_ratio_keywords ?? [])];
+    const parentIds = (parentByAf.get(af.id) ?? []).map((r) => r.factionKeywordId);
+    for (const k of battlelineRatioKeywords(dump, parentIds)) if (!ratio.includes(k)) ratio.push(k);
+    if (ratio.length > 0) rule.battleline_ratio_keywords = ratio;
     if (overlay?.notes) rule.notes = overlay.notes;
 
     report.rules.push(rule);

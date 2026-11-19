@@ -88,19 +88,26 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 	for _, k := range armyKeywords {
 		armyKeywordSet[k] = struct{}{}
 	}
+	// Unit records included through an allied rule that replaces Faction
+	// keywords (Renegades): they carry the army's Faction keywords instead of
+	// their own. Keyed by unitRecordKey; filled once views resolve.
+	replacedUnits := map[string]bool{}
 	keywordSet := func(view *UnitView, overrides []string) map[string]struct{} {
+		replaced := replacedUnits[unitRecordKey(view)]
 		s := map[string]struct{}{}
 		for _, k := range getStrList(view.Raw, "keywords") {
 			s[k] = struct{}{}
 		}
-		for _, k := range getStrList(view.Raw, "faction_keywords") {
-			s[k] = struct{}{}
+		if !replaced {
+			for _, k := range getStrList(view.Raw, "faction_keywords") {
+				s[k] = struct{}{}
+			}
 		}
 		s[getStr(view.Raw, "name")] = struct{}{}
 		if len(armyKeywordSet) > 0 {
 			inPool := true
 			for _, k := range getStrList(view.Raw, "faction_keywords") {
-				if _, ok := armyKeywordSet[k]; !ok {
+				if _, ok := armyKeywordSet[k]; !ok && !replaced {
 					inPool = false
 					break
 				}
@@ -141,6 +148,12 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 	views := make([]*UnitView, len(spec.units))
 	for i, u := range spec.units {
 		views[i] = resolveUnit(u.unitID)
+	}
+	allies := attributeAllies(ds, spec.factionID, spec.detachmentIDs, armyKeywordSet, views)
+	for idx, rule := range allies {
+		if rule["replaces_faction_keywords"] == true {
+			replacedUnits[unitRecordKey(views[idx])] = true
+		}
 	}
 
 	// attachedToKeywords is the roster keyword set of the unit su attaches to as
@@ -727,6 +740,32 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 					errV("ally-cannot-take-enhancements", su.unitID, idx)
 				}
 			}
+		}
+	}
+
+	// --- Allied pools: keyword caps of the rule each foreign unit is included through.
+	var ruleOrder []string
+	byRule := map[string][]int{}
+	ruleByID := map[string]map[string]any{}
+	for idx := range views {
+		rule, ok := allies[idx]
+		if !ok {
+			continue
+		}
+		id := getStr(rule, "id")
+		if _, seen := byRule[id]; !seen {
+			ruleOrder = append(ruleOrder, id)
+			ruleByID[id] = rule
+		}
+		byRule[id] = append(byRule[id], idx)
+	}
+	for _, id := range ruleOrder {
+		var members []map[string]struct{}
+		for _, idx := range byRule[id] {
+			members = append(members, keywordSet(views[idx], spec.units[idx].keywordOverrides))
+		}
+		for _, v := range allyKeywordLimitViolations(ruleByID[id], members, spec.battleSize) {
+			errV(v.code, v.id, -1)
 		}
 	}
 

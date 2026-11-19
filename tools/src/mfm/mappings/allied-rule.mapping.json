@@ -73,24 +73,39 @@
       "reason": "Each emitted gate member is a resolved host faction keyword."
     },
     "/battleline_ratio_keywords": {
-      "provenance": "repo-authored",
+      "provenance": "derived",
       "coverage": "implemented",
-      "sources": [],
-      "joins": [],
+      "sources": [
+        "data.keyword.allyRestrictingFactionKeywordId",
+        "data.keyword.allyRestrictingKeywordId",
+        "data.keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "allied_faction_parent_faction_keyword.alliedFactionId",
+          "direction": "children",
+          "purpose": "applicability"
+        }
+      ],
       "transforms": [
         {
           "symbol": "tools/src/mfm/allies.ts#runAllies",
-          "operation": "Apply curated overlay ratio constraints."
+          "operation": "Apply curated overlay ratio keywords, then append keywords the dump flags for the pool's parent faction keyword."
+        },
+        {
+          "symbol": "tools/src/mfm/allies-limits.ts#battlelineRatioKeywords",
+          "operation": "Select keywords whose ally-restricting faction keyword is a pool parent and whose restricting keyword is Battleline."
         }
       ],
       "filters": [
-        "Emit only overlay entries that define a ratio."
+        "Emit only when the overlay or the dump defines a ratio."
       ],
       "precedence": [],
       "consumers": [
-        "tools/src/mfm/allies.ts#runAllies"
+        "tools/src/mfm/allies.ts#runAllies",
+        "tools/src/mfm/allies-limits.ts#battlelineRatioKeywords"
       ],
-      "reason": "The dump tables do not express this ratio constraint."
+      "reason": "The dump flags only some of the printed ratio keywords (Slaanesh under Daemonic Pact); the overlay carries the full printed list."
     },
     "/battleline_ratio_keywords/*": {
       "provenance": "repo-authored",
@@ -977,23 +992,222 @@
         "tools/src/mfm/allies.ts#runAllies"
       ],
       "reason": "A detachment-gated sibling pool lists datasheets printed in the host's own codex that exist only for the pool, so they are not ordinary picks of the source faction."
+    },
+    "/keyword_limits/*/exemptions": {
+      "provenance": "joined",
+      "coverage": "implemented",
+      "sources": [
+        "data.allied_faction_keyword_slotless_keyword_group.id"
+      ],
+      "joins": [
+        {
+          "relation": "allied_faction_keyword_slotless_keyword_group.alliedFactionKeywordId",
+          "direction": "children",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/allies-limits.ts#slotlessExemptions",
+          "operation": "Collect the keyword-limit row's slotless groups as donor/receiver pairs."
+        }
+      ],
+      "filters": [
+        "Emit only when the row has groups.",
+        "Deduplicate identical pairs."
+      ],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/allies-limits.ts#slotlessExemptions"
+      ],
+      "reason": "Each slotless group exempts one receiver unit per donor unit from the row's cap."
+    },
+    "/keyword_limits/*/exemptions/*": {
+      "provenance": "joined",
+      "coverage": "implemented",
+      "sources": [
+        "data.allied_faction_keyword_slotless_keyword_group.id"
+      ],
+      "joins": [
+        {
+          "relation": "allied_faction_keyword_slotless_keyword_group.alliedFactionKeywordId",
+          "direction": "children",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/allies-limits.ts#slotlessExemptions",
+          "operation": "Project one slotless group."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/allies-limits.ts#slotlessExemptions"
+      ],
+      "reason": "One group is one donor/receiver pair."
+    },
+    "/keyword_limits/*/exemptions/*/donor_keywords": {
+      "provenance": "joined",
+      "coverage": "implemented",
+      "sources": [
+        "data.keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "allied_faction_keyword_slotless_keyword_group_donor_keyword.alliedFactionKeywordSlotlessKeywordGroupId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "allied_faction_keyword_slotless_keyword_group_donor_keyword.keywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/allies-limits.ts#slotlessExemptions",
+          "operation": "Resolve the group's donor keyword names, sorted."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/allies-limits.ts#slotlessExemptions"
+      ],
+      "reason": "A donor unit carries every keyword of the group's donor rows."
+    },
+    "/keyword_limits/*/exemptions/*/donor_keywords/*": {
+      "provenance": "joined",
+      "coverage": "implemented",
+      "sources": [
+        "data.keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "allied_faction_keyword_slotless_keyword_group_donor_keyword.keywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/allies-limits.ts#slotlessExemptions",
+          "operation": "Resolve one donor keyword name."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/allies-limits.ts#slotlessExemptions"
+      ],
+      "reason": "Keyword ids are projected as resolved repository keyword strings."
+    },
+    "/keyword_limits/*/exemptions/*/receiver_keywords": {
+      "provenance": "joined",
+      "coverage": "implemented",
+      "sources": [
+        "data.keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "allied_faction_keyword_slotless_keyword_group_receiver_keyword.alliedFactionKeywordSlotlessKeywordGroupId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "allied_faction_keyword_slotless_keyword_group_receiver_keyword.keywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/allies-limits.ts#slotlessExemptions",
+          "operation": "Resolve the group's receiver keyword names, sorted."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/allies-limits.ts#slotlessExemptions"
+      ],
+      "reason": "A receiver unit carries every keyword of the group's receiver rows."
+    },
+    "/keyword_limits/*/exemptions/*/receiver_keywords/*": {
+      "provenance": "joined",
+      "coverage": "implemented",
+      "sources": [
+        "data.keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "allied_faction_keyword_slotless_keyword_group_receiver_keyword.keywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/allies-limits.ts#slotlessExemptions",
+          "operation": "Resolve one receiver keyword name."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/allies-limits.ts#slotlessExemptions"
+      ],
+      "reason": "Keyword ids are projected as resolved repository keyword strings."
+    },
+    "/keyword_limits_exclusive": {
+      "provenance": "direct",
+      "coverage": "implemented",
+      "sources": [
+        "data.allied_faction.isMutuallyExclusiveKeywordLimit"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/allies.ts#runAllies",
+          "operation": "Copy the mutually-exclusive keyword-limit flag."
+        }
+      ],
+      "filters": [
+        "Emit only when true and the pool has keyword limits."
+      ],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/allies.ts#runAllies"
+      ],
+      "reason": "The flag marks a pool whose keyword caps are alternatives (one TITANIC model or up to three ARMIGER models)."
+    },
+    "/replaces_faction_keywords": {
+      "provenance": "direct",
+      "coverage": "implemented",
+      "sources": [
+        "data.allied_faction.replacesRosterFactionKeyword"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/allies.ts#runAllies",
+          "operation": "Copy the faction-keyword replacement flag."
+        }
+      ],
+      "filters": [
+        "Emit only when true."
+      ],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/allies.ts#runAllies"
+      ],
+      "reason": "The flag marks a pool whose included units take the army's Faction keywords in place of their own."
     }
   },
   "unmapped_mfm_fields": [
-    {
-      "source": "data.allied_faction.isMutuallyExclusiveKeywordLimit",
-      "candidate_pointer": "/keyword_limits",
-      "reason": "True on 4 allied factions: their keyword limits are mutually exclusive. allies.ts should read it into keyword_limits.",
-      "classification": "needs-consumer",
-      "spread": "23 rows, 23 values (0 null/absent): boolean false×19, true×4"
-    },
-    {
-      "source": "data.allied_faction.replacesRosterFactionKeyword",
-      "candidate_pointer": null,
-      "reason": "True on 1 allied faction, which replaces the roster's faction keyword. allies.ts should model it.",
-      "classification": "needs-consumer",
-      "spread": "23 rows, 23 values (0 null/absent): boolean false×22, true×1"
-    },
     {
       "source": "data.allied_faction.requiredWarlordMiniatureId",
       "candidate_pointer": "/warlord_datasheet_ids",
@@ -1009,30 +1223,9 @@
       "spread": "54 rows, 54 values (54 null/absent)"
     },
     {
-      "source": "data.allied_faction_keyword_slotless_keyword_group.id",
-      "candidate_pointer": null,
-      "reason": "12 slotless keyword groups exempt allied keywords from slot accounting. allies.ts should read them.",
-      "classification": "needs-consumer",
-      "spread": "12 rows, 12 values (0 null/absent): string, 12 distinct"
-    },
-    {
-      "source": "data.allied_faction_keyword_slotless_keyword_group_donor_keyword.keywordId",
-      "candidate_pointer": null,
-      "reason": "The 3 donor keywords of the slotless groups. allies.ts should read them with the groups.",
-      "classification": "needs-consumer",
-      "spread": "18 rows, 18 values (0 null/absent): string, 3 distinct"
-    },
-    {
-      "source": "data.allied_faction_keyword_slotless_keyword_group_receiver_keyword.keywordId",
-      "candidate_pointer": null,
-      "reason": "The 2 receiver keywords of the slotless groups. allies.ts should read them with the groups.",
-      "classification": "needs-consumer",
-      "spread": "12 rows, 12 values (0 null/absent): string, 2 distinct"
-    },
-    {
       "source": "data.allied_faction_parent_faction_keyword.factionKeywordId",
       "candidate_pointer": "/label",
-      "reason": "allies.ts reads the parent faction only for a fallback rule label; allied-rule records have no parent-faction field.",
+      "reason": "allies.ts reads the parent faction for a fallback rule label and to select the dump's Battleline-ratio keywords; allied-rule records have no parent-faction field.",
       "classification": "consumed-elsewhere",
       "spread": "27 rows, 27 values (0 null/absent): string, 23 distinct"
     }

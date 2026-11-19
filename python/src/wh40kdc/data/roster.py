@@ -31,6 +31,7 @@ from wh40kdc.data.enhancement_eligibility import (
 )
 from wh40kdc.data.list_keywords import list_building_keyword_changes, with_keyword_changes
 from wh40kdc.data.pricing import host_unit_points, wargear_points
+from wh40kdc.data.roster_allies import ally_keyword_limit_violations, attribute_allies
 from wh40kdc.data.roster_warlord import warlord_violations
 
 #: Army-construction violation codes (distinct from per-unit loadout codes).
@@ -69,22 +70,31 @@ ROSTER_VIOLATION_CODES = (
     "ally-points-over-limit",
     "ally-cannot-be-warlord",
     "ally-cannot-take-enhancements",
+    "ally-keyword-limit-exceeded",
+    "ally-keyword-limits-exclusive",
     "unit-minimum-unmet",
 )
 
 
-def _keyword_set(
+def _unit_keyword_set(
     unit: dict[str, Any],
     army_keywords: list[str],
     army_keyword_set: set[str],
     detachment_ids: list[str],
     keyword_overrides: list[str] | None = None,
+    replaced: bool = False,
 ) -> set[str]:
-    """Return the roster-contextual keyword set used by construction checks."""
-    owned = set(unit.get("keywords") or []) | set(unit.get("faction_keywords") or [])
-    owned.add(unit.get("name"))
+    """Return the roster-contextual keyword set used by construction checks.
+
+    A unit included through an allied rule that replaces Faction keywords
+    (``replaced``) carries the army's Faction keywords instead of its own.
+    """
     faction_keywords = unit.get("faction_keywords") or []
-    if army_keyword_set and all(keyword in army_keyword_set for keyword in faction_keywords):
+    owned = set(unit.get("keywords") or []) | (set() if replaced else set(faction_keywords))
+    owned.add(unit.get("name"))
+    if army_keyword_set and (
+        replaced or all(keyword in army_keyword_set for keyword in faction_keywords)
+    ):
         owned.update(army_keywords)
     for grant in unit.get("conditional_keywords") or []:
         # A keyword-choice option is the unit's only when the roster takes it (keyword overrides).
@@ -167,6 +177,29 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
     army_keyword_set = set(army_keywords)
 
     views = [resolve_unit(u.get("unit_id") or "") for u in spec_units]
+    allies = attribute_allies(dataset, faction_id, detachment_ids, army_keyword_set, views)
+    # Raw records of units whose allied rule replaces their Faction keywords.
+    # Attribution depends only on the resolved unit, so every roster entry of
+    # one record shares it.
+    replaced_raw = {
+        id(views[idx].raw) for idx, rule in allies.items() if rule.get("replaces_faction_keywords")
+    }
+
+    def _keyword_set(
+        unit: dict[str, Any],
+        army_keywords: list[str],
+        army_keyword_set: set[str],
+        detachment_ids: list[str],
+        keyword_overrides: list[str] | None = None,
+    ) -> set[str]:
+        return _unit_keyword_set(
+            unit,
+            army_keywords,
+            army_keyword_set,
+            detachment_ids,
+            keyword_overrides,
+            replaced=id(unit) in replaced_raw,
+        )
 
     def attached_to_keywords(su: dict[str, Any]) -> set[str] | None:
         """The roster keywords of the unit ``su`` attaches to as a leader or support character."""
@@ -738,6 +771,26 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                     f"{uid} cannot take an Enhancement under {rule['id']}",
                     idx,
                 )
+
+    # --- Allied pools: keyword caps of the rule each foreign unit is included through.
+    by_rule: dict[str, tuple[dict[str, Any], list[int]]] = {}
+    for idx, rule in sorted(allies.items()):
+        by_rule.setdefault(rule["id"], (rule, []))[1].append(idx)
+    for rule, idxs in by_rule.values():
+        member_keywords = [
+            _keyword_set(
+                views[idx].raw,
+                army_keywords,
+                army_keyword_set,
+                detachment_ids,
+                spec_units[idx].get("keyword_overrides") or [],
+            )
+            for idx in idxs
+        ]
+        for code, id_, message in ally_keyword_limit_violations(
+            rule, member_keywords, spec.get("battle_size")
+        ):
+            err(code, id_, message)
 
     # --- Unit minimums (e.g. Houndpack: 3+ WAR DOG units). --------------------
     for d in detachments:

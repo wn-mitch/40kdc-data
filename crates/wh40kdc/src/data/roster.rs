@@ -21,6 +21,7 @@ use crate::generated::{Unit, UnitRole};
 use crate::import::{BattleSize, Roster};
 use crate::Dataset;
 
+use super::roster_allies::{ally_keyword_limit_violations, attribute_allies};
 use super::roster_rules::{
     attachment_gates_hold, equipable_by_non_character, missing_required_wargear,
     AttachmentGateContext,
@@ -64,6 +65,8 @@ pub enum RosterViolationCode {
     AllyPointsOverLimit,
     AllyCannotBeWarlord,
     AllyCannotTakeEnhancements,
+    AllyKeywordLimitExceeded,
+    AllyKeywordLimitsExclusive,
     UnitMinimumUnmet,
 }
 
@@ -106,6 +109,8 @@ impl RosterViolationCode {
             RosterViolationCode::AllyPointsOverLimit => "ally-points-over-limit",
             RosterViolationCode::AllyCannotBeWarlord => "ally-cannot-be-warlord",
             RosterViolationCode::AllyCannotTakeEnhancements => "ally-cannot-take-enhancements",
+            RosterViolationCode::AllyKeywordLimitExceeded => "ally-keyword-limit-exceeded",
+            RosterViolationCode::AllyKeywordLimitsExclusive => "ally-keyword-limits-exclusive",
             RosterViolationCode::UnitMinimumUnmet => "unit-minimum-unmet",
         }
     }
@@ -180,31 +185,35 @@ pub struct NormRoster {
 
 /// The complete roster-legality keyword set for a unit: its `keywords`,
 /// `faction_keywords`, and display name; eligible army-faction keywords;
-/// conditionally granted keywords; then source-format overrides.
+/// conditionally granted keywords; then source-format overrides. A unit
+/// included through an allied rule that replaces Faction keywords (`replaced`)
+/// carries the army's Faction keywords instead of its own.
 fn roster_keyword_set(
     view: &Unit,
     army_keywords: &HashSet<String>,
     detachment_ids: &[String],
     overrides: &[String],
+    replaced: bool,
 ) -> HashSet<String> {
     let mut out = HashSet::new();
     if let Some(kws) = &view.keywords {
         out.extend(kws.0.iter().map(|keyword| keyword.as_str().to_string()));
     }
-    if let Some(kws) = &view.faction_keywords {
+    if let Some(kws) = view.faction_keywords.as_ref().filter(|_| !replaced) {
         out.extend(kws.0.iter().map(|keyword| keyword.as_str().to_string()));
     }
     out.insert(view.name.as_str().to_string());
 
-    let in_pool = view
-        .faction_keywords
-        .as_ref()
-        .map(|kws| {
-            kws.0
-                .iter()
-                .all(|keyword| army_keywords.contains(keyword.as_str()))
-        })
-        .unwrap_or(true);
+    let in_pool = replaced
+        || view
+            .faction_keywords
+            .as_ref()
+            .map(|kws| {
+                kws.0
+                    .iter()
+                    .all(|keyword| army_keywords.contains(keyword.as_str()))
+            })
+            .unwrap_or(true);
     if !army_keywords.is_empty() && in_pool {
         out.extend(army_keywords.iter().cloned());
     }
@@ -286,6 +295,20 @@ pub fn validate_roster_core_with_keyword_overrides(
         .iter()
         .map(|u| resolve_unit(&u.unit_id))
         .collect();
+    let allies = attribute_allies(
+        dataset,
+        faction,
+        &spec.detachment_ids,
+        &army_keywords,
+        &views,
+    );
+    let replaced: Vec<bool> = (0..spec.units.len())
+        .map(|idx| {
+            allies
+                .get(&idx)
+                .is_some_and(|r| r.replaces_faction_keywords)
+        })
+        .collect();
 
     // The roster keywords of the unit `su` attaches to as a leader or support character.
     let attached_to_keywords = |su: &NormUnit| -> Option<HashSet<String>> {
@@ -304,6 +327,7 @@ pub fn validate_roster_core_with_keyword_overrides(
             &army_keywords,
             &spec.detachment_ids,
             overrides,
+            idx.is_some_and(|i| replaced[i]),
         ))
     };
 
@@ -371,7 +395,13 @@ pub fn validate_roster_core_with_keyword_overrides(
                 severity: Severity::Error,
             });
         }
-        let kws = roster_keyword_set(view, &army_keywords, &spec.detachment_ids, overrides);
+        let kws = roster_keyword_set(
+            view,
+            &army_keywords,
+            &spec.detachment_ids,
+            overrides,
+            replaced[idx],
+        );
         // 11e Select Enhancements: EPIC HERO models cannot be given Enhancements
         // (Upgrades included) unless the enhancement says an Epic Hero may take it.
         // Mirror of TS `enhancement-on-epic-hero`.
@@ -561,8 +591,13 @@ pub fn validate_roster_core_with_keyword_overrides(
             }
             // Detachment and shared-keyword gates (Pactbound Zealots' Marks of Chaos)
             // narrow the eligible set; an enhancement's grant is not gated.
-            let leader_keywords =
-                roster_keyword_set(view, &army_keywords, &spec.detachment_ids, overrides);
+            let leader_keywords = roster_keyword_set(
+                view,
+                &army_keywords,
+                &spec.detachment_ids,
+                overrides,
+                replaced[idx],
+            );
             let bodyguard_keywords = attached_to_keywords(su).unwrap_or_default();
             let gated = !granted
                 && !attachment_gates_hold(
@@ -724,7 +759,13 @@ pub fn validate_roster_core_with_keyword_overrides(
         for (idx, _su) in spec.units.iter().enumerate() {
             let Some(view) = views[idx] else { continue };
             let overrides = keyword_overrides.get(idx).map(Vec::as_slice).unwrap_or(&[]);
-            let kws = roster_keyword_set(view, &army_keywords, &spec.detachment_ids, overrides);
+            let kws = roster_keyword_set(
+                view,
+                &army_keywords,
+                &spec.detachment_ids,
+                overrides,
+                replaced[idx],
+            );
             if let Some(req) = &r.required_keywords {
                 if req.0.iter().any(|k| !kws.contains(k.as_str())) {
                     army.push(RosterViolation {
@@ -862,8 +903,14 @@ pub fn validate_roster_core_with_keyword_overrides(
             let view = views[idx]?;
             let overrides = keyword_overrides.get(idx).map(Vec::as_slice).unwrap_or(&[]);
             let is_character = is_character(view, overrides)
-                || roster_keyword_set(view, &army_keywords, &spec.detachment_ids, overrides)
-                    .contains("Character");
+                || roster_keyword_set(
+                    view,
+                    &army_keywords,
+                    &spec.detachment_ids,
+                    overrides,
+                    replaced[idx],
+                )
+                .contains("Character");
             Some(WarlordUnit {
                 unit_id: view.id.as_str(),
                 is_warlord: su.is_warlord,
@@ -905,7 +952,13 @@ pub fn validate_roster_core_with_keyword_overrides(
     for (idx, view) in views.iter().enumerate() {
         let Some(view) = *view else { continue };
         let overrides = keyword_overrides.get(idx).map(Vec::as_slice).unwrap_or(&[]);
-        let kws = roster_keyword_set(view, &army_keywords, &spec.detachment_ids, overrides);
+        let kws = roster_keyword_set(
+            view,
+            &army_keywords,
+            &spec.detachment_ids,
+            overrides,
+            replaced[idx],
+        );
         let limit = if matches!(view.role, Some(UnitRole::EpicHero)) || kws.contains("Epic Hero") {
             Some(1)
         } else if matches!(
@@ -1012,6 +1065,7 @@ pub fn validate_roster_core_with_keyword_overrides(
                         &army_keywords,
                         &spec.detachment_ids,
                         overrides,
+                        replaced[idx],
                     ))
                 })
                 .collect();
@@ -1167,6 +1221,41 @@ pub fn validate_roster_core_with_keyword_overrides(
         }
     }
 
+    // --- Allied pools: keyword caps of the rule each foreign unit is included through.
+    let mut by_rule: Vec<(&crate::generated::AlliedRule, Vec<usize>)> = Vec::new();
+    for (&idx, &rule) in &allies {
+        match by_rule.iter_mut().find(|(r, _)| r.id == rule.id) {
+            Some((_, idxs)) => idxs.push(idx),
+            None => by_rule.push((rule, vec![idx])),
+        }
+    }
+    for (rule, idxs) in &by_rule {
+        let members: Vec<HashSet<String>> = idxs
+            .iter()
+            .filter_map(|&idx| {
+                let overrides = keyword_overrides.get(idx).map(Vec::as_slice).unwrap_or(&[]);
+                views[idx].map(|view| {
+                    roster_keyword_set(
+                        view,
+                        &army_keywords,
+                        &spec.detachment_ids,
+                        overrides,
+                        replaced[idx],
+                    )
+                })
+            })
+            .collect();
+        for v in ally_keyword_limit_violations(rule, &members, spec.battle_size) {
+            army.push(RosterViolation {
+                code: v.code,
+                id: v.id,
+                message: v.message,
+                unit_index: None,
+                severity: Severity::Error,
+            });
+        }
+    }
+
     // --- Unit minimums (e.g. Houndpack: 3+ WAR DOG units). --------------------
     for d in &detachments {
         for um in &d.unit_minimums {
@@ -1184,6 +1273,7 @@ pub fn validate_roster_core_with_keyword_overrides(
                                 .get(*idx)
                                 .map(Vec::as_slice)
                                 .unwrap_or(&[]),
+                            replaced[*idx],
                         )
                         .contains(keyword)
                     })
