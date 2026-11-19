@@ -71,6 +71,7 @@
   </categoryEntries>
   <entryLinks>
     <entryLink name="High Marshal Helbrecht" id="2afb-1309-a655-8638" hidden="false" import="true" targetId="da8a-de9f-1fe7-2513" type="selectionEntry"/>
+    <entryLink name="Gladiator Lancer" id="b264-e5fb-63b6-af44" hidden="false" import="true" targetId="7dec-dc3d-c40a-8ce" type="selectionEntry"/>
     <entryLink name="Marshal" id="e5d7-2ce8-09dc-f414" hidden="false" import="true" targetId="68dd-5f49-4f17-cd84" type="selectionEntry"/>
     <entryLink name="Sword Brethren Squad" id="bd10-e178-428a-4a81" hidden="false" import="true" targetId="206c-6b4d-4aaa-7e79" type="selectionEntry"/>
     <entryLink name="Crusader Squad" id="b2c6-a748-3257-a6a8" hidden="false" import="true" targetId="8bbe-e7fc-44b7-ed94" type="selectionEntry"/>
@@ -82,7 +83,12 @@
         <categoryLink name="Limit: Emperor's Champion" id="0cf7-9129-2174-730d" hidden="false" primary="false" targetId="d0c5-8d6f-a7d8-d151"/>
       </categoryLinks>
     </entryLink>
+    <entryLink name="Impulsor" id="7630-5754-2ac2-1635" hidden="false" import="true" targetId="fa27-4bc1-72c9-894f" type="selectionEntry"/>
+    <entryLink name="Repulsor Executioner" id="7e26-c149-e6cd-94cf" hidden="false" import="true" targetId="a344-192f-aae2-16e5" type="selectionEntry"/>
+    <entryLink name="Gladiator Valiant" id="c88c-85b7-f46b-28a3" hidden="false" import="true" targetId="5704-ffe4-4a53-8789" type="selectionEntry"/>
     <entryLink name="Crusade Ancient" id="6807-e530-b765-0fe6" hidden="false" import="true" targetId="dca2-b12f-d1a9-5822" type="selectionEntry"/>
+    <entryLink name="Repulsor" id="ba33-32ad-0a49-f8f4" hidden="false" import="true" targetId="c3e8-3cde-8b39-4b19" type="selectionEntry"/>
+    <entryLink name="Gladiator Reaper" id="2e82-4eaf-168f-66ac" hidden="false" import="true" targetId="bfb6-4320-74cf-bbda" type="selectionEntry"/>
     <entryLink name="Reaver Titan" id="d7a6-0481-73c7-041a" hidden="false" import="true" targetId="b7e8-f3ae-be53-9ba5" type="selectionEntry">
       <modifiers>
         <modifier field="hidden" type="set" value="true">

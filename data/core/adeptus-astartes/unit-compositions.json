@@ -35072,5 +35072,1088 @@
       ],
       "uniform": []
     }
+  },
+  {
+    "unit_id": "gladiator-lancer-black-templars",
+    "faction_id": "adeptus-astartes",
+    "models": [
+      {
+        "name": "Gladiator Lancer",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        },
+        "default_weapon_ids": [
+          "armoured-hull-gladiator-lancer",
+          "defensive-array-gladiator-lancer",
+          "laser-destroyer"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Gladiator Lancer",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Gladiator Lancer",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull-gladiator-lancer",
+              "count": 1
+            },
+            {
+              "id": "defensive-array-gladiator-lancer",
+              "count": 1
+            },
+            {
+              "id": "laser-destroyer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Gladiator Lancer",
+          "items": [
+            {
+              "id": "armoured-hull-gladiator-lancer",
+              "count": 1
+            },
+            {
+              "id": "defensive-array-gladiator-lancer",
+              "count": 1
+            },
+            {
+              "id": "laser-destroyer",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Gladiator Lancer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Gladiator Lancer",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull-gladiator-lancer",
+                "count": 1
+              },
+              {
+                "id": "defensive-array-gladiator-lancer",
+                "count": 1
+              },
+              {
+                "id": "laser-destroyer",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Gladiator Lancer",
+          "id": "armoured-hull-gladiator-lancer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gladiator Lancer",
+          "id": "defensive-array-gladiator-lancer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gladiator Lancer",
+          "id": "laser-destroyer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gladiator Lancer",
+          "id": "multi-melta",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
+  },
+  {
+    "unit_id": "gladiator-reaper-black-templars",
+    "faction_id": "adeptus-astartes",
+    "models": [
+      {
+        "name": "Gladiator Reaper",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        },
+        "default_weapon_ids": [
+          "armoured-hull-gladiator-reaper",
+          "defensive-array-gladiator-reaper",
+          "twin-heavy-onslaught-gatling-cannon"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Gladiator Reaper",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Gladiator Reaper",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull-gladiator-reaper",
+              "count": 1
+            },
+            {
+              "id": "defensive-array-gladiator-reaper",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-onslaught-gatling-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Gladiator Reaper",
+          "items": [
+            {
+              "id": "armoured-hull-gladiator-reaper",
+              "count": 1
+            },
+            {
+              "id": "defensive-array-gladiator-reaper",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-onslaught-gatling-cannon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Gladiator Reaper",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Gladiator Reaper",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull-gladiator-reaper",
+                "count": 1
+              },
+              {
+                "id": "defensive-array-gladiator-reaper",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-onslaught-gatling-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Gladiator Reaper",
+          "id": "armoured-hull-gladiator-reaper",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gladiator Reaper",
+          "id": "defensive-array-gladiator-reaper",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gladiator Reaper",
+          "id": "multi-melta",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Gladiator Reaper",
+          "id": "twin-heavy-onslaught-gatling-cannon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
+  },
+  {
+    "unit_id": "gladiator-valiant-black-templars",
+    "faction_id": "adeptus-astartes",
+    "models": [
+      {
+        "name": "Gladiator Valiant",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        },
+        "default_weapon_ids": [
+          "armoured-hull-gladiator-valiant",
+          "defensive-array-gladiator-valiant",
+          "multi-melta-gladiator-valiant",
+          "multi-melta-gladiator-valiant",
+          "twin-las-talon"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Gladiator Valiant",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Gladiator Valiant",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull-gladiator-valiant",
+              "count": 1
+            },
+            {
+              "id": "defensive-array-gladiator-valiant",
+              "count": 1
+            },
+            {
+              "id": "multi-melta-gladiator-valiant",
+              "count": 2
+            },
+            {
+              "id": "twin-las-talon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Gladiator Valiant",
+          "items": [
+            {
+              "id": "armoured-hull-gladiator-valiant",
+              "count": 1
+            },
+            {
+              "id": "defensive-array-gladiator-valiant",
+              "count": 1
+            },
+            {
+              "id": "multi-melta-gladiator-valiant",
+              "count": 2
+            },
+            {
+              "id": "twin-las-talon",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Gladiator Valiant",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull-gladiator-valiant",
+                "count": 1
+              },
+              {
+                "id": "defensive-array-gladiator-valiant",
+                "count": 1
+              },
+              {
+                "id": "multi-melta-gladiator-valiant",
+                "count": 2
+              },
+              {
+                "id": "twin-las-talon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "armoured-hull-gladiator-valiant",
+                "count": 1
+              },
+              {
+                "id": "defensive-array-gladiator-valiant",
+                "count": 1
+              },
+              {
+                "id": "multi-melta-gladiator-valiant",
+                "count": 3
+              },
+              {
+                "id": "twin-las-talon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Gladiator Valiant",
+          "id": "armoured-hull-gladiator-valiant",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gladiator Valiant",
+          "id": "defensive-array-gladiator-valiant",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Gladiator Valiant",
+          "id": "multi-melta-gladiator-valiant",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Gladiator Valiant",
+          "id": "multi-melta-gladiator-valiant",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Gladiator Valiant",
+          "id": "twin-las-talon",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
+  },
+  {
+    "unit_id": "impulsor-black-templars",
+    "faction_id": "adeptus-astartes",
+    "models": [
+      {
+        "name": "Impulsor",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        },
+        "default_weapon_ids": [
+          "armoured-hull-impulsor",
+          "storm-bolter-impulsor"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Impulsor",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Impulsor",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull-impulsor",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-impulsor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Impulsor",
+          "items": [
+            {
+              "id": "armoured-hull-impulsor",
+              "count": 1
+            },
+            {
+              "id": "storm-bolter-impulsor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Impulsor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "bellicatus-missile-array",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "orbital-comms-array",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "shield-dome",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Impulsor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "ironhail-heavy-stubber-impulsor",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Impulsor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull-impulsor",
+                "count": 1
+              },
+              {
+                "id": "fragstorm-grenade-launcher-impulsor",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "armoured-hull-impulsor",
+                "count": 1
+              },
+              {
+                "id": "storm-bolter-impulsor",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Impulsor",
+          "id": "armoured-hull-impulsor",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Impulsor",
+          "id": "bellicatus-missile-array",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Impulsor",
+          "id": "fragstorm-grenade-launcher-impulsor",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Impulsor",
+          "id": "ironhail-heavy-stubber-impulsor",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Impulsor",
+          "id": "multi-melta",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Impulsor",
+          "id": "orbital-comms-array",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Impulsor",
+          "id": "shield-dome",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Impulsor",
+          "id": "storm-bolter-impulsor",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
+  },
+  {
+    "unit_id": "repulsor-black-templars",
+    "faction_id": "adeptus-astartes",
+    "models": [
+      {
+        "name": "Repulsor",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        },
+        "default_weapon_ids": [
+          "armoured-hull-repulsor",
+          "defensive-array",
+          "heavy-onslaught-gatling-cannon-repulsor",
+          "hunter-slayer-missile",
+          "twin-heavy-bolter-repulsor"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Repulsor",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Repulsor",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull-repulsor",
+              "count": 1
+            },
+            {
+              "id": "defensive-array",
+              "count": 1
+            },
+            {
+              "id": "heavy-onslaught-gatling-cannon-repulsor",
+              "count": 1
+            },
+            {
+              "id": "hunter-slayer-missile",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-bolter-repulsor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Repulsor",
+          "items": [
+            {
+              "id": "armoured-hull-repulsor",
+              "count": 1
+            },
+            {
+              "id": "defensive-array",
+              "count": 1
+            },
+            {
+              "id": "heavy-onslaught-gatling-cannon-repulsor",
+              "count": 1
+            },
+            {
+              "id": "hunter-slayer-missile",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-bolter-repulsor",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Repulsor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Repulsor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull-repulsor",
+                "count": 1
+              },
+              {
+                "id": "defensive-array",
+                "count": 1
+              },
+              {
+                "id": "hunter-slayer-missile",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Repulsor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-onslaught-gatling-cannon-repulsor",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "las-talon-repulsor",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Repulsor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "twin-heavy-bolter-repulsor",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "twin-lascannon-repulsor",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Repulsor",
+          "id": "armoured-hull-repulsor",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Repulsor",
+          "id": "defensive-array",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Repulsor",
+          "id": "heavy-onslaught-gatling-cannon-repulsor",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Repulsor",
+          "id": "hunter-slayer-missile",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Repulsor",
+          "id": "las-talon-repulsor",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Repulsor",
+          "id": "multi-melta",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Repulsor",
+          "id": "twin-heavy-bolter-repulsor",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Repulsor",
+          "id": "twin-lascannon-repulsor",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
+  },
+  {
+    "unit_id": "repulsor-executioner-black-templars",
+    "faction_id": "adeptus-astartes",
+    "models": [
+      {
+        "name": "Repulsor Executioner",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        },
+        "default_weapon_ids": [
+          "armoured-hull-repulsor-executioner",
+          "defensive-array",
+          "heavy-laser-destroyer",
+          "heavy-onslaught-gatling-cannon",
+          "twin-heavy-bolter-repulsor-executioner"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Repulsor Executioner",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Repulsor Executioner",
+          "models": 1,
+          "items": [
+            {
+              "id": "armoured-hull-repulsor-executioner",
+              "count": 1
+            },
+            {
+              "id": "defensive-array",
+              "count": 1
+            },
+            {
+              "id": "heavy-laser-destroyer",
+              "count": 1
+            },
+            {
+              "id": "heavy-onslaught-gatling-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-bolter-repulsor-executioner",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Repulsor Executioner",
+          "items": [
+            {
+              "id": "armoured-hull-repulsor-executioner",
+              "count": 1
+            },
+            {
+              "id": "defensive-array",
+              "count": 1
+            },
+            {
+              "id": "heavy-laser-destroyer",
+              "count": 1
+            },
+            {
+              "id": "heavy-onslaught-gatling-cannon",
+              "count": 1
+            },
+            {
+              "id": "twin-heavy-bolter-repulsor-executioner",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Repulsor Executioner",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [],
+            [
+              {
+                "id": "multi-melta",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Repulsor Executioner",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "armoured-hull-repulsor-executioner",
+                "count": 1
+              },
+              {
+                "id": "defensive-array",
+                "count": 1
+              },
+              {
+                "id": "heavy-onslaught-gatling-cannon",
+                "count": 1
+              },
+              {
+                "id": "twin-heavy-bolter-repulsor-executioner",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Repulsor Executioner",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "heavy-laser-destroyer",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "macro-plasma-incinerator",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Repulsor Executioner",
+          "id": "armoured-hull-repulsor-executioner",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Repulsor Executioner",
+          "id": "defensive-array",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Repulsor Executioner",
+          "id": "heavy-laser-destroyer",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Repulsor Executioner",
+          "id": "heavy-onslaught-gatling-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Repulsor Executioner",
+          "id": "macro-plasma-incinerator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Repulsor Executioner",
+          "id": "multi-melta",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Repulsor Executioner",
+          "id": "twin-heavy-bolter-repulsor-executioner",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
   }
 ]

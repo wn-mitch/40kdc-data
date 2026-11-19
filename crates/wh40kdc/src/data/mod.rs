@@ -58,6 +58,8 @@ mod list_keywords;
 pub mod roster;
 #[cfg(feature = "import")]
 mod roster_allies;
+#[cfg(feature = "import")]
+mod roster_chapter;
 mod roster_rules;
 mod roster_warlord;
 

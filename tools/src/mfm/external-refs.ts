@@ -18,6 +18,7 @@ import {
 } from "./weapon-variants.js";
 import type { GameVersion } from "./gear-projection.js";
 import { findDatasheet } from "./project-loadout.js";
+import { unitIdForDatasheet } from "./chapter-reprints.js";
 import { currentGameVersion } from "./dataslate.js";
 
 export interface MfmExternalRefsReport {
@@ -90,7 +91,7 @@ export function runMfmExternalRefs(
     const sourceDir = repoDirForFactionName(factionName);
     const homeDir = sourceDir ? effectiveDir(sourceDir) : null;
     if (!sourceDir || !homeDir || (onlyDir && homeDir !== onlyDir)) continue;
-    const unitId = safeId(dump.enName(datasheet));
+    const unitId = unitIdForDatasheet(dump, datasheet);
     const matched = unitId ? findDatasheet(dump, unitId, sourceDir) : null;
     if (!matched || matched.id !== datasheet.id) {
       unmatched.unit++;

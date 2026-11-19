@@ -17,7 +17,7 @@ use crate::data::battle_sizes::{
 use crate::data::list_keywords::{list_building_keyword_changes, ListKeywords};
 use crate::data::loadout::Violation;
 use crate::data::pricing::{army_unit_points, wargear_points};
-use crate::generated::{Unit, UnitRole};
+use crate::generated::{Faction, Unit, UnitRole};
 use crate::import::{BattleSize, Roster};
 use crate::Dataset;
 
@@ -51,6 +51,7 @@ pub enum RosterViolationCode {
     DetachmentRestrictionRequired,
     DetachmentRestrictionExcluded,
     UnitExcludedFromFaction,
+    UnitChapterMismatch,
     NoWarlord,
     MultipleWarlords,
     WarlordNotMandated,
@@ -95,6 +96,7 @@ impl RosterViolationCode {
             RosterViolationCode::DetachmentRestrictionRequired => "detachment-restriction-required",
             RosterViolationCode::DetachmentRestrictionExcluded => "detachment-restriction-excluded",
             RosterViolationCode::UnitExcludedFromFaction => "unit-excluded-from-faction",
+            RosterViolationCode::UnitChapterMismatch => "unit-chapter-mismatch",
             RosterViolationCode::NoWarlord => "no-warlord",
             RosterViolationCode::MultipleWarlords => "multiple-warlords",
             RosterViolationCode::WarlordNotMandated => "warlord-not-mandated",
@@ -832,6 +834,42 @@ pub fn validate_roster_core_with_keyword_overrides(
                 });
             }
         }
+    }
+
+    // --- Chapter cohesion (chapter-locked units the army may not take). --------
+    // Mirror of TS `unit-chapter-mismatch` (`roster_chapter.rs`).
+    let army_faction = faction.and_then(|f| dataset.factions.get(f));
+    let parent_faction = army_faction
+        .and_then(|fac| fac.parent_faction_id.as_ref())
+        .and_then(|p| dataset.factions.get(p.as_str()));
+    let child_factions: Vec<&Faction> = match faction {
+        Some(f) => dataset
+            .factions
+            .all()
+            .iter()
+            .filter(|c| c.parent_faction_id.as_ref().map(|p| p.as_str()) == Some(f))
+            .collect(),
+        None => Vec::new(),
+    };
+    for m in super::roster_chapter::chapter_mismatches(
+        army_faction,
+        parent_faction,
+        &child_factions,
+        &views,
+    ) {
+        let Some(view) = views[m.index] else { continue };
+        army.push(RosterViolation {
+            code: RosterViolationCode::UnitChapterMismatch,
+            id: view.id.as_str().to_string(),
+            message: format!(
+                "{} belongs to {}, not {}",
+                view.id.as_str(),
+                m.keywords.join(", "),
+                faction.unwrap_or("")
+            ),
+            unit_index: Some(m.index),
+            severity: Severity::Error,
+        });
     }
 
     // --- Warlord present (exactly one). ---------------------------------------

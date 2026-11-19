@@ -209,6 +209,18 @@ describe("stack damage faction inheritance", () => {
     expect(unitAllowedInFaction(foreign, armyKeywords)).toBe(false);
     expect(unitAllowedInFaction(excluded, armyKeywords)).toBe(false);
   });
+
+  it("draws Space Marine pools by the roster checker's chapter rule", () => {
+    const dataset = Dataset.embedded();
+    const ids = new Set(resolveFactionContext(dataset, "adeptus-astartes").units.map((unit) => unit.id));
+    // Every chapter is an army of its own: the generic pool holds no chapter-locked unit.
+    expect(ids.has("roboute-guilliman")).toBe(false);
+    expect(ids.has("repulsor")).toBe(true);
+    expect(ids.has("repulsor-black-templars")).toBe(false);
+    expect(ids.has("ragnar-blackmane")).toBe(false);
+    const bt = new Set(resolveFactionContext(dataset, "black-templars").units.map((unit) => unit.id));
+    expect([bt.has("repulsor-black-templars"), bt.has("repulsor"), bt.has("roboute-guilliman")]).toEqual([true, false, false]);
+  });
 });
 
 describe("stack damage target-scoped state and output", () => {

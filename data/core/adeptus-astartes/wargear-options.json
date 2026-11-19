@@ -1,5 +1,21 @@
 [
   {
+    "id": "gladiator-lancer-black-templars-wgo-mfm-1",
+    "unit_id": "gladiator-lancer-black-templars",
+    "faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replacement": [
+      "multi-melta"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
     "id": "terminator-squad-wgo-mfm-1",
     "unit_id": "terminator-squad",
     "faction_id": "adeptus-astartes",
@@ -474,6 +490,70 @@
     }
   },
   {
+    "id": "impulsor-black-templars-wgo-mfm-1",
+    "unit_id": "impulsor-black-templars",
+    "faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "ironhail-heavy-stubber-impulsor"
+      ],
+      [
+        "multi-melta"
+      ]
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "impulsor-black-templars-wgo-mfm-2",
+    "unit_id": "impulsor-black-templars",
+    "faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replaces": [
+      "storm-bolter-impulsor"
+    ],
+    "replacement": [
+      "fragstorm-grenade-launcher-impulsor"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "impulsor-black-templars-wgo-mfm-3",
+    "unit_id": "impulsor-black-templars",
+    "faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "orbital-comms-array"
+      ],
+      [
+        "bellicatus-missile-array"
+      ],
+      [
+        "shield-dome"
+      ]
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
     "id": "repulsor-executioner-wgo-mfm-1",
     "unit_id": "repulsor-executioner",
     "faction_id": "adeptus-astartes",
@@ -487,6 +567,57 @@
     ],
     "replacement": [
       "macro-plasma-incinerator"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "repulsor-executioner-black-templars-wgo-mfm-1",
+    "unit_id": "repulsor-executioner-black-templars",
+    "faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replacement": [
+      "multi-melta"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "repulsor-executioner-black-templars-wgo-mfm-2",
+    "unit_id": "repulsor-executioner-black-templars",
+    "faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replaces": [
+      "heavy-laser-destroyer"
+    ],
+    "replacement": [
+      "macro-plasma-incinerator"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "gladiator-valiant-black-templars-wgo-mfm-1",
+    "unit_id": "gladiator-valiant-black-templars",
+    "faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replacement": [
+      "multi-melta-gladiator-valiant"
     ],
     "model_constraint": {
       "any_number": true
@@ -525,6 +656,76 @@
     ],
     "replacement": [
       "las-talon-repulsor"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "repulsor-black-templars-wgo-mfm-1",
+    "unit_id": "repulsor-black-templars",
+    "faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replaces": [
+      "twin-heavy-bolter-repulsor"
+    ],
+    "replacement": [
+      "twin-lascannon-repulsor"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "repulsor-black-templars-wgo-mfm-2",
+    "unit_id": "repulsor-black-templars",
+    "faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replacement": [
+      "multi-melta"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "repulsor-black-templars-wgo-mfm-3",
+    "unit_id": "repulsor-black-templars",
+    "faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replaces": [
+      "heavy-onslaught-gatling-cannon-repulsor"
+    ],
+    "replacement": [
+      "las-talon-repulsor"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "gladiator-reaper-black-templars-wgo-mfm-1",
+    "unit_id": "gladiator-reaper-black-templars",
+    "faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replacement": [
+      "multi-melta"
     ],
     "model_constraint": {
       "any_number": true

@@ -637,43 +637,6 @@
     "expected": []
   },
   {
-    "name": "collapsed-twin-legal-in-excluding-chapter",
-    "args": {
-      "factionId": "black-templars",
-      "battleSize": null,
-      "forceDisposition": "purge-the-foe",
-      "detachments": [],
-      "units": [
-        {
-          "unitId": "high-marshal-helbrecht",
-          "modelCount": 1,
-          "isWarlord": true,
-          "enhancementId": null,
-          "leaderBodyguardId": null,
-          "counts": {
-            "ferocity": 1,
-            "sword-of-the-high-marshals": 1
-          }
-        },
-        {
-          "unitId": "repulsor",
-          "modelCount": 1,
-          "isWarlord": false,
-          "enhancementId": null,
-          "leaderBodyguardId": null,
-          "counts": {
-            "armoured-hull-repulsor": 1,
-            "defensive-array": 1,
-            "heavy-onslaught-gatling-cannon-repulsor": 1,
-            "hunter-slayer-missile": 1,
-            "twin-heavy-bolter-repulsor": 1
-          }
-        }
-      ]
-    },
-    "expected": []
-  },
-  {
     "name": "points-over-limit-from-wargear-costs",
     "note": "5 Terminator Assault Squads at 10 models (340/340/380/380/380) plus a 90-point Captain = 1910 base (legal at 2000), but each squad's six storm shields (wargear_costs 5 pts each = 30/squad, +150) push the army to 2060 — over the limit. points-over-limit here is produced ONLY by charging wargear_costs over the loadout, so every port must sum them identically (issue 75). Five copies of one datasheet also exceed the strike-force unit limit of 3.",
     "args": {
@@ -2934,7 +2897,7 @@
   {
     "name": "warlord-not-supreme-commander",
     "args": {
-      "factionId": "adeptus-astartes",
+      "factionId": "ultramarines",
       "battleSize": "strike-force",
       "forceDisposition": "purge-the-foe",
       "detachments": [],
@@ -2971,7 +2934,7 @@
   {
     "name": "legal-supreme-commander-warlord",
     "args": {
-      "factionId": "adeptus-astartes",
+      "factionId": "ultramarines",
       "battleSize": "strike-force",
       "forceDisposition": "purge-the-foe",
       "detachments": [],
@@ -4081,5 +4044,267 @@
       "army|error|ally-keyword-limit-exceeded:agents-of-the-imperium-allies:Retinue"
     ],
     "note": "A Deathwatch army is offered both agents-of-the-imperium-allies and agents-of-the-imperium-deathwatch, and every Agents unit is in both pools. A foreign unit is attributed to the first offered rule in allied-rules order (by id), so the three Retinue units count against agents-of-the-imperium-allies: 3 over its strike-force cap of 2, and the violation names that rule."
+  },
+  {
+    "name": "chapter-reprint-legal-in-its-chapter",
+    "note": "A chapter's own printing of a generic datasheet is its own unit (repulsor-black-templars), legal in that chapter's army.",
+    "args": {
+      "factionId": "black-templars",
+      "battleSize": null,
+      "forceDisposition": "purge-the-foe",
+      "detachments": [],
+      "units": [
+        {
+          "unitId": "high-marshal-helbrecht",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "ferocity": 1,
+            "sword-of-the-high-marshals": 1
+          }
+        },
+        {
+          "unitId": "repulsor-black-templars",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "armoured-hull-repulsor": 1,
+            "defensive-array": 1,
+            "heavy-onslaught-gatling-cannon-repulsor": 1,
+            "hunter-slayer-missile": 1,
+            "twin-heavy-bolter-repulsor": 1
+          }
+        }
+      ]
+    },
+    "expected": []
+  },
+  {
+    "name": "generic-unit-excluded-where-chapter-reprints-it",
+    "note": "Black Templars field their own Repulsor, so the generic one is barred from the army.",
+    "args": {
+      "factionId": "black-templars",
+      "battleSize": null,
+      "forceDisposition": "purge-the-foe",
+      "detachments": [],
+      "units": [
+        {
+          "unitId": "high-marshal-helbrecht",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "ferocity": 1,
+            "sword-of-the-high-marshals": 1
+          }
+        },
+        {
+          "unitId": "repulsor",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "armoured-hull-repulsor": 1,
+            "defensive-array": 1,
+            "heavy-onslaught-gatling-cannon-repulsor": 1,
+            "hunter-slayer-missile": 1,
+            "twin-heavy-bolter-repulsor": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u1|error|unit-excluded-from-faction:repulsor"
+    ]
+  },
+  {
+    "name": "chapter-unit-in-another-chapter-army",
+    "note": "A chapter army takes no other chapter's units: the Black Templars Repulsor in a Space Wolves army.",
+    "args": {
+      "factionId": "space-wolves",
+      "battleSize": null,
+      "forceDisposition": "purge-the-foe",
+      "detachments": [],
+      "units": [
+        {
+          "unitId": "ragnar-blackmane",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "bolt-pistol-ragnar-blackmane": 1,
+            "frostfang": 1
+          }
+        },
+        {
+          "unitId": "repulsor-black-templars",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "armoured-hull-repulsor": 1,
+            "defensive-array": 1,
+            "heavy-onslaught-gatling-cannon-repulsor": 1,
+            "hunter-slayer-missile": 1,
+            "twin-heavy-bolter-repulsor": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u1|error|unit-chapter-mismatch:repulsor-black-templars"
+    ]
+  },
+  {
+    "name": "generic-army-rejects-black-templars-unit",
+    "note": "Black Templars have army rules of their own, so the generic Space Marines army cannot take their units (here their Repulsor).",
+    "args": {
+      "factionId": "adeptus-astartes",
+      "battleSize": null,
+      "forceDisposition": "purge-the-foe",
+      "detachments": [],
+      "units": [
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
+        },
+        {
+          "unitId": "repulsor-black-templars",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "armoured-hull-repulsor": 1,
+            "defensive-array": 1,
+            "heavy-onslaught-gatling-cannon-repulsor": 1,
+            "hunter-slayer-missile": 1,
+            "twin-heavy-bolter-repulsor": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u1|error|unit-chapter-mismatch:repulsor-black-templars"
+    ]
+  },
+  {
+    "name": "generic-army-rejects-space-wolves-unit",
+    "note": "Space Wolves have army rules of their own, so the generic Space Marines army cannot take their units (here Ragnar Blackmane).",
+    "args": {
+      "factionId": "adeptus-astartes",
+      "battleSize": null,
+      "forceDisposition": "purge-the-foe",
+      "detachments": [],
+      "units": [
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
+        },
+        {
+          "unitId": "ragnar-blackmane",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "bolt-pistol-ragnar-blackmane": 1,
+            "frostfang": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u1|error|unit-chapter-mismatch:ragnar-blackmane"
+    ]
+  },
+  {
+    "name": "generic-army-rejects-codex-chapter-unit",
+    "note": "Every chapter is an army of its own, Ultramarines as much as Black Templars, so the generic Space Marines army cannot take their units (here Roboute Guilliman).",
+    "args": {
+      "factionId": "adeptus-astartes",
+      "battleSize": null,
+      "forceDisposition": "purge-the-foe",
+      "detachments": [],
+      "units": [
+        {
+          "unitId": "roboute-guilliman",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "emperors-sword": 1,
+            "hand-of-dominion": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|unit-chapter-mismatch:roboute-guilliman"
+    ]
+  },
+  {
+    "name": "chapter-army-takes-generic-units",
+    "note": "A chapter army may field generic Space Marine units: a Blood Angels army of a Captain and a Repulsor is legal.",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": null,
+      "forceDisposition": "purge-the-foe",
+      "detachments": [],
+      "units": [
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
+        },
+        {
+          "unitId": "repulsor",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "armoured-hull-repulsor": 1,
+            "defensive-array": 1,
+            "heavy-onslaught-gatling-cannon-repulsor": 1,
+            "hunter-slayer-missile": 1,
+            "twin-heavy-bolter-repulsor": 1
+          }
+        }
+      ]
+    },
+    "expected": []
   }
 ]

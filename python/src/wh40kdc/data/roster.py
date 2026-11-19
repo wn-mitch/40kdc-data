@@ -32,6 +32,7 @@ from wh40kdc.data.enhancement_eligibility import (
 from wh40kdc.data.list_keywords import list_building_keyword_changes, with_keyword_changes
 from wh40kdc.data.pricing import host_unit_points, wargear_points
 from wh40kdc.data.roster_allies import ally_keyword_limit_violations, attribute_allies
+from wh40kdc.data.roster_chapter import chapter_mismatches
 from wh40kdc.data.roster_warlord import warlord_violations
 
 #: Army-construction violation codes (distinct from per-unit loadout codes).
@@ -56,6 +57,7 @@ ROSTER_VIOLATION_CODES = (
     "detachment-restriction-required",
     "detachment-restriction-excluded",
     "unit-excluded-from-faction",
+    "unit-chapter-mismatch",
     "no-warlord",
     "multiple-warlords",
     "warlord-not-mandated",
@@ -547,6 +549,30 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                     f"{view.id} cannot be taken by {faction_id} (barred by {', '.join(barred)})",
                     idx,
                 )
+
+    # --- Chapter cohesion (chapter-locked units the army may not take). --------
+    # Mirror of TS ``unit-chapter-mismatch`` (``roster_chapter.py``).
+    army_raw = faction_view.raw if faction_view else None
+    parent_id = army_raw.get("parent_faction_id") if army_raw else None
+    parent_view = dataset.factions.get(parent_id) if parent_id else None
+    unit_keywords = [
+        view.raw.get("faction_keywords") if view is not None else None for view in views
+    ]
+    children = [
+        f.raw
+        for f in dataset.factions.all
+        if faction_id and f.raw.get("parent_faction_id") == faction_id
+    ]
+    for index, chapter_keywords in chapter_mismatches(
+        army_raw, parent_view.raw if parent_view else None, children, unit_keywords
+    ):
+        view = views[index]
+        err(
+            "unit-chapter-mismatch",
+            view.id,
+            f"{view.id} belongs to {', '.join(chapter_keywords)}, not {faction_id}",
+            index,
+        )
 
     # --- Warlord present (exactly one). ---------------------------------------
     warlords = sum(1 for su in spec_units if su.get("is_warlord") is True)

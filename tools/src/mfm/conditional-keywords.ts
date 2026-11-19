@@ -8,6 +8,7 @@ import { repoDirs } from "./faction-map.js";
 import { factionKeywordLabel, keywordLabel } from "./keywords.js";
 import type { DatasheetRow } from "./dump.generated.js";
 import type { MfmDump } from "./loader.js";
+import { unitIdForDatasheet } from "./chapter-reprints.js";
 import { currentGameVersion } from "./dataslate.js";
 
 interface ConditionalKeyword {
@@ -150,12 +151,8 @@ export function runConditionalKeywords(dump: MfmDump, onlyDir?: string): Conditi
     for (const datasheet of datasheets) {
       const name = dump.enName(datasheet);
       if (!name) continue;
-      let unitId: string;
-      try {
-        unitId = nameToId(name);
-      } catch {
-        continue;
-      }
+      const unitId = unitIdForDatasheet(dump, datasheet);
+      if (!unitId) continue;
       if (!byId.has(unitId)) continue;
       matched.add(unitId);
 

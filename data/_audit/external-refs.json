@@ -14,12 +14,12 @@
       }
     },
     "unit": {
-      "entities": 1112,
-      "with_external_refs": 1109,
+      "entities": 1118,
+      "with_external_refs": 1115,
       "covered_entities_by_namespace": {
-        "bsdata": 955,
+        "bsdata": 961,
         "game-datacards": 961,
-        "mfm": 1109
+        "mfm": 1115
       },
       "references_by_namespace": {
         "bsdata": 1018,

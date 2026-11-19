@@ -426,6 +426,26 @@ async function checkAbilityUnitRefs(root: string, result: ValidationResult): Pro
 }
 
 /**
+ * Ability names a unit's datasheet `ability_ids` reach through more than one record, with those
+ * records. Refs gated on a wargear item (`{id, wargear}`) are left out: they apply only with the item.
+ */
+export function sameNamedAbilities(
+  refs: readonly (string | { id: string; wargear?: string })[],
+  nameById: ReadonlyMap<string, string>,
+): [string, string[]][] {
+  const idsByName = new Map<string, string[]>();
+  for (const ref of refs) {
+    if (typeof ref !== "string" && ref.wargear !== undefined) continue;
+    const id = typeof ref === "string" ? ref : ref.id;
+    const name = nameById.get(id);
+    if (name === undefined) continue;
+    const ids = idsByName.get(name) ?? idsByName.set(name, []).get(name)!;
+    if (!ids.includes(id)) ids.push(id);
+  }
+  return [...idsByName].filter(([, ids]) => ids.length > 1);
+}
+
+/**
  * An enhancement's `required_ability_ids` must each name a core ability in
  * `core/unit-keywords.json`: a dangling id would make every bearer ineligible.
  * A root without the catalog (a partial fixture tree) is not checked.
@@ -753,6 +773,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   loadAbilityIds(resolve(root, "enrichment/_core/abilities.json"), coreAbilities);
   // Every ability record id (unique across dirs), and those whose DSL reads the unit's rating.
   const abilityRecordIds = new Set<string>();
+  const abilityNameById = new Map<string, string>();
   const ratedAbilityIds = new Set<string>();
   // A stub awaits authoring, so a rating on a ref to it has nothing to read yet.
   const stubAbilityIds = new Set<string>();
@@ -762,6 +783,8 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       for (const a of readArray<AbilityLike & { effect?: unknown }>(f)) {
         if (!a.ability_id) continue;
         abilityRecordIds.add(a.ability_id);
+        const name = (a as { name?: unknown }).name;
+        if (typeof name === "string") abilityNameById.set(a.ability_id, name);
         if (/"rating":true/.test(JSON.stringify(a.effect ?? null))) ratedAbilityIds.add(a.ability_id);
         if ((a as { stub?: unknown }).stub === true) stubAbilityIds.add(a.ability_id);
       }
@@ -845,6 +868,11 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
         } else if (rated && !ratedAbilityIds.has(aid) && !stubAbilityIds.has(aid)) {
           errs.push({ path: `/${i}/ability_ids`, message: `unit "${u.id}": "${aid}" carries a value but its record reads no rating` });
         }
+      }
+      // A datasheet prints each ability once: two records of one name on a unit are two
+      // datasheets' copies merged onto it (e.g. a chapter reprint's), and consumers would apply both.
+      for (const [name, ids] of sameNamedAbilities(u.ability_ids ?? [], abilityNameById)) {
+        errs.push({ path: `/${i}/ability_ids`, message: `unit "${u.id}": ability records ${ids.map((id) => `"${id}"`).join(", ")} share the name "${name}"; a unit lists one record per printed ability` });
       }
 
       if (home !== undefined) {

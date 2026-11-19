@@ -31,6 +31,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
+import { unitIdForDatasheet } from "./chapter-reprints.js";
 import { MfmDump, type DatasheetRow,
 type UnitCompositionRow,
 type UnitCompositionMiniatureRow,
@@ -416,12 +417,8 @@ export function runPoints(dump: MfmDump, write: boolean): PointsReport {
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      let id: string;
-      try {
-        id = nameToId(name);
-      } catch {
-        continue;
-      }
+      const id = unitIdForDatasheet(dump, ds);
+      if (!id) continue;
       const rec = byId.get(id);
       if (!rec) continue; // not in this dir — may still match in another candidate dir
       if (matchedRepoIds.has(id)) {
@@ -527,15 +524,10 @@ export function runPoints(dump: MfmDump, write: boolean): PointsReport {
     if (ds.isLegends || matchedDatasheets.has(ds.id!) || seenNew.has(ds.id!)) continue;
     const cands = candidateDirs(dump, ds).filter((d) => dirs.has(d));
     if (!cands.length) continue;
-    const name = dump.enName(ds);
-    if (!name) continue;
-    try {
-      nameToId(name);
-    } catch {
-      continue;
-    }
+    const id = unitIdForDatasheet(dump, ds);
+    if (!id) continue;
     seenNew.add(ds.id!);
-    newInDump.push({ dir: cands[0], id: nameToId(name) });
+    newInDump.push({ dir: cands[0], id });
   }
   return { dirs: results, newInDump, staged };
 }

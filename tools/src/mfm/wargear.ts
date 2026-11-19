@@ -30,6 +30,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
+import { chapterReprints, unitIdForDatasheet, weaponOwnerId } from "./chapter-reprints.js";
 import { MfmDump, type DatasheetRow,
 type PublicationRow,
 type FactionKeywordRow,
@@ -105,14 +106,18 @@ interface UnitRecord {
 /**
  * Resolve the core record for a dump datasheet. Ordinary sheets retain their
  * stable name-derived ids; Combat Patrol sheets have mode-specific display names,
- * so their seeded MFM external reference is the authoritative join key.
+ * so their seeded MFM external reference is the authoritative join key. A chapter
+ * reprint resolves to its own unit (`chapter-reprints.ts`).
  */
 function datasheetUnitId(
+  dump: MfmDump,
   ds: DatasheetRow,
   name: string,
   byId: ReadonlyMap<string, UnitRecord>,
   byMfmId: ReadonlyMap<string, string>,
 ): string | null {
+  const reprint = ds.id ? chapterReprints(dump).get(ds.id) : undefined;
+  if (reprint) return byId.has(reprint.unitId) ? reprint.unitId : null;
   try {
     const nameId = nameToId(name);
     if (byId.has(nameId)) return nameId;
@@ -366,7 +371,9 @@ export function makeResolver(
  * plus `${baseId}-${unitId}` variants and rewires this unit's references to the
  * variant — so resolving a dump name back to the bare id on a wargear re-run would
  * silently undo that rewiring and orphan the variant. If the faction vocabulary
- * holds a variant of the resolved id for this unit, the variant wins.
+ * holds a variant of the resolved id for this unit, the variant wins. `variantOwner`
+ * names the unit whose variants and aliases apply (a chapter reprint uses its generic
+ * unit's, see `chapter-reprints.ts`).
  */
 export function unitScopedResolver(
   validIds: Set<string>,
@@ -374,14 +381,15 @@ export function unitScopedResolver(
   dir: string,
   unitId: string,
   factionResolve: (name: string) => string | null,
+  variantOwner: string = unitId,
 ): (name: string) => string | null {
-  const unitAliases = WEAPON_ALIASES_BY_UNIT[dir]?.[unitId];
+  const unitAliases = WEAPON_ALIASES_BY_UNIT[dir]?.[variantOwner];
   const base = unitAliases
     ? makeResolver(validIds, autoResolved, WEAPON_ALIASES[dir] ?? {}, unitAliases)
     : factionResolve;
   return (name: string) => {
     const id = base(name);
-    if (id && validIds.has(`${id}-${unitId}`)) return `${id}-${unitId}`;
+    if (id && validIds.has(`${id}-${variantOwner}`)) return `${id}-${variantOwner}`;
     return id;
   };
 }
@@ -2049,7 +2057,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      const id = datasheetUnitId(ds, name, byId, byMfmId);
+      const id = datasheetUnitId(dump, ds, name, byId, byMfmId);
       if (!id) {
         try {
           const sourceId = nameToId(name);
@@ -2066,7 +2074,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
       // A unit with reviewed per-unit overrides gets a resolver that layers them on
       // top of the faction aliases. Construct it before minting so an existing
       // reviewed alias wins over creating a duplicate source-name slug.
-      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve);
+      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve, weaponOwnerId(dump, id));
       // Mint source-owned weapons and non-weapon equipment before deriving the
       // loadout. The resolver can then retain every mechanically selectable item
       // instead of dropping names merely because a generated entity was absent.
@@ -2144,7 +2152,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
           for (const m of comp.models) {
             const ids = derived.defaultsByModel.get(m.name);
             if (!ids?.length) continue;
-            const manual = manualDefaults(dir, id, m.name, validIds);
+            const manual = manualDefaults(dir, weaponOwnerId(dump, id), m.name, validIds);
             const expected = [...ids, ...manual.filter((itemId) => !ids.includes(itemId))];
             const cur = Array.isArray(m.default_weapon_ids) ? m.default_weapon_ids : [];
             if (!sameMultiset(cur, expected)) {
@@ -2443,16 +2451,12 @@ export function forEachDirDatasheet(dump: MfmDump, cb: (ctx: DirDatasheetCtx) =>
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      let id: string;
-      try {
-        id = nameToId(name);
-      } catch {
-        continue;
-      }
+      const id = unitIdForDatasheet(dump, ds);
+      if (!id) continue;
       if (!byId.has(id)) continue; // dump datasheet with no repo unit → caught by unitInventory
       if (matchedRepoIds.has(id)) continue; // first candidate dir wins
       matchedRepoIds.add(id);
-      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve);
+      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve, weaponOwnerId(dump, id));
       cb({ dir, ds, unitId: id, resolve: unitResolve });
     }
   }
@@ -2571,18 +2575,14 @@ export function runWargearBudgets(dump: MfmDump, onlyDir?: string): BudgetReport
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      let id: string;
-      try {
-        id = nameToId(name);
-      } catch {
-        continue;
-      }
+      const id = unitIdForDatasheet(dump, ds);
+      if (!id) continue;
       const rec = byId.get(id);
       if (!rec || matchedRepoIds.has(id)) continue;
       matchedRepoIds.add(id);
       matched++;
 
-      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve);
+      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve, weaponOwnerId(dump, id));
       const budgets = limitedSetBudgets(
         dump,
         ds.id!,
@@ -2723,18 +2723,14 @@ export function runWargearCosts(dump: MfmDump, onlyDir?: string): WargearCostsRe
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      let id: string;
-      try {
-        id = nameToId(name);
-      } catch {
-        continue;
-      }
+      const id = unitIdForDatasheet(dump, ds);
+      if (!id) continue;
       const rec = byId.get(id);
       if (!rec || matchedRepoIds.has(id)) continue;
       matchedRepoIds.add(id);
       matched++;
 
-      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve);
+      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve, weaponOwnerId(dump, id));
       const costs = pricedWargearItems(dump, ds.id!, unitResolve);
 
       const before = JSON.stringify(rec.wargear_costs ?? null);
@@ -2874,12 +2870,8 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      let id: string;
-      try {
-        id = nameToId(name);
-      } catch {
-        continue;
-      }
+      const id = unitIdForDatasheet(dump, ds);
+      if (!id) continue;
       // A unit with no composition yet (a freshly seeded datasheet) gets one built below.
       if (matchedRepoIds.has(id) || (!compsByUnit.has(id) && !unitById.has(id))) continue;
       matchedRepoIds.add(id);
@@ -2909,12 +2901,12 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
         ...counts,
       }));
       if (!view.length) continue;
-      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve);
+      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve, weaponOwnerId(dump, id));
       const { byName: defaultsByModel, splitByName } = deriveDefaults(dump, ds.id!, unitResolve, [], []);
       // Reviewed always-on additions ride on top of the dump defaults, exactly
       // as runWargear applies them (a refresh must not drop a support turret).
       const withManual = (rowName: string, ids: string[] | undefined): string[] | undefined => {
-        const add = manualDefaults(dir, id, rowName, validIds);
+        const add = manualDefaults(dir, weaponOwnerId(dump, id), rowName, validIds);
         if (!ids?.length) return add.length ? [...add] : ids;
         return [...ids, ...add.filter((x) => !ids.includes(x))];
       };
@@ -3239,7 +3231,7 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      const id = datasheetUnitId(ds, name, unitsById, byMfmId);
+      const id = datasheetUnitId(dump, ds, name, unitsById, byMfmId);
       if (!id) continue;
       if (matchedRepoIds.has(id) || !compsByUnit.has(id)) continue;
       matchedRepoIds.add(id);

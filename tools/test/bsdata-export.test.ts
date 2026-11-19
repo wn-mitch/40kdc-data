@@ -20,7 +20,7 @@ import { children, str, walk, type BsNode } from "../src/bsdata-export/source.js
 import { homeFactionOf, isEpicHero } from "../src/bsdata-export/unit.js";
 import { modelCounts } from "../src/bsdata-export/wargear.js";
 import { bareModels, defaultMfmLoadout } from "../src/data/mfm-loadout.js";
-import { detachmentOptions, factionCatalogue } from "./bsdata-export-fixture.js";
+import { detachmentOptions, factionCatalogue, unitForEntry } from "./bsdata-export-fixture.js";
 
 const FORMAT = formatJson as unknown as FormatDescriptor;
 const dataset = Dataset.embedded();
@@ -73,7 +73,7 @@ beforeAll(() => {
     for (const entry of children(catalogue, "sharedSelectionEntries")) {
       const type = str(entry, "type");
       if (type !== "unit" && type !== "model") continue;
-      const view = dataset.units.byFaction(factionId).find((u) => bsName(u.raw.is_legend ? `${u.name} [Legends]` : u.name) === entry.name);
+      const view = unitForEntry(dataset, factionId, entry);
       if (!view) continue;
       const home = homeFactionOf(dataset, view.raw);
       units.push({ factionId, unitId: view.id, entry, catalogueId: str(catalogueOf(home), "id")! });

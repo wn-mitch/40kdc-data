@@ -1274,7 +1274,7 @@
       "dataslate": "2026-10-14"
     },
     "unit_ids": [
-      "gladiator-lancer"
+      "gladiator-lancer-black-templars"
     ],
     "faction_id": "black-templars",
     "detachment_id": null,
@@ -2534,7 +2534,7 @@
       "dataslate": "2026-10-14"
     },
     "unit_ids": [
-      "impulsor"
+      "impulsor-black-templars"
     ],
     "faction_id": "black-templars",
     "detachment_id": null,
@@ -2686,7 +2686,7 @@
       "dataslate": "2026-10-14"
     },
     "unit_ids": [
-      "gladiator-valiant"
+      "gladiator-valiant-black-templars"
     ],
     "faction_id": "black-templars",
     "detachment_id": null,
@@ -2849,7 +2849,7 @@
       "dataslate": "2026-10-14"
     },
     "unit_ids": [
-      "gladiator-reaper"
+      "gladiator-reaper-black-templars"
     ],
     "faction_id": "black-templars",
     "detachment_id": null,
@@ -3048,7 +3048,7 @@
       "dataslate": "2026-10-14"
     },
     "unit_ids": [
-      "impulsor"
+      "impulsor-black-templars"
     ],
     "faction_id": "black-templars",
     "detachment_id": null,
@@ -4041,7 +4041,7 @@
       "dataslate": "2026-10-14"
     },
     "unit_ids": [
-      "repulsor"
+      "repulsor-black-templars"
     ],
     "faction_id": "black-templars",
     "detachment_id": null,
@@ -4193,7 +4193,7 @@
       "dataslate": "2026-10-14"
     },
     "unit_ids": [
-      "repulsor-executioner"
+      "repulsor-executioner-black-templars"
     ],
     "faction_id": "black-templars",
     "detachment_id": null,
@@ -4416,7 +4416,7 @@
       "dataslate": "2026-10-14"
     },
     "unit_ids": [
-      "impulsor"
+      "impulsor-black-templars"
     ],
     "faction_id": "black-templars",
     "detachment_id": null,

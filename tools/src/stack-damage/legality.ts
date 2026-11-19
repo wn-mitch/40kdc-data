@@ -228,6 +228,7 @@ const LOCAL_DETACHMENT_CODES: Record<string, true> = {
   "detachment-restriction-excluded": true,
   "detachment-excluded-datasheet": true,
   "unit-excluded-from-faction": true,
+  "unit-chapter-mismatch": true,
 };
 
 /**

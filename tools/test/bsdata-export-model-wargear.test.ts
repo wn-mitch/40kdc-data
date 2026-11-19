@@ -17,7 +17,7 @@ import { modelWargear, splitStartingRows, startingBundles } from "../src/bsdata-
 import { compositionRows, modelCounts } from "../src/bsdata-export/wargear.js";
 import { mfmRows } from "../src/data/mfm-loadout-unit.js";
 import { BSDATA_IDS } from "../src/bsdata-export/ids.js";
-import { dataset, factionCatalogue, FACTIONS, loadExportFixture, type ExportFixture, type UnitEntry } from "./bsdata-export-fixture.js";
+import { dataset, factionCatalogue, FACTIONS, loadExportFixture, unitForEntry, type ExportFixture, type UnitEntry } from "./bsdata-export-fixture.js";
 
 interface ChoiceNode {
   readonly id: string;
@@ -507,7 +507,7 @@ describe("BSData export flat wargear for units without MFM rules", () => {
       const catalogue = factionCatalogue(documents, factionId)!;
       for (const entry of children(catalogue, "sharedSelectionEntries").filter((e) => e.type === "unit" || e.type === "model").slice(0, 40)) {
         // Names repeat across factions (each Chaos army has its own Helbrute).
-        const view = flat.units.byFaction(factionId).find((u) => bsName(u.name) === entry.name);
+        const view = unitForEntry(flat, factionId, entry);
         if (!view) continue;
         for (const n of modelCounts(view.raw)) {
           const bounds = flat.loadoutOf(view.raw).bounds(n);

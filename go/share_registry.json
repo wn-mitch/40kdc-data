@@ -1,5 +1,5 @@
 {
-  "version": 40,
+  "version": 41,
   "kinds": {
     "faction": [
       "adepta-sororitas",
@@ -1632,7 +1632,13 @@
       "reaver-titan",
       "warbringer-nemesis-titan",
       "warhound-titan",
-      "warlord-titan"
+      "warlord-titan",
+      "gladiator-lancer-black-templars",
+      "gladiator-reaper-black-templars",
+      "gladiator-valiant-black-templars",
+      "impulsor-black-templars",
+      "repulsor-black-templars",
+      "repulsor-executioner-black-templars"
     ],
     "wargear": [
       "a-bolt-rifle-can-be-equipped-with-1-astartes-grenade-launcher",

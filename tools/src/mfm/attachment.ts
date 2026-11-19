@@ -33,6 +33,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
+import { unitIdForDatasheet } from "./chapter-reprints.js";
 import {
   MfmDump,
   type DatasheetRow,
@@ -218,12 +219,8 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
       if (isCombatPatrolDatasheet(dump, ds)) continue;
       const name = dump.enName(ds);
       if (!name) continue;
-      let id: string;
-      try {
-        id = nameToId(name);
-      } catch {
-        continue;
-      }
+      const id = unitIdForDatasheet(dump, ds);
+      if (!id) continue;
       const rec = byId.get(id);
       if (!rec || matchedRepoIds.has(id)) continue;
       const groups = groupsByDs.get(ds.id!) ?? [];
@@ -255,9 +252,8 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
       const clauses: string[][] = [];
       const rosterIds = (datasheetIds: readonly string[]): string[] =>
         datasheetIds.map((datasheetId) => {
-          const rosterName = dump.enName(dsById.get(datasheetId));
-          if (!rosterName) throw new Error(`Unresolved roster-condition datasheet ${datasheetId}`);
-          const rosterId = nameToId(rosterName);
+          const rosterId = unitIdForDatasheet(dump, dsById.get(datasheetId));
+          if (!rosterId) throw new Error(`Unresolved roster-condition datasheet ${datasheetId}`);
           if (!unitIds.has(rosterId)) {
             throw new Error(`Roster-condition unit ${rosterId} is absent from ${dir}`);
           }
@@ -268,12 +264,8 @@ export function runAttachmentRoles(dump: MfmDump, onlyDir?: string): AttachmentR
         for (const j of eligByGroup.get(g.id) ?? []) {
           const bgName = dump.enName(dsById.get(j.datasheetId));
           if (!bgName) continue;
-          let bgId: string;
-          try {
-            bgId = nameToId(bgName);
-          } catch {
-            continue;
-          }
+          const bgId = unitIdForDatasheet(dump, dsById.get(j.datasheetId));
+          if (!bgId) continue;
           if (unitIds.has(bgId)) bodyguards.add(bgId);
           else unresolved.push(bgName);
         }

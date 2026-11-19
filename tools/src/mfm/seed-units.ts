@@ -36,6 +36,7 @@ import {
   type UnitCompositionMiniatureRow,
 } from "./loader.js";
 import { CORE_DIR, readJsonArray } from "./repo-files.js";
+import { chapterReprints } from "./chapter-reprints.js";
 import {
   repoDirForFactionName,
   repoDirs,
@@ -435,6 +436,7 @@ export function runSeedUnits(
   };
 
   const results: DirSeedResult[] = [];
+  const reprints = chapterReprints(dump);
 
   for (const dir of [...byDir.keys()].sort()) {
     if (onlyDir && dir !== onlyDir) continue;
@@ -456,6 +458,7 @@ export function runSeedUnits(
       { ds: DatasheetRow; name: string; cp: boolean }
     >();
     for (const ds of byDir.get(dir) ?? []) {
+      if (reprints.has(ds.id!)) continue; // chapter-scope creates a chapter reprint's unit
       const name = dump.enName(ds);
       if (!name) continue;
       let id: string;

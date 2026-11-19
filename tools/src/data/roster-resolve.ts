@@ -28,6 +28,7 @@ import type { Violation } from "./loadout.js";
 import { hostUnitPoints, wargearPoints } from "./pricing.js";
 import { warlordViolations, type WarlordViolationCode } from "./roster-warlord.js";
 import { allyKeywordLimitViolations, attributeAllies } from "./roster-allies.js";
+import { chapterMismatches } from "./roster-chapter.js";
 
 /**
  * Resolve a roster's unit entry against the dataset, returning the linked
@@ -164,6 +165,7 @@ export type RosterViolationCode =
   | "detachment-restriction-required"
   | "detachment-restriction-excluded"
   | "unit-excluded-from-faction"
+  | "unit-chapter-mismatch"
   | "no-warlord"
   | "multiple-warlords"
   | "warlord-not-mandated"
@@ -508,6 +510,22 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
           idx,
         );
     });
+  }
+
+  // --- Chapter cohesion (chapter-locked units the army may not take). --------
+  if (spec.factionId) {
+    const armyFaction = dataset.factions.get(spec.factionId)?.raw;
+    const parent = armyFaction?.parent_faction_id ? dataset.factions.get(armyFaction.parent_faction_id)?.raw : undefined;
+    const children = dataset.factions.all.filter((f) => f.raw.parent_faction_id === spec.factionId).map((f) => f.raw);
+    for (const m of chapterMismatches(armyFaction, parent, children, views.map((view) => view?.raw.faction_keywords))) {
+      const view = views[m.index]!;
+      err(
+        "unit-chapter-mismatch",
+        view.id,
+        `${view.id} belongs to ${m.keywords.join(", ")}, not ${spec.factionId}`,
+        m.index,
+      );
+    }
   }
 
   // --- Warlord present (exactly one). ---------------------------------------

@@ -53,6 +53,7 @@ import {
   type AutoResolution,
 } from "./wargear.js";
 import { repoDirForFactionName, SHARED_ROSTERS } from "./faction-map.js";
+import { chapterReprints, reprintForUnit, weaponOwnerId } from "./chapter-reprints.js";
 import { nameToId } from "../converters/id-generator.js";
 import { applyWrites, type StagedWrite } from "./apply.js";
 import { currentGameVersion } from "./dataslate.js";
@@ -275,6 +276,8 @@ export function mfmRefsOf(unit: object): string[] {
  * Patrol box's renamed copy).
  */
 export function findDatasheet(dump: MfmDump, unitId: string, dir: string, mfmRefs: readonly string[] = []): DatasheetRow | null {
+  const reprint = reprintForUnit(dump, unitId);
+  if (reprint) return dump.byId("datasheet").get(reprint.datasheetId) ?? null;
   const byName = findDatasheetByName(dump, unitId, dir);
   if (byName || mfmRefs.length === 0) return byName;
   const cited = mfmRefs.map((id) => dump.byId("datasheet").get(id)).filter((ds): ds is DatasheetRow => !!ds && !ds.isLegends);
@@ -283,8 +286,9 @@ export function findDatasheet(dump: MfmDump, unitId: string, dir: string, mfmRef
 
 function findDatasheetByName(dump: MfmDump, unitId: string, dir: string): DatasheetRow | null {
   const matches: DatasheetRow[] = [];
+  const reprints = chapterReprints(dump);
   for (const ds of dump.table("datasheet")) {
-    if (ds.isLegends) continue;
+    if (ds.isLegends || reprints.has(ds.id!)) continue; // a reprint is never its generic unit's sheet
     const name = dump.enName(ds);
     if (!name) continue;
     let slug: string;
@@ -629,8 +633,9 @@ async function main() {
     // base): the dump derivation only knows base ids, so remap each derived id back to
     // the unit's variant where one exists — on weapon_ids AND the composition loadout —
     // so a refresh can't silently downgrade the variant's stats to the base.
+    const owner = weaponOwnerId(dump, p.unitId);
     const toVariant = (id: string): string =>
-      refresh && weaponIdsPresent.has(`${id}-${p.unitId}`) ? `${id}-${p.unitId}` : id;
+      refresh && weaponIdsPresent.has(`${id}-${owner}`) ? `${id}-${owner}` : id;
     const weaponIds = p.weaponIds.map(toVariant);
     if (p.composition?.models) {
       for (const m of p.composition.models) {

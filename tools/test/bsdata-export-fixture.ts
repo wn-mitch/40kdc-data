@@ -4,6 +4,7 @@
  * single-army roster specs for `validateRosterCore`.
  */
 import { Dataset } from "../src/data/dataset.js";
+import type { UnitView } from "../src/data/entities.js";
 import { validateRosterCore, type NormRoster, type RosterViolationCode } from "../src/data/roster-resolve.js";
 import type { Detachment } from "../src/generated.js";
 import { evaluateField, type EvalContext } from "../src/bsdata-export/evaluate.js";
@@ -52,6 +53,15 @@ export function factionCatalogue(documents: readonly { file: string; document: B
   return merged;
 }
 
+/**
+ * The unit a catalogue's shared unit entry exports: the faction's unit of that name. A chapter's
+ * reprint shares its generic unit's name, so a repeated name is told apart by the BSData id.
+ */
+export function unitForEntry(ds: Dataset, factionId: string, node: BsNode): UnitView | undefined {
+  const named = ds.units.byFaction(factionId).filter((u) => bsName(u.raw.is_legend ? `${u.name} [Legends]` : u.name) === node.name);
+  return named.length > 1 ? named.find((u) => BSDATA_IDS.units[factionId]?.[u.id] === str(node, "id")) : named[0];
+}
+
 /** The export of `ds` (the embedded dataset by default), indexed for the tests. */
 export function loadExportFixture(ds: Dataset = dataset): ExportFixture {
   const documents = buildExport({ version: "1.5.1", dataset: ds });
@@ -64,7 +74,7 @@ export function loadExportFixture(ds: Dataset = dataset): ExportFixture {
     catalogues.set(factionId, catalogue);
     for (const node of children(catalogue, "sharedSelectionEntries")) {
       if (node.type !== "unit" && node.type !== "model") continue;
-      const view = ds.units.byFaction(factionId).find((u) => bsName(u.raw.is_legend ? `${u.name} [Legends]` : u.name) === node.name);
+      const view = unitForEntry(ds, factionId, node);
       if (view) entries.set(str(node, "id")!, { factionId, unitId: view.id, node });
     }
   }

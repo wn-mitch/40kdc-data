@@ -31,6 +31,7 @@
  */
 import * as path from "path";
 import { MfmDump } from "./loader.js";
+import { weaponOwnerId } from "./chapter-reprints.js";
 import { readJsonArray, CORE_DIR } from "./repo-files.js";
 import { findDatasheet, mfmRefsOf } from "./project-loadout.js";
 import {
@@ -142,7 +143,7 @@ export function resolveMfmWeaponEntityId(
   } catch {
     return null;
   }
-  const variantId = `${baseId}-${unitId}`;
+  const variantId = `${baseId}-${weaponOwnerId(dump, unitId)}`;
   const candidate =
     weapons.find((weapon) => weapon.id === variantId) ??
     weapons.find((weapon) => weapon.id === baseId);
@@ -375,7 +376,7 @@ export function runWeaponVariants(
         }
         const [fp, minted] = [...byFp][0];
         if (fp === bareFp.get(baseId)) continue; // matches the bare entry — keep it
-        const variantId = `${baseId}-${unit.id}`;
+        const variantId = `${baseId}-${weaponOwnerId(dump, unit.id)}`;
         const repoEntry = repoEntryByFp.get(baseId)!.get(fp);
         const src = repoEntry ?? minted;
         if (!repoEntry)

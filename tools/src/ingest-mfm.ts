@@ -18,9 +18,9 @@
  *   missions      Reconcile mission scoring-card numbers (vp/vp_max/cumulative)
  *                 + exclusive_group guard, for secondary + generic primary cards
  *   chapter-scope Reconcile Space Marine chapter access in the shared
- *                 adeptus-astartes pool: collapse Black Templars exclude-and-replace
- *                 twins to generic faction_keywords (#36) + stamp
- *                 excluded_faction_keywords for genuine chapter bars (e.g. Librarians)
+ *                 adeptus-astartes pool: generic vs chapter faction_keywords, chapter
+ *                 bars (excluded_faction_keywords) and a unit per chapter reprint
+ *                 of a generic datasheet (e.g. the Black Templars Gladiators)
  *   cull-legends  Drop dump-absent Legends/Forge-World units + prune refs
  *   reissued-refs Move dead detachment/stratagem/enhancement refs to a reissued row
  *   mirror        Ability identity from the dump (`mfm:mirror`): stubs, unit ability_ids, retirement
@@ -1242,8 +1242,9 @@ async function runChapterScopeCmd(
 
   console.log(`Chapter-scope report → ${path.relative(REPO_ROOT, reportPath)}`);
   console.log(
-    `Matched ${report.matched}, faction_keywords collapsed ${report.factionKeywordsChanged.length}, ` +
-      `excluded_faction_keywords set ${report.excludedChanged.length}, ` +
+    `Matched ${report.matched}, faction_keywords changed ${report.factionKeywordsChanged.length}, ` +
+      `excluded_faction_keywords changed ${report.excludedChanged.length}, ` +
+      `reprints created ${report.reprintsCreated.length}, refs moved ${report.refsMoved.length}, ` +
       `repo-only ${report.repoOnly.length}, dump-only ${report.dumpOnly.length}.`,
   );
   await applyWrites(report.staged, { write, label: "chapter-scope" });

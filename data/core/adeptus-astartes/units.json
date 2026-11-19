@@ -136,7 +136,6 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "aquilon-optics-black-templars",
       {
         "id": "damaged",
         "value": 4
@@ -155,36 +154,105 @@
         "id": "7814-107b-a498-96f6"
       },
       {
-        "namespace": "bsdata",
-        "id": "7dec-dc3d-c40a-8ce"
-      },
-      {
         "namespace": "game-datacards",
         "id": "b22e3ef7-6afa-5dda-8637-067fc98a4e31"
-      },
-      {
-        "namespace": "mfm",
-        "id": "28efe884-f718-4745-8b0c-6ed221f65504"
       },
       {
         "namespace": "mfm",
         "id": "5f3b31db-62e7-4b4e-9699-ad0d4bdd33fc"
       }
     ],
-    "allied_points": [
+    "excluded_faction_keywords": [
+      "Black Templars"
+    ]
+  },
+  {
+    "id": "gladiator-lancer-black-templars",
+    "name": "Gladiator Lancer",
+    "faction_id": "adeptus-astartes",
+    "profiles": [
+      {
+        "name": "Gladiator Lancer",
+        "M": 10,
+        "T": 10,
+        "W": 12,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 3
+      }
+    ],
+    "points": [
       {
         "models": 1,
         "cost": 165,
         "unit_count_min": 1,
-        "unit_count_max": 2,
-        "host_faction": "black-templars"
+        "unit_count_max": 2
       },
       {
         "models": 1,
         "cost": 185,
         "unit_count_min": 3,
-        "unit_count_max": null,
-        "host_faction": "black-templars"
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Frame",
+      "Imperium",
+      "Smoke",
+      "Gladiator Lancer"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes",
+      "Black Templars"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "laser-destroyer",
+      "multi-melta",
+      "armoured-hull-gladiator-lancer",
+      "defensive-array-gladiator-lancer"
+    ],
+    "ability_ids": [
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "aquilon-optics-black-templars",
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "combat-doctrines-adeptus-astartes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "7dec-dc3d-c40a-8ce"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28efe884-f718-4745-8b0c-6ed221f65504"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "multi-melta",
+        "cost": 10
       }
     ]
   },
@@ -1264,16 +1332,7 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      {
-        "id": "orbital-comms-array-black-templars",
-        "wargear": "orbital-comms-array"
-      },
-      {
-        "id": "shield-dome-black-templars",
-        "wargear": "shield-dome"
-      },
       "rapid-disembarkation-adeptus-astartes",
-      "rapid-disembarkation-black-templars",
       "combat-doctrines-adeptus-astartes"
     ],
     "transport_capacity": {
@@ -1294,16 +1353,8 @@
         "id": "bfb1-7512-e1a3-9fa2"
       },
       {
-        "namespace": "bsdata",
-        "id": "fa27-4bc1-72c9-894f"
-      },
-      {
         "namespace": "game-datacards",
         "id": "5fe8f17a-a8fb-5a0a-9b91-d61114df7d56"
-      },
-      {
-        "namespace": "mfm",
-        "id": "9aeb551d-6c87-42ca-b13c-97c31e62de93"
       },
       {
         "namespace": "mfm",
@@ -1311,6 +1362,121 @@
       }
     ],
     "wargear_costs": [
+      {
+        "item_id": "orbital-comms-array",
+        "cost": 10
+      }
+    ],
+    "excluded_faction_keywords": [
+      "Black Templars"
+    ]
+  },
+  {
+    "id": "impulsor-black-templars",
+    "name": "Impulsor",
+    "faction_id": "adeptus-astartes",
+    "role": "dedicated-transport",
+    "profiles": [
+      {
+        "name": "Impulsor",
+        "M": 12,
+        "T": 9,
+        "W": 11,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 70,
+        "unit_count_min": 1,
+        "unit_count_max": 3
+      },
+      {
+        "models": 1,
+        "cost": 80,
+        "unit_count_min": 4,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Dedicated Transport",
+      "Frame",
+      "Imperium",
+      "Transport",
+      "Impulsor"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes",
+      "Black Templars"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "bellicatus-missile-array",
+      "multi-melta",
+      "armoured-hull-impulsor",
+      "storm-bolter-impulsor",
+      "ironhail-heavy-stubber-impulsor",
+      "fragstorm-grenade-launcher-impulsor"
+    ],
+    "ability_ids": [
+      {
+        "id": "firing-deck",
+        "value": 7
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "orbital-comms-array-black-templars",
+        "wargear": "orbital-comms-array"
+      },
+      {
+        "id": "shield-dome-black-templars",
+        "wargear": "shield-dome"
+      },
+      "rapid-disembarkation-black-templars",
+      "combat-doctrines-adeptus-astartes"
+    ],
+    "transport_capacity": {
+      "capacity": 7,
+      "exclusion_keywords": [
+        "Jump Pack"
+      ]
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "fa27-4bc1-72c9-894f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9aeb551d-6c87-42ca-b13c-97c31e62de93"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "multi-melta",
+        "cost": 10
+      },
       {
         "item_id": "orbital-comms-array",
         "cost": 10
@@ -1384,7 +1550,6 @@
         "id": "damaged",
         "value": 6
       },
-      "executioner-black-templars",
       "combat-doctrines-adeptus-astartes"
     ],
     "transport_capacity": {
@@ -1458,20 +1623,6 @@
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "space-wolves"
-      },
-      {
-        "models": 1,
-        "cost": 265,
-        "unit_count_min": 1,
-        "unit_count_max": 2,
-        "host_faction": "black-templars"
-      },
-      {
-        "models": 1,
-        "cost": 285,
-        "unit_count_min": 3,
-        "unit_count_max": null,
-        "host_faction": "black-templars"
       }
     ],
     "conditional_keywords": [
@@ -1486,20 +1637,112 @@
         "id": "9259-f166-15f2-7f79"
       },
       {
-        "namespace": "bsdata",
-        "id": "a344-192f-aae2-16e5"
-      },
-      {
         "namespace": "game-datacards",
         "id": "40ee135b-a29f-5683-a9be-d618abe9dbd5"
       },
       {
         "namespace": "mfm",
-        "id": "33573b80-b342-4624-a282-ba3ed7c04068"
+        "id": "6843a410-d0fa-4b3e-8cd5-a000eb3cf015"
+      }
+    ],
+    "excluded_faction_keywords": [
+      "Black Templars"
+    ]
+  },
+  {
+    "id": "repulsor-executioner-black-templars",
+    "name": "Repulsor Executioner",
+    "faction_id": "adeptus-astartes",
+    "profiles": [
+      {
+        "name": "Repulsor Executioner",
+        "M": 10,
+        "T": 12,
+        "W": 16,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 265,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 285,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Smoke",
+      "Transport",
+      "Imperium",
+      "Repulsor Executioner",
+      "Frame"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes",
+      "Black Templars"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "heavy-laser-destroyer",
+      "heavy-onslaught-gatling-cannon",
+      "macro-plasma-incinerator",
+      "defensive-array",
+      "multi-melta",
+      "armoured-hull-repulsor-executioner",
+      "twin-heavy-bolter-repulsor-executioner"
+    ],
+    "ability_ids": [
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      "executioner-black-templars",
+      "combat-doctrines-adeptus-astartes"
+    ],
+    "transport_capacity": {
+      "capacity": 7
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "wargear_costs": [
+      {
+        "item_id": "multi-melta",
+        "cost": 10
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "a344-192f-aae2-16e5"
       },
       {
         "namespace": "mfm",
-        "id": "6843a410-d0fa-4b3e-8cd5-a000eb3cf015"
+        "id": "33573b80-b342-4624-a282-ba3ed7c04068"
       }
     ]
   },
@@ -1567,6 +1810,96 @@
         "id": "damaged",
         "value": 4
       },
+      "combat-doctrines-adeptus-astartes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "6b89-8147-9b6b-6db1"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "6bbb474f-faae-5610-8e6c-941d01509be8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c75a736d-2aac-40ad-bab0-78e768d49831"
+      }
+    ],
+    "excluded_faction_keywords": [
+      "Black Templars"
+    ]
+  },
+  {
+    "id": "gladiator-valiant-black-templars",
+    "name": "Gladiator Valiant",
+    "faction_id": "adeptus-astartes",
+    "profiles": [
+      {
+        "name": "Gladiator Valiant",
+        "M": 10,
+        "T": 10,
+        "W": 12,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 145,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 165,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Frame",
+      "Imperium",
+      "Smoke",
+      "Gladiator Valiant"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes",
+      "Black Templars"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "twin-las-talon",
+      "armoured-hull-gladiator-valiant",
+      "defensive-array-gladiator-valiant",
+      "multi-melta-gladiator-valiant"
+    ],
+    "ability_ids": [
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
       "priority-target-acquisition-black-templars",
       "combat-doctrines-adeptus-astartes"
     ],
@@ -1582,36 +1915,14 @@
         "id": "5704-ffe4-4a53-8789"
       },
       {
-        "namespace": "bsdata",
-        "id": "6b89-8147-9b6b-6db1"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "6bbb474f-faae-5610-8e6c-941d01509be8"
-      },
-      {
         "namespace": "mfm",
         "id": "85b09425-65d4-4ecf-8974-689ff36853aa"
-      },
-      {
-        "namespace": "mfm",
-        "id": "c75a736d-2aac-40ad-bab0-78e768d49831"
       }
     ],
-    "allied_points": [
+    "wargear_costs": [
       {
-        "models": 1,
-        "cost": 145,
-        "unit_count_min": 1,
-        "unit_count_max": 2,
-        "host_faction": "black-templars"
-      },
-      {
-        "models": 1,
-        "cost": 165,
-        "unit_count_min": 3,
-        "unit_count_max": null,
-        "host_faction": "black-templars"
+        "item_id": "multi-melta-gladiator-valiant",
+        "cost": 10
       }
     ]
   },
@@ -1758,7 +2069,6 @@
         "value": 6
       },
       "combat-embarkation-adeptus-astartes",
-      "combat-embarkation-black-templars",
       "combat-doctrines-adeptus-astartes"
     ],
     "transport_capacity": {
@@ -1779,10 +2089,6 @@
     "external_refs": [
       {
         "namespace": "bsdata",
-        "id": "c3e8-3cde-8b39-4b19"
-      },
-      {
-        "namespace": "bsdata",
         "id": "e8e-fc5c-c689-99ca"
       },
       {
@@ -1791,11 +2097,108 @@
       },
       {
         "namespace": "mfm",
-        "id": "46a89128-fa0a-4013-847a-ee4b5b490b53"
+        "id": "7102909d-95e0-42d3-99e3-e21364ba2365"
+      }
+    ],
+    "excluded_faction_keywords": [
+      "Black Templars"
+    ]
+  },
+  {
+    "id": "repulsor-black-templars",
+    "name": "Repulsor",
+    "faction_id": "adeptus-astartes",
+    "profiles": [
+      {
+        "name": "Repulsor",
+        "M": 10,
+        "T": 12,
+        "W": 16,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 190,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 210,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Frame",
+      "Imperium",
+      "Smoke",
+      "Transport",
+      "Repulsor"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes",
+      "Black Templars"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "hunter-slayer-missile",
+      "defensive-array",
+      "multi-melta",
+      "armoured-hull-repulsor",
+      "heavy-onslaught-gatling-cannon-repulsor",
+      "twin-heavy-bolter-repulsor",
+      "twin-lascannon-repulsor",
+      "las-talon-repulsor"
+    ],
+    "ability_ids": [
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      "combat-embarkation-black-templars",
+      "combat-doctrines-adeptus-astartes"
+    ],
+    "transport_capacity": {
+      "capacity": 14
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c3e8-3cde-8b39-4b19"
       },
       {
         "namespace": "mfm",
-        "id": "7102909d-95e0-42d3-99e3-e21364ba2365"
+        "id": "46a89128-fa0a-4013-847a-ee4b5b490b53"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "multi-melta",
+        "cost": 10
       }
     ]
   },
@@ -1862,6 +2265,96 @@
         "id": "damaged",
         "value": 4
       },
+      "combat-doctrines-adeptus-astartes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "ed20-824b-7419-aebc"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "0fae5944-73f5-5791-b835-ba2938f5d76f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5396e3da-e344-4478-b9f9-6466c96a9dbb"
+      }
+    ],
+    "excluded_faction_keywords": [
+      "Black Templars"
+    ]
+  },
+  {
+    "id": "gladiator-reaper-black-templars",
+    "name": "Gladiator Reaper",
+    "faction_id": "adeptus-astartes",
+    "profiles": [
+      {
+        "name": "Gladiator Reaper",
+        "M": 10,
+        "T": 10,
+        "W": 12,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 165,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 185,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Frame",
+      "Imperium",
+      "Smoke",
+      "Gladiator Reaper"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes",
+      "Black Templars"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "twin-heavy-onslaught-gatling-cannon",
+      "multi-melta",
+      "armoured-hull-gladiator-reaper",
+      "defensive-array-gladiator-reaper"
+    ],
+    "ability_ids": [
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
       "reaping-tally-black-templars",
       "combat-doctrines-adeptus-astartes"
     ],
@@ -1877,20 +2370,14 @@
         "id": "bfb6-4320-74cf-bbda"
       },
       {
-        "namespace": "bsdata",
-        "id": "ed20-824b-7419-aebc"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "0fae5944-73f5-5791-b835-ba2938f5d76f"
-      },
-      {
-        "namespace": "mfm",
-        "id": "5396e3da-e344-4478-b9f9-6466c96a9dbb"
-      },
-      {
         "namespace": "mfm",
         "id": "55fb581c-0805-4e4a-a6f4-9aea8aadf019"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "multi-melta",
+        "cost": 10
       }
     ]
   },

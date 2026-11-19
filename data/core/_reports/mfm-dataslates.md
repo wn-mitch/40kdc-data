@@ -8,16 +8,16 @@ dump confirmation.
 
 | Entity | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
-| units | 0 | 0 | 1106 | 6 |
+| units | 0 | 0 | 1112 | 6 |
 | weapons | 0 | 0 | 3562 | 119 |
 | wargear | 0 | 0 | 166 | 87 |
-| unit-compositions | 0 | 0 | 1112 | 0 |
-| wargear-options | 0 | 0 | 1247 | 0 |
+| unit-compositions | 0 | 0 | 1118 | 0 |
+| wargear-options | 0 | 0 | 1258 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 202 | 255 |
 | stratagems | 0 | 0 | 1086 | 227 |
-| abilities | 0 | 0 | 3859 | 683 |
+| abilities | 0 | 0 | 3873 | 683 |
 | phase-mappings | 0 | 0 | 1223 | 358 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -30,7 +30,7 @@ dump confirmation.
 | adeptus-astartes | 0 | 0 | 232 | 18 |
 | adeptus-custodes | 0 | 0 | 155 | 3 |
 | adeptus-mechanicus | 0 | 0 | 143 | 24 |
-| adeptus-titanicus | 0 | 0 | 0 | 3 |
+| adeptus-titanicus | 0 | 0 | 7 | 3 |
 | aeldari | 0 | 0 | 247 | 53 |
 | agents-of-the-imperium | 0 | 0 | 99 | 39 |
 | astra-militarum | 0 | 0 | 208 | 43 |
@@ -57,7 +57,7 @@ dump confirmation.
 | space-wolves | 0 | 0 | 81 | 6 |
 | tau-empire | 0 | 0 | 141 | 25 |
 | thousand-sons | 0 | 0 | 128 | 30 |
-| titanicus-traitoris | 0 | 0 | 0 | 3 |
+| titanicus-traitoris | 0 | 0 | 7 | 3 |
 | tyranids | 0 | 0 | 159 | 27 |
 | ultramarines | 0 | 0 | 11 | 0 |
 | white-scars | 0 | 0 | 11 | 0 |
@@ -89,6 +89,7 @@ dump confirmation.
 | adeptus-mechanicus | unpublished | 1 |
 | adeptus-mechanicus | verified | 143 |
 | adeptus-titanicus | stub | 3 |
+| adeptus-titanicus | verified | 7 |
 | aeldari | digest-differs | 9 |
 | aeldari | stub | 26 |
 | aeldari | unpublished | 18 |
@@ -178,6 +179,7 @@ dump confirmation.
 | thousand-sons | unpublished | 21 |
 | thousand-sons | verified | 128 |
 | titanicus-traitoris | stub | 3 |
+| titanicus-traitoris | verified | 7 |
 | tyranids | digest-differs | 4 |
 | tyranids | stub | 13 |
 | tyranids | unpublished | 10 |

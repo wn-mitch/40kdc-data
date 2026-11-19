@@ -265,6 +265,14 @@
         "type": "selectionEntry"
       },
       {
+        "name": "Gladiator Lancer",
+        "id": "b264-e5fb-63b6-af44",
+        "hidden": false,
+        "import": true,
+        "targetId": "7dec-dc3d-c40a-8ce",
+        "type": "selectionEntry"
+      },
+      {
         "name": "Marshal",
         "id": "e5d7-2ce8-09dc-f414",
         "hidden": false,
@@ -330,11 +338,51 @@
         ]
       },
       {
+        "name": "Impulsor",
+        "id": "7630-5754-2ac2-1635",
+        "hidden": false,
+        "import": true,
+        "targetId": "fa27-4bc1-72c9-894f",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Repulsor Executioner",
+        "id": "7e26-c149-e6cd-94cf",
+        "hidden": false,
+        "import": true,
+        "targetId": "a344-192f-aae2-16e5",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Gladiator Valiant",
+        "id": "c88c-85b7-f46b-28a3",
+        "hidden": false,
+        "import": true,
+        "targetId": "5704-ffe4-4a53-8789",
+        "type": "selectionEntry"
+      },
+      {
         "name": "Crusade Ancient",
         "id": "6807-e530-b765-0fe6",
         "hidden": false,
         "import": true,
         "targetId": "dca2-b12f-d1a9-5822",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Repulsor",
+        "id": "ba33-32ad-0a49-f8f4",
+        "hidden": false,
+        "import": true,
+        "targetId": "c3e8-3cde-8b39-4b19",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Gladiator Reaper",
+        "id": "2e82-4eaf-168f-66ac",
+        "hidden": false,
+        "import": true,
+        "targetId": "bfb6-4320-74cf-bbda",
         "type": "selectionEntry"
       },
       {

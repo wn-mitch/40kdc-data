@@ -450,6 +450,34 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 	}
 
+	// --- Chapter cohesion (chapter-locked units the army may not take). --------
+	// Mirror of TS unit-chapter-mismatch (roster_chapter.go).
+	if spec.factionID != "" {
+		if fac, ok := ds.Factions.Get(spec.factionID); ok {
+			var parent map[string]any
+			if parentID := getStr(fac.Raw, "parent_faction_id"); parentID != "" {
+				if p, ok := ds.Factions.Get(parentID); ok {
+					parent = p.Raw
+				}
+			}
+			unitKeywords := make([][]string, len(views))
+			for idx, view := range views {
+				if view != nil {
+					unitKeywords[idx] = getStrList(view.Raw, "faction_keywords")
+				}
+			}
+			var children []map[string]any
+			for _, f := range ds.Factions.All() {
+				if getStr(f.Raw, "parent_faction_id") == spec.factionID {
+					children = append(children, f.Raw)
+				}
+			}
+			for _, m := range chapterMismatches(fac.Raw, parent, children, unitKeywords) {
+				errV("unit-chapter-mismatch", views[m.index].ID(), m.index)
+			}
+		}
+	}
+
 	// --- Warlord present (exactly one). ---------------------------------------
 	warlords := 0
 	for _, su := range spec.units {

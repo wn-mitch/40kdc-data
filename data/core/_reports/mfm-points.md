@@ -6,7 +6,7 @@ Ambiguous units (multiple same-size base comps) are preserved, not overwritten.
 | Dir | Matched | Points changed | Allied added | Ambiguous (kept) | Repo-only (Legends/FW) |
 |---|--:|--:|--:|--:|--:|
 | adepta-sororitas | 37 | 0 | 0 | 0 | 0 |
-| adeptus-astartes | 177 | 0 | 0 | 1 | 0 |
+| adeptus-astartes | 183 | 0 | 0 | 1 | 0 |
 | adeptus-custodes | 39 | 0 | 0 | 0 | 0 |
 | adeptus-mechanicus | 38 | 0 | 0 | 0 | 0 |
 | adeptus-titanicus | 4 | 0 | 0 | 0 | 0 |
@@ -30,24 +30,18 @@ Ambiguous units (multiple same-size base comps) are preserved, not overwritten.
 | titanicus-traitoris | 4 | 0 | 0 | 0 | 0 |
 | tyranids | 57 | 0 | 0 | 0 | 0 |
 | world-eaters | 34 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **1112** | **0** | **0** | **1** | **0** |
+| **TOTAL** | **1118** | **0** | **0** | **1** | **0** |
 
 ## adeptus-astartes
 
 **Ambiguous (multiple same-size base comps — kept repo value):**
 - wolf-guard-headtakers
 
-## New units in dump (no repo entity — author in a follow-up): 15
+## New units in dump (no repo entity — author in a follow-up): 9
 
-- black-templars/gladiator-lancer
-- black-templars/repulsor-executioner
-- black-templars/repulsor
-- black-templars/gladiator-reaper
 - astra-militarum/draydens-lance-attilan-rough-riders
 - emperors-children/callous-blades-flawless-blades
-- black-templars/gladiator-valiant
 - genestealer-cults/claw-of-ascension-hybrid-metamorphs
-- black-templars/impulsor
 - agents-of-the-imperium/inquisitors-hand-vigilant-squad
 - tyranids/vardenghast-swarm-termagants
 - blood-angels/sanguinary-spearhead-sanguinary-guard

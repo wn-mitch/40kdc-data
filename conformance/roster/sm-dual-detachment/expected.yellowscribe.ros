@@ -26,14 +26,6 @@
   -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Aquilon Optics" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">While making ranged attacks, while the target is an enemy unit with the MONSTER or VEHICLE keyword:
-  -&gt; You can re-roll one Hit roll.
-  -&gt; You can re-roll one Wound roll.
-  -&gt; You can re-roll one Damage roll.</characteristic>
-              </characteristics>
-            </profile>
             <profile name="Damaged" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
