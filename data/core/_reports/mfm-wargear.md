@@ -6,7 +6,7 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 | Dir | Matched | Options | Defaults Δ | Weapon ids Δ | Weapon names Δ | Weapons + | Wargear + | Synth | Unresolved | Fuzzy | Notes | New-in-dump | Repo-only (fallback) |
 |---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
 | adepta-sororitas | 37 | 51 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 |
-| adeptus-astartes | 183 | 193 | 6 | 6 | 0 | 0 | 0 | 0 | 0 | 6 | 16 | 0 | 0 |
+| adeptus-astartes | 183 | 193 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 | 16 | 0 | 0 |
 | adeptus-custodes | 39 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 |
 | adeptus-mechanicus | 38 | 37 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
 | adeptus-titanicus | 4 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
@@ -17,20 +17,20 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 | chaos-knights | 20 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | chaos-space-marines | 58 | 80 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 11 | 99 | 0 |
 | death-guard | 41 | 37 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 |
-| drukhari | 27 | 41 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 |
+| drukhari | 28 | 41 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 |
 | emperors-children | 26 | 32 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 | 0 | 0 |
 | genestealer-cults | 28 | 19 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
 | grey-knights | 30 | 42 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 0 | 0 |
 | imperial-knights | 23 | 29 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
 | leagues-of-votann | 26 | 36 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
 | necrons | 57 | 28 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| orks | 60 | 52 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 | 0 |
+| orks | 61 | 52 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 | 0 |
 | tau-empire | 47 | 103 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
 | thousand-sons | 38 | 43 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
 | titanicus-traitoris | 4 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | tyranids | 57 | 20 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | world-eaters | 34 | 42 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
-| **TOTAL** | **1118** | **1258** | **6** | **6** | **0** | **0** | **0** | **0** | **0** | **21** | **103** | **191** | **0** |
+| **TOTAL** | **1120** | **1258** | **0** | **0** | **0** | **0** | **0** | **0** | **0** | **21** | **103** | **191** | **0** |
 
 ## adepta-sororitas
 
@@ -41,14 +41,6 @@ dump-absent (repo-only) units. Unresolved weapon names are triaged, never guesse
 - canoness: loadout set 0afca918 kept as one menu: its swaps do not stack freely (Canoness)
 
 ## adeptus-astartes
-
-**Default loadout changes:**
-- gladiator-lancer-black-templars / Gladiator Lancer: ["armoured-hull","defensive-array","laser-destroyer"] → ["armoured-hull-gladiator-lancer","defensive-array-gladiator-lancer","laser-destroyer"]
-- repulsor-executioner-black-templars / Repulsor Executioner: ["armoured-hull","defensive-array","heavy-laser-destroyer","heavy-onslaught-gatling-cannon","twin-heavy-bolter"] → ["armoured-hull-repulsor-executioner","defensive-array","heavy-laser-destroyer","heavy-onslaught-gatling-cannon","twin-heavy-bolter-repulsor-executioner"]
-- repulsor-black-templars / Repulsor: ["armoured-hull","defensive-array","heavy-onslaught-gatling-cannon","hunter-slayer-missile","twin-heavy-bolter"] → ["armoured-hull-repulsor","defensive-array","heavy-onslaught-gatling-cannon-repulsor","hunter-slayer-missile","twin-heavy-bolter-repulsor"]
-- gladiator-reaper-black-templars / Gladiator Reaper: ["armoured-hull","defensive-array","twin-heavy-onslaught-gatling-cannon"] → ["armoured-hull-gladiator-reaper","defensive-array-gladiator-reaper","twin-heavy-onslaught-gatling-cannon"]
-- gladiator-valiant-black-templars / Gladiator Valiant: ["armoured-hull","defensive-array","multi-melta","multi-melta","twin-las-talon"] → ["armoured-hull-gladiator-valiant","defensive-array-gladiator-valiant","multi-melta-gladiator-valiant","multi-melta-gladiator-valiant","twin-las-talon"]
-- impulsor-black-templars / Impulsor: ["armoured-hull","storm-bolter"] → ["armoured-hull-impulsor","storm-bolter-impulsor"]
 
 **Fuzzy-resolved spelling drift (GW name → repo id, edit-distance ≤1):**
 - `Bolt Rifles` → `bolt-rifle` (was `bolt-rifles`)

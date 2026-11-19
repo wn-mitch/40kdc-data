@@ -6274,11 +6274,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "2026-10-14"
+      "dataslate": "pre-launch-provisional"
     },
-    "unit_ids": [
-      "gilded-blades-custodian-guard"
-    ],
+    "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": null,
     "ability_type": "unit",
@@ -7240,11 +7238,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "2026-10-14"
+      "dataslate": "pre-launch-provisional"
     },
-    "unit_ids": [
-      "custodian-guard-sodality"
-    ],
+    "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": null,
     "ability_type": "unit",

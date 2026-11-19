@@ -1253,10 +1253,6 @@
         "namespace": "mfm",
         "id": "8c84a949-1ec7-4341-987c-c682aa2808c3"
       }
-    ],
-    "game_modes": [
-      "matched-play",
-      "combat-patrol"
     ]
   },
   {
@@ -2615,6 +2611,10 @@
       {
         "namespace": "bsdata",
         "id": "fce9-8c80-4731-4af6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a092c03-1bf6-4656-a598-2f4c2e7b58fc"
       },
       {
         "namespace": "mfm",
@@ -4448,6 +4448,46 @@
       {
         "namespace": "mfm",
         "id": "e090e0bd-1170-463f-8319-bc23555ece86"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "chitinous-claws-and-teeth-vardenghast-swarm-termagants",
+    "name": "Chitinous claws and teeth",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Chitinous Claws and Teeth",
+        "range": "Melee",
+        "stats": {
+          "A": 1,
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "WS": 4
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "f5e3-ad89-8888-4bd4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8c84a949-1ec7-4341-987c-c682aa2808c3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "be77a9f9-04ca-4c43-985b-5d69ed7cc3cc"
       }
     ],
     "game_modes": [

@@ -12,12 +12,12 @@ strings are reported, never guessed. A parsed dump value carries no `draft` flag
 | Corrected | 0 |
 | De-drafted | 0 |
 | Rounding kept (authored kept) | 5 |
-| Confirmed (units) | 881 |
-| Confirmed (models) | 1245 |
+| Confirmed (units) | 888 |
+| Confirmed (models) | 1254 |
 | Unmatched labels | 14 |
 | Conflicting labels | 2 |
 | Representative unresolved | 2 |
-| Unresolved (list/category/null) | 197 |
+| Unresolved (list/category/null) | 198 |
 
 ## Rounding kept (authored value kept — within 1 mm of the dump)
 
@@ -222,6 +222,7 @@ strings are reported, never guessed. A parsed dump value carries no `draft` flag
 - orks/trukk [null]: null
 - orks/tankbustas [list]: "32mm, 40mm"
 - orks/gunwagon [category]: "None"
+- orks/ardmob-boyz-2 [list]: "32mm, 40mm"
 - orks/gorkanaut [null]: null
 - orks/stompa [category]: "None"
 - tau-empire/tidewall-shieldline [category]: "Hull"

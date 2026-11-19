@@ -12,9 +12,10 @@ describe("same-named ability records on one unit", () => {
     ["charge", "Charge"],
   ]);
 
-  it("reports two datasheet records of one name, not a wargear-gated copy", () => {
+  it("reports two records of one name, wargear-gated or not", () => {
     expect(sameNamedAbilities(["shield-alpha", "charge", "shield-beta"], names)).toEqual([["Shield", ["shield-alpha", "shield-beta"]]]);
-    expect(sameNamedAbilities(["shield-alpha", { id: "shield-beta", wargear: "shield" }], names)).toEqual([]);
+    expect(sameNamedAbilities(["shield-alpha", { id: "shield-beta", wargear: "shield" }], names)).toEqual([["Shield", ["shield-alpha", "shield-beta"]]]);
+    expect(sameNamedAbilities([{ id: "shield-alpha", wargear: "shield" }, { id: "shield-beta", wargear: "shield" }], names)).toEqual([["Shield", ["shield-alpha", "shield-beta"]]]);
     expect(sameNamedAbilities(["shield-alpha", "shield-alpha"], names)).toEqual([]);
   });
 

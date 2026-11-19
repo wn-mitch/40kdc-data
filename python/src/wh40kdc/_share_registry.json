@@ -1,5 +1,5 @@
 {
-  "version": 41,
+  "version": 42,
   "kinds": {
     "faction": [
       "adepta-sororitas",
@@ -1638,7 +1638,9 @@
       "gladiator-valiant-black-templars",
       "impulsor-black-templars",
       "repulsor-black-templars",
-      "repulsor-executioner-black-templars"
+      "repulsor-executioner-black-templars",
+      "ardmob-boyz-2",
+      "coven-of-agonies-wracks-2"
     ],
     "wargear": [
       "a-bolt-rifle-can-be-equipped-with-1-astartes-grenade-launcher",
@@ -5561,7 +5563,17 @@
       "warhound-plasma-blastgun",
       "warhound-turbo-laser-destructor",
       "warhound-vulcan-mega-bolter",
-      "warlord-feet"
+      "warlord-feet",
+      "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
+      "autopistol-claw-of-ascension-hybrid-metamorphs",
+      "chitinous-claws-and-teeth-vardenghast-swarm-termagants",
+      "hand-flamer-claw-of-ascension-hybrid-metamorphs",
+      "kombi-rokkit-ardmob-boyz-2",
+      "metamorph-mutations-claw-of-ascension-hybrid-metamorphs",
+      "shoota-ardmob-boyz",
+      "slugga-ardmob-boyz",
+      "slugga-ardmob-boyz-2",
+      "webber-inquisitors-hand-vigilant-squad"
     ],
     "enhancement": [
       "a-chink-in-their-armour",

@@ -32474,7 +32474,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "angelus-boltgun",
+          "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
           "encarmine-blade"
         ]
       },
@@ -32488,7 +32488,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "angelus-boltgun",
+          "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
           "encarmine-spear"
         ]
       }
@@ -32523,7 +32523,7 @@
           "models": 1,
           "items": [
             {
-              "id": "angelus-boltgun",
+              "id": "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
               "count": 1
             },
             {
@@ -32537,7 +32537,7 @@
           "models": 2,
           "items": [
             {
-              "id": "angelus-boltgun",
+              "id": "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
               "count": 2
             },
             {
@@ -32557,7 +32557,7 @@
           "choices": [
             [
               {
-                "id": "angelus-boltgun",
+                "id": "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
                 "count": 1
               },
               {
@@ -32575,7 +32575,7 @@
           "choices": [
             [
               {
-                "id": "angelus-boltgun",
+                "id": "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
                 "count": 1
               },
               {
@@ -32590,7 +32590,7 @@
       "options": [
         {
           "model": "Sanguinary Guard with Encarmine Blade",
-          "id": "angelus-boltgun",
+          "id": "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
           "input": "checkbox",
           "default": 1
         },
@@ -32602,7 +32602,7 @@
         },
         {
           "model": "Sanguinary Guard with Encarmine Spear",
-          "id": "angelus-boltgun",
+          "id": "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
           "input": "stepper",
           "default": 2
         },

@@ -2442,7 +2442,8 @@
     "behavior": "passive",
     "unit_ids": [
       "captain-raldeo",
-      "sanguinary-spearhead-assault-intercessor-squad"
+      "sanguinary-spearhead-assault-intercessor-squad",
+      "sanguinary-spearhead-sanguinary-guard"
     ],
     "detachment_id": "sanguinary-spearhead"
   },

@@ -12630,7 +12630,8 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "ardmob-boyz"
+      "ardmob-boyz",
+      "ardmob-boyz-2"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -14047,6 +14048,7 @@
     },
     "unit_ids": [
       "ardmob-boyz",
+      "ardmob-boyz-2",
       "ardmob-gretchin",
       "ardmob-warboss",
       "ardmob-wartrakk",

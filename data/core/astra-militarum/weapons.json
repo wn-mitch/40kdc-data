@@ -1084,6 +1084,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "ddf23c7c-dc93-4569-a302-bfbea8471b0d"
+      },
+      {
+        "namespace": "mfm",
         "id": "f28685e3-6246-4ad4-93fb-84b2fbb52208"
       }
     ],
@@ -4172,6 +4176,10 @@
       {
         "namespace": "mfm",
         "id": "265534a3-62b3-451f-855b-9b649fba233c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f32231b2-58d7-4484-96ed-fadbc938ea4e"
       }
     ],
     "game_modes": [
@@ -4209,6 +4217,10 @@
       {
         "namespace": "bsdata",
         "id": "6316-de95-9075-9a8f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "68267d61-f5ba-4d5a-b4af-1829924c2bf6"
       },
       {
         "namespace": "mfm",
@@ -11494,7 +11506,11 @@
           "D": 2,
           "WS": 3
         },
-        "keywords": []
+        "keywords": [
+          {
+            "keyword_id": "lance"
+          }
+        ]
       }
     ],
     "game_version": {
@@ -11513,6 +11529,10 @@
       {
         "namespace": "mfm",
         "id": "d4c21ec3-4925-4440-84f2-34128cfceb6d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d9ef1a5f-e0ed-4728-b161-534c95a05542"
       }
     ],
     "game_modes": [

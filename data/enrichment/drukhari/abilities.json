@@ -5466,6 +5466,7 @@
       "coven-of-agonies-cronos",
       "coven-of-agonies-talos",
       "coven-of-agonies-wracks",
+      "coven-of-agonies-wracks-2",
       "xatrophos-nuul"
     ]
   },
@@ -8399,7 +8400,8 @@
       "dataslate": "2026-10-14"
     },
     "unit_ids": [
-      "coven-of-agonies-wracks"
+      "coven-of-agonies-wracks",
+      "coven-of-agonies-wracks-2"
     ],
     "faction_id": "drukhari",
     "detachment_id": null,
@@ -10003,6 +10005,7 @@
       "coven-of-agonies-cronos",
       "coven-of-agonies-talos",
       "coven-of-agonies-wracks",
+      "coven-of-agonies-wracks-2",
       "cronos",
       "drazhar",
       "haemonculus",
@@ -10947,7 +10950,8 @@
       "dataslate": "2026-10-14"
     },
     "unit_ids": [
-      "coven-of-agonies-wracks"
+      "coven-of-agonies-wracks",
+      "coven-of-agonies-wracks-2"
     ],
     "faction_id": "drukhari",
     "detachment_id": null,

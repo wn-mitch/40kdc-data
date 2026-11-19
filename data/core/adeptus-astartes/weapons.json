@@ -3641,10 +3641,6 @@
         "namespace": "mfm",
         "id": "ed1c8040-3507-402c-98df-cad0aaa92377"
       }
-    ],
-    "game_modes": [
-      "matched-play",
-      "combat-patrol"
     ]
   },
   {
@@ -33137,6 +33133,50 @@
         "namespace": "mfm",
         "id": "a037c131-356e-430f-9b4f-99f418e8aa5e"
       }
+    ]
+  },
+  {
+    "id": "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
+    "name": "Angelus boltgun",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Angelus Boltgun",
+        "range": 12,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "f64-f4db-cee7-c077"
+      },
+      {
+        "namespace": "mfm",
+        "id": "27ea3149-21a4-4c41-b17d-56e3e9e0e613"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ed1c8040-3507-402c-98df-cad0aaa92377"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f7c9765c-e92a-4a36-8412-19bc217cbc75"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   }
 ]

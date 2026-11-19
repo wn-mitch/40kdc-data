@@ -3275,10 +3275,6 @@
         "namespace": "mfm",
         "id": "879897b0-106d-4bdf-9210-9bffa1514c12"
       }
-    ],
-    "game_modes": [
-      "matched-play",
-      "combat-patrol"
     ]
   },
   {
@@ -3344,6 +3340,10 @@
       {
         "namespace": "mfm",
         "id": "77e78e37-2f44-4ecf-84d8-9f88388b9a6e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9c9b4eea-cabe-49f5-9721-11b63812fc8f"
       }
     ],
     "game_modes": [
@@ -6333,15 +6333,26 @@
           "AP": 0,
           "D": 1,
           "BS": 4
-        }
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a9318a7c-fa5f-495e-9528-5770c920977d"
+      }
     ]
   },
   {
@@ -6363,10 +6374,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1c16bf91-3732-4312-91f4-29f12f9c1ed1"
+      }
     ]
   },
   {
@@ -6393,10 +6410,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "34a3286b-3fb9-4802-82ec-f4fae8269518"
+      }
     ]
   },
   {
@@ -6416,7 +6439,10 @@
         },
         "keywords": [
           {
-            "keyword_id": "blast"
+            "keyword_id": "blast",
+            "parameters": {
+              "value": 1
+            }
           }
         ]
       },
@@ -6429,15 +6455,22 @@
           "AP": -2,
           "D": "D3",
           "BS": 4
-        }
+        },
+        "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a8a6fb57-11d9-4995-918a-13d23c294d7a"
+      }
     ]
   },
   {
@@ -6871,6 +6904,60 @@
       {
         "namespace": "mfm",
         "id": "386eff79-b35f-43e3-bf06-cf7844452127"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "webber-inquisitors-hand-vigilant-squad",
+    "name": "Webber",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Webber",
+        "range": 12,
+        "stats": {
+          "A": "D6",
+          "S": 2,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "torrent"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c3a5-5520-ca9c-4444"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "f5a8-b008-4de1-5acb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "19fbfab9-a7b3-486d-83f1-de60040b9bcf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "879897b0-106d-4bdf-9210-9bffa1514c12"
       }
     ],
     "game_modes": [

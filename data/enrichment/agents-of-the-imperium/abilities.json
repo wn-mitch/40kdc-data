@@ -3376,7 +3376,6 @@
       "inquisitor-kroyle",
       "inquisitorial-agents",
       "inquisitorial-chimera",
-      "inquisitors-hand-vigilant-squad",
       "navigator",
       "rogue-trader-entourage",
       "sanctifiers",
@@ -5247,6 +5246,7 @@
     "unit_ids": [
       "inquisitors-hand-eversor-assassin",
       "inquisitors-hand-inquisitorial-agents",
+      "inquisitors-hand-vigilant-squad",
       "preacher-teguen"
     ],
     "faction_id": "agents-of-the-imperium",
@@ -7219,9 +7219,7 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": [
-      "corvus-blackstar"
-    ],
+    "unit_ids": [],
     "faction_id": "agents-of-the-imperium",
     "detachment_id": null,
     "ability_type": "unit",
@@ -7455,5 +7453,49 @@
     },
     "behavior": "passive",
     "source_digest": "e538b4def968c942a7ba5b674c6b9941161bf9fbf9543e4d71f848e29cf70e17"
+  },
+  {
+    "ability_id": "merciless-judgement-inquisitors-hand-vigilant-squad-agents-of-the-imperium",
+    "name": "Merciless Judgement",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [
+      "inquisitors-hand-vigilant-squad"
+    ],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "nuncio-aquila-agents-of-the-imperium",
+    "name": "Nuncio-Aquila",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [
+      "inquisitors-hand-vigilant-squad"
+    ],
+    "faction_id": "agents-of-the-imperium",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

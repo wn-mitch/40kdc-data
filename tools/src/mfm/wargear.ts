@@ -31,6 +31,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
 import { chapterReprints, unitIdForDatasheet, weaponOwnerId } from "./chapter-reprints.js";
+import { datasheetTwins } from "./datasheet-twins.js";
 import { MfmDump, type DatasheetRow,
 type PublicationRow,
 type FactionKeywordRow,
@@ -116,8 +117,9 @@ function datasheetUnitId(
   byId: ReadonlyMap<string, UnitRecord>,
   byMfmId: ReadonlyMap<string, string>,
 ): string | null {
-  const reprint = ds.id ? chapterReprints(dump).get(ds.id) : undefined;
-  if (reprint) return byId.has(reprint.unitId) ? reprint.unitId : null;
+  // A chapter reprint or a distinct same-named copy reads only into its own unit.
+  const routed = ds.id ? (chapterReprints(dump).get(ds.id) ?? datasheetTwins(dump).get(ds.id)) : undefined;
+  if (routed) return byId.has(routed.unitId) ? routed.unitId : null;
   try {
     const nameId = nameToId(name);
     if (byId.has(nameId)) return nameId;

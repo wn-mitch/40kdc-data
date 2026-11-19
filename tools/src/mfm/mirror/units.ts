@@ -79,6 +79,38 @@ export function indexByDatasheet(set: AbilityRowSet): Map<string, AbilityRow[]> 
   return m;
 }
 
+/**
+ * A datasheet prints each rule once, but the dump can carry one rule under one name twice: a
+ * datasheet ability restating its wargear item's rule, or two items of one name. Same-named lines
+ * with no item among them (a faction rule named like a core rule) all stay. Each text is its
+ * own identity, so the unit would list both and consumers would apply the rule twice. The unit
+ * keeps one: a datasheet's own line over an item's, else the text more datasheets print, else the
+ * lower id. The kept record takes the dropped one's wargear gate when it has none.
+ */
+function collapseSameNamed(ctx: UnitContext, printed: Set<string>, owned: Set<string>, wargearOfId: Map<string, string>): void {
+  const byName = new Map<string, string[]>();
+  for (const id of [...printed].sort(cmp)) {
+    const name = ctx.ids.byId.get(id)?.name;
+    if (name !== undefined) byName.set(name, [...(byName.get(name) ?? []), id]);
+  }
+  for (const ids of byName.values()) {
+    // Only an item's rule doubles another line; a faction rule named like a core rule is its own rule.
+    if (ids.length < 2 || !ids.some((id) => ctx.ids.byId.get(id)!.kinds.includes("wargear"))) continue;
+    const rank = (id: string): [number, number] => {
+      const identity = ctx.ids.byId.get(id)!;
+      return [identity.kinds.some((k) => k !== "wargear") ? 0 : 1, -identity.datasheetIds.length];
+    };
+    const [keep, ...drop] = [...ids].sort((a, b) => rank(a)[0] - rank(b)[0] || rank(a)[1] - rank(b)[1] || cmp(a, b));
+    for (const id of drop) {
+      printed.delete(id);
+      owned.delete(id);
+      const gate = wargearOfId.get(id);
+      if (gate && !wargearOfId.has(keep!)) wargearOfId.set(keep!, gate);
+      wargearOfId.delete(id);
+    }
+  }
+}
+
 export function projectUnit(ctx: UnitContext, byDatasheet: Map<string, AbilityRow[]>, dir: string, unit: EntityRecord): UnitProjection {
   const before = [...((unit.ability_ids as UnitAbilityRef[] | undefined) ?? [])];
   // A datasheet the dump carries but that prints no ability (some Combat Patrol datasheets) still
@@ -153,6 +185,8 @@ export function projectUnit(ctx: UnitContext, byDatasheet: Map<string, AbilityRo
     owned.delete("support");
     printed.add("leader");
   }
+
+  collapseSameNamed(ctx, printed, owned, wargearOfId);
 
   const after: string[] = [];
   for (const id of before.map(abilityRefId)) {

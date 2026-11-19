@@ -2452,5 +2452,75 @@
         "id": "7d864aac-03ad-46d5-b60e-cacaec8fd814"
       }
     ]
+  },
+  {
+    "id": "coven-of-agonies-wracks-2",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "12721edc-3881-490b-8b81-bc569600cf0a"
+      }
+    ],
+    "name": "Coven of Agonies Wracks",
+    "faction_id": "drukhari",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Wrack",
+        "M": 7,
+        "T": 4,
+        "W": 2,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 5,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "Aeldari",
+      "Battleline",
+      "Coven of Agonies",
+      "Haemonculus Covens",
+      "Infantry",
+      "Coven of Agonies Wracks"
+    ],
+    "faction_keywords": [
+      "Drukhari"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
+    "model_count": {
+      "min": 5,
+      "max": 5
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false,
+    "ability_ids": [
+      "corsairs-and-travelling-players-drukhari",
+      "experimental-enhancements-coven-of-agonies-wracks-drukhari",
+      "power-from-pain-drukhari",
+      "torturers-craft-coven-of-agonies-wracks-drukhari"
+    ],
+    "weapon_ids": [
+      "twin-torturers-tools",
+      "ossefactor",
+      "torturers-tool",
+      "hexrifle"
+    ]
   }
 ]

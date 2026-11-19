@@ -12562,7 +12562,7 @@
         "Sanguinary Guard with Encarmine Spear": 2
       },
       "counts": {
-        "angelus-boltgun": 3,
+        "angelus-boltgun-sanguinary-spearhead-sanguinary-guard": 3,
         "encarmine-blade": 1,
         "encarmine-spear": 2
       }
@@ -12570,7 +12570,7 @@
     "expected": []
   },
   {
-    "name": "adeptus-astartes/sanguinary-spearhead-sanguinary-guard angelus-boltgun+1",
+    "name": "adeptus-astartes/sanguinary-spearhead-sanguinary-guard angelus-boltgun-sanguinary-spearhead-sanguinary-guard+1",
     "args": {
       "unitId": "sanguinary-spearhead-sanguinary-guard",
       "factionId": "adeptus-astartes",
@@ -12579,7 +12579,7 @@
         "Sanguinary Guard with Encarmine Spear": 2
       },
       "counts": {
-        "angelus-boltgun": 4,
+        "angelus-boltgun-sanguinary-spearhead-sanguinary-guard": 4,
         "encarmine-blade": 1,
         "encarmine-spear": 2
       }
@@ -12592,7 +12592,7 @@
     ]
   },
   {
-    "name": "adeptus-astartes/sanguinary-spearhead-sanguinary-guard angelus-boltgun-1",
+    "name": "adeptus-astartes/sanguinary-spearhead-sanguinary-guard angelus-boltgun-sanguinary-spearhead-sanguinary-guard-1",
     "args": {
       "unitId": "sanguinary-spearhead-sanguinary-guard",
       "factionId": "adeptus-astartes",
@@ -12601,7 +12601,7 @@
         "Sanguinary Guard with Encarmine Spear": 2
       },
       "counts": {
-        "angelus-boltgun": 2,
+        "angelus-boltgun-sanguinary-spearhead-sanguinary-guard": 2,
         "encarmine-blade": 1,
         "encarmine-spear": 2
       }
@@ -27913,7 +27913,7 @@
         "gun-stocks": 9,
         "mechanical-bite": 1,
         "shotpistol": 9,
-        "webber": 1
+        "webber-inquisitors-hand-vigilant-squad": 1
       }
     },
     "expected": []
@@ -27936,7 +27936,7 @@
         "gun-stocks": 9,
         "mechanical-bite": 1,
         "shotpistol": 9,
-        "webber": 1
+        "webber-inquisitors-hand-vigilant-squad": 1
       }
     },
     "expected": [
@@ -27964,7 +27964,7 @@
         "gun-stocks": 9,
         "mechanical-bite": 1,
         "shotpistol": 9,
-        "webber": 1
+        "webber-inquisitors-hand-vigilant-squad": 1
       }
     },
     "expected": [
@@ -45929,6 +45929,73 @@
     ]
   },
   {
+    "name": "drukhari/coven-of-agonies-wracks-2 default",
+    "args": {
+      "unitId": "coven-of-agonies-wracks-2",
+      "factionId": "drukhari",
+      "models": {
+        "Acothyst": 1,
+        "Wrack": 3,
+        "Wrack with Ossefactor": 1
+      },
+      "counts": {
+        "hexrifle": 1,
+        "ossefactor": 1,
+        "torturers-tool": 2,
+        "twin-torturers-tools": 3
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "drukhari/coven-of-agonies-wracks-2 hexrifle+1",
+    "args": {
+      "unitId": "coven-of-agonies-wracks-2",
+      "factionId": "drukhari",
+      "models": {
+        "Acothyst": 1,
+        "Wrack": 3,
+        "Wrack with Ossefactor": 1
+      },
+      "counts": {
+        "hexrifle": 2,
+        "ossefactor": 1,
+        "torturers-tool": 2,
+        "twin-torturers-tools": 3
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "drukhari/coven-of-agonies-wracks-2 hexrifle-1",
+    "args": {
+      "unitId": "coven-of-agonies-wracks-2",
+      "factionId": "drukhari",
+      "models": {
+        "Acothyst": 1,
+        "Wrack": 3,
+        "Wrack with Ossefactor": 1
+      },
+      "counts": {
+        "hexrifle": 0,
+        "ossefactor": 1,
+        "torturers-tool": 2,
+        "twin-torturers-tools": 3
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
     "name": "drukhari/cronos default",
     "args": {
       "unitId": "cronos",
@@ -50120,16 +50187,16 @@
         "Metamorph with Hand Flamer": 3
       },
       "counts": {
-        "autopistol": 1,
-        "hand-flamer": 3,
+        "autopistol-claw-of-ascension-hybrid-metamorphs": 1,
+        "hand-flamer-claw-of-ascension-hybrid-metamorphs": 3,
         "leaders-weapon-symbiote": 1,
-        "metamorph-mutations": 4
+        "metamorph-mutations-claw-of-ascension-hybrid-metamorphs": 4
       }
     },
     "expected": []
   },
   {
-    "name": "genestealer-cults/claw-of-ascension-hybrid-metamorphs autopistol+1",
+    "name": "genestealer-cults/claw-of-ascension-hybrid-metamorphs autopistol-claw-of-ascension-hybrid-metamorphs+1",
     "args": {
       "unitId": "claw-of-ascension-hybrid-metamorphs",
       "factionId": "genestealer-cults",
@@ -50139,10 +50206,10 @@
         "Metamorph with Hand Flamer": 3
       },
       "counts": {
-        "autopistol": 2,
-        "hand-flamer": 3,
+        "autopistol-claw-of-ascension-hybrid-metamorphs": 2,
+        "hand-flamer-claw-of-ascension-hybrid-metamorphs": 3,
         "leaders-weapon-symbiote": 1,
-        "metamorph-mutations": 4
+        "metamorph-mutations-claw-of-ascension-hybrid-metamorphs": 4
       }
     },
     "expected": [
@@ -50153,7 +50220,7 @@
     ]
   },
   {
-    "name": "genestealer-cults/claw-of-ascension-hybrid-metamorphs autopistol-1",
+    "name": "genestealer-cults/claw-of-ascension-hybrid-metamorphs autopistol-claw-of-ascension-hybrid-metamorphs-1",
     "args": {
       "unitId": "claw-of-ascension-hybrid-metamorphs",
       "factionId": "genestealer-cults",
@@ -50163,10 +50230,10 @@
         "Metamorph with Hand Flamer": 3
       },
       "counts": {
-        "autopistol": 0,
-        "hand-flamer": 3,
+        "autopistol-claw-of-ascension-hybrid-metamorphs": 0,
+        "hand-flamer-claw-of-ascension-hybrid-metamorphs": 3,
         "leaders-weapon-symbiote": 1,
-        "metamorph-mutations": 4
+        "metamorph-mutations-claw-of-ascension-hybrid-metamorphs": 4
       }
     },
     "expected": [
@@ -60354,8 +60421,8 @@
         "big-choppa": 1,
         "choppa": 9,
         "kustom-shoota": 1,
-        "shoota": 9,
-        "slugga": 10
+        "shoota-ardmob-boyz": 9,
+        "slugga-ardmob-boyz": 10
       }
     },
     "expected": []
@@ -60373,8 +60440,8 @@
         "big-choppa": 2,
         "choppa": 9,
         "kustom-shoota": 1,
-        "shoota": 9,
-        "slugga": 10
+        "shoota-ardmob-boyz": 9,
+        "slugga-ardmob-boyz": 10
       }
     },
     "expected": [
@@ -60397,8 +60464,78 @@
         "big-choppa": 0,
         "choppa": 9,
         "kustom-shoota": 1,
+        "shoota-ardmob-boyz": 9,
+        "slugga-ardmob-boyz": 10
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts"
+      }
+    ]
+  },
+  {
+    "name": "orks/ardmob-boyz-2 default",
+    "args": {
+      "unitId": "ardmob-boyz-2",
+      "factionId": "orks",
+      "models": {
+        "Boss Nob": 1,
+        "Boyz": 9
+      },
+      "counts": {
+        "big-choppa": 1,
+        "choppa": 9,
+        "kombi-rokkit-ardmob-boyz-2": 1,
+        "kombi-shoota": 1,
         "shoota": 9,
-        "slugga": 10
+        "slugga-ardmob-boyz-2": 10
+      }
+    },
+    "expected": []
+  },
+  {
+    "name": "orks/ardmob-boyz-2 big-choppa+1",
+    "args": {
+      "unitId": "ardmob-boyz-2",
+      "factionId": "orks",
+      "models": {
+        "Boss Nob": 1,
+        "Boyz": 9
+      },
+      "counts": {
+        "big-choppa": 2,
+        "choppa": 9,
+        "kombi-rokkit-ardmob-boyz-2": 1,
+        "kombi-shoota": 1,
+        "shoota": 9,
+        "slugga-ardmob-boyz-2": 10
+      }
+    },
+    "expected": [
+      {
+        "code": "no-assignment",
+        "message": "no assignment of wargear choices to models gives these counts within the unit's limits"
+      }
+    ]
+  },
+  {
+    "name": "orks/ardmob-boyz-2 big-choppa-1",
+    "args": {
+      "unitId": "ardmob-boyz-2",
+      "factionId": "orks",
+      "models": {
+        "Boss Nob": 1,
+        "Boyz": 9
+      },
+      "counts": {
+        "big-choppa": 0,
+        "choppa": 9,
+        "kombi-rokkit-ardmob-boyz-2": 1,
+        "kombi-shoota": 1,
+        "shoota": 9,
+        "slugga-ardmob-boyz-2": 10
       }
     },
     "expected": [
@@ -73533,14 +73670,14 @@
         "Termagant": 10
       },
       "counts": {
-        "chitinous-claws-and-teeth": 10,
+        "chitinous-claws-and-teeth-vardenghast-swarm-termagants": 10,
         "fleshborer": 10
       }
     },
     "expected": []
   },
   {
-    "name": "tyranids/vardenghast-swarm-termagants chitinous-claws-and-teeth+1",
+    "name": "tyranids/vardenghast-swarm-termagants chitinous-claws-and-teeth-vardenghast-swarm-termagants+1",
     "args": {
       "unitId": "vardenghast-swarm-termagants",
       "factionId": "tyranids",
@@ -73548,7 +73685,7 @@
         "Termagant": 10
       },
       "counts": {
-        "chitinous-claws-and-teeth": 11,
+        "chitinous-claws-and-teeth-vardenghast-swarm-termagants": 11,
         "fleshborer": 10
       }
     },
@@ -73560,7 +73697,7 @@
     ]
   },
   {
-    "name": "tyranids/vardenghast-swarm-termagants chitinous-claws-and-teeth-1",
+    "name": "tyranids/vardenghast-swarm-termagants chitinous-claws-and-teeth-vardenghast-swarm-termagants-1",
     "args": {
       "unitId": "vardenghast-swarm-termagants",
       "factionId": "tyranids",
@@ -73568,7 +73705,7 @@
         "Termagant": 10
       },
       "counts": {
-        "chitinous-claws-and-teeth": 9,
+        "chitinous-claws-and-teeth-vardenghast-swarm-termagants": 9,
         "fleshborer": 10
       }
     },

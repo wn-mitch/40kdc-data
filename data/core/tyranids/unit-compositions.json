@@ -7125,7 +7125,7 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "chitinous-claws-and-teeth",
+          "chitinous-claws-and-teeth-vardenghast-swarm-termagants",
           "fleshborer"
         ]
       }
@@ -7155,7 +7155,7 @@
           "models": 10,
           "items": [
             {
-              "id": "chitinous-claws-and-teeth",
+              "id": "chitinous-claws-and-teeth-vardenghast-swarm-termagants",
               "count": 10
             },
             {
@@ -7175,7 +7175,7 @@
           "choices": [
             [
               {
-                "id": "chitinous-claws-and-teeth",
+                "id": "chitinous-claws-and-teeth-vardenghast-swarm-termagants",
                 "count": 1
               },
               {
@@ -7190,7 +7190,7 @@
       "options": [
         {
           "model": "Termagant",
-          "id": "chitinous-claws-and-teeth",
+          "id": "chitinous-claws-and-teeth-vardenghast-swarm-termagants",
           "input": "stepper",
           "default": 10
         },

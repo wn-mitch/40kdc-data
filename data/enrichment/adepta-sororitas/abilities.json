@@ -10097,9 +10097,7 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": [
-      "sanctuary-guardians-battle-sisters-squad"
-    ],
+    "unit_ids": [],
     "faction_id": "adepta-sororitas",
     "detachment_id": null,
     "ability_type": "unit",

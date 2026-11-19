@@ -9,7 +9,7 @@
       "disposition": null,
       "units": []
     },
-    "token": "ASkAAgEAAAA"
+    "token": "ASoAAgEAAAA"
   },
   {
     "name": "warlord-enhancement-grants",
@@ -62,7 +62,7 @@
         }
       ]
     },
-    "token": "ASkSU3Ryw65rZSBGb3JjZSDwn5SoAgEBAasCAgoFE7EPAQlDaGFyYWN0ZXICDwIRAQ4KAAERCg"
+    "token": "ASoSU3Ryw65rZSBGb3JjZSDwn5SoAgEBAasCAgoFE7EPAQlDaGFyYWN0ZXICDwIRAQ4KAAERCg"
   },
   {
     "name": "allies-attachment",
@@ -118,7 +118,7 @@
         }
       ]
     },
-    "token": "ASkEU291cAIAAQKrAo0CAwoBBQEADgUAABABGAoZAQpCYXR0bGVsaW5lAeUaAQ"
+    "token": "ASoEU291cAIAAQKrAo0CAwoBBQEADgUAABABGAoZAQpCYXR0bGVsaW5lAeUaAQ"
   },
   {
     "name": "malformed-bad-format-byte",
@@ -130,7 +130,7 @@
   },
   {
     "name": "stale-future-index",
-    "decode_token": "ASkAgIl6",
+    "decode_token": "ASoAgIl6",
     "expected_decode": {
       "ok": false,
       "reason": "stale-registry"

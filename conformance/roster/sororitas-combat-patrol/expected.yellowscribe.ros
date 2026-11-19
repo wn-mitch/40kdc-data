@@ -105,11 +105,6 @@
                 <characteristic name="Description">Nothing happens.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Simulacrum Imperialis" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">Nothing happens.</characteristic>
-              </characteristics>
-            </profile>
             <profile name="Acts of Faith" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Nothing happens.</characteristic>

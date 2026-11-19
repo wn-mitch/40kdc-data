@@ -931,10 +931,6 @@
         "wargear": "vexilla"
       },
       "impenetrable-defence-adeptus-custodes",
-      {
-        "id": "vexilla-wargear-adeptus-custodes",
-        "wargear": "vexilla"
-      },
       "aegis-of-the-emperor-adeptus-custodes",
       "martial-katah-adeptus-custodes"
     ],
@@ -2283,9 +2279,8 @@
     "ability_ids": [
       "sentinel-storm-adeptus-custodes",
       "stand-vigil-gilded-blades-custodian-guard-adeptus-custodes",
-      "praesidium-shield-tristraens-gilded-blades-adeptus-custodes",
       {
-        "id": "praesidium-shield-wargear-adeptus-custodes",
+        "id": "praesidium-shield-tristraens-gilded-blades-adeptus-custodes",
         "wargear": "praesidium-shield"
       },
       "martial-katah-tristraens-gilded-blades-adeptus-custodes"

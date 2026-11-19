@@ -427,7 +427,8 @@ async function checkAbilityUnitRefs(root: string, result: ValidationResult): Pro
 
 /**
  * Ability names a unit's datasheet `ability_ids` reach through more than one record, with those
- * records. Refs gated on a wargear item (`{id, wargear}`) are left out: they apply only with the item.
+ * records. A wargear-gated ref (`{id, wargear}`) counts: an item's rule beside a same-named
+ * datasheet line is one rule printed twice.
  */
 export function sameNamedAbilities(
   refs: readonly (string | { id: string; wargear?: string })[],
@@ -435,7 +436,6 @@ export function sameNamedAbilities(
 ): [string, string[]][] {
   const idsByName = new Map<string, string[]>();
   for (const ref of refs) {
-    if (typeof ref !== "string" && ref.wargear !== undefined) continue;
     const id = typeof ref === "string" ? ref : ref.id;
     const name = nameById.get(id);
     if (name === undefined) continue;

@@ -37,17 +37,7 @@
     "game_version": {
       "edition": "10th",
       "dataslate": "2025-q3"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "0549dd4b-5a1a-4609-9244-415205cad4a6"
-      },
-      {
-        "namespace": "mfm",
-        "id": "07baa154-aeea-43b1-a515-8fb140376b9f"
-      }
-    ]
+    }
   },
   {
     "id": "blastajet-force-field",

@@ -9947,11 +9947,6 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
             <characteristic name="Base" typeId="nr-base-size">92x120mm</characteristic>
           </characteristics>
         </profile>
-        <profile name="Auspex Array" id="0641-7f1d-3ae2-7794" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
-          <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit's weapons gain [IGNORES COVER].</characteristic>
-          </characteristics>
-        </profile>
         <profile name="Blackstar Cluster Launcher" id="4783-bb90-8356-05c2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal move, during the Movement phase, in your turn:
@@ -13472,9 +13467,9 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
     </selectionEntry>
     <selectionEntry name="Auspex Array" id="278b-57c3-ad6c-b8db" hidden="false" import="true" type="upgrade">
       <profiles>
-        <profile name="Auspex Array" id="33e9-a574-a4b9-319b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
+        <profile name="Auspex Array" id="8b4a-daa9-810a-77ce" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit's weapons gain [IGNORES COVER].</characteristic>
           </characteristics>
         </profile>
       </profiles>

@@ -8184,7 +8184,7 @@
                             "defaultAmount": 1,
                             "hidden": false,
                             "import": true,
-                            "targetId": "cad9-9dac-d120-4f00",
+                            "targetId": "1edc-2d08-275c-0ec1",
                             "type": "selectionEntry",
                             "constraints": [
                               {
@@ -20156,50 +20156,6 @@
                 "name": "Keywords",
                 "$text": "",
                 "typeId": "893f-9000-ccf7-648e"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "Vexilla",
-        "id": "cad9-9dac-d120-4f00",
-        "hidden": false,
-        "import": true,
-        "type": "upgrade",
-        "costs": [
-          {
-            "name": "pts",
-            "typeId": "51b2-306e-1021-d207",
-            "value": 0
-          }
-        ],
-        "profiles": [
-          {
-            "name": "Vexilla",
-            "id": "5ddf-0746-19d6-4c54",
-            "hidden": false,
-            "typeId": "9cc3-6d83-4dd3-9b64",
-            "typeName": "Abilities",
-            "characteristics": [
-              {
-                "name": "Description",
-                "$text": "Add 1 to the unit's Objective Control characteristic.\nThe unit ignores any modifiers to its Leadership characteristics.",
-                "typeId": "9b8f-694b-e5e-b573"
-              }
-            ]
-          },
-          {
-            "name": "Vexilla",
-            "id": "b741-1c9e-3f37-913d",
-            "hidden": false,
-            "typeId": "9cc3-6d83-4dd3-9b64",
-            "typeName": "Abilities",
-            "characteristics": [
-              {
-                "name": "Description",
-                "$text": "Add 1 to the unit's Objective Control characteristic.",
-                "typeId": "9b8f-694b-e5e-b573"
               }
             ]
           }

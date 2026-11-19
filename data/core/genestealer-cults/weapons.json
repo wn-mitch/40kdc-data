@@ -350,10 +350,6 @@
         "namespace": "mfm",
         "id": "c4264e96-49d6-40d7-806f-c0c061bec825"
       }
-    ],
-    "game_modes": [
-      "matched-play",
-      "combat-patrol"
     ]
   },
   {
@@ -1549,10 +1545,6 @@
         "namespace": "mfm",
         "id": "d46a142b-2aee-4e11-8a36-8ed2ddfd9a43"
       }
-    ],
-    "game_modes": [
-      "matched-play",
-      "combat-patrol"
     ]
   },
   {
@@ -1598,10 +1590,6 @@
         "namespace": "mfm",
         "id": "5e028034-99c9-48c1-8ace-52c199f761aa"
       }
-    ],
-    "game_modes": [
-      "matched-play",
-      "combat-patrol"
     ]
   },
   {
@@ -2725,10 +2713,16 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b7b2602e-cbbd-43f2-b15b-a6d63fa95a27"
+      }
     ]
   },
   {
@@ -3026,6 +3020,149 @@
       {
         "namespace": "mfm",
         "id": "d29f7b62-fb03-4a2f-8c5f-06a2c64b0fc0"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "autopistol-claw-of-ascension-hybrid-metamorphs",
+    "name": "Autopistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Autopistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c213-e6c4-7183-4041"
+      },
+      {
+        "namespace": "mfm",
+        "id": "168e72ef-f7ca-4639-abc6-09247c6d2b1d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c4264e96-49d6-40d7-806f-c0c061bec825"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "hand-flamer-claw-of-ascension-hybrid-metamorphs",
+    "name": "Hand flamer",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Hand Flamer",
+        "range": 12,
+        "stats": {
+          "A": "D6",
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "2847-d130-817-7064"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0010bf42-f948-4971-8fae-2939762ae1cb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d46a142b-2aee-4e11-8a36-8ed2ddfd9a43"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "metamorph-mutations-claw-of-ascension-hybrid-metamorphs",
+    "name": "Metamorph mutations",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Strike",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -1,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      },
+      {
+        "name": "Sweep",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "729e-3495-ef80-33da"
+      },
+      {
+        "namespace": "mfm",
+        "id": "291b11fd-e444-43aa-97e7-383394edf4be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5e028034-99c9-48c1-8ace-52c199f761aa"
       }
     ],
     "game_modes": [

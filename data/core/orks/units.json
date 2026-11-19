@@ -153,18 +153,14 @@
       {
         "namespace": "mfm",
         "id": "63cdcf67-14f9-4233-94eb-e9fc83540fc4"
-      },
-      {
-        "namespace": "mfm",
-        "id": "e6444013-4fb5-42af-92a0-9da6cccf630c"
       }
     ],
     "weapon_ids": [
       "big-choppa",
       "kustom-shoota",
       "choppa",
-      "shoota",
-      "slugga"
+      "shoota-ardmob-boyz",
+      "slugga-ardmob-boyz"
     ],
     "ability_ids": [
       "grab-dat-scrap-orks",
@@ -5064,6 +5060,80 @@
       "bust-em-orks",
       "waaagh-orks",
       "speednob-support-orks"
+    ]
+  },
+  {
+    "id": "ardmob-boyz-2",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e6444013-4fb5-42af-92a0-9da6cccf630c"
+      }
+    ],
+    "name": "’Ardmob Boyz",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Boss Nob",
+        "M": 6,
+        "T": 5,
+        "W": 2,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      },
+      {
+        "name": "Boyz",
+        "M": 6,
+        "T": 5,
+        "W": 1,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 10,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "'Ardmob",
+      "Explosives",
+      "Infantry",
+      "Mob",
+      "’Ardmob Boyz"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "model_count": {
+      "min": 10,
+      "max": 10
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false,
+    "ability_ids": [
+      "grab-dat-scrap-orks",
+      "waaagh-ardmob-orks"
+    ],
+    "weapon_ids": [
+      "big-choppa",
+      "kombi-rokkit-ardmob-boyz-2",
+      "slugga-ardmob-boyz-2",
+      "kombi-shoota",
+      "choppa",
+      "shoota"
     ]
   }
 ]

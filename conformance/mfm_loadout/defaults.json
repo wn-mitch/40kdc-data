@@ -3132,7 +3132,7 @@
         "Sanguinary Guard with Encarmine Spear": 2
       },
       "counts": {
-        "angelus-boltgun": 3,
+        "angelus-boltgun-sanguinary-spearhead-sanguinary-guard": 3,
         "encarmine-blade": 1,
         "encarmine-spear": 2
       }
@@ -6907,7 +6907,7 @@
         "gun-stocks": 9,
         "mechanical-bite": 1,
         "shotpistol": 9,
-        "webber": 1
+        "webber-inquisitors-hand-vigilant-squad": 1
       }
     }
   },
@@ -11458,6 +11458,26 @@
     }
   },
   {
+    "name": "drukhari/coven-of-agonies-wracks-2",
+    "args": {
+      "unitId": "coven-of-agonies-wracks-2",
+      "factionId": "drukhari"
+    },
+    "expected": {
+      "models": {
+        "Acothyst": 1,
+        "Wrack": 3,
+        "Wrack with Ossefactor": 1
+      },
+      "counts": {
+        "hexrifle": 1,
+        "ossefactor": 1,
+        "torturers-tool": 2,
+        "twin-torturers-tools": 3
+      }
+    }
+  },
+  {
     "name": "drukhari/cronos",
     "args": {
       "unitId": "cronos",
@@ -12488,10 +12508,10 @@
         "Metamorph with Hand Flamer": 3
       },
       "counts": {
-        "autopistol": 1,
-        "hand-flamer": 3,
+        "autopistol-claw-of-ascension-hybrid-metamorphs": 1,
+        "hand-flamer-claw-of-ascension-hybrid-metamorphs": 3,
         "leaders-weapon-symbiote": 1,
-        "metamorph-mutations": 4
+        "metamorph-mutations-claw-of-ascension-hybrid-metamorphs": 4
       }
     }
   },
@@ -15047,8 +15067,29 @@
         "big-choppa": 1,
         "choppa": 9,
         "kustom-shoota": 1,
+        "shoota-ardmob-boyz": 9,
+        "slugga-ardmob-boyz": 10
+      }
+    }
+  },
+  {
+    "name": "orks/ardmob-boyz-2",
+    "args": {
+      "unitId": "ardmob-boyz-2",
+      "factionId": "orks"
+    },
+    "expected": {
+      "models": {
+        "Boss Nob": 1,
+        "Boyz": 9
+      },
+      "counts": {
+        "big-choppa": 1,
+        "choppa": 9,
+        "kombi-rokkit-ardmob-boyz-2": 1,
+        "kombi-shoota": 1,
         "shoota": 9,
-        "slugga": 10
+        "slugga-ardmob-boyz-2": 10
       }
     }
   },
@@ -18389,7 +18430,7 @@
         "Termagant": 10
       },
       "counts": {
-        "chitinous-claws-and-teeth": 10,
+        "chitinous-claws-and-teeth-vardenghast-swarm-termagants": 10,
         "fleshborer": 10
       }
     }

@@ -371,10 +371,6 @@
       },
       {
         "namespace": "mfm",
-        "id": "38903c97-fd84-45ee-ad2a-e60bfb01f157"
-      },
-      {
-        "namespace": "mfm",
         "id": "6ad781cd-6ee5-493b-8114-44363a3ae071"
       }
     ],
@@ -890,10 +886,6 @@
       },
       {
         "namespace": "mfm",
-        "id": "cec275e8-0bf3-499c-9646-3b84443eb02c"
-      },
-      {
-        "namespace": "mfm",
         "id": "f7aff398-85bb-4f56-bd37-bfc91532214c"
       }
     ]
@@ -996,10 +988,6 @@
       {
         "namespace": "game-datacards",
         "id": "99c456e2-eaf2-5c78-88b7-22e7d20f2605"
-      },
-      {
-        "namespace": "mfm",
-        "id": "8d33dc91-fc83-460f-afc5-b8c8e85b934c"
       },
       {
         "namespace": "mfm",
@@ -15228,7 +15216,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
@@ -15240,12 +15228,19 @@
       "diameter": 40
     },
     "ability_ids": [
-      "born-to-fight-blood-angels"
+      "born-to-fight-blood-angels",
+      "the-sons-of-sanguinius-blood-angels"
     ],
     "weapon_ids": [
-      "angelus-boltgun",
+      "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
       "encarmine-blade",
       "encarmine-spear"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d3ae940-93a0-488d-aed4-4b94e1cf8a19"
+      }
     ]
   },
   {

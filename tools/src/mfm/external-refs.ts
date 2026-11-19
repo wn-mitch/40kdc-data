@@ -18,11 +18,14 @@ import {
 } from "./weapon-variants.js";
 import type { GameVersion } from "./gear-projection.js";
 import { findDatasheet } from "./project-loadout.js";
-import { unitIdForDatasheet } from "./chapter-reprints.js";
+import { chapterReprints, unitIdForDatasheet } from "./chapter-reprints.js";
+import { datasheetTwins } from "./datasheet-twins.js";
 import { currentGameVersion } from "./dataslate.js";
 
 export interface MfmExternalRefsReport {
   added: Record<ExternalRefEntityType, number>;
+  /** Refs removed because the dump no longer carries their row. */
+  pruned: number;
   unmatched: Record<ExternalRefEntityType, number>;
   staged: StagedWrite[];
 }
@@ -48,12 +51,36 @@ function safeId(name: string | undefined): string | null {
   }
 }
 
-/** Project exact MFM row identities onto already-resolved core entities. */
+/** The dump table each entity type's `mfm` refs name a row of. */
+const SOURCE_TABLES = {
+  faction: "faction_keyword",
+  unit: "datasheet",
+  detachment: "detachment",
+  enhancement: "enhancement",
+  stratagem: "stratagem",
+  weapon: "wargear_item",
+  wargear: "wargear_item",
+} as const satisfies Record<ExternalRefEntityType, string>;
+
+/**
+ * Project exact MFM row identities onto already-resolved core entities. A ref whose row the dump
+ * no longer carries (a reissued datasheet or wargear item) names nothing and is removed, as is a
+ * unit's ref to a datasheet routed to another unit; a dump without the ref's table (a partial
+ * fixture) keeps it.
+ */
 export function runMfmExternalRefs(
   dump: MfmDump,
   onlyDir?: string,
 ): MfmExternalRefsReport {
   const store = new CoreExternalRefStore();
+  const pruned = store.removeRefs("mfm", (entityType, sourceId, dir, recordId) => {
+    const table = SOURCE_TABLES[entityType];
+    if ((onlyDir !== undefined && dir !== onlyDir) || !dump.tables[table]) return true;
+    if (!dump.byId(table).has(sourceId)) return false;
+    // A chapter reprint or a distinct same-named copy is its own unit's datasheet, never another's.
+    const routed = entityType === "unit" ? (chapterReprints(dump).get(sourceId) ?? datasheetTwins(dump).get(sourceId))?.unitId : undefined;
+    return routed === undefined || routed === recordId;
+  });
   const added = emptyCounts();
   const unmatched = emptyCounts();
   const attach = (
@@ -173,7 +200,7 @@ export function runMfmExternalRefs(
   }
 
   store.synchronizeReplicated();
-  return { added, unmatched, staged: store.stagedWrites() };
+  return { added, pruned, unmatched, staged: store.stagedWrites() };
 }
 
 export function buildMfmExternalRefsReport(
@@ -195,6 +222,6 @@ export function buildMfmExternalRefsReport(
       `| ${entityType} | ${report.added[entityType]} | ${report.unmatched[entityType]} |`,
     );
   }
-  lines.push("");
+  lines.push("", `References removed because the dump no longer carries their row: ${report.pruned}.`, "");
   return `${lines.join("\n")}\n`;
 }

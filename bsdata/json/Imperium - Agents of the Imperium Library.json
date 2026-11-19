@@ -40264,20 +40264,6 @@
             ]
           },
           {
-            "name": "Auspex Array",
-            "id": "0641-7f1d-3ae2-7794",
-            "hidden": false,
-            "typeId": "9cc3-6d83-4dd3-9b64",
-            "typeName": "Abilities",
-            "characteristics": [
-              {
-                "name": "Description",
-                "$text": "The unit's weapons gain [IGNORES COVER].",
-                "typeId": "9b8f-694b-e5e-b573"
-              }
-            ]
-          },
-          {
             "name": "Blackstar Cluster Launcher",
             "id": "4783-bb90-8356-05c2",
             "hidden": false,
@@ -52762,14 +52748,14 @@
         "profiles": [
           {
             "name": "Auspex Array",
-            "id": "33e9-a574-a4b9-319b",
+            "id": "8b4a-daa9-810a-77ce",
             "hidden": false,
             "typeId": "9cc3-6d83-4dd3-9b64",
             "typeName": "Abilities",
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Nothing happens.",
+                "$text": "The unit's weapons gain [IGNORES COVER].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

@@ -8,16 +8,16 @@ dump confirmation.
 
 | Entity | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
-| units | 0 | 0 | 1112 | 6 |
-| weapons | 0 | 0 | 3562 | 119 |
+| units | 2 | 0 | 1115 | 3 |
+| weapons | 0 | 0 | 3579 | 112 |
 | wargear | 0 | 0 | 166 | 87 |
-| unit-compositions | 0 | 0 | 1118 | 0 |
+| unit-compositions | 0 | 0 | 1120 | 0 |
 | wargear-options | 0 | 0 | 1258 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 202 | 255 |
 | stratagems | 0 | 0 | 1086 | 227 |
-| abilities | 0 | 0 | 3873 | 683 |
+| abilities | 0 | 0 | 3871 | 688 |
 | phase-mappings | 0 | 0 | 1223 | 358 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -28,11 +28,11 @@ dump confirmation.
 | _core | 0 | 0 | 11 | 15 |
 | adepta-sororitas | 0 | 0 | 121 | 27 |
 | adeptus-astartes | 0 | 0 | 232 | 18 |
-| adeptus-custodes | 0 | 0 | 155 | 3 |
+| adeptus-custodes | 0 | 0 | 153 | 5 |
 | adeptus-mechanicus | 0 | 0 | 143 | 24 |
 | adeptus-titanicus | 0 | 0 | 7 | 3 |
 | aeldari | 0 | 0 | 247 | 53 |
-| agents-of-the-imperium | 0 | 0 | 99 | 39 |
+| agents-of-the-imperium | 0 | 0 | 99 | 41 |
 | astra-militarum | 0 | 0 | 208 | 43 |
 | black-templars | 0 | 0 | 61 | 2 |
 | blood-angels | 0 | 0 | 53 | 8 |
@@ -44,7 +44,7 @@ dump confirmation.
 | deathwatch | 0 | 0 | 33 | 3 |
 | drukhari | 0 | 0 | 132 | 32 |
 | emperors-children | 0 | 0 | 127 | 21 |
-| genestealer-cults | 0 | 0 | 121 | 26 |
+| genestealer-cults | 0 | 0 | 121 | 27 |
 | grey-knights | 0 | 0 | 120 | 14 |
 | imperial-fists | 0 | 0 | 9 | 2 |
 | imperial-knights | 0 | 0 | 92 | 26 |
@@ -81,9 +81,10 @@ dump confirmation.
 | adeptus-astartes | unpublished | 1 |
 | adeptus-astartes | verified | 232 |
 | adeptus-custodes | digest-differs | 1 |
+| adeptus-custodes | no-source | 2 |
 | adeptus-custodes | stub | 1 |
 | adeptus-custodes | unpublished | 1 |
-| adeptus-custodes | verified | 155 |
+| adeptus-custodes | verified | 153 |
 | adeptus-mechanicus | digest-differs | 7 |
 | adeptus-mechanicus | stub | 16 |
 | adeptus-mechanicus | unpublished | 1 |
@@ -95,7 +96,7 @@ dump confirmation.
 | aeldari | unpublished | 18 |
 | aeldari | verified | 247 |
 | agents-of-the-imperium | digest-differs | 11 |
-| agents-of-the-imperium | stub | 17 |
+| agents-of-the-imperium | stub | 19 |
 | agents-of-the-imperium | unpublished | 11 |
 | agents-of-the-imperium | verified | 99 |
 | astra-militarum | digest-differs | 11 |
@@ -139,7 +140,7 @@ dump confirmation.
 | emperors-children | unpublished | 16 |
 | emperors-children | verified | 127 |
 | genestealer-cults | digest-differs | 3 |
-| genestealer-cults | stub | 13 |
+| genestealer-cults | stub | 14 |
 | genestealer-cults | unpublished | 10 |
 | genestealer-cults | verified | 121 |
 | grey-knights | digest-differs | 1 |
@@ -195,8 +196,7 @@ dump confirmation.
 
 | Outcome | Records |
 |---|--:|
-| dangling-ref | 4 |
 | differs | 14 |
-| no-ref | 99 |
+| no-ref | 96 |
 | unmapped-keyword | 2 |
-| verified | 3562 |
+| verified | 3579 |

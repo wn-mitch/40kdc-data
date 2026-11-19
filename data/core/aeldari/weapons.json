@@ -5660,6 +5660,10 @@
       },
       {
         "namespace": "mfm",
+        "id": "25641c6a-002f-4ce0-b006-f137e696eee8"
+      },
+      {
+        "namespace": "mfm",
         "id": "6c72e642-c6d1-491a-829e-93c4af8b4a86"
       }
     ],
@@ -5727,6 +5731,10 @@
       {
         "namespace": "bsdata",
         "id": "090c-5411-6c6d-eaf9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "76ec2643-d58a-4024-a4dc-9bad1d77ddde"
       },
       {
         "namespace": "mfm",
@@ -10179,6 +10187,10 @@
       {
         "namespace": "mfm",
         "id": "5ddff611-4837-47a7-aec3-3e93b5e36fd1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "60593cbe-e3bd-4fb6-8d7f-bc27e7fbb63e"
       }
     ],
     "game_modes": [

@@ -12,6 +12,7 @@
  * {@link unitIdForDatasheet}, so no pass joins a reprint onto the generic unit by name.
  */
 import { nameToId } from "../converters/id-generator.js";
+import { datasheetTwins } from "./datasheet-twins.js";
 import { repoDirForFactionName, SHARED_ROSTERS } from "./faction-map.js";
 import type { DatasheetRow, MfmDump } from "./loader.js";
 
@@ -86,12 +87,13 @@ export function reprintForUnit(dump: MfmDump, unitId: string): ChapterReprint | 
 }
 
 /**
- * The repo unit id a dump datasheet maps to: a chapter reprint's own id, else the slug of its
- * name (null when the name does not slug).
+ * The repo unit id a dump datasheet maps to: a chapter reprint's own id, else a distinct same-named
+ * copy's (`datasheet-twins.ts`), else the slug of its name (null when the name does not slug).
  */
 export function unitIdForDatasheet(dump: MfmDump, ds: DatasheetRow | undefined): string | null {
   if (!ds) return null;
-  return (ds.id ? chapterReprints(dump).get(ds.id)?.unitId : undefined) ?? slugOf(dump.enName(ds));
+  const routed = ds.id ? (chapterReprints(dump).get(ds.id) ?? datasheetTwins(dump).get(ds.id)) : undefined;
+  return routed?.unitId ?? slugOf(dump.enName(ds));
 }
 
 /**

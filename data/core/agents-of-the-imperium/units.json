@@ -2580,7 +2580,10 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "auspex-array-agents-of-the-imperium",
+      {
+        "id": "auspex-array-agents-of-the-imperium",
+        "wargear": "auspex-array"
+      },
       "blackstar-cluster-launcher-agents-of-the-imperium",
       {
         "id": "deadly-demise",
@@ -2591,10 +2594,6 @@
       {
         "id": "damaged",
         "value": 5
-      },
-      {
-        "id": "auspex-array-wargear-agents-of-the-imperium",
-        "wargear": "auspex-array"
       }
     ],
     "transport_capacity": {
@@ -3077,20 +3076,28 @@
       "mechanical-bite",
       "shotpistol",
       "grenade-launcher",
-      "webber"
+      "webber-inquisitors-hand-vigilant-squad"
     ],
     "ability_ids": [
-      "assigned-agents-agents-of-the-imperium"
+      "assigned-agents-inquisitors-hand-agents-of-the-imperium",
+      "merciless-judgement-inquisitors-hand-vigilant-squad-agents-of-the-imperium",
+      "nuncio-aquila-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
     ],
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "65761b9a-08e1-4e58-a929-8cff479a9c5c"
+      }
+    ]
   },
   {
     "id": "preacher-teguen",

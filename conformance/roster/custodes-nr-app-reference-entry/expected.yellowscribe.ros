@@ -148,11 +148,6 @@ The unit ignores any modifiers to its Leadership characteristics.</characteristi
                 <characteristic name="Description">Against a unit that is not a MONSTER or VEHICLE, while the unit is within range of an objective marker or while the target is within range of an objective marker, the unit's weapons gain [SUSTAINED HITS 1].</characteristic>
               </characteristics>
             </profile>
-            <profile name="Vexilla" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">Add 1 to the unit's Objective Control characteristic.</characteristic>
-              </characteristics>
-            </profile>
             <profile name="Aegis of the Emperor" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">All friendly ADEPTUS CUSTODES units with the Aegis of the Emperor ability have the Feel No Pain 5+ ability against mortal wounds.</characteristic>
