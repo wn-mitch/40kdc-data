@@ -107,6 +107,7 @@ import {
 } from "./terrain/index.js";
 import type { TerrainTemplate, TerrainLayout } from "./terrain/resolve.js";
 import type Ajv from "ajv";
+import type { ErrorObject } from "ajv";
 
 // -----------------------------------------------------------------------------
 // Constants — spec version and implementation identity.
@@ -987,10 +988,17 @@ const VALIDATOR_TARGETS: Record<string, string> = {
   wargear: "https://40kdc.dev/schemas/core/wargear.schema.json",
   "wargear-option": "https://40kdc.dev/schemas/core/wargear-option.schema.json",
   stratagem: "https://40kdc.dev/schemas/core/stratagem.schema.json",
+  "secondary-card": "https://40kdc.dev/schemas/core/secondary-card.schema.json",
 };
 
-function ajvKeywordToCode(keyword: string): string {
-  switch (keyword) {
+/**
+ * The closed-enum code for one AJV error, or null for a container error whose
+ * failing branches report their own errors: `anyOf`, `if`, and a `oneOf` no
+ * branch matches. Any other keyword without a specific code is
+ * `SCHEMA_VIOLATION`, so no failing keyword validates silently.
+ */
+function ajvErrorCode(e: ErrorObject): string | null {
+  switch (e.keyword) {
     case "required":
     case "dependentRequired":
       return "REQUIRED_MISSING";
@@ -1010,13 +1018,23 @@ function ajvKeywordToCode(keyword: string): string {
     case "maxLength":
     case "minItems":
     case "maxItems":
+    case "minProperties":
+    case "maxProperties":
       return "RANGE_VIOLATION";
     case "additionalProperties":
       return "ADDITIONAL_PROPERTY";
     case "uniqueItems":
       return "UNIQUE_VIOLATION";
+    case "anyOf":
+    case "if":
+      return null;
+    case "oneOf":
+      // passingSchemas is null when no branch matched (the branches report).
+      return (e.params as { passingSchemas?: unknown }).passingSchemas == null
+        ? null
+        : "SCHEMA_VIOLATION";
     default:
-      return `UNMAPPED:${keyword}`;
+      return "SCHEMA_VIOLATION";
   }
 }
 
@@ -1046,8 +1064,12 @@ function handleValidate(state: RunnerState, args: unknown): RunnerResponse {
   const seen = new Set<string>();
   const out: { path: string; code: string }[] = [];
   for (const e of raw) {
-    const code = ajvKeywordToCode(e.keyword);
-    if (code.startsWith("UNMAPPED:")) continue;
+    // AJV keeps the per-item errors of a failing `contains`; the failure is
+    // the `contains` error itself, as jsonschema and the Rust/Go validators
+    // report it.
+    if (e.schemaPath.includes("/contains/")) continue;
+    const code = ajvErrorCode(e);
+    if (code === null) continue;
     // A missing property (required, or required by a present one) is reported at its own path.
     const path =
       e.keyword === "required" || e.keyword === "dependentRequired"

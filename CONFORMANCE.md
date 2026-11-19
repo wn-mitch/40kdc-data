@@ -193,9 +193,9 @@ These notes document what is *currently load-bearing* about each corpus area. Fu
 
 ### `validator/cases.json`
 
-- Each case names a `target` schema (one of `unit`, `weapon`, `faction`, `ability`, `wargear`, `wargear-option`, `stratagem`), an `input` value, and the **closed-enum error codes** the validator must emit on `(path, code)` pairs. AJV's free-form error messages are intentionally not part of the contract — implementations that produce different wording for the same constraint must still emit the same code.
+- Each case names a `target` schema (one of `unit`, `weapon`, `faction`, `ability`, `wargear`, `wargear-option`, `stratagem`, `secondary-card`), an `input` value, and the **closed-enum error codes** the validator must emit on `(path, code)` pairs. AJV's free-form error messages are intentionally not part of the contract — implementations that produce different wording for the same constraint must still emit the same code.
 - The closed enum is defined in `conformance/RUNNER_PROTOCOL.md` under the `validate` op. Adding a new code is a `SPEC_VERSION` bump.
-- Comparison is set-based and deduplicated by `(path, code)`. AJV emits both a leaf-level error and a containing schema error for nested oneOf/anyOf failures; deduplication keeps the contract focused on what's user-meaningful.
+- Comparison is set-based and deduplicated by `(path, code)`. A failing `anyOf`, a `oneOf` no branch matches, and an `if` report through their branches' own errors, never a code of their own; every other failing keyword has a code (`SCHEMA_VIOLATION` when no specific one fits), so no rejected input validates to an empty list.
 - Every port ships a validator, so the second-impl rule is **active** for this area. Rust has a hand-rolled validator behind the default `validate` feature (`validate_target`, `crates/wh40kdc/tests/validator_conformance.rs`); Python's `wh40kdc.validator` is built on the `jsonschema` library with the closed-enum mapping (`python/tests/conformance/test_validator.py`); Go has a hand-rolled draft-2020-12 validator (`go/conformance_test.go`). Each runner answers `validate`, so the differ exercises the area for every pairing.
 
 ### `scoring-translation/cases.json`

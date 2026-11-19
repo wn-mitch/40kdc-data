@@ -8,7 +8,8 @@
 //! any other. Maps validation failures
 //! onto the closed `(path, code)` enum pinned by `conformance/validator`
 //! (`REQUIRED_MISSING`, `TYPE_MISMATCH`, `ENUM_VIOLATION`, `PATTERN_MISMATCH`,
-//! `RANGE_VIOLATION`, `ADDITIONAL_PROPERTY`, `UNIQUE_VIOLATION`). Wording is the
+//! `RANGE_VIOLATION`, `ADDITIONAL_PROPERTY`, `UNIQUE_VIOLATION`,
+//! `SCHEMA_VIOLATION`). Wording is the
 //! implementation's prerogative — only the codes cross the wire.
 //!
 //! Rust mirror of `python/src/wh40kdc/validator.py` (the closed-enum mapping)
@@ -52,20 +53,26 @@ pub const VALIDATOR_TARGETS: &[&str] = &[
     "wargear",
     "wargear-option",
     "stratagem",
+    "secondary-card",
 ];
 
-fn keyword_to_code(keyword: &str) -> Option<&'static str> {
-    Some(match keyword {
+/// The closed-enum code for a failing keyword. Every keyword `check` pushes
+/// has a code: one without a specific code (`not`, a `oneOf` several branches
+/// match, `contains`, a `false` schema) is `SCHEMA_VIOLATION`.
+fn keyword_to_code(keyword: &str) -> &'static str {
+    match keyword {
         "required" | "dependentRequired" => "REQUIRED_MISSING",
         "type" => "TYPE_MISMATCH",
         "enum" | "const" => "ENUM_VIOLATION",
         "pattern" | "format" => "PATTERN_MISMATCH",
         "minimum" | "maximum" | "exclusiveMinimum" | "exclusiveMaximum" | "minLength"
-        | "maxLength" | "minItems" | "maxItems" => "RANGE_VIOLATION",
+        | "maxLength" | "minItems" | "maxItems" | "minProperties" | "maxProperties" => {
+            "RANGE_VIOLATION"
+        }
         "additionalProperties" => "ADDITIONAL_PROPERTY",
         "uniqueItems" => "UNIQUE_VIOLATION",
-        _ => return None,
-    })
+        _ => "SCHEMA_VIOLATION",
+    }
 }
 
 fn bundled() -> &'static Value {
@@ -96,9 +103,7 @@ pub fn validate_target(target: &str, value: &Value) -> Vec<Value> {
     let mut seen: HashSet<String> = HashSet::new();
     let mut out: Vec<Value> = Vec::new();
     for v in vs {
-        let Some(code) = keyword_to_code(v.keyword) else {
-            continue;
-        };
+        let code = keyword_to_code(v.keyword);
         let key = format!("{}|{}", v.path, code);
         if seen.insert(key) {
             out.push(serde_json::json!({ "path": v.path, "code": code }));
@@ -337,7 +342,7 @@ fn check_object(
                 check(root, sub, instance, path, out);
             }
         } else if valid_count > 1 {
-            // More than one matching branch fails oneOf; the keyword maps to no code.
+            // More than one matching branch fails oneOf.
             push(out, path, "oneOf");
         }
     }

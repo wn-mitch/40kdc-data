@@ -764,16 +764,13 @@ interface AttributionCase {
 }
 
 // Validator conformance — pins the closed-enum error codes the schema
-// validator must emit for known invalid inputs. AJV errors are mapped to a
-// small enum so the contract is language-portable; downstream validators
-// (Python pydantic / jsonschema-rs, an eventual Rust validator) must reproduce
-// the same codes for the same inputs. Free-form AJV messages are intentionally
-// not part of the contract.
-//
-// The closed-enum lives in `conformance/RUNNER_PROTOCOL.md`; growing it is a
-// SPEC_VERSION bump.
+// validator must emit for known invalid inputs, through the runner's
+// `validate` op (the path the cross-impl differ drives). Free-form AJV
+// messages are not part of the contract. The closed enum lives in
+// `conformance/RUNNER_PROTOCOL.md`; growing it is a SPEC_VERSION bump.
 
 import { createValidator } from "../src/schema-loader.js";
+import { createRunnerState as createValidatorRunnerState, dispatch as dispatchValidator } from "../src/runner.js";
 
 interface ValidatorCase {
   name: string;
@@ -790,52 +787,21 @@ const VALIDATOR_TARGET_SCHEMAS: Record<string, string> = {
   wargear: "https://40kdc.dev/schemas/core/wargear.schema.json",
   "wargear-option": "https://40kdc.dev/schemas/core/wargear-option.schema.json",
   stratagem: "https://40kdc.dev/schemas/core/stratagem.schema.json",
+  "secondary-card": "https://40kdc.dev/schemas/core/secondary-card.schema.json",
 };
 
-/** Map an AJV error to the closed-enum code defined in RUNNER_PROTOCOL.md. */
-function ajvKeywordToCode(keyword: string): string {
-  switch (keyword) {
-    case "required":
-    case "dependentRequired":
-      return "REQUIRED_MISSING";
-    case "type":
-      return "TYPE_MISMATCH";
-    case "enum":
-    case "const":
-      return "ENUM_VIOLATION";
-    case "pattern":
-    case "format":
-      return "PATTERN_MISMATCH";
-    case "minimum":
-    case "maximum":
-    case "exclusiveMinimum":
-    case "exclusiveMaximum":
-    case "minLength":
-    case "maxLength":
-    case "minItems":
-    case "maxItems":
-      return "RANGE_VIOLATION";
-    case "additionalProperties":
-      return "ADDITIONAL_PROPERTY";
-    case "uniqueItems":
-      return "UNIQUE_VIOLATION";
-    default:
-      return `UNMAPPED:${keyword}`;
-  }
-}
-
-/** Compute the canonical error path for a closed-enum code. */
-function errorPath(err: { instancePath: string; keyword: string; params?: unknown }): string {
-  if (err.keyword === "required" || err.keyword === "dependentRequired") {
-    const params = err.params as { missingProperty?: string };
-    return `${err.instancePath}/${params.missingProperty ?? ""}`;
-  }
-  return err.instancePath;
-}
+const byPathCode = (a: { path: string; code: string }, b: { path: string; code: string }) =>
+  `${a.path}|${a.code}`.localeCompare(`${b.path}|${b.code}`);
 
 describe("validator conformance corpus", () => {
   const ajv = createValidator();
   const cases = readJson(join(CONFORMANCE, "validator", "cases.json")) as ValidatorCase[];
+  const state = createValidatorRunnerState();
+  const specVersion = Number.parseInt(readFileSync(join(CONFORMANCE, "SPEC_VERSION"), "utf8").trim(), 10);
+  dispatchValidator(state, {
+    op: "init",
+    args: { spec_version: specVersion, locale: "C", tz: "UTC", seed: 0 },
+  });
 
   it("the validator corpus is non-empty", () => {
     expect(cases.length).toBeGreaterThan(0);
@@ -848,31 +814,12 @@ describe("validator conformance corpus", () => {
       const validate = ajv.getSchema(schemaId);
       if (!validate) throw new Error(`schema not loaded: ${schemaId}`);
       const ok = validate(c.input);
-      const errors = (validate.errors ?? []).map((e) => ({
-        path: errorPath(e),
-        code: ajvKeywordToCode(e.keyword),
-      }));
-      // Filter: AJV emits both the specific keyword error and a containing
-      // schema error in nested oneOf/anyOf cases. Keep only mapped codes and
-      // dedupe by (path, code) so the closed-enum signature is what's pinned.
-      const seen = new Set<string>();
-      const filtered = errors
-        .filter((e) => !e.code.startsWith("UNMAPPED:"))
-        .filter((e) => {
-          const key = `${e.path}|${e.code}`;
-          if (seen.has(key)) return false;
-          seen.add(key);
-          return true;
-        });
-      if (c.expected_errors.length === 0) {
-        expect(ok).toBe(true);
-        expect(filtered).toEqual([]);
-      } else {
-        expect(ok).toBe(false);
-        expect(filtered.sort((a, b) => `${a.path}|${a.code}`.localeCompare(`${b.path}|${b.code}`))).toEqual(
-          c.expected_errors.slice().sort((a, b) => `${a.path}|${a.code}`.localeCompare(`${b.path}|${b.code}`)),
-        );
-      }
+      const res = dispatchValidator(state, { op: "validate", args: { target: c.target, value: c.input } });
+      if (!res.ok) throw new Error(JSON.stringify(res));
+      const errors = res.value as { path: string; code: string }[];
+      // An input the schema rejects never validates to an empty code list.
+      expect(errors.length === 0).toBe(ok);
+      expect(errors.slice().sort(byPathCode)).toEqual(c.expected_errors.slice().sort(byPathCode));
     });
   }
 });

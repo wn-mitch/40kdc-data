@@ -7,7 +7,7 @@ works, and maps validation errors onto the closed ``(path, code)`` enum
 pinned by ``conformance/validator/cases.json``:
 
 REQUIRED_MISSING, TYPE_MISMATCH, ENUM_VIOLATION, PATTERN_MISMATCH,
-RANGE_VIOLATION, ADDITIONAL_PROPERTY, UNIQUE_VIOLATION.
+RANGE_VIOLATION, ADDITIONAL_PROPERTY, UNIQUE_VIOLATION, SCHEMA_VIOLATION.
 
 Wording differs by library (AJV vs jsonschema) — only the ``(path, code)``
 pairs are the contract, compared with set semantics. AJV flattens failing
@@ -38,6 +38,7 @@ VALIDATOR_TARGETS = {
     "wargear": "https://40kdc.dev/schemas/core/wargear.schema.json",
     "wargear-option": "https://40kdc.dev/schemas/core/wargear-option.schema.json",
     "stratagem": "https://40kdc.dev/schemas/core/stratagem.schema.json",
+    "secondary-card": "https://40kdc.dev/schemas/core/secondary-card.schema.json",
 }
 
 #: jsonschema validator name → closed-enum code (mirrors ajvKeywordToCode).
@@ -57,6 +58,8 @@ _KEYWORD_TO_CODE = {
     "maxLength": "RANGE_VIOLATION",
     "minItems": "RANGE_VIOLATION",
     "maxItems": "RANGE_VIOLATION",
+    "minProperties": "RANGE_VIOLATION",
+    "maxProperties": "RANGE_VIOLATION",
     "additionalProperties": "ADDITIONAL_PROPERTY",
     "uniqueItems": "UNIQUE_VIOLATION",
 }
@@ -125,15 +128,16 @@ class SchemaValidator:
     def errors_for(self, schema_id: str, value: Any) -> list[dict[str, str]]:
         """Closed-enum ``[{path, code}]`` errors for ``value`` against the
         schema, deduplicated on ``(path, code)`` (first occurrence wins).
-        Unmapped keywords are dropped — only the closed enum crosses the
-        wire."""
+        A container error whose failing branches report their own errors
+        (``anyOf``, a ``oneOf`` no branch matches) is dropped; any other
+        keyword without a specific code is ``SCHEMA_VIOLATION``."""
         if schema_id not in self._schemas:
             raise KeyError(f"schema not loaded: {schema_id}")
         validator = self._validator_for(schema_id)
         seen: set[str] = set()
         out: list[dict[str, str]] = []
         for error in _flatten_errors(validator.iter_errors(value)):
-            code = _KEYWORD_TO_CODE.get(error.validator)
+            code = _error_code(error)
             if code is None:
                 continue
             path = _error_path(error)
@@ -150,11 +154,19 @@ class SchemaValidator:
         return self.errors_for(VALIDATOR_TARGETS[target], value)
 
 
+def _error_code(error: Any) -> str | None:
+    """The closed-enum code for one error, or None for a container error.
+    A ``oneOf`` with branch errors in ``.context`` matched no branch; one
+    without them matched several."""
+    if error.validator == "anyOf" or (error.validator == "oneOf" and error.context):
+        return None
+    return _KEYWORD_TO_CODE.get(error.validator, "SCHEMA_VIOLATION")
+
+
 def _flatten_errors(errors: Any) -> Any:
     """Recursively unnest ``anyOf``/``oneOf`` branch errors (``.context``) so
     the error stream matches AJV's flattened reporting. The containing
-    anyOf/oneOf error itself is also yielded (it maps to no code and drops,
-    mirroring AJV's unmapped ``anyOf`` keyword error)."""
+    anyOf/oneOf error itself is also yielded; :func:`_error_code` drops it."""
     for error in errors:
         yield error
         if error.context:

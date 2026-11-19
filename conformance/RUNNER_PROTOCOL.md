@@ -220,11 +220,14 @@ Response value is a list of error objects: `[{"path":"/profiles/0/Sv","code":"RA
 - `TYPE_MISMATCH` — value's JSON type doesn't satisfy the schema's `type` keyword.
 - `ENUM_VIOLATION` — value isn't in the schema's `enum`.
 - `PATTERN_MISMATCH` — string doesn't match the schema's `pattern` or `format` keyword.
-- `RANGE_VIOLATION` — number outside the schema's `minimum` / `maximum` / `exclusiveMinimum` / `exclusiveMaximum`, or string/array outside `minLength` / `maxLength` / `minItems` / `maxItems`.
+- `RANGE_VIOLATION` — number outside the schema's `minimum` / `maximum` / `exclusiveMinimum` / `exclusiveMaximum`, string/array outside `minLength` / `maxLength` / `minItems` / `maxItems`, or object outside `minProperties` / `maxProperties`.
 - `ADDITIONAL_PROPERTY` — object has a property not allowed by `additionalProperties: false`. `path` is the object's path, not the extra property's.
 - `UNIQUE_VIOLATION` — array with `uniqueItems: true` has a duplicate.
+- `SCHEMA_VIOLATION` — any other failing keyword: the value matches a `not` schema, matches more than one `oneOf` branch, or is an array with no item matching `contains` (or outside `minContains` / `maxContains`), or meets a `false` schema. `path` is the value's path.
 
-Adding a new code is a semantic change to the spec and bumps `SPEC_VERSION`. `target` is one of `unit`, `weapon`, `faction`, `ability`, `wargear`, `wargear-option`, `stratagem`; more schemas can be added as needed.
+A failing `anyOf`, a `oneOf` no branch matches, and the taken `then`/`else` branch of an `if` have no code of their own: each failing branch reports its own errors at their own paths. An item's failure inside a `contains` subschema is not reported; the `contains` failure is. An input the schema rejects always yields at least one error.
+
+Adding a new code is a semantic change to the spec and bumps `SPEC_VERSION`. `target` is one of `unit`, `weapon`, `faction`, `ability`, `wargear`, `wargear-option`, `stratagem`, `secondary-card`; more schemas can be added as needed.
 
 ### `crunch`
 

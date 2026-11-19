@@ -24,8 +24,12 @@ var validatorTargets = map[string]string{
 	"wargear":        "https://40kdc.dev/schemas/core/wargear.schema.json",
 	"wargear-option": "https://40kdc.dev/schemas/core/wargear-option.schema.json",
 	"stratagem":      "https://40kdc.dev/schemas/core/stratagem.schema.json",
+	"secondary-card": "https://40kdc.dev/schemas/core/secondary-card.schema.json",
 }
 
+// keywordToCode gives the failing keywords with a specific closed-enum code.
+// Every other keyword check records (not, a oneOf several branches match,
+// contains, a false schema) is SCHEMA_VIOLATION.
 var keywordToCode = map[string]string{
 	"required":             "REQUIRED_MISSING",
 	"dependentRequired":    "REQUIRED_MISSING",
@@ -42,6 +46,8 @@ var keywordToCode = map[string]string{
 	"maxLength":            "RANGE_VIOLATION",
 	"minItems":             "RANGE_VIOLATION",
 	"maxItems":             "RANGE_VIOLATION",
+	"minProperties":        "RANGE_VIOLATION",
+	"maxProperties":        "RANGE_VIOLATION",
 	"additionalProperties": "ADDITIONAL_PROPERTY",
 	"uniqueItems":          "UNIQUE_VIOLATION",
 }
@@ -91,7 +97,7 @@ func (v *SchemaValidator) validateTarget(target string, value any) []map[string]
 	for _, viol := range vs {
 		code, ok := keywordToCode[viol.keyword]
 		if !ok {
-			continue
+			code = "SCHEMA_VIOLATION"
 		}
 		key := viol.path + "|" + code
 		if seen[key] {
@@ -377,7 +383,7 @@ func (v *SchemaValidator) checkSchema(schema map[string]any, instance any, path,
 			}
 		} else if validCount > 1 {
 			// More than one branch matching fails oneOf (AJV and jsonschema report only the
-			// oneOf error, which maps to no code but makes the instance invalid).
+			// oneOf error).
 			*out = append(*out, violation{path, "oneOf"})
 		}
 	}
