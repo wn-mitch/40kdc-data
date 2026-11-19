@@ -460,7 +460,9 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     if m.get("distance") is not None:
         d = dice_case(m["distance"])
         up_to = f' of up to {d}"' if verb.startswith("make ") else f' up to {d}"'
-    s = f"{subj} can {verb}{up_to}{_mode_clause(m)}"
+    # mandatory: the target must make the move ("must make an ingress move").
+    modal = "must" if m.get("mandatory") is True else "can"
+    s = f"{subj} {modal} {verb}{up_to}{_mode_clause(m)}"
     # An embark's reach replaces the core 3" to the Transport.
     if m.get("reach") is not None:
         s += (

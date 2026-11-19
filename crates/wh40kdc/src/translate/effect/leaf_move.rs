@@ -220,7 +220,13 @@ pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
         Some(d) => format!(" up to {}\"", dice_case(Some(d))),
         None => String::new(),
     };
-    let mut s = format!("{subj} can {verb}{up_to}{}", mode_clause(m));
+    // mandatory: the target must make the move ("must make an ingress move").
+    let modal = if is_true(m, "mandatory") {
+        "must"
+    } else {
+        "can"
+    };
+    let mut s = format!("{subj} {modal} {verb}{up_to}{}", mode_clause(m));
     // An embark's reach replaces the core 3" to the Transport.
     if let Some(reach) = nn(m, "reach") {
         s.push_str(&format!(

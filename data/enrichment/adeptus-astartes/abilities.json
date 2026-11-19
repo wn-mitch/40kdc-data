@@ -1941,7 +1941,8 @@
                 },
                 "modifier": {
                   "move_type": "disembark",
-                  "mode": "assault"
+                  "mode": "assault",
+                  "mandatory": true
                 }
               },
               {

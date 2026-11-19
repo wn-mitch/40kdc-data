@@ -11889,7 +11889,8 @@
               "owner": "friendly"
             },
             "modifier": {
-              "move_type": "ingress"
+              "move_type": "ingress",
+              "mandatory": true
             }
           }
         }

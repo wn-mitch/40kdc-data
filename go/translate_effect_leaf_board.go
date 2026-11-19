@@ -266,7 +266,12 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 			upTo = " up to " + diceCase(m["distance"]) + "\""
 		}
 	}
-	s := subj + " can " + verb + upTo + moveModeClause(m)
+	// mandatory: the target must make the move ("must make an ingress move").
+	modal := "can"
+	if m["mandatory"] == true {
+		modal = "must"
+	}
+	s := subj + " " + modal + " " + verb + upTo + moveModeClause(m)
 	// An embark's reach replaces the core 3" to the Transport.
 	if m["reach"] != nil {
 		s += " within a Transport it is able to embark within, if every model is within " + rangePhrase(m["reach"]) + " of that Transport instead of 3\""

@@ -4301,5 +4301,396 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "caseId": "move-mandatory-ingress",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "ingress",
+        "mandatory": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "move-mandatory-disembark-mode",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "disembark",
+        "mode": "assault",
+        "mandatory": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "move-mandatory-normal-distance",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": "D6",
+        "mandatory": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "matches-subject/unit-subject-engaged-with",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "engaged_with": "this-unit"
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "matches-subject/unit-subject-engaged-with-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "engaged_with": "this-unit"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "matches-subject/unit-subject-designated-by",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "attacker",
+          "filter": {
+            "designated": "afflicted",
+            "designated_by": "this-unit"
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "matches-subject/unit-subject-not-engaged-with",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "selected-unit",
+          "filter": {
+            "not_engaged_with": {
+              "owner": "enemy"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "matches-subject/unit-subject-not-engaged-with-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "not_engaged_with": {
+                  "owner": "enemy"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "matches-subject/unit-subject-keyword-engaged-with",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "all_of": [
+              "INFANTRY"
+            ],
+            "engaged_with": "this-unit"
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "matches-subject/unit-subject-owner-engaged-with",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "owner": "enemy",
+            "engaged_with": "this-unit"
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "matches-subject/unit-subject-any-of-engaged-with",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ],
+            "engaged_with": "this-unit"
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "matches-subject/model-subject-designated-by",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "designated": "afflicted",
+            "designated_by": "this-unit"
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy",
+        "level": "model"
+      },
+      "filter": {
+        "kind": "attack"
+      }
+    }
+  },
+  {
+    "caseId": "matches-subject/this-model-engaged-with",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "engaged_with": {
+              "owner": "enemy",
+              "designated": "warlord"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "matches-subject/unit-subject-two-clauses",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "engaged_with": "this-unit",
+            "state": "battle-shocked"
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "matches-subject/unit-subject-alternative-filters",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "any_of_filters": [
+              {
+                "all_of": [
+                  "PSYKER"
+                ]
+              },
+              {
+                "state": "battle-shocked"
+              }
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

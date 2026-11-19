@@ -26,7 +26,8 @@ export type VersionMapping = {
   map: (parameters: Record<string, unknown>) => Record<string, unknown> | null;
 };
 
-export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [];
+export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
+];
 
 export type FamilyVersionReport = {
   migrated_fingerprints: number;

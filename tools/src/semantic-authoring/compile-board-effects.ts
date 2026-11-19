@@ -25,6 +25,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.mode !== undefined) modifier.mode = closed(leaf, "mode");
       // An embark's distance to its Transport in place of 3" (bindEmbarkAnchors, compile-transport-embark.ts).
       if (leaf.parameters.reach !== undefined) modifier.reach = closed(leaf, "reach");
+      // "Must make … move": the target is obliged to make it.
+      if (leaf.parameters.mandatory === true) modifier.mandatory = true;
       return { type: "move", target: unitOf(leaf, "subject"), modifier };
     }
     case "move-distance": {

@@ -48,7 +48,8 @@ function makeMoveDistance(value: unknown): unknown {
 }
 
 function makeMove(input: Params): Params {
-  keySet(input, ["subject", "move_type"], ["distance", "ends_within_inches", "counts_as_move", "mode"], "make-move");
+  keySet(input, ["subject", "move_type"], ["distance", "ends_within_inches", "counts_as_move", "mode", "mandatory"], "make-move");
+  if (input.mandatory !== undefined && typeof input.mandatory !== "boolean") throw new TypeError("make-move.mandatory is true, false or absent.");
   const result: Params = {
     subject: subjectOrSource(input.subject, MOVE_SUBJECTS, [ANTECEDENT, EVENT_SUBJECT, FILTERED_UNITS], "make-move.subject"),
     move_type: enumOrSource(input.move_type, MOVE_TYPES, "make-move.move_type"),
@@ -61,6 +62,8 @@ function makeMove(input: Params): Params {
     if (!(DISEMBARK_MODES as readonly unknown[]).includes(input.mode)) throw new TypeError(`make-move.mode is one of ${DISEMBARK_MODES.join(", ")}, not ${JSON.stringify(input.mode)}.`);
     result.mode = input.mode;
   }
+  // "Must make … move" obliges the move; an optional move (false) is the absent form.
+  if (input.mandatory === true) result.mandatory = true;
   return result;
 }
 
@@ -189,10 +192,10 @@ export const MOVES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "make-move",
-    version: 7,
+    version: 8,
     role: "EFFECT",
     label: "Make a move",
-    description: "The target makes a named kind of move: normal, Advance, Fall Back, charge, Pile In, Consolidation, Surge, Scout, ingress, disembark, embark, or Pulse Jet. The target can be this unit, this model, the selected unit, the unit an earlier leaf introduced (antecedent), the triggering unit (event-subject), or the units a unit-filter names right before the move (filtered-units). distance (inches, D3, D6, 2D6, or a dice amount plus a number such as D3+3) and ends_within_inches are optional. counts_as_move is optional: for rules that check what the unit did this turn, the move counts as a different named kind of move (or as Remaining Stationary). mode is the disembark mode the move uses (rapid, tactical, combat, emergency, assault, shock) and needs move_type disembark.",
+    description: "The target makes a named kind of move: normal, Advance, Fall Back, charge, Pile In, Consolidation, Surge, Scout, ingress, disembark, embark, or Pulse Jet. The target can be this unit, this model, the selected unit, the unit an earlier leaf introduced (antecedent), the triggering unit (event-subject), or the units a unit-filter names right before the move (filtered-units). distance (inches, D3, D6, 2D6, or a dice amount plus a number such as D3+3) and ends_within_inches are optional. counts_as_move is optional: for rules that check what the unit did this turn, the move counts as a different named kind of move (or as Remaining Stationary). mode is the disembark mode the move uses (rapid, tactical, combat, emergency, assault, shock) and needs move_type disembark. mandatory is true when the target must make the move (\"must make an ingress move\"); false or absent when it can.",
     starter: {"subject":"this-unit","move_type":""},
     parameterSchema: {
       "type": "object",
@@ -330,6 +333,9 @@ export const MOVES_FAMILIES: readonly FlatFamily[] = [
             ]
           },
           "x-optional": true
+        },
+        "mandatory": {
+          "type": "boolean"
         }
       },
       "additionalProperties": false
