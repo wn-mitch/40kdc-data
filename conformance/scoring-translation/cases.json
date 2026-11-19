@@ -40,8 +40,8 @@
     "cardId": "beacon",
     "expected": {
       "awards": [
-        "End of the opponent's turn: 3 VP per beacon unit on battlefield not in own deployment zone [highest tier]",
-        "End of the opponent's turn: 5 VP per beacon unit on battlefield not in own territory [highest tier]"
+        "End of the opponent's turn: 3 VP when a friendly unit that is tagged beacon is not within your deployment zone [highest tier]",
+        "End of the opponent's turn: 5 VP when a friendly unit that is tagged beacon is not within your territory [highest tier]"
       ]
     }
   },

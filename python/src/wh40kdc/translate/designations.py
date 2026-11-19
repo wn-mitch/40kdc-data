@@ -25,6 +25,7 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "auspex-scanned",
         "bastion-shield-yp-spent",
         "battle-shock-auto-succeed",
+        "beacon",
         "bio-stimulus-target",
         "blessed",
         "blight-bombardment-target",

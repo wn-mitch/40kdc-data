@@ -1240,14 +1240,18 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "opponent-turn" },
-        "vp_per": 3,
-        "per": "beacon-unit-on-battlefield-not-in-own-deployment-zone",
+        "when": { "operator": "not", "operands": [
+          { "type": "in-region", "parameters": { "subject": { "owner": "friendly", "designated": "beacon" }, "region": { "territory": "your-deployment-zone" } } }
+        ] },
+        "vp": 3,
         "exclusive_group": "beacon-position"
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "opponent-turn" },
-        "vp_per": 5,
-        "per": "beacon-unit-on-battlefield-not-in-own-territory",
+        "when": { "operator": "not", "operands": [
+          { "type": "in-region", "parameters": { "subject": { "owner": "friendly", "designated": "beacon" }, "region": { "territory": "your-territory" } } }
+        ] },
+        "vp": 5,
         "exclusive_group": "beacon-position"
       }
     ],

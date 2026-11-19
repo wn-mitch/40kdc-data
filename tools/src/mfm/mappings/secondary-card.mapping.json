@@ -1009,16 +1009,30 @@
     {
       "source": "data.primary_mission_objective_scorable_period.scorablePeriod",
       "candidate_pointer": "/awards/*/trigger",
-      "reason": "Six period values state when each primary objective scores; missions.ts should compare authored award triggers to them.",
-      "classification": "needs-consumer",
+      "reason": "The battle rounds (or end of battle) a primary objective scores in; mission-triggers.ts checks each authored award trigger's battle_round window and end-of-battle timing against them.",
+      "classification": "consumed-elsewhere",
       "spread": "455 rows, 455 values (0 null/absent): string, 6 distinct"
     },
     {
       "source": "data.secondary_mission_objective_scoring.inputType",
       "candidate_pointer": "/awards/*",
-      "reason": "Two input types state how a secondary objective is scored; missions.ts should compare authored awards to them.",
-      "classification": "needs-consumer",
+      "reason": "checkbox (a yes/no criterion) or stepper (a count) per secondary scoring row; mission-triggers.ts checks that checkbox rows are flat vp awards and stepper rows are vp_per awards.",
+      "classification": "consumed-elsewhere",
       "spread": "31 rows, 31 values (0 null/absent): string, 2 distinct"
+    },
+    {
+      "source": "data.primary_mission_objective_scoring.inputType",
+      "candidate_pointer": "/awards/*",
+      "reason": "checkbox or stepper per primary scoring row; mission-triggers.ts checks the authored award form (vp or vp_per) against it, with an accepted-exception list for rows whose label disagrees with the criterion.",
+      "classification": "consumed-elsewhere",
+      "spread": "170 rows, 170 values (0 null/absent): string, 2 distinct"
+    },
+    {
+      "source": "data.secondary_mission.isScorableFirstTurn",
+      "candidate_pointer": "/awards/*/trigger/battle_round/min",
+      "reason": "Whether a secondary mission can score in the first battle round; mission-triggers.ts checks that its awards' battle_round windows include round 1 exactly when it is true.",
+      "classification": "consumed-elsewhere",
+      "spread": "18 rows, 18 values (0 null/absent): boolean false×1, true×17"
     },
     {
       "source": "data.secondary_mission_objective_scoring.localisations.*.scoringCriteria",

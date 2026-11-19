@@ -438,7 +438,7 @@ export const RESOURCES_AND_DESIGNATIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "apply-mark",
-    version: 8,
+    version: 9,
     role: "EFFECT",
     label: "Tag a unit",
     description: "Applies (or clears) a designation tag on the subject: this unit, this model, the selected unit, antecedent (the unit an earlier leaf of the record introduced, \"that enemy unit\", \"it\", bound when the record compiles), selected-objective (the objective marker a select leaf of this record bound), or visible-terrain (one terrain feature visible to the rule's unit, which the rule picks: \"select one visible terrain feature. That terrain feature is identified\"). tag is any registered designation id (tools/src/translate/designations.ts) or a source-qualified value. by names the unit that applied the designation: this-unit, this-model, selected-unit, event-subject, or recipient (the unit of the current for-each-unit pass: \"for each Observer unit …, select one enemy unit … to be marked as their Spotted unit\"); a terrain subject takes no by. The designation ends at the record's printed duration (compile-designation-expiry.ts), so a by with no printed duration is refused at compile time.",

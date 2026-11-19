@@ -19,6 +19,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "auspex-scanned",
   "bastion-shield-yp-spent",
   "battle-shock-auto-succeed",
+  "beacon",
   "bio-stimulus-target",
   "blessed",
   "blight-bombardment-target",
