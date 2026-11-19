@@ -2274,12 +2274,6 @@
         "per_models": 0
       }
     ],
-    "conditional_keywords": [
-      {
-        "keyword": "Battleline",
-        "required_detachment_id": "the-lost-brethren"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -6069,10 +6063,6 @@
       {
         "keyword": "Ravenwing",
         "required_faction_keyword": "Dark Angels"
-      },
-      {
-        "keyword": "Speeder",
-        "required_detachment_id": "fulguris-task-force"
       }
     ],
     "external_refs": [
@@ -6946,10 +6936,6 @@
       {
         "keyword": "Ravenwing",
         "required_faction_keyword": "Dark Angels"
-      },
-      {
-        "keyword": "Speeder",
-        "required_detachment_id": "fulguris-task-force"
       }
     ],
     "external_refs": [
@@ -7657,10 +7643,6 @@
       {
         "keyword": "Ravenwing",
         "required_faction_keyword": "Dark Angels"
-      },
-      {
-        "keyword": "Speeder",
-        "required_detachment_id": "fulguris-task-force"
       }
     ],
     "external_refs": [
@@ -9031,10 +9013,6 @@
       }
     ],
     "conditional_keywords": [
-      {
-        "keyword": "Battleline",
-        "required_detachment_id": "company-of-hunters"
-      },
       {
         "keyword": "Battleline",
         "required_detachment_id": "darkflight-pursuit"
@@ -13931,10 +13909,6 @@
       {
         "keyword": "Ravenwing",
         "required_faction_keyword": "Dark Angels"
-      },
-      {
-        "keyword": "Speeder",
-        "required_detachment_id": "fulguris-task-force"
       }
     ],
     "ability_ids": [

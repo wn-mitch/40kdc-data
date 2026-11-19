@@ -2,7 +2,8 @@
  * Keyword-choice groups (`core/keyword-choice-groups.json`), run as part of `checkReferentialIntegrity`
  * (integrity.ts). Every unit's `conditional_keywords` entry with a `choice_group` names a group in the
  * file, a group names a detachment some faction prints (or none), and a group's options on one unit
- * are distinct keywords, since the unit takes one of them.
+ * are distinct keywords, since the unit takes one of them. A grant gated on a detachment
+ * (`required_detachment_id`) names a detachment some faction prints.
  */
 
 import { existsSync, readFileSync } from "node:fs";
@@ -11,7 +12,7 @@ import { glob } from "glob";
 import type { ValidationResult } from "./validate.js";
 
 type Group = { id?: unknown; detachment_id?: unknown };
-type Grant = { keyword?: unknown; choice_group?: unknown };
+type Grant = { keyword?: unknown; choice_group?: unknown; required_detachment_id?: unknown };
 type Unit = { id?: unknown; conditional_keywords?: unknown };
 
 function readArray<T>(file: string): T[] {
@@ -43,6 +44,9 @@ export async function checkChoiceGroupRefs(root: string, result: ValidationResul
       const errors: { path: string; message: string }[] = [];
       const options = new Map<string, Set<string>>();
       for (const grant of grants) {
+        if (typeof grant.required_detachment_id === "string" && !detachmentIds.has(grant.required_detachment_id)) {
+          errors.push({ path: "/conditional_keywords", message: `${String(unit.id)}: conditional keyword ${String(grant.keyword)} requires detachment ${grant.required_detachment_id}, which no faction prints` });
+        }
         if (typeof grant.choice_group !== "string") continue;
         if (!groupIds.has(grant.choice_group)) errors.push({ path: "/conditional_keywords", message: `${String(unit.id)}: conditional keyword ${String(grant.keyword)} names keyword-choice group ${grant.choice_group}, which keyword-choice-groups.json does not define` });
         const seen = options.get(grant.choice_group) ?? options.set(grant.choice_group, new Set()).get(grant.choice_group)!;

@@ -1294,12 +1294,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "conditional_keywords": [
-      {
-        "keyword": "Wagon",
-        "required_detachment_id": "rollin-deff"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -3749,12 +3743,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "conditional_keywords": [
-      {
-        "keyword": "Wagon",
-        "required_detachment_id": "rollin-deff"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -4248,12 +4236,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "conditional_keywords": [
-      {
-        "keyword": "Wagon",
-        "required_detachment_id": "rollin-deff"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",

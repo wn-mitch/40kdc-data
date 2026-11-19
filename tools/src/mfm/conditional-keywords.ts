@@ -112,8 +112,14 @@ export function runConditionalKeywords(dump: MfmDump, onlyDir?: string): Conditi
   const choices = choiceGroups(dump);
   const usedGroups = new Set<string>();
   const detachments = dump.byId("detachment");
-  // Detachments the dump prints. A repo grant tied to any other detachment (a faction-pack
-  // detachment the dump does not carry yet) is outside the dump's say and is kept.
+  // Detachments the dump prints. A repo grant tied to any other detachment the repo defines (a
+  // faction-pack detachment the dump does not carry yet) is outside the dump's say and is kept; a
+  // grant tied to a detachment neither defines (one GW retired) is dropped.
+  const repoDetachmentIds = new Set(
+    fs.readdirSync(CORE_DIR, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && fs.existsSync(path.join(CORE_DIR, entry.name, "detachments.json")))
+      .flatMap((entry) => readJsonArray<{ id: string }>(path.join(CORE_DIR, entry.name, "detachments.json")).map((d) => d.id)),
+  );
   const dumpDetachmentIds = new Set<string>();
   for (const detachment of dump.table("detachment")) {
     const name = dump.enName(detachment);
@@ -198,7 +204,8 @@ export function runConditionalKeywords(dump: MfmDump, onlyDir?: string): Conditi
     for (const unitId of matched) {
       const unit = byId.get(unitId)!;
       const kept = (unit.conditional_keywords ?? []).filter(
-        (entry) => entry.required_detachment_id && !dumpDetachmentIds.has(entry.required_detachment_id),
+        (entry) => entry.required_detachment_id && !dumpDetachmentIds.has(entry.required_detachment_id)
+          && repoDetachmentIds.has(entry.required_detachment_id),
       );
       const next = sortEntries([...(grantsByUnit.get(unitId) ?? []), ...kept]);
       if (same(unit.conditional_keywords, next)) continue;

@@ -6,7 +6,7 @@ An allegiance-ability condition is one option of a keyword-choice group (`keywor
 | Dir | Matched | Changed |
 |---|--:|--:|
 | adepta-sororitas | 37 | 0 |
-| adeptus-astartes | 177 | 0 |
+| adeptus-astartes | 177 | 6 |
 | adeptus-custodes | 39 | 0 |
 | adeptus-mechanicus | 38 | 0 |
 | adeptus-titanicus | 4 | 0 |
@@ -24,7 +24,7 @@ An allegiance-ability condition is one option of a keyword-choice group (`keywor
 | imperial-knights | 23 | 0 |
 | leagues-of-votann | 26 | 0 |
 | necrons | 57 | 0 |
-| orks | 60 | 0 |
+| orks | 60 | 3 |
 | tau-empire | 47 | 0 |
 | thousand-sons | 38 | 0 |
 | titanicus-traitoris | 4 | 0 |
