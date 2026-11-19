@@ -14,6 +14,7 @@
 
 mod board;
 mod equipment;
+mod filter_predicate;
 mod history;
 mod js;
 mod leadin;

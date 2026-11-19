@@ -18,6 +18,7 @@ import re
 from typing import Any
 
 from wh40kdc.translate.condition_equipment import named_equipment_phrase
+from wh40kdc.translate.condition_filter_predicate import filter_predicate
 from wh40kdc.translate.condition_history import _describe_happened, _destroyed_count
 from wh40kdc.translate.condition_refs import (
     EVENT_OBJECT_MODEL,
@@ -190,10 +191,9 @@ def _describe_matches(p: P, negated: bool) -> str:
             )
     # A trigger's model reads as a model ("the triggering model is within Engagement Range of ...").
     if p.get("subject") in (EVENT_SUBJECT_MODEL, EVENT_OBJECT_MODEL):
-        phrase = unit_filter_phrase({**f, "level": "model"})
-        phrase = phrase.removeprefix("a model ")
+        phrase = filter_predicate({**f, "level": "model"}, "model", negated)
         return f"{who} is {no}{phrase}"
-    return f"{who} is {no}{unit_filter_phrase(f)}"
+    return f"{who} is {no}{filter_predicate(f, 'unit', negated)}"
 
 
 _ELIGIBLE_TO: dict[str, str] = {

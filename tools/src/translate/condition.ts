@@ -382,8 +382,27 @@ function describeMatches(p: P, negated: boolean): string {
     }
   }
   // A trigger's model reads as a model ("the triggering model is within Engagement Range of …").
-  if (p.subject === EVENT_SUBJECT_MODEL || p.subject === EVENT_OBJECT_MODEL) return `${who} is ${no}${unitFilterPhrase({ ...f, level: "model" }).replace(/^a model /, "")}`;
-  return `${who} is ${no}${unitFilterPhrase(f)}`;
+  if (p.subject === EVENT_SUBJECT_MODEL || p.subject === EVENT_OBJECT_MODEL) return `${who} is ${no}${filterPredicate({ ...f, level: "model" }, "model", negated)}`;
+  return `${who} is ${no}${filterPredicate(f, "unit", negated)}`;
+}
+
+/**
+ * A one-clause filter as the predicate of a subject that is already a unit or model: "the
+ * triggering unit is within Engagement Range of …" and "the unit is enfeebled by this model", not
+ * "is a unit within …". A noun the filter qualifies ("a friendly INFANTRY unit", "a unit with the X
+ * keyword") stays, as does one with several clauses (each keeps qualifying the noun), one whose
+ * clause is a noun phrase of its own ("a unit that is a PSYKER unit or …"), or one whose clause is
+ * itself negative when the predicate is negated.
+ */
+function filterPredicate(f: P, noun: "unit" | "model", negated: boolean): string {
+  const phrase = unitFilterPhrase(f);
+  const clauses = Object.keys(f).filter((key) => f[key] != null && key !== "level" && key !== "designated_by" && key !== "has_ability_models");
+  const bare = `a ${noun} `;
+  if (clauses.length !== 1 || !phrase.startsWith(bare)) return phrase;
+  const rest = phrase.slice(bare.length);
+  const clause = rest.startsWith("that is ") ? rest.slice("that is ".length) : /^(?:wholly within|within|not within|embarked within|in) /.test(rest) ? rest : null;
+  if (clause == null || /^an? /.test(clause) || (negated && clause.startsWith("not "))) return phrase;
+  return clause;
 }
 
 /**

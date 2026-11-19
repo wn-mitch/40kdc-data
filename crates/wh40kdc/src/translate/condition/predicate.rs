@@ -5,6 +5,7 @@ use serde_json::Value;
 
 use super::board::board_predicate;
 use super::equipment::named_equipment_phrase;
+use super::filter_predicate::filter_predicate;
 use super::history::describe_happened;
 use super::js::*;
 use super::refs::*;
@@ -557,11 +558,11 @@ fn describe_matches(p: &P, negated: bool) -> String {
     ) {
         let mut model = f.clone();
         model.insert("level".into(), Value::String("model".into()));
-        let phrase = unit_filter_phrase(&model);
-        let phrase = phrase.strip_prefix("a model ").unwrap_or(&phrase);
+        let phrase = filter_predicate(&model, "model", negated);
         return format!("{who} is {not}{phrase}");
     }
-    format!("{who} is {not}{}", unit_filter_phrase(f))
+    let phrase = filter_predicate(f, "unit", negated);
+    format!("{who} is {not}{phrase}")
 }
 
 /// "during the Reinforcements step of the Movement phase": a phase-is narrowed to one of its

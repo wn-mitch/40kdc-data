@@ -354,7 +354,7 @@
             </profile>
             <profile name="Bane of Cowards" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of a friendly unit with the Bane of Cowards ability:
+                <characteristic name="Description">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of a friendly unit with the Bane of Cowards ability:
   -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
   -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
               </characteristics>

@@ -226,9 +226,9 @@ func describeMatches(p map[string]any, negated bool) string {
 			model[k] = v
 		}
 		model["level"] = "model"
-		return who + " is " + no + strings.TrimPrefix(unitFilterPhrase(model), "a model ")
+		return who + " is " + no + filterPredicate(model, "model", negated)
 	}
-	return who + " is " + no + unitFilterPhrase(f)
+	return who + " is " + no + filterPredicate(f, "unit", negated)
 }
 
 // controlCountPhrase renders a `{min, max}` count bound ("3+", "exactly 2",

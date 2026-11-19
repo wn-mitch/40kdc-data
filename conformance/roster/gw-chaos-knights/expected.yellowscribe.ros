@@ -1594,7 +1594,7 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Mischief Makers" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When an enemy unit is selected to fight (the triggering unit must not have TITANIC), while the triggering unit is a unit within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, the triggering unit gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">When an enemy unit is selected to fight (the triggering unit must not have TITANIC), while the triggering unit is within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, the triggering unit gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
@@ -1665,7 +1665,7 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Mischief Makers" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When an enemy unit is selected to fight (the triggering unit must not have TITANIC), while the triggering unit is a unit within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, the triggering unit gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">When an enemy unit is selected to fight (the triggering unit must not have TITANIC), while the triggering unit is within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, the triggering unit gets -1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
