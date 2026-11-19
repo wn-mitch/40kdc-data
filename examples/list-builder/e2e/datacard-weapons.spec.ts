@@ -2,8 +2,8 @@ import { test, expect, type Page } from '@playwright/test';
 
 /**
  * Datacard weapon rendering: a weapon whose profiles share a name (e.g. the
- * Adeptus Custodes venatari-lance, whose ranged and melee profiles are both
- * named "Venatari lance") once crashed the live datacard with Svelte's
+ * Adeptus Custodes verutum-lance, whose ranged and melee profiles are both
+ * named "Verutum Lance") once crashed the live datacard with Svelte's
  * each_key_duplicate — the weapon-row keyed each keyed on the display name.
  * Adding such a unit must render its datacard without any runtime error.
  */
@@ -25,12 +25,12 @@ test('adding a unit with same-named weapon profiles renders without each_key_dup
 	await page.getByPlaceholder('My list').fill('Custodes datacard');
 	await factionSelect(page).selectOption('adeptus-custodes');
 
-	await page.getByPlaceholder('Search units or keywords…').fill('Venatari');
-	await page.locator('li button', { hasText: 'Venatari' }).first().click();
+	await page.getByPlaceholder('Search units or keywords…').fill('Verutum');
+	await page.locator('li button', { hasText: 'Venatari with Verutum Lances' }).first().click();
 
 	// The unit lands in the roster and its live datacard renders in the detail
 	// panel — this is where the crash used to fire.
-	await expect(page.getByText('Venatari Custodians').first()).toBeVisible();
+	await expect(page.getByText('Venatari with Verutum Lances').first()).toBeVisible();
 	await expect(page.getByText('Ranged', { exact: false }).first()).toBeVisible();
 
 	expect(
