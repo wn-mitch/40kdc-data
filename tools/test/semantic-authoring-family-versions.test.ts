@@ -6,7 +6,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, describe, expect, it } from "vitest";
 import { hashJson } from "../src/canonical-hash.js";
-import { currentFamilyVersion, familyRole, REVIEWED_FAMILY_REGISTRY, seedReviewedFamilies, validateFingerprint } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY, seedReviewedFamilies, validateFingerprint } from "../src/semantic-authoring/contracts.js";
 import { initializeWorkbench, insertSpan } from "../src/semantic-authoring/db.js";
 import { FAMILY_VERSION_MAPPINGS, mapToLatest, upgradeFamilyVersions, type VersionMapping } from "../src/semantic-authoring/family-versions.js";
 import { refreshSources } from "../src/semantic-authoring/source.js";
@@ -217,5 +217,23 @@ describe("Semantic authoring family version bump", () => {
     } finally {
       db.close();
     }
+  });
+});
+
+describe("unit-mark v3", () => {
+  it("refuses the hidden mark", () => {
+    expect(() => normalizeFingerprintParameters("unit-mark", { mark: "hidden", subject: "target", negated: false })).toThrow();
+    expect(normalizeFingerprintParameters("unit-mark", { mark: "spotted", subject: "target", negated: false })).toEqual({ mark: "spotted", subject: "target", negated: false });
+  });
+
+  it("moves a v2 hidden mark to the hidden unit state and keeps every other mark", () => {
+    const hidden = mapToLatest("unit-mark", 2, { mark: "hidden", subject: "target", negated: true });
+    expect(hidden).toEqual({ family: "unit-state", version: currentFamilyVersion("unit-state"), parameters: { states: ["hidden"], subject: "target", negated: true } });
+    expect(normalizeFingerprintParameters(hidden!.family, hidden!.parameters as never)).toEqual(hidden!.parameters);
+    expect(mapToLatest("unit-mark", 2, { mark: "afflicted", subject: "this-unit", negated: false })).toEqual({
+      family: "unit-mark",
+      version: 3,
+      parameters: { mark: "afflicted", subject: "this-unit", negated: false },
+    });
   });
 });

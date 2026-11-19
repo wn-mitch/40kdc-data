@@ -114,10 +114,10 @@ function unitKeywords(text: string): string[] {
 const STATE_WORDS: Array<[RegExp, string]> = [
   [/starting strength/iu, "below-starting-strength"], [/half[- ‑]?strength/iu, "below-half-strength"], [/battle[- ]?shocked/iu, "battle-shocked"],
   [/engagement range|\bengaged\b|\bunengaged\b/iu, "engaged"],
-  [/on the battlefield/iu, "on-battlefield"],
+  [/on the battlefield/iu, "on-battlefield"], [/\bhidden\b/iu, "hidden"],
 ];
 const MARK_WORDS: Array<[RegExp, string]> = [
-  [/oath of moment/iu, "oath-of-moment"], [/afflicted/iu, "afflicted"], [/spotted/iu, "spotted"], [/hidden/iu, "hidden"], [/marked/iu, "marked"],
+  [/oath of moment/iu, "oath-of-moment"], [/afflicted/iu, "afflicted"], [/spotted/iu, "spotted"], [/marked/iu, "marked"],
 ];
 
 function predicateFromSource(familyId: string, text: string): Record<string, unknown> {

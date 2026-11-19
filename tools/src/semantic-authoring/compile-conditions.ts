@@ -157,7 +157,7 @@ const STRENGTH_STATES: Record<string, string> = { "below-starting-strength": "st
 
 /** Marks as the designations an effect applies, uppercase as the rules print them. */
 const MARK_TAGS: Record<string, string> = {
-  "oath-of-moment": "OATH OF MOMENT TARGET", afflicted: "AFFLICTED", spotted: "spotted", hidden: "HIDDEN", marked: "MARKED",
+  "oath-of-moment": "OATH OF MOMENT TARGET", afflicted: "AFFLICTED", spotted: "spotted", marked: "MARKED",
   "riled-up": "riled-up",
 };
 

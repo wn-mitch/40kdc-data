@@ -33,6 +33,15 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // target history; every earlier leaf keeps its meaning.
   { family: "named-option", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
   { family: "targeting-restriction", from: 9, to: 10, map: (parameters) => ({ ...parameters }) },
+  // unit-mark v3 drops the hidden mark: hidden is the core-rules state unit-state reads.
+  { family: "unit-mark", from: 2, to: 3, map: (parameters) => (parameters.mark === "hidden" ? null : { ...parameters }) },
+  {
+    family: "unit-mark",
+    from: 2,
+    to_family: "unit-state",
+    to: 18,
+    map: (parameters) => (parameters.mark === "hidden" ? { states: ["hidden"], subject: parameters.subject, negated: parameters.negated } : null),
+  },
 ];
 
 export type FamilyVersionReport = {

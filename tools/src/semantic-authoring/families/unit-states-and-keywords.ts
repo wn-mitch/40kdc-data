@@ -8,7 +8,8 @@ import {
 
 // ---- unit-mark ----
 
-const UNIT_MARKS = ["oath-of-moment", "afflicted", "spotted", "hidden", "marked", "riled-up"] as const;
+/** Designations an ability applies. Hidden is a core-rules state: unit-state reads it. */
+const UNIT_MARKS = ["oath-of-moment", "afflicted", "spotted", "marked", "riled-up"] as const;
 const MARK_SUBJECTS = ["this-unit", "target"] as const;
 
 function normalizeUnitMark(input: Params): Params {
@@ -198,10 +199,10 @@ function normalizeTargetIsSelected(input: Params): Params {
 export const UNIT_STATES_AND_KEYWORDS_FAMILIES: readonly FlatFamily[] = [
   {
     id: "unit-mark",
-    version: 2,
+    version: 3,
     role: "CONDITION",
     label: "Unit carries (or lacks) a mark",
-    description: "This unit or the attack's target carries a named mark: the Oath of Moment target, Afflicted, Spotted, Hidden, Marked, or riled up.",
+    description: "This unit or the attack's target carries a named mark: the Oath of Moment target, Afflicted, Spotted, Marked, or riled up. Hidden is a unit state (unit-state), not a mark.",
     starter: { mark: "", subject: "", negated: false },
     parameterSchema: {
       type: "object",
