@@ -465,7 +465,7 @@
         <profile name="Acheron's Duty" id="b5f2-d8ba-4b32-d8df" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, once per phase per army, while 1+ the units Bondsman-affected by the unit:
-  For each enemy unit: While the unit is a unit within Engagement Range of a friendly unit with the Acherons Duty ability, the unit must take a Battle-shock test, applying -1 to that test.</characteristic>
+  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Acherons Duty ability, the unit must take a Battle-shock test, applying -1 to that test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="6d2e-44c9-555d-4f57" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1664,7 +1664,7 @@
         </profile>
         <profile name="Crusader's Duty" id="c148-9dae-314b-b2b7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the attacking unit is a unit that is Bondsman-affected by the unit, while making ranged attacks, all friendly units get +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the attacking unit is Bondsman-affected by the unit, while making ranged attacks, all friendly units get +1 to Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="ca0a-ef4f-eadd-803e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2333,7 +2333,7 @@
         </profile>
         <profile name="Mentor (Bondsman)" id="2cd0-7e58-2888-ae9a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the attacking unit is a unit that is Bondsman-affected by the unit, while the unit is tagged quarry, you can re-roll the Wound roll for attacks made by all friendly units.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the attacking unit is Bondsman-affected by the unit, while the unit is tagged quarry, you can re-roll the Wound roll for attacks made by all friendly units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="4774-53fe-0f17-f008" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4972,7 +4972,7 @@ The unit is not destroyed until this model is also destroyed.</characteristic>
         </profile>
         <profile name="Atrapos' Duty (Bondsman)" id="1612-619c-60c1-b94f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the attacking unit is a unit that is Bondsman-affected by the unit against TITANIC or TOWERING targets:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the attacking unit is Bondsman-affected by the unit against TITANIC or TOWERING targets:
   -&gt; You can re-roll the Hit roll for attacks made by all friendly units.
   -&gt; You can re-roll the Wound roll for attacks made by all friendly units.</characteristic>
           </characteristics>
@@ -7698,7 +7698,7 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
           <profiles>
             <profile name="Mentor's Pride" id="32ad-737e-50cf-27dc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While 2+ the units Bondsman-affected by the unit, while the attacking unit is a unit that is Bondsman-affected by the unit, you can re-roll a Hit roll of 1 for attacks made by all friendly units.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While 2+ the units Bondsman-affected by the unit, while the attacking unit is Bondsman-affected by the unit, you can re-roll a Hit roll of 1 for attacks made by all friendly units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8225,7 +8225,7 @@ Applies to: units with IMPERIAL KNIGHTS, ARMIGER.</characteristic>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's turn, you may use this ability, once per battle per army, while the unit is unengaged, until the start of your next Shooting phase:
   -&gt; The unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.
   -&gt; The unit gains the Deep Strike ability.
-  -&gt; The unit can make an Ingress move.
+  -&gt; The unit must make an Ingress move.
 Applies to: units with IMPERIAL KNIGHTS.</characteristic>
               </characteristics>
             </profile>

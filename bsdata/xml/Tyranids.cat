@@ -2410,7 +2410,7 @@ For each friendly unit that is embarked with this model: The unit can be set up 
       <profiles>
         <profile name="Chitinous Horrors (Aura)" id="5738-e13a-4e73-6de4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is a unit within Engagement Range of the unit, halve that unit's Objective Control characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is within Engagement Range of the unit, halve that unit's Objective Control characteristic.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="8c8f-1c64-ccf3-39e3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3071,7 +3071,7 @@ For each friendly unit that is embarked with this model: The unit can be set up 
         </profile>
         <profile name="Harpoon Barbs" id="ce8b-8b3b-3bd0-987a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to make a Fall Back move, once per turn per unit, while the triggering unit is a unit within Engagement Range of this model:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to make a Fall Back move, once per turn per unit, while the triggering unit is within Engagement Range of this model:
   -&gt; Roll one D6: on a 2+, the triggering unit suffers D6 mortal wounds.</characteristic>
           </characteristics>
         </profile>
@@ -3803,7 +3803,7 @@ For each friendly unit that is embarked with this model: The unit can be set up 
         <profile name="Hypnotic Gaze (Psychic)" id="9fc7-cd65-dcc5-ddab" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, until the end of the phase:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of this model: that unit gets -1 to Hit rolls.</characteristic>
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model: that unit gets -1 to Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="db34-5932-e796-ad5e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4038,7 +4038,7 @@ For each friendly unit that is embarked with this model: The unit can be set up 
         <profile name="It Itches!" id="e919-6858-4fc3-5024" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of this model: that unit must take a Battle-shock test.</characteristic>
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model: that unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Parasitic Infection" id="cd13-5147-8866-bfae" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4777,7 +4777,7 @@ While the target is within range of an objective marker, you can re-roll a Wound
         </profile>
         <profile name="Grasping Tendrils" id="1b3a-2740-9b50-dbe4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to make a Fall Back move (the triggering unit must not have TITANIC), you may use this ability, while the triggering unit is a unit within Engagement Range of a friendly unit with the Grasping Tendrils ability:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to make a Fall Back move (the triggering unit must not have TITANIC), you may use this ability, while the triggering unit is within Engagement Range of a friendly unit with the Grasping Tendrils ability:
   -&gt; Roll one D6: on a 3+, the triggering unit cannot Fall Back.</characteristic>
           </characteristics>
         </profile>

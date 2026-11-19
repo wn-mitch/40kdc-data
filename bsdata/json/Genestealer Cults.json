@@ -25372,7 +25372,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While an enemy unit is a unit within Engagement Range of the unit, subtract 1 from that unit's Objective Control characteristic.",
+                    "$text": "While an enemy unit is within Engagement Range of the unit, subtract 1 from that unit's Objective Control characteristic.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

@@ -1640,7 +1640,7 @@
         <profile name="Herald of Ynnead" id="6dc5-1cb5-31c9-0545" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of this model (your Herald of Ynnead Target). Until the end of the phase, each time a friendly unit makes an attack against it, you can re-roll a Wound roll of 1 for attacks made by all friendly AELDARI models.</characteristic>
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model (your Herald of Ynnead Target). Until the end of the phase, each time a friendly unit makes an attack against it, you can re-roll a Wound roll of 1 for attacks made by all friendly AELDARI models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="ef2e-3388-d4f1-7bce" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3043,7 +3043,7 @@ If your army includes an EPIC HERO unit (excluding YNNARI units), your army cann
         <profile name="Tormentors" id="40a6-9396-2e11-ad4c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, once per phase per army:
-  For each enemy unit: While the unit is a unit within Engagement Range of a friendly unit with the Tormentors ability, the unit must take a Battle-shock test.</characteristic>
+  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Tormentors ability, the unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -12029,7 +12029,7 @@ While the target is within range of an objective marker, you can re-roll the Hit
       <profiles>
         <profile name="No Escape" id="a3be-6b10-aa8f-d429" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to make a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of a friendly unit with the No Escape ability:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to make a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of a friendly unit with the No Escape ability:
   -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
   -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
           </characteristics>
@@ -16890,7 +16890,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
         </profile>
         <profile name="Cornered Prey" id="27f6-4dc4-2676-04ed" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to make a Fall Back move, while the triggering unit is a unit within Engagement Range of the unit:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to make a Fall Back move, while the triggering unit is within Engagement Range of the unit:
   -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
   -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
           </characteristics>
@@ -22791,7 +22791,7 @@ You cannot select this Detachment together with another ACROBATIC Detachment.</d
             <profile name="Cegorach's Coil" id="2696-cc95-9cc8-977e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound (to a maximum of 6 mortal wounds).</characteristic>
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound (to a maximum of 6 mortal wounds).</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -22825,7 +22825,7 @@ You cannot select this Detachment together with another ACROBATIC Detachment.</d
           <profiles>
             <profile name="Mask of Secrets" id="1d2f-3258-9fff-4263" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of the unit:
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of the unit:
   -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
   -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
               </characteristics>

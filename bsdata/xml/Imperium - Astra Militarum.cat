@@ -1644,7 +1644,7 @@ This model cannot be your Warlord.</characteristic>
         <profile name="Thunderous Head-butt" id="33c1-943f-71ea-0451" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of this model:
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model:
     -&gt; Roll one D6:
       - On 1: Nothing happens.
       - On 2-5: That unit suffers D3 mortal wounds.
@@ -6916,7 +6916,7 @@ For Transport capacity when embarking as INFANTRY, this model occupies 7 model s
         </profile>
         <profile name="Close-quarters Warfare" id="44f8-e531-292e-42bb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while an enemy unit is a unit within Engagement Range of this model, this model ignores any negative modifiers to its Hit rolls with ranged weapons.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while an enemy unit is within Engagement Range of this model, this model ignores any negative modifiers to its Hit rolls with ranged weapons.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="e3ef-8dc2-62b7-8ee4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -15240,7 +15240,7 @@ The unit is eligible to declare a charge in a turn in which it Fell Back.</chara
         </profile>
         <profile name="Line-breaker" id="a231-162d-fc05-9359" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while making attacks made with demolisher battle cannon, while a friendly unit other than this unit is not a unit within Engagement Range of the target unit, units can target this model with ranged weapons.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while making attacks made with demolisher battle cannon, while a friendly unit other than this unit is not within Engagement Range of the target unit, units can target this model with ranged weapons.
 While making ranged attacks, this model ignores any negative modifiers to its Hit rolls.</characteristic>
           </characteristics>
         </profile>
@@ -26812,7 +26812,7 @@ The unit is eligible to declare a charge in a turn in which it Fell Back.</chara
         <profile name="Aquiline Prow" id="1130-ca51-dc5c-15e8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit:
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit:
     -&gt; Roll one D6:
       - On 1: Nothing happens.
       - On 2-3: That unit suffers D3 mortal wounds.
@@ -27372,7 +27372,7 @@ Applies to: units with ASTRA MILITARUM.</description>
               <rules>
                 <rule name="Ceaseless Cannonade" id="a685-7e55-696b-2913" hidden="false">
                   <description>When a friendly unit is selected to shoot (the triggering unit must have ASTRA MILITARUM) (the triggering unit must have SQUADRON or TITANIC), until the end of the phase:
-  -&gt; While a friendly unit other than this unit is not a unit within Engagement Range of the target unit, the triggering unit is eligible to shoot even if it is within Engagement Range of enemy units.
+  -&gt; While a friendly unit other than this unit is not within Engagement Range of the target unit, the triggering unit is eligible to shoot even if it is within Engagement Range of enemy units.
   -&gt; Unless making attacks made with [INDIRECT FIRE] weapons, the triggering unit ignores any negative modifiers to its Hit rolls.
 Applies to: units with ASTRA MILITARUM.</description>
                 </rule>

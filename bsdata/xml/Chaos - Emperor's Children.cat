@@ -562,7 +562,7 @@
   -&gt; Select one enemy unit that was hit by a ranged attack made by the triggering unit during its just-finished shooting sequence:
     -&gt; When a Charge is declared:
       -&gt; You can re-roll the Charge roll.
-      -&gt; The triggering unit must end its move where the triggering unit is a unit within Engagement Range of the selected unit, during its Charge moves.</characteristic>
+      -&gt; The triggering unit must end its move where the triggering unit is within Engagement Range of the selected unit, during its Charge moves.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3310,7 +3310,7 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
         <profile name="Daemonic Destruction" id="9fa3-95b6-b7a2-83b1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of this model:
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model:
     -&gt; Roll D6, then:
       -&gt; If the result of that roll is a 4+, that unit suffers 1 mortal wound (to a maximum of 6 mortal wounds).</characteristic>
           </characteristics>
@@ -4332,7 +4332,7 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
         <profile name="Horrifying Beauty" id="51e6-a21d-dd3b-113c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, once per phase per army, until the end of the phase:
-  For each enemy unit: While the unit is a unit within Engagement Range of a friendly unit with the Horrifying Beauty ability, while the unit is below half strength, the unit must take a Battle-shock test, applying -1 to that test; unless the unit is below half strength, the unit must take a Battle-shock test.</characteristic>
+  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Horrifying Beauty ability, while the unit is below half strength, the unit must take a Battle-shock test, applying -1 to that test; unless the unit is below half strength, the unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4537,7 +4537,7 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
         </profile>
         <profile name="Soporific Musk" id="0d71-5ab3-5ef0-925f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of a friendly unit with the Soporific Musk ability:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of a friendly unit with the Soporific Musk ability:
   -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
   -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
           </characteristics>
@@ -7638,7 +7638,7 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Repulsed by Weakness" id="4701-48d9-9ecc-ac53" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of the unit:
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of the unit:
   -&gt; While the unit is tagged favoured champions, the triggering unit must take a Desperate Escape test, applying -1 to that test.
   -&gt; While the unit is not tagged favoured champions, the triggering unit must take a Desperate Escape test.
 Applies to: units with EMPEROR’S CHILDREN.</characteristic>
@@ -8437,7 +8437,7 @@ Applies to: units with LORD EXULTANT.</characteristic>
             <profile name="Soulstain Made Manifest" id="0ea7-af3e-febd-fbf3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of this model: that unit must take a Battle-shock test, applying -1 to that test.
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model: that unit must take a Battle-shock test, applying -1 to that test.
 Applies to: units with EMPEROR’S CHILDREN.</characteristic>
               </characteristics>
             </profile>

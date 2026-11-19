@@ -2086,12 +2086,41 @@
           "type": "integer",
           "minimum": 0,
           "description": "Maximum number of units carrying `keyword` includable via the rule at this battle size."
+        },
+        "exemptions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/allied-keyword-limit-exemption"
+          },
+          "description": "Units that do not count towards this cap: for each included unit carrying every `donor_keywords`, one included unit carrying every `receiver_keywords` is not counted (e.g. one INQUISITORIAL AGENTS unit per INQUISITOR unit does not count towards RETINUE)."
         }
       },
       "required": [
         "keyword",
         "battle_size",
         "max_count"
+      ],
+      "additionalProperties": false
+    },
+    "allied-keyword-limit-exemption": {
+      "type": "object",
+      "description": "A donor/receiver pair exempting receiver units from an allied keyword cap, one receiver per donor unit.",
+      "properties": {
+        "donor_keywords": {
+          "$ref": "#/$defs/keyword-list",
+          "minItems": 1,
+          "description": "A donor unit carries all of these keywords."
+        },
+        "receiver_keywords": {
+          "$ref": "#/$defs/keyword-list",
+          "minItems": 1,
+          "description": "A receiver unit carries all of these keywords."
+        }
+      },
+      "required": [
+        "donor_keywords",
+        "receiver_keywords"
       ],
       "additionalProperties": false
     },
@@ -2178,6 +2207,16 @@
             "$ref": "#/$defs/allied-keyword-limit"
           },
           "description": "Per-keyword, per-battle-size cap on how many units carrying `keyword` may be included via this rule (e.g. Imperial Knights' Titanic 1 / Armiger 3; Agents of the Imperium's Character/Retinue/Requisitioned counts). Advisory construction cap."
+        },
+        "keyword_limits_exclusive": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the rule's `keyword_limits` are alternatives: the units included via the rule may carry only one of the limited keywords, whose cap then applies (e.g. Imperial Knights allies: one TITANIC model or up to three ARMIGER models, never both; Titan pools: one Titan of any class)."
+        },
+        "replaces_faction_keywords": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when units included via this rule have their Faction keywords replaced with the army's (e.g. Renegades: legion units taken by a Heretic Astartes army become HERETIC ASTARTES)."
         },
         "max_units": {
           "oneOf": [
@@ -3905,6 +3944,12 @@
           "type": "integer",
           "minimum": 0,
           "maximum": 4
+        },
+        "secondary_effect_extra_cp": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "description": "CP spent on top of cp_cost to use the Stratagem's secondary (alternate) effect instead of its main one. Absent when the Stratagem has no paid secondary effect."
         },
         "phases": {
           "$ref": "#/$defs/phase-list"
@@ -12071,6 +12116,10 @@
                 "ends_nearest": {
                   "$ref": "#/$defs/ends-nearest",
                   "description": "Where the move must end: as close as possible to the closest unit matching `of` (the move's own end rule)."
+                },
+                "mandatory": {
+                  "const": true,
+                  "description": "The target must make the move (\"must make an ingress move\"); absent, the move is optional."
                 }
               },
               "required": [

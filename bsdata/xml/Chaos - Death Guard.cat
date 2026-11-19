@@ -2928,7 +2928,7 @@
         <profile name="Inflamed Infections" id="b4b2-fc07-a23b-6788" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of this model (your Inflamed Infections Target). Until the end of the phase, each time this unit makes an attack against it:
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model (your Inflamed Infections Target). Until the end of the phase, each time this unit makes an attack against it:
     -&gt; Unless the selected unit is below half strength, this model scores Critical Hits on Hit rolls of 5+.
     -&gt; While the selected unit is below half strength, this model scores Critical Hits on Hit rolls of 4+.</characteristic>
           </characteristics>
@@ -3746,7 +3746,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         <profile name="Horrifying Visage" id="eed0-0bb9-76e7-c3e3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of this model: that unit must take a Battle-shock test, applying -1 to that test.</characteristic>
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model: that unit must take a Battle-shock test, applying -1 to that test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="f373-b579-e0e5-10c0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -7213,7 +7213,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Mischief Makers" id="bb87-b6f0-a48b-aaa1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to fight (the triggering unit must not have TITANIC), while the triggering unit is a unit within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, the triggering unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to fight (the triggering unit must not have TITANIC), while the triggering unit is within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, the triggering unit gets -1 to Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -10575,7 +10575,7 @@ Applies to: units with PLAGUE MARINES.</characteristic>
           <profiles>
             <profile name="Visions of Virulence" id="e290-1e8e-b492-4b5c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is a unit that is enfeebled by this model, that unit is Afflicted.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is enfeebled by this model, that unit is Afflicted.</characteristic>
               </characteristics>
             </profile>
           </profiles>

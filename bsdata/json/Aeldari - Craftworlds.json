@@ -6180,7 +6180,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase, you may use this ability:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of this model (your Herald of Ynnead Target). Until the end of the phase, each time a friendly unit makes an attack against it, you can re-roll a Wound roll of 1 for attacks made by all friendly AELDARI models.",
+                "$text": "At the start of the Fight phase, you may use this ability:\n  -> Select one enemy unit if the selected unit is within Engagement Range of this model (your Herald of Ynnead Target). Until the end of the phase, each time a friendly unit makes an attack against it, you can re-roll a Wound roll of 1 for attacks made by all friendly AELDARI models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11559,7 +11559,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase, once per phase per army:\n  For each enemy unit: While the unit is a unit within Engagement Range of a friendly unit with the Tormentors ability, the unit must take a Battle-shock test.",
+                "$text": "At the start of the Fight phase, once per phase per army:\n  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Tormentors ability, the unit must take a Battle-shock test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -43982,7 +43982,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When an enemy unit is selected to make a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of a friendly unit with the No Escape ability:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
+                "$text": "When an enemy unit is selected to make a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of a friendly unit with the No Escape ability:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -61005,7 +61005,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When an enemy unit is selected to make a Fall Back move, while the triggering unit is a unit within Engagement Range of the unit:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
+                "$text": "When an enemy unit is selected to make a Fall Back move, while the triggering unit is within Engagement Range of the unit:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -80663,7 +80663,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound (to a maximum of 6 mortal wounds).",
+                    "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound (to a maximum of 6 mortal wounds).",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -80765,7 +80765,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of the unit:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
+                    "$text": "Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of the unit:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

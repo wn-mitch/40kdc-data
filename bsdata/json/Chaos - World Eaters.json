@@ -12173,7 +12173,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of this model:\n    -> Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-3: That unit suffers 1 mortal wound.\n      - On 4-5: That unit suffers D3 mortal wounds.\n      - On 6: That unit suffers D3+3 mortal wounds.",
+                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is within Engagement Range of this model:\n    -> Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-3: That unit suffers 1 mortal wound.\n      - On 4-5: That unit suffers D3 mortal wounds.\n      - On 6: That unit suffers D3+3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -27598,7 +27598,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit: roll one D6 for each model in the unit: for each 4+, that unit suffers D3 mortal wounds.",
+                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is within Engagement Range of the unit: roll one D6 for each model in the unit: for each 4+, that unit suffers D3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -28482,7 +28482,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of a friendly unit with the Bane of Cowards ability:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
+                "$text": "Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of a friendly unit with the Bane of Cowards ability:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -29346,7 +29346,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of the Fight phase, you may use this ability:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of this model: roll 8 D6: for each 4+, that unit suffers 1 mortal wound.",
+                "$text": "At the end of the Fight phase, you may use this ability:\n  -> Select one enemy unit if the selected unit is within Engagement Range of this model: roll 8 D6: for each 4+, that unit suffers 1 mortal wound.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -37162,7 +37162,7 @@
                   {
                     "name": "Rampaging Terrors",
                     "id": "8587-90c8-b454-b824",
-                    "description": "All friendly DAEMON VEHICLE units gain the Terror of Khorne ability:\n  -> At the start of the Fight phase, you may use this ability:\n    -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit (each unit can be selected for this ability at most once per phase across your army): that unit must take a Battle-shock test, applying -1 to that test.\nYou cannot select this Detachment together with another ONSLAUGHT Detachment.\nApplies to: units with DAEMON, VEHICLE.",
+                    "description": "All friendly DAEMON VEHICLE units gain the Terror of Khorne ability:\n  -> At the start of the Fight phase, you may use this ability:\n    -> Select one enemy unit if the selected unit is within Engagement Range of the unit (each unit can be selected for this ability at most once per phase across your army): that unit must take a Battle-shock test, applying -1 to that test.\nYou cannot select this Detachment together with another ONSLAUGHT Detachment.\nApplies to: units with DAEMON, VEHICLE.",
                     "hidden": false
                   }
                 ]

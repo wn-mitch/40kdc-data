@@ -10657,7 +10657,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of this model (your Inflamed Infections Target). Until the end of the phase, each time this unit makes an attack against it:\n    -> Unless the selected unit is below half strength, this model scores Critical Hits on Hit rolls of 5+.\n    -> While the selected unit is below half strength, this model scores Critical Hits on Hit rolls of 4+.",
+                "$text": "At the start of the Fight phase:\n  -> Select one enemy unit if the selected unit is within Engagement Range of this model (your Inflamed Infections Target). Until the end of the phase, each time this unit makes an attack against it:\n    -> Unless the selected unit is below half strength, this model scores Critical Hits on Hit rolls of 5+.\n    -> While the selected unit is below half strength, this model scores Critical Hits on Hit rolls of 4+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13663,7 +13663,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of this model: that unit must take a Battle-shock test, applying -1 to that test.",
+                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is within Engagement Range of this model: that unit must take a Battle-shock test, applying -1 to that test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -26453,7 +26453,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When an enemy unit is selected to fight (the triggering unit must not have TITANIC), while the triggering unit is a unit within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, the triggering unit gets -1 to Hit rolls.",
+                "$text": "When an enemy unit is selected to fight (the triggering unit must not have TITANIC), while the triggering unit is within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, the triggering unit gets -1 to Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -37773,7 +37773,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While an enemy unit is a unit that is enfeebled by this model, that unit is Afflicted.",
+                    "$text": "While an enemy unit is enfeebled by this model, that unit is Afflicted.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

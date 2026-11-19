@@ -1377,7 +1377,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase, once per phase per army:\n  For each enemy unit: While the unit is a unit within Engagement Range of a friendly unit with the Terrifying Monstrosity ability, the unit must take a Battle-shock test.",
+                "$text": "At the start of the Fight phase, once per phase per army:\n  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Terrifying Monstrosity ability, the unit must take a Battle-shock test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10789,7 +10789,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of this model:\n    -> Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-5: That unit suffers D3 mortal wounds.\n      - On 6: That unit suffers D3+3 mortal wounds.",
+                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is within Engagement Range of this model:\n    -> Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-5: That unit suffers D3 mortal wounds.\n      - On 6: That unit suffers D3+3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15926,7 +15926,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While an enemy unit is a unit within Engagement Range of the unit, subtract 1 from that unit's Objective Control characteristic (to a minimum of 1).\nWhile the unit is within 6\" of a friendly CRYPTEK model, set the unit's Objective Control characteristic to 1.",
+                "$text": "While an enemy unit is within Engagement Range of the unit, subtract 1 from that unit's Objective Control characteristic (to a minimum of 1).\nWhile the unit is within 6\" of a friendly CRYPTEK model, set the unit's Objective Control characteristic to 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15940,7 +15940,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase, you may use this ability, while the unit is engaged:\n  -> Destroy 1 model in the unit.\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit:\n    If the selected unit has the VEHICLE keyword:\n      -> Roll one D6:\n        - On 1-4: That unit suffers D3 mortal wounds.\n        - On 5-6: That unit suffers 3 mortal wounds.\n    Unless the selected unit has the VEHICLE keyword:\n      -> Roll one D6:\n        - On 1: Nothing happens.\n        - On 2-5: That unit suffers D3 mortal wounds.\n        - On 6: That unit suffers 3 mortal wounds.",
+                "$text": "At the start of the Fight phase, you may use this ability, while the unit is engaged:\n  -> Destroy 1 model in the unit.\n  -> Select one enemy unit if the selected unit is within Engagement Range of the unit:\n    If the selected unit has the VEHICLE keyword:\n      -> Roll one D6:\n        - On 1-4: That unit suffers D3 mortal wounds.\n        - On 5-6: That unit suffers 3 mortal wounds.\n    Unless the selected unit has the VEHICLE keyword:\n      -> Roll one D6:\n        - On 1: Nothing happens.\n        - On 2-5: That unit suffers D3 mortal wounds.\n        - On 6: That unit suffers 3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -36284,7 +36284,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When an enemy unit is selected to make a Fall Back move, while the triggering unit is a unit within Engagement Range of the unit:\n  -> Roll one D6: on a 3+, the triggering unit cannot Fall Back; the triggering unit cannot move.",
+                    "$text": "When an enemy unit is selected to make a Fall Back move, while the triggering unit is within Engagement Range of the unit:\n  -> Roll one D6: on a 3+, the triggering unit cannot Fall Back; the triggering unit cannot move.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

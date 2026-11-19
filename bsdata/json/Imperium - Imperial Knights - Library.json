@@ -2416,7 +2416,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase, once per phase per army, while 1+ the units Bondsman-affected by the unit:\n  For each enemy unit: While the unit is a unit within Engagement Range of a friendly unit with the Acherons Duty ability, the unit must take a Battle-shock test, applying -1 to that test.",
+                "$text": "At the start of the Fight phase, once per phase per army, while 1+ the units Bondsman-affected by the unit:\n  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Acherons Duty ability, the unit must take a Battle-shock test, applying -1 to that test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7233,7 +7233,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the attacking unit is a unit that is Bondsman-affected by the unit, while making ranged attacks, all friendly units get +1 to Hit rolls.",
+                "$text": "While the attacking unit is Bondsman-affected by the unit, while making ranged attacks, all friendly units get +1 to Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9896,7 +9896,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the attacking unit is a unit that is Bondsman-affected by the unit, while the unit is tagged quarry, you can re-roll the Wound roll for attacks made by all friendly units.",
+                "$text": "While the attacking unit is Bondsman-affected by the unit, while the unit is tagged quarry, you can re-roll the Wound roll for attacks made by all friendly units.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20408,7 +20408,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the attacking unit is a unit that is Bondsman-affected by the unit against TITANIC or TOWERING targets:\n  -> You can re-roll the Hit roll for attacks made by all friendly units.\n  -> You can re-roll the Wound roll for attacks made by all friendly units.",
+                "$text": "While the attacking unit is Bondsman-affected by the unit against TITANIC or TOWERING targets:\n  -> You can re-roll the Hit roll for attacks made by all friendly units.\n  -> You can re-roll the Wound roll for attacks made by all friendly units.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -29885,7 +29885,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can: While 2+ the units Bondsman-affected by the unit, while the attacking unit is a unit that is Bondsman-affected by the unit, you can re-roll a Hit roll of 1 for attacks made by all friendly units.",
+                    "$text": "You can: While 2+ the units Bondsman-affected by the unit, while the attacking unit is Bondsman-affected by the unit, you can re-roll a Hit roll of 1 for attacks made by all friendly units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -31925,7 +31925,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the end of your opponent's turn, you may use this ability, once per battle per army, while the unit is unengaged, until the start of your next Shooting phase:\n  -> The unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.\n  -> The unit gains the Deep Strike ability.\n  -> The unit can make an Ingress move.\nApplies to: units with IMPERIAL KNIGHTS.",
+                    "$text": "At the end of your opponent's turn, you may use this ability, once per battle per army, while the unit is unengaged, until the start of your next Shooting phase:\n  -> The unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.\n  -> The unit gains the Deep Strike ability.\n  -> The unit must make an Ingress move.\nApplies to: units with IMPERIAL KNIGHTS.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

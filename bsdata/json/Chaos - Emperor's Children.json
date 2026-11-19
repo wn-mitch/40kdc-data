@@ -2205,7 +2205,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, until the end of the turn:\n  -> Select one enemy unit that was hit by a ranged attack made by the triggering unit during its just-finished shooting sequence:\n    -> When a Charge is declared:\n      -> You can re-roll the Charge roll.\n      -> The triggering unit must end its move where the triggering unit is a unit within Engagement Range of the selected unit, during its Charge moves.",
+                "$text": "After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, until the end of the turn:\n  -> Select one enemy unit that was hit by a ranged attack made by the triggering unit during its just-finished shooting sequence:\n    -> When a Charge is declared:\n      -> You can re-roll the Charge roll.\n      -> The triggering unit must end its move where the triggering unit is within Engagement Range of the selected unit, during its Charge moves.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12180,7 +12180,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of this model:\n    -> Roll D6, then:\n      -> If the result of that roll is a 4+, that unit suffers 1 mortal wound (to a maximum of 6 mortal wounds).",
+                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is within Engagement Range of this model:\n    -> Roll D6, then:\n      -> If the result of that roll is a 4+, that unit suffers 1 mortal wound (to a maximum of 6 mortal wounds).",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15641,7 +15641,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase, once per phase per army, until the end of the phase:\n  For each enemy unit: While the unit is a unit within Engagement Range of a friendly unit with the Horrifying Beauty ability, while the unit is below half strength, the unit must take a Battle-shock test, applying -1 to that test; unless the unit is below half strength, the unit must take a Battle-shock test.",
+                "$text": "At the start of the Fight phase, once per phase per army, until the end of the phase:\n  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Horrifying Beauty ability, while the unit is below half strength, the unit must take a Battle-shock test, applying -1 to that test; unless the unit is below half strength, the unit must take a Battle-shock test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16352,7 +16352,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of a friendly unit with the Soporific Musk ability:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
+                "$text": "Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of a friendly unit with the Soporific Musk ability:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -26773,7 +26773,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of the unit:\n  -> While the unit is tagged favoured champions, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the unit is not tagged favoured champions, the triggering unit must take a Desperate Escape test.\nApplies to: units with EMPEROR’S CHILDREN.",
+                    "$text": "Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of the unit:\n  -> While the unit is tagged favoured champions, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the unit is not tagged favoured champions, the triggering unit must take a Desperate Escape test.\nApplies to: units with EMPEROR’S CHILDREN.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -29126,7 +29126,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the start of the Fight phase, you may use this ability:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of this model: that unit must take a Battle-shock test, applying -1 to that test.\nApplies to: units with EMPEROR’S CHILDREN.",
+                    "$text": "At the start of the Fight phase, you may use this ability:\n  -> Select one enemy unit if the selected unit is within Engagement Range of this model: that unit must take a Battle-shock test, applying -1 to that test.\nApplies to: units with EMPEROR’S CHILDREN.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

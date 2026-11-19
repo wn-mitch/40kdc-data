@@ -8674,7 +8674,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making ranged attacks, while making attacks made with demolisher cannon, while a friendly unit other than this unit is not a unit within Engagement Range of the target unit, units can target this model with ranged weapons.\nWhile making ranged attacks, this model ignores any negative modifiers to its Hit rolls.",
+                "$text": "While making ranged attacks, while making attacks made with demolisher cannon, while a friendly unit other than this unit is not within Engagement Range of the target unit, units can target this model with ranged weapons.\nWhile making ranged attacks, this model ignores any negative modifiers to its Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12250,7 +12250,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.",
+                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -25475,7 +25475,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to fight, you may use this ability:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit, binding it as enemy:\n    -> Select one or more friendly BRIMSTONE models in the unit, binding them as horrors:\n      -> For each selected model:\n        -> Roll one D6: on a 4+, destroy that model; the bound enemy suffers 1 mortal wound.",
+                "$text": "When the unit is selected to fight, you may use this ability:\n  -> Select one enemy unit if the selected unit is within Engagement Range of the unit, binding it as enemy:\n    -> Select one or more friendly BRIMSTONE models in the unit, binding them as horrors:\n      -> For each selected model:\n        -> Roll one D6: on a 4+, destroy that model; the bound enemy suffers 1 mortal wound.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

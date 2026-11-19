@@ -6072,7 +6072,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move, you may use this ability:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 3+, that unit suffers 1 mortal wound.",
+                "$text": "When the unit ends a Charge move, you may use this ability:\n  -> Select one enemy unit if the selected unit is within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 3+, that unit suffers 1 mortal wound.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -49026,7 +49026,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When an enemy unit is selected to make a Fall Back move, while the triggering unit is a unit within Engagement Range of the unit:\n  -> While the unit is riled up, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the unit is not riled up, the triggering unit must take a Desperate Escape test.",
+                    "$text": "When an enemy unit is selected to make a Fall Back move, while the triggering unit is within Engagement Range of the unit:\n  -> While the unit is riled up, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the unit is not riled up, the triggering unit must take a Desperate Escape test.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

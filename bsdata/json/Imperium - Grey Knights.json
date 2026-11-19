@@ -12417,7 +12417,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit ends a Charge move, you may use this ability, while the triggering unit is a unit within Engagement Range of a friendly GREY KNIGHTS VEHICLE unit, while the triggering unit is within 6\" of the unit:\n  -> The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.\n  -> Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).\n  -> The unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.",
+                "$text": "Each time an enemy unit ends a Charge move, you may use this ability, while the triggering unit is within Engagement Range of a friendly GREY KNIGHTS VEHICLE unit, while the triggering unit is within 6\" of the unit:\n  -> The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.\n  -> Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).\n  -> The unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20387,7 +20387,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to fight, you may use this ability:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit:\n    -> Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-3: That unit suffers 1 mortal wound.\n      - On 4-5: That unit suffers D3 mortal wounds.\n      - On 6: That unit suffers D3+3 mortal wounds.",
+                "$text": "When the unit is selected to fight, you may use this ability:\n  -> Select one enemy unit if the selected unit is within Engagement Range of the unit:\n    -> Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-3: That unit suffers 1 mortal wound.\n      - On 4-5: That unit suffers D3 mortal wounds.\n      - On 6: That unit suffers D3+3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

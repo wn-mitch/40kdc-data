@@ -8956,7 +8956,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When an enemy unit is selected to make a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of the unit:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
+                "$text": "When an enemy unit is selected to make a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of the unit:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13211,7 +13211,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: Once per battle per unit, during the Movement phase, in your turn, while the unit is unengaged, unless the unit has been selected to move this phase, until the end of the phase:\n  -> The unit can be placed into Strategic Reserves.\n  -> The unit can make an Ingress move.",
+                "$text": "You can: Once per battle per unit, during the Movement phase, in your turn, while the unit is unengaged, unless the unit has been selected to move this phase, until the end of the phase:\n  -> The unit can be placed into Strategic Reserves.\n  -> The unit must make an Ingress move.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23325,7 +23325,7 @@
                   {
                     "name": "Instruments of the Emperor's Wrath",
                     "id": "9266-4c47-ac20-362c",
-                    "description": "You can re-roll the Charge roll for all friendly ADEPTUS CUSTODES units.\nWhile the Dacatarai option of Martial Katah is active, while an enemy unit is a unit within Engagement Range of the unit, subtract 2\" from that unit's Pile-in and Consolidation moves.",
+                    "description": "You can re-roll the Charge roll for all friendly ADEPTUS CUSTODES units.\nWhile the Dacatarai option of Martial Katah is active, while an enemy unit is within Engagement Range of the unit, subtract 2\" from that unit's Pile-in and Consolidation moves.",
                     "hidden": false
                   }
                 ]
@@ -23433,7 +23433,7 @@
                   {
                     "name": "Magna Imperator",
                     "id": "de91-8635-62aa-9929",
-                    "description": "-> When a friendly unit is selected to shoot or fight (the triggering unit must have ADEPTUS CUSTODES):\n  -> You can re-roll one Hit roll.\n  -> You can re-roll one Wound roll.\n-> You can: while the Rendax option of Martial Katah is active, select one enemy unit with the MONSTER or VEHICLE keyword if the selected unit is a unit within Engagement Range of the unit: roll one D6: on 1-2, that unit suffers 1 mortal wound; on 3-5, that unit suffers D3 mortal wounds; on 6, that unit suffers 3 mortal wounds.",
+                    "description": "-> When a friendly unit is selected to shoot or fight (the triggering unit must have ADEPTUS CUSTODES):\n  -> You can re-roll one Hit roll.\n  -> You can re-roll one Wound roll.\n-> You can: while the Rendax option of Martial Katah is active, select one enemy unit with the MONSTER or VEHICLE keyword if the selected unit is within Engagement Range of the unit: roll one D6: on 1-2, that unit suffers 1 mortal wound; on 3-5, that unit suffers D3 mortal wounds; on 6, that unit suffers 3 mortal wounds.",
                     "hidden": false
                   }
                 ]
@@ -23628,7 +23628,7 @@
                   {
                     "name": "Wardens of the Dark Cells",
                     "id": "65fb-869e-f8e5-a61e",
-                    "description": "While the target is within range of an objective marker, against melee attacks, while the target is a friendly ADEPTUS CUSTODES unit (excluding MONSTER or VEHICLE units), when the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.\nWhile the Kaptaris option of Martial Katah is active:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit (each unit can be selected for this ability at most once per phase across your army): that unit must take a Battle-shock test, applying -1 to that test.",
+                    "description": "While the target is within range of an objective marker, against melee attacks, while the target is a friendly ADEPTUS CUSTODES unit (excluding MONSTER or VEHICLE units), when the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.\nWhile the Kaptaris option of Martial Katah is active:\n  -> Select one enemy unit if the selected unit is within Engagement Range of the unit (each unit can be selected for this ability at most once per phase across your army): that unit must take a Battle-shock test, applying -1 to that test.",
                     "hidden": false
                   }
                 ]

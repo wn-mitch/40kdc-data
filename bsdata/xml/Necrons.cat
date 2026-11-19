@@ -263,7 +263,7 @@
         <profile name="Terrifying Monstrosity" id="9adc-bf9b-1ee1-970d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, once per phase per army:
-  For each enemy unit: While the unit is a unit within Engagement Range of a friendly unit with the Terrifying Monstrosity ability, the unit must take a Battle-shock test.</characteristic>
+  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Terrifying Monstrosity ability, the unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="a48c-7b47-96f0-3a1c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2868,7 +2868,7 @@ While making attacks made with gauss destructor against MONSTER or VEHICLE targe
         <profile name="Crimson Harvest" id="6201-5901-db00-95c5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of this model:
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model:
     -&gt; Roll one D6:
       - On 1: Nothing happens.
       - On 2-5: That unit suffers D3 mortal wounds.
@@ -4273,7 +4273,7 @@ While making attacks made with gauss destructor against MONSTER or VEHICLE targe
       <profiles>
         <profile name="Chittering Swarm" id="45fc-1f49-e607-0004" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is a unit within Engagement Range of the unit, subtract 1 from that unit's Objective Control characteristic (to a minimum of 1).
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is within Engagement Range of the unit, subtract 1 from that unit's Objective Control characteristic (to a minimum of 1).
 While the unit is within 6" of a friendly CRYPTEK model, set the unit's Objective Control characteristic to 1.</characteristic>
           </characteristics>
         </profile>
@@ -4281,7 +4281,7 @@ While the unit is within 6" of a friendly CRYPTEK model, set the unit's Objectiv
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability, while the unit is engaged:
   -&gt; Destroy 1 model in the unit.
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit:
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit:
     If the selected unit has the VEHICLE keyword:
       -&gt; Roll one D6:
         - On 1-4: That unit suffers D3 mortal wounds.
@@ -10283,7 +10283,7 @@ Add 3 to this model's Move characteristic.</characteristic>
           <profiles>
             <profile name="Soulless Reaper" id="9367-9ed9-dbdf-1ac5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to make a Fall Back move, while the triggering unit is a unit within Engagement Range of the unit:
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to make a Fall Back move, while the triggering unit is within Engagement Range of the unit:
   -&gt; Roll one D6: on a 3+, the triggering unit cannot Fall Back; the triggering unit cannot move.</characteristic>
               </characteristics>
             </profile>

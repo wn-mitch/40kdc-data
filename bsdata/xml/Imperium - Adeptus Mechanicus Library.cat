@@ -2434,7 +2434,7 @@ While making attacks made with Skatros transuranic arquebus against MONSTER or V
         <profile name="Voices in the Code" id="af4e-c8d6-b269-76c2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, once per phase per army:
-  For each enemy unit: While the unit is a unit within Engagement Range of a friendly unit with the Voices in the Code ability, the unit must take a Battle-shock test.</characteristic>
+  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Voices in the Code ability, the unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="cc76-1ccc-eba0-9432" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3184,7 +3184,7 @@ While making attacks made with Skatros transuranic arquebus against MONSTER or V
         <profile name="Dataspike" id="5831-8403-7bc9-4fac" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability, until the end of the phase:
-  -&gt; Select one enemy VEHICLE unit if the selected unit is a unit within Engagement Range of the unit:
+  -&gt; Select one enemy VEHICLE unit if the selected unit is within Engagement Range of the unit:
     -&gt; Roll one D6: on a 4+, that unit suffers D6 mortal wounds; worsen the Weapon Skill characteristic of melee weapons equipped by models in that unit by 1.</characteristic>
           </characteristics>
         </profile>
@@ -4604,9 +4604,9 @@ You can re-roll the Desperate Escape roll.</characteristic>
         <profile name="Line-breakers" id="b1d4-67c3-4dfb-f226" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit:
-    -&gt; While the unit was within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit at the start of that move, roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 2+, that unit suffers 1 mortal wound.
-    -&gt; Unless the unit was within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit at the start of that move, roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit:
+    -&gt; While the unit was within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit at the start of that move, roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 2+, that unit suffers 1 mortal wound.
+    -&gt; Unless the unit was within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit at the start of that move, roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
       </profiles>

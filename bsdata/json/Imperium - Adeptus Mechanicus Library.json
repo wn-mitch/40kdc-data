@@ -8931,7 +8931,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase, once per phase per army:\n  For each enemy unit: While the unit is a unit within Engagement Range of a friendly unit with the Voices in the Code ability, the unit must take a Battle-shock test.",
+                "$text": "At the start of the Fight phase, once per phase per army:\n  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Voices in the Code ability, the unit must take a Battle-shock test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11791,7 +11791,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase, you may use this ability, until the end of the phase:\n  -> Select one enemy VEHICLE unit if the selected unit is a unit within Engagement Range of the unit:\n    -> Roll one D6: on a 4+, that unit suffers D6 mortal wounds; worsen the Weapon Skill characteristic of melee weapons equipped by models in that unit by 1.",
+                "$text": "At the start of the Fight phase, you may use this ability, until the end of the phase:\n  -> Select one enemy VEHICLE unit if the selected unit is within Engagement Range of the unit:\n    -> Roll one D6: on a 4+, that unit suffers D6 mortal wounds; worsen the Weapon Skill characteristic of melee weapons equipped by models in that unit by 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16815,7 +16815,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit:\n    -> While the unit was within 6\" of a friendly ADEPTUS MECHANICUS BATTLELINE unit at the start of that move, roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 2+, that unit suffers 1 mortal wound.\n    -> Unless the unit was within 6\" of a friendly ADEPTUS MECHANICUS BATTLELINE unit at the start of that move, roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.",
+                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is within Engagement Range of the unit:\n    -> While the unit was within 6\" of a friendly ADEPTUS MECHANICUS BATTLELINE unit at the start of that move, roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 2+, that unit suffers 1 mortal wound.\n    -> Unless the unit was within 6\" of a friendly ADEPTUS MECHANICUS BATTLELINE unit at the start of that move, roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

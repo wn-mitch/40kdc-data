@@ -3268,7 +3268,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Guardians of the Machine" id="ad3e-0d92-47f2-f501" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a Charge move, you may use this ability, while the triggering unit is a unit within Engagement Range of a friendly GREY KNIGHTS VEHICLE unit, while the triggering unit is within 6" of the unit:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a Charge move, you may use this ability, while the triggering unit is within Engagement Range of a friendly GREY KNIGHTS VEHICLE unit, while the triggering unit is within 6" of the unit:
   -&gt; The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
   -&gt; Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
   -&gt; The unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
@@ -5287,7 +5287,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         <profile name="Hammer Aflame (Psychic)" id="84c6-f80b-b7c9-5531" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit:
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit:
     -&gt; Roll one D6:
       - On 1: Nothing happens.
       - On 2-3: That unit suffers 1 mortal wound.

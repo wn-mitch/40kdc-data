@@ -2245,7 +2245,7 @@
         </profile>
         <profile name="Siege Shield" id="bf78-bb59-a791-18b0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while making attacks made with demolisher cannon, while a friendly unit other than this unit is not a unit within Engagement Range of the target unit, units can target this model with ranged weapons.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while making attacks made with demolisher cannon, while a friendly unit other than this unit is not within Engagement Range of the target unit, units can target this model with ranged weapons.
 While making ranged attacks, this model ignores any negative modifiers to its Hit rolls.</characteristic>
           </characteristics>
         </profile>
@@ -3194,7 +3194,7 @@ While making ranged attacks, this model ignores any negative modifiers to its Hi
         <profile name="Prophesied Doom" id="dbce-cd23-2d89-8b1a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6823,7 +6823,7 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
         <profile name="Exploding Horrors" id="ae0b-d1b5-562e-0605" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit, binding it as enemy:
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit, binding it as enemy:
     -&gt; Select one or more friendly BRIMSTONE models in the unit, binding them as horrors:
       -&gt; For each selected model:
         -&gt; Roll one D6: on a 4+, destroy that model; the bound enemy suffers 1 mortal wound.</characteristic>

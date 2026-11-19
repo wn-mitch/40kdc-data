@@ -7465,7 +7465,7 @@ Improve the Damage characteristic of melee weapons equipped by this model by 1.<
           <profiles>
             <profile name="Alien Majesty" id="fe35-4c05-517a-c1a6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is a unit within Engagement Range of the unit, subtract 1 from that unit's Objective Control characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is within Engagement Range of the unit, subtract 1 from that unit's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>

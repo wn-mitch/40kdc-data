@@ -299,7 +299,7 @@ Add 2 to the unit's Strength characteristic.</characteristic>
         <profile name="Daemonic Destruction" id="194c-8b41-ed9b-dfae" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of this model:
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model:
     -&gt; Roll D6, then:
       -&gt; If the result of that roll is a 4+, that unit suffers 1 mortal wound (to a maximum of 6 mortal wounds).</characteristic>
           </characteristics>
@@ -4445,7 +4445,7 @@ Add 2 to the unit's Strength characteristic.</characteristic>
         <profile name="Malign Sacrifice" id="3110-dd22-9d3e-2dfa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability, if the unit contains 1+ DARK DISCIPLE models:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit:
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit:
     -&gt; Roll one D6:
       - On 1: Nothing happens.
       - On 2-5: That unit suffers 1 mortal wound.
@@ -5562,7 +5562,7 @@ Add 2 to the unit's Strength characteristic.</characteristic>
         <profile name="Terrifying Assault" id="9496-2f9a-fdf2-7ef9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, once per phase per army:
-  For each enemy unit: While the unit is a unit within Engagement Range of a friendly unit with the Terrifying Assault ability, the unit must take a Battle-shock test.</characteristic>
+  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Terrifying Assault ability, the unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="f81b-6e7c-7370-6776" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -9047,7 +9047,7 @@ The unit is eligible to declare a charge in a turn in which it Fell Back.</chara
         </profile>
         <profile name="Siege Shield" id="76b7-ff81-c8be-af96" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while making attacks made with demolisher cannon, while the target is a unit within Engagement Range of this model, while a friendly unit other than this unit is not a unit within Engagement Range of the target unit, units can target this model with ranged weapons.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while making attacks made with demolisher cannon, while the target is within Engagement Range of this model, while a friendly unit other than this unit is not within Engagement Range of the target unit, units can target this model with ranged weapons.
 While making ranged attacks, this model ignores any negative modifiers to its Hit rolls.</characteristic>
           </characteristics>
         </profile>
@@ -15861,7 +15861,7 @@ This model ignores any modifiers to its Charge and Advance rolls.</characteristi
         <profile name="Head Taker" id="f303-c20f-c87d-596f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move, while this model is leading a unit:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
         <profile name="Herald of the Apocalypse (Aura)" id="b8bf-0502-f0fd-2b66" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -16554,7 +16554,7 @@ This model ignores any modifiers to its Charge and Advance rolls.</characteristi
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll the Charge roll.
 -&gt; Each time a friendly unit ends a Charge move:
-  -&gt; Select one enemy unit: roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 4+, that unit suffers D3 mortal wounds.</characteristic>
+  -&gt; Select one enemy unit: roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers D3 mortal wounds.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -17008,7 +17008,7 @@ This model ignores any modifiers to its Charge and Advance rolls.</characteristi
       <profiles>
         <profile name="Voice Eater" id="6a21-34a2-3e68-8be2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit (excluding MONSTER or VEHICLE units) is a unit within Engagement Range of the unit, all enemy units (excluding MONSTER or VEHICLE units) cannot be targeted with Stratagems.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit (excluding MONSTER or VEHICLE units) is within Engagement Range of the unit, all enemy units (excluding MONSTER or VEHICLE units) cannot be targeted with Stratagems.</characteristic>
           </characteristics>
         </profile>
       </profiles>

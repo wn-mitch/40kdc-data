@@ -4424,6 +4424,14 @@ for AddUnitEffectModifierPlacementVariant1Item {
 ///        "onslaught"
 ///      ]
 ///    },
+///    "exemptions": {
+///      "description": "Units that do not count towards this cap: for each included unit carrying every `donor_keywords`, one included unit carrying every `receiver_keywords` is not counted (e.g. one INQUISITORIAL AGENTS unit per INQUISITOR unit does not count towards RETINUE).",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/allied-keyword-limit-exemption"
+///      },
+///      "uniqueItems": true
+///    },
 ///    "keyword": {
 ///      "description": "Keyword the cap counts (matched case-insensitively against a unit's keywords union faction_keywords, e.g. 'Titanic', 'Armiger', 'Character').",
 ///      "$ref": "#/$defs/keyword"
@@ -4443,6 +4451,9 @@ for AddUnitEffectModifierPlacementVariant1Item {
 pub struct AlliedKeywordLimit {
     ///Battle size this cap applies at.
     pub battle_size: AlliedKeywordLimitBattleSize,
+    ///Units that do not count towards this cap: for each included unit carrying every `donor_keywords`, one included unit carrying every `receiver_keywords` is not counted (e.g. one INQUISITORIAL AGENTS unit per INQUISITOR unit does not count towards RETINUE).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub exemptions: ::std::option::Option<Vec<AlliedKeywordLimitExemption>>,
     ///Keyword the cap counts (matched case-insensitively against a unit's keywords union faction_keywords, e.g. 'Titanic', 'Armiger', 'Character').
     pub keyword: Keyword,
     ///Maximum number of units carrying `keyword` includable via the rule at this battle size.
@@ -4529,6 +4540,42 @@ impl ::std::convert::TryFrom<::std::string::String> for AlliedKeywordLimitBattle
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///A donor/receiver pair exempting receiver units from an allied keyword cap, one receiver per donor unit.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "A donor/receiver pair exempting receiver units from an allied keyword cap, one receiver per donor unit.",
+///  "type": "object",
+///  "required": [
+///    "donor_keywords",
+///    "receiver_keywords"
+///  ],
+///  "properties": {
+///    "donor_keywords": {
+///      "description": "A donor unit carries all of these keywords.",
+///      "minItems": 1,
+///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "receiver_keywords": {
+///      "description": "A receiver unit carries all of these keywords.",
+///      "minItems": 1,
+///      "$ref": "#/$defs/keyword-list"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct AlliedKeywordLimitExemption {
+    ///A donor unit carries all of these keywords.
+    pub donor_keywords: Vec<Keyword>,
+    ///A receiver unit carries all of these keywords.
+    pub receiver_keywords: Vec<Keyword>,
 }
 ///The combined points cap for units included via an allied rule at one battle size.
 ///
@@ -4716,6 +4763,11 @@ impl ::std::convert::TryFrom<::std::string::String> for AlliedPointsLimitBattleS
 ///      },
 ///      "uniqueItems": true
 ///    },
+///    "keyword_limits_exclusive": {
+///      "description": "True when the rule's `keyword_limits` are alternatives: the units included via the rule may carry only one of the limited keywords, whose cap then applies (e.g. Imperial Knights allies: one TITANIC model or up to three ARMIGER models, never both; Titan pools: one Titan of any class).",
+///      "default": false,
+///      "type": "boolean"
+///    },
 ///    "label": {
 ///      "description": "Short panel/category heading a list builder groups this pool under (e.g. 'Daemons', 'Imperial Agents', 'Titanic Allies'). Defaults to `name` when omitted.",
 ///      "type": "string"
@@ -4755,6 +4807,11 @@ impl ::std::convert::TryFrom<::std::string::String> for AlliedPointsLimitBattleS
 ///        "$ref": "#/$defs/entity-id"
 ///      },
 ///      "uniqueItems": true
+///    },
+///    "replaces_faction_keywords": {
+///      "description": "True when units included via this rule have their Faction keywords replaced with the army's (e.g. Renegades: legion units taken by a Heretic Astartes army become HERETIC ASTARTES).",
+///      "default": false,
+///      "type": "boolean"
 ///    },
 ///    "required_keywords": {
 ///      "description": "Additional filter: a unit must carry ALL of these to be included via this rule (e.g. the matching god ['Khorne'] for a per-god Daemon pool).",
@@ -4844,6 +4901,9 @@ pub struct AlliedRule {
     ///Per-keyword, per-battle-size cap on how many units carrying `keyword` may be included via this rule (e.g. Imperial Knights' Titanic 1 / Armiger 3; Agents of the Imperium's Character/Retinue/Requisitioned counts). Advisory construction cap.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub keyword_limits: ::std::option::Option<Vec<AlliedKeywordLimit>>,
+    ///True when the rule's `keyword_limits` are alternatives: the units included via the rule may carry only one of the limited keywords, whose cap then applies (e.g. Imperial Knights allies: one TITANIC model or up to three ARMIGER models, never both; Titan pools: one Titan of any class).
+    #[serde(default)]
+    pub keyword_limits_exclusive: bool,
     ///Short panel/category heading a list builder groups this pool under (e.g. 'Daemons', 'Imperial Agents', 'Titanic Allies'). Defaults to `name` when omitted.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub label: ::std::option::Option<::std::string::String>,
@@ -4859,6 +4919,9 @@ pub struct AlliedRule {
     ///Abilities that included units lose under this rule (e.g. Astra Militarum units lose 'voice-of-command' under Brood Brothers). A display/effect hint, not a construction constraint.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub removes_ability_ids: ::std::option::Option<Vec<EntityId>>,
+    ///True when units included via this rule have their Faction keywords replaced with the army's (e.g. Renegades: legion units taken by a Heretic Astartes army become HERETIC ASTARTES).
+    #[serde(default)]
+    pub replaces_faction_keywords: bool,
     ///Additional filter: a unit must carry ALL of these to be included via this rule (e.g. the matching god ['Khorne'] for a per-god Daemon pool).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub required_keywords: ::std::option::Option<KeywordList>,
@@ -25389,6 +25452,10 @@ for MortalWoundsEffectModifierRollPerAttackAttackType {
 ///    "keeps_eligible": {
 ///      "const": true
 ///    },
+///    "mandatory": {
+///      "description": "The target must make the move (\"must make an ingress move\"); absent, the move is optional.",
+///      "const": true
+///    },
 ///    "mode": {
 ///      "$ref": "#/$defs/move-mode"
 ///    },
@@ -25490,6 +25557,9 @@ pub struct MoveEffectModifier {
     pub engaged_with: ::std::option::Option<MoveEffectModifierEngagedWith>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub keeps_eligible: ::std::option::Option<::serde_json::Value>,
+    ///The target must make the move ("must make an ingress move"); absent, the move is optional.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mandatory: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mode: ::std::option::Option<MoveMode>,
     pub move_type: MoveEffectModifierMoveType,
@@ -51415,6 +51485,12 @@ impl ::std::convert::TryFrom<::std::string::String> for StateChangeEffectModifie
 ///    "player_turn": {
 ///      "$ref": "#/$defs/player-turn"
 ///    },
+///    "secondary_effect_extra_cp": {
+///      "description": "CP spent on top of cp_cost to use the Stratagem's secondary (alternate) effect instead of its main one. Absent when the Stratagem has no paid secondary effect.",
+///      "type": "integer",
+///      "maximum": 4.0,
+///      "minimum": 1.0
+///    },
 ///    "target_restrictions": {
 ///      "oneOf": [
 ///        {
@@ -51487,6 +51563,9 @@ pub struct Stratagem {
     pub name: StratagemName,
     pub phases: PhaseList,
     pub player_turn: PlayerTurn,
+    ///CP spent on top of cp_cost to use the Stratagem's secondary (alternate) effect instead of its main one. Absent when the Stratagem has no paid secondary effect.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub secondary_effect_extra_cp: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub target_restrictions: ::std::option::Option<StratagemTargetRestrictions>,
     pub timing: StratagemTiming,

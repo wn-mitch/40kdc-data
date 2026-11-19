@@ -2485,7 +2485,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
       <profiles>
         <profile name="Merciless Eradication" id="a758-3ef0-6c72-e854" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of the unit:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of the unit:
   -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
   -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
           </characteristics>
@@ -3179,7 +3179,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
         <profile name="Mass Driver Accelerators" id="65f9-57f7-04b2-d4b8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of this model:
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model:
     -&gt; Roll one D6:
       - On 1: Nothing happens.
       - On 2-5: That unit suffers D3 mortal wounds.
@@ -6834,7 +6834,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
               </constraints>
               <rules>
                 <rule name="Methodical Annihilation" id="4fe3-d3f1-76a8-7957" hidden="false">
-                  <description>If the target is the closest eligible target or while the target is a unit within Engagement Range of the attacking unit:
+                  <description>If the target is the closest eligible target or while the target is within Engagement Range of the attacking unit:
   -&gt; You can re-roll a Wound roll of 1 for attacks made by all friendly LEAGUES OF VOTANN models.
   -&gt; If the attacking unit has the EINHYR HEARTHGUARD, KÂHL or ÛTHAR THE DESTINED keyword, improve all friendly LEAGUES OF VOTANN models' Armour Penetration characteristic by 1.</description>
                 </rule>

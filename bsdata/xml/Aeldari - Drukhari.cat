@@ -5407,7 +5407,7 @@
         </profile>
         <profile name="No Escape" id="78dc-ea48-2571-770e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of a friendly unit with the No Escape ability:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of a friendly unit with the No Escape ability:
   -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
   -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
           </characteristics>
@@ -6447,7 +6447,7 @@
         <profile name="Tormentors" id="5fe7-1033-aa07-ffb6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; At the start of the Fight phase, once per phase per army:
-  For each enemy unit: While the unit is a unit within Engagement Range of a friendly unit with the Tormentors ability, the unit must take a Battle-shock test.
+  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Tormentors ability, the unit must take a Battle-shock test.
 While making melee attacks, while the target is Battle-shocked, the unit gets +1 to Hit rolls.</characteristic>
           </characteristics>
         </profile>

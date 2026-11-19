@@ -3296,7 +3296,7 @@
         <profile name="Bloody Stampede" id="8e2d-d787-ce5a-e539" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of this model:
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model:
     -&gt; Roll one D6:
       - On 1: Nothing happens.
       - On 2-3: That unit suffers 1 mortal wound.
@@ -7505,7 +7505,7 @@
         <profile name="Brass Stampede" id="6090-914b-608c-4865" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit: roll one D6 for each model in the unit: for each 4+, that unit suffers D3 mortal wounds.</characteristic>
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit: roll one D6 for each model in the unit: for each 4+, that unit suffers D3 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="c2c4-a51d-eca7-f54d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -7746,7 +7746,7 @@
       <profiles>
         <profile name="Bane of Cowards" id="11a6-6308-60ee-4b5d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of a friendly unit with the Bane of Cowards ability:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of a friendly unit with the Bane of Cowards ability:
   -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
   -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
           </characteristics>
@@ -7982,7 +7982,7 @@
         <profile name="Relentless Carnage" id="1e6f-c95d-b0db-e658" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Fight phase, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of this model: roll 8 D6: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model: roll 8 D6: for each 4+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -10339,7 +10339,7 @@ Applies to: units with WORLD EATERS, CHARACTER (excluding EPIC HERO).</descripti
                 <rule name="Rampaging Terrors" id="8587-90c8-b454-b824" hidden="false">
                   <description>All friendly DAEMON VEHICLE units gain the Terror of Khorne ability:
   -&gt; At the start of the Fight phase, you may use this ability:
-    -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit (each unit can be selected for this ability at most once per phase across your army): that unit must take a Battle-shock test, applying -1 to that test.
+    -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit (each unit can be selected for this ability at most once per phase across your army): that unit must take a Battle-shock test, applying -1 to that test.
 You cannot select this Detachment together with another ONSLAUGHT Detachment.
 Applies to: units with DAEMON, VEHICLE.</description>
                 </rule>

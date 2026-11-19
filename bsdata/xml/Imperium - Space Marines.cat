@@ -6888,7 +6888,7 @@ Add 1 to the Strength characteristic of melee weapons equipped by models in this
         <profile name="High Marshal" id="d0f1-f03d-ff8b-b2b4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase:
-  -&gt; Select up to one enemy unit if the selected unit is a unit within Engagement Range of the unit:
+  -&gt; Select up to one enemy unit if the selected unit is within Engagement Range of the unit:
     -&gt; Roll one D6:
       - On 1: Nothing happens.
       - On 2-3: That unit suffers D3 mortal wounds.
@@ -12240,12 +12240,12 @@ While the unit is not within 6" of a friendly BLOOD ANGELS CHARACTER unit or whi
         <profile name="Death Visions of Sanguinius" id="ae2d-0cbb-747b-05e9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After an enemy unit fights, you may use this ability, during the Fight phase, if this model lost 1+ models to the just-resolved attacks:
-  While this model is a unit within Engagement Range of an enemy unit that is the Warlord:
+  While this model is within Engagement Range of an enemy unit that is the Warlord:
     -&gt; Roll one D6:
       - On 1: The triggering unit suffers D3 mortal wounds.
       - On 2-3: The triggering unit suffers 3 mortal wounds.
       - On 4-6: The triggering unit suffers D3+3 mortal wounds.
-  While this model is not a unit within Engagement Range of an enemy unit that is the Warlord:
+  While this model is not within Engagement Range of an enemy unit that is the Warlord:
     -&gt; Roll one D6:
       - On 1: Nothing happens.
       - On 2-3: The triggering unit suffers D3 mortal wounds.
@@ -15701,12 +15701,12 @@ While the unit is not within 6" of a friendly BLOOD ANGELS CHARACTER unit or whi
         <profile name="Death Visions of Sanguinius" id="beb4-712f-1f05-253e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After an enemy unit fights, you may use this ability, during the Fight phase, if this model lost 1+ models to the just-resolved attacks:
-  While this model is a unit within Engagement Range of an enemy unit that is the Warlord:
+  While this model is within Engagement Range of an enemy unit that is the Warlord:
     -&gt; Roll one D6:
       - On 1: The triggering unit suffers D3 mortal wounds.
       - On 2-3: The triggering unit suffers 3 mortal wounds.
       - On 4-6: The triggering unit suffers D3+3 mortal wounds.
-  While this model is not a unit within Engagement Range of an enemy unit that is the Warlord:
+  While this model is not within Engagement Range of an enemy unit that is the Warlord:
     -&gt; Roll one D6:
       - On 1: Nothing happens.
       - On 2-3: The triggering unit suffers D3 mortal wounds.
@@ -27589,7 +27589,7 @@ The unit cannot be targeted with the Tactical Dreadnought Fortitude Terminator S
         </profile>
         <profile name="Lord of the Pyroclasts" id="cad3-a142-4e1c-9963" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is a unit within Engagement Range of the unit, worsen that unit's Objective Control characteristic by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is within Engagement Range of the unit, worsen that unit's Objective Control characteristic by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Unto the Anvil" id="036e-ec62-c200-84c9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -31509,7 +31509,7 @@ The unit gains Tactical Doctrine (Combat Doctrines).</characteristic>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit must be placed into Strategic Reserves.
 During the first battle round, during the Movement phase, in your turn, the unit can make an Ingress move.
 -&gt; When the unit is set up:
-  -&gt; Friendly units embarked within the unit can disembark using the Assault Disembarkation rules.
+  -&gt; Friendly units embarked within the unit must disembark using the Assault Disembarkation rules.
   -&gt; The triggering unit must be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
@@ -38197,7 +38197,7 @@ While the Assault Doctrine option of Combat Doctrines is active, melee weapons e
         <profile name="Hammer of Wrath" id="15d8-7e25-5cda-9feb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="3df2-f91e-af3f-69a0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -42858,7 +42858,7 @@ Subtract 3 from the unit's detection range characteristic.</characteristic>
         <profile name="Fearsome Assault" id="4e1b-2139-ce99-c3df" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, once per phase per army:
-  For each enemy unit: While the unit is a unit within Engagement Range of a friendly unit with the Fearsome Assault ability, the unit must take a Battle-shock test, applying -1 to that test.</characteristic>
+  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Fearsome Assault ability, the unit must take a Battle-shock test, applying -1 to that test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Terror Troops (Aura)" id="02ff-48a5-3fdf-6709" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -45873,7 +45873,7 @@ Subtract 3 from the unit's detection range characteristic.</characteristic>
         </profile>
         <profile name="Judgement of the Omnissiah" id="7ccf-6101-bb5d-5421" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is a unit within Engagement Range of a friendly SPACE WOLVES VEHICLE unit, you can re-roll the Wound roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is within Engagement Range of a friendly SPACE WOLVES VEHICLE unit, you can re-roll the Wound roll for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="840a-bbf3-058f-6312" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -49372,7 +49372,7 @@ While the target is within 6" of the unit, you can re-roll a Hit roll of 1.</cha
       <profiles>
         <profile name="Savage Frenzy" id="a5d9-e6e0-3f87-9f36" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move, while the triggering unit is a unit within Engagement Range of the unit, unless the triggering unit has the MONSTER keyword, unless the triggering unit has the VEHICLE keyword:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move, while the triggering unit is within Engagement Range of the unit, unless the triggering unit has the MONSTER keyword, unless the triggering unit has the VEHICLE keyword:
   -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
   -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
           </characteristics>

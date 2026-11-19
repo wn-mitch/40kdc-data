@@ -1077,7 +1077,7 @@
       {
         "name": "For the Greater Good",
         "id": "f67c-fe00-db17-281c",
-        "description": "At the start of your Shooting phase, you may use this ability, if your Army Faction is TAU EMPIRE:\n  -> Select one or more friendly units if the selected unit has the For the Greater Good ability: that unit is an Observer.\n  -> Until the end of the phase: during the Shooting phase, in your turn, for each friendly unit that is Observers: select one enemy unit that is not Spotted if the selected unit is visible to the unit: unless the unit has been selected to shoot this phase, if the unit is eligible to shoot (excluding Fortification units), while the unit is not Battle-shocked, that unit is Spotted by the unit until the end of the phase; if the attacking unit is Guided, while the target is Spotted, improve all friendly models' Ballistic Skill characteristic by 1; if the attacking unit is Guided, while the target is Spotted, while the target is a unit that is Spotted by a friendly MARKERLIGHT unit that is an Observer, all friendly models' weapons gain [IGNORES COVER].",
+        "description": "At the start of your Shooting phase, you may use this ability, if your Army Faction is TAU EMPIRE:\n  -> Select one or more friendly units if the selected unit has the For the Greater Good ability: that unit is an Observer.\n  -> Until the end of the phase: during the Shooting phase, in your turn, for each friendly unit that is Observers: select one enemy unit that is not Spotted if the selected unit is visible to the unit: unless the unit has been selected to shoot this phase, if the unit is eligible to shoot (excluding Fortification units), while the unit is not Battle-shocked, that unit is Spotted by the unit until the end of the phase; if the attacking unit is Guided, while the target is Spotted, improve all friendly models' Ballistic Skill characteristic by 1; if the attacking unit is Guided, while the target is Spotted, while the target is Spotted by a friendly MARKERLIGHT unit that is an Observer, all friendly models' weapons gain [IGNORES COVER].",
         "hidden": false
       }
     ],
@@ -1290,7 +1290,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of the unit:\n    -> Roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 4+, that unit suffers D3 mortal wounds.\n    -> If 1+ enemy models destroyed, that unit must take a Battle-shock test.",
+                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is within Engagement Range of the unit:\n    -> Roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers D3 mortal wounds.\n    -> If 1+ enemy models destroyed, that unit must take a Battle-shock test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -52105,7 +52105,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time the unit becomes observer, while this model is leading a unit, until the end of the phase, if a friendly model is Guided, while the target is a unit that is Spotted by the unit, ranged weapons equipped by that model gain [SUSTAINED HITS 1].\nApplies to: units with T’AU EMPIRE.",
+                    "$text": "Each time the unit becomes observer, while this model is leading a unit, until the end of the phase, if a friendly model is Guided, while the target is Spotted by the unit, ranged weapons equipped by that model gain [SUSTAINED HITS 1].\nApplies to: units with T’AU EMPIRE.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -53292,7 +53292,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time the unit becomes observer, while this model is leading a unit, until the end of the phase, if a friendly model is Guided, while the target is a unit that is Spotted by the unit, ranged weapons equipped by that model gain [LETHAL HITS].\nApplies to: units with T’AU EMPIRE.",
+                    "$text": "Each time the unit becomes observer, while this model is leading a unit, until the end of the phase, if a friendly model is Guided, while the target is Spotted by the unit, ranged weapons equipped by that model gain [LETHAL HITS].\nApplies to: units with T’AU EMPIRE.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

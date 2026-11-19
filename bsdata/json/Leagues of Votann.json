@@ -9413,7 +9413,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is a unit within Engagement Range of the unit:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
+                "$text": "Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of the unit:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11936,7 +11936,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move, you may use this ability:\n  -> Select one enemy unit if the selected unit is a unit within Engagement Range of this model:\n    -> Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-5: That unit suffers D3 mortal wounds.\n      - On 6: That unit suffers D3+3 mortal wounds.",
+                "$text": "When the unit ends a Charge move, you may use this ability:\n  -> Select one enemy unit if the selected unit is within Engagement Range of this model:\n    -> Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-5: That unit suffers D3 mortal wounds.\n      - On 6: That unit suffers D3+3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24285,7 +24285,7 @@
                   {
                     "name": "Methodical Annihilation",
                     "id": "4fe3-d3f1-76a8-7957",
-                    "description": "If the target is the closest eligible target or while the target is a unit within Engagement Range of the attacking unit:\n  -> You can re-roll a Wound roll of 1 for attacks made by all friendly LEAGUES OF VOTANN models.\n  -> If the attacking unit has the EINHYR HEARTHGUARD, KÂHL or ÛTHAR THE DESTINED keyword, improve all friendly LEAGUES OF VOTANN models' Armour Penetration characteristic by 1.",
+                    "description": "If the target is the closest eligible target or while the target is within Engagement Range of the attacking unit:\n  -> You can re-roll a Wound roll of 1 for attacks made by all friendly LEAGUES OF VOTANN models.\n  -> If the attacking unit has the EINHYR HEARTHGUARD, KÂHL or ÛTHAR THE DESTINED keyword, improve all friendly LEAGUES OF VOTANN models' Armour Penetration characteristic by 1.",
                     "hidden": false
                   }
                 ]

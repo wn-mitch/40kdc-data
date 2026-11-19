@@ -1468,7 +1468,7 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         <profile name="Krushin' Impetus" id="3a30-6ba3-e7a2-8b44" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is a unit within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is a unit within Engagement Range of the selected unit: for each 3+, that unit suffers 1 mortal wound.</characteristic>
+  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 3+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="54db-f50c-62cf-58ad" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -13614,7 +13614,7 @@ Applies to: units with WARBOSS.</characteristic>
           <profiles>
             <profile name="Wimp-kickaz (Upgrade)" id="ce8d-f1ff-3477-7f1e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to make a Fall Back move, while the triggering unit is a unit within Engagement Range of the unit:
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to make a Fall Back move, while the triggering unit is within Engagement Range of the unit:
   -&gt; While the unit is riled up, the triggering unit must take a Desperate Escape test, applying -1 to that test.
   -&gt; While the unit is not riled up, the triggering unit must take a Desperate Escape test.</characteristic>
               </characteristics>
