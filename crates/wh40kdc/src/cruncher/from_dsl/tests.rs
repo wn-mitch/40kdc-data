@@ -785,7 +785,7 @@ fn complementary_reroll_pair_applies_the_weaker_while_undecided() {
     assert_eq!(undecided.unsupported.len(), 1);
     assert_eq!(
         undecided.unsupported[0].reason,
-        complement::COMPLEMENT_REASON
+        "conditional: cannot evaluate condition \"matches\" against current context; the weaker re-roll of its complementary pair applies"
     );
     assert!(undecided.unsupported[0]
         .needs

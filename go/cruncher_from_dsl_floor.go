@@ -6,9 +6,23 @@ import (
 	"strings"
 )
 
+// undecidedConditionText is the reason a conditional whose condition the context leaves
+// undecided is reported under. An operator condition (`and`, `or`, `not`) has no type; it is
+// named by its operator.
+func undecidedConditionText(condition map[string]any) string {
+	conditionName := condition["type"]
+	if conditionName == nil {
+		conditionName = condition["operator"]
+	}
+	return "conditional: cannot evaluate condition \"" + jsStr(conditionName) + "\" against current context"
+}
+
 // complementReason is the reason the stronger of a complementary re-roll pair is reported under
-// while its condition is undecided.
-const complementReason = "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies"
+// while its condition is undecided: an undecided conditional like any other, so callers decide it
+// through its needs, noting that the weaker re-roll applies meanwhile.
+func complementReason(condition map[string]any) string {
+	return undecidedConditionText(condition) + "; the weaker re-roll of its complementary pair applies"
+}
 
 // stableJSON renders a value as JSON with object keys sorted, so equal values compare equal
 // whatever their key order.
@@ -161,7 +175,7 @@ func walkSequence(steps []any, source map[string]any, opts dslOpts, out *effectT
 		case "stronger":
 			node, _ := asMap(step)
 			condition, _ := getMap(node, "condition")
-			entry := unsup(complementReason, step)
+			entry := unsup(complementReason(condition), step)
 			entry["needs"] = undecidedNeeds(condition, opts.context, opts.perspective, evalSource)
 			out.unsupported = append(out.unsupported, entry)
 		default:

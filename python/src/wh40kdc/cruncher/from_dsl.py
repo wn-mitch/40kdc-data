@@ -623,7 +623,7 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
             else:
                 out["unsupported"].append(
                     {
-                        "reason": COMPLEMENT_REASON,
+                        "reason": complement_reason(step["condition"]),
                         "effectFragment": step,
                         "needs": _undecided_needs(
                             step["condition"],
@@ -2288,19 +2288,12 @@ def _translate_conditional(
         None if opts.get("grantedHolder") else source,
     )
     if verdict == "unknown":
-        # An operator condition (`not`, `and`, `or`) is named by its operator.
-        condition_name = condition.get("type")
-        if condition_name is None:
-            condition_name = condition.get("operator")
         if _condition_mentions_timing(evaluated):
             _enumerate_timing_gate({**node, "condition": evaluated}, source, opts, out)
         else:
             out["unsupported"].append(
                 {
-                    "reason": (
-                        "conditional: cannot evaluate condition "
-                        f'"{_js_str(condition_name)}" against current context'
-                    ),
+                    "reason": _undecided_condition_reason(condition),
                     "effectFragment": node.get("_activation_source", node),
                     "needs": _undecided_needs(
                         evaluated,
@@ -2315,12 +2308,27 @@ def _translate_conditional(
         _walk(effect, source, opts, out)
 
 
-COMPLEMENT_REASON = (
-    "conditional: the stronger re-roll of a complementary pair needs its undecided condition; "
-    "the weaker applies"
-)
-"""The reason the stronger of a complementary re-roll pair is reported under while its condition
-is undecided."""
+def _undecided_condition_reason(condition: dict[str, Any]) -> str:
+    """The reason a conditional whose condition the context leaves undecided is reported under.
+
+    An operator condition (`not`, `and`, `or`) is named by its operator.
+    """
+    condition_name = condition.get("type")
+    if condition_name is None:
+        condition_name = condition.get("operator")
+    name = _js_str(condition_name)
+    return f'conditional: cannot evaluate condition "{name}" against current context'
+
+
+def complement_reason(condition: dict[str, Any]) -> str:
+    """The reason the stronger of a complementary re-roll pair is reported under while undecided.
+
+    It is an undecided conditional like any other, so callers decide it through its ``needs``; the
+    suffix notes that the weaker re-roll applies meanwhile.
+    """
+    suffix = "the weaker re-roll of its complementary pair applies"
+    return f"{_undecided_condition_reason(condition)}; {suffix}"
+
 
 _REROLL_SUBSET_RANK = {"ones": 1, "ones-and-twos": 2, "all-failures": 3}
 
@@ -4073,9 +4081,7 @@ def _matches_unit_filter(
         elif key == "level" and value == "unit":
             continue
         elif (
-            key == "level"
-            and value == "model"
-            and all(name in ("level", "owner") for name in filt)
+            key == "level" and value == "model" and all(name in ("level", "owner") for name in filt)
         ):
             # "Each model from your army": every model of a unit on that side, so the whole unit.
             continue

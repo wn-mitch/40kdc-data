@@ -4,12 +4,18 @@
 use serde_json::Value;
 
 use super::js::*;
-use super::levers::evaluate_condition;
+use super::levers::{evaluate_condition, undecided_condition_reason};
 use super::WalkOpts;
 
 /// The reason the stronger of a complementary re-roll pair is reported under while its condition
-/// is undecided.
-pub(super) const COMPLEMENT_REASON: &str = "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies";
+/// is undecided: an undecided conditional like any other, so callers decide it through its
+/// `needs`, noting that the weaker re-roll applies meanwhile.
+pub(super) fn complement_reason(condition: &Obj) -> String {
+    format!(
+        "{}; the weaker re-roll of its complementary pair applies",
+        undecided_condition_reason(condition)
+    )
+}
 
 /// A step's role in a complementary pair.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

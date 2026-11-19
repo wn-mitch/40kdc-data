@@ -12,8 +12,6 @@ from typing import Any
 
 import pytest
 
-from wh40kdc.cruncher.from_dsl import COMPLEMENT_REASON
-
 BREACHING_COMMAND = "breaching-command-adeptus-mechanicus"
 
 
@@ -35,7 +33,10 @@ def test_applies_the_weaker_re_roll_without_board_state(breaching_command: Any) 
     assert [buff["contribution"] for buff in out["applied"]] == [
         {"type": "reroll", "roll": "hit", "subset": "ones"}
     ]
-    assert [item["reason"] for item in out["unsupported"]] == [COMPLEMENT_REASON]
+    assert [item["reason"] for item in out["unsupported"]] == [
+        'conditional: cannot evaluate condition "matches" against current context; '
+        "the weaker re-roll of its complementary pair applies"
+    ]
     assert out["unsupported"][0]["needs"], "the stronger re-roll names the condition it needs"
 
 

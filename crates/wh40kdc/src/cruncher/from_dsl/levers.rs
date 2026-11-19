@@ -495,6 +495,20 @@ pub(super) fn lasting_setup(effect: &Value, duration: Option<&Value>) -> Value {
     Value::Object(rewritten)
 }
 
+/// The reason a conditional whose condition the context leaves undecided is reported under,
+/// naming an operator condition by its operator.
+pub(super) fn undecided_condition_reason(condition: &Obj) -> String {
+    format!(
+        "conditional: cannot evaluate condition \"{}\" against current context",
+        js_string(
+            condition
+                .get("type")
+                .filter(|kind| !kind.is_null())
+                .or_else(|| condition.get("operator"))
+        )
+    )
+}
+
 pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let Some(condition) = object(node.get("condition")) else {
         return;
@@ -596,15 +610,7 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                 enumerate_timing_gate(node, opts, out);
             } else {
                 out.unsupported.push((
-                    format!(
-                        "conditional: cannot evaluate condition \"{}\" against current context",
-                        js_string(
-                            condition
-                                .get("type")
-                                .filter(|kind| !kind.is_null())
-                                .or_else(|| condition.get("operator"))
-                        )
-                    ),
+                    undecided_condition_reason(condition),
                     Value::Object(activation_fragment(node).unwrap_or(node).clone()),
                     Some(undecided_needs(evaluated, opts)),
                 ));

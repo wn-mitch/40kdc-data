@@ -2462,15 +2462,7 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 		if conditionMentionsTiming(condition) {
 			enumerateTimingGate(node, source, opts, out)
 		} else {
-			// An operator condition (`and`, `or`, `not`) has no type; it is named by its operator.
-			conditionName := condition["type"]
-			if conditionName == nil {
-				conditionName = condition["operator"]
-			}
-			entry := unsup(
-				"conditional: cannot evaluate condition \""+jsStr(conditionName)+"\" against current context",
-				activationFragment(node),
-			)
+			entry := unsup(undecidedConditionText(condition), activationFragment(node))
 			entry["needs"] = undecidedNeeds(evaluated, opts.context, opts.perspective, evalSource)
 			out.unsupported = append(out.unsupported, entry)
 		}

@@ -504,7 +504,7 @@ function walk(
         if (floor === undefined) walk(step, source, opts, out);
         else if (floor === "weaker") walk((step as Record<string, unknown>).effect, source, opts, out);
         else out.unsupported.push({
-          reason: COMPLEMENT_REASON,
+          reason: complementReason((step as { condition: Record<string, unknown> }).condition),
           effectFragment: step,
           needs: undecidedNeeds((step as { condition: Record<string, unknown> }).condition, opts.context, opts.perspective, opts.grantedHolder ? undefined : source),
         });
@@ -1875,7 +1875,7 @@ function translateConditional(
       enumerateTimingGate(node, source, opts, out);
     } else {
       out.unsupported.push({
-        reason: `conditional: cannot evaluate condition "${String(condition.type ?? condition.operator)}" against current context`,
+        reason: undecidedConditionReason(condition),
         effectFragment: activationSources.get(node)?.fragment ?? node,
         needs: undecidedNeeds(evaluated, opts.context, opts.perspective, opts.grantedHolder ? undefined : source),
       });
@@ -1886,8 +1886,19 @@ function translateConditional(
   walk(effect, source, opts, out);
 }
 
-/** The reason the stronger of a complementary re-roll pair is reported under while its condition is undecided. */
-export const COMPLEMENT_REASON = "conditional: the stronger re-roll of a complementary pair needs its undecided condition; the weaker applies";
+/** The reason a conditional whose condition the context leaves undecided is reported under, naming an operator condition by its operator. */
+function undecidedConditionReason(condition: Record<string, unknown>): string {
+  return `conditional: cannot evaluate condition "${String(condition.type ?? condition.operator)}" against current context`;
+}
+
+/**
+ * The reason the stronger of a complementary re-roll pair is reported under while its condition is
+ * undecided: an undecided conditional like any other, so callers decide it through its `needs`,
+ * noting that the weaker re-roll applies meanwhile.
+ */
+export function complementReason(condition: Record<string, unknown>): string {
+  return `${undecidedConditionReason(condition)}; the weaker re-roll of its complementary pair applies`;
+}
 
 /** JSON with object keys sorted, so equal values compare equal whatever their key order. */
 function stableJson(value: unknown): string {

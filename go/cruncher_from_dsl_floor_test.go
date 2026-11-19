@@ -26,8 +26,9 @@ func TestComplementaryRerollPairAppliesTheWeakerWhileUndecided(t *testing.T) {
 	if got := subsets(undecided); len(got) != 1 || got[0] != "hit:ones" {
 		t.Fatalf("undecided: applied %v, want [hit:ones]", got)
 	}
-	if len(undecided.unsupported) != 1 || getStr(mapOr(undecided.unsupported[0]), "reason") != complementReason {
-		t.Fatalf("undecided: unsupported %v, want one %q entry", undecided.unsupported, complementReason)
+	const want = `conditional: cannot evaluate condition "matches" against current context; the weaker re-roll of its complementary pair applies`
+	if len(undecided.unsupported) != 1 || getStr(mapOr(undecided.unsupported[0]), "reason") != want {
+		t.Fatalf("undecided: unsupported %v, want one %q entry", undecided.unsupported, want)
 	}
 
 	near := effectToBuffs(ability.Raw["effect"], source, map[string]any{

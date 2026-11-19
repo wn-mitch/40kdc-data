@@ -904,14 +904,14 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                         out,
                     ),
                     Some(complement::Floor::Stronger) => {
-                        let needs = step
+                        let condition = step
                             .get("condition")
                             .and_then(Value::as_object)
-                            .map(|condition| levers::undecided_needs(condition, opts));
+                            .expect("a complementary step has an object condition");
                         out.unsupported.push((
-                            complement::COMPLEMENT_REASON.to_string(),
+                            complement::complement_reason(condition),
                             step.clone(),
-                            needs,
+                            Some(levers::undecided_needs(condition, opts)),
                         ));
                     }
                 }

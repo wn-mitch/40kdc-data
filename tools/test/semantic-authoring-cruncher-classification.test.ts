@@ -28,6 +28,25 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     expect(classifyUnsupported(malformed)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
   });
 
+  it("counts the stronger of a complementary re-roll pair as an undecided condition the caller can answer", () => {
+    const near = { type: "matches", parameters: { filter: { within: { of: { owner: "friendly", all_of: ["EXAMPLE BANNER"] }, range: { inches: 6 } } } } };
+    const pair = { type: "sequence", steps: [
+      { type: "conditional", condition: { operator: "not", operands: [near] }, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } } },
+      { type: "conditional", condition: near, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", result_scope: "any-result" } } },
+    ] };
+    const undecided = effectToBuffs(pair, source, ctx);
+    expect(undecided.applied.map((buff) => buff.contribution)).toEqual([{ type: "reroll", roll: "hit", subset: "ones" }]);
+    expect(undecided.unsupported.map((item) => item.reason)).toEqual([
+      'conditional: cannot evaluate condition "matches" against current context; the weaker re-roll of its complementary pair applies',
+    ]);
+    expect(classifyUnsupported(undecided.unsupported)).toEqual({ honestUnknown: 1, outsideDamagePath: 0, unrecognizedShape: 0 });
+    const key = undecided.unsupported[0]!.needs![0]!.key;
+    const decided = (holds: boolean) => effectToBuffs(pair, source, { ...ctx, conditionFacts: { [key]: holds } });
+    expect(decided(true).applied.map((buff) => buff.contribution)).toEqual([{ type: "reroll", roll: "hit", subset: "all-failures" }]);
+    expect(decided(false).applied.map((buff) => buff.contribution)).toEqual([{ type: "reroll", roll: "hit", subset: "ones" }]);
+    expect([...decided(true).unsupported, ...decided(false).unsupported]).toEqual([]);
+  });
+
   it("counts a heal effect as outside the damage path, not an unrecognized shape", () => {
     const { unsupported } = effectToBuffs({ type: "heal", target: "this-unit", modifier: { value: 3 } }, source, ctx);
     expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
