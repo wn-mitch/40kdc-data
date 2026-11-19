@@ -10510,6 +10510,180 @@
       }
     },
     {
+      "caseId": "canonical/scenario/choice-secondary-option",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "choice",
+        "secondary_option": 1,
+        "options": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-compare",
+              "parameters": {
+                "left": {
+                  "of": "attacker",
+                  "stat": "S"
+                },
+                "comparison": "gt",
+                "right": {
+                  "of": "defender",
+                  "stat": "T"
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-scenario?0",
+            "label": "+1 to hit",
+            "group": {
+              "id": "fabricated-scenario?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "id": "fabricated-scenario?1",
+            "label": "+1 to hit",
+            "group": {
+              "id": "fabricated-scenario?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "secondary": true,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
+      }
+    },
+    {
+      "caseId": "canonical/scenario/choice-secondary-option-out-of-range",
+      "abilityId": "fabricated-scenario",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-scenario",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "choice",
+        "secondary_option": 2,
+        "options": [
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-scenario?0",
+            "label": "+1 to hit",
+            "group": {
+              "id": "fabricated-scenario?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "id": "fabricated-scenario?1",
+            "label": "+1 to wound",
+            "group": {
+              "id": "fabricated-scenario?choice",
+              "maxActivations": 1
+            },
+            "requires": null,
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "wound-mod",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "applicableWhen": []
+      }
+    },
+    {
       "caseId": "canonical/scenario/rule-active-option-in-choice",
       "abilityId": "fabricated-scenario",
       "source": {
@@ -17641,7 +17815,7 @@
           "conditional: cannot evaluate condition \"happened\" against current context"
         ],
         "unsupportedScopes": [
-          "unresolved"
+          "encounter-layer"
         ],
         "needKeys": [
           "attacker:{\"parameters\":{\"event\":\"move-ended\",\"filter\":{\"move_types\":[\"charge\"]},\"window\":\"turn\"},\"type\":\"happened\"}"
@@ -20874,6 +21048,664 @@
           "unresolved"
         ],
         "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/moment-scope/move",
+      "abilityId": "fabricated-moment-scope",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-moment-scope",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "advance"
+            ]
+          }
+        },
+        "effect": {
+          "type": "move",
+          "target": {
+            "owner": "friendly",
+            "embarked_in": "this-unit"
+          },
+          "modifier": {
+            "move_type": "disembark",
+            "mode": "shock"
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerTurn": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"event\":\"move-ended\",\"filter\":{\"move_types\":[\"advance\"]},\"window\":\"turn\"},\"type\":\"happened\"}"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/moment-scope/phase-gated-move",
+      "abilityId": "fabricated-moment-scope",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-moment-scope",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "advance"
+            ]
+          }
+        },
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "move",
+            "target": {
+              "owner": "friendly",
+              "embarked_in": "this-unit"
+            },
+            "modifier": {
+              "move_type": "disembark",
+              "mode": "shock"
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerTurn": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "unsupportedScopes": [
+          "out-of-scope"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"event\":\"move-ended\",\"filter\":{\"move_types\":[\"advance\"]},\"window\":\"turn\"},\"type\":\"happened\"}"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/moment-scope/mortal-wounds",
+      "abilityId": "fabricated-moment-scope",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-moment-scope",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "advance"
+            ]
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "amount": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerTurn": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "unsupportedScopes": [
+          "encounter-layer"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"event\":\"move-ended\",\"filter\":{\"move_types\":[\"advance\"]},\"window\":\"turn\"},\"type\":\"happened\"}"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/moment-scope/hit-modifier",
+      "abilityId": "fabricated-moment-scope",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-moment-scope",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "advance"
+            ]
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerTurn": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"happened\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"event\":\"move-ended\",\"filter\":{\"move_types\":[\"advance\"]},\"window\":\"turn\"},\"type\":\"happened\"}"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/selection-backref/own-designation-and-same-unit",
+      "abilityId": "fabricated-selection-backref",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-selection-backref",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 18
+              },
+              "of": "this-unit"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "example-mark"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "defender",
+                      "filter": {
+                        "designated": "example-mark"
+                      }
+                    }
+                  },
+                  {
+                    "type": "attack-is",
+                    "parameters": {
+                      "attack_type": "ranged"
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "type": "same-unit",
+                  "parameters": {
+                    "subject": "defender",
+                    "as": "selected-unit"
+                  }
+                },
+                "effect": {
+                  "type": "re-roll",
+                  "target": "attacker",
+                  "modifier": {
+                    "roll": "hit",
+                    "subset": "ones"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerTurn": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"designate\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "encounter-layer"
+        ],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-selection-backref#selected",
+            "label": "Selected enemy unit: re-roll hit 1s",
+            "group": null,
+            "requires": [
+              {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy",
+                    "within": {
+                      "range": {
+                        "inches": 18
+                      },
+                      "of": "this-unit"
+                    }
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  }
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "reroll",
+                "roll": "hit",
+                "subset": "ones"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/selection-backref/other-designation-stays",
+      "abilityId": "fabricated-selection-backref",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-selection-backref",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 18
+              },
+              "of": "this-unit"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "example-mark"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "defender",
+                      "filter": {
+                        "designated": "other-mark"
+                      }
+                    }
+                  },
+                  {
+                    "type": "attack-is",
+                    "parameters": {
+                      "attack_type": "ranged"
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "type": "same-unit",
+                  "parameters": {
+                    "subject": "defender",
+                    "as": "selected-unit"
+                  }
+                },
+                "effect": {
+                  "type": "re-roll",
+                  "target": "attacker",
+                  "modifier": {
+                    "roll": "hit",
+                    "subset": "ones"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerTurn": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"designate\" is not modelled by the buff layer",
+          "conditional: cannot evaluate condition \"and\" against current context"
+        ],
+        "unsupportedScopes": [
+          "encounter-layer",
+          "unresolved"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"designated\":\"other-mark\"},\"subject\":\"defender\"},\"type\":\"matches\"}"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/visible-target/declared-visible",
+      "abilityId": "fabricated-visible-target",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-visible-target",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "defender",
+            "filter": {
+              "owner": "enemy",
+              "visible": {
+                "to": "attacker"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetVisible": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "extra-keyword",
+            "keywordRef": {
+              "keyword_id": "ignores-cover"
+            }
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/visible-target/declared-hidden",
+      "abilityId": "fabricated-visible-target",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-visible-target",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "defender",
+            "filter": {
+              "owner": "enemy",
+              "visible": {
+                "to": "attacker"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetVisible": false
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/visible-target/undeclared",
+      "abilityId": "fabricated-visible-target",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-visible-target",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "defender",
+            "filter": {
+              "owner": "enemy",
+              "visible": {
+                "to": "attacker"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"owner\":\"enemy\",\"visible\":{\"to\":\"attacker\"}},\"subject\":\"defender\"},\"type\":\"matches\"}"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/visible-target/other-observer-stays-unknown",
+      "abilityId": "fabricated-visible-target",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-visible-target",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "defender",
+            "filter": {
+              "owner": "enemy",
+              "visible": {
+                "to": "this-model"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "targetVisible": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [
+          "attacker:{\"parameters\":{\"filter\":{\"owner\":\"enemy\",\"visible\":{\"to\":\"this-model\"}},\"subject\":\"defender\"},\"type\":\"matches\"}"
+        ],
         "activatable": []
       }
     }

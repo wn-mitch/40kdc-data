@@ -212,6 +212,7 @@ fn run_dsl_corpus(filename: &str) {
                         "capRaise": a.cap_raise,
                         "requiresOption": a.requires_option,
                         "excludesOption": a.excludes_option,
+                        "secondary": a.secondary,
                         "buffs": a.buffs.iter().map(|b| serde_json::to_value(&b.contribution).unwrap()).collect::<Vec<_>>(),
                     })
                 })
@@ -231,6 +232,7 @@ fn run_dsl_corpus(filename: &str) {
                         "capRaise",
                         "requiresOption",
                         "excludesOption",
+                        "secondary",
                     ] {
                         o.entry(key).or_insert(Value::Null);
                     }

@@ -144,3 +144,16 @@ describe("targeting-restriction version 9: a unit selects new targets for the sa
     expect(describeEffectInline(effect as never)).toBe("the triggering unit can select new targets for that charge");
   });
 });
+
+describe("a target that made a Charge move this phase", () => {
+  it("lowers charged-this-phase to the target's own Charge move ending this phase", () => {
+    const text = "Fixture rule. When selecting charge targets, it can only select enemy units that made a charge move this phase.";
+    const leaf = { by: "this-unit", target: "enemy-units", may: "must-target", kind: "charge", weapon_type: "all", target_history: ["charged-this-phase"] };
+    const result = compileLeaves(placed(text, ["it can only select enemy units that made a charge move this phase", FAMILY, leaf]), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const charged = { type: "happened", parameters: { event: "move-ended", subject: "this-unit", filter: { move_types: ["charge"] }, window: "phase" } };
+    const effect = { type: "targeting", target: "this-unit", modifier: { by: "this-unit", may: "must-target", kind: "charge", target: { owner: "enemy" }, target_condition: charged } };
+    expect(result.mechanics.effect).toEqual(effect);
+    expect(validate()(effect)).toBe(true);
+  });
+});

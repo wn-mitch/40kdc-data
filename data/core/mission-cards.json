@@ -10,12 +10,12 @@
         "vp": 2
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "vp_per": 3,
         "per": "controlled-objective"
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "home_of": "friendly" } } },
         "vp_per": 2,
         "per": "controlled-non-home-objective",
@@ -36,12 +36,12 @@
         "per": "objective-newly-controlled-this-turn"
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "vp_per": 3,
         "per": "controlled-objective"
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "vp_per": 3,
         "per": "controlled-objective-in-enemy-territory",
         "cumulative": true
@@ -85,12 +85,12 @@
         "vp": 4
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "count": { "min": 2 } } },
         "vp": 5
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "compare": { "owner": "enemy", "comparison": "gt" } } },
         "vp": 4
       },
@@ -121,7 +121,7 @@
         "exclusive_group": "purge-kill"
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "vp_per": 4,
         "per": "controlled-non-home-objective"
       },
@@ -145,7 +145,7 @@
         "vp": 3
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "vp_per": 4,
         "per": "controlled-non-home-objective"
       },
@@ -184,12 +184,12 @@
         "vp": 5
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "compare": { "owner": "enemy", "comparison": "gt" } } },
         "vp": 5
       },
@@ -213,7 +213,7 @@
         "vp": 3
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
@@ -242,12 +242,12 @@
         "vp": 3
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "compare": { "owner": "enemy", "comparison": "gt" } } },
         "vp": 6
       },
@@ -287,12 +287,12 @@
         "exclusive_group": "consecrated-tier"
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "compare": { "owner": "enemy", "comparison": "gt" } } },
         "vp": 4
       },
@@ -336,7 +336,7 @@
         "vp": 3
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       }
@@ -384,7 +384,7 @@
         "per": "enemy-unit-destroyed-this-turn"
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
@@ -433,7 +433,7 @@
         "vp": 4
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
@@ -472,7 +472,7 @@
         "cumulative": true
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
@@ -510,12 +510,12 @@
         "vp": 2
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "count": { "min": 3 } } },
         "vp": 4
       }
@@ -555,7 +555,7 @@
         "vp": 4
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
@@ -596,12 +596,12 @@
         "cumulative": true
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "central" } } },
         "vp": 4,
         "cumulative": true
@@ -640,7 +640,7 @@
         "cumulative": true
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       }
@@ -673,7 +673,7 @@
         "vp": 2
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
@@ -709,7 +709,7 @@
         "per": "enemy-unit-destroyed-this-turn"
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 3
       }
@@ -741,12 +741,12 @@
         "vp": 4
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "compare": { "owner": "enemy", "comparison": "gt" } } },
         "vp": 4
       },
@@ -776,7 +776,7 @@
     ],
     "awards": [
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },
@@ -823,7 +823,7 @@
         "vp": 2
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "vp_per": 4,
         "per": "controlled-non-home-objective"
       },
@@ -858,7 +858,7 @@
         "vp": 6
       },
       {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 }, "final_round_timing": "end-of-turn" },
         "when": { "type": "controls", "parameters": { "objective": { "role": "non-home" } } },
         "vp": 4
       },

@@ -116,6 +116,7 @@ def _run_dsl_corpus(dataset: Any, filename: str) -> None:
                     "capRaise": a.get("capRaise"),
                     "requiresOption": a.get("requiresOption"),
                     "excludesOption": a.get("excludesOption"),
+                    "secondary": a.get("secondary"),
                     "buffs": [b["contribution"] for b in a["buffs"]],
                 }
                 for a in result["activatable"]
@@ -129,6 +130,7 @@ def _run_dsl_corpus(dataset: Any, filename: str) -> None:
                     "capRaise": None,
                     "requiresOption": None,
                     "excludesOption": None,
+                    "secondary": None,
                     **e,
                 }
                 for e in c["expected"]["activatable"]

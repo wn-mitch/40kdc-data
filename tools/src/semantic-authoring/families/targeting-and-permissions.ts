@@ -142,7 +142,7 @@ const RESTRICTION_KINDS = [...TARGETING_KINDS, "ability"] as const;
 const WEAPON_SCOPES = ["all", "melee", "ranged"] as const;
 /** The units a targeting restriction can name on either side of the by form. */
 const TARGETING_UNITS = ["this-unit", "this-model", "selected-unit", "event-subject", "enemy-units", "friendly-units", ANTECEDENT] as const;
-const TARGET_HISTORY = ["engaged-with-by-at-turn-start", "attacked-by-another-unit-this-phase", "charged-by-another-unit-this-phase", "fell-back-this-phase"] as const;
+const TARGET_HISTORY = ["engaged-with-by-at-turn-start", "attacked-by-another-unit-this-phase", "charged-by-another-unit-this-phase", "fell-back-this-phase", "charged-this-phase"] as const;
 const AFTER_MOVES = ["advance", "fall-back"] as const;
 const RESELECT_KINDS = ["charge", "attack", "shoot", "fight"] as const;
 const MAX_INCHES = 48;
@@ -421,13 +421,13 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "targeting-restriction",
-    version: 9,
+    version: 10,
     role: "EFFECT",
     label: "Who may target whom",
     description: "A unit may, may not, or must target something with an attack, a Stratagem, a selection by an ability, or a specific kind of attack, optionally only within a range or with a kind of weapon. "
       + "On the subject form, the subject is this unit, this model, enemy units, or the unit an earlier leaf of the record introduced (antecedent: \"that enemy unit\", \"it\"); may reselect: the subject (this unit, or event-subject: the unit whose selection triggered the ability) having selected targets of kind charge, attack, shoot or fight, can select new ones for that same action, with weapon_type all and no range, target or by. "
       + "On the by form, target (the unit being targeted, or matched-units: the units an earlier unit-position of matching-unit introduced) and optionally by (the unit that targets) replace subject: \"this unit can only target that enemy unit\" is by this unit, target that unit; \"this unit cannot be targeted by ranged attacks\" is target this unit with no by. With target, stratagem names the one Stratagem (kind stratagem), except: core-stratagems keeps Core Stratagems allowed (\"other than Core Stratagems\"), and ability names the one ability's record id whose selection this limits (kind ability: \"that unit cannot be selected as part of the Noospheric Transference Detachment rule\"). "
-      + "With by: target_history (the restriction covers only targets with any of this history, relative to by: engaged-with-by-at-turn-start, attacked-by-another-unit-this-phase, charged-by-another-unit-this-phase, fell-back-this-phase), kinds (two or more kinds in place of kind: \"shoot and declare a charge … it cannot target\") and after_moves (the restriction holds only in a turn by made one of these moves: advance, fall-back). "
+      + "With by: target_history (the restriction covers only targets with any of this history, relative to by: engaged-with-by-at-turn-start, attacked-by-another-unit-this-phase, charged-by-another-unit-this-phase, fell-back-this-phase, charged-this-phase: the target made a Charge move this phase), kinds (two or more kinds in place of kind: \"shoot and declare a charge … it cannot target\") and after_moves (the restriction holds only in a turn by made one of these moves: advance, fall-back). "
       + "not_engaged_with: this-unit, on a may target restriction: when targets are selected, the units it names are not considered to be within Engagement Range of this unit (ranged attacks can target enemy units engaged with it).",
     starter: { subject: "", may: "", kind: "", weapon_type: "" },
     parameterSchema: {

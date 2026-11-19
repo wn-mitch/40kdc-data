@@ -4699,14 +4699,14 @@ impl ::std::convert::TryFrom<::std::string::String> for AlliedPointsLimitBattleS
         value.parse()
     }
 }
-///A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by two optional, AND-combined conditions: an army-wide keyword condition (`army_keywords_any`) and/or a selected detachment (`detachment_ids`).
+///A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by three optional, AND-combined conditions: the army's faction (`host_faction_ids`), an army-wide keyword condition (`army_keywords_any`) and a selected detachment (`detachment_ids`).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
 ///  "title": "AlliedRule",
-///  "description": "A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by two optional, AND-combined conditions: an army-wide keyword condition (`army_keywords_any`) and/or a selected detachment (`detachment_ids`).",
+///  "description": "A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by three optional, AND-combined conditions: the army's faction (`host_faction_ids`), an army-wide keyword condition (`army_keywords_any`) and a selected detachment (`detachment_ids`).",
 ///  "type": "object",
 ///  "required": [
 ///    "game_version",
@@ -4751,6 +4751,14 @@ impl ::std::convert::TryFrom<::std::string::String> for AlliedPointsLimitBattleS
 ///    },
 ///    "game_version": {
 ///      "$ref": "#/$defs/game-version-ref"
+///    },
+///    "host_faction_ids": {
+///      "description": "Host gate: the factions whose armies may take this pool (the MFM dump's host faction keywords, mapped to faction ids). When non-empty, only an army of a listed faction is offered the rule, even if another of its faction keywords appears in `army_keywords_any` (a Deathwatch army carries ADEPTUS ASTARTES but is not a host of the generic Agents of the Imperium pool). Empty/absent = no host gate.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "uniqueItems": true
 ///    },
 ///    "id": {
 ///      "$ref": "#/$defs/entity-id"
@@ -4897,6 +4905,9 @@ pub struct AlliedRule {
     #[serde(default)]
     pub exclusive: bool,
     pub game_version: GameVersionRef,
+    ///Host gate: the factions whose armies may take this pool (the MFM dump's host faction keywords, mapped to faction ids). When non-empty, only an army of a listed faction is offered the rule, even if another of its faction keywords appears in `army_keywords_any` (a Deathwatch army carries ADEPTUS ASTARTES but is not a host of the generic Agents of the Imperium pool). Empty/absent = no host gate.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub host_faction_ids: ::std::option::Option<Vec<EntityId>>,
     pub id: EntityId,
     ///Per-keyword, per-battle-size cap on how many units carrying `keyword` may be included via this rule (e.g. Imperial Knights' Titanic 1 / Armiger 3; Agents of the Imperium's Character/Retinue/Requisitioned counts). Advisory construction cap.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -8203,6 +8214,11 @@ for CharacteristicResolutionEffectModifierTie {
 ///      },
 ///      "minItems": 2
 ///    },
+///    "secondary_option": {
+///      "description": "Index into `options` of the Stratagem's secondary effect: picking that option costs the Stratagem's `secondary_effect_extra_cp` on top of its CP cost. Absent, every option costs the Stratagem's CP cost alone.",
+///      "type": "integer",
+///      "minimum": 0.0
+///    },
 ///    "type": {
 ///      "type": "string",
 ///      "enum": [
@@ -8231,6 +8247,9 @@ pub struct ChoiceEffect {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub min_choices: ::std::option::Option<u64>,
     pub options: ::std::vec::Vec<EffectNode>,
+    ///Index into `options` of the Stratagem's secondary effect: picking that option costs the Stratagem's `secondary_effect_extra_cp` on top of its CP cost. Absent, every option costs the Stratagem's CP cost alone.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub secondary_option: ::std::option::Option<u64>,
     #[serde(rename = "type")]
     pub type_: ChoiceEffectType,
 }
@@ -43111,6 +43130,13 @@ impl ::std::convert::TryFrom<::std::string::String> for ScopeDuration {
 ///      },
 ///      "additionalProperties": false
 ///    },
+///    "final_round_timing": {
+///      "description": "The moment the award is checked in the fifth (final) battle round, replacing `timing` and `phase` for that round only. An award checked at the end of your Command phase, except at the end of your turn in the fifth battle round, is timing: end-of-phase, phase: command, final_round_timing: end-of-turn. Absent means `timing` holds in every round of the window. Requires `timing`.",
+///      "type": "string",
+///      "enum": [
+///        "end-of-turn"
+///      ]
+///    },
 ///    "phase": {
 ///      "description": "The phase the trigger is relative to. Required when `timing` is start-of-phase or end-of-phase; omitted for turn- or battle-level timings.",
 ///      "$ref": "#/$defs/phase"
@@ -43139,6 +43165,9 @@ impl ::std::convert::TryFrom<::std::string::String> for ScopeDuration {
 pub struct ScoringTrigger {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub battle_round: ::std::option::Option<ScoringTriggerBattleRound>,
+    ///The moment the award is checked in the fifth (final) battle round, replacing `timing` and `phase` for that round only. An award checked at the end of your Command phase, except at the end of your turn in the fifth battle round, is timing: end-of-phase, phase: command, final_round_timing: end-of-turn. Absent means `timing` holds in every round of the window. Requires `timing`.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub final_round_timing: ::std::option::Option<ScoringTriggerFinalRoundTiming>,
     ///The phase the trigger is relative to. Required when `timing` is start-of-phase or end-of-phase; omitted for turn- or battle-level timings.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub phase: ::std::option::Option<Phase>,
@@ -43152,6 +43181,7 @@ impl ::std::default::Default for ScoringTrigger {
     fn default() -> Self {
         Self {
             battle_round: Default::default(),
+            final_round_timing: Default::default(),
             phase: Default::default(),
             player_turn: Default::default(),
             timing: Default::default(),
@@ -43197,6 +43227,78 @@ impl ::std::default::Default for ScoringTriggerBattleRound {
             max: Default::default(),
             min: Default::default(),
         }
+    }
+}
+///The moment the award is checked in the fifth (final) battle round, replacing `timing` and `phase` for that round only. An award checked at the end of your Command phase, except at the end of your turn in the fifth battle round, is timing: end-of-phase, phase: command, final_round_timing: end-of-turn. Absent means `timing` holds in every round of the window. Requires `timing`.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The moment the award is checked in the fifth (final) battle round, replacing `timing` and `phase` for that round only. An award checked at the end of your Command phase, except at the end of your turn in the fifth battle round, is timing: end-of-phase, phase: command, final_round_timing: end-of-turn. Absent means `timing` holds in every round of the window. Requires `timing`.",
+///  "type": "string",
+///  "enum": [
+///    "end-of-turn"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ScoringTriggerFinalRoundTiming {
+    #[serde(rename = "end-of-turn")]
+    EndOfTurn,
+}
+impl ::std::fmt::Display for ScoringTriggerFinalRoundTiming {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::EndOfTurn => f.write_str("end-of-turn"),
+        }
+    }
+}
+impl ::std::str::FromStr for ScoringTriggerFinalRoundTiming {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "end-of-turn" => Ok(Self::EndOfTurn),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ScoringTriggerFinalRoundTiming {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for ScoringTriggerFinalRoundTiming {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ScoringTriggerFinalRoundTiming {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///The moment the award is checked. 'End of your turn' = end-of-turn; 'End of your Command phase' = end-of-phase with phase: command; 'End of the battle' = end-of-battle.

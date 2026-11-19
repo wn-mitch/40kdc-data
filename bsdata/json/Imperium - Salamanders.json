@@ -59,6 +59,47 @@
             "type": "max",
             "value": 1
           }
+        ],
+        "modifiers": [
+          {
+            "field": "6ec4-d020-928a-dd6c",
+            "type": "set",
+            "value": 0,
+            "conditionGroups": [
+              {
+                "type": "or",
+                "conditions": [
+                  {
+                    "childId": "adbc-73f5-6ca3-14f7",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "ef28-6a84-abfc-ca0e",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "d20b-47c4-0774-a6a2",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          }
         ]
       },
       {
@@ -74,6 +115,47 @@
             "shared": true,
             "type": "max",
             "value": 1
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "d840-9a19-1998-0e7f",
+            "type": "set",
+            "value": 0,
+            "conditionGroups": [
+              {
+                "type": "or",
+                "conditions": [
+                  {
+                    "childId": "67df-3aea-f203-cdc2",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "ef28-6a84-abfc-ca0e",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "d20b-47c4-0774-a6a2",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -91,6 +173,47 @@
             "type": "max",
             "value": 1
           }
+        ],
+        "modifiers": [
+          {
+            "field": "4098-0f1d-71d9-85f7",
+            "type": "set",
+            "value": 0,
+            "conditionGroups": [
+              {
+                "type": "or",
+                "conditions": [
+                  {
+                    "childId": "67df-3aea-f203-cdc2",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "adbc-73f5-6ca3-14f7",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "d20b-47c4-0774-a6a2",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          }
         ]
       },
       {
@@ -106,6 +229,47 @@
             "shared": true,
             "type": "max",
             "value": 1
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "5e23-c718-2bb7-bbe5",
+            "type": "set",
+            "value": 0,
+            "conditionGroups": [
+              {
+                "type": "or",
+                "conditions": [
+                  {
+                    "childId": "67df-3aea-f203-cdc2",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "adbc-73f5-6ca3-14f7",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "ef28-6a84-abfc-ca0e",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -166,6 +330,26 @@
         ]
       },
       {
+        "name": "Allies: Imperial Agents: Exemption donor: Character + Voidfarers",
+        "id": "b2ca-9a81-aca0-460d",
+        "hidden": true
+      },
+      {
+        "name": "Allies: Imperial Agents: Exemption receiver: Voidsmen-At-Arms + Retinue",
+        "id": "34f2-c904-fb04-95a7",
+        "hidden": true
+      },
+      {
+        "name": "Allies: Imperial Agents: Exemption donor: Inquisitor",
+        "id": "27c0-c239-566a-444f",
+        "hidden": true
+      },
+      {
+        "name": "Allies: Imperial Agents: Exemption receiver: Inquisitorial Agents + Retinue",
+        "id": "f2cb-b73d-e972-280a",
+        "hidden": true
+      },
+      {
         "name": "Allies: Imperial Agents: Retinue",
         "id": "c628-f3d0-5913-7a1f",
         "hidden": true,
@@ -197,6 +381,806 @@
                 "value": 1
               }
             ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "d62d-db22-4893-4bc0",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "b2ca-9a81-aca0-460d",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "34f2-c904-fb04-95a7",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "d62d-db22-4893-4bc0",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "b2ca-9a81-aca0-460d",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 2
+                  },
+                  {
+                    "childId": "34f2-c904-fb04-95a7",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "d62d-db22-4893-4bc0",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "b2ca-9a81-aca0-460d",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 3
+                  },
+                  {
+                    "childId": "34f2-c904-fb04-95a7",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "d62d-db22-4893-4bc0",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "b2ca-9a81-aca0-460d",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 4
+                  },
+                  {
+                    "childId": "34f2-c904-fb04-95a7",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 4
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "d62d-db22-4893-4bc0",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "27c0-c239-566a-444f",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "f2cb-b73d-e972-280a",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "d62d-db22-4893-4bc0",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "27c0-c239-566a-444f",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 2
+                  },
+                  {
+                    "childId": "f2cb-b73d-e972-280a",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "d62d-db22-4893-4bc0",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "27c0-c239-566a-444f",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 3
+                  },
+                  {
+                    "childId": "f2cb-b73d-e972-280a",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "d62d-db22-4893-4bc0",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "27c0-c239-566a-444f",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 4
+                  },
+                  {
+                    "childId": "f2cb-b73d-e972-280a",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 4
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "baf8-997f-e323-a090",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "b2ca-9a81-aca0-460d",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "34f2-c904-fb04-95a7",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "baf8-997f-e323-a090",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "b2ca-9a81-aca0-460d",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 2
+                  },
+                  {
+                    "childId": "34f2-c904-fb04-95a7",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "baf8-997f-e323-a090",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "b2ca-9a81-aca0-460d",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 3
+                  },
+                  {
+                    "childId": "34f2-c904-fb04-95a7",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "baf8-997f-e323-a090",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "b2ca-9a81-aca0-460d",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 4
+                  },
+                  {
+                    "childId": "34f2-c904-fb04-95a7",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 4
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "baf8-997f-e323-a090",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "b2ca-9a81-aca0-460d",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 5
+                  },
+                  {
+                    "childId": "34f2-c904-fb04-95a7",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 5
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "baf8-997f-e323-a090",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "b2ca-9a81-aca0-460d",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 6
+                  },
+                  {
+                    "childId": "34f2-c904-fb04-95a7",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 6
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "baf8-997f-e323-a090",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "27c0-c239-566a-444f",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "f2cb-b73d-e972-280a",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "baf8-997f-e323-a090",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "27c0-c239-566a-444f",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 2
+                  },
+                  {
+                    "childId": "f2cb-b73d-e972-280a",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 2
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "baf8-997f-e323-a090",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "27c0-c239-566a-444f",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 3
+                  },
+                  {
+                    "childId": "f2cb-b73d-e972-280a",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 3
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "baf8-997f-e323-a090",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "27c0-c239-566a-444f",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 4
+                  },
+                  {
+                    "childId": "f2cb-b73d-e972-280a",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 4
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "baf8-997f-e323-a090",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "27c0-c239-566a-444f",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 5
+                  },
+                  {
+                    "childId": "f2cb-b73d-e972-280a",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 5
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "field": "d54e-7ab9-07b7-72e9",
+            "type": "increment",
+            "value": 1,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditions": [
+                  {
+                    "childId": "baf8-997f-e323-a090",
+                    "field": "selections",
+                    "includeChildForces": true,
+                    "includeChildSelections": true,
+                    "scope": "roster",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "27c0-c239-566a-444f",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 6
+                  },
+                  {
+                    "childId": "f2cb-b73d-e972-280a",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 6
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -219,6 +1203,29 @@
             "type": "max",
             "value": 3
           }
+        ],
+        "modifiers": [
+          {
+            "field": "c590-7d95-12c5-4c93",
+            "type": "set",
+            "value": 0,
+            "conditionGroups": [
+              {
+                "type": "or",
+                "conditions": [
+                  {
+                    "childId": "ed51-d704-6a44-c322",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          }
         ]
       },
       {
@@ -234,6 +1241,29 @@
             "shared": true,
             "type": "max",
             "value": 1
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "310b-533d-94d1-a524",
+            "type": "set",
+            "value": 0,
+            "conditionGroups": [
+              {
+                "type": "or",
+                "conditions": [
+                  {
+                    "childId": "afa7-59f0-75cd-0c35",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
           }
         ]
       }
@@ -4161,6 +5191,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "452f-b5fe-f20d-30d1"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption donor: Inquisitor",
+            "id": "b19f-7e2c-7d4a-33f6",
+            "hidden": false,
+            "primary": false,
+            "targetId": "27c0-c239-566a-444f"
           }
         ],
         "modifiers": [
@@ -4439,6 +5476,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "452f-b5fe-f20d-30d1"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption donor: Inquisitor",
+            "id": "9165-9ebb-a969-2cbf",
+            "hidden": false,
+            "primary": false,
+            "targetId": "27c0-c239-566a-444f"
           }
         ],
         "modifiers": [
@@ -4717,6 +5761,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "452f-b5fe-f20d-30d1"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption donor: Inquisitor",
+            "id": "bfc6-4dd6-5d71-5daa",
+            "hidden": false,
+            "primary": false,
+            "targetId": "27c0-c239-566a-444f"
           }
         ],
         "modifiers": [
@@ -4995,6 +6046,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "452f-b5fe-f20d-30d1"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption donor: Inquisitor",
+            "id": "080c-ed45-9c29-0d0f",
+            "hidden": false,
+            "primary": false,
+            "targetId": "27c0-c239-566a-444f"
           }
         ],
         "modifiers": [
@@ -5273,6 +6331,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "452f-b5fe-f20d-30d1"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption donor: Inquisitor",
+            "id": "9b12-cfbe-55c2-d28d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "27c0-c239-566a-444f"
           }
         ],
         "modifiers": [
@@ -5544,6 +6609,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "50a9-08e3-a786-a49b"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption receiver: Inquisitorial Agents + Retinue",
+            "id": "def6-95a7-c49e-3814",
+            "hidden": false,
+            "primary": false,
+            "targetId": "f2cb-b73d-e972-280a"
           },
           {
             "name": "Allies: Imperial Agents: Retinue",
@@ -6378,6 +7450,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "452f-b5fe-f20d-30d1"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption donor: Character + Voidfarers",
+            "id": "58e5-d71f-ab48-a3f0",
+            "hidden": false,
+            "primary": false,
+            "targetId": "b2ca-9a81-aca0-460d"
           }
         ],
         "modifiers": [
@@ -6656,6 +7735,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "452f-b5fe-f20d-30d1"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption donor: Character + Voidfarers",
+            "id": "9f2a-4fa4-93f2-3f6b",
+            "hidden": false,
+            "primary": false,
+            "targetId": "b2ca-9a81-aca0-460d"
           }
         ],
         "modifiers": [
@@ -8588,6 +9674,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "50a9-08e3-a786-a49b"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption receiver: Voidsmen-At-Arms + Retinue",
+            "id": "f237-fe7d-edb0-6e49",
+            "hidden": false,
+            "primary": false,
+            "targetId": "34f2-c904-fb04-95a7"
           },
           {
             "name": "Allies: Imperial Agents: Retinue",

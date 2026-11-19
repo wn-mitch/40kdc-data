@@ -3,21 +3,73 @@
   <categoryEntries>
     <categoryEntry name="Allies: Adeptus Titanicus" id="7a3f-9489-04fd-059b" hidden="false"/>
     <categoryEntry name="Allies: Adeptus Titanicus: Reaver Titan" id="52e7-1d4a-8964-6bea" hidden="true">
+      <modifiers>
+        <modifier field="6c18-6ca9-5fb1-464e" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="0969-58cc-f26b-10e1" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="7cac-5bba-9c86-ad41" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="c39f-32cd-60bf-1e08" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="6c18-6ca9-5fb1-464e" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
     </categoryEntry>
     <categoryEntry name="Allies: Adeptus Titanicus: Warbringer Nemesis Titan" id="0969-58cc-f26b-10e1" hidden="true">
+      <modifiers>
+        <modifier field="4655-4075-3055-a8d9" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="52e7-1d4a-8964-6bea" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="7cac-5bba-9c86-ad41" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="c39f-32cd-60bf-1e08" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="4655-4075-3055-a8d9" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
     </categoryEntry>
     <categoryEntry name="Allies: Adeptus Titanicus: Warhound Titan" id="7cac-5bba-9c86-ad41" hidden="true">
+      <modifiers>
+        <modifier field="e5dc-f5be-b0f3-8c30" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="52e7-1d4a-8964-6bea" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="0969-58cc-f26b-10e1" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="c39f-32cd-60bf-1e08" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="e5dc-f5be-b0f3-8c30" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
     </categoryEntry>
     <categoryEntry name="Allies: Adeptus Titanicus: Warlord Titan" id="c39f-32cd-60bf-1e08" hidden="true">
+      <modifiers>
+        <modifier field="a202-b0b5-0f2b-fc8b" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="52e7-1d4a-8964-6bea" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="0969-58cc-f26b-10e1" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="7cac-5bba-9c86-ad41" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="a202-b0b5-0f2b-fc8b" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
@@ -40,12 +92,236 @@
         <constraint id="e44e-906d-7d04-522a" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
     </categoryEntry>
+    <categoryEntry name="Allies: Imperial Agents: Exemption donor: Character + Voidfarers" id="5ed4-5232-31ca-92c8" hidden="true"/>
+    <categoryEntry name="Allies: Imperial Agents: Exemption receiver: Voidsmen-At-Arms + Retinue" id="8c84-3e2e-e9ee-072c" hidden="true"/>
+    <categoryEntry name="Allies: Imperial Agents: Exemption donor: Inquisitor" id="fb28-5f0f-a653-764f" hidden="true"/>
+    <categoryEntry name="Allies: Imperial Agents: Exemption receiver: Inquisitorial Agents + Retinue" id="2f6a-c36d-7d22-2307" hidden="true"/>
     <categoryEntry name="Allies: Imperial Agents: Retinue" id="fed5-ec40-db61-9db2" hidden="true">
       <modifiers>
         <modifier field="43cb-fcb2-f1c0-7abe" type="set" value="1">
           <conditions>
             <condition childId="d62d-db22-4893-4bc0" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
           </conditions>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="d62d-db22-4893-4bc0" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="5ed4-5232-31ca-92c8" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="8c84-3e2e-e9ee-072c" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="d62d-db22-4893-4bc0" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="5ed4-5232-31ca-92c8" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="2"/>
+                <condition childId="8c84-3e2e-e9ee-072c" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="2"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="d62d-db22-4893-4bc0" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="5ed4-5232-31ca-92c8" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="3"/>
+                <condition childId="8c84-3e2e-e9ee-072c" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="3"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="d62d-db22-4893-4bc0" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="5ed4-5232-31ca-92c8" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="4"/>
+                <condition childId="8c84-3e2e-e9ee-072c" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="4"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="d62d-db22-4893-4bc0" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="fb28-5f0f-a653-764f" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="2f6a-c36d-7d22-2307" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="d62d-db22-4893-4bc0" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="fb28-5f0f-a653-764f" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="2"/>
+                <condition childId="2f6a-c36d-7d22-2307" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="2"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="d62d-db22-4893-4bc0" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="fb28-5f0f-a653-764f" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="3"/>
+                <condition childId="2f6a-c36d-7d22-2307" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="3"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="d62d-db22-4893-4bc0" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="fb28-5f0f-a653-764f" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="4"/>
+                <condition childId="2f6a-c36d-7d22-2307" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="4"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="baf8-997f-e323-a090" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="5ed4-5232-31ca-92c8" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="8c84-3e2e-e9ee-072c" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="baf8-997f-e323-a090" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="5ed4-5232-31ca-92c8" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="2"/>
+                <condition childId="8c84-3e2e-e9ee-072c" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="2"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="baf8-997f-e323-a090" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="5ed4-5232-31ca-92c8" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="3"/>
+                <condition childId="8c84-3e2e-e9ee-072c" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="3"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="baf8-997f-e323-a090" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="5ed4-5232-31ca-92c8" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="4"/>
+                <condition childId="8c84-3e2e-e9ee-072c" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="4"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="baf8-997f-e323-a090" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="5ed4-5232-31ca-92c8" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="5"/>
+                <condition childId="8c84-3e2e-e9ee-072c" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="5"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="baf8-997f-e323-a090" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="5ed4-5232-31ca-92c8" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="6"/>
+                <condition childId="8c84-3e2e-e9ee-072c" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="6"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="baf8-997f-e323-a090" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="fb28-5f0f-a653-764f" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="2f6a-c36d-7d22-2307" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="baf8-997f-e323-a090" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="fb28-5f0f-a653-764f" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="2"/>
+                <condition childId="2f6a-c36d-7d22-2307" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="2"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="baf8-997f-e323-a090" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="fb28-5f0f-a653-764f" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="3"/>
+                <condition childId="2f6a-c36d-7d22-2307" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="3"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="baf8-997f-e323-a090" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="fb28-5f0f-a653-764f" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="4"/>
+                <condition childId="2f6a-c36d-7d22-2307" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="4"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="baf8-997f-e323-a090" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="fb28-5f0f-a653-764f" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="5"/>
+                <condition childId="2f6a-c36d-7d22-2307" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="5"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="43cb-fcb2-f1c0-7abe" type="increment" value="1">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditions>
+                <condition childId="baf8-997f-e323-a090" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+                <condition childId="fb28-5f0f-a653-764f" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="6"/>
+                <condition childId="2f6a-c36d-7d22-2307" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="6"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
         </modifier>
       </modifiers>
       <constraints>
@@ -54,11 +330,33 @@
     </categoryEntry>
     <categoryEntry name="Allies: Questoris Allies" id="5f76-7caf-528c-389c" hidden="false"/>
     <categoryEntry name="Allies: Questoris Allies: Armiger" id="b530-74b7-fcf2-b997" hidden="true">
+      <modifiers>
+        <modifier field="4327-9619-b00f-04f8" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="a041-6094-d949-74db" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="4327-9619-b00f-04f8" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="3"/>
       </constraints>
     </categoryEntry>
     <categoryEntry name="Allies: Questoris Allies: Titanic" id="a041-6094-d949-74db" hidden="true">
+      <modifiers>
+        <modifier field="8e0a-3373-cd2c-6106" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="b530-74b7-fcf2-b997" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="8e0a-3373-cd2c-6106" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
@@ -1804,6 +2102,7 @@
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="1619-1e95-27ef-9e34" hidden="false" primary="false" targetId="4ab0-9d3f-386b-0c3d"/>
         <categoryLink name="Allies: Imperial Agents: Character" id="470a-325c-2f57-acf2" hidden="false" primary="false" targetId="7d37-152b-88cf-672c"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption donor: Inquisitor" id="19fd-e614-6760-19c8" hidden="false" primary="false" targetId="fb28-5f0f-a653-764f"/>
       </categoryLinks>
     </entryLink>
     <entryLink name="Inquisitor Coteaz" id="a159-9b4a-4c6a-af51" hidden="false" import="true" targetId="264a-fc24-3a98-31dc" type="selectionEntry">
@@ -1920,6 +2219,7 @@
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="5aff-7d09-6fe3-2eed" hidden="false" primary="false" targetId="4ab0-9d3f-386b-0c3d"/>
         <categoryLink name="Allies: Imperial Agents: Character" id="8748-f302-4150-a600" hidden="false" primary="false" targetId="7d37-152b-88cf-672c"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption donor: Inquisitor" id="881b-6f08-43a7-a923" hidden="false" primary="false" targetId="fb28-5f0f-a653-764f"/>
       </categoryLinks>
     </entryLink>
     <entryLink name="Inquisitor Draxus" id="dc43-0554-a90d-d6aa" hidden="false" import="true" targetId="f3a6-de9-584e-c394" type="selectionEntry">
@@ -2036,6 +2336,7 @@
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="dc1d-8d6c-b050-82a7" hidden="false" primary="false" targetId="4ab0-9d3f-386b-0c3d"/>
         <categoryLink name="Allies: Imperial Agents: Character" id="72cd-19b2-94cd-09ca" hidden="false" primary="false" targetId="7d37-152b-88cf-672c"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption donor: Inquisitor" id="9630-d3db-ac64-281d" hidden="false" primary="false" targetId="fb28-5f0f-a653-764f"/>
       </categoryLinks>
     </entryLink>
     <entryLink name="Inquisitor Greyfax" id="cb47-86f6-b0c7-8145" hidden="false" import="true" targetId="6e0e-b9a2-f53d-ad0e" type="selectionEntry">
@@ -2152,6 +2453,7 @@
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="bac9-15f2-465e-b7fc" hidden="false" primary="false" targetId="4ab0-9d3f-386b-0c3d"/>
         <categoryLink name="Allies: Imperial Agents: Character" id="77b5-88c9-befc-ce06" hidden="false" primary="false" targetId="7d37-152b-88cf-672c"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption donor: Inquisitor" id="7c6a-46c6-8139-a080" hidden="false" primary="false" targetId="fb28-5f0f-a653-764f"/>
       </categoryLinks>
     </entryLink>
     <entryLink name="Inquisitor Kroyle" id="f3dd-4334-72f7-9f99" hidden="false" import="true" targetId="2a3f-b53b-6ea4-6da9" type="selectionEntry">
@@ -2268,6 +2570,7 @@
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="d23d-24a8-e317-d37c" hidden="false" primary="false" targetId="4ab0-9d3f-386b-0c3d"/>
         <categoryLink name="Allies: Imperial Agents: Character" id="e3c6-23bc-240e-9a98" hidden="false" primary="false" targetId="7d37-152b-88cf-672c"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption donor: Inquisitor" id="b11e-6117-0e10-6d03" hidden="false" primary="false" targetId="fb28-5f0f-a653-764f"/>
       </categoryLinks>
     </entryLink>
     <entryLink name="Inquisitorial Agents" id="cafa-11d6-666b-8740" hidden="false" import="true" targetId="4469-7239-717e-9abd" type="selectionEntry">
@@ -2383,6 +2686,7 @@
       </modifiers>
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="ffad-d567-8011-7888" hidden="false" primary="false" targetId="4ab0-9d3f-386b-0c3d"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption receiver: Inquisitorial Agents + Retinue" id="5859-260b-b2fa-e335" hidden="false" primary="false" targetId="2f6a-c36d-7d22-2307"/>
         <categoryLink name="Allies: Imperial Agents: Retinue" id="3fe8-aa71-1a59-5f9f" hidden="false" primary="false" targetId="fed5-ec40-db61-9db2"/>
       </categoryLinks>
     </entryLink>
@@ -2731,6 +3035,7 @@
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="4049-8692-7f83-db7d" hidden="false" primary="false" targetId="4ab0-9d3f-386b-0c3d"/>
         <categoryLink name="Allies: Imperial Agents: Character" id="c55c-a1fe-3f15-6c54" hidden="false" primary="false" targetId="7d37-152b-88cf-672c"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption donor: Character + Voidfarers" id="ae58-ce31-1126-18e5" hidden="false" primary="false" targetId="5ed4-5232-31ca-92c8"/>
       </categoryLinks>
     </entryLink>
     <entryLink name="Rogue Trader Entourage" id="1663-15f4-28cf-cdcb" hidden="false" import="true" targetId="9360-d8b2-cd92-9e7f" type="selectionEntry">
@@ -2847,6 +3152,7 @@
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="b722-8ca4-b86d-5ff8" hidden="false" primary="false" targetId="4ab0-9d3f-386b-0c3d"/>
         <categoryLink name="Allies: Imperial Agents: Character" id="bde1-5464-ef24-5e68" hidden="false" primary="false" targetId="7d37-152b-88cf-672c"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption donor: Character + Voidfarers" id="23a4-0fd2-1ffd-e7ae" hidden="false" primary="false" targetId="5ed4-5232-31ca-92c8"/>
       </categoryLinks>
     </entryLink>
     <entryLink name="Sanctifiers" id="2bc7-7636-ed68-63ce" hidden="false" import="true" targetId="4e74-3710-7a66-9d6c" type="selectionEntry">
@@ -3657,6 +3963,7 @@
       </modifiers>
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="3f3d-3004-12d6-9e8c" hidden="false" primary="false" targetId="4ab0-9d3f-386b-0c3d"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption receiver: Voidsmen-At-Arms + Retinue" id="eba7-bdd7-db85-3c56" hidden="false" primary="false" targetId="8c84-3e2e-e9ee-072c"/>
         <categoryLink name="Allies: Imperial Agents: Retinue" id="c1b1-9e36-60c7-c639" hidden="false" primary="false" targetId="fed5-ec40-db61-9db2"/>
       </categoryLinks>
     </entryLink>

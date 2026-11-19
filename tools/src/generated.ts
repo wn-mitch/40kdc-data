@@ -2972,7 +2972,7 @@ export interface AlliedKeywordLimitExemption {
   receiver_keywords: KeywordList6;
 }
 /**
- * A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by two optional, AND-combined conditions: an army-wide keyword condition (`army_keywords_any`) and/or a selected detachment (`detachment_ids`).
+ * A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by three optional, AND-combined conditions: the army's faction (`host_faction_ids`), an army-wide keyword condition (`army_keywords_any`) and a selected detachment (`detachment_ids`).
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "allied-rule".
@@ -2985,6 +2985,10 @@ export interface AlliedRule {
    */
   label?: string;
   army_keywords_any?: KeywordList7;
+  /**
+   * Host gate: the factions whose armies may take this pool (the MFM dump's host faction keywords, mapped to faction ids). When non-empty, only an army of a listed faction is offered the rule, even if another of its faction keywords appears in `army_keywords_any` (a Deathwatch army carries ADEPTUS ASTARTES but is not a host of the generic Agents of the Imperium pool). Empty/absent = no host gate.
+   */
+  host_faction_ids?: EntityId[];
   /**
    * Detachment gate: the rule applies only when at least one listed detachment is selected. Empty/absent = no detachment gate. Replaces the former single detachment_id (GW pools may gate on several detachments).
    */
@@ -3612,6 +3616,10 @@ export interface ScoringTrigger {
     min?: number;
     max?: number;
   };
+  /**
+   * The moment the award is checked in the fifth (final) battle round, replacing `timing` and `phase` for that round only. An award checked at the end of your Command phase, except at the end of your turn in the fifth battle round, is timing: end-of-phase, phase: command, final_round_timing: end-of-turn. Absent means `timing` holds in every round of the window. Requires `timing`.
+   */
+  final_round_timing?: "end-of-turn";
 }
 /**
  * A draw-time predicate over an army list (not runtime board state, so deliberately NOT the Ability DSL condition). Used to gate when_drawn operations such as redraws. Example: a card that is void unless the opponent fields a large unit (10e 'Cull the Horde' redrew when the opponent had no unit of 14+ models) is { subject: 'opponent', quantifier: 'none', unit_filter: { model_count_min: 14 } } with operation 'redraw'.
@@ -4164,6 +4172,10 @@ export interface ChoiceEffect {
    * Who picks the option: the opponent ("your opponent must decide whether that unit will take cover or stand firm"). Absent, the player using the ability picks.
    */
   chosen_by?: "opponent";
+  /**
+   * Index into `options` of the Stratagem's secondary effect: picking that option costs the Stratagem's `secondary_effect_extra_cp` on top of its CP cost. Absent, every option costs the Stratagem's CP cost alone.
+   */
+  secondary_option?: number;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema

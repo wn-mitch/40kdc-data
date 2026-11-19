@@ -127,7 +127,8 @@ def _scope_of(
 ) -> str:
     """The scope of a fragment. An undecided condition matters only as much as what it gates: its
     body is translated as if the condition held, and a body that yields no buff or lever takes the
-    widest scope of its own fragments; a body that could change the attack stays unresolved."""
+    widest scope of its own fragments; a body that could change the attack stays unresolved. An
+    undecided trigger moment is reported as the ability part it gates, whose body is its effect."""
     if not UNDECIDED_CONDITION.match(fragment["reason"]):
         return fragment_scope(
             fragment["reason"], fragment.get("effectFragment"), POST_ATTACK_MOMENT
@@ -136,7 +137,7 @@ def _scope_of(
     if (
         depth >= _SCOPE_DEPTH
         or not _is_object(node)
-        or node.get("type") != "conditional"
+        or node.get("type") not in ("conditional", "ability-part")
         or node.get("effect") is None
     ):
         return UNRESOLVED
@@ -3141,7 +3142,10 @@ def _enumerate_choice(
             fragment = item.get("effectFragment")
             grant = _is_object(fragment) and fragment.get("type") == "ability-grant"
             if grant and "choice" not in item:
-                item = {**item, "choice": {"lever": lever, "label": label, "group": group}}
+                choice: dict[str, Any] = {"lever": lever, "label": label, "group": group}
+                if _is_index(node.get("secondary_option"), i):
+                    choice["secondary"] = True
+                item = {**item, "choice": choice}
             out["unsupported"].append(item)
         if not buffs:
             continue
@@ -3152,8 +3156,15 @@ def _enumerate_choice(
                 "buffs": buffs,
                 **stance_gate_fields(gate),
                 "group": group,
+                # The option a choice marks as a Stratagem's secondary effect (its extra CP).
+                **({"secondary": True} if _is_index(node.get("secondary_option"), i) else {}),
             }
         )
+
+
+def _is_index(value: Any, i: int) -> bool:
+    """Whether ``value`` is the integer index ``i`` (never a bool)."""
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and value == i
 
 
 def _enumerate_dice_pool(
@@ -4077,6 +4088,19 @@ def _matches_unit_filter(
             if verdict is False:
                 return False
             if verdict == "unknown":
+                unknown = True
+        elif (
+            key == "visible"
+            and side == "target"
+            and isinstance(value, dict)
+            and len(value) == 1
+            and value.get("to") == "attacker"
+        ):
+            # The attack's target as the attacking model sees it is a declared fact.
+            visible = ctx.get("targetVisible")
+            if visible is False:
+                return False
+            if not isinstance(visible, bool):
                 unknown = True
         elif key == "level" and value == "unit":
             continue

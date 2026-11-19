@@ -20,8 +20,12 @@ export interface EvalContext {
   readonly primaryCatalogueId: string;
   /** Entry ids selected in the army (battle size, detachments, toggles). */
   readonly selected: ReadonlySet<string>;
-  /** Selections of an entry within the evaluated unit (`unit` scope) or parent selection (`parent` scope). */
-  readonly counts?: { readonly unit?: ReadonlyMap<string, number>; readonly parent?: ReadonlyMap<string, number> };
+  /**
+   * Selections of an entry within the evaluated unit (`unit` scope) or parent selection (`parent` scope),
+   * and of entries or categories across the army (`force` and `roster` scopes; without it, an id in
+   * `selected` counts 1).
+   */
+  readonly counts?: { readonly unit?: ReadonlyMap<string, number>; readonly parent?: ReadonlyMap<string, number>; readonly force?: ReadonlyMap<string, number> };
 }
 
 function scopedCount(ctx: EvalContext, scope: string, childId: string): number | undefined {
@@ -68,7 +72,7 @@ function conditionHolds(condition: BsNode, entryId: string, ctx: EvalContext): b
   if (countsModels) return compare(type, ctx.modelCount, value);
   const scoped = scopedCount(ctx, scope, childId);
   if (scoped !== undefined) return compare(type, scoped, value);
-  if (scope === "force" || scope === "roster") return compare(type, ctx.selected.has(childId) ? 1 : 0, value);
+  if (scope === "force" || scope === "roster") return compare(type, ctx.counts?.force?.get(childId) ?? (ctx.selected.has(childId) ? 1 : 0), value);
   throw new UnsupportedLogic(`condition ${childId} in ${scope}`);
 }
 

@@ -178,7 +178,7 @@ function namedOption(input: Params): Params {
   if ("requirement_any_of" in input && ("requirement_type" in input || "requirement_min_value" in input)) {
     throw new TypeError(`${family} names one requirement or requirement_any_of, not both.`);
   }
-  exactKeys(input, ["label", ...single, ...present(input, ["requirement_any_of", "option_id", "warp_charge"])], family);
+  exactKeys(input, ["label", ...single, ...present(input, ["requirement_any_of", "option_id", "warp_charge", "secondary"])], family);
   const result: Params = { label: String(input.label) };
   if (single.length) {
     result.requirement_type = enumValue(input.requirement_type, DICE_REQUIREMENT_TYPES, `${family}.requirement_type`);
@@ -193,6 +193,10 @@ function namedOption(input: Params): Params {
   }
   if ("option_id" in input) result.option_id = namedId(input.option_id, `${family}.option_id`);
   if ("warp_charge" in input) result.warp_charge = boundedInteger(input.warp_charge, 2, 18, `${family}.warp_charge`);
+  if ("secondary" in input) {
+    if (input.secondary !== true) throw new TypeError(`${family}.secondary must be true, or omitted.`);
+    result.secondary = true;
+  }
   return result;
 }
 
@@ -324,12 +328,12 @@ export const CONTAINER_OPENERS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "named-option",
-    version: 4,
+    version: 5,
     role: "EVENT",
     label: "Named option",
-    description: "Opens one option of the enclosing stance-select, issue-orders or dice-pool-allocation with its name; under dice-pool-allocation it also carries the option's dice requirement: requirement_type and requirement_min_value, or requirement_any_of, two or more dice requirements any one of which activates the option (\"a double 4 or higher, or any triple\" is a pair from 4 or a triple from 1). option_id is the option's reviewed stable identity. warp_charge, on a Ritual of a ritual menu, is the Psychic test result it needs (2-18), from the Ritual's card where its text does not print it.",
+    description: "Opens one option of the enclosing stance-select, issue-orders or dice-pool-allocation with its name; under dice-pool-allocation it also carries the option's dice requirement: requirement_type and requirement_min_value, or requirement_any_of, two or more dice requirements any one of which activates the option (\"a double 4 or higher, or any triple\" is a pair from 4 or a triple from 1). option_id is the option's reviewed stable identity. warp_charge, on a Ritual of a ritual menu, is the Psychic test result it needs (2-18), from the Ritual's card where its text does not print it. secondary: true marks the option of a choice-open menu that is a Stratagem's secondary effect, the option its extra CP buys; at most one per menu.",
     starter: {label: ""},
-    parameterSchema: {type: "object", required: ["label"], properties: {label: {type: "string", minLength: 1}, requirement_type: {enum: ["pair", "triple", "single", "run"]}, requirement_min_value: {type: "integer", minimum: 1, maximum: 6, "x-only-when": {requirement_type: ["pair", "triple", "single", "run"]}}, requirement_any_of: {type: "array", items: {type: "object", required: ["type", "min_value"], properties: {type: {enum: ["pair", "triple", "single", "run"]}, min_value: {type: "integer", minimum: 1, maximum: 6}}, additionalProperties: false}, minItems: 2, "x-optional": true}, option_id: {type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$", "x-optional": true}, warp_charge: {type: "integer", minimum: 2, maximum: 18, "x-optional": true}}, additionalProperties: false},
+    parameterSchema: {type: "object", required: ["label"], properties: {label: {type: "string", minLength: 1}, requirement_type: {enum: ["pair", "triple", "single", "run"]}, requirement_min_value: {type: "integer", minimum: 1, maximum: 6, "x-only-when": {requirement_type: ["pair", "triple", "single", "run"]}}, requirement_any_of: {type: "array", items: {type: "object", required: ["type", "min_value"], properties: {type: {enum: ["pair", "triple", "single", "run"]}, min_value: {type: "integer", minimum: 1, maximum: 6}}, additionalProperties: false}, minItems: 2, "x-optional": true}, option_id: {type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$", "x-optional": true}, warp_charge: {type: "integer", minimum: 2, maximum: 18, "x-optional": true}, secondary: {const: true, "x-optional": true}}, additionalProperties: false},
     normalize: namedOption,
   },
   {

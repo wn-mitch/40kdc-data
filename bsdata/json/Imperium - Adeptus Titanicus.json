@@ -319,6 +319,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "10a4-990e-f09e-9b9e"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption donor: Inquisitor",
+            "id": "ce59-6687-99db-66e1",
+            "hidden": false,
+            "primary": false,
+            "targetId": "b6a6-90c5-a9b4-ba12"
           }
         ]
       },
@@ -343,6 +350,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "10a4-990e-f09e-9b9e"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption donor: Inquisitor",
+            "id": "0204-3360-8d33-0b0b",
+            "hidden": false,
+            "primary": false,
+            "targetId": "b6a6-90c5-a9b4-ba12"
           }
         ]
       },
@@ -367,6 +381,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "10a4-990e-f09e-9b9e"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption donor: Inquisitor",
+            "id": "dcab-8e57-4028-70cb",
+            "hidden": false,
+            "primary": false,
+            "targetId": "b6a6-90c5-a9b4-ba12"
           }
         ]
       },
@@ -391,6 +412,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "10a4-990e-f09e-9b9e"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption donor: Inquisitor",
+            "id": "0dcd-baf3-1846-ba99",
+            "hidden": false,
+            "primary": false,
+            "targetId": "b6a6-90c5-a9b4-ba12"
           }
         ]
       },
@@ -415,6 +443,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "10a4-990e-f09e-9b9e"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption donor: Inquisitor",
+            "id": "1520-1154-167e-408f",
+            "hidden": false,
+            "primary": false,
+            "targetId": "b6a6-90c5-a9b4-ba12"
           }
         ]
       },
@@ -432,6 +467,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "11c0-a44c-88b6-fe99"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption receiver: Inquisitorial Agents + Retinue",
+            "id": "8d7b-a400-f3b5-b18c",
+            "hidden": false,
+            "primary": false,
+            "targetId": "ae1e-de3c-3ef7-eb88"
           },
           {
             "name": "Allies: Imperial Agents: Retinue",
@@ -504,6 +546,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "10a4-990e-f09e-9b9e"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption donor: Character + Voidfarers",
+            "id": "0bd2-7685-e079-bdfd",
+            "hidden": false,
+            "primary": false,
+            "targetId": "b098-0688-ccc2-6091"
           }
         ]
       },
@@ -528,6 +577,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "10a4-990e-f09e-9b9e"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption donor: Character + Voidfarers",
+            "id": "ba87-86d7-4b28-a271",
+            "hidden": false,
+            "primary": false,
+            "targetId": "b098-0688-ccc2-6091"
           }
         ]
       },
@@ -682,6 +738,13 @@
             "hidden": false,
             "primary": false,
             "targetId": "11c0-a44c-88b6-fe99"
+          },
+          {
+            "name": "Allies: Imperial Agents: Exemption receiver: Voidsmen-At-Arms + Retinue",
+            "id": "e57e-098e-c706-d126",
+            "hidden": false,
+            "primary": false,
+            "targetId": "ac25-e859-0f0e-8739"
           },
           {
             "name": "Allies: Imperial Agents: Retinue",

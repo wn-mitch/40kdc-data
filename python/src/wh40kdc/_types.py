@@ -678,6 +678,7 @@ class ScoringTrigger(TypedDict):
     ]
     player_turn: NotRequired[PlayerTurn]
     battle_round: NotRequired[BattleRound]
+    final_round_timing: NotRequired[Literal["end-of-turn"]]
 
 
 class UnitFilter1(TypedDict):
@@ -1751,6 +1752,7 @@ class AlliedRule(TypedDict):
     name: str
     label: NotRequired[str]
     army_keywords_any: NotRequired[KeywordList]
+    host_faction_ids: NotRequired[list[EntityId]]
     detachment_ids: NotRequired[list[EntityId]]
     source_faction_id: NotRequired[EntityId | None]
     source_keywords: NotRequired[KeywordList]
@@ -4081,6 +4083,7 @@ class ChoiceEffect(TypedDict):
     min_choices: NotRequired[int]
     max_choices: NotRequired[int]
     chosen_by: NotRequired[Literal["opponent"]]
+    secondary_option: NotRequired[int]
 
 
 class SequenceEffect(TypedDict):

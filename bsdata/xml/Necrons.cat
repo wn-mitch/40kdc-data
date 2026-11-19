@@ -9527,7 +9527,7 @@ Ranged weapons equipped by all friendly NECRONS models with the MOUNTED or VEHIC
                   <description>-&gt; After a friendly unit selects targets for its charge but before it makes a Charge move (the triggering unit must have DESTROYER CULT or FLAYED ONES), you may use this ability:
   -&gt; You can re-roll the Charge roll.
   -&gt; While the target unit is below half strength, the unit gets +1 to Charge rolls.
-While making ranged attacks, if the target is the closest eligible target, add 1 to all friendly DESTROYER CULT units' Armour Penetration characteristic.</description>
+While making ranged attacks, if the target is the closest eligible target, improve all friendly DESTROYER CULT units' Armour Penetration characteristic by 1.</description>
                 </rule>
               </rules>
               <categoryLinks>

@@ -91,7 +91,11 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             out.push_str(
                 &items(e, "options")
                     .iter()
-                    .map(|o| format!("{indent}  - {}.", capitalize(&inline(o, ctx))))
+                    .enumerate()
+                    .map(|(i, o)| {
+                        let text = format!("{}{}", super::secondary_lead(e, i), inline(o, ctx));
+                        format!("{indent}  - {}.", capitalize(&text))
+                    })
                     .collect::<Vec<_>>()
                     .join("\n"),
             );

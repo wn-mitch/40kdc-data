@@ -31,7 +31,12 @@ from wh40kdc.data.enhancement_eligibility import (
 )
 from wh40kdc.data.list_keywords import list_building_keyword_changes, with_keyword_changes
 from wh40kdc.data.pricing import host_unit_points, wargear_points
-from wh40kdc.data.roster_allies import ally_keyword_limit_violations, attribute_allies
+from wh40kdc.data.roster_allies import (
+    AllyMember,
+    ally_keyword_limit_violations,
+    ally_pool_violations,
+    attribute_allies,
+)
 from wh40kdc.data.roster_chapter import chapter_mismatches
 from wh40kdc.data.roster_warlord import warlord_violations
 
@@ -74,6 +79,7 @@ ROSTER_VIOLATION_CODES = (
     "ally-cannot-take-enhancements",
     "ally-keyword-limit-exceeded",
     "ally-keyword-limits-exclusive",
+    "ally-battleline-ratio-exceeded",
     "unit-minimum-unmet",
 )
 
@@ -555,8 +561,10 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
     army_raw = faction_view.raw if faction_view else None
     parent_id = army_raw.get("parent_faction_id") if army_raw else None
     parent_view = dataset.factions.get(parent_id) if parent_id else None
+    # Units included through an allied rule are judged by that rule, not by chapter.
     unit_keywords = [
-        view.raw.get("faction_keywords") if view is not None else None for view in views
+        view.raw.get("faction_keywords") if view is not None and idx not in allies else None
+        for idx, view in enumerate(views)
     ]
     children = [
         f.raw
@@ -733,10 +741,17 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                 f"army includes {count} of {id_}, over the limit of {cap}",
             )
 
-    # --- Exclusive allied pools (the army faction's own pool-only units). -----
-    # Mirror of TS: the rule must be offered, and its points cap and
-    # Warlord/Enhancement locks apply; a selected detachment's mandatory or
-    # granted Warlord datasheets lift the Warlord lock.
+    # --- Allied pools: the offer gate of exclusive pools, then every pool's caps and locks.
+    # Mirror of TS: an exclusive pool's units must come through an offered rule
+    # (``allies_for``); foreign units count against the rule ``attribute_allies``
+    # assigns them. Each pool's points cap, Warlord/Enhancement locks and
+    # Battleline ratio apply to its members (a selected detachment's mandatory or
+    # granted Warlord datasheets lift the Warlord lock); keyword caps apply to the
+    # attributed pools.
+    offered = (
+        {r["id"] for r in dataset.allies_for(faction_id, detachment_ids)} if faction_id else set()
+    )
+    pools: list[tuple[dict[str, Any], list[int]]] = []
     for rule in dataset.allied_rules.all if faction_id else []:
         if not rule.get("exclusive") or rule.get("source_faction_id") != faction_id:
             continue
@@ -750,11 +765,7 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
         ]
         if not members:
             continue
-        army_any = rule.get("army_keywords_any") or []
-        det_any = rule.get("detachment_ids") or []
-        army_gate = not army_any or any(k in army_keyword_set for k in army_any)
-        detachment_gate = not det_any or any(d in detachment_ids for d in det_any)
-        if not (army_gate and detachment_gate):
+        if rule["id"] not in offered:
             for idx in members:
                 uid = spec_units[idx].get("unit_id") or ""
                 err(
@@ -763,58 +774,43 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                     f"{uid} is only available through {rule['id']}, which this army does not offer",
                     idx,
                 )
-        cap_points = next(
-            (
-                p["max_points"]
-                for p in rule.get("points_limits") or []
-                if p.get("battle_size") == spec.get("battle_size")
-            ),
-            None,
-        )
-        if cap_points is not None:
-            spent = sum(unit_costs[idx] for idx in members)
-            if spent > cap_points:
-                err(
-                    "ally-points-over-limit",
-                    rule["id"],
-                    f"{rule['id']} units total {spent}, over the {cap_points} limit",
-                )
-        for idx in members:
-            su = spec_units[idx]
-            uid = su.get("unit_id") or ""
-            locked = rule.get("cannot_be_warlord") and uid not in detachment_warlords
-            if locked and su.get("is_warlord") is True:
-                err(
-                    "ally-cannot-be-warlord",
-                    uid,
-                    f"{uid} cannot be Warlord under {rule['id']}",
-                    idx,
-                )
-            if rule.get("cannot_take_enhancements") and su.get("enhancement_id"):
-                err(
-                    "ally-cannot-take-enhancements",
-                    uid,
-                    f"{uid} cannot take an Enhancement under {rule['id']}",
-                    idx,
-                )
-
-    # --- Allied pools: keyword caps of the rule each foreign unit is included through.
+        pools.append((rule, members))
     by_rule: dict[str, tuple[dict[str, Any], list[int]]] = {}
     for idx, rule in sorted(allies.items()):
         by_rule.setdefault(rule["id"], (rule, []))[1].append(idx)
-    for rule, idxs in by_rule.values():
-        member_keywords = [
-            _keyword_set(
-                views[idx].raw,
-                army_keywords,
-                army_keyword_set,
-                detachment_ids,
-                spec_units[idx].get("keyword_overrides") or [],
-            )
-            for idx in idxs
-        ]
+    pools.extend(by_rule.values())
+
+    def _ally_member(idx: int) -> AllyMember:
+        su = spec_units[idx]
+        raw = views[idx].raw
+        kws = _keyword_set(
+            raw,
+            army_keywords,
+            army_keyword_set,
+            detachment_ids,
+            su.get("keyword_overrides") or [],
+        )
+        return AllyMember(
+            unit_id=su.get("unit_id") or "",
+            unit_index=idx,
+            cost=unit_costs[idx],
+            is_warlord=su.get("is_warlord") is True,
+            has_enhancement=bool(su.get("enhancement_id")),
+            battleline=raw.get("role") == "battleline"
+            or any(k.lower() == "battleline" for k in kws),
+            keywords=kws,
+        )
+
+    for rule, idxs in pools:
+        ally_members = [_ally_member(idx) for idx in idxs]
+        for code, id_, message, unit_index in ally_pool_violations(
+            rule, ally_members, spec.get("battle_size"), detachment_warlords
+        ):
+            err(code, id_, message, unit_index)
+        if rule.get("exclusive"):
+            continue
         for code, id_, message in ally_keyword_limit_violations(
-            rule, member_keywords, spec.get("battle_size")
+            rule, [m.keywords for m in ally_members], spec.get("battle_size")
         ):
             err(code, id_, message)
 

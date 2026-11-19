@@ -33779,7 +33779,7 @@
                   {
                     "name": "Annihilation Protocol",
                     "id": "d28e-71f1-db43-3fc3",
-                    "description": "-> After a friendly unit selects targets for its charge but before it makes a Charge move (the triggering unit must have DESTROYER CULT or FLAYED ONES), you may use this ability:\n  -> You can re-roll the Charge roll.\n  -> While the target unit is below half strength, the unit gets +1 to Charge rolls.\nWhile making ranged attacks, if the target is the closest eligible target, add 1 to all friendly DESTROYER CULT units' Armour Penetration characteristic.",
+                    "description": "-> After a friendly unit selects targets for its charge but before it makes a Charge move (the triggering unit must have DESTROYER CULT or FLAYED ONES), you may use this ability:\n  -> You can re-roll the Charge roll.\n  -> While the target unit is below half strength, the unit gets +1 to Charge rolls.\nWhile making ranged attacks, if the target is the closest eligible target, improve all friendly DESTROYER CULT units' Armour Penetration characteristic by 1.",
                     "hidden": false
                   }
                 ]

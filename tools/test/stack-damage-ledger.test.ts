@@ -94,6 +94,29 @@ describe("stack damage ledger", () => {
     });
   });
 
+  it("rejects a rule whose undecided moment gates only a move", () => {
+    // Rapid Disembarkation (Impulsor support) fires when the transport ends an Advance move and
+    // lets embarked units disembark; it changes no attack, so it leaves no cell incomplete.
+    const marines = cellFor("adeptus-astartes", "shooting", {}, dataset, "meq-intercessors");
+    const disembark = marines.ledger.filter((candidate) => candidate.abilityId === "rapid-disembarkation-adeptus-astartes");
+    expect(disembark.length).toBeGreaterThan(0);
+    for (const candidate of disembark) {
+      expect(candidate).toMatchObject({
+        status: "rejected",
+        relevant: false,
+        reasons: ["no current-attack effect", 'conditional: cannot evaluate condition "happened" against current context'],
+      });
+    }
+  });
+
+  it("scores a support selection whose gate restates the selected enemy unit", () => {
+    // Divinator-class Auspexes (Incursor support) scans one enemy unit; ranged attacks against
+    // the scanned unit re-roll Hit rolls of 1. Picking the target as that unit is a lever.
+    const marines = cellFor("adeptus-astartes", "shooting", {}, dataset, "meq-intercessors");
+    const auspex = marines.ledger.find((candidate) => candidate.abilityId === "divinator-class-auspexes-adeptus-astartes");
+    expect(auspex).toMatchObject({ status: "applied", relevant: false, sourceKind: "support", sourceUnitId: "incursor-squad" });
+  });
+
   it("resolves wargear-gated rules against the winning loadout", () => {
     const member = broadside.winner!.members.find((candidate) => candidate.unitId === "broadside-battlesuits")!;
     const drones = member.loadout.find((item) => item.weaponId === "missile-drone")?.count ?? 0;

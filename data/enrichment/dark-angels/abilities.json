@@ -1020,7 +1020,7 @@
           "target": "this-model",
           "modifier": {
             "stat": "AP",
-            "operation": "add",
+            "operation": "improve",
             "value": 1,
             "weapons": {
               "type": "melee"
@@ -4306,7 +4306,7 @@
                 },
                 {
                   "type": "roll-modifier",
-                  "target": "this-unit",
+                  "target": "attacker",
                   "modifier": {
                     "roll": "hit",
                     "operation": "subtract",

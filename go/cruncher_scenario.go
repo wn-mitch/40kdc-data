@@ -7,6 +7,8 @@ import "strings"
 // (nil), while a supplied list is complete, so an empty list is a known "none".
 //
 //	attackerTurn                         bool: it is the attacking unit's player's turn
+//	targetVisible                        bool: the attack's target is visible to the attacking model,
+//	                                     for a unit-filter's visible {to: "attacker"} on that target
 //	attackerStrength, targetStrength     "full" | "below-starting" | "below-half"
 //	attackerWounds, targetWounds         {remaining, starting} of the damaged (or only) model
 //	attackerDesignations, targetDesignations  []string, matched case-insensitively

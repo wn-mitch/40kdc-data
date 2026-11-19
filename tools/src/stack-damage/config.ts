@@ -43,7 +43,7 @@ export interface MatrixConfig {
 
 /** The scenario facts a matrix may declare; each is an {@link EngineContext} field. */
 export type Scenario = Pick<EngineContext,
-  | "battleRound" | "attackerTurn" | "attackerStrength" | "targetStrength" | "attackerDesignations"
+  | "battleRound" | "attackerTurn" | "targetVisible" | "attackerStrength" | "targetStrength" | "attackerDesignations"
   | "targetDesignations" | "attackerStates" | "targetStates" | "targetClosest" | "attackerObjectives"
   | "targetObjectives" | "attackerGuided" | "attackerNeighbours" | "targetNeighbours" | "activeRules"
   | "attackerRegions" | "targetRegions" | "objectivesControlled" | "attackerWounds" | "targetWounds"
@@ -100,6 +100,7 @@ const testResults = (value: unknown) => isRecord(value) && Object.entries(value)
 const SCENARIO_FIELDS: Record<keyof Scenario, (value: unknown) => boolean> = {
   battleRound: (value) => Number.isInteger(value) && (value as number) >= 1,
   attackerTurn: (value) => typeof value === "boolean",
+  targetVisible: (value) => typeof value === "boolean",
   attackerStrength: (value) => STRENGTHS.includes(value as string),
   targetStrength: (value) => STRENGTHS.includes(value as string),
   attackerDesignations: strings,

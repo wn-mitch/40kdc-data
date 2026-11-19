@@ -18,7 +18,8 @@ function listsMode(ds: Dataset, unit: Unit): boolean {
 
 /**
  * The allied-rules **offered** for an army of `factionId` running the given
- * detachments. A rule applies when both its gates pass: the **army gate**
+ * detachments. A rule applies when all its gates pass: the **host gate**
+ * (`host_faction_ids` empty, or listing `factionId`), the **army gate**
  * (`army_keywords_any` empty, or intersecting the faction's keywords) and the
  * **detachment gate** (`detachment_ids` empty, or any listed id among `detachmentIds`). Order
  * follows the allied-rules data file. The strict "every *model* carries an
@@ -36,6 +37,9 @@ export function alliesFor(
   );
   const detachmentSet = new Set(detachmentIds);
   return ds.alliedRules.all.filter((rule) => {
+    const hostGate =
+      (rule.host_faction_ids ?? []).length === 0 ||
+      (rule.host_faction_ids ?? []).includes(factionId);
     const armyGate =
       (rule.army_keywords_any ?? []).length === 0 ||
       (rule.army_keywords_any ?? []).some((k) =>
@@ -44,7 +48,7 @@ export function alliesFor(
     const detachmentGate =
       (rule.detachment_ids ?? []).length === 0 ||
       (rule.detachment_ids ?? []).some((id) => detachmentSet.has(id));
-    return armyGate && detachmentGate;
+    return hostGate && armyGate && detachmentGate;
   });
 }
 

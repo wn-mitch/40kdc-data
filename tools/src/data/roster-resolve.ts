@@ -27,7 +27,7 @@ import { listBuildingKeywordChanges, withKeywordChanges } from "./list-building-
 import type { Violation } from "./loadout.js";
 import { hostUnitPoints, wargearPoints } from "./pricing.js";
 import { warlordViolations, type WarlordViolationCode } from "./roster-warlord.js";
-import { allyKeywordLimitViolations, attributeAllies } from "./roster-allies.js";
+import { allyKeywordLimitViolations, allyPoolViolations, attributeAllies, type AllyMember } from "./roster-allies.js";
 import { chapterMismatches } from "./roster-chapter.js";
 
 /**
@@ -180,6 +180,7 @@ export type RosterViolationCode =
   | "ally-cannot-take-enhancements"
   | "ally-keyword-limit-exceeded"
   | "ally-keyword-limits-exclusive"
+  | "ally-battleline-ratio-exceeded"
   | "unit-minimum-unmet";
 
 /** One army-level legality violation. */
@@ -517,7 +518,9 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     const armyFaction = dataset.factions.get(spec.factionId)?.raw;
     const parent = armyFaction?.parent_faction_id ? dataset.factions.get(armyFaction.parent_faction_id)?.raw : undefined;
     const children = dataset.factions.all.filter((f) => f.raw.parent_faction_id === spec.factionId).map((f) => f.raw);
-    for (const m of chapterMismatches(armyFaction, parent, children, views.map((view) => view?.raw.faction_keywords))) {
+    // Units included through an allied rule are judged by that rule, not by chapter.
+    const chapterKeywords = views.map((view, idx) => (allies.has(idx) ? undefined : view?.raw.faction_keywords));
+    for (const m of chapterMismatches(armyFaction, parent, children, chapterKeywords)) {
       const view = views[m.index]!;
       err(
         "unit-chapter-mismatch",
@@ -640,50 +643,54 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     }
   }
 
-  // --- Exclusive allied pools (the army faction's own pool-only units). -----
+  // --- Allied pools: the offer gate of exclusive pools, then every pool's caps and locks.
   // Units listed by an `exclusive` rule drawn from the army faction can only be
-  // taken through that rule, so their pool is known without per-unit attribution:
-  // the rule must be offered (army keyword + detachment gates), and its points cap
-  // and Warlord/Enhancement locks apply. A selected detachment that names a unit
-  // for Warlord (mandatory or granted) lifts the Warlord lock for it.
+  // taken through that rule, so their pool is known without per-unit attribution
+  // and the rule must be offered (`alliesFor`'s host, army keyword and detachment
+  // gates). Foreign units count against the rule `attributeAllies` assigns them.
+  // Each pool's points cap, Warlord/Enhancement locks and Battleline ratio apply
+  // to its members; a selected detachment that names a unit for Warlord
+  // (mandatory or granted) lifts the Warlord lock for it.
+  const offered = new Set(spec.factionId ? dataset.alliesFor(spec.factionId, spec.detachmentIds).map((r) => r.id) : []);
+  const allyMember = (idx: number): AllyMember => {
+    const su = spec.units[idx];
+    const kws = keywordSet(views[idx]!, su);
+    return {
+      unitId: su.unitId,
+      index: idx,
+      cost: unitCosts[idx],
+      isWarlord: su.isWarlord,
+      hasEnhancement: !!su.enhancementId,
+      battleline: views[idx]!.raw.role === "battleline" || [...kws].some((k) => k.toLowerCase() === "battleline"),
+      keywords: kws,
+    };
+  };
+  const pools: { rule: AlliedRule; idxs: number[] }[] = [];
   for (const rule of dataset.alliedRules.all) {
     if (!rule.exclusive || !spec.factionId || rule.source_faction_id !== spec.factionId) continue;
     const pool = new Set(rule.source_datasheet_ids ?? []);
-    const members = spec.units
-      .map((su, idx) => ({ su, idx, view: views[idx] }))
-      .filter(({ su, view }) => view !== undefined && view.raw.faction_id === spec.factionId && pool.has(su.unitId));
-    if (members.length === 0) continue;
-    const armyGate =
-      (rule.army_keywords_any ?? []).length === 0 ||
-      (rule.army_keywords_any ?? []).some((k) => armyKeywordSet.has(k));
-    const detachmentGate =
-      (rule.detachment_ids ?? []).length === 0 ||
-      (rule.detachment_ids ?? []).some((id) => spec.detachmentIds.includes(id));
-    if (!armyGate || !detachmentGate)
-      for (const { su, idx } of members)
-        err("ally-pool-not-offered", su.unitId, `${su.unitId} is only available through ${rule.id}, which this army does not offer`, idx);
-    const cap = (rule.points_limits ?? []).find((p) => p.battle_size === spec.battleSize)?.max_points;
-    if (cap != null) {
-      const spent = members.reduce((sum, { idx }) => sum + unitCosts[idx], 0);
-      if (spent > cap) err("ally-points-over-limit", rule.id, `${rule.id} units total ${spent}, over the ${cap} limit`);
-    }
-    for (const { su, idx } of members) {
-      if (rule.cannot_be_warlord && su.isWarlord && !detachmentWarlords.has(su.unitId))
-        err("ally-cannot-be-warlord", su.unitId, `${su.unitId} cannot be Warlord under ${rule.id}`, idx);
-      if (rule.cannot_take_enhancements && su.enhancementId)
-        err("ally-cannot-take-enhancements", su.unitId, `${su.unitId} cannot take an Enhancement under ${rule.id}`, idx);
-    }
+    const idxs = spec.units.flatMap((su, idx) =>
+      views[idx] !== undefined && views[idx]!.raw.faction_id === spec.factionId && pool.has(su.unitId) ? [idx] : [],
+    );
+    if (idxs.length === 0) continue;
+    if (!offered.has(rule.id))
+      for (const idx of idxs)
+        err("ally-pool-not-offered", spec.units[idx].unitId, `${spec.units[idx].unitId} is only available through ${rule.id}, which this army does not offer`, idx);
+    pools.push({ rule, idxs });
   }
-
-  // --- Allied pools: keyword caps of the rule each foreign unit is included through.
-  const byRule = new Map<string, { rule: AlliedRule; idxs: number[] }>();
+  const attributed = new Map<string, { rule: AlliedRule; idxs: number[] }>();
   for (const [idx, rule] of allies) {
-    const entry = byRule.get(rule.id) ?? byRule.set(rule.id, { rule, idxs: [] }).get(rule.id)!;
+    const entry = attributed.get(rule.id) ?? attributed.set(rule.id, { rule, idxs: [] }).get(rule.id)!;
     entry.idxs.push(idx);
   }
-  for (const { rule, idxs } of byRule.values()) {
-    const members = idxs.map((idx) => keywordSet(views[idx]!, spec.units[idx]));
-    for (const v of allyKeywordLimitViolations(rule, members, spec.battleSize)) err(v.code, v.id, v.message);
+  pools.push(...attributed.values());
+  for (const { rule, idxs } of pools) {
+    const members = idxs.map(allyMember);
+    for (const v of allyPoolViolations(rule, members, spec.battleSize, detachmentWarlords))
+      err(v.code, v.id, v.message, v.unitIndex);
+    if (rule.exclusive) continue;
+    for (const v of allyKeywordLimitViolations(rule, members.map((m) => m.keywords), spec.battleSize))
+      err(v.code, v.id, v.message);
   }
 
   // --- Unit minimums (e.g. Houndpack: 3+ WAR DOG units). --------------------

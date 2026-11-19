@@ -209,6 +209,9 @@ def ability_levers(
         lever = lever_from_activatable(act, f"{ability.name} — {act['label']}", source)
         if requires_lever:
             lever["requiresLever"] = requires_lever
+        # The option a choice marks as the secondary effect also costs ``gate["secondaryCost"]``.
+        if act.get("secondary") and gate and gate.get("secondaryCost"):
+            lever["cost"] = gate["secondaryCost"]
         for group in [*([act["group"]] if act.get("group") else []), *(act.get("groups") or [])]:
             if not any(g["id"] == group["id"] for g in out.groups):
                 out.groups.append(
@@ -229,7 +232,15 @@ def ability_levers(
         # A grant one option of a choice makes stands behind picking that option, in its pool.
         choice = grant["fragment"].get("choice")
         option = (
-            _choice_option_lever(choice, ability, source, requires_lever, levers, out.groups)
+            _choice_option_lever(
+                choice,
+                ability,
+                source,
+                requires_lever,
+                levers,
+                out.groups,
+                gate.get("secondaryCost") if gate else None,
+            )
             if choice
             else None
         )
@@ -385,9 +396,11 @@ def _choice_option_lever(
     requires_lever: str | None,
     levers: list[Lever],
     groups: list[dict[str, Any]],
+    secondary_cost: dict[str, Any] | None,
 ) -> str:
     """The lever picking a ``choice`` option, added as a buffless member of the choice's pool
-    when the option has no buff of its own. Returns its id."""
+    when the option has no buff of its own. Returns its id. A buffless secondary option is
+    priced here; one with buffs was priced with its own lever."""
     group = choice["group"]
     if not any(existing["id"] == group["id"] for existing in groups):
         groups.append({**group, "label": ability.name, "abilityId": ability.id})
@@ -402,6 +415,8 @@ def _choice_option_lever(
         }
         if requires_lever:
             lever["requiresLever"] = requires_lever
+        if choice.get("secondary") and secondary_cost:
+            lever["cost"] = secondary_cost
         levers.append(lever)
     return str(choice["lever"])
 

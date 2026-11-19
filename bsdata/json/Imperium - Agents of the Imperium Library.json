@@ -394,6 +394,47 @@
             "type": "max",
             "value": 1
           }
+        ],
+        "modifiers": [
+          {
+            "field": "75a8-d689-e61e-1742",
+            "type": "set",
+            "value": 0,
+            "conditionGroups": [
+              {
+                "type": "or",
+                "conditions": [
+                  {
+                    "childId": "076b-18e8-9a1b-070a",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "a4d1-59b4-c8d5-a775",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "4e66-e142-2675-10a9",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          }
         ]
       },
       {
@@ -409,6 +450,47 @@
             "shared": true,
             "type": "max",
             "value": 1
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "e475-6a70-546c-c718",
+            "type": "set",
+            "value": 0,
+            "conditionGroups": [
+              {
+                "type": "or",
+                "conditions": [
+                  {
+                    "childId": "8ecd-d8b8-c198-38c1",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "a4d1-59b4-c8d5-a775",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "4e66-e142-2675-10a9",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -426,6 +508,47 @@
             "type": "max",
             "value": 1
           }
+        ],
+        "modifiers": [
+          {
+            "field": "2199-b733-b123-085f",
+            "type": "set",
+            "value": 0,
+            "conditionGroups": [
+              {
+                "type": "or",
+                "conditions": [
+                  {
+                    "childId": "8ecd-d8b8-c198-38c1",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "076b-18e8-9a1b-070a",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "4e66-e142-2675-10a9",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          }
         ]
       },
       {
@@ -441,6 +564,47 @@
             "shared": true,
             "type": "max",
             "value": 1
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "0512-9d49-d2bd-0f6a",
+            "type": "set",
+            "value": 0,
+            "conditionGroups": [
+              {
+                "type": "or",
+                "conditions": [
+                  {
+                    "childId": "8ecd-d8b8-c198-38c1",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "076b-18e8-9a1b-070a",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  },
+                  {
+                    "childId": "a4d1-59b4-c8d5-a775",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -463,6 +627,29 @@
             "type": "max",
             "value": 3
           }
+        ],
+        "modifiers": [
+          {
+            "field": "2164-d4a6-ef63-6985",
+            "type": "set",
+            "value": 0,
+            "conditionGroups": [
+              {
+                "type": "or",
+                "conditions": [
+                  {
+                    "childId": "6ac3-8c9e-a305-fe99",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          }
         ]
       },
       {
@@ -478,6 +665,29 @@
             "shared": true,
             "type": "max",
             "value": 1
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "a7cd-635e-f71e-770c",
+            "type": "set",
+            "value": 0,
+            "conditionGroups": [
+              {
+                "type": "or",
+                "conditions": [
+                  {
+                    "childId": "f9e1-3383-5d2b-5767",
+                    "field": "selections",
+                    "includeChildSelections": true,
+                    "scope": "force",
+                    "shared": true,
+                    "type": "atLeast",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
           }
         ]
       }
@@ -4116,14 +4326,6 @@
                           },
                           {
                             "childId": "f27e-18c0-b73e-748e",
-                            "field": "selections",
-                            "scope": "primary-catalogue",
-                            "shared": true,
-                            "type": "instanceOf",
-                            "value": 1
-                          },
-                          {
-                            "childId": "f89b-84e0-6e3b-f1e2",
                             "field": "selections",
                             "scope": "primary-catalogue",
                             "shared": true,
@@ -36366,14 +36568,6 @@
                             "shared": true,
                             "type": "instanceOf",
                             "value": 1
-                          },
-                          {
-                            "childId": "f89b-84e0-6e3b-f1e2",
-                            "field": "selections",
-                            "scope": "primary-catalogue",
-                            "shared": true,
-                            "type": "instanceOf",
-                            "value": 1
                           }
                         ]
                       }
@@ -36554,14 +36748,6 @@
                       },
                       {
                         "childId": "f27e-18c0-b73e-748e",
-                        "field": "selections",
-                        "scope": "primary-catalogue",
-                        "shared": true,
-                        "type": "instanceOf",
-                        "value": 1
-                      },
-                      {
-                        "childId": "f89b-84e0-6e3b-f1e2",
                         "field": "selections",
                         "scope": "primary-catalogue",
                         "shared": true,
@@ -52755,7 +52941,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit's weapons gain [IGNORES COVER].",
+                "$text": "Ranged weapons equipped by models in this unit gain [IGNORES COVER].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

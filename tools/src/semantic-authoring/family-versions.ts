@@ -27,6 +27,12 @@ export type VersionMapping = {
 };
 
 export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
+  // instead v3 adds the optional `secondary` marker; every v2 leaf keeps its meaning.
+  { family: "instead", from: 2, to: 3, map: (parameters) => ({ ...parameters }) },
+  // named-option v5 adds the optional `secondary` marker, targeting-restriction v10 the charged-this-phase
+  // target history; every earlier leaf keeps its meaning.
+  { family: "named-option", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
+  { family: "targeting-restriction", from: 9, to: 10, map: (parameters) => ({ ...parameters }) },
 ];
 
 export type FamilyVersionReport = {

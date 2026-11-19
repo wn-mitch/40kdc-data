@@ -17,6 +17,9 @@ func capitalize(s string) string {
 	return string(b)
 }
 
+// describeTrigger renders "End of your Command phase (round 2+)" and friends. A
+// final_round_timing appends the fifth-round moment: "End of your Command phase
+// (round 2+), or end of your turn in round 5".
 func describeTrigger(t map[string]any) string {
 	turn := "your"
 	switch t["player_turn"] {
@@ -61,6 +64,9 @@ func describeTrigger(t map[string]any) string {
 		case hasMax:
 			base += " (rounds 1-" + cstr(maxV) + ")"
 		}
+	}
+	if t["final_round_timing"] == "end-of-turn" {
+		base += ", or end of " + turn + " turn in round 5"
 	}
 	return base
 }

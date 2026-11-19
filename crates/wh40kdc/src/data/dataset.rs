@@ -742,7 +742,8 @@ impl Dataset {
     }
 
     /// The allied-rules offered for an army of `faction_id` running the given
-    /// detachments. A rule applies when both gates pass: the army gate
+    /// detachments. A rule applies when all gates pass: the host gate
+    /// (`host_faction_ids` empty, or listing `faction_id`), the army gate
     /// (`army_keywords_any` empty, or intersecting the faction's keywords) and
     /// the detachment gate (`detachment_ids` empty, or at least one listed id
     /// among the selected detachments).
@@ -762,6 +763,11 @@ impl Dataset {
             .all()
             .iter()
             .filter(|rule| {
+                let host_gate = match &rule.host_faction_ids {
+                    None => true,
+                    Some(ids) if ids.is_empty() => true,
+                    Some(ids) => ids.iter().any(|id| id.as_str() == faction_id),
+                };
                 let army_gate = match &rule.army_keywords_any {
                     None => true,
                     Some(kws) if kws.0.is_empty() => true,
@@ -779,7 +785,7 @@ impl Dataset {
                         .collect();
                     gates.is_empty() || gates.iter().any(|id| detachment_ids.contains(id))
                 };
-                army_gate && detachment_gate
+                host_gate && army_gate && detachment_gate
             })
             .collect()
     }

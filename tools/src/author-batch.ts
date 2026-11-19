@@ -335,7 +335,8 @@ const BEHAVIOR_VALUES = new Set(["passive", "activated", "reactive", "aura"]);
 // Every single effect's modifier is closed in the schema, so AJV rejects an
 // invented modifier key. What AJV cannot see is a condition's vocabulary: a
 // parameter placed beside `parameters`, an unknown phase or turn, or a keyword
-// that is not one unit keyword as the rules print it. This lint is that gate.
+// that is not one unit keyword as the rules print it, or an AP change written as a
+// signed add/subtract instead of improve/worsen. This lint is that gate.
 
 const CANONICAL_PHASES = new Set(["command", "movement", "shooting", "charge", "fight"]);
 /** Tags the data still writes as keywords, until they get a designation condition of their own. */
@@ -393,6 +394,13 @@ export function lintCanonical(effect: Json): { canonical: boolean; issues: strin
     // Traverse every nested object rather than naming current wrapper fields.
     // The effect schema is intentionally extensible; a new wrapper must not
     // create an unchecked path to a cruncher-interpreted leaf.
+    // AP is stored negative, so add/subtract is a signed delta on that number: "+1 AP" is improve.
+    if (node.type === "stat-modifier" && node.modifier?.stat === "AP" && (node.modifier.operation === "add" || node.modifier.operation === "subtract")) {
+      issues.push(`stat-modifier AP: "${String(node.modifier.operation)}" is a signed change to a negative characteristic; write an AP bonus as "improve" and a penalty as "worsen"`);
+    }
+    if (node.type === "choice" && typeof node.secondary_option === "number" && !(Array.isArray(node.options) && node.secondary_option < node.options.length)) {
+      issues.push(`choice: secondary_option ${node.secondary_option} names no option`);
+    }
     for (const [key, child] of Object.entries(node)) {
       if (CANONICAL_CONDITION_CHILD_KEYS.has(key)) visitCondition(child);
       visit(child);

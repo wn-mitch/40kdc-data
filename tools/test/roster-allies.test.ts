@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/dataset.js";
 import { emptyRawData } from "../src/data/types.js";
-import { allyKeywordLimitViolations } from "../src/data/roster-allies.js";
+import { allyKeywordLimitViolations, allyPoolViolations, type AllyMember } from "../src/data/roster-allies.js";
 import { validateRosterCore, type NormRoster } from "../src/data/roster-resolve.js";
 import type { AlliedRule } from "../src/generated.js";
 
@@ -109,5 +109,49 @@ describe("allyKeywordLimitViolations", () => {
     expect(codes(knights, [["Armiger"], ["Armiger"]])).toEqual([]);
     expect(codes(knights, [["Titanic"], ["Armiger"]])).toEqual(["ally-keyword-limits-exclusive:example-pool"]);
     expect(codes({ ...knights, keyword_limits_exclusive: false }, [["Titanic"], ["Armiger"]])).toEqual([]);
+  });
+});
+
+describe("allyPoolViolations", () => {
+  const rule = (extra: Partial<AlliedRule>): AlliedRule => ({ id: "example-pool", name: "Example Pool", game_version: GV, ...extra });
+  const member = (index: number, keywords: string[], extra: Partial<AllyMember> = {}): AllyMember => ({
+    unitId: `example-unit-${index}`,
+    index,
+    cost: 100,
+    isWarlord: false,
+    hasEnhancement: false,
+    battleline: false,
+    keywords: new Set(keywords),
+    ...extra,
+  });
+  const codes = (r: AlliedRule, members: AllyMember[], exempt: string[] = []) =>
+    allyPoolViolations(r, members, "strike-force", new Set(exempt)).map((v) => `${v.unitIndex ?? "army"}|${v.code}:${v.id}`);
+
+  it("caps the members' combined cost at the battle size's limit", () => {
+    const capped = rule({ points_limits: [{ battle_size: "strike-force", max_points: 200 }] });
+    expect(codes(capped, [member(0, []), member(1, [])])).toEqual([]);
+    expect(codes(capped, [member(0, []), member(1, [], { cost: 101 })])).toEqual(["army|ally-points-over-limit:example-pool"]);
+    expect(allyPoolViolations(capped, [member(0, [], { cost: 500 })], "incursion", new Set())).toEqual([]);
+  });
+
+  it("locks Warlord and Enhancements, lifting the Warlord lock for a detachment-named datasheet", () => {
+    const locked = rule({ cannot_be_warlord: true, cannot_take_enhancements: true });
+    const lord = member(2, [], { isWarlord: true, hasEnhancement: true });
+    expect(codes(locked, [lord])).toEqual([
+      "2|ally-cannot-be-warlord:example-unit-2",
+      "2|ally-cannot-take-enhancements:example-unit-2",
+    ]);
+    expect(codes(locked, [lord], ["example-unit-2"])).toEqual(["2|ally-cannot-take-enhancements:example-unit-2"]);
+  });
+
+  it("lets non-Battleline units of a ratio keyword at most match its Battleline units", () => {
+    const pact = rule({ battleline_ratio_keywords: ["Khorne", "Nurgle"] });
+    const line = member(0, ["Khorne"], { battleline: true });
+    expect(codes(pact, [line, member(1, ["khorne"])])).toEqual([]);
+    expect(codes(pact, [line, member(1, ["Khorne"]), member(2, ["KHORNE"])])).toEqual([
+      "army|ally-battleline-ratio-exceeded:example-pool:Khorne",
+    ]);
+    // A Battleline unit of another keyword does not cover a Nurgle unit.
+    expect(codes(pact, [line, member(1, ["Nurgle"])])).toEqual(["army|ally-battleline-ratio-exceeded:example-pool:Nurgle"]);
   });
 });

@@ -110,13 +110,47 @@
     </categoryEntry>
     <categoryEntry name="Allies: Chaos Knights" id="408f-c7c0-364c-3ac6" hidden="false"/>
     <categoryEntry name="Allies: Chaos Knights: Titanic" id="175d-1512-f85f-7336" hidden="true">
+      <modifiers>
+        <modifier field="fc6f-8c68-c0ab-4f40" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="ccbe-2c61-5d03-421e" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="fc6f-8c68-c0ab-4f40" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
     </categoryEntry>
     <categoryEntry name="Allies: Chaos Knights: War Dog" id="ccbe-2c61-5d03-421e" hidden="true">
+      <modifiers>
+        <modifier field="b64b-bb3b-edbe-baa5" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="175d-1512-f85f-7336" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="b64b-bb3b-edbe-baa5" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="3"/>
+      </constraints>
+    </categoryEntry>
+    <categoryEntry name="Allies: Renegades" id="8e42-e64a-7646-7210" hidden="false">
+      <modifiers>
+        <modifier field="44d9-b411-6fd3-9e64" type="set" value="250">
+          <conditions>
+            <condition childId="d62d-db22-4893-4bc0" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
+          </conditions>
+        </modifier>
+      </modifiers>
+      <constraints>
+        <constraint id="44d9-b411-6fd3-9e64" field="51b2-306e-1021-d207" includeChildSelections="true" scope="force" shared="true" type="max" value="500"/>
       </constraints>
     </categoryEntry>
     <categoryEntry name="Allies: Daemons" id="d233-e05c-485f-e07e" hidden="false">
@@ -133,21 +167,73 @@
     </categoryEntry>
     <categoryEntry name="Allies: Titanicus Traitoris" id="98a5-a0c3-0f15-eb03" hidden="false"/>
     <categoryEntry name="Allies: Titanicus Traitoris: Reaver Titan" id="2c68-3ba0-2ffb-8b5e" hidden="true">
+      <modifiers>
+        <modifier field="4691-ad2e-daf6-f2d9" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="ce1e-220f-399b-1281" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="22a5-13a2-4c3f-1b30" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="2471-b627-26e2-e4a6" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="4691-ad2e-daf6-f2d9" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
     </categoryEntry>
     <categoryEntry name="Allies: Titanicus Traitoris: Warbringer Nemesis Titan" id="ce1e-220f-399b-1281" hidden="true">
+      <modifiers>
+        <modifier field="a3a0-3975-52c1-192a" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="2c68-3ba0-2ffb-8b5e" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="22a5-13a2-4c3f-1b30" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="2471-b627-26e2-e4a6" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="a3a0-3975-52c1-192a" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
     </categoryEntry>
     <categoryEntry name="Allies: Titanicus Traitoris: Warhound Titan" id="22a5-13a2-4c3f-1b30" hidden="true">
+      <modifiers>
+        <modifier field="c0e8-beeb-f340-12b4" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="2c68-3ba0-2ffb-8b5e" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="ce1e-220f-399b-1281" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="2471-b627-26e2-e4a6" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="c0e8-beeb-f340-12b4" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
     </categoryEntry>
     <categoryEntry name="Allies: Titanicus Traitoris: Warlord Titan" id="2471-b627-26e2-e4a6" hidden="true">
+      <modifiers>
+        <modifier field="359f-e7a4-92aa-6111" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="2c68-3ba0-2ffb-8b5e" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="ce1e-220f-399b-1281" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="22a5-13a2-4c3f-1b30" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="359f-e7a4-92aa-6111" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>

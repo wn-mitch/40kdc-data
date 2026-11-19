@@ -88,12 +88,23 @@ describe("BSData export format", () => {
     expect(new Set(documents.slice(1).filter((d) => rootOf(d).library !== true).map((d) => d.file))).toEqual(
       new Set(Object.values(BSDATA_IDS.catalogues).map((c) => c.file)),
     );
-    // The armies that ally each other: Chaos Space Marines, Daemons, Knights and Titans; Imperial Knights, Mechanicus, Agents and Titans.
+    // The armies that ally each other: Chaos Space Marines, Daemons, Knights and Titans, and the legions Renegades draws from;
+    // Imperial Knights, Mechanicus, Agents and Titans.
     // BSData's own names for the Imperial Knights library and the one library both Titan Legions share,
     // then BSData's libraries the export holds nothing for.
     expect(libraries.map((d) => d.file).sort()).toEqual(
       [
-        ...["Chaos - Chaos Daemons", "Chaos - Chaos Knights", "Chaos - Chaos Space Marines", "Imperium - Adeptus Mechanicus", "Imperium - Agents of the Imperium"].map((n) => `${n} Library`),
+        ...[
+          "Chaos - Chaos Daemons",
+          "Chaos - Chaos Knights",
+          "Chaos - Chaos Space Marines",
+          "Chaos - Death Guard",
+          "Chaos - Emperor's Children",
+          "Chaos - Thousand Sons",
+          "Chaos - World Eaters",
+          "Imperium - Adeptus Mechanicus",
+          "Imperium - Agents of the Imperium",
+        ].map((n) => `${n} Library`),
         "Imperium - Imperial Knights - Library",
         "Library - Titans",
         "Aeldari - Aeldari Library",

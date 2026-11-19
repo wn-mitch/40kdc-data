@@ -72,6 +72,7 @@ export interface Effect {
   })[];
   choice_label?: string;
   chosen_by?: string;
+  secondary_option?: number;
   choice_prompt?: string;
   /** stance-select: the option id in force from the start of the battle. */
   initial?: string;
@@ -640,7 +641,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       return partInline(partWithModelRefs(e), ctx);
     case "choice": {
       const prompt = choicePrompt(e);
-      return `${prompt}: ${(e.options ?? []).map((o) => describeEffectInline(o, ctx)).join(" / ")}`;
+      return `${prompt}: ${(e.options ?? []).map((o, i) => `${secondaryLead(e, i)}${describeEffectInline(o, ctx)}`).join(" / ")}`;
     }
     case "dice-gated":
       if (e.test) return leadershipTest(e, ctx);
@@ -777,6 +778,11 @@ function choicePrompt(e: Effect): string {
   const own = ownChoicePrompt(e);
   if (e.chosen_by !== "opponent") return own;
   return own.startsWith("select ") ? `your opponent selects ${own.slice("select ".length)}` : `your opponent: ${own}`;
+}
+
+/** "secondary effect (extra CP): " before the option a choice marks as the Stratagem's secondary effect. */
+function secondaryLead(e: Effect, index: number): string {
+  return e.secondary_option === index ? "secondary effect (extra CP): " : "";
 }
 
 function ownChoicePrompt(e: Effect): string {
@@ -960,7 +966,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       const prompt = choicePrompt(e);
       return (
         `${indent}${capitalize(prompt)}:\n` +
-        (e.options ?? []).map((o) => `${indent}  - ${capitalize(describeEffectInline(o, ctx))}.`).join("\n")
+        (e.options ?? []).map((o, i) => `${indent}  - ${capitalize(`${secondaryLead(e, i)}${describeEffectInline(o, ctx)}`)}.`).join("\n")
       );
     }
     case "dice-gated": {

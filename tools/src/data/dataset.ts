@@ -433,7 +433,8 @@ export class Dataset {
 
   /**
    * The allied-rules **offered** for an army of `factionId` running the given
-   * detachments. A rule applies when both its gates pass: the **army gate**
+   * detachments. A rule applies when all its gates pass: the **host gate**
+   * (`host_faction_ids` empty, or listing `factionId`), the **army gate**
    * (`army_keywords_any` empty, or intersecting the faction's keywords) and the
    * **detachment gate** (`detachment_ids` empty, or any listed id among `detachmentIds`). Order
    * follows the allied-rules data file. The strict "every *model* carries an
@@ -647,6 +648,8 @@ export class Dataset {
    * ```
    *
    * A lever that raises another pool's cap or applies only under a stance option is not listed.
+   * The caller pays an opted-in Stratagem's CP; the option its `choice` marks as the secondary
+   * effect carries the Stratagem's `secondary_effect_extra_cp` as its `cost`.
    */
   defensiveLeversFor(
     input: EligibilityInput & { optedInStratagemIds?: string[] },

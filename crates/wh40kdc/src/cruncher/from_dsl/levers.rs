@@ -668,6 +668,7 @@ pub(super) fn named_effect(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             .and_then(Value::as_str)
             .map_or_else(|| label_for_buffs(&sub.applied), str::to_string);
         out.activatable.push(Lever {
+            secondary: false,
             id: format!("{}#{name}", opts.ability_id),
             label: name,
             buffs: sub.applied,
@@ -711,6 +712,7 @@ fn enumerate_timing_gate(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     if !buffs.is_empty() {
         let timing = extract_timing(condition).unwrap_or_else(|| "timing".to_string());
         out.activatable.push(Lever {
+            secondary: false,
             id: format!("{}@{timing}", opts.ability_id),
             label: label_for_buffs(&buffs),
             buffs,

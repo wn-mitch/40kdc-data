@@ -79,7 +79,7 @@ function hasLastingEffect(node: unknown): boolean {
  * duration is printed (core rule 01.02.02: "In the Shooting phase" with no duration lasts until the
  * end of that Shooting phase). A window of phases is a phase; "in your turn" alone is the turn.
  */
-function windowPeriod(list: readonly CompileLeaf[]): "phase" | "turn" | null {
+function windowPeriod(list: readonly CompileLeaf[], phaseEnd = false): "phase" | "turn" | null {
   // A folded either-phase window ("in your Shooting phase and the Fight phase") is one any-of whose
   // alternatives are each one phase window; those alternatives are the windows. Other any-of leaves
   // (an "or" with a non-window condition) hold no window.
@@ -94,7 +94,8 @@ function windowPeriod(list: readonly CompileLeaf[]): "phase" | "turn" | null {
   if (windows.length) return "turn";
   // "At the start of the Fight phase, …" names the phase it happens in, as a window does (core rule 01.02.02).
   // So does "when … is selected to fight" or "to shoot": that activation happens in its phase.
-  return flat.some((leaf) => leaf.family_id === "event" && ((leaf.parameters.kind === "phase-start" && leaf.parameters.phase !== undefined && leaf.parameters.phase !== "any")
+  // With `phaseEnd`, "At the end of your opponent's Charge phase" names its phase too.
+  return flat.some((leaf) => leaf.family_id === "event" && (((leaf.parameters.kind === "phase-start" || (phaseEnd && leaf.parameters.kind === "phase-end")) && leaf.parameters.phase !== undefined && leaf.parameters.phase !== "any")
     || (leaf.parameters.kind === "selected" && (leaf.parameters.to === "fight" || leaf.parameters.to === "shoot")))) ? "phase" : null;
 }
 
@@ -423,8 +424,13 @@ export function assemblePart(
   const windowLeaves = (part: number | null) => list.filter((_, index) => !consumedByContainer.has(index) && (part === null || windowPart(index) === part));
   const usedOrTriggered = durations.length === 0 && (behavior === "reactive" || behavior === "activated");
   // "In any phase, when …" with no duration: the effects last until the end of the phase the ability is used in.
-  const period = usedOrTriggered && hasLastingEffect(body)
-    ? windowPeriod(windowLeaves(partStarts.length ? 0 : null)) ?? (options.anyPhaseWindow === true ? "phase" : null) : null;
+  const period = !usedOrTriggered ? null
+    : hasLastingEffect(body) ? windowPeriod(windowLeaves(partStarts.length ? 0 : null)) ?? (options.anyPhaseWindow === true ? "phase" : null)
+      // A Stratagem whose WHEN moment holds nothing lasting but whose later moment does ("End of your opponent's
+      // Charge phase … Before making the charge roll, …") lasts until the end of the WHEN's phase, a phase's end
+      // included (core rule 01.02.02); otherwise the later moment would keep firing after the use.
+      : stratagem && partStarts.length > 0 && !hasLastingEffect(pieces[0]) && pieces.slice(1).some(hasLastingEffect)
+        ? windowPeriod(windowLeaves(0), true) : null;
   // A later part's own window gives it a lifetime when it holds a lasting effect and the record's window does not already bound it.
   const partPeriods = partStarts.map((_, position) => usedOrTriggered && period === null && hasLastingEffect(pieces[position + 1])
     ? windowPeriod(windowLeaves(position + 1)) : null);

@@ -7779,7 +7779,7 @@
             },
             "modifier": {
               "stat": "AP",
-              "operation": "add",
+              "operation": "improve",
               "value": 1
             }
           }

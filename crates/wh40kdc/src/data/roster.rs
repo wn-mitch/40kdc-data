@@ -21,7 +21,9 @@ use crate::generated::{Faction, Unit, UnitRole};
 use crate::import::{BattleSize, Roster};
 use crate::Dataset;
 
-use super::roster_allies::{ally_keyword_limit_violations, attribute_allies};
+use super::roster_allies::{
+    ally_keyword_limit_violations, ally_pool_violations, attribute_allies, AllyMember,
+};
 use super::roster_rules::{
     attachment_gates_hold, equipable_by_non_character, missing_required_wargear,
     AttachmentGateContext,
@@ -68,6 +70,7 @@ pub enum RosterViolationCode {
     AllyCannotTakeEnhancements,
     AllyKeywordLimitExceeded,
     AllyKeywordLimitsExclusive,
+    AllyBattlelineRatioExceeded,
     UnitMinimumUnmet,
 }
 
@@ -113,6 +116,7 @@ impl RosterViolationCode {
             RosterViolationCode::AllyCannotTakeEnhancements => "ally-cannot-take-enhancements",
             RosterViolationCode::AllyKeywordLimitExceeded => "ally-keyword-limit-exceeded",
             RosterViolationCode::AllyKeywordLimitsExclusive => "ally-keyword-limits-exclusive",
+            RosterViolationCode::AllyBattlelineRatioExceeded => "ally-battleline-ratio-exceeded",
             RosterViolationCode::UnitMinimumUnmet => "unit-minimum-unmet",
         }
     }
@@ -851,11 +855,23 @@ pub fn validate_roster_core_with_keyword_overrides(
             .collect(),
         None => Vec::new(),
     };
+    // Units included through an allied rule are judged by that rule, not by chapter.
+    let chapter_views: Vec<Option<&Unit>> = views
+        .iter()
+        .enumerate()
+        .map(|(idx, view)| {
+            if allies.contains_key(&idx) {
+                None
+            } else {
+                *view
+            }
+        })
+        .collect();
     for m in super::roster_chapter::chapter_mismatches(
         army_faction,
         parent_faction,
         &child_factions,
-        &views,
+        &chapter_views,
     ) {
         let Some(view) = views[m.index] else { continue };
         army.push(RosterViolation {
@@ -1134,10 +1150,25 @@ pub fn validate_roster_core_with_keyword_overrides(
         }
     }
 
-    // --- Exclusive allied pools (the army faction's own pool-only units). -----
-    // Mirror of TS: the rule must be offered, and its points cap and
-    // Warlord/Enhancement locks apply; a selected detachment's mandatory or
-    // granted Warlord datasheets lift the Warlord lock.
+    // --- Allied pools: the offer gate of exclusive pools, then every pool's caps and locks.
+    // Mirror of TS: an exclusive pool's units must come through an offered rule
+    // (`allies_for`); foreign units count against the rule `attribute_allies`
+    // assigns them. Each pool's points cap, Warlord/Enhancement locks and
+    // Battleline ratio apply to its members (a selected detachment's mandatory or
+    // granted Warlord datasheets lift the Warlord lock); keyword caps apply to the
+    // attributed pools.
+    let offered: HashSet<&str> = match faction {
+        Some(f) => {
+            let dets: Vec<&str> = spec.detachment_ids.iter().map(String::as_str).collect();
+            dataset
+                .allies_for(f, &dets)
+                .into_iter()
+                .map(|r| r.id.as_str())
+                .collect()
+        }
+        None => HashSet::new(),
+    };
+    let mut pools: Vec<(&crate::generated::AlliedRule, Vec<usize>)> = Vec::new();
     if let Some(army_faction) = faction {
         for rule in dataset.allied_rules.all() {
             if !rule.exclusive
@@ -1164,24 +1195,7 @@ pub fn validate_roster_core_with_keyword_overrides(
             if members.is_empty() {
                 continue;
             }
-            let army_gate = rule
-                .army_keywords_any
-                .as_ref()
-                .map(|ks| {
-                    ks.0.is_empty() || ks.0.iter().any(|k| army_keywords.contains(k.as_str()))
-                })
-                .unwrap_or(true);
-            let detachment_gate = rule
-                .detachment_ids
-                .as_ref()
-                .map(|ids| {
-                    ids.is_empty()
-                        || ids
-                            .iter()
-                            .any(|id| spec.detachment_ids.iter().any(|s| s == id.as_str()))
-                })
-                .unwrap_or(true);
-            if !army_gate || !detachment_gate {
+            if !offered.contains(rule.id.as_str()) {
                 for &idx in &members {
                     let unit_id = &spec.units[idx].unit_id;
                     army.push(RosterViolation {
@@ -1196,99 +1210,63 @@ pub fn validate_roster_core_with_keyword_overrides(
                     });
                 }
             }
-            let cap = rule.points_limits.iter().flatten().find(|p| {
-                matches!(
-                    (p.battle_size, spec.battle_size),
-                    (
-                        crate::generated::AlliedPointsLimitBattleSize::Incursion,
-                        Some(BattleSize::Incursion)
-                    ) | (
-                        crate::generated::AlliedPointsLimitBattleSize::StrikeForce,
-                        Some(BattleSize::StrikeForce)
-                    )
-                )
-            });
-            if let Some(cap) = cap {
-                let spent: u64 = members.iter().map(|&idx| unit_costs[idx]).sum();
-                if spent > cap.max_points {
-                    army.push(RosterViolation {
-                        code: RosterViolationCode::AllyPointsOverLimit,
-                        id: rule.id.as_str().to_string(),
-                        message: format!(
-                            "{} units total {spent}, over the {} limit",
-                            rule.id.as_str(),
-                            cap.max_points
-                        ),
-                        unit_index: None,
-                        severity: Severity::Error,
-                    });
-                }
-            }
-            for &idx in &members {
-                let su = &spec.units[idx];
-                if rule.cannot_be_warlord
-                    && su.is_warlord
-                    && !detachment_warlords.contains(su.unit_id.as_str())
-                {
-                    army.push(RosterViolation {
-                        code: RosterViolationCode::AllyCannotBeWarlord,
-                        id: su.unit_id.clone(),
-                        message: format!(
-                            "{} cannot be Warlord under {}",
-                            su.unit_id,
-                            rule.id.as_str()
-                        ),
-                        unit_index: Some(idx),
-                        severity: Severity::Error,
-                    });
-                }
-                if rule.cannot_take_enhancements && su.enhancement_id.is_some() {
-                    army.push(RosterViolation {
-                        code: RosterViolationCode::AllyCannotTakeEnhancements,
-                        id: su.unit_id.clone(),
-                        message: format!(
-                            "{} cannot take an Enhancement under {}",
-                            su.unit_id,
-                            rule.id.as_str()
-                        ),
-                        unit_index: Some(idx),
-                        severity: Severity::Error,
-                    });
-                }
-            }
+            pools.push((rule, members));
         }
     }
-
-    // --- Allied pools: keyword caps of the rule each foreign unit is included through.
-    let mut by_rule: Vec<(&crate::generated::AlliedRule, Vec<usize>)> = Vec::new();
+    let attributed_from = pools.len();
     for (&idx, &rule) in &allies {
-        match by_rule.iter_mut().find(|(r, _)| r.id == rule.id) {
+        match pools[attributed_from..]
+            .iter_mut()
+            .find(|(r, _)| r.id == rule.id)
+        {
             Some((_, idxs)) => idxs.push(idx),
-            None => by_rule.push((rule, vec![idx])),
+            None => pools.push((rule, vec![idx])),
         }
     }
-    for (rule, idxs) in &by_rule {
-        let members: Vec<HashSet<String>> = idxs
+    for (rule, idxs) in &pools {
+        let members: Vec<AllyMember> = idxs
             .iter()
             .filter_map(|&idx| {
+                let view = views[idx]?;
+                let su = &spec.units[idx];
                 let overrides = keyword_overrides.get(idx).map(Vec::as_slice).unwrap_or(&[]);
-                views[idx].map(|view| {
-                    roster_keyword_set(
-                        view,
-                        &army_keywords,
-                        &spec.detachment_ids,
-                        overrides,
-                        replaced[idx],
-                    )
+                let keywords = roster_keyword_set(
+                    view,
+                    &army_keywords,
+                    &spec.detachment_ids,
+                    overrides,
+                    replaced[idx],
+                );
+                let battleline = matches!(view.role, Some(UnitRole::Battleline))
+                    || keywords.iter().any(|k| k.to_lowercase() == "battleline");
+                Some(AllyMember {
+                    unit_id: su.unit_id.as_str(),
+                    index: idx,
+                    cost: unit_costs[idx],
+                    is_warlord: su.is_warlord,
+                    has_enhancement: su.enhancement_id.is_some(),
+                    battleline,
+                    keywords,
                 })
             })
             .collect();
-        for v in ally_keyword_limit_violations(rule, &members, spec.battle_size) {
+        let mut found =
+            ally_pool_violations(rule, &members, spec.battle_size, &detachment_warlords);
+        if !rule.exclusive {
+            let keyword_sets: Vec<HashSet<String>> =
+                members.iter().map(|m| m.keywords.clone()).collect();
+            found.extend(ally_keyword_limit_violations(
+                rule,
+                &keyword_sets,
+                spec.battle_size,
+            ));
+        }
+        for v in found {
             army.push(RosterViolation {
                 code: v.code,
                 id: v.id,
                 message: v.message,
-                unit_index: None,
+                unit_index: v.unit_index,
                 severity: Severity::Error,
             });
         }

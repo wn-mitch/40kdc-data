@@ -5462,6 +5462,11 @@
             "opponent"
           ],
           "description": "Who picks the option: the opponent (\"your opponent must decide whether that unit will take cover or stand firm\"). Absent, the player using the ability picks."
+        },
+        "secondary_option": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Index into `options` of the Stratagem's secondary effect: picking that option costs the Stratagem's `secondary_effect_extra_cp` on top of its CP cost. Absent, every option costs the Stratagem's CP cost alone."
         }
       },
       "required": [

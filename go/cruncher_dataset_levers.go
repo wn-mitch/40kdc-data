@@ -10,8 +10,11 @@ type defensiveLevers struct {
 // push appends each of an ability's activatables as an opt-in lever (first id
 // wins) with the pools it names. An activatable that raises a pool's cap or is
 // gated on a stance option is left out: nothing here resolves it against
-// another lever. Mirrors the levers sink of TS collectBuffs.
-func (l *defensiveLevers) push(ability *AbilityView, source map[string]any, activatable []any) {
+// another lever. secondaryCost is the cost the option a choice marks as an
+// opted-in Stratagem's secondary effect carries (its extra CP; the caller pays
+// the Stratagem's own CP), nil when there is none. Mirrors the levers sink of
+// TS collectBuffs.
+func (l *defensiveLevers) push(ability *AbilityView, source map[string]any, activatable []any, secondaryCost map[string]any) {
 	if l == nil {
 		return
 	}
@@ -51,6 +54,9 @@ func (l *defensiveLevers) push(ability *AbilityView, source map[string]any, acti
 		if requires, present := act["requires"]; present && requires != nil {
 			lever["requires"] = requires
 		}
+		if act["secondary"] == true && secondaryCost != nil {
+			lever["cost"] = secondaryCost
+		}
 		l.levers = append(l.levers, lever)
 		for _, groupAny := range pools {
 			group, _ := asMap(groupAny)
@@ -80,13 +86,30 @@ func (l *defensiveLevers) has(items []map[string]any, id string) bool {
 // levers of the abilities defensiveBuffsFor walks (an optional ability, a
 // usage-limited activation, a choice branch), each off by default, with the
 // pools that cap them. Each lever is {id, label, buffs, enabled, source,
-// group?, groups?, requires?} and each pool {id, abilityId, label,
+// group?, groups?, requires?, cost?} and each pool {id, abilityId, label,
 // maxActivations}, as TS Dataset.defensiveLeversFor returns them. The plain
 // defensive stack never applies these. A lever behind an undecided condition
 // appears once that condition is answered true in context["conditionFacts"].
-// Append each chosen lever's buffs to the defensive stack to crunch it.
+// Append each chosen lever's buffs to the defensive stack to crunch it. The
+// caller pays an opted-in Stratagem's CP; the option its choice marks as the
+// secondary effect carries the Stratagem's secondary_effect_extra_cp as cost.
 func (ds *Dataset) DefensiveLeversFor(input, context map[string]any) (levers, groups []map[string]any) {
 	sink := &defensiveLevers{levers: []map[string]any{}, groups: []map[string]any{}}
 	ds.collectBuffs(input, context, "target", sink)
 	return sink.levers, sink.groups
+}
+
+// secondaryCost is the extra CP a Stratagem's secondary effect costs, as a lever
+// cost ({"cp": n}), or nil when the Stratagem has none. Mirrors TS secondaryCost.
+func (ds *Dataset) secondaryCost(stratagemID string) map[string]any {
+	found, ok := ds.Stratagems.Get(stratagemID)
+	stratagem, isMap := asMap(found)
+	if !ok || !isMap || stratagem == nil {
+		return nil
+	}
+	extra, present := stratagem["secondary_effect_extra_cp"]
+	if !present || extra == nil {
+		return nil
+	}
+	return map[string]any{"cp": extra}
 }

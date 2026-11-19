@@ -337,6 +337,11 @@ export type EngineContext = {
    * ability it is: "your turn" for a defensive ability is the opponent of the attacker.
    */
   attackerTurn?: boolean;
+  /**
+   * The attack's target is visible to the attacking model. Drives a unit-filter's
+   * `visible: {to: "attacker"}` on the attack's target; undefined leaves it "unknown".
+   */
+  targetVisible?: boolean;
   /** Each unit against its Starting Strength. Drives `strength`; undefined leaves it "unknown". */
   attackerStrength?: UnitStrength;
   targetStrength?: UnitStrength;

@@ -460,9 +460,10 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 					parent = p.Raw
 				}
 			}
+			// Units included through an allied rule are judged by that rule, not by chapter.
 			unitKeywords := make([][]string, len(views))
 			for idx, view := range views {
-				if view != nil {
+				if _, allied := allies[idx]; view != nil && !allied {
 					unitKeywords[idx] = getStrList(view.Raw, "faction_keywords")
 				}
 			}
@@ -704,11 +705,22 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 	}
 
-	// --- Exclusive allied pools (the army faction's own pool-only units). -----
-	// Mirror of TS: the rule must be offered, and its points cap and
-	// Warlord/Enhancement locks apply; a selected detachment's mandatory or
-	// granted Warlord datasheets lift the Warlord lock.
+	// --- Allied pools: the offer gate of exclusive pools, then every pool's caps and locks.
+	// Mirror of TS: an exclusive pool's units must come through an offered rule
+	// (alliesFor); foreign units count against the rule attributeAllies assigns
+	// them. Each pool's points cap, Warlord/Enhancement locks and Battleline ratio
+	// apply to its members (a selected detachment's mandatory or granted Warlord
+	// datasheets lift the Warlord lock); keyword caps apply to the attributed pools.
+	type allyPool struct {
+		rule map[string]any
+		idxs []int
+	}
+	var pools []allyPool
 	if spec.factionID != "" {
+		offered := map[string]bool{}
+		for _, r := range ds.alliesFor(spec.factionID, spec.detachmentIDs) {
+			offered[getStr(r.(map[string]any), "id")] = true
+		}
 		for _, ruleAny := range ds.AlliedRules.All() {
 			rule, ok := asMap(ruleAny)
 			if !ok || rule["exclusive"] != true || getStr(rule, "source_faction_id") != spec.factionID {
@@ -724,76 +736,60 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 			if len(members) == 0 {
 				continue
 			}
-			armyAny := getStrList(rule, "army_keywords_any")
-			armyGate := len(armyAny) == 0
-			for _, k := range armyAny {
-				if _, has := armyKeywordSet[k]; has {
-					armyGate = true
-					break
-				}
-			}
-			detAny := getStrList(rule, "detachment_ids")
-			detGate := len(detAny) == 0
-			for _, id := range detAny {
-				if contains(spec.detachmentIDs, id) {
-					detGate = true
-					break
-				}
-			}
-			if !armyGate || !detGate {
+			if !offered[getStr(rule, "id")] {
 				for _, idx := range members {
 					errV("ally-pool-not-offered", spec.units[idx].unitID, idx)
 				}
 			}
-			for _, pAny := range getList(rule, "points_limits") {
-				p, ok := asMap(pAny)
-				if !ok || getStr(p, "battle_size") != spec.battleSize {
-					continue
-				}
-				spent := 0
-				for _, idx := range members {
-					spent += unitCosts[idx]
-				}
-				if spent > asInt(p["max_points"]) {
-					errV("ally-points-over-limit", getStr(rule, "id"), -1)
-				}
-				break
-			}
-			for _, idx := range members {
-				su := spec.units[idx]
-				if rule["cannot_be_warlord"] == true && su.isWarlord && !detachmentWarlords[su.unitID] {
-					errV("ally-cannot-be-warlord", su.unitID, idx)
-				}
-				if rule["cannot_take_enhancements"] == true && su.enhancementID != "" {
-					errV("ally-cannot-take-enhancements", su.unitID, idx)
-				}
-			}
+			pools = append(pools, allyPool{rule, members})
 		}
 	}
-
-	// --- Allied pools: keyword caps of the rule each foreign unit is included through.
-	var ruleOrder []string
-	byRule := map[string][]int{}
-	ruleByID := map[string]map[string]any{}
+	attributedAt := map[string]int{}
 	for idx := range views {
 		rule, ok := allies[idx]
 		if !ok {
 			continue
 		}
 		id := getStr(rule, "id")
-		if _, seen := byRule[id]; !seen {
-			ruleOrder = append(ruleOrder, id)
-			ruleByID[id] = rule
+		at, seen := attributedAt[id]
+		if !seen {
+			at = len(pools)
+			attributedAt[id] = at
+			pools = append(pools, allyPool{rule, nil})
 		}
-		byRule[id] = append(byRule[id], idx)
+		pools[at].idxs = append(pools[at].idxs, idx)
 	}
-	for _, id := range ruleOrder {
-		var members []map[string]struct{}
-		for _, idx := range byRule[id] {
-			members = append(members, keywordSet(views[idx], spec.units[idx].keywordOverrides))
+	for _, p := range pools {
+		var members []allyMember
+		var keywordSets []map[string]struct{}
+		for _, idx := range p.idxs {
+			su := spec.units[idx]
+			kws := keywordSet(views[idx], su.keywordOverrides)
+			battleline := getStr(views[idx].Raw, "role") == "battleline"
+			for k := range kws {
+				if lower(k) == "battleline" {
+					battleline = true
+				}
+			}
+			members = append(members, allyMember{
+				unitID:         su.unitID,
+				index:          idx,
+				cost:           unitCosts[idx],
+				isWarlord:      su.isWarlord,
+				hasEnhancement: su.enhancementID != "",
+				battleline:     battleline,
+				keywords:       kws,
+			})
+			keywordSets = append(keywordSets, kws)
 		}
-		for _, v := range allyKeywordLimitViolations(ruleByID[id], members, spec.battleSize) {
-			errV(v.code, v.id, -1)
+		for _, v := range allyPoolViolations(p.rule, members, spec.battleSize, detachmentWarlords) {
+			errV(v.code, v.id, v.unitIndex)
+		}
+		if p.rule["exclusive"] == true {
+			continue
+		}
+		for _, v := range allyKeywordLimitViolations(p.rule, keywordSets, spec.battleSize) {
+			errV(v.code, v.id, v.unitIndex)
 		}
 	}
 

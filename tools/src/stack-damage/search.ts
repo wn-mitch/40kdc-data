@@ -114,13 +114,15 @@ export function cellScenario(dataset: Dataset, faction: FactionContext, config: 
 
 /**
  * The engine context of one stack member in a cell. The crunch fires every model at a full-strength
- * target in the attacker's own turn, so those facts are stated; the scenario declares the rest.
+ * target it can see, in the attacker's own turn, so those facts are stated (Indirect Fire's
+ * penalties for an unseen target are never applied); the scenario declares the rest.
  */
 function contextForCell(dataset: Dataset, factionId: string, target: ResolvedTarget, phase: ComparePhase, scenario: Scenario, targetWargear: Record<string, number>) {
   const targetKeywords = [...(target.unitRaw.keywords ?? []), ...(target.unitRaw.faction_keywords ?? [])].map((keyword) => keyword.toLowerCase());
   const targetWounds = freshWounds(target.unitRaw);
   return (spec: StackSpec, member?: StackMember): EngineContext => ({
     attackerTurn: true,
+    targetVisible: true,
     attackerStrength: "full",
     targetStrength: "full",
     ...(targetWounds ? { targetWounds } : {}),

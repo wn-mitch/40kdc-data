@@ -21,7 +21,11 @@ def _capitalize(s: str) -> str:
 
 
 def describe_trigger(t: dict[str, Any]) -> str:
-    """ "End of your Command phase (round 2+)" and friends."""
+    """ "End of your Command phase (round 2+)" and friends.
+
+    A ``final_round_timing`` appends the fifth-round moment:
+    "End of your Command phase (round 2+), or end of your turn in round 5".
+    """
     player_turn = t.get("player_turn")
     if player_turn == "opponent-turn":
         turn = "the opponent's"
@@ -55,6 +59,8 @@ def describe_trigger(t: dict[str, Any]) -> str:
             base += f" (round {min_}+)"
         elif max_ is not None:
             base += f" (rounds 1-{max_})"
+    if t.get("final_round_timing") == "end-of-turn":
+        base += f", or end of {turn} turn in round 5"
     return base
 
 

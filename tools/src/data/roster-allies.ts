@@ -1,5 +1,5 @@
 /**
- * Allied-pool attribution and keyword caps for the roster checker
+ * Allied-pool attribution, caps and locks for the roster checker
  * ({@link validateRosterCore}). Mirrored by Rust `data/roster_allies.rs`, Python
  * `data/roster_allies.py` and Go `roster_allies.go`; pinned by the
  * `roster_validation` conformance corpus.
@@ -11,11 +11,33 @@ import type { AlliedRule } from "../generated.js";
 import type { Dataset } from "./dataset.js";
 import type { UnitView } from "./entities.js";
 
-/** An army-level violation the allied-pool checks raise. */
+/** A violation the allied-pool checks raise; `unitIndex` is null for an army-level one. */
 export interface AllyViolation {
-  code: "ally-keyword-limit-exceeded" | "ally-keyword-limits-exclusive";
+  code:
+    | "ally-points-over-limit"
+    | "ally-cannot-be-warlord"
+    | "ally-cannot-take-enhancements"
+    | "ally-battleline-ratio-exceeded"
+    | "ally-keyword-limit-exceeded"
+    | "ally-keyword-limits-exclusive";
   id: string;
   message: string;
+  unitIndex: number | null;
+}
+
+/** A roster unit included through an allied rule, as {@link allyPoolViolations} reads it. */
+export interface AllyMember {
+  unitId: string;
+  /** Index into the roster's units. */
+  index: number;
+  /** The unit's roster cost (host-aware points, wargear and enhancement). */
+  cost: number;
+  isWarlord: boolean;
+  hasEnhancement: boolean;
+  /** True when the unit is BATTLELINE (role or keyword). */
+  battleline: boolean;
+  /** The unit's roster keyword set. */
+  keywords: ReadonlySet<string>;
 }
 
 /**
@@ -92,6 +114,7 @@ export function allyKeywordLimitViolations(
         code: "ally-keyword-limit-exceeded",
         id: `${rule.id}:${limit.keyword}`,
         message: `${rule.id} includes ${count} ${limit.keyword} units, over the limit of ${limit.max_count}`,
+        unitIndex: null,
       });
   }
   if (rule.keyword_limits_exclusive) {
@@ -102,6 +125,74 @@ export function allyKeywordLimitViolations(
         code: "ally-keyword-limits-exclusive",
         id: rule.id,
         message: `${rule.id} allows only one of ${keywords.sort().join(", ")}; the army includes ${used.join(" and ")} units`,
+        unitIndex: null,
+      });
+  }
+  return out;
+}
+
+/**
+ * The pool-level violations of one allied rule over the units included through
+ * it, in this order:
+ *
+ * - **Points cap** (`points_limits` at `battleSize`): the members' combined cost.
+ * - **Warlord lock** (`cannot_be_warlord`): a member may not be the Warlord,
+ *   unless a selected detachment names its datasheet for Warlord
+ *   (`warlordExempt`).
+ * - **Enhancement lock** (`cannot_take_enhancements`).
+ * - **Battleline ratio** (`battleline_ratio_keywords`, at any battle size): for
+ *   each keyword, the members carrying it that are not BATTLELINE may not
+ *   outnumber those that are. Keywords match case-insensitively.
+ */
+export function allyPoolViolations(
+  rule: AlliedRule,
+  members: readonly AllyMember[],
+  battleSize: BattleSize | null,
+  warlordExempt: ReadonlySet<string>,
+): AllyViolation[] {
+  const out: AllyViolation[] = [];
+  const cap = (rule.points_limits ?? []).find((p) => p.battle_size === battleSize)?.max_points;
+  if (cap != null) {
+    const spent = members.reduce((sum, m) => sum + m.cost, 0);
+    if (spent > cap)
+      out.push({
+        code: "ally-points-over-limit",
+        id: rule.id,
+        message: `${rule.id} units total ${spent}, over the ${cap} limit`,
+        unitIndex: null,
+      });
+  }
+  for (const m of members) {
+    if (rule.cannot_be_warlord && m.isWarlord && !warlordExempt.has(m.unitId))
+      out.push({
+        code: "ally-cannot-be-warlord",
+        id: m.unitId,
+        message: `${m.unitId} cannot be Warlord under ${rule.id}`,
+        unitIndex: m.index,
+      });
+    if (rule.cannot_take_enhancements && m.hasEnhancement)
+      out.push({
+        code: "ally-cannot-take-enhancements",
+        id: m.unitId,
+        message: `${m.unitId} cannot take an Enhancement under ${rule.id}`,
+        unitIndex: m.index,
+      });
+  }
+  for (const keyword of rule.battleline_ratio_keywords ?? []) {
+    const lower = keyword.toLowerCase();
+    let battleline = 0;
+    let other = 0;
+    for (const m of members) {
+      if (![...m.keywords].some((k) => k.toLowerCase() === lower)) continue;
+      if (m.battleline) battleline += 1;
+      else other += 1;
+    }
+    if (other > battleline)
+      out.push({
+        code: "ally-battleline-ratio-exceeded",
+        id: `${rule.id}:${keyword}`,
+        message: `${rule.id} includes ${other} non-Battleline ${keyword} units, more than its ${battleline} Battleline ${keyword} units`,
+        unitIndex: null,
       });
   }
   return out;

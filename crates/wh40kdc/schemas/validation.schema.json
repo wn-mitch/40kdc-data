@@ -2126,7 +2126,7 @@
     },
     "allied-rule": {
       "title": "AlliedRule",
-      "description": "A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by two optional, AND-combined conditions: an army-wide keyword condition (`army_keywords_any`) and/or a selected detachment (`detachment_ids`).",
+      "description": "A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by three optional, AND-combined conditions: the army's faction (`host_faction_ids`), an army-wide keyword condition (`army_keywords_any`) and a selected detachment (`detachment_ids`).",
       "type": "object",
       "properties": {
         "id": {
@@ -2144,6 +2144,14 @@
         "army_keywords_any": {
           "$ref": "#/$defs/keyword-list",
           "description": "Army gate: every model in the army must carry at least one of these keywords for the rule to apply (e.g. ['Chaos Knights', 'Heretic Astartes'] for Daemonic Pact). Empty = no army-level gate (the rule is then gated only by `detachment_ids`, whose detachments are themselves faction-locked)."
+        },
+        "host_faction_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity-id"
+          },
+          "uniqueItems": true,
+          "description": "Host gate: the factions whose armies may take this pool (the MFM dump's host faction keywords, mapped to faction ids). When non-empty, only an army of a listed faction is offered the rule, even if another of its faction keywords appears in `army_keywords_any` (a Deathwatch army carries ADEPTUS ASTARTES but is not a host of the generic Agents of the Imperium pool). Empty/absent = no host gate."
         },
         "detachment_ids": {
           "type": "array",
@@ -3432,6 +3440,13 @@
           },
           "minProperties": 1,
           "additionalProperties": false
+        },
+        "final_round_timing": {
+          "type": "string",
+          "enum": [
+            "end-of-turn"
+          ],
+          "description": "The moment the award is checked in the fifth (final) battle round, replacing `timing` and `phase` for that round only. An award checked at the end of your Command phase, except at the end of your turn in the fifth battle round, is timing: end-of-phase, phase: command, final_round_timing: end-of-turn. Absent means `timing` holds in every round of the window. Requires `timing`."
         }
       },
       "minProperties": 1,
@@ -3453,6 +3468,18 @@
           "then": {
             "required": [
               "phase"
+            ]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "final_round_timing"
+            ]
+          },
+          "then": {
+            "required": [
+              "timing"
             ]
           }
         }
@@ -14089,6 +14116,11 @@
             "opponent"
           ],
           "description": "Who picks the option: the opponent (\"your opponent must decide whether that unit will take cover or stand firm\"). Absent, the player using the ability picks."
+        },
+        "secondary_option": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Index into `options` of the Stratagem's secondary effect: picking that option costs the Stratagem's `secondary_effect_extra_cp` on top of its CP cost. Absent, every option costs the Stratagem's CP cost alone."
         }
       },
       "required": [

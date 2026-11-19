@@ -68,35 +68,41 @@
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="4f56-dbf2-99a7-ef65" hidden="false" primary="false" targetId="11c0-a44c-88b6-fe99"/>
         <categoryLink name="Allies: Imperial Agents: Character" id="573d-fb23-e141-4c1e" hidden="false" primary="false" targetId="10a4-990e-f09e-9b9e"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption donor: Inquisitor" id="ce59-6687-99db-66e1" hidden="false" primary="false" targetId="b6a6-90c5-a9b4-ba12"/>
       </categoryLinks>
     </entryLink>
     <entryLink name="Inquisitor Coteaz" id="047d-3ae3-4667-8aec" hidden="false" import="true" targetId="264a-fc24-3a98-31dc" type="selectionEntry">
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="3665-5761-37e9-f9bd" hidden="false" primary="false" targetId="11c0-a44c-88b6-fe99"/>
         <categoryLink name="Allies: Imperial Agents: Character" id="4d38-f1d2-f9b9-bd55" hidden="false" primary="false" targetId="10a4-990e-f09e-9b9e"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption donor: Inquisitor" id="0204-3360-8d33-0b0b" hidden="false" primary="false" targetId="b6a6-90c5-a9b4-ba12"/>
       </categoryLinks>
     </entryLink>
     <entryLink name="Inquisitor Draxus" id="2ccc-ddeb-fa56-6343" hidden="false" import="true" targetId="f3a6-de9-584e-c394" type="selectionEntry">
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="0ad2-af34-5c94-75a1" hidden="false" primary="false" targetId="11c0-a44c-88b6-fe99"/>
         <categoryLink name="Allies: Imperial Agents: Character" id="8c5a-3a29-a5d3-ad79" hidden="false" primary="false" targetId="10a4-990e-f09e-9b9e"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption donor: Inquisitor" id="dcab-8e57-4028-70cb" hidden="false" primary="false" targetId="b6a6-90c5-a9b4-ba12"/>
       </categoryLinks>
     </entryLink>
     <entryLink name="Inquisitor Greyfax" id="1611-8f8e-1e4d-414f" hidden="false" import="true" targetId="6e0e-b9a2-f53d-ad0e" type="selectionEntry">
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="065a-f5b5-20bb-5ba0" hidden="false" primary="false" targetId="11c0-a44c-88b6-fe99"/>
         <categoryLink name="Allies: Imperial Agents: Character" id="4daf-3274-55e5-ee17" hidden="false" primary="false" targetId="10a4-990e-f09e-9b9e"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption donor: Inquisitor" id="0dcd-baf3-1846-ba99" hidden="false" primary="false" targetId="b6a6-90c5-a9b4-ba12"/>
       </categoryLinks>
     </entryLink>
     <entryLink name="Inquisitor Kroyle" id="1cb4-fe1d-e84b-13e2" hidden="false" import="true" targetId="2a3f-b53b-6ea4-6da9" type="selectionEntry">
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="525b-faad-07be-4df9" hidden="false" primary="false" targetId="11c0-a44c-88b6-fe99"/>
         <categoryLink name="Allies: Imperial Agents: Character" id="7766-0075-36fe-1595" hidden="false" primary="false" targetId="10a4-990e-f09e-9b9e"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption donor: Inquisitor" id="1520-1154-167e-408f" hidden="false" primary="false" targetId="b6a6-90c5-a9b4-ba12"/>
       </categoryLinks>
     </entryLink>
     <entryLink name="Inquisitorial Agents" id="8448-8c55-39a3-f42c" hidden="false" import="true" targetId="4469-7239-717e-9abd" type="selectionEntry">
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="a8db-5f71-59e2-8659" hidden="false" primary="false" targetId="11c0-a44c-88b6-fe99"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption receiver: Inquisitorial Agents + Retinue" id="8d7b-a400-f3b5-b18c" hidden="false" primary="false" targetId="ae1e-de3c-3ef7-eb88"/>
         <categoryLink name="Allies: Imperial Agents: Retinue" id="d41b-984b-0e1d-5187" hidden="false" primary="false" targetId="5ebb-8a79-c0a4-3b0d"/>
       </categoryLinks>
     </entryLink>
@@ -115,12 +121,14 @@
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="c4a1-7981-2831-a8d2" hidden="false" primary="false" targetId="11c0-a44c-88b6-fe99"/>
         <categoryLink name="Allies: Imperial Agents: Character" id="c9f2-faf3-63b8-513b" hidden="false" primary="false" targetId="10a4-990e-f09e-9b9e"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption donor: Character + Voidfarers" id="0bd2-7685-e079-bdfd" hidden="false" primary="false" targetId="b098-0688-ccc2-6091"/>
       </categoryLinks>
     </entryLink>
     <entryLink name="Rogue Trader Entourage" id="7a28-ed09-7986-a727" hidden="false" import="true" targetId="9360-d8b2-cd92-9e7f" type="selectionEntry">
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="3560-1944-d4a9-19e5" hidden="false" primary="false" targetId="11c0-a44c-88b6-fe99"/>
         <categoryLink name="Allies: Imperial Agents: Character" id="0549-7f33-6991-142a" hidden="false" primary="false" targetId="10a4-990e-f09e-9b9e"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption donor: Character + Voidfarers" id="ba87-86d7-4b28-a271" hidden="false" primary="false" targetId="b098-0688-ccc2-6091"/>
       </categoryLinks>
     </entryLink>
     <entryLink name="Sanctifiers" id="dda3-c334-89c6-21e7" hidden="false" import="true" targetId="4e74-3710-7a66-9d6c" type="selectionEntry">
@@ -161,6 +169,7 @@
     <entryLink name="Voidsmen-at-Arms" id="a7a3-0ca1-7020-71c9" hidden="false" import="true" targetId="3953-4e12-fe7b-97e9" type="selectionEntry">
       <categoryLinks>
         <categoryLink name="Allies: Imperial Agents" id="a016-fea0-20ab-2bf1" hidden="false" primary="false" targetId="11c0-a44c-88b6-fe99"/>
+        <categoryLink name="Allies: Imperial Agents: Exemption receiver: Voidsmen-At-Arms + Retinue" id="e57e-098e-c706-d126" hidden="false" primary="false" targetId="ac25-e859-0f0e-8739"/>
         <categoryLink name="Allies: Imperial Agents: Retinue" id="694d-1fee-6249-7059" hidden="false" primary="false" targetId="5ebb-8a79-c0a4-3b0d"/>
       </categoryLinks>
     </entryLink>

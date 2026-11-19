@@ -263,7 +263,9 @@ func (ds *Dataset) unitLoadoutOf(unit map[string]any) any {
 }
 
 // alliesFor returns allied-rules offered for an army of factionID running the
-// given detachments.
+// given detachments: those whose host gate (host_faction_ids empty or listing
+// factionID), army gate (army_keywords_any empty or intersecting the faction's
+// keywords) and detachment gate (detachment_ids empty or one selected) pass.
 func (ds *Dataset) alliesFor(factionID string, detachmentIDs []string) []any {
 	faction, ok := ds.Factions.Get(factionID)
 	if !ok {
@@ -280,6 +282,14 @@ func (ds *Dataset) alliesFor(factionID string, detachmentIDs []string) []any {
 	var out []any
 	for _, ruleAny := range ds.AlliedRules.All() {
 		rule := ruleAny.(map[string]any)
+		hosts := getStrList(rule, "host_faction_ids")
+		hostGate := len(hosts) == 0
+		for _, h := range hosts {
+			if h == factionID {
+				hostGate = true
+				break
+			}
+		}
 		armyAny := getStrList(rule, "army_keywords_any")
 		armyGate := len(armyAny) == 0
 		for _, k := range armyAny {
@@ -296,7 +306,7 @@ func (ds *Dataset) alliesFor(factionID string, detachmentIDs []string) []any {
 				break
 			}
 		}
-		if armyGate && detachmentGate {
+		if hostGate && armyGate && detachmentGate {
 			out = append(out, rule)
 		}
 	}

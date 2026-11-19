@@ -46,6 +46,7 @@ def _push_levers(
     activatable: list[dict[str, Any]],
     ability: Any,
     source: dict[str, Any],
+    secondary_cost: dict[str, Any] | None = None,
 ) -> None:
     """Append each of an ability's activatables to ``levers`` as an opt-in lever (first id
     wins) with the pools it names, leaving out cap raises and stance-gated ones. Mirrors the
@@ -58,7 +59,12 @@ def _push_levers(
         if any(lever["id"] == act["id"] for lever in levers["buffs"]):
             continue
         label = f"{ability.name} — {act['label']}"
-        levers["buffs"].append(lever_from_activatable(act, label, source))
+        lever = lever_from_activatable(act, label, source)
+        # The caller pays an opted-in Stratagem's cost; its secondary effect's extra CP rides on
+        # that option.
+        if act.get("secondary") and secondary_cost:
+            lever["cost"] = secondary_cost
+        levers["buffs"].append(lever)
         pools = ([act["group"]] if act.get("group") else []) + list(act.get("groups") or [])
         for group in pools:
             if not any(existing["id"] == group["id"] for existing in levers["groups"]):
@@ -492,7 +498,8 @@ class Dataset:
     ) -> list[dict[str, Any]]:
         """Allied-rules offered for an army of ``faction_id`` running the given detachments.
 
-        A rule applies when both gates pass: the army gate
+        A rule applies when all gates pass: the host gate (``host_faction_ids``
+        empty, or listing ``faction_id``), the army gate
         (``army_keywords_any`` empty, or intersecting the faction's keywords) and
         the detachment gate (``detachment_ids`` empty, or at least one listed id
         among ``detachment_ids``).
@@ -506,11 +513,13 @@ class Dataset:
         detachment_set = set(detachment_ids or [])
         out: list[dict[str, Any]] = []
         for rule in self.allied_rules.all:
+            hosts = rule.get("host_faction_ids") or []
+            host_gate = not hosts or faction_id in hosts
             army_any = rule.get("army_keywords_any") or []
             army_gate = not army_any or any(k.lower() in faction_keywords for k in army_any)
             det_ids = rule.get("detachment_ids") or []
             detachment_gate = not det_ids or any(d in detachment_set for d in det_ids)
-            if army_gate and detachment_gate:
+            if host_gate and army_gate and detachment_gate:
                 out.append(rule)
         return out
 
@@ -999,7 +1008,10 @@ class Dataset:
                     enabled=kind != "support",
                     # Stratagems cost CP — opt-in, not on by default.
                     gate=(
-                        {"cost": {"cp": entry["source"]["cpCost"]}}
+                        {
+                            "cost": {"cp": entry["source"]["cpCost"]},
+                            **self._secondary_cost(entry["source"]["stratagemId"]),
+                        }
                         if kind == "detachment-stratagem"
                         else None
                     ),
@@ -1354,10 +1366,28 @@ class Dataset:
                     ):
                         needs.append(need)
             if levers is not None:
-                _push_levers(levers, translation["activatable"], ability, source)
+                secondary = (
+                    self._secondary_cost(source_info["stratagemId"])
+                    if source_info["kind"] == "detachment-stratagem"
+                    else {}
+                )
+                _push_levers(
+                    levers,
+                    translation["activatable"],
+                    ability,
+                    source,
+                    secondary.get("secondaryCost"),
+                )
             out.extend(translation["applied"])
 
         return out
+
+    def _secondary_cost(self, stratagem_id: str) -> dict[str, Any]:
+        """The extra CP a Stratagem's secondary effect costs, as a lever gate's
+        ``secondaryCost``."""
+        stratagem = self.stratagems.get(stratagem_id)
+        extra = stratagem.get("secondary_effect_extra_cp") if stratagem else None
+        return {} if extra is None else {"secondaryCost": {"cp": extra}}
 
     def _build_indexes(self, raw: RawData) -> None:
         for pm in raw["phase_mappings"]:

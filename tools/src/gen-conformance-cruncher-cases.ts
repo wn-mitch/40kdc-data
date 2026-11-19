@@ -392,6 +392,8 @@ export function dslProjection(result: EffectTranslation) {
       id: lever.id, label: lever.label, group: lever.group ?? null,
       requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
       ...stanceOptionFields(lever),
+      // Projected only on a secondary-effect lever, so other goldens keep their shape.
+      ...(lever.secondary ? { secondary: true } : {}),
       buffs: lever.buffs.map((applied) => applied.contribution),
     })),
   };
@@ -516,6 +518,9 @@ export function canonicalScenarioCases() {
     { id: "rule-active-option-with-condition", effect: gated({ operator: "and", operands: [doctrine, shooting] }), context: {} },
     { id: "rule-active-option-with-failed-condition", effect: gated({ operator: "and", operands: [doctrine, { type: "phase-is", parameters: { phase: "fight" } }] }), context: {} },
     { id: "rule-active-option-shared-lever", effect: { type: "sequence", steps: [gated(doctrine), woundGated(doctrine)] }, context: {} },
+    // A Stratagem's secondary effect: the option the choice marks is the only secondary lever.
+    { id: "choice-secondary-option", effect: { type: "choice", secondary_option: 1, options: [gated(sAboveT), hitPlus] }, context: {} },
+    { id: "choice-secondary-option-out-of-range", effect: { type: "choice", secondary_option: 2, options: [hitPlus, woundPlus] }, context: {} },
     { id: "rule-active-option-in-choice", effect: { type: "choice", options: [hitPlus, { type: "sequence", steps: [gated(doctrine), { type: "conditional", condition: doctrine, effect: apImprove }] }] }, context: {} },
     { id: "rule-active-option-mixed-choice", effect: { type: "choice", options: [{ type: "sequence", steps: [woundPlus, gated(doctrine)] }] }, context: {} },
     { id: "rule-active-option-negated", effect: gated(notDoctrine), context: {} },

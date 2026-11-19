@@ -86,14 +86,15 @@ const scopeDepth = 4
 // scopeOf is the scope of a fragment. An undecided condition matters only as much as what it
 // gates: its body is translated as if the condition held, and a body that yields no buff or lever
 // takes the widest scope of its own fragments; a body that could change the attack keeps the
-// condition unresolved.
+// condition unresolved. An undecided trigger moment is reported as the ability part it gates,
+// whose body is its effect.
 func scopeOf(fragment map[string]any, source map[string]any, context map[string]any, perspective string, depth int) string {
 	reason, _ := fragment["reason"].(string)
 	if !undecidedConditionReason.MatchString(reason) {
 		return fragmentScope(reason, fragment["effectFragment"])
 	}
 	node, _ := fragment["effectFragment"].(map[string]any)
-	if depth >= scopeDepth || node == nil || node["type"] != "conditional" {
+	if depth >= scopeDepth || node == nil || (node["type"] != "conditional" && node["type"] != "ability-part") {
 		return scopeUnresolved
 	}
 	body, has := node["effect"]
@@ -1273,10 +1274,15 @@ func enumerateChoice(node, source map[string]any, opts dslOpts, out *effectTrans
 		if len(buffs) == 0 {
 			continue
 		}
-		out.activatable = append(out.activatable, withStanceGate(map[string]any{
+		lever := withStanceGate(map[string]any{
 			"id": opts.abilityID + "?" + strconv.Itoa(i), "label": labelForBuffs(buffs),
 			"buffs": buffs, "group": map[string]any{"id": opts.abilityID + "?choice", "maxActivations": maxActivations},
-		}, gate))
+		}, gate)
+		// The option the choice marks is a Stratagem's secondary effect, costing its extra CP.
+		if secondary, ok := node["secondary_option"].(float64); ok && secondary == float64(i) {
+			lever["secondary"] = true
+		}
+		out.activatable = append(out.activatable, lever)
 	}
 }
 
@@ -3127,6 +3133,16 @@ func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
 	}
 	for key, value := range filter {
 		if _, predicate := predicates[key]; predicate {
+			continue
+		}
+		if view, ok := value.(map[string]any); key == "visible" && ok && side == "target" && len(view) == 1 && view["to"] == "attacker" {
+			// The attack's target as the attacking model sees it is a declared fact.
+			switch visible, known := ctx["targetVisible"].(bool); {
+			case !known:
+				unknown = true
+			case !visible:
+				return false
+			}
 			continue
 		}
 		switch key {

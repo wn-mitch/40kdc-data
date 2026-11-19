@@ -273,18 +273,25 @@ export const AURAS_AND_SELECTIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "instead",
-    version: 2,
+    version: 3,
     role: "COMBINATOR",
     label: "Instead",
-    description: "The effect in this clause replaces an earlier effect of the same kind when this clause's condition holds; it does not add to it. With choice: true, on \"Or:\" between two effects of the same kind, the player picks one of them (each under its own conditions) instead.",
+    description: "The effect in this clause replaces an earlier effect of the same kind when this clause's condition holds; it does not add to it. With choice: true, on \"Or:\" between two effects of the same kind, the player picks one of them (each under its own conditions) instead. "
+      + "secondary: true (only with choice) marks the \"Or:\" that opens a Stratagem's secondary effect, the option its extra CP buys; at most one per choice.",
     starter: {},
-    parameterSchema: { type: "object", properties: { choice: { const: true, "x-optional": true } }, additionalProperties: false },
+    parameterSchema: {
+      type: "object",
+      properties: { choice: { const: true, "x-optional": true }, secondary: { const: true, "x-optional": true } },
+      additionalProperties: false,
+    },
     normalize: (input) => {
-      const { choice, ...rest } = input;
+      const { choice, secondary, ...rest } = input;
       exactKeys(rest, [], "instead");
-      if (choice === undefined) return {};
+      if (choice === undefined && secondary === undefined) return {};
       if (choice !== true) throw new TypeError("instead.choice must be true, or omitted.");
-      return { choice: true };
+      if (secondary === undefined) return { choice: true };
+      if (secondary !== true) throw new TypeError("instead.secondary must be true, or omitted.");
+      return { choice: true, secondary: true };
     },
   },
 ];

@@ -72,6 +72,7 @@ interface AlliedRuleOut {
   name: string;
   label?: string;
   army_keywords_any?: string[];
+  host_faction_ids?: string[];
   detachment_ids?: string[];
   source_faction_id?: string;
   source_datasheet_ids?: string[];
@@ -475,6 +476,11 @@ export function runAllies(dump: MfmDump): AlliesReport {
       ),
     ].sort();
 
+    // (1b) host faction gate: each host faction keyword's repo faction.
+    const hostFactionIds = [
+      ...new Set(hosts.map((n) => repoDirForFactionName(n)).filter((id): id is string => !!id)),
+    ].sort();
+
     // (5) detachment gate.
     const dets: string[] = [];
     const missingDetachments: string[] = [];
@@ -548,6 +554,7 @@ export function runAllies(dump: MfmDump): AlliesReport {
     const rule: AlliedRuleOut = { id, name, game_version: GAME_VERSION };
     rule.label = overlay?.label ?? label;
     if (hosts.length > 0) rule.army_keywords_any = hosts;
+    if (hostFactionIds.length > 0) rule.host_faction_ids = hostFactionIds;
     if (detIds.length > 0) rule.detachment_ids = detIds;
     if (sourceFaction) rule.source_faction_id = sourceFaction;
     if (datasheetIds.length > 0) rule.source_datasheet_ids = datasheetIds;

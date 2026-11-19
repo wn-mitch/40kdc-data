@@ -134,7 +134,7 @@ func planSelection(node, source map[string]any, perspective string, context map[
 			return selectionPlan{kind: "unsupported", reason: reason}
 		}
 		applicability = gate
-		effect = retargetSelected(node["effect"], other)
+		effect = selectionHolds(retargetSelected(node["effect"], other), other, selectionDesignatedTags(node["effect"]))
 		label = "Selected enemy unit"
 	}
 

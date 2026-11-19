@@ -134,7 +134,13 @@ pub(super) fn plan_selection(node: &Obj, opts: &WalkOpts) -> SelectionPlan {
             .into(),
             Value::Object(predicates),
         );
-        let effect = retarget(node.get("effect").unwrap_or(&Value::Null), other, binding);
+        let nested = node.get("effect").unwrap_or(&Value::Null);
+        let effect = super::selection_backrefs::selection_holds(
+            &retarget(nested, other, binding),
+            other,
+            &super::selection_backrefs::designated_tags(nested, binding),
+            binding,
+        );
         (effect, Some(gate), "Selected enemy unit")
     };
 
@@ -486,6 +492,7 @@ pub(super) fn offer_lever(
     if !sub.applied.is_empty() {
         let buffs: Vec<Value> = sub.applied.into_iter().map(gate).collect();
         out.activatable.push(Lever {
+            secondary: false,
             id,
             label: format!("{label}: {}", label_for_buffs(&buffs)),
             buffs,
@@ -569,6 +576,7 @@ pub(super) fn ability_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         format!("{} more {ability} selections", fmt_num(by))
     };
     out.activatable.push(Lever {
+        secondary: false,
         id: format!("{}#cap", opts.ability_id),
         label,
         buffs: Vec::new(),
@@ -614,6 +622,7 @@ pub(super) fn stance_capacity(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         return;
     };
     out.activatable.push(Lever {
+        secondary: false,
         id: format!("{}#cap", opts.ability_id),
         label: format!("{by} more {ability} selections"),
         buffs: Vec::new(),

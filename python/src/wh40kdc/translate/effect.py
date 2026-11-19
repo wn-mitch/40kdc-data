@@ -40,6 +40,7 @@ from wh40kdc.translate.effect_inline import (
     part_with_model_refs,
     pool_text,
     roll_with_rider,
+    secondary_lead,
     stance_additive,
     stance_initial,
     stance_pick,
@@ -200,7 +201,10 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         head = capitalize(defined_grant_head(e, ctx))
         return f"{indent}{arrow}{head}:\n" + describe_effect(definition_part(e), depth + 1, ctx)
     if t == "choice":
-        lines = [f"{indent}  - {capitalize(inline(o, ctx))}." for o in (e.get("options") or [])]
+        lines = [
+            f"{indent}  - {capitalize(secondary_lead(e, i) + inline(o, ctx))}."
+            for i, o in enumerate(e.get("options") or [])
+        ]
         return f"{indent}{capitalize(choice_prompt(e))}:\n" + "\n".join(lines)
     if t == "dice-gated":
         if e.get("test"):

@@ -1205,6 +1205,72 @@
         "tools/src/mfm/allies.ts#runAllies"
       ],
       "reason": "The flag marks a pool whose included units take the army's Faction keywords in place of their own."
+    },
+    "/host_faction_ids": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.faction_keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "faction_keyword_allied_faction.alliedFactionId",
+          "direction": "children",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "faction_keyword_allied_faction.factionKeywordId",
+          "direction": "parent",
+          "purpose": "applicability"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/allies.ts#runAllies",
+          "operation": "Map each host faction keyword to its repository faction and emit the sorted host gate."
+        }
+      ],
+      "filters": [
+        "Omit when no host faction resolves."
+      ],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/allies.ts#runAllies"
+      ],
+      "reason": "The pool's host faction keywords name the armies that may take it."
+    },
+    "/host_faction_ids/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.faction_keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "faction_keyword_allied_faction.alliedFactionId",
+          "direction": "children",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "faction_keyword_allied_faction.factionKeywordId",
+          "direction": "parent",
+          "purpose": "applicability"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/allies.ts#runAllies",
+          "operation": "Map one host faction keyword name to a repository faction id."
+        }
+      ],
+      "filters": [
+        "Discard names that map to no repository faction."
+      ],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/allies.ts#runAllies"
+      ],
+      "reason": "Each gate member is the repository faction of one host faction keyword."
     }
   },
   "unmapped_mfm_fields": [

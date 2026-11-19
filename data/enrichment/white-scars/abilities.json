@@ -350,7 +350,7 @@
                 "target": "this-model",
                 "modifier": {
                   "stat": "AP",
-                  "operation": "add",
+                  "operation": "improve",
                   "value": 1,
                   "weapons": {
                     "type": "melee"
@@ -394,7 +394,7 @@
                 "target": "this-model",
                 "modifier": {
                   "stat": "AP",
-                  "operation": "add",
+                  "operation": "improve",
                   "value": 2,
                   "weapons": {
                     "type": "melee"

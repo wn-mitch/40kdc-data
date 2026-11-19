@@ -1,4 +1,4 @@
-"""Allied-pool attribution and keyword caps for the roster checker.
+"""Allied-pool attribution, caps and locks for the roster checker.
 
 Mirror of TS ``data/roster-allies.ts``; pinned by the ``roster_validation``
 conformance corpus.
@@ -6,7 +6,7 @@ conformance corpus.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, NamedTuple
 
 from wh40kdc.data.dataset import Dataset
 
@@ -99,6 +99,99 @@ def ally_keyword_limit_violations(
                     rule["id"],
                     f"{rule['id']} allows only one of {', '.join(keywords)}; "
                     f"the army includes {' and '.join(used)} units",
+                )
+            )
+    return out
+
+
+class AllyMember(NamedTuple):
+    """A roster unit included through an allied rule, as ``ally_pool_violations`` reads it."""
+
+    unit_id: str
+    #: Index into the roster's units.
+    unit_index: int
+    #: The unit's roster cost (host-aware points, wargear and enhancement).
+    cost: int
+    is_warlord: bool
+    has_enhancement: bool
+    #: True when the unit is BATTLELINE (role or keyword).
+    battleline: bool
+    #: The unit's roster keyword set.
+    keywords: set[str]
+
+
+def ally_pool_violations(
+    rule: dict[str, Any],
+    members: list[AllyMember],
+    battle_size: str | None,
+    warlord_exempt: set[str],
+) -> list[tuple[str, str, str, int | None]]:
+    """``(code, id, message, unit_index)`` pool-level violations of one allied rule.
+
+    In order: the ``points_limits`` cap at ``battle_size`` on the members'
+    combined cost; the ``cannot_be_warlord`` lock (lifted for a datasheet in
+    ``warlord_exempt``); the ``cannot_take_enhancements`` lock; and, for each
+    ``battleline_ratio_keywords`` keyword at any battle size, more
+    non-BATTLELINE members carrying it than BATTLELINE ones (keywords match
+    case-insensitively). ``unit_index`` is None for an army-level violation.
+    """
+    out: list[tuple[str, str, str, int | None]] = []
+    cap = next(
+        (
+            p["max_points"]
+            for p in rule.get("points_limits") or []
+            if p.get("battle_size") == battle_size
+        ),
+        None,
+    )
+    if cap is not None:
+        spent = sum(m.cost for m in members)
+        if spent > cap:
+            out.append(
+                (
+                    "ally-points-over-limit",
+                    rule["id"],
+                    f"{rule['id']} units total {spent}, over the {cap} limit",
+                    None,
+                )
+            )
+    for m in members:
+        if rule.get("cannot_be_warlord") and m.is_warlord and m.unit_id not in warlord_exempt:
+            out.append(
+                (
+                    "ally-cannot-be-warlord",
+                    m.unit_id,
+                    f"{m.unit_id} cannot be Warlord under {rule['id']}",
+                    m.unit_index,
+                )
+            )
+        if rule.get("cannot_take_enhancements") and m.has_enhancement:
+            out.append(
+                (
+                    "ally-cannot-take-enhancements",
+                    m.unit_id,
+                    f"{m.unit_id} cannot take an Enhancement under {rule['id']}",
+                    m.unit_index,
+                )
+            )
+    for keyword in rule.get("battleline_ratio_keywords") or []:
+        lower = keyword.lower()
+        battleline = other = 0
+        for m in members:
+            if not any(k.lower() == lower for k in m.keywords):
+                continue
+            if m.battleline:
+                battleline += 1
+            else:
+                other += 1
+        if other > battleline:
+            out.append(
+                (
+                    "ally-battleline-ratio-exceeded",
+                    f"{rule['id']}:{keyword}",
+                    f"{rule['id']} includes {other} non-Battleline {keyword} units, "
+                    f"more than its {battleline} Battleline {keyword} units",
+                    None,
                 )
             )
     return out

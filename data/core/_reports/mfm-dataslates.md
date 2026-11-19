@@ -8,7 +8,7 @@ dump confirmation.
 
 | Entity | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
-| units | 2 | 0 | 1115 | 3 |
+| units | 0 | 0 | 1117 | 3 |
 | weapons | 0 | 0 | 3579 | 112 |
 | wargear | 0 | 0 | 166 | 87 |
 | unit-compositions | 0 | 0 | 1120 | 0 |
@@ -16,23 +16,23 @@ dump confirmation.
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 202 | 255 |
-| stratagems | 0 | 0 | 1086 | 227 |
-| abilities | 0 | 0 | 3871 | 688 |
-| phase-mappings | 0 | 0 | 1223 | 358 |
+| stratagems | 1 | 0 | 1086 | 226 |
+| abilities | 0 | 0 | 3878 | 681 |
+| phase-mappings | 5 | 0 | 1223 | 353 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
 
 | Faction | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
-| _core | 0 | 0 | 11 | 15 |
+| _core | 0 | 0 | 12 | 14 |
 | adepta-sororitas | 0 | 0 | 121 | 27 |
-| adeptus-astartes | 0 | 0 | 232 | 18 |
+| adeptus-astartes | 0 | 0 | 236 | 14 |
 | adeptus-custodes | 0 | 0 | 153 | 5 |
 | adeptus-mechanicus | 0 | 0 | 143 | 24 |
 | adeptus-titanicus | 0 | 0 | 7 | 3 |
 | aeldari | 0 | 0 | 247 | 53 |
-| agents-of-the-imperium | 0 | 0 | 99 | 41 |
+| agents-of-the-imperium | 0 | 0 | 100 | 40 |
 | astra-militarum | 0 | 0 | 208 | 43 |
 | black-templars | 0 | 0 | 61 | 2 |
 | blood-angels | 0 | 0 | 53 | 8 |
@@ -41,7 +41,7 @@ dump confirmation.
 | chaos-space-marines | 0 | 0 | 234 | 47 |
 | dark-angels | 0 | 0 | 69 | 8 |
 | death-guard | 0 | 0 | 134 | 26 |
-| deathwatch | 0 | 0 | 33 | 3 |
+| deathwatch | 0 | 0 | 34 | 2 |
 | drukhari | 0 | 0 | 132 | 32 |
 | emperors-children | 0 | 0 | 127 | 21 |
 | genestealer-cults | 0 | 0 | 121 | 27 |
@@ -68,18 +68,18 @@ dump confirmation.
 | Faction | Outcome | Records |
 |---|---|--:|
 | _core | ambiguous-source | 1 |
-| _core | digest-differs | 8 |
+| _core | digest-differs | 7 |
 | _core | stub | 1 |
 | _core | unpublished | 5 |
-| _core | verified | 11 |
+| _core | verified | 12 |
 | adepta-sororitas | digest-differs | 8 |
 | adepta-sororitas | stub | 4 |
 | adepta-sororitas | unpublished | 15 |
 | adepta-sororitas | verified | 121 |
-| adeptus-astartes | digest-differs | 13 |
+| adeptus-astartes | digest-differs | 9 |
 | adeptus-astartes | no-source | 4 |
 | adeptus-astartes | unpublished | 1 |
-| adeptus-astartes | verified | 232 |
+| adeptus-astartes | verified | 236 |
 | adeptus-custodes | digest-differs | 1 |
 | adeptus-custodes | no-source | 2 |
 | adeptus-custodes | stub | 1 |
@@ -95,10 +95,10 @@ dump confirmation.
 | aeldari | stub | 26 |
 | aeldari | unpublished | 18 |
 | aeldari | verified | 247 |
-| agents-of-the-imperium | digest-differs | 11 |
+| agents-of-the-imperium | digest-differs | 10 |
 | agents-of-the-imperium | stub | 19 |
 | agents-of-the-imperium | unpublished | 11 |
-| agents-of-the-imperium | verified | 99 |
+| agents-of-the-imperium | verified | 100 |
 | astra-militarum | digest-differs | 11 |
 | astra-militarum | stub | 14 |
 | astra-militarum | unpublished | 18 |
@@ -130,8 +130,7 @@ dump confirmation.
 | death-guard | verified | 134 |
 | deathwatch | digest-differs | 1 |
 | deathwatch | no-source | 1 |
-| deathwatch | unpublished | 1 |
-| deathwatch | verified | 33 |
+| deathwatch | verified | 34 |
 | drukhari | digest-differs | 7 |
 | drukhari | stub | 19 |
 | drukhari | unpublished | 6 |

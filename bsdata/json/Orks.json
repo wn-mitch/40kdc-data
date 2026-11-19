@@ -11809,7 +11809,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Against HIDDEN targets, the unit gets +1 to Hit rolls.",
+                "$text": "While the target is hidden, the unit gets +1 to Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

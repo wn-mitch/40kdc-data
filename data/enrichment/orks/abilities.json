@@ -5274,7 +5274,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
-            "designated": "HIDDEN"
+            "state": "hidden"
           }
         }
       },
@@ -8699,7 +8699,8 @@
               }
             }
           }
-        ]
+        ],
+        "secondary_option": 1
       }
     },
     "scope": {

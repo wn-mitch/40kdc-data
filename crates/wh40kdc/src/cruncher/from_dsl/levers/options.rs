@@ -25,6 +25,7 @@ pub(in crate::cruncher::from_dsl) fn enumerate_choice(node: &Obj, opts: &WalkOpt
             continue;
         }
         out.activatable.push(Lever {
+            secondary: node.get("secondary_option").and_then(Value::as_f64) == Some(i as f64),
             id: format!("{}?{i}", opts.ability_id),
             label: label_for_buffs(&buffs),
             buffs,
@@ -77,6 +78,7 @@ fn push_named(
         .filter(|n| !n.is_empty())
         .map_or_else(|| label_for_buffs(&buffs), str::to_string);
     out.activatable.push(Lever {
+        secondary: false,
         id: format!("{}#{name}", opts.ability_id),
         label: name,
         buffs,
@@ -134,6 +136,7 @@ pub(in crate::cruncher::from_dsl) fn enumerate_roll_allocation(
             .and_then(Value::as_str)
             .map_or_else(|| label_for_buffs(&buffs), str::to_string);
         out.activatable.push(Lever {
+            secondary: false,
             id: format!("{}#{name}", opts.ability_id),
             label: name,
             buffs,
@@ -241,6 +244,7 @@ pub(in crate::cruncher::from_dsl) fn enumerate_menu_actions(
             .and_then(Value::as_i64)
             .map(|max| (format!("{}?menu", opts.ability_id), max));
         out.activatable.push(Lever {
+            secondary: false,
             id: format!("{}#{id}", opts.ability_id),
             label,
             buffs,

@@ -6,6 +6,7 @@ import { CORE_DIR } from "../src/mfm/repo-files.js";
 import {
   buildTriggerCanon,
   checkCardTriggers,
+  finalRoundTimingOf,
   missionTriggerDrift,
   triggerPeriods,
   type TriggerCard,
@@ -26,7 +27,12 @@ function fixture() {
       ],
       primary_mission_objective: [
         { id: "o2", primaryMissionId: "pm", displayOrder: 2 },
-        { id: "o1", primaryMissionId: "pm", displayOrder: 1 },
+        {
+          id: "o1",
+          primaryMissionId: "pm",
+          displayOrder: 1,
+          localisations: { en: { whenText: "Fabricated phase end; in the fifth battle round, the end of your turn instead." } },
+        },
         { id: "o-cp", primaryMissionId: "pm-cp", displayOrder: 1 },
       ],
       primary_mission_objective_scoring: [
@@ -66,12 +72,23 @@ describe("buildTriggerCanon (synthetic)", () => {
     expect(rows[0]!.periods).toEqual(ALL_ROUNDS.slice(1));
     expect(rows[1]!.periods).toEqual(["endOfBattle"]);
     expect(rows[0]!.inputType).toBe("checkbox");
+    expect(rows.map((r) => r.finalRoundTiming)).toEqual(["end-of-turn", "none"]);
   });
 
   it("skips detachment-scoped primaries and carries a secondary's first-turn flag and tracks", () => {
     expect(canon.has("fabricated-patrol-primary")).toBe(false);
     const rows = canon.get("fabricated-secondary")!;
     expect(rows.map((r) => [r.mode, r.scorableFirstTurn, r.periods])).toEqual([["fixed", false, null], ["tactical", false, null]]);
+    expect(rows.map((r) => r.finalRoundTiming)).toEqual([undefined, undefined]);
+  });
+});
+
+describe("finalRoundTimingOf", () => {
+  it("reads end-of-turn only from text naming both the end of your turn and the fifth battle round", () => {
+    expect(finalRoundTimingOf("Phase end, or the end of your turn in the fifth battle round.")).toBe("end-of-turn");
+    expect(finalRoundTimingOf("End of your turn.")).toBe("none");
+    expect(finalRoundTimingOf("Something in the fifth battle round.")).toBe("none");
+    expect(finalRoundTimingOf(undefined)).toBe("none");
   });
 });
 
@@ -81,15 +98,32 @@ describe("checkCardTriggers", () => {
 
   it("accepts awards whose rounds, end-of-battle timing and form match the dump", () => {
     const card = primary([
-      { trigger: { timing: "end-of-phase", battle_round: { min: 2 } }, vp: 3 },
+      { trigger: { timing: "end-of-phase", battle_round: { min: 2 }, final_round_timing: "end-of-turn" }, vp: 3 },
       { trigger: { timing: "end-of-battle" }, vp_per: 2 },
     ]);
     expect(checkCardTriggers(card, canon.get(card.id)!)).toEqual({ disagreements: [], shapeMismatches: [] });
   });
 
+  it("flags a fifth-round timing the award lacks, and one the dump does not state", () => {
+    const missing = primary([
+      { trigger: { timing: "end-of-phase", battle_round: { min: 2 } }, vp: 3 },
+      { trigger: { timing: "end-of-battle" }, vp_per: 2 },
+    ]);
+    expect(checkCardTriggers(missing, canon.get(missing.id)!).disagreements.map((d) => [d.index, d.field, d.repo, d.dump])).toEqual([
+      [0, "final-round-timing", "none", "end-of-turn"],
+    ]);
+    const extra = primary([
+      { trigger: { timing: "end-of-phase", battle_round: { min: 2 }, final_round_timing: "end-of-turn" }, vp: 3 },
+      { trigger: { timing: "end-of-battle", final_round_timing: "end-of-turn" }, vp_per: 2 },
+    ]);
+    expect(checkCardTriggers(extra, canon.get(extra.id)!).disagreements.map((d) => [d.index, d.field, d.repo, d.dump])).toEqual([
+      [1, "final-round-timing", "end-of-turn", "none"],
+    ]);
+  });
+
   it("flags an award that scores in a round the dump does not list", () => {
     const card = primary([
-      { trigger: { timing: "end-of-turn" }, vp: 3 },
+      { trigger: { timing: "end-of-turn", final_round_timing: "end-of-turn" }, vp: 3 },
       { trigger: { timing: "end-of-battle" }, vp_per: 2 },
     ]);
     const { disagreements } = checkCardTriggers(card, canon.get(card.id)!);
@@ -100,7 +134,7 @@ describe("checkCardTriggers", () => {
 
   it("flags an end-of-battle objective authored as a per-round award", () => {
     const card = primary([
-      { trigger: { timing: "end-of-phase", battle_round: { min: 2 } }, vp: 3 },
+      { trigger: { timing: "end-of-phase", battle_round: { min: 2 }, final_round_timing: "end-of-turn" }, vp: 3 },
       { trigger: { timing: "end-of-turn", battle_round: { min: 5 } }, vp_per: 2 },
     ]);
     const { disagreements } = checkCardTriggers(card, canon.get(card.id)!);
@@ -109,7 +143,7 @@ describe("checkCardTriggers", () => {
 
   it("flags a checkbox row authored as vp_per and a stepper row authored as flat vp", () => {
     const card = primary([
-      { trigger: { timing: "end-of-phase", battle_round: { min: 2 } }, vp_per: 3 },
+      { trigger: { timing: "end-of-phase", battle_round: { min: 2 }, final_round_timing: "end-of-turn" }, vp_per: 3 },
       { trigger: { timing: "end-of-battle" }, vp: 2 },
     ]);
     const { disagreements } = checkCardTriggers(card, canon.get(card.id)!);

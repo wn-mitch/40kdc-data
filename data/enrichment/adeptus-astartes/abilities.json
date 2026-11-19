@@ -5,16 +5,67 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "bac4cd4bc01defa370d5f166c743a6bccc3108e6a84dd2d4d6d4c14a15804b01",
+    "source_digest": "de2840d2d407e9ce989550b59e61938e93f7ca813aaab12d054a0b3958bb0b44",
     "version": "2025-q3",
     "effect": {
-      "type": "re-roll",
-      "target": "this-unit",
-      "modifier": {
-        "roll": "damage",
-        "subset": "all-failures"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "owner": "enemy",
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result",
+              "count": 1
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result",
+              "count": 1
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "damage",
+              "result_scope": "any-result",
+              "count": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -24,7 +75,7 @@
       "gladiator-lancer"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "passive",
     "faction_id": "adeptus-astartes"
   },
   {
@@ -33,45 +84,132 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "096a7d713985856d0e8ce93c877db4b58b44a27c01fd2092a3d3014a0095930d",
+    "source_digest": "366e36491dee4900ac413d56653dc02c5441f5c62c8ff3fe4c0161df9c1429c6",
     "version": "2025-q3",
     "effect": {
       "type": "sequence",
       "steps": [
         {
-          "type": "marker",
-          "target": "this-unit",
-          "modifier": {
-            "label": "teleport-homer",
-            "operation": "place",
-            "placement": "outside-enemy-deployment-zone",
-            "consume": "on-use"
+          "type": "ability-part",
+          "trigger": {
+            "event": "battle-started",
+            "optional": true
+          },
+          "effect": {
+            "type": "marker",
+            "target": "this-unit",
+            "modifier": {
+              "label": "teleport-homer-token",
+              "operation": "place"
+            }
           }
         },
         {
-          "type": "cost-modifier",
-          "target": "this-model",
-          "modifier": {
-            "of": "stratagem",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
+          "type": "ability-part",
+          "trigger": {
+            "event": "used",
+            "filter": {
+              "kind": "stratagem",
+              "id": "rapid-ingress"
+            },
+            "object": "this-unit",
+            "optional": true
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "cost-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "of": "stratagem",
+                  "operation": "decrease",
+                  "amount": 1,
+                  "applies_to": "the-triggering-use"
+                }
+              },
+              {
+                "type": "set-up",
+                "target": "this-unit",
+                "modifier": {
+                  "to": "battlefield",
+                  "min_enemy_distance": {
+                    "inches": 8
+                  },
+                  "mandatory": true,
+                  "near": [
+                    {
+                      "of": {
+                        "marker": "teleport-homer-token"
+                      },
+                      "range": {
+                        "inches": 3
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "marker",
+                "target": "this-unit",
+                "modifier": {
+                  "label": "teleport-homer-token",
+                  "operation": "remove"
+                }
+              }
+            ]
+          },
+          "duration": "resolution"
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "subject": {
+              "owner": "enemy"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "event-subject",
+                "filter": {
+                  "within": {
+                    "of": {
+                      "marker": "teleport-homer-token"
+                    },
+                    "range": {
+                      "inches": 1
+                    }
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "marker",
+              "target": "this-unit",
+              "modifier": {
+                "label": "teleport-homer-token",
+                "operation": "remove"
+              }
+            }
           }
         }
       ]
     },
     "scope": {
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "terminator-squad",
       "terminator-assault-squad"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "Set up one Teleport Homer token at the start of the battle. Targeting this unit with Rapid Ingress costs 1CP less, but the unit must be set up within 3\" of that token and not within 8\" of an enemy unit; the token is then removed.",
+    "behavior": "reactive",
     "faction_id": "adeptus-astartes"
   },
   {
@@ -1136,7 +1274,7 @@
     "version": "2025-q3",
     "effect": {
       "type": "roll-modifier",
-      "target": "this-unit",
+      "target": "attacker",
       "modifier": {
         "roll": "hit",
         "operation": "subtract",
@@ -1190,9 +1328,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "29b7d5fc3327b672c8f0eead42159385c674ae9c5443474c954802f72ce2f4f4",
+    "source_digest": "86427f81eb260ea5ec6e02181fbe366e6c6d069bd84360c810326f8e40ee144f",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1203,12 +1341,33 @@
         }
       },
       "effect": {
-        "type": "re-roll",
-        "target": "this-unit",
-        "modifier": {
-          "roll": "hit",
-          "subset": "ones"
-        }
+        "type": "choice",
+        "options": [
+          {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1,
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        ],
+        "choice_label": "one of the following",
+        "min_choices": 1,
+        "max_choices": 1
       }
     },
     "scope": {
@@ -1218,8 +1377,28 @@
       "bladeguard-veteran-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "faction_id": "adeptus-astartes"
+    "behavior": "reactive",
+    "faction_id": "adeptus-astartes",
+    "trigger": [
+      {
+        "event": "selected",
+        "filter": {
+          "to": "fight"
+        },
+        "optional": true
+      },
+      {
+        "event": "targets-selected",
+        "filter": {
+          "kind": "attack"
+        },
+        "subject": {
+          "owner": "enemy"
+        },
+        "object": "this-unit",
+        "optional": true
+      }
+    ]
   },
   {
     "ability_id": "sentinel-protocols-adeptus-astartes",
@@ -2555,7 +2734,7 @@
           },
           {
             "type": "roll-modifier",
-            "target": "this-unit",
+            "target": "attacker",
             "modifier": {
               "roll": "hit",
               "operation": "subtract",
@@ -2863,19 +3042,37 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "d51bf0f1bab54b31bd269c353055be30d25a235160d543a08ae11042f412307a",
+    "source_digest": "a8eb3d293a5e5cef7bde5919cca8ac343a71aa9ba2e23c34abe63271d98608fe",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "keywords": [
-          {
-            "keyword_id": "ignores-cover"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "owner": "enemy",
+            "visible": {
+              "to": "attacker"
+            }
           }
-        ]
+        }
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "keywords": [
+            {
+              "keyword_id": "ignores-cover"
+            }
+          ],
+          "weapons": {
+            "type": "ranged"
+          }
+        }
       }
     },
     "scope": {
@@ -5455,9 +5652,13 @@
       "all_of": [
         "ADEPTUS ASTARTES",
         "VEHICLE"
+      ],
+      "none_of": [
+        "DEDICATED TRANSPORT",
+        "FLY",
+        "WALKER"
       ]
-    },
-    "community_notes": "Once per phase: one Hit roll, one Wound roll and one Damage roll"
+    }
   },
   {
     "ability_id": "prescience-adeptus-astartes",
@@ -14851,7 +15052,7 @@
               "target": "this-model",
               "modifier": {
                 "stat": "AP",
-                "operation": "add",
+                "operation": "improve",
                 "value": 1,
                 "weapons": {
                   "type": "melee"
@@ -14891,7 +15092,7 @@
                 "target": "this-model",
                 "modifier": {
                   "stat": "AP",
-                  "operation": "add",
+                  "operation": "improve",
                   "value": 2,
                   "weapons": {
                     "type": "melee"
@@ -15444,7 +15645,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
-            "designated": "HIDDEN"
+            "state": "hidden"
           }
         }
       },
@@ -15524,7 +15725,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
-            "designated": "HIDDEN"
+            "state": "hidden"
           }
         }
       },

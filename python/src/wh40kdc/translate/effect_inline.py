@@ -327,7 +327,9 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
     if t == "ability-part":
         return part_inline(e, ctx)
     if t == "choice":
-        return f"{choice_prompt(e)}: {' / '.join(inline(o, ctx) for o in (e.get('options') or []))}"
+        options = e.get("options") or []
+        rendered = [f"{secondary_lead(e, i)}{inline(o, ctx)}" for i, o in enumerate(options)]
+        return f"{choice_prompt(e)}: {' / '.join(rendered)}"
     if t == "dice-gated":
         if e.get("test"):
             return leadership_test(e, ctx)
@@ -502,6 +504,14 @@ def stance_pick(e: Effect) -> str:
     if lo == hi:
         return f"select {n(hi)}"
     return f"select up to {n(hi)}" if num(lo) <= 1 else f"select from {n(lo)} to {n(hi)}"
+
+
+def secondary_lead(e: Effect, index: int) -> str:
+    """The "secondary effect (extra CP): " lead before the option a choice marks as the
+    Stratagem's secondary effect."""
+    marked = e.get("secondary_option")
+    is_number = isinstance(marked, (int, float)) and not isinstance(marked, bool)
+    return "secondary effect (extra CP): " if is_number and marked == index else ""
 
 
 def choice_prompt(e: Effect) -> str:

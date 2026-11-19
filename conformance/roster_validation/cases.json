@@ -3977,7 +3977,7 @@
     "note": "One INQUISITOR exempts one of the two INQUISITORIAL AGENTS units: 4 Retinue units less 1 is 3, over the cap of 2."
   },
   {
-    "name": "ally-unit-in-two-pools-takes-first-offered",
+    "name": "ally-deathwatch-agents-count-against-own-pool",
     "args": {
       "factionId": "deathwatch",
       "battleSize": "strike-force",
@@ -4041,9 +4041,316 @@
       ]
     },
     "expected": [
-      "army|error|ally-keyword-limit-exceeded:agents-of-the-imperium-allies:Retinue"
+      "army|error|ally-keyword-limit-exceeded:agents-of-the-imperium-deathwatch:Retinue"
     ],
-    "note": "A Deathwatch army is offered both agents-of-the-imperium-allies and agents-of-the-imperium-deathwatch, and every Agents unit is in both pools. A foreign unit is attributed to the first offered rule in allied-rules order (by id), so the three Retinue units count against agents-of-the-imperium-allies: 3 over its strike-force cap of 2, and the violation names that rule."
+    "note": "A Deathwatch army is a host of agents-of-the-imperium-deathwatch only: the dump does not list Deathwatch as a host of agents-of-the-imperium-allies, though a Deathwatch army carries its ADEPTUS ASTARTES gate keyword. The three Retinue units count against agents-of-the-imperium-deathwatch: 3 over its strike-force cap of 2, and the violation names that rule."
+  },
+  {
+    "name": "ally-attributed-pool-points-over-limit",
+    "args": {
+      "factionId": "chaos-space-marines",
+      "battleSize": "strike-force",
+      "forceDisposition": "take-and-hold",
+      "detachments": [
+        {
+          "id": "veterans-of-the-long-war"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "chaos-lord",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "daemon-hammer": 1,
+            "plasma-pistol-chaos-lord": 1
+          }
+        },
+        {
+          "unitId": "bloodletters",
+          "modelCount": 10,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "hellblade": 10
+          }
+        },
+        {
+          "unitId": "bloodletters",
+          "modelCount": 10,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "hellblade": 10
+          }
+        },
+        {
+          "unitId": "bloodthirster",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "great-axe-of-khorne": 1,
+            "hellfire-breath": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "army|error|ally-points-over-limit:daemonic-pact"
+    ],
+    "note": "A Chaos Space Marines army takes Daemonic Pact units, a non-exclusive pool its foreign daemons are attributed to: two Bloodletters (110 each) and a Bloodthirster (320) total 540, over the pact's 500-point strike-force cap. Two Battleline Khorne units cover the one non-Battleline Khorne unit."
+  },
+  {
+    "name": "ally-attributed-pool-cannot-be-warlord-or-take-enhancement",
+    "args": {
+      "factionId": "chaos-space-marines",
+      "battleSize": "strike-force",
+      "forceDisposition": "take-and-hold",
+      "detachments": [
+        {
+          "id": "veterans-of-the-long-war"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "bloodthirster",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "mark-of-legend-veterans-of-the-long-war-chaos-space-marines",
+          "leaderBodyguardId": null,
+          "counts": {
+            "great-axe-of-khorne": 1,
+            "hellfire-breath": 1
+          }
+        },
+        {
+          "unitId": "bloodletters",
+          "modelCount": 10,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "hellblade": 10
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|ally-cannot-be-warlord:bloodthirster",
+      "u0|error|ally-cannot-take-enhancements:bloodthirster",
+      "u0|error|enhancement-keyword-mismatch:mark-of-legend-veterans-of-the-long-war-chaos-space-marines"
+    ],
+    "note": "Daemonic Pact's Warlord and Enhancement locks apply to its attributed units: the Bloodthirster can be neither the Chaos Space Marines army's Warlord nor take a Veterans of the Long War Enhancement."
+  },
+  {
+    "name": "ally-battleline-ratio-exceeded",
+    "args": {
+      "factionId": "chaos-space-marines",
+      "battleSize": "strike-force",
+      "forceDisposition": "take-and-hold",
+      "detachments": [
+        {
+          "id": "veterans-of-the-long-war"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "chaos-lord",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "daemon-hammer": 1,
+            "plasma-pistol-chaos-lord": 1
+          }
+        },
+        {
+          "unitId": "bloodletters",
+          "modelCount": 10,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "hellblade": 10
+          }
+        },
+        {
+          "unitId": "flesh-hounds",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "burning-roar": 1,
+            "collar-of-khorne": 5,
+            "gore-drenched-fangs": 5
+          }
+        },
+        {
+          "unitId": "flesh-hounds",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "burning-roar": 1,
+            "collar-of-khorne": 5,
+            "gore-drenched-fangs": 5
+          }
+        }
+      ]
+    },
+    "expected": [
+      "army|error|ally-battleline-ratio-exceeded:daemonic-pact:Khorne"
+    ],
+    "note": "Daemonic Pact's Battleline ratio: two non-Battleline Khorne units (Flesh Hounds) against one Battleline Khorne unit (Bloodletters) exceed it. The three units total 270, under the 500-point cap."
+  },
+  {
+    "name": "ally-battleline-ratio-legal",
+    "args": {
+      "factionId": "chaos-space-marines",
+      "battleSize": "strike-force",
+      "forceDisposition": "take-and-hold",
+      "detachments": [
+        {
+          "id": "veterans-of-the-long-war"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "chaos-lord",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "daemon-hammer": 1,
+            "plasma-pistol-chaos-lord": 1
+          }
+        },
+        {
+          "unitId": "bloodletters",
+          "modelCount": 10,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "hellblade": 10
+          }
+        },
+        {
+          "unitId": "flesh-hounds",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "burning-roar": 1,
+            "collar-of-khorne": 5,
+            "gore-drenched-fangs": 5
+          }
+        },
+        {
+          "unitId": "plaguebearers",
+          "modelCount": 10,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "plaguesword": 10
+          }
+        }
+      ]
+    },
+    "expected": [],
+    "note": "One Battleline Khorne unit covers one non-Battleline Khorne unit; a Battleline Nurgle unit with no non-Battleline Nurgle unit is legal. No Daemonic Pact violation."
+  },
+  {
+    "name": "ally-unit-in-two-pools-takes-first-offered",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "wrath-of-the-doomed"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "heavy-bolt-pistol-captain": 1,
+            "master-crafted-bolter": 1,
+            "master-crafted-power-weapon-captain": 1
+          }
+        },
+        {
+          "unitId": "watch-master",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "vigil-spear": 1
+          }
+        },
+        {
+          "unitId": "corvus-blackstar",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "armoured-hull": 1,
+            "auspex-array": 1,
+            "blackstar-rocket-launcher": 2,
+            "twin-assault-cannon": 1
+          }
+        },
+        {
+          "unitId": "corvus-blackstar",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "armoured-hull": 1,
+            "auspex-array": 1,
+            "blackstar-rocket-launcher": 2,
+            "twin-assault-cannon": 1
+          }
+        },
+        {
+          "unitId": "corvus-blackstar",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "armoured-hull": 1,
+            "auspex-array": 1,
+            "blackstar-rocket-launcher": 2,
+            "twin-assault-cannon": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "army|error|ally-points-over-limit:adeptus-astartes-allies"
+    ],
+    "note": "A Blood Angels army is offered adeptus-astartes-allies (Deathwatch units) and agents-of-the-imperium-allies, and the Watch Master and Corvus Blackstar are in both pools. A foreign unit is attributed to the first offered rule in allied-rules order (by id), so all four count against adeptus-astartes-allies: 105 + 3 x 180 = 645, over its 500-point cap, and the violation names that rule (agents-of-the-imperium-allies has no points cap). Allied units are not judged by chapter cohesion."
   },
   {
     "name": "chapter-reprint-legal-in-its-chapter",

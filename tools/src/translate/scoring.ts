@@ -16,6 +16,8 @@ export interface ScoringTrigger {
   phase?: "command" | "movement" | "shooting" | "charge" | "fight";
   player_turn?: "your-turn" | "opponent-turn" | "either";
   battle_round?: { min?: number; max?: number };
+  /** The moment the award is checked in the fifth battle round, in place of `timing`. */
+  final_round_timing?: "end-of-turn";
 }
 
 /** The scoring approach a card is played under (cards that print both). */
@@ -41,7 +43,10 @@ function capitalize(s: string): string {
   return s.length === 0 ? s : s[0].toUpperCase() + s.slice(1);
 }
 
-/** "End of your Command phase (round 2+)" and friends. */
+/**
+ * "End of your Command phase (round 2+)" and friends. A `final_round_timing` appends the
+ * fifth-round moment: "End of your Command phase (round 2+), or end of your turn in round 5".
+ */
 export function describeTrigger(t: ScoringTrigger): string {
   const turn =
     t.player_turn === "opponent-turn"
@@ -82,6 +87,7 @@ export function describeTrigger(t: ScoringTrigger): string {
       base += ` (rounds 1-${max})`;
     }
   }
+  if (t.final_round_timing === "end-of-turn") base += `, or end of ${turn} turn in round 5`;
   return base;
 }
 

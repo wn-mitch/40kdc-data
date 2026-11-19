@@ -354,8 +354,8 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		return partInline(e, ctx)
 	case "choice":
 		var opts []string
-		for _, o := range getList(e, "options") {
-			opts = append(opts, describeEffectInline(mapOr(o), ctx))
+		for i, o := range getList(e, "options") {
+			opts = append(opts, secondaryLead(e, i)+describeEffectInline(mapOr(o), ctx))
 		}
 		return choicePrompt(e) + ": " + strings.Join(opts, " / ")
 	case "dice-gated":
@@ -553,6 +553,15 @@ func stancePick(e map[string]any) string {
 }
 
 // choicePrompt is the prompt of a choice, with the player who picks: the opponent when chosen_by says so.
+// secondaryLead is "secondary effect (extra CP): " before the option a choice marks as the
+// Stratagem's secondary effect.
+func secondaryLead(e map[string]any, index int) string {
+	if n, ok := e["secondary_option"].(float64); ok && n == float64(index) {
+		return "secondary effect (extra CP): "
+	}
+	return ""
+}
+
 func choicePrompt(e map[string]any) string {
 	own := ownChoicePrompt(e)
 	if by, _ := e["chosen_by"].(string); by != "opponent" {
@@ -674,8 +683,8 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		return indent + arrow + capitalize(describeEffectInline(e, ctx)) + "."
 	case "choice":
 		lines := []string{indent + capitalize(choicePrompt(e)) + ":"}
-		for _, o := range getList(e, "options") {
-			lines = append(lines, indent+"  - "+capitalize(describeEffectInline(mapOr(o), ctx))+".")
+		for i, o := range getList(e, "options") {
+			lines = append(lines, indent+"  - "+capitalize(secondaryLead(e, i)+describeEffectInline(mapOr(o), ctx))+".")
 		}
 		return strings.Join(lines, "\n")
 	case "dice-gated":

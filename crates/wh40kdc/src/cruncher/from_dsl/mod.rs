@@ -31,6 +31,7 @@ mod levers;
 mod roll_mortals;
 pub use roll_mortals::is_own_attack_roll_trigger;
 mod selection;
+mod selection_backrefs;
 
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Map, Value};
@@ -114,6 +115,10 @@ pub struct ActivatableBuff {
     /// The stance option the lever does not apply under: a negated `rule-active` gate on it.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub excludes_option: Option<StanceOptionRef>,
+    /// The lever picks the option a `choice` marks `secondary_option`: a Stratagem's secondary
+    /// effect, which costs its `secondary_effect_extra_cp` on top of the Stratagem's CP cost.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub secondary: Option<bool>,
 }
 
 /// An [`ActivatableBuff`] that raises another ability's lever cap: `ability` names that ability
@@ -164,6 +169,8 @@ pub(crate) struct Lever {
     requires: Option<Vec<Value>>,
     cap_raise: Option<CapRaise>,
     gate: Option<gated::StanceGate>,
+    /// The option a `choice` marks `secondary_option`: a Stratagem's secondary effect.
+    secondary: bool,
 }
 
 /// The walk's sink, mirroring the TS `EffectTranslation` with JSON buffs.
@@ -329,7 +336,8 @@ const SCOPE_DEPTH: usize = 4;
 /// The scope of a fragment. An undecided condition matters only as much as what it gates: its
 /// body is translated as if the condition held, and a body that yields no buff or lever takes the
 /// widest scope of its own fragments; a body that could change the attack keeps the condition
-/// unresolved.
+/// unresolved. An undecided trigger moment is reported as the ability part it gates, whose body is
+/// its effect.
 fn scope_of(
     fragment: &UnsupportedFragment,
     source: &BuffSource,
@@ -348,7 +356,8 @@ fn scope_of(
     let body = match node {
         Some(node)
             if depth < SCOPE_DEPTH
-                && is_str(node, "type", "conditional")
+                && (is_str(node, "type", "conditional")
+                    || is_str(node, "type", "ability-part"))
                 && node.get("effect").is_some() =>
         {
             translate_effect(
@@ -497,6 +506,7 @@ fn finish(out: Out) -> EffectTranslation {
                     .map(|gate| gate.option.clone()),
                 excludes_option: l.gate.filter(|gate| gate.negated).map(|gate| gate.option),
                 requires: l.requires,
+                secondary: l.secondary.then_some(true),
             })
             .collect(),
     }
@@ -554,6 +564,7 @@ pub fn apply_activation(result: &mut EffectTranslation, ability_id: &str, activa
             requires_option: None,
             excludes_option: None,
             requires: None,
+            secondary: None,
         });
     }
     for lever in &mut result.activatable {
@@ -672,6 +683,7 @@ fn designate_entry(node: &Obj, applies: Option<&Obj>, opts: &WalkOpts, out: &mut
                 .and_then(Value::as_str)
                 .unwrap_or("designated");
             out.activatable.push(Lever {
+                secondary: false,
                 id: format!("{}#{designation}", opts.ability_id),
                 label: format!(
                     "Designated target: {}",

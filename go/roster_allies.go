@@ -2,13 +2,31 @@ package wh40kdc
 
 import "sort"
 
-// Allied-pool attribution and keyword caps for the roster checker. Mirror of TS
+// Allied-pool attribution, caps and locks for the roster checker. Mirror of TS
 // data/roster-allies.ts; pinned by the roster_validation conformance corpus.
 
-// allyViolation is an army-level violation the allied-pool checks raise.
+// allyViolation is a violation the allied-pool checks raise; unitIndex is -1
+// for an army-level one.
 type allyViolation struct {
-	code string
-	id   string
+	code      string
+	id        string
+	unitIndex int
+}
+
+// allyMember is a roster unit included through an allied rule, as
+// allyPoolViolations reads it.
+type allyMember struct {
+	unitID string
+	// index into the roster's units.
+	index int
+	// cost is the unit's roster cost (host-aware points, wargear and enhancement).
+	cost           int
+	isWarlord      bool
+	hasEnhancement bool
+	// battleline is true when the unit is BATTLELINE (role or keyword).
+	battleline bool
+	// keywords is the unit's roster keyword set.
+	keywords map[string]struct{}
 }
 
 // unitRecordKey identifies a resolved unit record by (faction_id, id).
@@ -134,7 +152,7 @@ func allyKeywordLimitViolations(rule map[string]any, members []map[string]struct
 			}
 		}
 		if len(counted)-len(exempt) > asInt(limit["max_count"]) {
-			out = append(out, allyViolation{"ally-keyword-limit-exceeded", ruleID + ":" + keyword})
+			out = append(out, allyViolation{"ally-keyword-limit-exceeded", ruleID + ":" + keyword, -1})
 		}
 	}
 	if rule["keyword_limits_exclusive"] == true {
@@ -159,7 +177,65 @@ func allyKeywordLimitViolations(rule map[string]any, members []map[string]struct
 		}
 		sort.Strings(used)
 		if len(used) > 1 {
-			out = append(out, allyViolation{"ally-keyword-limits-exclusive", ruleID})
+			out = append(out, allyViolation{"ally-keyword-limits-exclusive", ruleID, -1})
+		}
+	}
+	return out
+}
+
+// allyPoolViolations returns the pool-level violations of one allied rule over
+// the units included through it, in this order: the points_limits cap at
+// battleSize on the members' combined cost; the cannot_be_warlord lock (lifted
+// for a datasheet in warlordExempt); the cannot_take_enhancements lock; and, for
+// each battleline_ratio_keywords keyword at any battle size, more non-BATTLELINE
+// members carrying it than BATTLELINE ones (keywords match case-insensitively).
+func allyPoolViolations(rule map[string]any, members []allyMember, battleSize string, warlordExempt map[string]bool) []allyViolation {
+	var out []allyViolation
+	ruleID := getStr(rule, "id")
+	for _, pAny := range getList(rule, "points_limits") {
+		p, ok := asMap(pAny)
+		if !ok || getStr(p, "battle_size") != battleSize {
+			continue
+		}
+		spent := 0
+		for _, m := range members {
+			spent += m.cost
+		}
+		if spent > asInt(p["max_points"]) {
+			out = append(out, allyViolation{"ally-points-over-limit", ruleID, -1})
+		}
+		break
+	}
+	for _, m := range members {
+		if rule["cannot_be_warlord"] == true && m.isWarlord && !warlordExempt[m.unitID] {
+			out = append(out, allyViolation{"ally-cannot-be-warlord", m.unitID, m.index})
+		}
+		if rule["cannot_take_enhancements"] == true && m.hasEnhancement {
+			out = append(out, allyViolation{"ally-cannot-take-enhancements", m.unitID, m.index})
+		}
+	}
+	for _, keyword := range getStrList(rule, "battleline_ratio_keywords") {
+		want := lower(keyword)
+		battleline, other := 0, 0
+		for _, m := range members {
+			carries := false
+			for k := range m.keywords {
+				if lower(k) == want {
+					carries = true
+					break
+				}
+			}
+			if !carries {
+				continue
+			}
+			if m.battleline {
+				battleline++
+			} else {
+				other++
+			}
+		}
+		if other > battleline {
+			out = append(out, allyViolation{"ally-battleline-ratio-exceeded", ruleID + ":" + keyword, -1})
 		}
 	}
 	return out

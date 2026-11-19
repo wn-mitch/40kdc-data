@@ -373,6 +373,14 @@ fn stance_pick(e: &P) -> String {
     }
 }
 
+/// "secondary effect (extra CP): " before the option a choice marks as the Stratagem's secondary effect.
+pub(super) fn secondary_lead(e: &P, index: usize) -> &'static str {
+    match e.get("secondary_option").and_then(Value::as_f64) {
+        Some(n) if n == index as f64 => "secondary effect (extra CP): ",
+        _ => "",
+    }
+}
+
 /// The prompt of a choice, with the player who picks: the opponent when `chosen_by` says so.
 fn choice_prompt(e: &P) -> String {
     let own = own_choice_prompt(e);
@@ -522,7 +530,8 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
             choice_prompt(e),
             items(e, "options")
                 .iter()
-                .map(|o| inline(o, ctx))
+                .enumerate()
+                .map(|(i, o)| format!("{}{}", secondary_lead(e, i), inline(o, ctx)))
                 .collect::<Vec<_>>()
                 .join(" / ")
         ),

@@ -17,6 +17,7 @@ from __future__ import annotations
 from typing import Any
 
 from wh40kdc.cruncher.buffs import Buff, BuffSource, EngineContext
+from wh40kdc.cruncher.from_dsl_selection_backrefs import designated_tags, selection_holds
 
 _SELECTED_UNIT = "selected-unit"
 
@@ -136,7 +137,9 @@ def plan_selection(
         if isinstance(gate, str):
             return {"kind": "unsupported", "reason": gate}
         applicability = gate
-        effect = _retarget(node.get("effect"), other)
+        effect = selection_holds(
+            _retarget(node.get("effect"), other), other, designated_tags(node.get("effect"))
+        )
         label = "Selected enemy unit"
 
     if isinstance(effect, dict) and effect.get("type") == "dice-gated":

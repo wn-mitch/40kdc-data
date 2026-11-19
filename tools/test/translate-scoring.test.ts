@@ -127,8 +127,8 @@ describe("describeScoringCard against the embedded dataset", () => {
     expect(card).toBeDefined();
     expect(describeScoringCard(card!)).toEqual([
       "End of your turn (rounds 1-2): 2 VP when you hold more objectives than the opponent",
-      "End of your Command phase (round 2+): 3 VP per controlled objective",
-      "+ End of your Command phase (round 2+): 2 VP per controlled non home objective when you control 1+ objectives (your home)",
+      "End of your Command phase (round 2+), or end of your turn in round 5: 3 VP per controlled objective",
+      "+ End of your Command phase (round 2+), or end of your turn in round 5: 2 VP per controlled non home objective when you control 1+ objectives (your home)",
     ]);
   });
 

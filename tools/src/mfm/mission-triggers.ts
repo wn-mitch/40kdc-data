@@ -12,6 +12,12 @@
  *     scorable-period table is empty): false means the card cannot score in the first
  *     battle round, so every award's `battle_round.min` is at least 2; true means the
  *     awards' windows include round 1.
+ *   - `primary_mission_objective.localisations.en.whenText` (primary missions): the only place
+ *     the dump states that an objective scored at the end of your Command phase is instead
+ *     scored at the end of your turn in the fifth battle round; `scorablePeriod` lists the round
+ *     either way. A `whenText` naming both the end of your turn and the fifth battle round means
+ *     the award's trigger carries `final_round_timing: end-of-turn`; any other text means it
+ *     carries none. The text is read at check time and never stored.
  *   - `*_mission_objective_scoring.inputType`: `checkbox` is a yes/no criterion, scored as
  *     a flat `vp`; `stepper` counts instances, scored as `vp_per` with a `per` descriptor.
  *
@@ -28,6 +34,7 @@ import type { AwardMode } from "./missions.js";
 const ROUND_PERIODS = ["firstBattleRound", "secondBattleRound", "thirdBattleRound", "fourthBattleRound", "fifthBattleRound"] as const;
 export type ScorablePeriod = (typeof ROUND_PERIODS)[number] | "endOfBattle";
 export type InputType = "checkbox" | "stepper";
+export type FinalRoundTiming = "end-of-turn";
 
 /**
  * Dump scoring rows whose `inputType` disagrees with the criterion it labels, keyed by the
@@ -49,11 +56,17 @@ export interface TriggerRow {
   periods: ScorablePeriod[] | null;
   /** Secondary rows: the mission's isScorableFirstTurn. Null for primary rows. */
   scorableFirstTurn: boolean | null;
+  /**
+   * Primary rows: the objective's fifth-battle-round timing when it differs from its usual
+   * timing, else "none". Undefined for secondary rows, which the dump gives no timing text.
+   */
+  finalRoundTiming?: FinalRoundTiming | "none";
 }
 
 interface Trigger {
   timing?: string;
   battle_round?: { min?: number; max?: number };
+  final_round_timing?: string;
 }
 export interface TriggerAward {
   trigger: Trigger;
@@ -70,7 +83,7 @@ export interface TriggerDisagreement {
   cardId: string;
   /** Index into the card's `awards`. */
   index: number;
-  field: "scorable-period" | "first-turn" | "input-type";
+  field: "scorable-period" | "first-turn" | "final-round-timing" | "input-type";
   repo: string;
   dump: string;
   scoringId: string;
@@ -101,6 +114,12 @@ function modeOf(scoringType: string | null | undefined): AwardMode {
 
 function inputTypeOf(value: unknown): InputType | null {
   return value === "checkbox" || value === "stepper" ? value : null;
+}
+
+/** The fifth-battle-round timing an objective's `whenText` states, or "none". */
+export function finalRoundTimingOf(whenText: unknown): FinalRoundTiming | "none" {
+  if (typeof whenText !== "string") return "none";
+  return /\bfifth battle round\b/i.test(whenText) && /\bend of your turn\b/i.test(whenText) ? "end-of-turn" : "none";
 }
 
 /** Repo card-id → its dump scoring rows (secondary missions and the generic primary missions). */
@@ -151,6 +170,7 @@ export function buildTriggerCanon(dump: MfmDump): Map<string, TriggerRow[]> {
     const rows: TriggerRow[] = [];
     for (const objective of [...(priObjectives.get(mission.id) ?? [])].sort(byDisplayOrder)) {
       const objectivePeriods = periods.get(objective.id) ?? [];
+      const finalRoundTiming = finalRoundTimingOf(objective.localisations?.en?.whenText);
       for (const score of [...(priScoring.get(objective.id) ?? [])].sort(byDisplayOrder)) {
         rows.push({
           scoringId: score.id,
@@ -158,6 +178,7 @@ export function buildTriggerCanon(dump: MfmDump): Map<string, TriggerRow[]> {
           inputType: inputTypeOf(score.inputType),
           periods: objectivePeriods,
           scorableFirstTurn: null,
+          finalRoundTiming,
         });
       }
     }
@@ -219,6 +240,10 @@ export function checkCardTriggers(
       if (row.periods) {
         const expected = canonicalPeriods(row.periods);
         if (scored.join() !== expected.join()) push("scorable-period", scored.join(","), expected.join(","));
+      }
+      if (row.finalRoundTiming !== undefined) {
+        const authored = award.trigger?.final_round_timing ?? "none";
+        if (authored !== row.finalRoundTiming) push("final-round-timing", authored, row.finalRoundTiming);
       }
       if (row.scorableFirstTurn != null) {
         const scoresFirst = scored.includes("firstBattleRound");

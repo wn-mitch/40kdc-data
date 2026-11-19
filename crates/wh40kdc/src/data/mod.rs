@@ -71,7 +71,7 @@ pub use ability_refs::{
 pub use collection::Collection;
 pub use dataset::{Dataset, RawData, ReactiveTrigger};
 #[cfg(feature = "cruncher")]
-pub use defensive::{DefensiveLever, DefensiveLevers, LeverGroup};
+pub use defensive::{DefensiveLever, DefensiveLevers, LeverCost, LeverGroup};
 #[cfg(feature = "cruncher")]
 pub use describe_buffs::{aura_inches, trigger_gated};
 pub use game_mode::{GameModeView, UnknownGameMode};

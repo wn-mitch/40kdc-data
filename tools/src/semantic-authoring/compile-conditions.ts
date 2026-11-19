@@ -501,7 +501,9 @@ export function condition(leaf: CompileLeaf): Node {
     case "unit-filter-target": {
       // A who folded onto an attack's target ("that targets a VEHICLE unit"): each of its fields, said of the defender.
       const filter = dslUnitFilter(leaf, { warlordTarget: true });
-      if (filter.visible) throw new CompileError("An attack's target is already visible to the attacker; drop visible from its unit-filter.");
+      // "Attacks that target a visible enemy unit": the target as the attacking model sees it, so an
+      // Indirect Fire attack at a unit it cannot see is not one of them.
+      if (filter.visible !== undefined) filter.visible = { to: "attacker" };
       if (leaf.parameters.owner_explicit !== true || filter.owner === "any") delete filter.owner;
       if (Object.keys(filter).length === 0) throw new CompileError("An attack's target unit-filter that names only a side says nothing the attack does not.");
       return { type: "matches", parameters: { subject: "defender", filter } };

@@ -17,7 +17,10 @@
             </profile>
             <profile name="Aquilon Optics" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll a failed Damage roll.</characteristic>
+                <characteristic name="Description">While making ranged attacks, while the target is an enemy unit with the MONSTER or VEHICLE keyword:
+  -&gt; You can re-roll one Hit roll.
+  -&gt; You can re-roll one Wound roll.
+  -&gt; You can re-roll one Damage roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">

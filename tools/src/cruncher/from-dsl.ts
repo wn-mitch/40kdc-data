@@ -70,7 +70,7 @@ export type UnsupportedFragment = {
    * For a record grant inside a `choice` option: the lever that picks the option and the choice's
    * pool. The consumer that expands the grant keeps the granted record behind that pick.
    */
-  choice?: { lever: string; label: string; group: ActivatableGroupRef };
+  choice?: { lever: string; label: string; group: ActivatableGroupRef; secondary?: true };
 };
 
 const stochasticDiceGatedReason = "dice-gated effect: stochastic; not expressible as a buff";
@@ -125,6 +125,11 @@ export type ActivatableBuff = {
   requiresOption?: StanceOptionRef;
   /** The stance option the lever does not apply under: a negated `rule-active` gate on it. */
   excludesOption?: StanceOptionRef;
+  /**
+   * The lever picks the option a `choice` marks `secondary_option`: a Stratagem's secondary effect,
+   * which costs its `secondary_effect_extra_cp` on top of the Stratagem's CP cost.
+   */
+  secondary?: true;
 };
 
 /** One option of a `stance-select` rule, as a `rule-active` condition names it. */
@@ -264,11 +269,12 @@ const SCOPE_DEPTH = 4;
  * The scope of a fragment. An undecided condition matters only as much as what it gates: its body
  * is translated as if the condition held, and a body that yields no buff or lever takes the widest
  * scope of its own fragments; a body that could change the attack keeps the condition unresolved.
+ * An undecided trigger moment is reported as the ability part it gates, whose body is its effect.
  */
 function scopeOf(fragment: UnsupportedFragment, source: BuffSource, context: EngineContext, perspective: TranslationPerspective, depth: number): UnsupportedScope {
   if (!UNDECIDED_CONDITION.test(fragment.reason)) return fragmentScope(fragment.reason, fragment.effectFragment, POST_ATTACK_MOMENT);
   const node = fragment.effectFragment as { type?: unknown; effect?: unknown } | null;
-  if (depth >= SCOPE_DEPTH || !isObject(node) || node.type !== "conditional" || node.effect === undefined) return "unresolved";
+  if (depth >= SCOPE_DEPTH || !isObject(node) || (node.type !== "conditional" && node.type !== "ability-part") || node.effect === undefined) return "unresolved";
   const body = translateEffect(node.effect, source, context, perspective);
   if (body.applied.length > 0 || body.activatable.length > 0) return "unresolved";
   return body.unsupported.reduce<UnsupportedScope>(
@@ -2358,10 +2364,11 @@ function enumerateChoice(
     // A record grant is expanded by its consumer, which must keep it behind this option's pick.
     for (const item of diagnostics) {
       const grant = isObject(item.effectFragment) && item.effectFragment.type === "ability-grant";
-      out.unsupported.push(grant && !item.choice ? { ...item, choice: { lever, label, group } } : item);
+      const secondary = node.secondary_option === i ? { secondary: true as const } : {};
+      out.unsupported.push(grant && !item.choice ? { ...item, choice: { lever, label, group, ...secondary } } : item);
     }
     if (buffs.length === 0) return;
-    out.activatable.push({ id: lever, label, buffs, ...stanceGateFields(gate), group });
+    out.activatable.push({ id: lever, label, buffs, ...stanceGateFields(gate), group, ...(node.secondary_option === i ? { secondary: true as const } : {}) });
   });
 }
 

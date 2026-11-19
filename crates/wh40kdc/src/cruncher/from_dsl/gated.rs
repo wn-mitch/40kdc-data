@@ -126,6 +126,7 @@ pub(super) fn offer_stance_gated(
         return;
     }
     out.activatable.push(Lever {
+        secondary: false,
         id,
         label: format!("{name}: {}", label_for_buffs(&sub.applied)),
         buffs: sub.applied,
@@ -176,6 +177,7 @@ pub(super) fn offer_own_designated(node: &Obj, tag: &str, opts: &WalkOpts, out: 
         return;
     }
     out.activatable.push(Lever {
+        secondary: false,
         id: format!("{}#{tag}", opts.ability_id),
         label: format!("{tag}: {}", label_for_buffs(&sub.applied)),
         buffs: sub.applied,

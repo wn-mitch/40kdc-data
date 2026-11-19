@@ -754,6 +754,20 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     args: { factionId: "chaos-daemons", detachmentIds: ["shadow-legion"] },
     comparison: "ordered",
   },
+  // Host gate: Deathwatch and Grey Knights carry ADEPTUS ASTARTES, but neither hosts the
+  // Space Marine armies' Deathwatch pool; Deathwatch takes its own Agents pool, not the generic one.
+  {
+    name: "allies_for deathwatch (host gate → own agents pool, not the generic one)",
+    query: "allies_for",
+    args: { factionId: "deathwatch" },
+    comparison: "ordered",
+  },
+  {
+    name: "allies_for grey-knights (host gate → no Deathwatch pool)",
+    query: "allies_for",
+    args: { factionId: "grey-knights" },
+    comparison: "ordered",
+  },
   // ally_units_for: resolved pool; compared as set (accessor sorts by name, locale-dependent).
   {
     name: "ally_units_for iconoclast-fiefdom-damned",
@@ -4487,6 +4501,14 @@ function genEffectTranslation(): void {
     ...(["and", "or"] as const).map((operator) => ({ caseId: `fidelity/not-${operator}-of-negations-reads-positive`, effect: { type: "conditional",
       condition: { operator: "not", operands: [{ operator, operands: ["CHAOS", "IMPERIUM"].map((keyword) => ({ operator: "not", operands: [{ type: "matches", parameters: { filter: { all_of: [keyword] } } }] })) }] },
       effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "OC", operation: "add", value: 1 } } } })),
+    // The option a choice marks as a Stratagem's secondary effect reads as the extra-CP pick, in block and inline form.
+    { caseId: "fidelity/choice-secondary-option-block", effect: { type: "choice", secondary_option: 1, options: [
+      { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
+      { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } }] } },
+    { caseId: "fidelity/choice-secondary-option-inline", effect: { type: "aura", target: "friendly-within-aura", modifier: { range: { inches: 6 }, of: "this-unit",
+      effect: { type: "choice", secondary_option: 0, options: [
+        { type: "roll-modifier", target: "recipient", modifier: { roll: "hit", operation: "add", value: 1 } },
+        { type: "roll-modifier", target: "recipient", modifier: { roll: "wound", operation: "add", value: 1 } }] } } } },
     { caseId: "fidelity/move-modifier-mode-choice-named-beside-clause", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], no_end_in_engagement: true, mode_choice: { modes: ["objective"], ignore_before_moving: true } } } },
   ];
   for (const example of fidelityBoundaryCases) {

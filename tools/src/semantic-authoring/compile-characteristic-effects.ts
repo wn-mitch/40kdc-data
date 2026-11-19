@@ -24,6 +24,17 @@ function floorOf(leaf: CompileLeaf, stat: string): unknown {
   return own ?? (leaf.parameters.minimum !== undefined ? closed(leaf, "minimum") : undefined);
 }
 
+/**
+ * The DSL operation for a change to AP. The rules count a bonus to AP ("+1 AP", "add 1 to the
+ * Armour Penetration characteristic") as an improvement, and a leaf's amount is always positive.
+ * The DSL stores AP negative and reads `add`/`subtract` as a signed delta on that number, so an
+ * additive leaf lowers to the directional `improve`/`worsen` the cruncher reads as more or less
+ * piercing.
+ */
+function apOperation(operation: unknown): unknown {
+  return operation === "add" ? "improve" : operation === "subtract" ? "worsen" : operation;
+}
+
 /** The effect for a characteristic family, or undefined when the family is not one of them. */
 export function characteristicEffect(leaf: CompileLeaf, context: EffectContext, target: TargetOf): Node | undefined {
   switch (leaf.family_id) {
@@ -93,7 +104,7 @@ export function characteristicEffect(leaf: CompileLeaf, context: EffectContext, 
         return {
           type: "stat-modifier", target: owner,
           modifier: {
-            stat, operation: closed(leaf, "operation"),
+            stat, operation: stat === "AP" ? apOperation(closed(leaf, "operation")) : closed(leaf, "operation"),
             ...(leaf.parameters.value !== undefined ? { value: closed(leaf, "value") } : {}),
             ...weaponScope(scopedLeaf),
             // A floor on this characteristic alone (compile-characteristic-amount.ts bindCharacteristicFloors), else the change's own.

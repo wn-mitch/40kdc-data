@@ -662,6 +662,19 @@ fn evaluate_filter(
                     return Some(false);
                 }
             }
+            // The attack's target as the attacking model sees it is a declared fact.
+            "visible"
+                if value
+                    .as_object()
+                    .is_some_and(|view| view.len() == 1 && is_str(view, "to", "attacker"))
+                    && context.is_some_and(|(_, side)| side == TranslationPerspective::Target) =>
+            {
+                match context.and_then(|(ctx, _)| ctx.target_visible) {
+                    Some(false) => return Some(false),
+                    None => unknown = true,
+                    Some(true) => {}
+                }
+            }
             "level" if value.as_str() == Some("unit") => {}
             // "Each model from your army": every model of a unit on that side, so the whole unit.
             "level"

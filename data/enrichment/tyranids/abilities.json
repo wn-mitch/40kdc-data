@@ -4987,7 +4987,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
-            "designated": "HIDDEN"
+            "state": "hidden"
           }
         }
       },

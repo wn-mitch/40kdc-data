@@ -5,19 +5,22 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "071d01584806666355bbae334684b453f7f226d22fde041d6ea9634ef576073b",
     "version": "2025-q3",
     "effect": {
       "type": "weapon-ability-grant",
-      "target": "this-unit",
+      "target": "this-model",
       "modifier": {
         "keywords": [
           {
             "keyword_id": "ignores-cover"
           }
-        ]
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {

@@ -56,7 +56,7 @@ describe("geometry and unit relations", () => {
 
   it("accepts near / away_from / in_region lists and placement lists; wholly selection needs a range", () => {
     expect(effectOk(leaf("set-up", {
-      to: "battlefield", near: [{ of: { marker: "teleport-homer" }, range: { inches: 3 } }], away_from: [{ of: { owner: "enemy" }, range: { inches: 9 } }],
+      to: "battlefield", near: [{ of: { marker: "teleport-homer-adeptus-astartes" }, range: { inches: 3 } }], away_from: [{ of: { owner: "enemy" }, range: { inches: 9 } }],
       in_region: { region: { territory: "your-deployment-zone" }, wholly: true }, placement: ["closest-to-original", "on-terrain"],
     }))).toBe(true);
     expect(effectOk(leaf("return-models", { count: 1, placement: ["closest-to-destruction", "unengaged"] }))).toBe(true);

@@ -5968,7 +5968,7 @@
             },
             "modifier": {
               "stat": "AP",
-              "operation": "add",
+              "operation": "improve",
               "value": 1
             }
           }
@@ -5979,7 +5979,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "-> After a friendly unit selects targets for its charge but before it makes a Charge move (the triggering unit must have DESTROYER CULT or FLAYED ONES), you may use this ability:\n  -> You can re-roll the Charge roll.\n  -> While the target unit is below half strength, the unit gets +1 to Charge rolls.\nWhile making ranged attacks, if the target is the closest eligible target, add 1 to all friendly DESTROYER CULT units' Armour Penetration characteristic."
+      "text": "-> After a friendly unit selects targets for its charge but before it makes a Charge move (the triggering unit must have DESTROYER CULT or FLAYED ONES), you may use this ability:\n  -> You can re-roll the Charge roll.\n  -> While the target unit is below half strength, the unit gets +1 to Charge rolls.\nWhile making ranged attacks, if the target is the closest eligible target, improve all friendly DESTROYER CULT units' Armour Penetration characteristic by 1."
     }
   },
   {
@@ -15382,7 +15382,7 @@
                 },
                 {
                   "type": "roll-modifier",
-                  "target": "this-unit",
+                  "target": "attacker",
                   "modifier": {
                     "roll": "hit",
                     "operation": "subtract",
@@ -15399,7 +15399,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Set this model's Psyker Level characteristic to 3.\n-> You can:\n  -> By paying this cost (spend 1 Psychic Level): during the Shooting phase, in your turn, while the unit is not Battle-shocked, roll D6; then roll one D6: on 1, the unit is Battle-shocked; on 2-6, nothing happens; select one enemy unit if the selected unit is within 12\" of this model: that unit must take a Battle-shock test, applying -1 to that test.\n-> When an enemy unit targets this unit, you may use this ability, by paying this cost (spend 1 Psychic Level), until the end of the phase: while the unit is not Battle-shocked, roll D6; then roll one D6: on 1, the unit is Battle-shocked; on 2-6, nothing happens; the unit gets -1 to Hit rolls."
+      "text": "Set this model's Psyker Level characteristic to 3.\n-> You can:\n  -> By paying this cost (spend 1 Psychic Level): during the Shooting phase, in your turn, while the unit is not Battle-shocked, roll D6; then roll one D6: on 1, the unit is Battle-shocked; on 2-6, nothing happens; select one enemy unit if the selected unit is within 12\" of this model: that unit must take a Battle-shock test, applying -1 to that test.\n-> When an enemy unit targets this unit, you may use this ability, by paying this cost (spend 1 Psychic Level), until the end of the phase: while the unit is not Battle-shocked, roll D6; then roll one D6: on 1, the unit is Battle-shocked; on 2-6, nothing happens; the attacking unit gets -1 to Hit rolls."
     }
   },
   {
@@ -42838,6 +42838,82 @@
     },
     "expected": {
       "text": "If the unit is a CHAOS IMPERIUM unit, when resolving this use, add 1 to the unit's Objective Control characteristic."
+    }
+  },
+  {
+    "caseId": "fidelity/choice-secondary-option-block",
+    "effect": {
+      "type": "choice",
+      "secondary_option": 1,
+      "options": [
+        {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "wound",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  Select one of the following:\n    - The unit gets +1 to Hit rolls.\n    - Secondary effect (extra CP): the unit gets +1 to Wound rolls."
+    }
+  },
+  {
+    "caseId": "fidelity/choice-secondary-option-inline",
+    "effect": {
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 6
+        },
+        "of": "this-unit",
+        "effect": {
+          "type": "choice",
+          "secondary_option": 0,
+          "options": [
+            {
+              "type": "roll-modifier",
+              "target": "recipient",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": "recipient",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, while a friendly unit is within 6\" of this unit, select one of the following: secondary effect (extra CP): that unit gets +1 to Hit rolls / that unit gets +1 to Wound rolls."
     }
   },
   {

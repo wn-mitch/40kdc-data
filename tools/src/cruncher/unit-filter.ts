@@ -106,6 +106,10 @@ export function matchesUnitFilter(filter: unknown, context: EngineContext, side:
         : "unknown";
       if (verdict === false) return false;
       if (verdict === "unknown") unknown = true;
+    } else if (key === "visible" && side === "target" && isObject(value) && Object.keys(value).length === 1 && value.to === "attacker") {
+      // The attack's target as the attacking model sees it is a declared fact.
+      if (context.targetVisible === false) return false;
+      if (context.targetVisible === undefined) unknown = true;
     } else if (key === "level" && value === "unit") {
       continue;
     } else if (key === "level" && value === "model" && Object.keys(filter).every((name) => name === "level" || name === "owner")) {

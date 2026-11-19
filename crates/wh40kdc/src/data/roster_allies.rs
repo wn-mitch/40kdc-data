@@ -1,19 +1,39 @@
-//! Allied-pool attribution and keyword caps for the roster checker. Mirror of TS
+//! Allied-pool attribution, caps and locks for the roster checker. Mirror of TS
 //! `data/roster-allies.ts`; pinned by the `roster_validation` conformance corpus.
 
 use std::collections::{BTreeMap, HashSet};
 
-use crate::generated::{AlliedKeywordLimitBattleSize, AlliedRule, Unit};
+use crate::generated::{
+    AlliedKeywordLimitBattleSize, AlliedPointsLimitBattleSize, AlliedRule, Unit,
+};
 use crate::import::BattleSize;
 use crate::Dataset;
 
 use super::roster::RosterViolationCode;
 
-/// An army-level violation the allied-pool checks raise.
+/// A violation the allied-pool checks raise; `unit_index` is `None` for an
+/// army-level one.
 pub(crate) struct AllyViolation {
     pub code: RosterViolationCode,
     pub id: String,
     pub message: String,
+    pub unit_index: Option<usize>,
+}
+
+/// A roster unit included through an allied rule, as `ally_pool_violations`
+/// reads it.
+pub(crate) struct AllyMember<'a> {
+    pub unit_id: &'a str,
+    /// Index into the roster's units.
+    pub index: usize,
+    /// The unit's roster cost (host-aware points, wargear and enhancement).
+    pub cost: u64,
+    pub is_warlord: bool,
+    pub has_enhancement: bool,
+    /// True when the unit is BATTLELINE (role or keyword).
+    pub battleline: bool,
+    /// The unit's roster keyword set.
+    pub keywords: HashSet<String>,
 }
 
 /// The offered allied rule each foreign roster unit is included through, by
@@ -138,6 +158,7 @@ pub(crate) fn ally_keyword_limit_violations(
                     keyword,
                     limit.max_count
                 ),
+                unit_index: None,
             });
         }
     }
@@ -168,6 +189,102 @@ pub(crate) fn ally_keyword_limit_violations(
                     keywords.join(", "),
                     used.join(" and ")
                 ),
+                unit_index: None,
+            });
+        }
+    }
+    out
+}
+
+/// The pool-level violations of one allied rule over the units included
+/// through it, in this order: the `points_limits` cap at `battle_size` on the
+/// members' combined cost; the `cannot_be_warlord` lock (lifted for a datasheet
+/// in `warlord_exempt`); the `cannot_take_enhancements` lock; and, for each
+/// `battleline_ratio_keywords` keyword at any battle size, more non-BATTLELINE
+/// members carrying it than BATTLELINE ones (keywords match case-insensitively).
+pub(crate) fn ally_pool_violations(
+    rule: &AlliedRule,
+    members: &[AllyMember],
+    battle_size: Option<BattleSize>,
+    warlord_exempt: &HashSet<&str>,
+) -> Vec<AllyViolation> {
+    let mut out = Vec::new();
+    let cap = rule.points_limits.iter().flatten().find(|p| {
+        matches!(
+            (p.battle_size, battle_size),
+            (
+                AlliedPointsLimitBattleSize::Incursion,
+                Some(BattleSize::Incursion)
+            ) | (
+                AlliedPointsLimitBattleSize::StrikeForce,
+                Some(BattleSize::StrikeForce)
+            )
+        )
+    });
+    if let Some(cap) = cap {
+        let spent: u64 = members.iter().map(|m| m.cost).sum();
+        if spent > cap.max_points {
+            out.push(AllyViolation {
+                code: RosterViolationCode::AllyPointsOverLimit,
+                id: rule.id.as_str().to_string(),
+                message: format!(
+                    "{} units total {spent}, over the {} limit",
+                    rule.id.as_str(),
+                    cap.max_points
+                ),
+                unit_index: None,
+            });
+        }
+    }
+    for m in members {
+        if rule.cannot_be_warlord && m.is_warlord && !warlord_exempt.contains(m.unit_id) {
+            out.push(AllyViolation {
+                code: RosterViolationCode::AllyCannotBeWarlord,
+                id: m.unit_id.to_string(),
+                message: format!("{} cannot be Warlord under {}", m.unit_id, rule.id.as_str()),
+                unit_index: Some(m.index),
+            });
+        }
+        if rule.cannot_take_enhancements && m.has_enhancement {
+            out.push(AllyViolation {
+                code: RosterViolationCode::AllyCannotTakeEnhancements,
+                id: m.unit_id.to_string(),
+                message: format!(
+                    "{} cannot take an Enhancement under {}",
+                    m.unit_id,
+                    rule.id.as_str()
+                ),
+                unit_index: Some(m.index),
+            });
+        }
+    }
+    for keyword in rule
+        .battleline_ratio_keywords
+        .iter()
+        .flat_map(|ks| ks.0.iter())
+    {
+        let keyword = keyword.as_str();
+        let lower = keyword.to_lowercase();
+        let (mut battleline, mut other) = (0usize, 0usize);
+        for m in members {
+            if !m.keywords.iter().any(|k| k.to_lowercase() == lower) {
+                continue;
+            }
+            if m.battleline {
+                battleline += 1;
+            } else {
+                other += 1;
+            }
+        }
+        if other > battleline {
+            out.push(AllyViolation {
+                code: RosterViolationCode::AllyBattlelineRatioExceeded,
+                id: format!("{}:{}", rule.id.as_str(), keyword),
+                message: format!(
+                    "{} includes {other} non-Battleline {keyword} units, more than its {battleline} Battleline {keyword} units",
+                    rule.id.as_str()
+                ),
+                unit_index: None,
             });
         }
     }

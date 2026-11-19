@@ -9,6 +9,7 @@ import { bindCharacteristicAmounts, bindCharacteristicFloors } from "../src/sema
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
+import { lintCanonical } from "../src/author-batch.js";
 
 /**
  * A characteristic change written without its amount, a recipient filter, then the amount
@@ -221,5 +222,29 @@ describe("Semantic authoring characteristic-modifier optional amount", () => {
     expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "halve" })).toMatchObject({ operation: "halve" });
     expect(() => normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "multiply" })).toThrow();
     expect(normalizeFingerprintParameters("characteristic-modifier", { ...base, operation: "multiply", value: 2 })).toMatchObject({ operation: "multiply", value: 2 });
+  });
+});
+
+describe("Semantic authoring AP changes", () => {
+  const apText = "This model's melee attacks have +1 Zorn and Quux.";
+  const apChange = (operation: string, characteristics: string[]) =>
+    placedIn(apText, ["+1 Zorn and Quux", "characteristic-modifier", { subject: "this-model", characteristics, operation, value: 1, weapon_type: "melee" }])[0]!;
+
+  it("lowers an AP bonus to improve and an AP penalty to worsen, leaving other characteristics additive", () => {
+    // AP is stored negative: a signed add would make the weapon less piercing.
+    const bonus = effect(apChange("add", ["S", "AP"]), { attached: false, incoming: false }) as { steps: Array<{ modifier: Record<string, unknown> }> };
+    expect(bonus.steps.map((step) => [step.modifier.stat, step.modifier.operation])).toEqual([["S", "add"], ["AP", "improve"]]);
+    const penalty = effect(apChange("subtract", ["AP"]), { attached: false, incoming: false }) as { modifier: Record<string, unknown> };
+    expect(penalty.modifier).toMatchObject({ stat: "AP", operation: "worsen", value: 1 });
+    expect(lintCanonical(bonus).canonical).toBe(true);
+  });
+
+  it("refuses an AP change written as a signed add or subtract", () => {
+    for (const operation of ["add", "subtract"]) {
+      const result = lintCanonical({ type: "stat-modifier", target: "this-model", modifier: { stat: "AP", operation, value: 1, weapons: { type: "melee" } } });
+      expect(result.canonical, operation).toBe(false);
+      expect(result.issues.join(), operation).toContain("improve");
+    }
+    expect(lintCanonical({ type: "stat-modifier", target: "this-model", modifier: { stat: "S", operation: "add", value: 1 } }).canonical).toBe(true);
   });
 });

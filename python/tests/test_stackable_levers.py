@@ -759,3 +759,123 @@ def test_chapter_army_follows_its_own_combat_doctrines_declared_or_picked() -> N
         and any(buff["contribution"] == sustained for buff in lever["buffs"])
     )
     assert furor["requiresOption"].endswith("combat-doctrines-blood-angels#devastator-doctrine")
+
+
+# A Stratagem's secondary effect: Fix Strat's second option costs one extra CP, as does the second
+# option of Fix Brace, a defensive Stratagem.
+_WOUND_MINUS = {
+    "type": "roll-modifier",
+    "target": "attacker",
+    "modifier": {"roll": "wound", "operation": "subtract", "value": 1},
+}
+
+
+def _secondary_dataset(extra_cp: int | None) -> Dataset:
+    raw = army_raw()
+    extra = {} if extra_cp is None else {"secondary_effect_extra_cp": extra_cp}
+    for record in raw["abilities"]:
+        if record["ability_id"] == "fix-strat":
+            record["effect"] = {**record["effect"], "secondary_option": 1}
+    raw["abilities"].append(
+        ability(
+            "fix-brace",
+            "stratagem",
+            {
+                "type": "choice",
+                "secondary_option": 1,
+                "options": [
+                    {
+                        "type": "conditional",
+                        "condition": {"type": "attack-is", "parameters": {"attack_type": "melee"}},
+                        "effect": _WOUND_MINUS,
+                    },
+                    _WOUND_MINUS,
+                ],
+            },
+            detachment_id="fix-det",
+        )
+    )
+    # Fix Gift's secondary effect grants a record and applies no buff of its own.
+    raw["abilities"].append(
+        ability(
+            "fix-gift",
+            "stratagem",
+            {
+                "type": "choice",
+                "secondary_option": 1,
+                "options": [
+                    hit_plus("this-unit"),
+                    {
+                        "type": "ability-grant",
+                        "target": "this-unit",
+                        "modifier": {"ability": "fix-granted"},
+                    },
+                ],
+            },
+            detachment_id="fix-det",
+        )
+    )
+    raw["detachments"][0]["stratagem_ids"].extend(["fix-brace-s", "fix-gift-s"])
+    raw["stratagems"] = [
+        {**s, **extra} if s["id"] == "fix-strat-s" else s for s in raw["stratagems"]
+    ] + [
+        {
+            "id": "fix-gift-s",
+            "name": "Fix Gift",
+            "category": "detachment",
+            "detachment_id": "fix-det",
+            "cp_cost": 1,
+            "phases": ["fight"],
+            "ability_id": "fix-gift",
+            "game_version": VERSION,
+            **extra,
+        },
+        {
+            "id": "fix-brace-s",
+            "name": "Fix Brace",
+            "category": "detachment",
+            "detachment_id": "fix-det",
+            "cp_cost": 1,
+            "phases": ["fight"],
+            "ability_id": "fix-brace",
+            "game_version": VERSION,
+            **extra,
+        },
+    ]
+    return Dataset(raw)
+
+
+def test_secondary_option_lever_costs_the_extra_cp_on_top_of_the_stratagem_lever() -> None:
+    levers, _ = by_id(MOB, _secondary_dataset(1))
+    assert levers["detachment-stratagem:fix-strat"]["cost"] == {"cp": 2}
+    assert "cost" not in levers["fix-strat?0"]
+    assert levers["fix-strat?1"]["requiresLever"] == "detachment-stratagem:fix-strat"
+    assert levers["fix-strat?1"]["cost"] == {"cp": 1}
+
+
+def test_secondary_option_that_only_grants_a_record_costs_the_extra_cp() -> None:
+    boss = {"unitId": "fix-boss", "factionId": "orks", "detachmentId": "fix-det"}
+    result = _secondary_dataset(1).stackable_buffs_for(boss, {"phase": "fight"})
+    levers = {lever["id"]: lever for lever in result["buffs"]}
+    assert "cost" not in levers["fix-gift?0"]
+    gift = levers["fix-gift?1"]
+    assert gift["buffs"] == []
+    assert gift["requiresLever"] == "detachment-stratagem:fix-gift"
+    assert gift["cost"] == {"cp": 1}
+    granted = [lever for lever in result["buffs"] if lever["id"].startswith("fix-gift>fix-granted")]
+    assert granted
+    assert all(lever["requiresLever"] == "fix-gift?1" for lever in granted)
+
+
+def test_secondary_option_costs_nothing_extra_without_extra_cp() -> None:
+    levers, _ = by_id(MOB, _secondary_dataset(None))
+    assert "cost" not in levers["fix-strat?1"]
+
+
+def test_defensive_secondary_option_costs_the_extra_cp_once_opted_in() -> None:
+    result = _secondary_dataset(1).defensive_levers_for(
+        {**MOB, "optedInStratagemIds": ["fix-brace-s"]}, {"phase": "fight"}
+    )
+    levers = {lever["id"]: lever for lever in result["buffs"]}
+    assert "cost" not in levers["fix-brace?0"]
+    assert levers["fix-brace?1"]["cost"] == {"cp": 1}

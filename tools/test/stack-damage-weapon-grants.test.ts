@@ -5,7 +5,8 @@ import type { Buff, EngineContext } from "../src/cruncher/index.js";
 import { Dataset } from "../src/data/dataset.js";
 import { parseMatrixConfig } from "../src/stack-damage/config.js";
 import { resolveFactionContext, unitInFaction } from "../src/stack-damage/factions.js";
-import { damageScoringSession, emptySpec } from "../src/stack-damage/search.js";
+import { damageScoringSession, emptySpec, legalDetachmentSpec } from "../src/stack-damage/search.js";
+import { buildLedger } from "../src/stack-damage/ledger.js";
 import { unitLoadoutDamage } from "../src/stack-damage/unit-damage.js";
 import {
   groupsWithGrantedWeapons,
@@ -77,6 +78,51 @@ describe("unit weapon grants", () => {
     expect(without.selected.some((weapon) => weapon.weaponId === "twin-pulse-carbine-drone")).toBe(false);
     expect(carbine?.count).toBe(2);
     expect(scored.total).toBeCloseTo(without.total + carbine!.damage, 9);
+  });
+});
+
+describe("an Enhancement's weapon grant", () => {
+  it("splits a group of identical models to arm only the bearer", () => {
+    const groups = [{ count: 3, weapons: [{ id: "bolt-rifle", count: 1 }] }];
+    const grant = { abilityId: "example-relic", wargearId: "enhancement:example-relic@unit", weaponId: "example-blade", perBearer: 1, models: 1 };
+    expect(groupsWithGrantedWeapons(groups, [grant])).toEqual([
+      { count: 1, weapons: [{ id: "bolt-rifle", count: 1 }, { id: "example-blade", count: 1 }] },
+      { count: 2, weapons: [{ id: "bolt-rifle", count: 1 }] },
+    ]);
+    // Counts take the fixed model count, not carriers of the lever id.
+    expect(withGrantedWeapons(new Map([["bolt-rifle", 3]]), [grant]).get("example-blade")).toBe(1);
+  });
+
+  it("offers Imperium's Sword as a lever and fires it on the bearer", () => {
+    const astartes = resolveFactionContext(dataset, "adeptus-astartes");
+    const intercessors = resolveTarget(dataset, dataset.targetProfiles.get("meq-intercessors")!)!;
+    const config = parseMatrixConfig({ HC_FACTIONS: "adeptus-astartes", HC_TARGETS: "meq-intercessors", HC_PHASES: "fight", HC_OUTPUT: "grants.json" },
+      { factionIds: new Set(["adeptus-astartes"]), targetIds: ["meq-intercessors"] });
+    const session = damageScoringSession({ dataset, config, faction: astartes, target: intercessors, phase: "fight" });
+    const unit = (id: string) => unitInFaction(astartes, id)!;
+    const spec = legalDetachmentSpec(session, "adeptus-astartes", [
+      { unit: unit("assault-intercessor-squad"), role: "bodyguard" },
+      { unit: unit("captain"), role: "leader" },
+    ], [dataset.detachments.getAny("assault-brethren")!])!;
+    const leverId = "enhancement:imperiums-sword-assault-brethren-adeptus-astartes@captain";
+    expect(session.pool(spec).levers.find((lever) => lever.id === leverId)).toMatchObject({ buffs: [], cost: { points: 20 }, group: "enhancement@captain" });
+    // An Enhancement lever passes the bearer and uniqueness checks like any other.
+    expect(session.legalLeverSelection(spec, [leverId])).toBe(true);
+    const plain = session.scoreStack(spec);
+    const armed = session.scoreStack({ ...spec, selectedLeverIds: [leverId] });
+    const sword = armed.members.find(({ member }) => member.unit.id === "captain")!.loadout.selectedWeapons
+      .find((weapon) => weapon.weaponId === "imperiums-sword-assault-brethren");
+    expect(sword).toMatchObject({ count: 1 });
+    expect(sword!.damage).toBeGreaterThan(0);
+    expect(plain.members.flatMap(({ loadout }) => loadout.selectedWeapons).some((weapon) => weapon.weaponId === "imperiums-sword-assault-brethren")).toBe(false);
+    expect(armed.total).toBeGreaterThan(plain.total);
+    // The bodyguard's loadout gains nothing from the Captain's Enhancement.
+    expect(armed.members.find(({ member }) => member.unit.id === "assault-intercessor-squad")!.loadout.total)
+      .toBeCloseTo(plain.members.find(({ member }) => member.unit.id === "assault-intercessor-squad")!.loadout.total, 9);
+    expect(buildLedger(session, armed).find((entry) => entry.abilityId === "imperiums-sword-assault-brethren-adeptus-astartes" && entry.sourceUnitId === "captain"))
+      .toMatchObject({ status: "applied", relevant: false });
+    expect(buildLedger(session, plain).find((entry) => entry.abilityId === "imperiums-sword-assault-brethren-adeptus-astartes" && entry.sourceUnitId === "captain"))
+      .toMatchObject({ status: "rejected", relevant: false, reasons: ["not selected by the optimiser"] });
   });
 });
 

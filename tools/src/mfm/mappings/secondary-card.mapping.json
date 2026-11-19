@@ -507,6 +507,17 @@
       "consumers": [],
       "reason": "Award timing is community-authored; the secondary objective scorable-period table is unobserved and no timing is inferred from MFM prose."
     },
+    "/awards/*/trigger/final_round_timing": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "The fifth-round timing is community-authored. MFM states it only in primary_mission_objective.localisations.*.whenText prose, which mission-triggers.ts reads at check time to verify the authored value and never projects."
+    },
     "/awards/*/trigger/phase": {
       "provenance": "repo-authored",
       "coverage": "unimplemented",

@@ -7,6 +7,7 @@ import { canTakeEnhancement, grantedRecordIds, grantedRecordLevers } from "../da
 import type { DamageScoringSession } from "./scoring.js";
 import type { StackMemberResult, StackResult } from "./model.js";
 import { printedWargear, WEAPON_GRANT_REASON } from "./weapon-grants.js";
+import type { EnhancementGrant } from "./enhancement-grants.js";
 import { stackEligibleAbilities } from "./stratagem-eligibility.js";
 
 /**
@@ -50,6 +51,8 @@ interface Reading {
   perspective: "attacker" | "target";
   /** What the loadout scoring made of each weapon grant, by `abilityId|weaponId`. */
   grantNotes?: ReadonlyMap<string, string>;
+  /** The provider's weapon grant is an opt-in lever (an Enhancement's), whether or not selected. */
+  grantLever?: boolean;
 }
 
 /** The loadout-scoring note for a weapon-grant fragment, if the member's loadout scored it. */
@@ -83,6 +86,27 @@ function memberGrants(session: DamageScoringSession, result: StackResult, scored
       `weapon-grant: ${duplicate.weaponId} duplicates the ${duplicate.wargearId} grant of ${duplicate.ownerAbilityId}`);
   }
   return { notes, fired };
+}
+
+/** Notes for the weapons an Enhancement lever gives its bearer, by `abilityId|weaponId`. */
+function enhancementGrantNotes(
+  offered: readonly EnhancementGrant[],
+  leverId: string,
+  abilityId: string,
+  selected: boolean,
+  bearer: StackMemberResult,
+): Pick<Reading, "grantNotes" | "grantLever"> {
+  const notes = new Map<string, string>();
+  for (const grant of offered) {
+    if (grant.leverId !== leverId) continue;
+    const shot = bearer.loadout.selectedWeapons.some((weapon) => weapon.weaponId === grant.weaponId && weapon.count > 0 && weapon.damage > 0);
+    notes.set(`${abilityId}|${grant.weaponId}`, !selected
+      ? `weapon-grant: ${grant.weaponId} is offered to ${grant.bearerId} by the Enhancement lever`
+      : shot
+        ? `weapon-grant: ${grant.weaponId} is scored on the ${grant.bearerId} bearer`
+        : `weapon-grant: ${grant.weaponId} on the ${grant.bearerId} bearer adds no damage`);
+  }
+  return notes.size > 0 ? { grantNotes: notes, grantLever: true } : {};
 }
 
 /**
@@ -167,7 +191,7 @@ function classify(
   if (encounter || encounterReasons.length > 0) {
     return { status: "unresolved", relevant: false, reasons: ["encounter-layer", ...encounterReasons] };
   }
-  const offers = readings.some(({ translation }) => translation.applied.length > 0 || translation.activatable.length > 0);
+  const offers = readings.some(({ translation, grantLever }) => grantLever || translation.applied.length > 0 || translation.activatable.length > 0);
   if (offers) return { status: "rejected", relevant: false, reasons: ["not selected by the optimiser"] };
   return { status: "rejected", relevant: false, reasons: ["no current-attack effect", ...outOfScope] };
 }
@@ -189,6 +213,7 @@ export function buildLedger(session: DamageScoringSession, result: StackResult):
     ? [`${lever.source.abilityId}|${lever.source.sourceUnitId ?? ""}`]
     : []));
 
+  const offeredGrants = session.enhancementGrantsOf(spec);
   const gathered = new Map<string, { entry: Omit<LedgerEntry, "status" | "relevant" | "reasons">; ability: AbilityView; readings: Reading[]; applied: boolean; dropped: boolean; unequipped?: string | null }>();
   /** `unequipped` names the wargear a member's printed rule needs and its loadout lacks; null when it has it. */
   const gather = (
@@ -264,11 +289,13 @@ export function buildLedger(session: DamageScoringSession, result: StackResult):
         const ability = dataset.abilities.getInFaction(enhancement.ability_id, member.unit.factionId) ?? dataset.abilities.getAny(enhancement.ability_id);
         if (!ability) continue;
         const source: BuffSource = { kind: "ability", abilityId: ability.id, abilityKind: "unit" };
+        const leverId = `enhancement:${enhancement.id}@${member.unit.id}`;
+        const grants = enhancementGrantNotes(offeredGrants, leverId, ability.id, selectedIds.has(leverId), scored);
         gather(
           { side: "attacker", abilityId: ability.id, sourceKind: "enhancement", sourceUnitId: member.unit.id },
           ability,
-          { translation: ability.describeBuffs(source, context, "attacker"), source, context, perspective: "attacker" },
-          selectedIds.has(`enhancement:${enhancement.id}@${member.unit.id}`),
+          { translation: ability.describeBuffs(source, context, "attacker"), source, context, perspective: "attacker", ...grants },
+          selectedIds.has(leverId),
         );
       }
     }

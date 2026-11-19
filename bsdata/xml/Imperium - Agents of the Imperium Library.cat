@@ -76,32 +76,106 @@
     <categoryEntry name="Watch Master" id="428f-8c3b-d212-3eab" hidden="false"/>
     <categoryEntry name="Allies: Adeptus Titanicus" id="8f13-8307-aa5c-9cbe" hidden="false"/>
     <categoryEntry name="Allies: Adeptus Titanicus: Reaver Titan" id="8ecd-d8b8-c198-38c1" hidden="true">
+      <modifiers>
+        <modifier field="75a8-d689-e61e-1742" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="076b-18e8-9a1b-070a" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="a4d1-59b4-c8d5-a775" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="4e66-e142-2675-10a9" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="75a8-d689-e61e-1742" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
     </categoryEntry>
     <categoryEntry name="Allies: Adeptus Titanicus: Warbringer Nemesis Titan" id="076b-18e8-9a1b-070a" hidden="true">
+      <modifiers>
+        <modifier field="e475-6a70-546c-c718" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="8ecd-d8b8-c198-38c1" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="a4d1-59b4-c8d5-a775" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="4e66-e142-2675-10a9" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="e475-6a70-546c-c718" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
     </categoryEntry>
     <categoryEntry name="Allies: Adeptus Titanicus: Warhound Titan" id="a4d1-59b4-c8d5-a775" hidden="true">
+      <modifiers>
+        <modifier field="2199-b733-b123-085f" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="8ecd-d8b8-c198-38c1" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="076b-18e8-9a1b-070a" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="4e66-e142-2675-10a9" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="2199-b733-b123-085f" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
     </categoryEntry>
     <categoryEntry name="Allies: Adeptus Titanicus: Warlord Titan" id="4e66-e142-2675-10a9" hidden="true">
+      <modifiers>
+        <modifier field="0512-9d49-d2bd-0f6a" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="8ecd-d8b8-c198-38c1" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="076b-18e8-9a1b-070a" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                <condition childId="a4d1-59b4-c8d5-a775" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="0512-9d49-d2bd-0f6a" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
     </categoryEntry>
     <categoryEntry name="Allies: Questoris Allies" id="42fb-c475-8806-0bef" hidden="false"/>
     <categoryEntry name="Allies: Questoris Allies: Armiger" id="f9e1-3383-5d2b-5767" hidden="true">
+      <modifiers>
+        <modifier field="2164-d4a6-ef63-6985" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="6ac3-8c9e-a305-fe99" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="2164-d4a6-ef63-6985" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="3"/>
       </constraints>
     </categoryEntry>
     <categoryEntry name="Allies: Questoris Allies: Titanic" id="6ac3-8c9e-a305-fe99" hidden="true">
+      <modifiers>
+        <modifier field="a7cd-635e-f71e-770c" type="set" value="0">
+          <conditionGroups>
+            <conditionGroup type="or">
+              <conditions>
+                <condition childId="f9e1-3383-5d2b-5767" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+              </conditions>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
       <constraints>
         <constraint id="a7cd-635e-f71e-770c" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="1"/>
       </constraints>
@@ -1140,7 +1214,6 @@
                         <condition childId="bdc0-c0d-72d7-87e2" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
                         <condition childId="e0af-67df-9d63-8fb7" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
                         <condition childId="f27e-18c0-b73e-748e" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
-                        <condition childId="f89b-84e0-6e3b-f1e2" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
                       </conditions>
                     </conditionGroup>
                   </conditionGroups>
@@ -9102,7 +9175,6 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
                         <condition childId="bdc0-c0d-72d7-87e2" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
                         <condition childId="e0af-67df-9d63-8fb7" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
                         <condition childId="f27e-18c0-b73e-748e" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
-                        <condition childId="f89b-84e0-6e3b-f1e2" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
                       </conditions>
                     </conditionGroup>
                   </conditionGroups>
@@ -9140,7 +9212,6 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
                     <condition childId="bdc0-c0d-72d7-87e2" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
                     <condition childId="e0af-67df-9d63-8fb7" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
                     <condition childId="f27e-18c0-b73e-748e" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
-                    <condition childId="f89b-84e0-6e3b-f1e2" field="selections" scope="primary-catalogue" shared="true" type="instanceOf" value="1"/>
                   </conditions>
                 </conditionGroup>
               </conditionGroups>
@@ -13469,7 +13540,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Auspex Array" id="8b4a-daa9-810a-77ce" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit's weapons gain [IGNORES COVER].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Ranged weapons equipped by models in this unit gain [IGNORES COVER].</characteristic>
           </characteristics>
         </profile>
       </profiles>

@@ -300,3 +300,63 @@ describe("a once-per-round dice-pool allocation", () => {
     expect(legal(blessings.slice(0, 3))).toBe(false);
   });
 });
+
+describe("a Stratagem's secondary effect", () => {
+  // Fix Strat's second option is its secondary effect: one extra CP. Fix Brace is a defensive
+  // Stratagem whose second option is its secondary effect.
+  const woundMinus = { type: "roll-modifier", target: "attacker", modifier: { roll: "wound", operation: "subtract", value: 1 } };
+  function secondaryRaw(extraCp: number | undefined) {
+    const raw = armyRaw();
+    const extra = extraCp === undefined ? {} : { secondary_effect_extra_cp: extraCp };
+    raw.abilities = (raw.abilities as unknown as Array<Record<string, unknown>>).map((record) => record.ability_id === "fix-strat"
+      ? { ...record, effect: { ...(record.effect as object), secondary_option: 1 } }
+      : record) as never;
+    (raw.abilities as unknown[]).push(ability("fix-brace", "stratagem", {
+      type: "choice", secondary_option: 1,
+      options: [{ type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "melee" } }, effect: woundMinus }, woundMinus],
+    }, { detachment_id: "fix-det" }));
+    // Fix Gift's secondary effect grants a record and applies no buff of its own.
+    (raw.abilities as unknown[]).push(ability("fix-gift", "stratagem", {
+      type: "choice", secondary_option: 1,
+      options: [hitPlus("this-unit"), { type: "ability-grant", target: "this-unit", modifier: { ability: "fix-granted" } }],
+    }, { detachment_id: "fix-det" }));
+    (raw.detachments as Array<{ stratagem_ids: string[] }>)[0]!.stratagem_ids.push("fix-brace-s", "fix-gift-s");
+    raw.stratagems = [
+      ...(raw.stratagems as unknown as Array<Record<string, unknown>>).map((s) => s.id === "fix-strat-s" ? { ...s, ...extra } : s),
+      { id: "fix-gift-s", name: "Fix Gift", category: "detachment", detachment_id: "fix-det", cp_cost: 1, phases: ["fight"], ability_id: "fix-gift", game_version: version, ...extra },
+      { id: "fix-brace-s", name: "Fix Brace", category: "detachment", detachment_id: "fix-det", cp_cost: 1, phases: ["fight"], ability_id: "fix-brace", game_version: version, ...extra },
+    ] as never;
+    return new Dataset(raw);
+  }
+
+  it("charges the extra CP on the secondary option's lever, on top of the Stratagem lever it requires", () => {
+    const { buffs } = secondaryRaw(1).stackableBuffsFor(mob, { phase: "fight" });
+    const levers = new Map(buffs.map((lever) => [lever.id, lever]));
+    expect(levers.get("detachment-stratagem:fix-strat")!.cost).toEqual({ cp: 2 });
+    expect(levers.get("fix-strat?0")!.cost).toBeUndefined();
+    expect(levers.get("fix-strat?1")).toMatchObject({ requiresLever: "detachment-stratagem:fix-strat", cost: { cp: 1 } });
+  });
+
+  it("charges the extra CP on a secondary option that only grants a record, and keeps the record behind it", () => {
+    const boss = { unitId: "fix-boss", factionId: "orks", detachmentId: "fix-det" };
+    const { buffs } = secondaryRaw(1).stackableBuffsFor(boss, { phase: "fight" });
+    const levers = new Map(buffs.map((lever) => [lever.id, lever]));
+    expect(levers.get("fix-gift?0")!.cost).toBeUndefined();
+    expect(levers.get("fix-gift?1")).toMatchObject({ buffs: [], requiresLever: "detachment-stratagem:fix-gift", cost: { cp: 1 } });
+    const granted = buffs.filter((lever) => lever.id.startsWith("fix-gift>fix-granted"));
+    expect(granted.length).toBeGreaterThan(0);
+    for (const lever of granted) expect(lever.requiresLever).toBe("fix-gift?1");
+  });
+
+  it("charges nothing extra where the Stratagem's secondary effect has no extra CP", () => {
+    const { buffs } = secondaryRaw(undefined).stackableBuffsFor(mob, { phase: "fight" });
+    expect(buffs.find((lever) => lever.id === "fix-strat?1")!.cost).toBeUndefined();
+  });
+
+  it("charges the extra CP on a defensive Stratagem's secondary option once the Stratagem is opted in", () => {
+    const { buffs } = secondaryRaw(1).defensiveLeversFor({ ...mob, optedInStratagemIds: ["fix-brace-s"] }, { phase: "fight" });
+    const levers = new Map(buffs.map((lever) => [lever.id, lever]));
+    expect(levers.get("fix-brace?0")!.cost).toBeUndefined();
+    expect(levers.get("fix-brace?1")!.cost).toEqual({ cp: 1 });
+  });
+});

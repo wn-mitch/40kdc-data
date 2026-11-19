@@ -678,6 +678,32 @@
     ]
   },
   {
+    "name": "allies_for deathwatch (host gate → own agents pool, not the generic one)",
+    "query": "allies_for",
+    "args": {
+      "factionId": "deathwatch"
+    },
+    "comparison": "ordered",
+    "expected": [
+      "adeptus-titanicus-allies",
+      "agents-of-the-imperium-deathwatch",
+      "imperial-knights-allies"
+    ]
+  },
+  {
+    "name": "allies_for grey-knights (host gate → no Deathwatch pool)",
+    "query": "allies_for",
+    "args": {
+      "factionId": "grey-knights"
+    },
+    "comparison": "ordered",
+    "expected": [
+      "adeptus-titanicus-allies",
+      "agents-of-the-imperium-allies",
+      "imperial-knights-allies"
+    ]
+  },
+  {
     "name": "ally_units_for iconoclast-fiefdom-damned",
     "query": "ally_units_for",
     "args": {
@@ -1995,6 +2021,8 @@
       "blackstar-extraction-deathwatch-support-deathwatch",
       "blade-masters-assault-force-adeptus-astartes",
       "blade-of-detestation-marshals-household-black-templars",
+      "bladeguard-adeptus-astartes",
+      "bladeguard-adeptus-astartes",
       "bladeguard-black-templars",
       "bladeguard-black-templars",
       "bladeguard-dark-angels",
@@ -2644,7 +2672,6 @@
       "heroes-fall-fateful-performance-aeldari",
       "heroes-fall-ghosts-of-the-webway-aeldari",
       "heroic-fusillade-genestealer-cults",
-      "heroic-intervention",
       "heroic-resolve-champions-of-fenris-space-wolves",
       "hex-marked-armour-warpforged-cabal-thousand-sons",
       "hexagrammic-wards-ordo-malleus-daemon-hunters-agents-of-the-imperium",
@@ -4149,6 +4176,7 @@
       "berserk-fugue-spectacle-of-spite-drukhari",
       "berserk-resilience-frenzied-reavers-world-eaters",
       "bionic-endurance-skitarii-hunter-cohort-adeptus-mechanicus",
+      "bladeguard-adeptus-astartes",
       "bladeguard-black-templars",
       "bladeguard-dark-angels",
       "blessing-of-burning-blood-khorne-daemonkin-world-eaters",
