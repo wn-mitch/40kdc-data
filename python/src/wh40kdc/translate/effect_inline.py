@@ -21,6 +21,7 @@ from wh40kdc.translate.effect_aura import aura_reach, with_aura_recipient
 from wh40kdc.translate.effect_bind import roll_head, select_objective_inline
 from wh40kdc.translate.effect_leaf import LEAF_TYPES, describe_leaf
 from wh40kdc.translate.effect_move_type import move_type_inline
+from wh40kdc.translate.effect_orders import as_if_phase
 from wh40kdc.translate.effect_quantity import (
     quantity_phrase,
     requirement_phrase,
@@ -461,10 +462,12 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
         on_fail = inline(risk["on_fail"], ctx) if risk.get("on_fail") else "suffer a consequence"
         reward = inline(e.get("reward"), ctx)
         return f"take a {test_name(risk.get('test'))} test (on a failure, {on_fail}), then {reward}"
+    if t == "issue-orders" and e.get("same_order") is True:
+        return f"issue the same Order to another eligible unit{order_limit(e)}{as_if_phase(e)}"
     if t == "issue-orders" and e.get("menu_from") is not None:
         return (
             f"issue Orders from {ability_label(e['menu_from'])}{order_recipient(e)}"
-            f"{only_orders(e)}{order_limit(e)}"
+            f"{only_orders(e)}{order_limit(e)}{as_if_phase(e)}"
         )
     if t == "issue-orders":
         return (

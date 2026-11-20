@@ -1511,6 +1511,26 @@ class Modifier58(TypedDict):
     incoming: NotRequired[Literal[True]]
 
 
+class OnlyOption(TypedDict):
+    ability_id: EntityId
+    option_id: EntityId
+
+
+class RangeProxy(TypedDict):
+    marker: EntityId
+    inches: int
+
+
+class Modifier62(TypedDict):
+    only_options: NotRequired[list[OnlyOption]]
+    recipients: NotRequired[KeywordPredicate]
+    adds_recipients: NotRequired[Literal[True]]
+    count: NotRequired[Literal["any"]]
+    range: NotRequired[Literal["unlimited"]]
+    range_proxy: NotRequired[RangeProxy]
+    off_battlefield: NotRequired[Literal[True]]
+
+
 Result: TypeAlias = int
 
 
@@ -1533,7 +1553,7 @@ class Option4(TypedDict):
     option_id: EntityId
 
 
-class Modifier64(TypedDict):
+class Modifier66(TypedDict):
     option: NotRequired[Option4]
     options: NotRequired[list[Option4]]
     additional_selections: int
@@ -1543,7 +1563,7 @@ class Modifier64(TypedDict):
 
 class StanceSelectionCapacityEffect(TypedDict):
     type: Literal["stance-selection-capacity"]
-    modifier: Modifier64
+    modifier: Modifier66
 
 
 TransportOccupancySubjectKind: TypeAlias = Literal["unit-models", "single-model"]
@@ -3149,6 +3169,7 @@ class Ability1(TypedDict):
 class AddOption(TypedDict):
     id: NotRequired[EntityId]
     name: str
+    eligible: NotRequired[KeywordPredicate]
     effect: EffectNode
 
 
@@ -3239,6 +3260,7 @@ class Modifier17(TypedDict):
                 "fell-back",
                 "destroyed",
                 "transport-advanced",
+                "embarked",
             ]
         ]
     ]
@@ -4023,6 +4045,27 @@ class SingleEffect48(TypedDict):
     modifier: Modifier61
 
 
+class SingleEffect49(TypedDict):
+    type: Literal["orders-modifier"]
+    target: UnitRef
+    modifier: Modifier62
+
+
+Modifier63 = TypedDict(
+    "Modifier63",
+    {
+        "with": UnitRef,
+        "mutual": NotRequired[Literal[True]],
+    },
+)
+
+
+class SingleEffect50(TypedDict):
+    type: Literal["order-share"]
+    target: UnitRef
+    modifier: Modifier63
+
+
 SingleEffect: TypeAlias = (
     SingleEffect1
     | SingleEffect2
@@ -4072,6 +4115,8 @@ SingleEffect: TypeAlias = (
     | SingleEffect46
     | SingleEffect47
     | SingleEffect48
+    | SingleEffect49
+    | SingleEffect50
 )
 
 
@@ -4109,7 +4154,7 @@ class AbilityPart(TypedDict):
     usage: NotRequired[AbilityUsage]
 
 
-class Modifier62(TypedDict):
+class Modifier64(TypedDict):
     condition: Condition
     value: int
 
@@ -4117,7 +4162,7 @@ class Modifier62(TypedDict):
 class Test(TypedDict):
     kind: TestKind
     subject: UnitRef
-    modifiers: NotRequired[list[Modifier62]]
+    modifiers: NotRequired[list[Modifier64]]
 
 
 DiceGatedEffect = TypedDict(
@@ -4184,7 +4229,7 @@ class ForEachUnitEffect(TypedDict):
     max_affected: NotRequired[Quantity]
 
 
-class Modifier63(TypedDict):
+class Modifier65(TypedDict):
     range: NotRequired[RangeRef]
     range_bonus: NotRequired[RangeRef]
     of: NotRequired[str]
@@ -4199,7 +4244,7 @@ class Modifier63(TypedDict):
 class AuraEffect(TypedDict):
     type: Literal["aura"]
     target: Literal["enemy-within-aura", "friendly-within-aura"]
-    modifier: Modifier63
+    modifier: Modifier65
 
 
 class Select1(TypedDict):
@@ -4247,6 +4292,7 @@ class Option6(TypedDict):
     id: NotRequired[str]
     name: str
     effect: EffectNode
+    eligible: NotRequired[KeywordPredicate]
 
 
 class IssueOrdersEffect(TypedDict):
@@ -4264,6 +4310,9 @@ class IssueOrdersEffect(TypedDict):
     options: NotRequired[list[Option6]]
     menu_from: NotRequired[EntityId]
     only_options: NotRequired[list[EntityId]]
+    as_if_phase: NotRequired[Literal["command"]]
+    same_order: NotRequired[Literal[True]]
+    exclude: NotRequired[Literal["event-object"]]
 
 
 class NamedRegionStateEffect(TypedDict):
@@ -4434,7 +4483,7 @@ class RitualMenuEffect(TypedDict):
     rituals: list[Ritual]
 
 
-class Modifier65(TypedDict):
+class Modifier67(TypedDict):
     condition: Condition
     value: Quantity
 
@@ -4443,7 +4492,7 @@ class DeathGate(TypedDict):
     dice: DiceExpression
     comparison: Comparison
     threshold: Quantity
-    modifiers: list[Modifier65]
+    modifiers: list[Modifier67]
 
 
 class DesignationApplies(TypedDict):

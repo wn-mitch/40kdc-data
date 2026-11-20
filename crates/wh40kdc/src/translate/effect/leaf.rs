@@ -27,6 +27,8 @@ pub(crate) const LEAF_TYPES: &[&str] = &[
     "ability-modifier",
     "ability-activate",
     "oath-modifier",
+    "orders-modifier",
+    "order-share",
     "permission",
     "targeting",
     "counts-as",
@@ -663,6 +665,8 @@ pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
         "weapon-ability-range" => weapon_ability_range(m, subj),
         "counts-as" => counts_as(m, subj, ctx),
         "rule-state" => rule_state(m, subj),
+        "orders-modifier" => super::orders::orders_modifier(m, subj, ctx),
+        "order-share" => super::orders::order_share(m, subj, ctx),
         _ => describe_shape_leaf(e, m, subj, ctx)
             .unwrap_or_else(|| describe_board_leaf(e, m, subj, ctx)),
     }

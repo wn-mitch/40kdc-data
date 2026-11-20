@@ -792,7 +792,9 @@ export type SingleEffect =
   | CharacteristicResolutionEffect
   | BorrowWeaponsEffect
   | SelectWeaponEffect
-  | WeaponAbilityRangeEffect;
+  | WeaponAbilityRangeEffect
+  | OrdersModifierEffect
+  | OrderShareEffect;
 /**
  * How long an effect, a part or a designation lasts; resolution lasts only while resolving this activation; while-leading ends when the bearer stops leading; after-resolving ends after this activation resolves. The remaining values are phase, turn, battle-round, battle, explicit phase edges, attack-sequence, permanent, and domain-specific expiry windows.
  *
@@ -4034,6 +4036,7 @@ export interface AbilityModifierEffect {
        */
       id?: string;
       name: string;
+      eligible?: KeywordPredicate1;
       effect: EffectNode;
     };
     /**
@@ -4067,6 +4070,15 @@ export interface StanceOptionRef1 {
 export interface NamedAbilityRef1 {
   ability_id: EntityId;
   definition_id: EntityId;
+}
+/**
+ * The only friendly units the added Order can be issued to ("This Order can only be issued to K units").
+ */
+export interface KeywordPredicate1 {
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -4545,7 +4557,7 @@ export interface IssueOrdersEffect {
          */
         per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
       };
-  eligible?: KeywordPredicate1;
+  eligible?: KeywordPredicate2;
   /**
    * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
    */
@@ -4582,7 +4594,7 @@ export interface IssueOrdersEffect {
    * The Order does not count toward the Orders the officer can issue this turn.
    */
   counts_toward_limit?: false;
-  issuer?: KeywordPredicate2;
+  issuer?: KeywordPredicate3;
   /**
    * Units in any of these states cannot be issued an Order.
    *
@@ -4599,7 +4611,7 @@ export interface IssueOrdersEffect {
    * A unit is affected by at most one Order at a time; an Order issued to it later replaces the current one.
    */
   one_at_a_time?: true;
-  benefit?: KeywordPredicate3;
+  benefit?: KeywordPredicate4;
   /**
    * @minItems 1
    */
@@ -4611,6 +4623,7 @@ export interface IssueOrdersEffect {
       id?: string;
       name: string;
       effect: EffectNode;
+      eligible?: KeywordPredicate5;
     },
     ...{
       /**
@@ -4619,6 +4632,7 @@ export interface IssueOrdersEffect {
       id?: string;
       name: string;
       effect: EffectNode;
+      eligible?: KeywordPredicate5;
     }[]
   ];
   /**
@@ -4631,18 +4645,21 @@ export interface IssueOrdersEffect {
    * @minItems 1
    */
   only_options?: [EntityId, ...EntityId[]];
+  /**
+   * The Orders are issued as if it were this phase ("as if it were your Command phase").
+   */
+  as_if_phase?: "command";
+  /**
+   * Issue again the Order the triggering use just issued, rather than a pick from a menu.
+   */
+  same_order?: true;
+  /**
+   * The unit the triggering use's Order already went to cannot receive it again ("to another unit").
+   */
+  exclude?: "event-object";
 }
 /**
  * Which friendly units may receive an Order, by keyword.
- */
-export interface KeywordPredicate1 {
-  all_of?: KeywordList;
-  any_of?: KeywordList;
-  none_of?: KeywordList;
-  not_all_of?: KeywordList;
-}
-/**
- * Which models with this ability issue Orders, by keyword; each one's datasheet sets how many Orders it issues and which units may receive them.
  */
 export interface KeywordPredicate2 {
   all_of?: KeywordList;
@@ -4651,9 +4668,27 @@ export interface KeywordPredicate2 {
   not_all_of?: KeywordList;
 }
 /**
- * Only models with these keywords gain the benefit of an Order issued to their unit.
+ * Which models with this ability issue Orders, by keyword; each one's datasheet sets how many Orders it issues and which units may receive them.
  */
 export interface KeywordPredicate3 {
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList;
+}
+/**
+ * Only models with these keywords gain the benefit of an Order issued to their unit.
+ */
+export interface KeywordPredicate4 {
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList;
+}
+/**
+ * Only units with these keywords can be issued this Order ("This Order can only be issued to ARMOURED SKIRMISHER units").
+ */
+export interface KeywordPredicate5 {
   all_of?: KeywordList;
   any_of?: KeywordList;
   none_of?: KeywordList;
@@ -5432,6 +5467,7 @@ export interface PermissionEffect {
         | "fell-back"
         | "destroyed"
         | "transport-advanced"
+        | "embarked"
       ),
       ...(
         | "engaged"
@@ -5445,6 +5481,7 @@ export interface PermissionEffect {
         | "fell-back"
         | "destroyed"
         | "transport-advanced"
+        | "embarked"
       )[]
     ];
     into?: UnitRef;
@@ -7634,6 +7671,74 @@ export interface WeaponAbilityRangeEffect {
   modifier: {
     keyword: WeaponKeywordSelector;
     range: RangeRef;
+  };
+}
+/**
+ * [orders] Changes how the target issues Orders without issuing one itself: only `only_options` of a menu, to the `recipients` units (made eligible with `adds_recipients`), any number of them (`count` any), regardless of range (`range` unlimited), to recipients within `range_proxy.inches` of a marker as if the issuer were within that distance of them, or while the issuer is not on the battlefield (`off_battlefield`).
+ */
+export interface OrdersModifierEffect {
+  type: "orders-modifier";
+  target: UnitRef;
+  modifier: {
+    /**
+     * Only these Orders, each an option of an Orders menu.
+     *
+     * @minItems 1
+     */
+    only_options?: [
+      {
+        ability_id: EntityId;
+        option_id: EntityId;
+      },
+      ...{
+        ability_id: EntityId;
+        option_id: EntityId;
+      }[]
+    ];
+    recipients?: KeywordPredicate6;
+    /**
+     * The recipients become eligible to receive Orders from the target.
+     */
+    adds_recipients?: true;
+    /**
+     * To any number of eligible units.
+     */
+    count?: "any";
+    /**
+     * Regardless of range.
+     */
+    range?: "unlimited";
+    /**
+     * To recipients within this distance of the marker, as if the issuer were within this distance of them.
+     */
+    range_proxy?: {
+      marker: EntityId;
+      inches: number;
+    };
+    /**
+     * Even while the target is not on the battlefield (embarked, in reserves).
+     */
+    off_battlefield?: true;
+  };
+}
+/**
+ * The friendly units the change reaches, by keyword.
+ */
+export interface KeywordPredicate6 {
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList;
+}
+/**
+ * [orders] Orders affecting the target also affect `modifier.with`; `mutual`: and vice versa.
+ */
+export interface OrderShareEffect {
+  type: "order-share";
+  target: UnitRef;
+  modifier: {
+    with: UnitRef;
+    mutual?: true;
   };
 }
 /**

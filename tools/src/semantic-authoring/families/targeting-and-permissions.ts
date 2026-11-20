@@ -64,7 +64,7 @@ const PERMISSION_ACTIVITIES = [
 ] as const;
 const PERMISSION_DESPITE = [
   "engaged", "battle-shocked", "shot-this-phase", "fought-this-phase", "disembarked-this-turn",
-  "stratagem-used-this-phase", "performing-action", "advanced", "fell-back", "destroyed", "transport-advanced",
+  "stratagem-used-this-phase", "performing-action", "advanced", "fell-back", "destroyed", "transport-advanced", "embarked",
 ] as const;
 const PERMISSION_AS_IF = ["shooting-phase", "snap-shooting", "fight-phase"] as const;
 const PERMISSION_INTO = ["antecedent", "following-filter", "selection", "this-unit"] as const;
@@ -367,10 +367,10 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "eligibility-permission",
-    version: 10,
+    version: 11,
     role: "EFFECT",
     label: "Allow or forbid an activity",
-    description: "A unit or model is (or is not) eligible to shoot, charge, fight, embark, disembark, Fall Back, Advance, be targeted with Stratagems, issue Orders, attempt Rituals, use Enhancements, move, or act as an Observer, optionally even if something would normally block it (including being just destroyed, so a Stratagem can still target it, and, for a disembark, the Transport having Advanced: transport-advanced), or as if in a different phase. "
+    description: "A unit or model is (or is not) eligible to shoot, charge, fight, embark, disembark, Fall Back, Advance, be targeted with Stratagems, issue Orders, attempt Rituals, use Enhancements, move, or act as an Observer, optionally even if something would normally block it (including being just destroyed, so a Stratagem can still target it; being embarked within a Transport: embarked; and, for a disembark, the Transport having Advanced: transport-advanced), or as if in a different phase. "
       + "The subject is this unit or model, the unit an earlier leaf of the record introduced (antecedent: \"that enemy unit\", \"it\"), the triggering unit (event-subject: the unit a move-ended event names), or the units a unit-filter names right before the permission (filtered-units: \"units cannot embark within this unit\"). "
       + "engaged_with_move_end: the permission applies within Engagement Range of the enemy unit the same ability's move ends nearest, not any engaged unit (despite includes engaged). into: the Transport an embark permission places the subject within (antecedent, following-filter, selection, this-unit), only with activity embark. "
       + "reach (1 to 12 inches: models that far from an enemy are eligible to fight) and next (true: the unit must be the next one selected to fight), only with activity fight and allow true. "

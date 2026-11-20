@@ -119,6 +119,11 @@ function objectPhrase(ref: unknown): string {
   return dekebab(str(ref));
 }
 
+/** Whether a trigger's object is a unit filter (an object), not a role. */
+function isFilterObject(ref: unknown): boolean {
+  return typeof ref === "object" && ref !== null && !Array.isArray(ref);
+}
+
 /** The unit a used Stratagem targets: "this unit" for the holder's own role, else the object filter. */
 function stratagemTarget(ref: unknown): string {
   return typeof ref === "object" && ref !== null && !Array.isArray(ref) ? objectPhrase(ref) : "this unit";
@@ -321,6 +326,8 @@ function eventPhrase(t: AbilityTrigger): string {
       if (opponent && f.kind === "ability" && f.id == null) return "each time your opponent uses an ability";
       if (f.kind === "ritual" && f.result === "success") return `each time ${who} manifests a Ritual`;
       if (f.kind === "act-of-faith") return f.result === "success" ? "after an Act of Faith is completed" : "when an Act of Faith is performed";
+      // "after the bearer issues an Order to a SQUADRON unit": who issued it, and the unit it went to.
+      if (f.kind === "order" && isFilterObject(t.object)) return `each time ${who} issues an Order to ${objectPhrase(t.object)}`;
       if (f.kind === "order" && t.object != null) return "each time an Order is issued to the unit";
       if (f.kind === "contract" && f.result === "success") return "each time you complete a Contract";
       return `each time ${who} ${USED[str(f.kind)] ?? `uses ${dekebab(str(f.kind))}`}`;

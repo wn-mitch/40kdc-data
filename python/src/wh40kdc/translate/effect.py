@@ -52,6 +52,7 @@ from wh40kdc.translate.effect_inline import (
 )
 from wh40kdc.translate.effect_leaf import defined_grant_head, definition_part, is_defined_grant
 from wh40kdc.translate.effect_move_type import move_type_block
+from wh40kdc.translate.effect_orders import as_if_phase, option_recipients, same_order_target
 from wh40kdc.translate.effect_recipient_gate import recipient_gate
 from wh40kdc.translate.effect_region import (
     capacity_clause,
@@ -160,6 +161,15 @@ def _order_rule_sentences(e: Effect, ctx: Ctx) -> list[str]:
 def _option_lines(e: Effect, indent: str, ctx: Ctx) -> list[str]:
     return [
         f"{indent}  - {jstr(_obj(o).get('name'))}: "
+        f"{capitalize(inline(_obj(o).get('effect'), ctx))}."
+        for o in (e.get("options") or [])
+    ]
+
+
+def _order_option_lines(e: Effect, indent: str, ctx: Ctx) -> list[str]:
+    """An issue-orders menu's Orders, each with the units it alone can be issued to."""
+    return [
+        f"{indent}  - {jstr(_obj(o).get('name'))}{option_recipients(_obj(o), ctx)}: "
         f"{capitalize(inline(_obj(o).get('effect'), ctx))}."
         for o in (e.get("options") or [])
     ]
@@ -318,20 +328,27 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         issuer = e.get("issuer")
         issuer_models = filter_subject({**_obj(issuer), "level": "model"}, ctx)
         issue = f"{issuer_models.removeprefix('all ')} can issue" if issuer is not None else "Issue"
+        as_if = as_if_phase(e)
+        if e.get("same_order") is True:
+            # "it can issue the same Order to another SQUADRON unit": the Order just issued, again.
+            return (
+                f"{indent}{arrow}{issue} {same_order_target(e.get('count'), units)}{rng}"
+                f"{not_states}{order_limit(e)}{as_if}."
+            )
         if e.get("menu_from") is not None:
             # An officer's datasheet: how many of its army rule's Orders it issues, and to whom.
             orders = "Order" if e.get("count") == 1 else "Orders"
             who = issue if issuer is not None else "This model can issue"
             return (
                 f"{indent}{arrow}{who} up to {n} {orders} from {ability_label(e['menu_from'])} "
-                f"to {order_to(e, units)}{rng}{not_states}{only_orders(e)}{order_limit(e)}."
+                f"to {order_to(e, units)}{rng}{not_states}{only_orders(e)}{order_limit(e)}{as_if}."
             )
         head = (
             f"{indent}{arrow}{issue} up to {n} Orders to {order_to(e, units)}{rng}{not_states}"
-            f"{order_limit(e)}, each one of:"
+            f"{order_limit(e)}{as_if}, each one of:"
         )
         rules = [f"{indent}{rule}" for rule in _order_rule_sentences(e, ctx)]
-        return "\n".join([head, *_option_lines(e, indent, ctx), *rules])
+        return "\n".join([head, *_order_option_lines(e, indent, ctx), *rules])
     if t == "resource-action-menu":
         su = shared_usage_clause(e.get("shared_usage"))
         intro = (

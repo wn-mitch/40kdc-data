@@ -340,6 +340,11 @@ export type ComposedEntry = { type: string; reason: string; pinnedTest: string }
  */
 export const COMPOSED: readonly ComposedEntry[] = [
   {
+    type: "order-share",
+    reason: "An order-share leaf names a Stratagem's two targets, so it compiles only beside two stratagem-target (TARGET) leaves; alone it has no pair to share Orders between.",
+    pinnedTest: "tools/test/semantic-authoring-orders.test.ts (Orders shared between a Stratagem's two targets)",
+  },
+  {
     type: "dice-gated",
     reason: "Needs a dice-roll (EVENT) leaf plus one roll-result (CONDITION) band reaching the die's top face; dice-roll alone has no band to gate on.",
     pinnedTest: "tools/test/semantic-authoring-compile-containers.test.ts (dice-roll + roll-result -> dice-gated) and semantic-authoring-compose.test.ts:186",

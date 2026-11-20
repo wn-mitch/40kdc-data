@@ -1391,6 +1391,10 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityInteractionsItemT
 ///        "effect": {
 ///          "$ref": "#/$defs/effect-node"
 ///        },
+///        "eligible": {
+///          "description": "The only friendly units the added Order can be issued to (\"This Order can only be issued to K units\").",
+///          "$ref": "#/$defs/keyword-predicate"
+///        },
 ///        "id": {
 ///          "description": "The added option's stable id; other rules link it as {ability_id, option_id} with this record's id.",
 ///          "$ref": "#/$defs/entity-id"
@@ -1778,6 +1782,10 @@ for AbilityModifierEffectModifierAbilityVariant5Keyword {
 ///    "effect": {
 ///      "$ref": "#/$defs/effect-node"
 ///    },
+///    "eligible": {
+///      "description": "The only friendly units the added Order can be issued to (\"This Order can only be issued to K units\").",
+///      "$ref": "#/$defs/keyword-predicate"
+///    },
 ///    "id": {
 ///      "description": "The added option's stable id; other rules link it as {ability_id, option_id} with this record's id.",
 ///      "$ref": "#/$defs/entity-id"
@@ -1795,6 +1803,9 @@ for AbilityModifierEffectModifierAbilityVariant5Keyword {
 #[serde(deny_unknown_fields)]
 pub struct AbilityModifierEffectModifierAddOption {
     pub effect: EffectNode,
+    ///The only friendly units the added Order can be issued to ("This Order can only be issued to K units").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub eligible: ::std::option::Option<KeywordPredicate>,
     ///The added option's stable id; other rules link it as {ability_id, option_id} with this record's id.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<EntityId>,
@@ -22412,6 +22423,12 @@ pub struct InvulnerableSaveEffectModifier {
 ///    "type"
 ///  ],
 ///  "properties": {
+///    "as_if_phase": {
+///      "description": "The Orders are issued as if it were this phase (\"as if it were your Command phase\").",
+///      "enum": [
+///        "command"
+///      ]
+///    },
 ///    "benefit": {
 ///      "description": "Only models with these keywords gain the benefit of an Order issued to their unit.",
 ///      "$ref": "#/$defs/keyword-predicate"
@@ -22438,6 +22455,10 @@ pub struct InvulnerableSaveEffectModifier {
 ///      },
 ///      "minItems": 1,
 ///      "uniqueItems": true
+///    },
+///    "exclude": {
+///      "description": "The unit the triggering use's Order already went to cannot receive it again (\"to another unit\").",
+///      "const": "event-object"
 ///    },
 ///    "ineligible_states": {
 ///      "description": "Units in any of these states cannot be issued an Order.",
@@ -22483,6 +22504,10 @@ pub struct InvulnerableSaveEffectModifier {
 ///          "effect": {
 ///            "$ref": "#/$defs/effect-node"
 ///          },
+///          "eligible": {
+///            "description": "Only units with these keywords can be issued this Order (\"This Order can only be issued to ARMOURED SKIRMISHER units\").",
+///            "$ref": "#/$defs/keyword-predicate"
+///          },
 ///          "id": {
 ///            "description": "Stable id other rules reference this Order by (\"affected by the Take Aim! Order\").",
 ///            "type": "string",
@@ -22505,6 +22530,10 @@ pub struct InvulnerableSaveEffectModifier {
 ///      "description": "The one unit the Order goes to (the unit the trigger names), in place of an eligible unit the officer picks.",
 ///      "$ref": "#/$defs/unit-ref"
 ///    },
+///    "same_order": {
+///      "description": "Issue again the Order the triggering use just issued, rather than a pick from a menu.",
+///      "const": true
+///    },
 ///    "type": {
 ///      "type": "string",
 ///      "enum": [
@@ -22513,13 +22542,16 @@ pub struct InvulnerableSaveEffectModifier {
 ///    }
 ///  },
 ///  "additionalProperties": false,
-///  "$comment": "An officer issues up to `count` Orders per round to eligible friendly units within `range` inches, each a pick from the `options` menu (Astra Militarum Voice of Command). `count`/`eligible` are typically per-officer-datasheet; the shared menu lives on the army rule. Each option carries a `name` and the `effect` the chosen Order applies to the receiving unit. A per-officer record prints no menu: `menu_from` names the ability holding it, and `only_options` narrows it."
+///  "$comment": "An officer issues up to `count` Orders per round to eligible friendly units within `range` inches, each a pick from the `options` menu (Astra Militarum Voice of Command). `count`/`eligible` are typically per-officer-datasheet; the shared menu lives on the army rule. Each option carries a `name` and the `effect` the chosen Order applies to the receiving unit. A per-officer record prints no menu: `menu_from` names the ability holding it, and `only_options` narrows it. `as_if_phase` issues them as if it were that phase. `same_order` issues the Order the moment just issued again, to another eligible unit (`exclude` names the unit it already went to); it lists no menu. An option's `eligible` narrows which units that one Order can be issued to."
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct IssueOrdersEffect {
+    ///The Orders are issued as if it were this phase ("as if it were your Command phase").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub as_if_phase: ::std::option::Option<IssueOrdersEffectAsIfPhase>,
     ///Only models with these keywords gain the benefit of an Order issued to their unit.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub benefit: ::std::option::Option<KeywordPredicate>,
@@ -22534,6 +22566,9 @@ pub struct IssueOrdersEffect {
     ///An Order stops affecting a unit that enters any of these states.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ends_on: ::std::option::Option<Vec<IssueOrdersEffectEndsOnItem>>,
+    ///The unit the triggering use's Order already went to cannot receive it again ("to another unit").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub exclude: ::std::option::Option<::serde_json::Value>,
     ///Units in any of these states cannot be issued an Order.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ineligible_states: ::std::option::Option<
@@ -22559,8 +22594,82 @@ pub struct IssueOrdersEffect {
     ///The one unit the Order goes to (the unit the trigger names), in place of an eligible unit the officer picks.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub recipient: ::std::option::Option<UnitRef>,
+    ///Issue again the Order the triggering use just issued, rather than a pick from a menu.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_order: ::std::option::Option<::serde_json::Value>,
     #[serde(rename = "type")]
     pub type_: IssueOrdersEffectType,
+}
+///The Orders are issued as if it were this phase ("as if it were your Command phase").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The Orders are issued as if it were this phase (\"as if it were your Command phase\").",
+///  "enum": [
+///    "command"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum IssueOrdersEffectAsIfPhase {
+    #[serde(rename = "command")]
+    Command,
+}
+impl ::std::fmt::Display for IssueOrdersEffectAsIfPhase {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Command => f.write_str("command"),
+        }
+    }
+}
+impl ::std::str::FromStr for IssueOrdersEffectAsIfPhase {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "command" => Ok(Self::Command),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for IssueOrdersEffectAsIfPhase {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for IssueOrdersEffectAsIfPhase {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for IssueOrdersEffectAsIfPhase {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`IssueOrdersEffectEndsOnItem`
 ///
@@ -22719,6 +22828,10 @@ for IssueOrdersEffectIneligibleStatesItem {
 ///    "effect": {
 ///      "$ref": "#/$defs/effect-node"
 ///    },
+///    "eligible": {
+///      "description": "Only units with these keywords can be issued this Order (\"This Order can only be issued to ARMOURED SKIRMISHER units\").",
+///      "$ref": "#/$defs/keyword-predicate"
+///    },
 ///    "id": {
 ///      "description": "Stable id other rules reference this Order by (\"affected by the Take Aim! Order\").",
 ///      "type": "string",
@@ -22737,6 +22850,9 @@ for IssueOrdersEffectIneligibleStatesItem {
 #[serde(deny_unknown_fields)]
 pub struct IssueOrdersEffectOptionsItem {
     pub effect: EffectNode,
+    ///Only units with these keywords can be issued this Order ("This Order can only be issued to ARMOURED SKIRMISHER units").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub eligible: ::std::option::Option<KeywordPredicate>,
     ///Stable id other rules reference this Order by ("affected by the Take Aim! Order").
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<IssueOrdersEffectOptionsItemId>,
@@ -30754,6 +30870,218 @@ pub struct OperationMarkersConditionParametersWithin {
     pub of: PlaceRef,
     pub range: RangeRef,
 }
+///`OrderShareEffectModifier`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "with"
+///  ],
+///  "properties": {
+///    "mutual": {
+///      "const": true
+///    },
+///    "with": {
+///      "$ref": "#/$defs/unit-ref"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct OrderShareEffectModifier {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mutual: ::std::option::Option<::serde_json::Value>,
+    pub with: UnitRef,
+}
+///`OrdersModifierEffectModifier`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "minProperties": 1,
+///  "properties": {
+///    "adds_recipients": {
+///      "description": "The recipients become eligible to receive Orders from the target.",
+///      "const": true
+///    },
+///    "count": {
+///      "description": "To any number of eligible units.",
+///      "const": "any"
+///    },
+///    "off_battlefield": {
+///      "description": "Even while the target is not on the battlefield (embarked, in reserves).",
+///      "const": true
+///    },
+///    "only_options": {
+///      "description": "Only these Orders, each an option of an Orders menu.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "ability_id",
+///          "option_id"
+///        ],
+///        "properties": {
+///          "ability_id": {
+///            "$ref": "#/$defs/entity-id"
+///          },
+///          "option_id": {
+///            "$ref": "#/$defs/entity-id"
+///          }
+///        },
+///        "additionalProperties": false
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
+///    "range": {
+///      "description": "Regardless of range.",
+///      "const": "unlimited"
+///    },
+///    "range_proxy": {
+///      "description": "To recipients within this distance of the marker, as if the issuer were within this distance of them.",
+///      "type": "object",
+///      "required": [
+///        "inches",
+///        "marker"
+///      ],
+///      "properties": {
+///        "inches": {
+///          "type": "integer",
+///          "maximum": 48.0,
+///          "minimum": 1.0
+///        },
+///        "marker": {
+///          "$ref": "#/$defs/entity-id"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    "recipients": {
+///      "description": "The friendly units the change reaches, by keyword.",
+///      "$ref": "#/$defs/keyword-predicate"
+///    }
+///  },
+///  "additionalProperties": false,
+///  "dependentRequired": {
+///    "adds_recipients": [
+///      "recipients"
+///    ],
+///    "range_proxy": [
+///      "recipients"
+///    ]
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct OrdersModifierEffectModifier {
+    ///The recipients become eligible to receive Orders from the target.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub adds_recipients: ::std::option::Option<::serde_json::Value>,
+    ///To any number of eligible units.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub count: ::std::option::Option<::serde_json::Value>,
+    ///Even while the target is not on the battlefield (embarked, in reserves).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub off_battlefield: ::std::option::Option<::serde_json::Value>,
+    ///Only these Orders, each an option of an Orders menu.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub only_options: ::std::option::Option<
+        Vec<OrdersModifierEffectModifierOnlyOptionsItem>,
+    >,
+    ///Regardless of range.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub range: ::std::option::Option<::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub range_proxy: ::std::option::Option<OrdersModifierEffectModifierRangeProxy>,
+    ///The friendly units the change reaches, by keyword.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub recipients: ::std::option::Option<KeywordPredicate>,
+}
+impl ::std::default::Default for OrdersModifierEffectModifier {
+    fn default() -> Self {
+        Self {
+            adds_recipients: Default::default(),
+            count: Default::default(),
+            off_battlefield: Default::default(),
+            only_options: Default::default(),
+            range: Default::default(),
+            range_proxy: Default::default(),
+            recipients: Default::default(),
+        }
+    }
+}
+///`OrdersModifierEffectModifierOnlyOptionsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "ability_id",
+///    "option_id"
+///  ],
+///  "properties": {
+///    "ability_id": {
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    "option_id": {
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct OrdersModifierEffectModifierOnlyOptionsItem {
+    pub ability_id: EntityId,
+    pub option_id: EntityId,
+}
+///To recipients within this distance of the marker, as if the issuer were within this distance of them.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "To recipients within this distance of the marker, as if the issuer were within this distance of them.",
+///  "type": "object",
+///  "required": [
+///    "inches",
+///    "marker"
+///  ],
+///  "properties": {
+///    "inches": {
+///      "type": "integer",
+///      "maximum": 48.0,
+///      "minimum": 1.0
+///    },
+///    "marker": {
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct OrdersModifierEffectModifierRangeProxy {
+    pub inches: ::std::num::NonZeroU64,
+    pub marker: EntityId,
+}
 ///Which player a unit, objective or resource belongs to.
 ///
 /// <details><summary>JSON schema</summary>
@@ -31009,7 +31337,8 @@ impl ::std::convert::TryFrom<::std::string::String> for Period {
 ///          "advanced",
 ///          "fell-back",
 ///          "destroyed",
-///          "transport-advanced"
+///          "transport-advanced",
+///          "embarked"
 ///        ]
 ///      },
 ///      "minItems": 1,
@@ -31525,7 +31854,8 @@ for PermissionEffectModifierCountsAsUntil {
 ///    "advanced",
 ///    "fell-back",
 ///    "destroyed",
-///    "transport-advanced"
+///    "transport-advanced",
+///    "embarked"
 ///  ]
 ///}
 /// ```
@@ -31565,6 +31895,8 @@ pub enum PermissionEffectModifierDespiteItem {
     Destroyed,
     #[serde(rename = "transport-advanced")]
     TransportAdvanced,
+    #[serde(rename = "embarked")]
+    Embarked,
 }
 impl ::std::fmt::Display for PermissionEffectModifierDespiteItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -31580,6 +31912,7 @@ impl ::std::fmt::Display for PermissionEffectModifierDespiteItem {
             Self::FellBack => f.write_str("fell-back"),
             Self::Destroyed => f.write_str("destroyed"),
             Self::TransportAdvanced => f.write_str("transport-advanced"),
+            Self::Embarked => f.write_str("embarked"),
         }
     }
 }
@@ -31600,6 +31933,7 @@ impl ::std::str::FromStr for PermissionEffectModifierDespiteItem {
             "fell-back" => Ok(Self::FellBack),
             "destroyed" => Ok(Self::Destroyed),
             "transport-advanced" => Ok(Self::TransportAdvanced),
+            "embarked" => Ok(Self::Embarked),
             _ => Err("invalid value".into()),
         }
     }
@@ -48862,6 +49196,50 @@ pub enum SimpleCondition {
 ///        }
 ///      },
 ///      "additionalProperties": false
+///    },
+///    {
+///      "title": "orders-modifier effect",
+///      "description": "[orders] Changes how the target issues Orders without issuing one itself: only `only_options` of a menu, to the `recipients` units (made eligible with `adds_recipients`), any number of them (`count` any), regardless of range (`range` unlimited), to recipients within `range_proxy.inches` of a marker as if the issuer were within that distance of them, or while the issuer is not on the battlefield (`off_battlefield`).",
+///      "type": "object",
+///      "required": [
+///        "modifier",
+///        "target",
+///        "type"
+///      ],
+///      "properties": {
+///        "modifier": {
+///          "$ref": "#/$defs/orders-modifier-effect-modifier"
+///        },
+///        "target": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "type": {
+///          "const": "orders-modifier"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
+///      "title": "order-share effect",
+///      "description": "[orders] Orders affecting the target also affect `modifier.with`; `mutual`: and vice versa.",
+///      "type": "object",
+///      "required": [
+///        "modifier",
+///        "target",
+///        "type"
+///      ],
+///      "properties": {
+///        "modifier": {
+///          "$ref": "#/$defs/order-share-effect-modifier"
+///        },
+///        "target": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "type": {
+///          "const": "order-share"
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  ]
 ///}
@@ -49347,6 +49725,16 @@ pub enum SingleEffect {
 [ability] The named weapon ability's test applies out to the given range instead of its printed range: keyword benefit when the target is within weapon range.*/
     #[serde(rename = "weapon-ability-range")]
     WeaponAbilityRange { modifier: WeaponAbilityRangeEffectModifier, target: UnitRef },
+    /**orders-modifier effect
+
+[orders] Changes how the target issues Orders without issuing one itself: only `only_options` of a menu, to the `recipients` units (made eligible with `adds_recipients`), any number of them (`count` any), regardless of range (`range` unlimited), to recipients within `range_proxy.inches` of a marker as if the issuer were within that distance of them, or while the issuer is not on the battlefield (`off_battlefield`).*/
+    #[serde(rename = "orders-modifier")]
+    OrdersModifier { modifier: OrdersModifierEffectModifier, target: UnitRef },
+    /**order-share effect
+
+[orders] Orders affecting the target also affect `modifier.with`; `mutual`: and vice versa.*/
+    #[serde(rename = "order-share")]
+    OrderShare { modifier: OrderShareEffectModifier, target: UnitRef },
 }
 ///`Snapshot`
 ///
@@ -65595,7 +65983,7 @@ fn effect_node_from_value(
             | "resource-spend" | "resource-die" | "objective-sticky" | "designate"
             | "army-rule" | "test-exemption" | "datasheet-swap"
             | "characteristic-resolution" | "borrow-weapons" | "select-weapon"
-            | "weapon-ability-range",
+            | "weapon-ability-range" | "orders-modifier" | "order-share",
         ) => |v| ::serde_json::from_value(v).map(EffectNode::SingleEffect),
         Some("stance-select") => {
             |v| ::serde_json::from_value(v).map(EffectNode::StanceSelectEffect)

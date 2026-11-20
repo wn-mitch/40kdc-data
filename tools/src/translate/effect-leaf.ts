@@ -16,6 +16,7 @@ import { describeCondition, type Condition } from "./condition.js";
 import type { P } from "./condition-refs.js";
 import { selectionBinding, selectorSubject, selectUnitsSubject } from "./effect-bind.js";
 import { expiryTrail } from "./expiry.js";
+import { addedOptionRecipients, orderShare, ordersModifier } from "./effect-orders.js";
 
 /** A leaf effect node: `{type, target, modifier, scaling?}`. */
 export interface Leaf {
@@ -35,7 +36,7 @@ export const LEAF_TYPES = new Set([
   "destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
   "transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
   "objective-sticky", "designate", "army-rule", "test-exemption", "datasheet-swap", "characteristic-resolution", "borrow-weapons", "select-weapon",
-  "oath-modifier",
+  "oath-modifier", "orders-modifier", "order-share",
 ]);
 
 /** "each time an attack targets the unit, " — the lead of an `incoming` change. */
@@ -334,9 +335,9 @@ function abilityModifier(m: Record<string, unknown>, subj: string, ctx: Ctx, inl
   const aspect = ASPECTS[jstr(m.aspect)] ?? jstr(m.aspect);
   const value = m.aspect === "range" && typeof m.value === "number" ? `${jstr(m.value)}"` : typeof m.value === "string" ? dekebab(m.value) : jstr(m.value);
   const cap = m.cap != null ? ` (to a maximum of ${jstr(m.cap)})` : "";
-  const opt = m.add_option as { name?: unknown; effect?: unknown } | undefined;
+  const opt = m.add_option as { name?: unknown; eligible?: unknown; effect?: unknown } | undefined;
   const recipients = m.recipients != null ? effectSubject(m.recipients, ctx) : undefined;
-  const option = opt != null ? `the option ${titleCase(jstr(opt.name))} (${inline(opt.effect, ctx)})` : undefined;
+  const option = opt != null ? `the option ${titleCase(jstr(opt.name))} (${addedOptionRecipients(opt, ctx)}${inline(opt.effect, ctx)})` : undefined;
   // An add with no value only widens the ability: it names the new recipients or option instead of a count.
   if (m.value == null && m.operation !== "set" && m.operation !== "lift-limit" && (recipients || option)) {
     const parts = [recipients && `${whose} can also affect ${recipients}`, option && `${whose} gains ${option}`].filter(Boolean);
@@ -378,8 +379,9 @@ const DESPITE: Record<string, string> = {
   "fought-this-phase": "has already fought this phase", "disembarked-this-turn": "disembarked this turn",
   "stratagem-used-this-phase": "has already been targeted with that Stratagem this phase", "performing-action": "performing an Action",
   advanced: "Advanced this turn", "fell-back": "Fell Back this turn", destroyed: "has just been destroyed",
+  embarked: "embarked within a Transport",
 };
-const IS_STATE = new Set(["engaged", "battle-shocked", "performing-action"]);
+const IS_STATE = new Set(["engaged", "battle-shocked", "performing-action", "embarked"]);
 const AS_IF: Record<string, string> = {
   "shooting-phase": " as if it were your Shooting phase", "fight-phase": " as if it were the Fight phase", "snap-shooting": " using the Snap Shooting rules",
   "movement-phase": " as if it were your Movement phase", "charge-phase": " as if it were your Charge phase", "command-phase": " as if it were your Command phase",
@@ -638,6 +640,8 @@ export function describeLeaf(e: Leaf, ctx: Ctx, inline: Inline): string {
     case "targeting": return targeting(e, m, subj, ctx);
     case "counts-as": return countsAs(m, subj, ctx);
     case "rule-state": return ruleState(m, subj);
+    case "orders-modifier": return ordersModifier(m, subj, ctx);
+    case "order-share": return orderShare(m, subj, ctx);
     default: return describeShapeLeaf(e, m, subj, ctx) ?? describeBoardLeaf(e, m, subj, ctx, inline);
   }
 }

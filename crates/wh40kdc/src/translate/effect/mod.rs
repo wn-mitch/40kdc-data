@@ -24,6 +24,7 @@ mod leaf_rules;
 mod leaf_shapes;
 mod menu;
 mod move_type;
+mod orders;
 mod placement;
 mod quantity;
 mod recipient_gate;
@@ -812,12 +813,18 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
                 inline(child(e, "reward"), ctx)
             )
         }
+        "issue-orders" if e.get("same_order") == Some(&Value::Bool(true)) => format!(
+            "issue the same Order to another eligible unit{}{}",
+            block::order_limit(e),
+            orders::as_if_phase(e)
+        ),
         "issue-orders" if nn(e, "menu_from").is_some() => format!(
-            "issue Orders from {}{}{}{}",
+            "issue Orders from {}{}{}{}{}",
             ability_label(nn(e, "menu_from")),
             block::order_recipient(e),
             block::only_orders(e),
-            block::order_limit(e)
+            block::order_limit(e),
+            orders::as_if_phase(e)
         ),
         "issue-orders" => format!(
             "issue Orders{}{}, each one of: {}",

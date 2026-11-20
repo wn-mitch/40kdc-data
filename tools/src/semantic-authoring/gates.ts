@@ -136,6 +136,8 @@ const OUTSIDE_CRUNCHER_SCOPE: ReadonlyArray<{ reason: RegExp; why: string }> = [
   { reason: /^effect type "resource-(spend|die)" is not modelled by the buff layer$/u, why: "spending a banked resource (miracle dice) is a player decision per roll" },
   { reason: /^effect type "weapon-grant" is not modelled by the buff layer$/u, why: "a granted weapon is a loadout change, not a modifier to the crunched weapon" },
   { reason: /^effect type "ability-modifier" is not modelled by the buff layer$/u, why: "a change to another ability's numbers resolves through that ability" },
+  { reason: /^effect type "orders-modifier" is not modelled by the buff layer$/u, why: "who can be issued an Order, and from how far, resolves through that Order's own lever" },
+  { reason: /^effect type "order-share" is not modelled by the buff layer$/u, why: "an Order shared from another unit resolves through that Order's own lever" },
   { reason: /^effect type "dice-table" is not modelled by the buff layer$/u, why: "a rolled outcome table is not a fixed buff" },
   { reason: /^effect type "test-exemption" is not modelled by the buff layer$/u, why: "a test exemption changes no attack" },
   { reason: /^ignore-modifiers: only hit and wound rolls and WS\/BS are modelled$/u, why: "ignoring modifiers to other rolls or characteristics is not modelled" },

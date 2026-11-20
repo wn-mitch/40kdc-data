@@ -4220,6 +4220,30 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/dice-table-two-dice-distinct", effect: { type: "dice-table", dice: "D6", count: 2, distinct: true, outcomes: [{ results: [1, 2, 3], effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } }, { results: [4, 5, 6], effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 } } }] } },
     { caseId: "fidelity/army-rule-allied-faction", effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", max: 500, measure: "points", faction: "chaos-daemons" } } },
     { caseId: "fidelity/condition-attached-to-keywords", effect: { type: "conditional", condition: { type: "attachment", parameters: { role: "attached", with: { all_of: ["DOMINION SQUAD"] } } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } } },
+    // Orders: a change to how a unit issues Orders, Orders shared between two units, and the Order an
+    // issuer just issued, issued again to another unit.
+    { caseId: "fidelity/orders-modifier-named-any-unlimited", effect: { type: "orders-modifier", target: "this-model", modifier: { only_options: [{ ability_id: "voice-of-command-astra-militarum", option_id: "move-move-move" }], recipients: { all_of: ["INFANTRY", "REGIMENT"] }, count: "any", range: "unlimited" } } },
+    { caseId: "fidelity/orders-modifier-two-orders-count-any", effect: { type: "orders-modifier", target: "this-unit", modifier: { only_options: [{ ability_id: "voice-of-command-astra-militarum", option_id: "take-aim" }, { ability_id: "voice-of-command-astra-militarum", option_id: "fix-bayonets" }], count: "any" } } },
+    { caseId: "fidelity/orders-modifier-range-proxy", effect: { type: "orders-modifier", target: { owner: "friendly", all_of: ["OFFICER"] }, modifier: { recipients: { all_of: ["ASTRA MILITARUM", "REGIMENT"] }, range_proxy: { marker: "vox-relay-beacon", inches: 6 } } } },
+    { caseId: "fidelity/orders-modifier-adds-recipients-off-battlefield", effect: { type: "orders-modifier", target: "this-unit", modifier: { recipients: { all_of: ["ASTRA MILITARUM", "TRANSPORT"], none_of: ["TITANIC"] }, adds_recipients: true, off_battlefield: true, range: "unlimited" } } },
+    { caseId: "fidelity/order-share-mutual", effect: { type: "order-share", target: { stratagem_target: "first" }, modifier: { with: { stratagem_target: "second" }, mutual: true } } },
+    { caseId: "fidelity/order-share-one-way", effect: { type: "order-share", target: "this-unit", modifier: { with: "event-object" } } },
+    { caseId: "fidelity/trigger-used-order-to-filter-same-order", trigger: { event: "used", subject: "this-model", filter: { kind: "order" }, object: { owner: "friendly", all_of: ["SQUADRON"] } }, effect: { type: "issue-orders", count: 1, eligible: { all_of: ["SQUADRON"] }, same_order: true, exclude: "event-object" } },
+    { caseId: "fidelity/trigger-used-order-to-filter-same-order-two", trigger: { event: "used", subject: "this-model", filter: { kind: "order" }, object: { owner: "friendly", all_of: ["SQUADRON"] } }, effect: { type: "issue-orders", count: 2, eligible: { all_of: ["SQUADRON"] }, same_order: true, exclude: "event-object", as_if_phase: "command" } },
+    { caseId: "fidelity/issue-orders-same-order-and-as-if-phase-inline", effect: { type: "choice", options: [
+      { type: "issue-orders", count: 1, eligible: { all_of: ["SQUADRON"] }, same_order: true, exclude: "event-object", counts_toward_limit: false },
+      { type: "issue-orders", count: 1, menu_from: "orders-menu-example", as_if_phase: "command" }] } },
+    { caseId: "fidelity/issue-orders-menu-from-as-if-phase", effect: { type: "issue-orders", count: 1, issuer: { all_of: ["OFFICER"] }, menu_from: "orders-menu-example", as_if_phase: "command" } },
+    // One Order of a menu reaches only units with its own keywords.
+    { caseId: "fidelity/issue-orders-option-eligible-as-if-phase", effect: { type: "issue-orders", count: 1, range: { inches: 6 }, eligible: { all_of: ["INFANTRY"] }, as_if_phase: "command", options: [
+      { name: "Take Aim!", effect: { type: "no-effect" } },
+      { name: "On My Signal!", eligible: { all_of: ["ARMOURED", "SKIRMISHER"], none_of: ["TITANIC"] }, effect: { type: "no-effect" } }] } },
+    // A record that defines one Order: that Order on the army's menu, only to units with its keywords.
+    { caseId: "fidelity/ability-modifier-added-order-eligible", effect: { type: "ability-modifier", target: { owner: "friendly" }, modifier: { ability: "voice-of-command-astra-militarum", aspect: "options", operation: "add",
+      add_option: { id: "fabricated-order", name: "Fabricated Order", eligible: { all_of: ["ALPHA", "BETA"], none_of: ["TITANIC"] }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } } } } },
+    // A Stratagem that can target its unit while that unit is embarked within a Transport.
+    { caseId: "fidelity/permission-despite-embarked", effect: { type: "permission", target: "this-unit", modifier: { activity: "use-stratagem", allow: true, despite: ["embarked"] } } },
+    { caseId: "fidelity/permission-despite-embarked-plural", effect: { type: "permission", target: { owner: "friendly", all_of: ["ALPHA"] }, modifier: { activity: "use-stratagem", allow: true, despite: ["embarked", "battle-shocked"] } } },
     { caseId: "fidelity/trigger-used-by-opponent", trigger: { event: "used", subject: { owner: "enemy" }, filter: { kind: "stratagem" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
     { caseId: "fidelity/trigger-after-roll-failed-test", trigger: { event: "after-roll", filter: { roll: "battle-shock", result: "failure" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
     { caseId: "fidelity/trigger-after-roll-save-failed-for-model", trigger: { event: "after-roll", subject: "this-model", filter: { roll: "save", result: "failure" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },

@@ -20,6 +20,7 @@ from wh40kdc.translate.effect_leaf_shapes import (
     ability_limits,
     describe_shape_leaf,
 )
+from wh40kdc.translate.effect_orders import added_option_recipients, order_share, orders_modifier
 from wh40kdc.translate.effect_select import (
     select_units_subject,
     selection_binding,
@@ -76,6 +77,8 @@ LEAF_TYPES = frozenset(
         "weapon-grant",
         "ability-modifier",
         "oath-modifier",
+        "orders-modifier",
+        "order-share",
         "ability-activate",
         "permission",
         "targeting",
@@ -611,7 +614,10 @@ def _ability_modifier(m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) ->
     option = None
     if opt is not None:
         o = opt if isinstance(opt, dict) else {}
-        option = f"the option {title_case(jstr(o.get('name')))} ({inline(o.get('effect'), ctx)})"
+        option = (
+            f"the option {title_case(jstr(o.get('name')))} "
+            f"({added_option_recipients(o, ctx)}{inline(o.get('effect'), ctx)})"
+        )
     op = m.get("operation")
     # An add with no value only widens the ability: it names the new recipients or option
     # instead of a count.
@@ -847,5 +853,9 @@ def describe_leaf(e: Leaf, ctx: Ctx, inline: Inline) -> str:
         return _counts_as(m, subj, ctx)
     if t == "rule-state":
         return _rule_state(m, subj)
+    if t == "orders-modifier":
+        return orders_modifier(m, subj, ctx)
+    if t == "order-share":
+        return order_share(m, subj, ctx)
     shaped = describe_shape_leaf(e, m, subj, ctx)
     return shaped if shaped is not None else describe_board_leaf(e, m, subj, ctx, inline)

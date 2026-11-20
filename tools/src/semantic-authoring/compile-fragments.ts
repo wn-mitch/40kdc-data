@@ -94,6 +94,8 @@ const SUBJECT_TARGETS: Record<string, string> = {
 const OTHER_UNITS = new Set(["selected-unit", "event-subject", "event-object", "defender", "recipient", "bearer-transport"]);
 
 /** Families whose subject is a property of one model: its keywords, its rules, its characteristics. */
+import { FIRST_TARGET, ordersModifier, SECOND_TARGET } from "./compile-orders.js";
+
 const MODEL_PROPERTY_FAMILIES = new Set(["keyword-grant", "rule-state", "characteristic-modifier", "characteristic-set"]);
 
 /**
@@ -263,6 +265,10 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
         },
       };
     }
+    case "orders-modifier": return ordersModifier(leaf, target);
+    case "order-share":
+      // The Stratagem's two targets, named once the entry knows them (compile-target-refs.ts resolveEntry).
+      return { type: "order-share", target: FIRST_TARGET, modifier: { with: SECOND_TARGET, ...(leaf.parameters.mutual === true ? { mutual: true } : {}) } };
     case "ability-activate":
       return { type: "ability-activate", target: target(leaf.parameters.subject), modifier: activationModifier(leaf) };
     case "feel-no-pain": {

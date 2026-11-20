@@ -9155,6 +9155,10 @@
                       "type": "string",
                       "minLength": 1
                     },
+                    "eligible": {
+                      "$ref": "#/$defs/keyword-predicate",
+                      "description": "The only friendly units the added Order can be issued to (\"This Order can only be issued to K units\")."
+                    },
                     "effect": {
                       "$ref": "#/$defs/effect-node"
                     }
@@ -9389,7 +9393,8 @@
                       "advanced",
                       "fell-back",
                       "destroyed",
-                      "transport-advanced"
+                      "transport-advanced",
+                      "embarked"
                     ]
                   },
                   "minItems": 1,
@@ -12289,6 +12294,135 @@
               ]
             }
           }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "orders-modifier effect",
+          "description": "[orders] Changes how the target issues Orders without issuing one itself: only `only_options` of a menu, to the `recipients` units (made eligible with `adds_recipients`), any number of them (`count` any), regardless of range (`range` unlimited), to recipients within `range_proxy.inches` of a marker as if the issuer were within that distance of them, or while the issuer is not on the battlefield (`off_battlefield`).",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "orders-modifier"
+            },
+            "target": {
+              "$ref": "#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "minProperties": 1,
+              "properties": {
+                "only_options": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "ability_id",
+                      "option_id"
+                    ],
+                    "properties": {
+                      "ability_id": {
+                        "$ref": "#/$defs/entity-id"
+                      },
+                      "option_id": {
+                        "$ref": "#/$defs/entity-id"
+                      }
+                    }
+                  },
+                  "description": "Only these Orders, each an option of an Orders menu."
+                },
+                "recipients": {
+                  "$ref": "#/$defs/keyword-predicate",
+                  "description": "The friendly units the change reaches, by keyword."
+                },
+                "adds_recipients": {
+                  "const": true,
+                  "description": "The recipients become eligible to receive Orders from the target."
+                },
+                "count": {
+                  "const": "any",
+                  "description": "To any number of eligible units."
+                },
+                "range": {
+                  "const": "unlimited",
+                  "description": "Regardless of range."
+                },
+                "range_proxy": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "marker",
+                    "inches"
+                  ],
+                  "properties": {
+                    "marker": {
+                      "$ref": "#/$defs/entity-id"
+                    },
+                    "inches": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 48
+                    }
+                  },
+                  "description": "To recipients within this distance of the marker, as if the issuer were within this distance of them."
+                },
+                "off_battlefield": {
+                  "const": true,
+                  "description": "Even while the target is not on the battlefield (embarked, in reserves)."
+                }
+              },
+              "dependentRequired": {
+                "adds_recipients": [
+                  "recipients"
+                ],
+                "range_proxy": [
+                  "recipients"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "order-share effect",
+          "description": "[orders] Orders affecting the target also affect `modifier.with`; `mutual`: and vice versa.",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "order-share"
+            },
+            "target": {
+              "$ref": "#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "with"
+              ],
+              "properties": {
+                "with": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "mutual": {
+                  "const": true
+                }
+              }
+            }
+          }
         }
       ]
     },
@@ -13324,7 +13458,7 @@
     "issue-orders-effect": {
       "type": "object",
       "additionalProperties": false,
-      "$comment": "An officer issues up to `count` Orders per round to eligible friendly units within `range` inches, each a pick from the `options` menu (Astra Militarum Voice of Command). `count`/`eligible` are typically per-officer-datasheet; the shared menu lives on the army rule. Each option carries a `name` and the `effect` the chosen Order applies to the receiving unit. A per-officer record prints no menu: `menu_from` names the ability holding it, and `only_options` narrows it.",
+      "$comment": "An officer issues up to `count` Orders per round to eligible friendly units within `range` inches, each a pick from the `options` menu (Astra Militarum Voice of Command). `count`/`eligible` are typically per-officer-datasheet; the shared menu lives on the army rule. Each option carries a `name` and the `effect` the chosen Order applies to the receiving unit. A per-officer record prints no menu: `menu_from` names the ability holding it, and `only_options` narrows it. `as_if_phase` issues them as if it were that phase. `same_order` issues the Order the moment just issued again, to another eligible unit (`exclude` names the unit it already went to); it lists no menu. An option's `eligible` narrows which units that one Order can be issued to.",
       "properties": {
         "type": {
           "const": "issue-orders"
@@ -13401,6 +13535,10 @@
               },
               "effect": {
                 "$ref": "#/$defs/effect-node"
+              },
+              "eligible": {
+                "$ref": "#/$defs/keyword-predicate",
+                "description": "Only units with these keywords can be issued this Order (\"This Order can only be issued to ARMOURED SKIRMISHER units\")."
               }
             },
             "required": [
@@ -13421,6 +13559,20 @@
             "$ref": "#/$defs/entity-id"
           },
           "description": "Only these Orders of the `menu_from` menu, by option id, can be issued."
+        },
+        "as_if_phase": {
+          "enum": [
+            "command"
+          ],
+          "description": "The Orders are issued as if it were this phase (\"as if it were your Command phase\")."
+        },
+        "same_order": {
+          "const": true,
+          "description": "Issue again the Order the triggering use just issued, rather than a pick from a menu."
+        },
+        "exclude": {
+          "const": "event-object",
+          "description": "The unit the triggering use's Order already went to cannot receive it again (\"to another unit\")."
         }
       },
       "required": [

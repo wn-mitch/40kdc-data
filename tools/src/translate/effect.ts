@@ -19,6 +19,7 @@ import { conditionLeadIn, describeSelectionEligibility, isDefensiveEffect } from
 import { modelEventRefs, unitRefPhrase, usageClause } from "./condition-refs.js";
 import { describeTrigger, normalizeTriggers, type AbilityTrigger, type AbilityTriggerSpec } from "./trigger.js";
 import { definedGrantHead, definitionPart, describeLeaf, isDefinedGrant, LEAF_TYPES, type Leaf } from "./effect-leaf.js";
+import { asIfPhase, optionRecipients, sameOrderTarget } from "./effect-orders.js";
 import { expiryTrail } from "./expiry.js";
 import { moveTypeBlock, moveTypeInline } from "./effect-move-type.js";
 import { recipientGate } from "./effect-recipient-gate.js";
@@ -148,6 +149,9 @@ export interface Effect {
   one_at_a_time?: boolean;
   menu_from?: string;
   only_options?: string[];
+  as_if_phase?: string;
+  same_order?: boolean;
+  exclude?: string;
   /** issue-orders: the one unit the Order goes to, and whether it counts toward the officer's limit. */
   recipient?: unknown;
   counts_toward_limit?: boolean;
@@ -766,7 +770,8 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
     case "risk-reward":
       return `take a ${testName(e.risk?.test)} test (on a failure, ${e.risk?.on_fail ? describeEffectInline(e.risk.on_fail, ctx) : "suffer a consequence"}), then ${describeEffectInline(e.reward ?? {}, ctx)}`;
     case "issue-orders":
-      if (e.menu_from != null) return `issue Orders from ${abilityLabel(e.menu_from)}${orderRecipient(e)}${onlyOrders(e)}${orderLimit(e)}`;
+      if (e.same_order === true) return `issue the same Order to another eligible unit${orderLimit(e)}${asIfPhase(e)}`;
+      if (e.menu_from != null) return `issue Orders from ${abilityLabel(e.menu_from)}${orderRecipient(e)}${onlyOrders(e)}${orderLimit(e)}${asIfPhase(e)}`;
       return `issue Orders${orderRecipient(e)}${orderLimit(e)}, each one of: ${(e.options ?? []).map((o) => jstr(o.name)).join(" / ")}`;
     case "resource-action-menu":
       return `actions may be performed when their conditions are met: ${(e.actions ?? []).map((a) => describeMenuAction(a, ctx)).join(" / ")}`;
@@ -1173,15 +1178,17 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       const units = filterSubject({ owner: "friendly", ...(e.eligible ?? {}) }, ctx).replace(/^all /, "");
       const states = Array.isArray(e.ineligible_states) ? ` that are not ${orList(e.ineligible_states.map(dekebabState))}` : "";
       const issue = e.issuer != null ? `${filterSubject({ ...e.issuer, level: "model" }, ctx).replace(/^all /, "")} can issue` : "Issue";
+      // "it can issue the same Order to another SQUADRON unit": the Order just issued, again.
+      if (e.same_order === true) return `${indent}${arrow}${issue} ${sameOrderTarget(e.count, units)}${rng}${states}${orderLimit(e)}${asIfPhase(e)}.`;
       if (e.menu_from != null) {
         // An officer's datasheet: how many of its army rule's Orders it issues, and to which units.
         const orders = e.count === 1 ? "Order" : "Orders";
         const who = e.issuer != null ? issue : "This model can issue";
-        return `${indent}${arrow}${who} up to ${n} ${orders} from ${abilityLabel(e.menu_from)} to ${orderTo(e, units)}${rng}${states}${onlyOrders(e)}${orderLimit(e)}.`;
+        return `${indent}${arrow}${who} up to ${n} ${orders} from ${abilityLabel(e.menu_from)} to ${orderTo(e, units)}${rng}${states}${onlyOrders(e)}${orderLimit(e)}${asIfPhase(e)}.`;
       }
-      const lines = [`${indent}${arrow}${issue} up to ${n} Orders to ${orderTo(e, units)}${rng}${states}${orderLimit(e)}, each one of:`];
+      const lines = [`${indent}${arrow}${issue} up to ${n} Orders to ${orderTo(e, units)}${rng}${states}${orderLimit(e)}${asIfPhase(e)}, each one of:`];
       for (const opt of e.options ?? []) {
-        lines.push(`${indent}  - ${jstr(opt.name)}: ${capitalize(describeEffectInline(opt.effect ?? {}, ctx))}.`);
+        lines.push(`${indent}  - ${jstr(opt.name)}${optionRecipients(opt as Record<string, unknown>, ctx)}: ${capitalize(describeEffectInline(opt.effect ?? {}, ctx))}.`);
       }
       for (const rule of orderRuleSentences(e, ctx)) lines.push(`${indent}${rule}`);
       return lines.join("\n");

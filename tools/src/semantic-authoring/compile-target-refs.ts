@@ -6,6 +6,7 @@ import { AMONG_TARGETS } from "./families/vocabulary.js";
 import { awaitsFollowingFilter, FOLLOWING_FILTER } from "./families/vocabulary.js";
 import { type TargetHead, targetGroupOf, targetHeads } from "./compile-target-groups.js";
 import { assignTargetModes } from "./compile-target-modes.js";
+import { resolveOrderShareTargets } from "./compile-orders.js";
 
 /**
  * References to one or several of a Stratagem's named targets ("your **VEHICLE** unit", "both of
@@ -65,6 +66,7 @@ export const TARGET_REF_KEYS: Readonly<Record<string, readonly string[]>> = {
   visible: ["subject", "to"], eligible: ["subject"],
   // "while a friendly X unit is within 3\" of your unit": an aura measured from a target (compile-wrappers.ts wrapAura).
   "aura-range": ["of"],
+  "orders-modifier": ["subject"],
 };
 
 const accepts = (leaf: CompileLeaf, key: string) => TARGET_REF_KEYS[leaf.family_id]?.includes(key) === true;
@@ -501,6 +503,8 @@ function resolveTargetRefs<T>(value: T, position: Position = "effect"): T {
  * not override) is ambiguous and refuses.
  */
 export function resolveEntry(effect: Node, trigger: unknown, target: Node | Node[] | null, several: boolean): { effect: Node; trigger: unknown; core: { target_restrictions: Node | Node[] } | null } {
+  // "Orders affecting one of your units affect the other": the order-share's two targets by name.
+  effect = resolveOrderShareTargets(effect, several && Array.isArray(target) ? target : null);
   let moment = resolveTargetRefs(trigger, "moment");
   if (several && Array.isArray(target) && JSON.stringify(moment ?? null).includes('"this-unit"')) {
     const bound = target.filter((item) => item.bound_to !== undefined);

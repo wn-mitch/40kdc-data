@@ -58,7 +58,7 @@ const STRATAGEM_FAMILIES = new Set(["use-window", "stratagem-target", "triggerin
 const LASTING_EFFECTS = new Set([
   "ability-grant", "ability-modifier", "act-on-death", "borrow-weapons", "cost-modifier", "counts-as", "damage-reduction",
   "destruction-rule", "feel-no-pain", "ignore-modifiers", "invulnerable-save", "keyword-grant",
-  "move-modifier", "named-region-state", "permission", "re-roll", "roll-modifier", "roll-result", "rule-state", "stat-modifier",
+  "move-modifier", "named-region-state", "order-share", "orders-modifier", "permission", "re-roll", "roll-modifier", "roll-result", "rule-state", "stat-modifier",
   "targeting", "test-exemption", "transport-capacity", "weapon-ability-grant", "weapon-ability-range", "weapon-grant",
 ]);
 

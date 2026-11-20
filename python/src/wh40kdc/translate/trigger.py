@@ -514,6 +514,9 @@ def _event_phrase(t: AbilityTrigger) -> str:
             if f.get("result") == "success":
                 return "after an Act of Faith is completed"
             return "when an Act of Faith is performed"
+        # "after the bearer issues an Order to a SQUADRON unit": who issued it, and to which unit.
+        if kind == "order" and isinstance(obj, dict):
+            return f"each time {who} issues an Order to {_object_phrase(obj)}"
         if kind == "order" and obj is not None:
             return "each time an Order is issued to the unit"
         if kind == "contract" and f.get("result") == "success":

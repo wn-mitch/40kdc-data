@@ -1,4 +1,4 @@
-import { addedOrder, addedOrderMoment } from "./compile-added-order.js";
+import { addedOrder, addedOrderMoment, definedOrderPlan } from "./compile-added-order.js";
 import { withoutSharedBattleSizeTable } from "./compile-battle-size-table.js";
 import { withSharedRoll } from "./compile-shared-roll.js";
 import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
@@ -14,6 +14,7 @@ import { buildRitualMenu, isRitualTestLeaf } from "./compile-ritual-menu.js";
 import { RITUAL_MENU_OPEN } from "./families/vocabulary.js";
 import { usageFor } from "./families/vocabulary.js";
 import { buildMoveType, MOVE_TYPE_OPEN } from "./compile-move-type.js";
+import { buildIssueOrders, isRecipientRule } from "./compile-issue-orders.js";
 
 /**
  * Container fragments (batch 5). `compile.ts` delegates here in two ways:
@@ -226,27 +227,6 @@ function stanceRandom(node: Node, random: { dice: string; count: number }): Node
  * An issue-orders: its own Orders, one per named option, or none, when an officer's datasheet issues
  * the Orders its faction's army rule lists (`menu_from`, resolved by compile-rule-refs.ts).
  */
-function buildIssueOrders(head: CompileLeaf, groups: CompileLeaf[][], rules: readonly CompileLeaf[]): Node {
-  const options = groups.map((group, index) => {
-    const { id, name, effect: optionEffect } = namedOption(group, false, index);
-    return { id, name, effect: optionEffect };
-  });
-  const node: Node = { type: "issue-orders" };
-  if (options.length > 0) node.options = options;
-  else if (typeof head.parameters.__menu === "string") node.menu_from = head.parameters.__menu;
-  else throw new CompileError("An issue-orders with no Orders of its own needs its faction's one army rule that lists them.");
-  if (head.parameters.count !== undefined) node.count = closed(head, "count");
-  if (head.parameters.range !== undefined) node.range = { inches: closed(head, "range") };
-  if (head.parameters.eligible_keyword !== undefined) node.eligible = { all_of: [closed(head, "eligible_keyword")] };
-  if (head.parameters.__eligible !== undefined) node.eligible = head.parameters.__eligible;
-  // "issue 1 Order to that unit, regardless of how many Orders it has already issued": the moment's unit, outside the limit.
-  if (head.parameters.recipient === "antecedent") node.recipient = "event-subject";
-  if (head.parameters.counts_toward_limit === false) node.counts_toward_limit = false;
-  const ruled = orderRules(rules);
-  if (ruled.only_options !== undefined && node.menu_from === undefined) throw new CompileError("Only some Orders of a menu: the issue-orders must take its Orders from its army rule.");
-  return { ...node, ...ruled };
-}
-
 /**
  * When Orders are issued and how long one lasts, printed between the opener and its first Order
  * ("… can issue Orders in your Command phase and at the end of a phase in which they disembarked …
@@ -277,37 +257,6 @@ function issueOrdersTiming(leaves: readonly CompileLeaf[]): { trigger: Node | No
   if (moments.length === 0) return lifetime === undefined ? null : { trigger: [], duration: lifetime };
   const triggers = moments.map(({ moment, gates }) => gatedMoment(moment, gates));
   return { trigger: triggers.length === 1 ? triggers[0]! : triggers, ...(lifetime === undefined ? {} : { duration: lifetime }) };
-}
-
-/** The issue-orders fields its order-rule leaves set, wherever the record prints them; a repeated rule must agree. */
-function orderRules(rules: readonly CompileLeaf[]): Node {
-  const out: Node = {};
-  const keywords = (key: string, leaf: CompileLeaf) => {
-    const all_of = closed(leaf, "keywords") as string[];
-    const existing = out[key] as { all_of: string[] } | undefined;
-    if (existing && JSON.stringify(existing.all_of) !== JSON.stringify(all_of)) throw new CompileError(`Two order-rule leaves name different ${key} keywords.`);
-    out[key] = { all_of };
-  };
-  const states = (key: string, leaf: CompileLeaf) => {
-    out[key] = [...new Set([...((out[key] as string[] | undefined) ?? []), closed(leaf, "state") as string])];
-  };
-  for (const leaf of rules) {
-    switch (leaf.parameters.rule) {
-      case "issuer": keywords("issuer", leaf); break;
-      case "benefit": keywords("benefit", leaf); break;
-      case "one-at-a-time": out.one_at_a_time = true; break;
-      case "ineligible-state": states("ineligible_states", leaf); break;
-      case "ends-on-state": states("ends_on", leaf); break;
-      case "only-orders": {
-        if (!Array.isArray(leaf.parameters.__options)) throw new CompileError(`The Orders ${JSON.stringify(leaf.parameters.orders)} are not all Orders of the faction's army rule.`);
-        if (out.only_options !== undefined) throw new CompileError("An officer's Orders are narrowed by one only-orders rule.");
-        out.only_options = leaf.parameters.__options;
-        break;
-      }
-      default: throw new CompileError(`order-rule ${String(leaf.parameters.rule)} has no issue-orders field.`);
-    }
-  }
-  return out;
 }
 
 function buildDicePoolAllocation(head: CompileLeaf, groups: CompileLeaf[][]): Node {
@@ -426,7 +375,7 @@ function buildContainer(head: CompileLeaf, groups: CompileLeaf[][], replacement?
   switch (head.family_id) {
     case "choice-open": return buildChoice(head, groups);
     case "stance-select-open": return buildStanceSelect(head, groups);
-    case "issue-orders-open": return buildIssueOrders(head, groups, orderRuleLeaves);
+    case "issue-orders-open": return buildIssueOrders(head, groups, orderRuleLeaves, namedOption);
     case "dice-pool-allocation-open": return buildDicePoolAllocation(head, groups);
     case "risk-reward-open": return buildRiskReward(head, groups);
     case "resource-action-menu-open": return buildResourceActionMenu(head, groups, (leaves) => effectsOf(leaves));
@@ -464,7 +413,13 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
   const replacements = findReplacementOpeners(list, (leaf) => LEADING_CONTAINERS.has(leaf.family_id));
   // An order-rule belongs to the record's one issue-orders, wherever it is printed ("OFFICER with this
   // ability can issue Orders" comes before the opener; the Battle-shock rules come after it).
-  const orderRuleIndexes = list.flatMap((leaf, index) => leaf.family_id === "order-rule" ? [index] : []);
+  const orderRuleIndexes = list.flatMap((leaf, index) => leaf.family_id === "order-rule" && !isRecipientRule(leaf) ? [index] : []);
+  // "This Order can only be issued to K units" stays inside its Order's sentences (buildIssueOrders).
+  if (list.some(isRecipientRule) && !list.some((leaf) => leaf.family_id === "issue-orders-open")) {
+    // A record that defines one Order: its name, its recipients and what it does, joined to the army's menu.
+    const defined = definedOrderPlan(list, (group) => namedOption(group, false, 0));
+    return { nodes: new Map([[defined.at, defined.node]]), consumed: defined.consumed };
+  }
   if (orderRuleIndexes.length > 0) {
     const openers = list.filter((leaf) => leaf.family_id === "issue-orders-open").length;
     if (openers !== 1) throw new CompileError(`An order-rule needs exactly one issue-orders-open in its record; found ${openers}.`);
@@ -533,7 +488,8 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
         && current.some((item) => item.role === "EFFECT") && opensMoment(list, cursor)) break;
       // Each item of a colon-introduced comma list is an option of its own (compile-placement.ts commaItems).
       const itemStarts = leaf.family_id === "choice-open" && commas[cursor] === true;
-      if (list[cursor]!.family_id === "order-rule") continue;
+      // An order-rule is the issue-orders' own, except an Order's recipient keywords, which stay in that Order's group.
+      if (list[cursor]!.family_id === "order-rule" && !isRecipientRule(list[cursor]!)) continue;
       const starts = byMarker ? list[cursor]!.family_id === optionMarker
         : byBullet ? currentSentence === null || bulletStarts
           : byOrLine ? currentSentence === null || orLines[cursor] === true

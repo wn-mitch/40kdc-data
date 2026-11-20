@@ -169,6 +169,12 @@ func stratagemTarget(ref any) string {
 }
 
 // triggerObjectPhrase renders an object phrase: "this unit", "an enemy unit".
+// isMapObject reports whether a trigger's object is a unit filter (an object), not a role.
+func isMapObject(ref any) bool {
+	_, ok := ref.(map[string]any)
+	return ok
+}
+
 func triggerObjectPhrase(ref any) string {
 	switch r := ref.(type) {
 	case nil:
@@ -631,6 +637,9 @@ func triggerEventPhrase(t map[string]any) string {
 				return "after an Act of Faith is completed"
 			}
 			return "when an Act of Faith is performed"
+		case f["kind"] == "order" && isMapObject(object):
+			// "after the bearer issues an Order to a SQUADRON unit": who issued it, and the unit it went to.
+			return "each time " + who + " issues an Order to " + triggerObjectPhrase(object)
 		case f["kind"] == "order" && object != nil:
 			return "each time an Order is issued to the unit"
 		case f["kind"] == "contract" && f["result"] == "success":

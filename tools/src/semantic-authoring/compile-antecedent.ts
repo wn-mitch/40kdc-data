@@ -54,7 +54,9 @@ export function objectEvent(leaf: CompileLeaf | undefined): boolean {
   // A unit-filter after a plain "is destroyed" names who destroyed it ("by an attack made by a
   // friendly X unit"), not what was destroyed; only "this unit destroys an X unit" names the object.
   // "when an enemy unit targets a friendly X unit": the unit targeted.
+  // "after the bearer issues an Order to a SQUADRON unit": the unit the Order went to.
   return leaf.parameters.kind === "damage-allocated" || leaf.parameters.kind === "enemy-selected-targets" || leaf.parameters.kind === "targets-selected"
+    || (leaf.parameters.kind === "used" && leaf.parameters.activity === "order" && leaf.parameters.object === undefined)
     || ((leaf.parameters.kind === "unit-destroyed" || leaf.parameters.kind === "model-destroyed") && leaf.parameters.by !== undefined);
 }
 
@@ -663,6 +665,7 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "damage-reduction": ["subject"],
   "counts-as": ["subject"],
   "ability-modifier": ["subject"],
+  "orders-modifier": ["subject"],
   // "**K** units from your army are eligible to shoot and declare a charge in a turn in which they Fell Back": every unit the filter matches.
   "act-after-move": ["subject"],
   // "-2\" from that pile-in move" of an enemy unit an earlier unit-filter names.

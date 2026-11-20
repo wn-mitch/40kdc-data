@@ -63,8 +63,9 @@ _DESPITE = {
     "advanced": "Advanced this turn",
     "fell-back": "Fell Back this turn",
     "destroyed": "has just been destroyed",
+    "embarked": "embarked within a Transport",
 }
-_IS_STATE = frozenset({"engaged", "battle-shocked", "performing-action"})
+_IS_STATE = frozenset({"engaged", "battle-shocked", "performing-action", "embarked"})
 _AS_IF = {
     "shooting-phase": " as if it were your Shooting phase",
     "fight-phase": " as if it were the Fight phase",

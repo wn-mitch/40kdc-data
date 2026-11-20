@@ -756,6 +756,13 @@ pub(crate) fn event_phrase(t: &P) -> String {
                     "when an Act of Faith is performed".to_string()
                 };
             }
+            // "after the bearer issues an Order to a SQUADRON unit": who issued it, and the unit it went to.
+            if is(f, "kind", "order") && matches!(nn(t, "object"), Some(Value::Object(_))) {
+                return format!(
+                    "each time {who} issues an Order to {}",
+                    object_phrase(nn(t, "object"))
+                );
+            }
             if is(f, "kind", "order") && nn(t, "object").is_some() {
                 return "each time an Order is issued to the unit".to_string();
             }

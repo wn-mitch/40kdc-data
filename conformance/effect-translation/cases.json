@@ -38893,6 +38893,405 @@
     }
   },
   {
+    "caseId": "fidelity/orders-modifier-named-any-unlimited",
+    "effect": {
+      "type": "orders-modifier",
+      "target": "this-model",
+      "modifier": {
+        "only_options": [
+          {
+            "ability_id": "voice-of-command-astra-militarum",
+            "option_id": "move-move-move"
+          }
+        ],
+        "recipients": {
+          "all_of": [
+            "INFANTRY",
+            "REGIMENT"
+          ]
+        },
+        "count": "any",
+        "range": "unlimited"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, this model can issue the Move Move Move Order to any number of eligible friendly INFANTRY REGIMENT units, regardless of range."
+    }
+  },
+  {
+    "caseId": "fidelity/orders-modifier-two-orders-count-any",
+    "effect": {
+      "type": "orders-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "only_options": [
+          {
+            "ability_id": "voice-of-command-astra-militarum",
+            "option_id": "take-aim"
+          },
+          {
+            "ability_id": "voice-of-command-astra-militarum",
+            "option_id": "fix-bayonets"
+          }
+        ],
+        "count": "any"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, this unit can issue the Take Aim and Fix Bayonets Orders to any number of eligible units."
+    }
+  },
+  {
+    "caseId": "fidelity/orders-modifier-range-proxy",
+    "effect": {
+      "type": "orders-modifier",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "OFFICER"
+        ]
+      },
+      "modifier": {
+        "recipients": {
+          "all_of": [
+            "ASTRA MILITARUM",
+            "REGIMENT"
+          ]
+        },
+        "range_proxy": {
+          "marker": "vox-relay-beacon",
+          "inches": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, friendly OFFICER units can issue Orders to eligible friendly ASTRA MILITARUM REGIMENT units within 6\" of the Vox Relay Beacon token, as if within 6\" of them."
+    }
+  },
+  {
+    "caseId": "fidelity/orders-modifier-adds-recipients-off-battlefield",
+    "effect": {
+      "type": "orders-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "recipients": {
+          "all_of": [
+            "ASTRA MILITARUM",
+            "TRANSPORT"
+          ],
+          "none_of": [
+            "TITANIC"
+          ]
+        },
+        "adds_recipients": true,
+        "off_battlefield": true,
+        "range": "unlimited"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, this unit can also issue Orders to friendly ASTRA MILITARUM TRANSPORT units (excluding TITANIC units) even while not on the battlefield, regardless of range."
+    }
+  },
+  {
+    "caseId": "fidelity/order-share-mutual",
+    "effect": {
+      "type": "order-share",
+      "target": {
+        "stratagem_target": "first"
+      },
+      "modifier": {
+        "with": {
+          "stratagem_target": "second"
+        },
+        "mutual": true
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, Orders affecting the first target also affect the second target, and vice versa."
+    }
+  },
+  {
+    "caseId": "fidelity/order-share-one-way",
+    "effect": {
+      "type": "order-share",
+      "target": "this-unit",
+      "modifier": {
+        "with": "event-object"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, Orders affecting this unit also affect that unit."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-used-order-to-filter-same-order",
+    "trigger": {
+      "event": "used",
+      "subject": "this-model",
+      "filter": {
+        "kind": "order"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "SQUADRON"
+        ]
+      }
+    },
+    "effect": {
+      "type": "issue-orders",
+      "count": 1,
+      "eligible": {
+        "all_of": [
+          "SQUADRON"
+        ]
+      },
+      "same_order": true,
+      "exclude": "event-object"
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time this model issues an Order to a friendly SQUADRON unit, for this activation:\n  - Issue the same Order to one other of the eligible friendly SQUADRON units."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-used-order-to-filter-same-order-two",
+    "trigger": {
+      "event": "used",
+      "subject": "this-model",
+      "filter": {
+        "kind": "order"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "SQUADRON"
+        ]
+      }
+    },
+    "effect": {
+      "type": "issue-orders",
+      "count": 2,
+      "eligible": {
+        "all_of": [
+          "SQUADRON"
+        ]
+      },
+      "same_order": true,
+      "exclude": "event-object",
+      "as_if_phase": "command"
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time this model issues an Order to a friendly SQUADRON unit, for this activation:\n  - Issue the same Order to up to 2 other eligible friendly SQUADRON units as if it were your Command phase."
+    }
+  },
+  {
+    "caseId": "fidelity/issue-orders-same-order-and-as-if-phase-inline",
+    "effect": {
+      "type": "choice",
+      "options": [
+        {
+          "type": "issue-orders",
+          "count": 1,
+          "eligible": {
+            "all_of": [
+              "SQUADRON"
+            ]
+          },
+          "same_order": true,
+          "exclude": "event-object",
+          "counts_toward_limit": false
+        },
+        {
+          "type": "issue-orders",
+          "count": 1,
+          "menu_from": "orders-menu-example",
+          "as_if_phase": "command"
+        }
+      ]
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation:\n  Choose one of the following:\n    - Issue the same Order to another eligible unit, not counting toward the Orders it can issue this turn.\n    - Issue Orders from Orders Menu Example as if it were your Command phase."
+    }
+  },
+  {
+    "caseId": "fidelity/issue-orders-menu-from-as-if-phase",
+    "effect": {
+      "type": "issue-orders",
+      "count": 1,
+      "issuer": {
+        "all_of": [
+          "OFFICER"
+        ]
+      },
+      "menu_from": "orders-menu-example",
+      "as_if_phase": "command"
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation:\n  - OFFICER models can issue up to 1 Order from Orders Menu Example to eligible friendly units as if it were your Command phase."
+    }
+  },
+  {
+    "caseId": "fidelity/issue-orders-option-eligible-as-if-phase",
+    "effect": {
+      "type": "issue-orders",
+      "count": 1,
+      "range": {
+        "inches": 6
+      },
+      "eligible": {
+        "all_of": [
+          "INFANTRY"
+        ]
+      },
+      "as_if_phase": "command",
+      "options": [
+        {
+          "name": "Take Aim!",
+          "effect": {
+            "type": "no-effect"
+          }
+        },
+        {
+          "name": "On My Signal!",
+          "eligible": {
+            "all_of": [
+              "ARMOURED",
+              "SKIRMISHER"
+            ],
+            "none_of": [
+              "TITANIC"
+            ]
+          },
+          "effect": {
+            "type": "no-effect"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation:\n  - Issue up to 1 Orders to eligible friendly INFANTRY units within 6\" as if it were your Command phase, each one of:\n    - Take Aim!: Nothing happens.\n    - On My Signal! (only to friendly ARMOURED SKIRMISHER units (excluding TITANIC units)): Nothing happens."
+    }
+  },
+  {
+    "caseId": "fidelity/ability-modifier-added-order-eligible",
+    "effect": {
+      "type": "ability-modifier",
+      "target": {
+        "owner": "friendly"
+      },
+      "modifier": {
+        "ability": "voice-of-command-astra-militarum",
+        "aspect": "options",
+        "operation": "add",
+        "add_option": {
+          "id": "fabricated-order",
+          "name": "Fabricated Order",
+          "eligible": {
+            "all_of": [
+              "ALPHA",
+              "BETA"
+            ],
+            "none_of": [
+              "TITANIC"
+            ]
+          },
+          "effect": {
+            "type": "feel-no-pain",
+            "target": "this-unit",
+            "modifier": {
+              "threshold": 6
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, friendly units' Voice of Command ability gains the option Fabricated Order (only to friendly ALPHA BETA units (excluding TITANIC units): this unit has Feel No Pain 6+)."
+    }
+  },
+  {
+    "caseId": "fidelity/permission-despite-embarked",
+    "effect": {
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "use-stratagem",
+        "allow": true,
+        "despite": [
+          "embarked"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, this unit is eligible to be targeted with Stratagems even if it is embarked within a Transport."
+    }
+  },
+  {
+    "caseId": "fidelity/permission-despite-embarked-plural",
+    "effect": {
+      "type": "permission",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA"
+        ]
+      },
+      "modifier": {
+        "activity": "use-stratagem",
+        "allow": true,
+        "despite": [
+          "embarked",
+          "battle-shocked"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, friendly ALPHA units are eligible to be targeted with Stratagems even if they are embarked within a Transport or they are Battle-shocked."
+    }
+  },
+  {
     "caseId": "fidelity/trigger-used-by-opponent",
     "trigger": {
       "event": "used",

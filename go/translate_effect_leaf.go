@@ -17,7 +17,7 @@ var leafTypes = map[string]bool{}
 func init() {
 	for _, t := range []string{
 		"stat-modifier", "ignore-modifiers", "roll-modifier", "re-roll", "roll-result", "end-attack-sequence", "ability-grant",
-		"keyword-grant", "weapon-ability-grant", "weapon-ability-range", "weapon-grant", "ability-modifier", "ability-activate", "oath-modifier", "permission", "targeting",
+		"keyword-grant", "weapon-ability-grant", "weapon-ability-range", "weapon-grant", "ability-modifier", "ability-activate", "oath-modifier", "orders-modifier", "order-share", "permission", "targeting",
 		"counts-as", "rule-state", "mortal-wounds", "damage-reduction", "feel-no-pain", "invulnerable-save", "heal", "return-models",
 		"destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
 		"transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
@@ -690,7 +690,7 @@ func abilityModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 	}
 	option := ""
 	if opt, ok := asMap(m["add_option"]); ok && opt != nil {
-		option = "the option " + titleCase(ejstr(opt["name"])) + " (" + describeEffectInline(mapOr(opt["effect"]), ctx) + ")"
+		option = "the option " + titleCase(ejstr(opt["name"])) + " (" + addedOptionRecipients(opt, ctx) + describeEffectInline(mapOr(opt["effect"]), ctx) + ")"
 	}
 	// An add with no value only widens the ability: it names the new recipients or option instead of a count.
 	if m["value"] == nil && m["operation"] != "set" && m["operation"] != "lift-limit" && (recipients != "" || option != "") {
@@ -953,6 +953,10 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 		return countsAsLeaf(m, subj, ctx)
 	case "rule-state":
 		return ruleStateLeaf(m, subj)
+	case "orders-modifier":
+		return ordersModifierLeaf(m, subj, ctx)
+	case "order-share":
+		return orderShareLeaf(m, subj, ctx)
 	}
 	if s, ok := describeShapeLeaf(e, m, subj, ctx); ok {
 		return s

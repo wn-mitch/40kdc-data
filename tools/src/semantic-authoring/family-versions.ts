@@ -27,6 +27,12 @@ export type VersionMapping = {
 };
 
 export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
+  // issue-orders-open v3 adds as_if_phase, issuer_keywords and same_order; order-rule v3 the
+  // recipient-keywords rule. Every earlier leaf keeps its meaning.
+  { family: "issue-orders-open", from: 2, to: 3, map: (parameters) => ({ ...parameters }) },
+  { family: "order-rule", from: 2, to: 3, map: (parameters) => ({ ...parameters }) },
+  // eligibility-permission v11 adds despite embarked ("even though it is embarked within a TRANSPORT").
+  { family: "eligibility-permission", from: 10, to: 11, map: (parameters) => ({ ...parameters }) },
   // attack v10 lets a targeted attack's unit point back (antecedent); stratagem-target v6 allows count_max 1.
   // Every earlier leaf keeps its meaning.
   { family: "attack", from: 9, to: 10, map: (parameters) => ({ ...parameters }) },

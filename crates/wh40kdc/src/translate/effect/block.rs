@@ -337,6 +337,15 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 Some(issuer) => format!("{} can issue", model_subject(issuer, ctx)),
                 None => "Issue".to_string(),
             };
+            let as_if = super::orders::as_if_phase(e);
+            // "it can issue the same Order to another SQUADRON unit": the Order just issued, again.
+            if e.get("same_order") == Some(&Value::Bool(true)) {
+                return format!(
+                    "{indent}{arrow}{issue} {}{range}{not_states}{}{as_if}.",
+                    super::orders::same_order_target(e.get("count"), units),
+                    order_limit(e)
+                );
+            }
             if let Some(menu) = nn(e, "menu_from") {
                 // An officer's datasheet: how many of its army rule's Orders it issues, and to which units.
                 let orders = if e.get("count").and_then(Value::as_i64) == Some(1) {
@@ -350,7 +359,7 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                     "This model can issue".to_string()
                 };
                 return format!(
-                    "{indent}{arrow}{who} up to {n} {orders} from {} to {}{range}{not_states}{}{}.",
+                    "{indent}{arrow}{who} up to {n} {orders} from {} to {}{range}{not_states}{}{}{as_if}.",
                     ability_label(Some(menu)),
                     order_to(e, units),
                     only_orders(e),
@@ -358,15 +367,16 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 );
             }
             let mut lines = vec![format!(
-                "{indent}{arrow}{issue} up to {n} Orders to {}{range}{not_states}{}, each one of:",
+                "{indent}{arrow}{issue} up to {n} Orders to {}{range}{not_states}{}{as_if}, each one of:",
                 order_to(e, units),
                 order_limit(e)
             )];
             for o in items(e, "options") {
                 let o = obj(Some(o));
                 lines.push(format!(
-                    "{indent}  - {}: {}.",
+                    "{indent}  - {}{}: {}.",
                     jstr(o.get("name")),
+                    super::orders::option_recipients(o, ctx),
                     capitalize(&inline(child(o, "effect"), ctx))
                 ));
             }

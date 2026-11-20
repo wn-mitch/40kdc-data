@@ -222,8 +222,9 @@ pub(super) fn ability_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
     let option = nn(m, "add_option").map(|opt| {
         let opt = obj(Some(opt));
         format!(
-            "the option {} ({})",
+            "the option {} ({}{})",
             title_case(&jstr(opt.get("name"))),
+            super::orders::added_option_recipients(opt, ctx),
             super::inline(opt.get("effect").unwrap_or(&Value::Null), ctx)
         )
     });
@@ -342,6 +343,7 @@ pub(super) fn despite_phrase(d: &str) -> Option<&'static str> {
         "advanced" => "Advanced this turn",
         "fell-back" => "Fell Back this turn",
         "destroyed" => "has just been destroyed",
+        "embarked" => "embarked within a Transport",
         _ => return None,
     })
 }
@@ -457,7 +459,7 @@ pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
             return format!("{its} Transport Advanced this turn");
         }
         let phrase = despite_phrase(&d).map(str::to_string).unwrap_or(d.clone());
-        if ["engaged", "battle-shocked", "performing-action"].contains(&d.as_str()) {
+        if ["engaged", "battle-shocked", "performing-action", "embarked"].contains(&d.as_str()) {
             let is = if it == "they" { "they are" } else { "it is" };
             return format!("{is} {phrase}");
         }
