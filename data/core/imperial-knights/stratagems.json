@@ -950,7 +950,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Imperial Knights",
+        "Titanic"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "moment-of-glory-questoris-companions-imperial-knights",
     "game_version": {
       "edition": "11th",
@@ -1526,7 +1534,79 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Armiger"
+        ],
+        "name": "first",
+        "count": "one",
+        "mode": "a",
+        "side": "your-army",
+        "selects": "model",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      },
+      {
+        "required_keywords": [
+          "Imperial Knights",
+          "Titanic"
+        ],
+        "name": "second",
+        "count": "one",
+        "mode": "b",
+        "side": "your-army",
+        "selects": "model",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      },
+      {
+        "required_keywords": [
+          "Armiger"
+        ],
+        "name": "third",
+        "count": "one-or-more",
+        "mode": "b",
+        "side": "your-army",
+        "selects": "model",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "rule-active",
+              "parameters": {
+                "rule": "bondsman-imperial-knights"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "second"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "thin-their-ranks-spearhead-at-arms-imperial-knights",
     "game_version": {
       "edition": "11th",

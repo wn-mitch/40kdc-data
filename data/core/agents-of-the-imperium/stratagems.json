@@ -11,7 +11,22 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Deathwatch"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "adaptive-tactics-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
@@ -523,7 +538,49 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "ADEPTUS ARBITES",
+                  "INQUISITORIAL AGENTS",
+                  "ORDO HERETICUS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "exact-punishment-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
@@ -581,7 +638,43 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Deathwatch",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "hellfire-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
@@ -834,7 +927,51 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "ADEPTUS ARBITES",
+                  "INQUISITORIAL AGENTS",
+                  "ORDO HERETICUS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "line-of-fire-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
@@ -1048,7 +1185,50 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "DEATHWATCH",
+                      "INFANTRY"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "INQUISITOR"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "rapid-tactical-relocation-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",

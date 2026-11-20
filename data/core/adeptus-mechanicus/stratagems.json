@@ -11,7 +11,42 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Skorpius Dunerider"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "move"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "aggressive-impulse-haloscreed-battle-clade-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
@@ -1312,7 +1347,22 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Tech-Priest"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "extinction-order-rad-zone-corps-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
@@ -2347,7 +2397,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adeptus Mechanicus"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "priority-reclamation-explorator-maniple-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",

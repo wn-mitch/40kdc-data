@@ -4241,19 +4241,68 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "grey-knights",
     "detachment_id": "brotherhood-strike",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "engaged_with": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "GREY KNIGHTS"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "has_ability": [
+                  "deep-strike"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "set-up",
+        "target": "this-unit",
+        "modifier": {
+          "to": "strategic-reserves"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      }
+    },
+    "source_digest": "f00557a2e5223ac125549995ff1f8ddee6408412b0f6598f03371e38a1900523"
   },
   {
     "ability_id": "ephemeral-tome-banishers-grey-knights",
@@ -4337,19 +4386,40 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "grey-knights",
     "detachment_id": "crowes-sanctifiers",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "consolidation",
+        "distance": "D3+3"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "consolidation"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CROWE'S SANCTIFIERS"
+        ]
+      }
+    },
+    "source_digest": "255106b0fbe927356e498df70a9bcc6d90d7a7048dc383ea43e4baddb5a41d83"
   },
   {
     "ability_id": "expeditious-exit-brotherhood-strike-grey-knights",

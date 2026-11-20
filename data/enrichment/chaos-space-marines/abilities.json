@@ -10870,19 +10870,55 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "fellhammer-siege-host",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "kind": "fight"
+        }
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "event-subject",
+        "modifier": {
+          "count": 1,
+          "per": "success",
+          "roll": {
+            "dice": 1,
+            "threshold": 4,
+            "per_attack": {
+              "attack_type": "melee"
+            },
+            "max_dice": 6
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "ab55a941bd9ce4bd25764e0ecb8530511e61d6f56c90d24e810dc0b3b73c5fb9"
   },
   {
     "ability_id": "chaos-icon-zarkans-daemonkin-legionaries-chaos-space-marines",
@@ -14724,19 +14760,34 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "fellhammer-siege-host",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ],
+        "weapons": {
+          "type": "ranged",
+          "exclude_keyword": {
+            "keyword_id": "blast"
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "5ab8174aeafd7b5a0498aac379086ba94b9a9f261284af5c4b9f164e6676487b"
   },
   {
     "ability_id": "predatory-pursuit-soulforged-warpack-chaos-space-marines",
@@ -14940,19 +14991,47 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "hurons-marauders",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "subject": "bearer-transport",
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "normal"
+            ]
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true,
+          "despite": [
+            "disembarked-this-turn"
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "disembarked"
+    },
+    "source_digest": "88de8f08271778e4d761742a43c58755cc83cbc1af75ec9b492c84b98c61e64b"
   },
   {
     "ability_id": "reavers-flurry-hurons-marauders-chaos-space-marines",
@@ -17124,19 +17203,51 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "chaos-cult",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "has_ability": [
+                  "scouts"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "scouts",
+          "value": 6
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "903dd2ceacf220a4f5f6d7c211879b2a138ebba96d7f7f9288d108d173ea0749"
   },
   {
     "ability_id": "weaponised-hatred-renegade-warband-chaos-space-marines",

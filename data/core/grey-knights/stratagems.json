@@ -738,7 +738,39 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Grey Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "unit-state",
+            "parameters": {
+              "state": "engaged",
+              "with": "event-subject"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "duty-unending-brotherhood-strike-grey-knights",
     "game_version": {
       "edition": "11th",
@@ -766,7 +798,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Crowe's Sanctifiers"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "exigent-assignments-crowes-sanctifiers-grey-knights",
     "game_version": {
       "edition": "11th",

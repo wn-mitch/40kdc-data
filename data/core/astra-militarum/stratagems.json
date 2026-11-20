@@ -1432,7 +1432,37 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Astra Militarum",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "targets-selected",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "window": "event"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "hasty-extraction-mechanised-assault-astra-militarum",
     "game_version": {
       "edition": "11th",

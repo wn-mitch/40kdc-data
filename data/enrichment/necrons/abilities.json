@@ -8687,19 +8687,84 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "annihilation-legion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "dice-table",
+          "dice": "D6",
+          "outcomes": [
+            {
+              "results": [
+                1
+              ],
+              "effect": {
+                "type": "no-effect"
+              }
+            },
+            {
+              "results": [
+                2,
+                3,
+                4,
+                5
+              ],
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "event-subject",
+                "modifier": {
+                  "count": "D3"
+                }
+              }
+            },
+            {
+              "results": [
+                6
+              ],
+              "effect": {
+                "type": "mortal-wounds",
+                "target": "event-subject",
+                "modifier": {
+                  "count": 3
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "move",
+          "target": "this-unit",
+          "modifier": {
+            "move_type": "normal",
+            "ends_nearest": {
+              "of": "event-subject"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "3e9dcc7eb2a50c4cf3437b6123a0fe1b47abdd9a7dfe439433a716260a2644f1"
   },
   {
     "ability_id": "chrono-impedance-fields-starshatter-arsenal-necrons",
@@ -8963,19 +9028,40 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "hypercrypt-legion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "set-up",
+          "target": "this-unit",
+          "modifier": {
+            "to": "battlefield",
+            "min_enemy_distance": {
+              "inches": 6
+            }
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": false
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "activated",
+    "source_digest": "96e213ec4655a72d6bc7044bde78ef607e363e2e587b14270cfa988411819b45"
   },
   {
     "ability_id": "countertemporal-shift-canoptek-court-necrons",
@@ -9559,19 +9645,25 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "hypercrypt-legion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "declare-charge",
+        "allow": true
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "bbfe735c7e1b88b01f5a559a1467e042242b6b59b4b8c08c4141f498ee2e0a08"
   },
   {
     "ability_id": "dimensional-overseer-hypercrypt-legion-necrons",
@@ -11182,19 +11274,40 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "cursed-legion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "reanimation-protocols-necrons"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "destroyed",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DESTROYER CULT"
+        ]
+      },
+      "object": {
+        "owner": "enemy"
+      }
+    },
+    "usage": {
+      "frequency": "first-time-this-turn",
+      "per": "army"
+    },
+    "source_digest": "8aa7ced687749ff4a9ec17b716cd70c4063d994243c04cacb5d7ffad0411ba28"
   },
   {
     "ability_id": "murdermind-cursed-legion-necrons",
@@ -11680,19 +11793,66 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "awakened-dynasty",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "destroyed"
+            ]
+          }
+        },
+        {
+          "type": "set-up",
+          "target": "this-model",
+          "modifier": {
+            "to": "battlefield",
+            "min_enemy_distance": {
+              "inches": 1
+            },
+            "placement": "closest-to-destruction",
+            "wounds_remaining": "half-starting",
+            "detach": true,
+            "starting_strength": 1
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": "this-model",
+          "window": "phase",
+          "count": {
+            "min": 1
+          }
+        }
+      }
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "model"
+    },
+    "source_digest": "b863033257564dd508474df0893ad8986d4713cdc9e16c0116348b615f167da2"
   },
   {
     "ability_id": "protocol-of-the-hungry-void-awakened-dynasty-necrons",

@@ -6285,19 +6285,65 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "imperial-knights",
     "detachment_id": "questoris-companions",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "consolidation"
+          ]
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "engagement-fronts",
+          "parameters": {
+            "count": {
+              "min": 1
+            }
+          }
+        },
+        "effect": {
+          "type": "move-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "applies_to_moves": [
+              "consolidation"
+            ],
+            "distance_bonus": 3
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "consolidation"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "IMPERIAL KNIGHTS",
+          "TITANIC"
+        ]
+      }
+    },
+    "source_digest": "4d366073bc32ee52c74bef5c51a9e8054368f4fedd26d1bcfbb5b96171987c71"
   },
   {
     "ability_id": "omnissiahs-grace-questor-forgepact-imperial-knights",
@@ -6770,19 +6816,80 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "imperial-knights",
     "detachment_id": "spearhead-at-arms",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "rapid-fire",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": {
+            "stratagem_target": "third"
+          },
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "rapid-fire",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "81408dc8c8eb7bece4a561424518fa527bfebe84daba23ce5361425571191521"
   },
   {
     "ability_id": "thunderstomp-valourstrike-lance-imperial-knights",

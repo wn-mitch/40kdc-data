@@ -666,7 +666,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Slaanesh"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "cavalcade-of-blades-legion-of-excess-chaos-daemons",
     "game_version": {
       "edition": "11th",
@@ -1446,7 +1454,95 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Heretic Astartes",
+          "Shadow Legion"
+        ],
+        "name": "first",
+        "count": "up-to",
+        "count_max": 1,
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "engaged"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Legiones Daemonica",
+          "Shadow Legion"
+        ],
+        "name": "second",
+        "count": "up-to",
+        "count_max": 1,
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "engaged"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "binding-shadow-shadow-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",

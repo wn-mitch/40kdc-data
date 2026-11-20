@@ -476,7 +476,55 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Biologus Putrifier"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "deaths-heads-champions-of-contagion-death-guard",
     "game_version": {
       "edition": "11th",
@@ -1310,7 +1358,35 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Plague Legions"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "engaged_with": "event-subject"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "mireslick-tallyband-summoners-death-guard",
     "game_version": {
       "edition": "11th",

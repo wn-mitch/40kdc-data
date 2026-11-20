@@ -7227,19 +7227,55 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "haloscreed-battle-clade",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "normal"
+            ]
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true,
+          "despite": [
+            "disembarked-this-turn"
+          ]
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "disembarked",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS MECHANICUS"
+        ]
+      },
+      "filter": {
+        "transport": "this-unit"
+      }
+    },
+    "source_digest": "25dd319fa0e72adbe1eb838313297373cc5c78c46d414c924f1e43c3b3ec988f"
   },
   {
     "ability_id": "aggressor-imperative-rad-zone-corps-adeptus-mechanicus",
@@ -8585,19 +8621,70 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "cohort-cybernetica",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-object",
+          "filter": {
+            "within": {
+              "of": "this-model",
+              "range": {
+                "inches": 12
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-result",
+        "target": "event-subject",
+        "modifier": {
+          "roll": "deadly-demise",
+          "result": "pass"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "any_of_filters": [
+          {
+            "all_of": [
+              "ADEPTUS MECHANICUS",
+              "VEHICLE"
+            ]
+          },
+          {
+            "all_of": [
+              "LEGIO CYBERNETICA"
+            ]
+          }
+        ],
+        "level": "model",
+        "has_ability": [
+          "deadly-demise"
+        ]
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "model"
+    },
+    "source_digest": "1f00edf0bd1354cdf773dfc238dfef59d7539da97c588110001cb26194bee32e"
   },
   {
     "ability_id": "empowered-mechanisms-purge-corps-deltic-9-adeptus-mechanicus",
@@ -8735,19 +8822,88 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "rad-zone-corps",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "within": {
+            "range": {
+              "inches": 24
+            },
+            "of": "this-model"
+          }
+        },
+        "bind_as": "objective-marker",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          }
+        },
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "recipient",
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "selection_var": "objective-marker"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 4,
+            "comparison": "gte",
+            "on_success": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "mortal-wounds",
+                  "target": "recipient",
+                  "modifier": {
+                    "count": 1
+                  }
+                },
+                {
+                  "type": "test",
+                  "target": "recipient",
+                  "modifier": {
+                    "test": "battle-shock"
+                  }
+                }
+              ]
+            },
+            "on_fail": null
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "fccce42bb678874b561a5f8ac5495d893baae27b581dbadbf0c068bdbc314c3d"
   },
   {
     "ability_id": "genetor-explorator-maniple-adeptus-mechanicus",
@@ -9895,19 +10051,70 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "cohort-cybernetica",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": "this-model",
+              "range": {
+                "inches": 12
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "damage-reduction",
+        "target": "event-subject",
+        "modifier": {
+          "reduction": "to-zero"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "save",
+        "result": "failure"
+      },
+      "subject": {
+        "owner": "friendly",
+        "any_of_filters": [
+          {
+            "all_of": [
+              "ADEPTUS MECHANICUS",
+              "VEHICLE"
+            ]
+          },
+          {
+            "all_of": [
+              "LEGIO CYBERNETICA"
+            ]
+          }
+        ],
+        "level": "model"
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "model"
+    },
+    "source_digest": "b28028c8a3fa0397806145b7a84fe9f666538445dde8c6bf393665c3e7a755d5"
   },
   {
     "ability_id": "neural-overload-haloscreed-battle-clade-adeptus-mechanicus",
@@ -10273,19 +10480,82 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "explorator-maniple",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "designated": "acquisition"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "owner": "enemy"
+                      },
+                      "range": {
+                        "inches": 3
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-model",
+        "modifier": {
+          "move_type": "consolidation",
+          "distance": 6
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-started",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS MECHANICUS"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "consolidation"
+        ]
+      }
+    },
+    "source_digest": "225bf66ea4d6afb3f820d8fe0802d5360ac24812654d6f92eb2f5375449b9754"
   },
   {
     "ability_id": "programmed-withdrawal-skitarii-hunter-cohort-adeptus-mechanicus",

@@ -7305,19 +7305,42 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "invasion-fleet",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "roll-result",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "roll": "hit",
+            "critical_on": 5
+          }
+        },
+        {
+          "type": "roll-result",
+          "target": {
+            "stratagem_target": "second"
+          },
+          "modifier": {
+            "roll": "hit",
+            "critical_on": 5
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "d935627e9cdcefd15ee6535ea9278d07d495f5e441212d36ffcc1293a24bc99d"
   },
   {
     "ability_id": "adrenalised-onslaught-unending-swarm-tyranids",
