@@ -643,8 +643,9 @@
       "Orks"
     ],
     "base_size_mm": {
-      "shape": "round",
-      "diameter": 75
+      "shape": "oval",
+      "width": 75,
+      "length": 42
     },
     "model_count": {
       "min": 3,
@@ -1598,7 +1599,8 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 32
+      "diameter": 32,
+      "draft": true
     },
     "model_count": {
       "min": 6,
@@ -1864,7 +1866,8 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 32
+      "diameter": 32,
+      "draft": true
     },
     "model_count": {
       "min": 6,
@@ -2715,8 +2718,9 @@
       "Orks"
     ],
     "base_size_mm": {
-      "shape": "round",
-      "diameter": 120
+      "shape": "oval",
+      "width": 120,
+      "length": 92
     },
     "model_count": {
       "min": 1,
@@ -2954,8 +2958,9 @@
       "Orks"
     ],
     "base_size_mm": {
-      "shape": "round",
-      "diameter": 120
+      "shape": "oval",
+      "width": 120,
+      "length": 92
     },
     "model_count": {
       "min": 1,
@@ -4100,8 +4105,9 @@
       "Orks"
     ],
     "base_size_mm": {
-      "shape": "round",
-      "diameter": 120
+      "shape": "oval",
+      "width": 120,
+      "length": 92
     },
     "model_count": {
       "min": 1,

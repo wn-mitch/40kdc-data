@@ -1418,7 +1418,8 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 32
+      "diameter": 32,
+      "draft": true
     },
     "model_count": {
       "min": 5,

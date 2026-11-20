@@ -729,7 +729,7 @@ The unit ignores any modifiers to its Hit rolls.</characteristic>
                     <characteristic name="LD" typeId="58d2-b879-49c7-43bc">7+</characteristic>
                     <characteristic name="OC" typeId="bef7-942a-1a23-59f8">2</characteristic>
                     <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc">6+</characteristic>
-                    <characteristic name="Base" typeId="nr-base-size">75mm</characteristic>
+                    <characteristic name="Base" typeId="nr-base-size">42x75mm</characteristic>
                   </characteristics>
                 </profile>
               </profiles>
@@ -4857,7 +4857,7 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
             <characteristic name="LD" typeId="58d2-b879-49c7-43bc">7+</characteristic>
             <characteristic name="OC" typeId="bef7-942a-1a23-59f8">-</characteristic>
             <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc">6+</characteristic>
-            <characteristic name="Base" typeId="nr-base-size">120mm</characteristic>
+            <characteristic name="Base" typeId="nr-base-size">92x120mm</characteristic>
           </characteristics>
         </profile>
         <profile name="Boom Bomb" id="4371-f27d-860d-1eb2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5303,7 +5303,7 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
             <characteristic name="LD" typeId="58d2-b879-49c7-43bc">7+</characteristic>
             <characteristic name="OC" typeId="bef7-942a-1a23-59f8">-</characteristic>
             <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc">6+</characteristic>
-            <characteristic name="Base" typeId="nr-base-size">120mm</characteristic>
+            <characteristic name="Base" typeId="nr-base-size">92x120mm</characteristic>
           </characteristics>
         </profile>
         <profile name="Strafing Run" id="c248-93de-f3b5-e535" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -7386,7 +7386,7 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
             <characteristic name="LD" typeId="58d2-b879-49c7-43bc">7+</characteristic>
             <characteristic name="OC" typeId="bef7-942a-1a23-59f8">-</characteristic>
             <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc">6+</characteristic>
-            <characteristic name="Base" typeId="nr-base-size">120mm</characteristic>
+            <characteristic name="Base" typeId="nr-base-size">92x120mm</characteristic>
           </characteristics>
         </profile>
         <profile name="Burna Bomb" id="4a1e-f871-562c-10ec" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">

@@ -435,8 +435,9 @@
         "max": 6,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "round",
-          "diameter": 75
+          "shape": "oval",
+          "width": 75,
+          "length": 42
         },
         "default_weapon_ids": [
           "choppa-deffkoptas",
@@ -2054,7 +2055,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 32,
+          "draft": true
         },
         "default_weapon_ids": [
           "smash-hammer"
@@ -2102,7 +2104,8 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 32,
+          "draft": true
         },
         "default_weapon_ids": [
           "choppa-breaka-boyz",
@@ -2622,7 +2625,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 32,
+          "draft": true
         }
       },
       {
@@ -2632,7 +2636,8 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 32,
+          "draft": true
         },
         "default_weapon_ids": [
           "choppa-tankbustas",
@@ -4570,8 +4575,9 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "round",
-          "diameter": 120
+          "shape": "oval",
+          "width": 120,
+          "length": 92
         },
         "default_weapon_ids": [
           "armoured-impact",
@@ -5024,8 +5030,9 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "round",
-          "diameter": 120
+          "shape": "oval",
+          "width": 120,
+          "length": 92
         },
         "default_weapon_ids": [
           "armoured-impact",
@@ -7096,8 +7103,9 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "round",
-          "diameter": 120
+          "shape": "oval",
+          "width": 120,
+          "length": 92
         },
         "default_weapon_ids": [
           "armoured-impact",

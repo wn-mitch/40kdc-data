@@ -3,21 +3,34 @@
 Reconciles `base_size_mm` on units and unit-composition models from the dump's datasheet
 baseSize label. A single clean round/oval is authoritative at both levels (a value within
 1 mm on the same shape is kept — the GW app rounds oval dimensions). Labelled per-model
-strings are mapped onto composition models by name; bare lists, categories, and null
-strings are reported, never guessed. A parsed dump value carries no `draft` flag.
+strings are mapped onto composition models by name. A bare list attributes nothing, but
+authored bases it contradicts are marked draft. Categories and null strings are reported,
+never guessed. A parsed dump value carries no `draft` flag.
 
 | Metric | Count |
 |---|--:|
 | Filled | 0 |
-| Corrected | 0 |
+| Corrected | 8 |
 | De-drafted | 0 |
 | Rounding kept (authored kept) | 5 |
-| Confirmed (units) | 888 |
-| Confirmed (models) | 1254 |
+| Confirmed (units) | 884 |
+| Confirmed (models) | 1250 |
 | Unmatched labels | 14 |
 | Conflicting labels | 2 |
 | Representative unresolved | 2 |
 | Unresolved (list/category/null) | 198 |
+| Drafted (contradicts a bare list) | 41 |
+
+## Corrected (dump authoritative)
+
+- orks/deffkoptas: round 75 → oval 75x42
+- orks/deffkoptas :: Deffkopta: round 75 → oval 75x42
+- orks/dakkajet: round 120 → oval 120x92
+- orks/dakkajet :: Dakkajet: round 120 → oval 120x92
+- orks/burna-bommer: round 120 → oval 120x92
+- orks/burna-bommer :: Burna-bommer: round 120 → oval 120x92
+- orks/blitza-bommer: round 120 → oval 120x92
+- orks/blitza-bommer :: Blitza-bommer: round 120 → oval 120x92
 
 ## Rounding kept (authored value kept — within 1 mm of the dump)
 
@@ -53,6 +66,50 @@ strings are reported, never guessed. A parsed dump value carries no `draft` flag
 
 - agents-of-the-imperium/imperial-navy-breachers: authored round 25, labelled none
 - astra-militarum/krieg-heavy-weapons-squad: authored round 50, labelled round 25
+
+## Drafted (authored bases a bare list contradicts — which model is which is unknown)
+
+- adeptus-astartes/crusader-squad :: Sword Brother: round 40
+- adeptus-astartes/crusader-squad :: Initiate: round 40
+- adeptus-astartes/crusader-squad :: Neophyte: round 40
+- adeptus-astartes/crusader-squad: round 40
+- adeptus-astartes/chaplain-grimaldus :: Chaplain Grimaldus: round 40
+- adeptus-astartes/chaplain-grimaldus :: Cenobyte Servitor: round 40
+- adeptus-astartes/chaplain-grimaldus: round 40
+- adeptus-astartes/wolf-guard-headtakers :: Wolf Guard Headtaker: round 40
+- adeptus-astartes/wolf-guard-headtakers :: Hunting Wolf: round 40
+- adeptus-astartes/wolf-guard-headtakers: round 40
+- adeptus-astartes/decimus-kill-team :: Kill Team Sergeant: round 32
+- adeptus-astartes/decimus-kill-team :: Gravis Veteran: round 32
+- adeptus-astartes/decimus-kill-team :: Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol: round 32
+- adeptus-astartes/decimus-kill-team :: Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists: round 32
+- adeptus-astartes/decimus-kill-team :: Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists: round 32
+- adeptus-astartes/decimus-kill-team :: Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol: round 32
+- adeptus-astartes/decimus-kill-team: round 32
+- adeptus-astartes/talonstrike-kill-team :: Kill Team Sergeant with Jump Pack: round 32
+- adeptus-astartes/talonstrike-kill-team :: Kill Team Intercessor with Jump Pack: round 32
+- adeptus-astartes/talonstrike-kill-team :: Kill Team Heavy Intercessor with Jump Pack: round 32
+- adeptus-astartes/talonstrike-kill-team: round 32
+- adeptus-astartes/wolf-scouts :: Wolf Scout Pack Leader: oval 60x35.5
+- adeptus-astartes/wolf-scouts :: Wolf Scout: oval 60x35.5
+- adeptus-astartes/wolf-scouts :: Hunting Wolf: oval 60x35.5
+- adeptus-astartes/wolf-scouts: oval 60x35.5
+- agents-of-the-imperium/aquila-kill-team :: Kill Team Sergeant: round 32
+- agents-of-the-imperium/aquila-kill-team :: Gravis Veteran: round 32
+- agents-of-the-imperium/aquila-kill-team :: Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol: round 32
+- agents-of-the-imperium/aquila-kill-team :: Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists: round 32
+- agents-of-the-imperium/aquila-kill-team :: Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists: round 32
+- agents-of-the-imperium/aquila-kill-team :: Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol: round 32
+- agents-of-the-imperium/aquila-kill-team: round 32
+- genestealer-cults/claw-of-ascension-atalan-jackals :: Atalan Jackal with Power Weapon: oval 60x35.5
+- genestealer-cults/claw-of-ascension-atalan-jackals :: Atalan Wolfquad: oval 60x35.5
+- genestealer-cults/claw-of-ascension-atalan-jackals :: Atalan Jackal: oval 60x35.5
+- orks/breaka-boyz :: Breaka Boy: round 32
+- orks/breaka-boyz :: Nob: round 32
+- orks/breaka-boyz: round 32
+- orks/tankbustas :: Tankbusta: round 32
+- orks/tankbustas :: Nob: round 32
+- orks/tankbustas: round 32
 
 ## Unresolved datasheets (not attributed)
 

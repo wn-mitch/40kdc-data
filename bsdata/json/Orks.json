@@ -3016,7 +3016,7 @@
                       },
                       {
                         "name": "Base",
-                        "$text": "75mm",
+                        "$text": "42x75mm",
                         "typeId": "nr-base-size"
                       }
                     ]
@@ -18581,7 +18581,7 @@
               },
               {
                 "name": "Base",
-                "$text": "120mm",
+                "$text": "92x120mm",
                 "typeId": "nr-base-size"
               }
             ]
@@ -20153,7 +20153,7 @@
               },
               {
                 "name": "Base",
-                "$text": "120mm",
+                "$text": "92x120mm",
                 "typeId": "nr-base-size"
               }
             ]
@@ -28077,7 +28077,7 @@
               },
               {
                 "name": "Base",
-                "$text": "120mm",
+                "$text": "92x120mm",
                 "typeId": "nr-base-size"
               }
             ]

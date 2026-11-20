@@ -965,7 +965,8 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 40,
+          "draft": true
         }
       },
       {
@@ -980,7 +981,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 40,
+          "draft": true
         }
       },
       {
@@ -994,7 +996,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 40,
+          "draft": true
         }
       }
     ],
@@ -2067,7 +2070,8 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 40,
+          "draft": true
         }
       },
       {
@@ -2080,7 +2084,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 40,
+          "draft": true
         }
       }
     ],
@@ -9523,7 +9528,8 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 32,
+          "draft": true
         }
       },
       {
@@ -9538,7 +9544,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 32,
+          "draft": true
         }
       },
       {
@@ -9548,7 +9555,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 32,
+          "draft": true
         },
         "default_weapon_ids": [
           "heavy-thunder-hammer",
@@ -9563,7 +9571,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 32,
+          "draft": true
         },
         "default_weapon_ids": [
           "deathwatch-marksman-bolt-carbine",
@@ -9579,7 +9588,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 32,
+          "draft": true
         },
         "default_weapon_ids": [
           "stalker-bolt-rifle",
@@ -9595,7 +9605,8 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 32,
+          "draft": true
         },
         "default_weapon_ids": [
           "special-issue-bolt-pistol",
@@ -10184,7 +10195,8 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 32,
+          "draft": true
         },
         "default_weapon_ids": [
           "heavy-bolt-pistol",
@@ -10203,7 +10215,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 32,
+          "draft": true
         }
       },
       {
@@ -10217,7 +10230,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 32,
+          "draft": true
         }
       }
     ],
@@ -27500,7 +27514,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 40,
+          "draft": true
         }
       },
       {
@@ -27510,7 +27525,8 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 40,
+          "draft": true
         },
         "default_weapon_ids": [
           "teeth-and-claws-wolf-guard-headtakers"
@@ -29439,7 +29455,8 @@
         "base_size_mm": {
           "shape": "oval",
           "width": 60,
-          "length": 35.5
+          "length": 35.5,
+          "draft": true
         }
       },
       {
@@ -29454,7 +29471,8 @@
         "base_size_mm": {
           "shape": "oval",
           "width": 60,
-          "length": 35.5
+          "length": 35.5,
+          "draft": true
         }
       },
       {
@@ -29468,7 +29486,8 @@
         "base_size_mm": {
           "shape": "oval",
           "width": 60,
-          "length": 35.5
+          "length": 35.5,
+          "draft": true
         }
       }
     ],

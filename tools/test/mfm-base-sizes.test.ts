@@ -7,6 +7,9 @@ import {
   parseBaseSize,
   parseNominalOval,
   parseDumpBaseSize,
+  parseBareOval,
+  parseBareBaseSizeList,
+  bareListConsistent,
   parseLabelledBaseSizes,
   baseSizeEqual,
   baseSizesWithinRounding,
@@ -91,11 +94,43 @@ describe("parseDumpBaseSize (everything the dump can express in millimetres)", (
     expect(parseDumpBaseSize("105mm oval")).toEqual({ shape: "oval", width: 105, length: 70 });
   });
 
+  it("reads the bare 75mm and 120mm shorthand as the ovals GW makes, and other bare sizes as round", () => {
+    expect(parseBareOval("75mm")).toEqual({ shape: "oval", width: 75, length: 42 });
+    expect(parseDumpBaseSize("120mm")).toEqual({ shape: "oval", width: 120, length: 92 });
+    expect(parseDumpBaseSize("75mm")).toEqual({ shape: "oval", width: 75, length: 42 });
+    for (const raw of ["40mm", "150mm", "130mm", "28.5mm"]) expect(parseBareOval(raw), raw).toBeNull();
+    expect(parseDumpBaseSize("150mm")).toEqual({ shape: "round", diameter: 150 });
+  });
+
   it("stays null for categories and bare lists", () => {
     expect(parseDumpBaseSize("Hull")).toBeNull();
     expect(parseDumpBaseSize("None")).toBeNull();
     expect(parseDumpBaseSize("32mm, 40mm")).toBeNull();
     expect(parseDumpBaseSize(null)).toBeNull();
+  });
+});
+
+describe("bare lists (sorted sizes, no model attribution)", () => {
+  const r = (diameter: number) => ({ shape: "round" as const, diameter });
+  it("parses a comma list of sizes and nothing else", () => {
+    expect(parseBareBaseSizeList("28.5mm, 32mm, 40mm")).toEqual([r(28.5), r(32), r(40)]);
+    expect(parseBareBaseSizeList("60mm, 60x35.5mm Oval Base")).toEqual([r(60), { shape: "oval", width: 60, length: 35.5 }]);
+    for (const raw of ["40mm", "Blessed Blade: 28.5mm", "32mm, Hull", "Proctor-Vigilant, Vigilants: 28.5mm", "", null]) {
+      expect(parseBareBaseSizeList(raw), String(raw)).toBeNull();
+    }
+  });
+
+  it("is consistent only when the authored bases are exactly the listed sizes", () => {
+    const list = [r(28.5), r(32), r(40)];
+    expect(bareListConsistent([r(40), r(32), r(28.5)], list)).toBe(true);
+    // Every model on 40mm: no model carries the listed 28.5mm or 32mm.
+    expect(bareListConsistent([r(40), r(40), r(40)], list)).toBe(false);
+    // An unlisted size is wrong even while other models are still empty.
+    expect(bareListConsistent([r(50), undefined, undefined], list)).toBe(false);
+    // Empty models are no evidence that a listed size is missing.
+    expect(bareListConsistent([r(40), undefined, undefined], list)).toBe(true);
+    // The app's 1 mm oval rounding still counts as listed.
+    expect(bareListConsistent([{ shape: "oval", width: 75, length: 42 }, r(32)], [r(32), { shape: "oval", width: 74, length: 42 }])).toBe(true);
   });
 });
 
@@ -217,6 +252,7 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("base-size reconcile over the
     expect(report.filled).toEqual([]);
     expect(report.corrected).toEqual([]);
     expect(report.dedrafted).toEqual([]);
+    expect(report.listDrafted).toEqual([]);
     expect(report.staged).toEqual([]);
     expect(report.confirmed.units).toBeGreaterThan(700);
   });
@@ -260,6 +296,16 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("base-size reconcile over the
     ]);
     // A category carries no dimensions at all.
     expect(report.unresolved.find((u) => u.unit === "gunwagon")).toMatchObject({ form: "category", raw: "None" });
+  });
+
+  it("drafts bases a bare list contradicts and decodes the Ork oval shorthand", () => {
+    // "28.5mm, 32mm, 40mm": every model on 40mm cannot be right, and the list cannot say which is.
+    const crusader = readRecord("adeptus-astartes/unit-compositions.json", "crusader-squad")?.models ?? [];
+    expect(crusader.length).toBeGreaterThan(0);
+    for (const m of crusader) expect(m.base_size_mm?.draft, m.name).toBe(true);
+    expect(readRecord("adeptus-astartes/units.json", "crusader-squad")?.base_size_mm?.draft).toBe(true);
+    expect(readRecord("orks/units.json", "deffkoptas")?.base_size_mm).toEqual({ shape: "oval", width: 75, length: 42 });
+    expect(readRecord("orks/units.json", "blitza-bommer")?.base_size_mm).toEqual({ shape: "oval", width: 120, length: 92 });
   });
 
   it("reports a model whose labels disagree instead of picking one", () => {

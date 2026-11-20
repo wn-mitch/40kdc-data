@@ -629,7 +629,8 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 40
+      "diameter": 40,
+      "draft": true
     },
     "model_count": {
       "min": 10,
@@ -1043,7 +1044,8 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 40
+      "diameter": 40,
+      "draft": true
     },
     "model_count": {
       "min": 4,
@@ -5389,7 +5391,8 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 32
+      "diameter": 32,
+      "draft": true
     },
     "model_count": {
       "min": 5,
@@ -5497,7 +5500,8 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 32
+      "diameter": 32,
+      "draft": true
     },
     "model_count": {
       "min": 10,
@@ -12944,7 +12948,8 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 40
+      "diameter": 40,
+      "draft": true
     },
     "model_count": {
       "min": 3,
@@ -13989,7 +13994,8 @@
     "base_size_mm": {
       "shape": "oval",
       "width": 60,
-      "length": 35.5
+      "length": 35.5,
+      "draft": true
     },
     "model_count": {
       "min": 6,
