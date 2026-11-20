@@ -162,6 +162,14 @@ def _applies(buff: Buff, ctx: EngineContext) -> bool:
         return True
     if w.get("onCritical") is not None and ctx.get("criticalRoll") != w["onCritical"]:
         return False
+    if w.get("attackerFilter") or w.get("targetFilter"):
+        # Deferred: from_dsl imports this module.
+        from wh40kdc.cruncher.from_dsl import _matches_unit_filter
+
+        # An enemy selection's filter on the selected unit: an undecided predicate drops the buff.
+        for key, side in (("attackerFilter", "attacker"), ("targetFilter", "target")):
+            if w.get(key) and _matches_unit_filter(w[key], ctx, side, "enemy") is not True:
+                return False
     phases = w.get("phases")
     if phases and ctx.get("phase") not in phases:
         return False

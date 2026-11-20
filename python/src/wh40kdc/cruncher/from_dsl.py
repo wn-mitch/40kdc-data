@@ -3744,6 +3744,9 @@ def _combine_applicability(a: dict[str, Any], b: dict[str, Any]) -> dict[str, An
         out["rollType"] = b["rollType"]
     if b.get("onCritical"):
         out["onCritical"] = b["onCritical"]
+    for side_filter in ("attackerFilter", "targetFilter"):
+        if side_filter in b:
+            out[side_filter] = b[side_filter]
     if b.get("requiresTargetKeyword"):
         out["requiresTargetKeyword"] = b["requiresTargetKeyword"]
     if b.get("requiresAttackerKeyword"):

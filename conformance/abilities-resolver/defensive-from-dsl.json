@@ -2693,6 +2693,93 @@
         "needKeys": [],
         "activatable": []
       }
+    },
+    {
+      "caseId": "canonical/selection-backref/enemy-filter-attacker-none-of",
+      "abilityId": "fabricated-selection-backref",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-selection-backref",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 18
+              },
+              "of": "this-unit"
+            },
+            "none_of": [
+              "VEHICLE"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "selected-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerTurn": false
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-selection-backref#selected",
+            "label": "Selected enemy unit: -1 to hit",
+            "group": null,
+            "requires": [
+              {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy",
+                    "within": {
+                      "range": {
+                        "inches": 18
+                      },
+                      "of": "this-unit"
+                    },
+                    "none_of": [
+                      "VEHICLE"
+                    ]
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  }
+                }
+              }
+            ],
+            "capRaise": null,
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": -1
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 }

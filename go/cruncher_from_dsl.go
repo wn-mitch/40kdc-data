@@ -2794,6 +2794,11 @@ func combineApplicability(a, b map[string]any) map[string]any {
 	if v, ok := b["onCritical"]; ok && v != nil {
 		out["onCritical"] = v
 	}
+	for _, key := range []string{"attackerFilter", "targetFilter"} {
+		if v, ok := b[key]; ok {
+			out[key] = v
+		}
+	}
 	if v, ok := b["requiresTargetKeyword"]; ok && v != nil {
 		out["requiresTargetKeyword"] = v
 	}

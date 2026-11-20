@@ -81,6 +81,7 @@ import { canonicalDefensiveLeverCases } from "./gen-conformance-defensive-levers
 import { canonicalMfmLoadoutCases } from "./gen-conformance-mfm-loadout.js";
 import { canonicalMfmUnitCases } from "./gen-conformance-mfm-unit.js";
 import { canonicalDslCases, refreshResolverDslCases, withCanonicalDslCases, type ResolverDslCase } from "./gen-conformance-resolver-dsl.js";
+import { canonicalSelectedEnemyCruncherCases } from "./gen-conformance-selection-cases.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "../..");
@@ -4783,7 +4784,7 @@ function genCanonicalCruncherCases(): void {
     writeJson(path, corpus);
     console.log(`abilities-resolver/${filename}: ${corpus.cases.length} cases`);
   }
-  for (const { filename, value } of [...canonicalWeaponScopeCases(Dataset.embedded()), ...canonicalAttackCompareCases(Dataset.embedded()), ...canonicalCriticalWoundCases(Dataset.embedded()), ...canonicalRerollSubsetCases(Dataset.embedded()), ...canonicalRemovedKeywordCruncherCases(Dataset.embedded())]) {
+  for (const { filename, value } of [...canonicalWeaponScopeCases(Dataset.embedded()), ...canonicalAttackCompareCases(Dataset.embedded()), ...canonicalCriticalWoundCases(Dataset.embedded()), ...canonicalRerollSubsetCases(Dataset.embedded()), ...canonicalRemovedKeywordCruncherCases(Dataset.embedded()), ...canonicalSelectedEnemyCruncherCases(Dataset.embedded())]) {
     writeJson(join(CONFORMANCE, "cruncher", filename), value);
   }
 }

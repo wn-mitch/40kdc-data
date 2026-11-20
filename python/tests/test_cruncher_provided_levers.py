@@ -131,7 +131,11 @@ def test_enemy_selection_incoming_grant_is_the_attackers_own_behind_its_roll() -
             },
             "applicableWhen": {
                 "phases": ["shooting"],
-                "excludedTargetKeywords": ["MONSTER", "VEHICLE"],
+                "targetFilter": {
+                    "owner": "enemy",
+                    "level": "unit",
+                    "none_of": ["MONSTER", "VEHICLE"],
+                },
             },
         }
     ]

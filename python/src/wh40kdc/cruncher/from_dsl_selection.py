@@ -40,21 +40,16 @@ def plan_selection(
       leaves it unsupported. When the eligibility or ``filter.excluding`` excludes the ability's
       own unit, the lever exists only when another unit provides the ability
       (``abilityKind: "support"``).
-    - An enemy selection reaches the other side of the attack.
+    - An enemy selection reaches the other side of the attack, gated by the selector's unit
+      filter less range and visibility; the gate is decided when the attack resolves.
     - A top-level dice gate with no failure branch becomes the lever's content; its roll joins
       ``requires``.
     """
     selector = node.get("selector") if isinstance(node.get("selector"), dict) else None
     filt = selector.get("filter") if isinstance(selector, dict) else None
-    unit_ids = filt.get("unit_ids") if isinstance(filt, dict) else None
     owner = filt.get("owner") if isinstance(filt, dict) else None
-    if selector is None or not isinstance(filt, dict) or (
-        owner not in ("friendly", "enemy")
-        and not (unit_ids is not None and owner in (None, "any"))
-    ):
+    if selector is None or not isinstance(filt, dict) or owner not in ("friendly", "enemy"):
         return {"kind": "none"}
-    if unit_ids is not None and owner in (None, "any"):
-        owner = "friendly"
     if filt.get("level") == "model" or filt.get("model_names") is not None:
         return {"kind": "none"}
     bind_as = selector.get("bind_as")
@@ -92,53 +87,11 @@ def plan_selection(
         effect = _retarget(node.get("effect"), _SELECTED_UNIT, binding)
         label = "Selected unit"
     else:
-        all_of = filt.get("all_of")
-        any_of = filt.get("any_of")
-        excluded = filt.get("none_of")
-        has_keywords = "all_of" in filt or "any_of" in filt
-        has_excluded = "none_of" in filt
-        if (all_of is not None and not _is_keyword_list(all_of)) or (
-            any_of is not None and not _is_keyword_list(any_of)
-        ) or (excluded is not None and not _is_keyword_list(excluded)):
-            return {
-                "kind": "unsupported",
-                "reason": "select-units: the selector's keyword lists are malformed",
-            }
-        if unit_ids is not None:
-            if (
-                filt.get("level") != "unit"
-                or not isinstance(unit_ids, list)
-                or not unit_ids
-                or any(not isinstance(unit_id, str) for unit_id in unit_ids)
-            ):
-                return {
-                    "kind": "unsupported",
-                    "reason": "select-units: unit_ids identity filter is malformed",
-                }
-            identity = context.get(
-                "targetUnitId" if perspective == "attacker" else "attackerUnitId"
-            )
-            if not isinstance(identity, str):
-                return {
-                    "kind": "unsupported",
-                    "reason": "select-units: unit identity is unavailable",
-                }
-            if identity not in unit_ids:
-                return {"kind": "skip"}
         other = "defender" if perspective == "attacker" else "attacker"
-        enemy_keywords: list[str] = []
-        if isinstance(all_of, list):
-            enemy_keywords.extend(all_of)
-        if isinstance(any_of, list):
-            enemy_keywords.extend(any_of)
-        gate = _selected_enemy_gate(
-            enemy_keywords if has_keywords else None,
-            excluded if has_excluded else None,
-            perspective,
+        known = {k: v for k, v in filt.items() if k not in ("within", "visible", "excluding")}
+        applicability = (
+            {"targetFilter": known} if perspective == "attacker" else {"attackerFilter": known}
         )
-        if isinstance(gate, str):
-            return {"kind": "unsupported", "reason": gate}
-        applicability = gate
         effect = selection_holds(
             _retarget(node.get("effect"), other, binding),
             other,
@@ -160,32 +113,6 @@ def plan_selection(
     if applicability:
         plan["applicability"] = applicability
     return plan
-
-
-def _selected_enemy_gate(
-    keywords: list[str] | None, excluded: list[str] | None, perspective: str
-) -> dict[str, Any] | None | str:
-    """The keyword gate an enemy selector puts on the selected unit, or a reason the buff layer
-    cannot express it."""
-    out: dict[str, Any] = {}
-    if keywords:
-        if len(keywords) > 1:
-            return (
-                "select-units: more than one required keyword on the selected enemy unit is not "
-                "gated by the buff layer"
-            )
-        if perspective == "attacker":
-            out["requiresTargetKeyword"] = keywords[0]
-        else:
-            out["requiresAttackerKeyword"] = keywords[0]
-    if excluded:
-        if perspective != "attacker":
-            return (
-                "select-units: excluded keywords on the attacking unit are not gated by the buff "
-                "layer"
-            )
-        out["excludedTargetKeywords"] = list(excluded)
-    return out or None
 
 
 def _names_selected(value: Any, binding: str | None) -> bool:

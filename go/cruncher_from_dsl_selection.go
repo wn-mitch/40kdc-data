@@ -40,8 +40,9 @@ type selectionPlan struct {
 // vouch for); a predicate the context cannot decide leaves it unsupported. When
 // the eligibility or filter.excluding excludes the ability's own unit, the lever
 // exists only when another unit provides the ability (abilityKind "support").
-// An enemy selection reaches the other side of the attack. A
-// top-level dice gate with no failure branch becomes the lever's content; its
+// An enemy selection reaches the other side of the attack, gated by the
+// selector's unit filter less range and visibility; the gate is decided when the
+// attack resolves. A top-level dice gate with no failure branch becomes the lever's content; its
 // roll joins requires.
 func planSelection(node, source map[string]any, perspective string, context map[string]any) selectionPlan {
 	selector, ok := node["selector"].(map[string]any)
@@ -102,29 +103,19 @@ func planSelection(node, source map[string]any, perspective string, context map[
 		effect = retargetSelected(node["effect"], selectedUnit, binding)
 		label = "Selected unit"
 	} else {
-		keywords, keywordsOK := selectorKeywordList(filter["all_of"])
-		anyKeywords, anyOK := selectorKeywordList(filter["any_of"])
-		excluded, excludedOK := selectorKeywordList(filter["none_of"])
-		if (filter["all_of"] != nil && !keywordsOK) || (filter["any_of"] != nil && !anyOK) || (filter["none_of"] != nil && !excludedOK) {
-			return selectionPlan{kind: "unsupported", reason: "select-units: the selector's keyword lists are malformed"}
-		}
-		if len(anyKeywords) > 0 {
-			// The buff gate can represent one required keyword, not an arbitrary
-			// OR predicate on an enemy selector.
-			return selectionPlan{kind: "unsupported", reason: "select-units: any_of keyword selectors are not gated by the buff layer"}
-		}
 		other := "attacker"
+		gateKey := "attackerFilter"
 		if perspective == "attacker" {
 			other = "defender"
+			gateKey = "targetFilter"
 		}
-		if filter["not_all_of"] != nil {
-			return selectionPlan{kind: "unsupported", reason: "select-units: not_all_of keyword selectors are not gated by the buff layer"}
+		known := make(map[string]any, len(filter))
+		for k, v := range filter {
+			if k != "within" && k != "visible" && k != "excluding" {
+				known[k] = v
+			}
 		}
-		gate, reason := selectedEnemyGate(keywords, excluded, perspective)
-		if reason != "" {
-			return selectionPlan{kind: "unsupported", reason: reason}
-		}
-		applicability = gate
+		applicability = map[string]any{gateKey: known}
 		effect = selectionHolds(retargetSelected(node["effect"], other, binding), other, selectionDesignatedTags(node["effect"], binding), binding)
 		label = "Selected enemy unit"
 	}
@@ -255,36 +246,6 @@ func matchesEachRecipient(filter map[string]any, context map[string]any, perspec
 		return false, "for-each-unit recipient keywords are unavailable"
 	}
 	return true, ""
-}
-
-// selectedEnemyGate is the keyword gate an enemy selector puts on the selected
-// unit, or a reason the buff layer cannot express it.
-func selectedEnemyGate(keywords, excluded []string, perspective string) (map[string]any, string) {
-	out := map[string]any{}
-	if len(keywords) > 0 {
-		if len(keywords) > 1 {
-			return nil, "select-units: more than one required keyword on the selected enemy unit is not gated by the buff layer"
-		}
-		if perspective == "attacker" {
-			out["requiresTargetKeyword"] = keywords[0]
-		} else {
-			out["requiresAttackerKeyword"] = keywords[0]
-		}
-	}
-	if len(excluded) > 0 {
-		if perspective != "attacker" {
-			return nil, "select-units: excluded keywords on the attacking unit are not gated by the buff layer"
-		}
-		list := make([]any, len(excluded))
-		for i, k := range excluded {
-			list[i] = k
-		}
-		out["excludedTargetKeywords"] = list
-	}
-	if len(out) == 0 {
-		return nil, ""
-	}
-	return out, ""
 }
 
 // namesSelection reports whether a unit-ref names the selection's unit:

@@ -1,0 +1,50 @@
+{
+  "name": "Canonical selected enemy: any-of-fails",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 0
+  },
+  "target": {
+    "unitId": "outrider-squad",
+    "profileIndex": 0
+  },
+  "modelsFiring": 5,
+  "context": {
+    "phase": "shooting",
+    "withinHalfRange": false,
+    "attackerStationary": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-selected-enemy",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "save-mod",
+        "value": -1
+      },
+      "applicableWhen": {
+        "targetFilter": {
+          "owner": "enemy",
+          "any_of": [
+            "INFANTRY",
+            "MONSTER"
+          ]
+        }
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 5,
+      "hits": 3.3333,
+      "wounds": 1.6667,
+      "unsaved": 0.8333,
+      "damage": 1.6667,
+      "after-fnp": 1.6667,
+      "models-killed": 0.4167
+    }
+  }
+}
