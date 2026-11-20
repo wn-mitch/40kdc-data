@@ -3481,8 +3481,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 32
         },
         "default_weapon_ids": [
           "plasma-pistol-aquila-kill-team",
@@ -3502,8 +3501,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 40
         }
       },
       {
@@ -3513,8 +3511,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 32
         },
         "default_weapon_ids": [
           "bolt-pistol-aquila-kill-team",
@@ -3529,8 +3526,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 32
         },
         "default_weapon_ids": [
           "deathwatch-marksman-bolt-carbine",
@@ -3546,8 +3542,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 32
         },
         "default_weapon_ids": [
           "bolt-pistol-aquila-kill-team",
@@ -3563,8 +3558,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 32
         },
         "default_weapon_ids": [
           "special-issue-bolt-pistol",

@@ -4326,8 +4326,7 @@
         "base_size_mm": {
           "shape": "oval",
           "width": 60,
-          "length": 35.5,
-          "draft": true
+          "length": 35.5
         },
         "default_weapon_ids": [
           "power-weapon-claw-of-ascension-atalan-jackals",
@@ -4340,10 +4339,8 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "oval",
-          "width": 60,
-          "length": 35.5,
-          "draft": true
+          "shape": "round",
+          "diameter": 60
         },
         "default_weapon_ids": [
           "mining-laser",
@@ -4359,8 +4356,7 @@
         "base_size_mm": {
           "shape": "oval",
           "width": 60,
-          "length": 35.5,
-          "draft": true
+          "length": 35.5
         },
         "default_weapon_ids": [
           "stolen-blade-claw-of-ascension-atalan-jackals",

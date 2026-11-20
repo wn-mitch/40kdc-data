@@ -136,6 +136,10 @@
     "faction_keywords": [
       "Orks"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -1599,8 +1603,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 32,
-      "draft": true
+      "diameter": 32
     },
     "model_count": {
       "min": 6,
@@ -1866,8 +1869,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 32,
-      "draft": true
+      "diameter": 32
     },
     "model_count": {
       "min": 6,
@@ -5116,6 +5118,10 @@
     "faction_keywords": [
       "Orks"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 10,
       "max": 10

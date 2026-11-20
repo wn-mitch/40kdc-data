@@ -8991,7 +8991,7 @@ Add 1 to the Strength characteristic of melee weapons equipped by models in this
                     <characteristic name="LD" typeId="58d2-b879-49c7-43bc">6+</characteristic>
                     <characteristic name="OC" typeId="bef7-942a-1a23-59f8">2</characteristic>
                     <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc"></characteristic>
-                    <characteristic name="Base" typeId="nr-base-size">40mm</characteristic>
+                    <characteristic name="Base" typeId="nr-base-size">32mm</characteristic>
                   </characteristics>
                 </profile>
               </profiles>
@@ -9080,7 +9080,7 @@ Add 1 to the Strength characteristic of melee weapons equipped by models in this
                     <characteristic name="LD" typeId="58d2-b879-49c7-43bc">6+</characteristic>
                     <characteristic name="OC" typeId="bef7-942a-1a23-59f8">2</characteristic>
                     <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc"></characteristic>
-                    <characteristic name="Base" typeId="nr-base-size">40mm</characteristic>
+                    <characteristic name="Base" typeId="nr-base-size">32mm</characteristic>
                   </characteristics>
                 </profile>
               </profiles>
@@ -9293,7 +9293,7 @@ Add 1 to the Strength characteristic of melee weapons equipped by models in this
                     <characteristic name="LD" typeId="58d2-b879-49c7-43bc">6+</characteristic>
                     <characteristic name="OC" typeId="bef7-942a-1a23-59f8">2</characteristic>
                     <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc"></characteristic>
-                    <characteristic name="Base" typeId="nr-base-size">40mm</characteristic>
+                    <characteristic name="Base" typeId="nr-base-size">32mm</characteristic>
                   </characteristics>
                 </profile>
               </profiles>
@@ -10441,7 +10441,7 @@ For Transport capacity, each Cenobyte Servitor model occupies 0 model spaces.</c
                     <characteristic name="LD" typeId="58d2-b879-49c7-43bc">5+</characteristic>
                     <characteristic name="OC" typeId="bef7-942a-1a23-59f8">1</characteristic>
                     <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc">4+</characteristic>
-                    <characteristic name="Base" typeId="nr-base-size">40mm</characteristic>
+                    <characteristic name="Base" typeId="nr-base-size">28.5mm</characteristic>
                   </characteristics>
                 </profile>
               </profiles>
@@ -10496,7 +10496,7 @@ For Transport capacity, each Cenobyte Servitor model occupies 0 model spaces.</c
                     <characteristic name="LD" typeId="58d2-b879-49c7-43bc">8+</characteristic>
                     <characteristic name="OC" typeId="bef7-942a-1a23-59f8">1</characteristic>
                     <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc">4+</characteristic>
-                    <characteristic name="Base" typeId="nr-base-size">40mm</characteristic>
+                    <characteristic name="Base" typeId="nr-base-size">28.5mm</characteristic>
                   </characteristics>
                 </profile>
               </profiles>
@@ -38843,7 +38843,7 @@ While the Assault Doctrine option of Combat Doctrines is active, melee weapons e
             <characteristic name="LD" typeId="58d2-b879-49c7-43bc">6+</characteristic>
             <characteristic name="OC" typeId="bef7-942a-1a23-59f8">1</characteristic>
             <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc"></characteristic>
-            <characteristic name="Base" typeId="nr-base-size"></characteristic>
+            <characteristic name="Base" typeId="nr-base-size">28.5mm</characteristic>
           </characteristics>
         </profile>
         <profile name="Strategium Command" id="e06a-ff19-b783-c68d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -38904,7 +38904,7 @@ While the Assault Doctrine option of Combat Doctrines is active, melee weapons e
                     <characteristic name="LD" typeId="58d2-b879-49c7-43bc">6+</characteristic>
                     <characteristic name="OC" typeId="bef7-942a-1a23-59f8">2</characteristic>
                     <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc"></characteristic>
-                    <characteristic name="Base" typeId="nr-base-size"></characteristic>
+                    <characteristic name="Base" typeId="nr-base-size">28.5mm</characteristic>
                   </characteristics>
                 </profile>
               </profiles>
@@ -38959,7 +38959,7 @@ While the Assault Doctrine option of Combat Doctrines is active, melee weapons e
                     <characteristic name="LD" typeId="58d2-b879-49c7-43bc">6+</characteristic>
                     <characteristic name="OC" typeId="bef7-942a-1a23-59f8">1</characteristic>
                     <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc">4+</characteristic>
-                    <characteristic name="Base" typeId="nr-base-size"></characteristic>
+                    <characteristic name="Base" typeId="nr-base-size">28.5mm</characteristic>
                   </characteristics>
                 </profile>
               </profiles>
@@ -39014,7 +39014,7 @@ While the Assault Doctrine option of Combat Doctrines is active, melee weapons e
                     <characteristic name="LD" typeId="58d2-b879-49c7-43bc">6+</characteristic>
                     <characteristic name="OC" typeId="bef7-942a-1a23-59f8">1</characteristic>
                     <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc">5+</characteristic>
-                    <characteristic name="Base" typeId="nr-base-size"></characteristic>
+                    <characteristic name="Base" typeId="nr-base-size">28.5mm</characteristic>
                   </characteristics>
                 </profile>
               </profiles>
@@ -39069,7 +39069,7 @@ While the Assault Doctrine option of Combat Doctrines is active, melee weapons e
                     <characteristic name="LD" typeId="58d2-b879-49c7-43bc">6+</characteristic>
                     <characteristic name="OC" typeId="bef7-942a-1a23-59f8">1</characteristic>
                     <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc"></characteristic>
-                    <characteristic name="Base" typeId="nr-base-size"></characteristic>
+                    <characteristic name="Base" typeId="nr-base-size">28.5mm</characteristic>
                   </characteristics>
                 </profile>
               </profiles>
@@ -39165,7 +39165,7 @@ While the Assault Doctrine option of Combat Doctrines is active, melee weapons e
                     <characteristic name="LD" typeId="58d2-b879-49c7-43bc">6+</characteristic>
                     <characteristic name="OC" typeId="bef7-942a-1a23-59f8">1</characteristic>
                     <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc"></characteristic>
-                    <characteristic name="Base" typeId="nr-base-size"></characteristic>
+                    <characteristic name="Base" typeId="nr-base-size">28.5mm</characteristic>
                   </characteristics>
                 </profile>
               </profiles>
@@ -50867,7 +50867,7 @@ While the target is within 6" of the unit, you can re-roll a Hit roll of 1.</cha
                     <characteristic name="LD" typeId="58d2-b879-49c7-43bc">6+</characteristic>
                     <characteristic name="OC" typeId="bef7-942a-1a23-59f8">1</characteristic>
                     <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc"></characteristic>
-                    <characteristic name="Base" typeId="nr-base-size">35.5x60mm</characteristic>
+                    <characteristic name="Base" typeId="nr-base-size">32mm</characteristic>
                   </characteristics>
                 </profile>
               </profiles>
@@ -50966,7 +50966,7 @@ While the target is within 6" of the unit, you can re-roll a Hit roll of 1.</cha
                     <characteristic name="LD" typeId="58d2-b879-49c7-43bc">6+</characteristic>
                     <characteristic name="OC" typeId="bef7-942a-1a23-59f8">1</characteristic>
                     <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc"></characteristic>
-                    <characteristic name="Base" typeId="nr-base-size">35.5x60mm</characteristic>
+                    <characteristic name="Base" typeId="nr-base-size">32mm</characteristic>
                   </characteristics>
                 </profile>
               </profiles>
@@ -51151,7 +51151,7 @@ While the target is within 6" of the unit, you can re-roll a Hit roll of 1.</cha
                     <characteristic name="LD" typeId="58d2-b879-49c7-43bc">8+</characteristic>
                     <characteristic name="OC" typeId="bef7-942a-1a23-59f8">0</characteristic>
                     <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc"></characteristic>
-                    <characteristic name="Base" typeId="nr-base-size">35.5x60mm</characteristic>
+                    <characteristic name="Base" typeId="nr-base-size">32mm</characteristic>
                   </characteristics>
                 </profile>
               </profiles>

@@ -5205,7 +5205,11 @@
         "max": 1,
         "default_weapon_ids": [
           "skullsmasher-and-mangler"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Jakhal with Autopistol and Chainblade",
@@ -5214,7 +5218,11 @@
         "default_weapon_ids": [
           "autopistol-frenzied-reavers-jakhals",
           "chainblade-frenzied-reavers-jakhals"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Jakhal with Autopistol and Mauler Chainblade",
@@ -5223,7 +5231,11 @@
         "default_weapon_ids": [
           "autopistol-frenzied-reavers-jakhals",
           "mauler-chainblade"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Jakhal Pack Leader",
@@ -5233,7 +5245,11 @@
           "autopistol-frenzied-reavers-jakhals",
           "chainblade-frenzied-reavers-jakhals"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {

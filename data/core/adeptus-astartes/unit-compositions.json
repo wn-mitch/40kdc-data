@@ -965,8 +965,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40,
-          "draft": true
+          "diameter": 40
         }
       },
       {
@@ -981,8 +980,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40,
-          "draft": true
+          "diameter": 32
         }
       },
       {
@@ -996,8 +994,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40,
-          "draft": true
+          "diameter": 28.5
         }
       }
     ],
@@ -2070,8 +2067,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40,
-          "draft": true
+          "diameter": 40
         }
       },
       {
@@ -2084,8 +2080,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40,
-          "draft": true
+          "diameter": 28.5
         }
       }
     ],
@@ -9528,8 +9523,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 32
         }
       },
       {
@@ -9544,8 +9538,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 40
         }
       },
       {
@@ -9555,8 +9548,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 32
         },
         "default_weapon_ids": [
           "heavy-thunder-hammer",
@@ -9571,8 +9563,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 32
         },
         "default_weapon_ids": [
           "deathwatch-marksman-bolt-carbine",
@@ -9588,8 +9579,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 32
         },
         "default_weapon_ids": [
           "stalker-bolt-rifle",
@@ -9605,8 +9595,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 32
         },
         "default_weapon_ids": [
           "special-issue-bolt-pistol",
@@ -10195,8 +10184,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 32
         },
         "default_weapon_ids": [
           "heavy-bolt-pistol",
@@ -10215,8 +10203,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 32
         }
       },
       {
@@ -10230,8 +10217,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 40
         }
       }
     ],
@@ -20260,7 +20246,11 @@
           "bolt-rifle-wardens-of-ultramar",
           "ceramite-fists-wardens-of-ultramar"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Veteran Sergeant Metaurus",
@@ -20270,7 +20260,11 @@
           "heavy-bolt-pistol-wardens-of-ultramar",
           "master-crafted-power-weapon-wardens-of-ultramar"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Gaius Silva",
@@ -20280,7 +20274,11 @@
           "archeotech-laspistol",
           "power-weapon-wardens-of-ultramar"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Aemelia Minervas",
@@ -20290,7 +20288,11 @@
           "archeotech-laspistol",
           "power-weapon-wardens-of-ultramar"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Dainal Komelius",
@@ -20300,7 +20302,11 @@
           "astropathic-blast",
           "force-stave"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Lucia Vestha",
@@ -20310,7 +20316,11 @@
           "archeotech-laspistol",
           "ultramarian-combat-weapons"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -27514,8 +27524,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40,
-          "draft": true
+          "diameter": 40
         }
       },
       {
@@ -27524,9 +27533,9 @@
         "max": 6,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "round",
-          "diameter": 40,
-          "draft": true
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
         },
         "default_weapon_ids": [
           "teeth-and-claws-wolf-guard-headtakers"
@@ -29453,10 +29462,8 @@
         ],
         "is_leader_model": true,
         "base_size_mm": {
-          "shape": "oval",
-          "width": 60,
-          "length": 35.5,
-          "draft": true
+          "shape": "round",
+          "diameter": 32
         }
       },
       {
@@ -29469,10 +29476,8 @@
         ],
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "oval",
-          "width": 60,
-          "length": 35.5,
-          "draft": true
+          "shape": "round",
+          "diameter": 32
         }
       },
       {
@@ -29486,8 +29491,7 @@
         "base_size_mm": {
           "shape": "oval",
           "width": 60,
-          "length": 35.5,
-          "draft": true
+          "length": 35.5
         }
       }
     ],
@@ -33985,6 +33989,10 @@
         "min": 2,
         "max": 2,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "heavy-bolt-pistol-vow-sworn-crusader-squad",
           "chainsword-vow-sworn-crusader-squad"
@@ -33995,6 +34003,10 @@
         "min": 2,
         "max": 2,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "bolt-pistol-vow-sworn-crusader-squad",
           "bolt-rifle-vow-sworn-crusader-squad",
@@ -34006,6 +34018,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "heavy-bolt-pistol-vow-sworn-crusader-squad",
           "master-crafted-power-weapon-vow-sworn-crusader-squad"
@@ -34016,6 +34032,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "bolt-pistol-vow-sworn-crusader-squad",
           "knives-and-fists-vow-sworn-crusader-squad",
@@ -34027,6 +34047,10 @@
         "min": 2,
         "max": 2,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
         "default_weapon_ids": [
           "neophyte-firearm",
           "knives-and-fists-vow-sworn-crusader-squad"
@@ -34037,6 +34061,10 @@
         "min": 2,
         "max": 2,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
         "default_weapon_ids": [
           "bolt-pistol-vow-sworn-crusader-squad",
           "chainsword-vow-sworn-crusader-squad"

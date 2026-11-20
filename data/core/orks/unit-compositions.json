@@ -2055,8 +2055,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 32
         },
         "default_weapon_ids": [
           "smash-hammer"
@@ -2104,8 +2103,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 40
         },
         "default_weapon_ids": [
           "choppa-breaka-boyz",
@@ -2625,8 +2623,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 32
         }
       },
       {
@@ -2636,8 +2633,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32,
-          "draft": true
+          "diameter": 40
         },
         "default_weapon_ids": [
           "choppa-tankbustas",
@@ -3189,7 +3185,11 @@
           "kustom-choppa-boyz",
           "kombi-skorcha-boyz"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Boy",
@@ -3200,7 +3200,11 @@
           "shoota-boyz",
           "slugga"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -8228,7 +8232,11 @@
           "kustom-shoota",
           "slugga-ardmob-boyz"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Boyz",
@@ -8239,7 +8247,11 @@
           "shoota-ardmob-boyz",
           "slugga-ardmob-boyz"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -9437,6 +9449,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "big-choppa",
           "kombi-rokkit-ardmob-boyz-2",
@@ -9449,6 +9465,10 @@
         "min": 9,
         "max": 9,
         "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "choppa",
           "shoota",

@@ -9,28 +9,97 @@ never guessed. A parsed dump value carries no `draft` flag.
 
 | Metric | Count |
 |---|--:|
-| Filled | 0 |
-| Corrected | 8 |
-| De-drafted | 0 |
+| Filled | 28 |
+| Corrected | 15 |
+| De-drafted | 26 |
 | Rounding kept (authored kept) | 5 |
-| Confirmed (units) | 884 |
-| Confirmed (models) | 1250 |
+| Confirmed (units) | 889 |
+| Confirmed (models) | 1254 |
 | Unmatched labels | 14 |
 | Conflicting labels | 2 |
 | Representative unresolved | 2 |
-| Unresolved (list/category/null) | 198 |
-| Drafted (contradicts a bare list) | 41 |
+| Unresolved (list/category/null) | 182 |
+| Drafted (contradicts a bare list) | 0 |
+| Attributed bare lists (reviewed) | 16 |
+| Attributions refused / unused | 0 / 0 |
+
+## Filled (was empty)
+
+- adeptus-astartes/wardens-of-ultramar :: Ancient Gadriel: none → round 40
+- adeptus-astartes/wardens-of-ultramar :: Veteran Sergeant Metaurus: none → round 40
+- adeptus-astartes/wardens-of-ultramar :: Gaius Silva: none → round 28.5
+- adeptus-astartes/wardens-of-ultramar :: Aemelia Minervas: none → round 28.5
+- adeptus-astartes/wardens-of-ultramar :: Dainal Komelius: none → round 28.5
+- adeptus-astartes/wardens-of-ultramar :: Lucia Vestha: none → round 28.5
+- adeptus-astartes/wardens-of-ultramar: none → round 28.5
+- adeptus-astartes/vow-sworn-crusader-squad :: Initiate with Heavy Bolt Pistol and Chainsword: none → round 32
+- adeptus-astartes/vow-sworn-crusader-squad :: Initiate with Bolt Pistol, Bolt Rifle and Knives and Fists: none → round 32
+- adeptus-astartes/vow-sworn-crusader-squad :: Sword Brother: none → round 40
+- adeptus-astartes/vow-sworn-crusader-squad :: Initiate with Pyreblaster, Bolt Pistol and Knives and Fists: none → round 32
+- adeptus-astartes/vow-sworn-crusader-squad :: Neophyte with Neophyte Firearm and Knives and Fists: none → round 28.5
+- adeptus-astartes/vow-sworn-crusader-squad :: Neophyte with Bolt Pistol and Chainsword: none → round 28.5
+- adeptus-astartes/vow-sworn-crusader-squad: none → round 32
+- genestealer-cults/claw-of-ascension-atalan-jackals: none → oval 60x35.5
+- orks/boyz :: Nob: none → round 40
+- orks/boyz :: Boy: none → round 32
+- orks/ardmob-boyz :: Boss Nob: none → round 40
+- orks/ardmob-boyz :: Boyz: none → round 32
+- orks/ardmob-boyz: none → round 32
+- orks/ardmob-boyz-2 :: Boss Nob: none → round 40
+- orks/ardmob-boyz-2 :: Boyz: none → round 32
+- orks/ardmob-boyz-2: none → round 32
+- world-eaters/frenzied-reavers-jakhals :: Dishonoured: none → round 40
+- world-eaters/frenzied-reavers-jakhals :: Jakhal with Autopistol and Chainblade: none → round 28.5
+- world-eaters/frenzied-reavers-jakhals :: Jakhal with Autopistol and Mauler Chainblade: none → round 28.5
+- world-eaters/frenzied-reavers-jakhals :: Jakhal Pack Leader: none → round 28.5
+- world-eaters/frenzied-reavers-jakhals: none → round 28.5
 
 ## Corrected (dump authoritative)
 
-- orks/deffkoptas: round 75 → oval 75x42
-- orks/deffkoptas :: Deffkopta: round 75 → oval 75x42
-- orks/dakkajet: round 120 → oval 120x92
-- orks/dakkajet :: Dakkajet: round 120 → oval 120x92
-- orks/burna-bommer: round 120 → oval 120x92
-- orks/burna-bommer :: Burna-bommer: round 120 → oval 120x92
-- orks/blitza-bommer: round 120 → oval 120x92
-- orks/blitza-bommer :: Blitza-bommer: round 120 → oval 120x92
+- adeptus-astartes/crusader-squad :: Initiate: round 40 → round 32
+- adeptus-astartes/crusader-squad :: Neophyte: round 40 → round 28.5
+- adeptus-astartes/crusader-squad: round 40 → round 32
+- adeptus-astartes/chaplain-grimaldus :: Cenobyte Servitor: round 40 → round 28.5
+- adeptus-astartes/chaplain-grimaldus: round 40 → round 28.5
+- adeptus-astartes/wolf-guard-headtakers :: Hunting Wolf: round 40 → oval 60x35.5
+- adeptus-astartes/decimus-kill-team :: Gravis Veteran: round 32 → round 40
+- adeptus-astartes/talonstrike-kill-team :: Kill Team Heavy Intercessor with Jump Pack: round 32 → round 40
+- adeptus-astartes/wolf-scouts :: Wolf Scout Pack Leader: oval 60x35.5 → round 32
+- adeptus-astartes/wolf-scouts :: Wolf Scout: oval 60x35.5 → round 32
+- adeptus-astartes/wolf-scouts: oval 60x35.5 → round 32
+- agents-of-the-imperium/aquila-kill-team :: Gravis Veteran: round 32 → round 40
+- genestealer-cults/claw-of-ascension-atalan-jackals :: Atalan Wolfquad: oval 60x35.5 → round 60
+- orks/breaka-boyz :: Nob: round 32 → round 40
+- orks/tankbustas :: Nob: round 32 → round 40
+
+## De-drafted (dump confirmed a provisional value)
+
+- adeptus-astartes/crusader-squad :: Sword Brother: round 40 → round 40
+- adeptus-astartes/chaplain-grimaldus :: Chaplain Grimaldus: round 40 → round 40
+- adeptus-astartes/wolf-guard-headtakers :: Wolf Guard Headtaker: round 40 → round 40
+- adeptus-astartes/wolf-guard-headtakers: round 40 → round 40
+- adeptus-astartes/decimus-kill-team :: Kill Team Sergeant: round 32 → round 32
+- adeptus-astartes/decimus-kill-team :: Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol: round 32 → round 32
+- adeptus-astartes/decimus-kill-team :: Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists: round 32 → round 32
+- adeptus-astartes/decimus-kill-team :: Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists: round 32 → round 32
+- adeptus-astartes/decimus-kill-team :: Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol: round 32 → round 32
+- adeptus-astartes/decimus-kill-team: round 32 → round 32
+- adeptus-astartes/talonstrike-kill-team :: Kill Team Sergeant with Jump Pack: round 32 → round 32
+- adeptus-astartes/talonstrike-kill-team :: Kill Team Intercessor with Jump Pack: round 32 → round 32
+- adeptus-astartes/talonstrike-kill-team: round 32 → round 32
+- adeptus-astartes/wolf-scouts :: Hunting Wolf: oval 60x35.5 → oval 60x35.5
+- agents-of-the-imperium/aquila-kill-team :: Kill Team Sergeant: round 32 → round 32
+- agents-of-the-imperium/aquila-kill-team :: Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol: round 32 → round 32
+- agents-of-the-imperium/aquila-kill-team :: Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists: round 32 → round 32
+- agents-of-the-imperium/aquila-kill-team :: Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists: round 32 → round 32
+- agents-of-the-imperium/aquila-kill-team :: Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol: round 32 → round 32
+- agents-of-the-imperium/aquila-kill-team: round 32 → round 32
+- genestealer-cults/claw-of-ascension-atalan-jackals :: Atalan Jackal with Power Weapon: oval 60x35.5 → oval 60x35.5
+- genestealer-cults/claw-of-ascension-atalan-jackals :: Atalan Jackal: oval 60x35.5 → oval 60x35.5
+- orks/breaka-boyz :: Breaka Boy: round 32 → round 32
+- orks/breaka-boyz: round 32 → round 32
+- orks/tankbustas :: Tankbusta: round 32 → round 32
+- orks/tankbustas: round 32 → round 32
 
 ## Rounding kept (authored value kept — within 1 mm of the dump)
 
@@ -67,50 +136,6 @@ never guessed. A parsed dump value carries no `draft` flag.
 - agents-of-the-imperium/imperial-navy-breachers: authored round 25, labelled none
 - astra-militarum/krieg-heavy-weapons-squad: authored round 50, labelled round 25
 
-## Drafted (authored bases a bare list contradicts — which model is which is unknown)
-
-- adeptus-astartes/crusader-squad :: Sword Brother: round 40
-- adeptus-astartes/crusader-squad :: Initiate: round 40
-- adeptus-astartes/crusader-squad :: Neophyte: round 40
-- adeptus-astartes/crusader-squad: round 40
-- adeptus-astartes/chaplain-grimaldus :: Chaplain Grimaldus: round 40
-- adeptus-astartes/chaplain-grimaldus :: Cenobyte Servitor: round 40
-- adeptus-astartes/chaplain-grimaldus: round 40
-- adeptus-astartes/wolf-guard-headtakers :: Wolf Guard Headtaker: round 40
-- adeptus-astartes/wolf-guard-headtakers :: Hunting Wolf: round 40
-- adeptus-astartes/wolf-guard-headtakers: round 40
-- adeptus-astartes/decimus-kill-team :: Kill Team Sergeant: round 32
-- adeptus-astartes/decimus-kill-team :: Gravis Veteran: round 32
-- adeptus-astartes/decimus-kill-team :: Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol: round 32
-- adeptus-astartes/decimus-kill-team :: Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists: round 32
-- adeptus-astartes/decimus-kill-team :: Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists: round 32
-- adeptus-astartes/decimus-kill-team :: Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol: round 32
-- adeptus-astartes/decimus-kill-team: round 32
-- adeptus-astartes/talonstrike-kill-team :: Kill Team Sergeant with Jump Pack: round 32
-- adeptus-astartes/talonstrike-kill-team :: Kill Team Intercessor with Jump Pack: round 32
-- adeptus-astartes/talonstrike-kill-team :: Kill Team Heavy Intercessor with Jump Pack: round 32
-- adeptus-astartes/talonstrike-kill-team: round 32
-- adeptus-astartes/wolf-scouts :: Wolf Scout Pack Leader: oval 60x35.5
-- adeptus-astartes/wolf-scouts :: Wolf Scout: oval 60x35.5
-- adeptus-astartes/wolf-scouts :: Hunting Wolf: oval 60x35.5
-- adeptus-astartes/wolf-scouts: oval 60x35.5
-- agents-of-the-imperium/aquila-kill-team :: Kill Team Sergeant: round 32
-- agents-of-the-imperium/aquila-kill-team :: Gravis Veteran: round 32
-- agents-of-the-imperium/aquila-kill-team :: Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol: round 32
-- agents-of-the-imperium/aquila-kill-team :: Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists: round 32
-- agents-of-the-imperium/aquila-kill-team :: Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists: round 32
-- agents-of-the-imperium/aquila-kill-team :: Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol: round 32
-- agents-of-the-imperium/aquila-kill-team: round 32
-- genestealer-cults/claw-of-ascension-atalan-jackals :: Atalan Jackal with Power Weapon: oval 60x35.5
-- genestealer-cults/claw-of-ascension-atalan-jackals :: Atalan Wolfquad: oval 60x35.5
-- genestealer-cults/claw-of-ascension-atalan-jackals :: Atalan Jackal: oval 60x35.5
-- orks/breaka-boyz :: Breaka Boy: round 32
-- orks/breaka-boyz :: Nob: round 32
-- orks/breaka-boyz: round 32
-- orks/tankbustas :: Tankbusta: round 32
-- orks/tankbustas :: Nob: round 32
-- orks/tankbustas: round 32
-
 ## Unresolved datasheets (not attributed)
 
 - adepta-sororitas/immolator [category]: "Hull"
@@ -119,7 +144,6 @@ never guessed. A parsed dump value carries no `draft` flag.
 - adepta-sororitas/sororitas-rhino [category]: "Hull"
 - adeptus-astartes/thunderhawk-gunship [category]: "Unique"
 - adeptus-astartes/astraeus [category]: "Hull"
-- adeptus-astartes/wardens-of-ultramar [list]: "28.5mm, 40mm"
 - adeptus-astartes/land-raider [category]: "None"
 - adeptus-astartes/land-raider-crusader [category]: "None"
 - adeptus-astartes/rhino [category]: "None"
@@ -127,16 +151,9 @@ never guessed. A parsed dump value carries no `draft` flag.
 - adeptus-astartes/drop-pod [category]: "Custom"
 - adeptus-astartes/invader-atvs [category]: "None"
 - adeptus-astartes/sammael [category]: "Large Flying Base"
-- adeptus-astartes/crusader-squad [list]: "28.5mm, 32mm, 40mm"
-- adeptus-astartes/vow-sworn-crusader-squad [list]: "28.5mm, 32mm, 40mm"
 - adeptus-astartes/ravenwing-darkshroud [category]: "Large Flying Base"
-- adeptus-astartes/chaplain-grimaldus [list]: "28.5mm, 40mm"
-- adeptus-astartes/wolf-guard-headtakers [list]: "40mm, 60x35.5mm Oval Base"
 - adeptus-astartes/baal-predator [category]: "Hull"
-- adeptus-astartes/decimus-kill-team [list]: "32mm, 40mm"
-- adeptus-astartes/talonstrike-kill-team [list]: "32mm, 40mm"
 - adeptus-astartes/land-speeder-vengeance [category]: "Large Flying Base"
-- adeptus-astartes/wolf-scouts [list]: "32mm, 60x35.5mm Oval Base"
 - adeptus-custodes/anathema-psykana-rhino [null]: null
 - adeptus-mechanicus/skorpius-disintegrator [category]: "Hull"
 - adeptus-mechanicus/skorpius-dunerider [category]: "Hull"
@@ -169,7 +186,6 @@ never guessed. A parsed dump value carries no `draft` flag.
 - agents-of-the-imperium/imperial-rhino [category]: "Hull"
 - agents-of-the-imperium/inquisitorial-chimera [category]: "Hull"
 - agents-of-the-imperium/inquisitors-hand-vigilant-squad [list]: "25mm, 28.5mm"
-- agents-of-the-imperium/aquila-kill-team [list]: "32mm, 40mm"
 - agents-of-the-imperium/inquisitors-hand-inquisitorial-agents [list]: "25mm, 32mm"
 - astra-militarum/leman-russ-battle-tank [category]: "Hull"
 - astra-militarum/hydra [category]: "Hull"
@@ -239,7 +255,6 @@ never guessed. A parsed dump value carries no `draft` flag.
 - emperors-children/chaos-land-raider [category]: "Hull"
 - genestealer-cults/goliath-rockgrinder [category]: "Hull"
 - genestealer-cults/goliath-truck [category]: "Hull"
-- genestealer-cults/claw-of-ascension-atalan-jackals [list]: "60mm, 60x35.5mm Oval Base"
 - grey-knights/land-raider [category]: "Hull"
 - grey-knights/grey-knights-thunderhawk-gunship [category]: "Unique"
 - grey-knights/land-raider-redeemer [category]: "Hull"
@@ -261,25 +276,20 @@ never guessed. A parsed dump value carries no `draft` flag.
 - necrons/convergence-of-dominion [category]: "Hull"
 - necrons/catacomb-command-barge [category]: "Large Flying Base"
 - necrons/triarch-stalker [category]: "Hull"
-- orks/boyz [list]: "32mm, 40mm"
 - orks/wazdakka-gutsmek [null]: null
 - orks/big-mek-dakkarig [null]: null
 - orks/battlewagon [null]: null
 - orks/squighog-boyz [list]: "75mm, 90x52.5mm Oval Base"
 - orks/deffkilla-wartrike [null]: null
-- orks/ardmob-boyz [list]: "32mm, 40mm"
 - orks/biged-bossbunka [null]: null
 - orks/mek-gunz [category]: "None"
 - orks/gargantuan-squiggoth [category]: "Hull"
 - orks/warbikers [null]: null
 - orks/wartrakks [null]: null
-- orks/breaka-boyz [list]: "32mm, 40mm"
 - orks/bigboss [null]: null
 - orks/morkanaut [null]: null
 - orks/trukk [null]: null
-- orks/tankbustas [list]: "32mm, 40mm"
 - orks/gunwagon [category]: "None"
-- orks/ardmob-boyz-2 [list]: "32mm, 40mm"
 - orks/gorkanaut [null]: null
 - orks/stompa [category]: "None"
 - tau-empire/tidewall-shieldline [category]: "Hull"
@@ -305,7 +315,6 @@ never guessed. A parsed dump value carries no `draft` flag.
 - tyranids/gargoyles [category]: "Small Flying Base"
 - tyranids/harridan [category]: "Unique"
 - tyranids/hierophant [category]: "Hull"
-- world-eaters/frenzied-reavers-jakhals [list]: "28.5mm, 40mm"
 - world-eaters/chaos-predator-annihilator [category]: "Hull"
 - world-eaters/chaos-rhino [category]: "Hull"
 - world-eaters/chaos-predator-destructor [category]: "Hull"

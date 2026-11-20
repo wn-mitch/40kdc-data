@@ -2249,6 +2249,10 @@
     "faction_keywords": [
       "World Eaters"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 28.5
+    },
     "model_count": {
       "min": 10,
       "max": 10

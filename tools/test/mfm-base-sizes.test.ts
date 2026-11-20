@@ -10,6 +10,8 @@ import {
   parseBareOval,
   parseBareBaseSizeList,
   bareListConsistent,
+  bareListAttributionProblem,
+  BARE_LIST_ATTRIBUTIONS,
   parseLabelledBaseSizes,
   baseSizeEqual,
   baseSizesWithinRounding,
@@ -134,6 +136,25 @@ describe("bare lists (sorted sizes, no model attribution)", () => {
   });
 });
 
+describe("reviewed bare-list attributions", () => {
+  const crusader = { list: "28.5mm, 32mm, 40mm", unit: "32mm", models: { "Sword Brother": "40mm", Initiate: "32mm", Neophyte: "28.5mm" } };
+  const names = ["Sword Brother", "Initiate", "Neophyte"];
+  it("holds only for the reviewed label, every model, and exactly the listed sizes", () => {
+    expect(bareListAttributionProblem(crusader, "28.5mm, 32mm, 40mm", names)).toBeNull();
+    expect(bareListAttributionProblem(crusader, "28.5mm, 32mm, 50mm", names)).toMatch(/now prints/u);
+    expect(bareListAttributionProblem(crusader, "28.5mm, 32mm, 40mm", [...names, "Sergeant"])).toMatch(/no base for Sergeant/u);
+    expect(bareListAttributionProblem(crusader, "28.5mm, 32mm, 40mm", names.slice(0, 2))).toMatch(/no composition model named Neophyte/u);
+    expect(bareListAttributionProblem({ ...crusader, models: { ...crusader.models, Neophyte: "32mm" } }, "28.5mm, 32mm, 40mm", names)).toMatch(/exactly the listed/u);
+    expect(bareListAttributionProblem({ ...crusader, unit: "50mm" }, "28.5mm, 32mm, 40mm", names)).toMatch(/unit base/u);
+  });
+
+  it("every committed entry is internally consistent", () => {
+    for (const [key, entry] of Object.entries(BARE_LIST_ATTRIBUTIONS)) {
+      expect(bareListAttributionProblem(entry, entry.list, Object.keys(entry.models)), key).toBeNull();
+    }
+  });
+});
+
 describe("parseLabelledBaseSizes (per-model dump strings)", () => {
   it("splits one line per model, keeping every label on the line", () => {
     expect(parseLabelledBaseSizes("Sword Brother: 40mm\nInitiates: 32mm")).toEqual([
@@ -253,6 +274,8 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("base-size reconcile over the
     expect(report.corrected).toEqual([]);
     expect(report.dedrafted).toEqual([]);
     expect(report.listDrafted).toEqual([]);
+    expect(report.attributionRefused).toEqual([]);
+    expect(report.attributionUnused).toEqual([]);
     expect(report.staged).toEqual([]);
     expect(report.confirmed.units).toBeGreaterThan(700);
   });
@@ -286,24 +309,26 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("base-size reconcile over the
     });
   });
 
-  it("reports rather than attributes a base it cannot pin to a model", () => {
-    // "32mm, 40mm" is a bare list: its order does not follow the repo's model order
-    // (Nob, Boy), so attributing it by position would have made the Nob 32mm.
-    expect(report.unresolved.find((u) => u.unit === "boyz")).toMatchObject({ form: "list", raw: "32mm, 40mm" });
-    expect(readRecord("orks/unit-compositions.json", "boyz")?.models?.map((m) => m.base_size_mm)).toEqual([
-      undefined,
-      undefined,
+  it("never attributes a bare list by position", () => {
+    // "32mm, 40mm" does not follow the repo's model order (Nob, Boy); the reviewed entry, not position, puts the Nob on 40mm.
+    expect(readRecord("orks/unit-compositions.json", "boyz")?.models?.map((m) => [m.name, m.base_size_mm])).toEqual([
+      ["Nob", { shape: "round", diameter: 40 }],
+      ["Boy", { shape: "round", diameter: 32 }],
     ]);
     // A category carries no dimensions at all.
     expect(report.unresolved.find((u) => u.unit === "gunwagon")).toMatchObject({ form: "category", raw: "None" });
   });
 
-  it("drafts bases a bare list contradicts and decodes the Ork oval shorthand", () => {
-    // "28.5mm, 32mm, 40mm": every model on 40mm cannot be right, and the list cannot say which is.
+  it("attributes a bare list through its reviewed entry and decodes the Ork oval shorthand", () => {
+    // "28.5mm, 32mm, 40mm" is sorted by size; the datasheet lists the Sword Brother first, so position alone reverses it.
     const crusader = readRecord("adeptus-astartes/unit-compositions.json", "crusader-squad")?.models ?? [];
-    expect(crusader.length).toBeGreaterThan(0);
-    for (const m of crusader) expect(m.base_size_mm?.draft, m.name).toBe(true);
-    expect(readRecord("adeptus-astartes/units.json", "crusader-squad")?.base_size_mm?.draft).toBe(true);
+    expect(Object.fromEntries(crusader.map((m) => [m.name, m.base_size_mm]))).toEqual({
+      "Sword Brother": { shape: "round", diameter: 40 },
+      Initiate: { shape: "round", diameter: 32 },
+      Neophyte: { shape: "round", diameter: 28.5 },
+    });
+    expect(readRecord("adeptus-astartes/units.json", "crusader-squad")?.base_size_mm).toEqual({ shape: "round", diameter: 32 });
+    expect(report.listAttributed).toContain("adeptus-astartes/crusader-squad");
     expect(readRecord("orks/units.json", "deffkoptas")?.base_size_mm).toEqual({ shape: "oval", width: 75, length: 42 });
     expect(readRecord("orks/units.json", "blitza-bommer")?.base_size_mm).toEqual({ shape: "oval", width: 120, length: 92 });
   });

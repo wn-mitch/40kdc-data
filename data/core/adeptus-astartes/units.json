@@ -629,8 +629,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 40,
-      "draft": true
+      "diameter": 32
     },
     "model_count": {
       "min": 10,
@@ -1044,8 +1043,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 40,
-      "draft": true
+      "diameter": 28.5
     },
     "model_count": {
       "min": 4,
@@ -5391,8 +5389,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 32,
-      "draft": true
+      "diameter": 32
     },
     "model_count": {
       "min": 5,
@@ -5500,8 +5497,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 32,
-      "draft": true
+      "diameter": 32
     },
     "model_count": {
       "min": 10,
@@ -9776,6 +9772,10 @@
       "Adeptus Astartes",
       "Ultramarines"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 28.5
+    },
     "model_count": {
       "min": 6,
       "max": 6
@@ -12948,8 +12948,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 40,
-      "draft": true
+      "diameter": 40
     },
     "model_count": {
       "min": 3,
@@ -13992,10 +13991,8 @@
       "Space Wolves"
     ],
     "base_size_mm": {
-      "shape": "oval",
-      "width": 60,
-      "length": 35.5,
-      "draft": true
+      "shape": "round",
+      "diameter": 32
     },
     "model_count": {
       "min": 6,
@@ -14935,6 +14932,10 @@
       "Black Templars",
       "Adeptus Astartes"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 10,
       "max": 10

@@ -2204,6 +2204,11 @@
     "faction_keywords": [
       "Genestealer Cults"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 60,
+      "length": 35.5
+    },
     "model_count": {
       "min": 5,
       "max": 5

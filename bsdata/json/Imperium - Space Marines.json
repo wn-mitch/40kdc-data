@@ -25185,7 +25185,7 @@
                       },
                       {
                         "name": "Base",
-                        "$text": "40mm",
+                        "$text": "32mm",
                         "typeId": "nr-base-size"
                       }
                     ]
@@ -25489,7 +25489,7 @@
                       },
                       {
                         "name": "Base",
-                        "$text": "40mm",
+                        "$text": "32mm",
                         "typeId": "nr-base-size"
                       }
                     ]
@@ -26307,7 +26307,7 @@
                       },
                       {
                         "name": "Base",
-                        "$text": "40mm",
+                        "$text": "32mm",
                         "typeId": "nr-base-size"
                       }
                     ]
@@ -30279,7 +30279,7 @@
                       },
                       {
                         "name": "Base",
-                        "$text": "40mm",
+                        "$text": "28.5mm",
                         "typeId": "nr-base-size"
                       }
                     ]
@@ -30474,7 +30474,7 @@
                       },
                       {
                         "name": "Base",
-                        "$text": "40mm",
+                        "$text": "28.5mm",
                         "typeId": "nr-base-size"
                       }
                     ]
@@ -128426,7 +128426,7 @@
               },
               {
                 "name": "Base",
-                "$text": "",
+                "$text": "28.5mm",
                 "typeId": "nr-base-size"
               }
             ]
@@ -128576,7 +128576,7 @@
                       },
                       {
                         "name": "Base",
-                        "$text": "",
+                        "$text": "28.5mm",
                         "typeId": "nr-base-size"
                       }
                     ]
@@ -128771,7 +128771,7 @@
                       },
                       {
                         "name": "Base",
-                        "$text": "",
+                        "$text": "28.5mm",
                         "typeId": "nr-base-size"
                       }
                     ]
@@ -128966,7 +128966,7 @@
                       },
                       {
                         "name": "Base",
-                        "$text": "",
+                        "$text": "28.5mm",
                         "typeId": "nr-base-size"
                       }
                     ]
@@ -129161,7 +129161,7 @@
                       },
                       {
                         "name": "Base",
-                        "$text": "",
+                        "$text": "28.5mm",
                         "typeId": "nr-base-size"
                       }
                     ]
@@ -129500,7 +129500,7 @@
                       },
                       {
                         "name": "Base",
-                        "$text": "",
+                        "$text": "28.5mm",
                         "typeId": "nr-base-size"
                       }
                     ]
@@ -170948,7 +170948,7 @@
                       },
                       {
                         "name": "Base",
-                        "$text": "35.5x60mm",
+                        "$text": "32mm",
                         "typeId": "nr-base-size"
                       }
                     ]
@@ -171307,7 +171307,7 @@
                       },
                       {
                         "name": "Base",
-                        "$text": "35.5x60mm",
+                        "$text": "32mm",
                         "typeId": "nr-base-size"
                       }
                     ]
@@ -172024,7 +172024,7 @@
                       },
                       {
                         "name": "Base",
-                        "$text": "35.5x60mm",
+                        "$text": "32mm",
                         "typeId": "nr-base-size"
                       }
                     ]
