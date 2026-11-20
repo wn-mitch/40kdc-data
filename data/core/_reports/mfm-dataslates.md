@@ -16,9 +16,9 @@ dump confirmation.
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 202 | 255 |
-| stratagems | 1 | 0 | 1086 | 226 |
-| abilities | 0 | 0 | 3878 | 681 |
-| phase-mappings | 5 | 0 | 1223 | 353 |
+| stratagems | 1 | 0 | 1087 | 225 |
+| abilities | 0 | 0 | 3879 | 680 |
+| phase-mappings | 0 | 0 | 1228 | 353 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
 ## Abilities by faction
@@ -43,7 +43,7 @@ dump confirmation.
 | death-guard | 0 | 0 | 134 | 26 |
 | deathwatch | 0 | 0 | 34 | 2 |
 | drukhari | 0 | 0 | 132 | 32 |
-| emperors-children | 0 | 0 | 127 | 21 |
+| emperors-children | 0 | 0 | 128 | 20 |
 | genestealer-cults | 0 | 0 | 121 | 27 |
 | grey-knights | 0 | 0 | 120 | 14 |
 | imperial-fists | 0 | 0 | 9 | 2 |
@@ -135,9 +135,9 @@ dump confirmation.
 | drukhari | stub | 19 |
 | drukhari | unpublished | 6 |
 | drukhari | verified | 132 |
-| emperors-children | digest-differs | 5 |
+| emperors-children | digest-differs | 4 |
 | emperors-children | unpublished | 16 |
-| emperors-children | verified | 127 |
+| emperors-children | verified | 128 |
 | genestealer-cults | digest-differs | 3 |
 | genestealer-cults | stub | 14 |
 | genestealer-cults | unpublished | 10 |

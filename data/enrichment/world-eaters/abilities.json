@@ -6665,7 +6665,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "trigger": {
       "event": "phase-ended",

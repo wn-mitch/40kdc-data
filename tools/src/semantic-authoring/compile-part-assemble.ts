@@ -424,8 +424,10 @@ export function assemblePart(
   const windowLeaves = (part: number | null) => list.filter((_, index) => !consumedByContainer.has(index) && (part === null || windowPart(index) === part));
   const usedOrTriggered = durations.length === 0 && (behavior === "reactive" || behavior === "activated");
   // "In any phase, when …" with no duration: the effects last until the end of the phase the ability is used in.
+  // A Stratagem used at the end of a phase ("End of your opponent's Fight phase") lasts until the end of that
+  // phase too (core rule 01.02.02).
   const period = !usedOrTriggered ? null
-    : hasLastingEffect(body) ? windowPeriod(windowLeaves(partStarts.length ? 0 : null)) ?? (options.anyPhaseWindow === true ? "phase" : null)
+    : hasLastingEffect(body) ? windowPeriod(windowLeaves(partStarts.length ? 0 : null), stratagem) ?? (options.anyPhaseWindow === true ? "phase" : null)
       // A Stratagem whose WHEN moment holds nothing lasting but whose later moment does ("End of your opponent's
       // Charge phase … Before making the charge roll, …") lasts until the end of the WHEN's phase, a phase's end
       // included (core rule 01.02.02); otherwise the later moment would keep firing after the use.

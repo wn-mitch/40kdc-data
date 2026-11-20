@@ -13195,7 +13195,7 @@
       ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "behavior": "reactive",
     "trigger": {

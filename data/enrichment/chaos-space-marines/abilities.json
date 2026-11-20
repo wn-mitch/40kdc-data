@@ -14129,7 +14129,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "behavior": "reactive",
     "trigger": {
@@ -14478,7 +14478,7 @@
       ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "behavior": "reactive",
     "trigger": {

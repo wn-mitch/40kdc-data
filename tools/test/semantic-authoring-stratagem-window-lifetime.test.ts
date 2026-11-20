@@ -22,6 +22,13 @@ describe("Semantic authoring Stratagem window lifetime", () => {
     expect(JSON.stringify(result.mechanics.effect)).toContain("\"before-roll\"");
   });
 
+  it("bounds a lasting effect in the WHEN's own moment by the phase it ends", () => {
+    const text = "WHEN: End of your opponent's Fight phase.\nTARGET: One FIXTURE unit from your army.\nEFFECT: Add 1 to charge rolls made for your unit.";
+    const result = compileLeaves(placed(text, WHEN, TARGET, ["Add 1 to charge rolls made for your unit", "roll-modifier", { roll: "charge", operation: "add", value: 1 }, "EFFECT"]), text);
+    expectCompiled(result);
+    expect(result.mechanics.scope?.duration).toBe("phase");
+  });
+
   it("leaves the same moments outside a Stratagem unbounded", () => {
     const text = "At the end of your opponent's Fight phase, this unit can declare a charge. Before making the charge roll, add 1 to it.";
     const result = compileLeaves(placed(text,

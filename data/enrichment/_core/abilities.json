@@ -369,7 +369,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "community_notes": "At the end of the opponent's Movement phase, one friendly unengaged unit (excluding Titanic) shoots using snap shooting"
   },

@@ -8447,7 +8447,7 @@
       ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [
