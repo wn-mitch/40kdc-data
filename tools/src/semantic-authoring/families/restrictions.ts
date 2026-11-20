@@ -155,7 +155,7 @@ function normalizeStratagemTarget(input: Params): Params {
   const ranged = count === "up-to" ? ["count_max"] : count === "exactly" ? ["count_exact"] : [];
   const counted: Params = {
     count,
-    ...(count === "up-to" ? { count_max: boundedInteger(input.count_max, 2, 10, "stratagem-target.count_max") } : {}),
+    ...(count === "up-to" ? { count_max: boundedInteger(input.count_max, 1, 10, "stratagem-target.count_max") } : {}),
     ...(count === "exactly" ? { count_exact: boundedInteger(input.count_exact, 2, 10, "stratagem-target.count_exact") } : {}),
   };
   // Without side, the leaf is only the count; the unit-filter after it names whose units and which keywords.
@@ -313,17 +313,17 @@ export const RESTRICTIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "stratagem-target",
-    version: 5,
+    version: 6,
     role: "RESTRICTION",
     kinds: ["stratagem"],
     label: "Stratagem target",
-    description: "A stratagem's TARGET: how many (one, one or more, up to count_max, or exactly count_exact of 2-10, each meeting the same restrictions: \"Two **X** units\"), whose, unit or model, and the keywords it must have (all of them, or any one) and must not have. side, selects, keywords, match and excluded_keywords are given together or all left out; left out, the leaf is only the count (\"One\", \"Up to two\") and the unit-filter right after it says whose units and which keywords. A keyword can carry accented capitals (KÂHL) or start with an apostrophe ('ARDMOB) as the rules print it. Qualifiers such as \"that has not been selected to shoot this phase\" are their own condition leaves in the TARGET.",
+    description: "A stratagem's TARGET: how many (one, one or more, up to count_max of 1-10 (\"Up to one\": zero or one unit), or exactly count_exact of 2-10, each meeting the same restrictions: \"Two **X** units\"), whose, unit or model, and the keywords it must have (all of them, or any one) and must not have. side, selects, keywords, match and excluded_keywords are given together or all left out; left out, the leaf is only the count (\"One\", \"Up to two\") and the unit-filter right after it says whose units and which keywords. A keyword can carry accented capitals (KÂHL) or start with an apostrophe ('ARDMOB) as the rules print it. Qualifiers such as \"that has not been selected to shoot this phase\" are their own condition leaves in the TARGET.",
     starter: { count: "" },
     parameterSchema: {
       type: "object", required: ["count"], additionalProperties: false,
       properties: {
         count: { enum: ["one", "one-or-more", "up-to", "exactly"] },
-        count_max: { type: "integer", minimum: 2, maximum: 10, "x-only-when": { count: ["up-to"] } },
+        count_max: { type: "integer", minimum: 1, maximum: 10, "x-only-when": { count: ["up-to"] } },
         side: { enum: ["your-army", "enemy"] },
         selects: { enum: ["unit", "model"] },
         keywords: { type: "array", items: { type: "string", pattern: PRINTED_KEYWORD_PATTERN }, minItems: 0, uniqueItems: true },

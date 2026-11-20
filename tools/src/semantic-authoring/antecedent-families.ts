@@ -59,6 +59,8 @@ const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   // "add 3\" to that unit's Contagion Range": the unit an earlier filter, aura or Stratagem target names.
   "ability-modifier": ["subject"],
   event: ["subject", "by"],
+  // "each time an attack targets one of those units": the attacked unit (compile-part-plan.ts gates on it).
+  attack: ["unit"],
   // An embark permission's destination ("that TRANSPORT"), accepted by eligibility-permission.
   "eligibility-permission": ["into"],
   "rule-state": ["subject"],

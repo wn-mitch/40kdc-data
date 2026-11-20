@@ -58,6 +58,8 @@ export const TARGET_REF_KEYS: Readonly<Record<string, readonly string[]>> = {
   "targeting-restriction": ["by", "target"], "weapon-property-scope": ["subject"], "ignore-modifiers": ["subject"],
   "roll-modifier": ["subject"], reroll: ["subject"], "make-move": ["subject"], "act-after-move": ["subject"], "no-advance-roll": ["subject"],
   "ability-activate": ["subject"], "set-up": ["subject"], "apply-mark": ["subject"], test: ["target"],
+  // A targeted attack's attacked unit: its effects gate on the defender (compile-part-plan.ts).
+  attack: ["unit"],
   "unit-state": ["subject", "with"], "unit-activity": ["subject"], "unit-position": ["subject", "of"], "unit-keyword": ["subject"],
   "hit-by-attacks": ["subject"], "in-region": ["subject"], targeted: ["subject"], "target-is-selected": ["by", "target"],
   visible: ["subject", "to"], eligible: ["subject"],
@@ -97,12 +99,12 @@ function matchedNames(filter: CompileLeaf, heads: readonly TargetHead[]): Match[
  * A bare "your unit" (no keywords) that matches several targets, the first among them, is the
  * first target when the record has no target modes; any other ambiguity refuses.
  */
-/** Whether the head that names `name` picks several targets: an up-to count, or a count_max above one. */
+/** Whether the head that names `name` picks several targets: an up-to count whose count_max is above one. */
 function isMultiCountHead(heads: readonly TargetHead[], name: string): boolean {
   const head = heads.find((item) => item.names.includes(name));
   const parameters = head?.selector?.parameters;
   if (parameters === undefined || head?.selector?.family_id !== "stratagem-target") return false;
-  return parameters.count === "up-to" || Number(parameters.count_max ?? 1) > 1;
+  return parameters.count === "up-to" && Number(parameters.count_max ?? 1) > 1;
 }
 
 function referenceOf(filter: CompileLeaf, heads: readonly TargetHead[]): { ref: string; singular: boolean } {
@@ -128,13 +130,16 @@ function referenceOf(filter: CompileLeaf, heads: readonly TargetHead[]): { ref: 
 }
 
 /**
- * The EFFECT leaves of the same fragment whose span holds the among-filter at `index`. The
+ * The EFFECT leaves of the same fragment whose span holds the among-filter at `index`, and a
+ * targeted attack whose attacked unit points back ("an attack targets one of those units"). The
  * filter's own span lies inside its container's, and a container starts no later than the filter.
  */
 function containerOf(leaves: readonly CompileLeaf[], index: number): number[] {
   const filter = leaves[index]!;
   const end = filter.end_byte ?? filter.start_byte;
-  return leaves.flatMap((leaf, at) => at !== index && leaf.role === "EFFECT" && leaf.fragment === filter.fragment
+  const holds = (leaf: CompileLeaf) => leaf.role === "EFFECT"
+    || (leaf.family_id === "attack" && leaf.parameters.direction === "targeted" && leaf.parameters.unit === ANTECEDENT);
+  return leaves.flatMap((leaf, at) => at !== index && holds(leaf) && leaf.fragment === filter.fragment
     && leaf.start_byte <= filter.start_byte && end <= (leaf.end_byte ?? leaf.start_byte) ? [at] : []);
 }
 

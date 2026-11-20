@@ -12,7 +12,7 @@ import type { FlatFamily } from "./types.js";
 // attack
 
 const ATTACK_DIRECTIONS = ["makes", "targeted"] as const;
-const ATTACK_UNITS = ["this-model", "this-unit", "bearers-unit", "that-unit", "recipient", "friendly-unit", "enemy-unit"] as const;
+export const ATTACK_UNITS = ["this-model", "this-unit", "bearers-unit", "that-unit", "recipient", "friendly-unit", "enemy-unit"] as const;
 const ATTACK_TYPES = ["any", "melee", "ranged", "psychic"] as const;
 /** The attack types a back-reference can print ("those ranged attacks"). */
 const PRINTED_ATTACK_TYPES = ["melee", "ranged", "psychic"];
@@ -43,9 +43,11 @@ function normalizeAttack(input: Params): Params {
     if (base.unit === "that-unit") throw new TypeError("attack.target cannot go with unit that-unit: one unit would both make and receive the attack.");
   }
   exactKeys(base, ["direction", "unit", "attack_type"], "attack");
+  // "each time an attack targets one of those units": the attacked unit an earlier leaf or an among-filter names.
+  if (base.unit === ANTECEDENT && base.direction !== "targeted") throw new TypeError(`attack.unit ${ANTECEDENT} names the attacked unit, so the attack's direction must be targeted.`);
   return {
     direction: enumValue(base.direction, ATTACK_DIRECTIONS, "attack.direction"),
-    unit: enumValue(base.unit, ATTACK_UNITS, "attack.unit"),
+    unit: enumValue(base.unit, [...ATTACK_UNITS, ANTECEDENT], "attack.unit"),
     attack_type: enumValue(base.attack_type, ATTACK_TYPES, "attack.attack_type"),
     ...(target !== undefined ? { target } : {}),
     ...(selection !== undefined ? { selection: selectionName(selection, "attack.selection") } : {}),
@@ -397,19 +399,20 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "attack",
-    version: 9,
+    version: 10,
     role: "EVENT",
     label: "Each time an attack is made",
     description: "An attack made by the named model or unit, or an attack that targets it, optionally only melee, ranged or psychic. \"The bearer\" is this model; recipient is the unit an aura applies to; friendly-unit is any friendly unit (\"each time a friendly unit makes an attack that targets that enemy unit\"); enemy-unit is an enemy unit (\"each time an enemy model makes a ranged attack\"), whose units a unit-filter right before it names. What the attack targets is a separate condition, or, on direction makes, target: that-unit, a unit an earlier leaf introduced (\"an X unit … targets that unit\"), a designation's unit or else the selected unit; following-filter, any unit the unit-filter right after this attack matches (\"makes a ranged attack that targets an enemy unit\"); neither goes with unit that-unit. "
       + "refers earlier-attack: \"that attack\", \"those attacks\", \"such an attack\", \"the target of that attack\" name the attack an earlier attack leaf of the record introduced, so the leaf records only the back-reference (and attack_type when the anaphor prints one, \"those ranged attacks\"); refers earlier-permission: resolving the attacks made by the nearest preceding allowed shoot or fight permission in the same fragment, whose actor and attack type it takes and whose attack modifiers last only for that resolution. "
-      + "selection: the bind_as of the select-unit the unit names when the record selects several units (\"each time a model in the selected Y unit makes an attack\"); only with unit that-unit.",
+      + "selection: the bind_as of the select-unit the unit names when the record selects several units (\"each time a model in the selected Y unit makes an attack\"); only with unit that-unit. "
+      + "unit antecedent, on direction targeted only: the attacked unit is one an earlier leaf introduced, or the Stratagem targets an among-filter inside the span names (\"each time an attack targets one of those units\").",
     starter: { direction: "", unit: "", attack_type: "" },
     parameterSchema: {
       type: "object",
       required: [],
       properties: {
         direction: { enum: ["makes", "targeted"] },
-        unit: { enum: [...ATTACK_UNITS] },
+        unit: { enum: [...ATTACK_UNITS, ANTECEDENT] },
         attack_type: { enum: ["any", "melee", "ranged", "psychic"] },
         refers: { enum: ["earlier-attack", "earlier-permission"], "x-optional": true },
         target: { enum: ["that-unit", "following-filter"], "x-only-when": { direction: ["makes"] }, "x-optional": true },

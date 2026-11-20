@@ -167,8 +167,18 @@ export function seedReviewedFamilies(db: DatabaseSync): void {
  * their plain forms.
  */
 function foldKeywordText(text: string): string {
-  return text.replace(/\*/gu, "").replace(/[\u2010-\u2013\u2212]/gu, "-").replace(/[\u00a0\u202f]/gu, " ").toLowerCase();
+  const folded = text.replace(/\*/gu, "").replace(/[\u2010-\u2013\u2212]/gu, "-").replace(/[\u00a0\u202f]/gu, " ").toLowerCase();
+  return KEYWORD_MISPRINTS.reduce((acc, [misprint, keyword]) => acc.replace(misprint, keyword), folded);
 }
+
+/**
+ * Printed misspellings of a weapon-ability keyword, each mapped to the keyword it names. The source
+ * keeps its own spelling; only the comparison reads it as the keyword ("[Ignore Cover]" on
+ * Parasitic Payload is [IGNORES COVER]).
+ */
+const KEYWORD_MISPRINTS: ReadonlyArray<readonly [RegExp, string]> = [
+  [/\bignore cover\b/gu, "ignores cover"],
+];
 
 /** Require the granted ability name in the exact source-backed effect span. */
 /**

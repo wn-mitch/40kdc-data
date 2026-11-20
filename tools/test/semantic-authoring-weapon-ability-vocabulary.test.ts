@@ -43,6 +43,10 @@ describe("wave-9 weapon-ability keywords", () => {
   it("accepts a bold-marked Anti keyword whose printed span carries the bold markers", () => {
     expect(() => validateFamilySource("weapon-ability-keyword", { keyword: "Anti-Non-Vehicle 4+" }, "[ANTI-**non-**VEHICLE 4+]")).not.toThrow();
     expect(() => validateFamilySource("weapon-ability-keyword", { keyword: "Anti-Vehicle 4+" }, "[ANTI-**non-**VEHICLE 4+]")).toThrow();
+    // A printed misspelling reads as the keyword it names, and only that keyword.
+    expect(() => validateFamilySource("weapon-ability-keyword", { keyword: "Ignores Cover" }, "Ignore Cover")).not.toThrow();
+    expect(() => validateFamilySource("weapon-ability-keyword", { keyword: "Lethal Hits" }, "Ignore Cover")).toThrow();
+    expect(() => validateFamilySource("weapon-ability-keyword", { keyword: "Ignores Cover" }, "Ignore Covering")).toThrow();
   });
 
   it("compiles a Cleave N grant under a melee scope", () => {
