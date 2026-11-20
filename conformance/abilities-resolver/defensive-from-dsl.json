@@ -2874,7 +2874,7 @@
         "needKeys": [],
         "activatable": [
           {
-            "id": "fabricated-selection-backref#selected",
+            "id": "fabricated-selection-backref#selected-2",
             "label": "Selected enemy unit: -1 to hit",
             "group": null,
             "requires": [

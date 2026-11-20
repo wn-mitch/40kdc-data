@@ -23,7 +23,9 @@ export const SELECTION_BACKREF_CASE_PREFIX = "canonical/selection-backref/";
  * the lever for any filter: several required keywords, `any_of`, `not_all_of`, `none_of` on the
  * attacker, a state, or a `unit_ids` identity the context does not carry. An enemy selection nested
  * in another picks its own unit, so its lever is gated by its own filter alone; the enclosing
- * selection stays in `requires`. A selector with no
+ * selection stays in `requires`. Each selection's lever has its own id: `<ability>#selected` for the
+ * effect's first selection in document order and `<ability>#selected-<n>` for its nth, whichever
+ * branches the context prunes. A selector with no
  * friendly or enemy `owner` is not planned as a selection, even when it names `unit_ids`.
  */
 export function canonicalSelectionBackrefCases() {
@@ -80,6 +82,8 @@ export function canonicalSelectionBackrefCases() {
   const nestedEnemy = (effect: unknown) => selection(
     { type: "sequence", steps: [effect, selection(effect, undefined, { state: "battle-shocked" })] }, undefined, { all_of: ["INFANTRY"] },
   );
+  // In the fight phase, select an enemy unit; then select an enemy unit. Shooting prunes the first.
+  const inFight = { type: "conditional", condition: { type: "phase-is", parameters: { phase: "fight" } }, effect: selection(hitDebuff, undefined, { all_of: ["MONSTER"] }) };
   const unowned = (owner: Record<string, unknown>) => ({
     type: "select-units",
     selector: { filter: { ...owner, level: "unit", unit_ids: ["example-unit"] }, count: { min: 1, max: 1 } },
@@ -112,6 +116,8 @@ export function canonicalSelectionBackrefCases() {
     { id: "enemy-filter-attacker-none-of", effect: enemyDebuff({ none_of: ["VEHICLE"] }), context: { attackerTurn: false }, perspective: "target" },
     { id: "enemy-filter-nested-selection-own-filter", effect: nestedEnemy(worsenSave) },
     { id: "enemy-filter-nested-selection-own-attacker-filter", effect: nestedEnemy(hitDebuff), context: { attackerTurn: false }, perspective: "target" },
+    { id: "sibling-selections-distinct-ids", effect: { type: "sequence", steps: [friendly({ all_of: ["INFANTRY"] }), enemy({ all_of: ["INFANTRY"] })] }, context: infantry },
+    { id: "pruned-selection-keeps-numbering", effect: { type: "sequence", steps: [inFight, enemy({ all_of: ["INFANTRY"] })] } },
     { id: "unowned-unit-ids-not-a-selection", effect: unowned({}), context: { attackerUnitId: "example-unit" } },
     { id: "any-owner-unit-ids-not-a-selection", effect: unowned({ owner: "any" }), context: { attackerUnitId: "example-unit" } },
   ];

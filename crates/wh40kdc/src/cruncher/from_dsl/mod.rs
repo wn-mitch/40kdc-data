@@ -213,6 +213,9 @@ pub(crate) struct WalkOpts<'a> {
     definitions: &'a std::collections::HashMap<String, Value>,
     /// Inside a part triggered by each hit or wound roll of the attack: that roll and its outcome.
     attack_roll: Option<roll_mortals::AttackRoll>,
+    /// The effect's selections in document order ([`selection::selection_order`]), which number
+    /// their lever ids.
+    selections: &'a [Value],
 }
 
 const STOCHASTIC_DICE_GATED: &str = "dice-gated effect: stochastic; not expressible as a buff";
@@ -448,6 +451,7 @@ fn translate_effect(
         aura_emitter: None,
         definitions: &definitions,
         attack_roll: None,
+        selections: &[],
     };
     // The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
     let effect = match roll_mortals::on_attack_roll(trigger, &effect) {
@@ -457,6 +461,8 @@ fn translate_effect(
         }
         None => effect,
     };
+    let selections = selection::selection_order(&effect);
+    opts.selections = &selections;
     let mut out = Out::default();
     out.unsupported.extend(
         scoped

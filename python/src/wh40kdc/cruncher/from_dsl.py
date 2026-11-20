@@ -185,7 +185,7 @@ def _translate_effect(
     }
     # The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
     effect, opts = _on_attack_roll(activation.get("trigger") if activation else None, effect, opts)
-    _walk(effect, source, opts, out)
+    _walk(effect, source, {**opts, "selections": _selection.selection_order(effect)}, out)
     if activation and (
         activation.get("usage") is not None
         or activation.get("cost") is not None

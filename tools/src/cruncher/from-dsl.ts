@@ -40,7 +40,7 @@ import type {
   WeaponKeywordRef,
 } from "./buffs.js";
 import type { Phase } from "../generated.js";
-import { bindEachRecipient, bindEventSubject, planSelection } from "./from-dsl-selection.js";
+import { bindEachRecipient, bindEventSubject, planSelection, selectionLeverId, selectionOrder } from "./from-dsl-selection.js";
 import { matchesUnitFilter } from "./unit-filter.js";
 import {
   attachmentFromMembers, boundsVerdict, evaluateControls, evaluateDesignated, evaluateInRegion, evaluateOwnMove, evaluatePhaseEvent, evaluateRuleActive,
@@ -307,7 +307,7 @@ function translateEffect(
   const abilityId = source.kind === "ability" ? source.abilityId : "effect";
   // The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
   const step = onAttackRoll(activation?.trigger, effect, { context, perspective, abilityId, duration: activation?.duration, usage: activation?.usage, definitions: ownDefinitions(effect, abilityId) });
-  walk(step.effect, source, step.opts, out);
+  walk(step.effect, source, { ...step.opts, selections: selectionOrder(step.effect) }, out);
   if (activation?.usage != null || activation?.cost != null || activation?.optional === true) {
     const { duration: _duration, trigger: _trigger, ...requirement } = activation;
     const requires = [requirement];
@@ -358,6 +358,8 @@ type WalkOpts = {
   /** Inside a part triggered by each hit or wound roll of the attack, that roll and its outcome. */
   /** The hit or wound roll an enclosing trigger fires on; `unmodelled` names its narrowing the attack cannot carry. */
   attackRoll?: { roll: "hit" | "wound"; outcome: "success" | "critical" | undefined; unmodelled?: string[] };
+  /** The effect's selections in document order ({@link selectionOrder}), which number their lever ids. */
+  selections?: readonly string[];
 };
 
 function walk(
@@ -744,7 +746,7 @@ function translateSelection(
     out.unsupported.push({ reason: plan.reason, effectFragment: node });
     return;
   }
-  offerLever(plan.effect, source, opts, out, { id: `${opts.abilityId}#selected`, label: plan.label, requires: plan.requires, applicability: plan.applicability });
+  offerLever(plan.effect, source, opts, out, { id: selectionLeverId(opts.abilityId, node, opts.selections), label: plan.label, requires: plan.requires, applicability: plan.applicability });
 }
 
 /**

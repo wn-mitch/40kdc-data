@@ -54,23 +54,20 @@ pub(super) enum SelectionPlan {
 /// joins `requires`. Selections that bind models, named models or a named binding, and selections
 /// whose effect never names the selected unit, stay on the general path.
 pub(super) fn plan_selection(node: &Obj, opts: &WalkOpts) -> SelectionPlan {
-    let Some(selector) = object(node.get("selector")) else {
+    if !is_selection_candidate(node) {
         return SelectionPlan::None;
-    };
-    let Some(filter) = object(selector.get("filter")) else {
+    }
+    let (Some(selector), Some(filter)) = (
+        object(node.get("selector")),
+        object(
+            node.get("selector")
+                .and_then(|selector| selector.get("filter")),
+        ),
+    ) else {
         return SelectionPlan::None;
     };
     let friendly = is_str(filter, "owner", "friendly");
-    if !friendly && !is_str(filter, "owner", "enemy") {
-        return SelectionPlan::None;
-    }
-    if is_str(filter, "level", "model") || present(filter, "model_names").is_some() {
-        return SelectionPlan::None;
-    }
     let binding = selector.get("bind_as").and_then(Value::as_str);
-    if !references_selected_unit(node.get("effect").unwrap_or(&Value::Null), binding) {
-        return SelectionPlan::None;
-    }
     if selector
         .get("count")
         .and_then(|count| count.get("max"))
@@ -439,7 +436,63 @@ fn excludes_ability_unit(condition: Option<&Value>) -> bool {
     false
 }
 
-/// Offer a planned unit selection as one lever (`<abilityId>#selected`).
+/// Whether a `select-units` node is planned as a selection in any context: a friendly or enemy
+/// unit selection whose effect reaches the selected unit.
+fn is_selection_candidate(node: &Obj) -> bool {
+    let Some(selector) = object(node.get("selector")) else {
+        return false;
+    };
+    let Some(filter) = object(selector.get("filter")) else {
+        return false;
+    };
+    if !is_str(filter, "owner", "friendly") && !is_str(filter, "owner", "enemy") {
+        return false;
+    }
+    if is_str(filter, "level", "model") || present(filter, "model_names").is_some() {
+        return false;
+    }
+    let binding = selector.get("bind_as").and_then(Value::as_str);
+    references_selected_unit(node.get("effect").unwrap_or(&Value::Null), binding)
+}
+
+/// The selections of an effect in document order (an object's keys sorted). A selection's lever id is numbered by its
+/// place here, so it does not depend on which branches the context prunes; two identical
+/// selections share a place.
+pub(super) fn selection_order(effect: &Value) -> Vec<Value> {
+    fn visit(node: &Value, order: &mut Vec<Value>) {
+        match node {
+            Value::Array(items) => items.iter().for_each(|child| visit(child, order)),
+            Value::Object(map) => {
+                if is_str(map, "type", "select-units")
+                    && is_selection_candidate(map)
+                    && !order.contains(node)
+                {
+                    order.push(node.clone());
+                }
+                // Keys in sorted order, so every port numbers the same way.
+                let mut keys: Vec<&String> = map.keys().collect();
+                keys.sort();
+                keys.into_iter().for_each(|key| visit(&map[key], order));
+            }
+            _ => {}
+        }
+    }
+    let mut order = Vec::new();
+    visit(effect, &mut order);
+    order
+}
+
+/// A selection lever's id: `<ability>#selected` for the effect's first selection, and
+/// `<ability>#selected-<n>` for its nth.
+fn selection_lever_id(ability_id: &str, node: &Obj, order: &[Value]) -> String {
+    let node = Value::Object(node.clone());
+    match order.iter().position(|selection| *selection == node) {
+        Some(place) if place > 0 => format!("{ability_id}#selected-{}", place + 1),
+        _ => format!("{ability_id}#selected"),
+    }
+}
+
+/// Offer a planned unit selection as one lever (`<abilityId>#selected`, numbered after the first).
 pub(super) fn translate_selection(plan: SelectionPlan, node: &Obj, opts: &WalkOpts, out: &mut Out) {
     match plan {
         SelectionPlan::None | SelectionPlan::Skip => {}
@@ -453,7 +506,7 @@ pub(super) fn translate_selection(plan: SelectionPlan, node: &Obj, opts: &WalkOp
             &effect,
             opts,
             out,
-            format!("{}#selected", opts.ability_id),
+            selection_lever_id(opts.ability_id, node, opts.selections),
             label,
             requires,
             applicability.as_ref(),

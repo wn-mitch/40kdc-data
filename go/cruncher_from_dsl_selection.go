@@ -2,6 +2,9 @@ package wh40kdc
 
 import (
 	"encoding/json"
+	"slices"
+	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -45,24 +48,14 @@ type selectionPlan struct {
 // attack resolves. A top-level dice gate with no failure branch becomes the lever's content; its
 // roll joins requires.
 func planSelection(node, source map[string]any, perspective string, context map[string]any) selectionPlan {
-	selector, ok := node["selector"].(map[string]any)
-	if !ok {
+	if !isSelectionCandidate(node) {
 		return selectionPlan{kind: "none"}
 	}
-	filter, ok := selector["filter"].(map[string]any)
-	if !ok || (filter["owner"] != "friendly" && filter["owner"] != "enemy") {
-		return selectionPlan{kind: "none"}
-	}
-	if filter["level"] == "model" || filter["model_names"] != nil {
-		return selectionPlan{kind: "none"}
-	}
+	selector, _ := node["selector"].(map[string]any)
+	filter, _ := selector["filter"].(map[string]any)
 	// binding is the selector's bind_as name: a {selection_var: binding} ref names the selected
 	// unit as "selected-unit" does.
 	binding, _ := selector["bind_as"].(string)
-	// TS planSelection: a selection whose effect never reaches the selected unit plans nothing.
-	if !referencesSelectedUnit(node["effect"], binding) {
-		return selectionPlan{kind: "none"}
-	}
 	if count, ok := selector["count"].(map[string]any); ok && isZeroNumber(count["max"]) {
 		return selectionPlan{kind: "skip"}
 	}
@@ -398,6 +391,79 @@ func includesKeyword(keywords []any, keyword string) bool {
 	return false
 }
 
+// isSelectionCandidate reports whether a select-units node is planned as a
+// selection in any context: a friendly or enemy unit selection whose effect
+// reaches the selected unit.
+func isSelectionCandidate(node map[string]any) bool {
+	selector, ok := node["selector"].(map[string]any)
+	if !ok {
+		return false
+	}
+	filter, ok := selector["filter"].(map[string]any)
+	if !ok || (filter["owner"] != "friendly" && filter["owner"] != "enemy") {
+		return false
+	}
+	if filter["level"] == "model" || filter["model_names"] != nil {
+		return false
+	}
+	binding, _ := selector["bind_as"].(string)
+	return referencesSelectedUnit(node["effect"], binding)
+}
+
+// selectionText is a node's JSON text (object keys sorted), which identifies
+// a selection.
+func selectionText(node any) string {
+	b, err := json.Marshal(node)
+	if err != nil {
+		return ""
+	}
+	return string(b)
+}
+
+// selectionOrder lists the selections of an effect in document order (an
+// object's keys sorted), each as its JSON text. A selection's lever id is
+// numbered by its place here, so it does not depend on which branches the
+// context prunes; two identical selections share a place.
+func selectionOrder(effect any) []string {
+	var order []string
+	var visit func(node any)
+	visit = func(node any) {
+		switch v := node.(type) {
+		case []any:
+			for _, child := range v {
+				visit(child)
+			}
+		case map[string]any:
+			if v["type"] == "select-units" && isSelectionCandidate(v) {
+				text := selectionText(v)
+				if !slices.Contains(order, text) {
+					order = append(order, text)
+				}
+			}
+			// Keys in sorted order, so every port numbers the same way.
+			keys := make([]string, 0, len(v))
+			for key := range v {
+				keys = append(keys, key)
+			}
+			sort.Strings(keys)
+			for _, key := range keys {
+				visit(v[key])
+			}
+		}
+	}
+	visit(effect)
+	return order
+}
+
+// selectionLeverID is a selection lever's id: <ability>#selected for the
+// effect's first selection, and <ability>#selected-<n> for its nth.
+func selectionLeverID(abilityID string, node map[string]any, order []string) string {
+	if place := slices.Index(order, selectionText(node)); place > 0 {
+		return abilityID + "#selected-" + strconv.Itoa(place+1)
+	}
+	return abilityID + "#selected"
+}
+
 // translateSelection offers a planned unit selection as one lever, gated on the
 // selected unit's keywords, with the selection (and any roll) in requires.
 func translateSelection(plan selectionPlan, node, source map[string]any, opts dslOpts, out *effectTranslation) {
@@ -408,7 +474,7 @@ func translateSelection(plan selectionPlan, node, source map[string]any, opts ds
 		out.unsupported = append(out.unsupported, unsup(plan.reason, node))
 		return
 	}
-	offerLever(plan.effect, source, opts, out, leverSpec{id: opts.abilityID + "#selected", label: plan.label, requires: plan.requires, applicability: plan.applicability})
+	offerLever(plan.effect, source, opts, out, leverSpec{id: selectionLeverID(opts.abilityID, node, opts.selections), label: plan.label, requires: plan.requires, applicability: plan.applicability})
 }
 
 // leverSpec names the lever offerLever builds.

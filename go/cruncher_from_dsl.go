@@ -57,6 +57,9 @@ type dslOpts struct {
 	// attackRoll is set inside a part triggered by each hit or wound roll of the attack: that
 	// roll and its outcome.
 	attackRoll *attackRollInfo
+	// selections lists the effect's selections in document order
+	// (selectionOrder), which number their lever ids.
+	selections []string
 }
 
 // attackRollInfo is the hit or wound roll a single after-roll trigger fires on; outcome is ""
@@ -149,6 +152,7 @@ func translateEffect(effect any, source map[string]any, context map[string]any, 
 			effect = gated
 		}
 	}
+	opts.selections = selectionOrder(effect)
 	dslWalk(effect, source, opts, out)
 	if act == nil || (act["usage"] == nil && act["cost"] == nil && act["optional"] != true) {
 		return out

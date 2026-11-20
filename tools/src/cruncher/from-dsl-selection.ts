@@ -53,12 +53,10 @@ export function planSelection(
   perspective: "attacker" | "target",
   context: EngineContext,
 ): SelectionPlan {
-  const selector = isObject(node.selector) ? node.selector : undefined;
-  const filter = selector && isObject(selector.filter) ? selector.filter : undefined;
-  if (!selector || !filter || (filter.owner !== "friendly" && filter.owner !== "enemy")) return { kind: "none" };
-  if (filter.level === "model" || filter.model_names != null) return { kind: "none" };
+  if (!isSelectionCandidate(node)) return { kind: "none" };
+  const selector = node.selector as Record<string, unknown>;
+  const filter = selector.filter as Record<string, unknown>;
   const binding = typeof selector.bind_as === "string" ? selector.bind_as : undefined;
-  if (!referencesSelectedUnit(node.effect, binding)) return { kind: "none" };
   if (isObject(selector.count) && selector.count.max === 0) return { kind: "skip" };
   const { effect: _effect, ...selection } = node;
   const requires: unknown[] = [selection];
@@ -90,6 +88,51 @@ export function planSelection(
     effect = on_success;
   }
   return { kind: "lever", effect, ...(applicability ? { applicability } : {}), requires, label };
+}
+
+/**
+ * Whether a `select-units` node is planned as a selection in any context: a friendly or enemy unit
+ * selection whose effect reaches the selected unit.
+ */
+function isSelectionCandidate(node: Record<string, unknown>): boolean {
+  const selector = isObject(node.selector) ? node.selector : undefined;
+  const filter = selector && isObject(selector.filter) ? selector.filter : undefined;
+  if (!selector || !filter || (filter.owner !== "friendly" && filter.owner !== "enemy")) return false;
+  if (filter.level === "model" || filter.model_names != null) return false;
+  return referencesSelectedUnit(node.effect, typeof selector.bind_as === "string" ? selector.bind_as : undefined);
+}
+
+/**
+ * The selections of an effect in document order (an object's keys sorted), each as its JSON text. A selection's lever id is
+ * numbered by its place here, so it does not depend on which branches the context prunes; two
+ * identical selections share a place.
+ */
+export function selectionOrder(effect: unknown): string[] {
+  const order: string[] = [];
+  const visit = (node: unknown): void => {
+    if (Array.isArray(node)) {
+      for (const child of node) visit(child);
+      return;
+    }
+    if (!isObject(node)) return;
+    if (node.type === "select-units" && isSelectionCandidate(node)) {
+      const text = JSON.stringify(node);
+      if (!order.includes(text)) order.push(text);
+    }
+    // Keys in sorted order, so every port numbers the same way.
+    for (const key of Object.keys(node).sort()) visit(node[key]);
+  };
+  visit(effect);
+  return order;
+}
+
+/**
+ * A selection lever's id: `<ability>#selected` for the effect's first selection, and
+ * `<ability>#selected-<n>` for its nth.
+ */
+export function selectionLeverId(abilityId: string, node: Record<string, unknown>, order: readonly string[] | undefined): string {
+  const place = order?.indexOf(JSON.stringify(node)) ?? -1;
+  return place > 0 ? `${abilityId}#selected-${place + 1}` : `${abilityId}#selected`;
 }
 
 /**

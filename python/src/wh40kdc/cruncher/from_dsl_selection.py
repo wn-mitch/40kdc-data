@@ -14,6 +14,7 @@ imports this module; that import is deferred to call time to avoid a cycle.
 
 from __future__ import annotations
 
+import json
 from typing import Any
 
 from wh40kdc.cruncher.buffs import Buff, BuffSource, EngineContext
@@ -45,17 +46,13 @@ def plan_selection(
     - A top-level dice gate with no failure branch becomes the lever's content; its roll joins
       ``requires``.
     """
-    selector = node.get("selector") if isinstance(node.get("selector"), dict) else None
-    filt = selector.get("filter") if isinstance(selector, dict) else None
-    owner = filt.get("owner") if isinstance(filt, dict) else None
-    if selector is None or not isinstance(filt, dict) or owner not in ("friendly", "enemy"):
+    if not _is_selection_candidate(node):
         return {"kind": "none"}
-    if filt.get("level") == "model" or filt.get("model_names") is not None:
-        return {"kind": "none"}
+    selector = node["selector"]
+    filt = selector["filter"]
+    owner = filt["owner"]
     bind_as = selector.get("bind_as")
     binding = bind_as if isinstance(bind_as, str) else None
-    if not _references_selected_unit(node.get("effect"), binding):
-        return {"kind": "none"}
 
     count = selector.get("count")
     if isinstance(count, dict) and _is_zero(count.get("max")):
@@ -120,6 +117,59 @@ def _names_selected(value: Any, binding: str | None) -> bool:
     return value == _SELECTED_UNIT or (
         binding is not None and isinstance(value, dict) and value.get("selection_var") == binding
     )
+
+
+def _is_selection_candidate(node: dict[str, Any]) -> bool:
+    """Whether a ``select-units`` node is planned as a selection in any context: a friendly or
+    enemy unit selection whose effect reaches the selected unit."""
+    selector = node.get("selector")
+    if not isinstance(selector, dict):
+        return False
+    filt = selector.get("filter")
+    if not isinstance(filt, dict) or filt.get("owner") not in ("friendly", "enemy"):
+        return False
+    if filt.get("level") == "model" or filt.get("model_names") is not None:
+        return False
+    bind_as = selector.get("bind_as")
+    binding = bind_as if isinstance(bind_as, str) else None
+    return _references_selected_unit(node.get("effect"), binding)
+
+
+def _selection_text(node: Any) -> str:
+    return json.dumps(node, sort_keys=True, separators=(",", ":"))
+
+
+def selection_order(effect: Any) -> list[str]:
+    """The selections of an effect in document order (an object's keys sorted), each as its JSON
+    text. A selection's lever id is numbered by its place here, so it does not depend on which
+    branches the context prunes; two identical selections share a place."""
+    order: list[str] = []
+
+    def visit(node: Any) -> None:
+        if isinstance(node, list):
+            for child in node:
+                visit(child)
+            return
+        if not isinstance(node, dict):
+            return
+        if node.get("type") == "select-units" and _is_selection_candidate(node):
+            text = _selection_text(node)
+            if text not in order:
+                order.append(text)
+        # Keys in sorted order, so every port numbers the same way.
+        for key in sorted(node):
+            visit(node[key])
+
+    visit(effect)
+    return order
+
+
+def selection_lever_id(ability_id: str, node: dict[str, Any], order: list[str] | None) -> str:
+    """A selection lever's id: ``<ability>#selected`` for the effect's first selection, and
+    ``<ability>#selected-<n>`` for its nth."""
+    text = _selection_text(node)
+    place = order.index(text) if order and text in order else -1
+    return f"{ability_id}#selected-{place + 1}" if place > 0 else f"{ability_id}#selected"
 
 
 def _references_selected_unit(node: Any, binding: str | None = None) -> bool:
@@ -249,7 +299,7 @@ def translate_selection(
         opts,
         out,
         {
-            "id": f"{opts['abilityId']}#selected",
+            "id": selection_lever_id(opts["abilityId"], node, opts.get("selections")),
             "label": plan["label"],
             "requires": plan["requires"],
             "applicability": plan.get("applicability"),
