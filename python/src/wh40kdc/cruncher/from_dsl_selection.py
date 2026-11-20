@@ -34,9 +34,12 @@ def plan_selection(
     the crunched unit), ``{"kind": "unsupported", "reason"}``, or ``{"kind": "lever", "effect",
     "applicability"?, "requires", "label"}``.
 
-    - A friendly selection reaches the crunched unit when its keywords match the selector. When
-      the eligibility excludes the ability's own unit, the lever exists only when another unit
-      provides the ability (``abilityKind: "support"``).
+    - A selection whose ``count.max`` is 0 picks nothing, so nothing reaches the crunched unit.
+    - A friendly selection reaches the crunched unit when the selector's unit filter holds for it
+      (range and visibility are the player's to vouch for); a predicate the context cannot decide
+      leaves it unsupported. When the eligibility or ``filter.excluding`` excludes the ability's
+      own unit, the lever exists only when another unit provides the ability
+      (``abilityKind: "support"``).
     - An enemy selection reaches the other side of the attack.
     - A top-level dice gate with no failure branch becomes the lever's content; its roll joins
       ``requires``.
@@ -59,68 +62,69 @@ def plan_selection(
     if not _references_selected_unit(node.get("effect"), binding):
         return {"kind": "none"}
 
-    all_of = filt.get("all_of")
-    any_of = filt.get("any_of")
-    excluded = filt.get("none_of")
-    has_keywords = "all_of" in filt or "any_of" in filt
-    has_excluded = "none_of" in filt
-    if (all_of is not None and not _is_keyword_list(all_of)) or (
-        any_of is not None and not _is_keyword_list(any_of)
-    ) or (excluded is not None and not _is_keyword_list(excluded)):
-        return {
-            "kind": "unsupported",
-            "reason": "select-units: the selector's keyword lists are malformed",
-        }
+    count = selector.get("count")
+    if isinstance(count, dict) and _is_zero(count.get("max")):
+        return {"kind": "skip"}
     selection = {k: v for k, v in node.items() if k != "effect"}
     requires: list[Any] = [selection]
     applicability: dict[str, Any] | None = None
 
-    unit_ids = filt.get("unit_ids")
-    if unit_ids is not None and (
-        filt.get("level") != "unit"
-        or not isinstance(unit_ids, list)
-        or not unit_ids
-        or any(not isinstance(unit_id, str) for unit_id in unit_ids)
-    ):
-        return {
-            "kind": "unsupported",
-            "reason": "select-units: unit_ids identity filter is malformed",
-        }
-    if unit_ids is not None:
-        identity_key = (
-            "attackerUnitId"
-            if (owner == "friendly") == (perspective == "attacker")
-            else "targetUnitId"
-        )
-        identity = context.get(identity_key)
-        if not isinstance(identity, str):
-            return {"kind": "unsupported", "reason": "select-units: unit identity is unavailable"}
-        if identity not in unit_ids:
-            return {"kind": "skip"}
     if owner == "friendly":
         provided = source.get("kind") == "ability" and source.get("abilityKind") == "support"
-        if _excludes_ability_unit(selector.get("eligibility")) and not provided:
+        excludes_self = filt.get("excluding") in ("ability-unit", "this-unit") or (
+            _excludes_ability_unit(selector.get("eligibility"))
+        )
+        if excludes_self and not provided:
             return {"kind": "skip"}
-        if has_keywords or has_excluded:
-            own = context.get("attackerKeywords" if perspective == "attacker" else "targetKeywords")
-            if own is None:
-                return {
-                    "kind": "unsupported",
-                    "reason": (
-                        "select-units: the crunched unit's keywords are unavailable for the "
-                        "selector"
-                    ),
-                }
-            holds = (
-                (not all_of or all(_includes_keyword(own, k) for k in all_of))
-                and (not any_of or any(_includes_keyword(own, k) for k in any_of))
-                and not any(_includes_keyword(own, k) for k in excluded or [])
-            )
-            if not holds:
-                return {"kind": "skip"}
+        from wh40kdc.cruncher import from_dsl as dsl
+
+        known = {k: v for k, v in filt.items() if k not in ("within", "visible", "excluding")}
+        verdict = dsl._matches_unit_filter(
+            known, context, "attacker" if perspective == "attacker" else "target"
+        )
+        if verdict is False:
+            return {"kind": "skip"}
+        if verdict == "unknown":
+            return {
+                "kind": "unsupported",
+                "reason": "select-units: candidate identity or state is unavailable",
+            }
         effect = _retarget(node.get("effect"), _SELECTED_UNIT, binding)
         label = "Selected unit"
     else:
+        all_of = filt.get("all_of")
+        any_of = filt.get("any_of")
+        excluded = filt.get("none_of")
+        has_keywords = "all_of" in filt or "any_of" in filt
+        has_excluded = "none_of" in filt
+        if (all_of is not None and not _is_keyword_list(all_of)) or (
+            any_of is not None and not _is_keyword_list(any_of)
+        ) or (excluded is not None and not _is_keyword_list(excluded)):
+            return {
+                "kind": "unsupported",
+                "reason": "select-units: the selector's keyword lists are malformed",
+            }
+        if unit_ids is not None:
+            if (
+                filt.get("level") != "unit"
+                or not isinstance(unit_ids, list)
+                or not unit_ids
+                or any(not isinstance(unit_id, str) for unit_id in unit_ids)
+            ):
+                return {
+                    "kind": "unsupported",
+                    "reason": "select-units: unit_ids identity filter is malformed",
+                }
+            identity = context.get(
+                "targetUnitId" if perspective == "attacker" else "attackerUnitId"
+            )
+            if not isinstance(identity, str):
+                return {
+                    "kind": "unsupported",
+                    "reason": "select-units: unit identity is unavailable",
+                }
+            if identity not in unit_ids:
+                return {"kind": "skip"}
         other = "defender" if perspective == "attacker" else "attacker"
         enemy_keywords: list[str] = []
         if isinstance(all_of, list):
@@ -282,6 +286,11 @@ def _excludes_ability_unit(condition: Any) -> bool:
     if condition.get("operator") == "and" and isinstance(operands, list):
         return any(_excludes_ability_unit(operand) for operand in operands)
     return False
+
+
+def _is_zero(value: Any) -> bool:
+    """Whether a JSON value is the number 0 (a boolean is not a number)."""
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and value == 0
 
 
 def _is_keyword_list(value: Any) -> bool:

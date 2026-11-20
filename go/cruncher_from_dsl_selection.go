@@ -1,6 +1,9 @@
 package wh40kdc
 
-import "strings"
+import (
+	"encoding/json"
+	"strings"
+)
 
 // Unit selections and other player-vouched choices as levers. A select-units
 // effect whose nested effect reaches the selected-unit is a choice the player
@@ -31,10 +34,13 @@ type selectionPlan struct {
 }
 
 // planSelection plans a select-units node for the crunched unit under
-// perspective. A friendly selection reaches the crunched unit when its keywords
-// match the selector; when the eligibility excludes the ability's own unit, the
-// lever exists only when another unit provides the ability (abilityKind
-// "support"). An enemy selection reaches the other side of the attack. A
+// perspective. A selection whose count.max is 0 picks nothing, so nothing reaches
+// the crunched unit. A friendly selection reaches the crunched unit when the
+// selector's unit filter holds for it (range and visibility are the player's to
+// vouch for); a predicate the context cannot decide leaves it unsupported. When
+// the eligibility or filter.excluding excludes the ability's own unit, the lever
+// exists only when another unit provides the ability (abilityKind "support").
+// An enemy selection reaches the other side of the attack. A
 // top-level dice gate with no failure branch becomes the lever's content; its
 // roll joins requires.
 func planSelection(node, source map[string]any, perspective string, context map[string]any) selectionPlan {
@@ -56,18 +62,8 @@ func planSelection(node, source map[string]any, perspective string, context map[
 	if !referencesSelectedUnit(node["effect"], binding) {
 		return selectionPlan{kind: "none"}
 	}
-	keywords, keywordsOK := selectorKeywordList(filter["all_of"])
-	anyKeywords, anyOK := selectorKeywordList(filter["any_of"])
-	excluded, excludedOK := selectorKeywordList(filter["none_of"])
-	if (filter["all_of"] != nil && !keywordsOK) || (filter["any_of"] != nil && !anyOK) || (filter["none_of"] != nil && !excludedOK) {
-		return selectionPlan{kind: "unsupported", reason: "select-units: the selector's keyword lists are malformed"}
-	}
-	if len(anyKeywords) > 0 {
-		// The buff gate can represent one required keyword, not an arbitrary
-		// OR predicate on an enemy selector.
-		if filter["owner"] == "enemy" {
-			return selectionPlan{kind: "unsupported", reason: "select-units: any_of keyword selectors are not gated by the buff layer"}
-		}
+	if count, ok := selector["count"].(map[string]any); ok && isZeroNumber(count["max"]) {
+		return selectionPlan{kind: "skip"}
 	}
 	selection := make(map[string]any, len(node))
 	for k, v := range node {
@@ -82,49 +78,41 @@ func planSelection(node, source map[string]any, perspective string, context map[
 	var label string
 	if filter["owner"] == "friendly" {
 		provided := getStr(source, "kind") == "ability" && getStr(source, "abilityKind") == "support"
-		if excludesAbilityUnit(selector["eligibility"]) && !provided {
+		excludesSelf := filter["excluding"] == "ability-unit" || filter["excluding"] == "this-unit" || excludesAbilityUnit(selector["eligibility"])
+		if excludesSelf && !provided {
 			return selectionPlan{kind: "skip"}
 		}
-		hasKeywords := len(keywords) > 0 || len(anyKeywords) > 0 || len(excluded) > 0
-		if hasKeywords {
-			key := "targetKeywords"
-			if perspective == "attacker" {
-				key = "attackerKeywords"
-			}
-			ownRaw, present := context[key]
-			if !present || ownRaw == nil {
-				return selectionPlan{kind: "unsupported", reason: "select-units: the crunched unit's keywords are unavailable for the selector"}
-			}
-			own := getList(context, key)
-			for _, k := range keywords {
-				if !includesKeyword(own, k) {
-					return selectionPlan{kind: "skip"}
-				}
-			}
-			if len(anyKeywords) > 0 {
-				found := false
-				for _, k := range anyKeywords {
-					if includesKeyword(own, k) {
-						found = true
-						break
-					}
-				}
-				if !found {
-					return selectionPlan{kind: "skip"}
-				}
-			}
-			for _, k := range excluded {
-				if includesKeyword(own, k) {
-					return selectionPlan{kind: "skip"}
-				}
+		known := make(map[string]any, len(filter))
+		for k, v := range filter {
+			if k != "within" && k != "visible" && k != "excluding" {
+				known[k] = v
 			}
 		}
-		if filter["not_all_of"] != nil {
-			return selectionPlan{kind: "unsupported", reason: "select-units: not_all_of keyword selectors are not gated by the buff layer"}
+		side := "target"
+		if perspective == "attacker" {
+			side = "attacker"
+		}
+		switch matchesUnitFilter(known, context, side, "friendly") {
+		case false:
+			return selectionPlan{kind: "skip"}
+		case true:
+		default:
+			return selectionPlan{kind: "unsupported", reason: "select-units: candidate identity or state is unavailable"}
 		}
 		effect = retargetSelected(node["effect"], selectedUnit, binding)
 		label = "Selected unit"
 	} else {
+		keywords, keywordsOK := selectorKeywordList(filter["all_of"])
+		anyKeywords, anyOK := selectorKeywordList(filter["any_of"])
+		excluded, excludedOK := selectorKeywordList(filter["none_of"])
+		if (filter["all_of"] != nil && !keywordsOK) || (filter["any_of"] != nil && !anyOK) || (filter["none_of"] != nil && !excludedOK) {
+			return selectionPlan{kind: "unsupported", reason: "select-units: the selector's keyword lists are malformed"}
+		}
+		if len(anyKeywords) > 0 {
+			// The buff gate can represent one required keyword, not an arbitrary
+			// OR predicate on an enemy selector.
+			return selectionPlan{kind: "unsupported", reason: "select-units: any_of keyword selectors are not gated by the buff layer"}
+		}
 		other := "attacker"
 		if perspective == "attacker" {
 			other = "defender"
@@ -402,6 +390,22 @@ func excludesAbilityUnit(raw any) bool {
 				return true
 			}
 		}
+	}
+	return false
+}
+
+// isZeroNumber reports whether a decoded JSON value is the number 0.
+func isZeroNumber(value any) bool {
+	switch n := value.(type) {
+	case float64:
+		return n == 0
+	case int:
+		return n == 0
+	case int64:
+		return n == 0
+	case json.Number:
+		f, err := n.Float64()
+		return err == nil && f == 0
 	}
 	return false
 }

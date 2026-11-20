@@ -9,6 +9,11 @@ export const SELECTION_BACKREF_CASE_PREFIX = "canonical/selection-backref/";
  * tag the selection does not designate stays undecided. A selector that binds the selection with
  * `bind_as` is planned the same way: its `{selection_var}` refs name the selected unit, for an
  * enemy selection (the defender) and a friendly one (the buffed unit).
+ *
+ * Friendly selections reach the buffed unit only when it can be picked: a `count.max` of 0 picks
+ * nothing, a `filter.excluding` of the ability's own unit keeps a unit from picking itself (another
+ * unit providing the ability still can), and the whole unit filter, not just its keywords, must
+ * hold for the buffed unit; a predicate the context cannot decide leaves the selection unsupported.
  */
 export function canonicalSelectionBackrefCases() {
   const source = { kind: "ability", abilityId: "fabricated-selection-backref", abilityKind: "unit" } as const;
@@ -46,16 +51,34 @@ export function canonicalSelectionBackrefCases() {
     },
     effect: { type: "re-roll", target: bound, modifier: { roll: "wound", subset: "ones" } },
   };
-  const inputs: Array<{ id: string; effect: unknown; context?: Record<string, unknown> }> = [
+  const friendly = (filter: Record<string, unknown>, count = { min: 1, max: 1 }) => ({
+    type: "select-units",
+    selector: {
+      filter: { owner: "friendly", within: { range: { inches: 6 }, of: "this-unit" }, ...filter },
+      count,
+    },
+    effect: { type: "re-roll", target: "selected-unit", modifier: { roll: "wound", subset: "ones" } },
+  });
+  const supported = { kind: "ability", abilityId: source.abilityId, abilityKind: "support" } as const;
+  const infantry = { attackerKeywords: ["infantry"] };
+  const inputs: Array<{ id: string; effect: unknown; context?: Record<string, unknown>; source?: typeof source | typeof supported }> = [
     { id: "own-designation-and-same-unit", effect: selection(marked("example-mark", "example-mark")) },
     { id: "other-designation-stays", effect: selection(marked("example-mark", "other-mark")) },
     { id: "bound-enemy-designation-and-same-unit", effect: selection(marked("example-mark", "example-mark", bound), binding) },
-    { id: "bound-friendly-target", effect: friendlyBound, context: { attackerKeywords: ["infantry"] } },
+    { id: "bound-friendly-target", effect: friendlyBound, context: infantry },
+    { id: "friendly-count-max-zero-skips", effect: friendly({ all_of: ["INFANTRY"] }, { min: 0, max: 0 }), context: infantry },
+    { id: "friendly-excluding-this-unit-skips", effect: friendly({ all_of: ["INFANTRY"], excluding: "this-unit" }), context: infantry },
+    { id: "friendly-excluding-ability-unit-skips", effect: friendly({ all_of: ["INFANTRY"], excluding: "ability-unit" }), context: infantry },
+    { id: "friendly-excluding-ability-unit-provided", effect: friendly({ all_of: ["INFANTRY"], excluding: "ability-unit" }), context: infantry, source: supported },
+    { id: "friendly-filter-state-fails-skips", effect: friendly({ all_of: ["INFANTRY"], state: "benefit-of-cover" }), context: { ...infantry, attackerInCover: false } },
+    { id: "friendly-filter-state-holds", effect: friendly({ state: "battle-shocked" }), context: { attackerStates: ["battle-shocked"] } },
+    { id: "friendly-filter-state-unknown", effect: friendly({ state: "battle-shocked" }), context: infantry },
+    { id: "friendly-keywords-unknown", effect: friendly({ all_of: ["INFANTRY"] }) },
   ];
   return inputs.map((input) => dslExpectation({
     caseId: `${SELECTION_BACKREF_CASE_PREFIX}${input.id}`,
     abilityId: source.abilityId,
-    source,
+    source: input.source ?? source,
     effect: input.effect,
     context: { phase: "shooting", attackerTurn: true, ...input.context },
     perspective: "attacker",
