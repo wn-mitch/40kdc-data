@@ -761,7 +761,16 @@ function offerLever(
 ): void {
   const sub: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
   walk(effect, source, opts, sub);
-  const gate = (buff: Buff): Buff => (lever.applicability ? applyApplicability(buff, lever.applicability) : buff);
+  // A nested enemy selection names its own unit on that side of the attack, so its filter, not
+  // this lever's, gates its buffs; this lever's selection stays in `requires`.
+  const gate = (buff: Buff): Buff => {
+    if (!lever.applicability) return buff;
+    const own = buff.applicableWhen;
+    const outer: BuffApplicability = { ...lever.applicability };
+    if (own?.targetFilter) delete outer.targetFilter;
+    if (own?.attackerFilter) delete outer.attackerFilter;
+    return applyApplicability(buff, outer);
+  };
   out.unsupported.push(...sub.unsupported);
   for (const nested of sub.activatable) {
     out.activatable.push({ ...nested, buffs: nested.buffs.map(gate), requires: [...lever.requires, ...(nested.requires ?? [])] });

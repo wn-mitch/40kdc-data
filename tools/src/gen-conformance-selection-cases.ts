@@ -21,7 +21,9 @@ export const SELECTION_BACKREF_CASE_PREFIX = "canonical/selection-backref/";
  * An enemy selection is gated by its whole unit filter, less `within`, `visible` and `excluding`,
  * on the other side of the attack. The gate is decided when the attack resolves, so planning offers
  * the lever for any filter: several required keywords, `any_of`, `not_all_of`, `none_of` on the
- * attacker, a state, or a `unit_ids` identity the context does not carry. A selector with no
+ * attacker, a state, or a `unit_ids` identity the context does not carry. An enemy selection nested
+ * in another picks its own unit, so its lever is gated by its own filter alone; the enclosing
+ * selection stays in `requires`. A selector with no
  * friendly or enemy `owner` is not planned as a selection, even when it names `unit_ids`.
  */
 export function canonicalSelectionBackrefCases() {
@@ -73,6 +75,11 @@ export function canonicalSelectionBackrefCases() {
   const enemyDebuff = (filter: Record<string, unknown>) => selection(
     { type: "roll-modifier", target: "selected-unit", modifier: { roll: "hit", operation: "subtract", value: 1 } }, undefined, filter,
   );
+  const hitDebuff = { type: "roll-modifier", target: "selected-unit", modifier: { roll: "hit", operation: "subtract", value: 1 } };
+  // Select an enemy INFANTRY unit, then a battle-shocked enemy unit; each gets the same effect.
+  const nestedEnemy = (effect: unknown) => selection(
+    { type: "sequence", steps: [effect, selection(effect, undefined, { state: "battle-shocked" })] }, undefined, { all_of: ["INFANTRY"] },
+  );
   const unowned = (owner: Record<string, unknown>) => ({
     type: "select-units",
     selector: { filter: { ...owner, level: "unit", unit_ids: ["example-unit"] }, count: { min: 1, max: 1 } },
@@ -103,6 +110,8 @@ export function canonicalSelectionBackrefCases() {
     { id: "enemy-filter-unit-ids-identity-unknown", effect: enemy({ level: "unit", unit_ids: ["example-unit"] }) },
     { id: "enemy-filter-unit-ids-other-unit", effect: enemy({ level: "unit", unit_ids: ["example-unit"] }), context: { targetUnitId: "other-unit" } },
     { id: "enemy-filter-attacker-none-of", effect: enemyDebuff({ none_of: ["VEHICLE"] }), context: { attackerTurn: false }, perspective: "target" },
+    { id: "enemy-filter-nested-selection-own-filter", effect: nestedEnemy(worsenSave) },
+    { id: "enemy-filter-nested-selection-own-attacker-filter", effect: nestedEnemy(hitDebuff), context: { attackerTurn: false }, perspective: "target" },
     { id: "unowned-unit-ids-not-a-selection", effect: unowned({}), context: { attackerUnitId: "example-unit" } },
     { id: "any-owner-unit-ids-not-a-selection", effect: unowned({ owner: "any" }), context: { attackerUnitId: "example-unit" } },
   ];

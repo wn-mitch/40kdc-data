@@ -38,6 +38,13 @@
             },
             "requires": null,
             "capRaise": null,
+            "gates": [
+              {
+                "phases": [
+                  "shooting"
+                ]
+              }
+            ],
             "buffs": [
               {
                 "type": "extra-keyword",
@@ -318,6 +325,13 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "phases": [
+                  "fight"
+                ]
+              }
+            ],
             "buffs": [
               {
                 "type": "attacks-mod",
@@ -1511,6 +1525,19 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "phases": [
+                  "shooting"
+                ],
+                "targetFilter": {
+                  "owner": "enemy",
+                  "none_of": [
+                    "VEHICLE"
+                  ]
+                }
+              }
+            ],
             "buffs": [
               {
                 "type": "extra-keyword",
@@ -1639,6 +1666,11 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "weaponName": "fabricated claws"
+              }
+            ],
             "buffs": [
               {
                 "type": "attacks-mod",
@@ -1876,6 +1908,18 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "phases": [
+                  "shooting"
+                ]
+              },
+              {
+                "phases": [
+                  "fight"
+                ]
+              }
+            ],
             "buffs": [
               {
                 "type": "wound-mod",
@@ -2092,6 +2136,18 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "phases": [
+                  "fight"
+                ]
+              },
+              {
+                "phases": [
+                  "shooting"
+                ]
+              }
+            ],
             "buffs": [
               {
                 "type": "hit-mod",
@@ -5397,6 +5453,20 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "weaponName": "plasma rifle"
+              },
+              {
+                "weaponName": "plasma rifle"
+              },
+              {
+                "weaponName": "plasma rifle"
+              },
+              {
+                "weaponName": "plasma rifle"
+              }
+            ],
             "buffs": [
               {
                 "type": "strength-mod",
@@ -7399,6 +7469,13 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "phases": [
+                  "fight"
+                ]
+              }
+            ],
             "buffs": [
               {
                 "type": "strength-mod",
@@ -9097,6 +9174,13 @@
             },
             "requires": null,
             "capRaise": null,
+            "gates": [
+              {
+                "phases": [
+                  "fight"
+                ]
+              }
+            ],
             "buffs": [
               {
                 "type": "strength-mod",
@@ -10577,6 +10661,23 @@
             },
             "requires": null,
             "capRaise": null,
+            "gates": [
+              {
+                "attackComparisons": [
+                  {
+                    "left": {
+                      "of": "attacker",
+                      "stat": "S"
+                    },
+                    "comparison": "gt",
+                    "right": {
+                      "of": "defender",
+                      "stat": "T"
+                    }
+                  }
+                ]
+              }
+            ],
             "buffs": [
               {
                 "type": "hit-mod",
@@ -20804,6 +20905,13 @@
             },
             "requires": null,
             "capRaise": null,
+            "gates": [
+              {
+                "phases": [
+                  "shooting"
+                ]
+              }
+            ],
             "buffs": [
               {
                 "type": "removed-keyword",
@@ -21380,6 +21488,13 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "targetFilter": {
+                  "owner": "enemy"
+                }
+              }
+            ],
             "buffs": [
               {
                 "type": "reroll",
@@ -21616,6 +21731,13 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "targetFilter": {
+                  "owner": "enemy"
+                }
+              }
+            ],
             "buffs": [
               {
                 "type": "reroll",
@@ -22303,6 +22425,17 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "targetFilter": {
+                  "owner": "enemy",
+                  "all_of": [
+                    "INFANTRY",
+                    "CHARACTER"
+                  ]
+                }
+              }
+            ],
             "buffs": [
               {
                 "type": "save-mod",
@@ -22392,6 +22525,17 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "targetFilter": {
+                  "owner": "enemy",
+                  "any_of": [
+                    "INFANTRY",
+                    "MONSTER"
+                  ]
+                }
+              }
+            ],
             "buffs": [
               {
                 "type": "save-mod",
@@ -22481,6 +22625,17 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "targetFilter": {
+                  "owner": "enemy",
+                  "not_all_of": [
+                    "INFANTRY",
+                    "CHARACTER"
+                  ]
+                }
+              }
+            ],
             "buffs": [
               {
                 "type": "save-mod",
@@ -22564,6 +22719,14 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "targetFilter": {
+                  "owner": "enemy",
+                  "state": "battle-shocked"
+                }
+              }
+            ],
             "buffs": [
               {
                 "type": "save-mod",
@@ -22653,6 +22816,17 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "targetFilter": {
+                  "owner": "enemy",
+                  "level": "unit",
+                  "unit_ids": [
+                    "example-unit"
+                  ]
+                }
+              }
+            ],
             "buffs": [
               {
                 "type": "save-mod",
@@ -22743,6 +22917,209 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "targetFilter": {
+                  "owner": "enemy",
+                  "level": "unit",
+                  "unit_ids": [
+                    "example-unit"
+                  ]
+                }
+              }
+            ],
+            "buffs": [
+              {
+                "type": "save-mod",
+                "value": -1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/selection-backref/enemy-filter-nested-selection-own-filter",
+      "abilityId": "fabricated-selection-backref",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-selection-backref",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 18
+              },
+              "of": "this-unit"
+            },
+            "all_of": [
+              "INFANTRY"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "stat": "Sv",
+                "operation": "worsen",
+                "value": 1
+              }
+            },
+            {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "enemy",
+                  "within": {
+                    "range": {
+                      "inches": 18
+                    },
+                    "of": "this-unit"
+                  },
+                  "state": "battle-shocked"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "effect": {
+                "type": "stat-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "stat": "Sv",
+                  "operation": "worsen",
+                  "value": 1
+                }
+              }
+            }
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerTurn": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-selection-backref#selected",
+            "label": "Selected enemy unit: -1 to save",
+            "group": null,
+            "requires": [
+              {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy",
+                    "within": {
+                      "range": {
+                        "inches": 18
+                      },
+                      "of": "this-unit"
+                    },
+                    "all_of": [
+                      "INFANTRY"
+                    ]
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  }
+                }
+              },
+              {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy",
+                    "within": {
+                      "range": {
+                        "inches": 18
+                      },
+                      "of": "this-unit"
+                    },
+                    "state": "battle-shocked"
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  }
+                }
+              }
+            ],
+            "capRaise": null,
+            "gates": [
+              {
+                "targetFilter": {
+                  "owner": "enemy",
+                  "state": "battle-shocked"
+                }
+              }
+            ],
+            "buffs": [
+              {
+                "type": "save-mod",
+                "value": -1
+              }
+            ]
+          },
+          {
+            "id": "fabricated-selection-backref#selected",
+            "label": "Selected enemy unit: -1 to save",
+            "group": null,
+            "requires": [
+              {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy",
+                    "within": {
+                      "range": {
+                        "inches": 18
+                      },
+                      "of": "this-unit"
+                    },
+                    "all_of": [
+                      "INFANTRY"
+                    ]
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  }
+                }
+              }
+            ],
+            "capRaise": null,
+            "gates": [
+              {
+                "targetFilter": {
+                  "owner": "enemy",
+                  "all_of": [
+                    "INFANTRY"
+                  ]
+                }
+              }
+            ],
             "buffs": [
               {
                 "type": "save-mod",

@@ -394,6 +394,8 @@ export function dslProjection(result: EffectTranslation) {
       ...stanceOptionFields(lever),
       // Projected only on a secondary-effect lever, so other goldens keep their shape.
       ...(lever.secondary ? { secondary: true } : {}),
+      // Each buff's gate (null when ungated), projected only on a lever with a gated buff.
+      ...(lever.buffs.some((applied) => applied.applicableWhen) ? { gates: lever.buffs.map((applied) => applied.applicableWhen ?? null) } : {}),
       buffs: lever.buffs.map((applied) => applied.contribution),
     })),
   };

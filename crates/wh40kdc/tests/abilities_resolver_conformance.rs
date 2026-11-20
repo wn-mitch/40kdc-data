@@ -213,6 +213,9 @@ fn run_dsl_corpus(filename: &str) {
                         "requiresOption": a.requires_option,
                         "excludesOption": a.excludes_option,
                         "secondary": a.secondary,
+                        "gates": a.buffs.iter().any(|b| b.applicable_when.is_some()).then(|| {
+                            a.buffs.iter().map(|b| serde_json::to_value(&b.applicable_when).unwrap()).collect::<Vec<_>>()
+                        }),
                         "buffs": a.buffs.iter().map(|b| serde_json::to_value(&b.contribution).unwrap()).collect::<Vec<_>>(),
                     })
                 })
@@ -233,6 +236,7 @@ fn run_dsl_corpus(filename: &str) {
                         "requiresOption",
                         "excludesOption",
                         "secondary",
+                        "gates",
                     ] {
                         o.entry(key).or_insert(Value::Null);
                     }

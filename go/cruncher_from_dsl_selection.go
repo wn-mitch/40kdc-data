@@ -430,7 +430,17 @@ func offerLever(effect any, source map[string]any, opts dslOpts, out *effectTran
 		if lever.applicability == nil {
 			return b
 		}
-		return applyApplicability(b, lever.applicability)
+		// A nested enemy selection names its own unit on that side of the
+		// attack, so its filter, not this lever's, gates its buffs; this
+		// lever's selection stays in requires.
+		outer := cloneMap(lever.applicability)
+		own, _ := asMap(b["applicableWhen"])
+		for _, key := range []string{"targetFilter", "attackerFilter"} {
+			if own != nil && own[key] != nil {
+				delete(outer, key)
+			}
+		}
+		return applyApplicability(b, outer)
 	}
 	out.unsupported = append(out.unsupported, sub.unsupported...)
 	for _, nestedAny := range sub.activatable {

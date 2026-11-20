@@ -2771,6 +2771,208 @@
               }
             ],
             "capRaise": null,
+            "gates": [
+              {
+                "attackerFilter": {
+                  "owner": "enemy",
+                  "none_of": [
+                    "VEHICLE"
+                  ]
+                }
+              }
+            ],
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": -1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/selection-backref/enemy-filter-nested-selection-own-attacker-filter",
+      "abilityId": "fabricated-selection-backref",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-selection-backref",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 18
+              },
+              "of": "this-unit"
+            },
+            "all_of": [
+              "INFANTRY"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "roll-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "subtract",
+                "value": 1
+              }
+            },
+            {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "enemy",
+                  "within": {
+                    "range": {
+                      "inches": 18
+                    },
+                    "of": "this-unit"
+                  },
+                  "state": "battle-shocked"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1
+                }
+              }
+            }
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerTurn": false
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-selection-backref#selected",
+            "label": "Selected enemy unit: -1 to hit",
+            "group": null,
+            "requires": [
+              {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy",
+                    "within": {
+                      "range": {
+                        "inches": 18
+                      },
+                      "of": "this-unit"
+                    },
+                    "all_of": [
+                      "INFANTRY"
+                    ]
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  }
+                }
+              },
+              {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy",
+                    "within": {
+                      "range": {
+                        "inches": 18
+                      },
+                      "of": "this-unit"
+                    },
+                    "state": "battle-shocked"
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  }
+                }
+              }
+            ],
+            "capRaise": null,
+            "gates": [
+              {
+                "attackerFilter": {
+                  "owner": "enemy",
+                  "state": "battle-shocked"
+                }
+              }
+            ],
+            "buffs": [
+              {
+                "type": "hit-mod",
+                "value": -1
+              }
+            ]
+          },
+          {
+            "id": "fabricated-selection-backref#selected",
+            "label": "Selected enemy unit: -1 to hit",
+            "group": null,
+            "requires": [
+              {
+                "type": "select-units",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy",
+                    "within": {
+                      "range": {
+                        "inches": 18
+                      },
+                      "of": "this-unit"
+                    },
+                    "all_of": [
+                      "INFANTRY"
+                    ]
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  }
+                }
+              }
+            ],
+            "capRaise": null,
+            "gates": [
+              {
+                "attackerFilter": {
+                  "owner": "enemy",
+                  "all_of": [
+                    "INFANTRY"
+                  ]
+                }
+              }
+            ],
             "buffs": [
               {
                 "type": "hit-mod",

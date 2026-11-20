@@ -475,8 +475,21 @@ pub(super) fn offer_lever(
 ) {
     let mut sub = Out::default();
     walk(effect, opts, &mut sub);
+    // A nested enemy selection names its own unit on that side of the attack, so its filter, not
+    // this lever's, gates its buffs; this lever's selection stays in `requires`.
     let gate = |b: Value| match applicability {
-        Some(app) => apply_applicability(b, app),
+        Some(app) => {
+            let mut outer = app.clone();
+            for key in ["targetFilter", "attackerFilter"] {
+                if b["applicableWhen"]
+                    .get(key)
+                    .is_some_and(|own| !own.is_null())
+                {
+                    outer.remove(key);
+                }
+            }
+            apply_applicability(b, &outer)
+        }
         None => b,
     };
     out.unsupported.extend(sub.unsupported);

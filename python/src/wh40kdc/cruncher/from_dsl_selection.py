@@ -274,7 +274,17 @@ def offer_lever(
     applicability = lever.get("applicability")
 
     def gate(buff: Buff) -> Buff:
-        return dsl._apply_applicability(buff, applicability) if applicability else buff
+        # A nested enemy selection names its own unit on that side of the attack, so its filter,
+        # not this lever's, gates its buffs; this lever's selection stays in ``requires``.
+        if not applicability:
+            return buff
+        own = buff.get("applicableWhen") or {}
+        outer = {
+            key: value
+            for key, value in applicability.items()
+            if not (key in ("targetFilter", "attackerFilter") and own.get(key))
+        }
+        return dsl._apply_applicability(buff, outer)
 
     out["unsupported"].extend(sub["unsupported"])
     for nested in sub["activatable"]:
