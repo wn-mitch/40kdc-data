@@ -7636,19 +7636,64 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "rad-zone-corps",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "same-unit",
+            "parameters": {
+              "subject": "defender",
+              "as": {
+                "stratagem_target": "first"
+              }
+            }
+          },
+          {
+            "type": "same-unit",
+            "parameters": {
+              "subject": "defender",
+              "as": {
+                "stratagem_target": "second"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "stratagem_target": "first"
+      }
+    },
+    "source_digest": "7c45512e5bf4dc7335ea80944a9d926ee3ed5890941ceeeba043550431bfa9d3"
   },
   {
     "ability_id": "battle-sphere-uplink-skitarii-hunter-cohort-adeptus-mechanicus",

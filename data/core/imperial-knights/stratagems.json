@@ -359,11 +359,44 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Imperial Knights",
+        "Titanic"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "in-region",
+            "parameters": {
+              "subject": "this-unit",
+              "region": {
+                "rule_region": {
+                  "region_id": "defensive-line",
+                  "owner_faction": "imperial-knights"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "fortress-of-intimidation-gate-warden-lance-imperial-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -751,11 +784,83 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Armiger"
+        ],
+        "name": "first",
+        "count": "one",
+        "mode": "a",
+        "side": "your-army",
+        "selects": "model",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      },
+      {
+        "required_keywords": [
+          "Imperial Knights",
+          "Titanic"
+        ],
+        "name": "second",
+        "count": "one",
+        "mode": "b",
+        "side": "your-army",
+        "selects": "model",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      },
+      {
+        "required_keywords": [
+          "Armiger"
+        ],
+        "name": "third",
+        "count": "one-or-more",
+        "mode": "b",
+        "side": "your-army",
+        "selects": "model",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "rule-active",
+              "parameters": {
+                "rule": "bondsman-imperial-knights"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "second"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "mantle-of-the-mentor-spearhead-at-arms-imperial-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {

@@ -9237,19 +9237,43 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "warrior-bioform-onslaught",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ],
+        "weapons": {
+          "type": "ranged"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "TYRANID WARRIORS"
+        ]
+      }
+    },
+    "source_digest": "3a1c68e13ca0adb40d5486ab23960b1319ccd4f11b4a005c6b90737f50be5a99"
   },
   {
     "ability_id": "perfectly-adapted-invasion-fleet-tyranids",

@@ -5420,19 +5420,58 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "imperial-knights",
     "detachment_id": "gate-warden-lance",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "targets-selected",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "kind": "charge"
+        },
+        "object": "this-unit"
+      },
+      "effect": {
+        "type": "test",
+        "target": "event-subject",
+        "modifier": {
+          "test": "battle-shock",
+          "modifier": -1
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "9b47e2df00d232374913d721e643f8740602a9cabc98d04c0346d8ce69fb6644"
   },
   {
     "ability_id": "freeblades-imperial-knights",
@@ -6073,19 +6112,68 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "imperial-knights",
     "detachment_id": "spearhead-at-arms",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "despite": [
+              "fell-back"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": {
+            "stratagem_target": "third"
+          },
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "despite": [
+              "fell-back"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "6af92f68250d6293fab5a22f3667850c7b6d0640d5b752415180c0ada620c424"
   },
   {
     "ability_id": "marshal-the-defence-gate-warden-lance-imperial-knights",

@@ -11409,19 +11409,102 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "pantheon-of-woe",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "move-ended",
+        "subject": "event-subject",
+        "filter": {
+          "move_types": [
+            "fall-back"
+          ]
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "event-subject",
+            "filter": {
+              "designated": "unravelling"
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "event-subject",
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
+                }
+              },
+              "effect": {
+                "type": "test",
+                "target": "event-subject",
+                "modifier": {
+                  "test": "desperate-escape",
+                  "modifier": -1
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "event-subject",
+                      "filter": {
+                        "state": "battle-shocked"
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "test",
+                "target": "event-subject",
+                "modifier": {
+                  "test": "desperate-escape"
+                }
+              }
+            }
+          ]
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "b45606ba47415da92f3654a22d806186bf80be795dbdad3ebed4723fc8079b95"
   },
   {
     "ability_id": "pitiless-hunters-annihilation-legion-necrons",

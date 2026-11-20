@@ -9845,19 +9845,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "shadow-legion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ]
+          }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": {
+            "stratagem_target": "second"
+          },
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "79075c3fbc17e83fed73fed0033f2f8dbfab98e83bd24a440bc38f91c5a96004"
   },
   {
     "ability_id": "fade-to-darkness-shadow-legion-chaos-daemons",

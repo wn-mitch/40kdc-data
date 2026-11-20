@@ -16,8 +16,8 @@ dump confirmation.
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 202 | 255 |
-| stratagems | 1 | 0 | 1087 | 225 |
-| abilities | 0 | 0 | 3879 | 680 |
+| stratagems | 8 | 1 | 1087 | 217 |
+| abilities | 0 | 1 | 3886 | 672 |
 | phase-mappings | 0 | 0 | 1228 | 353 |
 | resource-pools | 0 | 0 | 0 | 6 |
 
@@ -28,15 +28,15 @@ dump confirmation.
 | _core | 0 | 0 | 12 | 14 |
 | adepta-sororitas | 0 | 0 | 121 | 27 |
 | adeptus-astartes | 0 | 0 | 236 | 14 |
-| adeptus-custodes | 0 | 0 | 153 | 5 |
-| adeptus-mechanicus | 0 | 0 | 143 | 24 |
+| adeptus-custodes | 0 | 1 | 152 | 5 |
+| adeptus-mechanicus | 0 | 0 | 144 | 23 |
 | adeptus-titanicus | 0 | 0 | 7 | 3 |
 | aeldari | 0 | 0 | 247 | 53 |
 | agents-of-the-imperium | 0 | 0 | 100 | 40 |
 | astra-militarum | 0 | 0 | 208 | 43 |
 | black-templars | 0 | 0 | 61 | 2 |
 | blood-angels | 0 | 0 | 53 | 8 |
-| chaos-daemons | 0 | 0 | 163 | 32 |
+| chaos-daemons | 0 | 0 | 164 | 31 |
 | chaos-knights | 0 | 0 | 88 | 22 |
 | chaos-space-marines | 0 | 0 | 234 | 47 |
 | dark-angels | 0 | 0 | 69 | 8 |
@@ -45,12 +45,12 @@ dump confirmation.
 | drukhari | 0 | 0 | 132 | 32 |
 | emperors-children | 0 | 0 | 128 | 20 |
 | genestealer-cults | 0 | 0 | 121 | 27 |
-| grey-knights | 0 | 0 | 120 | 14 |
+| grey-knights | 0 | 0 | 122 | 12 |
 | imperial-fists | 0 | 0 | 9 | 2 |
-| imperial-knights | 0 | 0 | 92 | 26 |
+| imperial-knights | 0 | 0 | 94 | 24 |
 | iron-hands | 0 | 0 | 11 | 0 |
 | leagues-of-votann | 0 | 0 | 131 | 24 |
-| necrons | 0 | 0 | 195 | 35 |
+| necrons | 0 | 0 | 196 | 34 |
 | orks | 0 | 0 | 196 | 13 |
 | raven-guard | 0 | 0 | 11 | 0 |
 | salamanders | 0 | 0 | 10 | 1 |
@@ -58,7 +58,7 @@ dump confirmation.
 | tau-empire | 0 | 0 | 141 | 25 |
 | thousand-sons | 0 | 0 | 128 | 30 |
 | titanicus-traitoris | 0 | 0 | 7 | 3 |
-| tyranids | 0 | 0 | 159 | 27 |
+| tyranids | 0 | 0 | 160 | 26 |
 | ultramarines | 0 | 0 | 11 | 0 |
 | white-scars | 0 | 0 | 11 | 0 |
 | world-eaters | 0 | 0 | 122 | 25 |
@@ -83,12 +83,12 @@ dump confirmation.
 | adeptus-custodes | digest-differs | 1 |
 | adeptus-custodes | no-source | 2 |
 | adeptus-custodes | stub | 1 |
-| adeptus-custodes | unpublished | 1 |
-| adeptus-custodes | verified | 153 |
+| adeptus-custodes | unpublished | 2 |
+| adeptus-custodes | verified | 152 |
 | adeptus-mechanicus | digest-differs | 7 |
-| adeptus-mechanicus | stub | 16 |
+| adeptus-mechanicus | stub | 15 |
 | adeptus-mechanicus | unpublished | 1 |
-| adeptus-mechanicus | verified | 143 |
+| adeptus-mechanicus | verified | 144 |
 | adeptus-titanicus | stub | 3 |
 | adeptus-titanicus | verified | 7 |
 | aeldari | digest-differs | 9 |
@@ -111,9 +111,9 @@ dump confirmation.
 | blood-angels | unpublished | 1 |
 | blood-angels | verified | 53 |
 | chaos-daemons | digest-differs | 3 |
-| chaos-daemons | stub | 17 |
+| chaos-daemons | stub | 16 |
 | chaos-daemons | unpublished | 12 |
-| chaos-daemons | verified | 163 |
+| chaos-daemons | verified | 164 |
 | chaos-knights | digest-differs | 4 |
 | chaos-knights | unpublished | 18 |
 | chaos-knights | verified | 88 |
@@ -143,24 +143,24 @@ dump confirmation.
 | genestealer-cults | unpublished | 10 |
 | genestealer-cults | verified | 121 |
 | grey-knights | digest-differs | 1 |
-| grey-knights | stub | 11 |
+| grey-knights | stub | 9 |
 | grey-knights | unpublished | 2 |
-| grey-knights | verified | 120 |
+| grey-knights | verified | 122 |
 | imperial-fists | digest-differs | 2 |
 | imperial-fists | verified | 9 |
 | imperial-knights | digest-differs | 6 |
-| imperial-knights | stub | 13 |
+| imperial-knights | stub | 11 |
 | imperial-knights | unpublished | 7 |
-| imperial-knights | verified | 92 |
+| imperial-knights | verified | 94 |
 | iron-hands | verified | 11 |
 | leagues-of-votann | digest-differs | 3 |
 | leagues-of-votann | stub | 14 |
 | leagues-of-votann | unpublished | 7 |
 | leagues-of-votann | verified | 131 |
 | necrons | digest-differs | 7 |
-| necrons | stub | 15 |
+| necrons | stub | 14 |
 | necrons | unpublished | 13 |
-| necrons | verified | 195 |
+| necrons | verified | 196 |
 | orks | digest-differs | 10 |
 | orks | unpublished | 3 |
 | orks | verified | 196 |
@@ -181,9 +181,9 @@ dump confirmation.
 | titanicus-traitoris | stub | 3 |
 | titanicus-traitoris | verified | 7 |
 | tyranids | digest-differs | 4 |
-| tyranids | stub | 13 |
+| tyranids | stub | 12 |
 | tyranids | unpublished | 10 |
-| tyranids | verified | 159 |
+| tyranids | verified | 160 |
 | ultramarines | verified | 11 |
 | white-scars | verified | 11 |
 | world-eaters | digest-differs | 5 |

@@ -525,11 +525,93 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Heretic Astartes",
+          "Shadow Legion"
+        ],
+        "name": "first",
+        "count": "up-to",
+        "count_max": 1,
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "set-up",
+                "filter": {
+                  "from": "strategic-reserves"
+                },
+                "window": "turn"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Legiones Daemonica",
+          "Shadow Legion"
+        ],
+        "name": "second",
+        "count": "up-to",
+        "count_max": 1,
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "owner": "friendly"
+                }
+              }
+            },
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "set-up",
+                "filter": {
+                  "from": "strategic-reserves"
+                },
+                "window": "turn"
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "first"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "encroaching-darkness-shadow-legion-chaos-daemons",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {

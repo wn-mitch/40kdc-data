@@ -3023,7 +3023,49 @@
     }
   },
   {
-    "caseId": "aerial-assault-grey-knights#70",
+    "caseId": "aegis-eternal-warpbane-task-force-grey-knights#70",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "in-region",
+        "parameters": {
+          "subject": "this-unit",
+          "region": {
+            "rule_region": {
+              "region_id": "hallowed-ground",
+              "owner_faction": "grey-knights"
+            }
+          },
+          "wholly": true
+        }
+      },
+      "effect": {
+        "type": "invulnerable-save",
+        "target": "this-unit",
+        "modifier": {
+          "invuln_sv": 4
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "expected": {
+      "text": "When an enemy unit targets this unit, while the unit is wholly within Hallowed Ground, until the end of the phase, the unit has a 4+ invulnerable save."
+    }
+  },
+  {
+    "caseId": "aerial-assault-grey-knights#71",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -3071,7 +3113,7 @@
     }
   },
   {
-    "caseId": "aerial-deployment-adeptus-mechanicus#71",
+    "caseId": "aerial-deployment-adeptus-mechanicus#72",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -3119,7 +3161,7 @@
     }
   },
   {
-    "caseId": "aerial-manoover-orks#72",
+    "caseId": "aerial-manoover-orks#73",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -3172,7 +3214,7 @@
     }
   },
   {
-    "caseId": "aerial-seeding-tyranids#73",
+    "caseId": "aerial-seeding-tyranids#74",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -3257,7 +3299,7 @@
     }
   },
   {
-    "caseId": "aerialists-drukhari#74",
+    "caseId": "aerialists-drukhari#75",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -3380,7 +3422,7 @@
     }
   },
   {
-    "caseId": "aethersails-aeldari#75",
+    "caseId": "aethersails-aeldari#76",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -3404,7 +3446,7 @@
     }
   },
   {
-    "caseId": "aethersense-aeldari#76",
+    "caseId": "aethersense-aeldari#77",
     "effect": {
       "type": "set-up",
       "target": {
@@ -3432,7 +3474,7 @@
     }
   },
   {
-    "caseId": "aetherstride-thousand-sons#77",
+    "caseId": "aetherstride-thousand-sons#78",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -3543,7 +3585,7 @@
     }
   },
   {
-    "caseId": "agent-of-discord-chaos-space-marines#78",
+    "caseId": "agent-of-discord-chaos-space-marines#79",
     "effect": {
       "type": "cost-modifier",
       "target": "this-unit",
@@ -3585,7 +3627,7 @@
     }
   },
   {
-    "caseId": "aggressive-advance-world-eaters#79",
+    "caseId": "aggressive-advance-world-eaters#80",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -3642,7 +3684,7 @@
     }
   },
   {
-    "caseId": "aggressive-deployment-goretrack-onslaught-world-eaters#80",
+    "caseId": "aggressive-deployment-goretrack-onslaught-world-eaters#81",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -3690,7 +3732,7 @@
     }
   },
   {
-    "caseId": "aggressive-deployment-tau-empire#81",
+    "caseId": "aggressive-deployment-tau-empire#82",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -3783,7 +3825,7 @@
     }
   },
   {
-    "caseId": "aggressive-disembarkation-goretrack-onslaught-world-eaters#82",
+    "caseId": "aggressive-disembarkation-goretrack-onslaught-world-eaters#83",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -3854,7 +3896,7 @@
     }
   },
   {
-    "caseId": "agonising-onslaught-coven-of-agonies-drukhari#83",
+    "caseId": "agonising-onslaught-coven-of-agonies-drukhari#84",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -3904,7 +3946,7 @@
     }
   },
   {
-    "caseId": "agonising-suppression-drukhari#84",
+    "caseId": "agonising-suppression-drukhari#85",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -4048,7 +4090,7 @@
     }
   },
   {
-    "caseId": "air-caste-colossus-tau-empire#85",
+    "caseId": "air-caste-colossus-tau-empire#86",
     "effect": {
       "type": "cost-modifier",
       "target": "this-unit",
@@ -4074,7 +4116,7 @@
     }
   },
   {
-    "caseId": "airborne-predator-emperors-children#86",
+    "caseId": "airborne-predator-emperors-children#87",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -4173,7 +4215,7 @@
     }
   },
   {
-    "caseId": "alien-physiology-warrior-bioform-onslaught-tyranids#87",
+    "caseId": "alien-physiology-warrior-bioform-onslaught-tyranids#88",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -4223,7 +4265,7 @@
     }
   },
   {
-    "caseId": "all-is-rot-tallyband-summoners-death-guard#88",
+    "caseId": "all-is-rot-tallyband-summoners-death-guard#89",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -4295,7 +4337,7 @@
     }
   },
   {
-    "caseId": "all-seeing-mutant-hordes-thousand-sons#89",
+    "caseId": "all-seeing-mutant-hordes-thousand-sons#90",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -4373,7 +4415,7 @@
     }
   },
   {
-    "caseId": "alliance-of-agony-drukhari#90",
+    "caseId": "alliance-of-agony-drukhari#91",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -4504,7 +4546,7 @@
     }
   },
   {
-    "caseId": "along-shadowed-trails-outlander-claw-genestealer-cults#91",
+    "caseId": "along-shadowed-trails-outlander-claw-genestealer-cults#92",
     "effect": {
       "type": "marker",
       "target": "this-unit",
@@ -4528,7 +4570,7 @@
     }
   },
   {
-    "caseId": "alpha-leader-tyranids#92",
+    "caseId": "alpha-leader-tyranids#93",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -4555,7 +4597,7 @@
     }
   },
   {
-    "caseId": "alpha-warrior-winged-tyranid-prime-tyranids#93",
+    "caseId": "alpha-warrior-winged-tyranid-prime-tyranids#94",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -4588,7 +4630,7 @@
     }
   },
   {
-    "caseId": "altered-reality-chaos-daemons#94",
+    "caseId": "altered-reality-chaos-daemons#95",
     "effect": {
       "type": "roll-result",
       "target": "this-unit",
@@ -4632,7 +4674,7 @@
     }
   },
   {
-    "caseId": "amulet-of-auto-chastisement-ordo-xenos-alien-hunters-agents-of-the-imperium#95",
+    "caseId": "amulet-of-auto-chastisement-ordo-xenos-alien-hunters-agents-of-the-imperium#96",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -4758,7 +4800,7 @@
     }
   },
   {
-    "caseId": "amulet-of-tainted-vigour-chaos-cult-chaos-space-marines#96",
+    "caseId": "amulet-of-tainted-vigour-chaos-cult-chaos-space-marines#97",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -4804,7 +4846,7 @@
     }
   },
   {
-    "caseId": "an-honourable-death-in-combat-blood-angels#97",
+    "caseId": "an-honourable-death-in-combat-blood-angels#98",
     "effect": {
       "type": "choice",
       "options": [
@@ -4864,7 +4906,7 @@
     }
   },
   {
-    "caseId": "analytic-reprisals-eradication-cohort-adeptus-mechanicus#98",
+    "caseId": "analytic-reprisals-eradication-cohort-adeptus-mechanicus#99",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -4930,7 +4972,7 @@
     }
   },
   {
-    "caseId": "anathema-blademastery-null-maiden-vigil-adeptus-custodes#99",
+    "caseId": "anathema-blademastery-null-maiden-vigil-adeptus-custodes#100",
     "effect": {
       "type": "choice",
       "options": [
@@ -4987,7 +5029,7 @@
     }
   },
   {
-    "caseId": "ancestral-crest-needgaard-oathband-leagues-of-votann#100",
+    "caseId": "ancestral-crest-needgaard-oathband-leagues-of-votann#101",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -5032,7 +5074,7 @@
     }
   },
   {
-    "caseId": "ancestral-fortune-leagues-of-votann#101",
+    "caseId": "ancestral-fortune-leagues-of-votann#102",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -5091,7 +5133,7 @@
     }
   },
   {
-    "caseId": "ancestral-overbleed-upgrade-throne-bonded-outriders-imperial-knights#102",
+    "caseId": "ancestral-overbleed-upgrade-throne-bonded-outriders-imperial-knights#103",
     "effect": {
       "type": "cost-modifier",
       "target": "this-unit",
@@ -5134,7 +5176,7 @@
     }
   },
   {
-    "caseId": "ancestral-sentence-needgaard-oathband-leagues-of-votann#103",
+    "caseId": "ancestral-sentence-needgaard-oathband-leagues-of-votann#104",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -5236,7 +5278,7 @@
     }
   },
   {
-    "caseId": "ancient-collector-necrons#104",
+    "caseId": "ancient-collector-necrons#105",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -5299,7 +5341,7 @@
     }
   },
   {
-    "caseId": "ancient-cover-necrons#105",
+    "caseId": "ancient-cover-necrons#106",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -5341,7 +5383,7 @@
     }
   },
   {
-    "caseId": "angelic-judgement-adepta-sororitas#106",
+    "caseId": "angelic-judgement-adepta-sororitas#107",
     "effect": {
       "type": "ability-grant",
       "target": {
@@ -5462,7 +5504,7 @@
     }
   },
   {
-    "caseId": "angelic-terror-sanguinary-spearhead-blood-angels#107",
+    "caseId": "angelic-terror-sanguinary-spearhead-blood-angels#108",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -5505,7 +5547,7 @@
     }
   },
   {
-    "caseId": "angelic-visage-blood-angels#108",
+    "caseId": "angelic-visage-blood-angels#109",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -5532,7 +5574,7 @@
     }
   },
   {
-    "caseId": "angels-defiant-fist-of-the-god-emperor-black-templars#109",
+    "caseId": "angels-defiant-fist-of-the-god-emperor-black-templars#110",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -5582,7 +5624,7 @@
     }
   },
   {
-    "caseId": "anguish-of-the-unredeemed-adepta-sororitas#110",
+    "caseId": "anguish-of-the-unredeemed-adepta-sororitas#111",
     "effect": {
       "type": "act-on-death",
       "target": "event-object",
@@ -5626,7 +5668,7 @@
     }
   },
   {
-    "caseId": "animalistic-rage-houndpack-lance-chaos-knights#111",
+    "caseId": "animalistic-rage-houndpack-lance-chaos-knights#112",
     "effect": {
       "type": "choice",
       "choice_label": "rage-attack",
@@ -5730,7 +5772,7 @@
     }
   },
   {
-    "caseId": "animus-curse-cryptek-conclave-necrons#112",
+    "caseId": "animus-curse-cryptek-conclave-necrons#113",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -5785,7 +5827,7 @@
     }
   },
   {
-    "caseId": "animus-damper-pantheon-of-woe-necrons#113",
+    "caseId": "animus-damper-pantheon-of-woe-necrons#114",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -5884,7 +5926,7 @@
     }
   },
   {
-    "caseId": "annihilation-protocol-necrons#114",
+    "caseId": "annihilation-protocol-necrons#115",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -5983,7 +6025,7 @@
     }
   },
   {
-    "caseId": "annihilator-chaos-space-marines#115",
+    "caseId": "annihilator-chaos-space-marines#116",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -6021,7 +6063,7 @@
     }
   },
   {
-    "caseId": "anvil-of-endurance-space-wolves#116",
+    "caseId": "anvil-of-endurance-space-wolves#117",
     "effect": {
       "type": "act-on-death",
       "target": "event-object",
@@ -6075,7 +6117,7 @@
     }
   },
   {
-    "caseId": "apoplectic-clarity-brazen-engines-world-eaters#117",
+    "caseId": "apoplectic-clarity-brazen-engines-world-eaters#118",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -6130,7 +6172,7 @@
     }
   },
   {
-    "caseId": "apothecarys-narthecium-grey-knights#118",
+    "caseId": "apothecarys-narthecium-grey-knights#119",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -6187,7 +6229,7 @@
     }
   },
   {
-    "caseId": "appointed-hour-augurium-task-force-grey-knights#119",
+    "caseId": "appointed-hour-augurium-task-force-grey-knights#120",
     "effect": {
       "type": "roll-result",
       "target": "this-unit",
@@ -6204,7 +6246,7 @@
     }
   },
   {
-    "caseId": "aquila-commander-adeptus-custodes#120",
+    "caseId": "aquila-commander-adeptus-custodes#121",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -6251,7 +6293,7 @@
     }
   },
   {
-    "caseId": "aquilan-eye-grizzled-company-astra-militarum#121",
+    "caseId": "aquilan-eye-grizzled-company-astra-militarum#122",
     "effect": {
       "type": "ability-modifier",
       "target": "this-model",
@@ -6310,7 +6352,7 @@
     }
   },
   {
-    "caseId": "aquiline-prow-astra-militarum#122",
+    "caseId": "aquiline-prow-astra-militarum#123",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -6401,7 +6443,7 @@
     }
   },
   {
-    "caseId": "arbites-medi-kit-agents-of-the-imperium#123",
+    "caseId": "arbites-medi-kit-agents-of-the-imperium#124",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -6453,7 +6495,7 @@
     }
   },
   {
-    "caseId": "arcane-might-hexwarp-thrallband-thousand-sons#124",
+    "caseId": "arcane-might-hexwarp-thrallband-thousand-sons#125",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -6532,7 +6574,7 @@
     }
   },
   {
-    "caseId": "arcane-shield-thousand-sons#125",
+    "caseId": "arcane-shield-thousand-sons#126",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -6558,7 +6600,7 @@
     }
   },
   {
-    "caseId": "arcane-thralls-aura-rubricae-phalanx-thousand-sons#126",
+    "caseId": "arcane-thralls-aura-rubricae-phalanx-thousand-sons#127",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -6595,7 +6637,7 @@
     }
   },
   {
-    "caseId": "arcane-venting-sekhetar-cohort-thousand-sons#127",
+    "caseId": "arcane-venting-sekhetar-cohort-thousand-sons#128",
     "effect": {
       "type": "select-objective",
       "selector": {
@@ -6650,7 +6692,7 @@
     }
   },
   {
-    "caseId": "architect-of-ruin-chaos-space-marines#128",
+    "caseId": "architect-of-ruin-chaos-space-marines#129",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -6727,7 +6769,7 @@
     }
   },
   {
-    "caseId": "archon-of-the-poisoned-tongue-drukhari#129",
+    "caseId": "archon-of-the-poisoned-tongue-drukhari#130",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -6837,7 +6879,7 @@
     }
   },
   {
-    "caseId": "archons-will-drukhari#130",
+    "caseId": "archons-will-drukhari#131",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -6929,7 +6971,7 @@
     }
   },
   {
-    "caseId": "ard-as-nails-orks#131",
+    "caseId": "ard-as-nails-orks#132",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -7045,7 +7087,7 @@
     }
   },
   {
-    "caseId": "argath-the-king-of-blades-daemonic-incursion-chaos-daemons#132",
+    "caseId": "argath-the-king-of-blades-daemonic-incursion-chaos-daemons#133",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -7140,7 +7182,7 @@
     }
   },
   {
-    "caseId": "argent-wrath-sanctic-spearhead-grey-knights#133",
+    "caseId": "argent-wrath-sanctic-spearhead-grey-knights#134",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -7185,7 +7227,7 @@
     }
   },
   {
-    "caseId": "arisen-tyrant-hypercrypt-legion-necrons#134",
+    "caseId": "arisen-tyrant-hypercrypt-legion-necrons#135",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -7240,7 +7282,7 @@
     }
   },
   {
-    "caseId": "armour-obliteration-astra-militarum#135",
+    "caseId": "armour-obliteration-astra-militarum#136",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -7270,7 +7312,7 @@
     }
   },
   {
-    "caseId": "armour-of-corruption-warpstrike-champions-chaos-space-marines#136",
+    "caseId": "armour-of-corruption-warpstrike-champions-chaos-space-marines#137",
     "effect": {
       "type": "damage-reduction",
       "target": "this-unit",
@@ -7308,7 +7350,7 @@
     }
   },
   {
-    "caseId": "armour-of-faith-black-templars#137",
+    "caseId": "armour-of-faith-black-templars#138",
     "effect": {
       "type": "damage-reduction",
       "target": "this-model",
@@ -7328,7 +7370,7 @@
     }
   },
   {
-    "caseId": "armoured-aegis-sanctic-spearhead-grey-knights#138",
+    "caseId": "armoured-aegis-sanctic-spearhead-grey-knights#139",
     "effect": {
       "type": "heal",
       "target": "this-unit",
@@ -7345,7 +7387,7 @@
     }
   },
   {
-    "caseId": "armoured-impact-gravis-linebreaker-force-adeptus-astartes#139",
+    "caseId": "armoured-impact-gravis-linebreaker-force-adeptus-astartes#140",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -7417,7 +7459,7 @@
     }
   },
   {
-    "caseId": "artillery-support-astra-militarum#140",
+    "caseId": "artillery-support-astra-militarum#141",
     "effect": {
       "type": "choice",
       "options": [
@@ -7640,7 +7682,7 @@
     }
   },
   {
-    "caseId": "aspect-of-the-beast-helhunt-lance-chaos-knights#141",
+    "caseId": "aspect-of-the-beast-helhunt-lance-chaos-knights#142",
     "effect": {
       "type": "ability-modifier",
       "target": "this-model",
@@ -7659,7 +7701,7 @@
     }
   },
   {
-    "caseId": "assailed-from-every-angle-leagues-of-votann#142",
+    "caseId": "assailed-from-every-angle-leagues-of-votann#143",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -7775,7 +7817,7 @@
     }
   },
   {
-    "caseId": "assassins-poisons-drukhari#143",
+    "caseId": "assassins-poisons-drukhari#144",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -7820,7 +7862,7 @@
     }
   },
   {
-    "caseId": "assault-hatches-steel-hammer-astra-militarum#144",
+    "caseId": "assault-hatches-steel-hammer-astra-militarum#145",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -7873,7 +7915,7 @@
     }
   },
   {
-    "caseId": "asset-manipulator-mercenary-oathband-leagues-of-votann#145",
+    "caseId": "asset-manipulator-mercenary-oathband-leagues-of-votann#146",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -7926,7 +7968,7 @@
     }
   },
   {
-    "caseId": "assigned-agents-agents-of-the-imperium#146",
+    "caseId": "assigned-agents-agents-of-the-imperium#147",
     "effect": {
       "type": "army-rule",
       "target": {
@@ -7951,7 +7993,7 @@
     }
   },
   {
-    "caseId": "astartes-banner-dark-angels#147",
+    "caseId": "astartes-banner-dark-angels#148",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -7980,7 +8022,7 @@
     }
   },
   {
-    "caseId": "at-all-costs-agents-of-the-imperium#148",
+    "caseId": "at-all-costs-agents-of-the-imperium#149",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -8124,7 +8166,7 @@
     }
   },
   {
-    "caseId": "atavistic-instigation-necrons#149",
+    "caseId": "atavistic-instigation-necrons#150",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -8151,7 +8193,7 @@
     }
   },
   {
-    "caseId": "attached-unit-chaos-space-marines#150",
+    "caseId": "attached-unit-chaos-space-marines#151",
     "effect": {
       "type": "army-rule",
       "target": "this-unit",
@@ -8185,7 +8227,7 @@
     }
   },
   {
-    "caseId": "attached-unit-sanctifiers-adepta-sororitas#151",
+    "caseId": "attached-unit-sanctifiers-adepta-sororitas#152",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -8252,7 +8294,7 @@
     }
   },
   {
-    "caseId": "augury-servo-host-vow-sworn-crusaders-black-templars#152",
+    "caseId": "augury-servo-host-vow-sworn-crusaders-black-templars#153",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -8320,7 +8362,7 @@
     }
   },
   {
-    "caseId": "aura-of-fervour-blood-angels#153",
+    "caseId": "aura-of-fervour-blood-angels#154",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -8352,7 +8394,7 @@
     }
   },
   {
-    "caseId": "auriferous-orb-emissaries-imperatus-adeptus-custodes#154",
+    "caseId": "auriferous-orb-emissaries-imperatus-adeptus-custodes#155",
     "effect": {
       "type": "weapon-grant",
       "target": "this-model",
@@ -8368,7 +8410,7 @@
     }
   },
   {
-    "caseId": "avatar-of-perfection-legion-of-excess-chaos-daemons#155",
+    "caseId": "avatar-of-perfection-legion-of-excess-chaos-daemons#156",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -8448,7 +8490,7 @@
     }
   },
   {
-    "caseId": "avatar-of-the-whispering-god-aeldari#156",
+    "caseId": "avatar-of-the-whispering-god-aeldari#157",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -8510,7 +8552,7 @@
     }
   },
   {
-    "caseId": "avatars-of-decay-tallyband-summoners-death-guard#157",
+    "caseId": "avatars-of-decay-tallyband-summoners-death-guard#158",
     "effect": {
       "type": "aura",
       "target": "enemy-within-aura",
@@ -8539,7 +8581,7 @@
     }
   },
   {
-    "caseId": "avenge-the-fallen-honoured-companions-adeptus-custodes#158",
+    "caseId": "avenge-the-fallen-honoured-companions-adeptus-custodes#159",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -8593,7 +8635,7 @@
     }
   },
   {
-    "caseId": "banishing-wave-psychic-brotherhood-strike-grey-knights#159",
+    "caseId": "banishing-wave-psychic-brotherhood-strike-grey-knights#160",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -8671,7 +8713,7 @@
     }
   },
   {
-    "caseId": "banner-of-macragge-adeptus-astartes#160",
+    "caseId": "banner-of-macragge-adeptus-astartes#161",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -8775,7 +8817,7 @@
     }
   },
   {
-    "caseId": "barrage-of-filth-death-guard#161",
+    "caseId": "barrage-of-filth-death-guard#162",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -8844,7 +8886,7 @@
     }
   },
   {
-    "caseId": "bastion-of-faith-champions-of-faith-adepta-sororitas#162",
+    "caseId": "bastion-of-faith-champions-of-faith-adepta-sororitas#163",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -8963,7 +9005,7 @@
     }
   },
   {
-    "caseId": "battle-focus-aeldari#163",
+    "caseId": "battle-focus-aeldari#164",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9328,7 +9370,7 @@
     }
   },
   {
-    "caseId": "battle-focus-kygharils-protectors-aeldari#164",
+    "caseId": "battle-focus-kygharils-protectors-aeldari#165",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9693,7 +9735,7 @@
     }
   },
   {
-    "caseId": "battle-lust-berzerker-warband-world-eaters#165",
+    "caseId": "battle-lust-berzerker-warband-world-eaters#166",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9741,7 +9783,7 @@
     }
   },
   {
-    "caseId": "battle-protocols-adeptus-mechanicus#166",
+    "caseId": "battle-protocols-adeptus-mechanicus#167",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -9860,7 +9902,7 @@
     }
   },
   {
-    "caseId": "bearer-of-the-iron-chalice-valourstrike-lance-imperial-knights#167",
+    "caseId": "bearer-of-the-iron-chalice-valourstrike-lance-imperial-knights#168",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -9980,7 +10022,7 @@
     }
   },
   {
-    "caseId": "bearers-of-his-light-emissaries-imperatus-adeptus-custodes#168",
+    "caseId": "bearers-of-his-light-emissaries-imperatus-adeptus-custodes#169",
     "effect": {
       "type": "ignore-modifiers",
       "target": "this-unit",
@@ -10015,7 +10057,7 @@
     }
   },
   {
-    "caseId": "beastscent-orks#169",
+    "caseId": "beastscent-orks#170",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10140,7 +10182,7 @@
     }
   },
   {
-    "caseId": "benedictions-of-the-omnissiah-adeptus-mechanicus#170",
+    "caseId": "benedictions-of-the-omnissiah-adeptus-mechanicus#171",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10297,7 +10339,7 @@
     }
   },
   {
-    "caseId": "berzerker-frenzy-world-eaters#171",
+    "caseId": "berzerker-frenzy-world-eaters#172",
     "effect": {
       "type": "dice-gated",
       "dice": "D6",
@@ -10343,7 +10385,7 @@
     }
   },
   {
-    "caseId": "bestial-aspect-infernal-lance-chaos-knights#172",
+    "caseId": "bestial-aspect-infernal-lance-chaos-knights#173",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10419,7 +10461,7 @@
     }
   },
   {
-    "caseId": "bilious-blessing-lords-of-the-warp-chaos-daemons#173",
+    "caseId": "bilious-blessing-lords-of-the-warp-chaos-daemons#174",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -10499,7 +10541,7 @@
     }
   },
   {
-    "caseId": "binharic-offence-skitarii-hunter-cohort-adeptus-mechanicus#174",
+    "caseId": "binharic-offence-skitarii-hunter-cohort-adeptus-mechanicus#175",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10567,7 +10609,7 @@
     }
   },
   {
-    "caseId": "bio-stimulus-tyranids#175",
+    "caseId": "bio-stimulus-tyranids#176",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10662,7 +10704,7 @@
     }
   },
   {
-    "caseId": "biomechanical-mutation-warpforged-cabal-thousand-sons#176",
+    "caseId": "biomechanical-mutation-warpforged-cabal-thousand-sons#177",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10735,7 +10777,7 @@
     }
   },
   {
-    "caseId": "biomechanoid-regeneration-cult-of-the-arkifane-chaos-space-marines#177",
+    "caseId": "biomechanoid-regeneration-cult-of-the-arkifane-chaos-space-marines#178",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10801,7 +10843,7 @@
     }
   },
   {
-    "caseId": "blackstar-cluster-launcher-agents-of-the-imperium#178",
+    "caseId": "blackstar-cluster-launcher-agents-of-the-imperium#179",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10869,7 +10911,7 @@
     }
   },
   {
-    "caseId": "blade-of-saint-ellynor-army-of-faith-adepta-sororitas#179",
+    "caseId": "blade-of-saint-ellynor-army-of-faith-adepta-sororitas#180",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10971,7 +11013,7 @@
     }
   },
   {
-    "caseId": "blessed-icon-of-disease-death-guard#180",
+    "caseId": "blessed-icon-of-disease-death-guard#181",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -11040,7 +11082,7 @@
     }
   },
   {
-    "caseId": "blessed-transmutations-warpmeld-pact-thousand-sons#181",
+    "caseId": "blessed-transmutations-warpmeld-pact-thousand-sons#182",
     "effect": {
       "type": "return-models",
       "target": {
@@ -11069,7 +11111,7 @@
     }
   },
   {
-    "caseId": "blessing-of-burning-blood-khorne-daemonkin-world-eaters#182",
+    "caseId": "blessing-of-burning-blood-khorne-daemonkin-world-eaters#183",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -11122,7 +11164,7 @@
     }
   },
   {
-    "caseId": "blessing-of-the-omnissiah-grey-knights#183",
+    "caseId": "blessing-of-the-omnissiah-grey-knights#184",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11208,7 +11250,7 @@
     }
   },
   {
-    "caseId": "blessings-of-khorne-frenzied-reavers-world-eaters#184",
+    "caseId": "blessings-of-khorne-frenzied-reavers-world-eaters#185",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11441,7 +11483,7 @@
     }
   },
   {
-    "caseId": "blessings-of-khorne-world-eaters#185",
+    "caseId": "blessings-of-khorne-world-eaters#186",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11680,7 +11722,7 @@
     }
   },
   {
-    "caseId": "blessings-of-the-omnissiah-adeptus-astartes#186",
+    "caseId": "blessings-of-the-omnissiah-adeptus-astartes#187",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11773,7 +11815,7 @@
     }
   },
   {
-    "caseId": "blight-bombardment-death-guard#187",
+    "caseId": "blight-bombardment-death-guard#188",
     "effect": {
       "type": "designate-target",
       "designation": "blight-bombardment-target",
@@ -11949,7 +11991,7 @@
     }
   },
   {
-    "caseId": "blinding-aura-brotherhood-strike-grey-knights#188",
+    "caseId": "blinding-aura-brotherhood-strike-grey-knights#189",
     "effect": {
       "type": "targeting",
       "target": {
@@ -11987,7 +12029,7 @@
     }
   },
   {
-    "caseId": "blood-offering-berzerker-warband-world-eaters#189",
+    "caseId": "blood-offering-berzerker-warband-world-eaters#190",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12015,7 +12057,7 @@
     }
   },
   {
-    "caseId": "blood-tithe-world-eaters#190",
+    "caseId": "blood-tithe-world-eaters#191",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -12180,7 +12222,7 @@
     }
   },
   {
-    "caseId": "bloodied-terror-world-eaters#191",
+    "caseId": "bloodied-terror-world-eaters#192",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -12252,7 +12294,7 @@
     }
   },
   {
-    "caseId": "bloody-fury-world-eaters#192",
+    "caseId": "bloody-fury-world-eaters#193",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -12324,7 +12366,7 @@
     }
   },
   {
-    "caseId": "bloody-spectacle-drukhari#193",
+    "caseId": "bloody-spectacle-drukhari#194",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -12405,7 +12447,7 @@
     }
   },
   {
-    "caseId": "bloody-stampede-world-eaters#194",
+    "caseId": "bloody-stampede-world-eaters#195",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -12495,7 +12537,7 @@
     }
   },
   {
-    "caseId": "bomb-squig-orks#195",
+    "caseId": "bomb-squig-orks#196",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12581,7 +12623,7 @@
     }
   },
   {
-    "caseId": "breakin-heads-war-horde-orks#196",
+    "caseId": "breakin-heads-war-horde-orks#197",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12656,7 +12698,7 @@
     }
   },
   {
-    "caseId": "broad-spectrum-data-tether-adeptus-mechanicus#197",
+    "caseId": "broad-spectrum-data-tether-adeptus-mechanicus#198",
     "effect": {
       "type": "dice-gated",
       "dice": "D6",
@@ -12686,7 +12728,7 @@
     }
   },
   {
-    "caseId": "brutal-disciplinarian-astra-militarum#198",
+    "caseId": "brutal-disciplinarian-astra-militarum#199",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -12791,7 +12833,7 @@
     }
   },
   {
-    "caseId": "brutal-disciplinarian-commissar-graves-on-foot-astra-militarum#199",
+    "caseId": "brutal-disciplinarian-commissar-graves-on-foot-astra-militarum#200",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -12885,7 +12927,7 @@
     }
   },
   {
-    "caseId": "cabal-of-sorcerers-prism-of-zadophon-thousand-sons#200",
+    "caseId": "cabal-of-sorcerers-prism-of-zadophon-thousand-sons#201",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -13456,7 +13498,7 @@
     }
   },
   {
-    "caseId": "cabal-of-sorcerers-thousand-sons#201",
+    "caseId": "cabal-of-sorcerers-thousand-sons#202",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14027,7 +14069,7 @@
     }
   },
   {
-    "caseId": "callous-sacrifice-siege-regiment-astra-militarum#202",
+    "caseId": "callous-sacrifice-siege-regiment-astra-militarum#203",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -14099,7 +14141,7 @@
     }
   },
   {
-    "caseId": "canoptek-swarm-necrons#203",
+    "caseId": "canoptek-swarm-necrons#204",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14147,7 +14189,7 @@
     }
   },
   {
-    "caseId": "captain-of-the-honour-guard-adeptus-astartes#204",
+    "caseId": "captain-of-the-honour-guard-adeptus-astartes#205",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14191,7 +14233,7 @@
     }
   },
   {
-    "caseId": "captivating-performance-twilight-flickers-aeldari#205",
+    "caseId": "captivating-performance-twilight-flickers-aeldari#206",
     "effect": {
       "type": "select-objective",
       "selector": {
@@ -14241,7 +14283,7 @@
     }
   },
   {
-    "caseId": "carry-forth-the-faithful-bringers-of-flame-adepta-sororitas#206",
+    "caseId": "carry-forth-the-faithful-bringers-of-flame-adepta-sororitas#207",
     "effect": {
       "type": "rules-bundle",
       "steps": [
@@ -14306,7 +14348,7 @@
     }
   },
   {
-    "caseId": "castigators-duty-imperial-knights#207",
+    "caseId": "castigators-duty-imperial-knights#208",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14358,7 +14400,7 @@
     }
   },
   {
-    "caseId": "catch-dat-red-bit-orks#208",
+    "caseId": "catch-dat-red-bit-orks#209",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -14404,7 +14446,7 @@
     }
   },
   {
-    "caseId": "chainbreaker-imperial-knights#209",
+    "caseId": "chainbreaker-imperial-knights#210",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -14473,7 +14515,7 @@
     }
   },
   {
-    "caseId": "chaplet-of-sacrifice-hallowed-martyrs-adepta-sororitas#210",
+    "caseId": "chaplet-of-sacrifice-hallowed-martyrs-adepta-sororitas#211",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -14574,7 +14616,7 @@
     }
   },
   {
-    "caseId": "cherub-agents-of-the-imperium#211",
+    "caseId": "cherub-agents-of-the-imperium#212",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -14624,7 +14666,7 @@
     }
   },
   {
-    "caseId": "chief-librarian-adeptus-astartes#212",
+    "caseId": "chief-librarian-adeptus-astartes#213",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -14875,7 +14917,7 @@
     }
   },
   {
-    "caseId": "chief-librarian-blood-angels#213",
+    "caseId": "chief-librarian-blood-angels#214",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15161,7 +15203,7 @@
     }
   },
   {
-    "caseId": "chief-librarian-dark-angels#214",
+    "caseId": "chief-librarian-dark-angels#215",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15403,7 +15445,7 @@
     }
   },
   {
-    "caseId": "close-range-killers-chaos-knights#215",
+    "caseId": "close-range-killers-chaos-knights#216",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15444,7 +15486,7 @@
     }
   },
   {
-    "caseId": "close-range-titan-killer-astra-militarum#216",
+    "caseId": "close-range-titan-killer-astra-militarum#217",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15487,7 +15529,7 @@
     }
   },
   {
-    "caseId": "code-chivalric-imperial-knights#217",
+    "caseId": "code-chivalric-imperial-knights#218",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -15728,7 +15770,7 @@
     }
   },
   {
-    "caseId": "codex-fire-patterns-adeptus-astartes#218",
+    "caseId": "codex-fire-patterns-adeptus-astartes#219",
     "effect": {
       "type": "weapon-ability-range",
       "target": {
@@ -15752,7 +15794,7 @@
     }
   },
   {
-    "caseId": "cold-and-calculating-adeptus-astartes#219",
+    "caseId": "cold-and-calculating-adeptus-astartes#220",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -15982,7 +16024,7 @@
     }
   },
   {
-    "caseId": "combat-doctrines-adeptus-astartes#220",
+    "caseId": "combat-doctrines-adeptus-astartes#221",
     "effect": {
       "type": "stance-select",
       "mode": "consumable",
@@ -16108,7 +16150,7 @@
     }
   },
   {
-    "caseId": "combat-doctrines-assault-force-adeptus-astartes#221",
+    "caseId": "combat-doctrines-assault-force-adeptus-astartes#222",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16210,7 +16252,7 @@
     }
   },
   {
-    "caseId": "combat-embarkation-kauyon-tau-empire#222",
+    "caseId": "combat-embarkation-kauyon-tau-empire#223",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16278,7 +16320,7 @@
     }
   },
   {
-    "caseId": "combat-squad-chaos-space-marines#223",
+    "caseId": "combat-squad-chaos-space-marines#224",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -16301,7 +16343,7 @@
     }
   },
   {
-    "caseId": "combat-squad-grey-knights#224",
+    "caseId": "combat-squad-grey-knights#225",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -16324,7 +16366,7 @@
     }
   },
   {
-    "caseId": "compact-astra-militarum#225",
+    "caseId": "compact-astra-militarum#226",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -16366,7 +16408,7 @@
     }
   },
   {
-    "caseId": "contemptuous-disregard-court-of-the-phoenician-emperors-children#226",
+    "caseId": "contemptuous-disregard-court-of-the-phoenician-emperors-children#227",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16406,7 +16448,7 @@
     }
   },
   {
-    "caseId": "courageous-diversion-recon-element-astra-militarum#227",
+    "caseId": "courageous-diversion-recon-element-astra-militarum#228",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -16469,7 +16511,7 @@
     }
   },
   {
-    "caseId": "crewed-platform-storm-guardians-aeldari#228",
+    "caseId": "crewed-platform-storm-guardians-aeldari#229",
     "effect": {
       "type": "destroy-models",
       "target": {
@@ -16495,7 +16537,7 @@
     }
   },
   {
-    "caseId": "cult-ambush-genestealer-cults#229",
+    "caseId": "cult-ambush-genestealer-cults#230",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -16846,7 +16888,7 @@
     }
   },
   {
-    "caseId": "cult-infiltration-genestealer-cults#230",
+    "caseId": "cult-infiltration-genestealer-cults#231",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -16889,7 +16931,7 @@
     }
   },
   {
-    "caseId": "curse-of-the-wulfen-space-wolves#231",
+    "caseId": "curse-of-the-wulfen-space-wolves#232",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -17030,7 +17072,7 @@
     }
   },
   {
-    "caseId": "da-gobshot-thunderbuss-brute-bosses-orks#232",
+    "caseId": "da-gobshot-thunderbuss-brute-bosses-orks#233",
     "effect": {
       "type": "weapon-grant",
       "target": "this-model",
@@ -17046,7 +17088,7 @@
     }
   },
   {
-    "caseId": "da-krunch-wurrband-orks#233",
+    "caseId": "da-krunch-wurrband-orks#234",
     "effect": {
       "type": "weapon-grant",
       "target": "this-model",
@@ -17062,7 +17104,7 @@
     }
   },
   {
-    "caseId": "daemonic-allegiance-soul-grinder-chaos-daemons#234",
+    "caseId": "daemonic-allegiance-soul-grinder-chaos-daemons#235",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -17183,7 +17225,7 @@
     }
   },
   {
-    "caseId": "daemonic-patrons-callous-blades-flawless-blades-emperors-children#235",
+    "caseId": "daemonic-patrons-callous-blades-flawless-blades-emperors-children#236",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17266,7 +17308,7 @@
     }
   },
   {
-    "caseId": "daemonkin-aranis-zarkan-chaos-space-marines#236",
+    "caseId": "daemonkin-aranis-zarkan-chaos-space-marines#237",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17309,7 +17351,7 @@
     }
   },
   {
-    "caseId": "damaged#237",
+    "caseId": "damaged#238",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17339,7 +17381,7 @@
     }
   },
   {
-    "caseId": "damaged-1-6-wounds-remaining-adepta-sororitas#238",
+    "caseId": "damaged-1-6-wounds-remaining-adepta-sororitas#239",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17381,7 +17423,7 @@
     }
   },
   {
-    "caseId": "damaged-1-6-wounds-remaining-necrons#239",
+    "caseId": "damaged-1-6-wounds-remaining-necrons#240",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17422,7 +17464,7 @@
     }
   },
   {
-    "caseId": "damaged-1-7-wounds-remaining-chaos-daemons#240",
+    "caseId": "damaged-1-7-wounds-remaining-chaos-daemons#241",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17454,7 +17496,7 @@
     }
   },
   {
-    "caseId": "data-severed-adeptus-mechanicus#241",
+    "caseId": "data-severed-adeptus-mechanicus#242",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17497,7 +17539,7 @@
     }
   },
   {
-    "caseId": "dauntless-bravery-sanguinary-spearhead-blood-angels#242",
+    "caseId": "dauntless-bravery-sanguinary-spearhead-blood-angels#243",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17542,7 +17584,7 @@
     }
   },
   {
-    "caseId": "dauntless-defenders-imperial-knights#243",
+    "caseId": "dauntless-defenders-imperial-knights#244",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17594,7 +17636,7 @@
     }
   },
   {
-    "caseId": "death-korps-medi-pack-astra-militarum#244",
+    "caseId": "death-korps-medi-pack-astra-militarum#245",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17701,7 +17743,7 @@
     }
   },
   {
-    "caseId": "divinator-class-auspexes-adeptus-astartes#245",
+    "caseId": "divinator-class-auspexes-adeptus-astartes#246",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17817,7 +17859,7 @@
     }
   },
   {
-    "caseId": "downtrodden-orks#246",
+    "caseId": "downtrodden-orks#247",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -17843,7 +17885,7 @@
     }
   },
   {
-    "caseId": "drawn-to-the-slaughter-cult-of-blood-world-eaters#247",
+    "caseId": "drawn-to-the-slaughter-cult-of-blood-world-eaters#248",
     "effect": {
       "type": "add-unit",
       "target": "stratagem-target",
@@ -17870,7 +17912,7 @@
     }
   },
   {
-    "caseId": "dreadblades-chaos-knights#248",
+    "caseId": "dreadblades-chaos-knights#249",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17979,7 +18021,7 @@
     }
   },
   {
-    "caseId": "drive-them-out-gate-warden-lance-imperial-knights#249",
+    "caseId": "drive-them-out-gate-warden-lance-imperial-knights#250",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18011,7 +18053,7 @@
     }
   },
   {
-    "caseId": "drones-sudden-dawn-cadre-tau-empire#250",
+    "caseId": "drones-sudden-dawn-cadre-tau-empire#251",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -18052,7 +18094,7 @@
     }
   },
   {
-    "caseId": "drones-tau-empire#251",
+    "caseId": "drones-tau-empire#252",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -18197,7 +18239,7 @@
     }
   },
   {
-    "caseId": "embarking-krieg-heavy-weapons-squad-astra-militarum#252",
+    "caseId": "embarking-krieg-heavy-weapons-squad-astra-militarum#253",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -18216,7 +18258,7 @@
     }
   },
   {
-    "caseId": "empowered-manifestation-hexwarp-thrallband-thousand-sons#253",
+    "caseId": "empowered-manifestation-hexwarp-thrallband-thousand-sons#254",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18266,43 +18308,6 @@
     },
     "expected": {
       "text": "While the unit is within Flow of Magic, for the rest of the battle:\n  -> Increase the range of each PSYCHIC ability of this model by 6\".\n  -> You can re-roll the Hazard roll with weapons with [PSYCHIC]."
-    }
-  },
-  {
-    "caseId": "empyric-onslaught-hexwarp-thrallband-thousand-sons#254",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "in-region",
-        "parameters": {
-          "subject": "this-unit",
-          "region": {
-            "rule_region": {
-              "region_id": "flow-of-magic",
-              "owner_faction": "thousand-sons"
-            }
-          },
-          "wholly": true
-        }
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-model",
-        "modifier": {
-          "stat": "A",
-          "operation": "add",
-          "value": 3,
-          "weapons": {
-            "type": "ranged"
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "While the unit is wholly within Flow of Magic, add 3 to the Attacks characteristic of ranged weapons equipped by this model."
     }
   },
   {
@@ -19121,7 +19126,99 @@
     }
   },
   {
-    "caseId": "flow-of-magic-thousand-sons#267",
+    "caseId": "flames-of-sanctity-warpbane-task-force-grey-knights#267",
+    "effect": {
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 6
+            },
+            "of": "this-unit"
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "model-count",
+              "parameters": {
+                "subject": "this-unit",
+                "keyword": "CASTELLAN CROWE",
+                "min": 1
+              }
+            },
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6+1",
+              "threshold": 4,
+              "comparison": "gte",
+              "on_success": {
+                "type": "mortal-wounds",
+                "target": "recipient",
+                "modifier": {
+                  "count": "D3"
+                }
+              },
+              "on_fail": null
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "model-count",
+                  "parameters": {
+                    "subject": "this-unit",
+                    "keyword": "CASTELLAN CROWE",
+                    "min": 1
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6",
+              "threshold": 4,
+              "comparison": "gte",
+              "on_success": {
+                "type": "mortal-wounds",
+                "target": "recipient",
+                "modifier": {
+                  "count": "D3"
+                }
+              },
+              "on_fail": null
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    },
+    "expected": {
+      "text": "At the end of the Fight phase:\n  For each enemy unit within 6\" of the unit:\n    If the unit contains 1+ CASTELLAN CROWE models:\n      -> Roll one D6+1: on a 4+, the unit suffers D3 mortal wounds.\n    Unless the unit contains 1+ CASTELLAN CROWE models:\n      -> Roll one D6: on a 4+, the unit suffers D3 mortal wounds."
+    }
+  },
+  {
+    "caseId": "flow-of-magic-thousand-sons#268",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -19276,7 +19373,7 @@
     }
   },
   {
-    "caseId": "forward-assault-warsuit-adeptus-astartes#268",
+    "caseId": "forward-assault-warsuit-adeptus-astartes#269",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -19354,7 +19451,7 @@
     }
   },
   {
-    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#269",
+    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#270",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -19375,7 +19472,7 @@
     }
   },
   {
-    "caseId": "grot-shields-runt-swarm-orks#270",
+    "caseId": "grot-shields-runt-swarm-orks#271",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -19470,7 +19567,7 @@
     }
   },
   {
-    "caseId": "guns-blazing-chaos-space-marines#271",
+    "caseId": "guns-blazing-chaos-space-marines#272",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19583,7 +19680,7 @@
     }
   },
   {
-    "caseId": "hallowed-ground-grey-knights#272",
+    "caseId": "hallowed-ground-grey-knights#273",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -19789,7 +19886,7 @@
     }
   },
   {
-    "caseId": "headhunters-space-wolves#273",
+    "caseId": "headhunters-space-wolves#274",
     "effect": {
       "type": "ability-part",
       "trigger": {
@@ -19874,7 +19971,7 @@
     }
   },
   {
-    "caseId": "headlong-destruction-chaos-space-marines#274",
+    "caseId": "headlong-destruction-chaos-space-marines#275",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -19903,7 +20000,7 @@
     }
   },
   {
-    "caseId": "heroes-of-legend-imperial-knights#275",
+    "caseId": "heroes-of-legend-imperial-knights#276",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -19992,86 +20089,6 @@
     },
     "expected": {
       "text": "-> At the start of your turn: if the Code Chivalric oath is fulfilled, the unit resolves the Code Chivalric Oath procedure again.\nWhen selecting deeds and qualities for Code Chivalric for the unit; exclude previously selected deeds and qualities; if a duplicate is rolled, choose an unselected result in that domain; stop when every domain is exhausted.\nAll friendly models with the Code Chivalric ability retain qualities from fulfilled Code Chivalric Oaths.\nFor the unit, on completion of additional Code Chivalric deeds, regardless of how those deeds were selected, replace their reward with: you gain 1CP."
-    }
-  },
-  {
-    "caseId": "honour-or-death-dark-angels#276",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "model-count",
-            "parameters": {
-              "subject": "this-unit",
-              "keyword": "RAVENWING CHAMPION",
-              "min": 1
-            }
-          },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "roll-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "advance",
-                  "operation": "add",
-                  "value": 1
-                }
-              },
-              {
-                "type": "roll-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "charge",
-                  "operation": "add",
-                  "value": 1
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "ability-part",
-          "trigger": {
-            "event": "used",
-            "filter": {
-              "kind": "stratagem",
-              "id": "heroic-intervention"
-            },
-            "object": "this-unit"
-          },
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "model-count",
-              "parameters": {
-                "subject": "this-unit",
-                "keyword": "RAVENWING CHAMPION",
-                "min": 1
-              }
-            },
-            "effect": {
-              "type": "cost-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "of": "stratagem",
-                "operation": "decrease",
-                "amount": 1,
-                "applies_to": "the-triggering-use"
-              }
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "If the unit contains 1+ RAVENWING CHAMPION models:\n  -> The unit gets +1 to Advance rolls.\n  -> The unit gets +1 to Charge rolls.\n-> When you target the unit with the Heroic Intervention Stratagem: if the unit contains 1+ RAVENWING CHAMPION models, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP)."
     }
   },
   {
