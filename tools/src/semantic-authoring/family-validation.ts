@@ -81,3 +81,37 @@ export function integerOrSource(value: unknown, label: string): number | SourceQ
   if (source) return source;
   throw new TypeError(`${label} must be an integer or an exact source snippet.`);
 }
+
+/** A kebab-case name a resource-spend binds its spent amount to (bind_as) and a reader names (spent). */
+const SPENT_NAME = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;
+
+/** The parameter schema of a spent-amount reference: `{spent, per?}`. */
+export const spentReferenceSchema = {
+  type: "object",
+  required: ["spent"],
+  properties: { spent: { type: "string", pattern: SPENT_NAME.source }, per: { type: "integer", minimum: 2, maximum: 10, "x-optional": true } },
+  additionalProperties: false,
+};
+
+/** Whether a value is written as a spent-amount reference (an object naming `spent`). */
+export function isSpentReference(value: unknown): value is { spent: string; per?: number } {
+  return value !== null && typeof value === "object" && !Array.isArray(value) && "spent" in value;
+}
+
+/** The bind_as name of a resource-spend. */
+export function spentName(value: unknown, label: string): string {
+  if (typeof value !== "string" || !SPENT_NAME.test(value)) throw new TypeError(`${label} must be a kebab-case name.`);
+  return value;
+}
+
+/**
+ * The amount a resource-spend of this ability bound with bind_as ("the number of YP you spent"):
+ * `{spent}`, or with per N one for every N of it (`{spent, per}`, "for every 2YP you just spent").
+ */
+export function spentReference(value: unknown, label: string): { spent: string; per?: number } {
+  if (!isSpentReference(value)) throw new TypeError(`${label} must be {spent, per?}.`);
+  keySet(value, ["spent"], ["per"], label);
+  const result: { spent: string; per?: number } = { spent: spentName(value.spent, `${label}.spent`) };
+  if (value.per !== undefined) result.per = boundedInteger(value.per, 2, 10, `${label}.per`);
+  return result;
+}

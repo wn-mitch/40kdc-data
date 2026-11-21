@@ -27,6 +27,13 @@ function normalizeDiceRoll(input: Input): Input {
       if (input[key] !== undefined) throw new TypeError(`dice-roll.plus is printed on one die; it takes no ${key}.`);
     }
   }
+  // "rolling two additional D6 if X": extra dice of the roll before, under the condition leaf after.
+  if (input.plus_if !== undefined) {
+    if (input.plus_if !== true) throw new TypeError("dice-roll.plus_if must be true.");
+    for (const key of ["per_model", "roll_var", "kind", "alternative", "max_dice", "plus", "count_stat"]) {
+      if (input[key] !== undefined) throw new TypeError(`dice-roll.plus_if adds dice to the roll before it; it takes no ${key}.`);
+    }
+  }
   const perModel = input.per_model;
   if (input.max_dice !== undefined && perModel !== "allocated-attack") throw new TypeError("dice-roll.max_dice caps the dice of per_model allocated-attack only.");
   if (perModel === "allocated-attack" && input.count !== undefined) throw new TypeError("dice-roll.per_model allocated-attack rolls one die per allocated attack; it takes no count.");
@@ -35,7 +42,7 @@ function normalizeDiceRoll(input: Input): Input {
     if (input.alternative !== true) throw new TypeError("dice-roll.alternative must be true.");
     if (input.roll_var !== undefined) throw new TypeError("dice-roll: an alternative pool cannot also bind a roll_var.");
   }
-  const optionalKeys = ["roll_var", "count", "per_model", "kind", "alternative", "max_dice", "plus", "count_stat"].filter((key) => key in input);
+  const optionalKeys = ["roll_var", "count", "per_model", "kind", "alternative", "max_dice", "plus", "count_stat", "plus_if"].filter((key) => key in input);
   exactKeys(input, ["dice", ...optionalKeys], "dice-roll");
   const result: Input = { dice: enumValue(input.dice, DICE, "dice-roll.dice") };
   if ("count" in input) {
@@ -52,6 +59,7 @@ function normalizeDiceRoll(input: Input): Input {
   }
   if ("kind" in input) result.kind = enumValue(input.kind, DICE_ROLL_KINDS, "dice-roll.kind");
   if (input.alternative !== undefined) result.alternative = true;
+  if (input.plus_if !== undefined) result.plus_if = true;
   if (input.max_dice !== undefined) result.max_dice = boundedInteger(input.max_dice, 1, 30, "dice-roll.max_dice");
   if (input.plus !== undefined) result.plus = boundedInteger(input.plus, 1, 12, "dice-roll.plus");
   if (input.count_stat !== undefined) {
@@ -183,10 +191,10 @@ export const DICE_AND_DAMAGE_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "dice-roll",
-    version: 10,
+    version: 11,
     role: "EVENT",
     label: "Roll dice",
-    description: "\"Roll one D6\", \"roll six D6\", or \"roll one D6 for each model in this unit\": the result bands that follow (on a 4+, for each 5+) say what happens for each result. count is how many dice are rolled when it is more than one. per_model rolls one die for each model of this unit or the target, for each model the enclosing model selection selects (selected: \"for each X model you select, roll one D6\"; it needs a select-unit of models before it), or for each attack the attacking unit allocated to a model in this unit once it has finished making its attacks (allocated-attack; the attack moment before the roll says which attacks count, and max_dice caps the dice: \"to a maximum of six D6\"); it takes no count. count_stat rolls as many dice as a characteristic of a model (as many D6 as the selected model's Toughness): stat (M, T, W, OC or A) and of (selected: the model the enclosing selection selected; this-model: the model with the ability); it takes no count, per_model, alternative, plus or kind. plus is a number printed as part of the roll (\"roll D3+3\" is dice D3, plus 3): the result bands and any effect that reads the result read the roll with it added; it takes one die: no count, per_model, alternative or kind. kind names the test the roll is (\"take a Psychic test\" is dice 2D6, kind psychic; the result band that follows is its Warp Charge: \"on a 7+\"). alternative: this roll replaces the roll before it when the condition leaf right after it holds (\"or roll four D6 if X\"); it binds no roll_var. A named roll_var binds the roll (the DSL's phase-4 `roll` container) so a single result band compiles its dice-gated from that binding instead of rolling again.",
+    description: "\"Roll one D6\", \"roll six D6\", or \"roll one D6 for each model in this unit\": the result bands that follow (on a 4+, for each 5+) say what happens for each result. count is how many dice are rolled when it is more than one. per_model rolls one die for each model of this unit or the target, for each model the enclosing model selection selects (selected: \"for each X model you select, roll one D6\"; it needs a select-unit of models before it), or for each attack the attacking unit allocated to a model in this unit once it has finished making its attacks (allocated-attack; the attack moment before the roll says which attacks count, and max_dice caps the dice: \"to a maximum of six D6\"); it takes no count. count_stat rolls as many dice as a characteristic of a model (as many D6 as the selected model's Toughness): stat (M, T, W, OC or A) and of (selected: the model the enclosing selection selected; this-model: the model with the ability); it takes no count, per_model, alternative, plus or kind. plus is a number printed as part of the roll (\"roll D3+3\" is dice D3, plus 3): the result bands and any effect that reads the result read the roll with it added; it takes one die: no count, per_model, alternative or kind. kind names the test the roll is (\"take a Psychic test\" is dice 2D6, kind psychic; the result band that follows is its Warp Charge: \"on a 7+\"). alternative: this roll replaces the roll before it when the condition leaf right after it holds (\"or roll four D6 if X\"); it binds no roll_var. plus_if: these dice (count of them, or one) are added to the per-model or counted roll before it when the condition leaf right after it holds (\"rolling two additional D6 if you spent YP during this use\"); same die, and no per_model, roll_var, kind, alternative, max_dice, plus or count_stat. A named roll_var binds the roll (the DSL's phase-4 `roll` container) so a single result band compiles its dice-gated from that binding instead of rolling again.",
     starter: { dice: "" },
     parameterSchema: {
       type: "object",
@@ -198,6 +206,7 @@ export const DICE_AND_DAMAGE_FAMILIES: readonly FlatFamily[] = [
         roll_var: { type: "string", minLength: 1 },
         kind: { enum: DICE_ROLL_KINDS, "x-optional": true },
         alternative: { const: true, "x-optional": true },
+        plus_if: { const: true, "x-optional": true },
         max_dice: { type: "integer", minimum: 1, maximum: 30, "x-optional": true },
         plus: { type: "integer", minimum: 1, maximum: 12, "x-optional": true },
         count_stat: {

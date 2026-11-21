@@ -266,6 +266,7 @@ var scaleOf = map[string]string{
 	"models-equipped-with":            "models in this unit equipped with",
 	"enemy-units-in-range":            "enemy units",
 	"wounds-lost":                     "wounds lost",
+	"enemy-units-hit":                 "enemy units hit by those attacks",
 	"battle-round":                    "battle round",
 }
 
@@ -288,6 +289,9 @@ func scaleSource(q map[string]any) string {
 	}
 	if q["keyword"] != nil {
 		s = replaceFirst(leadingModelsRe, s, ejstr(q["keyword"])+" models")
+	}
+	if q["designated"] != nil {
+		s = dekebab(ejstr(q["designated"])) + " " + s
 	}
 	if q["within"] != nil {
 		s += " within " + rangePhrase(q["within"])
@@ -325,6 +329,13 @@ func quantityPhrase(q map[string]any) string {
 		}
 		return "the result of that roll"
 	}
+	// "the number of YP you just spent": the amount a resource-spend of this ability bound.
+	if _, ok := q["spent"].(string); ok {
+		if q["per"] != nil {
+			return "1 for every " + ejstr(q["per"]) + " you spent"
+		}
+		return "the amount you spent"
+	}
 	if q["count_of"] == "battle-round" {
 		return "the battle round number"
 	}
@@ -360,6 +371,10 @@ func amountOf(q any, one, many string) string {
 	p := mapOr(q)
 	if isBattleSizeValue(p) {
 		return battleSizeValues(p) + " " + many + " (" + battleSizeNames(p) + ")"
+	}
+	// "for every 2YP you just spent, return one additional model": one per that many spent.
+	if _, ok := p["spent"].(string); ok && p["per"] != nil {
+		return "1 " + one + " for every " + ejstr(p["per"]) + " you spent"
 	}
 	return "a number of " + many + " equal to " + quantityPhrase(p)
 }

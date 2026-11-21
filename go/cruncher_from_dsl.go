@@ -60,6 +60,8 @@ type dslOpts struct {
 	// selections lists the effect's selections in document order
 	// (selectionOrder), which number their lever ids.
 	selections []string
+	// spentMax is the most each bound spend of the effect can spend (spentMaxima), by its bind_as name.
+	spentMax map[string]float64
 }
 
 // attackRollInfo is the hit or wound roll a single after-roll trigger fires on; outcome is ""
@@ -153,6 +155,7 @@ func translateEffect(effect any, source map[string]any, context map[string]any, 
 		}
 	}
 	opts.selections = selectionOrder(effect)
+	opts.spentMax = spentMaxima(effect)
 	dslWalk(effect, source, opts, out)
 	if act == nil || (act["usage"] == nil && act["cost"] == nil && act["optional"] != true) {
 		return out
@@ -436,6 +439,12 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	}
 	if hasUnresolvedFidelityBinding(n) {
 		out.unsupported = append(out.unsupported, unsup(fidelityBindingReason, n))
+		return
+	}
+	// "add the number of YP you just spent": a lever at the most the spend can spend; the player
+	// vouches for spending it.
+	if atMost, spend := spentAtMost(n, opts.spentMax); atMost != nil {
+		offerLever(atMost, source, opts, out, leverSpec{id: opts.abilityID + "#spent-max", label: "Spending the most", requires: []any{spend}})
 		return
 	}
 	// A scaled or bound value (a count on the board, the battle size, a bound roll) has no fixed size here:

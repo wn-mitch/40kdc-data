@@ -53,7 +53,12 @@ from wh40kdc.translate.condition_refs import (
     with_article,
     within_clause,
 )
-from wh40kdc.translate.effect_words import dice_case, dice_table_result_label, weapon_noun
+from wh40kdc.translate.effect_words import (
+    dice_case,
+    dice_table_result_label,
+    resource_noun,
+    weapon_noun,
+)
 
 # Shared helpers re-exported for the trigger, timing, effect and scoring describers.
 __all__ = [
@@ -656,6 +661,10 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
                 "at the end of your opponent's previous turn"
             )
         amount = count_phrase(p.get("count"))
+        # "you gained fewer than 3YP this turn": this turn's gains, not what the pool holds.
+        if p.get("gained") == "turn":
+            verb = "did not gain" if negated else "gained"
+            return f"you {verb} {amount} {resource_noun(p.get('pool'), None, 2)} this turn"
         # A pool is the player's ("If you have 3 or more Pact points").
         return f"you have {amount} {dekebab(_str(p.get('pool')))}"
     if ctype == "roll-total":

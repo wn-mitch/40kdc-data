@@ -150,6 +150,12 @@ def _scaling_wording(s: dict[str, Any]) -> str:
     if s.get("of") == "embarked-models-oc":
         points = "point" if num(s.get("per")) == 1 else f"{jstr(s.get('per'))} points"
         return f"for every {points} of {scale_source(s)}{cap}"
+    # "for each assailed enemy unit hit by those attacks": one counted unit at a time.
+    if s.get("of") == "enemy-units-hit" and num(s.get("per")) == 1:
+        designated = (
+            f"{dekebab(jstr(s['designated']))} " if s.get("designated") is not None else ""
+        )
+        return f"for each {designated}enemy unit hit by those attacks{cap}"
     c = f"for every {jstr(s.get('per'))} {scale_source(s)}"
     if s.get("within") is not None and not c.endswith(f"within {range_phrase(s['within'])}"):
         c += f" within {range_phrase(s['within'])}"

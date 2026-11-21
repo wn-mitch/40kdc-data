@@ -1587,7 +1587,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "resource condition",
-          "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent.",
+          "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held.",
           "required": [
             "type",
             "parameters"
@@ -1627,11 +1627,20 @@
                 },
                 "at": {
                   "$ref": "../../defs/common.schema.json#/$defs/snapshot"
+                },
+                "gained": {
+                  "const": "turn",
+                  "description": "count bounds how much of the pool you gained this turn (\"you gained fewer than 3YP this turn\"), not how much it holds."
                 }
               },
               "required": [
                 "pool"
-              ]
+              ],
+              "dependentRequired": {
+                "gained": [
+                  "count"
+                ]
+              }
             }
           }
         },

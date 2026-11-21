@@ -10,7 +10,8 @@ use super::placement::{placement_limits, placement_phrase};
 use super::select::for_each_unit_subject;
 use super::words::*;
 use crate::translate::condition::{
-    and_list, condition_lead_in_value, nn, obj, or_list, place_ref_phrase, range_phrase, P,
+    and_list, condition_lead_in_value, describe_condition_value, nn, obj, or_list,
+    place_ref_phrase, range_phrase, P,
 };
 
 /// A Combat Patrol arrival schedule: "the following friendly units must start the battle in
@@ -136,8 +137,19 @@ fn mortal_wounds(m: &P, subj: &str, ctx: &Ctx) -> String {
         } else {
             format!("result of {} or less", jstr(roll.get("threshold")))
         };
+        // "rolling two additional D6 if X": more dice when the condition holds.
+        let more = nn(roll, "extra_dice")
+            .map(|extra| {
+                let extra = obj(Some(extra));
+                format!(
+                    ", rolling {} additional D6 if {}",
+                    jstr(extra.get("count")),
+                    describe_condition_value(extra.get("condition").unwrap_or(&Value::Null))
+                )
+            })
+            .unwrap_or_default();
         return format!(
-            "roll {dice}{each}{most}: for each {band}, {who} {} {suffered}{psychic}{cap}",
+            "roll {dice}{each}{most}{more}: for each {band}, {who} {} {suffered}{psychic}{cap}",
             v(&who, "suffers")
         );
     }
@@ -616,6 +628,18 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
                     crate::translate::dekebab(source)
                 );
             }
+            // "you gain an amount of YP equal to the difference": what this turn's gains fall short of N by.
+            if let Some(to) = nn(m, "amount")
+                .filter(|a| a.is_object())
+                .and_then(|a| nn(obj(Some(a)), "difference_to"))
+            {
+                let two = Value::from(2);
+                let noun = resource_noun(m.get("pool"), m.get("label"), Some(&two));
+                return format!(
+                    "you gain a number of {noun} equal to the difference between {} and the {noun} you gained this turn",
+                    jstr(Some(to))
+                );
+            }
             if let Some(a) = nn(m, "amount").filter(|a| a.is_object() || a.is_array()) {
                 let one = Value::from(1);
                 let two = Value::from(2);
@@ -647,10 +671,21 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
                     cost_table(m.get("amount_table"))
                 );
             }
-            let all = sv(m, "amount") == Some("all");
+            if let Some(up_to) = nn(m, "amount")
+                .filter(|a| a.is_object())
+                .and_then(|a| nn(obj(Some(a)), "up_to"))
+            {
+                return format!(
+                    "spend up to {} {}",
+                    jstr(Some(up_to)),
+                    resource_noun(m.get("pool"), m.get("label"), Some(up_to))
+                );
+            }
+            let all = matches!(sv(m, "amount"), Some("all") | Some("any"));
             let amount = match sv(m, "amount") {
                 Some("all") => "all your".to_string(),
                 Some("one-or-more") => "one or more".to_string(),
+                Some("any") => "any number of".to_string(),
                 _ => dice_case(m.get("amount")),
             };
             let two = Value::from(2);

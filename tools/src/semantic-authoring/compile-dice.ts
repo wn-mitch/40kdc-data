@@ -39,11 +39,14 @@ const body = (items: Planned[]): Node => {
  * per success of a roll of `count` D6; anything else rolled per die has no DSL shape yet.
  */
 export function perSuccess(planned: Planned[], banded: Planned[], dice: string, count: number, bound: boolean, perModel?: string, forEach?: Node,
-  perAttack?: { per_attack: Node; max_dice?: number }): Node[] {
+  perAttack?: { per_attack: Node; max_dice?: number }, extraDice?: Node): Node[] {
   if (dice !== "D6") throw new CompileError(`Rolling ${count} ${dice} has no DSL shape; only several D6 fold into a count per success.`);
   if (bound) throw new CompileError("A roll of several dice cannot also bind a roll_var.");
   if (perModel === undefined && forEach === undefined && perAttack === undefined && banded.some((item) => item.leaf.family_id !== "mortal-wounds")
-    && banded.every((item) => COUNTED_TYPES.has(String(item.node.type)))) return countedSuccesses(planned, banded, count);
+    && banded.every((item) => COUNTED_TYPES.has(String(item.node.type)))) {
+    if (extraDice !== undefined) throw new CompileError("Additional dice under a condition fold only into mortal wounds per success.");
+    return countedSuccesses(planned, banded, count);
+  }
   for (const item of banded) {
     const markers = item.gate.filter(isRollMarker);
     if (markers.length !== 1) throw new CompileError("One effect is gated by two result bands.");
@@ -64,6 +67,8 @@ export function perSuccess(planned: Planned[], banded: Planned[], dice: string, 
       ...(forEach ? { for_each: structuredClone(forEach) } : {}),
       // One die for each attack allocated to this unit (compile-selected-model-roll.ts), capped.
       ...(perAttack ? { per_attack: structuredClone(perAttack.per_attack), ...(perAttack.max_dice === undefined ? {} : { max_dice: perAttack.max_dice }) } : {}),
+      // "rolling two additional D6 if X" (compile-dice-variants.ts foldExtraDice).
+      ...(extraDice ? { extra_dice: structuredClone(extraDice) } : {}),
     };
     item.gate = item.gate.filter((node) => !isRollMarker(node));
   }
@@ -132,7 +137,7 @@ function readRoll(node: Node, dice: string, rollVar: string): Node | null {
  */
 function resultReaders(planned: Planned[], roll: CompileLeaf): Node[] | null {
   const parameters = roll.parameters;
-  if (["count", "count_stat", "per_model", "for_each", "roll_var", "conditional_bonus", "pool_condition", "kind"].some((key) => parameters[key] !== undefined)) return null;
+  if (["count", "count_stat", "per_model", "for_each", "roll_var", "conditional_bonus", "pool_condition", "kind", "extra_dice"].some((key) => parameters[key] !== undefined)) return null;
   // "Roll D3+3: … that number of mortal wounds": the readers write the roll with its bonus.
   const bonus = Number(parameters.bonus ?? 0);
   const dice = bonus > 0 ? `${String(parameters.dice)}+${bonus}` : String(parameters.dice);
@@ -168,6 +173,11 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
   }
   if (rolls.length > 1 && rolls[0]!.parameters.pool_condition === undefined && rolls.slice(1).every((roll) => roll.parameters.pool_condition !== undefined)) return resolveAlternativePools(planned, global, banded, rolls);
   if (rolls.length !== 1) throw new CompileError(`Result bands need exactly one roll; found ${rolls.length}.`);
+  const extraDice = rolls[0]!.parameters.extra_dice as Node | undefined;
+  const perDie = ["count", "per_model", "for_each", "per_attack"].some((key) => rolls[0]!.parameters[key] !== undefined);
+  if (extraDice !== undefined && (!perDie || rolls[0]!.parameters.count_stat !== undefined || rolls[0]!.parameters.conditional_bonus !== undefined)) {
+    throw new CompileError("Additional dice under a condition go on a roll of one die per model, attack or counted unit, or of a count of dice.");
+  }
   // A change to the roll that holds only under a condition (compile-preceding-roll.ts): two rolls, one per side.
   const conditional = rolls[0]!.parameters.conditional_bonus as ConditionalBonus | undefined;
   if (conditional !== undefined) return resolveConditionalRolls(planned, global, banded, rolls[0]!, conditional);
@@ -183,9 +193,12 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
   // A count from a model's characteristic is one shared pool (compile-dice-variants.ts).
   if (rolls[0]!.parameters.count_stat !== undefined) return sharedPool(planned, banded, rolls[0]!);
   // Several dice whose bands pay different mortal-wound effects are one pool, not a roll per effect.
-  if (count !== undefined && perModel === undefined && forEach === undefined && perAttack === undefined && splitBands(banded)) return sharedPool(planned, banded, rolls[0]!);
+  if (count !== undefined && perModel === undefined && forEach === undefined && perAttack === undefined && splitBands(banded)) {
+    if (extraDice !== undefined) throw new CompileError("Additional dice under a condition have no DSL shape on a pool whose bands pay different effects.");
+    return sharedPool(planned, banded, rolls[0]!);
+  }
   if (count !== undefined || perModel !== undefined || forEach !== undefined || perAttack !== undefined) {
-    return perSuccess(planned, banded, die, count ?? 1, rolls[0]!.parameters.roll_var !== undefined, perModel, forEach, perAttack);
+    return perSuccess(planned, banded, die, count ?? 1, rolls[0]!.parameters.roll_var !== undefined, perModel, forEach, perAttack, extraDice);
   }
   // "adding 1 to the result" (compile-preceding-roll.ts): the bands read the roll plus the bonus.
   const bonus = Number(rolls[0]!.parameters.bonus ?? 0);

@@ -52,7 +52,7 @@ import { foldDelayedMoments } from "./compile-delayed-moment.js";
 import { foldRitualTest } from "./compile-ritual-test.js";
 import { foldEmergencyDisembark } from "./compile-emergency-disembark.js";
 import { bulletBreaks, commaItems, ordered, orLineBreaks, placements, plainLineBreaks, shapeSignature } from "./compile-placement.js";
-import { foldAlternativePools } from "./compile-dice-variants.js";
+import { foldAlternativePools, foldExtraDice } from "./compile-dice-variants.js";
 import { planContainers } from "./compile-containers.js";
 import { optionalDesignationUses, timingMoments } from "./compile-redesignate.js";
 import { compileNamedRegionState } from "./compile-named-region.js";
@@ -101,6 +101,7 @@ import { refuseStratagemTargetActivity } from "./compile-triggering-destruction.
 import { planConditionOf, type ConditionOfPlan } from "./compile-connective-plan.js";
 import { lowerHistoryMoments } from "./compile-connective-history.js";
 import { checkOptionalCosts } from "./compile-optional-cost.js";
+import { checkSpentReferences } from "./compile-spent.js";
 import { foldSelectionHolders } from "./compile-selection-holders.js";
 import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
 import { bindMatchedPools } from "./compile-matched-set.js";
@@ -469,7 +470,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
     const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldManoeuvreOwnRoll(foldHistoryWindow(foldByAbility(foldAuraMoments(foldUsedObjects(foldStratagemTail(foldObjectRange(splitIgnoreModifiers(resolveAttackBackrefs(groupMembership(hoistWeaponRecipients(foldWarlordTests(foldEffectAfterAttacks(foldDestructionAfterAttacks(foldDisembarkMoment(foldStepWindow(ordered(weaponBound), sourceText), sourceText), sourceText), sourceText)), sourceText)))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), options.menuActions ?? manoeuvreLookupFor(options.abilityId)), sourceText), sourceText, options.abilityId), sourceText), sourceText);
     // "wholly within 6\" of a friendly Transport unit that unit is able to embark within" (compile-transport-embark.ts).
-    const bound = bindEmbarkAnchors(foldCountScales(bindDesignationSubjects(foldAlternativePools(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(foldForwardComposition(refs.leaves), sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText))), sourceText));
+    const bound = bindEmbarkAnchors(foldCountScales(bindDesignationSubjects(foldExtraDice(foldAlternativePools(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(foldForwardComposition(refs.leaves), sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText)))), sourceText));
     refuseTransportAsSubject(bound);
     refuseDestinationMismatch(bound, sourceText);
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldFightNext(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldTargetingWeapons(foldDestroyFilters(foldMortalWoundSources(bindEquippedCounts(bound)), sourceText), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText)), sourceText));
@@ -545,6 +546,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   if (!assembled.ok) return assembled;
   // A selection after "those attacks" resolve is made once, outside their per-attack gate (compile-resolved-selection.ts).
   try {
+    // "the number of YP you just spent" reads a spend before it that bound its amount (compile-spent.ts).
+    checkSpentReferences(assembled.mechanics.effect);
     return { ...assembled, mechanics: { ...assembled.mechanics, effect: hoistResolvedSelections(assembled.mechanics.effect) as typeof assembled.mechanics.effect } };
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;

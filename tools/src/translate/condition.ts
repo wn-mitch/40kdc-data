@@ -21,7 +21,7 @@ export interface Condition {
 import { describeHappened, destroyedCount } from "./condition-history.js";
 import { namedEquipmentPhrase } from "./condition-equipment.js";
 import { andList, countPhrase, dekebab, designationPhrase, EVENT_OBJECT_MODEL, EVENT_SUBJECT_MODEL, idLabel, keywordList, keywordNoun, objectivePhrase, ord, orList, type P, placeRefPhrase, rangePhrase, rollWord, ruleRefPhrase, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase, withArticle, withinClause } from "./condition-refs.js";
-import { bracketKeyword, diceCase, diceTableResultLabel, weaponNoun } from "./effect-words.js";
+import { bracketKeyword, diceCase, diceTableResultLabel, resourceNoun, weaponNoun } from "./effect-words.js";
 
 export { dekebab, moveKinds, rangePhrase, titleCase, unitFilterPhrase, unitRefPhrase } from "./condition-refs.js";
 
@@ -283,6 +283,8 @@ export function describePredicate(c: Condition, negated: boolean): string {
         return `${neg}the ${dekebab(str(source))} ability had unused selection capacity at the end of your opponent's previous turn`;
       }
       const amount = countPhrase(p.count);
+      // "you gained fewer than 3YP this turn": this turn's gains, not what the pool holds.
+      if (p.gained === "turn") return `you ${negated ? "did not gain" : "gained"} ${amount} ${resourceNoun(p.pool, undefined, 2)} this turn`;
       // A pool is the player's ("If you have 3 or more Pact points").
       return `you have ${amount} ${dekebab(str(p.pool))}`;
     }

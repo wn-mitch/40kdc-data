@@ -182,6 +182,9 @@ export function assemblePart(
     rolls.filter((leaf) => partOf(list.indexOf(leaf)) === part).map((leaf) => {
       const poolLeaf = leaf.parameters.pool_condition as CompileLeaf | undefined;
       if (poolLeaf !== undefined) return { ...leaf, parameters: { ...leaf.parameters, pool_condition: condition(poolLeaf) } };
+      // Additional dice under a condition (compile-dice-variants.ts foldExtraDice).
+      const extra = leaf.parameters.extra_dice as { count: number; leaf: CompileLeaf } | undefined;
+      if (extra !== undefined) return { ...leaf, parameters: { ...leaf.parameters, extra_dice: { count: extra.count, condition: condition(extra.leaf) } } };
       const bonus = leaf.parameters.conditional_bonus as { value: number; leaf: CompileLeaf; following?: CompileLeaf } | undefined;
       if (bonus === undefined) return leaf;
       return { ...leaf, parameters: { ...leaf.parameters, conditional_bonus: { value: bonus.value, node: condition(bonusCondition(bonus, sourceText)) } } };

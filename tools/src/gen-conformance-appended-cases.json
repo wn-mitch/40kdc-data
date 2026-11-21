@@ -4692,5 +4692,284 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "caseId": "yield-points/spend-up-to-damage",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "fabricated-pool",
+            "amount": {
+              "up_to": 3
+            },
+            "bind_as": "spent"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "D",
+            "operation": "add",
+            "value": {
+              "spent": "spent"
+            },
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "yield-points/spend-any-return-per",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "fabricated-pool",
+            "amount": "any",
+            "bind_as": "spent"
+          }
+        },
+        {
+          "type": "return-models",
+          "target": "this-unit",
+          "modifier": {
+            "count": 1
+          }
+        },
+        {
+          "type": "return-models",
+          "target": "this-unit",
+          "modifier": {
+            "count": {
+              "spent": "spent",
+              "per": 2
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "yield-points/spent-move-amount",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "fabricated-pool",
+            "amount": {
+              "up_to": 2
+            },
+            "bind_as": "spent"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "M",
+            "operation": "add",
+            "value": {
+              "spent": "spent",
+              "per": 2
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "yield-points/gained-this-turn-difference",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "resource",
+        "parameters": {
+          "pool": "yp-pool",
+          "count": {
+            "max": 2
+          },
+          "gained": "turn"
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "yp-pool",
+          "amount": {
+            "difference_to": 3
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "yield-points/not-gained-this-turn",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "resource",
+            "parameters": {
+              "pool": "yp-pool",
+              "count": {
+                "min": 2
+              },
+              "gained": "turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "yield-points/extra-dice-if-spent",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "this-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "max": 6,
+        "roll": {
+          "dice": 1,
+          "threshold": 4,
+          "per_model": "this-unit",
+          "extra_dice": {
+            "count": 2,
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "designated": "yp-spent-this-use"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "yield-points/gain-per-designated-unit-hit",
+    "effect": {
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "yp-pool",
+        "amount": 1
+      },
+      "scaling": {
+        "per": 1,
+        "of": "enemy-units-hit",
+        "designated": "assailed",
+        "max_value": 3,
+        "field": "amount"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "yield-points/gain-per-two-units-hit",
+    "effect": {
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "yp-pool",
+        "amount": 1
+      },
+      "scaling": {
+        "per": 2,
+        "of": "enemy-units-hit",
+        "field": "amount"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "yield-points/spend-any-pool-checked",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "fabricated-pool",
+            "amount": "any"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "resource",
+            "parameters": {
+              "pool": "yp-pool",
+              "count": {
+                "max": 6
+              }
+            }
+          },
+          "effect": {
+            "type": "keyword-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                "FABRICATED"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

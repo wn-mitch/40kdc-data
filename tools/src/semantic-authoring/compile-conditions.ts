@@ -793,6 +793,7 @@ export function condition(leaf: CompileLeaf): Node {
         parameters.source_ability = sourceAbility;
       }
       if (leaf.parameters.at !== undefined) parameters.at = closed(leaf, "at");
+      if (leaf.parameters.gained_this_turn === true) parameters.gained = "turn";
       return polarity(leaf, { type: "resource", parameters });
     }
     case "operation-markers": {

@@ -220,7 +220,9 @@ pub fn condition_lead_in_for(c: &Value, defending: bool) -> String {
             format!("if {}", describe_happened(p, false))
         }
         "resource" => {
-            if p.get("below_max") == Some(&Value::Bool(true)) {
+            if p.get("below_max") == Some(&Value::Bool(true))
+                || p.get("gained").and_then(Value::as_str) == Some("turn")
+            {
                 format!("if {}", pred())
             } else {
                 format!("while {}", pred())

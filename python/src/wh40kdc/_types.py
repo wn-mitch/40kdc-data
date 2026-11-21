@@ -364,6 +364,7 @@ ScalingSource: TypeAlias = Literal[
     "enemy-units-in-range",
     "wounds-lost",
     "battle-round",
+    "enemy-units-hit",
 ]
 
 
@@ -371,6 +372,11 @@ class RollReference(TypedDict):
     roll_var: str
     successes_on: NotRequired[int]
     comparison: NotRequired[Literal["lte"]]
+
+
+class SpentReference(TypedDict):
+    spent: EntityId
+    per: NotRequired[int]
 
 
 class CountOf(TypedDict):
@@ -1309,6 +1315,7 @@ class Scaling(TypedDict):
     wargear: NotRequired[EntityId]
     evaluated: NotRequired[Literal["live", "on-apply"]]
     within: NotRequired[RangeRef]
+    designated: NotRequired[DesignationId]
 
 
 RuleStateCoreRuleSlug: TypeAlias = Literal[
@@ -1492,6 +1499,14 @@ class Modifier49(TypedDict):
 
 class Amount(TypedDict):
     pool: str
+
+
+class Amount1(TypedDict):
+    difference_to: int
+
+
+class Amount2(TypedDict):
+    up_to: int
 
 
 class AmountTableItem(TypedDict):
@@ -1772,6 +1787,7 @@ Quantity: TypeAlias = (
     | CountOf
     | UnitRating
     | UnitCharacteristic
+    | SpentReference
 )
 
 
@@ -1895,7 +1911,7 @@ class Modifier44(TypedDict):
 
 class Modifier50(TypedDict):
     pool: str
-    amount: Quantity | Literal["variable", "any"] | Amount
+    amount: Quantity | Literal["variable", "any"] | Amount | Amount1
     set: NotRequired[Literal[True]]
     label: NotRequired[str]
 
@@ -1991,6 +2007,7 @@ class Parameters39(TypedDict):
     below_max: NotRequired[Literal[True]]
     source_ability: NotRequired[SourceAbility1]
     at: NotRequired[Snapshot]
+    gained: NotRequired[Literal["turn"]]
 
 
 class SimpleCondition31(TypedDict):
@@ -3386,6 +3403,11 @@ class SingleEffect16(TypedDict):
     scaling: NotRequired[Scaling]
 
 
+class ExtraDice(TypedDict):
+    count: int
+    condition: Condition
+
+
 class Roll(TypedDict):
     dice: int | DiceExpression
     threshold: int
@@ -3394,6 +3416,7 @@ class Roll(TypedDict):
     for_each: NotRequired[UnitSelector]
     per_attack: NotRequired[PerAttack]
     max_dice: NotRequired[int]
+    extra_dice: NotRequired[ExtraDice]
 
 
 class Modifier22(TypedDict):
@@ -3920,12 +3943,13 @@ class SingleEffect37(TypedDict):
 
 class Modifier51(TypedDict):
     pool: str
-    amount: Quantity | Literal["all", "one-or-more", "by-table"]
+    amount: Quantity | Literal["all", "one-or-more", "by-table", "any"] | Amount2
     label: NotRequired[str]
     face: NotRequired[int]
     requirement: NotRequired[DiceRequirementSpec]
     amount_table: NotRequired[list[AmountTableItem]]
     table_of: NotRequired[UnitRef]
+    bind_as: NotRequired[EntityId]
 
 
 class SingleEffect38(TypedDict):

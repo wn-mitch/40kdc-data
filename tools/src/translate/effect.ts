@@ -111,6 +111,8 @@ export interface Effect {
     max_value?: number;
     /** When the count is taken: live (default) at each use, on-apply once when the rule applies. */
     evaluated?: "live" | "on-apply";
+    /** enemy-units-hit: only units carrying this designation count. */
+    designated?: string;
   };
   // designate-target / persistent-designation
   designation?: string;
@@ -485,6 +487,11 @@ function scalingWording(s: NonNullable<Effect["scaling"]>): string {
   if (s.of === "battle-round") return `multiplied by the battle round number${s.max_value != null ? ` (to a maximum of ${jstr(s.max_value)})` : ""}`;
   // A summed characteristic is counted in points: "for every point of Objective Control of the models embarked within this model".
   if (s.of === "embarked-models-oc") return `for every ${Number(s.per) === 1 ? "point" : `${jstr(s.per)} points`} of ${scaleSource(s as Record<string, unknown>)}${s.max_value != null ? ` (to a maximum of ${jstr(s.max_value)})` : ""}`;
+  // "for each assailed enemy unit hit by those attacks": one counted unit at a time.
+  if (s.of === "enemy-units-hit" && Number(s.per) === 1) {
+    const each = `for each ${s.designated != null ? `${dekebab(jstr(s.designated))} ` : ""}enemy unit hit by those attacks`;
+    return s.max_value != null ? `${each} (to a maximum of ${jstr(s.max_value)})` : each;
+  }
   let c = `for every ${jstr(s.per)} ${scaleSource(s as Record<string, unknown>)}`;
   if (s.round === "up") c += " (rounding up)";
   if (s.max_value != null) c += ` (to a maximum of ${jstr(s.max_value)})`;

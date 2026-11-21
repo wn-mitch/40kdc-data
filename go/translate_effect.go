@@ -56,6 +56,14 @@ func scalingWording(s map[string]any) string {
 		}
 		return "for every " + per + " of " + scaleSource(s) + maxTail
 	}
+	// "for each assailed enemy unit hit by those attacks": one counted unit at a time.
+	if s["of"] == "enemy-units-hit" && jsNumber(s["per"]) == 1 {
+		designated := ""
+		if s["designated"] != nil {
+			designated = dekebab(ejstr(s["designated"])) + " "
+		}
+		return "for each " + designated + "enemy unit hit by those attacks" + maxTail
+	}
 	c := "for every " + ejstr(s["per"]) + " " + scaleSource(s)
 	if s["within"] != nil {
 		rangeText := rangePhrase(s["within"])

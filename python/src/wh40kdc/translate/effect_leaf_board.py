@@ -126,8 +126,16 @@ def _mortal_wounds(m: dict[str, Any], subj: str) -> str:
             band = "1"
         else:
             band = f"result of {jstr(roll.get('threshold'))} or less"
+        # "rolling two additional D6 if X": more dice when the condition holds.
+        extra = roll.get("extra_dice")
+        more = (
+            f", rolling {jstr(_obj(extra).get('count'))} additional D6 if "
+            f"{describe_condition(_obj(_obj(extra).get('condition')))}"
+            if extra is not None
+            else ""
+        )
         return (
-            f"roll {dice}{each}{most}: for each {band}, {who} "
+            f"roll {dice}{each}{most}{more}: for each {band}, {who} "
             f"{v(who, 'suffers')} "
             f"{suffered}{psychic}{cap}"
         )

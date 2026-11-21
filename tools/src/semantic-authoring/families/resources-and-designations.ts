@@ -1,7 +1,7 @@
 import { DESIGNATION_IDS, LIST_BUILDING_DESIGNATIONS, designationId, refuseListBuildingTag } from "../../translate/designations.js";
 import { ANTECEDENT } from "../antecedent-families.js";
 import {
-  booleanValue, boundedInteger, enumOrSource, enumSet, enumValue, integerOrSource, keySet, sourceQualified,
+  booleanValue, boundedInteger, enumOrSource, enumSet, enumValue, integerOrSource, keySet, sourceQualified, spentName,
   type SourceQualifiedValue,
 } from "../family-validation.js";
 import type { FlatFamily } from "./types.js";
@@ -89,15 +89,29 @@ function normalizeStratagemCost(input: Params): Params {
 const DICE_REQUIREMENT_TYPES = ["pair", "triple", "single", "run"] as const;
 const TABLE_OF = [ANTECEDENT, "event-subject", "event-object"] as const;
 
+/** A fixed spend, an exact source snippet, or "up to N" ({up_to}: none up to N, as the player chooses). */
+function spendAmount(amount: unknown): unknown {
+  if (isObject(amount) && "up_to" in amount) {
+    keySet(amount, ["up_to"], [], "resource-spend.amount");
+    return { up_to: boundedInteger(amount.up_to, 1, 20, "resource-spend.amount.up_to") };
+  }
+  return integerOrSource(amount, "resource-spend.amount");
+}
+
 function normalizeResourceSpend(input: Params): Params {
   const family = "resource-spend";
-  keySet(input, ["pool", "amount"], ["label", "spend_gate", "face", "requirement_type", "requirement_min", "table_of", "starting_strength"], family);
+  keySet(input, ["pool", "amount"], ["label", "spend_gate", "face", "requirement_type", "requirement_min", "table_of", "starting_strength", "bind_as"], family);
   const { amount, table_of: tableOf, starting_strength: strength } = input;
   const result: Params = {
     pool: poolId(input.pool, "resource-spend.pool"),
-    amount: amount === "all" || amount === "one-or-more" || amount === "by-table" ? amount : integerOrSource(amount, "resource-spend.amount"),
+    amount: amount === "all" || amount === "one-or-more" || amount === "by-table" || amount === "any" ? amount : spendAmount(amount),
     ...poolLabel(input, family),
   };
+  // "the number of YP you spent": a later {spent} amount reads what this spend spent.
+  if (input.bind_as !== undefined) {
+    if (amount === "by-table" || Number.isInteger(amount)) throw new TypeError("resource-spend.bind_as names an amount the player chooses: any, one-or-more, all or {up_to}.");
+    result.bind_as = spentName(input.bind_as, "resource-spend.bind_as");
+  }
   if (amount === "by-table") {
     // The cost is the row of the table after the leaf that matches the unit table_of names.
     if (strength !== undefined) throw new TypeError("resource-spend.starting_strength names one row; a by-table spend has none.");
@@ -163,6 +177,11 @@ function gainAmount(amount: unknown, pool: unknown): unknown {
     if (amount.pool === pool) throw new TypeError("resource-gain.amount {pool} names another pool than the one gained.");
     return { pool: amount.pool };
   }
+  // "you gain an amount of YP equal to the difference": what this turn's gains fall short of N by.
+  if (isObject(amount) && "difference_to" in amount) {
+    keySet(amount, ["difference_to"], [], "resource-gain.amount");
+    return { difference_to: boundedInteger(amount.difference_to, 1, 20, "resource-gain.amount.difference_to") };
+  }
   if (isObject(amount) && !("source" in amount)) return battleSizeValue(amount, 100, "resource-gain.amount");
   return integerOrSource(amount, "resource-gain.amount");
 }
@@ -178,7 +197,7 @@ function normalizeResourceGain(input: Params): Params {
     result.subject = enumValue(subject, POOL_OWNERS, "resource-gain.subject");
   }
   if (set !== undefined) {
-    if (isObject(result.amount) && "pool" in result.amount) throw new TypeError("resource-gain.set does not take an amount read from another pool.");
+    if (isObject(result.amount) && ("pool" in result.amount || "difference_to" in result.amount)) throw new TypeError("resource-gain.set does not take an amount read from another pool or this turn's gains.");
     if (set !== true) throw new TypeError("resource-gain.set is true or omitted.");
     if (amount === "variable") throw new TypeError("resource-gain.set needs a number: any, a value or dice.");
     result.set = true;
@@ -376,17 +395,18 @@ export const RESOURCES_AND_DESIGNATIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "resource-spend",
-    version: 4,
+    version: 5,
     role: "EFFECT",
     label: "Spend a resource",
-    description: "Spends an amount from a named resource pool (any kebab-case pool id, or an exact source snippet): a fixed amount, all of it, one-or-more (the player chooses how many, at least one: \"spend one or more BTP you have\"), or by-table with table_of (antecedent: the unit an earlier leaf named, event-subject or event-object): the cost is the row of the table after it that matches that unit. starting_strength on a row with a fixed amount is the cost for a unit of that Starting Strength. spend_gate optionally requires the spent dice to show a named face, or to form a pair/triple/single/run at or above a minimum value (face and the requirement are mutually exclusive, so spend_gate says which — or neither — applies). label is the player-facing singular noun for one unit of the pool (Aeldari's \"Battle Focus token\"), only when the rules give the pool one.",
+    description: "Spends an amount from a named resource pool (any kebab-case pool id, or an exact source snippet): a fixed amount, all of it, one-or-more (the player chooses how many, at least one: \"spend one or more BTP you have\"), or by-table with table_of (antecedent: the unit an earlier leaf named, event-subject or event-object): the cost is the row of the table after it that matches that unit. any: any number the player chooses, none included (\"you can spend any number of YP\"); {up_to: N}: none up to N (\"spend up to 2YP\"). bind_as names the amount spent (a kebab-case name) for a later {spent} amount in the same ability (\"add the number of YP you just spent\"); it goes with an amount the player chooses (any, one-or-more, all or up_to). starting_strength on a row with a fixed amount is the cost for a unit of that Starting Strength. spend_gate optionally requires the spent dice to show a named face, or to form a pair/triple/single/run at or above a minimum value (face and the requirement are mutually exclusive, so spend_gate says which — or neither — applies). label is the player-facing singular noun for one unit of the pool (Aeldari's \"Battle Focus token\"), only when the rules give the pool one.",
     starter: { pool: "", amount: null },
     parameterSchema: {
       type: "object", required: ["pool", "amount"], additionalProperties: false,
       properties: {
         pool: { anyOf: [{ enum: [...KNOWN_POOL_IDS] }, SOURCE_QUALIFIED_SCHEMA, { type: "string", pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" }] },
-        amount: { anyOf: [{ type: "integer" }, SOURCE_QUALIFIED_SCHEMA, { const: "all" }, { const: "one-or-more" }, { const: "by-table" }] },
+        amount: { anyOf: [{ type: "integer" }, SOURCE_QUALIFIED_SCHEMA, { const: "all" }, { const: "one-or-more" }, { const: "by-table" }, { const: "any" }, { type: "object", required: ["up_to"], properties: { up_to: { type: "integer", minimum: 1, maximum: 20 } }, additionalProperties: false }] },
         label: { type: "string", minLength: 1 },
+        bind_as: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$", "x-optional": true },
         spend_gate: { enum: ["none", "face", "requirement"] },
         face: { type: "integer", minimum: 1, maximum: 6, "x-only-when": { spend_gate: ["face"] } },
         requirement_type: { enum: ["pair", "triple", "single", "run"], "x-only-when": { spend_gate: ["requirement"] } },
@@ -402,13 +422,13 @@ export const RESOURCES_AND_DESIGNATIONS_FAMILIES: readonly FlatFamily[] = [
     version: 7,
     role: "EFFECT",
     label: "Gain a resource",
-    description: "Gains an amount of a named resource pool (any kebab-case pool id, or an exact source snippet; command-point becomes CP): a fixed number, a variable or any amount the rules don't fix, one value per battle size ({incursion, strike-force, onslaught}, plus combat-patrol when the table prints a Combat Patrol row), a dice amount (D3, D6, 2D6, D3+1, normalized to uppercase) for a gain rolled on the bearer's ability, as many as another pool holds ({pool}), or as many as one of the unit's own characteristics ({characteristic}: M, T, Sv, W, Ld, OC or psyker-level). set: true makes the pool become the amount instead of gaining it (amount any is a number the player picks); it takes neither a variable amount nor a {pool} amount. With a characteristic amount the pool belongs to that unit: subject names it (this-unit, or antecedent for the units a unit-filter before it names; this-unit when omitted), and subject needs a characteristic amount. label is the player-facing singular noun for one unit of the pool (Aeldari's \"Battle Focus token\"), only when the rules give the pool one.",
+    description: "Gains an amount of a named resource pool (any kebab-case pool id, or an exact source snippet; command-point becomes CP): a fixed number, a variable or any amount the rules don't fix, one value per battle size ({incursion, strike-force, onslaught}, plus combat-patrol when the table prints a Combat Patrol row), a dice amount (D3, D6, 2D6, D3+1, normalized to uppercase) for a gain rolled on the bearer's ability, as many as another pool holds ({pool}), or as many as one of the unit's own characteristics ({characteristic}: M, T, Sv, W, Ld, OC or psyker-level). {difference_to: N}: what the pool's gains this turn fall short of N by (\"if you gained fewer than 3YP this turn, you gain an amount of YP equal to the difference\"); it takes no set. set: true makes the pool become the amount instead of gaining it (amount any is a number the player picks); it takes neither a variable amount nor a {pool} amount. With a characteristic amount the pool belongs to that unit: subject names it (this-unit, or antecedent for the units a unit-filter before it names; this-unit when omitted), and subject needs a characteristic amount. label is the player-facing singular noun for one unit of the pool (Aeldari's \"Battle Focus token\"), only when the rules give the pool one.",
     starter: { pool: "", amount: null },
     parameterSchema: {
       type: "object", required: ["pool", "amount"], additionalProperties: false,
       properties: {
         pool: { anyOf: [{ enum: [...KNOWN_POOL_IDS] }, SOURCE_QUALIFIED_SCHEMA, { type: "string", pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" }] },
-        amount: { anyOf: [{ type: "integer" }, SOURCE_QUALIFIED_SCHEMA, { const: "variable" }, { const: "any" }, { type: "object", required: ["incursion", "strike-force", "onslaught"], properties: { "combat-patrol": { type: "integer", minimum: 0, maximum: 100, "x-optional": true }, incursion: { type: "integer", minimum: 0, maximum: 100 }, "strike-force": { type: "integer", minimum: 0, maximum: 100 }, onslaught: { type: "integer", minimum: 0, maximum: 100 } }, additionalProperties: false }, { type: "string", pattern: "^\\d*D(3|6)(\\+\\d+)?$", examples: ["D3"] }, { type: "object", required: ["pool"], properties: { pool: { type: "string", pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" } }, additionalProperties: false }, { type: "object", required: ["characteristic"], properties: { characteristic: { enum: ["M", "T", "Sv", "W", "Ld", "OC", "psyker-level"] } }, additionalProperties: false }] },
+        amount: { anyOf: [{ type: "integer" }, SOURCE_QUALIFIED_SCHEMA, { const: "variable" }, { const: "any" }, { type: "object", required: ["incursion", "strike-force", "onslaught"], properties: { "combat-patrol": { type: "integer", minimum: 0, maximum: 100, "x-optional": true }, incursion: { type: "integer", minimum: 0, maximum: 100 }, "strike-force": { type: "integer", minimum: 0, maximum: 100 }, onslaught: { type: "integer", minimum: 0, maximum: 100 } }, additionalProperties: false }, { type: "string", pattern: "^\\d*D(3|6)(\\+\\d+)?$", examples: ["D3"] }, { type: "object", required: ["pool"], properties: { pool: { type: "string", pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" } }, additionalProperties: false }, { type: "object", required: ["characteristic"], properties: { characteristic: { enum: ["M", "T", "Sv", "W", "Ld", "OC", "psyker-level"] } }, additionalProperties: false }, { type: "object", required: ["difference_to"], properties: { difference_to: { type: "integer", minimum: 1, maximum: 20 } }, additionalProperties: false }] },
         label: { type: "string", minLength: 1 },
         set: { const: true, "x-optional": true },
         subject: { enum: ["this-unit", "antecedent"], "x-optional": true },

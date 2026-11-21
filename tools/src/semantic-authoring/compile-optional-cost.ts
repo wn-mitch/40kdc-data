@@ -8,11 +8,14 @@ export function isSpendRead(leaf: CompileLeaf): boolean {
   return leaf.family_id === "optional-cost-paid" && (leaf.parameters.window === "use" || leaf.parameters.window === "trigger");
 }
 
-/** Every leaf of an ability, with the conditions folded into an any-of unfolded again. */
+/** Every leaf of an ability, with the conditions folded into an any-of or a roll's additional dice unfolded again. */
 export function flatLeaves(list: readonly CompileLeaf[]): CompileLeaf[] {
-  return list.flatMap((leaf) => leaf.family_id === "__any-of"
-    ? flatLeaves((leaf.parameters.alternatives as CompileLeaf[][]).flat())
-    : [leaf]);
+  return list.flatMap((leaf) => {
+    if (leaf.family_id === "__any-of") return flatLeaves((leaf.parameters.alternatives as CompileLeaf[][]).flat());
+    // "rolling two additional D6 if you spent YP during this use": the read sits on the roll (compile-dice-variants.ts foldExtraDice).
+    const extra = leaf.family_id === "dice-roll" ? (leaf.parameters.extra_dice as { leaf?: CompileLeaf } | undefined)?.leaf : undefined;
+    return extra !== undefined ? [leaf, ...flatLeaves([extra])] : [leaf];
+  });
 }
 
 /** The designation tag a read tests and its spend sets. */

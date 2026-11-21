@@ -113,7 +113,7 @@ function normalizeTriggeringTarget(input: Params): Params {
 function normalizeBearerEligibility(input: Params): Params {
   const family = "bearer-eligibility";
   const spelling = new PrintedKeywords(family, input);
-  const { any_keywords: anyKeywords, datasheets, abilities, or_datasheets: orDatasheets, ...rest } = input;
+  const { any_keywords: anyKeywords, datasheets, abilities, or_datasheets: orDatasheets, wargear, ...rest } = input;
   if (orDatasheets !== undefined && datasheets !== undefined) {
     throw new TypeError("bearer-eligibility names datasheets that narrow its keywords or or_datasheets that add to them, not both.");
   }
@@ -130,6 +130,7 @@ function normalizeBearerEligibility(input: Params): Params {
   }
   if (datasheets !== undefined) result.datasheets = kebabIds(datasheets, "bearer-eligibility.datasheets", "core unit ids");
   if (abilities !== undefined) result.abilities = kebabIds(abilities, "bearer-eligibility.abilities", "core ability ids");
+  if (wargear !== undefined) result.wargear = kebabIds(wargear, "bearer-eligibility.wargear", "core weapon or wargear ids");
   if (orDatasheets !== undefined) {
     const list = kebabIds(orDatasheets, "bearer-eligibility.or_datasheets", "core unit ids");
     if (match !== "all" || anyKeywords !== undefined) {
@@ -275,11 +276,11 @@ export const RESTRICTIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "bearer-eligibility",
-    version: 8,
+    version: 9,
     role: "RESTRICTION",
     kinds: ["enhancement"],
     label: "Which models can take it",
-    description: "An enhancement's \"<KEYWORD> model only\": every keyword, or any one of them (\"CANONESS, PALATINE or MINISTORUM PRIEST\"), and the models it excludes (\"(excluding CYBERNETICA DATASMITH models)\"). any_keywords: the bearer has every keyword and at least one of these (\"ADEPTUS ASTARTES INFANTRY/MOUNTED model only\" is ADEPTUS ASTARTES plus INFANTRY or MOUNTED; match all). datasheets: the bearer is a model of one of these datasheets, by core unit id (\"Tzaangor Shaman model only\" when the restriction names the Tzaangor Shaman datasheet, not every unit with its keyword); the keywords still record what the source prints. or_datasheets: the bearer has every keyword, or is a model of one of these datasheets (match all, with no datasheets and no any_keywords). abilities: core abilities the bearer's datasheet must have, by core ability id (\"HERETIC ASTARTES model with the Deep Strike ability only\" is HERETIC ASTARTES plus deep-strike), checked against the core enhancement's required_ability_ids. A keyword can carry accented capitals (KÂHL) or start with an apostrophe ('ARDMOB) as the rules print it. Checked against the core enhancement record, not written again.",
+    description: "An enhancement's \"<KEYWORD> model only\": every keyword, or any one of them (\"CANONESS, PALATINE or MINISTORUM PRIEST\"), and the models it excludes (\"(excluding CYBERNETICA DATASMITH models)\"). any_keywords: the bearer has every keyword and at least one of these (\"ADEPTUS ASTARTES INFANTRY/MOUNTED model only\" is ADEPTUS ASTARTES plus INFANTRY or MOUNTED; match all). datasheets: the bearer is a model of one of these datasheets, by core unit id (\"Tzaangor Shaman model only\" when the restriction names the Tzaangor Shaman datasheet, not every unit with its keyword); the keywords still record what the source prints. or_datasheets: the bearer has every keyword, or is a model of one of these datasheets (match all, with no datasheets and no any_keywords). abilities: core abilities the bearer's datasheet must have, by core ability id (\"HERETIC ASTARTES model with the Deep Strike ability only\" is HERETIC ASTARTES plus deep-strike), checked against the core enhancement's required_ability_ids. wargear: weapons or wargear the bearer must be equipped with, by core id (\"LEAGUES OF VOTANN model equipped with an Autoch-pattern combi-bolter only\"), checked against the core enhancement's required_wargear_ids. A keyword can carry accented capitals (KÂHL) or start with an apostrophe ('ARDMOB) as the rules print it. Checked against the core enhancement record, not written again.",
     starter: { keywords: [], match: "", excluded_keywords: [] },
     parameterSchema: {
       type: "object", required: ["keywords", "match", "excluded_keywords"], additionalProperties: false,
@@ -291,6 +292,7 @@ export const RESTRICTIONS_FAMILIES: readonly FlatFamily[] = [
         datasheets: { type: "array", items: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$" }, minItems: 1, uniqueItems: true, "x-optional": true },
         abilities: { type: "array", items: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$" }, minItems: 1, uniqueItems: true, "x-optional": true },
         or_datasheets: { type: "array", items: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$" }, minItems: 1, uniqueItems: true, "x-optional": true },
+        wargear: { type: "array", items: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$" }, minItems: 1, uniqueItems: true, "x-optional": true },
       },
     },
     normalize: normalizeBearerEligibility,

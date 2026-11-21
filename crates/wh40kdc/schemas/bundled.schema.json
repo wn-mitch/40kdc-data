@@ -1552,9 +1552,10 @@
         "models-equipped-with",
         "enemy-units-in-range",
         "wounds-lost",
-        "battle-round"
+        "battle-round",
+        "enemy-units-hit"
       ],
-      "description": "What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number."
+      "description": "What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number. enemy-units-hit: the enemy units hit by one or more of the attacks of the triggering attack sequence (\"those attacks\")."
     },
     "roll-reference": {
       "type": "object",
@@ -1576,6 +1577,24 @@
         "comparison": {
           "const": "lte",
           "description": "Count the dice that rolled successes_on or lower, not higher."
+        }
+      }
+    },
+    "spent-reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spent"
+      ],
+      "description": "The amount a resource-spend of this ability bound with bind_as spent during this use (0 when it spent none). With per N: one for every N of it, rounded down (\"for every 2YP you just spent\").",
+      "properties": {
+        "spent": {
+          "$ref": "#/$defs/entity-id",
+          "description": "The bind_as name of the resource-spend whose amount this reads; that spend comes before the reader."
+        },
+        "per": {
+          "type": "integer",
+          "minimum": 2
         }
       }
     },
@@ -1615,7 +1634,7 @@
       }
     },
     "quantity": {
-      "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.",
+      "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics, or the amount a resource spend of this ability bound (\"the number of YP you spent\").",
       "oneOf": [
         {
           "type": "integer",
@@ -1638,6 +1657,9 @@
         },
         {
           "$ref": "#/$defs/unit-characteristic"
+        },
+        {
+          "$ref": "#/$defs/spent-reference"
         }
       ]
     },
@@ -7553,7 +7575,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "resource condition",
-          "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent.",
+          "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held.",
           "required": [
             "type",
             "parameters"
@@ -7593,11 +7615,20 @@
                 },
                 "at": {
                   "$ref": "#/$defs/snapshot"
+                },
+                "gained": {
+                  "const": "turn",
+                  "description": "count bounds how much of the pool you gained this turn (\"you gained fewer than 3YP this turn\"), not how much it holds."
                 }
               },
               "required": [
                 "pool"
-              ]
+              ],
+              "dependentRequired": {
+                "gained": [
+                  "count"
+                ]
+              }
             }
           }
         },
@@ -8344,6 +8375,10 @@
         },
         "within": {
           "$ref": "#/$defs/range-ref"
+        },
+        "designated": {
+          "$ref": "#/$defs/designation-id",
+          "description": "enemy-units-hit: only units carrying this designation are counted (\"each assailed enemy unit hit by those attacks\")."
         }
       },
       "required": [
@@ -9835,6 +9870,24 @@
                       "type": "integer",
                       "minimum": 1,
                       "description": "No more than this many dice are rolled, however many candidates there are (\"to a maximum of six D6\")."
+                    },
+                    "extra_dice": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "count",
+                        "condition"
+                      ],
+                      "properties": {
+                        "count": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "condition": {
+                          "$ref": "#/$defs/condition"
+                        }
+                      },
+                      "description": "Rolls this many additional dice, past any max_dice, when condition holds (\"rolling two additional D6 if you spent YP during this use\")."
                     }
                   },
                   "required": [
@@ -11641,6 +11694,20 @@
                           "minLength": 1
                         }
                       }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "difference_to"
+                      ],
+                      "properties": {
+                        "difference_to": {
+                          "type": "integer",
+                          "minimum": 1
+                        }
+                      },
+                      "description": "The amount by which the pool's gains this turn fall short of difference_to (\"you gained fewer than 3YP this turn … gain YP equal to the difference\"); 0 when they reach it."
                     }
                   ]
                 },
@@ -11697,10 +11764,26 @@
                       "enum": [
                         "all",
                         "one-or-more",
-                        "by-table"
+                        "by-table",
+                        "any"
                       ]
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "up_to"
+                      ],
+                      "properties": {
+                        "up_to": {
+                          "type": "integer",
+                          "minimum": 1
+                        }
+                      },
+                      "description": "Any amount from 0 to up_to, as the player chooses (\"spend up to 2YP\")."
                     }
-                  ]
+                  ],
+                  "description": "A fixed amount; all of the pool; one-or-more or any (the player chooses how many: at least one, or any number including none); {up_to} (none up to that many); or by-table."
                 },
                 "label": {
                   "type": "string",
@@ -11749,6 +11832,10 @@
                 "table_of": {
                   "$ref": "#/$defs/unit-ref",
                   "description": "With amount by-table: the unit whose datasheet and Starting Strength choose the row."
+                },
+                "bind_as": {
+                  "$ref": "#/$defs/entity-id",
+                  "description": "Names the amount this spend spent, for a later spent-reference quantity ({spent: bind_as}) in the same ability."
                 }
               },
               "required": [

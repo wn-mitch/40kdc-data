@@ -573,6 +573,72 @@ pub(super) fn offer_lever(
 /// A scaled leaf with a cap, as the leaf at that cap: the scaled field set to `max_value` and the
 /// scaling removed. `None` when the scaling has no positive integer cap, the scaled field is not a
 /// plain number, or another size is bound.
+/// The most each resource-spend of an effect that binds its amount (bind_as) can spend: its
+/// {up_to} amount.
+pub(super) fn spent_maxima(effect: &Value) -> std::collections::HashMap<String, Value> {
+    fn visit(node: &Value, maxima: &mut std::collections::HashMap<String, Value>) {
+        match node {
+            Value::Array(items) => items.iter().for_each(|item| visit(item, maxima)),
+            Value::Object(map) => {
+                if map.get("type").and_then(Value::as_str) == Some("resource-spend") {
+                    if let Some(modifier) = object(map.get("modifier")) {
+                        let up_to = object(modifier.get("amount"))
+                            .and_then(|a| a.get("up_to"))
+                            .filter(|v| v.is_number());
+                        if let (Some(name), Some(up_to)) =
+                            (modifier.get("bind_as").and_then(Value::as_str), up_to)
+                        {
+                            maxima.insert(name.to_string(), up_to.clone());
+                        }
+                    }
+                }
+                let mut keys: Vec<&String> = map.keys().collect();
+                keys.sort();
+                for key in keys {
+                    visit(&map[key], maxima);
+                }
+            }
+            _ => {}
+        }
+    }
+    let mut maxima = std::collections::HashMap::new();
+    visit(effect, &mut maxima);
+    maxima
+}
+
+/// A leaf whose one bound size is a spent amount ({spent, per?}) with a known most, as the leaf
+/// at that most (one per `per`, rounded down), with the spend the lever requires.
+pub(super) fn spent_at_most(
+    node: &Obj,
+    maxima: &std::collections::HashMap<String, Value>,
+) -> Option<(Obj, Value)> {
+    let modifier = object(node.get("modifier"))?;
+    node.get("type").and_then(Value::as_str)?;
+    if node.contains_key("scaling") {
+        return None;
+    }
+    let bound: Vec<&str> = SIZED_FIELDS
+        .iter()
+        .copied()
+        .filter(|field| object(modifier.get(*field)).is_some())
+        .collect();
+    let [field] = bound.as_slice() else {
+        return None;
+    };
+    let reference = object(modifier.get(*field))?;
+    let name = reference.get("spent").and_then(Value::as_str)?;
+    let most = maxima.get(name)?;
+    let value = match reference.get("per").and_then(Value::as_f64) {
+        Some(per) => Value::from((most.as_f64()? / per).floor() as i64),
+        None => most.clone(),
+    };
+    let mut at_most = modifier.clone();
+    at_most.insert((*field).into(), value);
+    let mut leaf = node.clone();
+    leaf.insert("modifier".into(), Value::Object(at_most));
+    Some((leaf, serde_json::json!({ "spent": name, "amount": most })))
+}
+
 pub(super) fn scaled_to_cap(node: &Obj) -> Option<Obj> {
     let scaling = object(node.get("scaling"))?;
     let modifier = object(node.get("modifier"))?;

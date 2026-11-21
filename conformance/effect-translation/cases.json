@@ -50568,6 +50568,312 @@
     }
   },
   {
+    "caseId": "yield-points/spend-up-to-damage",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "fabricated-pool",
+            "amount": {
+              "up_to": 3
+            },
+            "bind_as": "spent"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "D",
+            "operation": "add",
+            "value": {
+              "spent": "spent"
+            },
+            "weapons": {
+              "type": "ranged"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Spend up to 3 Fabricated.\nAdd the amount you spent to the Damage characteristic of ranged weapons equipped by this model."
+    }
+  },
+  {
+    "caseId": "yield-points/spend-any-return-per",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "fabricated-pool",
+            "amount": "any",
+            "bind_as": "spent"
+          }
+        },
+        {
+          "type": "return-models",
+          "target": "this-unit",
+          "modifier": {
+            "count": 1
+          }
+        },
+        {
+          "type": "return-models",
+          "target": "this-unit",
+          "modifier": {
+            "count": {
+              "spent": "spent",
+              "per": 2
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Spend any number of Fabricated.\nReturn 1 destroyed model to this unit, each with its full wounds remaining.\nReturn 1 destroyed model for every 2 you spent to this unit, each with its full wounds remaining."
+    }
+  },
+  {
+    "caseId": "yield-points/spent-move-amount",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "fabricated-pool",
+            "amount": {
+              "up_to": 2
+            },
+            "bind_as": "spent"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "M",
+            "operation": "add",
+            "value": {
+              "spent": "spent",
+              "per": 2
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Spend up to 2 Fabricated.\nAdd 1 for every 2 you spent to this unit's Move characteristic."
+    }
+  },
+  {
+    "caseId": "yield-points/gained-this-turn-difference",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "resource",
+        "parameters": {
+          "pool": "yp-pool",
+          "count": {
+            "max": 2
+          },
+          "gained": "turn"
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "yp-pool",
+          "amount": {
+            "difference_to": 3
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If you gained at most 2 YP this turn, you gain a number of YP equal to the difference between 3 and the YP you gained this turn."
+    }
+  },
+  {
+    "caseId": "yield-points/not-gained-this-turn",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "resource",
+            "parameters": {
+              "pool": "yp-pool",
+              "count": {
+                "min": 2
+              },
+              "gained": "turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Unless you gained 2 or more YP this turn, you gain 1 CP."
+    }
+  },
+  {
+    "caseId": "yield-points/extra-dice-if-spent",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "this-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "max": 6,
+        "roll": {
+          "dice": 1,
+          "threshold": 4,
+          "per_model": "this-unit",
+          "extra_dice": {
+            "count": 2,
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "designated": "yp-spent-this-use"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Roll one D6 for each model in this unit, rolling 2 additional D6 if this unit is YP-spent this use: for each 4+, this unit suffers 1 mortal wound, to a maximum of 6 mortal wounds."
+    }
+  },
+  {
+    "caseId": "yield-points/gain-per-designated-unit-hit",
+    "effect": {
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "yp-pool",
+        "amount": 1
+      },
+      "scaling": {
+        "per": 1,
+        "of": "enemy-units-hit",
+        "designated": "assailed",
+        "max_value": 3,
+        "field": "amount"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "You gain 1 YP for each assailed enemy unit hit by those attacks (to a maximum of 3)."
+    }
+  },
+  {
+    "caseId": "yield-points/gain-per-two-units-hit",
+    "effect": {
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "yp-pool",
+        "amount": 1
+      },
+      "scaling": {
+        "per": 2,
+        "of": "enemy-units-hit",
+        "field": "amount"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "You gain 1 YP for every 2 enemy units hit by those attacks."
+    }
+  },
+  {
+    "caseId": "yield-points/spend-any-pool-checked",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "fabricated-pool",
+            "amount": "any"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "resource",
+            "parameters": {
+              "pool": "yp-pool",
+              "count": {
+                "max": 6
+              }
+            }
+          },
+          "effect": {
+            "type": "keyword-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                "FABRICATED"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Spend any number of Fabricated.\nWhile you have at most 6 yp pool, this unit gains the FABRICATED keyword."
+    }
+  },
+  {
     "caseId": "model-refs/event-subject-model-matches",
     "effect": {
       "type": "conditional",

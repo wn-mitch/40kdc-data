@@ -77,6 +77,7 @@ export const SCALE_OF: Record<string, string> = {
   "models-equipped-with": "models in this unit equipped with",
   "enemy-units-in-range": "enemy units",
   "wounds-lost": "wounds lost",
+  "enemy-units-hit": "enemy units hit by those attacks",
   "battle-round": "battle round",
 };
 
@@ -86,6 +87,7 @@ export function scaleSource(q: P): string {
   let s = SCALE_OF[of] ?? dekebab(of);
   if (of === "models-equipped-with") s += ` ${titleCase(jstr(q.wargear))}`;
   if (q.keyword != null) s = s.replace(/^models\b/, `${jstr(q.keyword)} models`);
+  if (q.designated != null) s = `${dekebab(jstr(q.designated))} ${s}`;
   if (q.within != null) s += ` within ${rangePhrase(q.within)}`;
   // A label that already ends in "marker" ("cult-ambush-marker") must not read "marker markers".
   if (of === "markers") s = `your ${dekebab(jstr(q.marker)).replace(/ marker$/i, "")} markers on the battlefield`;
@@ -108,6 +110,8 @@ export function quantityPhrase(q: P): string {
     if (q.comparison === "lte") return Number(q.successes_on) === 1 ? "the number of those dice that rolled a 1" : `the number of those dice that rolled a ${jstr(q.successes_on)} or less`;
     return `the number of those dice that rolled a ${jstr(q.successes_on)}+`;
   }
+  // "the number of YP you just spent": the amount a resource-spend of this ability bound.
+  if (typeof q.spent === "string") return q.per != null ? `1 for every ${jstr(q.per)} you spent` : "the amount you spent";
   if (q.count_of === "battle-round") return "the battle round number";
   if (q.count_of === "embarked-models-oc") return `the total ${scaleSource(q)}`;
   if (q.count_of != null) return `the number of ${scaleSource(q)}`;
@@ -128,6 +132,8 @@ export function amountOf(q: unknown, one: string, many: string): string {
   const p = q as P;
   const sized = tableSizes(p);
   if (sized) return `${sized.keys.map((k) => jstr(p[k])).join("/")} ${many} (${sized.names})`;
+  // "for every 2YP you just spent, return one additional model": one per that many spent.
+  if (typeof p.spent === "string" && p.per != null) return `1 ${one} for every ${jstr(p.per)} you spent`;
   return `a number of ${many} equal to ${quantityPhrase(p)}`;
 }
 

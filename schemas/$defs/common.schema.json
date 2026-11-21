@@ -1639,9 +1639,10 @@
         "models-equipped-with",
         "enemy-units-in-range",
         "wounds-lost",
-        "battle-round"
+        "battle-round",
+        "enemy-units-hit"
       ],
-      "description": "What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number."
+      "description": "What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number. enemy-units-hit: the enemy units hit by one or more of the attacks of the triggering attack sequence (\"those attacks\")."
     },
     "roll-reference": {
       "type": "object",
@@ -1687,6 +1688,24 @@
           "successes_on": {
             "maximum": 5
           }
+        }
+      }
+    },
+    "spent-reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spent"
+      ],
+      "description": "The amount a resource-spend of this ability bound with bind_as spent during this use (0 when it spent none). With per N: one for every N of it, rounded down (\"for every 2YP you just spent\").",
+      "properties": {
+        "spent": {
+          "$ref": "#/$defs/entity-id",
+          "description": "The bind_as name of the resource-spend whose amount this reads; that spend comes before the reader."
+        },
+        "per": {
+          "type": "integer",
+          "minimum": 2
         }
       }
     },
@@ -1791,7 +1810,7 @@
       ]
     },
     "quantity": {
-      "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.",
+      "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics, or the amount a resource spend of this ability bound (\"the number of YP you spent\").",
       "oneOf": [
         {
           "type": "integer",
@@ -1814,6 +1833,9 @@
         },
         {
           "$ref": "#/$defs/unit-characteristic"
+        },
+        {
+          "$ref": "#/$defs/spent-reference"
         }
       ]
     },

@@ -32,7 +32,7 @@ export type Keyword = string;
  */
 export type KeywordList = Keyword[];
 /**
- * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.
+ * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics, or the amount a resource spend of this ability bound ("the number of YP you spent").
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "quantity".
@@ -44,14 +44,15 @@ export type Quantity =
   | RollReference
   | CountOf
   | UnitRating
-  | UnitCharacteristic;
+  | UnitCharacteristic
+  | SpentReference;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "dice-expression".
  */
 export type DiceExpression = string;
 /**
- * What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number.
+ * What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number. enemy-units-hit: the enemy units hit by one or more of the attacks of the triggering attack sequence ("those attacks").
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "scaling-source".
@@ -66,7 +67,8 @@ export type ScalingSource =
   | "models-equipped-with"
   | "enemy-units-in-range"
   | "wounds-lost"
-  | "battle-round";
+  | "battle-round"
+  | "enemy-units-hit";
 /**
  * A single non-tiered distance reference.
  *
@@ -1288,6 +1290,19 @@ export interface UnitRating {
  */
 export interface UnitCharacteristic {
   characteristic: Stat;
+}
+/**
+ * The amount a resource-spend of this ability bound with bind_as spent during this use (0 when it spent none). With per N: one for every N of it, rounded down ("for every 2YP you just spent").
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "spent-reference".
+ */
+export interface SpentReference {
+  /**
+   * Kebab-case identifier
+   */
+  spent: string;
+  per?: number;
 }
 /**
  * A stable identifier assigned to the same entity by an external data source.
@@ -2680,7 +2695,7 @@ export interface DesignatedCondition {
       };
 }
 /**
- * [resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent.
+ * [resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held.
  */
 export interface ResourceCondition {
   type: "resource";
@@ -2696,6 +2711,10 @@ export interface ResourceCondition {
       owner?: "friendly" | "enemy" | "any";
     };
     at?: Snapshot;
+    /**
+     * count bounds how much of the pool you gained this turn ("you gained fewer than 3YP this turn"), not how much it holds.
+     */
+    gained?: "turn";
   };
 }
 /**
@@ -3875,6 +3894,10 @@ export interface Scaling {
    */
   evaluated?: "live" | "on-apply";
   within?: RangeRef;
+  /**
+   * A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.
+   */
+  designated?: string;
 }
 /**
  * [characteristic] Ignore modifiers to characteristics or rolls (all of them, or only worsening ones).
@@ -4438,9 +4461,17 @@ export interface ForEachUnitEffect {
   selector: UnitSelector;
   effect: EffectNode;
   /**
-   * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.
+   * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics, or the amount a resource spend of this ability bound ("the number of YP you spent").
    */
-  max_affected?: number | DiceExpression | BattleSizeValue | RollReference | CountOf | UnitRating | UnitCharacteristic;
+  max_affected?:
+    | number
+    | DiceExpression
+    | BattleSizeValue
+    | RollReference
+    | CountOf
+    | UnitRating
+    | UnitCharacteristic
+    | SpentReference;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -5288,9 +5319,17 @@ export interface MoveTypeEffect {
         per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
       };
   /**
-   * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.
+   * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics, or the amount a resource spend of this ability bound ("the number of YP you spent").
    */
-  distance?: number | DiceExpression | BattleSizeValue | RollReference | CountOf | UnitRating | UnitCharacteristic;
+  distance?:
+    | number
+    | DiceExpression
+    | BattleSizeValue
+    | RollReference
+    | CountOf
+    | UnitRating
+    | UnitCharacteristic
+    | SpentReference;
   eligible_if?: AbilityDSLCondition5;
   /**
    * What resolves before the unit moves.
@@ -6493,6 +6532,9 @@ export interface ResourceGainEffect {
       | ("variable" | "any")
       | {
           pool: string;
+        }
+      | {
+          difference_to: number;
         };
     /**
      * The pool becomes the amount instead of gaining it ('you must pledge a number'); amount any is a number the player picks.
@@ -6510,7 +6552,15 @@ export interface ResourceSpendEffect {
   target: UnitRef;
   modifier: {
     pool: string;
-    amount: Quantity | ("all" | "one-or-more" | "by-table");
+    /**
+     * A fixed amount; all of the pool; one-or-more or any (the player chooses how many: at least one, or any number including none); {up_to} (none up to that many); or by-table.
+     */
+    amount:
+      | Quantity
+      | ("all" | "one-or-more" | "by-table" | "any")
+      | {
+          up_to: number;
+        };
     label?: string;
     face?: number;
     requirement?: DiceRequirementSpec;
@@ -6569,6 +6619,10 @@ export interface ResourceSpendEffect {
       | {
           stratagem_target: EntityId;
         };
+    /**
+     * Kebab-case identifier
+     */
+    bind_as?: string;
   };
   scaling?: Scaling;
 }

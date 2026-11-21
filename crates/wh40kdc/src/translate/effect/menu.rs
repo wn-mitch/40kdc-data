@@ -80,6 +80,13 @@ fn scaling_wording(s: &P) -> String {
             };
             return format!("for every {per} of {}{max}", scale_source(s));
         }
+        // "for each assailed enemy unit hit by those attacks": one counted unit at a time.
+        Some("enemy-units-hit") if num(s.get("per")) == 1.0 => {
+            let designated = nn(s, "designated")
+                .map(|d| format!("{} ", dekebab(&jstr(Some(d)))))
+                .unwrap_or_default();
+            return format!("for each {designated}enemy unit hit by those attacks{max}");
+        }
         _ => {}
     }
     let mut c = format!("for every {} {}", jstr(s.get("per")), scale_source(s));

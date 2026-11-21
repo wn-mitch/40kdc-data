@@ -802,6 +802,14 @@ func describePredicate(c map[string]any, negated bool) string {
 			source := mapOr(p["source_ability"])["ability_id"]
 			return neg + "the " + dekebab(cstr(source)) + " ability had unused selection capacity at the end of your opponent's previous turn"
 		}
+		// "you gained fewer than 3YP this turn": this turn's gains, not what the pool holds.
+		if p["gained"] == "turn" {
+			verb := "gained"
+			if negated {
+				verb = "did not gain"
+			}
+			return "you " + verb + " " + controlCountPhrase(p["count"]) + " " + resourceNoun(p["pool"], nil, 2.0) + " this turn"
+		}
 		// A pool is the player's ("If you have 3 or more Pact points").
 		return "you have " + controlCountPhrase(p["count"]) + " " + dekebab(cstr(p["pool"]))
 	// -- Mission-card predicates --

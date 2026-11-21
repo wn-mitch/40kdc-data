@@ -415,6 +415,10 @@
         },
         "within": {
           "$ref": "../../defs/common.schema.json#/$defs/range-ref"
+        },
+        "designated": {
+          "$ref": "../../defs/common.schema.json#/$defs/designation-id",
+          "description": "enemy-units-hit: only units carrying this designation are counted (\"each assailed enemy unit hit by those attacks\")."
         }
       },
       "required": [
@@ -441,6 +445,20 @@
               "required": [
                 "wargear"
               ]
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "designated"
+            ]
+          },
+          "then": {
+            "properties": {
+              "of": {
+                "const": "enemy-units-hit"
+              }
             }
           }
         }
@@ -2486,6 +2504,24 @@
                       "type": "integer",
                       "minimum": 1,
                       "description": "No more than this many dice are rolled, however many candidates there are (\"to a maximum of six D6\")."
+                    },
+                    "extra_dice": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "count",
+                        "condition"
+                      ],
+                      "properties": {
+                        "count": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "condition": {
+                          "$ref": "condition.schema.json"
+                        }
+                      },
+                      "description": "Rolls this many additional dice, past any max_dice, when condition holds (\"rolling two additional D6 if you spent YP during this use\")."
                     }
                   },
                   "required": [
@@ -4555,6 +4591,20 @@
                           "minLength": 1
                         }
                       }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "difference_to"
+                      ],
+                      "properties": {
+                        "difference_to": {
+                          "type": "integer",
+                          "minimum": 1
+                        }
+                      },
+                      "description": "The amount by which the pool's gains this turn fall short of difference_to (\"you gained fewer than 3YP this turn … gain YP equal to the difference\"); 0 when they reach it."
                     }
                   ]
                 },
@@ -4611,10 +4661,26 @@
                       "enum": [
                         "all",
                         "one-or-more",
-                        "by-table"
+                        "by-table",
+                        "any"
                       ]
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "up_to"
+                      ],
+                      "properties": {
+                        "up_to": {
+                          "type": "integer",
+                          "minimum": 1
+                        }
+                      },
+                      "description": "Any amount from 0 to up_to, as the player chooses (\"spend up to 2YP\")."
                     }
-                  ]
+                  ],
+                  "description": "A fixed amount; all of the pool; one-or-more or any (the player chooses how many: at least one, or any number including none); {up_to} (none up to that many); or by-table."
                 },
                 "label": {
                   "type": "string",
@@ -4663,6 +4729,10 @@
                 "table_of": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref",
                   "description": "With amount by-table: the unit whose datasheet and Starting Strength choose the row."
+                },
+                "bind_as": {
+                  "$ref": "../../defs/common.schema.json#/$defs/entity-id",
+                  "description": "Names the amount this spend spent, for a later spent-reference quantity ({spent: bind_as}) in the same ability."
                 }
               },
               "required": [

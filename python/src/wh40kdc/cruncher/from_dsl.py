@@ -35,6 +35,8 @@ from wh40kdc.cruncher.from_dsl_shapes import (
     own_designation_gate,
     roll_label,
     scaled_to_cap,
+    spent_at_most,
+    spent_maxima,
     stance_gate_fields,
     unsized_value_reason,
 )
@@ -185,7 +187,16 @@ def _translate_effect(
     }
     # The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
     effect, opts = _on_attack_roll(activation.get("trigger") if activation else None, effect, opts)
-    _walk(effect, source, {**opts, "selections": _selection.selection_order(effect)}, out)
+    _walk(
+        effect,
+        source,
+        {
+            **opts,
+            "selections": _selection.selection_order(effect),
+            "spentMax": spent_maxima(effect),
+        },
+        out,
+    )
     if activation and (
         activation.get("usage") is not None
         or activation.get("cost") is not None
@@ -480,6 +491,22 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
             return
     if _has_unresolved_fidelity_binding(node):
         out["unsupported"].append({"reason": _FIDELITY_BINDING_REASON, "effectFragment": node})
+        return
+    # "add the number of YP you just spent": a lever at the most the spend can spend; the player
+    # vouches for spending it.
+    spent_most = spent_at_most(node, opts.get("spentMax"))
+    if spent_most is not None:
+        _selection.offer_lever(
+            spent_most[0],
+            source,
+            opts,
+            out,
+            {
+                "id": f"{opts['abilityId']}#spent-max",
+                "label": "Spending the most",
+                "requires": [spent_most[1]],
+            },
+        )
         return
     # A scaled or bound value (a count on the board, the battle size, a bound roll) has no fixed
     # size here: applying the printed value would over- or under-state it.

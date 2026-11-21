@@ -34,6 +34,7 @@ SCALE_OF: dict[str, str] = {
     "models-equipped-with": "models in this unit equipped with",
     "enemy-units-in-range": "enemy units",
     "wounds-lost": "wounds lost",
+    "enemy-units-hit": "enemy units hit by those attacks",
     "battle-round": "battle round",
 }
 
@@ -46,6 +47,8 @@ def scale_source(q: dict[str, Any]) -> str:
         s += f" {title_case(jstr(q.get('wargear')))}"
     if q.get("keyword") is not None:
         s = re.sub(r"^models\b", f"{jstr(q['keyword'])} models", s, count=1)
+    if q.get("designated") is not None:
+        s = f"{dekebab(jstr(q['designated']))} {s}"
     if q.get("within") is not None:
         s += f" within {range_phrase(q['within'])}"
     if of == "markers":
@@ -91,6 +94,11 @@ def quantity_phrase(q: dict[str, Any]) -> str:
                 return f"the number of those dice that rolled a {jstr(q['successes_on'])} or less"
             return f"the number of those dice that rolled a {jstr(q['successes_on'])}+"
         return "the result of that roll"
+    # "the number of YP you just spent": the amount a resource-spend of this ability bound.
+    if isinstance(q.get("spent"), str):
+        if q.get("per") is not None:
+            return f"1 for every {jstr(q['per'])} you spent"
+        return "the amount you spent"
     if q.get("count_of") == "battle-round":
         return "the battle round number"
     if q.get("count_of") == "embarked-models-oc":
@@ -115,6 +123,9 @@ def amount_of(q: Any, one: str, many: str) -> str:
     if sized is not None:
         values, names = sized
         return f"{values} {many} ({names})"
+    # "for every 2YP you just spent, return one additional model": one per that many spent.
+    if isinstance(p.get("spent"), str) and p.get("per") is not None:
+        return f"1 {one} for every {jstr(p['per'])} you spent"
     return f"a number of {many} equal to {quantity_phrase(p)}"
 
 

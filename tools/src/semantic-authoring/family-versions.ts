@@ -56,6 +56,17 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
     to: 18,
     map: (parameters) => (parameters.mark === "hidden" ? { states: ["hidden"], subject: parameters.subject, negated: parameters.negated } : null),
   },
+  // Yield Points: resource-spend v5 adds any, {up_to} and bind_as; resource-gain v7 also takes {difference_to};
+  // resource v2 gained_this_turn; characteristic-modifier v22, characteristic-amount v2 and
+  // return-models v8 a {spent} amount; dice-roll v11 plus_if; bearer-eligibility v9 wargear.
+  // Every earlier leaf keeps its meaning.
+  { family: "resource-spend", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
+  { family: "resource", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
+  { family: "characteristic-modifier", from: 21, to: 22, map: (parameters) => ({ ...parameters }) },
+  { family: "characteristic-amount", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
+  { family: "return-models", from: 7, to: 8, map: (parameters) => ({ ...parameters }) },
+  { family: "dice-roll", from: 10, to: 11, map: (parameters) => ({ ...parameters }) },
+  { family: "bearer-eligibility", from: 8, to: 9, map: (parameters) => ({ ...parameters }) },
 ];
 
 export type FamilyVersionReport = {

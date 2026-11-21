@@ -81,7 +81,12 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 				band = "result of " + ejstr(roll["threshold"]) + " or less"
 			}
 		}
-		return "roll " + dice + each + most + ": for each " + band + ", " + who + " " + ev(who, "suffers") + " " + suffered + psychic + cap
+		// "rolling two additional D6 if X": more dice when the condition holds.
+		more := ""
+		if extra, ok := asMap(roll["extra_dice"]); ok && extra != nil {
+			more = ", rolling " + ejstr(extra["count"]) + " additional D6 if " + describeCondition(mapOr(extra["condition"]))
+		}
+		return "roll " + dice + each + most + more + ": for each " + band + ", " + who + " " + ev(who, "suffers") + " " + suffered + psychic + cap
 	}
 	per := ""
 	if m["per"] == "model" {
@@ -822,6 +827,11 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 				return "you gain a number of " + resourceNoun(m["pool"], m["label"], 2.0) + " equal to your " + dekebab(source)
 			}
 		}
+		// "you gain an amount of YP equal to the difference": what this turn's gains fall short of N by.
+		if a, ok := m["amount"].(map[string]any); ok && a["difference_to"] != nil {
+			noun := resourceNoun(m["pool"], m["label"], 2.0)
+			return "you gain a number of " + noun + " equal to the difference between " + ejstr(a["difference_to"]) + " and the " + noun + " you gained this turn"
+		}
 		if _, ok := m["amount"].(map[string]any); ok {
 			return "you gain " + amountOf(m["amount"], resourceNoun(m["pool"], m["label"], 1.0), resourceNoun(m["pool"], m["label"], 2.0))
 		}
@@ -838,6 +848,9 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 			return "spend the " + resourceNoun(m["pool"], m["label"], 2.0) + " the cost table gives for the datasheet and Starting Strength of " +
 				effectSubject(m["table_of"], ctx) + " (" + costTable(m["amount_table"]) + ")"
 		}
+		if a, ok := m["amount"].(map[string]any); ok && a["up_to"] != nil {
+			return "spend up to " + ejstr(a["up_to"]) + " " + resourceNoun(m["pool"], m["label"], a["up_to"])
+		}
 		amount := diceCase(m["amount"])
 		count := m["amount"]
 		switch m["amount"] {
@@ -845,6 +858,8 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 			amount, count = "all your", 2.0
 		case "one-or-more":
 			amount = "one or more"
+		case "any":
+			amount, count = "any number of", 2.0
 		}
 		showing := ""
 		if m["face"] != nil {

@@ -25062,6 +25062,24 @@ pub struct ModelProfileConditionParameters {
 ///            }
 ///          ]
 ///        },
+///        "extra_dice": {
+///          "description": "Rolls this many additional dice, past any max_dice, when condition holds (\"rolling two additional D6 if you spent YP during this use\").",
+///          "type": "object",
+///          "required": [
+///            "condition",
+///            "count"
+///          ],
+///          "properties": {
+///            "condition": {
+///              "$ref": "#/$defs/condition"
+///            },
+///            "count": {
+///              "type": "integer",
+///              "minimum": 1.0
+///            }
+///          },
+///          "additionalProperties": false
+///        },
 ///        "for_each": {
 ///          "description": "One die (dice per candidate) for each unit or model the selector matches (\"one D6 for each WRACKS model in your unit\"); per_model names the two fixed sets.",
 ///          "$ref": "#/$defs/unit-selector"
@@ -25228,6 +25246,24 @@ impl ::std::convert::TryFrom<::std::string::String> for MortalWoundsEffectModifi
 ///        }
 ///      ]
 ///    },
+///    "extra_dice": {
+///      "description": "Rolls this many additional dice, past any max_dice, when condition holds (\"rolling two additional D6 if you spent YP during this use\").",
+///      "type": "object",
+///      "required": [
+///        "condition",
+///        "count"
+///      ],
+///      "properties": {
+///        "condition": {
+///          "$ref": "#/$defs/condition"
+///        },
+///        "count": {
+///          "type": "integer",
+///          "minimum": 1.0
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "for_each": {
 ///      "description": "One die (dice per candidate) for each unit or model the selector matches (\"one D6 for each WRACKS model in your unit\"); per_model names the two fixed sets.",
 ///      "$ref": "#/$defs/unit-selector"
@@ -25272,6 +25308,8 @@ pub struct MortalWoundsEffectModifierRoll {
     #[serde(default = "defaults::mortal_wounds_effect_modifier_roll_comparison")]
     pub comparison: MortalWoundsEffectModifierRollComparison,
     pub dice: MortalWoundsEffectModifierRollDice,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub extra_dice: ::std::option::Option<MortalWoundsEffectModifierRollExtraDice>,
     ///One die (dice per candidate) for each unit or model the selector matches ("one D6 for each WRACKS model in your unit"); per_model names the two fixed sets.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub for_each: ::std::option::Option<UnitSelector>,
@@ -25449,6 +25487,37 @@ impl ::std::convert::From<DiceExpression> for MortalWoundsEffectModifierRollDice
     fn from(value: DiceExpression) -> Self {
         Self::DiceExpression(value)
     }
+}
+///Rolls this many additional dice, past any max_dice, when condition holds ("rolling two additional D6 if you spent YP during this use").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Rolls this many additional dice, past any max_dice, when condition holds (\"rolling two additional D6 if you spent YP during this use\").",
+///  "type": "object",
+///  "required": [
+///    "condition",
+///    "count"
+///  ],
+///  "properties": {
+///    "condition": {
+///      "$ref": "#/$defs/condition"
+///    },
+///    "count": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct MortalWoundsEffectModifierRollExtraDice {
+    pub condition: Condition,
+    pub count: ::std::num::NonZeroU64,
 }
 ///One die (dice per candidate) for each attack the attacking unit allocated to a model in this unit ("each time a melee attack is allocated to a model in this unit, … roll one D6"), rolled once that unit has finished making its attacks.
 ///
@@ -35049,13 +35118,13 @@ for PlayerTurnIsConditionParametersTurn {
         value.parse()
     }
 }
-///A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.
+///A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics, or the amount a resource spend of this ability bound ("the number of YP you spent").
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.",
+///  "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics, or the amount a resource spend of this ability bound (\"the number of YP you spent\").",
 ///  "oneOf": [
 ///    {
 ///      "type": "integer",
@@ -35078,6 +35147,9 @@ for PlayerTurnIsConditionParametersTurn {
 ///    },
 ///    {
 ///      "$ref": "#/$defs/unit-characteristic"
+///    },
+///    {
+///      "$ref": "#/$defs/spent-reference"
 ///    }
 ///  ]
 ///}
@@ -35093,6 +35165,7 @@ pub enum Quantity {
     CountOf(CountOf),
     UnitRating(UnitRating),
     UnitCharacteristic(UnitCharacteristic),
+    SpentReference(SpentReference),
 }
 impl ::std::convert::From<u64> for Quantity {
     fn from(value: u64) -> Self {
@@ -35127,6 +35200,11 @@ impl ::std::convert::From<UnitRating> for Quantity {
 impl ::std::convert::From<UnitCharacteristic> for Quantity {
     fn from(value: UnitCharacteristic) -> Self {
         Self::UnitCharacteristic(value)
+    }
+}
+impl ::std::convert::From<SpentReference> for Quantity {
+    fn from(value: SpentReference) -> Self {
+        Self::SpentReference(value)
     }
 }
 ///One reference for every distance. A per_battle_round table is indexed from battle round 1; each later round uses the next entry and the final entry continues for all subsequent rounds. Tier entries are non-tiered range refs, so nested tables are forbidden.
@@ -37595,6 +37673,10 @@ impl ::std::convert::From<Trigger> for ResourceActionMenuTrigger {
 ///    "count": {
 ///      "$ref": "#/$defs/count-bounds"
 ///    },
+///    "gained": {
+///      "description": "count bounds how much of the pool you gained this turn (\"you gained fewer than 3YP this turn\"), not how much it holds.",
+///      "const": "turn"
+///    },
 ///    "pool": {
 ///      "type": "string",
 ///      "minLength": 1
@@ -37615,7 +37697,12 @@ impl ::std::convert::From<Trigger> for ResourceActionMenuTrigger {
 ///      "additionalProperties": false
 ///    }
 ///  },
-///  "additionalProperties": false
+///  "additionalProperties": false,
+///  "dependentRequired": {
+///    "gained": [
+///      "count"
+///    ]
+///  }
 ///}
 /// ```
 /// </details>
@@ -37628,6 +37715,9 @@ pub struct ResourceConditionParameters {
     pub below_max: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count: ::std::option::Option<CountBounds>,
+    ///count bounds how much of the pool you gained this turn ("you gained fewer than 3YP this turn"), not how much it holds.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub gained: ::std::option::Option<::serde_json::Value>,
     pub pool: ResourceConditionParametersPool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub source_ability: ::std::option::Option<ResourceConditionParametersSourceAbility>,
@@ -38231,6 +38321,20 @@ for ResourceDieEffectModifierValueVariant1 {
 ///            }
 ///          },
 ///          "additionalProperties": false
+///        },
+///        {
+///          "description": "The amount by which the pool's gains this turn fall short of difference_to (\"you gained fewer than 3YP this turn … gain YP equal to the difference\"); 0 when they reach it.",
+///          "type": "object",
+///          "required": [
+///            "difference_to"
+///          ],
+///          "properties": {
+///            "difference_to": {
+///              "type": "integer",
+///              "minimum": 1.0
+///            }
+///          },
+///          "additionalProperties": false
 ///        }
 ///      ]
 ///    },
@@ -38291,6 +38395,20 @@ pub struct ResourceGainEffectModifier {
 ///        }
 ///      },
 ///      "additionalProperties": false
+///    },
+///    {
+///      "description": "The amount by which the pool's gains this turn fall short of difference_to (\"you gained fewer than 3YP this turn … gain YP equal to the difference\"); 0 when they reach it.",
+///      "type": "object",
+///      "required": [
+///        "difference_to"
+///      ],
+///      "properties": {
+///        "difference_to": {
+///          "type": "integer",
+///          "minimum": 1.0
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  ]
 ///}
@@ -38302,6 +38420,7 @@ pub enum ResourceGainEffectModifierAmount {
     Variant0(Quantity),
     Variant1(ResourceGainEffectModifierAmountVariant1),
     Variant2 { pool: ResourceGainEffectModifierAmountVariant2Pool },
+    Variant3 { difference_to: ::std::num::NonZeroU64 },
 }
 impl ::std::convert::From<Quantity> for ResourceGainEffectModifierAmount {
     fn from(value: Quantity) -> Self {
@@ -38894,6 +39013,7 @@ impl ::std::convert::TryFrom<::std::string::String> for ResourcePoolPoolType {
 ///  ],
 ///  "properties": {
 ///    "amount": {
+///      "description": "A fixed amount; all of the pool; one-or-more or any (the player chooses how many: at least one, or any number including none); {up_to} (none up to that many); or by-table.",
 ///      "oneOf": [
 ///        {
 ///          "$ref": "#/$defs/quantity"
@@ -38902,8 +39022,23 @@ impl ::std::convert::TryFrom<::std::string::String> for ResourcePoolPoolType {
 ///          "enum": [
 ///            "all",
 ///            "one-or-more",
-///            "by-table"
+///            "by-table",
+///            "any"
 ///          ]
+///        },
+///        {
+///          "description": "Any amount from 0 to up_to, as the player chooses (\"spend up to 2YP\").",
+///          "type": "object",
+///          "required": [
+///            "up_to"
+///          ],
+///          "properties": {
+///            "up_to": {
+///              "type": "integer",
+///              "minimum": 1.0
+///            }
+///          },
+///          "additionalProperties": false
 ///        }
 ///      ]
 ///    },
@@ -38939,6 +39074,10 @@ impl ::std::convert::TryFrom<::std::string::String> for ResourcePoolPoolType {
 ///      },
 ///      "minItems": 1
 ///    },
+///    "bind_as": {
+///      "description": "Names the amount this spend spent, for a later spent-reference quantity ({spent: bind_as}) in the same ability.",
+///      "$ref": "#/$defs/entity-id"
+///    },
 ///    "face": {
 ///      "type": "integer",
 ///      "maximum": 6.0,
@@ -38967,10 +39106,14 @@ impl ::std::convert::TryFrom<::std::string::String> for ResourcePoolPoolType {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ResourceSpendEffectModifier {
+    ///A fixed amount; all of the pool; one-or-more or any (the player chooses how many: at least one, or any number including none); {up_to} (none up to that many); or by-table.
     pub amount: ResourceSpendEffectModifierAmount,
     ///With amount by-table: the amount for a unit of one of unit_ids at that Starting Strength (attached CHARACTER models not counted). table_of names the unit; a unit no row matches cannot pay.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub amount_table: ::std::vec::Vec<ResourceSpendEffectModifierAmountTableItem>,
+    ///Names the amount this spend spent, for a later spent-reference quantity ({spent: bind_as}) in the same ability.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub bind_as: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub face: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -38982,12 +39125,13 @@ pub struct ResourceSpendEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub table_of: ::std::option::Option<UnitRef>,
 }
-///`ResourceSpendEffectModifierAmount`
+///A fixed amount; all of the pool; one-or-more or any (the player chooses how many: at least one, or any number including none); {up_to} (none up to that many); or by-table.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
+///  "description": "A fixed amount; all of the pool; one-or-more or any (the player chooses how many: at least one, or any number including none); {up_to} (none up to that many); or by-table.",
 ///  "oneOf": [
 ///    {
 ///      "$ref": "#/$defs/quantity"
@@ -38996,18 +39140,34 @@ pub struct ResourceSpendEffectModifier {
 ///      "enum": [
 ///        "all",
 ///        "one-or-more",
-///        "by-table"
+///        "by-table",
+///        "any"
 ///      ]
+///    },
+///    {
+///      "description": "Any amount from 0 to up_to, as the player chooses (\"spend up to 2YP\").",
+///      "type": "object",
+///      "required": [
+///        "up_to"
+///      ],
+///      "properties": {
+///        "up_to": {
+///          "type": "integer",
+///          "minimum": 1.0
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  ]
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
-#[serde(untagged)]
+#[serde(untagged, deny_unknown_fields)]
 pub enum ResourceSpendEffectModifierAmount {
     Variant0(Quantity),
     Variant1(ResourceSpendEffectModifierAmountVariant1),
+    Variant2 { up_to: ::std::num::NonZeroU64 },
 }
 impl ::std::convert::From<Quantity> for ResourceSpendEffectModifierAmount {
     fn from(value: Quantity) -> Self {
@@ -39070,7 +39230,8 @@ pub struct ResourceSpendEffectModifierAmountTableItem {
 ///  "enum": [
 ///    "all",
 ///    "one-or-more",
-///    "by-table"
+///    "by-table",
+///    "any"
 ///  ]
 ///}
 /// ```
@@ -39094,6 +39255,8 @@ pub enum ResourceSpendEffectModifierAmountVariant1 {
     OneOrMore,
     #[serde(rename = "by-table")]
     ByTable,
+    #[serde(rename = "any")]
+    Any,
 }
 impl ::std::fmt::Display for ResourceSpendEffectModifierAmountVariant1 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -39101,6 +39264,7 @@ impl ::std::fmt::Display for ResourceSpendEffectModifierAmountVariant1 {
             Self::All => f.write_str("all"),
             Self::OneOrMore => f.write_str("one-or-more"),
             Self::ByTable => f.write_str("by-table"),
+            Self::Any => f.write_str("any"),
         }
     }
 }
@@ -39113,6 +39277,7 @@ impl ::std::str::FromStr for ResourceSpendEffectModifierAmountVariant1 {
             "all" => Ok(Self::All),
             "one-or-more" => Ok(Self::OneOrMore),
             "by-table" => Ok(Self::ByTable),
+            "any" => Ok(Self::Any),
             _ => Err("invalid value".into()),
         }
     }
@@ -42942,6 +43107,10 @@ pub struct SameUnitConditionParameters {
 ///    "per"
 ///  ],
 ///  "properties": {
+///    "designated": {
+///      "description": "enemy-units-hit: only units carrying this designation are counted (\"each assailed enemy unit hit by those attacks\").",
+///      "$ref": "#/$defs/designation-id"
+///    },
 ///    "evaluated": {
 ///      "description": "When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).",
 ///      "default": "live",
@@ -43000,6 +43169,9 @@ pub struct SameUnitConditionParameters {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct Scaling {
+    ///enemy-units-hit: only units carrying this designation are counted ("each assailed enemy unit hit by those attacks").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub designated: ::std::option::Option<DesignationId>,
     ///When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).
     #[serde(default = "defaults::scaling_evaluated")]
     pub evaluated: ScalingEvaluated,
@@ -43283,13 +43455,13 @@ impl ::std::default::Default for ScalingRound {
         ScalingRound::Down
     }
 }
-///What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number.
+///What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number. enemy-units-hit: the enemy units hit by one or more of the attacks of the triggering attack sequence ("those attacks").
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number.",
+///  "description": "What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number. enemy-units-hit: the enemy units hit by one or more of the attacks of the triggering attack sequence (\"those attacks\").",
 ///  "type": "string",
 ///  "enum": [
 ///    "enemy-models-in-range",
@@ -43301,7 +43473,8 @@ impl ::std::default::Default for ScalingRound {
 ///    "models-equipped-with",
 ///    "enemy-units-in-range",
 ///    "wounds-lost",
-///    "battle-round"
+///    "battle-round",
+///    "enemy-units-hit"
 ///  ]
 ///}
 /// ```
@@ -43339,6 +43512,8 @@ pub enum ScalingSource {
     WoundsLost,
     #[serde(rename = "battle-round")]
     BattleRound,
+    #[serde(rename = "enemy-units-hit")]
+    EnemyUnitsHit,
 }
 impl ::std::fmt::Display for ScalingSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -43355,6 +43530,7 @@ impl ::std::fmt::Display for ScalingSource {
             Self::EnemyUnitsInRange => f.write_str("enemy-units-in-range"),
             Self::WoundsLost => f.write_str("wounds-lost"),
             Self::BattleRound => f.write_str("battle-round"),
+            Self::EnemyUnitsHit => f.write_str("enemy-units-hit"),
         }
     }
 }
@@ -43374,6 +43550,7 @@ impl ::std::str::FromStr for ScalingSource {
             "enemy-units-in-range" => Ok(Self::EnemyUnitsInRange),
             "wounds-lost" => Ok(Self::WoundsLost),
             "battle-round" => Ok(Self::BattleRound),
+            "enemy-units-hit" => Ok(Self::EnemyUnitsHit),
             _ => Err("invalid value".into()),
         }
     }
@@ -47735,7 +47912,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///    },
 ///    {
 ///      "title": "resource condition",
-///      "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent.",
+///      "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held.",
 ///      "type": "object",
 ///      "required": [
 ///        "parameters",
@@ -48144,7 +48321,7 @@ pub enum SimpleCondition {
     Designated { parameters: DesignatedConditionParameters },
     /**resource condition
 
-[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent.*/
+[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held.*/
     #[serde(rename = "resource")]
     Resource { parameters: ResourceConditionParameters },
     /**operation-markers condition
@@ -50168,6 +50345,39 @@ impl ::std::convert::TryFrom<::std::string::String> for SourceType {
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///The amount a resource-spend of this ability bound with bind_as spent during this use (0 when it spent none). With per N: one for every N of it, rounded down ("for every 2YP you just spent").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The amount a resource-spend of this ability bound with bind_as spent during this use (0 when it spent none). With per N: one for every N of it, rounded down (\"for every 2YP you just spent\").",
+///  "type": "object",
+///  "required": [
+///    "spent"
+///  ],
+///  "properties": {
+///    "per": {
+///      "type": "integer",
+///      "minimum": 2.0
+///    },
+///    "spent": {
+///      "description": "The bind_as name of the resource-spend whose amount this reads; that spend comes before the reader.",
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SpentReference {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub per: ::std::option::Option<i64>,
+    ///The bind_as name of the resource-spend whose amount this reads; that spend comes before the reader.
+    pub spent: EntityId,
 }
 ///`SplitUnitEffectModifier`
 ///

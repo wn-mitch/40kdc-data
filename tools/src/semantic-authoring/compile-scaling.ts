@@ -29,7 +29,8 @@ function scaleLeaf(node: Node, scaling: Node): Node {
   const modifier = { ...(node.modifier as Node | undefined ?? {}) };
   const { per, of, within_inches: within, keyword, max_value: max, wargear } = scaling as Record<string, unknown>;
   const counted = COUNTED_FIELDS[type];
-  if (counted !== undefined && per === 1 && max === undefined && String(modifier[counted]) === "1") {
+  // A count-of quantity names no designation, so a designated count stays a scaling block.
+  if (counted !== undefined && per === 1 && max === undefined && scaling.designated === undefined && String(modifier[counted]) === "1") {
     modifier[counted] = { count_of: of, ...(keyword !== undefined ? { keyword } : {}), ...(within !== undefined ? { within: { inches: within } } : {}), ...(wargear !== undefined ? { wargear } : {}) };
     return { ...node, modifier };
   }

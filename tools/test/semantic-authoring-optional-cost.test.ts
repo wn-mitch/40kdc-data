@@ -219,7 +219,8 @@ describe("resource-spend amount one-or-more", () => {
   });
 
   it("refuses a cap spelled as an amount, since the DSL has no largest-amount field", () => {
-    for (const amount of ["up-to-2", "at-most-2", "any", "some"]) {
+    // "up to 2" is the object amount {up_to: 2}, and "any" its own amount; neither is a spelled-out string.
+    for (const amount of ["up-to-2", "at-most-2", "some"]) {
       expect(() => normalizeFingerprintParameters("resource-spend", leafOf(amount), currentFamilyVersion("resource-spend"))).toThrow();
     }
   });

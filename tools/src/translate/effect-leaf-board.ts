@@ -45,7 +45,10 @@ function mortalWounds(m: Record<string, unknown>, subj: string): string {
     const dice = many !== null ? (each && many === 1 ? "one D6" : `${many} D6`) : each ? `one ${diceCase(roll.dice)}` : diceCase(roll.dice);
     // "for each 1": a die at or under the threshold succeeds.
     const band = roll.comparison !== "lte" ? `${jstr(roll.threshold)}+` : Number(roll.threshold) === 1 ? "1" : `result of ${jstr(roll.threshold)} or less`;
-    return `roll ${dice}${each}${most}: for each ${band}, ${who} ${v(who, "suffers")} ${suffered}${psychic}${cap}`;
+    // "rolling two additional D6 if X": more dice when the condition holds.
+    const extra = roll.extra_dice as P | undefined;
+    const more = extra != null ? `, rolling ${jstr(extra.count)} additional D6 if ${describeCondition(extra.condition as Condition)}` : "";
+    return `roll ${dice}${each}${most}${more}: for each ${band}, ${who} ${v(who, "suffers")} ${suffered}${psychic}${cap}`;
   }
   const per = m.per === "model" ? ` for each model in ${pronoun(who) === "their" ? "them" : "it"}` : "";
   return `${who} ${v(who, "suffers")} ${suffered}${per}${psychic}${cap}`;
@@ -587,15 +590,21 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
       if (m.amount != null && typeof m.amount === "object" && !Array.isArray(m.amount) && typeof (m.amount as P).pool === "string") {
         return `you gain a number of ${resourceNoun(m.pool, m.label, 2)} equal to your ${dekebab(jstr((m.amount as P).pool))}`;
       }
+      // "you gain an amount of YP equal to the difference": what this turn's gains fall short of N by.
+      if (m.amount != null && typeof m.amount === "object" && (m.amount as P).difference_to != null) {
+        return `you gain a number of ${resourceNoun(m.pool, m.label, 2)} equal to the difference between ${jstr((m.amount as P).difference_to)} and the ${resourceNoun(m.pool, m.label, 2)} you gained this turn`;
+      }
       if (m.amount != null && typeof m.amount === "object") return `you gain ${amountOf(m.amount, resourceNoun(m.pool, m.label, 1), resourceNoun(m.pool, m.label, 2))}`;
       const amount = m.amount === "variable" ? "a number of" : m.amount === "any" ? "any number of" : diceCase(m.amount);
       return `you gain ${amount} ${resourceNoun(m.pool, m.label, m.amount)}`;
     }
     case "resource-spend": {
       if (m.amount === "by-table") return `spend the ${resourceNoun(m.pool, m.label, 2)} the cost table gives for the datasheet and Starting Strength of ${effectSubject(m.table_of, ctx)} (${costTable(m.amount_table)})`;
-      const amount = m.amount === "all" ? "all your" : m.amount === "one-or-more" ? "one or more" : diceCase(m.amount);
+      const upTo = m.amount != null && typeof m.amount === "object" ? (m.amount as P).up_to : undefined;
+      if (upTo != null) return `spend up to ${jstr(upTo)} ${resourceNoun(m.pool, m.label, upTo)}`;
+      const amount = m.amount === "all" ? "all your" : m.amount === "one-or-more" ? "one or more" : m.amount === "any" ? "any number of" : diceCase(m.amount);
       const showing = m.face != null ? ` showing a ${jstr(m.face)}` : m.requirement != null ? ` forming a ${requirementPhrase(m.requirement)}` : "";
-      let noun = resourceNoun(m.pool, m.label, m.amount === "all" ? 2 : m.amount);
+      let noun = resourceNoun(m.pool, m.label, m.amount === "all" || m.amount === "any" ? 2 : m.amount);
       // A face or a pair/triple is only said of dice: "3 Blessings of Khorne dice forming a triple of 6+".
       if (showing && !/\b(die|dice)$/.test(noun)) noun += Number(jstr(m.amount)) === 1 ? " die" : " dice";
       return `spend ${amount} ${noun}${showing}`;

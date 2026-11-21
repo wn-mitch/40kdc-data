@@ -22,6 +22,7 @@ pub(crate) fn scale_of(of: &str) -> Option<&'static str> {
         "models-equipped-with" => "models in this unit equipped with",
         "enemy-units-in-range" => "enemy units",
         "wounds-lost" => "wounds lost",
+        "enemy-units-hit" => "enemy units hit by those attacks",
         "battle-round" => "battle round",
         _ => return None,
     })
@@ -42,6 +43,9 @@ pub(crate) fn scale_source(q: &P) -> String {
                 s = format!("{} models{rest}", jv(k));
             }
         }
+    }
+    if let Some(d) = nn(q, "designated") {
+        s = format!("{} {s}", dekebab(&jstr(Some(d))));
     }
     if let Some(w) = nn(q, "within") {
         s.push_str(&format!(" within {}", range_phrase(Some(w))));
@@ -116,6 +120,13 @@ pub(crate) fn quantity_phrase(q: &P) -> String {
             None => "the result of that roll".to_string(),
         };
     }
+    // "the number of YP you just spent": the amount a resource-spend of this ability bound.
+    if q.get("spent").is_some_and(Value::is_string) {
+        return match nn(q, "per") {
+            Some(per) => format!("1 for every {} you spent", jv(per)),
+            None => "the amount you spent".to_string(),
+        };
+    }
     match q.get("count_of").and_then(Value::as_str) {
         Some("battle-round") => "the battle round number".to_string(),
         Some("embarked-models-oc") => format!("the total {}", scale_source(q)),
@@ -138,6 +149,12 @@ pub(crate) fn amount_of(q: Option<&Value>, one: &str, many: &str) -> String {
     let p = obj(q);
     if let Some((sizes, names)) = battle_sized(p) {
         return format!("{sizes} {many} ({names})");
+    }
+    // "for every 2YP you just spent, return one additional model": one per that many spent.
+    if p.get("spent").is_some_and(Value::is_string) {
+        if let Some(per) = nn(p, "per") {
+            return format!("1 {one} for every {} you spent", jv(per));
+        }
     }
     format!("a number of {many} equal to {}", quantity_phrase(p))
 }

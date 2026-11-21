@@ -307,7 +307,7 @@ function translateEffect(
   const abilityId = source.kind === "ability" ? source.abilityId : "effect";
   // The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
   const step = onAttackRoll(activation?.trigger, effect, { context, perspective, abilityId, duration: activation?.duration, usage: activation?.usage, definitions: ownDefinitions(effect, abilityId) });
-  walk(step.effect, source, { ...step.opts, selections: selectionOrder(step.effect) }, out);
+  walk(step.effect, source, { ...step.opts, selections: selectionOrder(step.effect), spentMax: spentMaxima(step.effect) }, out);
   if (activation?.usage != null || activation?.cost != null || activation?.optional === true) {
     const { duration: _duration, trigger: _trigger, ...requirement } = activation;
     const requires = [requirement];
@@ -360,6 +360,8 @@ type WalkOpts = {
   attackRoll?: { roll: "hit" | "wound"; outcome: "success" | "critical" | undefined; unmodelled?: string[] };
   /** The effect's selections in document order ({@link selectionOrder}), which number their lever ids. */
   selections?: readonly string[];
+  /** The most each bound spend of the effect can spend ({@link spentMaxima}), by its bind_as name. */
+  spentMax?: ReadonlyMap<string, number>;
 };
 
 function walk(
@@ -410,6 +412,12 @@ function walk(
   // Keep the source representation intact rather than silently widening its buff.
   if (hasUnresolvedFidelityBinding(currentNode)) {
     out.unsupported.push({ reason: FIDELITY_BINDING_REASON, effectFragment: currentNode });
+    return;
+  }
+  // "add the number of YP you just spent": a lever at the most the spend can spend; the player vouches for spending it.
+  const spentMost = spentAtMost(currentNode, opts.spentMax);
+  if (spentMost) {
+    offerLever(spentMost.node, source, opts, out, { id: `${opts.abilityId}#spent-max`, label: "Spending the most", requires: [spentMost.spend] });
     return;
   }
   // A scaled or bound value (a count on the board, the battle size, a bound roll) has no fixed size here:
@@ -3337,10 +3345,49 @@ function unsizedValueReason(node: Record<string, unknown>): string | undefined {
   for (const field of SIZED_FIELDS) {
     const v = node.modifier[field];
     if (!isObject(v)) continue;
-    const what = typeof v.roll_var === "string" ? "a bound roll" : typeof v.count_of === "string" ? `the number of ${v.count_of}` : "the battle size";
+    // "spend up to 2YP": the player picks how much a spend spends; it sizes no buff.
+    if (node.type === "resource-spend" && field === "amount" && v.up_to !== undefined) continue;
+    const what = typeof v.roll_var === "string" ? "a bound roll" : typeof v.count_of === "string" ? `the number of ${v.count_of}`
+      : typeof v.spent === "string" ? "the amount spent" : "the battle size";
     return `${node.type}: its ${field} is set by ${what}; not resolved by the buff engine`;
   }
   return undefined;
+}
+
+/** The most each resource-spend of an effect that binds its amount (bind_as) can spend: its {up_to} amount. */
+function spentMaxima(effect: unknown): Map<string, number> {
+  const maxima = new Map<string, number>();
+  const visit = (node: unknown): void => {
+    if (Array.isArray(node)) {
+      node.forEach(visit);
+      return;
+    }
+    if (!isObject(node)) return;
+    const modifier = node.modifier;
+    if (node.type === "resource-spend" && isObject(modifier) && typeof modifier.bind_as === "string" && isObject(modifier.amount) && typeof modifier.amount.up_to === "number") {
+      maxima.set(modifier.bind_as, modifier.amount.up_to);
+    }
+    Object.keys(node).sort().forEach((key) => visit(node[key]));
+  };
+  visit(effect);
+  return maxima;
+}
+
+/**
+ * A leaf whose one bound size is a spent amount ({spent, per?}) with a known most, as the leaf at
+ * that most (one per `per`, rounded down), with the spend the lever requires. Undefined otherwise.
+ */
+function spentAtMost(node: Record<string, unknown>, maxima: ReadonlyMap<string, number> | undefined): { node: Record<string, unknown>; spend: Record<string, unknown> } | undefined {
+  const modifier = node.modifier;
+  if (maxima === undefined || !isObject(modifier) || typeof node.type !== "string" || node.scaling !== undefined) return undefined;
+  const bound = SIZED_FIELDS.filter((field) => isObject(modifier[field]));
+  if (bound.length !== 1) return undefined;
+  const field = bound[0]!;
+  const ref = modifier[field] as Record<string, unknown>;
+  if (typeof ref.spent !== "string" || !maxima.has(ref.spent)) return undefined;
+  const most = maxima.get(ref.spent)!;
+  const value = typeof ref.per === "number" ? Math.floor(most / ref.per) : most;
+  return { node: { ...node, modifier: { ...modifier, [field]: value } }, spend: { spent: ref.spent, amount: most } };
 }
 
 /**

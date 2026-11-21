@@ -133,6 +133,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       }
       if (leaf.parameters.starting_strength !== undefined) throw new CompileError(`The resource-spend row at byte ${leaf.start_byte} is a cost-table row with no table.`);
       if (leaf.parameters.label !== undefined) modifier.label = closed(leaf, "label");
+      // "the number of YP you spent": a later {spent} amount reads what this spend bound (compile-spent.ts checks the pairing).
+      if (leaf.parameters.bind_as !== undefined) modifier.bind_as = closed(leaf, "bind_as");
       if (leaf.parameters.face !== undefined) modifier.face = closed(leaf, "face");
       if (leaf.parameters.requirement_type !== undefined) modifier.requirement = { type: closed(leaf, "requirement_type"), min_value: closed(leaf, "requirement_min") };
       return { type: "resource-spend", target: "this-model", modifier };
@@ -286,6 +288,8 @@ function foldedPlacement(leaf: CompileLeaf, placement: unknown): Node {
 
 /** A count/amount family value ("1", "D3", "all") as the DSL prefers it: a number when it is one. */
 function countValue(value: unknown): unknown {
+  // A {spent} amount (compile-spent.ts) is already a DSL quantity.
+  if (value !== null && typeof value === "object") return value;
   const text = String(value);
   return /^\d+$/u.test(text) ? Number(text) : text;
 }

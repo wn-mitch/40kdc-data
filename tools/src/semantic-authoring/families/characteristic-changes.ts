@@ -1,4 +1,4 @@
-import { boundedInteger, enumSet, enumValue, exactKeys, integerOrSource } from "../family-validation.js";
+import { boundedInteger, enumSet, enumValue, exactKeys, integerOrSource, isSpentReference, spentReference, spentReferenceSchema } from "../family-validation.js";
 import type { FlatFamily } from "./types.js";
 import {
   type Params, ANTECEDENT, WEAPON_TYPES, WEAPON_KEYWORDS, DICE, DICE_SCHEMA, MODEL_KEYWORDS_SCHEMA,
@@ -103,12 +103,14 @@ function normalizeCharacteristicSet(input: Params): Params {
 function normalizeCharacteristicAmount(input: Params): Params {
   exactKeys(input, ["value"], "characteristic-amount");
   const { value } = input;
+  // "where X is the number of YP you spent during this use": the amount a resource-spend bound.
+  if (isSpentReference(value)) return { value: spentReference(value, "characteristic-amount.value") };
   if (typeof value === "string") {
     const dice = value.trim().toUpperCase();
-    if (!DICE.test(dice)) throw new TypeError("characteristic-amount.value is a whole number from 1, or a dice amount (D3, D6, D6+1).");
+    if (!DICE.test(dice)) throw new TypeError("characteristic-amount.value is a whole number from 1, a dice amount (D3, D6, D6+1) or a spent amount ({spent, per?}).");
     return { value: dice };
   }
-  if (!Number.isSafeInteger(value) || (value as number) < 1) throw new TypeError("characteristic-amount.value is a whole number from 1, or a dice amount (D3, D6, D6+1).");
+  if (!Number.isSafeInteger(value) || (value as number) < 1) throw new TypeError("characteristic-amount.value is a whole number from 1, a dice amount (D3, D6, D6+1) or a spent amount ({spent, per?}).");
   return { value };
 }
 
@@ -154,6 +156,10 @@ function normalizeCharacteristicModifier(input: Params): Params {
   } else if (operation === "multiply") {
     if (!Number.isInteger(input.value) || (input.value as number) < 2 || (input.value as number) > 4) throw new TypeError(`${family} multiply needs a whole factor from 2 to 4.`);
     result.value = input.value;
+  } else if (isSpentReference(input.value)) {
+    // "add the number of YP you just spent to the Damage characteristic": the amount a resource-spend bound.
+    if (!AMOUNT_OPERATIONS.includes(operation)) throw new TypeError(`${family} takes a spent amount only to add, subtract, improve or worsen.`);
+    result.value = spentReference(input.value, `${family}.value`);
   } else if (typeof input.value === "string") {
     const dice = input.value.trim().toUpperCase();
     if (!DICE.test(dice)) throw new TypeError(`${family}.value is a whole number or a dice amount (D3, D6, D3+1, 2D6).`);
@@ -250,15 +256,15 @@ export const CHARACTERISTIC_CHANGES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "characteristic-amount",
-    version: 1,
+    version: 2,
     role: "CONDITION",
     label: "Amount of a characteristic change",
-    description: "\"by 2\" or \"by D6+1\" after a characteristic change that has no amount and a recipient filter before this leaf: the amount the change applies. Takes the same amount types as a characteristic change: a whole number from 1, or a dice amount (D3, D6, D6+1). The binder sets it on the change and drops this leaf.",
+    description: "\"by 2\" or \"by D6+1\" after a characteristic change that has no amount and a recipient filter before this leaf: the amount the change applies. Takes the same amount types as a characteristic change: a whole number from 1, a dice amount (D3, D6, D6+1), or a spent amount ({spent: the bind_as of an earlier resource-spend, per?}: \"where X is the number of YP you spent\"). The binder sets it on the change and drops this leaf.",
     starter: { value: 1 },
     parameterSchema: {
       type: "object",
       required: ["value"],
-      properties: { value: { anyOf: [{ type: "integer", minimum: 1, maximum: Number.MAX_SAFE_INTEGER }, DICE_SCHEMA] } },
+      properties: { value: { anyOf: [{ type: "integer", minimum: 1, maximum: Number.MAX_SAFE_INTEGER }, DICE_SCHEMA, spentReferenceSchema] } },
       additionalProperties: false,
     },
     normalize: normalizeCharacteristicAmount,
@@ -283,12 +289,12 @@ export const CHARACTERISTIC_CHANGES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "characteristic-modifier",
-    version: 21,
+    version: 22,
     role: "EFFECT",
     label: "Change characteristics",
     description: "A stat adjustment records the characteristics, operation and amount without guessing its recipient or weapon scope. Signed shorthand bonuses improve the named stat; penalties worsen it. Reviewed subject and weapon_type bindings can accompany a qualified leaf. Setting a value is a different leaf. "
       + "subject can be antecedent (the unit an earlier leaf of the record introduced, bound when the record compiles), event-subject (the triggering unit), bearer-transport (the Transport the model is embarked within), target (the attack's target unit, which the DSL names as the defender), or army-models (every model from your army, narrowed by model_keywords and excluded_model_keywords: \"equipped by WYCH CULT models from your army by 1\", in one leaf that spans the whole change). "
-      + "Characteristics include detection range and the Range of weapons. The amount is a whole number or a dice amount (D3, D6, D3+1, 2D6); for add, subtract, improve and worsen it is optional, and a change without one takes its amount from a characteristic-amount leaf after its recipient. halve takes no value; multiply takes the factor (2 to 4) as value. "
+      + "Characteristics include detection range and the Range of weapons. The amount is a whole number, a dice amount (D3, D6, D3+1, 2D6), or a spent amount for add, subtract, improve or worsen ({spent: the bind_as of an earlier resource-spend in the ability, per?: one for every N}: \"add the number of YP you just spent\"); for add, subtract, improve and worsen it is optional, and a change without one takes its amount from a characteristic-amount leaf after its recipient. halve takes no value; multiply takes the factor (2 to 4) as value. "
       + "minimum: a lowered characteristic never goes below this value (\"(to a minimum of 1)\"), only for subtract or worsen. "
       + "weapon_keyword: the change applies only to weapons with that ability (Torrent, Rapid Fire, Psychic …). weapon_name: the change applies to that one weapon (needs a melee or ranged weapon_type). weapon_names: two to eight printed weapon names (\"of X and Y\"), with weapon_type (all is allowed). "
       + "weapon antecedent with a melee or ranged weapon_type: the weapons an earlier equipped-weapon-count condition counted, excluding its named weapon. weapon antecedent without weapon_type: the one weapon an earlier select-weapon bound; only weapon characteristics (A, WS, BS, S, AP, D) and only this-model take it. "
@@ -302,7 +308,7 @@ export const CHARACTERISTIC_CHANGES_FAMILIES: readonly FlatFamily[] = [
         subject: { enum: MODIFIER_SUBJECTS },
         characteristics: { type: "array", items: { enum: [...MODIFIER_CHARACTERISTICS, "Range"] }, minItems: 1, uniqueItems: true },
         operation: { enum: [...AMOUNT_OPERATIONS, "halve", "multiply"] },
-        value: { anyOf: [{ type: "integer", minimum: 1, maximum: Number.MAX_SAFE_INTEGER }, DICE_SCHEMA], "x-optional": true },
+        value: { anyOf: [{ type: "integer", minimum: 1, maximum: Number.MAX_SAFE_INTEGER }, DICE_SCHEMA, spentReferenceSchema], "x-optional": true },
         weapon_type: { enum: WEAPON_TYPES },
         weapon_keyword: { enum: WEAPON_KEYWORDS, "x-optional": true },
         weapon_name: { type: "string", minLength: 1, "x-optional": true },

@@ -56,7 +56,7 @@ use menu::{duration_clauses, menu_inline, scaling_clause};
 use region::{describe_named_region_conditional, describe_named_region_state};
 use select::*;
 use words::*;
-pub(crate) use words::{bracket_keyword, dice_case, title_case, weapon_noun};
+pub(crate) use words::{bracket_keyword, dice_case, resource_noun, title_case, weapon_noun};
 
 const CONTAINER_TYPES: &[&str] = &[
     "roll",

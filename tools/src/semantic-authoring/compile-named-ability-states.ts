@@ -209,6 +209,16 @@ export function guardNamedAbilityPayments(value: unknown): unknown {
   if (!spends.length) return node;
   if (spends.length !== 1) throw new CompileError("A named ability exchange needs one fixed resource payment in its resolution.");
   const modifier = spends[0]!.modifier;
+  // "spend any number of YP. Once you have done so, if you have 6 or fewer YP, … instead": a spend the
+  // player sizes cannot overdraw; the exchange is gated by its own check of the pool after the spend.
+  if (object(modifier) && typeof modifier.pool === "string" && modifier.amount === "any") {
+    const spendAt = node.steps.indexOf(spends[0]!);
+    const poolCheck = (condition: unknown): boolean => object(condition) && (condition.type === "resource" && object(condition.parameters) && condition.parameters.pool === modifier.pool
+      || Array.isArray(condition.operands) && condition.operator === "and" && condition.operands.some(poolCheck));
+    const ungated = node.steps.some((step, at) => has(step, exchange) && (at < spendAt || !(object(step) && step.type === "conditional" && poolCheck(step.condition))));
+    if (ungated) throw new CompileError("A named ability exchange after a spend of any amount must follow it, gated by a check of that pool.");
+    return node;
+  }
   if (!object(modifier) || typeof modifier.pool !== "string" || !Number.isInteger(modifier.amount) || Number(modifier.amount) <= 0) {
     throw new CompileError("A named ability exchange payment must name a pool and a positive fixed amount.");
   }

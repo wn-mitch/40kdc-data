@@ -196,7 +196,7 @@ export function conditionLeadIn(c: Condition, defending = false): string {
       return `if ${describeHappened(p, false)}`;
     }
     case "resource":
-      return p.below_max === true ? `if ${describePredicate(c, false)}` : `while ${describePredicate(c, false)}`;
+      return p.below_max === true || p.gained === "turn" ? `if ${describePredicate(c, false)}` : `while ${describePredicate(c, false)}`;
     case "strength":
       return `while ${describePredicate(c, false).replace(/ is below Starting Strength$/, " is below its Starting Strength").replace(/ is below Half-strength$/, " is Below Half-strength")}`;
     case "designated":

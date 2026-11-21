@@ -7,7 +7,7 @@ use super::history::destroyed_count;
 use super::js::*;
 use super::refs::*;
 use crate::translate::dekebab;
-use crate::translate::effect::{dice_case, dice_table_result_label, title_case};
+use crate::translate::effect::{dice_case, dice_table_result_label, resource_noun, title_case};
 
 /// The predicate phrase for the history-count, position, board, attack,
 /// visibility, designation, resource and mission-card predicates (the rest of
@@ -438,6 +438,15 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                 return format!(
                     "{neg}the {} ability had unused selection capacity at the end of your opponent's previous turn",
                     dekebab(&st(source))
+                );
+            }
+            // "you gained fewer than 3YP this turn": this turn's gains, not what the pool holds.
+            if p.get("gained").and_then(Value::as_str) == Some("turn") {
+                return format!(
+                    "you {} {} {} this turn",
+                    if negated { "did not gain" } else { "gained" },
+                    count_phrase(p.get("count")),
+                    resource_noun(p.get("pool"), None, Some(&Value::from(2)))
                 );
             }
             // A pool is the player's ("If you have 3 or more Pact points").

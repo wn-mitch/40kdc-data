@@ -66,7 +66,7 @@ function normalizeEligible(input: Params): Params {
 
 function normalizeResource(input: Params): Params {
   const negated = negation(input, "resource");
-  exactKeys(input, ["pool", ...present(input, ["at_least", "at_most", "below_max", "source_ability_id", "source_ability_owner", "at", "negated"])], "resource");
+  exactKeys(input, ["pool", ...present(input, ["at_least", "at_most", "below_max", "source_ability_id", "source_ability_owner", "at", "gained_this_turn", "negated"])], "resource");
   if (!("at_least" in input) && !("at_most" in input) && !("below_max" in input)) throw new TypeError("resource needs at_least, at_most, or below_max.");
   const result: Params = { pool: String(input.pool ?? "") };
   if (!result.pool) throw new TypeError("resource.pool must be a nonempty string.");
@@ -80,6 +80,11 @@ function normalizeResource(input: Params): Params {
   }
   if ("source_ability_owner" in input) result.source_ability_owner = enumValue(input.source_ability_owner, OWNERS, "resource.source_ability_owner");
   if ("at" in input) result.at = enumValue(input.at, AT_TIMES, "resource.at");
+  // "you gained fewer than 3YP this turn": the bounds read this turn's gains, not what the pool holds.
+  if ("gained_this_turn" in input) {
+    result.gained_this_turn = trueFlag(input.gained_this_turn, "resource.gained_this_turn");
+    if ("below_max" in input || "at" in input) throw new TypeError("resource.gained_this_turn bounds this turn's gains with at_least or at_most; it takes no below_max or at.");
+  }
   return { ...result, ...negated };
 }
 
@@ -172,10 +177,10 @@ export const UNIT_COMPOSITION_PREDICATES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "resource",
-    version: 1,
+    version: 2,
     role: "CONDITION",
     label: "Resource pool holds",
-    description: "Requires a named resource pool to hold at least, or at most, an amount, or to have unused capacity below its maximum (optionally as of the end of the opponent's previous turn).",
+    description: "Requires a named resource pool to hold at least, or at most, an amount, or to have unused capacity below its maximum (optionally as of the end of the opponent's previous turn). gained_this_turn: the at_least/at_most bounds read how much of the pool you gained this turn (\"you gained fewer than 3YP this turn\" is at_most 2), not how much it holds.",
     starter: { pool: "", at_least: 1 },
     parameterSchema: {
       type: "object", required: ["pool"], additionalProperties: false,
@@ -187,6 +192,7 @@ export const UNIT_COMPOSITION_PREDICATES_FAMILIES: readonly FlatFamily[] = [
         source_ability_id: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$", "x-only-when": { below_max: ["true"] } },
         source_ability_owner: { enum: ["friendly", "enemy"], "x-only-when": { below_max: ["true"] } },
         at: { enum: ["now", "opponents-previous-turn-end"] },
+        gained_this_turn: { const: true, "x-optional": true },
         negated: { type: "boolean" },
       },
     },

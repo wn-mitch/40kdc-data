@@ -1,5 +1,5 @@
 import {
-  booleanValue, boundedInteger, enumValue, exactKeys,
+  booleanValue, boundedInteger, enumValue, exactKeys, isSpentReference, spentReference, spentReferenceSchema,
 } from "../family-validation.js";
 import {
   type Params, ANTECEDENT, EVENT_SUBJECT, withApostrophes, withAccents, modelKeyword,
@@ -69,7 +69,8 @@ function returnModelsChecked(input: Params): Params {
   exactKeys(input, ["subject", "count", ...(["wounds_remaining", "model_keyword", "bodyguard_only"] as const).filter((key) => key in input)], "return-models");
   const result: Params = {
     subject: enumValue(input.subject, RETURN_SUBJECTS, "return-models.subject"),
-    count: enumValue(input.count, RETURN_COUNTS, "return-models.count"),
+    // "for every 2YP you just spent, return up to one additional destroyed model": the amount a resource-spend bound.
+    count: isSpentReference(input.count) ? spentReference(input.count, "return-models.count") : enumValue(input.count, RETURN_COUNTS, "return-models.count"),
   };
   if ("wounds_remaining" in input) result.wounds_remaining = enumValue(input.wounds_remaining, RETURN_WOUNDS, "return-models.wounds_remaining");
   if ("model_keyword" in input) result.model_keyword = modelKeyword(input.model_keyword, "return-models.model_keyword");
@@ -262,10 +263,10 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "return-models",
-    version: 7,
+    version: 8,
     role: "EFFECT",
     label: "Return destroyed models",
-    description: "Return a number of destroyed models (all of them, a fixed or rolled count up to D3+3, optionally only of a named model keyword, or only models with the profile name model_name as the datasheet prints it: \"1 destroyed Geminae Superia model\") to this unit, this model or the unit an earlier leaf introduced (antecedent), each with its full wounds, 1, 3, D3 or D6 wounds, or half of its starting number of wounds remaining. model_name needs a unit subject. A keyword can carry accented capitals or start with an apostrophe as the rules print it (KÂHL, 'ARDMOB).",
+    description: "Return a number of destroyed models (all of them, a fixed or rolled count up to D3+3, or a spent amount {spent: the bind_as of an earlier resource-spend, per?: one for every N} (\"for every 2YP you just spent, return one additional model\"), optionally only of a named model keyword, or only models with the profile name model_name as the datasheet prints it: \"1 destroyed Geminae Superia model\") to this unit, this model or the unit an earlier leaf introduced (antecedent), each with its full wounds, 1, 3, D3 or D6 wounds, or half of its starting number of wounds remaining. model_name needs a unit subject. A keyword can carry accented capitals or start with an apostrophe as the rules print it (KÂHL, 'ARDMOB).",
     starter: {"subject":"","count":""},
     parameterSchema: {
       "type": "object",
@@ -282,17 +283,19 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
           ]
         },
         "count": {
-          "enum": [
-            "1",
-            "2",
-            "3",
-            "D3",
-            "D3+1",
-            "D3+3",
-            "D6",
-            "all",
-            "D3+2"
-          ]
+          "anyOf": [{
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "D3",
+              "D3+1",
+              "D3+3",
+              "D6",
+              "all",
+              "D3+2"
+            ]
+          }, spentReferenceSchema]
         },
         "wounds_remaining": {
           "enum": [
