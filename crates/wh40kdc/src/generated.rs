@@ -1428,7 +1428,8 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityInteractionsItemT
 ///        "threshold",
 ///        "options",
 ///        "amount",
-///        "received"
+///        "received",
+///        "mortal-wounds"
 ///      ]
 ///    },
 ///    "cap": {
@@ -1915,7 +1916,8 @@ impl<'de> ::serde::Deserialize<'de> for AbilityModifierEffectModifierAddOptionNa
 ///    "threshold",
 ///    "options",
 ///    "amount",
-///    "received"
+///    "received",
+///    "mortal-wounds"
 ///  ]
 ///}
 /// ```
@@ -1961,6 +1963,8 @@ pub enum AbilityModifierEffectModifierAspect {
     Amount,
     #[serde(rename = "received")]
     Received,
+    #[serde(rename = "mortal-wounds")]
+    MortalWounds,
 }
 impl ::std::fmt::Display for AbilityModifierEffectModifierAspect {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -1979,6 +1983,7 @@ impl ::std::fmt::Display for AbilityModifierEffectModifierAspect {
             Self::Options => f.write_str("options"),
             Self::Amount => f.write_str("amount"),
             Self::Received => f.write_str("received"),
+            Self::MortalWounds => f.write_str("mortal-wounds"),
         }
     }
 }
@@ -2002,6 +2007,7 @@ impl ::std::str::FromStr for AbilityModifierEffectModifierAspect {
             "options" => Ok(Self::Options),
             "amount" => Ok(Self::Amount),
             "received" => Ok(Self::Received),
+            "mortal-wounds" => Ok(Self::MortalWounds),
             _ => Err("invalid value".into()),
         }
     }
@@ -49185,7 +49191,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "ability-modifier effect",
-///      "description": "[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, or how many times one unit can be affected by it (received).",
+///      "description": "[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, the number of mortal wounds a bound use inflicts when it inflicts any (mortal-wounds), or how many times one unit can be affected by it (received).",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -50330,7 +50336,7 @@ pub enum SingleEffect {
     },
     /**ability-modifier effect
 
-[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, or how many times one unit can be affected by it (received).*/
+[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, the number of mortal wounds a bound use inflicts when it inflicts any (mortal-wounds), or how many times one unit can be affected by it (received).*/
     #[serde(rename = "ability-modifier")]
     AbilityModifier {
         modifier: AbilityModifierEffectModifier,
@@ -57218,6 +57224,11 @@ impl ::std::convert::TryFrom<::std::string::String> for TransportOccupancySubjec
 ///      "minLength": 1,
 ///      "$comment": "Names the triggering event's bound object for later reference by a condition in the same reactive action. Internal only; never rendered."
 ///    },
+///    "binds_roll_variable": {
+///      "description": "Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered.",
+///      "type": "string",
+///      "minLength": 1
+///    },
 ///    "binds_selected_die_variable": {
 ///      "description": "Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}.",
 ///      "type": "string",
@@ -57312,6 +57323,9 @@ pub struct Trigger {
     pub binds_die_variable: ::std::option::Option<TriggerBindsDieVariable>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub binds_event_variable: ::std::option::Option<TriggerBindsEventVariable>,
+    ///Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub binds_roll_variable: ::std::option::Option<TriggerBindsRollVariable>,
     ///Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub binds_selected_die_variable: ::std::option::Option<
@@ -57472,6 +57486,79 @@ impl ::std::convert::TryFrom<::std::string::String> for TriggerBindsEventVariabl
     }
 }
 impl<'de> ::serde::Deserialize<'de> for TriggerBindsEventVariable {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct TriggerBindsRollVariable(::std::string::String);
+impl ::std::ops::Deref for TriggerBindsRollVariable {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<TriggerBindsRollVariable> for ::std::string::String {
+    fn from(value: TriggerBindsRollVariable) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for TriggerBindsRollVariable {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TriggerBindsRollVariable {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for TriggerBindsRollVariable {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for TriggerBindsRollVariable {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TriggerBindsRollVariable {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,

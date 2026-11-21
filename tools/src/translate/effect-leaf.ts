@@ -334,6 +334,11 @@ function abilityModifier(m: Record<string, unknown>, subj: string, ctx: Ctx, inl
   // "The bearer's unit can be regenerated up to twice per phase": how many times one unit can be affected by it.
   if (m.aspect === "received") return `${subj} can be affected by ${abilityLabel(m.ability)} up to ${timesWord(m.value)}, in place of its usual limit`;
   const whose = modifiedAbility(m.ability, subj, ctx);
+  // "If it suffers one or more mortal wounds as a result of that Dark Pact, add 1 to the number of mortal wounds it suffers."
+  if (m.aspect === "mortal-wounds") {
+    const change = m.operation === "subtract" ? `subtract ${jstr(m.value)} from` : `add ${jstr(m.value)} to`;
+    return `if ${whose} inflicts one or more mortal wounds on ${subj}, ${change} the number of mortal wounds it suffers`;
+  }
   const aspect = ASPECTS[jstr(m.aspect)] ?? jstr(m.aspect);
   const value = m.aspect === "range" && typeof m.value === "number" ? `${jstr(m.value)}"` : typeof m.value === "string" ? dekebab(m.value) : jstr(m.value);
   const cap = m.cap != null ? ` (to a maximum of ${jstr(m.cap)})` : "";

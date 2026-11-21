@@ -2566,6 +2566,7 @@ class Trigger(TypedDict):
     window: NotRequired[str]
     binds_event_variable: NotRequired[str]
     binds_die_variable: NotRequired[str]
+    binds_roll_variable: NotRequired[str]
     binds_selected_die_variable: NotRequired[str]
     source_ability: NotRequired[SourceAbility]
 
@@ -3255,6 +3256,7 @@ class Modifier15(TypedDict):
         "options",
         "amount",
         "received",
+        "mortal-wounds",
     ]
     operation: Literal["add", "subtract", "set", "lift-limit"]
     value: NotRequired[float | str]

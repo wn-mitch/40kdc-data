@@ -469,6 +469,12 @@ export function condition(leaf: CompileLeaf): Node {
       const activities = closed(leaf, "activities") as string[];
       // "not chosen by the Foo Gadget this phase" names its Gadgets (compile-opponent-stratagem.ts).
       if (checkStratagemActivity(leaf, activities)) return polarity(leaf, stratagemTargetedAnyOf(leaf, subject));
+      // "Made a Dark Pact that phase and did not fail the resulting Leadership test": that test's outcome.
+      if (leaf.parameters.passed !== undefined) {
+        const outcome = leaf.parameters.passed === true ? "success" : "failure";
+        // The unit is named even when it is this unit, so the history reads whose Dark Pact it was.
+        return polarity(leaf, pred("happened", { event: "after-roll", filter: { roll: "dark-pact", result: outcome }, window: "phase" }, subject ?? "this-unit"));
+      }
       const own = anyOf(activities.map((activity) => {
         const byAbility = SET_UP_BY_ABILITY[activity];
         if (byAbility) return setUpByAbility(subject, ...byAbility);

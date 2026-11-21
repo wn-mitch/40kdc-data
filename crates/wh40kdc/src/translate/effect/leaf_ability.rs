@@ -217,6 +217,18 @@ pub(super) fn ability_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
         );
     }
     let whose = modified_ability(m.get("ability"), subj, ctx);
+    // "If it suffers one or more mortal wounds as a result of that Dark Pact, add 1 to the number of mortal wounds it suffers."
+    if sv(m, "aspect") == Some("mortal-wounds") {
+        let value = jstr(m.get("value"));
+        let change = if sv(m, "operation") == Some("subtract") {
+            format!("subtract {value} from")
+        } else {
+            format!("add {value} to")
+        };
+        return format!(
+            "if {whose} inflicts one or more mortal wounds on {subj}, {change} the number of mortal wounds it suffers"
+        );
+    }
     let aspect_key = sv(m, "aspect");
     let aspect = aspect_name(&jstr(m.get("aspect")));
     let value = match m.get("value") {

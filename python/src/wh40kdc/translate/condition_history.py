@@ -192,6 +192,17 @@ def _describe_happened_core(p: P, negated: bool) -> str:
             else:
                 hits = f"a {atk}attack"
             return f"{neg}{target} was hit by {hits}{attacker}{weapon}{by}{when}"
+        # A Dark Pact's Leadership test:
+        # "the unit made a Dark Pact and passed its Leadership test this phase".
+        if (
+            subj is not None
+            and f.get("roll") == "dark-pact"
+            and f.get("result") in ("success", "failure")
+            and p.get("count") is None
+        ):
+            outcome = "passed" if f.get("result") == "success" else "failed"
+            made = f"{neg}{who} made a Dark Pact and {outcome} its Leadership test"
+            return f"{made} {_window_phrase(window)}".rstrip()
         # Whose roll it was, when the subject names one:
         # "this unit made a battle-shock roll and failed it".
         times = f" ({amount} times)" if p.get("count") is not None else ""

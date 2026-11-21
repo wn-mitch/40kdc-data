@@ -24,6 +24,7 @@ export interface AbilityTrigger {
   binds_event_variable?: string;
   binds_die_variable?: string;
   binds_selected_die_variable?: string;
+  binds_roll_variable?: string;
   source_ability?: { ability_id: string; owner: string; keywords?: string[] };
 }
 

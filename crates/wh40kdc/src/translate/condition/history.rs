@@ -323,6 +323,25 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                 };
                 return format!("{neg}{target} was hit by {hits}{attacker}{weapon}{by}{when}");
             }
+            // A Dark Pact's Leadership test: "the unit made a Dark Pact and passed its Leadership
+            // test this phase".
+            if nn(p, "subject").is_some()
+                && is(f, "roll", "dark-pact")
+                && (is(f, "result", "success") || is(f, "result", "failure"))
+                && nn(p, "count").is_none()
+            {
+                let outcome = if is(f, "result", "success") {
+                    "passed"
+                } else {
+                    "failed"
+                };
+                return format!(
+                    "{neg}{who} made a Dark Pact and {outcome} its Leadership test {}",
+                    window_phrase(window)
+                )
+                .trim_end()
+                .to_string();
+            }
             // Whose roll it was, when the subject names one: "this unit made a battle-shock roll
             // and failed it".
             if nn(p, "subject").is_some() {

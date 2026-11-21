@@ -1291,7 +1291,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "ability-modifier effect",
-          "description": "[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, or how many times one unit can be affected by it (received).",
+          "description": "[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, the number of mortal wounds a bound use inflicts when it inflicts any (mortal-wounds), or how many times one unit can be affected by it (received).",
           "required": [
             "type",
             "target",
@@ -1383,7 +1383,8 @@
                     "threshold",
                     "options",
                     "amount",
-                    "received"
+                    "received",
+                    "mortal-wounds"
                   ]
                 },
                 "operation": {

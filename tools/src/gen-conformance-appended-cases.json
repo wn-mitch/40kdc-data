@@ -5356,5 +5356,152 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "caseId": "dark-pact/passed-test-total",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "roll-total",
+        "parameters": {
+          "roll_var": "dark-pact-test",
+          "min": 8
+        }
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-unit",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "dark-pact",
+        "result": "success"
+      },
+      "binds_roll_variable": "dark-pact-test"
+    }
+  },
+  {
+    "caseId": "dark-pact/passed-this-phase",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "after-roll",
+          "subject": "this-unit",
+          "filter": {
+            "roll": "dark-pact",
+            "result": "success"
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "this-unit",
+        "modifier": {
+          "count": "D3"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "dark-pact/failed-this-phase-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "this-unit",
+              "filter": {
+                "roll": "dark-pact",
+                "result": "failure"
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "this-unit",
+        "modifier": {
+          "count": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "dark-pact/contract-mortal-wounds-add",
+    "effect": {
+      "type": "ability-modifier",
+      "target": "event-subject",
+      "modifier": {
+        "ability": {
+          "event": "used",
+          "event_var": "pact"
+        },
+        "aspect": "mortal-wounds",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "contract"
+      },
+      "subject": {
+        "owner": "friendly"
+      },
+      "binds_event_variable": "pact"
+    }
+  },
+  {
+    "caseId": "dark-pact/contract-mortal-wounds-subtract",
+    "effect": {
+      "type": "ability-modifier",
+      "target": "event-subject",
+      "modifier": {
+        "ability": {
+          "event": "used",
+          "event_var": "pact"
+        },
+        "aspect": "mortal-wounds",
+        "operation": "subtract",
+        "value": 2
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "dark-pact"
+      },
+      "binds_event_variable": "pact"
+    }
   }
 ]

@@ -163,7 +163,7 @@ const SUBJECTS: Record<string, unknown> = {
 const PROXIMITY_OF: Record<string, string | undefined> = { self: "this-model", bearer: "this-model", "bearer-unit": undefined, "attached-unit": undefined };
 
 const KNOWN = new Set(["event", "subject", "caused_by", "proximity", "move_types", "condition", "optional", "cost", "window",
-  "binds_event_variable", "binds_die_variable", "binds_selected_die_variable", "source_ability", "subject_keywords", "subject_excluded_keywords"]);
+  "binds_event_variable", "binds_die_variable", "binds_selected_die_variable", "binds_roll_variable", "source_ability", "subject_keywords", "subject_excluded_keywords"]);
 
 /** Migrate one trigger; `migrateCondition` rewrites its condition tree. */
 export function migrateTrigger(t: Node, migrateCondition: (c: Node) => Outcome): Outcome {
@@ -229,7 +229,7 @@ export function migrateTrigger(t: Node, migrateCondition: (c: Node) => Outcome):
   if (conditions.length === 1) out.condition = conditions[0];
   else if (conditions.length > 1) out.condition = { operator: "and", operands: conditions };
 
-  for (const k of ["optional", "cost", "window", "binds_event_variable", "binds_die_variable", "binds_selected_die_variable", "source_ability"])
+  for (const k of ["optional", "cost", "window", "binds_event_variable", "binds_die_variable", "binds_selected_die_variable", "binds_roll_variable", "source_ability"])
     if (t[k] !== undefined) out[k] = t[k];
   return { node: out };
 }

@@ -6192,6 +6192,11 @@
           "minLength": 1,
           "description": "Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}."
         },
+        "binds_roll_variable": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered."
+        },
         "binds_selected_die_variable": {
           "type": "string",
           "minLength": 1,
@@ -6298,6 +6303,20 @@
             "required": [
               "subject"
             ]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "binds_roll_variable"
+            ]
+          },
+          "then": {
+            "properties": {
+              "event": {
+                "const": "after-roll"
+              }
+            }
           }
         },
         {
@@ -10020,7 +10039,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "ability-modifier effect",
-          "description": "[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, or how many times one unit can be affected by it (received).",
+          "description": "[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, the number of mortal wounds a bound use inflicts when it inflicts any (mortal-wounds), or how many times one unit can be affected by it (received).",
           "required": [
             "type",
             "target",
@@ -10112,7 +10131,8 @@
                     "threshold",
                     "options",
                     "amount",
-                    "received"
+                    "received",
+                    "mortal-wounds"
                   ]
                 },
                 "operation": {

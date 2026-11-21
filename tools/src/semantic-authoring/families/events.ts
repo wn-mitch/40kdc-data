@@ -112,7 +112,7 @@ const KIND_KEYS: Readonly<Record<string, { required?: readonly string[]; optiona
   "before-roll": { optional: ["roll", "rolls"] },
   "after-roll": { optional: ["roll", "rolls", "subject", "result", "channelled", "before_resolving_activity"] },
   "damage-allocated": { optional: ["object", "attack_type"] },
-  used: { required: ["activity"], optional: ["owner", "subject", "id", "ids", "object", "source", "usage", "ability_keyword", "targets_level"] },
+  used: { required: ["activity"], optional: ["owner", "subject", "id", "ids", "object", "source", "usage", "ability_keyword", "targets_level", "passed"] },
   "state-changed": { optional: ["state", "strength"] },
   "designation-changed": { required: ["tag"] },
   "designation-resolved": { required: ["tag"] },
@@ -360,8 +360,20 @@ function normalizeEvent(input: Record<string, unknown>): Record<string, unknown>
     if (new Set(ids).size !== ids.length) throw new TypeError("event.ids names a rule twice.");
     result.ids = ids;
   }
-  if (kind === "used" && ["source", "usage", "bind_as", "ability_keyword", "targets_level"].some(has) && result.activity !== "ability") {
-    throw new TypeError("event source, usage, bind_as, ability_keyword and targets_level qualify a used ability, not another used activity.");
+  // A Dark Pact or contract is bound for a later change to that same use ("add 1 to the number of mortal wounds it suffers").
+  const bindsPact = has("bind_as") && (result.activity === "dark-pact" || result.activity === "contract");
+  if (kind === "used" && ["source", "usage", "ability_keyword", "targets_level"].some(has) && result.activity !== "ability") {
+    throw new TypeError("event source, usage, ability_keyword and targets_level qualify a used ability, not another used activity.");
+  }
+  if (kind === "used" && has("bind_as") && result.activity !== "ability" && !bindsPact) {
+    throw new TypeError("event bind_as on a used moment names a used ability, Dark Pact or contract.");
+  }
+  // "Makes a Dark Pact and does not fail the resulting Leadership test": the test's outcome.
+  if (has("passed")) {
+    if (result.activity !== "dark-pact") throw new TypeError("event.passed is the outcome of a Dark Pact's Leadership test; its activity is dark-pact.");
+    if (has("bind_as")) throw new TypeError("event.passed binds the Dark Pact's test, not the use; it takes no bind_as.");
+    if (typeof input.passed !== "boolean") throw new TypeError("event.passed must be true or false.");
+    result.passed = input.passed;
   }
   if (has("source")) result.source = enumSet(input.source, ["unit", "enhancement"], "event.source");
   if (has("usage")) result.usage = usage(input.usage);
@@ -393,7 +405,7 @@ function normalizeEvent(input: Record<string, unknown>): Record<string, unknown>
 
 const EVENT: FlatFamily = {
   id: "event",
-  version: 40,
+  version: 41,
   role: "EVENT",
   label: "At an event",
   description: [
@@ -404,7 +416,7 @@ const EVENT: FlatFamily = {
     "Moments a unit makes take owner (friendly or enemy, and on targets-selected also any) or subject (this unit by default, this model, the selected unit, the triggering unit, or antecedent: an earlier leaf's unit), never both: move-started and move-ended (move_types; also, the other end of the same move, so one leaf fires at the start or end of a move; through on move-ended, the move passed through the named terrain, written by the move-passthrough-used fold); selected (to move, shoot, fight, charge or attack, narrowed by move_types; mode, the disembark mode, when move_types is [disembark]); targets-selected (action_kind charge, shoot, attack, stratagem or ability; object, what was selected as the target: this unit, this model, the selected unit, or antecedent; id, the ability or Stratagem that selected, with action_kind ability or stratagem); attacks-resolved (action_kind charge, shoot, attack, stratagem, or fight for a fight only; optional phase and turn; attack_type; same_subject_targeted stratagem-target); set-up (from strategic-reserves: set up from Reserves or as Reinforcements).",
     "A disembarkation takes transport this-unit (the Transport left). damage-allocated takes object (this unit, this model or the selected unit: the attack is allocated to a model in it) and attack_type.",
     "Rolls: before-roll and after-roll name roll, or rolls (two or more roll kinds a DSL trigger can name, lowered to one trigger per kind). after-roll also takes subject (who made the roll), result (success or failure), and, after a Psychic test (roll psychic), channelled and before_resolving_activity ritual.",
-    "used names the activity used (ability, Stratagem, action, manoeuvre, order, ritual, Dark Pact, Act of Faith, doctrine or contract), with owner (whose army) or subject (who used it); id names which ability, manoeuvre, Stratagem or action, or ids lists two or more rules any one of which was used; object is the unit the rule is aimed at (this unit, this model, the selected unit, or filtered-units: the unit-filter right before names it). A used ability also takes source (unit or enhancement definitions), usage (once per battle), ability_keyword and targets_level unit.",
+    "used names the activity used (ability, Stratagem, action, manoeuvre, order, ritual, Dark Pact, Act of Faith, doctrine or contract), with owner (whose army) or subject (who used it); id names which ability, manoeuvre, Stratagem or action, or ids lists two or more rules any one of which was used; object is the unit the rule is aimed at (this unit, this model, the selected unit, or filtered-units: the unit-filter right before names it). A used ability also takes source (unit or enhancement definitions), usage (once per battle), ability_keyword and targets_level unit. passed, on a used Dark Pact, is the outcome of its Leadership test (true: \"does not fail the resulting Leadership test\"); a later roll-total dark-pact-test reads that test's result. A used Dark Pact or contract also takes bind_as, for a later change to that same use.",
     "state-changed names the core-rules state that changed, or strength: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting). designation-changed and designation-resolved name the designation (tag). marker-removed names the marker. resource-gained and resource-spent name the pool; a spend can name what it is for, by activity or by tag (not both), and object (this unit, the selected unit, or antecedent), the unit it serves.",
     "bind_as names the exact event for a later leaf to refer to; an exact destruction relation needs it: caused_by_destruction on resource-gained, causes_destruction on attacks-resolved, each naming unit and/or model destruction by owner, keywords and distance. A keyword can start with an apostrophe as the rules print it ('ARDMOB).",
   ].join(" "),
@@ -452,6 +464,7 @@ const EVENT: FlatFamily = {
       },
       ability_keyword: { type: "string", minLength: 1, "x-only-when": { kind: ["used"] }, "x-optional": true },
       targets_level: { enum: ["unit"], "x-only-when": { kind: ["used"] }, "x-optional": true },
+      passed: { type: "boolean", "x-only-when": { kind: ["used"] }, "x-optional": true },
       timing: { enum: ["before-removal"], "x-only-when": { kind: ["unit-destroyed", "model-destroyed", "unit-or-model-destroyed"] }, "x-optional": true },
       object_designated: { enum: OBJECT_DESIGNATIONS, "x-only-when": { kind: ["unit-destroyed"] }, "x-optional": true },
       same_subject_targeted: { enum: ["stratagem-target"], "x-only-when": { kind: ["attacks-resolved"] }, "x-optional": true },

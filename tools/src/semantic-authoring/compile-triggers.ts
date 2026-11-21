@@ -124,6 +124,16 @@ function usedTrigger(leaf: CompileLeaf): Node {
   if (usageValue !== undefined && (usageValue.frequency !== "n-per-battle" || usageValue.count !== 1)) throw new CompileError("A used-ability usage qualifier must be once per battle.");
   if (sources !== undefined && (sources.length < 1 || sources.some((value) => value !== "unit" && value !== "enhancement"))) throw new CompileError("A used-ability source qualifier must list unit and/or enhancement.");
   if (sources !== undefined && new Set(sources).size !== sources.length) throw new CompileError("A used-ability source qualifier lists a source twice.");
+  // "Makes a Dark Pact and does not fail the resulting Leadership test": the test's outcome is the moment,
+  // and binds that test for a later "if the result of that test was 8 or more" (compile-dark-pact.ts).
+  if (leaf.parameters.passed !== undefined) {
+    return {
+      event: "after-roll",
+      filter: { roll: "dark-pact", result: leaf.parameters.passed === true ? "success" : "failure" },
+      ...(subject !== undefined && subject !== "this-unit" ? { subject: closed(leaf, "subject") } : {}),
+      ...(leaf.parameters.owner !== undefined ? { subject: { owner: closed(leaf, "owner") } } : {}),
+    };
+  }
   const filter = {
     kind: closed(leaf, "activity"),
     ...(leaf.parameters.id !== undefined ? { id: closed(leaf, "id") } : {}),

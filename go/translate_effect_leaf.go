@@ -685,6 +685,14 @@ func abilityModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 		return subj + " can be affected by " + abilityLabel(m["ability"]) + " up to " + timesWord(m["value"]) + ", in place of its usual limit"
 	}
 	whose := modifiedAbility(m["ability"], subj, ctx)
+	// "If it suffers one or more mortal wounds as a result of that Dark Pact, add 1 to the number of mortal wounds it suffers."
+	if m["aspect"] == "mortal-wounds" {
+		change := "add " + ejstr(m["value"]) + " to"
+		if m["operation"] == "subtract" {
+			change = "subtract " + ejstr(m["value"]) + " from"
+		}
+		return "if " + whose + " inflicts one or more mortal wounds on " + subj + ", " + change + " the number of mortal wounds it suffers"
+	}
 	aspect, ok := abilityAspects[ejstr(m["aspect"])]
 	if !ok {
 		aspect = ejstr(m["aspect"])

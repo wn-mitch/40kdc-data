@@ -80,7 +80,21 @@ function destruction(input: Params, rest: Params, destroyers: readonly string[],
   return { negated: booleanValue(rest.negated, "unit-activity.negated"), named: input.named, container: input.container, destroyer: input.destroyer };
 }
 
+/**
+ * "Made a Dark Pact that phase and did not fail the resulting Leadership test": passed is the
+ * outcome of that Dark Pact's test, on made-dark-pact-this-phase alone.
+ */
 function normalizeUnitActivity(input: Params): Params {
+  if (!("passed" in input)) return normalizeActivities(input);
+  const { passed, ...rest } = input;
+  if (typeof passed !== "boolean") throw new TypeError("unit-activity.passed must be true or false.");
+  if (!Array.isArray(rest.activities) || rest.activities.length !== 1 || rest.activities[0] !== "made-dark-pact-this-phase") {
+    throw new TypeError("unit-activity.passed is the outcome of a Dark Pact's Leadership test; it takes made-dark-pact-this-phase alone.");
+  }
+  return { ...normalizeActivities(rest), passed };
+}
+
+function normalizeActivities(input: Params): Params {
   if (!Array.isArray(input.activities)) throw new TypeError(`unit-activity.activities must list at least one activity.`);
   if (input.subject !== undefined) enumValue(input.subject, ACTIVITY_SUBJECTS, "unit-activity.subject");
   // Transport moves, history values and destroyed-stratagem-target are subject activities: they
@@ -344,10 +358,10 @@ const ALTERNATIVE_KEYWORDS = { type: "array", minItems: 1, uniqueItems: true, it
 export const UNIT_ACTIVITY_AND_POSITION_FAMILIES: readonly FlatFamily[] = [
   {
     id: "unit-activity",
-    version: 25,
+    version: 26,
     role: "CONDITION",
     label: "Unit has (or has not) acted",
-    description: "What the subject has done: it holds when the subject did any of the listed activities, and negated when it did none (\"has not been selected to shoot or fight this phase\"). Activities: charged or Advanced this turn, Remained Stationary, fought (or was selected to fight) this phase, selected to shoot or to move this phase, declared a charge this phase, Fell Back this turn or this phase, charged this phase, made a Normal move this phase or turn, disembarked this phase or turn (or from this unit, the Transport, this turn), made an Ingress move this turn, was set up this phase or turn (using Deep Strike, or from Reserves), resolved its attacks this phase, made a Dark Pact this phase, lost models this phase or to the attacks of the unit that fired the trigger, destroyed an enemy unit or model this phase or turn, was targeted by attacks this phase, made attacks this phase that targeted this unit (made-attacks-targeting-this-phase; its subject is never this unit or its model), destroyed the Stratagem's target, lost wounds to the triggering attacks, was charged this turn, suffered mortal wounds from this ability, lost models to this ability's mortal wounds, embarked within a Transport this phase, and made an Advance move this phase. The subject is this unit, this model, the attack's target, the attacking unit, the unit that triggered the ability, the effect's recipient, a unit the ability selected earlier, an earlier leaf's unit (antecedent), every Stratagem target named before it (each-target), or the Transport the unit is embarked within (bearer-transport). attack_type (melee, ranged or psychic) qualifies one destroyed-enemy-unit activity on its own. targeted-with-stratagem-this-phase stands alone, with stratagem_ids naming the Stratagems (any player's) that targeted the subject this phase. A destruction by the triggering attacks (destroyed-units-by-triggering-attacks, destroyed-models-by-triggering-attacks, or both on one leaf) takes no subject: named (before, after or none) places the unit-filter that names what was destroyed, container (after or none) says a model's unit is named after it, destroyer (this-unit, this-model, event-subject or stratagem-target) says whose attacks, and keywords on destroyed-models-by-triggering-attacks are the destroyed models' unit keywords. destroyed-units-in-window is a windowed destruction history with no subject: named before or after, container none, destroyer this-unit, this-model, event-subject, stratagem-target or defender (the attack's target, this activity only); a history-window leaf after it names the window. A keyword can start with an apostrophe as the rules print it.",
+    description: "What the subject has done: it holds when the subject did any of the listed activities, and negated when it did none (\"has not been selected to shoot or fight this phase\"). Activities: charged or Advanced this turn, Remained Stationary, fought (or was selected to fight) this phase, selected to shoot or to move this phase, declared a charge this phase, Fell Back this turn or this phase, charged this phase, made a Normal move this phase or turn, disembarked this phase or turn (or from this unit, the Transport, this turn), made an Ingress move this turn, was set up this phase or turn (using Deep Strike, or from Reserves), resolved its attacks this phase, made a Dark Pact this phase, lost models this phase or to the attacks of the unit that fired the trigger, destroyed an enemy unit or model this phase or turn, was targeted by attacks this phase, made attacks this phase that targeted this unit (made-attacks-targeting-this-phase; its subject is never this unit or its model), destroyed the Stratagem's target, lost wounds to the triggering attacks, was charged this turn, suffered mortal wounds from this ability, lost models to this ability's mortal wounds, embarked within a Transport this phase, and made an Advance move this phase. The subject is this unit, this model, the attack's target, the attacking unit, the unit that triggered the ability, the effect's recipient, a unit the ability selected earlier, an earlier leaf's unit (antecedent), every Stratagem target named before it (each-target), or the Transport the unit is embarked within (bearer-transport). attack_type (melee, ranged or psychic) qualifies one destroyed-enemy-unit activity on its own. targeted-with-stratagem-this-phase stands alone, with stratagem_ids naming the Stratagems (any player's) that targeted the subject this phase. A destruction by the triggering attacks (destroyed-units-by-triggering-attacks, destroyed-models-by-triggering-attacks, or both on one leaf) takes no subject: named (before, after or none) places the unit-filter that names what was destroyed, container (after or none) says a model's unit is named after it, destroyer (this-unit, this-model, event-subject or stratagem-target) says whose attacks, and keywords on destroyed-models-by-triggering-attacks are the destroyed models' unit keywords. destroyed-units-in-window is a windowed destruction history with no subject: named before or after, container none, destroyer this-unit, this-model, event-subject, stratagem-target or defender (the attack's target, this activity only); a history-window leaf after it names the window. A keyword can start with an apostrophe as the rules print it. passed, on made-dark-pact-this-phase alone, is the outcome of that Dark Pact's Leadership test (true: \"and did not fail the resulting Leadership test\").",
     starter: { activities: [], subject: "", negated: false },
     parameterSchema: {
       type: "object",
@@ -364,6 +378,7 @@ export const UNIT_ACTIVITY_AND_POSITION_FAMILIES: readonly FlatFamily[] = [
         },
         subject: { enum: [...ACTIVITY_SUBJECTS] },
         negated: { type: "boolean" },
+        passed: { type: "boolean", "x-optional": true },
         named: { enum: ["before", "after", "none"], "x-optional": true },
         container: { enum: ["after", "none"], "x-optional": true },
         destroyer: { enum: ["this-unit", "event-subject", "stratagem-target", "this-model", "defender"], "x-optional": true },

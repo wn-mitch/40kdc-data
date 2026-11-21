@@ -27,6 +27,13 @@ export type VersionMapping = {
 };
 
 export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
+  // event v41 adds passed and a Dark Pact or contract bind_as on a used moment; unit-activity v26 passed on
+  // made-dark-pact-this-phase; roll-total v2 roll_var dark-pact-test; ability-modifier v9 aspect mortal-wounds.
+  // Every earlier leaf keeps its meaning.
+  { family: "event", from: 40, to: 41, map: (parameters) => ({ ...parameters }) },
+  { family: "unit-activity", from: 25, to: 26, map: (parameters) => ({ ...parameters }) },
+  { family: "roll-total", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
+  { family: "ability-modifier", from: 8, to: 9, map: (parameters) => ({ ...parameters }) },
   // issue-orders-open v3 adds as_if_phase, issuer_keywords and same_order; order-rule v3 the
   // recipient-keywords rule. Every earlier leaf keeps its meaning.
   { family: "issue-orders-open", from: 2, to: 3, map: (parameters) => ({ ...parameters }) },
@@ -82,7 +89,7 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // earlier leaf keeps its meaning.
   { family: "choice-open", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
   { family: "ability-activate", from: 5, to: 6, map: (parameters) => ({ ...parameters }) },
-  { family: "ability-modifier", from: 7, to: 8, map: (parameters) => ({ ...parameters }) },
+  { family: "ability-modifier", from: 7, to: 9, map: (parameters) => ({ ...parameters }) },
   // return-models v9 adds exclude_model_keyword ("(excluding CHARACTERS)"); every earlier leaf keeps its meaning.
   { family: "return-models", from: 8, to: 9, map: (parameters) => ({ ...parameters }) },
 ];

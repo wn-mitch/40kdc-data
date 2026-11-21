@@ -16,9 +16,12 @@ function testDoubles(input: Params): Params {
   return { on: enumValue(input.on, ["double"], "test-doubles.on") };
 }
 
+/** psychic-test: a ritual menu's Psychic test; dark-pact-test: the Leadership test of the Dark Pact moment (a 2D6 roll). */
+const ROLL_TOTAL_VARS = ["psychic-test", "dark-pact-test"] as const;
+
 function rollTotal(input: Params): Params {
   exactKeys(input, ["roll_var", "min"], "roll-total");
-  return { roll_var: enumValue(input.roll_var, ["psychic-test"], "roll-total.roll_var"), min: boundedInteger(input.min, 2, 18, "roll-total.min") };
+  return { roll_var: enumValue(input.roll_var, ROLL_TOTAL_VARS, "roll-total.roll_var"), min: boundedInteger(input.min, 2, input.roll_var === "dark-pact-test" ? 12 : 18, "roll-total.min") };
 }
 
 // ── Oaths ───────────────────────────────────────────────────────────────────────────────────────
@@ -114,12 +117,12 @@ export const PSYCHIC_AND_OATHS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "roll-total",
-    version: 1,
+    version: 2,
     role: "CONDITION",
     label: "Roll total is at least",
-    description: "\"If the Psychic test result for this Ritual was 10+\": the total of the named roll is at least min. roll_var psychic-test is a ritual menu's Psychic test.",
+    description: "\"If the Psychic test result for this Ritual was 10+\": the total of the named roll is at least min. roll_var psychic-test is a ritual menu's Psychic test; dark-pact-test is the Leadership test of the Dark Pact moment (event used dark-pact with passed) the record opens with (\"if the result of that test was 8 or more\"), min at most 12.",
     starter: {roll_var: "psychic-test", min: 10},
-    parameterSchema: {type: "object", required: ["roll_var", "min"], properties: {roll_var: {enum: ["psychic-test"]}, min: {type: "integer", minimum: 2, maximum: 18}}, additionalProperties: false},
+    parameterSchema: {type: "object", required: ["roll_var", "min"], properties: {roll_var: {enum: ["psychic-test", "dark-pact-test"]}, min: {type: "integer", minimum: 2, maximum: 18}}, additionalProperties: false},
     normalize: rollTotal,
   },
   {

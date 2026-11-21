@@ -603,6 +603,16 @@ def _ability_modifier(m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) ->
         times = _times_word(m.get("value"))
         return f"{subj} can be affected by {label} up to {times}, in place of its usual limit"
     whose = _modified_ability(m.get("ability"), subj, ctx)
+    # "If it suffers one or more mortal wounds as a result of that Dark Pact, add 1 to the
+    # number of mortal wounds it suffers."
+    if m.get("aspect") == "mortal-wounds":
+        amount = jstr(m.get("value"))
+        subtract = m.get("operation") == "subtract"
+        change = f"subtract {amount} from" if subtract else f"add {amount} to"
+        return (
+            f"if {whose} inflicts one or more mortal wounds on {subj}, "
+            f"{change} the number of mortal wounds it suffers"
+        )
     aspect = _ASPECTS.get(jstr(m.get("aspect")), jstr(m.get("aspect")))
     raw = m.get("value")
     if (

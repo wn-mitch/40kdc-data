@@ -50,6 +50,7 @@ import { foldRollCaps, foldRollFaces } from "./compile-roll-faces.js";
 import { compileStratagemWindowMoments, compileWindowMoment } from "./compile-window-moment.js";
 import { foldDelayedMoments } from "./compile-delayed-moment.js";
 import { foldRitualTest } from "./compile-ritual-test.js";
+import { bindDarkPactTest } from "./compile-dark-pact.js";
 import { foldEmergencyDisembark } from "./compile-emergency-disembark.js";
 import { bulletBreaks, commaItems, ordered, orLineBreaks, placements, plainLineBreaks, shapeSignature } from "./compile-placement.js";
 import { foldAlternativePools, foldExtraDice } from "./compile-dice-variants.js";
@@ -560,6 +561,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   try {
     // "the number of YP you just spent" reads a spend before it that bound its amount (compile-spent.ts).
     checkSpentReferences(assembled.mechanics.effect);
+    // "If the result of that test was 8 or more" reads the Dark Pact test its moment binds (compile-dark-pact.ts).
+    bindDarkPactTest(assembled.mechanics);
     return { ...assembled, mechanics: { ...assembled.mechanics, effect: hoistResolvedSelections(assembled.mechanics.effect) as typeof assembled.mechanics.effect } };
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;

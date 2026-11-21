@@ -4037,7 +4037,7 @@ export interface WeaponGrantEffect {
   scaling?: Scaling;
 }
 /**
- * [ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, or how many times one unit can be affected by it (received).
+ * [ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, the number of mortal wounds a bound use inflicts when it inflicts any (mortal-wounds), or how many times one unit can be affected by it (received).
  */
 export interface AbilityModifierEffect {
   type: "ability-modifier";
@@ -4071,7 +4071,8 @@ export interface AbilityModifierEffect {
       | "threshold"
       | "options"
       | "amount"
-      | "received";
+      | "received"
+      | "mortal-wounds";
     operation: "add" | "subtract" | "set" | "lift-limit";
     value?: number | string;
     cap?: number;
@@ -4907,6 +4908,10 @@ export interface ResourceActionMenuTrigger {
    */
   binds_die_variable?: string;
   /**
+   * Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered.
+   */
+  binds_roll_variable?: string;
+  /**
    * Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}.
    */
   binds_selected_die_variable?: string;
@@ -5022,6 +5027,10 @@ export interface Trigger {
    * Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}.
    */
   binds_die_variable?: string;
+  /**
+   * Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered.
+   */
+  binds_roll_variable?: string;
   /**
    * Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}.
    */
@@ -9281,6 +9290,10 @@ export interface Trigger1 {
    * Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}.
    */
   binds_die_variable?: string;
+  /**
+   * Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered.
+   */
+  binds_roll_variable?: string;
   /**
    * Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}.
    */
