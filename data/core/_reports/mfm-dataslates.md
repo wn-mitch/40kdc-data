@@ -15,18 +15,18 @@ dump confirmation.
 | wargear-options | 0 | 0 | 1258 | 0 |
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
-| detachments | 0 | 26 | 180 | 251 |
-| stratagems | 0 | 0 | 1126 | 187 |
-| abilities | 0 | 0 | 3953 | 606 |
-| phase-mappings | 0 | 0 | 1228 | 353 |
-| resource-pools | 0 | 0 | 0 | 6 |
+| detachments | 0 | 0 | 181 | 276 |
+| stratagems | 0 | 0 | 1131 | 182 |
+| abilities | 0 | 0 | 3970 | 589 |
+| phase-mappings | 0 | 0 | 1229 | 352 |
+| resource-pools | 0 | 0 | 0 | 7 |
 
 ## Abilities by faction
 
 | Faction | Promote | Demote | Kept | Untouched |
 |---|--:|--:|--:|--:|
 | _core | 0 | 0 | 12 | 14 |
-| adepta-sororitas | 0 | 0 | 122 | 26 |
+| adepta-sororitas | 0 | 0 | 123 | 25 |
 | adeptus-astartes | 0 | 0 | 236 | 14 |
 | adeptus-custodes | 0 | 0 | 152 | 6 |
 | adeptus-mechanicus | 0 | 0 | 148 | 19 |
@@ -36,18 +36,18 @@ dump confirmation.
 | astra-militarum | 0 | 0 | 218 | 33 |
 | black-templars | 0 | 0 | 61 | 2 |
 | blood-angels | 0 | 0 | 53 | 8 |
-| chaos-daemons | 0 | 0 | 167 | 28 |
+| chaos-daemons | 0 | 0 | 173 | 22 |
 | chaos-knights | 0 | 0 | 88 | 22 |
-| chaos-space-marines | 0 | 0 | 237 | 44 |
+| chaos-space-marines | 0 | 0 | 240 | 41 |
 | dark-angels | 0 | 0 | 69 | 8 |
 | death-guard | 0 | 0 | 139 | 21 |
 | deathwatch | 0 | 0 | 34 | 2 |
-| drukhari | 0 | 0 | 135 | 29 |
+| drukhari | 0 | 0 | 136 | 28 |
 | emperors-children | 0 | 0 | 128 | 20 |
 | genestealer-cults | 0 | 0 | 122 | 26 |
 | grey-knights | 0 | 0 | 125 | 9 |
 | imperial-fists | 0 | 0 | 9 | 2 |
-| imperial-knights | 0 | 0 | 96 | 22 |
+| imperial-knights | 0 | 0 | 97 | 21 |
 | iron-hands | 0 | 0 | 11 | 0 |
 | leagues-of-votann | 0 | 0 | 141 | 14 |
 | necrons | 0 | 0 | 202 | 28 |
@@ -58,7 +58,7 @@ dump confirmation.
 | tau-empire | 0 | 0 | 142 | 24 |
 | thousand-sons | 0 | 0 | 129 | 29 |
 | titanicus-traitoris | 0 | 0 | 8 | 2 |
-| tyranids | 0 | 0 | 161 | 25 |
+| tyranids | 0 | 0 | 166 | 20 |
 | ultramarines | 0 | 0 | 11 | 0 |
 | white-scars | 0 | 0 | 11 | 0 |
 | world-eaters | 0 | 0 | 123 | 24 |
@@ -73,9 +73,9 @@ dump confirmation.
 | _core | unpublished | 5 |
 | _core | verified | 12 |
 | adepta-sororitas | digest-differs | 8 |
-| adepta-sororitas | stub | 3 |
+| adepta-sororitas | stub | 2 |
 | adepta-sororitas | unpublished | 15 |
-| adepta-sororitas | verified | 122 |
+| adepta-sororitas | verified | 123 |
 | adeptus-astartes | digest-differs | 9 |
 | adeptus-astartes | no-source | 4 |
 | adeptus-astartes | unpublished | 1 |
@@ -110,16 +110,16 @@ dump confirmation.
 | blood-angels | unpublished | 1 |
 | blood-angels | verified | 53 |
 | chaos-daemons | digest-differs | 3 |
-| chaos-daemons | stub | 13 |
+| chaos-daemons | stub | 7 |
 | chaos-daemons | unpublished | 12 |
-| chaos-daemons | verified | 167 |
+| chaos-daemons | verified | 173 |
 | chaos-knights | digest-differs | 4 |
 | chaos-knights | unpublished | 18 |
 | chaos-knights | verified | 88 |
 | chaos-space-marines | digest-differs | 11 |
-| chaos-space-marines | stub | 18 |
+| chaos-space-marines | stub | 15 |
 | chaos-space-marines | unpublished | 15 |
-| chaos-space-marines | verified | 237 |
+| chaos-space-marines | verified | 240 |
 | dark-angels | digest-differs | 7 |
 | dark-angels | stub | 1 |
 | dark-angels | verified | 69 |
@@ -132,8 +132,8 @@ dump confirmation.
 | deathwatch | verified | 34 |
 | drukhari | digest-differs | 7 |
 | drukhari | stub | 15 |
-| drukhari | unpublished | 7 |
-| drukhari | verified | 135 |
+| drukhari | unpublished | 6 |
+| drukhari | verified | 136 |
 | emperors-children | digest-differs | 4 |
 | emperors-children | unpublished | 16 |
 | emperors-children | verified | 128 |
@@ -148,9 +148,9 @@ dump confirmation.
 | imperial-fists | digest-differs | 2 |
 | imperial-fists | verified | 9 |
 | imperial-knights | digest-differs | 6 |
-| imperial-knights | stub | 9 |
+| imperial-knights | stub | 8 |
 | imperial-knights | unpublished | 7 |
-| imperial-knights | verified | 96 |
+| imperial-knights | verified | 97 |
 | iron-hands | verified | 11 |
 | leagues-of-votann | digest-differs | 3 |
 | leagues-of-votann | stub | 4 |
@@ -180,9 +180,9 @@ dump confirmation.
 | titanicus-traitoris | stub | 2 |
 | titanicus-traitoris | verified | 8 |
 | tyranids | digest-differs | 4 |
-| tyranids | stub | 11 |
-| tyranids | unpublished | 10 |
-| tyranids | verified | 161 |
+| tyranids | stub | 7 |
+| tyranids | unpublished | 9 |
+| tyranids | verified | 166 |
 | ultramarines | verified | 11 |
 | white-scars | verified | 11 |
 | world-eaters | digest-differs | 5 |

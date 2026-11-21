@@ -102,7 +102,9 @@
             </profile>
             <profile name="Simulacrum Imperialis" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Nothing happens.</characteristic>
+                <characteristic name="Description">At the end of your Command phase:
+  - For each objective marker you control, with one or more friendly units with the Simulacrum Imperialis Sanctuary Guardians ability within range of it (referred to below as the simulacrum objective):
+    - Roll one D6: on a 4+, add a die showing that result to your Miracle dice.</characteristic>
               </characteristics>
             </profile>
             <profile name="Acts of Faith" typeName="Abilities">
